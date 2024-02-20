@@ -34,7 +34,7 @@ class MembersView(generic.ListView):
 class MemberView(generic.DetailView):
    model = Member
 
-def get_member(request, pk):
+def get_member(request, pk=None):
     # if pk, get existing member
     member = get_object_or_404(Member, pk=pk) if pk else None
     # if this is a POST request we need to process the form data
@@ -43,7 +43,7 @@ def get_member(request, pk):
         form = MemberForm(request.POST, instance = member)
         # save the form (it checks whether form is valid):
         form.save()
-        return HttpResponseRedirect("/thanks/")
+        return HttpResponseRedirect(reverse("members:members"))
 
     # if a GET (or any other method) we'll create a "blank" form prefilled by existing member (or None)
     else:

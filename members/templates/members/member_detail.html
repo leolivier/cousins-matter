@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load members_extras %}
+<!DOCTYPE html>
+<html lang="en">
+	{{ "Cousins Matter - Detail"|members_header }}
+
+<body>
+	<h1 class="title is-1">{% translate "Member Detail" %}</h1>
+	<div class="container">
+		{% if pk %}
+		<form action="{% url 'members:detail' pk %}" method="post">
+		{% else %}
+		<form action="{% url 'members:create' %}" method="post">
+		{% endif %}
+			{% csrf_token %}
+			{{ form }}
+			<input type="submit" value="Submit" class="button is-primary">
+		</form>
+	</div>
+</body>
+</html>

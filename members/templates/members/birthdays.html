@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load members_extras %}
+<!DOCTYPE html>
+<html lang="en">
+{{ "Cousins Matter - Birthdays"|members_header }}
+<body>
+{% if birthdays_list %}
+    <div>
+        <ul>
+            {% for member, when in birthdays_list %}
+            <li>
+                <a href="{% url 'members:detail' member.id %}">{{ member.first_name }} {{ member.last_name }}</a>
+                {% if when == 0 %}
+                    {% blocktranslate with age=member.age %}turns {{ age }} today, happy birthday!{% endblocktranslate %}
+                {% elif when == 1 %}
+                    {% blocktranslate with age=member.age|add:1 %}will turn {{ age }} tomorrow, happy birthday!{% endblocktranslate %}
+                {% else %}
+                    {% blocktranslate with age=member.age|add:1 birthday=member.birthdate|date:"l d F" %}will turn {{ age }} on {{ birthday }}{% endblocktranslate %}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+    <div>
+        <p>{% blocktranslate %}No birthdays in next {{ndays}} days{% endblocktranslate %}.</p>
+    </div>
+{% endif %}
+</body>
+</html>

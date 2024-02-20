@@ -63,7 +63,7 @@ class Member(models.Model):
       return self.birthdate.strftime('%d/%m')
     
     def next_birthday(self) -> datetime.date:
-      today = datetime.datetime.today()
+      today = datetime.date.today()
       year = today.year
       if today.month > self.birthdate.month or \
          (today.month == self.birthdate.month and today.day > self.birthdate.day):
@@ -71,20 +71,10 @@ class Member(models.Model):
       return self.birthdate.replace(year=year)
       
     def age(self) -> int:
-      today = datetime.datetime.today()
+      today = datetime.date.today()
       years = today.year - self.birthdate.year
       return years if (today >= self.next_birthday()) else years-1
-      
-    @staticmethod
-    def next_birthdays(ndays):
-      today = datetime.date.today()
-      delta = datetime.timedelta(days = ndays)
-      bdates = []
-      for m in Member.objects.all():
-        if m.next_birthday() <= today + delta:
-          bdates.append(m)
-      return bdates
-    
+
 
 
 

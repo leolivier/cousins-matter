@@ -46,21 +46,17 @@
 				</a>
 				{% else %}
 				<div class="navbar-item has-dropdown is-hoverable">
-					<button class="button navbar-link">
+					<button class="button navbar-link is-dark is-light">
 						<span class="icon is-small">
-							<i class="mdi mdi-account"></i>
+							<i class="mdi mdi-account-outline"></i>
 						</span>
 					</button>
-					<div class="navbar-dropdown">
+					<div class="navbar-dropdown is-right">
 						<p>{{user.username}}</p>
 						<a class="navbar-item" href="{% url 'users:profile' %}">
 							<span class="icon"><i class="mdi mdi-account-box-edit-outline"></i></span>
 							<span>{% translate "Profile" %}</span>
 						</a>
-						<form action="{% url 'users:logout'%}" class="navbar-item" method="post">
-							{% csrf_token %}
-							<input type="submit" value='{% translate "Log Out" %}'>
-						</form>
 						<a class="navbar-item" href="{% url 'users:logout'%}">
 							<span class="icon"><i class="mdi mdi-account-arrow-right"></i></span>
 							<span>{% translate "Log Out" %}</span>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-24 20:45+0100\n"
+"POT-Creation-Date: 2024-02-25 15:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,56 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: templates/users/login.html:9
+#: users/templates/users/login.html:9
 msgid "Log In"
 msgstr "Connexion"
 
-#: templates/users/login.html:13
+#: users/templates/users/login.html:13
 msgid "Login"
 msgstr "Se connecter"
 
-#: templates/users/login.html:18
-#, 
+#: users/templates/users/login.html:17
 msgid "Need An Account?"
 msgstr "Besoin d'un compte?"
 
-#: templates/users/login.html:18
+#: users/templates/users/login.html:18
 msgid "Sign Up Now"
 msgstr "S'enregistrer maintenant"
 
-#: templates/users/logout.html:4
-msgid "You have been logged out"
-msgstr "Tu as été déconnecté(e)"
-
-#: templates/users/logout.html:7
-msgid "Log In Again"
-msgstr "Se reconnecter"
-
-#: templates/users/profile.html:16
+#: users/templates/users/profile.html:20
 msgid "Profile Info"
 msgstr "Infos du profil"
 
-#: templates/users/profile.html:21
+#: users/templates/users/profile.html:25
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: templates/users/register.html:9
+#: users/templates/users/register.html:9
 msgid "Join Today"
 msgstr "Nous rejoindre aujourd'hui"
 
-#: templates/users/register.html:13
+#: users/templates/users/register.html:13
 msgid "Sign Up"
 msgstr "S'enregistrer"
 
-#: templates/users/register.html:18
+#: users/templates/users/register.html:17
 msgid "Already Have An Account?"
 msgstr "Tu as déjà un compte?"
 
-#: templates/users/register.html:18
+#: users/templates/users/register.html:18
 msgid "Sign In"
 msgstr "Connexion"
 
-#: views.py:13
+#: users/views.py:14
 #, python-format
 msgid ""
 "Hello %(username)s, your account has been created! You are now able to log in"
@@ -75,6 +66,13 @@ msgstr ""
 "Bonjour %(username)s, ton compte a été créé! Tu peux maintenant te "
 "connecter..."
 
-#: views.py:30
+#: users/views.py:22
+msgid "You have been logged out"
+msgstr "Tu as été déconnecté(e)"
+
+#: users/views.py:35
 msgid "Your account has been updated!"
 msgstr "Ton compte a été mis à jour"
+
+#~ msgid "Log In Again"
+#~ msgstr "Se reconnecter"

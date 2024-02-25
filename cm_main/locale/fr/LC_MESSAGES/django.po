@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-24 20:44+0100\n"
+"POT-Creation-Date: 2024-02-25 15:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,18 +30,18 @@ msgstr "Membres"
 msgid "Birthdays"
 msgstr "Anniversaires"
 
-#: cm_main/templates/cm_main/menu.html:63
-msgid "Sign up"
-msgstr "S'enregistrer"
-
-#: cm_main/templates/cm_main/menu.html:66
+#: cm_main/templates/cm_main/menu.html:42
 msgid "Log in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/menu.html:77
+#: cm_main/templates/cm_main/menu.html:46
+msgid "Sign up"
+msgstr "S'enregistrer"
+
+#: cm_main/templates/cm_main/menu.html:59
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/menu.html:80
+#: cm_main/templates/cm_main/menu.html:63
 msgid "Log Out"
 msgstr "Déconnexion"

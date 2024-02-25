@@ -3,10 +3,13 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from datetime import date, timedelta
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Member, Address, Family
 from .forms import MemberForm
 
+@login_required
 def birthdays(request) -> HttpResponse:
   """
   Return the members with their birthday in the next ndays days
@@ -27,13 +30,15 @@ def birthdays(request) -> HttpResponse:
   }
   return render(request, "members/birthdays.html", context)
 
-class MembersView(generic.ListView):
+class MembersView(LoginRequiredMixin, generic.ListView):
     template_name = "members/members.html"
     model = Member
 
+@login_required
 class MemberView(generic.DetailView):
    model = Member
 
+@login_required
 def get_member(request, pk=None):
     # if pk, get existing member
     member = get_object_or_404(Member, pk=pk) if pk else None

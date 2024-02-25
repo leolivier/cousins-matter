@@ -1,23 +1,24 @@
 from django.db import models
 import datetime
+from django.utils.translation import gettext_lazy as _
 
 class Family(models.Model):
-  name = models.CharField(max_length=72)
+  name = models.CharField(_('Name'), max_length=72)
   
-  parent = models.ForeignKey('self', on_delete=models.CASCADE)
+  parent = models.ForeignKey('self', verbose_name=_('Parent family'), on_delete=models.CASCADE)
 
 class Address(models.Model):
-  street_number = models.CharField(max_length=12)
+  street_number = models.CharField(_('Street number'), max_length=12)
   
-  street = models.CharField(max_length=120)
+  street = models.CharField(_('Street name'), max_length=120)
 
-  complementary_info = models.CharField(max_length=120)
+  complementary_info = models.CharField(_('Complementary info'), max_length=120)
 
-  zip_code = models.CharField(max_length=12)
+  zip_code = models.CharField(_('Zip code'), max_length=12)
 
-  city = models.CharField(max_length=120)
+  city = models.CharField(_('City'), max_length=120)
 
-  country = models.CharField(max_length=32)
+  country = models.CharField(_('Country'), max_length=32)
 
   def __str__(self) -> str:
     return f"""
@@ -28,25 +29,25 @@ class Address(models.Model):
 """
 
 class Member(models.Model):
-    first_name = models.CharField(max_length=128)
+    first_name = models.CharField(_('First name'), max_length=128)
 
-    last_name = models.CharField(max_length=128)
+    last_name = models.CharField(_('Last name'), max_length=128)
 
-    address = models.ForeignKey(Address, null=True, blank=True, on_delete=models.DO_NOTHING)
+    address = models.ForeignKey(Address, verbose_name=_('Address'), null=True, blank=True, on_delete=models.DO_NOTHING)
 
-    cell_phone = models.CharField(max_length=32, blank=True)
+    cell_phone = models.CharField(_('Cell phone'), max_length=32, blank=True)
 
-    alternate_phone = models.CharField(max_length=32, blank=True)
+    alternate_phone = models.CharField(_('Alternate phone'), max_length=32, blank=True)
 
-    birthdate = models.DateField()
+    birthdate = models.DateField(_('Birthdate'), )
     
-    personal_email = models.EmailField(blank=True)
+    personal_email = models.EmailField(_('Personal email'), blank=True)
 
-    alternate_email = models.EmailField(blank=True)
+    alternate_email = models.EmailField(_('Alternate email'), blank=True)
 
-    website = models.URLField(blank=True)
+    website = models.URLField(_('Website'), blank=True)
 
-    family = models.ForeignKey(Family, on_delete=models.CASCADE, null=True, blank=True)
+    family = models.ForeignKey(Family, verbose_name=_('Family'), on_delete=models.CASCADE, null=True, blank=True)
 
     def family_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/family_<name>/<filename>
@@ -57,10 +58,6 @@ class Member(models.Model):
     def __str__(self) -> str:
       return f"{self.first_name} {self.last_name}"
 
-    def birthday(self) -> str:
-      """TODO use locale for D/M order"""
-      return self.birthdate.strftime('%d/%m')
-    
     def next_birthday(self) -> datetime.date:
       today = datetime.date.today()
       year = today.year

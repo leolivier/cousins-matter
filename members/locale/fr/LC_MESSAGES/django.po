@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-24 20:12+0100\n"
+"POT-Creation-Date: 2024-02-25 18:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,78 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: members/models.py:6
+msgid "Name"
+msgstr "Nom"
+
+#: members/models.py:8
+msgid "Parent family"
+msgstr "Famille parente"
+
+#: members/models.py:11
+msgid "Street number"
+msgstr "Numéros dans la rue"
+
+#: members/models.py:13
+msgid "Street name"
+msgstr "Nom de la voie"
+
+#: members/models.py:15
+msgid "Complementary info"
+msgstr "Infos complémentaires"
+
+#: members/models.py:17
+msgid "Zip code"
+msgstr "Code postal"
+
+#: members/models.py:19
+msgid "City"
+msgstr "Ville"
+
+#: members/models.py:21
+msgid "Country"
+msgstr "Pays"
+
+#: members/models.py:32
+msgid "First name"
+msgstr "Prénom"
+
+#: members/models.py:34
+msgid "Last name"
+msgstr "Nom"
+
+#: members/models.py:36
+msgid "Address"
+msgstr "Adresse"
+
+#: members/models.py:38
+msgid "Cell phone"
+msgstr "Téléphone mobile"
+
+#: members/models.py:40
+msgid "Alternate phone"
+msgstr "Autre téléphone"
+
+#: members/models.py:42
+msgid "Birthdate"
+msgstr "Date de naissance"
+
+#: members/models.py:44
+msgid "Personal email"
+msgstr "Mail personnel"
+
+#: members/models.py:46
+msgid "Alternate email"
+msgstr "Mail alternatif"
+
+#: members/models.py:48
+msgid "Website"
+msgstr "Site web"
+
+#: members/models.py:50
+msgid "Family"
+msgstr "Famille"
 
 #: members/templates/members/birthdays.html:3
 msgid "Cousins Matter - Birthdays"
@@ -32,12 +104,12 @@ msgstr "a %(age)s ans aujourd'hui, joyeux anniversaire!"
 msgid "will turn %(age)s tomorrow, happy birthday!"
 msgstr "aura %(age)s ans demain, joyeux anniversaire!"
 
-#: members/templates/members/birthdays_include.html:13
+#: members/templates/members/birthdays_include.html:14
 #, python-format
 msgid "will turn %(age)s on %(birthday)s"
 msgstr "aura %(age)s ans %(birthday)s"
 
-#: members/templates/members/birthdays_include.html:21
+#: members/templates/members/birthdays_include.html:22
 #, python-format
 msgid "No birthdays in next %(ndays)s days"
 msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
@@ -61,29 +133,8 @@ msgstr "Pas de membre trouvé"
 #~ msgid "identity"
 #~ msgstr "Identité"
 
-#~ msgid "First name"
-#~ msgstr "Prénom"
-
-#~ msgid "Last name"
-#~ msgstr "Nom"
-
 #~ msgid "Email addresses"
 #~ msgstr "Adresses Mail"
-
-#~ msgid "Personal email"
-#~ msgstr "Mail personnel"
-
-#~ msgid "Alternate email"
-#~ msgstr "Mail alternatif"
-
-#~ msgid "Telephone numbers"
-#~ msgstr "Numéros de téléphone"
-
-#~ msgid "Cell phone"
-#~ msgstr "Téléphone mobile"
-
-#~ msgid "Alternate phone"
-#~ msgstr "Autre téléphone"
 
 #~ msgid "No member passed"
 #~ msgstr "Pas de membre passé"

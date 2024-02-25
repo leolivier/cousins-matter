@@ -1,6 +1,22 @@
 {% load i18n %}
 {% load static %}
-<div>
-	<img src="{% static 'images/cousinsmatter.jpg' %}" style='height: 250px'>
-	Home content. TODO: parameterize home content
-</div>
+<div class="container">
+  <div class="media">
+    <figure class="media-left">
+      <p class="image">
+        <img style='height: 250px' src="{%if home_logo%}{{MEDIA_URL}}{{home_logo}}{%else%}{% static 'images/cousinsmatter.jpg' %}{%endif%}">
+      </p>
+    </figure>
+    <div class="media-content">
+			<p>
+				<strong class="is-size-1">
+				{% if home_title %}{{home_title}}{%else%}{%translate "Cousins Matter!" %}{%endif%}
+			</strong><br/>
+				{% if home_content %}
+					{{home_content}}
+				{%else%}
+					{%translate "No home content yet, please go to <a href='/admin'>admin site</a> and create one." %}
+				{%endif%}
+			</p>
+    </div>
+  </div>

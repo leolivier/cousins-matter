@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-25 15:39+0100\n"
+"POT-Creation-Date: 2024-02-25 17:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,9 +18,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cm_main/templates/cm_main/base.html:9
+#: cm_main/models.py:7
+msgid "Home title"
+msgstr "Titre de la page d'accueil"
+
+#: cm_main/models.py:7 cm_main/templates/cm_main/base.html:9
+#: cm_main/templates/cm_main/home.html:13
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
+
+#: cm_main/models.py:8
+msgid "Home content"
+msgstr "Contenu de la page d'accueil"
+
+#: cm_main/models.py:9
+msgid "Home logo"
+msgstr "Logo sur la page d'accueil"
+
+#: cm_main/templates/cm_main/home.html:18
+msgid ""
+"No home content yet, please go to <a href='/admin'>admin site</a> and create "
+"one."
+msgstr ""
 
 #: cm_main/templates/cm_main/menu.html:18
 msgid "Members"

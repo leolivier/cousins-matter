@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -123,12 +124,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-
+#STATIC_ROOT = Path(BASE_DIR, 'static').absolute()
 STATIC_URL = 'static/'
+
+MEDIA_ROOT = Path(BASE_DIR, 'media').absolute()
+MEDIA_URL = 'media/'
 
 STATICFILES_DIRS = [
     Path(BASE_DIR, 'static').absolute(),
-    Path(BASE_DIR, 'media').absolute(),
+    MEDIA_ROOT,
 #    "/var/www/static/",
 ]
 # Default primary key field type
@@ -136,8 +140,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_ROOT = Path(BASE_DIR, 'media').absolute()
-MEDIA_URL = 'media/'
 
 CRISPY_TEMPLATE_PACK = 'bulma'
 

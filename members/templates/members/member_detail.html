@@ -1,10 +1,7 @@
+{% extends "members/base_members.html" %}
 {% load i18n %}
-{% load members_extras %}
-<!DOCTYPE html>
-<html lang="en">
-	{{ "Cousins Matter - Detail"|members_header }}
-
-<body>
+{% block title %}{%translate "Cousins Matter - Detail" %} {% endblock %}
+{% block content %}
 	<h1 class="title is-1">{% translate "Member Detail" %}</h1>
 	<div class="container">
 		{% if pk %}
@@ -17,5 +14,4 @@
 			<input type="submit" value="Submit" class="button is-primary">
 		</form>
 	</div>
-</body>
-</html>
+{% endblock %}

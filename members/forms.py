@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from django.utils.translation import gettext as _
+#from django.utils.translation import gettext as _
 from .models import Member
 
 class MemberForm(ModelForm):

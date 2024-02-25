@@ -31,9 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+	'users.apps.UsersConfig',
 	'cm_main.apps.CmMainConfig',
 	'members.apps.MembersConfig',
     'polls.apps.PollsConfig',
+    'crispy_forms',
+    'crispy_bulma',
+    'django_icons',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -112,6 +116,8 @@ TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
 
@@ -120,7 +126,27 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    Path(BASE_DIR, 'static').absolute(),
+    Path(BASE_DIR, 'media').absolute(),
+#    "/var/www/static/",
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_ROOT = Path(BASE_DIR, 'media').absolute()
+MEDIA_URL = 'media/'
+
+CRISPY_TEMPLATE_PACK = 'bulma'
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'login'
+#LOGOUT_REDIRECT_URL = '/'
+
+DJANGO_ICONS = {
+    "ICONS": {
+        "account": {"name": "mdi mdi-account"},
+    },
+}

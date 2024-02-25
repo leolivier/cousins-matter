@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-20 17:27+0100\n"
+"POT-Creation-Date: 2024-02-24 20:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,80 +18,72 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: members/templates/members/birthdays.html:14
+#: members/templates/members/birthdays.html:3
+msgid "Cousins Matter - Birthdays"
+msgstr "Cousins Matter - Anniversaires"
+
+#: members/templates/members/birthdays_include.html:9
 #, python-format
 msgid "turns %(age)s today, happy birthday!"
 msgstr "a %(age)s ans aujourd'hui, joyeux anniversaire!"
 
-#: members/templates/members/birthdays.html:16
+#: members/templates/members/birthdays_include.html:11
 #, python-format
 msgid "will turn %(age)s tomorrow, happy birthday!"
 msgstr "aura %(age)s ans demain, joyeux anniversaire!"
 
-#: members/templates/members/birthdays.html:18
+#: members/templates/members/birthdays_include.html:13
 #, python-format
 msgid "will turn %(age)s on %(birthday)s"
 msgstr "aura %(age)s ans %(birthday)s"
 
-#: members/templates/members/birthdays.html:26
+#: members/templates/members/birthdays_include.html:21
 #, python-format
 msgid "No birthdays in next %(ndays)s days"
 msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
 
-#: members/templates/members/member_detail.html:8
-msgid "CousinsMatter Member Detail"
-msgstr "CousinsMatter Détail d'un Membre"
+#: members/templates/members/member_detail.html:3
+msgid "Cousins Matter - Detail"
+msgstr "Cousins Matter - Détail"
 
-#: members/templates/members/member_detail.html:16
-msgid "identity"
-msgstr "Identité"
+#: members/templates/members/member_detail.html:5
+msgid "Member Detail"
+msgstr "Détail d'un Membre"
 
-#: members/templates/members/member_detail.html:17
-msgid "First name"
-msgstr "Prénom"
+#: members/templates/members/members.html:3
+msgid "Cousins Matter - Members"
+msgstr "Cousins Matter - Membres"
 
-#: members/templates/members/member_detail.html:19
-msgid "Last name"
-msgstr "Nom"
-
-#: members/templates/members/member_detail.html:23
-msgid "Email addresses"
-msgstr "Adresses Mail"
-
-#: members/templates/members/member_detail.html:24
-msgid "Personal email"
-msgstr "Mail personnel"
-
-#: members/templates/members/member_detail.html:26
-msgid "Alternate email"
-msgstr "Mail alternatif"
-
-#: members/templates/members/member_detail.html:30
-msgid "Telephone numbers"
-msgstr "Numéros de téléphone"
-
-#: members/templates/members/member_detail.html:31
-msgid "Cell phone"
-msgstr "Téléphone mobile"
-
-#: members/templates/members/member_detail.html:33
-msgid "Alternate phone"
-msgstr "Autre téléphone"
-
-#: members/templates/members/member_detail.html:41
-msgid "No member passed"
-msgstr "Pas de membre passé"
-
-#: members/templates/members/members.html:8
-msgid "CousinsMatter Members"
-msgstr "CousinsMatter Membres"
-
-#: members/templates/members/members.html:23
+#: members/templates/members/members.html:17
 msgid "No members found"
 msgstr "Pas de membre trouvé"
 
-#~ msgid ""
-#~ "\n"
-#~ "                    will turn %(age)s on %(birthday)s\n"
-#~ "                    "
-#~ msgstr "aura %(age) ans le %(birthday)s"
+#~ msgid "identity"
+#~ msgstr "Identité"
+
+#~ msgid "First name"
+#~ msgstr "Prénom"
+
+#~ msgid "Last name"
+#~ msgstr "Nom"
+
+#~ msgid "Email addresses"
+#~ msgstr "Adresses Mail"
+
+#~ msgid "Personal email"
+#~ msgstr "Mail personnel"
+
+#~ msgid "Alternate email"
+#~ msgstr "Mail alternatif"
+
+#~ msgid "Telephone numbers"
+#~ msgstr "Numéros de téléphone"
+
+#~ msgid "Cell phone"
+#~ msgstr "Téléphone mobile"
+
+#~ msgid "Alternate phone"
+#~ msgstr "Autre téléphone"
+
+#~ msgid "No member passed"
+#~ msgstr "Pas de membre passé"

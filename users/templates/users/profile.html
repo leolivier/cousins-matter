@@ -2,24 +2,28 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
-      <div class="media">
-        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
-        <div class="media-body">
-          <h2 class="account-heading">{{ user.username }}</h2>
-          <p class="text-secondary">{{ user.email }}</p>
-        </div>
-      </div>
-      <form method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-          <fieldset class="form-group">
-              <legend class="border-bottom mb-4">{% translate "Profile Info" %}</legend>
-              {{ u_form|crispy }}
-              {{ p_form|crispy }}
-          </fieldset>
-          <div class="form-group">
-              <button class="btn btn-outline-info" type="submit">{% translate "Update" %}</button>
-          </div>
-      </form>
+{# TODO: manage media directory #}
+<div class="container">
+  <div class="media">
+    <figure class="media-left">
+      <p class="image is-128x128">
+        <img class="is-rounded" src="{{ user.profile.image.url }}">
+      </p>
+    </figure>
+    <div class="media-content">
+      <p class="content"><strong>{{ user.username }}</strong><small>&lt;{{ user.email }}&gt;</small></p>
     </div>
+  </div>
+  <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <fieldset class="container">
+          <legend class="title is-3">{% translate "Profile Info" %}</legend>
+          {{ u_form|crispy }}
+          {{ p_form|crispy }}
+      </fieldset>
+      <div class="container">
+          <button class="button is-primary" type="submit">{% translate "Update" %}</button>
+      </div>
+  </form>
+</div>
 {% endblock content %}

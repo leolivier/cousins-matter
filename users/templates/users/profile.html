@@ -2,8 +2,7 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
-{# TODO: manage media directory #}
-<div class="container">
+<div class="container mt-4">
   <div class="media">
     <figure class="media-left">
       <p class="image is-128x128">
@@ -12,6 +11,9 @@
     </figure>
     <div class="media-content">
       <p class="content"><strong>{{ user.username }}</strong><small>&lt;{{ user.email }}&gt;</small></p>
+    </div>
+    <div class="media-right">
+      <a class="button is-link" href="{% url 'users:change_password' %}">{% translate "Change Password" %}</a>
     </div>
   </div>
   <form method="POST" enctype="multipart/form-data">

@@ -10,6 +10,7 @@
             {% elif when == 1 %}
                 {% blocktranslate with age=member.age|add:1 %}will turn {{ age }} tomorrow, happy birthday!{% endblocktranslate %}
             {% else %}
+                {# TODO: manage locale for birthdate format #}
                 {% blocktranslate with age=member.age|add:1 birthday=member.birthdate|date:"l d F" %}will turn {{ age }} on {{ birthday }}{% endblocktranslate %}
             {% endif %}
         </li>

@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, \
+    ProfileUpdateForm, UserPasswordChangeForm, \
+    UserPasswordResetForm, UserPasswordResetConfirmForm
 from django.utils.translation import gettext as _
 from django.contrib.auth import logout
+import base64
 
 def register(request):
     if request.method == 'POST':
@@ -17,6 +20,7 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
+@login_required
 def logout_user(request):
     logout(request)
     messages.success(request, _("You have been logged out"))
@@ -45,3 +49,46 @@ def profile(request):
     }
 
     return render(request, 'users/profile.html', context)
+
+@login_required
+def change_password(request):
+  if request.method == 'POST':
+    form = UserPasswordChangeForm(user=request.user, data=request.POST)
+    if form.is_valid():
+      form.save()
+      messages.success(request, _('Your password was successfully updated!\nPlease login with your new password'))
+      return redirect('users:profile')
+  else:
+    form = UserPasswordChangeForm(user=request.user)
+  
+  context = {'form': form}
+  return render(request, 'users/password_change.html', context)
+
+def reset_password(request):
+  if request.method == 'POST':
+    form = UserPasswordResetForm(request.POST)
+    if form.is_valid():
+      form.save(request=request) 
+      return redirect('password_reset_done')
+  else:
+    form = UserPasswordResetForm()
+
+  context = {'form': form}
+  return render(request, 'users/password_reset.html', context)  
+
+def reset_password_confirm(request, uidb64, token):
+  if request.method == 'POST':
+    form = UserPasswordResetConfirmForm(request.POST)
+    if form.is_valid():
+      user = form.save()
+      messages.success(request, _('Your password has been reset!'))
+      return redirect('users:login')
+  else:
+    print(uidb64, token)
+    uidb64_enc = uidb64.encode('ascii')
+    decoded = base64.b64decode(uidb64_enc)
+    user=decoded.decode('ascii')
+    form = UserPasswordResetConfirmForm(user=user)
+  
+  context = {'form': form}
+  return render(request, 'users/password_reset_confirm.html', context)

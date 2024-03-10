@@ -19,6 +19,8 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+from users import views as user_views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path("", include("cm_main.urls")),
@@ -28,4 +30,10 @@ urlpatterns = [
     path("galleries/", include("galleries.urls")),
     path("polls/", include("polls.urls")),
     path("admin/", admin.site.urls),
+    #path("ckeditor/", include("ckeditor_uploader.urls")),
+    #path('password-reset/<uidb64>/<token>/', user_views.reset_password_confirm, name='password_reset_confirm'),
+    path('password-reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'), name='password_reset_confirm'),
+    path('password/reset', auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'), name='reset_password'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'), name='password_reset_done'),
+		
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

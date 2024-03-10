@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-25 15:39+0100\n"
+"POT-Creation-Date: 2024-02-25 18:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,11 +34,11 @@ msgstr "Besoin d'un compte?"
 msgid "Sign Up Now"
 msgstr "S'enregistrer maintenant"
 
-#: users/templates/users/profile.html:20
+#: users/templates/users/profile.html:19
 msgid "Profile Info"
 msgstr "Infos du profil"
 
-#: users/templates/users/profile.html:25
+#: users/templates/users/profile.html:24
 msgid "Update"
 msgstr "Mettre à jour"
 

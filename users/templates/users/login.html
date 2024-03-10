@@ -17,6 +17,11 @@
             {% translate "Need An Account?" %}
             <a class="is-2" href="{% url 'users:register' %}">{% translate "Sign Up Now" %}</a>
         </div>
+        <div class="container is-small">
+            {% translate "Password Forgotten?" %}
+            <a class="is-2" href="{% url 'reset_password' %}">{% translate "Reset password" %}</a>
+        </div>
+
     </div>
     {# TODO: add forgotten password process #}
 {% endblock content %}

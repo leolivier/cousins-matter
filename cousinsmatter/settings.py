@@ -144,7 +144,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bulma'
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = 'login'
+LOGIN_URL = '/users/login'
 #LOGOUT_REDIRECT_URL = '/'
 
 DJANGO_ICONS = {
@@ -152,3 +152,11 @@ DJANGO_ICONS = {
         "account": {"name": "mdi mdi-account"},
     },
 }
+
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST ='smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '<EMAIL>'
+EMAIL_HOST_PASSWORD = '<PASSWORD>'

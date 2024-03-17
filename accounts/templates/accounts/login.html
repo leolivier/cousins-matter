@@ -1,0 +1,27 @@
+{% extends "cm_main/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="box">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="container">
+                <legend class="title is-3">{% translate "Log In" %}</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="container">
+                <button class="button is-primary" type="submit">{% translate "Login" %}</button>
+            </div>
+        </form>
+        <div class="container is-small">
+            {% translate "Need An Account?" %}
+            <a class="is-2" href="{% url 'accounts:register' %}">{% translate "Sign Up Now" %}</a>
+        </div>
+        <div class="container is-small">
+            {% translate "Password Forgotten?" %}
+            <a class="is-2" href="{% url 'reset_password' %}">{% translate "Reset password" %}</a>
+        </div>
+
+    </div>
+    {# TODO: add forgotten password process #}
+{% endblock content %}

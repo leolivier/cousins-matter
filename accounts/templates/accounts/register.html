@@ -1,0 +1,21 @@
+{% extends "cm_main/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="box">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="container">
+                <legend class="title is-3">{% translate "Join Today" %}</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="container">
+                <button class="button is-primary" type="submit">{% translate "Sign Up" %}</button>
+            </div>
+        </form>
+        <div class="container is-small">
+            {% translate "Already Have An Account?" %}
+            <a class="is-2" href="{% url 'accounts:login' %}">{% translate "Sign In" %}</a>
+        </div>
+    </div>
+{% endblock content %}

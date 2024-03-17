@@ -1,0 +1,189 @@
+# French translation of Cousins Matter Accounts package.
+# Copyright (C) 2024	Olivier LEVILLAIN <olivier@levillain.eu>
+# This file is distributed under the same license as the Cousins Matter Accounts package.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Cousins Matter Accounts 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-17 11:24+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: accounts/templates/accounts/login.html:9
+msgid "Log In"
+msgstr "Connexion"
+
+#: accounts/templates/accounts/login.html:13
+msgid "Login"
+msgstr "Se connecter"
+
+#: accounts/templates/accounts/login.html:17
+msgid "Need An Account?"
+msgstr "Besoin d'un compte?"
+
+#: accounts/templates/accounts/login.html:18
+msgid "Sign Up Now"
+msgstr "S'enregistrer maintenant"
+
+#: accounts/templates/accounts/login.html:21
+#: accounts/templates/accounts/password_change.html:18
+msgid "Password Forgotten?"
+msgstr "Mot de passe oublié?"
+
+#: accounts/templates/accounts/login.html:22
+#: accounts/templates/accounts/password_change.html:19
+msgid "Reset password"
+msgstr "Reinitialiser le mot de passe"
+
+#: accounts/templates/accounts/password_change.html:10
+msgid "Password Change"
+msgstr "Changement du mot de passe"
+
+#: accounts/templates/accounts/password_change.html:14
+msgid "Change password"
+msgstr "Changer le mot de passe"
+
+#: accounts/templates/accounts/password_reset.html:10
+msgid "Enter new password"
+msgstr "Entrer un nouveau mot de passe"
+
+#: accounts/templates/accounts/password_reset.html:14
+msgid "Send a reset link"
+msgstr "Envoyer un lien de réinitialisation"
+
+#: accounts/templates/accounts/password_reset.html:18
+#: accounts/templates/accounts/password_reset_confirm.html:28
+msgid "Password Not Forgotten?"
+msgstr "Mot de passe non oublié?"
+
+#: accounts/templates/accounts/password_reset.html:19
+#: accounts/templates/accounts/password_reset_confirm.html:29
+#, fuzzy
+#| msgid "Sign In"
+msgid "Sign in"
+msgstr "Connexion"
+
+#: accounts/templates/accounts/password_reset_complete.html:6
+msgid "Password reset complete"
+msgstr "Reinitialisation du mot de passe terminée"
+
+#: accounts/templates/accounts/password_reset_complete.html:7
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr "Ton mot de passe a été défini. Tu peux maintenant te connecter."
+
+#: accounts/templates/accounts/password_reset_complete.html:9
+#, fuzzy
+#| msgid "Log In"
+msgid "Log in"
+msgstr "Connexion"
+
+#: accounts/templates/accounts/password_reset_confirm.html:12
+msgid "Password reset confirmation"
+msgstr "Confirmation de la réinitialisation du mot de passe"
+
+#: accounts/templates/accounts/password_reset_confirm.html:13
+msgid "Please enter your new password twice so we can verify you typed it in correctly."
+msgstr ""
+"Merci d'entrer ton nouveau mot de passe deux fois pour que nous puissions vérifier "
+"que tu l'as entré correctement."
+
+#: accounts/templates/accounts/password_reset_confirm.html:18
+msgid "Change my password"
+msgstr "Modifier mon mot de passe"
+
+#: accounts/templates/accounts/password_reset_confirm.html:24
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+"Le lien de réinitialisation du mot de passe est invalide, probablement "
+"parce qu'il a déjà été utilisé."
+"Merci de demander une nouvelle réinitialisation du mot de passe."
+
+#: accounts/templates/accounts/password_reset_done.html:6
+msgid "Password reset sent"
+msgstr "Reinitialisation du mot de passe envoyée"
+
+#: accounts/templates/accounts/password_reset_done.html:7
+msgid ""
+"We’ve emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+"Nous t'avons envoyé des instructions pour définir ton mot de passe, si "
+"un compte existe avec l'adresse e-mail que tu as entrée. Tu devrais "
+"le recevoir bientôt."
+
+#: accounts/templates/accounts/password_reset_done.html:9
+msgid ""
+"If you don’t receive an email, please make sure you’ve entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"Si tu ne recois pas d'e-mail, vérifie que tu as entré l'adresse "
+"que tu as utilisée pour t'enregistrer, et vérifie ton dossier "
+"de spams."
+
+#: accounts/templates/accounts/profile.html:16
+msgid "Change Password"
+msgstr "Modifier le mot de passe"
+
+#: accounts/templates/accounts/profile.html:22
+msgid "Profile Info"
+msgstr "Informations sur le profil"
+
+#: accounts/templates/accounts/profile.html:27
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: accounts/templates/accounts/register.html:9
+msgid "Join Today"
+msgstr "Rejoins nous aujourd'hui"
+
+#: accounts/templates/accounts/register.html:13
+msgid "Sign Up"
+msgstr "S'enregistrer"
+
+#: accounts/templates/accounts/register.html:17
+msgid "Already Have An Account?"
+msgstr "Tu as déjà un compte?"
+
+#: accounts/templates/accounts/register.html:18
+msgid "Sign In"
+msgstr "Connexion"
+
+#: accounts/views.py:17
+#, python-format
+msgid ""
+"Hello %(username)s, your account has been created! You are now able to log in"
+msgstr ""
+"Bonjour %(username)s, ton compte a été créé! Tu peux maintenant te "
+"connecter..."
+
+#: accounts/views.py:26
+msgid "You have been logged out"
+msgstr "Tu as été déconnecté(e)"
+
+#: accounts/views.py:35
+msgid ""
+"Your password was successfully updated!\n"
+"Please login with your new password"
+msgstr ""
+"Votre mot de passe a été mis à jour avec succès!\n"
+"Merci de te reconnecter avec ton nouveau mot de passe"
+
+#: accounts/views.py:60
+#, fuzzy
+#| msgid "Your account has been updated!"
+msgid "Your password has been reset!"
+msgstr "Ton compte a été mis à jour"
+
+#~ msgid "Log In Again"
+#~ msgstr "Se reconnecter"

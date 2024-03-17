@@ -1,10 +1,37 @@
 from django.forms import ModelForm
+from django.contrib.auth.models import User
 #from django.utils.translation import gettext as _
-from .models import Member
+from .models import Member, Address, Family
 
-class MemberForm(ModelForm):
+class MemberUpdateForm(ModelForm):
   class Meta:
     model = Member
+    localized_fields = "__all__"
+    exclude=["managing_account"]
+
+  def clean(self):
+    account = self.cleaned_data.get("account")
+    if account:  # if we have an account in form, we need to set the managing_account to the same account
+      self.cleaned_data['managing_account'] = User.objects.get(id=account.id)
+    return super().clean()
+
+
+class MemberUpdateNoAccountForm(ModelForm):
+  class Meta:
+    model = Member
+    localized_fields = "__all__"
+    exclude=["managing_account", "account"]
+
+class AddressUpdateForm(ModelForm):
+  class Meta:
+    model = Address
     fields = "__all__"
     localized_fields = "__all__"
-    #exclude=[]
+    exclude=[]
+
+class FamilyUpdateForm(ModelForm):
+  class Meta:
+    model = Family
+    fields = "__all__"
+    localized_fields = "__all__"
+    exclude=[]

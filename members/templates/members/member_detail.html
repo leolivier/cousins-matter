@@ -1,17 +1,44 @@
 {% extends "members/base_members.html" %}
-{% load i18n %}
+{% load i18n crispy_forms_tags %}
 {% block title %}{%translate "Cousins Matter - Detail" %} {% endblock %}
 {% block content %}
+	{% if form.instance %}
 	<h1 class="title is-1">{% translate "Member Detail" %}</h1>
+	<div class="media">
+    <figure class="media-left">
+      <p class="image is-128x128">
+        <img class="is-rounded" src="{{ form.instance.avatar.url }}">
+      </p>
+    </figure>
+    <div class="media-content">
+      <p class="content"><strong>{{ form.instance.first_name }} {{ form.instance.last_name }}</strong><small>&lt;{{ form.instance.email }}&gt;</small></p>
+    </div>
+    <div class="media-right">
+      <a class="button is-link" href="{% url 'accounts:change_password' %}">{% translate "Change Password" %}</a>
+    </div>
+  </div>
+	{% endif %}
 	<div class="container">
 		{% if pk %}
-		<form action="{% url 'members:detail' pk %}" method="post">
+		<form action="{% url 'members:edit' pk %}" method="post">
 		{% else %}
 		<form action="{% url 'members:create' %}" method="post">
 		{% endif %}
 			{% csrf_token %}
-			{{ form }}
-			<input type="submit" value="Submit" class="button is-primary">
+			
+		{% if writable %}
+			{{ form | crispy }}
+			<input type="submit" class="button is-primary" value='{% translate "Submit" %}'>
+		{% else %}
+			<fieldset disabled="disabled">{{ form | crispy }}</fieldset>
+			{% if editable %}
+				<a class="button is-primary" href="{% url 'members:edit' pk %}">{% translate "Edit" %}</a>
+			{% elif managing_account_name %}
+			<p class="content">
+				{% blocktranslate with name=managing_account_name %}(Only {{name}} can manage this member){% endblocktranslate %}
+			</p>
+			{% endif %}
+		{% endif %}
 		</form>
 	</div>
 {% endblock %}

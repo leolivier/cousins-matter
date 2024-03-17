@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-	'users.apps.UsersConfig',
+	'accounts.apps.AccountsConfig',
 	'cm_main.apps.CmMainConfig',
 	'members.apps.MembersConfig',
     'polls.apps.PollsConfig',
@@ -144,7 +145,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bulma'
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/users/login'
+LOGIN_URL = '/accounts/login'
 #LOGOUT_REDIRECT_URL = '/'
 
 DJANGO_ICONS = {
@@ -160,3 +161,33 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = '<EMAIL>'
 EMAIL_HOST_PASSWORD = '<PASSWORD>'
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+	    "file": {
+            "class": "logging.FileHandler",
+            "filename": "general.log",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "file"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+        "members": {
+            "handlers": ["console", "file"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}

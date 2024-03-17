@@ -1,31 +1,31 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# French translation of cousins_matter.
+# Copyright (C) 2024 Olivier LEVILLAIN <olivier@levillain.eu>
+# This file is distributed under the same license as the Cousins Matter package.
+# <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-25 17:37+0100\n"
+"POT-Creation-Date: 2024-03-17 12:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: French <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cm_main/models.py:7
-msgid "Home title"
-msgstr "Titre de la page d'accueil"
-
-#: cm_main/models.py:7 cm_main/templates/cm_main/base.html:9
+#: cm_main/apps.py:7 cm_main/models.py:7 cm_main/templates/cm_main/base.html:9
 #: cm_main/templates/cm_main/home.html:13
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
+
+#: cm_main/models.py:7
+msgid "Home title"
+msgstr "Titre de la page d'accueil"
 
 #: cm_main/models.py:8
 msgid "Home content"
@@ -40,6 +40,8 @@ msgid ""
 "No home content yet, please go to <a href='/admin'>admin site</a> and create "
 "one."
 msgstr ""
+"Aucun contenu de la page d'accueil n'est défini, merci d'aller sur le site "
+"<a href='/admin'>administration</a> et en créer un."
 
 #: cm_main/templates/cm_main/menu.html:18
 msgid "Members"

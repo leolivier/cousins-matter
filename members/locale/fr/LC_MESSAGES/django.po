@@ -8,87 +8,113 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-25 18:07+0100\n"
+"POT-Creation-Date: 2024-03-17 12:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: French <LL@li.org>\n"
 "Language: FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: members/models.py:6
+#: members/apps.py:7
+msgid "Members"
+msgstr "Membres"
+
+#: members/models.py:11
 msgid "Name"
 msgstr "Nom"
 
-#: members/models.py:8
+#: members/models.py:13
 msgid "Parent family"
 msgstr "Famille parente"
 
-#: members/models.py:11
-msgid "Street number"
-msgstr "Numéros dans la rue"
+#: members/models.py:18
+msgid "family"
+msgstr "famille"
 
-#: members/models.py:13
-msgid "Street name"
-msgstr "Nom de la voie"
+#: members/models.py:19
+msgid "families"
+msgstr "familles"
 
-#: members/models.py:15
+#: members/models.py:23
+msgid "Number & Street name"
+msgstr "N° et nom de la voie"
+
+#: members/models.py:25
 msgid "Complementary info"
 msgstr "Infos complémentaires"
 
-#: members/models.py:17
+#: members/models.py:27
 msgid "Zip code"
 msgstr "Code postal"
 
-#: members/models.py:19
+#: members/models.py:29
 msgid "City"
 msgstr "Ville"
 
-#: members/models.py:21
+#: members/models.py:31
 msgid "Country"
 msgstr "Pays"
 
-#: members/models.py:32
+#: members/models.py:41
+msgid "address"
+msgstr "adresse"
+
+#: members/models.py:42
+msgid "addresses"
+msgstr "adresses"
+
+#: members/models.py:46
+msgid "Linked Account"
+msgstr "Compte lié"
+
+#: members/models.py:47
+msgid "Managing account"
+msgstr ""
+"Compte gérant ce membre (pour les membres de la famille qui ne se gèrent pas "
+"eux-mêmes)"
+
+#: members/models.py:50
 msgid "First name"
 msgstr "Prénom"
 
-#: members/models.py:34
+#: members/models.py:52
 msgid "Last name"
 msgstr "Nom"
 
-#: members/models.py:36
+#: members/models.py:54
 msgid "Address"
 msgstr "Adresse"
 
-#: members/models.py:38
-msgid "Cell phone"
-msgstr "Téléphone mobile"
+#: members/models.py:56
+msgid "Phone"
+msgstr "Téléphone"
 
-#: members/models.py:40
-msgid "Alternate phone"
-msgstr "Autre téléphone"
-
-#: members/models.py:42
+#: members/models.py:58
 msgid "Birthdate"
 msgstr "Date de naissance"
 
-#: members/models.py:44
-msgid "Personal email"
-msgstr "Mail personnel"
+#: members/models.py:60
+msgid "Email address"
+msgstr "Adresse Mail"
 
-#: members/models.py:46
-msgid "Alternate email"
-msgstr "Mail alternatif"
-
-#: members/models.py:48
+#: members/models.py:62
 msgid "Website"
 msgstr "Site web"
 
-#: members/models.py:50
+#: members/models.py:64
 msgid "Family"
 msgstr "Famille"
+
+#: members/models.py:118
+msgid "member"
+msgstr "membre"
+
+#: members/models.py:119
+msgid "members"
+msgstr "members"
 
 #: members/templates/members/birthdays.html:3
 msgid "Cousins Matter - Birthdays"
@@ -118,9 +144,22 @@ msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
 msgid "Cousins Matter - Detail"
 msgstr "Cousins Matter - Détail"
 
-#: members/templates/members/member_detail.html:5
+#: members/templates/members/member_detail.html:6
 msgid "Member Detail"
 msgstr "Détail d'un Membre"
+
+#: members/templates/members/member_detail.html:17
+msgid "Change Password"
+msgstr "Changer le mot de passe"
+
+#: members/templates/members/member_detail.html:35
+msgid "Edit"
+msgstr "Modifier"
+
+#: members/templates/members/member_detail.html:38
+#, python-format
+msgid "(Only %(name)s can manage this member)"
+msgstr "(Seul %(name)s peut gérer ce membre)"
 
 #: members/templates/members/members.html:3
 msgid "Cousins Matter - Members"
@@ -129,12 +168,3 @@ msgstr "Cousins Matter - Membres"
 #: members/templates/members/members.html:17
 msgid "No members found"
 msgstr "Pas de membre trouvé"
-
-#~ msgid "identity"
-#~ msgstr "Identité"
-
-#~ msgid "Email addresses"
-#~ msgstr "Adresses Mail"
-
-#~ msgid "No member passed"
-#~ msgstr "Pas de membre passé"

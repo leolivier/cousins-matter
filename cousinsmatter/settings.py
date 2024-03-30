@@ -10,23 +10,38 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-r%5^tibqko((%13p#evi53gi8gg#o2y(-akf$qt6*6c_dg^s!h'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+# You must set ALLOWED_HOSTS if DEBUG is False
+ALLOWED_HOSTS = []
+
+# Internationalization
+LANGUAGE_CODE = 'fr-fr'
+
+TIME_ZONE = 'Europe/Paris'
+
+# Email properties
+EMAIL_HOST ='smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '<EMAIL>'
+EMAIL_HOST_PASSWORD = '<PASSWORD>'
+
+# DON'T CHANGE ANYTHING BELOW THIS LINE
+#===========================================================================================================
+
+
 from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-r%5^tibqko((%13p#evi53gi8gg#o2y(-akf$qt6*6c_dg^s!h'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -112,10 +127,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'fr-fr'
-
-TIME_ZONE = 'Europe/Paris'
-
 USE_I18N = True
 
 USE_L10N = True
@@ -156,11 +167,6 @@ DJANGO_ICONS = {
 
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST ='smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = '<EMAIL>'
-EMAIL_HOST_PASSWORD = '<PASSWORD>'
 
 LOGGING = {
     "version": 1,
@@ -191,3 +197,6 @@ LOGGING = {
         },
     },
 }
+
+AVATARS_DIR = Path(MEDIA_ROOT, 'avatars')
+AVATARS_SIZE = 300

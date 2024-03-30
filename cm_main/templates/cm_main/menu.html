@@ -40,7 +40,8 @@
 					<span class="icon"><i class="mdi mdi-account-check"></i></span>
 					<span>{% translate "Log in" %}</span>
 				</a>
-				<a class="button is-primary" href="{% url 'accounts:register' %}">
+{#				<a class="button is-primary" href="{% url 'accounts:register' %}"> #}
+				<a class="button is-primary" href="{% url 'members:register' %}">
 					<span class="icon"><i class="mdi mdi-account-box-plus-outline"></i></span>
 					<span><strong>{% translate "Sign up" %}</strong></span>
 				</a>
@@ -52,7 +53,7 @@
 						</span>
 					</button>
 					<div class="navbar-dropdown is-right">
-						<p>{{user.username}}</p>
+						<p class="has-text-centered is-size-4"><strong>{{user.username}}</strong></p>
 						<a class="navbar-item" href="{% url 'members:profile' %}">
 							<span class="icon"><i class="mdi mdi-account-box-edit-outline"></i></span>
 							<span>{% translate "Profile" %}</span>

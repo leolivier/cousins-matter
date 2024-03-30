@@ -3,6 +3,10 @@ import datetime
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from PIL import Image
+import logging
+from cousinsmatter import settings
+
+logger = logging.getLogger(__name__)
 
 def get_admin():
    return User.objects.filter(is_superuser=True).first()
@@ -43,39 +47,41 @@ class Address(models.Model):
 
 
 class Member(models.Model):
-    account = models.OneToOneField('auth.User', verbose_name=_('Linked Account'), on_delete=models.DO_NOTHING, null=True, blank=True)
+    account = models.OneToOneField('auth.User', verbose_name=_('Linked Account'), on_delete=models.CASCADE)
 
-    managing_account = models.ForeignKey('auth.User', verbose_name=_('Managing account'), on_delete=models.DO_NOTHING, 
+    managing_account = models.ForeignKey('auth.User', verbose_name=_('Managing account'), on_delete=models.CASCADE, 
                                       related_name='managing_account', default=1)
-
-    first_name = models.CharField(_('First name'), max_length=128)
-
-    last_name = models.CharField(_('Last name'), max_length=128)
+    # TODO: fix the avatar path is not sent by the form which always provide default.jpg...
+    avatar = models.ImageField(default='default.jpg', upload_to=settings.AVATARS_DIR, blank=True)
 
     address = models.ForeignKey(Address, verbose_name=_('Address'), null=True, blank=True, on_delete=models.DO_NOTHING)
 
     phone = models.CharField(_('Phone'), max_length=32, blank=True)
 
-    birthdate = models.DateField(_('Birthdate'), null=True, blank=True)
+    birthdate = models.DateField(_('Birthdate'), null=True, blank=False)
     
-    email = models.EmailField(_('Email address'), blank=True)
-
     website = models.URLField(_('Website'), blank=True)
 
     family = models.ForeignKey(Family, verbose_name=_('Family'), on_delete=models.CASCADE, null=True, blank=True)
 
     def get_full_name(self):
-      uname = f"({self.account.username})" if self.account else ''
-      return f"{self.first_name} {self.last_name} {uname}"
+      uname = self.account.username if self.account_id else self.id
+      return f"{self.first_name()} {self.last_name()} {uname}"
 
     def get_short_name(self):
-        return self.first_name if not self.account else self.account.name
+        return self.account.username if self.account_id else f'member id: {self.id}'
     
-    def family_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/family_<name>/<filename>
-      return "family_{0}/{1}".format(instance.family.name, filename)
+    def first_name(self):
+      return self.account.first_name if self.account_id else '?'
 
-    avatar = models.ImageField(default='default.jpg', upload_to=family_directory_path, blank=True)
+    def last_name(self):
+      return self.account.last_name if self.account_id else '?'
+
+    def email(self):
+      return self.account.email if self.account else ''
+
+    def username(self):
+      return self.account.username if self.account else ''
 
     def __str__(self) -> str:
       return self.get_full_name()
@@ -87,36 +93,36 @@ class Member(models.Model):
          (today.month == self.birthdate.month and today.day > self.birthdate.day):
             year += 1
       return self.birthdate.replace(year=year)
-      
+
     def age(self) -> int:
       today = datetime.date.today()
       years = today.year - self.birthdate.year
       return years if (today >= self.next_birthday()) else years-1
 
     def save(self, *args, **kwargs):
-        # need to have a managing account. If none, use the first admin created
-        if self.managing_account is None: self.managing_account = get_admin().id
 
-        # sync back email with linked account email
-        if not self.email and self.account and self.account.email :
-           self.email = self.account.email
-        super().save(*args, **kwargs)
+      logger.info(f"Saving member {self.get_full_name()}: {vars(self)}")
 
-        # resize avatar
-        img = Image.open(self.avatar.path)
+      # make sure the managing account is the account if it's active
+      if self.account.is_active and self.managing_account!= self.account:
+        logger.info(f"Before saving member {self.get_full_name()}: changing managing account")
+        self.managing_account = self.account
+      elif self.managing_account is None: 
+        # If no managing account and account inactive, use admin account
+        self.managing_account = get_admin()
 
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.avatar.path)
 
-        # update linked account
-        if self.account:
-          user = User.objects.get(id=self.account.id)
-          user.first_name = self.first_name,
-          user.last_name = self.last_name,
-          user.email = self.email,
-          user.save()
+      super().save(*args, **kwargs)
+
+      # resize avatar
+      img = Image.open(self.avatar.path)
+
+      if img.height > settings.AVATARS_SIZE or img.width > settings.AVATARS_SIZE:
+          output_size = (settings.AVATARS_SIZE, settings.AVATARS_SIZE)
+          img.thumbnail(output_size)
+          img.save(self.avatar.path)
+
+      logger.info(f"Resized and saved avatar for {self.get_full_name()} in {self.avatar.path}, size: {img.size}")
 
     class Meta:
       verbose_name = _('member')

@@ -2,15 +2,31 @@
 {% load i18n %}
 {% block title %}{%translate "Cousins Matter - Members" %} {% endblock %}
 {% block content %}
+  <div class="media container">
+    <div class="media-left"></div>
+    <div class="media-content">
+      <h1 class="title">{% translate "Members List" %}</h1>
+    </div>
+    <div class="media-right">
+        <a class="button is-link" href="{% url 'members:create' %}">
+          {% translate "Create Member" %}
+        </a>
+      </div>
+
+  </div>
   {% if member_list %}
-	<div>
-		<ul>
+	<div class="fixed-grid has-auto-count">
+		<div class="grid">
     {% for member in member_list %}
-        <li>
-					<a href="{% url 'members:detail' member.id %}">{{ member.first_name }} {{ member.last_name }}</a>
-				</li>
+      <div class="cell">
+        <strong>
+          <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
+            {{ member.first_name }} {{ member.last_name }}
+          </a>
+        </strong>
+      </div>
     {% endfor %}
-    </ul>
+    </div>
 	</div>
   {% else %}
 	<div>

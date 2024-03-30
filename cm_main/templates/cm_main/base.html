@@ -28,7 +28,11 @@
           <ul class="messages">
           {% for message in messages %}
             <li{% if message.tags %} class="message is-{{ message.tags }}"{% endif %}>
-              <div class="message-body">{{ message }}</div>
+              <div class="message-body">
+                {% autoescape off %}
+                  {{ message }}
+                {% endautoescape %}
+              </div>
             </li>
           {% endfor %}
           </ul>

@@ -32,13 +32,13 @@ def logout_account(request):
 @login_required
 def change_password(request):
   if request.method == 'POST':
-    form = AccountPasswordChangeForm(account=request.account, data=request.POST)
+    form = AccountPasswordChangeForm(user=request.user, data=request.POST)
     if form.is_valid():
       form.save()
       messages.success(request, _('Your password was successfully updated!\nPlease login with your new password'))
       return redirect('accounts:login')
   else:
-    form = AccountPasswordChangeForm(account=request.account)
+    form = AccountPasswordChangeForm(user=request.user)
   
   context = {'form': form}
   return render(request, 'accounts/password_change.html', context)
@@ -59,7 +59,7 @@ def reset_password_confirm(request, uidb64, token):
   if request.method == 'POST':
     form = AccountPasswordResetConfirmForm(request.POST)
     if form.is_valid():
-      account = form.save()
+      form.save()
       messages.success(request, _('Your password has been reset!'))
       return redirect('accounts:login')
   else:

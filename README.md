@@ -8,9 +8,17 @@ then cd to the created directory:
 To install dependencies:
 `pip install -r requirements.txt`
 (it's better to do that in a pip env or a conda specific environment)
+Create a superuser:
+`python manage.py createsuperuser`
+Edit ./cousinsmatter/settings.py to set the properties at the beginning of the file.
 
 # To run it
 `python manage.py runserver`
+Then, only the 1rst time:
+* Go to http://127.0.0.1:8000/
+* Login with the superuser account
+* Complete your profile (profile menu on the right hand side icon)
+* You're good to go
 
 # To generate a new language
 `django-admin makemessages -l <language_code>`
@@ -19,11 +27,19 @@ and finish with:
 `django-admin compilemessages`	
 which will compile the translations
 
-# todo
+# To reset the database completely
+Run `./clean_database.sh`
+
+# Todos
+* fix avatar not working
+* check sign up with email + validation by admin
+* validate emails changes
+* manage to send really emails for pasword reinit
+* write tests
 * create a docker file
 * develop different subpackages
-** news
-** classified ads
-** galleries
-** chat
-** ...
+  * news
+  * classified ads
+  * galleries
+  * chat
+  * ...

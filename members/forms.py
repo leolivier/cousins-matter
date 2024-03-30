@@ -7,20 +7,13 @@ class MemberUpdateForm(ModelForm):
   class Meta:
     model = Member
     localized_fields = "__all__"
-    exclude=["managing_account"]
+    exclude=["managing_account", "account"]
 
   def clean(self):
     account = self.cleaned_data.get("account")
     if account:  # if we have an account in form, we need to set the managing_account to the same account
       self.cleaned_data['managing_account'] = User.objects.get(id=account.id)
     return super().clean()
-
-
-class MemberUpdateNoAccountForm(ModelForm):
-  class Meta:
-    model = Member
-    localized_fields = "__all__"
-    exclude=["managing_account", "account"]
 
 class AddressUpdateForm(ModelForm):
   class Meta:

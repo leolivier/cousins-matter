@@ -19,11 +19,9 @@
 		<div class="grid">
     {% for member in member_list %}
       <div class="cell">
-        <strong>
-          <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
-            {{ member.first_name }} {{ member.last_name }}
-          </a>
-        </strong>
+        <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
+          <strong>{{ member.first_name }} {{ member.last_name }}</strong>
+        </a>
       </div>
     {% endfor %}
     </div>

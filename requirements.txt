@@ -3,3 +3,4 @@ pillow>=10.2.0
 django-crispy-forms>=2.1
 crispy-bulma>=0.11.0
 django-icons>=23.5
+django-environ>=0.11.2

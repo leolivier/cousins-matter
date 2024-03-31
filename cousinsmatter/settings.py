@@ -9,36 +9,39 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-r%5^tibqko((%13p#evi53gi8gg#o2y(-akf$qt6*6c_dg^s!h'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# You must set ALLOWED_HOSTS if DEBUG is False
-ALLOWED_HOSTS = []
-
-# Internationalization
-LANGUAGE_CODE = 'fr-fr'
-
-TIME_ZONE = 'Europe/Paris'
-
-# Email properties
-EMAIL_HOST ='smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = '<EMAIL>'
-EMAIL_HOST_PASSWORD = '<PASSWORD>'
-
-# DON'T CHANGE ANYTHING BELOW THIS LINE
-#===========================================================================================================
-
-
+import environ
 from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# load keys from .env
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+SECRET_KEY = env('SECRET_KEY')
+
+DEBUG = env('DEBUG')
+
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+
+LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
+
+TIME_ZONE = env('TIME_ZONE', default='Europe/Paris')
+
+# Email properties
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_USE_TLS = env('EMAIL_USE_TLS')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+DJANGO_LOG_LEVEL = env('DJANGO_LOG_LEVEL', default='INFO')
+CM_LOG_LEVEL = env('CM_LOG_LEVEL', default='INFO')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -187,12 +190,12 @@ LOGGING = {
     "loggers": {
         "django": {
             "handlers": ["console", "file"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "level": DJANGO_LOG_LEVEL,
             "propagate": False,
         },
         "members": {
             "handlers": ["console", "file"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "level": CM_LOG_LEVEL,
             "propagate": False,
         },
     },

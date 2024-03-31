@@ -22,7 +22,7 @@ class MemberCreateTest(TestCase):
 	# 	self.assertEqual(member.account.password, '<PASSWORD>')
 
 	def test_create_user_creates_member(self):
-			# check taht create account (in SetUp) has an associated Member
+			# check that create account (in SetUp) has an associated Member
 			self.assertEqual(Member.objects.filter(account=self.account).count(), 1)
 
 	def test_create_managed_member_creates_user(self):
@@ -50,6 +50,32 @@ class MemberCreateTest(TestCase):
 		self.assertEqual(Member.objects.filter(id=member.id).count(), 0)
 		self.assertEqual(User.objects.filter(username=self.account.username).count(), 0)
 
+class MemberRegisterTests(TestCase):
+
+	def test_register_view(self):
+		user = {}
+		response = self.client.get(reverse('accounts:register'))
+		self.assertEqual(response.status_code, 200)
+		self.assertTemplateUsed(response, 'accounts/register.html')
+		user['username'] = 'foobar1'
+		user['password1'] = "<PASSWORD>"
+		user['password2'] = "<PASSWORD>"
+		response = self.client.post(reverse('accounts:register'), user)
+		self.assertContains(response, _("This password is too common."))
+		user['password1'] = user['password2'] = 'vWx12/gtV"'
+		response = self.client.post(reverse('accounts:register'), user) 
+		self.assertContains(response, _("This field is required."))
+		user['email'] = "foo@bar1.com"
+		response = self.client.post(reverse('accounts:register'), user)
+		self.assertContains(response, _("This field is required."))
+		user['first_name'] = 'foo'
+		response = self.client.post(reverse('accounts:register'), user)
+		self.assertContains(response, _("This field is required."))
+		user['last_name'] = 'bar1'
+		response = self.client.post(reverse('accounts:register'), user) 
+		self.assertRedirects(response, reverse('accounts:login'), 302, 200)
+		user = User.objects.filter(username=user['username'])
+		self.assertTrue(user.exists())
 
 class LoginRequiredTests(TestCase):
 	def setUp(self):
@@ -91,7 +117,7 @@ class MemberProfileViewTest(TestCase):
 		user = TEST_ACCOUNT.copy()
 		user['first_name'] += '1'
 		user['phone'] = '01 23 45 67 89'
-		response = self.client.post(reverse('members:profile'), user, follow=True)
+		response = self.client.post(reverse('members:profile'), **user, follow=True)
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(User.objects.get(username=user['username']).first_name, user['first_name'])
 		self.assertEqual(Member.objects.get(account__username=user['username']).phone, user['phone'])

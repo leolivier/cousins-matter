@@ -11,17 +11,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def register(request):
-    if request.method == 'POST':
-        form = AccountRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, _('Hello %(username)s, your account has been created! You are now able to log in') % {"username": username})
-            return redirect('accounts:login')
-    else:
-        form = AccountRegisterForm()
-    return render(request, 'accounts/register.html', {'form': form})
+# replaced by member registration
+# def register(request):
+#     if request.method == 'POST':
+#         form = AccountRegisterForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data.get('username')
+#             messages.success(request, _('Hello %(username)s, your account has been created! You are now able to log in') % {"username": username})
+#             return redirect('accounts:login')
+#     else:
+#         form = AccountRegisterForm()
+#     return render(request, 'accounts/register.html', {'form': form})
 
 @login_required
 def logout_account(request):

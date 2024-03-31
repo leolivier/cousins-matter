@@ -34,7 +34,6 @@ Run `./clean_database.sh`
 * fix avatar not working
 * check sign up with email + validation by admin
 * validate emails changes
-* manage to send really emails for pasword reinit
 * write tests
 * create a docker file
 * develop different subpackages

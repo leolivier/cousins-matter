@@ -36,16 +36,15 @@ TIME_ZONE = env('TIME_ZONE', default='Europe/Paris')
 # Email properties
 EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_USE_TLS = env('EMAIL_USE_TLS')
+EMAIL_USE_TLS = env('EMAIL_USE_TLS', default=True)
+EMAIL_USE_SSL = env('EMAIL_USE_SSL', default=False)
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default="cousinsmatter@localhost")
 
+# log levels
 DJANGO_LOG_LEVEL = env('DJANGO_LOG_LEVEL', default='INFO')
 CM_LOG_LEVEL = env('CM_LOG_LEVEL', default='INFO')
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
 
 # Application definition
 
@@ -168,8 +167,8 @@ DJANGO_ICONS = {
     },
 }
 
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGGING = {
     "version": 1,

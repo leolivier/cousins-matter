@@ -13,18 +13,18 @@ from .models import Member, Address, Family
 from .forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
 from accounts.forms import AccountUpdateForm, AccountRegisterForm
 import logging
+from cousinsmatter import settings 
 
 logger = logging.getLogger(__name__)
 
 @login_required
 def birthdays(request) -> HttpResponse:
   """
-  Return the members with their birthday in the next ndays days
-  (or previous ndays days if ndays <0)
+  Return the members with their birthday in the next settings.BIRTHDAYS_NDAYS days
+  (or previous settings.BIRTHDAYS_NDAYS days if settings.BIRTHDAYS_NDAYS <0)
   """
-  ndays = 50 # TODO: parameterize
   today = date.today()
-  deltaNdays = timedelta(days = ndays)
+  deltaNdays = timedelta(days = settings.BIRTHDAYS_NDAYS)
   bdays = []
   for m in Member.objects.all():
     nb = m.next_birthday()
@@ -33,7 +33,7 @@ def birthdays(request) -> HttpResponse:
         bdays.append((m, delta.days))
   context = {
     "birthdays_list": bdays,
-    "ndays": ndays
+    "ndays": settings.BIRTHDAYS_NDAYS
   }
   return render(request, "members/birthdays.html", context)
 

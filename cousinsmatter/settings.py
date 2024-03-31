@@ -46,6 +46,9 @@ DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default="cousinsmatter@localhost"
 DJANGO_LOG_LEVEL = env('DJANGO_LOG_LEVEL', default='INFO')
 CM_LOG_LEVEL = env('CM_LOG_LEVEL', default='INFO')
 
+# Number of days for birthdays
+BIRTHDAY_DAYS = env('BIRTHDAY_DAYS', default=50)
+
 # Application definition
 
 INSTALLED_APPS = [

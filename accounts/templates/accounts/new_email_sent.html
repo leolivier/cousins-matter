@@ -1,0 +1,15 @@
+{% extends "cm_main/base.html" %}
+{% load i18n %}
+{% block title %}{%translate "Cousins Matter - New Email Sent" %} {% endblock %}
+{%block content%}
+
+<div class="container">
+    <h1 class="title">{% translate 'Email Sent!' %}</h1>
+    <hr/>
+    <p class="content">{% translate "You have requested another verification email!" %}</p>
+    <p class="content">{% translate 'Your verification link has been sent'%}</p>
+    <p class="content">{% translate "Please check your email and click on the link to verify your email." %}</p>
+</div>
+
+{%endblock%}
+

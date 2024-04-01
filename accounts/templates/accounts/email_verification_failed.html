@@ -1,0 +1,17 @@
+{% extends "cm_main/base.html" %}
+{% load i18n %}
+{% block title %}{%translate "Cousins Matter - Invalid Link!" %} {% endblock %}
+{%block content%}
+
+<div class="container">
+    <h1 class="title">{% translate 'Invalid Link!' %}</h1>
+    <hr/>
+    <p class="content">{% translate "This link is invalid or been used already, we cannot verify using this link." %}</p>
+</div>
+<div class="container mt-4">
+    <a href="{% url 'request-new-link-from-email' %}" class="button is-primary">
+        {% translate "Request a new link" %}
+    </a>
+</div>
+
+{% endblock %}

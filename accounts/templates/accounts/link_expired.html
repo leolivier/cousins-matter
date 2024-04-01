@@ -1,0 +1,17 @@
+{% extends "cm_main/base.html" %}
+{% load i18n %}
+{% block title %}{%translate "Cousins Matter - Link Expired!" %} {% endblock %}
+{%block content%}
+
+<div class="container">
+    <h1 class="title">{% translate "Link Expired!" %}</h1>
+    <hr/>
+    <p class="content">{% translate "The link has lived its life :( Can not validate a dead link..." %}</p>
+</div>
+<div class="container mt-4">
+    <a href="{% url 'request-new-link-from-token' encoded_email encoded_token %}" class="button is-primary">
+        {% translate "Request Another one" %}
+    </a>
+</div>
+
+{% endblock %}

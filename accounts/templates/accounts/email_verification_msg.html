@@ -1,0 +1,74 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% translate 'Verify Email address' %}</title>
+
+    <style>
+        body { font-family: sans-serif; }
+        hr { width:100px; }
+        .green {
+            background-color: rgb(0, 209, 157);
+            color: rgb(0, 31, 26);
+            border: 1px solid rgb(0, 209, 177);
+        }
+        .small { font-size: 0.75rem;}
+        .container {
+            margin: 10px;
+            padding: 10px;
+            padding-top: 0px;
+            justify-content: center;
+            border-radius: 5px;
+            border: 1px solid rgb(0, 209, 157);
+        }
+        .button {
+            padding: 10px;
+            padding-left: 35px;
+            padding-right: 35px;
+            border-radius: 5px;
+            transition-duration: 500ms;
+            text-decoration: none;
+        }
+        .mt-5 { margin-top: 50px;}
+        .mt-3 { margin-top: 30px;}
+        .mt-2 { margin-top: 20px;}
+        .center { text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="green">
+            <h1 class="center" style="padding:2px">
+                {% translate "Cousins Matter Account Activation" %}
+            </h1>
+        </div>
+
+        <h2 class="center">{% translate "E-mail Confirmation" %}</h2>
+        <hr>
+
+        <div class="center">
+            <p class="mt-2"><strong>{% translate 'Greetings!' %}</strong></p>
+            <p class="mt-2">
+                {% translate "You received this mail because you attempted to make account on our website" %}<br>
+                {% translate "Please click on the link below to confirm the email and activate your account." %}
+            </p>
+            <p class="mt-2">
+                <strong>{% translate "You'll be joining us right after the verification !" %}</strong>
+            </p>
+        </div>
+        <div class="center mt-3">
+            <hr>
+            <a href="{{link}}" class="button green" >{% translate "Verify" %}</a>
+        </div>
+    
+        <p class="small mt-3 center">{% translate "Do not reply to this mail, it is machine generated." %}</p>
+        
+    </div>
+   
+</body>
+</html>

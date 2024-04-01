@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-17 12:57+0100\n"
+"POT-Creation-Date: 2024-04-01 14:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,97 +22,85 @@ msgstr ""
 msgid "Members"
 msgstr "Membres"
 
-#: members/models.py:11
+#: members/models.py:15
 msgid "Name"
 msgstr "Nom"
 
-#: members/models.py:13
+#: members/models.py:17
 msgid "Parent family"
 msgstr "Famille parente"
 
-#: members/models.py:18
+#: members/models.py:22
 msgid "family"
 msgstr "famille"
 
-#: members/models.py:19
+#: members/models.py:23
 msgid "families"
 msgstr "familles"
 
-#: members/models.py:23
+#: members/models.py:27
 msgid "Number & Street name"
 msgstr "N° et nom de la voie"
 
-#: members/models.py:25
+#: members/models.py:29
 msgid "Complementary info"
 msgstr "Infos complémentaires"
 
-#: members/models.py:27
+#: members/models.py:31
 msgid "Zip code"
 msgstr "Code postal"
 
-#: members/models.py:29
+#: members/models.py:33
 msgid "City"
 msgstr "Ville"
 
-#: members/models.py:31
+#: members/models.py:35
 msgid "Country"
 msgstr "Pays"
 
-#: members/models.py:41
+#: members/models.py:45
 msgid "address"
 msgstr "adresse"
 
-#: members/models.py:42
+#: members/models.py:46
 msgid "addresses"
 msgstr "adresses"
 
-#: members/models.py:46
+#: members/models.py:50
 msgid "Linked Account"
 msgstr "Compte lié"
 
-#: members/models.py:47
+#: members/models.py:52
 msgid "Managing account"
 msgstr ""
 "Compte gérant ce membre (pour les membres de la famille qui ne se gèrent pas "
 "eux-mêmes)"
 
-#: members/models.py:50
-msgid "First name"
-msgstr "Prénom"
-
-#: members/models.py:52
-msgid "Last name"
-msgstr "Nom"
-
-#: members/models.py:54
+#: members/models.py:57
 msgid "Address"
 msgstr "Adresse"
 
-#: members/models.py:56
+#: members/models.py:59
 msgid "Phone"
 msgstr "Téléphone"
 
-#: members/models.py:58
+#: members/models.py:61
 msgid "Birthdate"
 msgstr "Date de naissance"
 
-#: members/models.py:60
-msgid "Email address"
-msgstr "Adresse Mail"
-
-#: members/models.py:62
+#: members/models.py:63
 msgid "Website"
 msgstr "Site web"
 
-#: members/models.py:64
+#: members/models.py:65
 msgid "Family"
 msgstr "Famille"
 
-#: members/models.py:118
+#: members/models.py:128
 msgid "member"
 msgstr "membre"
 
-#: members/models.py:119
+#: members/models.py:129
 msgid "members"
 msgstr "members"
 
@@ -144,27 +132,160 @@ msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
 msgid "Cousins Matter - Detail"
 msgstr "Cousins Matter - Détail"
 
-#: members/templates/members/member_detail.html:6
-msgid "Member Detail"
+#: members/templates/members/member_detail.html:7
+#: members/templates/members/members.html:12
+#, fuzzy
+#| msgid "Members"
+msgid "Create Member"
+msgstr "Membres"
+
+#: members/templates/members/member_detail.html:9
+msgid "Sign Up"
+msgstr "S'enregistrer"
+
+#: members/templates/members/member_detail.html:11
+msgid "My Profile"
+msgstr "Mon Profil"
+
+#: members/templates/members/member_detail.html:13
+msgid "Update Member Details"
+msgstr "Modifier les détails d'un Membre"
+
+#: members/templates/members/member_detail.html:15
+#, fuzzy
+msgid "Member Details"
 msgstr "Détail d'un Membre"
 
 #: members/templates/members/member_detail.html:17
+msgid "Unknown mode. Something went wrong!"
+msgstr "Mode inconnu. Une erreur est survenue!"
+
+#: members/templates/members/member_detail.html:33
+#, fuzzy
+msgid "Active member"
+msgstr "Membre active"
+
+#: members/templates/members/member_detail.html:35
+#, fuzzy
+msgid "Managed member"
+msgstr "Membre géré"
+
+#: members/templates/members/member_detail.html:41
 msgid "Change Password"
 msgstr "Changer le mot de passe"
 
-#: members/templates/members/member_detail.html:35
-msgid "Edit"
-msgstr "Modifier"
+#: members/templates/members/member_detail.html:56
+#: members/templates/members/member_detail.html:64
+msgid "Submit"
+msgstr "Soumettre"
 
-#: members/templates/members/member_detail.html:38
+#: members/templates/members/member_detail.html:57
 #, python-format
 msgid "(Only %(name)s can manage this member)"
 msgstr "(Seul %(name)s peut gérer ce membre)"
+
+#: members/templates/members/member_detail.html:66
+#, fuzzy
+msgid "Activate Account"
+msgstr "Activer le compte"
+
+#: members/templates/members/member_detail.html:73
+msgid "Lost your verification email?"
+msgstr "Mail de vérification perdu?"
+
+#: members/templates/members/member_detail.html:75
+msgid "Request a new link"
+msgstr "Demander un nouveau lien"
 
 #: members/templates/members/members.html:3
 msgid "Cousins Matter - Members"
 msgstr "Cousins Matter - Membres"
 
-#: members/templates/members/members.html:17
+#: members/templates/members/members.html:8
+#, fuzzy
+msgid "Members List"
+msgstr "Liste des Membres"
+
+#: members/templates/members/members.html:31
 msgid "No members found"
 msgstr "Pas de membre trouvé"
+
+#: members/tests.py:64
+msgid "This password is too common."
+msgstr "Ce mot de passe est trop commun."
+
+#: members/tests.py:67 members/tests.py:70 members/tests.py:73
+msgid "This field is required."
+msgstr "Ce champs est obligatoire."
+
+#: members/views.py:117
+#, python-format
+msgid ""
+"Hello %(username)s, your account has been created! You will now receive an "
+"email to verify your email address. Click in the link inside the mail to "
+"finish the registration."
+msgstr ""
+"Hello %(username)s, ton compte a été créé! Tu vas maintenant recevoir un "
+"email pour vérifier ton adresse mail. Clique sur le lien "
+"dans le mail pour terminer le processus de création de compte."
+
+#: members/views.py:120
+msgid "Member successfully created"
+msgstr "Le membre a été créé avec succès"
+
+#: members/views.py:123
+msgid "Member successfully updated"
+msgstr "Le membre a été mis à jour avec succès"
+
+#: members/views.py:156
+msgid "You are already logged in"
+msgstr "Tu es déjà connecté"
+
+#: members/views.py:166
+msgid ""
+"A member with the same account name or email address is already registered. "
+"Please login instead"
+msgstr ""
+"Un membre avec le même nom d'utilisateur ou la même adresse mail est déjà enregistré. "
+"Connecte-toi plutôt."
+
+#: members/views.py:170
+#, python-format
+msgid ""
+"You are already registered but not active. Please contact %s to activate "
+"your account"
+msgstr ""
+"Tu es déjà enregistré mais pas encore actif. Contacte %s pour activer ton compte."
+
+#: members/views.py:191
+#, python-brace-format
+msgid "Error: Only cannot {first_name} {last_name} can change this member"
+msgstr "Erreur: Seul {first_name} {last_name} peut modifier ce membre"
+
+#: members/views.py:229
+msgid "Error: Account already active"
+msgstr "Erreur: Compte déjà activé"
+
+#: members/views.py:231
+msgid "Error: Account without email cannot be activated"
+msgstr "Erreur: Un compte sans adresse mail ne peut pas être activé"
+
+#: members/views.py:238
+msgid ""
+"Account successfully activated. The owner of the account must now proceed as "
+"if (s)he had lost his/her password before being able to log in."
+msgstr ""
+"Compte activé avec succès. Le propriétaire du compte doit maintenant procéder "
+"comme s'il avait perdu son mot de passe avant de pouvoir se connecter."
+
+#~ msgid "First name"
+#~ msgstr "Prénom"
+
+#~ msgid "Last name"
+#~ msgstr "Nom"
+
+#~ msgid "Email address"
+#~ msgstr "Adresse Mail"
+
+#~ msgid "Edit"
+#~ msgstr "Modifier"

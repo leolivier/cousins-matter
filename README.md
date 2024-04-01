@@ -32,8 +32,8 @@ Run `./clean_database.sh`
 
 # Todos
 * fix avatar not working
-* check sign up with email + validation by admin
-* validate emails changes
+* validation signup by admin
+* manage addresses and families
 * write tests
 * create a docker file
 * develop different subpackages

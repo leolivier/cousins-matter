@@ -1,5 +1,8 @@
+import logging
+from enum import Enum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
+from django.template.loader import render_to_string
 from django.contrib import messages
 from django.urls import reverse
 from django.views import generic
@@ -8,14 +11,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
-
+from verify_email.email_handler import send_verification_email, _VerifyEmail
 from .models import Member, Address, Family
 from .forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
 from accounts.forms import AccountUpdateForm, AccountRegisterForm
-import logging
 from cousinsmatter import settings 
 
 logger = logging.getLogger(__name__)
+
+MEMBER_MODE_ENUMS = Enum('MEMBER_MODE_ENUMS', ['create_managed', 'signup', 'update_managed', 'profile', 'show_details'])
 
 @login_required
 def birthdays(request) -> HttpResponse:
@@ -59,43 +63,21 @@ def managing_member_name(member):
         return member.managing_account.username
     else:
         return None
-    
-@login_required
-def view_member(request, pk):
-    member = get_object_or_404(Member, pk=pk)
-    # if this is not a GET, error
-    if request.method != "GET":
-        messages.error(request, _("Error: Only GET is allowed here"))
-        return redirect("members:detail", kwargs={"pk":pk})
 
-    m_form = MemberUpdateForm(instance=member)
-    u_form = AccountUpdateForm(instance=member.account)
-
-    return render(request, "members/member_detail.html", {"m_form": m_form,
-                                                          "u_form": u_form, 
-                                                          "pk":pk, 
-                                                          "writable": False, 
-                                                          "editable": editable(request, member),
-                                                          "managing_account_name": managing_member_name(member)})
-
-def upsert_member(request, member=None):
-    """create or update a member"""
-    # if we create a new member, if a user is logged in, he is creating a new managed member
-    # otherwise, someone is self registering
-    new_member = new_managed_member = self_registration = False
-    if not member:
-        new_member = True
-        new_managed_member = request.user.is_authenticated
-        self_registration = not new_managed_member
-
+def _view_member(request, mode:MEMBER_MODE_ENUMS, member=None):
+    """display, create or update a member"""
+ 
     # if this is a POST request we need to process the form data
     if request.method == "POST":
         # create a form instance and populate it with data from the request on existing member (or None):
         m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
-        if self_registration:
+        if mode == MEMBER_MODE_ENUMS.signup:
             u_form = AccountRegisterForm(request.POST)
-        elif new_managed_member: # no need of the passwords, we are creating an inactive account
+        elif mode == MEMBER_MODE_ENUMS.create_managed: # no need of the passwords, we are creating an inactive account
             u_form = AccountUpdateForm(request.POST)
+        elif mode == MEMBER_MODE_ENUMS.show_details:
+            messages.error(request, "Wrong mode: show_details in POST request")
+            return redirect("Home")
         else: # we are updating an existing account
             u_form = AccountUpdateForm(request.POST, instance=member.account)
 
@@ -108,16 +90,21 @@ def upsert_member(request, member=None):
                 logger.error(f"error {e}")
             return redirect("Home")
 
-        account = u_form.save()
+        if  mode == MEMBER_MODE_ENUMS.signup or \
+            (mode == MEMBER_MODE_ENUMS.profile and u_form.data.email != member.account.email):
+            # the returned account is inactive and saved
+            account = send_verification_email(request, u_form)
+        else:
+            account = u_form.save()
 
-        if new_member:
+        if not member:
             # if new member, it has been created by the account creation
             # retrieve it and recreate the member form with this instance
             member = Member.objects.get(account=account)
             m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
             # if new managed member is created, the associated account must be inactivated
             # and we force managing_account to the logged in user
-            if new_managed_member:
+            if mode == MEMBER_MODE_ENUMS.create_managed:
                 account.is_active = False
                 account.save()
                 member.managing_account = User.objects.get(id=request.user.id)
@@ -125,17 +112,11 @@ def upsert_member(request, member=None):
 
         member = m_form.save()
 
-        # we should never go there!
-        # if no managing account, we use the account if it's active otherwise the logged user account
-        # if not member.managing_account:
-        #     member.managing_account = account if account.is_active else User.objects.get(id=request.user.id)
-        #     member.save()
-
-        if self_registration:
+        if mode == MEMBER_MODE_ENUMS.signup:
             username = u_form.cleaned_data.get('username')
-            messages.success(request, _('Hello %(username)s, your account has been created! You are now able to log in') % {"username": username})
+            messages.success(request, _('Hello %(username)s, your account has been created! You will now receive an email to verify your email address. Click in the link inside the mail to finish the registration.') % {"username": username})
             return redirect("accounts:login")
-        elif new_managed_member:
+        elif mode == MEMBER_MODE_ENUMS.create_managed:
             messages.success(request, _('Member successfully created'))
             return redirect("members:members")
         else:
@@ -149,15 +130,16 @@ def upsert_member(request, member=None):
     # if a GET (or any other method) we'll create a "blank" form prefilled by existing member (or empty if member = None)
     else:
         m_form = MemberUpdateForm(instance=member)
-        if self_registration:
+        if mode == MEMBER_MODE_ENUMS.signup:
             u_form = AccountRegisterForm()
-        elif new_managed_member:
+        elif mode == MEMBER_MODE_ENUMS.create_managed:
             u_form = AccountUpdateForm()
         else:
             u_form = AccountUpdateForm(instance=member.account)
+        
         return render(request, "members/member_detail.html", {"m_form": m_form, "u_form": u_form, "pk":member.id if member else None,
-                                                              "writable": editable(request, member),
-                                                              "editable": editable(request, member),
+                                                              "read_only": not editable(request, member),
+                                                              "mode": mode.name,
                                                               "managing_account_name": managing_member_name(member)})
 
 
@@ -165,25 +147,41 @@ def upsert_member(request, member=None):
 def create_member(request):
     """creates a member"""
     # TODO: check if member already exists
-    return upsert_member(request)
+    return _view_member(request, MEMBER_MODE_ENUMS.create_managed)
 
 def register_member(request):
     """register a member, no login required"""
-    # TODO: check if user is already logged in
-    # TODO: check if user is already registered
-    # TODO: check if user is already registered but not active
-    # TODO: how to control self registration?
-    return upsert_member(request)
+    # check if user is already logged in
+    if request.user.is_authenticated:
+        messages.error(request, _("You are already logged in"))
+        return redirect("Home")
+    # check if member is already registered
+    account = User.objects.filter(email=request.POST.get("email"))
+    if not account.exists():
+        account = User.objects.filter(email=request.POST.get("username"))
+    if account.exists():
+        account = account.first()
+        # if member is already registered but account not active, ask him to contact his/her managing account
+        if account.is_active:
+            messages.error(request, _("A member with the same account name or email address is already registered. Please login instead"))
+            return redirect("Home")
+        else:
+            manager = Member.objects.get(account__id=account.id).managing_account
+            messages.error(request, _("You are already registered but not active. Please contact %s to activate your account") % manager.member.get_full_name())
+            return redirect("Home")
+    # TODO: how to control self registration by an admin?
+    return _view_member(request, MEMBER_MODE_ENUMS.signup)
 
 @login_required
-def change_member(request, pk=None):
-    """change the member with id pk, to be used when the user is the managing account but not the account of the member"""
-    # if pk, get existing member
-    member = get_object_or_404(Member, pk=pk) if pk else None
-    if member and member.account.id != request.user.id and member.managing_account.id!= request.user.id:
-        messages.error(_("Error: You cannot change this member"))
-        return redirect("members:detail", kwargs={"pk":pk})
-    return upsert_member(request, member)
+def display_member(request, pk):
+    member = get_object_or_404(Member, pk=pk)
+    if member.account.id == request.user.id:
+        mode = MEMBER_MODE_ENUMS.profile
+    elif member.managing_account.id == request.user.id:
+        mode = MEMBER_MODE_ENUMS.update_managed
+    else:
+        mode = MEMBER_MODE_ENUMS.show_details
+    return _view_member(request, mode, member)
 
 @login_required
 def profile(request):
@@ -193,12 +191,37 @@ def profile(request):
         messages.error(_("Error: Only cannot {first_name} {last_name} can change this member") \
                             % {"first_name": member.account.first_name, "last_name": member.account.last_name})
         return redirect("members:profile")
-    return upsert_member(request, member)
+    return _view_member(request, MEMBER_MODE_ENUMS.profile, member)
+
+AccountAlreadyVerified = Exception("Account already verified")
+class VerifyEmail(_VerifyEmail):
+    def send_activation_link(self, request, account, email=None):
+        if account.is_active:
+            raise AccountAlreadyVerified()
+        if not email: email = account.email
+        account.is_active = False
+        if email: account.email = email
+        account.save()
+        
+        try:
+            verification_url = self.token_manager.generate_link(request, account, account.email)
+            msg = render_to_string(
+                self.settings.get('html_message_template', raise_exception=True),
+                {"link": verification_url, "inactive_user": account}, 
+                request=request
+            )
+
+            self.__send_email(msg, account.email)
+            return account
+        except Exception:
+            # account.delete()
+            raise
 
 @login_required
 def activate_account(request, pk):
     """activate the account of the member with id pk"""
     member = get_object_or_404(Member, pk=pk)
+    #TODO verify email
     if member.account.is_active:
         if member.managing_account != member.account:
             member.managing_account = member.account
@@ -209,6 +232,7 @@ def activate_account(request, pk):
     else:
         member.account.is_active = True
         member.account.save()
+        account = VerifyEmail().send_activation_link(request, member.account)
         member.managing_account = member.account
         member.save()
         messages.success(request, _("Account successfully activated. The owner of the account must now proceed as if (s)he had lost his/her password before being able to log in."))

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bulma',
     'django_icons',
+	"verify_email.apps.VerifyEmailConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -161,7 +162,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bulma'
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/accounts/login'
+# LOGIN_URL = '/accounts/login'
+LOGIN_URL = 'accounts:login'
 #LOGOUT_REDIRECT_URL = '/'
 
 DJANGO_ICONS = {
@@ -205,3 +207,10 @@ LOGGING = {
 
 AVATARS_DIR = Path(MEDIA_ROOT, 'avatars')
 AVATARS_SIZE = 300
+# not used
+NEW_EMAIL_SENT_TEMPLATE  = "accounts/new_email_sent.html"
+
+VERIFICATION_SUCCESS_TEMPLATE = "accounts/email_verification_successful.html"
+VERIFICATION_FAILED_TEMPLATE = "accounts/email_verification_failed.html"
+REQUEST_NEW_EMAIL_TEMPLATE = "accounts/request_new_email.html"
+HTML_MESSAGE_TEMPLATE = "accounts/email_verification_msg.html"

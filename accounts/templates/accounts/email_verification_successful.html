@@ -1,0 +1,21 @@
+{% extends "cm_main/base.html" %}
+{% load i18n %}
+{% block title %}{%translate "Cousins Matter - Email Verification Successful!" %} {% endblock %}
+{%block content%}
+
+<div class="container">
+    <h1 class="title">{% translate 'Email Verification Successful!' %}</h1>
+    <hr/>
+    <p class="content">{% translate "Your Email is verified successfully and account has been activated." %}</p>
+    <p class="content">{% translate "You can login with the credentials now..." %}</p>
+</div>
+<div class="container mt-4">
+    <a href="{% url 'accounts:login' %}" class="button is-primary">
+        {% translate "Login" %}
+    </a>
+</div>
+
+
+
+{%endblock%}
+

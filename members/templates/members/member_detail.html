@@ -3,18 +3,12 @@
 {% block title %}{%translate "Cousins Matter - Detail" %} {% endblock %}
 {% block content %}
 	<h1 class="title has-text-centered is-1">
-		{% if mode == "create_managed" %}
-			{% translate "Create Member" %}
-		{% elif mode == "signup" %}
-			{% translate "Sign Up" %}
-		{% elif mode == "profile" %}
-			{% translate "My Profile" %}
-		{% elif mode == "update_managed" %}
-			{% translate "Update Member Details" %}
-		{% elif mode == "show_details" %}
-			{% translate "Member Details" %}
-		{% else %}
-			{{mode}} {% translate "Unknown mode. Something went wrong!" %}
+		{% if mode == "create_managed" %}{% translate "Create Member" %}
+		{% elif mode == "signup" %}{% translate "Sign Up" %}
+		{% elif mode == "profile" %}{% translate "My Profile" %}
+		{% elif mode == "update_managed" %}{% translate "Update Member Details" %}
+		{% elif mode == "show_details" %}{% translate "Member Details" %}
+		{% else %}{{mode}} {% translate "Unknown mode. Something went wrong!" %}
 		{% endif %}
 	</h1>
 	<div class="media">
@@ -75,5 +69,69 @@
 					{% translate "Request a new link" %}
 			</a>
 	</div>
-	
-{% endblock %}
+
+	{% block modals %}
+
+		{% url 'members:create_address' as create_address %}
+		{% with modal_id="create-address-modal" title="New Address" url=create_address form=addr_form action="Create" %}
+			{% include "members/modal_form.html" %}
+		{% endwith %}
+
+		{% if m_form.address.value %}
+		{% url 'members:change_address' as change_address %}
+		{% with modal_id="change-address-modal" title="Change Address" url=change_address form=addr_form action="Update" %}
+			{% include "members/modal_form.html" %}
+		{% endwith %}
+		{% endif %}
+		
+		{% url 'members:create_family' as create_family %}
+		{% with modal_id="create-family-modal" title="New Family" url=create_family form=family_form action="Create" %}
+			{% include "members/modal_form.html" %}
+		{% endwith %}
+
+		{% with modal_id="create-parent-family-modal" title="New Parent Family" url=create_family form=family_form action="Create" %}
+			{% include "members/modal_form.html" %}
+		{% endwith %}
+
+		{% if m_form.family.value %}
+		{% url 'members:change_family' as change_family %}
+		{% with modal_id="change-family-modal" title="Change Family" url=change_family form=family_form action="Update" %}
+			{% include "members/modal_form.html" %}
+		{% endwith %}
+		{% endif %}
+
+	{% endblock modals %}
+
+	{% block javascript %}
+		<script>
+			$(document).ready(function () {
+				// catch the form's submit event
+				set_modal_form_ajax('#create-address-modal-form', "{% url 'members:create_address' %}", 
+											function(response) {
+													add_selected_option('#id_address', response.address_id, response.address_str, "{% translate 'Address created' %}");
+											}, on_ajax_error);
+				set_modal_form_ajax('#create-family-modal-form', "{% url 'members:create_family' %}", 
+											function (response) {
+													add_selected_option('#id_family', response.family_id, response.family_name, "{% translate 'Family created' %}");
+											}, on_ajax_error);
+				{% if m_form.address.value %}
+				set_modal_form_ajax('#change-address-modal-form', "{% url 'members:update_address' m_form.address.value %}", 
+											function(response) { 
+												change_option('#id_address', response.address_id, response.address_str, "{% translate 'Address updated' %}"); 
+											}, on_ajax_error);
+				{% endif %}
+				{% if m_form.family.value %}
+				set_modal_form_ajax('#change-family-modal-form', "{% url 'members:update_family' m_form.family.value %}", 
+											function (response) {	('#id_family', response.family_id, response.family_name, "{% translate 'Family updated' %}");
+											}, on_ajax_error);
+				{% endif %}
+				set_modal_form_ajax('#create-parent-family-modal-form', "{% url 'members:create_family' %}", 
+											function (response) {
+													add_selected_option('#id_parent', response.family_id, response.family_name, "{% translate 'Parent family created' %}");
+											}, on_ajax_error);
+			})
+		</script>
+
+	{% endblock javascript %}
+
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% load i18n static %}
+<div class="related-widget-wrapper">
+	{{ rendered_widget }}
+	{% block links %}
+		{% spaceless %}
+		{% if can_change_related %}
+		<a class="change-related button js-modal-trigger" 
+			id="id_change_{{ name }}_link" data-target="change-{{ name }}-modal"
+			title="{% blocktranslate %}Change selected {{ name }}{% endblocktranslate %}">
+			<img src="{% static 'admin/img/icon-changelink.svg' %}" alt="" width="20" height="20">
+		</a>
+		{% endif %}
+		{% if can_add_related %}
+		<a class="add-related button js-modal-trigger"
+			id="id_create_{{ name }}_link" data-target="create-{{ name }}-modal"
+			title="{% blocktranslate %}Add another {{ name }}{% endblocktranslate %}">
+			<img src="{% static 'admin/img/icon-addlink.svg' %}" alt="" width="20" height="20">
+		</a>
+		{% endif %}
+		{% endspaceless %}
+	{% endblock %}
+</div>

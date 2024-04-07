@@ -1,0 +1,22 @@
+{% load i18n crispy_forms_tags %}
+<div class="modal" id="{{ modal_id }}">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<p class="modal-card-title">{%translate title %}</p>
+			<button class="delete" aria-label="close"></button>
+		</header>
+		<form id="{{modal_id}}-form" method="post">
+			{% csrf_token %}
+			<section class="modal-card-body">
+					{{ form | crispy}}
+			</section>
+			<footer class="modal-card-foot">
+				<div class="buttons">
+					<button type="submit" class="button is-success">{%translate action %}</button>
+					<button type="reset" class="button" aria-label="close">{%translate "Cancel" %}</button>
+				</div>
+			</footer>
+		</form>
+	</div>
+</div>

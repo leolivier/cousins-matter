@@ -12,35 +12,42 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
+            crossorigin="anonymous"></script>
     <script src="{% static 'js/cousinsmatter.js' %}"></script>
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
   </head>
   <body>
     <nav class="navbar is-dark has-shadow" role="navigation" aria-label="main navigation">
-      {% block sidebar %}
+    {% block sidebar %}
       {% include "cm_main/menu.html" %}
-      {% endblock %}
+    {% endblock %}
     </nav>
 
     <div id="content">
-        {% if messages %}
-        <div class="container">
-          <ul class="messages">
+      <div class="container">
+        <ul class="messages">
           {% for message in messages %}
-            <li{% if message.tags %} class="message is-{{ message.tags }}"{% endif %}>
-              <div class="message-body">
-                {% autoescape off %}
-                  {{ message }}
-                {% endautoescape %}
-              </div>
-            </li>
+          <li{% if message.tags %} class="message is-{{ message.tags }}"{% endif %}>
+            {% if message.tags %}
+            <div class="message-header">
+              <p>{{ message.tags|capfirst }}</p>
+              <button class="delete" aria-label="delete"></button>
+            </div>
+            {% endif %}
+            <div class="message-body">
+              {% autoescape off %}
+                {{ message }}
+              {% endautoescape %}
+            </div>
+          </li>
           {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
-        {% block content %}
+        </ul>
+      </div>
+      {% block content %}
         {% include "cm_main/home.html" %}
-        {% endblock %}
+      {% endblock %}
     </div>
   </body>
 </html>

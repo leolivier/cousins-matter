@@ -30,6 +30,14 @@ which will compile the translations
 # To reset the database completely
 Run `./clean_database.sh`
 
+# To build a docker image
+`docker build -t cousins-matter.`	
+
+# To run with Docker
+`docker run --name cousinsmatter -p 8000:8000 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media cousinsmatter`
+then follow the same steps as in the local run section above.
+
+
 # Todos
 * validation signup by admin
 * write tests

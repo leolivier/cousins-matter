@@ -9,11 +9,11 @@ from cousinsmatter import settings
 @login_required
 def birthdays(request) -> HttpResponse:
   """
-  Return the members with their birthday in the next settings.BIRTHDAYS_NDAYS days
-  (or previous settings.BIRTHDAYS_NDAYS days if settings.BIRTHDAYS_NDAYS <0)
+  Return the members with their birthday in the next settings.BIRTHDAY_DAYS days
+  (or previous settings.BIRTHDAY_DAYS days if settings.BIRTHDAY_DAYS <0)
   """
   today = date.today()
-  deltaNdays = timedelta(days = settings.BIRTHDAYS_NDAYS)
+  deltaNdays = timedelta(days = settings.BIRTHDAY_DAYS)
   bdays = []
   for m in Member.objects.all():
     nb = m.next_birthday()
@@ -22,6 +22,6 @@ def birthdays(request) -> HttpResponse:
         bdays.append((m, delta.days))
   context = {
     "birthdays_list": bdays,
-    "ndays": settings.BIRTHDAYS_NDAYS
+    "ndays": settings.BIRTHDAY_DAYS
   }
   return render(request, "members/birthdays.html", context)

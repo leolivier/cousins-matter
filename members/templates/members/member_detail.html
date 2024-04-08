@@ -4,7 +4,7 @@
 {% block content %}
 	<h1 class="title has-text-centered is-1">
 		{% if mode == "create_managed" %}{% translate "Create Member" %}
-		{% elif mode == "signup" %}{% translate "Sign Up" %}
+		{% elif mode == "signup" %}{% translate "Sign up" %}
 		{% elif mode == "profile" %}{% translate "My Profile" %}
 		{% elif mode == "update_managed" %}{% translate "Update Member Details" %}
 		{% elif mode == "show_details" %}{% translate "Member Details" %}
@@ -105,7 +105,7 @@
 	{% block javascript %}
 		<script>
 			$(document).ready(function () {
-				// catch the form's submit event
+				// associate to each modal form created above an ajax processing function
 				set_modal_form_ajax('#create-address-modal-form', "{% url 'members:create_address' %}", 
 											function(response) {
 													add_selected_option('#id_address', response.address_id, response.address_str, "{% translate 'Address created' %}");
@@ -129,6 +129,9 @@
 											function (response) {
 													add_selected_option('#id_parent', response.family_id, response.family_name, "{% translate 'Parent family created' %}");
 											}, on_ajax_error);
+
+				// check user name is not taken for self registration
+				add_ajax_checker('id_username', "{% url 'accounts:validate_username' %}", "is_taken", "{% translate 'This username is not available!' %}")
 			})
 		</script>
 

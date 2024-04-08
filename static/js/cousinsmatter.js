@@ -103,3 +103,40 @@ function on_ajax_error(response) {
     add_error_message(response.responseText);
   } else console.log(response)
 }
+
+// alias is-error to is-danger
+$(document).ready(function() {
+  $('.is-error').addClass('is-danger');
+});
+
+// function to add an jax checker to a field
+// if response[response_field] is true, then error triggered
+function add_ajax_checker(id, validator_url, response_field, error_message) {
+  $('#'+id).keyup(function () {
+    // create an AJAX call
+    $.ajax({
+        data: $(this).serialize(), // get the form data
+        url: validator_url,
+      // on success
+      success: function (response) {
+        // alert the error if any error occured
+          error_id=id+'_error';
+          if (response[response_field] == true) {
+              $('#'+id).removeClass('is-success').addClass('is-danger');
+              $('#'+id).after('<div class="has-text-danger has-background-danger-light has-text-weight-semibold" id="'+error_id+'">'
+                              +error_message+'</div>')
+          }
+          else {
+              $('#'+id).removeClass('is-danger').addClass('is-success');
+              $('#'+error_id).remove();
+          }
+      },
+      // on error
+      error: function (response) {
+          // alert the error if any error occured
+          console.log(response.responseJSON.errors)
+      }
+    });
+    return false;
+  })
+}

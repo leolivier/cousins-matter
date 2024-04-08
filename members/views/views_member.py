@@ -10,6 +10,8 @@ from django.utils.translation import gettext as _
 from verify_email.email_handler import send_verification_email
 from ..models import Member
 from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
+from .utils import is_ajax, redirect_to_referer
+
 from accounts.forms import AccountUpdateForm, AccountRegisterForm
 
 logger = logging.getLogger(__name__)
@@ -32,7 +34,7 @@ def managing_member_name(member):
     else:
         return None
 
-def _view_member(request, mode:MEMBER_MODE, member=None):
+def _show_member(request, mode:MEMBER_MODE, member=None):
     """display, create or update a member"""
  
     # if this is a POST request we need to process the form data
@@ -45,7 +47,7 @@ def _view_member(request, mode:MEMBER_MODE, member=None):
             u_form = AccountUpdateForm(request.POST)
         elif mode == MEMBER_MODE.show_details:
             messages.error(request, "Wrong mode: show_details in POST request")
-            return redirect("Home")
+            return redirect_to_referer(request)
         else: # we are updating an existing account
             u_form = AccountUpdateForm(request.POST, instance=member.account)
 
@@ -56,7 +58,7 @@ def _view_member(request, mode:MEMBER_MODE, member=None):
                 logger.error(f">m_form instance {vars(m_form.instance)}\n{vars(m_form)}")
             except Exception as e:
                 logger.error(f"error {e}")
-            return redirect("Home")
+            return redirect_to_referer(request)
 
         if  mode == MEMBER_MODE.signup or \
             (mode == MEMBER_MODE.profile and 'email' in u_form.changed_data):
@@ -103,6 +105,9 @@ def _view_member(request, mode:MEMBER_MODE, member=None):
         if member:
             a_form = AddressUpdateForm(instance=member.address)
             f_form = FamilyUpdateForm(instance=member.family)
+        else:
+            a_form = AddressUpdateForm()
+            f_form = FamilyUpdateForm()
         return render(request, "members/member_detail.html", {"m_form": m_form, "u_form": u_form, "addr_form": a_form, "family_form": f_form,
                                                               "pk":member.id if member else None,
                                                               "read_only": not editable(request, member),
@@ -114,14 +119,14 @@ def _view_member(request, mode:MEMBER_MODE, member=None):
 def create_member(request):
     """creates a member"""
     # TODO: check if member already exists
-    return _view_member(request, MEMBER_MODE.create_managed)
+    return _show_member(request, MEMBER_MODE.create_managed)
 
 def register_member(request):
-    """register a member, no login required"""
+    """register a member, no sign in required"""
     # check if user is already logged in
     if request.user.is_authenticated:
         messages.error(request, _("You are already logged in"))
-        return redirect("Home")
+        return redirect_to_referer(request)
     # check if member is already registered
     account = User.objects.filter(email=request.POST.get("email"))
     if not account.exists():
@@ -130,14 +135,14 @@ def register_member(request):
         account = account.first()
         # if member is already registered but account not active, ask him to contact his/her managing account
         if account.is_active:
-            messages.error(request, _("A member with the same account name or email address is already registered. Please login instead"))
-            return redirect("Home")
+            messages.error(request, _("A member with the same account name or email address is already registered. Please sign in instead"))
+            return redirect_to_referer(request)
         else:
             manager = Member.objects.get(account__id=account.id).managing_account
             messages.error(request, _("You are already registered but not active. Please contact %s to activate your account") % manager.member.get_full_name())
-            return redirect("Home")
+            return redirect_to_referer(request)
     # TODO: how to control self registration by an admin?
-    return _view_member(request, MEMBER_MODE.signup)
+    return _show_member(request, MEMBER_MODE.signup)
 
 @login_required
 def display_member(request, pk):
@@ -148,7 +153,7 @@ def display_member(request, pk):
         mode = MEMBER_MODE.update_managed
     else:
         mode = MEMBER_MODE.show_details
-    return _view_member(request, mode, member)
+    return _show_member(request, mode, member)
 
 @login_required
 def profile(request):
@@ -158,5 +163,5 @@ def profile(request):
         messages.error(_("Error: Only cannot {first_name} {last_name} can change this member") \
                             % {"first_name": member.account.first_name, "last_name": member.account.last_name})
         return redirect("members:profile")
-    return _view_member(request, MEMBER_MODE.profile, member)
+    return _show_member(request, MEMBER_MODE.profile, member)
 

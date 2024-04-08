@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-01 14:51+0200\n"
+"POT-Creation-Date: 2024-04-08 15:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -72,9 +72,7 @@ msgstr "Compte lié"
 
 #: members/models.py:52
 msgid "Managing account"
-msgstr ""
-"Compte gérant ce membre (pour les membres de la famille qui ne se gèrent pas "
-"eux-mêmes)"
+msgstr "Compte gérant ce membre"
 
 #: members/models.py:57
 msgid "Address"
@@ -132,83 +130,114 @@ msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
 msgid "Cousins Matter - Detail"
 msgstr "Cousins Matter - Détail"
 
-#: members/templates/members/member_detail.html:7
+#: members/templates/members/member_detail.html:6
 #: members/templates/members/members.html:12
-#, fuzzy
-#| msgid "Members"
 msgid "Create Member"
-msgstr "Membres"
+msgstr "Créer un Membre"
 
-#: members/templates/members/member_detail.html:9
-msgid "Sign Up"
+#: members/templates/members/member_detail.html:7
+msgid "Sign up"
 msgstr "S'enregistrer"
 
-#: members/templates/members/member_detail.html:11
+#: members/templates/members/member_detail.html:8
 msgid "My Profile"
 msgstr "Mon Profil"
 
-#: members/templates/members/member_detail.html:13
+#: members/templates/members/member_detail.html:9
 msgid "Update Member Details"
 msgstr "Modifier les détails d'un Membre"
 
-#: members/templates/members/member_detail.html:15
-#, fuzzy
+#: members/templates/members/member_detail.html:10
 msgid "Member Details"
 msgstr "Détail d'un Membre"
 
-#: members/templates/members/member_detail.html:17
+#: members/templates/members/member_detail.html:11
 msgid "Unknown mode. Something went wrong!"
 msgstr "Mode inconnu. Une erreur est survenue!"
 
-#: members/templates/members/member_detail.html:33
-#, fuzzy
+#: members/templates/members/member_detail.html:27
 msgid "Active member"
-msgstr "Membre active"
+msgstr "Membre actif"
 
-#: members/templates/members/member_detail.html:35
-#, fuzzy
+#: members/templates/members/member_detail.html:29
 msgid "Managed member"
 msgstr "Membre géré"
 
-#: members/templates/members/member_detail.html:41
+#: members/templates/members/member_detail.html:35
 msgid "Change Password"
 msgstr "Changer le mot de passe"
 
-#: members/templates/members/member_detail.html:56
-#: members/templates/members/member_detail.html:64
+#: members/templates/members/member_detail.html:50
+#: members/templates/members/member_detail.html:58
 msgid "Submit"
 msgstr "Soumettre"
 
-#: members/templates/members/member_detail.html:57
+#: members/templates/members/member_detail.html:51
 #, python-format
 msgid "(Only %(name)s can manage this member)"
 msgstr "(Seul %(name)s peut gérer ce membre)"
 
-#: members/templates/members/member_detail.html:66
-#, fuzzy
+#: members/templates/members/member_detail.html:60
 msgid "Activate Account"
 msgstr "Activer le compte"
 
-#: members/templates/members/member_detail.html:73
+#: members/templates/members/member_detail.html:67
 msgid "Lost your verification email?"
 msgstr "Mail de vérification perdu?"
 
-#: members/templates/members/member_detail.html:75
+#: members/templates/members/member_detail.html:69
 msgid "Request a new link"
 msgstr "Demander un nouveau lien"
+
+#: members/templates/members/member_detail.html:111
+msgid "Address created"
+msgstr "Adresse créée"
+
+#: members/templates/members/member_detail.html:115
+msgid "Family created"
+msgstr "Famille créée"
+
+#: members/templates/members/member_detail.html:120
+msgid "Address updated"
+msgstr "Adresse mise à jour"
+
+#: members/templates/members/member_detail.html:125
+msgid "Family updated"
+msgstr "Famille mise à jour"
+
+#: members/templates/members/member_detail.html:130
+msgid "Parent family created"
+msgstr "Famille parente créée"
+
+#: members/templates/members/member_detail.html:134
+msgid "This username is not available!"
+msgstr "Ce nom d'utilisateur est déjà pris!"
 
 #: members/templates/members/members.html:3
 msgid "Cousins Matter - Members"
 msgstr "Cousins Matter - Membres"
 
 #: members/templates/members/members.html:8
-#, fuzzy
 msgid "Members List"
 msgstr "Liste des Membres"
 
 #: members/templates/members/members.html:31
 msgid "No members found"
 msgstr "Pas de membre trouvé"
+
+#: members/templates/members/modal_form.html:17
+msgid "Cancel"
+msgstr "Annuler"
+
+#: members/templates/widgets/wrap_create_link.html:9
+#, python-format
+msgid "Change selected %(name)s"
+msgstr "Modifier les %(name)s sélectionnées"
+
+#: members/templates/widgets/wrap_create_link.html:16
+#, python-format
+msgid "Add another %(name)s"
+msgstr "Ajouter une autre %(name)s"
 
 #: members/tests.py:64
 msgid "This password is too common."
@@ -218,7 +247,24 @@ msgstr "Ce mot de passe est trop commun."
 msgid "This field is required."
 msgstr "Ce champs est obligatoire."
 
-#: members/views.py:117
+#: members/views/views_activate.py:50
+msgid "Error: Account already active"
+msgstr "Erreur: Compte déjà activé"
+
+#: members/views/views_activate.py:52
+msgid "Error: Account without email cannot be activated"
+msgstr "Erreur: Un compte sans adresse mail ne peut pas être activé"
+
+#: members/views/views_activate.py:59
+msgid ""
+"Account successfully activated. The owner of the account must now proceed as "
+"if (s)he had lost his/her password before being able to sign in."
+msgstr ""
+"Compte activé avec succès. Le propriétaire du compte doit maintenant "
+"procéder comme s'il avait perdu son mot de passe avant de pouvoir se "
+"connecter."
+
+#: members/views/views_member.py:87
 #, python-format
 msgid ""
 "Hello %(username)s, your account has been created! You will now receive an "
@@ -226,57 +272,42 @@ msgid ""
 "finish the registration."
 msgstr ""
 "Hello %(username)s, ton compte a été créé! Tu vas maintenant recevoir un "
-"email pour vérifier ton adresse mail. Clique sur le lien "
-"dans le mail pour terminer le processus de création de compte."
+"email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
+"terminer le processus de création de compte."
 
-#: members/views.py:120
+#: members/views/views_member.py:90
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: members/views.py:123
+#: members/views/views_member.py:93
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
-#: members/views.py:156
+#: members/views/views_member.py:128
 msgid "You are already logged in"
 msgstr "Tu es déjà connecté"
 
-#: members/views.py:166
+#: members/views/views_member.py:138
 msgid ""
 "A member with the same account name or email address is already registered. "
-"Please login instead"
+"Please sign in instead"
 msgstr ""
-"Un membre avec le même nom d'utilisateur ou la même adresse mail est déjà enregistré. "
-"Connecte-toi plutôt."
+"Un membre avec le même nom d'utilisateur ou la même adresse mail est déjà "
+"enregistré. Connecte-toi plutôt."
 
-#: members/views.py:170
+#: members/views/views_member.py:142
 #, python-format
 msgid ""
 "You are already registered but not active. Please contact %s to activate "
 "your account"
 msgstr ""
-"Tu es déjà enregistré mais pas encore actif. Contacte %s pour activer ton compte."
+"Tu es déjà enregistré mais pas encore actif. Contacte %s pour activer ton "
+"compte."
 
-#: members/views.py:191
+#: members/views/views_member.py:163
 #, python-brace-format
 msgid "Error: Only cannot {first_name} {last_name} can change this member"
 msgstr "Erreur: Seul {first_name} {last_name} peut modifier ce membre"
-
-#: members/views.py:229
-msgid "Error: Account already active"
-msgstr "Erreur: Compte déjà activé"
-
-#: members/views.py:231
-msgid "Error: Account without email cannot be activated"
-msgstr "Erreur: Un compte sans adresse mail ne peut pas être activé"
-
-#: members/views.py:238
-msgid ""
-"Account successfully activated. The owner of the account must now proceed as "
-"if (s)he had lost his/her password before being able to log in."
-msgstr ""
-"Compte activé avec succès. Le propriétaire du compte doit maintenant procéder "
-"comme s'il avait perdu son mot de passe avant de pouvoir se connecter."
 
 #~ msgid "First name"
 #~ msgstr "Prénom"

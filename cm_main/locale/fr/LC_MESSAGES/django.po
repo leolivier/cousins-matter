@@ -52,7 +52,7 @@ msgid "Birthdays"
 msgstr "Anniversaires"
 
 #: cm_main/templates/cm_main/menu.html:42
-msgid "Log in"
+msgid "Sign in"
 msgstr "Connexion"
 
 #: cm_main/templates/cm_main/menu.html:47

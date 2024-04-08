@@ -56,7 +56,7 @@ def activate_account(request, pk):
         account = VerifyEmail().send_activation_link(request, member.account)
         member.managing_account = member.account
         member.save()
-        messages.success(request, _("Account successfully activated. The owner of the account must now proceed as if (s)he had lost his/her password before being able to log in."))
+        messages.success(request, _("Account successfully activated. The owner of the account must now proceed as if (s)he had lost his/her password before being able to sign in."))
         logger.info("Account activated by %s" % request.user.username)
 
     logger.info("Request referer:  %s" % request.META['HTTP_REFERER'])

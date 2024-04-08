@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter Accounts 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-01 14:51+0200\n"
+"POT-Creation-Date: 2024-04-08 16:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,8 +27,11 @@ msgid "Invalid Link!"
 msgstr "Lien invalide!"
 
 #: accounts/templates/accounts/email_verification_failed.html:9
-msgid "This link is invalid or been used already, we cannot verify using this link."
-msgstr "Ce lien est invalide ou a déjà été utilisé, nous ne pouvons rien vérifier à l'aide de ce lien."
+msgid ""
+"This link is invalid or been used already, we cannot verify using this link."
+msgstr ""
+"Ce lien est invalide ou a déjà été utilisé, nous ne pouvons rien vérifier à "
+"l'aide de ce lien."
 
 #: accounts/templates/accounts/email_verification_failed.html:13
 msgid "Request a new link"
@@ -51,7 +54,8 @@ msgid "Greetings!"
 msgstr "Salutations!"
 
 #: accounts/templates/accounts/email_verification_msg.html:57
-msgid "You received this mail because you attempted to make account on our website"
+msgid ""
+"You received this mail because you attempted to make account on our website"
 msgstr "Tu reçois ce mail car tu essayes de créer un compte sur notre site web"
 
 #: accounts/templates/accounts/email_verification_msg.html:58
@@ -59,8 +63,8 @@ msgid ""
 "Please click on the link below to confirm the email and activate your "
 "account."
 msgstr ""
-"Merci de cliquer sur le lien ci-dessous pour confirmer l'adresse e-mail "
-"et activer ton compte."
+"Merci de cliquer sur le lien ci-dessous pour confirmer l'adresse e-mail et "
+"activer ton compte."
 
 #: accounts/templates/accounts/email_verification_msg.html:61
 msgid "You'll be joining us right after the verification !"
@@ -84,16 +88,21 @@ msgstr "Vérification de l'adresse e-mail réussie!"
 
 #: accounts/templates/accounts/email_verification_successful.html:9
 msgid "Your Email is verified successfully and account has been activated."
-msgstr "Ton adresse e-mail a été vérifiée avec succès et le compte a été activé."
+msgstr ""
+"Ton adresse e-mail a été vérifiée avec succès et le compte a été activé."
 
 #: accounts/templates/accounts/email_verification_successful.html:10
-msgid "You can login with the credentials now..."
+#, fuzzy
+#| msgid "You can sign in with the credentials now..."
+msgid "You can sig in with the credentials now..."
 msgstr "Tu peux te connecter avec tes identifiants maintenant..."
 
 #: accounts/templates/accounts/email_verification_successful.html:14
+#: accounts/templates/accounts/login.html:9
 #: accounts/templates/accounts/login.html:13
 #: accounts/templates/accounts/password_reset.html:19
-msgid "Login"
+#: accounts/templates/accounts/password_reset_complete.html:9
+msgid "Sign in"
 msgstr "Se connecter"
 
 #: accounts/templates/accounts/link_expired.html:3
@@ -111,10 +120,6 @@ msgstr "Ce lien a vécu sa vie :( Impossible de valider un lien mort..."
 #: accounts/templates/accounts/link_expired.html:13
 msgid "Request Another one"
 msgstr "Envoyer un autre lien"
-
-#: accounts/templates/accounts/login.html:9
-msgid "Log In"
-msgstr "Connexion"
 
 #: accounts/templates/accounts/login.html:17
 msgid "Need An Account?"
@@ -152,7 +157,9 @@ msgstr "Ton compte a été mis à jour"
 
 #: accounts/templates/accounts/new_email_sent.html:11
 msgid "Please check your email and click on the link to verify your email."
-msgstr "Merci de vérifier tes mails et de cliquer sur le lien pour vérifier ton adresse mail."
+msgstr ""
+"Merci de vérifier tes mails et de cliquer sur le lien pour vérifier ton "
+"adresse mail."
 
 #: accounts/templates/accounts/password_change.html:10
 msgid "Password Change"
@@ -180,14 +187,8 @@ msgid "Password reset complete"
 msgstr "Reinitialisation du mot de passe terminée"
 
 #: accounts/templates/accounts/password_reset_complete.html:7
-msgid "Your password has been set.  You may go ahead and log in now."
+msgid "Your password has been set.  You may go ahead and sign in now."
 msgstr "Ton mot de passe a été défini. Tu peux maintenant te connecter."
-
-#: accounts/templates/accounts/password_reset_complete.html:9
-#, fuzzy
-#| msgid "Log In"
-msgid "Log in"
-msgstr "Connexion"
 
 #: accounts/templates/accounts/password_reset_confirm.html:12
 msgid "Password reset confirmation"
@@ -216,9 +217,9 @@ msgstr ""
 
 #: accounts/templates/accounts/password_reset_confirm.html:29
 #, fuzzy
-#| msgid "Sign In"
-msgid "Sign in"
-msgstr "Connexion"
+#| msgid "Sign in"
+msgid "Sign In"
+msgstr "Se connecter"
 
 #: accounts/templates/accounts/password_reset_done.html:6
 msgid "Password reset sent"
@@ -241,22 +242,6 @@ msgstr ""
 "Si tu ne recois pas d'e-mail, vérifie que tu as entré l'adresse que tu as "
 "utilisée pour t'enregistrer, et vérifie ton dossier de spams."
 
-#: accounts/templates/accounts/register.html:9
-msgid "Join Today"
-msgstr "Rejoins nous aujourd'hui"
-
-#: accounts/templates/accounts/register.html:13
-msgid "Sign Up"
-msgstr "S'enregistrer"
-
-#: accounts/templates/accounts/register.html:17
-msgid "Already Have An Account?"
-msgstr "Tu as déjà un compte?"
-
-#: accounts/templates/accounts/register.html:18
-msgid "Sign In"
-msgstr "Connexion"
-
 #: accounts/templates/accounts/request_new_email.html:3
 msgid "Cousins Matter - Request New Email for Verification"
 msgstr "Les Cousins Comptent - Demande d'un nouvel e-mail de vérification"
@@ -269,37 +254,18 @@ msgstr "Demande d'un nouvel e-mail de vérification"
 msgid "Request New Email"
 msgstr "Demande d'un nouvel e-mail"
 
-#: accounts/views.py:30
+#: accounts/views.py:26
 msgid "You have been logged out"
 msgstr "Tu as été déconnecté(e)"
 
-#: accounts/views.py:39
+#: accounts/views.py:35
 msgid ""
 "Your password was successfully updated!\n"
-"Please login with your new password"
+"Please sign in with your new password"
 msgstr ""
 "Votre mot de passe a été mis à jour avec succès!\n"
 "Merci de te reconnecter avec ton nouveau mot de passe"
 
-#: accounts/views.py:64
+#: accounts/views.py:60
 msgid "Your password has been reset!"
 msgstr "Ton compte a été mis à jour"
-
-#~ msgid "Change Password"
-#~ msgstr "Modifier le mot de passe"
-
-#~ msgid "Profile Info"
-#~ msgstr "Informations sur le profil"
-
-#~ msgid "Update"
-#~ msgstr "Mettre à jour"
-
-#~ msgid ""
-#~ "Hello %(username)s, your account has been created! You are now able to "
-#~ "log in"
-#~ msgstr ""
-#~ "Bonjour %(username)s, ton compte a été créé! Tu peux maintenant te "
-#~ "connecter..."
-
-#~ msgid "Log In Again"
-#~ msgstr "Se reconnecter"

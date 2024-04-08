@@ -6,11 +6,11 @@
         <form method="POST">
             {% csrf_token %}
             <fieldset class="container">
-                <legend class="title is-3">{% translate "Log In" %}</legend>
+                <legend class="title is-3">{% translate "Sign in" %}</legend>
                 {{ form|crispy }}
             </fieldset>
             <div class="container mt-4">
-                <button class="button is-primary" type="submit">{% translate "Login" %}</button>
+                <button class="button is-primary" type="submit">{% translate "Sign in" %}</button>
             </div>
         </form>
         <div class="container is-small">

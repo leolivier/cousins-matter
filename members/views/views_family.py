@@ -8,14 +8,9 @@ from django.shortcuts import get_object_or_404, redirect
 
 from ..models import Family
 from ..forms import FamilyUpdateForm
+from .utils import is_ajax, redirect_to_referer
 
 logger = logging.getLogger(__name__)
-
-def is_ajax(request):
-    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
-
-def redirect_to_referer(request):
-    return redirect(request.META.get('HTTP_REFERER'))
 
 class FamilyDetailView(LoginRequiredMixin, generic.DetailView):
    model = Family

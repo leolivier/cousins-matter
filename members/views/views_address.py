@@ -11,11 +11,7 @@ from ..forms import AddressUpdateForm
 
 logger = logging.getLogger(__name__)
 
-def is_ajax(request):
-    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
-
-def redirect_to_referer(request):
-    return redirect(request.META.get('HTTP_REFERER'))
+from .utils import is_ajax, redirect_to_referer
 
 class AddressDetailView(LoginRequiredMixin, generic.DetailView):
    model = Address

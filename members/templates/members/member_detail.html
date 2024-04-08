@@ -37,7 +37,7 @@
 		{% endif %}
   </div>
 	<div class="container">
-		<form method="post">
+		<form enctype="multipart/form-data" method="post">
 		{% csrf_token %}
 			
 		{% if read_only %}

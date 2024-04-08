@@ -31,9 +31,7 @@ which will compile the translations
 Run `./clean_database.sh`
 
 # Todos
-* fix avatar not working
 * validation signup by admin
-* manage addresses and families
 * write tests
 * create a docker file
 * develop different subpackages
@@ -41,4 +39,5 @@ Run `./clean_database.sh`
   * classified ads
   * galleries
   * chat
+  * genealogy
   * ...

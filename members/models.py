@@ -1,8 +1,8 @@
 from django.db import models
 import datetime
+from PIL import Image, ImageOps
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
-from PIL import Image
 import logging
 from cousinsmatter import settings
 
@@ -99,30 +99,26 @@ class Member(models.Model):
       years = today.year - self.birthdate.year
       return years if (today >= self.next_birthday()) else years-1
 
-    def save(self, *args, **kwargs):
-
-      logger.info(f"Saving member {self.get_full_name()}: {vars(self)}")
-
-      # make sure the managing account is the account if it's active
-      if self.account.is_active and self.managing_account!= self.account:
-        logger.info(f"Before saving member {self.get_full_name()}: changing managing account")
+    def clean(self):
+      # If account is active, set managing account to current member account
+      if self.account.is_active and self.managing_account != self.account:
+        logger.info(f"Cleaning member {self.get_full_name()}: changing managing account to himself")
         self.managing_account = self.account
       elif self.managing_account is None: 
         # If no managing account and account inactive, use admin account
+        logger.info(f"Cleaning member {self.get_full_name()}: changing managing account to admin")
         self.managing_account = get_admin()
 
-
+    def save(self, *args, **kwargs):
       super().save(*args, **kwargs)
-
       # resize avatar
       img = Image.open(self.avatar.path)
-
       if img.height > settings.AVATARS_SIZE or img.width > settings.AVATARS_SIZE:
-          output_size = (settings.AVATARS_SIZE, settings.AVATARS_SIZE)
-          img.thumbnail(output_size)
-          img.save(self.avatar.path)
-
-      logger.info(f"Resized and saved avatar for {self.get_full_name()} in {self.avatar.path}, size: {img.size}")
+        output_size = (settings.AVATARS_SIZE, settings.AVATARS_SIZE)
+        img.thumbnail(output_size)
+        img = ImageOps.exif_transpose(img)  # avoid image rotating
+        img.save(self.avatar.path)
+        logger.info(f"Resized and saved avatar for {self.get_full_name()} in {self.avatar.path}, size: {img.size}")
 
     class Meta:
       verbose_name = _('member')

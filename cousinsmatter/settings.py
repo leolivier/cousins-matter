@@ -205,8 +205,10 @@ LOGGING = {
     },
 }
 
-AVATARS_DIR = Path(MEDIA_ROOT, 'avatars')
+AVATARS_DIR = 'avatars'
 AVATARS_SIZE = 300
+AVATARS_MAX_LOAD_SIZE = 1024 * 1024 * 2
+
 # not used
 NEW_EMAIL_SENT_TEMPLATE  = "accounts/new_email_sent.html"
 

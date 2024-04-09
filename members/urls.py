@@ -18,4 +18,5 @@ urlpatterns = [
 	path("family/create", views_family.FamilyCreateView.as_view(), name="create_family"),
 	path("family/<int:pk>/", views_family.FamilyDetailView.as_view(), name="family_detail"),
 	path("family/<int:pk>/update", views_family.FamilyUpdateView.as_view(), name="update_family"),
+	path("include_birthdays", views_birthday.include_birthdays, name="include_birthdays"),
 ]

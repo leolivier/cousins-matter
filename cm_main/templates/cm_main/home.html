@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load static %}
+{% load static include_view %}
 <div class="container">
   <div class="media">
     <figure class="media-left">
@@ -11,7 +11,7 @@
 			<p>
 				<strong class="is-size-1">
 				{% if home_title %}{{home_title}}{%else%}{%translate "Cousins Matter!" %}{%endif%}
-			</strong><br/>
+				</strong><br/>
 				{% if home_content %}
 					{{home_content}}
 				{%else%}
@@ -20,3 +20,6 @@
 			</p>
     </div>
   </div>
+	{% if user.is_authenticated %}
+	{% include_view "members:include_birthdays" %}
+	{% endif %}

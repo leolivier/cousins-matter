@@ -109,7 +109,7 @@ msgstr "Cousins Matter - Anniversaires"
 #: members/templates/members/birthdays_include.html:4
 #, python-format
 msgid "Birthdays in the next %(ndays)s days"
-msgstr "Anniversaires dans les prochains %(ndays)s jours"
+msgstr "Anniversaires dans les %(ndays)s prochains jours"
 
 #: members/templates/members/birthdays_include.html:15
 #, python-format

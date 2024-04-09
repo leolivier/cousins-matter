@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-01 14:51+0200\n"
+"POT-Creation-Date: 2024-04-09 16:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,8 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cm_main/apps.py:7 cm_main/models.py:7 cm_main/templates/cm_main/base.html:9
-#: cm_main/templates/cm_main/home.html:13
+#: cm_main/apps.py:7 cm_main/models.py:8 cm_main/templates/cm_main/base.html:8
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
 
@@ -27,21 +26,42 @@ msgstr "Les Cousins Comptent!"
 msgid "Home title"
 msgstr "Titre de la page d'accueil"
 
-#: cm_main/models.py:8
-msgid "Home content"
-msgstr "Contenu de la page d'accueil"
-
-#: cm_main/models.py:9
-msgid "Home logo"
-msgstr "Logo sur la page d'accueil"
-
-#: cm_main/templates/cm_main/home.html:18
+#: cm_main/models.py:10
 msgid ""
 "No home content yet, please go to <a href='/admin'>admin site</a> and create "
 "one."
 msgstr ""
 "Aucun contenu de la page d'accueil n'est défini, merci d'aller sur le site "
 "<a href='/admin'>administration</a> et en créer un."
+
+#: cm_main/models.py:9
+msgid "Home content"
+msgstr "Contenu de la page d'accueil"
+
+#: cm_main/models.py:11
+msgid "Home logo"
+msgstr "Logo sur la page d'accueil"
+
+#: cm_main/templates/cm_main/base.html:55
+msgid "This site proudly built using"
+msgstr "Ce site est créé fièrement avec"
+
+#: cm_main/templates/cm_main/base.html:57
+msgid "by"
+msgstr "par"
+
+#: cm_main/templates/cm_main/base.html:58
+msgid "The source code is licensed"
+msgstr "Le code source est sous licence"
+
+#: cm_main/templates/cm_main/home.html:15
+msgid ""
+"No home content yet, please provide values in .env for variables "
+"HOME_CONTENT_UNSIGNED and HOME_CONTENT_SIGNED."
+msgstr ""
+"Aucun contenu n'est défini pour la page d'accueil, merci de fournir les "
+"valeurs dans le fichier.env pour les variables HOME_CONTENT_UNSIGNED et "
+"HOME_CONTENT_SIGNED."
 
 #: cm_main/templates/cm_main/menu.html:18
 msgid "Members"

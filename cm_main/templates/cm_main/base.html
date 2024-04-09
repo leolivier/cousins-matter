@@ -1,5 +1,4 @@
-{% load i18n %}
-{% load static %}
+{% load i18n static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -49,5 +48,17 @@
         {% include "cm_main/home.html" %}
       {% endblock %}
     </div>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          {{site_copyright}}
+          {% translate 'This site proudly built using' %} 
+          <a href="https://github.com/leolivier/cousins-matter-django"><strong>Cousins Matter</strong></a>
+          {% translate "by" %} <a href="https://github.com/leolivier">Olivier LEVILLAIN</a>.
+          {% translate 'The source code is licensed' %} 
+          <a href="http://opensource.org/licenses/mit-license.php"><i class="icon"><span class="mdi mdi-copyleft"></span></i>MIT</a>. 
+        </p>
+      </div>
+    </footer>
   </body>
 </html>

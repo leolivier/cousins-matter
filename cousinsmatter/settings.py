@@ -32,6 +32,12 @@ LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
 
 TIME_ZONE = env('TIME_ZONE', default='Europe/Paris')
 
+HOME_TITLE=env('HOME_TITLE', default='Cousins Matter!')
+HOME_CONTENT_UNSIGNED=env.str('HOME_CONTENT_UNSIGNED', multiline=True, default="")
+HOME_CONTENT_SIGNED=env.str('HOME_CONTENT_SIGNED', multiline=True, default="")
+HOME_LOGO=env('HOME_LOGO', default='static/images/cousinsmatter.jpg')
+SITE_COPYRIGHT=env('SITE_COPYRIGHT', default='Site Copyright © 2024 Cousins Matter. All rights reserved.')
+
 # Email properties
 EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_PORT = env('EMAIL_PORT')

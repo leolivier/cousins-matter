@@ -11,7 +11,11 @@
 			<h1 class="title">{{home_title}}</h1>
 			<div class="content">
 				{% autoescape off %}
-				{{home_content}}
+				{% if home_content == "" %}
+					{% translate "No home content yet, please provide values in .env for variables HOME_CONTENT_UNSIGNED and HOME_CONTENT_SIGNED." %}
+				{% else %}
+					{{home_content}}
+				{% endif %}
 				{% endautoescape %}
 			</div>
     </div>

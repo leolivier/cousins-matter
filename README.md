@@ -41,7 +41,8 @@ then follow the same steps as in the local run section above.
 # Todos
 * validation signup by admin
 * write tests
-* create a docker file
+* create a docker file usable in prod (ie not based on runserver)
+* add a footer
 * develop different subpackages
   * news
   * classified ads

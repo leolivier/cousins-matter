@@ -1,3 +1,6 @@
+# based on https://stackoverflow.com/questions/17178525/django-how-to-include-a-view-from-within-a-template#56476932
+# this view and tag allows including a view into another view. see template/cm_main/base.html as an example
+# TODO: deliver this as a reusable piece of code
 from django.template import Library, Node, Variable, TemplateSyntaxError
 from django.template.response import TemplateResponse
 from django.conf import settings

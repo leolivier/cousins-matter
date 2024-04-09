@@ -4,20 +4,16 @@
   <div class="media">
     <figure class="media-left">
       <p class="image">
-        <img style='height: 250px' src="{%if home_logo%}{{MEDIA_URL}}{{home_logo}}{%else%}{% static 'images/cousinsmatter.jpg' %}{%endif%}">
+        <img style='height: 250px' src="{{home_logo}}">
       </p>
     </figure>
     <div class="media-content">
-			<p>
-				<strong class="is-size-1">
-				{% if home_title %}{{home_title}}{%else%}{%translate "Cousins Matter!" %}{%endif%}
-				</strong><br/>
-				{% if home_content %}
-					{{home_content}}
-				{%else%}
-					{%translate "No home content yet, please go to <a href='/admin'>admin site</a> and create one." %}
-				{%endif%}
-			</p>
+			<h1 class="title">{{home_title}}</h1>
+			<div class="content">
+				{% autoescape off %}
+				{{home_content}}
+				{% endautoescape %}
+			</div>
     </div>
   </div>
 	{% if user.is_authenticated %}

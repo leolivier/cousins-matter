@@ -73,29 +73,36 @@
 	{% block modals %}
 
 		{% url 'members:create_address' as create_address %}
-		{% with modal_id="create-address-modal" title="New Address" url=create_address form=addr_form action="Create" %}
+		{% translate "New Address" as new_address %}
+		{% translate "Create" as create %}
+		{% with modal_id="create-address-modal" title=new_address url=create_address form=addr_form action=create %}
 			{% include "members/modal_form.html" %}
 		{% endwith %}
 
 		{% if m_form.address.value %}
 		{% url 'members:change_address' as change_address %}
-		{% with modal_id="change-address-modal" title="Change Address" url=change_address form=addr_form action="Update" %}
+		{% translate "Change Address" as change_address %}
+		{% translate "Update" as update %}
+		{% with modal_id="change-address-modal" title=change_address url=change_address form=addr_form action=update %}
 			{% include "members/modal_form.html" %}
 		{% endwith %}
 		{% endif %}
 		
 		{% url 'members:create_family' as create_family %}
-		{% with modal_id="create-family-modal" title="New Family" url=create_family form=family_form action="Create" %}
+		{% translate "New Family" as new_family %}
+		{% with modal_id="create-family-modal" title=new_family url=create_family form=family_form action=create %}
 			{% include "members/modal_form.html" %}
 		{% endwith %}
 
-		{% with modal_id="create-parent-family-modal" title="New Parent Family" url=create_family form=family_form action="Create" %}
+		{% translate "New Parent Family" as new_parent_family %}
+		{% with modal_id="create-parent-family-modal" title=new_parent_family url=create_family form=family_form action=create %}
 			{% include "members/modal_form.html" %}
 		{% endwith %}
 
 		{% if m_form.family.value %}
 		{% url 'members:change_family' as change_family %}
-		{% with modal_id="change-family-modal" title="Change Family" url=change_family form=family_form action="Update" %}
+		{% translate "Change Family" as change_family %}
+		{% with modal_id="change-family-modal" title=change_family url=change_family form=family_form action=update %}
 			{% include "members/modal_form.html" %}
 		{% endwith %}
 		{% endif %}

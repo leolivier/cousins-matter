@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 20:00+0200\n"
+"POT-Creation-Date: 2024-04-09 15:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -106,27 +106,27 @@ msgstr "members"
 msgid "Cousins Matter - Birthdays"
 msgstr "Cousins Matter - Anniversaires"
 
-#: members/templates/members/birthdays_include.html:5
+#: members/templates/members/birthdays_include.html:4
 #, python-format
 msgid "Birthdays in the next %(ndays)s days"
 msgstr "Anniversaires dans les prochains %(ndays)s jours"
 
-#: members/templates/members/birthdays_include.html:13
+#: members/templates/members/birthdays_include.html:15
 #, python-format
 msgid "turns %(age)s today, happy birthday!"
 msgstr "a %(age)s ans aujourd'hui, joyeux anniversaire!"
 
-#: members/templates/members/birthdays_include.html:15
+#: members/templates/members/birthdays_include.html:17
 #, python-format
 msgid "will turn %(age)s tomorrow, happy birthday!"
 msgstr "aura %(age)s ans demain, joyeux anniversaire!"
 
-#: members/templates/members/birthdays_include.html:18
+#: members/templates/members/birthdays_include.html:20
 #, python-format
 msgid "will turn %(age)s on %(birthday)s"
 msgstr "aura %(age)s ans %(birthday)s"
 
-#: members/templates/members/birthdays_include.html:26
+#: members/templates/members/birthdays_include.html:34
 #, python-format
 msgid "No birthdays in next %(ndays)s days"
 msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
@@ -194,27 +194,55 @@ msgstr "Mail de vérification perdu?"
 msgid "Request a new link"
 msgstr "Demander un nouveau lien"
 
-#: members/templates/members/member_detail.html:111
+#: members/templates/members/member_detail.html:76
+msgid "New Address"
+msgstr "Nouvelle Adresse"
+
+#: members/templates/members/member_detail.html:77
+msgid "Create"
+msgstr "Créer"
+
+#: members/templates/members/member_detail.html:84
+msgid "Change Address"
+msgstr "Modifier l'Adresse"
+
+#: members/templates/members/member_detail.html:85
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: members/templates/members/member_detail.html:92
+msgid "New Family"
+msgstr "Nouvelle Famille"
+
+#: members/templates/members/member_detail.html:97
+msgid "New Parent Family"
+msgstr "Nouvell Famille Parente"
+
+#: members/templates/members/member_detail.html:104
+msgid "Change Family"
+msgstr "Modifier la Famille"
+
+#: members/templates/members/member_detail.html:118
 msgid "Address created"
 msgstr "Adresse créée"
 
-#: members/templates/members/member_detail.html:115
+#: members/templates/members/member_detail.html:122
 msgid "Family created"
 msgstr "Famille créée"
 
-#: members/templates/members/member_detail.html:120
+#: members/templates/members/member_detail.html:127
 msgid "Address updated"
 msgstr "Adresse mise à jour"
 
-#: members/templates/members/member_detail.html:125
+#: members/templates/members/member_detail.html:132
 msgid "Family updated"
 msgstr "Famille mise à jour"
 
-#: members/templates/members/member_detail.html:130
+#: members/templates/members/member_detail.html:137
 msgid "Parent family created"
 msgstr "Famille parente créée"
 
-#: members/templates/members/member_detail.html:134
+#: members/templates/members/member_detail.html:141
 msgid "This username is not available!"
 msgstr "Ce nom d'utilisateur est déjà pris!"
 

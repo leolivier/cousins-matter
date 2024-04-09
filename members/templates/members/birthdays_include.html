@@ -1,10 +1,16 @@
 {% load i18n %}
 {% if birthdays_list %}
-<div>
-    <ul>
+<div class="container">
+    <h1 class="title has-text-centered">{% blocktranslate %}Birthdays in the next {{ndays}} days{% endblocktranslate %}</h1>
+    <hr>
+    <div class="fixed-grid has-2-cols">
+      <div class="grid">
         {% for member, when in birthdays_list %}
-        <li>
+        <div class="cell has-background-light-link has-text-right px-0 mx-0">
             <a href="{% url 'members:detail' member.id %}">{{ member.account.first_name }} {{ member.account.last_name }}</a>
+        </div>
+        <div class="cell has-background-light-primary px-0 mx-0
+                has-text-{% if when == 0 %}danger{% elif when == 1 %}warning{% else %}primary{% endif %}">
             {% if when == 0 %}
                 {% blocktranslate with age=member.age %}turns {{ age }} today, happy birthday!{% endblocktranslate %}
             {% elif when == 1 %}
@@ -13,9 +19,15 @@
                 {# TODO: manage locale for birthdate format #}
                 {% blocktranslate with age=member.age|add:1 birthday=member.birthdate|date:"l d F" %}will turn {{ age }} on {{ birthday }}{% endblocktranslate %}
             {% endif %}
-        </li>
+            {% if when == 0 or when == 1 %}
+            <i class="icon"><span class="mdi mdi-cake-variant-outline"></span></i>
+            <i class="icon"><span class="mdi mdi-cake-variant"></span></i>
+            <i class="icon"><span class="mdi mdi-cake-variant-outline"></span></i>
+        {% endif %}
+        </div>
         {% endfor %}
-    </ul>
+      </div>
+    </div>
 </div>
 {% else %}
 <div>

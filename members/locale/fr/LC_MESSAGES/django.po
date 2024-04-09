@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 15:42+0200\n"
+"POT-Creation-Date: 2024-04-08 20:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -94,11 +94,11 @@ msgstr "Site web"
 msgid "Family"
 msgstr "Famille"
 
-#: members/models.py:128
+#: members/models.py:124
 msgid "member"
 msgstr "membre"
 
-#: members/models.py:129
+#: members/models.py:125
 msgid "members"
 msgstr "members"
 
@@ -106,22 +106,27 @@ msgstr "members"
 msgid "Cousins Matter - Birthdays"
 msgstr "Cousins Matter - Anniversaires"
 
-#: members/templates/members/birthdays_include.html:9
+#: members/templates/members/birthdays_include.html:5
+#, python-format
+msgid "Birthdays in the next %(ndays)s days"
+msgstr "Anniversaires dans les prochains %(ndays)s jours"
+
+#: members/templates/members/birthdays_include.html:13
 #, python-format
 msgid "turns %(age)s today, happy birthday!"
 msgstr "a %(age)s ans aujourd'hui, joyeux anniversaire!"
 
-#: members/templates/members/birthdays_include.html:11
+#: members/templates/members/birthdays_include.html:15
 #, python-format
 msgid "will turn %(age)s tomorrow, happy birthday!"
 msgstr "aura %(age)s ans demain, joyeux anniversaire!"
 
-#: members/templates/members/birthdays_include.html:14
+#: members/templates/members/birthdays_include.html:18
 #, python-format
 msgid "will turn %(age)s on %(birthday)s"
 msgstr "aura %(age)s ans %(birthday)s"
 
-#: members/templates/members/birthdays_include.html:22
+#: members/templates/members/birthdays_include.html:26
 #, python-format
 msgid "No birthdays in next %(ndays)s days"
 msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"

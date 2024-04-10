@@ -41,9 +41,9 @@
 					<span>{% translate "Sign in" %}</span>
 				</a>
 {#				<a class="button is-primary" href="{% url 'accounts:register' %}"> #}
-				<a class="button is-primary" href="{% url 'members:register' %}">
+					<a class="button is-primary" href="{% url 'members:register_request' %}">
 					<span class="icon"><i class="mdi mdi-account-box-plus-outline"></i></span>
-					<span><strong>{% translate "Sign up" %}</strong></span>
+					<span><strong>{% translate "Request invitation link" %}</strong></span>
 				</a>
 				{% else %}
 				<div class="navbar-item has-dropdown is-hoverable">

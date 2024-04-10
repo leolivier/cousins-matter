@@ -10,3 +10,8 @@ body {
   flex-wrap: wrap;
   margin-bottom: 5px;
 }
+
+.captchaanswerinput {
+  margin-left: 5px;
+  margin-bottom: 15px;
+}

@@ -44,4 +44,5 @@ urlpatterns = [
 	path('password-reset/completed/', auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'), name='password_reset_complete'),
     path('verification/', include('verify_email.urls')),	
     path("robots.txt", TemplateView.as_view(template_name="cm_main/robots.txt", content_type="text/plain")),
+	path('captcha/', include('captcha.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

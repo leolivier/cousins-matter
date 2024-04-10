@@ -1,8 +1,10 @@
 from pprint import pprint
-from django.forms import ModelForm
+from django import forms
+from django.forms import ModelForm, Form
 from django.forms import ValidationError
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from captcha.fields import CaptchaField
 from .models import Member, Address, Family
 from .widgets import FieldLinkWrapper
 from cousinsmatter import settings
@@ -69,3 +71,12 @@ class FamilyUpdateForm(ModelForm):
     can_change_parent = self.instance and self.instance.parent
     self.fields['parent'].widget = FieldLinkWrapper(self.fields['parent'].widget, True, can_change_parent, 
                                                     name="parent-family")
+
+class MemberInvitationForm(Form):
+  email = forms.EmailField(label=_("Email to send invitation"), max_length=254)
+
+class RegistrationRequestForm(Form):
+  name = forms.CharField(label=_("Your name"), max_length=254)
+  email = forms.EmailField(label=_("Email where you will receive the link"), max_length=254)
+  message = forms.CharField(label=_("Message to the administrator"), widget=forms.Textarea, max_length=2000)
+  captcha = CaptchaField(label=_("Captcha (click on the image to refresh)"))

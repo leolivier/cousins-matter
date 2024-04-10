@@ -22,9 +22,13 @@ env = environ.Env(
 )
 environ.Env.read_env(Path(BASE_DIR, '.env'))
 
+SITE_NAME = env('SITE_NAME', default='Cousins Matter')
+
 SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env('DEBUG')
+
+MAX_REGISTRATION_AGE = env('MAX_REGISTRATION_AGE', default=2*24*3600)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
@@ -71,6 +75,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'captcha',
 ]
 
 MIDDLEWARE = [
@@ -209,9 +214,6 @@ LOGGING = {
 AVATARS_DIR = 'avatars'
 AVATARS_SIZE = 300
 AVATARS_MAX_LOAD_SIZE = 1024 * 1024 * 2
-
-# not used
-NEW_EMAIL_SENT_TEMPLATE  = "accounts/new_email_sent.html"
 
 VERIFICATION_SUCCESS_TEMPLATE = "accounts/email_verification_successful.html"
 VERIFICATION_FAILED_TEMPLATE = "accounts/email_verification_failed.html"

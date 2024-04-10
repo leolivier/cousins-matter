@@ -8,34 +8,7 @@
     <title>{% translate 'Verify Email address' %}</title>
 
     <style>
-        body { font-family: sans-serif; }
-        hr { width:100px; }
-        .green {
-            background-color: rgb(0, 209, 157);
-            color: rgb(0, 31, 26);
-            border: 1px solid rgb(0, 209, 177);
-        }
-        .small { font-size: 0.75rem;}
-        .container {
-            margin: 10px;
-            padding: 10px;
-            padding-top: 0px;
-            justify-content: center;
-            border-radius: 5px;
-            border: 1px solid rgb(0, 209, 157);
-        }
-        .button {
-            padding: 10px;
-            padding-left: 35px;
-            padding-right: 35px;
-            border-radius: 5px;
-            transition-duration: 500ms;
-            text-decoration: none;
-        }
-        .mt-5 { margin-top: 50px;}
-        .mt-3 { margin-top: 30px;}
-        .mt-2 { margin-top: 20px;}
-        .center { text-align: center; }
+        {% include "accounts/email_msg_css.css" %}
     </style>
 </head>
 <body>

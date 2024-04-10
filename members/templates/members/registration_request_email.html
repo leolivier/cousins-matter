@@ -1,0 +1,41 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% blocktranslate %}Registration request for {{site_name}}{% endblocktranslate %}</title>
+
+    <style>
+        {% include "accounts/email_msg_css.css" %}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="green">
+            <h1 class="center" style="padding:2px">
+				{% blocktranslate %}Registration request for the "{{site_name}}" site{% endblocktranslate %}
+            </h1>
+        </div>
+
+        <p>{% blocktranslate with name=requester.name email=requester.email %}{{name}} ({{email}}) requested to register to your cousinades site{% endblocktranslate %}</p>
+        <hr>
+        <p>{% blocktranslate %}Here is the message he sent:{% endblocktranslate %}</p>
+        <div class="container">{{requester.message}}</div>
+
+        <div class="center">
+            <p class="mt-2">
+                {% blocktranslate %}You received this mail because you are the administrator of the "{{site_name}}" site.{% endblocktranslate %}
+            </p>
+        </div>
+        <div class="center mt-3">
+            <hr>
+            <a href="{{link}}?mail={{requester.email}}" class="button green" >{% translate "Open invitation page" %}</a>
+        </div>
+    </div>
+   
+</body>
+</html>

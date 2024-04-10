@@ -1,0 +1,45 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% blocktranslate %}Register to {{site_name}}{% endblocktranslate %}</title>
+
+    <style>
+        {% include "accounts/email_msg_css.css" %}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="green">
+            <h1 class="center" style="padding:2px">
+							{% blocktranslate %}Registration to the "{{site_name}}" site{% endblocktranslate %}
+            </h1>
+        </div>
+
+        <h2 class="center">{% blocktranslate %}You have been invited by {{admin}} to register to his cousinades site{% endblocktranslate %}</h2>
+        <hr>
+
+        <div class="center">
+            <p class="mt-2">
+                {% blocktranslate %}You received this mail because the administrator of this site ({{admin}}) invites you to join his site.{% endblocktranslate %}
+                {% translate "If you know the administrator and knows he created this site, please click on the link below to go to the site and create your account." %}
+            </p>
+        </div>
+        <div class="center mt-3">
+            <hr>
+            <a href="{{link}}" class="button green" >{% translate "Sign up" %}</a>
+        </div>
+    
+        <p class="small mt-3 center">
+					{% blocktranslate %}You can reply to this email to contact {{admin}} and check with him if he really invited you...{% endblocktranslate %}
+				</p>
+
+    </div>
+   
+</body>
+</html>

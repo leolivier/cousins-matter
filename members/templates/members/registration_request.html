@@ -11,9 +11,9 @@
 	<form method="post">
 		{% csrf_token %}
 		{{ form | crispy}}
-		<button class='js-captcha-refresh'></button>
 		<p class="content">{% translate "Please fill in the captcha above before clicking the invitation button" %}</p>
 		<button type="submit" class="button is-success">{%translate "Invite me" %}</button>
+		<button class='js-captcha-refresh'></button>
 	</form>
 </div>
 <script>

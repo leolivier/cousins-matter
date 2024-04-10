@@ -219,3 +219,5 @@ VERIFICATION_SUCCESS_TEMPLATE = "accounts/email_verification_successful.html"
 VERIFICATION_FAILED_TEMPLATE = "accounts/email_verification_failed.html"
 REQUEST_NEW_EMAIL_TEMPLATE = "accounts/request_new_email.html"
 HTML_MESSAGE_TEMPLATE = "accounts/email_verification_msg.html"
+
+CAPTCHA_LENGTH=6

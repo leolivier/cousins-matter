@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-09 16:31+0200\n"
+"POT-Creation-Date: 2024-04-10 18:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,29 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cm_main/apps.py:7 cm_main/models.py:8 cm_main/templates/cm_main/base.html:8
+#: cm_main/apps.py:7 cm_main/templates/cm_main/base.html:8
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
-
-#: cm_main/models.py:7
-msgid "Home title"
-msgstr "Titre de la page d'accueil"
-
-#: cm_main/models.py:10
-msgid ""
-"No home content yet, please go to <a href='/admin'>admin site</a> and create "
-"one."
-msgstr ""
-"Aucun contenu de la page d'accueil n'est défini, merci d'aller sur le site "
-"<a href='/admin'>administration</a> et en créer un."
-
-#: cm_main/models.py:9
-msgid "Home content"
-msgstr "Contenu de la page d'accueil"
-
-#: cm_main/models.py:11
-msgid "Home logo"
-msgstr "Logo sur la page d'accueil"
 
 #: cm_main/templates/cm_main/base.html:55
 msgid "This site proudly built using"
@@ -76,8 +56,8 @@ msgid "Sign in"
 msgstr "Connexion"
 
 #: cm_main/templates/cm_main/menu.html:47
-msgid "Sign up"
-msgstr "S'enregistrer"
+msgid "Request invitation link"
+msgstr "Demander un lien d'invitation"
 
 #: cm_main/templates/cm_main/menu.html:61
 msgid "Profile"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter Accounts 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 16:07+0200\n"
+"POT-Creation-Date: 2024-04-10 18:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,30 +35,30 @@ msgstr ""
 
 #: accounts/templates/accounts/email_verification_failed.html:13
 msgid "Request a new link"
-msgstr "Démander un nouveau lien"
+msgstr "Demander un nouveau lien"
 
 #: accounts/templates/accounts/email_verification_msg.html:8
 msgid "Verify Email address"
 msgstr "Vérifier l'adresse e-mail"
 
-#: accounts/templates/accounts/email_verification_msg.html:47
+#: accounts/templates/accounts/email_verification_msg.html:20
 msgid "Cousins Matter Account Activation"
 msgstr "Les Cousins Comptent - Activation de compte"
 
-#: accounts/templates/accounts/email_verification_msg.html:51
+#: accounts/templates/accounts/email_verification_msg.html:24
 msgid "E-mail Confirmation"
 msgstr "Confirmation de l'e-mail"
 
-#: accounts/templates/accounts/email_verification_msg.html:55
+#: accounts/templates/accounts/email_verification_msg.html:28
 msgid "Greetings!"
 msgstr "Salutations!"
 
-#: accounts/templates/accounts/email_verification_msg.html:57
+#: accounts/templates/accounts/email_verification_msg.html:30
 msgid ""
 "You received this mail because you attempted to make account on our website"
 msgstr "Tu reçois ce mail car tu essayes de créer un compte sur notre site web"
 
-#: accounts/templates/accounts/email_verification_msg.html:58
+#: accounts/templates/accounts/email_verification_msg.html:31
 msgid ""
 "Please click on the link below to confirm the email and activate your "
 "account."
@@ -66,15 +66,15 @@ msgstr ""
 "Merci de cliquer sur le lien ci-dessous pour confirmer l'adresse e-mail et "
 "activer ton compte."
 
-#: accounts/templates/accounts/email_verification_msg.html:61
+#: accounts/templates/accounts/email_verification_msg.html:34
 msgid "You'll be joining us right after the verification !"
 msgstr "Tu nous rejoindras après la vérification !"
 
-#: accounts/templates/accounts/email_verification_msg.html:66
+#: accounts/templates/accounts/email_verification_msg.html:39
 msgid "Verify"
 msgstr "Vérifier"
 
-#: accounts/templates/accounts/email_verification_msg.html:69
+#: accounts/templates/accounts/email_verification_msg.html:42
 msgid "Do not reply to this mail, it is machine generated."
 msgstr "Ne pas répondre à ce mail, il est généré par ordinateur."
 
@@ -126,8 +126,8 @@ msgid "Need An Account?"
 msgstr "Besoin d'un compte?"
 
 #: accounts/templates/accounts/login.html:18
-msgid "Sign Up Now"
-msgstr "S'enregistrer maintenant"
+msgid "Request invitation link"
+msgstr "Demander une invitation"
 
 #: accounts/templates/accounts/login.html:21
 #: accounts/templates/accounts/password_change.html:18

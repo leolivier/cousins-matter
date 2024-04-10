@@ -79,4 +79,4 @@ class RegistrationRequestForm(Form):
   name = forms.CharField(label=_("Your name"), max_length=254)
   email = forms.EmailField(label=_("Email where you will receive the link"), max_length=254)
   message = forms.CharField(label=_("Message to the administrator"), widget=forms.Textarea, max_length=2000)
-  captcha = CaptchaField(label=_("Captcha (click on the image to refresh)"))
+  captcha = CaptchaField(label=_("Captcha (click on the image to refresh if you can't read it)"))

@@ -1,24 +1,40 @@
 # Cousins Matter project
-Django version with sqlite behind
+An application for managing large families, listing all your cousins and allowing them to manage their own profiles.
+Soon to come:
+  * news
+  * classified ads
+  * galleries
+  * chat
+  * genealogy
+  * ...
+
 # To install it
-Clone the git repo:
-`git clone https://github.com/mariocesar/cousins-matter.git`
-then cd to the created directory:
-`cd cousins-matter`	
-To install dependencies:
-`pip install -r requirements.txt`
-(it's better to do that in a pip env or a conda specific environment)
-Create a superuser:
-`python manage.py createsuperuser`
-Edit ./cousinsmatter/settings.py to set the properties at the beginning of the file.
+* Clone the git repo:
+ `git clone https://github.com/mariocesar/cousins-matter-django.git cousins-matter`
+ then cd to the created directory:
+ `cd cousins-matter`	
+* To install dependencies:
+ `pip install -r requirements.txt`
+ (it's better to do that in a pip env or a conda specific environment)
+* Create a superuser:
+ `python manage.py createsuperuser`
+* Update your settings:
+  Edit `.env` to set the properties according to your needs.
+* Create your database
+ `python manage.py migrate`	
 
 # To run it
 `python manage.py runserver`
-Then, only the 1rst time:
+Then, **only the 1rst time**:
 * Go to http://127.0.0.1:8000/
 * Login with the superuser account
 * Complete your profile (profile menu on the right hand side icon)
-* You're good to go
+* You're good to go!
+
+# To update it
+ `git pull`
+ `pip install -r requirements.txt`
+ `python manage.py migrate`	
 
 # To generate a new language
 `django-admin makemessages -l <language_code>`
@@ -30,21 +46,45 @@ which will compile the translations
 # To reset the database completely
 Run `./clean_database.sh`
 
-# To build a docker image
-`docker build -t cousins-matter.`	
+# To use a docker image
+* Either build it from source (at the roor of the project)
+ `docker build -t cousins-matter.`
+* Or pull it from docker hub
+ `docker pull leolivier/cousins-matter`
+  * and create the appropriate directories
+  `mkdir -p cousins-matters cousins-matters/data cousins-matters/media`
+  `cd cousins-matters`
+* Download the raw version of the `.env.example` file from https://github.com/leolivier/cousins-matter-django/blob/main/.env.example, rename it to .env and edit it to set the properties according to your needs.
 
 # To run with Docker
-`docker run --name cousinsmatter -p 8000:8000 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media cousinsmatter`
-then follow the same steps as in the local run section above.
+* run the docker image
+ `docker run --name cousins-matter -p 8000:8000 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media cousins-matter` (or `leolivier/cousins-matter` if pulled from docker hub)
+  Mounted volumes are as follows:
+  * `/app/data` must be mounted on a directory where the database will be stored
+  * `/app/.env` must be mounted on a file where the environment variables will be stored
+  * `/app/media` must be mounted on a directory where the media files will be stored
+## The first time only
+  * Create the database
+    `docker exec -it cousins-matter python manage.py migrate`
+  * Go to http://127.0.0.1:8000/
+  * Login with the superuser account
+  * Complete your profile (profile menu on the right hand side icon)
+  * **You're good to go!**
 
+# To update with Docker
+* Stop the container
+ `docker stop cousins-matter`
+* Update the code and rebuild the image
+  `git pull`	
+  `docker build -t cousins-matter.`	
+ or pull the latest image
+ `docker pull leolivier/cousins-matter`
+* Then rerun it as described above
+* And finally, update the database
+ `docker exec -it cousins-matter python manage.py migrate`
+* **You're good to go!**
 
 # Todos
 * write tests
 * create a docker file usable in prod (ie not based on runserver)
-* develop different subpackages
-  * news
-  * classified ads
-  * galleries
-  * chat
-  * genealogy
-  * ...
+* develop different subpackages as described above

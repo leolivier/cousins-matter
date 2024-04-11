@@ -21,6 +21,7 @@ class Family(models.Model):
   class Meta:
     verbose_name = _('family')
     verbose_name_plural = _('families')
+    ordering = ['name']
 
 class Address(models.Model):
   
@@ -44,6 +45,7 @@ class Address(models.Model):
   class Meta:
     verbose_name = _('address')
     verbose_name_plural = _('addresses')
+    ordering = ['city', 'zip_code', 'number_and_street']
 
 
 class Member(models.Model):
@@ -123,3 +125,4 @@ class Member(models.Model):
     class Meta:
       verbose_name = _('member')
       verbose_name_plural = _('members')
+      ordering = ['account__last_name', 'account__first_name']

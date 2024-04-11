@@ -20,6 +20,7 @@ MEMBER_MODE = Enum('MEMBER_MODE_ENUMS', ['create_managed', 'signup', 'update_man
 
 class MembersView(LoginRequiredMixin, generic.ListView):
     template_name = "members/members.html"
+    paginate_by = 100
     model = Member
 
 def editable(request, member):

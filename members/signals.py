@@ -37,7 +37,7 @@ def delete_user_deletes_member(sender, instance, **kwargs):
     managed_members = Member.objects.filter(managing_account__id = instance.id)
     admin = User.objects.filter(is_superuser=True).first()
     for member in managed_members:
-        logger.info(f"User {instance.username} deleted: associating managed member {member.__str__()} to {admin.username} managing account")
+        logger.info(f"User {instance.username} deleted: associating managed member {member.str()} to {admin.username} managing account")
         member.managing_account = admin
         member.save()
 

@@ -25,7 +25,7 @@ class AddressCreateView(LoginRequiredMixin, generic.CreateView):
          form = AddressUpdateForm(request.POST)
          if form.is_valid():
             address = form.save()
-            return JsonResponse({"address_id": address.id, "address_str": address.__str__()}, status=200)
+            return JsonResponse({"address_id": address.id, "address_str": address.str()}, status=200)
          else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)
@@ -42,7 +42,7 @@ class AddressUpdateView(LoginRequiredMixin, generic.UpdateView):
          form = AddressUpdateForm(request.POST, instance=address)
          if form.is_valid():
             address = form.save()
-            return JsonResponse({"address_id": address.id, "address_str": address.__str__()}, status=200)
+            return JsonResponse({"address_id": address.id, "address_str": address.str()}, status=200)
          else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)

@@ -24,7 +24,7 @@ class FamilyCreateView(LoginRequiredMixin, generic.CreateView):
          form = FamilyUpdateForm(request.POST)
          if form.is_valid():
             family = form.save()
-            return JsonResponse({"family_id": family.id, "family_name": family.__str__()}, status=200)
+            return JsonResponse({"family_id": family.id, "family_name": family.str()}, status=200)
          else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)
@@ -41,7 +41,7 @@ class FamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
          form = FamilyUpdateForm(request.POST, instance=family)
          if form.is_valid():
             family = form.save()
-            return JsonResponse({"family_id": family.id, "family_name": family.__str__()}, status=200)
+            return JsonResponse({"family_id": family.id, "family_name": family.str()}, status=200)
          else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)

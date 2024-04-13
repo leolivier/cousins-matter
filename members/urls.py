@@ -5,7 +5,7 @@ from .views import views_address, views_activate, views_family, views_member, vi
 
 app_name = "members"
 urlpatterns = [
-	path("birthdays", views_birthday.birthdays, name="birthdays"),
+	path("birthdays", views_birthday.BirthdaysView.as_view(), name="birthdays"),
 	path("", views_member.MembersView.as_view(), name="members"),
 	path("<int:pk>/", views_member.display_member, name="detail"),
 	path("create/", views_member.create_member, name="create"),

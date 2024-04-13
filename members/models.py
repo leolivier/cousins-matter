@@ -126,3 +126,111 @@ class Member(models.Model):
       verbose_name = _('member')
       verbose_name_plural = _('members')
       ordering = ['account__last_name', 'account__first_name']
+
+from django.db.models.functions import (ExtractDay, ExtractMonth, ExtractYear, Now, Concat, TruncYear)
+from django.db.models.expressions import Func, Case, When, Expression, Value as V, ExpressionWrapper
+from django.db.models import CharField, DateField, IntegerField, Q, F
+
+sql_statement="""
+with precalc(id, birthdate, diff, birthday_year) as (
+	select 
+    members_member.id as id, 
+    members_member.birthdate as birthdate,
+		(julianday(substr(current_date, 1, 4) || substr(birthdate, -6, 6)) - julianday(current_date)) as diff,
+		case
+			when (substr(current_date, 6, 2)>substr(birthdate, 6, 2) or (substr(current_date, 6, 2)=substr(birthdate, 6, 2) and substr(current_date, -2, 2)>substr(birthdate, -2, 2)))
+			then substr(current_date, 1, 4) + 1
+			else substr(current_date, 1, 4) 
+		end  as birthday_year
+	from members_member)
+select precalc.id, birthdate,
+  account.first_name, account.last_name, 
+	case 
+		when(precalc.diff >= 0)
+		then precalc.diff
+		else precalc.diff + strftime("%j", substr(current_date, 1, 4)||'-12-31')
+	end as delta,
+	precalc.birthday_year || substr(birthdate, -6, 6) as next_birthday,
+	case 
+		when(precalc.diff >= 0)
+		then substr(current_date, 1, 4)-substr(birthdate, 1, 4)
+		else substr(current_date, 1, 4)-substr(birthdate, 1, 4) + 1
+	end as age
+from precalc INNER JOIN auth_user as account ON (precalc.id = account.id) 
+where delta < 100 
+order by delta;
+"""
+class Date(Func):
+  function = 'date'
+  template = "%(function)s(%(expressions)s, 'localtime')"
+  def __init__(self, year, month, day, **extra):
+    lst=[]
+    for attribute in [year, month, day]:
+      if not isinstance(attribute, int) and not isinstance(attribute, Expression) and not isinstance(attribute, F):
+        raise ValueError(f'Date() must be called with year, month and day as integers or Expressions or F: {attribute} is a {type(attribute)}')
+      if isinstance(attribute, int):
+        attribute=V(attribute)
+      lst.append(attribute)
+    
+    date=Concat(lst[0], V('-'), lst[1], V('-'), lst[2], output_field=CharField())
+    expressions = [date]
+    super().__init__(*expressions, **extra)
+
+class JulianDay(Func):
+  function = 'julianday'
+  template = "%(function)s(%(expressions)s)"
+
+class GetYear(Func):
+  function = 'substr'
+  template = "%(function)s(%(expressions)s, 1, 4)"
+
+class GetMonth(Func):
+  function = 'substr'
+  template = "%(function)s(%(expressions)s, 6, 2)"
+
+class GetDay(Func):
+  function = 'substr'
+  template = "%(function)s(%(expressions)s, 9, 2)"
+
+def birthdays_raw(ndays: int):
+  res = Member.objects.raw(sql_statement)
+  print(res)
+  return res;
+
+
+
+def birthdays_F(ndays:int):
+  today = datetime.date.today()
+  year = today.year
+  month = today.month
+  day = today.day
+  deltaNdays = datetime.timedelta(days = ndays)
+# values('id', 'account__first_name', 'account__last_name').
+  f = Member.objects.annotate(
+        cur_month=V(month),
+        cur_day=V(day),
+        birth_year=ExtractYear('birthdate'),
+        birth_month=ExtractMonth('birthdate'),
+        birth_day=ExtractDay('birthdate'),
+        next_birthday_year=Case(
+          When(Q(cur_month__gt=F('birth_month')) | 
+              (Q(cur_month=F('birth_month')) & Q(cur_day__gt=F('birth_day'))), 
+              then=V(year + 1)),
+          default=V(year)
+        ),
+        next_birthday=Date(F('next_birthday_year'), month, day),
+        age=F('next_birthday_year')-F('birth_year'),
+        # age=Case(
+        #   When(next_birthday=TruncDay(Now()), 
+        #        then=ExpressionWrapper(ExtractYear(Now(), output_field=IntegerField()) -
+        #                               ExtractYear('next_birthday', output_field=IntegerField()), 
+        #                               output_field=IntegerField())),
+        #   defaut=ExpressionWrapper(ExtractYear(Now(), output_field=IntegerField()) -
+        #                            ExtractYear('next_birthday', output_field=IntegerField())-1, 
+        #                            output_field=IntegerField())
+        # ),
+        when=(JulianDay('next_birthday', output_field=IntegerField()) - JulianDay(Now(), output_field=IntegerField()))
+  ) #.filter(when__lt=V(deltaNdays)).order_by('when')
+
+  print (f"birthdays query={f.query}")
+  return f

@@ -1,6 +1,8 @@
 # Cousins Matter project
 An application for managing large families, listing all your cousins and allowing them to manage their own profiles.
 Soon to come:
+  * help/faq
+  * pdf directory
   * news
   * classified ads
   * galleries
@@ -16,15 +18,16 @@ Soon to come:
 * To install dependencies:
  `pip install -r requirements.txt`
  (it's better to do that in a pip env or a conda specific environment)
-* Create a superuser:
- `python manage.py createsuperuser`
 * Update your settings:
-  Edit `.env` to set the properties according to your needs.
+  Copy `.env.example`to `.env` and edit `.env` to set the properties according to your needs.
 * Create your database
  `python manage.py migrate`	
+* Create a superuser:
+ `python manage.py createsuperuser`
 
 # To run it
-`python manage.py runserver`
+__WARNING: This is currently not tuned for production!__
+Run `python manage.py runserver`
 Then, **only the 1rst time**:
 * Go to http://127.0.0.1:8000/
 * Login with the superuser account
@@ -57,6 +60,7 @@ Run `./clean_database.sh`
 * Download the raw version of the `.env.example` file from https://github.com/leolivier/cousins-matter-django/blob/main/.env.example, rename it to .env and edit it to set the properties according to your needs.
 
 # To run with Docker
+__WARNING: This is currently not tuned for production!__
 * run the docker image
  `docker run --name cousins-matter -p 8000:8000 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media cousins-matter` (or `leolivier/cousins-matter` if pulled from docker hub)
   Mounted volumes are as follows:
@@ -88,3 +92,4 @@ Run `./clean_database.sh`
 * write tests
 * create a docker file usable in prod (ie not based on runserver)
 * develop different subpackages as described above
+

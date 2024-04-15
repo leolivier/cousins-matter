@@ -30,7 +30,7 @@ def managing_member_name(member):
     if member:
         managing_member = Member.objects.filter(account__id=member.managing_account.id)
         if managing_member:
-            return managing_member.first().str()
+            return managing_member.first().get_full_name()
         return member.managing_account.username
     else:
         return None

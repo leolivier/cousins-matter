@@ -221,3 +221,5 @@ REQUEST_NEW_EMAIL_TEMPLATE = "accounts/request_new_email.html"
 HTML_MESSAGE_TEMPLATE = "accounts/email_verification_msg.html"
 
 CAPTCHA_LENGTH=6
+
+PDF_SIZE=env.str('PDF_SIZE', 'A4')

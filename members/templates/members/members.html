@@ -8,11 +8,16 @@
       <h1 class="title">{% translate "Members List" %}</h1>
     </div>
     <div class="media-right">
-        <a class="button is-link" href="{% url 'members:create' %}">
+      <a class="button is-info" href="{% url 'members:birthdays' %}">
+        {% translate "Birthdays" %}
+      </a>
+      <a class="button is-primary" href="{% url 'members:directory' %}">
+        {% translate "Show directory" %}
+      </a>
+      <a class="button is-link" href="{% url 'members:create' %}">
           {% translate "Create Member" %}
-        </a>
-      </div>
-
+      </a>
+    </div>
   </div>
   {% if member_list %}
 	<div class="fixed-grid has-auto-count">

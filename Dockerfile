@@ -1,6 +1,10 @@
 FROM python:3.12-slim
 
 WORKDIR /app
+# install lighttpd for serving static and media files
+RUN apt-get update &&\
+		apt-get install -y lighttpd &&\
+		rm -rf /var/lib/apt/lists/*
 
 # Allows docker to cache installed dependencies between builds
 COPY requirements.txt .
@@ -11,7 +15,7 @@ COPY . .
 EXPOSE 8000
 
 # runs the production server
-ENTRYPOINT ["python", "manage.py"]
-CMD ["runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 VOLUME [ "/app/data" ]
+VOLUME [ "/app/media" ]

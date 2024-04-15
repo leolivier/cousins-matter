@@ -12,6 +12,10 @@
 			"args": [
 				"runserver"
 			],
+			// "program": "/home/olivi/miniconda3/envs/cousinsmatter/bin/python",
+			// "args": [
+			// 	"-m", "gunicorn", "cousinsmatter.asgi:application", "-k", "uvicorn.workers.UvicornWorker"
+			// ],
 			"django": true,
 			"autoStartBrowser": false,
 			"justMyCode": false,

@@ -3,6 +3,8 @@ import datetime
 from PIL import Image, ImageOps
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
+from django.db.models import Func 
+from django.urls import reverse
 import logging
 from cousinsmatter import settings
 
@@ -16,12 +18,19 @@ class Family(models.Model):
   
   parent = models.ForeignKey('self', verbose_name=_('Parent family'), on_delete=models.CASCADE, null=True, blank=True)
 
-  def __str__(self) -> str:
-     return self.name
   class Meta:
     verbose_name = _('family')
     verbose_name_plural = _('families')
     ordering = ['name']
+    indexes = [
+            models.Index(fields=["name"]),
+    ]
+
+  def __str__(self) -> str:
+     return self.name
+
+  def get_absolute_url(self):
+    return reverse("members:family", kwargs={"pk": self.pk})
 
 class Address(models.Model):
   
@@ -46,7 +55,9 @@ class Address(models.Model):
     verbose_name = _('address')
     verbose_name_plural = _('addresses')
     ordering = ['city', 'zip_code', 'number_and_street']
-
+    indexes = [
+            models.Index(fields=["city", "zip_code"]),
+        ]
 
 class Member(models.Model):
     account = models.OneToOneField('auth.User', verbose_name=_('Linked Account'), on_delete=models.CASCADE)
@@ -66,9 +77,20 @@ class Member(models.Model):
 
     family = models.ForeignKey(Family, verbose_name=_('Family'), on_delete=models.CASCADE, null=True, blank=True)
 
+    class Meta:
+      verbose_name = _('member')
+      verbose_name_plural = _('members')
+      ordering = ['account__last_name', 'account__first_name']
+      indexes = [
+        models.Index(fields=["account", "birthdate"]),
+      ]
+      
+    def get_absolute_url(self):
+      return reverse("members:detail", kwargs={"pk": self.pk})
+      
     def get_full_name(self):
-      uname = self.account.username if self.account_id else self.id
-      return f"{self.first_name()} {self.last_name()} {uname}"
+        uname = self.account.username if self.account_id else self.id
+        return f"{self.first_name()} {self.last_name()} {uname}"
 
     def get_short_name(self):
         return self.account.username if self.account_id else f'member id: {self.id}'
@@ -95,7 +117,7 @@ class Member(models.Model):
          (today.month == self.birthdate.month and today.day > self.birthdate.day):
             year += 1
       return self.birthdate.replace(year=year)
-
+    
     def age(self) -> int:
       today = datetime.date.today()
       years = today.year - self.birthdate.year

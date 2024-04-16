@@ -80,7 +80,7 @@ docker build -t cousins-matter .
 ```
 * Or pull it from docker hub
 ```
-docker pull leolivier/cousins-matter
+docker pull ghcr.io/leolivier/cousins-matter
 ```
   * and create the appropriate directories and cd
   ```
@@ -93,7 +93,7 @@ docker pull leolivier/cousins-matter
 ```
 docker run --name cousins-matter -p 8000:8000 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media cousins-matter
 ```
-  (or `leolivier/cousins-matter` if pulled from docker hub)
+  (or `ghcr.io/leolivier/cousins-matter` if pulled from docker hub)
   
   Mounted volumes are as follows:
   * `/app/data` must be mounted on a directory where the database will be stored

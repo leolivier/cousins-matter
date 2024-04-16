@@ -1,0 +1,43 @@
+{% extends "members/base_members.html" %}
+{% load i18n %}
+{% block title %}{%translate "Cousins Matter - Members Directory" %} {% endblock %}
+{% block content %}
+	<div class="media container">
+		<div class="media-left"></div>
+		<div class="media-content">
+			<h1 class="title">{% translate "Members Directory" %}</h1>
+			<hr/>
+		</div>
+		<div class="media-right">
+			<a class="button is-primary" href="{% url 'members:print_directory' %}">
+				{% translate "Print as PDF" %}
+			</a>
+		</div>
+	</div>
+  {% if member_list %}
+	<div class="fixed-grid has-5-cols">
+		<div class="grid">
+			<div class="cell has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Name" %}</div>
+			<div class="cell has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Birthdate" %}</div>
+			<div class="cell has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Phone" %}</div>
+			<div class="cell has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Email" %}</div>
+			<div class="cell has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Address" %}</div>
+    {% for member in member_list %}
+      <div class="cell">
+        <a class="button is-link is-light" href="{% url 'members:detail' member.id %}">
+          <strong>{{ member.first_name }} {{ member.last_name }}</strong>
+        </a>
+      </div>
+			<div class="cell">{{ member.birthdate | date }}</div>
+			<div class="cell">{{ member.phone }}</div>
+			<div class="cell">{{ member.email }}</div>
+			<div class="cell">{%if member.address %}{{ member.address }}{% endif %}</div>
+    {% endfor %}
+    </div>
+	</div>
+  {% else %}
+	<div>
+    <p>{% translate "No members found" %}.</p>
+	</div>
+  {% endif %}
+{% endblock %}

@@ -133,7 +133,6 @@ docker exec -it cousins-matter python manage.py migrate
 
 # Todos
 * write tests
-* create a docker file usable in prod (ie not based on runserver)
 * develop different subpackages as described above
 * manage TLS
 * provide tweeked config files for running lighttpd and supervisord outside of docker

@@ -13,7 +13,8 @@
 		{% if can_add_related %}
 		<a class="add-related button js-modal-trigger"
 			id="id_create_{{ name }}_link" data-target="create-{{ name }}-modal"
-			title="{% blocktranslate %}Add another {{ name }}{% endblocktranslate %}">
+			{% translate name as translated_name %}
+			title="{% blocktranslate %}Add another {{ translated_name }}{% endblocktranslate %}">
 			<img src="{% static 'admin/img/icon-addlink.svg' %}" alt="" width="20" height="20">
 		</a>
 		{% endif %}

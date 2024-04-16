@@ -6,4 +6,6 @@ django-icons>=23.5
 django-environ>=0.11.2
 Django-Verify-Email>=2.0.3
 django-simple-captcha>=0.6.0
+daphne>=4.1.2
+supervisor>=4.2.5
 reportlab>=4.1.0

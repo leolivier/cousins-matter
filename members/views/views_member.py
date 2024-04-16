@@ -27,13 +27,7 @@ def editable(request, member):
     return (not member) or member.managing_account.id == request.user.id
 
 def managing_member_name(member):
-    if member:
-        managing_member = Member.objects.filter(account__id=member.managing_account.id)
-        if managing_member:
-            return managing_member.first().get_full_name()
-        return member.managing_account.username
-    else:
-        return None
+    return Member.objects.get(account__id=member.managing_account.id).get_full_name() if member else None
 
 def _show_member(request, mode:MEMBER_MODE, member=None):
     """display, create or update a member"""

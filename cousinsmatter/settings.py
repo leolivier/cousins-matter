@@ -20,47 +20,49 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
-environ.Env.read_env(Path(BASE_DIR, '.env'))
+environ.Env.read_env(BASE_DIR / '.env')
 
-SITE_NAME = env('SITE_NAME', default='Cousins Matter')
+SITE_NAME = env.str('SITE_NAME', default='Cousins Matter')
+SITE_DOMAIN = env.str('SITE_DOMAIN', '127.0.0.1')
 
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env.str('SECRET_KEY')
 
-DEBUG = env('DEBUG')
+DEBUG = env.bool('DEBUG', False)
 
-MAX_REGISTRATION_AGE = env('MAX_REGISTRATION_AGE', default=2*24*3600)
+MAX_REGISTRATION_AGE = env.int('MAX_REGISTRATION_AGE', default=2*24*3600)
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'])
 
-LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
+LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-us')
 
-TIME_ZONE = env('TIME_ZONE', default='Europe/Paris')
+TIME_ZONE = env.str('TIME_ZONE', default='Europe/Paris')
 
-HOME_TITLE=env('HOME_TITLE', default='Cousins Matter!')
+HOME_TITLE=env.str('HOME_TITLE', default='Cousins Matter!')
 HOME_CONTENT_UNSIGNED=env.str('HOME_CONTENT_UNSIGNED', multiline=True, default="")
 HOME_CONTENT_SIGNED=env.str('HOME_CONTENT_SIGNED', multiline=True, default="")
-HOME_LOGO=env('HOME_LOGO', default='static/images/cousinsmatter.jpg')
-SITE_COPYRIGHT=env('SITE_COPYRIGHT', default='Site Copyright © 2024 Cousins Matter. All rights reserved.')
+HOME_LOGO=env.url('HOME_LOGO', default='/static/cm_main/images/cousinsmatter.jpg')
+SITE_COPYRIGHT=env.str('SITE_COPYRIGHT', default='Site Copyright © 2024 Cousins Matter. All rights reserved.')
 
 # Email properties
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_USE_TLS = env('EMAIL_USE_TLS', default=True)
-EMAIL_USE_SSL = env('EMAIL_USE_SSL', default=False)
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default="cousinsmatter@localhost")
+EMAIL_HOST = env.str('EMAIL_HOST')
+EMAIL_PORT = env.int('EMAIL_PORT')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
+EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=False)
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', default="cousinsmatter@localhost")
 
 # log levels
-DJANGO_LOG_LEVEL = env('DJANGO_LOG_LEVEL', default='INFO')
-CM_LOG_LEVEL = env('CM_LOG_LEVEL', default='INFO')
+DJANGO_LOG_LEVEL = env.str('DJANGO_LOG_LEVEL', default='INFO')
+CM_LOG_LEVEL = env.str('CM_LOG_LEVEL', default='INFO')
 
 # Number of days for birthdays
-BIRTHDAY_DAYS = env('BIRTHDAY_DAYS', default=50)
+BIRTHDAY_DAYS = env.int('BIRTHDAY_DAYS', default=50)
 
 # Application definition
 
 INSTALLED_APPS = [
+	'daphne',
 	'accounts.apps.AccountsConfig',
 	'cm_main.apps.CmMainConfig',
 	'members.apps.MembersConfig',
@@ -109,6 +111,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cousinsmatter.wsgi.application'
 
+ASGI_APPLICATION = "cousinsmatter.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -116,7 +119,7 @@ WSGI_APPLICATION = 'cousinsmatter.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': Path(BASE_DIR, 'data', 'db.sqlite3'),
+        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
     }
 }
 
@@ -152,12 +155,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_ROOT = Path(BASE_DIR, 'static')
+STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = 'static/'
 # STATICFILES_DIRS = []
 
-MEDIA_ROOT = Path(BASE_DIR, 'media').absolute()
-MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+if DEBUG:
+    MEDIA_URL = 'media/'
+else:
+    MEDIA_URL = 'protected_media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

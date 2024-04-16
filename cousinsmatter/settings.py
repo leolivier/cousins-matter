@@ -20,7 +20,7 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
-environ.Env.read_env(Path(BASE_DIR, '.env'))
+environ.Env.read_env(BASE_DIR / '.env')
 
 SITE_NAME = env.str('SITE_NAME', default='Cousins Matter')
 SITE_DOMAIN = env.str('SITE_DOMAIN', '127.0.0.1')
@@ -40,7 +40,7 @@ TIME_ZONE = env.str('TIME_ZONE', default='Europe/Paris')
 HOME_TITLE=env.str('HOME_TITLE', default='Cousins Matter!')
 HOME_CONTENT_UNSIGNED=env.str('HOME_CONTENT_UNSIGNED', multiline=True, default="")
 HOME_CONTENT_SIGNED=env.str('HOME_CONTENT_SIGNED', multiline=True, default="")
-HOME_LOGO=env.url('HOME_LOGO', default='')
+HOME_LOGO=env.url('HOME_LOGO', default='/static/cm_main/images/cousinsmatter.jpg')
 SITE_COPYRIGHT=env.str('SITE_COPYRIGHT', default='Site Copyright © 2024 Cousins Matter. All rights reserved.')
 
 # Email properties
@@ -119,7 +119,7 @@ ASGI_APPLICATION = "cousinsmatter.asgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': Path(BASE_DIR, 'data', 'db.sqlite3'),
+        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
     }
 }
 
@@ -155,12 +155,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_ROOT = Path(BASE_DIR, 'static')
+STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = 'static/'
 # STATICFILES_DIRS = []
 
-MEDIA_ROOT = Path(BASE_DIR, 'media').absolute()
-MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+if DEBUG:
+    MEDIA_URL = 'media/'
+else:
+    MEDIA_URL = 'protected_media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

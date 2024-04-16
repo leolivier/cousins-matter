@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 from accounts import views as account_views
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
+from cm_main.views import download_protected_media
 
 # from django.utils.translation import gettext_lazy as _
  
@@ -45,4 +46,5 @@ urlpatterns = [
     path('verification/', include('verify_email.urls')),	
     path("robots.txt", TemplateView.as_view(template_name="cm_main/robots.txt", content_type="text/plain")),
 	path('captcha/', include('captcha.urls')),
+	path('protected_media/<path:media>', download_protected_media, name="get_protected_media")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -16,6 +16,7 @@ EXPOSE 8000
 
 # runs the production server
 ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["supervisord", "-c", "/app/supervisord.conf"]
 
 VOLUME [ "/app/data" ]
 VOLUME [ "/app/media" ]

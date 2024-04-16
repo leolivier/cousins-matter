@@ -59,7 +59,7 @@ Run `./clean_database.sh`
 
 # To run with Docker
 * run the docker image
- `docker run --name cousins-matter -p 8000:8000 -p 8001:8001 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media cousins-matter` (or `leolivier/cousins-matter` if pulled from docker hub)
+ `docker run --name cousins-matter -p 8000:8000 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media cousins-matter` (or `leolivier/cousins-matter` if pulled from docker hub)
   Mounted volumes are as follows:
   * `/app/data` must be mounted on a directory where the database will be stored
   * `/app/.env` must be mounted on a file where the environment variables will be stored

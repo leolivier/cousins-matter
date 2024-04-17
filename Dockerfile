@@ -1,5 +1,11 @@
 FROM python:3.12-slim
 
+LABEL org.opencontainers.image.source=https://github.com/leolivier/cousins-matter
+LABEL org.opencontainers.image.description='Docker image for the Cousins Matter application (https://github.com/leolivier/cousins-matter)'
+LABEL org.opencontainers.image.url=https://github.com/leolivier/cousins-matter
+LABEL org.opencontainers.image.branch=main
+LABEL org.opencontainers.image.licenses=MIT
+
 WORKDIR /app
 # install lighttpd for serving static and media files
 RUN apt-get update &&\

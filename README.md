@@ -1,5 +1,11 @@
-# Cousins Matter project
-An application for managing large families, listing all your cousins and allowing them to manage their own profiles.
+<table>
+ <tr>
+  <td width="50%"><img src='https://raw.githubusercontent.com/leolivier/cousins-matter/main/cm_main/static/cm_main/images/cousinades.png' title="Cousins Matter!"></td>
+  <td> <h1>Cousins Matter project</h1>
+   <p>An application for managing large families, listing all your cousins and allowing them to manage their own profiles.</p>
+  </td>
+ </tr>
+</table>
 
 Soon to come:
   * help/faq
@@ -13,7 +19,7 @@ Soon to come:
 # To install it
 * Clone the git repo:
  ```
-git clone https://github.com/mariocesar/cousins-matter-django.git cousins-matter
+git clone https://github.com/mariocesar/cousins-matter.git
 ```
  then cd to the created directory:
  ```
@@ -86,7 +92,11 @@ docker pull ghcr.io/leolivier/cousins-matter
   ```
   mkdir -p cousins-matters cousins-matters/data cousins-matters/media && cd cousins-matters
   ```
-* __IMPORTANT__: Download the raw version of the `.env.example` file from https://github.com/leolivier/cousins-matter-django/blob/main/.env.example, rename it to .env and edit it to set the properties according to your context.
+* Setup your .env configuration
+```
+curl https://raw.githubusercontent.com/leolivier/cousins-matter/main/.env.example -o .env
+```
+then edit .env to set the properties according to your context.
 
 # To run with Docker
 * run the docker image

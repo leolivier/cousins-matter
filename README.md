@@ -29,7 +29,9 @@ git clone https://github.com/mariocesar/cousins-matter.git
 ```
 pip install -r requirements.txt
 ```
- _(it's better to do that in a pip env or a conda specific environment)_
+
+> _it's better to do that in a pip env or a conda specific environment_
+> ---
 * Update your settings:
   Copy `.env.example`to `.env` and edit `.env` to set the properties according to your needs.
 * Create your database

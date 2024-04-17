@@ -86,7 +86,7 @@ Run `./clean_database.sh`
 ```
 docker build -t cousins-matter .
 ```
-* Or pull it from docker hub
+* Or pull it from ghcr.io
 ```
 docker pull ghcr.io/leolivier/cousins-matter
 ```
@@ -105,12 +105,14 @@ then edit .env to set the properties according to your context.
 ```
 docker run --name cousins-matter -p 8000:8000 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media cousins-matter
 ```
-  (or `ghcr.io/leolivier/cousins-matter` if pulled from docker hub)
-  
-  Mounted volumes are as follows:
+  Notes:
+  1. Replace cousins-matter at the end by `ghcr.io/leolivier/cousins-matter` if you pulled the image from ghcr.io
+  2. If you are running on an arm64 platform, don't forget to add the platform option (`--platform linux/arm64`)
+  3. Mounted volumes are as follows:
   * `/app/data` must be mounted on a directory where the database will be stored
   * `/app/.env` must be mounted on a file where the environment variables will be stored
   * `/app/media` must be mounted on a directory where the media files will be stored
+     
 ## The first time only
   * Create a superuser:
   ```

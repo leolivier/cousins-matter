@@ -92,7 +92,7 @@ docker pull ghcr.io/leolivier/cousins-matter
 ```
   * and create the appropriate directories and cd
   ```
-  mkdir -p cousins-matters cousins-matters/data cousins-matters/media && cd cousins-matters
+  mkdir -p cousins-matter cousins-matter/data cousins-matter/media && cd cousins-matter
   ```
 * Setup your .env configuration
 ```

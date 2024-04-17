@@ -4,7 +4,8 @@ name: Release build
 on: [release]
 
 env:
-  REGISTRY_IMAGE: ghcr.io/leolivier/cousins-matter
+  REGISTRY: ghcr.io
+  IMAGE: ${{ github.repository }}
   PLATFORMS: linux/amd64,linux/arm64
 
 jobs:
@@ -25,13 +26,13 @@ jobs:
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY_IMAGE }}
+          images: ${{ env.REGISTRY }}/${{ IMAGE }}
           tags: |
             type=semver,pattern={{version}}
 

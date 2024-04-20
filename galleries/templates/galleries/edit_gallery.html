@@ -1,0 +1,13 @@
+{% extends "cm_main/base.html" %}
+{% load i18n crispy_forms_tags %}
+{% block title %}{%translate "Cousins Matter - Create Gallery" %} {% endblock %}
+{% block content %}
+<div class="container mt-5">
+	<h1 class="title">{%translate "Cousins Matter - Create Gallery" %}</h1>
+	<form method="post">
+		{% csrf_token %}
+		{{ form | crispy}}
+		<button type="submit" class="button is-success">{%translate "Create" %}</button>
+	</form>
+</div>
+{% endblock %}

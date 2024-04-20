@@ -6,12 +6,12 @@
   </td>
  </tr>
 </table>
+Now, you can also manage galleries!
 
 Soon to come:
   * help/faq/about
   * posts from all members
   * classified ads from all members
-  * galleries from all members
   * chat between members
   * genealogy
   * ...

@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="container">
+	<p class="title">{% translate "Photos" %}</p>
+	<div class="grid">
+		{% for photo in photos %}
+		<div class="cell">
+			<a href="{% url 'galleries:photo' gallery.id photo.id %}">
+				<figure class="image is-128x128">
+					<img src="{{photo.thumbnail.url}}">
+				</figure>
+			</a>
+		</div>
+		{% endfor %}
+	</div>
+</div>

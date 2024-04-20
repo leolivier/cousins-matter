@@ -1,0 +1,97 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-20 19:11+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: galleries/models.py:31
+msgid "Photo"
+msgstr "Photo"
+
+#: galleries/models.py:33 galleries/models.py:82
+msgid "Name"
+msgstr "Nom"
+
+#: galleries/models.py:34 galleries/models.py:83
+msgid "Description"
+msgstr "Description"
+
+#: galleries/models.py:36
+msgid "Date"
+msgstr "Date"
+
+#: galleries/models.py:84
+msgid "Cover Photo"
+msgstr "Photo de couverture"
+
+#: galleries/models.py:85
+msgid "Parent gallery"
+msgstr "Galerie parente"
+
+#: galleries/models.py:88
+msgid "galleries"
+msgstr "galeries"
+
+#: galleries/templates/galleries/edit_gallery.html:3
+#: galleries/templates/galleries/edit_gallery.html:6
+msgid "Cousins Matter - Create Gallery"
+msgstr "Les cousins comptent - Créer une galerie"
+
+#: galleries/templates/galleries/edit_gallery.html:10
+#: galleries/templates/galleries/edit_photo.html:10
+msgid "Create"
+msgstr "Créer"
+
+#: galleries/templates/galleries/edit_photo.html:3
+#: galleries/templates/galleries/edit_photo.html:6
+msgid "Cousins Matter - Add Photo"
+msgstr "Les cousins comptent - Ajouter une photo"
+
+#: galleries/templates/galleries/edit_photo.html:11
+msgid "Create and add another one"
+msgstr "Créer et ajouter une autre"
+
+#: galleries/templates/galleries/galleries_tree.html:3
+msgid "Cousins Matter - Members"
+msgstr "Les cousins comptent - Membres"
+
+#: galleries/templates/galleries/photo_detail.html:3
+msgid "Cousins Matter - Photo"
+msgstr "Les cousins comptent - Photo"
+
+#: galleries/templates/galleries/photos_gallery.html:3
+msgid "Photos"
+msgstr "Photos"
+
+#: galleries/templates/galleries/show_gallery.html:3
+msgid "Cousins Matter - Show Gallery"
+msgstr "Les cousins comptent - Afficher la Galerie"
+
+#: galleries/templates/galleries/show_gallery.html:24
+msgid "Children galleries"
+msgstr "Sous Galeries"
+
+#: galleries/templates/galleries/show_gallery.html:32
+msgid "Add<br/>Photos"
+msgstr "Ajouter<br/>Photos"
+
+#: galleries/templates/galleries/show_gallery.html:36
+msgid "Parent<br/>gallery"
+msgstr "Galerie<br/>parente"
+
+#: galleries/views.py:69
+msgid "Photo created"
+msgstr "Photo créée"

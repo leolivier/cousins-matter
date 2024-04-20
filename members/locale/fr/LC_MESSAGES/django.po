@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-10 18:13+0200\n"
+"POT-Creation-Date: 2024-04-20 19:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,103 +22,106 @@ msgstr ""
 msgid "Members"
 msgstr "Membres"
 
-#: members/forms.py:76
+#: members/forms.py:69
 msgid "Email to send invitation"
 msgstr "Email auquel envoyer l'invitation"
 
-#: members/forms.py:79
+#: members/forms.py:72
 msgid "Your name"
 msgstr "Ton nom"
 
-#: members/forms.py:80
+#: members/forms.py:73
 msgid "Email where you will receive the link"
 msgstr "Email où tu recevras le lien"
 
-#: members/forms.py:81
+#: members/forms.py:74
 msgid "Message to the administrator"
 msgstr "Message à l'administrateur"
 
-#: members/forms.py:82
+#: members/forms.py:75
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Captcha (cliquez sur l'image pour la rafraîchir si elle est illisible)"
 
-#: members/models.py:15
+#: members/models.py:16 members/templates/members/members_directory.html:20
+#: members/views/views_directory.py:43
 msgid "Name"
 msgstr "Nom"
 
-#: members/models.py:17
+#: members/models.py:18
 msgid "Parent family"
 msgstr "Famille parente"
 
-#: members/models.py:22
+#: members/models.py:21
 msgid "family"
 msgstr "famille"
 
-#: members/models.py:23
+#: members/models.py:22
 msgid "families"
 msgstr "familles"
 
-#: members/models.py:27
+#: members/models.py:36
 msgid "Number & Street name"
 msgstr "N° et nom de la voie"
 
-#: members/models.py:29
+#: members/models.py:38
 msgid "Complementary info"
 msgstr "Infos complémentaires"
 
-#: members/models.py:31
+#: members/models.py:40
 msgid "Zip code"
 msgstr "Code postal"
 
-#: members/models.py:33
+#: members/models.py:42
 msgid "City"
 msgstr "Ville"
 
-#: members/models.py:35
+#: members/models.py:44
 msgid "Country"
 msgstr "Pays"
 
-#: members/models.py:45
+#: members/models.py:54
 msgid "address"
 msgstr "adresse"
 
-#: members/models.py:46
+#: members/models.py:55
 msgid "addresses"
 msgstr "adresses"
 
-#: members/models.py:50
+#: members/models.py:62
 msgid "Linked Account"
 msgstr "Compte lié"
 
-#: members/models.py:52
+#: members/models.py:64
 msgid "Managing account"
 msgstr "Compte gérant ce membre"
 
-#: members/models.py:57
+#: members/models.py:69 members/templates/members/members_directory.html:24
+#: members/views/views_directory.py:43
 msgid "Address"
 msgstr "Adresse"
 
-#: members/models.py:59
+#: members/models.py:71 members/templates/members/members_directory.html:22
+#: members/views/views_directory.py:43
 msgid "Phone"
 msgstr "Téléphone"
 
-#: members/models.py:61
+#: members/models.py:73 members/templates/members/members_directory.html:21
 msgid "Birthdate"
 msgstr "Date de naissance"
 
-#: members/models.py:63
+#: members/models.py:75
 msgid "Website"
 msgstr "Site web"
 
-#: members/models.py:65
+#: members/models.py:77
 msgid "Family"
 msgstr "Famille"
 
-#: members/models.py:124
+#: members/models.py:80
 msgid "member"
 msgstr "membre"
 
-#: members/models.py:125
+#: members/models.py:81
 msgid "members"
 msgstr "members"
 
@@ -156,7 +159,7 @@ msgid "Cousins Matter - Detail"
 msgstr "Cousins Matter - Détail"
 
 #: members/templates/members/member_detail.html:6
-#: members/templates/members/members.html:12
+#: members/templates/members/members.html:18
 msgid "Create Member"
 msgstr "Créer un Membre"
 
@@ -275,9 +278,37 @@ msgstr "Cousins Matter - Membres"
 msgid "Members List"
 msgstr "Liste des Membres"
 
-#: members/templates/members/members.html:31
+#: members/templates/members/members.html:12
+msgid "Birthdays"
+msgstr "Anniversaires"
+
+#: members/templates/members/members.html:15
+msgid "Show directory"
+msgstr "Afficher l'annuaire"
+
+#: members/templates/members/members.html:36
+#: members/templates/members/members_directory.html:40
 msgid "No members found"
 msgstr "Pas de membre trouvé"
+
+#: members/templates/members/members_directory.html:3
+msgid "Cousins Matter - Members Directory"
+msgstr "Les cousins comptent - Annuaire des membres"
+
+#: members/templates/members/members_directory.html:8
+#, fuzzy
+#| msgid "Members List"
+msgid "Members Directory"
+msgstr "Annuaire des Membres"
+
+#: members/templates/members/members_directory.html:13
+msgid "Print as PDF"
+msgstr "Imprimer en PDF"
+
+#: members/templates/members/members_directory.html:23
+#: members/views/views_directory.py:43
+msgid "Email"
+msgstr "Email"
 
 #: members/templates/members/modal_form.html:17
 msgid "Cancel"
@@ -305,7 +336,8 @@ msgstr "Enregistrement sur le site \"%(site_name)s\""
 #: members/templates/members/registration_invite_email.html:24
 #, python-format
 msgid "You have been invited by %(admin)s to register to his cousinades site"
-msgstr "Tu as été invité par %(admin)s à s'enregistrer sur son site de cousinades."
+msgstr ""
+"Tu as été invité par %(admin)s à s'enregistrer sur son site de cousinades."
 
 #: members/templates/members/registration_invite_email.html:29
 #, python-format
@@ -330,8 +362,8 @@ msgid ""
 "You can reply to this email to contact %(admin)s and check with him if he "
 "really invited you..."
 msgstr ""
-"Tu peux répondre à ce mail pour contacter %(admin)s et lui demander si "
-"il t'a bien invité..."
+"Tu peux répondre à ce mail pour contacter %(admin)s et lui demander si il "
+"t'a bien invité..."
 
 #: members/templates/members/registration_request.html:3
 #: members/templates/members/registration_request.html:6
@@ -343,14 +375,16 @@ msgid ""
 "By completing and submitting this form, you are asking the site "
 "administrator to send you an invitation link."
 msgstr ""
-"En complétant et soumettant ce formulaire, tu demandes "
-"à l'administrateur du site de t'envoyer un lien d'invitation."
+"En complétant et soumettant ce formulaire, tu demandes à l'administrateur du "
+"site de t'envoyer un lien d'invitation."
+
+#: members/templates/members/registration_request.html:14
+msgid "Please fill in the captcha above before clicking the invitation button"
+msgstr ""
+"Merci de remplir le captcha ci-dessus avant de cliquer sur le bouton "
+"d'invitation"
 
 #: members/templates/members/registration_request.html:15
-msgid "Please fill in the captcha above before clicking the invitation button"
-msgstr "Merci de remplir le captcha ci-dessus avant de cliquer sur le bouton d'invitation"
-
-#: members/templates/members/registration_request.html:16
 msgid "Invite me"
 msgstr "M'inviter"
 
@@ -367,7 +401,8 @@ msgstr "Demande d'enregistrement pour le site \"%(site_name)s\""
 #: members/templates/members/registration_request_email.html:24
 #, python-format
 msgid "%(name)s (%(email)s) requested to register to your cousinades site"
-msgstr "%(name)s (%(email)s) a demandé à s'enregistrer sur ton site de cousinades."
+msgstr ""
+"%(name)s (%(email)s) a demandé à s'enregistrer sur ton site de cousinades."
 
 #: members/templates/members/registration_request_email.html:26
 msgid "Here is the message he sent:"
@@ -390,10 +425,10 @@ msgstr "Ouvrir la page d'invitation"
 msgid "Change selected %(name)s"
 msgstr "Modifier les %(name)s sélectionnées"
 
-#: members/templates/widgets/wrap_create_link.html:16
+#: members/templates/widgets/wrap_create_link.html:17
 #, python-format
-msgid "Add another %(name)s"
-msgstr "Ajouter une autre %(name)s"
+msgid "Add another %(translated_name)s"
+msgstr "Ajouter une autre %(translated_name)s"
 
 #: members/tests.py:64
 msgid "This password is too common."
@@ -456,7 +491,17 @@ msgstr "Demande d'enregistrement pour {site_name}"
 msgid "Registration request sent."
 msgstr "Demande d'enregistrement envoyée."
 
-#: members/views/views_member.py:87
+#: members/views/views_directory.py:59
+#, python-brace-format
+msgid "{settings.SITE_NAME} directory"
+msgstr "Dossier {settings.SITE_NAME}"
+
+#: members/views/views_directory.py:64
+#, python-brace-format
+msgid "Page {doc.page} - {title}"
+msgstr "Page {doc.page} - {title}"
+
+#: members/views/views_member.py:82
 #, python-format
 msgid ""
 "Hello %(username)s, your account has been created! You will now receive an "
@@ -467,19 +512,19 @@ msgstr ""
 "email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
 "terminer le processus de création de compte."
 
-#: members/views/views_member.py:90
+#: members/views/views_member.py:85
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: members/views/views_member.py:93
+#: members/views/views_member.py:88
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
-#: members/views/views_member.py:128
+#: members/views/views_member.py:123
 msgid "You are already logged in"
 msgstr "Tu es déjà connecté"
 
-#: members/views/views_member.py:138
+#: members/views/views_member.py:133
 msgid ""
 "A member with the same account name or email address is already registered. "
 "Please sign in instead"
@@ -487,7 +532,7 @@ msgstr ""
 "Un membre avec le même nom d'utilisateur ou la même adresse mail est déjà "
 "enregistré. Connecte-toi plutôt."
 
-#: members/views/views_member.py:142
+#: members/views/views_member.py:137
 #, python-format
 msgid ""
 "You are already registered but not active. Please contact %s to activate "
@@ -496,16 +541,8 @@ msgstr ""
 "Tu es déjà enregistré mais pas encore actif. Contacte %s pour activer ton "
 "compte."
 
-#: members/views/views_member.py:163
+#: members/views/views_member.py:158
 #, python-brace-format
 msgid "Error: Only cannot {first_name} {last_name} can change this member"
 msgstr "Erreur: Seul {first_name} {last_name} peut modifier ce membre"
 
-#~ msgid "Last name"
-#~ msgstr "Nom"
-
-#~ msgid "Email address"
-#~ msgstr "Adresse Mail"
-
-#~ msgid "Edit"
-#~ msgstr "Modifier"

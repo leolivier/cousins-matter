@@ -29,19 +29,29 @@
 				</a>
 				<a class="navbar-item" href="{% url 'members:create' %}">
 						{% translate "Create Member" %}
-					</a>
+				</a>
 			</div>
 		</div>
 		
+		<div class="navbar-item has-dropdown is-hoverable">
+			<a class="navbar-item" href="{% url 'galleries:galleries' %}">
+				{% translate "Galleries" %}
+				<span class="icon is-medium"><i class="mdi mdi-group-outline"></i></span>
+			</a>
+	
+			<div class="navbar-dropdown is-right">
+				<a class="navbar-item" href="{% url 'galleries:create' %}">
+					{% translate "Create Gallery" %}
+				</a>
+			</div>
+		</div>
 
 		{% comment %}
 		<li><a href="{% url 'news:news' %}">{% translate "News" %}</a></li>
-			<li><a href="{% url 'galleries:galleries' %}">{% translate "Galleries" %}</a></li>
 			<li><a href="{% url 'polls:polls' %}">{% translate "Polls" %}</a></li>
 			<li><a href="{% url 'admin:admin' %}">{% translate "Admin" %}</a></li>
 		</ul>
-			{% endcomment %}
-		</div>
+		{% endcomment %}
 	</div>
 
 	<div class="navbar-end">

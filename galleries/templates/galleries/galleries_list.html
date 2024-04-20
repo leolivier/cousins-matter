@@ -1,0 +1,29 @@
+{% load i18n galleries_tags static %}
+{% block content %}
+{% for gallery in galleries %}
+  <div class="box">
+    <article class="media">
+      {% url 'galleries:display' gallery.id as gallery_url %}
+      <figure class="media-left">
+        <a class="image is-128x128" href="{{gallery_url}}">
+          <img src="{% if gallery.cover %}{{gallery.cover.thumbnail.url}}{% else %}{% static 'cm_main/default.jpg' %}{% endif %}">
+        </a>
+      </figure>
+      <div class="media-content">
+        <a class="content has-text-primary-dark" href="{{gallery_url}}">
+          <p>
+            <strong>{{gallery.name}}</strong>
+            <br/>
+            {{ gallery.description }}
+            <br/>
+            <small>{{ gallery.photos.count }} {% translate photos %}</small>
+        </a>
+        {% if recursive and gallery.children.count > 0 %}
+          {% include_galleries gallery.children.all recursive=recursive %}
+        {% endif %}
+      </div>
+    </article>
+  </div>
+
+{% endfor %}
+{% endblock %}

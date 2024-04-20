@@ -4,6 +4,7 @@
 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
+
 		{
 			"name": "Python Debugger: Django",
 			"type": "debugpy",
@@ -12,10 +13,6 @@
 			"args": [
 				"runserver"
 			],
-			// "program": "/home/olivi/miniconda3/envs/cousinsmatter/bin/python",
-			// "args": [
-			// 	"-m", "gunicorn", "cousinsmatter.asgi:application", "-k", "uvicorn.workers.UvicornWorker"
-			// ],
 			"django": true,
 			"autoStartBrowser": false,
 			"justMyCode": false,

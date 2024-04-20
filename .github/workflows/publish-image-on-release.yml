@@ -1,4 +1,4 @@
-# creates a multiplatform image of cousins matter and push it to ghcr.io for each new release
+v.# creates a multiplatform image of cousins matter and push it to ghcr.io for each new release
 name: Release build
 
 on: [release]
@@ -34,7 +34,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ IMAGE }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
           tags: |
             type=semver,pattern={{version}}
 

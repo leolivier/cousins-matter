@@ -2,7 +2,6 @@
 # this view and tag allows including a view into another view. see template/cm_main/base.html as an example
 # TODO: deliver this as a reusable piece of code
 from django.template import Library, Node, Variable, TemplateSyntaxError
-from django.template.response import TemplateResponse
 from django.conf import settings
 from django.urls import reverse, resolve, NoReverseMatch
 
@@ -14,14 +13,28 @@ class ViewNode(Node):
         self.url_or_view = url_or_view
         self.args = args
         self.kwargs = kwargs
+        self.init = False
 
     def render(self, context):
         if 'request' not in context:
             raise TemplateSyntaxError("No request has been made.")
 
         url_or_view = Variable(self.url_or_view).resolve(context)
+        # for an unknown reason, the first time, the args are not resolved
+        if self.init:
+            resolved_args = self.args
+            resolved_kwargs = self.kwargs
+        else:
+            resolved_args = [] if self.args else None
+            for arg in self.args:
+                resolved_args.append(Variable(arg).resolve(context))
+            resolved_kwargs = {} if self.kwargs else None
+            
+            for k, v in self.kwargs.items():
+                resolved_kwargs[k] = Variable(v).resolve(context)
+            self.init = True
         try:
-            view, args, kwargs = resolve(reverse(url_or_view))
+            view, args, kwargs = resolve(reverse(url_or_view, args=resolved_args, kwargs=resolved_kwargs))
         except NoReverseMatch:
             view, args, kwargs = resolve(url_or_view)
 
@@ -47,4 +60,6 @@ def do_view(parser, token):
     for t in tokens[2:]:
         kw = t.find("=")
         args.append(t) if kw == -1 else kwargs.update({str(t[:kw]): t[kw+1:]})
+    print(kwargs)
+
     return ViewNode(tokens[1], args, kwargs)

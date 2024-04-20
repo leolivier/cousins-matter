@@ -13,11 +13,11 @@
 	</h1>
 	<div class="media">
 		{% if m_form.instance %}
-    <figure class="media-left">
-      <p class="image is-128x128">
+		<div class="media-left">
+    	<figure class="image is-128x128">
         <img class="is-rounded" src="{{ m_form.instance.avatar.url }}">
-      </p>
-    </figure>
+    	</figure>
+		</div>
 		{% endif %}
 		{% if u_form.instance %}
     <div class="media-content">

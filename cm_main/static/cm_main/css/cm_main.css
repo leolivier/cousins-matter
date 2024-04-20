@@ -15,3 +15,9 @@ body {
   margin-left: 5px;
   margin-bottom: 15px;
 }
+
+/* override img size to get is-NxN working with max size=N is both directions */
+.image img {
+  width: auto;
+  max-height: 100%;
+}

@@ -1,0 +1,6 @@
+{% extends "members/base_members.html" %}
+{% load i18n galleries_tags %}
+{% block title %}{%translate "Cousins Matter - Members" %} {% endblock %}
+{% block content %}
+  {% include_galleries galleries recursive=True %}
+{% endblock %}

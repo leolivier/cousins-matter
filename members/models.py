@@ -3,7 +3,6 @@ import datetime
 from PIL import Image, ImageOps
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
-from django.db.models import Func 
 from django.urls import reverse
 import logging
 from cousinsmatter import settings
@@ -64,7 +63,7 @@ class Member(models.Model):
 
     managing_account = models.ForeignKey('auth.User', verbose_name=_('Managing account'), on_delete=models.CASCADE, 
                                       related_name='managing_account', default=1)
-    # TODO: fix the avatar path is not sent by the form which always provide default.jpg...
+    
     avatar = models.ImageField(default='default.jpg', upload_to=settings.AVATARS_DIR, blank=True)
 
     address = models.ForeignKey(Address, verbose_name=_('Address'), null=True, blank=True, on_delete=models.DO_NOTHING)

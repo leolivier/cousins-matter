@@ -26,7 +26,7 @@ class MemberUpdateForm(ModelForm):
     avatar = self.cleaned_data['avatar']
     # print(f"Validating avatar for {self.instance.get_full_name()} in {avatar}")
     if 'avatar' not in self.changed_data:
-      print("No change in avatar, skipping validation")
+      # print("No change in avatar, skipping validation")
       return avatar
     try:
       #validate file size
@@ -43,13 +43,6 @@ class MemberUpdateForm(ModelForm):
         pass
 
     return avatar
-
-  def clean_managing_account(self):  # managing_account is excluded from this form, so this useless!
-    account = self.cleaned_data.get("account")
-    raise ValidationError("We should never go there!!!")
-    if account:  # if we have an account in form, we need to set the managing_account to the same account
-      self.cleaned_data['managing_account'] = User.objects.get(id=account.id)
-    return super().clean()
 
 class AddressUpdateForm(ModelForm):
   class Meta:

@@ -19,7 +19,6 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-from accounts import views as account_views
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
 from cm_main.views import download_protected_media
@@ -48,3 +47,6 @@ urlpatterns = [
 	path('captcha/', include('captcha.urls')),
 	path('protected_media/<path:media>', download_protected_media, name="get_protected_media")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+

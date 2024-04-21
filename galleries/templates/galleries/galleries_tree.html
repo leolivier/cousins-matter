@@ -2,5 +2,9 @@
 {% load i18n galleries_tags %}
 {% block title %}{%translate "Cousins Matter - Members" %} {% endblock %}
 {% block content %}
-  {% include_galleries galleries recursive=True %}
+  {% if galleries.count > 0 %}
+    {% include_galleries galleries recursive=True %}
+  {% else % }
+    <div class="has-text-warning has-background-warning-light">{% translate "No galleries found" %}</div>
+  {% endif %}
 {% endblock %}

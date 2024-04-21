@@ -1,10 +1,9 @@
 {% extends "members/base_members.html" %}
 {% load i18n galleries_tags %}
-{% block title %}{%translate "Cousins Matter - Members" %} {% endblock %}
+{% block title %}{%translate "Cousins Matter - Galleries" %} {% endblock %}
 {% block content %}
-  {% if galleries.count > 0 %}
-    {% include_galleries galleries recursive=True %}
-  {% else % }
-    <div class="has-text-warning has-background-warning-light">{% translate "No galleries found" %}</div>
+  {% if galleries.count == 0 %}
+  <div class="container has-text-centered has-text-warning has-background-warning-light">{% translate "No galleries found" %}</div>
   {% endif %}
+  {% include_galleries galleries recursive=True %}
 {% endblock %}

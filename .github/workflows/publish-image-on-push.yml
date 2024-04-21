@@ -8,4 +8,4 @@ jobs:
     uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@show-no-gal
     with:
       push: true
-      tags: $${{github.sha}}
+      # tags: $${{github.sha}}

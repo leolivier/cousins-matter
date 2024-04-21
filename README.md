@@ -83,22 +83,26 @@ Run `./clean_database.sh`
 
 # To use a docker image
 * Either build it from source (at the root of the project)
-```
-docker build -t cousins-matter .
-```
+  ```
+  docker build -t cousins-matter .
+  ```
 * Or pull it from ghcr.io
-```
-docker pull ghcr.io/leolivier/cousins-matter
-```
+   ```
+  docker pull ghcr.io/leolivier/cousins-matter
+  ```
   * and create the appropriate directories and cd
-  ```
-  mkdir -p cousins-matter cousins-matter/data cousins-matter/media && cd cousins-matter
-  ```
+    ```
+    mkdir -p cousins-matter cousins-matter/data cousins-matter/media && cd cousins-matter
+    ```
 * Setup your .env configuration
-```
-curl https://raw.githubusercontent.com/leolivier/cousins-matter/main/.env.example -o .env
-```
-then edit .env to set the properties according to your context.
+  ```
+  curl https://raw.githubusercontent.com/leolivier/cousins-matter/main/.env.example -o .env
+  ```
+  then edit .env to set the properties according to your context.
+* Provide a default avatar as `media/default.jpg`. You can download it with:
+  ```
+  curl https://raw.githubusercontent.com/leolivier/cousins-matter/main/media/default.jpg -o media/default.jpg
+  ```
 
 # To run with Docker
 * run the docker image

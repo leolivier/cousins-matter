@@ -5,7 +5,7 @@ on: [push]
 
 jobs:
   build-and-push:
-    uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@show-no-gal
+    uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main
     with:
       push: true
       # tags: $${{github.sha}}

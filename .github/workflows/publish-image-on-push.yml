@@ -4,8 +4,8 @@ name: Release build
 on: [push]
 
 jobs:
-  call-workflow-passing-data:
+  build-and-push:
     uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@show-no-gal
     with:
       push: true
-      tags: $GITHUB_SHA
+      tags: $${{github.sha}}

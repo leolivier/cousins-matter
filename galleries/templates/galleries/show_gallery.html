@@ -7,7 +7,7 @@
 		{% url 'galleries:display' gallery.id as gallery_url %}
 		<figure class="media-left">
 			<a class="image is-128x128" href="{{gallery_url}}">
-				<img src="{% if gallery.cover %}{{gallery.cover.thumbnail.url}}{% else %}{% static 'cm_main/default.jpg' %}{% endif %}">
+				<img src="{{gallery.cover_url}}">
 			</a>
 		</figure>
 		<div class="media-content">
@@ -33,21 +33,15 @@
 				<a class="button is-link" href="{% url 'galleries:add_photo' gallery.id %}">{% translate "Add<br/>Photos" %}</a>
 				{% if gallery.parent %}
 				{% with parent=gallery.parent %}
-				<p class="content">
+				<div class="container">
 					<label class="has-text-centered">{% translate "Parent<br/>gallery" %}</label>
-					{% if parent.cover %}
 					<a href="{% url 'galleries:display' parent.id %}">
 						<figure class="image is-128x128">
-							<img src="{{parent.cover.thumbnail.url}}">
+							<img src="{{parent.cover_url}}">
 							<figcaption class="has-text-centered">{{parent.name}}</figcaption>
 						</figure>
 					</a>
-					{% else %}
-					<a class="button is-link" href="{% url 'galleries:display' parent.id %}">
-						{{parent.name}}
-					</a>
-					{% endif %}
-				</p>
+				</div>
 				{% endwith %}
 				{% endif %}
 			</div>

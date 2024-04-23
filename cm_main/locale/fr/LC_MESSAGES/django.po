@@ -82,4 +82,3 @@ msgstr "Déconnexion"
 #: cm_main/views.py:27
 msgid "Media not found"
 msgstr "Média non trouvé"
-

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-20 19:13+0200\n"
+"POT-Creation-Date: 2024-04-23 19:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,25 +22,33 @@ msgstr ""
 msgid "Members"
 msgstr "Membres"
 
-#: members/forms.py:69
+#: members/forms.py:70
 msgid "Email to send invitation"
 msgstr "Email auquel envoyer l'invitation"
 
-#: members/forms.py:72
+#: members/forms.py:73
 msgid "Your name"
 msgstr "Ton nom"
 
-#: members/forms.py:73
+#: members/forms.py:74
 msgid "Email where you will receive the link"
 msgstr "Email où tu recevras le lien"
 
-#: members/forms.py:74
+#: members/forms.py:75
 msgid "Message to the administrator"
 msgstr "Message à l'administrateur"
 
-#: members/forms.py:75
+#: members/forms.py:76
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Captcha (cliquez sur l'image pour la rafraîchir si elle est illisible)"
+
+#: members/forms.py:84
+msgid "Zip file"
+msgstr "Fichier ZIP"
+
+#: members/forms.py:85
+msgid "The CSV file containing the members to import."
+msgstr "Le fichier CSV contenant les membres à importer."
 
 #: members/models.py:16 members/templates/members/members_directory.html:20
 #: members/views/views_directory.py:43
@@ -153,6 +161,15 @@ msgstr "aura %(age)s ans %(birthday)s"
 #, python-format
 msgid "No birthdays in next %(ndays)s days"
 msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
+
+#: members/templates/members/import_members.html:3
+#: members/templates/members/import_members.html:6
+msgid "Cousins Matter - Import Members"
+msgstr "Cousins Matter - Importer des Membres"
+
+#: members/templates/members/import_members.html:10
+msgid "Import"
+msgstr ""
 
 #: members/templates/members/member_detail.html:3
 msgid "Cousins Matter - Detail"
@@ -545,4 +562,3 @@ msgstr ""
 #, python-brace-format
 msgid "Error: Only cannot {first_name} {last_name} can change this member"
 msgstr "Erreur: Seul {first_name} {last_name} peut modifier ce membre"
-

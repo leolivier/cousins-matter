@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-20 19:11+0200\n"
+"POT-Creation-Date: 2024-04-23 19:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,33 +17,57 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-#: galleries/models.py:31
+
+#: galleries/forms.py:6
+msgid "Zip file"
+msgstr "Fichier ZIP"
+
+#: galleries/forms.py:7
+msgid ""
+"The zip file containing the photos to upload. All folders will be created as "
+"galleries and photos in these folders added to the galleries. All photos "
+"must be in folders."
+msgstr ""
+"Le fichier zip contenant les photos à télécharger. Tous les dossiers seront créés en tant que galeries "
+"et les photos de ces dossiers seront ajoutées aux galeries. Toutes les photos "
+"doivent être dans des dossiers."
+
+#: galleries/models.py:54
 msgid "Photo"
 msgstr "Photo"
 
-#: galleries/models.py:33 galleries/models.py:82
+#: galleries/models.py:56 galleries/models.py:112
 msgid "Name"
 msgstr "Nom"
 
-#: galleries/models.py:34 galleries/models.py:83
+#: galleries/models.py:57 galleries/models.py:113
 msgid "Description"
 msgstr "Description"
 
-#: galleries/models.py:36
+#: galleries/models.py:59
 msgid "Date"
 msgstr "Date"
 
-#: galleries/models.py:84
+#: galleries/models.py:114
 msgid "Cover Photo"
 msgstr "Photo de couverture"
 
-#: galleries/models.py:85
+#: galleries/models.py:117
 msgid "Parent gallery"
 msgstr "Galerie parente"
 
-#: galleries/models.py:88
+#: galleries/models.py:122
 msgid "galleries"
 msgstr "galeries"
+
+#: galleries/templates/galleries/bulk_upload.html:3
+#: galleries/templates/galleries/bulk_upload.html:6
+msgid "Cousins Matter - Bulk Upload Photos"
+msgstr "Les Cousins Comptent - Télécharger des photos en masse"
+
+#: galleries/templates/galleries/bulk_upload.html:10
+msgid "Upload"
+msgstr "Télécharger"
 
 #: galleries/templates/galleries/edit_gallery.html:3
 #: galleries/templates/galleries/edit_gallery.html:6
@@ -84,14 +108,44 @@ msgstr "Les cousins comptent - Afficher la Galerie"
 msgid "Children galleries"
 msgstr "Sous Galeries"
 
-#: galleries/templates/galleries/show_gallery.html:32
+#: galleries/templates/galleries/show_gallery.html:33
 msgid "Add<br/>Photos"
 msgstr "Ajouter<br/>Photos"
 
-#: galleries/templates/galleries/show_gallery.html:36
+#: galleries/templates/galleries/show_gallery.html:37
 msgid "Parent<br/>gallery"
 msgstr "Galerie<br/>parente"
 
-#: galleries/views.py:69
+#: galleries/views/views_bulk.py:43
+msgid "Photos can't be at the root of the zip file."
+msgstr "Les photos ne peuvent pas être à la racine du fichier zip."
+
+#: galleries/views/views_bulk.py:61
+msgid ""
+"Detected path traversal attempt, '..' is not allowed in paths inside the zip "
+"file"
+msgstr ""
+"Tentative de traversée de chemin détectée, '..' n'est pas autorisé dans les chemins "
+"à l'intérieur du fichier zip"
+
+#: galleries/views/views_bulk.py:70
+#, python-brace-format
+msgid "Imported from zipfile directory {path}"
+msgstr "Importé du répertoire {path} du fichier zip"
+
+#: galleries/views/views_bulk.py:98
+#, python-brace-format
+msgid "Imported from zipfile directory {filename}"
+msgstr "Importé du fichier {filename} du fichier zip"
+
+#: galleries/views/views_bulk.py:170
+msgid ""
+"Zip file uploaded: {len(self.galleries)} galleries and {self.nbPhotos} "
+"photos created"
+msgstr ""
+"Fichier zip téléchargé : {len(self.galleries)} galeries et {self.nbPhotos} "
+"photos créées"
+
+#: galleries/views/views_photo.py:39
 msgid "Photo created"
 msgstr "Photo créée"

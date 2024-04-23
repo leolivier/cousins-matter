@@ -1,5 +1,5 @@
 from django.db import models
-import datetime
+import datetime, os
 from PIL import Image, ImageOps
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
@@ -64,7 +64,7 @@ class Member(models.Model):
     managing_account = models.ForeignKey('auth.User', verbose_name=_('Managing account'), on_delete=models.CASCADE, 
                                       related_name='managing_account', default=1)
     
-    avatar = models.ImageField(default='default.jpg', upload_to=settings.AVATARS_DIR, blank=True)
+    avatar = models.ImageField(upload_to=settings.AVATARS_DIR, blank=True, null=True)
 
     address = models.ForeignKey(Address, verbose_name=_('Address'), null=True, blank=True, on_delete=models.DO_NOTHING)
 
@@ -105,6 +105,9 @@ class Member(models.Model):
 
     def username(self):
       return self.account.username if self.account else ''
+    
+    def avatar_url(self):
+      return self.avatar.url if self.avatar else os.path.join('/', settings.STATIC_URL, 'members/default-avatar.jpg')
 
     def __str__(self) -> str:
       return self.get_full_name()
@@ -124,7 +127,7 @@ class Member(models.Model):
 
     def clean(self):
       # If account is active, set managing account to current member account
-      if self.account.is_active and self.managing_account != self.account:
+      if self.account_id and self.account.is_active and self.managing_account != self.account:
         logger.info(f"Cleaning member {self.get_full_name()}: changing managing account to himself")
         self.managing_account = self.account
       elif self.managing_account is None: 
@@ -135,10 +138,11 @@ class Member(models.Model):
     def save(self, *args, **kwargs):
       super().save(*args, **kwargs)
       # resize avatar
-      img = Image.open(self.avatar.path)
-      if img.height > settings.AVATARS_SIZE or img.width > settings.AVATARS_SIZE:
-        output_size = (settings.AVATARS_SIZE, settings.AVATARS_SIZE)
-        img.thumbnail(output_size)
-        img = ImageOps.exif_transpose(img)  # avoid image rotating
-        img.save(self.avatar.path)
-        logger.info(f"Resized and saved avatar for {self.get_full_name()} in {self.avatar.path}, size: {img.size}")
+      if self.avatar:
+        img = Image.open(self.avatar.path)
+        if img.height > settings.AVATARS_SIZE or img.width > settings.AVATARS_SIZE:
+          output_size = (settings.AVATARS_SIZE, settings.AVATARS_SIZE)
+          img.thumbnail(output_size)
+          img = ImageOps.exif_transpose(img)  # avoid image rotating
+          img.save(self.avatar.path)
+          logger.info(f"Resized and saved avatar for {self.get_full_name()} in {self.avatar.path}, size: {img.size}")

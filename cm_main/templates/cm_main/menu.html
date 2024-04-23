@@ -19,7 +19,6 @@
 				{% translate "Members" %}
 				<span class="icon is-medium"><i class="mdi mdi-group-outline"></i></span>
 			</a>
-	
 			<div class="navbar-dropdown is-right">
 				<a class="navbar-item" href="{% url 'members:birthdays' %}">
 					{% translate "Birthdays" %}
@@ -38,10 +37,13 @@
 				{% translate "Galleries" %}
 				<span class="icon is-medium"><i class="mdi mdi-group-outline"></i></span>
 			</a>
-	
-			<div class="navbar-dropdown is-right">
+			<div class="navbar-dropdown">
 				<a class="navbar-item" href="{% url 'galleries:create' %}">
 					{% translate "Create Gallery" %}
+				</a>
+				<a class="navbar-item" href="{% url 'galleries:bulk_upload' %}">
+					{% translate "Bulk Upload" %}
+					<span class="icon is-medium"><i class="mdi mdi-arrow-up-bold-circle"></i></span>
 				</a>
 			</div>
 		</div>

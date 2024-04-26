@@ -1,7 +1,9 @@
 from django.urls import path
 
 from . import views
-from .views import views_address, views_activate, views_family, views_member, views_birthday, views_checkregister, views_directory
+from .views import views_address, views_activate, views_family, \
+									views_member, views_birthday, views_checkregister, \
+									views_directory, views_import
 
 app_name = "members"
 urlpatterns = [
@@ -23,4 +25,5 @@ urlpatterns = [
 	path("family/<int:pk>/update", views_family.FamilyUpdateView.as_view(), name="update_family"),
 	path("directory", views_directory.MembersDirectoryView.as_view(), name="directory"),
 	path("directory/print", views_directory.MembersPrintDirectoryView.as_view(), name="print_directory"),
+	path("import", views_import.CSVImportView.as_view(), name="csv_import"),
 ]

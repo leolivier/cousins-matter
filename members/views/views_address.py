@@ -11,7 +11,7 @@ from ..forms import AddressUpdateForm
 
 logger = logging.getLogger(__name__)
 
-from .utils import is_ajax, redirect_to_referer
+from cousinsmatter.utils import is_ajax, redirect_to_referer
 
 class AddressDetailView(LoginRequiredMixin, generic.DetailView):
    model = Address

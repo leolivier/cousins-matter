@@ -12,7 +12,7 @@ from django.utils.translation import gettext as _
 
 from ..registration_link_manager import RegistrationLinkManager
 from ..forms import MemberInvitationForm, RegistrationRequestForm
-from .utils import redirect_to_referer
+from cousinsmatter.utils import redirect_to_referer
 from .views_member import register_member
 
 from cousinsmatter import settings

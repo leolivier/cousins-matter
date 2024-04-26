@@ -9,6 +9,22 @@ from cousinsmatter import settings
 
 logger = logging.getLogger(__name__)
 
+# lists of fields for use in other modules
+ADDRESS_FIELD_NAMES = { 'number_and_street' : _('number_and_street'), 
+                       'address_complementary_info': _('address_complementary_info'), 
+                       'zip_code' : _('zip_code'), 'city': _('city'), 'country': _('country')
+                      }
+
+ACCOUNT_FIELD_NAMES = {'username':_('username'), 'email': _('email'), 
+                       'first_name': _('first_name'), 'last_name': _('last_name')}
+
+MEMBER_FIELD_NAMES = { 'birthdate': _('birthdate'), 'phone': _('phone'), 'website': _('website'), 
+                      'family': _('family'), 'avatar': _('avatar') }
+
+MANDATORY_FIELD_NAMES = ACCOUNT_FIELD_NAMES | { 'birthdate': _('birthdate'), 'phone': _('phone') }
+
+ALL_FIELD_NAMES = ACCOUNT_FIELD_NAMES | MEMBER_FIELD_NAMES | ADDRESS_FIELD_NAMES
+
 def get_admin():
    return User.objects.filter(is_superuser=True).first()
 
@@ -88,8 +104,12 @@ class Member(models.Model):
       return reverse("members:detail", kwargs={"pk": self.pk})
       
     def get_full_name(self):
-        uname = self.account.username if self.account_id else self.id
-        return f"{self.first_name()} {self.last_name()} {uname}"
+        if self.first_name and self.last_name:
+          return f"{self.first_name()} {self.last_name()}"
+        elif self.account_id:
+          return self.account.username
+        else:
+          return self.id
 
     def get_short_name(self):
         return self.account.username if self.account_id else f'member id: {self.id}'

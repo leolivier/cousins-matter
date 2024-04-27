@@ -1,6 +1,6 @@
 {% extends "cm_main/base.html" %}
-{% load i18n %}
-{% block title %}{%translate "Cousins Matter - Email Verification Successful!" %} {% endblock %}
+{% load i18n build_title %}
+{% block title %}{% title "Email Verification Successful!" %} {% endblock %}
 {%block content%}
 
 <div class="container">

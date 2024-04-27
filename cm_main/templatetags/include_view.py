@@ -60,6 +60,6 @@ def do_view(parser, token):
     for t in tokens[2:]:
         kw = t.find("=")
         args.append(t) if kw == -1 else kwargs.update({str(t[:kw]): t[kw+1:]})
-    print(kwargs)
+    # print(kwargs)
 
     return ViewNode(tokens[1], args, kwargs)

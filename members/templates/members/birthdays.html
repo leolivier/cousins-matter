@@ -1,6 +1,6 @@
 {% extends "members/base_members.html" %}
-{% load i18n %}
-{% block title %}{%translate "Cousins Matter - Birthdays" %} {% endblock %}
+{% load i18n build_title %}
+{% block title %}{% title "Birthdays" %} {% endblock %}
 {% block content %}
   {% include "members/birthdays_include.html" %}
 {% endblock %}

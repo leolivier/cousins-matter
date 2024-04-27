@@ -1,9 +1,9 @@
 {% extends "cm_main/base.html" %}
-{% load i18n crispy_forms_tags %}
-{% block title %}{%translate "Cousins Matter - Add Photo" %} {% endblock %}
+{% load i18n crispy_forms_tags build_title %}
+{% block title %}{% title "Add Photo" %} {% endblock %}
 {% block content %}
 <div class="container mt-5">
-	<h1 class="title">{%translate "Cousins Matter - Add Photo" %}</h1>
+	<h1 class="title">{% title "Add Photo" %}</h1>
 	<form method="post" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form | crispy}}

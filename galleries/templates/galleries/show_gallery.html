@@ -1,6 +1,6 @@
 {% extends "cm_main/base.html" %}
-{% load i18n galleries_tags static %}
-{% block title %}{%translate "Cousins Matter - Show Gallery" %} {% endblock %}
+{% load i18n galleries_tags static build_title %}
+{% block title %}{% title "Show Gallery" %} {% endblock %}
 {% block content %}
 <div class="box">
 	<article class="media">

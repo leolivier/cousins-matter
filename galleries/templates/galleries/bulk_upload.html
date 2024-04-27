@@ -1,0 +1,13 @@
+{% extends "cm_main/base.html" %}
+{% load i18n crispy_forms_tags %}
+{% block title %}{%translate "Cousins Matter - Bulk Upload Photos" %} {% endblock %}
+{% block content %}
+<div class="container mt-5">
+	<h1 class="title">{%translate "Cousins Matter - Bulk Upload Photos" %}</h1>
+	<form method="post"  enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form | crispy}}
+		<button type="submit" class="button is-success">{%translate "Upload" %}</button>
+	</form>
+</div>
+{% endblock %}

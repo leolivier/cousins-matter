@@ -34,7 +34,10 @@
 					<a class="navbar-item" href="{% url 'members:invite' %}">
 						{% translate "Invite Member" %}
 					</a>
-				{% endif %}
+					<a class="navbar-item" href="{% url 'members:csv_import' %}">
+						{% translate "Import from CSV" %}
+					</a>
+					{% endif %}
 			</div>
 		</div>
 		

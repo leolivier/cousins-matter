@@ -1,3 +1,4 @@
+import os
 from pprint import pprint
 from django import forms
 from django.forms import ModelForm, Form
@@ -7,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from captcha.fields import CaptchaField
 from .models import Member, Address, Family
 from .widgets import FieldLinkWrapper
+from .models import MANDATORY_FIELD_NAMES, ALL_FIELD_NAMES
 from cousinsmatter import settings
 
 class MemberUpdateForm(ModelForm):
@@ -74,3 +76,21 @@ class RegistrationRequestForm(Form):
   email = forms.EmailField(label=_("Email where you will receive the link"), max_length=254)
   message = forms.CharField(label=_("Message to the administrator"), widget=forms.Textarea, max_length=2000)
   captcha = CaptchaField(label=_("Captcha (click on the image to refresh if you can't read it)"))
+
+def validate_csv_extension(value):
+    from django.core.exceptions import ValidationError
+    ext = os.path.splitext(value.name)[1]
+    if ext.lower() != ".csv":
+        raise ValidationError('File must be a csv file')
+
+class CSVImportMembersForm(forms.Form):
+    csv_file = forms.FileField(label=_('CSV file'), 
+                              help_text=_(f"""The CSV file containing the members to import. 
+                                          The file must contain at least these columns: {MANDATORY_FIELD_NAMES.values()}.
+                                          All possible columns: {ALL_FIELD_NAMES.values()}.
+                                          Avatars must be uploaded manually first in the avatars folders of the {settings.MEDIA_ROOT} folder.
+                                          """),
+                              validators=[validate_csv_extension],
+                              widget=forms.FileInput(attrs={ 'accept': ".csv"})
+                            )
+    

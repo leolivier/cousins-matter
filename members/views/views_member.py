@@ -10,7 +10,7 @@ from django.utils.translation import gettext as _
 from verify_email.email_handler import send_verification_email
 from ..models import Member
 from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
-from .utils import redirect_to_referer
+from cousinsmatter.utils import redirect_to_referer
 
 from accounts.forms import AccountUpdateForm, AccountRegisterForm
 

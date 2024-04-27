@@ -1,5 +1,5 @@
 from django.db import models
-import datetime
+import datetime, os
 from PIL import Image, ImageOps
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
@@ -8,6 +8,22 @@ import logging
 from cousinsmatter import settings
 
 logger = logging.getLogger(__name__)
+
+# lists of fields for use in other modules
+ADDRESS_FIELD_NAMES = { 'number_and_street' : _('number_and_street'), 
+                       'address_complementary_info': _('address_complementary_info'), 
+                       'zip_code' : _('zip_code'), 'city': _('city'), 'country': _('country')
+                      }
+
+ACCOUNT_FIELD_NAMES = {'username':_('username'), 'email': _('email'), 
+                       'first_name': _('first_name'), 'last_name': _('last_name')}
+
+MEMBER_FIELD_NAMES = { 'birthdate': _('birthdate'), 'phone': _('phone'), 'website': _('website'), 
+                      'family': _('family'), 'avatar': _('avatar') }
+
+MANDATORY_FIELD_NAMES = ACCOUNT_FIELD_NAMES | { 'birthdate': _('birthdate'), 'phone': _('phone') }
+
+ALL_FIELD_NAMES = ACCOUNT_FIELD_NAMES | MEMBER_FIELD_NAMES | ADDRESS_FIELD_NAMES
 
 def get_admin():
    return User.objects.filter(is_superuser=True).first()
@@ -64,7 +80,7 @@ class Member(models.Model):
     managing_account = models.ForeignKey('auth.User', verbose_name=_('Managing account'), on_delete=models.CASCADE, 
                                       related_name='managing_account', default=1)
     
-    avatar = models.ImageField(default='default.jpg', upload_to=settings.AVATARS_DIR, blank=True)
+    avatar = models.ImageField(upload_to=settings.AVATARS_DIR, blank=True, null=True)
 
     address = models.ForeignKey(Address, verbose_name=_('Address'), null=True, blank=True, on_delete=models.DO_NOTHING)
 
@@ -88,8 +104,12 @@ class Member(models.Model):
       return reverse("members:detail", kwargs={"pk": self.pk})
       
     def get_full_name(self):
-        uname = self.account.username if self.account_id else self.id
-        return f"{self.first_name()} {self.last_name()} {uname}"
+        if self.first_name and self.last_name:
+          return f"{self.first_name()} {self.last_name()}"
+        elif self.account_id:
+          return self.account.username
+        else:
+          return self.id
 
     def get_short_name(self):
         return self.account.username if self.account_id else f'member id: {self.id}'
@@ -105,6 +125,9 @@ class Member(models.Model):
 
     def username(self):
       return self.account.username if self.account else ''
+    
+    def avatar_url(self):
+      return self.avatar.url if self.avatar else os.path.join('/', settings.STATIC_URL, 'members/default-avatar.jpg')
 
     def __str__(self) -> str:
       return self.get_full_name()
@@ -124,7 +147,7 @@ class Member(models.Model):
 
     def clean(self):
       # If account is active, set managing account to current member account
-      if self.account.is_active and self.managing_account != self.account:
+      if self.account_id and self.account.is_active and self.managing_account != self.account:
         logger.info(f"Cleaning member {self.get_full_name()}: changing managing account to himself")
         self.managing_account = self.account
       elif self.managing_account is None: 

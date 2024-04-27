@@ -6,7 +6,7 @@
       {% url 'galleries:display' gallery.id as gallery_url %}
       <figure class="media-left">
         <a class="image is-128x128" href="{{gallery_url}}">
-          <img src="{% if gallery.cover %}{{gallery.cover.thumbnail.url}}{% else %}{% static 'cm_main/default.jpg' %}{% endif %}">
+          <img src="{{gallery.cover_url}}">
         </a>
       </figure>
       <div class="media-content">

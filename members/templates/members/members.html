@@ -19,7 +19,7 @@
       </a>
     </div>
   </div>
-  {% if member_list %}
+  {% if member_list.count > 0 %}
 	<div class="fixed-grid has-auto-count">
 		<div class="grid">
     {% for member in member_list %}

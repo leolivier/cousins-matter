@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, redirect
 
 from ..models import Family
 from ..forms import FamilyUpdateForm
-from .utils import is_ajax, redirect_to_referer
+from cousinsmatter.utils import is_ajax, redirect_to_referer
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +16,16 @@ class FamilyDetailView(LoginRequiredMixin, generic.DetailView):
    model = Family
 
 class FamilyCreateView(LoginRequiredMixin, generic.CreateView):
+   model = Family
+   form_class = FamilyUpdateForm
+   fields = "__all__"
+
+class FamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
+   model = Family
+   form_class = FamilyUpdateForm
+   fields = "__all__"
+
+class ModalFamilyCreateView(LoginRequiredMixin, generic.CreateView):
    model = Family
    fields = "__all__"
    def post(self, request, *args, **kwargs):
@@ -31,7 +41,7 @@ class FamilyCreateView(LoginRequiredMixin, generic.CreateView):
 
       return redirect_to_referer(request)
 
-class FamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
+class ModalFamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
    model = Family
    fields = "__all__"
    def post(self, request, *args, **kwargs):

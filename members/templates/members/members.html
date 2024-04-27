@@ -23,7 +23,7 @@
 	<div class="fixed-grid has-auto-count">
 		<div class="grid">
     {% for member in member_list %}
-      <div class="cell">
+      <div class="cell has-text-centered">
         <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
           <strong>{{ member.first_name }} {{ member.last_name }}</strong>
         </a>

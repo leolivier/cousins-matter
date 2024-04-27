@@ -19,7 +19,6 @@
 				{% translate "Members" %}
 				<span class="icon is-medium"><i class="mdi mdi-group-outline"></i></span>
 			</a>
-	
 			<div class="navbar-dropdown is-right">
 				<a class="navbar-item" href="{% url 'members:birthdays' %}">
 					{% translate "Birthdays" %}
@@ -30,6 +29,14 @@
 				<a class="navbar-item" href="{% url 'members:create' %}">
 						{% translate "Create Member" %}
 				</a>
+				{% if user.is_superuser %}
+					<a class="navbar-item" href="{% url 'members:invite' %}">
+						{% translate "Invite Member" %}
+					</a>
+					<a class="navbar-item" href="{% url 'members:csv_import' %}">
+						{% translate "Import from CSV" %}
+					</a>
+					{% endif %}
 			</div>
 		</div>
 		
@@ -38,10 +45,13 @@
 				{% translate "Galleries" %}
 				<span class="icon is-medium"><i class="mdi mdi-group-outline"></i></span>
 			</a>
-	
-			<div class="navbar-dropdown is-right">
+			<div class="navbar-dropdown">
 				<a class="navbar-item" href="{% url 'galleries:create' %}">
 					{% translate "Create Gallery" %}
+				</a>
+				<a class="navbar-item" href="{% url 'galleries:bulk_upload' %}">
+					{% translate "Bulk Upload" %}
+					<span class="icon is-medium"><i class="mdi mdi-arrow-up-bold-circle"></i></span>
 				</a>
 			</div>
 		</div>

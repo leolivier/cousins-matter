@@ -1,0 +1,28 @@
+{% extends "members/base_members.html" %}
+{% load i18n %}
+{% block title %}{%translate "Cousins Matter - Member Detail" %} {% endblock %}
+{% block content %}
+<div class="container mt-5">
+	<div class="card">
+		<div class="card-content">
+			<p class="title is-4">
+				<label>{% translate "Family name" %}</label>
+				{{object.name}}
+			</p>
+			{% if object.parent %}
+			<p class="title is-4">
+				<label>{% translate "Parent family" %}</label>
+				{{object.parent}}
+			</p>
+			{% else %}
+			<p class="title is-4">{% translate "This family has no declared parent family." %}</p>
+			{% endif %}
+		</div>
+		<div class="card-footer">
+			<a class="button is-primary" href="{% url 'members:family_edit' object.id %}">
+				{% translate "Edit" %}
+			</a>
+		</div>
+	</div>
+</div>
+{% endblock %}

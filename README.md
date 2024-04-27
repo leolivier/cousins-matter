@@ -99,10 +99,6 @@ Run `./clean_database.sh`
   curl https://raw.githubusercontent.com/leolivier/cousins-matter/main/.env.example -o .env
   ```
   then edit .env to set the properties according to your context.
-* Provide a default avatar as `media/default.jpg`. You can download it with:
-  ```
-  curl https://raw.githubusercontent.com/leolivier/cousins-matter/main/media/default.jpg -o media/default.jpg
-  ```
 
 # To run with Docker
 * run the docker image

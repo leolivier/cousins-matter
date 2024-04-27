@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-20 19:11+0200\n"
+"POT-Creation-Date: 2024-04-27 15:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
 
-#: cm_main/templates/cm_main/base.html:55
+#: cm_main/templates/cm_main/base.html:49
 msgid "This site proudly built using"
 msgstr "Ce site est créé fièrement avec"
 
-#: cm_main/templates/cm_main/base.html:57
+#: cm_main/templates/cm_main/base.html:51
 msgid "The source code is licensed"
 msgstr "Le code source est sous licence"
 
@@ -55,31 +55,34 @@ msgstr "Afficher l'annuaire"
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: cm_main/templates/cm_main/menu.html:38
+#: cm_main/templates/cm_main/menu.html:35
+msgid "Invite Member"
+msgstr "Inviter un Membre"
+
+#: cm_main/templates/cm_main/menu.html:43
 msgid "Galleries"
 msgstr "Galeries"
 
-#: cm_main/templates/cm_main/menu.html:44
+#: cm_main/templates/cm_main/menu.html:49
 msgid "Create Gallery"
 msgstr "Créer une Galerie"
 
-#: cm_main/templates/cm_main/menu.html:64
+#: cm_main/templates/cm_main/menu.html:69
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/menu.html:69
+#: cm_main/templates/cm_main/menu.html:74
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/menu.html:83
+#: cm_main/templates/cm_main/menu.html:88
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/menu.html:87
+#: cm_main/templates/cm_main/menu.html:92
 msgid "Log Out"
 msgstr "Déconnexion"
 
 #: cm_main/views.py:27
 msgid "Media not found"
 msgstr "Média non trouvé"
-

@@ -66,6 +66,7 @@ class FamilyUpdateForm(ModelForm):
                                                     name="parent-family")
 
 class MemberInvitationForm(Form):
+  invited = forms.CharField(label=_("Name of the invited person (will appear in the received email)"), max_length=75)
   email = forms.EmailField(label=_("Email to send invitation"), max_length=254)
 
 class RegistrationRequestForm(Form):

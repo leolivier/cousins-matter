@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-20 19:11+0200\n"
+"POT-Creation-Date: 2024-04-27 15:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
 #: galleries/models.py:31
 msgid "Photo"
 msgstr "Photo"
@@ -65,8 +66,12 @@ msgid "Create and add another one"
 msgstr "Créer et ajouter une autre"
 
 #: galleries/templates/galleries/galleries_tree.html:3
-msgid "Cousins Matter - Members"
-msgstr "Les cousins comptent - Membres"
+msgid "Cousins Matter - Galleries"
+msgstr "Les cousins comptent - Galeries"
+
+#: galleries/templates/galleries/galleries_tree.html:6
+msgid "No galleries found"
+msgstr "Aucune galerie trouvée"
 
 #: galleries/templates/galleries/photo_detail.html:3
 msgid "Cousins Matter - Photo"
@@ -84,14 +89,15 @@ msgstr "Les cousins comptent - Afficher la Galerie"
 msgid "Children galleries"
 msgstr "Sous Galeries"
 
-#: galleries/templates/galleries/show_gallery.html:32
+#: galleries/templates/galleries/show_gallery.html:33
 msgid "Add<br/>Photos"
 msgstr "Ajouter<br/>Photos"
 
-#: galleries/templates/galleries/show_gallery.html:36
+#: galleries/templates/galleries/show_gallery.html:37
 msgid "Parent<br/>gallery"
 msgstr "Galerie<br/>parente"
 
 #: galleries/views.py:69
 msgid "Photo created"
 msgstr "Photo créée"
+

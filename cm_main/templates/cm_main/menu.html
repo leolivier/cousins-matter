@@ -30,6 +30,11 @@
 				<a class="navbar-item" href="{% url 'members:create' %}">
 						{% translate "Create Member" %}
 				</a>
+				{% if user.is_superuser %}
+					<a class="navbar-item" href="{% url 'members:invite' %}">
+						{% translate "Invite Member" %}
+					</a>
+				{% endif %}
 			</div>
 		</div>
 		

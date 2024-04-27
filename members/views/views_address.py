@@ -4,7 +4,7 @@ from django.views import generic
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 
 from ..models import Address
 from ..forms import AddressUpdateForm

@@ -135,10 +135,11 @@ class Member(models.Model):
     def save(self, *args, **kwargs):
       super().save(*args, **kwargs)
       # resize avatar
-      img = Image.open(self.avatar.path)
-      if img.height > settings.AVATARS_SIZE or img.width > settings.AVATARS_SIZE:
-        output_size = (settings.AVATARS_SIZE, settings.AVATARS_SIZE)
-        img.thumbnail(output_size)
-        img = ImageOps.exif_transpose(img)  # avoid image rotating
-        img.save(self.avatar.path)
-        logger.info(f"Resized and saved avatar for {self.get_full_name()} in {self.avatar.path}, size: {img.size}")
+      if self.avatar:
+        img = Image.open(self.avatar.path)
+        if img.height > settings.AVATARS_SIZE or img.width > settings.AVATARS_SIZE:
+          output_size = (settings.AVATARS_SIZE, settings.AVATARS_SIZE)
+          img.thumbnail(output_size)
+          img = ImageOps.exif_transpose(img)  # avoid image rotating
+          img.save(self.avatar.path)
+          logger.info(f"Resized and saved avatar for {self.get_full_name()} in {self.avatar.path}, size: {img.size}")

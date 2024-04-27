@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-20 19:13+0200\n"
+"POT-Creation-Date: 2024-04-27 15:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -23,22 +23,26 @@ msgid "Members"
 msgstr "Membres"
 
 #: members/forms.py:69
+msgid "Name of the invited person (will appear in the received email)"
+msgstr "Nom de la personne invitée (apparaîtra dans l'e-mail reçu)"
+
+#: members/forms.py:70
 msgid "Email to send invitation"
 msgstr "Email auquel envoyer l'invitation"
 
-#: members/forms.py:72
+#: members/forms.py:73
 msgid "Your name"
 msgstr "Ton nom"
 
-#: members/forms.py:73
+#: members/forms.py:74
 msgid "Email where you will receive the link"
 msgstr "Email où tu recevras le lien"
 
-#: members/forms.py:74
+#: members/forms.py:75
 msgid "Message to the administrator"
 msgstr "Message à l'administrateur"
 
-#: members/forms.py:75
+#: members/forms.py:76
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Captcha (cliquez sur l'image pour la rafraîchir si elle est illisible)"
 
@@ -47,7 +51,7 @@ msgstr "Captcha (cliquez sur l'image pour la rafraîchir si elle est illisible)"
 msgid "Name"
 msgstr "Nom"
 
-#: members/models.py:18
+#: members/models.py:18 members/templates/members/family_detail.html:14
 msgid "Parent family"
 msgstr "Famille parente"
 
@@ -95,25 +99,28 @@ msgstr "Compte lié"
 msgid "Managing account"
 msgstr "Compte gérant ce membre"
 
-#: members/models.py:69 members/templates/members/members_directory.html:24
+#: members/models.py:69 members/templates/members/member_detail.html:32
+#: members/templates/members/members_directory.html:24
 #: members/views/views_directory.py:43
 msgid "Address"
 msgstr "Adresse"
 
-#: members/models.py:71 members/templates/members/members_directory.html:22
+#: members/models.py:71 members/templates/members/member_detail.html:36
+#: members/templates/members/members_directory.html:22
 #: members/views/views_directory.py:43
 msgid "Phone"
 msgstr "Téléphone"
 
-#: members/models.py:73 members/templates/members/members_directory.html:21
+#: members/models.py:73 members/templates/members/member_detail.html:40
+#: members/templates/members/members_directory.html:21
 msgid "Birthdate"
 msgstr "Date de naissance"
 
-#: members/models.py:75
+#: members/models.py:75 members/templates/members/member_detail.html:44
 msgid "Website"
 msgstr "Site web"
 
-#: members/models.py:77
+#: members/models.py:77 members/templates/members/member_detail.html:48
 msgid "Family"
 msgstr "Famille"
 
@@ -154,119 +161,151 @@ msgstr "aura %(age)s ans %(birthday)s"
 msgid "No birthdays in next %(ndays)s days"
 msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
 
+#: members/templates/members/family_detail.html:3
+#: members/templates/members/family_edit.html:3
 #: members/templates/members/member_detail.html:3
+msgid "Cousins Matter - Member Detail"
+msgstr "Cousins Matter - Détail d'un membre"
+
+#: members/templates/members/family_detail.html:9
+msgid "Family name"
+msgstr "Nom de Famille"
+
+#: members/templates/members/family_detail.html:18
+msgid "This family has no declared parent family."
+msgstr "Cette famille n'a pas de famille parente déclarée."
+
+#: members/templates/members/family_detail.html:23
+#: members/templates/members/family_edit.html:16
+#: members/templates/members/member_detail.html:59
+msgid "Edit"
+msgstr "Editer"
+
+#: members/templates/members/family_edit.html:7
+msgid "Family edit"
+msgstr "Editer la Famille"
+
+#: members/templates/members/family_edit.html:17
+#: members/templates/members/modal_form.html:17
+msgid "Cancel"
+msgstr "Annuler"
+
+#: members/templates/members/member_detail.html:21
+#: members/templates/members/member_upsert.html:27
+msgid "Active member"
+msgstr "Membre actif"
+
+#: members/templates/members/member_detail.html:23
+#: members/templates/members/member_upsert.html:29
+msgid "Managed member"
+msgstr "Membre géré"
+
+#: members/templates/members/member_detail.html:63
+#: members/templates/members/member_upsert.html:51
+#, python-format
+msgid "(Only %(name)s can manage this member)"
+msgstr "(Seul.e %(name)s peut gérer ce membre)"
+
+#: members/templates/members/member_upsert.html:3
 msgid "Cousins Matter - Detail"
 msgstr "Cousins Matter - Détail"
 
-#: members/templates/members/member_detail.html:6
+#: members/templates/members/member_upsert.html:6
 #: members/templates/members/members.html:18
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: members/templates/members/member_detail.html:7
-#: members/templates/members/registration_invite_email.html:35
+#: members/templates/members/member_upsert.html:7
+#: members/templates/members/registration_invite_email.html:42
 msgid "Sign up"
 msgstr "S'enregistrer"
 
-#: members/templates/members/member_detail.html:8
+#: members/templates/members/member_upsert.html:8
 msgid "My Profile"
 msgstr "Mon Profil"
 
-#: members/templates/members/member_detail.html:9
+#: members/templates/members/member_upsert.html:9
 msgid "Update Member Details"
 msgstr "Modifier les détails d'un Membre"
 
-#: members/templates/members/member_detail.html:10
+#: members/templates/members/member_upsert.html:10
 msgid "Member Details"
 msgstr "Détail d'un Membre"
 
-#: members/templates/members/member_detail.html:11
+#: members/templates/members/member_upsert.html:11
 msgid "Unknown mode. Something went wrong!"
 msgstr "Mode inconnu. Une erreur est survenue!"
 
-#: members/templates/members/member_detail.html:27
-msgid "Active member"
-msgstr "Membre actif"
-
-#: members/templates/members/member_detail.html:29
-msgid "Managed member"
-msgstr "Membre géré"
-
-#: members/templates/members/member_detail.html:35
+#: members/templates/members/member_upsert.html:35
 msgid "Change Password"
 msgstr "Changer le mot de passe"
 
-#: members/templates/members/member_detail.html:50
-#: members/templates/members/member_detail.html:58
+#: members/templates/members/member_upsert.html:50
+#: members/templates/members/member_upsert.html:58
 msgid "Submit"
 msgstr "Soumettre"
 
-#: members/templates/members/member_detail.html:51
-#, python-format
-msgid "(Only %(name)s can manage this member)"
-msgstr "(Seul %(name)s peut gérer ce membre)"
-
-#: members/templates/members/member_detail.html:60
+#: members/templates/members/member_upsert.html:60
 msgid "Activate Account"
 msgstr "Activer le compte"
 
-#: members/templates/members/member_detail.html:67
+#: members/templates/members/member_upsert.html:67
 msgid "Lost your verification email?"
 msgstr "Mail de vérification perdu?"
 
-#: members/templates/members/member_detail.html:69
+#: members/templates/members/member_upsert.html:69
 msgid "Request a new link"
 msgstr "Demander un nouveau lien"
 
-#: members/templates/members/member_detail.html:76
+#: members/templates/members/member_upsert.html:76
 msgid "New Address"
 msgstr "Nouvelle Adresse"
 
-#: members/templates/members/member_detail.html:77
+#: members/templates/members/member_upsert.html:77
 msgid "Create"
 msgstr "Créer"
 
-#: members/templates/members/member_detail.html:84
+#: members/templates/members/member_upsert.html:84
 msgid "Change Address"
 msgstr "Modifier l'Adresse"
 
-#: members/templates/members/member_detail.html:85
+#: members/templates/members/member_upsert.html:85
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: members/templates/members/member_detail.html:92
+#: members/templates/members/member_upsert.html:92
 msgid "New Family"
 msgstr "Nouvelle Famille"
 
-#: members/templates/members/member_detail.html:97
+#: members/templates/members/member_upsert.html:97
 msgid "New Parent Family"
 msgstr "Nouvell Famille Parente"
 
-#: members/templates/members/member_detail.html:104
+#: members/templates/members/member_upsert.html:104
 msgid "Change Family"
 msgstr "Modifier la Famille"
 
-#: members/templates/members/member_detail.html:118
+#: members/templates/members/member_upsert.html:118
 msgid "Address created"
 msgstr "Adresse créée"
 
-#: members/templates/members/member_detail.html:122
+#: members/templates/members/member_upsert.html:122
 msgid "Family created"
 msgstr "Famille créée"
 
-#: members/templates/members/member_detail.html:127
+#: members/templates/members/member_upsert.html:127
 msgid "Address updated"
 msgstr "Adresse mise à jour"
 
-#: members/templates/members/member_detail.html:132
+#: members/templates/members/member_upsert.html:132
 msgid "Family updated"
 msgstr "Famille mise à jour"
 
-#: members/templates/members/member_detail.html:137
+#: members/templates/members/member_upsert.html:137
 msgid "Parent family created"
 msgstr "Famille parente créée"
 
-#: members/templates/members/member_detail.html:141
+#: members/templates/members/member_upsert.html:141
 msgid "This username is not available!"
 msgstr "Ce nom d'utilisateur est déjà pris!"
 
@@ -310,10 +349,6 @@ msgstr "Imprimer en PDF"
 msgid "Email"
 msgstr "Email"
 
-#: members/templates/members/modal_form.html:17
-msgid "Cancel"
-msgstr "Annuler"
-
 #: members/templates/members/registration_invite.html:3
 #: members/templates/members/registration_invite.html:6
 msgid "Cousins Matter - Invite Members"
@@ -325,30 +360,38 @@ msgstr "Inviter"
 
 #: members/templates/members/registration_invite_email.html:8
 #, python-format
-msgid "Register to %(site_name)s"
-msgstr "S'enregistrer sur %(site_name)s"
+msgid "Invitation for %(invited)s to register to %(site_name)s"
+msgstr "Invitation pour %(invited)s à s'inscrire sur %(site_name)s"
 
 #: members/templates/members/registration_invite_email.html:20
 #, python-format
 msgid "Registration to the \"%(site_name)s\" site"
 msgstr "Enregistrement sur le site \"%(site_name)s\""
 
-#: members/templates/members/registration_invite_email.html:24
+#: members/templates/members/registration_invite_email.html:25
 #, python-format
-msgid "You have been invited by %(admin)s to register to his cousinades site"
-msgstr ""
-"Tu as été invité par %(admin)s à s'enregistrer sur son site de cousinades."
+msgid "Hello %(invited)s, this is %(admin)s!"
+msgstr "Bonjour %(invited)s, c'est %(admin)s!"
 
-#: members/templates/members/registration_invite_email.html:29
+#: members/templates/members/registration_invite_email.html:26
 #, python-format
 msgid ""
-"You received this mail because the administrator of this site (%(admin)s) "
-"invites you to join his site."
+"I invite you to register on the %(site_name)s website I created for managing "
+"our big family!"
 msgstr ""
-"Tu as reçu ce mail car l'administrateur de ce site (%(admin)s) t'invite à "
-"rejoindre son site."
+"Je t'invite à t'inscrire sur le site %(site_name)s que j'ai créé pour gérer "
+"notre grande famille !"
 
-#: members/templates/members/registration_invite_email.html:30
+#: members/templates/members/registration_invite_email.html:31
+msgid ""
+"On this site, you will find a directory of the family members and a lot of "
+"features on birthdays, photos, news, ads,..."
+msgstr ""
+"Sur ce site, tu trouveras un annuaire des membres de la famille et de "
+"nombreuses fonctionnalités sur les anniversaires, les photos, les nouvelles, "
+"les annonces,..."
+
+#: members/templates/members/registration_invite_email.html:34
 msgid ""
 "If you know the administrator and knows he created this site, please click "
 "on the link below to go to the site and create your account."
@@ -356,14 +399,14 @@ msgstr ""
 "Si tu connais l'administrateur et tu sais qu'il a créé ce site, clique sur "
 "le lien ci-dessous pour aller sur le site et créer ton compte."
 
-#: members/templates/members/registration_invite_email.html:39
+#: members/templates/members/registration_invite_email.html:37
 #, python-format
 msgid ""
-"You can reply to this email to contact %(admin)s and check with him if he "
-"really invited you..."
+"You can also reply to this email to contact %(admin)s and check with him if "
+"he really invited you..."
 msgstr ""
-"Tu peux répondre à ce mail pour contacter %(admin)s et lui demander si il "
-"t'a bien invité..."
+"Tu peux également répondre à ce mail pour contacter %(admin)s et vérifier "
+"avec lui qu'il t'a bien invité(e)..."
 
 #: members/templates/members/registration_request.html:3
 #: members/templates/members/registration_request.html:6
@@ -455,42 +498,6 @@ msgstr ""
 "procéder comme s'il avait perdu son mot de passe avant de pouvoir se "
 "connecter."
 
-#: members/views/views_checkregister.py:26
-msgid "Invalid link. Please contact the administrator."
-msgstr "Lien invalide. Merci de contacter l'administrateur."
-
-#: members/views/views_checkregister.py:37
-msgid "Only staff users can send invitations."
-msgstr "Seuls les members du staff peuvent envoyer des invitations."
-
-#: members/views/views_checkregister.py:42
-msgid "Email is required."
-msgstr "L'email est obligatoire."
-
-#: members/views/views_checkregister.py:46
-#: members/views/views_checkregister.py:86
-msgid "User with this email already exists."
-msgstr "Un utilisateur avec cette adresse mail existe déjà."
-
-#: members/views/views_checkregister.py:60
-#, python-brace-format
-msgid "You are invited to register on {site_name}"
-msgstr "Tu as été invité à créer ton compte sur {site_name}"
-
-#: members/views/views_checkregister.py:64
-#, python-brace-format
-msgid "Invitation sent to {email}."
-msgstr "Invitation envoyée à {email}."
-
-#: members/views/views_checkregister.py:104
-#, python-brace-format
-msgid "Registration request for {site_name}"
-msgstr "Demande d'enregistrement pour {site_name}"
-
-#: members/views/views_checkregister.py:108
-msgid "Registration request sent."
-msgstr "Demande d'enregistrement envoyée."
-
 #: members/views/views_directory.py:59
 #, python-brace-format
 msgid "{settings.SITE_NAME} directory"
@@ -501,7 +508,7 @@ msgstr "Dossier {settings.SITE_NAME}"
 msgid "Page {doc.page} - {title}"
 msgstr "Page {doc.page} - {title}"
 
-#: members/views/views_member.py:82
+#: members/views/views_member.py:92 members/views/views_member.py:179
 #, python-format
 msgid ""
 "Hello %(username)s, your account has been created! You will now receive an "
@@ -512,19 +519,41 @@ msgstr ""
 "email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
 "terminer le processus de création de compte."
 
-#: members/views/views_member.py:85
+#: members/views/views_member.py:95 members/views/views_member.py:156
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: members/views/views_member.py:88
+#: members/views/views_member.py:98 members/views/views_member.py:239
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
-#: members/views/views_member.py:123
+#: members/views/views_member.py:195
+msgid "Only {managing_member_name(member)} is allowed to modify this member."
+msgstr "Seul.e {managing_member_name(member)} est autorisé à modifier ce membre."
+
+#: members/views/views_member.py:199
+#, python-brace-format
+msgid ""
+"Wrong modification mode: {self.mode} with user id different of the connected "
+"person one"
+msgstr ""
+"Mauvais mode de modification : {self.mode} avec un identifiant utilisateur "
+"différent de celui de la personne connectée"
+
+#: members/views/views_member.py:202
+#, python-brace-format
+msgid "Wrong modification mode: {self.mode}"
+msgstr "Mauvais mode de modification : {self.mode}"
+
+#: members/views/views_member.py:233
+msgid "A verification email has been sent to validate your new email address."
+msgstr "Un courriel de vérification a été envoyé pour valider ta nouvelle adresse électronique."
+
+#: members/views/views_registration.py:29
 msgid "You are already logged in"
 msgstr "Tu es déjà connecté"
 
-#: members/views/views_member.py:133
+#: members/views/views_registration.py:37
 msgid ""
 "A member with the same account name or email address is already registered. "
 "Please sign in instead"
@@ -532,7 +561,7 @@ msgstr ""
 "Un membre avec le même nom d'utilisateur ou la même adresse mail est déjà "
 "enregistré. Connecte-toi plutôt."
 
-#: members/views/views_member.py:137
+#: members/views/views_registration.py:41
 #, python-format
 msgid ""
 "You are already registered but not active. Please contact %s to activate "
@@ -541,8 +570,35 @@ msgstr ""
 "Tu es déjà enregistré mais pas encore actif. Contacte %s pour activer ton "
 "compte."
 
-#: members/views/views_member.py:158
+#: members/views/views_registration.py:51
+msgid "Invalid link. Please contact the administrator."
+msgstr "Lien invalide. Merci de contacter l'administrateur."
+
+#: members/views/views_registration.py:63
+msgid "Only staff users can send invitations."
+msgstr "Seuls les members du staff peuvent envoyer des invitations."
+
+#: members/views/views_registration.py:74
+#: members/views/views_registration.py:118
+msgid "User with this email already exists."
+msgstr "Un utilisateur avec cette adresse mail existe déjà."
+
+#: members/views/views_registration.py:89
 #, python-brace-format
-msgid "Error: Only cannot {first_name} {last_name} can change this member"
-msgstr "Erreur: Seul {first_name} {last_name} peut modifier ce membre"
+msgid "You are invited to register on {site_name}"
+msgstr "Tu as été invité.e à créer ton compte sur {site_name}"
+
+#: members/views/views_registration.py:93
+#, python-brace-format
+msgid "Invitation sent to {email}."
+msgstr "Invitation envoyée à {email}."
+
+#: members/views/views_registration.py:139
+#, python-brace-format
+msgid "Registration request for {site_name}"
+msgstr "Demande d'enregistrement pour {site_name}"
+
+#: members/views/views_registration.py:143
+msgid "Registration request sent."
+msgstr "Demande d'enregistrement envoyée."
 

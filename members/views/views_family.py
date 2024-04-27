@@ -17,6 +17,16 @@ class FamilyDetailView(LoginRequiredMixin, generic.DetailView):
 
 class FamilyCreateView(LoginRequiredMixin, generic.CreateView):
    model = Family
+   form_class = FamilyUpdateForm
+   fields = "__all__"
+
+class FamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
+   model = Family
+   form_class = FamilyUpdateForm
+   fields = "__all__"
+
+class ModalFamilyCreateView(LoginRequiredMixin, generic.CreateView):
+   model = Family
    fields = "__all__"
    def post(self, request, *args, **kwargs):
       if is_ajax(request):
@@ -31,7 +41,7 @@ class FamilyCreateView(LoginRequiredMixin, generic.CreateView):
 
       return redirect_to_referer(request)
 
-class FamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
+class ModalFamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
    model = Family
    fields = "__all__"
    def post(self, request, *args, **kwargs):

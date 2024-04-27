@@ -1,147 +1,69 @@
 {% extends "members/base_members.html" %}
-{% load i18n crispy_forms_tags build_title %}
-{% block title %}{% title "Member Detail" %} {% endblock %}
+{% load i18n %}
+{% block title %}{%translate "Cousins Matter - Member Detail" %} {% endblock %}
 {% block content %}
-	<h1 class="title has-text-centered is-1">
-		{% if mode == "create_managed" %}{% translate "Create Member" %}
-		{% elif mode == "signup" %}{% translate "Sign up" %}
-		{% elif mode == "profile" %}{% translate "My Profile" %}
-		{% elif mode == "update_managed" %}{% translate "Update Member Details" %}
-		{% elif mode == "show_details" %}{% translate "Member Details" %}
-		{% else %}{{mode}} {% translate "Unknown mode. Something went wrong!" %}
-		{% endif %}
-	</h1>
-	<div class="media">
-		{% if m_form.instance %}
-		<div class="media-left">
-    	<figure class="image is-128x128">
-        <img class="is-rounded" src="{{ m_form.instance.avatar.url }}">
-    	</figure>
+<div class="container mt-5">
+	<div class="card">
+		<div class="card-header">
+			<div class="media">
+				<div class="media-left">
+					<figure class="image is-128x128">
+						<img class="is-rounded" src="{{ object.avatar_url }}">
+					</figure>
+				</div>
+				<div class="media-content">
+					<p class="content">
+						<strong>{{ object.account.first_name }} {{ object.account.last_name }}</strong>
+						<small>&lt;{{ object.account.email }}&gt;</small>
+					</p>
+					<p class="content small">{{ object.account.username }}
+					({%if object.account.is_active %}
+						{% translate "Active member" %}
+					{% else %}
+						{% translate "Managed member" %}
+					{% endif %})
+					</p>
+				</div>
+			</div>
 		</div>
-		{% endif %}
-		{% if u_form.instance %}
-    <div class="media-content">
-      <p class="content"><strong>{{ u_form.instance.first_name }} {{ u_form.instance.last_name }}</strong>
-			{%if u_form.instance.email %}<small>&lt;{{ u_form.instance.email }}&gt;</small></p>{% endif %}
-			{%if u_form.instance.is_active %}
-				{% translate "Active member" %}
-			{% else %}
-				{% translate "Managed member" %}
-			{% endif %}
-    </div>
-		{% endif %}
-		{% if mode == "profile" %}
-    <div class="media-right">
-      <a class="button is-link" href="{% url 'accounts:change_password' %}">{% translate "Change Password" %}</a>
-    </div>
-		{% endif %}
-  </div>
-	<div class="container">
-		<form enctype="multipart/form-data" method="post">
-		{% csrf_token %}
-			
-		{% if read_only %}
-			<fieldset disabled="disabled">
-				{{ u_form | crispy }}
-				{{ m_form | crispy }}
-			</fieldset>
-			{% if managing_account_name %}
-			<p class="content mt-4">
-				<a class="button is-primary is-light" style="pointer-events: none">{% translate "Submit" %}</a>
+		<div class="card-content">
+			<table class="table">
+				<tr>
+					<td class="content has-text-right">{% translate "Address" %}</td>
+					<td class="content">{{ object.address }}</td>
+				</tr>
+				<tr>
+					<td class="content has-text-right">{% translate "Phone" %}</td>
+					<td class="content">{{ object.phone }}</td>
+				</tr>
+				<tr>
+					<td class="content has-text-right">{% translate "Birthdate" %}</td>
+					<td class="content">{{ object.birthdate }}</td>
+				</tr>
+				<tr>
+					<td class="content has-text-right">{% translate "Website" %}</td>
+					<td class="content">{{ object.website }}</td>
+				</tr>
+				<tr>
+					<td class="content has-text-right">{% translate "Family" %}</td>
+					<td class="content">{{ object.family }}</td>
+				</tr>
+			</table>
+		</div>
+		<div class="card-footer">
+			<a class="button is-primary" 
+				{% if can_edit %} href="{% url 'members:member_edit' object.id %}"
+				{% else %} disabled="" 
+				{% endif %}
+			>
+				{% translate "Edit" %}
+			</a>
+			{% if not can_edit and managing_account_name %}
+			<p class="content px-4">
 				{% blocktranslate with name=managing_account_name %}(Only {{name}} can manage this member){% endblocktranslate %}
 			</p>
 			{% endif %}
-		{% else %}
-			{{ u_form | crispy }}
-			{{ m_form | crispy }}
-			<div class="buttons mt-4">
-				<input type="submit" class="button is-primary" value='{% translate "Submit" %}'>
-				{% if mode == "update_managed" %}
-					<a class="button is-warning" href="{% url 'members:activate' pk %}">{% translate "Activate Account" %}</a>
-				{% endif %}
-			</div>
-		{% endif %}
-		</form>
+		</div>
 	</div>
-	<div class="container mt-4">
-			{% translate 'Lost your verification email?' %} 
-			<a href="{% url 'request-new-link-from-email' %}" class="is-small">
-					{% translate "Request a new link" %}
-			</a>
-	</div>
-
-	{% block modals %}
-
-		{% url 'members:create_address' as create_address %}
-		{% translate "New Address" as new_address %}
-		{% translate "Create" as create %}
-		{% with modal_id="create-address-modal" title=new_address url=create_address form=addr_form action=create %}
-			{% include "members/modal_form.html" %}
-		{% endwith %}
-
-		{% if m_form.address.value %}
-		{% url 'members:change_address' as change_address %}
-		{% translate "Change Address" as change_address %}
-		{% translate "Update" as update %}
-		{% with modal_id="change-address-modal" title=change_address url=change_address form=addr_form action=update %}
-			{% include "members/modal_form.html" %}
-		{% endwith %}
-		{% endif %}
-		
-		{% url 'members:create_family' as create_family %}
-		{% translate "New Family" as new_family %}
-		{% with modal_id="create-family-modal" title=new_family url=create_family form=family_form action=create %}
-			{% include "members/modal_form.html" %}
-		{% endwith %}
-
-		{% translate "New Parent Family" as new_parent_family %}
-		{% with modal_id="create-parent-family-modal" title=new_parent_family url=create_family form=family_form action=create %}
-			{% include "members/modal_form.html" %}
-		{% endwith %}
-
-		{% if m_form.family.value %}
-		{% url 'members:change_family' as change_family %}
-		{% translate "Change Family" as change_family %}
-		{% with modal_id="change-family-modal" title=change_family url=change_family form=family_form action=update %}
-			{% include "members/modal_form.html" %}
-		{% endwith %}
-		{% endif %}
-
-	{% endblock modals %}
-
-	{% block javascript %}
-		<script>
-			$(document).ready(function () {
-				// associate to each modal form created above an ajax processing function
-				set_modal_form_ajax('#create-address-modal-form', "{% url 'members:create_address' %}", 
-											function(response) {
-													add_selected_option('#id_address', response.address_id, response.address_str, "{% translate 'Address created' %}");
-											}, on_ajax_error);
-				set_modal_form_ajax('#create-family-modal-form', "{% url 'members:create_family' %}", 
-											function (response) {
-													add_selected_option('#id_family', response.family_id, response.family_name, "{% translate 'Family created' %}");
-											}, on_ajax_error);
-				{% if m_form.address.value %}
-				set_modal_form_ajax('#change-address-modal-form', "{% url 'members:update_address' m_form.address.value %}", 
-											function(response) { 
-												change_option('#id_address', response.address_id, response.address_str, "{% translate 'Address updated' %}"); 
-											}, on_ajax_error);
-				{% endif %}
-				{% if m_form.family.value %}
-				set_modal_form_ajax('#change-family-modal-form', "{% url 'members:update_family' m_form.family.value %}", 
-											function (response) {	('#id_family', response.family_id, response.family_name, "{% translate 'Family updated' %}");
-											}, on_ajax_error);
-				{% endif %}
-				set_modal_form_ajax('#create-parent-family-modal-form', "{% url 'members:create_family' %}", 
-											function (response) {
-													add_selected_option('#id_parent', response.family_id, response.family_name, "{% translate 'Parent family created' %}");
-											}, on_ajax_error);
-
-				// check user name is not taken for self registration
-				add_ajax_checker('id_username', "{% url 'accounts:validate_username' %}", "is_taken", "{% translate 'This username is not available!' %}")
-			})
-		</script>
-
-	{% endblock javascript %}
-
-{% endblock content %}
+</div>
+{% endblock %}

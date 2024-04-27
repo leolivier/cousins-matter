@@ -92,9 +92,7 @@ msgstr ""
 "Ton adresse e-mail a été vérifiée avec succès et le compte a été activé."
 
 #: accounts/templates/accounts/email_verification_successful.html:10
-#, fuzzy
-#| msgid "You can sign in with the credentials now..."
-msgid "You can sig in with the credentials now..."
+msgid "You can sign in with the credentials now..."
 msgstr "Tu peux te connecter avec tes identifiants maintenant..."
 
 #: accounts/templates/accounts/email_verification_successful.html:14
@@ -212,14 +210,8 @@ msgid ""
 "used.  Please request a new password reset."
 msgstr ""
 "Le lien de réinitialisation du mot de passe est invalide, probablement parce "
-"qu'il a déjà été utilisé.Merci de demander une nouvelle réinitialisation du "
+"qu'il a déjà été utilisé. Merci de demander une nouvelle réinitialisation du "
 "mot de passe."
-
-#: accounts/templates/accounts/password_reset_confirm.html:29
-#, fuzzy
-#| msgid "Sign in"
-msgid "Sign In"
-msgstr "Se connecter"
 
 #: accounts/templates/accounts/password_reset_done.html:6
 msgid "Password reset sent"

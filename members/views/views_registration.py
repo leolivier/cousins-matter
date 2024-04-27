@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User  
 from django.core.mail import send_mail
 from django.http import HttpResponseBadRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import strip_tags
@@ -13,16 +13,20 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 
 from ..registration_link_manager import RegistrationLinkManager
-from ..forms import MemberInvitationForm, RegistrationRequestForm
-from .utils import redirect_to_referer
-from .views_member import RegisterMemberView
+from accounts.forms import AccountRegisterForm
+from ..forms import MemberInvitationForm, RegistrationRequestForm, MemberUpdateForm, \
+										AddressUpdateForm, FamilyUpdateForm
+from cousinsmatter.utils import redirect_to_referer
+from .views_member import MEMBER_MODE
 from ..models import Member
-
+from verify_email.email_handler import send_verification_email
 from cousinsmatter import settings
 
-class RegistrationCheckingView(generic.View):
+class RegistrationCheckingView(generic.CreateView):
+	mode = MEMBER_MODE.signup
+	template_name = "members/member_upsert.html"
 
-	def get(self, request, encoded_email, token):
+	def check_before_register(self, request, encoded_email, token):
 		if RegistrationLinkManager().decrypt_link(encoded_email, token):
 			# check if user is already logged in
 			if request.user.is_authenticated:
@@ -43,12 +47,45 @@ class RegistrationCheckingView(generic.View):
 			else:
 					account = User.objects.filter(email=request.POST.get("username"))
 			# TODO: how to control self registration by an admin?
-
-			return RegisterMemberView(request)
-		
+			return None
 		else:
-			# we don't know what happened, should have raised before
 			return HttpResponseBadRequest(_("Invalid link. Please contact the administrator."))
+
+	def get(self, request, encoded_email, token):
+		checked_ko = self.check_before_register(request, encoded_email, token)
+		if checked_ko:
+			return checked_ko
+		else:
+			return render(request, self.template_name, {
+					"m_form": MemberUpdateForm(), 
+					"u_form": AccountRegisterForm(), 
+					"addr_form": AddressUpdateForm(), 
+					"family_form": FamilyUpdateForm(),
+					"mode": self.mode.name,
+			})
+
+
+	def post(self, request, encoded_email, token):
+		checked_ko = self.check_before_register(request, encoded_email, token)
+		if checked_ko: return checked_ko
+
+		# start with account
+		u_form = AccountRegisterForm(request.POST)
+
+		if u_form.is_valid():
+			account = send_verification_email(request, u_form)
+			# if new member, it has been created by the account creation
+			# retrieve it and recreate the member form with this instance
+			member = Member.objects.get(account=account)
+			m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
+			if m_form.is_valid():
+				member = m_form.save()
+
+				username = u_form.cleaned_data.get('username')
+				messages.success(request, _('Hello %(username)s, your account has been created! You will now receive an email to verify your email address. Click in the link inside the mail to finish the registration.') % {"username": username})
+				return redirect("accounts:login")
+
+		return redirect_to_referer(request)
 
 class MemberInvitationView(LoginRequiredMixin, generic.View):
 

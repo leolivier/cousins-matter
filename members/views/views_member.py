@@ -39,145 +39,42 @@ class MemberDetailView(LoginRequiredMixin, generic.DetailView):
                 "managing_account_name": self.object.managing_account.username 
             }
 
-def _update_member(request, mode:MEMBER_MODE, member=None):
-    """display, create or update a member"""
- 
-    # if this is a POST request we need to process the form data
-    if request.method == "POST":
-        # create a form instance and populate it with data from the request on existing member (or None):
-        m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
-        if mode == MEMBER_MODE.signup:
-            u_form = AccountRegisterForm(request.POST)
-        elif mode == MEMBER_MODE.create_managed: # no need of the passwords, we are creating an inactive account
-            u_form = AccountUpdateForm(request.POST)
-        elif mode == MEMBER_MODE.show_details:
-            messages.error(request, "Wrong mode: show_details in POST request")
-            return redirect_to_referer(request)
-        else: # we are updating an existing account
-            u_form = AccountUpdateForm(request.POST, instance=member.account)
-
-        if not u_form.is_valid() or not m_form.is_valid():
-            messages.error(request, f"{_("Error")}: {u_form.errors} {m_form.errors}")
-            try:
-                logger.error(f">u_form instance {vars(u_form.instance)}\n{vars(u_form)}")
-                logger.error(f">m_form instance {vars(m_form.instance)}\n{vars(m_form)}")
-            except Exception as e:
-                logger.error(f"error {e}")
-            return redirect_to_referer(request)
-
-        if  mode == MEMBER_MODE.signup or \
-            (mode == MEMBER_MODE.profile and 'email' in u_form.changed_data):
-            # the returned account is inactive and saved
-            account = send_verification_email(request, u_form)
-        else:
-            account = u_form.save()
-
-        if not member:
-            # if new member, it has been created by the account creation
-            # retrieve it and recreate the member form with this instance
-            member = Member.objects.get(account=account)
-            m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
-            # if new managed member is created, the associated account must be inactivated
-            # and we force managing_account to the logged in user
-            if mode == MEMBER_MODE.create_managed:
-                account.is_active = False
-                account.save()
-                member.managing_account = User.objects.get(id=request.user.id)
-                member.save()
-
-        member = m_form.save()
-
-        if mode == MEMBER_MODE.signup:
-            username = u_form.cleaned_data.get('username')
-            messages.success(request, _('Hello %(username)s, your account has been created! You will now receive an email to verify your email address. Click in the link inside the mail to finish the registration.') % {"username": username})
-            return redirect("accounts:login")
-        elif mode == MEMBER_MODE.create_managed:
-            messages.success(request, _('Member successfully created'))
-            return redirect("members:members")
-        else:
-            messages.success(request, _("Member successfully updated"))
-            return redirect("members:members")
-
-    # if a GET (or any other method) we'll create a "blank" form prefilled by existing member (or empty if member = None)
-    else:
-        m_form = MemberUpdateForm(instance=member)
-        if mode == MEMBER_MODE.signup:
-            u_form = AccountRegisterForm()
-        elif mode == MEMBER_MODE.create_managed:
-            u_form = AccountUpdateForm()
-        else:
-            u_form = AccountUpdateForm(instance=member.account)
-        if member:
-            a_form = AddressUpdateForm(instance=member.address)
-            f_form = FamilyUpdateForm(instance=member.family)
-        else:
-            a_form = AddressUpdateForm()
-            f_form = FamilyUpdateForm()
-        return render(request, "members/member_upsert.html", {"m_form": m_form, "u_form": u_form, "addr_form": a_form, "family_form": f_form,
-                                                              "pk":member.id if member else None,
-                                                              "read_only": not editable(request, member),
-                                                              "mode": mode.name,
-                                                              "managing_account_name": managing_member_name(member)})
-
-
 class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
-    """View used to create a managed member, and as a base class for other modes for the get part"""
-    mode = MEMBER_MODE.create_managed
+    """View used to create a managed member"""
+    model = Member
+    
     template_name = "members/member_upsert.html"
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {
             "m_form": MemberUpdateForm(), 
             "u_form": AccountUpdateForm(), 
             "addr_form": AddressUpdateForm(), 
             "family_form": FamilyUpdateForm(),
-            "mode": self.mode.name,
+            "mode": MEMBER_MODE.create_managed,
         })
-
-    def post(self, request):
+    
+    def post(self, request, *args, **kwargs):
         # process the account first
         u_form = AccountUpdateForm(request.POST)
         if u_form.is_valid():
-            # if new managed member is created, the associated account must be inactivated
-            u_form.cleaned_data['is_active'] = False
             account = u_form.save()
-            # account.is_active = False
-            # account.save()
+            # if new managed member is created, the associated account must be inactivated
+            account.is_active = False
+            account.save()
+
             # Now process the member which has been created by the account creation just above, through a signal
             # Retrieve it and recreate the member form with this instance
+            # WARNING: as the creation is asynchronous, is the member always created here?
+            member = Member.objects.get(account=account)
+            # force managing_account to the logged in user
+            member.managing_account = User.objects.get(id=request.user.id)
+            # Create a form instance and populate it with data from the request on existing member (or None):
+            m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
             if m_form.is_valid():
-                # WARNING: as the creation is asynchronous, is the member always created here?
-                member = Member.objects.get(account=account)
-                # force managing_account to the logged in user
-                member.managing_account = User.objects.get(id=request.user.id)
-                # Create a form instance and populate it with data from the request on existing member (or None):
-                m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
                 member = m_form.save()
                 messages.success(request, _('Member successfully created'))
                 return redirect("members:detail", member.id)
-
-        return redirect_to_referer(request)
-
-class RegisterMemberView(CreateManagedMemberView):
-    """register a member, accessible only through RegistrationCheckingView"""
-    mode = MEMBER_MODE.signup
-
-    def post(self, request):
-        # start with account
-        u_form = AccountRegisterForm(request.POST)
-
-        if u_form.is_valid():
-            account = send_verification_email(request, u_form)
-            if m_form.is_valid():
-                # if new member, it has been created by the account creation
-                # retrieve it and recreate the member form with this instance
-                member = Member.objects.get(account=account)
-                m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
-                member = m_form.save()
-
-                username = u_form.cleaned_data.get('username')
-                messages.success(request, _('Hello %(username)s, your account has been created! You will now receive an email to verify your email address. Click in the link inside the mail to finish the registration.') % {"username": username})
-                return redirect("accounts:login")
 
         return redirect_to_referer(request)
 
@@ -246,8 +143,10 @@ class EditProfileView(EditMemberView):
     mode = MEMBER_MODE.profile
 
     def get(self, request):
-        return super().get(request, request.user.id)
+        member = Member.objects.get(account_id=request.user.id)
+        return super().get(request, member.id)
     
     def post(self, request):
-        return super().post(request, request.user.id)
+        member = Member.objects.get(account_id=request.user.id)
+        return super().post(request, member.id)
 

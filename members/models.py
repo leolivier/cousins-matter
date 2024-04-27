@@ -135,11 +135,13 @@ class Member(models.Model):
     def next_birthday(self) -> datetime.date:
       today = datetime.date.today()
       year = today.year
-      if today.month > self.birthdate.month or \
-         (today.month == self.birthdate.month and today.day > self.birthdate.day):
-            year += 1
-      return self.birthdate.replace(year=year)
-    
+      if self.birthdate:
+        if today.month > self.birthdate.month or \
+          (today.month == self.birthdate.month and today.day > self.birthdate.day):
+              year += 1
+        return self.birthdate.replace(year=year)
+      return datetime.date(2999,1,1) 
+       
     def age(self) -> int:
       today = datetime.date.today()
       years = today.year - self.birthdate.year

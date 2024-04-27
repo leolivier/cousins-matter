@@ -26,10 +26,10 @@ def t(field): return ALL_FIELD_NAMES[field]
 def check_fields(fieldnames):
 	for fieldname in fieldnames:
 		if fieldname not in ALL_FIELD_NAMES.values():
-			raise ValidationError(_(f'Unknwon column is CSV file: "{fieldname}". Valid fields are {ALL_FIELD_NAMES.values()}'))
+			raise ValidationError(_(f'Unknwon column in CSV file: "{fieldname}". Valid fields are {ALL_FIELD_NAMES.values()}'))
 	for fieldname in MANDATORY_FIELD_NAMES.values():
 		if fieldname not in fieldnames:
-			raise ValidationError(_(f'Missing column is CSV file: "{fieldname}". Mandatory fields are {MANDATORY_FIELD_NAMES.values()}'))
+			raise ValidationError(_(f'Missing column in CSV file: "{fieldname}". Mandatory fields are {MANDATORY_FIELD_NAMES.values()}'))
 
 	return True
 

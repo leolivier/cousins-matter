@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-27 15:51+0200\n"
+"POT-Creation-Date: 2024-04-27 16:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -43,43 +43,51 @@ msgstr ""
 msgid "Members"
 msgstr "Membres"
 
-#: cm_main/templates/cm_main/menu.html:25
+#: cm_main/templates/cm_main/menu.html:24
 msgid "Birthdays"
 msgstr "Anniversaires"
 
-#: cm_main/templates/cm_main/menu.html:28
+#: cm_main/templates/cm_main/menu.html:27
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: cm_main/templates/cm_main/menu.html:31
+#: cm_main/templates/cm_main/menu.html:30
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: cm_main/templates/cm_main/menu.html:35
+#: cm_main/templates/cm_main/menu.html:34
 msgid "Invite Member"
 msgstr "Inviter un Membre"
 
-#: cm_main/templates/cm_main/menu.html:43
+#: cm_main/templates/cm_main/menu.html:37
+msgid "Import from CSV"
+msgstr "Importer depuis un fichier CSV"
+
+#: cm_main/templates/cm_main/menu.html:45
 msgid "Galleries"
 msgstr "Galeries"
 
-#: cm_main/templates/cm_main/menu.html:49
+#: cm_main/templates/cm_main/menu.html:50
 msgid "Create Gallery"
 msgstr "Créer une Galerie"
 
-#: cm_main/templates/cm_main/menu.html:69
+#: cm_main/templates/cm_main/menu.html:53
+msgid "Bulk Upload"
+msgstr "Chargement en masse"
+
+#: cm_main/templates/cm_main/menu.html:74
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/menu.html:74
+#: cm_main/templates/cm_main/menu.html:79
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/menu.html:88
+#: cm_main/templates/cm_main/menu.html:93
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/menu.html:92
+#: cm_main/templates/cm_main/menu.html:97
 msgid "Log Out"
 msgstr "Déconnexion"
 

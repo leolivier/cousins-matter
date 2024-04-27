@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-27 15:51+0200\n"
+"POT-Creation-Date: 2024-04-27 16:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,121 +22,185 @@ msgstr ""
 msgid "Members"
 msgstr "Membres"
 
-#: members/forms.py:69
+#: members/forms.py:71
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Nom de la personne invitée (apparaîtra dans l'e-mail reçu)"
 
-#: members/forms.py:70
+#: members/forms.py:72
 msgid "Email to send invitation"
 msgstr "Email auquel envoyer l'invitation"
 
-#: members/forms.py:73
+#: members/forms.py:75
 msgid "Your name"
 msgstr "Ton nom"
 
-#: members/forms.py:74
+#: members/forms.py:76
 msgid "Email where you will receive the link"
 msgstr "Email où tu recevras le lien"
 
-#: members/forms.py:75
+#: members/forms.py:77
 msgid "Message to the administrator"
 msgstr "Message à l'administrateur"
 
-#: members/forms.py:76
+#: members/forms.py:78
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Captcha (cliquez sur l'image pour la rafraîchir si elle est illisible)"
 
-#: members/forms.py:84
-msgid "Zip file"
-msgstr "Fichier ZIP"
+#: members/forms.py:87
+msgid "CSV file"
+msgstr "Fichier CSV"
 
-#: members/forms.py:85
-msgid "The CSV file containing the members to import."
-msgstr "Le fichier CSV contenant les membres à importer."
+#: members/forms.py:88
+msgid ""
+"The CSV file containing the members to import. \n"
+"                                          The file must contain at least "
+"these columns: {MANDATORY_FIELD_NAMES.values()}.\n"
+"                                          All possible columns: "
+"{ALL_FIELD_NAMES.values()}.\n"
+"                                          Avatars must be uploaded manually "
+"first in the avatars folders of the {settings.MEDIA_ROOT} folder.\n"
+"                                          "
+msgstr ""
+"Le fichier CSV contenant les membres à importer. Le fichier doit contenir au "
+"moins ces colonnes : {MANDATORY_FIELD_NAMES.values()}. Toutes les colonnes "
+"possibles : {ALL_FIELD_NAMES.values()}. Les avatars doivent être téléchargés "
+"manuellement dans les dossiers avatars du dossier {settings.MEDIA_ROOT}."
 
-#: members/models.py:16 members/templates/members/members_directory.html:20
-#: members/views/views_directory.py:43
-msgid "Name"
-msgstr "Nom"
+#: members/models.py:13
+msgid "number_and_street"
+msgstr "numero_et_rue"
 
-#: members/models.py:18 members/templates/members/family_detail.html:14
-msgid "Parent family"
-msgstr "Famille parente"
+#: members/models.py:14
+msgid "address_complementary_info"
+msgstr "infos_complementaires_d_adresse"
+
+#: members/models.py:15
+msgid "zip_code"
+msgstr "code_postal"
+
+#: members/models.py:15
+msgid "city"
+msgstr "ville"
+
+#: members/models.py:15
+msgid "country"
+msgstr "pays"
+
+#: members/models.py:18
+msgid "username"
+msgstr "nom_de_compte"
+
+#: members/models.py:18
+msgid "email"
+msgstr "email"
+
+#: members/models.py:19
+msgid "first_name"
+msgstr "prenom"
+
+#: members/models.py:19
+msgid "last_name"
+msgstr "nom_de_famille"
+
+#: members/models.py:21 members/models.py:24
+msgid "birthdate"
+msgstr "date_de_naissance"
+
+#: members/models.py:21 members/models.py:24
+msgid "phone"
+msgstr "telephone"
 
 #: members/models.py:21
+msgid "website"
+msgstr "site_web"
+
+#: members/models.py:22 members/models.py:37
 msgid "family"
 msgstr "famille"
 
 #: members/models.py:22
+msgid "avatar"
+msgstr "avatar"
+
+#: members/models.py:32 members/templates/members/members_directory.html:20
+#: members/views/views_directory.py:43
+msgid "Name"
+msgstr "Nom"
+
+#: members/models.py:34 members/templates/members/family_detail.html:14
+msgid "Parent family"
+msgstr "Famille parente"
+
+#: members/models.py:38
 msgid "families"
 msgstr "familles"
 
-#: members/models.py:36
+#: members/models.py:52
 msgid "Number & Street name"
 msgstr "N° et nom de la voie"
 
-#: members/models.py:38
+#: members/models.py:54
 msgid "Complementary info"
 msgstr "Infos complémentaires"
 
-#: members/models.py:40
+#: members/models.py:56
 msgid "Zip code"
 msgstr "Code postal"
 
-#: members/models.py:42
+#: members/models.py:58
 msgid "City"
 msgstr "Ville"
 
-#: members/models.py:44
+#: members/models.py:60
 msgid "Country"
 msgstr "Pays"
 
-#: members/models.py:54
+#: members/models.py:70
 msgid "address"
 msgstr "adresse"
 
-#: members/models.py:55
+#: members/models.py:71
 msgid "addresses"
 msgstr "adresses"
 
-#: members/models.py:62
+#: members/models.py:78
 msgid "Linked Account"
 msgstr "Compte lié"
 
-#: members/models.py:64
+#: members/models.py:80
 msgid "Managing account"
 msgstr "Compte gérant ce membre"
 
-#: members/models.py:69 members/templates/members/member_detail.html:32
+#: members/models.py:85 members/templates/members/member_detail.html:32
 #: members/templates/members/members_directory.html:24
 #: members/views/views_directory.py:43
 msgid "Address"
 msgstr "Adresse"
 
-#: members/models.py:71 members/templates/members/member_detail.html:36
+#: members/models.py:87 members/templates/members/member_detail.html:36
 #: members/templates/members/members_directory.html:22
 #: members/views/views_directory.py:43
 msgid "Phone"
 msgstr "Téléphone"
 
-#: members/models.py:73 members/templates/members/member_detail.html:40
+#: members/models.py:89 members/templates/members/member_detail.html:40
 #: members/templates/members/members_directory.html:21
 msgid "Birthdate"
 msgstr "Date de naissance"
 
-#: members/models.py:75 members/templates/members/member_detail.html:44
+#: members/models.py:91 members/templates/members/member_detail.html:44
 msgid "Website"
 msgstr "Site web"
 
-#: members/models.py:77 members/templates/members/member_detail.html:48
+#: members/models.py:93 members/templates/members/member_detail.html:48
 msgid "Family"
 msgstr "Famille"
 
-#: members/models.py:80
+#: members/models.py:96
 msgid "member"
 msgstr "membre"
 
-#: members/models.py:81
+#: members/models.py:97
 msgid "members"
 msgstr "members"
 
@@ -169,15 +233,8 @@ msgstr "aura %(age)s ans %(birthday)s"
 msgid "No birthdays in next %(ndays)s days"
 msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
 
-#: members/templates/members/import_members.html:3
-#: members/templates/members/import_members.html:6
-msgid "Cousins Matter - Import Members"
-msgstr "Cousins Matter - Importer des Membres"
-
-#: members/templates/members/import_members.html:10
-msgid "Import"
-msgstr "Importer"
-
+#: members/templates/members/family_detail.html:3
+#: members/templates/members/family_edit.html:3
 #: members/templates/members/member_detail.html:3
 msgid "Cousins Matter - Member Detail"
 msgstr "Cousins Matter - Détail d'un membre"
@@ -204,6 +261,15 @@ msgstr "Editer la Famille"
 #: members/templates/members/modal_form.html:17
 msgid "Cancel"
 msgstr "Annuler"
+
+#: members/templates/members/import_members.html:3
+#: members/templates/members/import_members.html:6
+msgid "Cousins Matter - Import Members"
+msgstr "Cousins Matter - Importer des Membres"
+
+#: members/templates/members/import_members.html:10
+msgid "Import"
+msgstr "Importer"
 
 #: members/templates/members/member_detail.html:21
 #: members/templates/members/member_upsert.html:27
@@ -523,6 +589,51 @@ msgstr "Dossier {settings.SITE_NAME}"
 msgid "Page {doc.page} - {title}"
 msgstr "Page {doc.page} - {title}"
 
+#: members/views/views_import.py:29
+msgid ""
+"Unknwon column in CSV file: \"{fieldname}\". Valid fields are "
+"{ALL_FIELD_NAMES.values()}"
+msgstr ""
+"Colonne inconnue dans le fichier CSV : \"{fieldname}\". Les champs valides "
+"sont {ALL_FIELD_NAMES.values()}"
+
+#: members/views/views_import.py:32
+#, fuzzy
+#| msgid ""
+#| "Missing column is CSV file: \"{fieldname}\". Mandatory fields are "
+#| "{MANDATORY_FIELD_NAMES.values()}"
+msgid ""
+"Missing column in CSV file: \"{fieldname}\". Mandatory fields are "
+"{MANDATORY_FIELD_NAMES.values()}"
+msgstr "Colonne manquante dans le fichier CSV: \"{fieldname}\". "
+"Les champs obligatoires sont {MANDATORY_FIELD_NAMES.values()}"
+
+#: members/views/views_import.py:100
+msgid ""
+"Avatar not found: {avatar} for username {row[t('username')]}. Ignored..."
+msgstr ""
+"Avatar introuvable : {avatar} pour le nom d'utilisateur {row[t('username')]}. "
+"Ignoré..."
+
+#: members/views/views_import.py:126
+#, python-brace-format
+msgid "Uploaded file is too big ({size} MB)."
+msgstr "Le fichier téléchargé est trop volumineux ({size} Mo)."
+
+#: members/views/views_import.py:131
+#, python-brace-format
+msgid ""
+"CSV file uploaded: {nbLines} lines read, {nbMembers} members created or "
+"updated"
+msgstr ""
+"Fichier CSV téléchargé : {nbLines} lignes lues, {nbMembers} membres créés "
+"ou mis à jour"
+
+#: members/views/views_import.py:133
+#, python-brace-format
+msgid "Warning: {error}"
+msgstr "Attention: {error}"
+
 #: members/views/views_member.py:92 members/views/views_member.py:179
 #, python-format
 msgid ""
@@ -544,7 +655,8 @@ msgstr "Le membre a été mis à jour avec succès"
 
 #: members/views/views_member.py:195
 msgid "Only {managing_member_name(member)} is allowed to modify this member."
-msgstr "Seul.e {managing_member_name(member)} est autorisé à modifier ce membre."
+msgstr ""
+"Seul.e {managing_member_name(member)} est autorisé à modifier ce membre."
 
 #: members/views/views_member.py:199
 #, python-brace-format
@@ -562,7 +674,9 @@ msgstr "Mauvais mode de modification : {self.mode}"
 
 #: members/views/views_member.py:233
 msgid "A verification email has been sent to validate your new email address."
-msgstr "Un courriel de vérification a été envoyé pour valider ta nouvelle adresse électronique."
+msgstr ""
+"Un courriel de vérification a été envoyé pour valider ta nouvelle adresse "
+"électronique."
 
 #: members/views/views_registration.py:29
 msgid "You are already logged in"
@@ -616,4 +730,3 @@ msgstr "Demande d'enregistrement pour {site_name}"
 #: members/views/views_registration.py:143
 msgid "Registration request sent."
 msgstr "Demande d'enregistrement envoyée."
-

@@ -155,4 +155,3 @@ msgstr ""
 #: galleries/views/views_photo.py:39
 msgid "Photo created"
 msgstr "Photo créée"
-

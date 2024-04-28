@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-27 16:14+0200\n"
+"POT-Creation-Date: 2024-04-28 09:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,9 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cm_main/apps.py:7 cm_main/templates/cm_main/base.html:8
+#: cm_main/apps.py:7
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
+
+#: cm_main/templates/cm_main/base.html:8
+msgid "Home"
+msgstr "Accueil"
 
 #: cm_main/templates/cm_main/base.html:49
 msgid "This site proudly built using"

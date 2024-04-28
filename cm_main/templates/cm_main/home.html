@@ -1,4 +1,4 @@
-{% load i18n static include_view %}
+{% load i18n static cm_tags %}
 <div class="container">
   <div class="media">
     <figure class="media-left">
@@ -20,5 +20,5 @@
     </div>
   </div>
 	{% if user.is_authenticated %}
-	{% include_view "members:include_birthdays" %}
+	{% cm_tags "members:include_birthdays" %}
 	{% endif %}

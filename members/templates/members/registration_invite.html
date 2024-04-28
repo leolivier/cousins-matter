@@ -1,9 +1,9 @@
 {% extends "members/base_members.html" %}
-{% load i18n crispy_forms_tags %}
-{% block title %}{%translate "Cousins Matter - Invite Members" %} {% endblock %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block title %}{% title _("Invite Members") %} {% endblock %}
 {% block content %}
 <div class="container mt-5">
-	<h1 class="title">{%translate "Cousins Matter - Invite Members" %}</h1>
+	<h1 class="title">{% title _("Invite Members") %}</h1>
 	<form method="post">
 		{% csrf_token %}
 		{{ form | crispy}}

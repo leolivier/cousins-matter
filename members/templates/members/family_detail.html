@@ -1,6 +1,6 @@
 {% extends "members/base_members.html" %}
-{% load i18n %}
-{% block title %}{%translate "Cousins Matter - Member Detail" %} {% endblock %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Family Detail") %}{% endblock %}
 {% block content %}
 <div class="container mt-5">
 	<div class="card">

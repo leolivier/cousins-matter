@@ -2,6 +2,8 @@ from django.db import models
 import datetime, os
 from PIL import Image, ImageOps
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import pgettext_lazy
+
 from django.contrib.auth.models import User
 from django.urls import reverse
 import logging
@@ -10,18 +12,33 @@ from cousinsmatter import settings
 logger = logging.getLogger(__name__)
 
 # lists of fields for use in other modules
-ADDRESS_FIELD_NAMES = { 'number_and_street' : _('number_and_street'), 
-                       'address_complementary_info': _('address_complementary_info'), 
-                       'zip_code' : _('zip_code'), 'city': _('city'), 'country': _('country')
-                      }
+ADDRESS_FIELD_NAMES = { 
+  'number_and_street' : pgettext_lazy('CSV Field', 'number_and_street'), 
+  'address_complementary_info': pgettext_lazy('CSV Field', 'address_complementary_info'), 
+  'zip_code' : pgettext_lazy('CSV Field', 'zip_code'), 
+  'city': pgettext_lazy('CSV Field', 'city'), 
+  'country': pgettext_lazy('CSV Field', 'country')
+}
 
-ACCOUNT_FIELD_NAMES = {'username':_('username'), 'email': _('email'), 
-                       'first_name': _('first_name'), 'last_name': _('last_name')}
+ACCOUNT_FIELD_NAMES = {
+  'username':pgettext_lazy('CSV Field', 'username'), 
+  'email': pgettext_lazy('CSV Field', 'email'), 
+  'first_name': pgettext_lazy('CSV Field', 'first_name'), 
+  'last_name': pgettext_lazy('CSV Field', 'last_name')
+  }
 
-MEMBER_FIELD_NAMES = { 'birthdate': _('birthdate'), 'phone': _('phone'), 'website': _('website'), 
-                      'family': _('family'), 'avatar': _('avatar') }
+MEMBER_FIELD_NAMES = { 
+  'birthdate': pgettext_lazy('CSV Field', 'birthdate'), 
+  'phone': pgettext_lazy('CSV Field', 'phone'), 
+  'website': pgettext_lazy('CSV Field', 'website'), 
+  'family': pgettext_lazy('CSV Field', 'family'), 
+  'avatar': pgettext_lazy('CSV Field', 'avatar') 
+  }
 
-MANDATORY_FIELD_NAMES = ACCOUNT_FIELD_NAMES | { 'birthdate': _('birthdate'), 'phone': _('phone') }
+MANDATORY_FIELD_NAMES = ACCOUNT_FIELD_NAMES | { 
+  'birthdate': pgettext_lazy('CSV Field', 'birthdate'), 
+  'phone': pgettext_lazy('CSV Field', 'phone')
+  }
 
 ALL_FIELD_NAMES = ACCOUNT_FIELD_NAMES | MEMBER_FIELD_NAMES | ADDRESS_FIELD_NAMES
 
@@ -53,7 +70,7 @@ class Address(models.Model):
 
   complementary_info = models.CharField(_('Complementary info'), max_length=120, default='', blank=True)
 
-  zip_code = models.CharField(_('Zip code'), max_length=12)
+  zipgettext_lazycode = models.CharField(_('Zip code'), max_length=12)
 
   city = models.CharField(_('City'), max_length=120)
 
@@ -63,15 +80,15 @@ class Address(models.Model):
     return f"""
 {self.number_and_street}
 {self.complementary_info}
-{self.zip_code}, {self.city}
+{self.zipgettext_lazycode}, {self.city}
 {self.country}
 """
   class Meta:
     verbose_name = _('address')
     verbose_name_plural = _('addresses')
-    ordering = ['city', 'zip_code', 'number_and_street']
+    ordering = ['city', 'zipgettext_lazycode', 'number_and_street']
     indexes = [
-            models.Index(fields=["city", "zip_code"]),
+            models.Index(fields=["city", "zipgettext_lazycode"]),
         ]
 
 class Member(models.Model):

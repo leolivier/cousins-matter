@@ -1,10 +1,10 @@
 {% extends "members/base_members.html" %}
-{% load i18n crispy_forms_tags %}
-{% block title %}{%translate "Cousins Matter - Member Detail" %} {% endblock %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block title %}{% title _("Edit Family") %}{% endblock %}
 {% block content %}
 <div class="card">
 	<header class="card-header">
-		<p class="card-header-title">{%translate "Family edit" %}</p>
+		<p class="card-header-title">{% title _("Edit Family") %}</p>
 	</header>
 	<form method="post">
 		{% csrf_token %}

@@ -1,9 +1,32 @@
 {% extends "cm_main/base.html" %}
-{% load i18n crispy_forms_tags %}
-{% block title %}{%translate "Cousins Matter - Import Members" %} {% endblock %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block title %}{% title _("Import Members") %}{% endblock %}
 {% block content %}
 <div class="container mt-5">
-	<h1 class="title">{%translate "Cousins Matter - Import Members" %}</h1>
+	<h1 class="title">{% title _("Import Members") %}</h1>
+	<p class="content is-medium">
+		{% translate "You can import members from a CSV file. The first line of the file must contain the field names as described below."%}
+	</p>
+	<div class="content">
+		<ul>
+			<li>
+				{% translate "The file must contain at least these columns:" %} {{mandatory_fields|join:", "}}
+			</li>
+			<li>
+				{% translate "You can also add these optional columns:" %} {{optional_fields|join:", "}}
+			</li>
+			<li>
+				{%translate "Avatars must be image file names." %}
+				{% blocktranslate %}They must be uploaded manually first in the avatars folders of the {{media_root}} folder.{% endblocktranslate %}
+			</li>
+			<li>
+				{% translate "The date of birth must be entered in the format YYYY/MM/DD." %}
+			</li>
+			<li>
+				{% translate "Families must be entered by name. They will be created on the fly if they don't already exist." %}
+			</li>
+		</ul>
+	</div>
 	<form method="post" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form | crispy}}

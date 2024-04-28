@@ -1,10 +1,10 @@
 {% extends "cm_main/base.html" %}
-{% load i18n crispy_forms_tags build_title %}
-{% block title %}{% title "Request New Email for Verification" %} {% endblock %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block title %}{% title _("Request New Email for Verification") %}{% endblock %}
 {%block content%}
 
 <div class="container">
-    <h1 class="title">{% translate 'Request New Email for Verification' %}</h1>
+    <h1 class="title">{% title _("Request New Email for Verification") %}</h1>
     <hr/>
     <form method='POST' >
         {% csrf_token %}

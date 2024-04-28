@@ -130,8 +130,7 @@ class Gallery(models.Model):
 		]
 
 	def __str__(self):
-		if self.parent:
-			return f'{self.parent}/{self.name}'
+		return f'{self.parent}/{self.name}' if self.parent else self.name
 
 	def get_absolute_url(self):
 		return reverse("galleries:display", kwargs={"pk": self.pk})

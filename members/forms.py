@@ -83,13 +83,12 @@ def validate_csv_extension(value):
     if ext.lower() != ".csv":
         raise ValidationError('File must be a csv file')
 
+
+
+
 class CSVImportMembersForm(forms.Form):
     csv_file = forms.FileField(label=_('CSV file'), 
-                              help_text=_(f"""The CSV file containing the members to import. 
-                                          The file must contain at least these columns: {MANDATORY_FIELD_NAMES.values()}.
-                                          All possible columns: {ALL_FIELD_NAMES.values()}.
-                                          Avatars must be uploaded manually first in the avatars folders of the {settings.MEDIA_ROOT} folder.
-                                          """),
+                              help_text=_("The CSV file containing the members to import."),
                               validators=[validate_csv_extension],
                               widget=forms.FileInput(attrs={ 'accept': ".csv"})
                             )

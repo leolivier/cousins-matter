@@ -38,6 +38,14 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 	form_class = CSVImportMembersForm
 	success_url = "/members"
 	
+	def get_context_data(self):
+		optional_fields = { str(s) for s in ALL_FIELD_NAMES.values() } - { str(s) for s in MANDATORY_FIELD_NAMES.values() }
+		return super().get_context_data() | { 
+			'mandatory_fields': MANDATORY_FIELD_NAMES.values(),
+			'optional_fields': optional_fields,
+			'media_root': settings.MEDIA_ROOT,
+			}
+	
 	def _import_csv(self, csv_file):
 			nbMembers = 0
 			nbLines = 0

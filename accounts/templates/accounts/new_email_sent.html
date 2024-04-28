@@ -1,10 +1,10 @@
 {% extends "cm_main/base.html" %}
-{% load i18n build_title %}
-{% block title %}{% title "New Email Sent" %} {% endblock %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("New Email Sent") %}{% endblock %}
 {%block content%}
 
 <div class="container">
-    <h1 class="title">{% translate 'Email Sent!' %}</h1>
+    <h1 class="title">{% title _("New Email Sent") %}</h1>
     <hr/>
     <p class="content">{% translate "You have requested another verification email!" %}</p>
     <p class="content">{% translate 'Your verification link has been sent'%}</p>

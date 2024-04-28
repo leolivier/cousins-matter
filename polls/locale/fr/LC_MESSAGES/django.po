@@ -19,4 +19,4 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 #: polls/apps.py:8
 msgid "Polls"
-msgstr ""
+msgstr "Sondages"

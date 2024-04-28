@@ -1,9 +1,9 @@
 {% extends "cm_main/base.html" %}
-{% load i18n crispy_forms_tags build_title %}
-{% block title %}{% title "Create Gallery" %} {% endblock %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block title %}{% title _("Create Gallery") %} {% endblock %}
 {% block content %}
 <div class="container mt-5">
-	<h1 class="title">{% title "Create Gallery" %}</h1>
+	<h1 class="title">{% title _("Create Gallery") %}</h1>
 	<form method="post">
 		{% csrf_token %}
 		{{ form | crispy}}

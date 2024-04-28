@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter Accounts 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-10 18:13+0200\n"
+"POT-Creation-Date: 2024-04-28 09:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,9 +19,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: accounts/templates/accounts/email_verification_failed.html:3
-msgid "Cousins Matter - Invalid Link!"
-msgstr "Les Cousins Comptent - Lien invalide!"
-
 #: accounts/templates/accounts/email_verification_failed.html:7
 msgid "Invalid Link!"
 msgstr "Lien invalide!"
@@ -42,8 +39,8 @@ msgid "Verify Email address"
 msgstr "Vérifier l'adresse e-mail"
 
 #: accounts/templates/accounts/email_verification_msg.html:20
-msgid "Cousins Matter Account Activation"
-msgstr "Les Cousins Comptent - Activation de compte"
+msgid "Account Activation"
+msgstr "Activation du compte"
 
 #: accounts/templates/accounts/email_verification_msg.html:24
 msgid "E-mail Confirmation"
@@ -79,9 +76,6 @@ msgid "Do not reply to this mail, it is machine generated."
 msgstr "Ne pas répondre à ce mail, il est généré par ordinateur."
 
 #: accounts/templates/accounts/email_verification_successful.html:3
-msgid "Cousins Matter - Email Verification Successful!"
-msgstr "Les Cousins Comptent - Vérification de l'adresse e-mail réussie!"
-
 #: accounts/templates/accounts/email_verification_successful.html:7
 msgid "Email Verification Successful!"
 msgstr "Vérification de l'adresse e-mail réussie!"
@@ -100,13 +94,11 @@ msgstr "Tu peux te connecter avec tes identifiants maintenant..."
 #: accounts/templates/accounts/login.html:13
 #: accounts/templates/accounts/password_reset.html:19
 #: accounts/templates/accounts/password_reset_complete.html:9
+#: accounts/templates/accounts/password_reset_confirm.html:29
 msgid "Sign in"
 msgstr "Se connecter"
 
 #: accounts/templates/accounts/link_expired.html:3
-msgid "Cousins Matter - Link Expired!"
-msgstr "Les Cousins Comptent - Lien expiré!"
-
 #: accounts/templates/accounts/link_expired.html:7
 msgid "Link Expired!"
 msgstr "Lien expiré!"
@@ -138,12 +130,9 @@ msgid "Reset password"
 msgstr "Reinitialiser le mot de passe"
 
 #: accounts/templates/accounts/new_email_sent.html:3
-msgid "Cousins Matter - New Email Sent"
-msgstr "Les Cousins Comptent - Nouvel e-mail envoyé"
-
 #: accounts/templates/accounts/new_email_sent.html:7
-msgid "Email Sent!"
-msgstr "E-mail envoyé!"
+msgid "New Email Sent"
+msgstr "Nouvel e-mail envoyé!"
 
 #: accounts/templates/accounts/new_email_sent.html:9
 msgid "You have requested another verification email!"
@@ -235,9 +224,6 @@ msgstr ""
 "utilisée pour t'enregistrer, et vérifie ton dossier de spams."
 
 #: accounts/templates/accounts/request_new_email.html:3
-msgid "Cousins Matter - Request New Email for Verification"
-msgstr "Les Cousins Comptent - Demande d'un nouvel e-mail de vérification"
-
 #: accounts/templates/accounts/request_new_email.html:7
 msgid "Request New Email for Verification"
 msgstr "Demande d'un nouvel e-mail de vérification"

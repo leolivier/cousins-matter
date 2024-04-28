@@ -1,6 +1,6 @@
 {% extends "members/base_members.html" %}
-{% load i18n crispy_forms_tags %}
-{% block title %}{%translate "Cousins Matter - Detail" %} {% endblock %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block title %}{% title _("Edit Member") %} {% endblock %}
 {% block content %}
 	<h1 class="title has-text-centered is-1">
 		{% if mode == "create_managed" %}{% translate "Create Member" %}

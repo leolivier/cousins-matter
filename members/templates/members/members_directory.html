@@ -1,11 +1,11 @@
 {% extends "members/base_members.html" %}
-{% load i18n %}
-{% block title %}{%translate "Cousins Matter - Members Directory" %} {% endblock %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Members Directory") %}{% endblock %}
 {% block content %}
 	<div class="media container">
 		<div class="media-left"></div>
 		<div class="media-content">
-			<h1 class="title">{% translate "Members Directory" %}</h1>
+			<h1 class="title">{% title _("Members Directory") %}</h1>
 			<hr/>
 		</div>
 		<div class="media-right">

@@ -1,11 +1,11 @@
-{% load i18n static build_title %}
+{% load i18n static cm_tags %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% title "Home" %}{% endblock %}</title>
+    <title>{% block title %}{% title _("Home") %}{% endblock %}</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
     <link rel="stylesheet"

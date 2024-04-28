@@ -50,7 +50,7 @@ class ViewNode(Node):
                 raise
         return None
 
-@register.tag(name='include_view')
+@register.tag(name='cm_tags')
 def do_view(parser, token):
     args, kwargs, tokens = [], {}, token.split_contents()
     if len(tokens) < 2:
@@ -63,3 +63,7 @@ def do_view(parser, token):
     # print(kwargs)
 
     return ViewNode(tokens[1], args, kwargs)
+
+@register.simple_tag
+def title(title_s):
+    return f"{settings.SITE_NAME} - {title_s}"

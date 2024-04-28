@@ -70,7 +70,7 @@ class Address(models.Model):
 
   complementary_info = models.CharField(_('Complementary info'), max_length=120, default='', blank=True)
 
-  zipgettext_lazycode = models.CharField(_('Zip code'), max_length=12)
+  zip_code = models.CharField(_('Zip code'), max_length=12)
 
   city = models.CharField(_('City'), max_length=120)
 
@@ -80,15 +80,15 @@ class Address(models.Model):
     return f"""
 {self.number_and_street}
 {self.complementary_info}
-{self.zipgettext_lazycode}, {self.city}
+{self.zip_code}, {self.city}
 {self.country}
 """
   class Meta:
     verbose_name = _('address')
     verbose_name_plural = _('addresses')
-    ordering = ['city', 'zipgettext_lazycode', 'number_and_street']
+    ordering = ['city', 'zip_code', 'number_and_street']
     indexes = [
-            models.Index(fields=["city", "zipgettext_lazycode"]),
+            models.Index(fields=["city", "zip_code"]),
         ]
 
 class Member(models.Model):

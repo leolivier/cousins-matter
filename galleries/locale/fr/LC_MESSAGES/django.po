@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 09:59+0200\n"
+"POT-Creation-Date: 2024-04-28 18:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,6 +48,10 @@ msgstr "Description"
 msgid "Date"
 msgstr "Date"
 
+#: galleries/models.py:59
+msgid "Click on the month name or the year to change them quickly"
+msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
+
 #: galleries/models.py:114
 msgid "Cover Photo"
 msgstr "Photo de couverture"
@@ -75,16 +79,16 @@ msgid "Create Gallery"
 msgstr "Création d'une Galerie"
 
 #: galleries/templates/galleries/edit_gallery.html:10
-#: galleries/templates/galleries/edit_photo.html:10
+#: galleries/templates/galleries/edit_photo.html:11
 msgid "Create"
 msgstr "Créer"
 
 #: galleries/templates/galleries/edit_photo.html:3
-#: galleries/templates/galleries/edit_photo.html:6
+#: galleries/templates/galleries/edit_photo.html:7
 msgid "Add Photo"
 msgstr "Ajout d'une Photo"
 
-#: galleries/templates/galleries/edit_photo.html:11
+#: galleries/templates/galleries/edit_photo.html:12
 msgid "Create and add another one"
 msgstr "Créer et ajouter une autre"
 

@@ -156,7 +156,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_REL = 'static'
+STATIC_ROOT = BASE_DIR / STATIC_REL
 STATIC_URL = 'static/'
 # STATICFILES_DIRS = []
 
@@ -222,6 +223,8 @@ AVATARS_DIR = 'avatars'
 AVATARS_SIZE = 300
 AVATARS_MAX_LOAD_SIZE = env.int('MAX_PHOTO_FILE_SIZE', 1024 * 1024 * 2)
 
+DEFAULT_AVATAR_URL = '/static/members/default-avatar.jpg'
+
 VERIFICATION_SUCCESS_TEMPLATE = "accounts/email_verification_successful.html"
 VERIFICATION_FAILED_TEMPLATE = "accounts/email_verification_failed.html"
 REQUEST_NEW_EMAIL_TEMPLATE = "accounts/request_new_email.html"
@@ -234,3 +237,4 @@ PDF_SIZE=env.str('PDF_SIZE', 'A4')
 GALLERIES_DIR = 'galleries'
 GALLERIES_THUMBNAIL_SIZE=300
 GALLERIES_MAX_LOAD_SIZE = env.int('MAX_PHOTO_FILE_SIZE', 1024 * 1024 * 5)
+DEFAULT_GALLERY_COVER_URL = '/static/galleries/default-gallery-cover.jpg'

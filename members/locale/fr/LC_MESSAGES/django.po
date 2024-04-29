@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 11:49+0200\n"
+"POT-Creation-Date: 2024-04-28 18:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -194,6 +194,10 @@ msgstr "Téléphone"
 msgid "Birthdate"
 msgstr "Date de naissance"
 
+#: members/models.py:106
+msgid "Click on the month name or the year to change them quickly"
+msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
+
 #: members/models.py:108 members/templates/members/member_detail.html:44
 msgid "Website"
 msgstr "Site web"
@@ -323,17 +327,17 @@ msgid "Member Detail"
 msgstr "Détail d'un Membre"
 
 #: members/templates/members/member_detail.html:21
-#: members/templates/members/member_upsert.html:27
+#: members/templates/members/member_upsert.html:28
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/member_detail.html:23
-#: members/templates/members/member_upsert.html:29
+#: members/templates/members/member_upsert.html:30
 msgid "Managed member"
 msgstr "Membre géré"
 
 #: members/templates/members/member_detail.html:63
-#: members/templates/members/member_upsert.html:51
+#: members/templates/members/member_upsert.html:52
 #, python-format
 msgid "(Only %(name)s can manage this member)"
 msgstr "(Seul.e %(name)s peut gérer ce membre)"
@@ -342,102 +346,102 @@ msgstr "(Seul.e %(name)s peut gérer ce membre)"
 msgid "Edit Member"
 msgstr "Editer un Membre"
 
-#: members/templates/members/member_upsert.html:6
+#: members/templates/members/member_upsert.html:7
 #: members/templates/members/members.html:18
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: members/templates/members/member_upsert.html:7
+#: members/templates/members/member_upsert.html:8
 #: members/templates/members/registration_invite_email.html:42
 msgid "Sign up"
 msgstr "S'enregistrer"
 
-#: members/templates/members/member_upsert.html:8
+#: members/templates/members/member_upsert.html:9
 msgid "My Profile"
 msgstr "Mon Profil"
 
-#: members/templates/members/member_upsert.html:9
+#: members/templates/members/member_upsert.html:10
 msgid "Update Member Details"
 msgstr "Modifier les détails d'un Membre"
 
-#: members/templates/members/member_upsert.html:10
+#: members/templates/members/member_upsert.html:11
 msgid "Member Details"
 msgstr "Détail d'un Membre"
 
-#: members/templates/members/member_upsert.html:11
+#: members/templates/members/member_upsert.html:12
 msgid "Unknown mode. Something went wrong!"
 msgstr "Mode inconnu. Une erreur est survenue!"
 
-#: members/templates/members/member_upsert.html:35
+#: members/templates/members/member_upsert.html:36
 msgid "Change Password"
 msgstr "Changer le mot de passe"
 
-#: members/templates/members/member_upsert.html:50
-#: members/templates/members/member_upsert.html:58
+#: members/templates/members/member_upsert.html:51
+#: members/templates/members/member_upsert.html:59
 msgid "Submit"
 msgstr "Soumettre"
 
-#: members/templates/members/member_upsert.html:60
+#: members/templates/members/member_upsert.html:61
 msgid "Activate Account"
 msgstr "Activer le compte"
 
-#: members/templates/members/member_upsert.html:67
+#: members/templates/members/member_upsert.html:68
 msgid "Lost your verification email?"
 msgstr "Mail de vérification perdu?"
 
-#: members/templates/members/member_upsert.html:69
+#: members/templates/members/member_upsert.html:70
 msgid "Request a new link"
 msgstr "Demander un nouveau lien"
 
-#: members/templates/members/member_upsert.html:76
+#: members/templates/members/member_upsert.html:77
 msgid "New Address"
 msgstr "Nouvelle Adresse"
 
-#: members/templates/members/member_upsert.html:77
+#: members/templates/members/member_upsert.html:78
 msgid "Create"
 msgstr "Créer"
 
-#: members/templates/members/member_upsert.html:84
+#: members/templates/members/member_upsert.html:85
 msgid "Change Address"
 msgstr "Modifier l'Adresse"
 
-#: members/templates/members/member_upsert.html:85
+#: members/templates/members/member_upsert.html:86
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: members/templates/members/member_upsert.html:92
+#: members/templates/members/member_upsert.html:93
 msgid "New Family"
 msgstr "Nouvelle Famille"
 
-#: members/templates/members/member_upsert.html:97
+#: members/templates/members/member_upsert.html:98
 msgid "New Parent Family"
 msgstr "Nouvell Famille Parente"
 
-#: members/templates/members/member_upsert.html:104
+#: members/templates/members/member_upsert.html:105
 msgid "Change Family"
 msgstr "Modifier la Famille"
 
-#: members/templates/members/member_upsert.html:118
+#: members/templates/members/member_upsert.html:119
 msgid "Address created"
 msgstr "Adresse créée"
 
-#: members/templates/members/member_upsert.html:122
+#: members/templates/members/member_upsert.html:123
 msgid "Family created"
 msgstr "Famille créée"
 
-#: members/templates/members/member_upsert.html:127
+#: members/templates/members/member_upsert.html:128
 msgid "Address updated"
 msgstr "Adresse mise à jour"
 
-#: members/templates/members/member_upsert.html:132
+#: members/templates/members/member_upsert.html:133
 msgid "Family updated"
 msgstr "Famille mise à jour"
 
-#: members/templates/members/member_upsert.html:137
+#: members/templates/members/member_upsert.html:138
 msgid "Parent family created"
 msgstr "Famille parente créée"
 
-#: members/templates/members/member_upsert.html:141
+#: members/templates/members/member_upsert.html:142
 msgid "This username is not available!"
 msgstr "Ce nom d'utilisateur est déjà pris!"
 

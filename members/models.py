@@ -103,7 +103,7 @@ class Member(models.Model):
 
     phone = models.CharField(_('Phone'), max_length=32, blank=True)
 
-    birthdate = models.DateField(_('Birthdate'), null=True, blank=False)
+    birthdate = models.DateField(_('Birthdate'), help_text=_("Click on the month name or the year to change them quickly"), null=True, blank=False)
     
     website = models.URLField(_('Website'), blank=True)
 
@@ -144,7 +144,7 @@ class Member(models.Model):
       return self.account.username if self.account else ''
     
     def avatar_url(self):
-      return self.avatar.url if self.avatar else os.path.join('/', settings.STATIC_URL, 'members/default-avatar.jpg')
+      return self.avatar.url if self.avatar else settings.DEFAULT_AVATAR_URL
 
     def __str__(self) -> str:
       return self.get_full_name()

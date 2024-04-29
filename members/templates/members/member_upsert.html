@@ -1,6 +1,7 @@
 {% extends "members/base_members.html" %}
 {% load i18n crispy_forms_tags cm_tags %}
 {% block title %}{% title _("Edit Member") %} {% endblock %}
+{% block header %}{%include "cm_main/include-bulma-calendar.html" %}{%endblock%}
 {% block content %}
 	<h1 class="title has-text-centered is-1">
 		{% if mode == "create_managed" %}{% translate "Create Member" %}
@@ -32,7 +33,7 @@
 		{% endif %}
 		{% if mode == "profile" %}
     <div class="media-right">
-      <a class="button is-link" href="{% url 'accounts:change_password' %}">{% translate "Change Password" %}</a>
+      <a class="button is-link" href="{% url 'change_password' %}">{% translate "Change Password" %}</a>
     </div>
 		{% endif %}
   </div>
@@ -113,7 +114,7 @@
 		<script>
 			$(document).ready(function () {
 				// associate to each modal form created above an ajax processing function
-				set_modal_form_ajax('#create-address-modal-form', "{% url 'members:create_address' %}", 
+				set_modal_form_ajax('#create-address-modal-form', "{% url 'members:modal_create_address' %}", 
 											function(response) {
 													add_selected_option('#id_address', response.address_id, response.address_str, "{% translate 'Address created' %}");
 											}, on_ajax_error);
@@ -122,17 +123,17 @@
 													add_selected_option('#id_family', response.family_id, response.family_name, "{% translate 'Family created' %}");
 											}, on_ajax_error);
 				{% if m_form.address.value %}
-				set_modal_form_ajax('#change-address-modal-form', "{% url 'members:update_address' m_form.address.value %}", 
+					set_modal_form_ajax('#change-address-modal-form', "{% url 'members:modal_update_address' m_form.address.value %}", 
 											function(response) { 
 												change_option('#id_address', response.address_id, response.address_str, "{% translate 'Address updated' %}"); 
 											}, on_ajax_error);
-				{% endif %}
+											{% endif %}
 				{% if m_form.family.value %}
-				set_modal_form_ajax('#change-family-modal-form', "{% url 'members:modal_update_family' m_form.family.value %}", 
+					set_modal_form_ajax('#change-family-modal-form', "{% url 'members:modal_update_family' m_form.family.value %}", 
 											function (response) {	('#id_family', response.family_id, response.family_name, "{% translate 'Family updated' %}");
 											}, on_ajax_error);
 				{% endif %}
-				set_modal_form_ajax('#create-parent-family-modal-form', "{% url 'members:create_family' %}", 
+				set_modal_form_ajax('#create-parent-family-modal-form', "{% url 'members:modal_create_family' %}", 
 											function (response) {
 													add_selected_option('#id_parent', response.family_id, response.family_name, "{% translate 'Parent family created' %}");
 											}, on_ajax_error);

@@ -1,4 +1,4 @@
-from typing import Iterable
+from datetime import date
 from django.db import models
 from PIL import Image, ImageOps
 from django.core.files import File
@@ -17,6 +17,7 @@ def get_path(instance, filename, subdir=None):
 	photos will be uploaded to MEDIA_ROOT/GALLERIES_DIR/<gallery_full_path>/<subdir>/<filename>.
 	subdir is None or 'thumbnails' for thumbnails
 	"""
+	if not instance.gallery_id: return settings.GALLERIES_DIR
 	dir = os.path.join(settings.GALLERIES_DIR, instance.gallery.full_path())
 	if subdir: dir = os.path.join(dir, subdir)
 	os.makedirs(dir, exist_ok=True)
@@ -30,33 +31,13 @@ def photo_path(instance, filename):
 def thumbnail_path(instance, filename):
 	return get_path(instance, filename, 'thumbnails')
 
-def get_default_cover():
-	"""
-	return the default cover used in the galleries as long as 
-	the user didn't define it
-	"""
-	cover = Photo.objects.filter(gallery__isnull=True)
-	if cover.exists(): 
-		return cover.first()
-	else:
-		default_cover_file = os.path.join(settings.MEDIA_URL, "galleries/default_gallery_cover.jpg")
-		membuf = BytesIO()
-		with Image.open(default_cover_file) as img:
-			img = ImageOps.exif_transpose(img)	# avoid image rotating
-			img.save(membuf, format='JPEG', quality=90)
-			size = sys.getsizeof(membuf)
-			default_cover_image = InMemoryUploadedFile(membuf, 'ImageField', os.path.basename(default_cover_file), 
-																					'image/jpeg', size, None)
-			cover = Photo.objects.create(image=default_cover_image, gallery=None)
-			return cover
-
 class Photo(models.Model):
 	image = models.ImageField(_("Photo"), upload_to=photo_path)
 	thumbnail = models.ImageField(upload_to=thumbnail_path, blank=True)
 	name = models.CharField(_("Name"), max_length=70, blank=True)
 	description = models.TextField(_("Description"), max_length=300, blank=True) # TODO: rich editor
 	slug = models.SlugField(max_length=70, blank=True, null=False)
-	date = models.DateField(_("Date"))
+	date = models.DateField(_("Date"), help_text=_("Click on the month name or the year to change them quickly"))
 	gallery = models.ForeignKey('Gallery', verbose_name="Gallery", on_delete=models.CASCADE, blank=True)
 
 	class Meta:
@@ -138,9 +119,6 @@ class Gallery(models.Model):
 	def clean(self):
 		# compute slug
 		self.slug = self.slug or slugify(self.name)
-		if not self.cover_id:
-			photos = Photo.objects.filter(gallery=self)
-			self.cover = photos.first() if photos.exists() else get_default_cover()
 
 	def save(self, *args, **kwargs):
 		self.full_clean()
@@ -151,5 +129,5 @@ class Gallery(models.Model):
 		return os.path.join(self.parent.full_path(), self.slug)
 
 	def cover_url(self):
-		return self.cover.thumbnail.url if self.cover else os.path.join('/', settings.STATIC_URL, 'galleries/default-gallery-cover.jpg')
+		return self.cover.thumbnail.url if self.cover else settings.DEFAULT_GALLERY_COVER_URL
 

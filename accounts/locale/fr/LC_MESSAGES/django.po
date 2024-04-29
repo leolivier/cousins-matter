@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter Accounts 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 09:59+0200\n"
+"POT-Creation-Date: 2024-04-28 18:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -232,18 +232,7 @@ msgstr "Demande d'un nouvel e-mail de vérification"
 msgid "Request New Email"
 msgstr "Demande d'un nouvel e-mail"
 
-#: accounts/views.py:26
+#: accounts/views.py:23
 msgid "You have been logged out"
 msgstr "Tu as été déconnecté(e)"
 
-#: accounts/views.py:35
-msgid ""
-"Your password was successfully updated!\n"
-"Please sign in with your new password"
-msgstr ""
-"Votre mot de passe a été mis à jour avec succès!\n"
-"Merci de te reconnecter avec ton nouveau mot de passe"
-
-#: accounts/views.py:60
-msgid "Your password has been reset!"
-msgstr "Ton compte a été mis à jour"

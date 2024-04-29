@@ -12,7 +12,7 @@ from ..models import Member
 from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
 from cousinsmatter.utils import redirect_to_referer
 
-from accounts.forms import AccountUpdateForm, AccountRegisterForm
+from accounts.forms import AccountUpdateForm
 
 logger = logging.getLogger(__name__)
 

@@ -18,6 +18,16 @@ class AddressDetailView(LoginRequiredMixin, generic.DetailView):
 
 class AddressCreateView(LoginRequiredMixin, generic.CreateView):
    model = Address
+   form_class = AddressUpdateForm
+   fields = "__all__"
+
+class AddressUpdateView(LoginRequiredMixin, generic.UpdateView):
+   model = Address
+   form_class = AddressUpdateForm
+   fields = "__all__"
+
+class ModalAddressCreateView(LoginRequiredMixin, generic.CreateView):
+   model = Address
    fields = "__all__"
    def post(self, request, *args, **kwargs):
       if is_ajax(request):
@@ -32,7 +42,7 @@ class AddressCreateView(LoginRequiredMixin, generic.CreateView):
 
       return redirect_to_referer(request)
 
-class AddressUpdateView(LoginRequiredMixin, generic.UpdateView):
+class ModalAddressUpdateView(LoginRequiredMixin, generic.UpdateView):
    model = Address
    fields = "__all__"
    def post(self, request, *args, **kwargs):

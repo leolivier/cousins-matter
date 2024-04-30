@@ -20,7 +20,7 @@ from cousinsmatter.utils import redirect_to_referer
 from .views_member import MEMBER_MODE
 from ..models import Member
 from verify_email.email_handler import send_verification_email
-from cousinsmatter import settings
+from django.conf import settings
 
 class RegistrationCheckingView(generic.CreateView):
 	mode = MEMBER_MODE.signup

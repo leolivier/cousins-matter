@@ -7,7 +7,7 @@ from django.utils.translation import pgettext_lazy
 from django.contrib.auth.models import User
 from django.urls import reverse
 import logging
-from cousinsmatter import settings
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 

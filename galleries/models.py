@@ -3,7 +3,7 @@ from django.db import models
 from PIL import Image, ImageOps
 from django.core.files import File
 from django.utils.translation import gettext_lazy as _
-from cousinsmatter import settings
+from django.conf import settings
 from django.template.defaultfilters import slugify
 import logging, os, sys
 from io import BytesIO
@@ -50,7 +50,7 @@ class Photo(models.Model):
 		]
 
 	def __str__(self):
-		return f'{self.gallery.name}/{self.name}'
+		return f'{self.gallery.name}/{self.name}' if self.gallery_id else self.name
 
 	def get_absolute_url(self):
 		return reverse("galleries:photo", kwargs={"pk": self.pk})

@@ -222,7 +222,6 @@ LOGGING = {
 AVATARS_DIR = 'avatars'
 AVATARS_SIZE = 300
 AVATARS_MAX_LOAD_SIZE = env.int('MAX_PHOTO_FILE_SIZE', 1024 * 1024 * 2)
-
 DEFAULT_AVATAR_URL = '/static/members/default-avatar.jpg'
 
 VERIFICATION_SUCCESS_TEMPLATE = "accounts/email_verification_successful.html"

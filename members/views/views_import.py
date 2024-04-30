@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from ..models import Member, Family
 from ..forms import CSVImportMembersForm
 from cousinsmatter.utils import redirect_to_referer
-from cousinsmatter import settings
+from django.conf import settings
 
 from ..models import ALL_FIELD_NAMES, MANDATORY_FIELD_NAMES, ACCOUNT_FIELD_NAMES, MEMBER_FIELD_NAMES
 

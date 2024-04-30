@@ -13,7 +13,7 @@ from django.http import FileResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 
-from cousinsmatter import settings
+from django.conf import settings
 from ..models import Member
 
 LIST_STYLE = TableStyle(

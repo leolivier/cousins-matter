@@ -5,7 +5,7 @@ from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from ..models import Member
-from cousinsmatter import settings
+from django.conf import settings
 
 def _birthdays(request, template_name) -> HttpResponse:
   """

@@ -17,13 +17,12 @@ from accounts.forms import AccountRegisterForm
 from ..forms import MemberInvitationForm, RegistrationRequestForm, MemberUpdateForm, \
 										AddressUpdateForm, FamilyUpdateForm
 from cousinsmatter.utils import redirect_to_referer
-from .views_member import MEMBER_MODE
 from ..models import Member
 from verify_email.email_handler import send_verification_email
 from django.conf import settings
 
 class RegistrationCheckingView(generic.CreateView):
-	mode = MEMBER_MODE.signup
+	title = _("Sign up")
 	template_name = "members/member_upsert.html"
 
 	def check_before_register(self, request, encoded_email, token):
@@ -61,7 +60,7 @@ class RegistrationCheckingView(generic.CreateView):
 					"u_form": AccountRegisterForm(), 
 					"addr_form": AddressUpdateForm(), 
 					"family_form": FamilyUpdateForm(),
-					"mode": self.mode.name,
+					"title": self.title,
 			})
 
 

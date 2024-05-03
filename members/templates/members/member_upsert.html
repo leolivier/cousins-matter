@@ -3,15 +3,7 @@
 {% block title %}{% title _("Edit Member") %} {% endblock %}
 {% block header %}{%include "cm_main/include-bulma-calendar.html" %}{%endblock%}
 {% block content %}
-	<h1 class="title has-text-centered is-1">
-		{% if mode == "create_managed" %}{% translate "Create Member" %}
-		{% elif mode == "signup" %}{% translate "Sign up" %}
-		{% elif mode == "profile" %}{% translate "My Profile" %}
-		{% elif mode == "update_managed" %}{% translate "Update Member Details" %}
-		{% elif mode == "show_details" %}{% translate "Member Details" %}
-		{% else %}{{mode}} {% translate "Unknown mode. Something went wrong!" %}
-		{% endif %}
-	</h1>
+	<h1 class="title has-text-centered is-1">{{title}}</h1>
 	<div class="media">
 		{% if m_form.instance %}
 		<div class="media-left">

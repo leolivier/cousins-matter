@@ -96,14 +96,13 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
     
     def post(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
-        if not self.check_mode(request, member): return redirect_to_referer(request)
 
         # create a form instance and populate it with data from the request on existing member
         m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
         u_form = AccountUpdateForm(request.POST, instance=member.account)
 
         if u_form.is_valid():
-            if member.account.id == request.user.id and 'email' in u_form.changed_data and u_form.changed_data['email']:
+            if member.account.id == request.user.id and 'email' in u_form.changed_data and u_form.cleaned_data['email']:
                 # the member changed his own email, let's check it
                 send_verification_email(request, u_form)
                 messages.info(request, _("A verification email has been sent to validate your new email address."))

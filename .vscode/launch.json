@@ -16,6 +16,20 @@
 			"django": true,
 			"autoStartBrowser": false,
 			"justMyCode": false,
-		}
+		},
+		{
+			"name": "Debug Django Test",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/manage.py",
+			"args": [
+					"test",
+					"members.tests.tests_member"
+//					"accounts"
+			],
+			"django": true,
+			"autoStartBrowser": false,
+			"justMyCode": false,
+	},
 	]
 }

@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def create_user_creates_member(sender, instance, created, **kwargs):
     logger.debug(f"user {instance.username}: post save user triggered for Member")
     if created: # new user, see if we need to create his associated member
-        if Member.objects.filter(account__id = instance.id):
+        if Member.objects.filter(account__id = instance.id).exists():
             logger.debug(f"User {instance.username} already has an associated member.")
         else:
             logger.debug(f"New user {instance.username}: creating associated member")
@@ -30,7 +30,7 @@ def delete_user_deletes_member(sender, instance, **kwargs):
     logger.debug(f"user {instance.username}: post delete user triggered")
     # delete associated member (should be done by delete cascade!)
     member = Member.objects.filter(account__id = instance.id)
-    if member:
+    if member.exists():
         logger.debug(f"User {instance.username} deleted: deleting associated member.")
         member.first().delete()
     # if managing account is deleted, associate managed members to first admin
@@ -59,7 +59,7 @@ def delete_member_deletes_user(sender, instance, **kwargs):
     logger.debug(f"member {instance.id}: post delete member triggered")
     # delete associated user (should be done by delete cascade!)
     user = User.objects.filter(id = instance.account.id)
-    if user:
+    if user.exists():
         logger.debug(f"Member {instance.id} deleted: deleting associated user.")
         user.first().delete()
 

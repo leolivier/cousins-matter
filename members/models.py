@@ -62,7 +62,7 @@ class Family(models.Model):
      return self.name
 
   def get_absolute_url(self):
-    return reverse("members:family", kwargs={"pk": self.pk})
+    return reverse("members:family_detail", kwargs={"pk": self.pk})
 
 class Address(models.Model):
   
@@ -83,6 +83,9 @@ class Address(models.Model):
 {self.zip_code}, {self.city}
 {self.country}
 """
+  def get_absolute_url(self):
+    return reverse("members:address_detail", kwargs={"pk": self.pk})
+
   class Meta:
     verbose_name = _('address')
     verbose_name_plural = _('addresses')

@@ -17,12 +17,10 @@ class FamilyDetailView(LoginRequiredMixin, generic.DetailView):
 
 class FamilyCreateView(LoginRequiredMixin, generic.CreateView):
    model = Family
-   form_class = FamilyUpdateForm
    fields = "__all__"
 
 class FamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
    model = Family
-   form_class = FamilyUpdateForm
    fields = "__all__"
 
 class ModalFamilyCreateView(LoginRequiredMixin, generic.CreateView):
@@ -34,7 +32,7 @@ class ModalFamilyCreateView(LoginRequiredMixin, generic.CreateView):
          form = FamilyUpdateForm(request.POST)
          if form.is_valid():
             family = form.save()
-            return JsonResponse({"family_id": family.id, "family_name": family.str()}, status=200)
+            return JsonResponse({"family_id": family.id, "family_name": str(family)}, status=200)
          else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)
@@ -51,7 +49,7 @@ class ModalFamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
          form = FamilyUpdateForm(request.POST, instance=family)
          if form.is_valid():
             family = form.save()
-            return JsonResponse({"family_id": family.id, "family_name": family.str()}, status=200)
+            return JsonResponse({"family_id": family.id, "family_name": str(family)}, status=200)
          else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)

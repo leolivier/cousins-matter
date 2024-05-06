@@ -2,6 +2,7 @@ import logging
 from enum import Enum
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
+from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -35,6 +36,9 @@ class MemberDetailView(LoginRequiredMixin, generic.DetailView):
                 "can_edit": editable(self.request, self.object),
                 "managing_account_name": self.object.managing_account.username 
             }
+
+    def get_absolute_url(self):
+        return reverse("members:detail", kwargs={"pk": self.pk})
 
 class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
     """View used to create a managed member"""

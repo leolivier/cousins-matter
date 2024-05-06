@@ -1,0 +1,52 @@
+{% extends "members/base_members.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Address Detail") %}{% endblock %}
+{% block content %}
+<div class="container mt-5">
+	<table class="table">
+		<tr>
+			<td class="content has-text-right">{% translate "Number & Street name" %}</td>
+			<td class="content">{{ object.number_and_street }}</td>
+		</tr>
+		<tr>
+			<td class="content has-text-right">{% translate "Complementary Info" %}</td>
+			<td class="content">{{ object.complementary_info }}</td>
+		</tr>
+		<tr>
+			<td class="content has-text-right">{% translate "Zip code" %}</td>
+			<td class="content">{{ object.zip_code }}</td>
+		</tr>
+		<tr>
+			<td class="content has-text-right">{% translate "City" %}</td>
+			<td class="content">{{ object.city }}</td>
+		</tr>
+		<tr>
+			<td class="content has-text-right">{% translate "Country" %}</td>
+			<td class="content">{{ object.country }}</td>
+		</tr>
+	</table>
+	{% if object.address_of.count > 0 %}
+	<div class="fixed-grid has-auto-count">
+		<div class="grid">
+			<div class="cell">{% translate "Address used by:" %}</div>
+    {% for member in object.address_of %}
+      <div class="cell has-text-centered">
+        <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
+          <strong>{{ member.first_name }} {{ member.last_name }}</strong>
+        </a>
+      </div>
+    {% endfor %}
+    </div>
+	</div>
+  {% else %}
+	<div>
+    <p>{% translate "Address not used by anyone" %}.</p>
+	</div>
+	{% endif %}
+	<div class="buttons mt-5 mb-5">
+		<a class="button is-primary" href="{% url 'members:update_address' object.id %}">
+			{% translate "Edit" %}
+		</a>
+	</div>
+</div>
+{% endblock %}

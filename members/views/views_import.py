@@ -2,7 +2,7 @@ import logging, csv, random, time, os, math, io, string
 from django.core.files import File
 from django.forms import ValidationError
 from django.http import HttpRequest, HttpResponse
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -36,7 +36,7 @@ def check_fields(fieldnames):
 class CSVImportView(LoginRequiredMixin, generic.FormView):
 	template_name = "members/import_members.html"
 	form_class = CSVImportMembersForm
-	success_url = "/members"
+	success_url = reverse_lazy("members:members")
 	
 	def get_context_data(self):
 		optional_fields = { str(s) for s in ALL_FIELD_NAMES.values() } - { str(s) for s in MANDATORY_FIELD_NAMES.values() }

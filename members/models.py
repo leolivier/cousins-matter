@@ -1,5 +1,5 @@
 from django.db import models
-import datetime, os
+import datetime
 from PIL import Image, ImageOps
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy

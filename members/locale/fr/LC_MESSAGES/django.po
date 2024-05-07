@@ -535,7 +535,7 @@ msgstr ""
 #: members/templates/members/registration_request.html:3
 #: members/templates/members/registration_request.html:6
 msgid "Request Invitation"
-msgstr "Demande  d'nvitation"
+msgstr "Demande  d'invitation"
 
 #: members/templates/members/registration_request.html:9
 msgid ""

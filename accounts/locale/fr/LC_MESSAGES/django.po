@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter Accounts 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 18:08+0200\n"
+"POT-Creation-Date: 2024-05-07 18:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,9 +92,9 @@ msgstr "Tu peux te connecter avec tes identifiants maintenant..."
 #: accounts/templates/accounts/email_verification_successful.html:14
 #: accounts/templates/accounts/login.html:9
 #: accounts/templates/accounts/login.html:13
-#: accounts/templates/accounts/password_reset.html:19
+#: accounts/templates/accounts/password_reset.html:18
 #: accounts/templates/accounts/password_reset_complete.html:9
-#: accounts/templates/accounts/password_reset_confirm.html:29
+#: accounts/templates/accounts/password_reset_confirm.html:28
 msgid "Sign in"
 msgstr "Se connecter"
 
@@ -120,12 +120,12 @@ msgid "Request invitation link"
 msgstr "Demander une invitation"
 
 #: accounts/templates/accounts/login.html:21
-#: accounts/templates/accounts/password_change.html:18
+#: accounts/templates/accounts/password_change.html:17
 msgid "Password Forgotten?"
 msgstr "Mot de passe oublié?"
 
 #: accounts/templates/accounts/login.html:22
-#: accounts/templates/accounts/password_change.html:19
+#: accounts/templates/accounts/password_change.html:18
 msgid "Reset password"
 msgstr "Reinitialiser le mot de passe"
 
@@ -148,24 +148,24 @@ msgstr ""
 "Merci de vérifier tes mails et de cliquer sur le lien pour vérifier ton "
 "adresse mail."
 
-#: accounts/templates/accounts/password_change.html:10
+#: accounts/templates/accounts/password_change.html:9
 msgid "Password Change"
 msgstr "Changement du mot de passe"
 
-#: accounts/templates/accounts/password_change.html:14
+#: accounts/templates/accounts/password_change.html:13
 msgid "Change password"
 msgstr "Changer le mot de passe"
 
-#: accounts/templates/accounts/password_reset.html:10
+#: accounts/templates/accounts/password_reset.html:9
 msgid "Password resetting"
 msgstr "Réinitialisation de mot de passe"
 
-#: accounts/templates/accounts/password_reset.html:14
+#: accounts/templates/accounts/password_reset.html:13
 msgid "Send a reset link"
 msgstr "Envoyer un lien de réinitialisation"
 
-#: accounts/templates/accounts/password_reset.html:18
-#: accounts/templates/accounts/password_reset_confirm.html:28
+#: accounts/templates/accounts/password_reset.html:17
+#: accounts/templates/accounts/password_reset_confirm.html:27
 msgid "Password Not Forgotten?"
 msgstr "Mot de passe non oublié?"
 
@@ -177,11 +177,11 @@ msgstr "Reinitialisation du mot de passe terminée"
 msgid "Your password has been set.  You may go ahead and sign in now."
 msgstr "Ton mot de passe a été défini. Tu peux maintenant te connecter."
 
-#: accounts/templates/accounts/password_reset_confirm.html:12
+#: accounts/templates/accounts/password_reset_confirm.html:11
 msgid "Password reset confirmation"
 msgstr "Confirmation de la réinitialisation du mot de passe"
 
-#: accounts/templates/accounts/password_reset_confirm.html:13
+#: accounts/templates/accounts/password_reset_confirm.html:12
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
@@ -189,11 +189,11 @@ msgstr ""
 "Merci d'entrer ton nouveau mot de passe deux fois pour que nous puissions "
 "vérifier que tu l'as entré correctement."
 
-#: accounts/templates/accounts/password_reset_confirm.html:18
+#: accounts/templates/accounts/password_reset_confirm.html:17
 msgid "Change my password"
 msgstr "Modifier mon mot de passe"
 
-#: accounts/templates/accounts/password_reset_confirm.html:24
+#: accounts/templates/accounts/password_reset_confirm.html:23
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
@@ -235,4 +235,3 @@ msgstr "Demande d'un nouvel e-mail"
 #: accounts/views.py:23
 msgid "You have been logged out"
 msgstr "Tu as été déconnecté(e)"
-

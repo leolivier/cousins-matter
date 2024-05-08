@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 18:41+0200\n"
+"POT-Creation-Date: 2024-05-07 18:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,35 +32,35 @@ msgstr ""
 "créés en tant que galeries et les photos de ces dossiers seront ajoutées aux "
 "galeries. Toutes les photos doivent être dans des dossiers."
 
-#: galleries/models.py:54 galleries/templates/galleries/photo_detail.html:3
+#: galleries/models.py:35 galleries/templates/galleries/photo_detail.html:3
 msgid "Photo"
 msgstr "Photo"
 
-#: galleries/models.py:56 galleries/models.py:112
+#: galleries/models.py:37 galleries/models.py:93
 msgid "Name"
 msgstr "Nom"
 
-#: galleries/models.py:57 galleries/models.py:113
+#: galleries/models.py:38 galleries/models.py:94
 msgid "Description"
 msgstr "Description"
 
-#: galleries/models.py:59
+#: galleries/models.py:40
 msgid "Date"
 msgstr "Date"
 
-#: galleries/models.py:59
+#: galleries/models.py:40
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
 
-#: galleries/models.py:114
+#: galleries/models.py:95
 msgid "Cover Photo"
 msgstr "Photo de couverture"
 
-#: galleries/models.py:117
+#: galleries/models.py:98
 msgid "Parent gallery"
 msgstr "Galerie parente"
 
-#: galleries/models.py:122
+#: galleries/models.py:103
 msgid "galleries"
 msgstr "galeries"
 

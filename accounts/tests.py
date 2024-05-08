@@ -12,27 +12,28 @@ def sreverse(url):
 class AccountTestCase(SimpleTestCase):
   databases = '__all__' # allow write to database
   
-  username='foobar'
-  password='vWx12/gtV"'
-  email="foo@bar.com"
-  first_name="foo"
-  last_name="bar"
-
-  login_url = reverse('accounts:login')
-  logout_url = reverse('accounts:logout')
-  change_password_url = reverse('change_password')
-  superuser = None
   account = None
+  username   = 'foobar'
+  password   = 'vWx12/gtV"'
+  email      = "foo@bar.com"
+  first_name = "foo"
+  last_name  = "bar"
+
+  superuser = None
+  superuser_name  = "superuser"
+  superuser_pwd   = "SuPerUser1!"
+  superuser_email = "superuser@test.com"
+
+  login_url           = reverse('accounts:login')
+  logout_url          = reverse('accounts:logout')
+  change_password_url = reverse('change_password')
 
   def setUp(self):
     super().setUp()
     if not self.superuser: 
-      self.superuser = User.objects.filter(username="superuser").first()
+      self.superuser = User.objects.filter(username=self.superuser_name).first()
       if not self.superuser:
-        self.superuser = User.objects.create_superuser("superuser", "superuser@test.com", "SuPerUser1!")
-  
-  def credentials(self):
-    return { 'username': self.username, 'password': self.password }
+        self.superuser = User.objects.create_superuser(self.superuser_name, self.superuser_email, self.superuser_pwd)
   
   def next(self, from_url, to_url):
     return  f"{from_url}?next={to_url}"
@@ -44,7 +45,7 @@ class AccountTestCase(SimpleTestCase):
         self.account = faccount.first()
       else:
         self.account = User.objects.create_user(self.username, self.email, self.password, 
-                                                first_name=self.first_name, last_name=self.last_name)
+                                                first_name=self.first_name, last_name=self.last_name, is_active=True)
     return self.account
   
   def delete_account(self):
@@ -52,7 +53,8 @@ class AccountTestCase(SimpleTestCase):
 
   def login(self):
     self.assertAccountExists()
-    logged = self.client.login(username=self.username, password=self.password)
+    user = get_user(self.client)
+    logged = user.is_authenticated or self.client.login(username=self.username, password=self.password)
     self.assertTrue(logged)
 
   def assertAccountExists(self):
@@ -65,6 +67,15 @@ class AccountTestCase(SimpleTestCase):
   def assertAccountIsNotLogged(self):
     user = get_user(self.client)
     self.assertFalse(user.is_authenticated)
+
+  def superuser_login(self):
+    self.assertIsNotNone(self.superuser)
+    user = get_user(self.client)
+    if user.is_authenticated and not user.is_superuser:
+      self.client.logout()
+      user = get_user(self.client) # is refresh needed?
+    logged = user.is_authenticated or self.client.login(username=self.superuser_name, password=self.superuser_pwd)
+    self.assertTrue(logged)
 
 class CreatedAccountTestCase(AccountTestCase):
   def setUp(self) -> None:

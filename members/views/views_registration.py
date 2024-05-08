@@ -41,11 +41,11 @@ class RegistrationCheckingView(generic.CreateView):
 					return redirect_to_referer(request)
 				else:
 					manager = Member.objects.get(account__id=account.id).managing_account
-					messages.error(request, _("You are already registered but not active. Please contact %s to activate your account") % manager.member.get_full_name())
+					messages.error(request, _("You are already registered but not active. Please contact %(admin)s to activate your account") % 
+										{ 'admin': manager.member.get_full_name() })
 					return redirect_to_referer(request)
 			else:
 					account = User.objects.filter(email=request.POST.get("username"))
-			# TODO: how to control self registration by an admin?
 			return None
 		else:
 			return HttpResponseBadRequest(_("Invalid link. Please contact the administrator."))
@@ -137,7 +137,8 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
 			form = MemberInvitationForm()
 		return render(request, "members/registration_invite.html", {'form': form})
 
-class RegistrationRequestView(LoginRequiredMixin, generic.View):
+class RegistrationRequestView(generic.View):
+	template_name = 'members/registration_request.html'
 
 	def post(self, request):
 		"""
@@ -152,33 +153,36 @@ class RegistrationRequestView(LoginRequiredMixin, generic.View):
 			requester_email = request.POST.get("email")
 			if User.objects.filter(email=requester_email).exists():
 				messages.error(request, _('User with this email already exists.'))
-				return redirect_to_referer(request)
+			else:
+				requester_name = request.POST.get("name")
+				requester_message = request.POST.get("message")
+				link = reverse("members:invite")
+				absolute_link = request.build_absolute_uri(link)
 
-			requester_name = request.POST.get("name")
-			requester_message = request.POST.get("message")
-			link = reverse("members:invite")
-			absolute_link = request.build_absolute_uri(link)
+				context = {
+					"site_name": site_name,
+					"requester" : {
+						"email": requester_email,
+						"name": requester_name,
+						"message": requester_message
+					},
+					"link": absolute_link
+				}
 
-			context = {
-				"site_name": site_name,
-				"requester" : {
-					"email": requester_email,
-					"name": requester_name,
-					"message": requester_message
-				},
-				"link": absolute_link
-			}
-
-			msg = render_to_string("members/registration_request_email.html", context, request=request)
-			admin = User.objects.filter(is_superuser=True).first()
-			send_mail(
-				_(f"Registration request for {site_name}"), strip_tags(msg),
-				from_email=settings.DEFAULT_FROM_EMAIL,
-				recipient_list=[admin.email], html_message=msg
-			)
-			messages.success(request, _("Registration request sent."))
-			return redirect_to_referer(request)
+				msg = render_to_string("members/registration_request_email.html", context, request=request)
+				admin = User.objects.filter(is_superuser=True).first()
+				if send_mail(
+					_(f"Registration request for %(site_name)s")%{'site_name':site_name}, strip_tags(msg),
+					from_email=settings.DEFAULT_FROM_EMAIL,
+					recipient_list=[admin.email], html_message=msg
+				) == 1:
+					messages.success(request, _("Registration request sent."))
+					return redirect_to_referer(request)
+				else:
+					messages.error(request, _("Unable to send mail, please contact your administrator"))
+		
+		return render(request, self.template_name, {'form': form})
 
 	def get(self, request):
 		form = RegistrationRequestForm()
-		return render(request, 'members/registration_request.html', {'form': form})
+		return render(request, self.template_name, {'form': form})

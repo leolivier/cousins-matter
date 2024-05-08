@@ -33,7 +33,7 @@ MAX_REGISTRATION_AGE = env.int('MAX_REGISTRATION_AGE', default=2*24*3600)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'])
 
-LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-us')
+LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-US')
 
 TIME_ZONE = env.str('TIME_ZONE', default='Europe/Paris')
 

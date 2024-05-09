@@ -4,11 +4,7 @@ name: Release build
 on: [push]
 
 jobs:
-  run-tests:
-    uses: leolivier/cousins-matter/.github/workflows/run-tests-reusable.yml@main
-  
-  build-and-push:
+  test-build-and-push:
     uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main
     with:
       push: true
-      # tags: $${{github.sha}}

@@ -57,7 +57,7 @@ class TestMemberImport(MemberTestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, f'''<li class="message is-error">
 	<div class="message-body">
-		{f'Unknown column in CSV file: "citi". Valid fields are {', '.join([str(s) for s in ALL_FIELD_NAMES.keys()])}'}            
+		{f'Unknown column in CSV file: "citi". Valid fields are {", ".join([str(s) for s in ALL_FIELD_NAMES.keys()])}'}            
 	</div>
 </li>''', html=True)
 
@@ -66,6 +66,6 @@ class TestMemberImport(MemberTestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, f'''<li class="message is-error">
 	<div class="message-body">
-		{f'Missing column in CSV file: "first_name". Mandatory fields are {', '.join([str(s) for s in MANDATORY_FIELD_NAMES.keys()])}'}            
+		{f'Missing column in CSV file: "first_name". Mandatory fields are {", ".join([str(s) for s in MANDATORY_FIELD_NAMES.keys()])}'}            
 	</div>
 </li>''', html=True)

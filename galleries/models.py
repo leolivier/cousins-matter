@@ -128,7 +128,7 @@ class Gallery(models.Model):
 				if self.parent:
 					raise ValidationError(_("Another sub gallery of %(parent)s with the same name already exists")%{'parent': self.parent.full_path()})
 				else:
-					raise ValidationError(_("Another root gallerwith the same name already exists"))
+					raise ValidationError(_("Another root gallery with the same name already exists"))
 			self.slug = slug
 
 	def save(self, *args, **kwargs):

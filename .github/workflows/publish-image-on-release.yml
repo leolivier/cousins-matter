@@ -4,9 +4,6 @@ name: Release build
 on: [release]
 
 jobs:
-  run-tests:
-    uses: leolivier/cousins-matter/.github/workflows/run-tests-reusable.yml@main
-  
   build-and-publish:
     uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main
     with:

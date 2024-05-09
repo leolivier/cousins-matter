@@ -33,6 +33,7 @@ jobs:
         envkey_ALLOWED_HOSTS: '127.0.0.1,localhost'
         envkey_LANGUAGE_CODE: 'fr-FR'
         envkey_EMAIL_HOST: 'smtp.gmail.com'
+        envkey_EMAIL_PORT: 465
         directory: .
         file_name: .env
         fail_on_empty: false

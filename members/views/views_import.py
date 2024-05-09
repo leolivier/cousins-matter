@@ -26,10 +26,12 @@ def t(field): return ALL_FIELD_NAMES[field]
 def check_fields(fieldnames):
 	for fieldname in fieldnames:
 		if fieldname not in ALL_FIELD_NAMES.values():
-			raise ValidationError(_(f'Unknwon column in CSV file: "{fieldname}". Valid fields are {ALL_FIELD_NAMES.values()}'))
+			raise ValidationError(_('Unknwon column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s')%
+												 {'fieldname': fieldname, 'all_names': ALL_FIELD_NAMES.values()})
 	for fieldname in MANDATORY_FIELD_NAMES.values():
 		if fieldname not in fieldnames:
-			raise ValidationError(_(f'Missing column in CSV file: "{fieldname}". Mandatory fields are {MANDATORY_FIELD_NAMES.values()}'))
+			raise ValidationError(_('Missing column in CSV file: "%(fieldname)s". Mandatory fields are %(all_names)s')%
+												 {'fieldname': fieldname, 'all_names': MANDATORY_FIELD_NAMES.values()})
 
 	return True
 
@@ -105,7 +107,8 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 							# avatar image must already exist
 							avatar = os.path.join(settings.MEDIA_ROOT, 'avatars', row[trfield])
 							if not os.path.exists(avatar):
-								errors.append(_(f"Avatar not found: {avatar} for username {row[t('username')]}. Ignored..."))
+								errors.append(_("Avatar not found: %(avatar)s for username %(username)s. Ignored...")%
+											{'avatar': avatar, 'username': row[t('username')]})
 							else:
 								with open(avatar, 'rb') as image_file:
 									image = File(image_file)
@@ -131,14 +134,15 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 			csv_file = request.FILES["csv_file"]
 			if csv_file.multiple_chunks():
 				size = math.floor(csv_file.size*100/(1024*1024))/100
-				messages.error(request,_("Uploaded file is too big ({size} MB)."))
+				messages.error(request,_("Uploaded file is too big (%(size)s MB).")%{'size': size})
 				return redirect_to_referer(request)
 		
 			try:
 				nbLines, nbMembers, errors = self._import_csv(csv_file)
-				messages.success(request, _(f"CSV file uploaded: {nbLines} lines read, {nbMembers} members created or updated"))
+				messages.success(request, _("CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or updated")%
+										 {'nbLines': nbLines, 'nbMembers': nbMembers})
 				for error in errors: 
-					messages.errors(request, _(f"Warning: {error}"))
+					messages.errors(request, _("Warning: %(error)")%{'error': error})
 			except ValidationError as ve:
 				messages.error(request, ve.message)
 				return redirect_to_referer(request)

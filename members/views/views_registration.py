@@ -122,11 +122,11 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
 		)
 
 		send_mail(
-			_(f"You are invited to register on {site_name}"), strip_tags(msg),
+			_(f"You are invited to register on %(site_name)s")%{'site_name': site_name}, strip_tags(msg),
 			from_email=from_email,
 			recipient_list=[email], html_message=msg
 		)
-		messages.success(request, _("Invitation sent to {email}.").format(email=email))
+		messages.success(request, _("Invitation sent to %(email)s.")%{'email': email})
 		return redirect_to_referer(request)
 
 	def get(self, request):

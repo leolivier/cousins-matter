@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-07 18:59+0200\n"
+"POT-Creation-Date: 2024-05-09 12:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -124,7 +124,7 @@ msgctxt "CSV Field"
 msgid "avatar"
 msgstr "avatar"
 
-#: members/models.py:49 members/templates/members/members_directory.html:20
+#: members/models.py:49 members/templates/members/members_directory.html:21
 #: members/views/views_directory.py:43
 msgid "Name"
 msgstr "Nom"
@@ -178,19 +178,19 @@ msgid "Managing account"
 msgstr "Compte gérant ce membre"
 
 #: members/models.py:105 members/templates/members/member_detail.html:32
-#: members/templates/members/members_directory.html:24
+#: members/templates/members/members_directory.html:25
 #: members/views/views_directory.py:43
 msgid "Address"
 msgstr "Adresse"
 
 #: members/models.py:107 members/templates/members/member_detail.html:36
-#: members/templates/members/members_directory.html:22
+#: members/templates/members/members_directory.html:23
 #: members/views/views_directory.py:43
 msgid "Phone"
 msgstr "Téléphone"
 
 #: members/models.py:109 members/templates/members/member_detail.html:40
-#: members/templates/members/members_directory.html:21
+#: members/templates/members/members_directory.html:22
 msgid "Birthdate"
 msgstr "Date de naissance"
 
@@ -470,20 +470,20 @@ msgid "Create Member"
 msgstr "Créer un Membre"
 
 #: members/templates/members/members.html:36
-#: members/templates/members/members_directory.html:40
+#: members/templates/members/members_directory.html:43
 msgid "No members found"
 msgstr "Pas de membre trouvé"
 
 #: members/templates/members/members_directory.html:3
-#: members/templates/members/members_directory.html:8
+#: members/templates/members/members_directory.html:9
 msgid "Members Directory"
 msgstr "Annuaire des Membres"
 
-#: members/templates/members/members_directory.html:13
+#: members/templates/members/members_directory.html:14
 msgid "Print as PDF"
 msgstr "Imprimer en PDF"
 
-#: members/templates/members/members_directory.html:23
+#: members/templates/members/members_directory.html:24
 #: members/views/views_directory.py:43
 msgid "Email"
 msgstr "Email"
@@ -503,19 +503,17 @@ msgid "Invitation for %(invited)s to register to %(site_name)s"
 msgstr "Invitation pour %(invited)s à s'inscrire sur %(site_name)s"
 
 #: members/templates/members/registration_invite_email.html:20
-#: members/tests/tests_register.py:31
+#: members/tests/tests_register.py:34
 #, python-format
 msgid "Registration to the \"%(site_name)s\" site"
 msgstr "Enregistrement sur le site \"%(site_name)s\""
 
 #: members/templates/members/registration_invite_email.html:25
-#: members/tests/tests_register.py:32
 #, python-format
 msgid "Hello %(invited)s, this is %(admin)s!"
 msgstr "Bonjour %(invited)s, c'est %(admin)s!"
 
 #: members/templates/members/registration_invite_email.html:26
-#: members/tests/tests_register.py:34
 #, python-format
 msgid ""
 "I invite you to register on the %(site_name)s website I created for managing "
@@ -579,19 +577,19 @@ msgid "Invite me"
 msgstr "M'inviter"
 
 #: members/templates/members/registration_request_email.html:8
-#: members/tests/tests_register.py:92 members/views/views_registration.py:175
+#: members/tests/tests_register.py:97 members/views/views_registration.py:175
 #, python-format
 msgid "Registration request for %(site_name)s"
 msgstr "Demande d'enregistrement pour %(site_name)s"
 
 #: members/templates/members/registration_request_email.html:20
-#: members/tests/tests_register.py:97
+#: members/tests/tests_register.py:102
 #, python-format
 msgid "Registration request for the \"%(site_name)s\" site"
 msgstr "Demande d'enregistrement pour le site \"%(site_name)s\""
 
 #: members/templates/members/registration_request_email.html:24
-#: members/tests/tests_register.py:98
+#: members/tests/tests_register.py:103
 #, python-format
 msgid "%(name)s (%(email)s) requested to register to your cousinades site"
 msgstr ""
@@ -623,20 +621,29 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_register.py:26
-#, fuzzy, python-format
-#| msgid "You are invited to register on {site_name}"
+#: members/tests/tests_register.py:29
+#, python-format
 msgid "You are invited to register on %(site_name)s"
-msgstr "Tu as été invité.e à créer ton compte sur {site_name}"
+msgstr "Tu as été invité.e à créer ton compte sur %(site_name)s"
 
-#: members/tests/tests_register.py:129
-msgid "This password is too common."
-msgstr "Ce mot de passe est trop commun."
+#: members/tests/tests_register.py:126
+msgid "Invalid CAPTCHA"
+msgstr ""
 
-#: members/tests/tests_register.py:132 members/tests/tests_register.py:135
-#: members/tests/tests_register.py:138
-msgid "This field is required."
-msgstr "Ce champs est obligatoire."
+#: members/tests/tests_register.py:145 members/views/views_registration.py:84
+#, python-format
+msgid ""
+"Hello %(username)s, your account has been created! You will now receive an "
+"email to verify your email address. Click in the link inside the mail to "
+"finish the registration."
+msgstr ""
+"Hello %(username)s, ton compte a été créé! Tu vas maintenant recevoir un "
+"email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
+"terminer le processus de création de compte."
+
+#: members/tests/tests_register.py:153 members/views/views_registration.py:51
+msgid "Invalid link. Please contact the administrator."
+msgstr "Lien invalide. Merci de contacter l'administrateur."
 
 #: members/views/views_activate.py:50
 msgid "Error: Account already active"
@@ -657,55 +664,55 @@ msgstr ""
 
 #: members/views/views_directory.py:59
 #, python-brace-format
-msgid "{settings.SITE_NAME} directory"
-msgstr "Dossier {settings.SITE_NAME}"
+msgid "%(site_name)s directory"
+msgstr "Dossier %(site_name)s"
 
 #: members/views/views_directory.py:64
 #, python-brace-format
-msgid "Page {doc.page} - {title}"
-msgstr "Page {doc.page} - {title}"
+msgid "Page %(doc.page)s - %(title)s"
+msgstr "Page %(doc.page)s - %(title)s"
 
 #: members/views/views_import.py:29
 msgid ""
-"Unknwon column in CSV file: \"{fieldname}\". Valid fields are "
-"{ALL_FIELD_NAMES.values()}"
+"Unknwon column in CSV file: "%(fieldname)s". Valid fields are "
+%(all_names)s"
 msgstr ""
-"Colonne inconnue dans le fichier CSV : \"{fieldname}\". Les champs valides "
-"sont {ALL_FIELD_NAMES.values()}"
+"Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
+"sont %(all_names)s"
 
 #: members/views/views_import.py:32
 msgid ""
-"Missing column in CSV file: \"{fieldname}\". Mandatory fields are "
-"{MANDATORY_FIELD_NAMES.values()}"
+"Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
+"%(all_names)s"
 msgstr ""
-"Colonne manquante dans le fichier CSV: \"{fieldname}\". Les champs "
-"obligatoires sont {MANDATORY_FIELD_NAMES.values()}"
+"Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
+"obligatoires sont %(all_names)s"
 
 #: members/views/views_import.py:108
 msgid ""
-"Avatar not found: {avatar} for username {row[t('username')]}. Ignored..."
+"Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
-"Avatar introuvable : {avatar} pour le nom d'utilisateur "
-"{row[t('username')]}. Ignoré..."
+"Avatar introuvable : %(avatar)s pour le nom d'utilisateur "
+"%(username)s. Ignoré..."
 
 #: members/views/views_import.py:134
 #, python-brace-format
-msgid "Uploaded file is too big ({size} MB)."
-msgstr "Le fichier téléchargé est trop volumineux ({size} Mo)."
+msgid "Uploaded file is too big (%(size)s MB)."
+msgstr "Le fichier téléchargé est trop volumineux (%(size)s Mo)."
 
 #: members/views/views_import.py:139
 #, python-brace-format
 msgid ""
-"CSV file uploaded: {nbLines} lines read, {nbMembers} members created or "
+"CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
 "updated"
 msgstr ""
-"Fichier CSV téléchargé : {nbLines} lignes lues, {nbMembers} membres créés ou "
+"Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres créés ou "
 "mis à jour"
 
 #: members/views/views_import.py:141
 #, python-brace-format
-msgid "Warning: {error}"
-msgstr "Attention: {error}"
+msgid "Warning: %(error)s"
+msgstr "Attention: %(error)s"
 
 #: members/views/views_member.py:77
 msgid "Member successfully created"
@@ -753,21 +760,6 @@ msgstr ""
 "Tu es déjà enregistré mais pas encore actif. Contacte %s pour activer ton "
 "compte."
 
-#: members/views/views_registration.py:51
-msgid "Invalid link. Please contact the administrator."
-msgstr "Lien invalide. Merci de contacter l'administrateur."
-
-#: members/views/views_registration.py:84
-#, python-format
-msgid ""
-"Hello %(username)s, your account has been created! You will now receive an "
-"email to verify your email address. Click in the link inside the mail to "
-"finish the registration."
-msgstr ""
-"Hello %(username)s, ton compte a été créé! Tu vas maintenant recevoir un "
-"email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
-"terminer le processus de création de compte."
-
 #: members/views/views_registration.py:99
 msgid "Only staff users can send invitations."
 msgstr "Seuls les members du staff peuvent envoyer des invitations."
@@ -777,15 +769,10 @@ msgstr "Seuls les members du staff peuvent envoyer des invitations."
 msgid "User with this email already exists."
 msgstr "Un utilisateur avec cette adresse mail existe déjà."
 
-#: members/views/views_registration.py:125
-#, python-brace-format
-msgid "You are invited to register on {site_name}"
-msgstr "Tu as été invité.e à créer ton compte sur {site_name}"
-
 #: members/views/views_registration.py:129
 #, python-brace-format
-msgid "Invitation sent to {email}."
-msgstr "Invitation envoyée à {email}."
+msgid "Invitation sent to %(email)s."
+msgstr "Invitation envoyée à %(email)s."
 
 #: members/views/views_registration.py:179
 msgid "Registration request sent."

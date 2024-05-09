@@ -15,7 +15,7 @@ class TestBulkUpload(GalleryBaseTestCase):
 
 		zipfile = test_file_full_path('test_bulk_import.zip')
 		response = self.client.post(reverse('galleries:bulk_upload'), 
-															{ 'zipfile': SimpleUploadedFile('test_bulk_import.zip', open(zipfile, 'rb' ).read()) }, 
+															{ 'zipfile': SimpleUploadedFile('test_bulk_import.zip', open(zipfile, 'rb' ).read(), content_type='application/zip') }, 
 															follow=True)
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(Gallery.objects.count(), 2)

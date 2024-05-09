@@ -34,6 +34,8 @@ jobs:
         envkey_LANGUAGE_CODE: 'fr-FR'
         envkey_EMAIL_HOST: 'smtp.gmail.com'
         envkey_EMAIL_PORT: 465
+        envkey_EMAIL_HOST_USER: 'nobody@gmail.com'
+        envkey_EMAIL_HOST_PASSWORD: 'no matter'
         directory: .
         file_name: .env
         fail_on_empty: false

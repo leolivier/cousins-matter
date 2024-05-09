@@ -21,7 +21,7 @@ class MemberInviteTests(MemberTestCase):
 		response  = self.client.post(reverse("members:invite"), test_invite, follow=True)
 		# pprint(vars(response))
 		self.assertContains(response, 
-											f'''<div class="message-body">{_("Invitation sent to {email}.").format(email=test_invite['email'])}</div>''', 
+											f'''<div class="message-body">{_("Invitation sent to %(email)s.")%{'email': test_invite['email']}}</div>''', 
 											html=True)
 		self.assertEqual(len(mail.outbox), 1)
 		self.assertSequenceEqual(mail.outbox[0].recipients(), [test_invite['email']])

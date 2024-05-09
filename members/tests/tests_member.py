@@ -148,11 +148,11 @@ class MemberProfileViewTest(MemberTestCase):
 		import sys
 
 		avatar_file = os.path.join(os.path.dirname(__file__), "test_avatar.jpg")
-		output_thumb = BytesIO()
+		membuf = BytesIO()
 		with Image.open(avatar_file) as img:
-			img.save(output_thumb, format='JPEG', quality=90)
-			size = sys.getsizeof(output_thumb)
-			self.member.avatar = InMemoryUploadedFile(output_thumb, 'ImageField', "test_avatar.jpg", 
+			img.save(membuf, format='JPEG', quality=90)
+			size = sys.getsizeof(membuf)
+			self.member.avatar = InMemoryUploadedFile(membuf, 'ImageField', "test_avatar.jpg", 
 																					'image/jpeg', size, None)
 		self.member.save()
 		self.assertTrue(os.path.isfile(os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, os.path.basename(avatar_file))))

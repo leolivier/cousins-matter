@@ -142,7 +142,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 				messages.success(request, _("CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or updated")%
 										 {'nbLines': nbLines, 'nbMembers': nbMembers})
 				for error in errors: 
-					messages.errors(request, _("Warning: %(error)")%{'error': error})
+					messages.errors(request, _("Warning: %(error)s")%{'error': error})
 			except ValidationError as ve:
 				messages.error(request, ve.message)
 				return redirect_to_referer(request)

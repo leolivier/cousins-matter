@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 12:41+0200\n"
+"POT-Creation-Date: 2024-05-09 15:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -621,7 +621,8 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_register.py:29
+#: members/tests/tests_register.py:29 
+#: members/views/views_registration.py:125
 #, python-format
 msgid "You are invited to register on %(site_name)s"
 msgstr "Tu as été invité.e à créer ton compte sur %(site_name)s"
@@ -663,24 +664,25 @@ msgstr ""
 "connecter."
 
 #: members/views/views_directory.py:59
-#, python-brace-format
+#, python-format
 msgid "%(site_name)s directory"
 msgstr "Dossier %(site_name)s"
 
 #: members/views/views_directory.py:64
-#, python-brace-format
-msgid "Page %(doc.page)s - %(title)s"
-msgstr "Page %(doc.page)s - %(title)s"
+#, python-format
+msgid "Page %(doc_page)s - %(title)s"
+msgstr "Page %(doc_page)s - %(title)s"
 
 #: members/views/views_import.py:29
+#, python-format
 msgid ""
-"Unknwon column in CSV file: \"%(fieldname)s\". Valid fields are "
-"%(all_names)s"
+"Unknwon column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
 msgstr ""
 "Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
 "sont %(all_names)s"
 
-#: members/views/views_import.py:32
+#: members/views/views_import.py:33
+#, python-format
 msgid ""
 "Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
 "%(all_names)s"
@@ -688,29 +690,28 @@ msgstr ""
 "Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
 "obligatoires sont %(all_names)s"
 
-#: members/views/views_import.py:108
-msgid ""
-"Avatar not found: %(avatar)s for username %(username)s. Ignored..."
+#: members/views/views_import.py:110
+#, python-format
+msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
-"Avatar introuvable : %(avatar)s pour le nom d'utilisateur "
-"%(username)s. Ignoré..."
+"Avatar introuvable : %(avatar)s pour le nom d'utilisateur %(username)s. "
+"Ignoré..."
 
-#: members/views/views_import.py:134
-#, python-brace-format
+#: members/views/views_import.py:137
+#, python-format
 msgid "Uploaded file is too big (%(size)s MB)."
 msgstr "Le fichier téléchargé est trop volumineux (%(size)s Mo)."
 
-#: members/views/views_import.py:139
-#, python-brace-format
+#: members/views/views_import.py:142
+#, python-format
 msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
 "updated"
 msgstr ""
-"Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres créés ou "
-"mis à jour"
+"Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres "
+"créés ou mis à jour"
 
-#: members/views/views_import.py:141
-#, python-brace-format
+#: members/views/views_import.py:145
 msgid "Warning: %(error)s"
 msgstr "Attention: %(error)s"
 
@@ -770,7 +771,7 @@ msgid "User with this email already exists."
 msgstr "Un utilisateur avec cette adresse mail existe déjà."
 
 #: members/views/views_registration.py:129
-#, python-brace-format
+#, python-format
 msgid "Invitation sent to %(email)s."
 msgstr "Invitation envoyée à %(email)s."
 

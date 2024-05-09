@@ -61,7 +61,7 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
       def add_footer(canvas, doc):
         canvas.saveState()
         canvas.setFont('Times-Roman',9)
-        canvas.drawString(inch, 0.75 * inch, _("Page %(doc_page) - %(title)s")%{'doc_page':doc.page, 'title':title})
+        canvas.drawString(inch, 0.75 * inch, _("Page %(doc_page)s - %(title)s")%{'doc_page':doc.page, 'title':title})
         canvas.restoreState()
 
       def handle_first_page(canvas, doc):

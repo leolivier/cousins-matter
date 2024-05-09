@@ -4,7 +4,10 @@ name: Release build
 on: [release]
 
 jobs:
-  call-workflow-passing-data:
+  run-tests:
+    uses: leolivier/cousins-matter/.github/workflows/run-tests-reusable.yml@main
+  
+  build-and-publish:
     uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main
     with:
       push: ${{ github.event.action == 'published' }}

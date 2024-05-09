@@ -1,7 +1,6 @@
-from datetime import date
 from django.db import models
 from PIL import Image, ImageOps
-from django.core.files import File
+from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.template.defaultfilters import slugify
@@ -17,10 +16,10 @@ def get_path(instance, filename, subdir=None):
 	photos will be uploaded to MEDIA_ROOT/GALLERIES_DIR/<gallery_full_path>/<subdir>/<filename>.
 	subdir is None or 'thumbnails' for thumbnails
 	"""
-	if not instance.gallery_id: return settings.GALLERIES_DIR
+	if not instance.gallery_id: raise ValidationError(_("A photo must belong to a gallery."))
 	dir = os.path.join(settings.GALLERIES_DIR, instance.gallery.full_path())
 	if subdir: dir = os.path.join(dir, subdir)
-	os.makedirs(dir, exist_ok=True)
+	os.makedirs(os.path.join(settings.MEDIA_ROOT, dir), exist_ok=True)
 	path = os.path.join(dir, filename)
 	logger.info(f"photo is stored in {path}")
 	return path
@@ -56,6 +55,9 @@ class Photo(models.Model):
 		return reverse("galleries:photo", kwargs={"pk": self.pk})
 
 	def clean(self):
+		# should never happen except in tests
+		if not self.gallery_id:
+			raise ValidationError(_("A photo must belong to a gallery."))
 		# name by default is the name of the file
 		self.name =	self.name or os.path.basename(self.image.path)
 		# compute slug
@@ -118,7 +120,16 @@ class Gallery(models.Model):
 	
 	def clean(self):
 		# compute slug
-		self.slug = self.slug or slugify(self.name)
+		if not self.slug:
+			slug = slugify(self.name)
+			# the unique constraint on slug does not work if the parent is null
+			# and it does not provide a friendly output if parent exists so check it manually
+			if Gallery.objects.filter(slug=slug, parent=self.parent).exists():
+				if self.parent:
+					raise ValidationError(_("Another sub gallery of %(parent)s with the same name already exists")%{'parent': self.parent.full_path()})
+				else:
+					raise ValidationError(_("Another root gallerwith the same name already exists"))
+			self.slug = slug
 
 	def save(self, *args, **kwargs):
 		self.full_clean()

@@ -13,6 +13,7 @@ from ..views.views_photo import PhotoAddView, PhotoDetailView
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from .utils import create_image, test_file_full_path, GalleryBaseTestCase
+from .tests_gallery import get_gallery_name
 
 COUNTER=0
 def get_photo_name():
@@ -30,16 +31,11 @@ class PhotoTestsBase(GalleryBaseTestCase):
 
 	def setUp(self):
 		super().setUp()
-		self.root_gallery = Gallery(name='root gallery', description="a test root gallery")
+		self.root_gallery = Gallery(name=get_gallery_name(), description="a test root gallery")
 		self.root_gallery.save()
-		self.sub_gallery = Gallery(name='sub gallery', description="a test sub gallery", parent=self.root_gallery)
+		self.sub_gallery = Gallery(name=get_gallery_name(), description="a test sub gallery", parent=self.root_gallery)
 		self.sub_gallery.save()
 		self.image = create_image("test-image-1.jpg")
-
-	def tearDown(self):
-		for photo in Photo.objects.all(): photo.delete()
-		for gallery in Gallery.objects.filter(parent=None): gallery.delete()
-		super().tearDown()
 
 class CreatePhotoTests(PhotoTestsBase):
 	def test_create_photo_no_gallery(self):
@@ -71,7 +67,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
 		self.assertTemplateUsed(response,'galleries/edit_photo.html')
 		self.assertIs(response.resolver_match.func.view_class, PhotoAddView)
 		
-		print("response:", response)
+		# print("response:", response)
 		formdata = { 'name': 'a photo', 'description': 'a description', 'gallery': self.root_gallery.id, 
 							'date': date.today() }
 		formclass = PhotoAddView().get_form_class()

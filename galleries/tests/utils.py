@@ -5,6 +5,8 @@ from io import BytesIO
 from PIL import Image
 import sys, os, shutil
 
+from galleries.models import Gallery, Photo
+
 def test_file_full_path(image_file_basename):
 	return os.path.join(os.path.dirname(__file__), 'resources', image_file_basename)
 
@@ -30,4 +32,11 @@ class GalleryBaseTestCase(LoggedAccountTestCase):
 	def tearDown(self):
 		if os.path.isdir(TEST_MEDIA_ROOT): shutil.rmtree(TEST_MEDIA_ROOT)
 		# print("deleted test media files")
+		for gallery in Gallery.objects.filter(parent=None): gallery.delete()
+		if Photo.objects.all().count()>0:
+			print("destroying remaining photos")
+			for photo in Photo.objects.all(): photo.delete()
+		super().tearDown()
+
+
 		super().tearDown()

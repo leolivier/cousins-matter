@@ -674,8 +674,8 @@ msgstr "Page %(doc.page)s - %(title)s"
 
 #: members/views/views_import.py:29
 msgid ""
-"Unknwon column in CSV file: "%(fieldname)s". Valid fields are "
-%(all_names)s"
+"Unknwon column in CSV file: \"%(fieldname)s\". Valid fields are "
+"%(all_names)s"
 msgstr ""
 "Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
 "sont %(all_names)s"

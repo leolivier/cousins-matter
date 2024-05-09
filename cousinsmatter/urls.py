@@ -38,6 +38,7 @@ urlpatterns = [
     path("polls/", include("polls.urls")),
     path("admin/", admin.site.urls),
     #path("ckeditor/", include("ckeditor_uploader.urls")),
+    path('password/change/', auth_views.PasswordChangeView.as_view(template_name='accounts/password_change.html'), name='change_password'),
     path('password-reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'), name='password_reset_confirm'),
     path('password/reset', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html'), name='reset_password'),
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'), name='password_reset_done'),
@@ -45,7 +46,7 @@ urlpatterns = [
     path('verification/', include('verify_email.urls')),	
     path("robots.txt", TemplateView.as_view(template_name="cm_main/robots.txt", content_type="text/plain")),
 	path('captcha/', include('captcha.urls')),
-	path('protected_media/<path:media>', download_protected_media, name="get_protected_media")
+	path('protected_media/<path:media>', download_protected_media, name="get_protected_media"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

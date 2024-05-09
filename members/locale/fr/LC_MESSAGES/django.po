@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 11:49+0200\n"
+"POT-Creation-Date: 2024-05-09 15:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -97,7 +97,7 @@ msgstr "prenom"
 #: members/models.py:27
 msgctxt "CSV Field"
 msgid "last_name"
-msgstr "nom_de_famille"
+msgstr "nom"
 
 #: members/models.py:31 members/models.py:39
 msgctxt "CSV Field"
@@ -124,7 +124,7 @@ msgctxt "CSV Field"
 msgid "avatar"
 msgstr "avatar"
 
-#: members/models.py:49 members/templates/members/members_directory.html:20
+#: members/models.py:49 members/templates/members/members_directory.html:21
 #: members/views/views_directory.py:43
 msgid "Name"
 msgstr "Nom"
@@ -141,7 +141,7 @@ msgstr "famille"
 msgid "families"
 msgstr "familles"
 
-#: members/models.py:69
+#: members/models.py:69 members/templates/members/address_detail.html:8
 msgid "Number & Street name"
 msgstr "N° et nom de la voie"
 
@@ -149,66 +149,118 @@ msgstr "N° et nom de la voie"
 msgid "Complementary info"
 msgstr "Infos complémentaires"
 
-#: members/models.py:73
+#: members/models.py:73 members/templates/members/address_detail.html:16
 msgid "Zip code"
 msgstr "Code postal"
 
-#: members/models.py:75
+#: members/models.py:75 members/templates/members/address_detail.html:20
 msgid "City"
 msgstr "Ville"
 
-#: members/models.py:77
+#: members/models.py:77 members/templates/members/address_detail.html:24
 msgid "Country"
 msgstr "Pays"
 
-#: members/models.py:87
+#: members/models.py:90
 msgid "address"
 msgstr "adresse"
 
-#: members/models.py:88
+#: members/models.py:91
 msgid "addresses"
 msgstr "adresses"
 
-#: members/models.py:95
+#: members/models.py:98
 msgid "Linked Account"
 msgstr "Compte lié"
 
-#: members/models.py:97
+#: members/models.py:100
 msgid "Managing account"
 msgstr "Compte gérant ce membre"
 
-#: members/models.py:102 members/templates/members/member_detail.html:32
-#: members/templates/members/members_directory.html:24
+#: members/models.py:105 members/templates/members/member_detail.html:32
+#: members/templates/members/members_directory.html:25
 #: members/views/views_directory.py:43
 msgid "Address"
 msgstr "Adresse"
 
-#: members/models.py:104 members/templates/members/member_detail.html:36
-#: members/templates/members/members_directory.html:22
+#: members/models.py:107 members/templates/members/member_detail.html:36
+#: members/templates/members/members_directory.html:23
 #: members/views/views_directory.py:43
 msgid "Phone"
 msgstr "Téléphone"
 
-#: members/models.py:106 members/templates/members/member_detail.html:40
-#: members/templates/members/members_directory.html:21
+#: members/models.py:109 members/templates/members/member_detail.html:40
+#: members/templates/members/members_directory.html:22
 msgid "Birthdate"
 msgstr "Date de naissance"
 
-#: members/models.py:108 members/templates/members/member_detail.html:44
+#: members/models.py:109
+msgid "Click on the month name or the year to change them quickly"
+msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
+
+#: members/models.py:111 members/templates/members/member_detail.html:44
 msgid "Website"
 msgstr "Site web"
 
-#: members/models.py:110 members/templates/members/member_detail.html:48
+#: members/models.py:113 members/templates/members/member_detail.html:48
 msgid "Family"
 msgstr "Famille"
 
-#: members/models.py:113
+#: members/models.py:116
 msgid "member"
 msgstr "membre"
 
-#: members/models.py:114
+#: members/models.py:117
 msgid "members"
 msgstr "members"
+
+#: members/templates/members/address_detail.html:3
+#, fuzzy
+#| msgid "Address created"
+msgid "Address Detail"
+msgstr "Adresse créée"
+
+#: members/templates/members/address_detail.html:12
+#, fuzzy
+#| msgid "Complementary info"
+msgid "Complementary Info"
+msgstr "Infos complémentaires"
+
+#: members/templates/members/address_detail.html:31
+#, fuzzy
+#| msgid "Address updated"
+msgid "Address used by:"
+msgstr "Adresse mise à jour"
+
+#: members/templates/members/address_detail.html:43
+msgid "Address not used by anyone"
+msgstr ""
+
+#: members/templates/members/address_detail.html:48
+#: members/templates/members/family_detail.html:23
+#: members/templates/members/member_detail.html:59
+msgid "Edit"
+msgstr "Editer"
+
+#: members/templates/members/address_form.html:3
+#: members/templates/members/address_form.html:8
+#, fuzzy
+#| msgid "Address"
+msgid "Edit Address"
+msgstr "Adresse"
+
+#: members/templates/members/address_form.html:17
+#: members/templates/members/family_form.html:17
+#: members/templates/members/member_upsert.html:43
+#: members/templates/members/member_upsert.html:51
+msgid "Submit"
+msgstr "Soumettre"
+
+#: members/templates/members/address_form.html:18
+#: members/templates/members/family_form.html:18
+#: members/templates/members/modal_form.html:17
+msgid "Cancel"
+msgstr "Annuler"
 
 #: members/templates/members/birthdays.html:3
 #: members/templates/members/members.html:12
@@ -221,16 +273,19 @@ msgid "Birthdays in the next %(ndays)s days"
 msgstr "Anniversaires dans les %(ndays)s prochains jours"
 
 #: members/templates/members/birthdays_include.html:15
+#: members/tests/tests_birthdays.py:45
 #, python-format
 msgid "turns %(age)s today, happy birthday!"
 msgstr "a %(age)s ans aujourd'hui, joyeux anniversaire!"
 
 #: members/templates/members/birthdays_include.html:17
+#: members/tests/tests_birthdays.py:56
 #, python-format
 msgid "will turn %(age)s tomorrow, happy birthday!"
 msgstr "aura %(age)s ans demain, joyeux anniversaire!"
 
 #: members/templates/members/birthdays_include.html:20
+#: members/tests/tests_birthdays.py:68
 #, python-format
 msgid "will turn %(age)s on %(birthday)s"
 msgstr "aura %(age)s ans %(birthday)s"
@@ -252,21 +307,10 @@ msgstr "Nom de Famille"
 msgid "This family has no declared parent family."
 msgstr "Cette famille n'a pas de famille parente déclarée."
 
-#: members/templates/members/family_detail.html:23
-#: members/templates/members/family_edit.html:16
-#: members/templates/members/member_detail.html:59
-msgid "Edit"
-msgstr "Editer"
-
-#: members/templates/members/family_edit.html:3
-#: members/templates/members/family_edit.html:7
+#: members/templates/members/family_form.html:3
+#: members/templates/members/family_form.html:8
 msgid "Edit Family"
 msgstr "Editer la Famille"
-
-#: members/templates/members/family_edit.html:17
-#: members/templates/members/modal_form.html:17
-msgid "Cancel"
-msgstr "Annuler"
 
 #: members/templates/members/import_members.html:3
 #: members/templates/members/import_members.html:6
@@ -323,17 +367,19 @@ msgid "Member Detail"
 msgstr "Détail d'un Membre"
 
 #: members/templates/members/member_detail.html:21
-#: members/templates/members/member_upsert.html:27
+#: members/templates/members/member_upsert.html:20
+#: members/tests/tests_member.py:198
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/member_detail.html:23
-#: members/templates/members/member_upsert.html:29
+#: members/templates/members/member_upsert.html:22
+#: members/tests/tests_member.py:198
 msgid "Managed member"
 msgstr "Membre géré"
 
 #: members/templates/members/member_detail.html:63
-#: members/templates/members/member_upsert.html:51
+#: members/templates/members/member_upsert.html:44
 #, python-format
 msgid "(Only %(name)s can manage this member)"
 msgstr "(Seul.e %(name)s peut gérer ce membre)"
@@ -342,102 +388,71 @@ msgstr "(Seul.e %(name)s peut gérer ce membre)"
 msgid "Edit Member"
 msgstr "Editer un Membre"
 
-#: members/templates/members/member_upsert.html:6
-#: members/templates/members/members.html:18
-msgid "Create Member"
-msgstr "Créer un Membre"
-
-#: members/templates/members/member_upsert.html:7
-#: members/templates/members/registration_invite_email.html:42
-msgid "Sign up"
-msgstr "S'enregistrer"
-
-#: members/templates/members/member_upsert.html:8
-msgid "My Profile"
-msgstr "Mon Profil"
-
-#: members/templates/members/member_upsert.html:9
-msgid "Update Member Details"
-msgstr "Modifier les détails d'un Membre"
-
-#: members/templates/members/member_upsert.html:10
-msgid "Member Details"
-msgstr "Détail d'un Membre"
-
-#: members/templates/members/member_upsert.html:11
-msgid "Unknown mode. Something went wrong!"
-msgstr "Mode inconnu. Une erreur est survenue!"
-
-#: members/templates/members/member_upsert.html:35
+#: members/templates/members/member_upsert.html:28
 msgid "Change Password"
 msgstr "Changer le mot de passe"
 
-#: members/templates/members/member_upsert.html:50
-#: members/templates/members/member_upsert.html:58
-msgid "Submit"
-msgstr "Soumettre"
-
-#: members/templates/members/member_upsert.html:60
+#: members/templates/members/member_upsert.html:53
 msgid "Activate Account"
 msgstr "Activer le compte"
 
-#: members/templates/members/member_upsert.html:67
+#: members/templates/members/member_upsert.html:60
 msgid "Lost your verification email?"
 msgstr "Mail de vérification perdu?"
 
-#: members/templates/members/member_upsert.html:69
+#: members/templates/members/member_upsert.html:62
 msgid "Request a new link"
 msgstr "Demander un nouveau lien"
 
-#: members/templates/members/member_upsert.html:76
+#: members/templates/members/member_upsert.html:69
 msgid "New Address"
 msgstr "Nouvelle Adresse"
 
-#: members/templates/members/member_upsert.html:77
+#: members/templates/members/member_upsert.html:70
 msgid "Create"
 msgstr "Créer"
 
-#: members/templates/members/member_upsert.html:84
+#: members/templates/members/member_upsert.html:77
 msgid "Change Address"
 msgstr "Modifier l'Adresse"
 
-#: members/templates/members/member_upsert.html:85
+#: members/templates/members/member_upsert.html:78
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: members/templates/members/member_upsert.html:92
+#: members/templates/members/member_upsert.html:85
 msgid "New Family"
 msgstr "Nouvelle Famille"
 
-#: members/templates/members/member_upsert.html:97
+#: members/templates/members/member_upsert.html:90
 msgid "New Parent Family"
 msgstr "Nouvell Famille Parente"
 
-#: members/templates/members/member_upsert.html:104
+#: members/templates/members/member_upsert.html:97
 msgid "Change Family"
 msgstr "Modifier la Famille"
 
-#: members/templates/members/member_upsert.html:118
+#: members/templates/members/member_upsert.html:111
 msgid "Address created"
 msgstr "Adresse créée"
 
-#: members/templates/members/member_upsert.html:122
+#: members/templates/members/member_upsert.html:115
 msgid "Family created"
 msgstr "Famille créée"
 
-#: members/templates/members/member_upsert.html:127
+#: members/templates/members/member_upsert.html:120
 msgid "Address updated"
 msgstr "Adresse mise à jour"
 
-#: members/templates/members/member_upsert.html:132
+#: members/templates/members/member_upsert.html:125
 msgid "Family updated"
 msgstr "Famille mise à jour"
 
-#: members/templates/members/member_upsert.html:137
+#: members/templates/members/member_upsert.html:130
 msgid "Parent family created"
 msgstr "Famille parente créée"
 
-#: members/templates/members/member_upsert.html:141
+#: members/templates/members/member_upsert.html:134
 msgid "This username is not available!"
 msgstr "Ce nom d'utilisateur est déjà pris!"
 
@@ -450,21 +465,25 @@ msgstr "Liste des Membres"
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
+#: members/templates/members/members.html:18 members/views/views_member.py:55
+msgid "Create Member"
+msgstr "Créer un Membre"
+
 #: members/templates/members/members.html:36
-#: members/templates/members/members_directory.html:40
+#: members/templates/members/members_directory.html:43
 msgid "No members found"
 msgstr "Pas de membre trouvé"
 
 #: members/templates/members/members_directory.html:3
-#: members/templates/members/members_directory.html:8
+#: members/templates/members/members_directory.html:9
 msgid "Members Directory"
 msgstr "Annuaire des Membres"
 
-#: members/templates/members/members_directory.html:13
+#: members/templates/members/members_directory.html:14
 msgid "Print as PDF"
 msgstr "Imprimer en PDF"
 
-#: members/templates/members/members_directory.html:23
+#: members/templates/members/members_directory.html:24
 #: members/views/views_directory.py:43
 msgid "Email"
 msgstr "Email"
@@ -484,6 +503,7 @@ msgid "Invitation for %(invited)s to register to %(site_name)s"
 msgstr "Invitation pour %(invited)s à s'inscrire sur %(site_name)s"
 
 #: members/templates/members/registration_invite_email.html:20
+#: members/tests/tests_register.py:34
 #, python-format
 msgid "Registration to the \"%(site_name)s\" site"
 msgstr "Enregistrement sur le site \"%(site_name)s\""
@@ -528,10 +548,15 @@ msgstr ""
 "Tu peux également répondre à ce mail pour contacter %(admin)s et vérifier "
 "avec lui qu'il t'a bien invité(e)..."
 
+#: members/templates/members/registration_invite_email.html:42
+#: members/views/views_registration.py:25
+msgid "Sign up"
+msgstr "S'enregistrer"
+
 #: members/templates/members/registration_request.html:3
 #: members/templates/members/registration_request.html:6
 msgid "Request Invitation"
-msgstr "Demande  d'nvitation"
+msgstr "Demande  d'invitation"
 
 #: members/templates/members/registration_request.html:9
 msgid ""
@@ -552,16 +577,19 @@ msgid "Invite me"
 msgstr "M'inviter"
 
 #: members/templates/members/registration_request_email.html:8
+#: members/tests/tests_register.py:97 members/views/views_registration.py:175
 #, python-format
 msgid "Registration request for %(site_name)s"
 msgstr "Demande d'enregistrement pour %(site_name)s"
 
 #: members/templates/members/registration_request_email.html:20
+#: members/tests/tests_register.py:102
 #, python-format
 msgid "Registration request for the \"%(site_name)s\" site"
 msgstr "Demande d'enregistrement pour le site \"%(site_name)s\""
 
 #: members/templates/members/registration_request_email.html:24
+#: members/tests/tests_register.py:103
 #, python-format
 msgid "%(name)s (%(email)s) requested to register to your cousinades site"
 msgstr ""
@@ -593,13 +621,30 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests.py:64
-msgid "This password is too common."
-msgstr "Ce mot de passe est trop commun."
+#: members/tests/tests_register.py:29 
+#: members/views/views_registration.py:125
+#, python-format
+msgid "You are invited to register on %(site_name)s"
+msgstr "Tu as été invité.e à créer ton compte sur %(site_name)s"
 
-#: members/tests.py:67 members/tests.py:70 members/tests.py:73
-msgid "This field is required."
-msgstr "Ce champs est obligatoire."
+#: members/tests/tests_register.py:126
+msgid "Invalid CAPTCHA"
+msgstr ""
+
+#: members/tests/tests_register.py:145 members/views/views_registration.py:84
+#, python-format
+msgid ""
+"Hello %(username)s, your account has been created! You will now receive an "
+"email to verify your email address. Click in the link inside the mail to "
+"finish the registration."
+msgstr ""
+"Hello %(username)s, ton compte a été créé! Tu vas maintenant recevoir un "
+"email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
+"terminer le processus de création de compte."
+
+#: members/tests/tests_register.py:153 members/views/views_registration.py:51
+msgid "Invalid link. Please contact the administrator."
+msgstr "Lien invalide. Merci de contacter l'administrateur."
 
 #: members/views/views_activate.py:50
 msgid "Error: Account already active"
@@ -619,95 +664,84 @@ msgstr ""
 "connecter."
 
 #: members/views/views_directory.py:59
-#, python-brace-format
-msgid "{settings.SITE_NAME} directory"
-msgstr "Dossier {settings.SITE_NAME}"
+#, python-format
+msgid "%(site_name)s directory"
+msgstr "Dossier %(site_name)s"
 
 #: members/views/views_directory.py:64
-#, python-brace-format
-msgid "Page {doc.page} - {title}"
-msgstr "Page {doc.page} - {title}"
+#, python-format
+msgid "Page %(doc_page)s - %(title)s"
+msgstr "Page %(doc_page)s - %(title)s"
 
 #: members/views/views_import.py:29
+#, python-format
 msgid ""
-"Unknwon column in CSV file: \"{fieldname}\". Valid fields are "
-"{ALL_FIELD_NAMES.values()}"
+"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
 msgstr ""
-"Colonne inconnue dans le fichier CSV : \"{fieldname}\". Les champs valides "
-"sont {ALL_FIELD_NAMES.values()}"
+"Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
+"sont %(all_names)s"
 
-#: members/views/views_import.py:32
+#: members/views/views_import.py:33
+#, python-format
 msgid ""
-"Missing column in CSV file: \"{fieldname}\". Mandatory fields are "
-"{MANDATORY_FIELD_NAMES.values()}"
+"Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
+"%(all_names)s"
 msgstr ""
-"Colonne manquante dans le fichier CSV: \"{fieldname}\". Les champs "
-"obligatoires sont {MANDATORY_FIELD_NAMES.values()}"
+"Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
+"obligatoires sont %(all_names)s"
 
-#: members/views/views_import.py:108
-msgid ""
-"Avatar not found: {avatar} for username {row[t('username')]}. Ignored..."
+#: members/views/views_import.py:110
+#, python-format
+msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
-"Avatar introuvable : {avatar} pour le nom d'utilisateur "
-"{row[t('username')]}. Ignoré..."
+"Avatar introuvable : %(avatar)s pour le nom d'utilisateur %(username)s. "
+"Ignoré..."
 
-#: members/views/views_import.py:134
-#, python-brace-format
-msgid "Uploaded file is too big ({size} MB)."
-msgstr "Le fichier téléchargé est trop volumineux ({size} Mo)."
+#: members/views/views_import.py:137
+#, python-format
+msgid "Uploaded file is too big (%(size)s MB)."
+msgstr "Le fichier téléchargé est trop volumineux (%(size)s Mo)."
 
-#: members/views/views_import.py:139
-#, python-brace-format
+#: members/views/views_import.py:142
+#, python-format
 msgid ""
-"CSV file uploaded: {nbLines} lines read, {nbMembers} members created or "
+"CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
 "updated"
 msgstr ""
-"Fichier CSV téléchargé : {nbLines} lignes lues, {nbMembers} membres créés ou "
-"mis à jour"
+"Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres "
+"créés ou mis à jour"
 
-#: members/views/views_import.py:141
-#, python-brace-format
-msgid "Warning: {error}"
-msgstr "Attention: {error}"
+#: members/views/views_import.py:145
+msgid "Warning: %(error)s"
+msgstr "Attention: %(error)s"
 
-#: members/views/views_member.py:76
+#: members/views/views_member.py:77
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: members/views/views_member.py:92
-msgid "Only {managing_member_name(member)} is allowed to modify this member."
-msgstr ""
-"Seul.e {managing_member_name(member)} est autorisé à modifier ce membre."
+#: members/views/views_member.py:84
+msgid "Update Member Details"
+msgstr "Modifier les détails d'un Membre"
 
-#: members/views/views_member.py:96
-#, python-brace-format
-msgid ""
-"Wrong modification mode: {self.mode} with user id different of the connected "
-"person one"
-msgstr ""
-"Mauvais mode de modification : {self.mode} avec un identifiant utilisateur "
-"différent de celui de la personne connectée"
+#: members/views/views_member.py:90 members/views/views_member.py:129
+msgid "My Profile"
+msgstr "Mon Profil"
 
-#: members/views/views_member.py:99
-#, python-brace-format
-msgid "Wrong modification mode: {self.mode}"
-msgstr "Mauvais mode de modification : {self.mode}"
-
-#: members/views/views_member.py:130
+#: members/views/views_member.py:112
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Un courriel de vérification a été envoyé pour valider ta nouvelle adresse "
 "électronique."
 
-#: members/views/views_member.py:136
+#: members/views/views_member.py:118
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
-#: members/views/views_registration.py:33
+#: members/views/views_registration.py:32
 msgid "You are already logged in"
 msgstr "Tu es déjà connecté"
 
-#: members/views/views_registration.py:41
+#: members/views/views_registration.py:40
 msgid ""
 "A member with the same account name or email address is already registered. "
 "Please sign in instead"
@@ -715,75 +749,36 @@ msgstr ""
 "Un membre avec le même nom d'utilisateur ou la même adresse mail est déjà "
 "enregistré. Connecte-toi plutôt."
 
-#: members/views/views_registration.py:45
-#, python-format
+#: members/views/views_registration.py:44
+#, fuzzy, python-format
+#| msgid ""
+#| "You are already registered but not active. Please contact %s to activate "
+#| "your account"
 msgid ""
-"You are already registered but not active. Please contact %s to activate "
-"your account"
+"You are already registered but not active. Please contact %(admin)s to "
+"activate your account"
 msgstr ""
 "Tu es déjà enregistré mais pas encore actif. Contacte %s pour activer ton "
 "compte."
 
-#: members/views/views_registration.py:52
-msgid "Invalid link. Please contact the administrator."
-msgstr "Lien invalide. Merci de contacter l'administrateur."
-
-#: members/views/views_registration.py:85
-#, python-format
-msgid ""
-"Hello %(username)s, your account has been created! You will now receive an "
-"email to verify your email address. Click in the link inside the mail to "
-"finish the registration."
-msgstr ""
-"Hello %(username)s, ton compte a été créé! Tu vas maintenant recevoir un "
-"email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
-"terminer le processus de création de compte."
-
-#: members/views/views_registration.py:100
+#: members/views/views_registration.py:99
 msgid "Only staff users can send invitations."
 msgstr "Seuls les members du staff peuvent envoyer des invitations."
 
-#: members/views/views_registration.py:111
+#: members/views/views_registration.py:110
 #: members/views/views_registration.py:155
 msgid "User with this email already exists."
 msgstr "Un utilisateur avec cette adresse mail existe déjà."
 
-#: members/views/views_registration.py:126
-#, python-brace-format
-msgid "You are invited to register on {site_name}"
-msgstr "Tu as été invité.e à créer ton compte sur {site_name}"
+#: members/views/views_registration.py:129
+#, python-format
+msgid "Invitation sent to %(email)s."
+msgstr "Invitation envoyée à %(email)s."
 
-#: members/views/views_registration.py:130
-#, python-brace-format
-msgid "Invitation sent to {email}."
-msgstr "Invitation envoyée à {email}."
-
-#: members/views/views_registration.py:176
-#, python-brace-format
-msgid "Registration request for {site_name}"
-msgstr "Demande d'enregistrement pour {site_name}"
-
-#: members/views/views_registration.py:180
+#: members/views/views_registration.py:179
 msgid "Registration request sent."
 msgstr "Demande d'enregistrement envoyée."
 
-#~ msgid "All possible columns:"
-#~ msgstr "Toutes les colonnes possibles :"
-
-#~ msgid "You can import members from a CSV file."
-#~ msgstr "Vous pouvez importer des membres à partir d'un fichier CSV."
-
-#~ msgid ""
-#~ "The CSV file containing the members to import. \n"
-#~ "The file must contain at least these columns: {MANDATORY_FIELD_NAMES."
-#~ "values()}.\n"
-#~ "All possible columns: {ALL_FIELD_NAMES.values()}.\n"
-#~ "Avatars must be uploaded manually first in the avatars folders of the "
-#~ "{settings.MEDIA_ROOT} folder."
-#~ msgstr ""
-#~ "Le fichier CSV contenant les membres à importer. \n"
-#~ "Le fichier doit contenir au moins ces colonnes : {MANDATORY_FIELD_NAMES."
-#~ "values()}. \n"
-#~ "Toutes les colonnes possibles : {ALL_FIELD_NAMES.values()}. \n"
-#~ "Les avatars doivent être téléchargés manuellement dans les dossiers "
-#~ "avatars du dossier {settings.MEDIA_ROOT}."
+#: members/views/views_registration.py:182
+msgid "Unable to send mail, please contact your administrator"
+msgstr "Impossible d'envoyer un mail. Merci de contacter l'administrateur."

@@ -13,7 +13,7 @@ from django.http import FileResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 
-from cousinsmatter import settings
+from django.conf import settings
 from ..models import Member
 
 LIST_STYLE = TableStyle(
@@ -56,12 +56,12 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
           case 'letter': pdf_size=letter
           case _: pdf_size = defaultPageSize
       
-      title=_(f'{settings.SITE_NAME} directory')
+      title=_('%(site_name)s directory')%{'site_name':settings.SITE_NAME}
 
       def add_footer(canvas, doc):
         canvas.saveState()
         canvas.setFont('Times-Roman',9)
-        canvas.drawString(inch, 0.75 * inch, _(f"Page {doc.page} - {title}"))
+        canvas.drawString(inch, 0.75 * inch, _("Page %(doc_page)s - %(title)s")%{'doc_page':doc.page, 'title':title})
         canvas.restoreState()
 
       def handle_first_page(canvas, doc):

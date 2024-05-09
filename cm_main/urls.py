@@ -16,9 +16,13 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
+from django.views.i18n import JavaScriptCatalog
 from . import views
+
+app_name = "cm_main"
 
 urlpatterns = [
 	path("", views.HomeView.as_view(), name="Home"),
+	path('jsi18n/cm_main', JavaScriptCatalog.as_view(packages=['cm_main']), name='javascript-catalog'),
 ]

@@ -1,7 +1,7 @@
 from typing import Any
 import logging, os, mimetypes, tempfile, zipfile
 from django.views import generic
-from cousinsmatter import settings
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from urllib.parse import urlunparse
 from wsgiref.util import FileWrapper

@@ -6,7 +6,7 @@ from datetime import datetime
 from io import BytesIO
 from django.forms import ValidationError
 from django.http import HttpRequest, HttpResponse
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
 		template_name = "galleries/bulk_upload.html"
 		form_class = BulkUploadPhotosForm
-		success_url = "/galleries" #reverse("galleries:galleries")
+		success_url = reverse_lazy("galleries:galleries")
 		galleries = {}
 		nbPhotos = 0
 

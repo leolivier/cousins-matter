@@ -2,8 +2,8 @@ import logging
 from enum import Enum
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
+from django.urls import reverse
 from django.views import generic
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
@@ -12,11 +12,9 @@ from ..models import Member
 from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
 from cousinsmatter.utils import redirect_to_referer
 
-from accounts.forms import AccountUpdateForm, AccountRegisterForm
+from accounts.forms import AccountUpdateForm
 
 logger = logging.getLogger(__name__)
-
-MEMBER_MODE = Enum('MEMBER_MODE_ENUMS', ['create_managed', 'signup', 'update_managed', 'profile', 'show_details'])
 
 def editable(request, member):
     return member.managing_account.id == request.user.id
@@ -39,6 +37,9 @@ class MemberDetailView(LoginRequiredMixin, generic.DetailView):
                 "managing_account_name": self.object.managing_account.username 
             }
 
+    def get_absolute_url(self):
+        return reverse("members:detail", kwargs={"pk": self.pk})
+
 class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
     """View used to create a managed member"""
     model = Member
@@ -51,7 +52,7 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
             "u_form": AccountUpdateForm(), 
             "addr_form": AddressUpdateForm(), 
             "family_form": FamilyUpdateForm(),
-            "mode": MEMBER_MODE.create_managed,
+            "title": _("Create Member"),
         })
     
     def post(self, request, *args, **kwargs):
@@ -80,31 +81,13 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
 
 class EditMemberView(LoginRequiredMixin, generic.UpdateView):
     template_name = "members/member_upsert.html"
-    mode = MEMBER_MODE.update_managed
-
-    def check_mode(self, request, member):
-        """checks the MEMBER_MODE vs the context"""
-        match self.mode:
-            case MEMBER_MODE.update_managed:
-                if member.account.id == request.user.id:
-                    self.mode = MEMBER_MODE.profile # force profile mode
-                elif member.managing_account.id != request.user.id:
-                    messages.error(request, _(f"Only {managing_member_name(member)} is allowed to modify this member."))
-                    return False
-            case MEMBER_MODE.profile:
-                if member.account.id != request.user.id:
-                    messages.error(request, _(f"Wrong modification mode: {self.mode} with user id different of the connected person one"))
-                    return False
-            case _:
-                messages.error(request, _(f"Wrong modification mode: {self.mode}"))
-                return False
-        
-        return True
+    title = _("Update Member Details")
 
     def get(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
-
-        if not self.check_mode(request, member): return redirect_to_referer(request)
+        # force profile mode
+        if member.account.id == request.user.id:
+                    self.title = _("My Profile") 
 
         return render(request, self.template_name, {
             "m_form": MemberUpdateForm(instance=member), 
@@ -112,19 +95,18 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
             "addr_form": AddressUpdateForm(instance=member.address), 
             "family_form": FamilyUpdateForm(instance=member.family),
             "pk":pk,
-            "mode": self.mode.name,
+            "title": self.title,
             "managing_account_name": managing_member_name(member)})
     
     def post(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
-        if not self.check_mode(request, member): return redirect_to_referer(request)
 
         # create a form instance and populate it with data from the request on existing member
         m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
         u_form = AccountUpdateForm(request.POST, instance=member.account)
 
         if u_form.is_valid():
-            if self.mode == MEMBER_MODE.profile and 'email' in u_form.changed_data:
+            if member.account.id == request.user.id and 'email' in u_form.changed_data and u_form.cleaned_data['email']:
                 # the member changed his own email, let's check it
                 send_verification_email(request, u_form)
                 messages.info(request, _("A verification email has been sent to validate your new email address."))
@@ -135,12 +117,16 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
                 member = m_form.save()
                 messages.success(request, _("Member successfully updated"))
                 return redirect("members:detail", member.id)
+            
+            else: logger.error(f"m_form error: {m_form.errors}")
+
+        else: logger.error(f"u_form error: {u_form.errors}")
 
         return redirect_to_referer(request)
 
 class EditProfileView(EditMemberView):
     """change the profile of the logged user (ie request.user.id = member.account.id)"""
-    mode = MEMBER_MODE.profile
+    title = _("My Profile")
 
     def get(self, request):
         member = Member.objects.get(account_id=request.user.id)

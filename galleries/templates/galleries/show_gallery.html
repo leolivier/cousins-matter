@@ -17,7 +17,12 @@
 					<br/>
 					{{ gallery.description }}
 					<br/>
-					<small>{{ gallery.photos.count }} {% translate photos %}</small>
+					<small>{% if gallery.photo_set.count > 0 %}
+					{{ gallery.photo_set.count }} {% translate "photos" %}
+					{% else %}
+					{% trans 'No photo' %}
+					{% endif %}
+				</small>
 				</p>
 			</a>
 			{% if gallery.children.count > 0 %}
@@ -34,7 +39,7 @@
 				{% if gallery.parent %}
 				{% with parent=gallery.parent %}
 				<div class="container">
-					<label class="has-text-centered">{% translate "Parent<br/>gallery" %}</label>
+					<label class="has-text-centered">{% translate "Parent gallery" %}</label>
 					<a href="{% url 'galleries:display' parent.id %}">
 						<figure class="image is-128x128">
 							<img src="{{parent.cover_url}}">

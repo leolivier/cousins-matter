@@ -17,7 +17,7 @@
                 {% blocktranslate with age=member.age|add:1 %}will turn {{ age }} tomorrow, happy birthday!{% endblocktranslate %}
             {% else %}
                 {# TODO: manage locale for birthdate format #}
-                {% blocktranslate with age=member.age|add:1 birthday=member.birthdate|date:"l d F" %}will turn {{ age }} on {{ birthday }}{% endblocktranslate %}
+                {% blocktranslate with age=member.age|add:1 birthday=member.next_birthday|date:"l d F" %}will turn {{ age }} on {{ birthday }}{% endblocktranslate %}
             {% endif %}
             {% if when == 0 or when == 1 %}
             <i class="icon"><span class="mdi mdi-cake-variant-outline"></span></i>

@@ -1,5 +1,6 @@
 import logging
 # from pprint import pprint
+from django.urls import reverse_lazy
 from django.views import generic
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
@@ -19,20 +20,29 @@ class AddressDetailView(LoginRequiredMixin, generic.DetailView):
 class AddressCreateView(LoginRequiredMixin, generic.CreateView):
    model = Address
    fields = "__all__"
+   
+class AddressUpdateView(LoginRequiredMixin, generic.UpdateView):
+   model = Address
+   fields = "__all__"
+
+class ModalAddressCreateView(LoginRequiredMixin, generic.CreateView):
+   model = Address
+   fields = "__all__"
    def post(self, request, *args, **kwargs):
       if is_ajax(request):
          # create a form instance from the request and save it
          form = AddressUpdateForm(request.POST)
+         # form = self.get_form()
          if form.is_valid():
             address = form.save()
-            return JsonResponse({"address_id": address.id, "address_str": address.str()}, status=200)
+            return JsonResponse({"address_id": address.id, "address_str": str(address)}, status=200)
          else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)
 
       return redirect_to_referer(request)
 
-class AddressUpdateView(LoginRequiredMixin, generic.UpdateView):
+class ModalAddressUpdateView(LoginRequiredMixin, generic.UpdateView):
    model = Address
    fields = "__all__"
    def post(self, request, *args, **kwargs):
@@ -40,9 +50,10 @@ class AddressUpdateView(LoginRequiredMixin, generic.UpdateView):
       if is_ajax(request):
          # create a form instance and populate it with data from the request on existing member (or None):
          form = AddressUpdateForm(request.POST, instance=address)
+         # form = self.get_form()
          if form.is_valid():
             address = form.save()
-            return JsonResponse({"address_id": address.id, "address_str": address.str()}, status=200)
+            return JsonResponse({"address_id": address.id, "address_str": str(address)}, status=200)
          else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)

@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
     const modal = $trigger.dataset.target;
     const $target = document.getElementById(modal);
-    console.log('adding openmodal to '+$target+' modal='+modal)
+    // console.log('adding openmodal to '+$target+' modal='+modal)
     $trigger.addEventListener('click', () => {
       openModal($target);
     });
@@ -109,7 +109,7 @@ $(document).ready(function() {
   $('.is-error').addClass('is-danger');
 });
 
-// function to add an jax checker to a field
+// function to add an ajax checker to a field
 // if response[response_field] is true, then error triggered
 function add_ajax_checker(id, validator_url, response_field, error_message) {
   $('#'+id).keyup(function () {

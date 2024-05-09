@@ -16,7 +16,12 @@
             <br/>
             {{ gallery.description }}
             <br/>
-            <small>{{ gallery.photos.count }} {% translate photos %}</small>
+            <small>{% if gallery.photo_set.count > 0 %}
+              {{ gallery.photo_set.count }} {% translate "photos" %}
+              {% else %}
+              {% trans 'No photo' %}
+              {% endif %}</small>
+          </p>
         </a>
         {% if recursive and gallery.children.count > 0 %}
           {% include_galleries gallery.children.all recursive=recursive %}

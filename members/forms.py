@@ -9,7 +9,7 @@ from captcha.fields import CaptchaField
 from .models import Member, Address, Family
 from .widgets import FieldLinkWrapper
 from .models import MANDATORY_FIELD_NAMES, ALL_FIELD_NAMES
-from cousinsmatter import settings
+from django.conf import settings
 
 class MemberUpdateForm(ModelForm):
   class Meta:

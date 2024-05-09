@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 09:32+0200\n"
+"POT-Creation-Date: 2024-04-28 16:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -26,11 +26,11 @@ msgstr "Les Cousins Comptent!"
 msgid "Home"
 msgstr "Accueil"
 
-#: cm_main/templates/cm_main/base.html:49
+#: cm_main/templates/cm_main/base.html:55
 msgid "This site proudly built using"
 msgstr "Ce site est créé fièrement avec"
 
-#: cm_main/templates/cm_main/base.html:51
+#: cm_main/templates/cm_main/base.html:57
 msgid "The source code is licensed"
 msgstr "Le code source est sous licence"
 

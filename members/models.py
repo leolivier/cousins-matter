@@ -1,5 +1,5 @@
 from django.db import models
-import datetime, os
+import datetime
 from PIL import Image, ImageOps
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -7,7 +7,7 @@ from django.utils.translation import pgettext_lazy
 from django.contrib.auth.models import User
 from django.urls import reverse
 import logging
-from cousinsmatter import settings
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,6 @@ MEMBER_FIELD_NAMES = {
 
 MANDATORY_FIELD_NAMES = ACCOUNT_FIELD_NAMES | { 
   'birthdate': pgettext_lazy('CSV Field', 'birthdate'), 
-  'phone': pgettext_lazy('CSV Field', 'phone')
   }
 
 ALL_FIELD_NAMES = ACCOUNT_FIELD_NAMES | MEMBER_FIELD_NAMES | ADDRESS_FIELD_NAMES
@@ -62,7 +61,7 @@ class Family(models.Model):
      return self.name
 
   def get_absolute_url(self):
-    return reverse("members:family", kwargs={"pk": self.pk})
+    return reverse("members:family_detail", kwargs={"pk": self.pk})
 
 class Address(models.Model):
   
@@ -83,6 +82,9 @@ class Address(models.Model):
 {self.zip_code}, {self.city}
 {self.country}
 """
+  def get_absolute_url(self):
+    return reverse("members:address_detail", kwargs={"pk": self.pk})
+
   class Meta:
     verbose_name = _('address')
     verbose_name_plural = _('addresses')
@@ -103,7 +105,7 @@ class Member(models.Model):
 
     phone = models.CharField(_('Phone'), max_length=32, blank=True)
 
-    birthdate = models.DateField(_('Birthdate'), null=True, blank=False)
+    birthdate = models.DateField(_('Birthdate'), help_text=_("Click on the month name or the year to change them quickly"), null=True, blank=False)
     
     website = models.URLField(_('Website'), blank=True)
 
@@ -144,7 +146,7 @@ class Member(models.Model):
       return self.account.username if self.account else ''
     
     def avatar_url(self):
-      return self.avatar.url if self.avatar else os.path.join('/', settings.STATIC_URL, 'members/default-avatar.jpg')
+      return self.avatar.url if self.avatar else settings.DEFAULT_AVATAR_URL
 
     def __str__(self) -> str:
       return self.get_full_name()

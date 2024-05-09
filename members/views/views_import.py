@@ -9,12 +9,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from ..models import Member, Family
+from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm
 from cousinsmatter.utils import redirect_to_referer
 from django.conf import settings
 
-from ..models import ALL_FIELD_NAMES, MANDATORY_FIELD_NAMES, ACCOUNT_FIELD_NAMES, MEMBER_FIELD_NAMES
+from ..models import ALL_FIELD_NAMES, MANDATORY_FIELD_NAMES, ACCOUNT_FIELD_NAMES, MEMBER_FIELD_NAMES, ADDRESS_FIELD_NAMES
 
 logger = logging.getLogger(__name__)
 
@@ -26,12 +26,12 @@ def t(field): return ALL_FIELD_NAMES[field]
 def check_fields(fieldnames):
 	for fieldname in fieldnames:
 		if fieldname not in ALL_FIELD_NAMES.values():
-			raise ValidationError(_('Unknwon column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s')%
-												 {'fieldname': fieldname, 'all_names': ALL_FIELD_NAMES.values()})
+			raise ValidationError(_('Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s')%
+												 {'fieldname': fieldname, 'all_names': ', '.join([str(s) for s in ALL_FIELD_NAMES.values()])})
 	for fieldname in MANDATORY_FIELD_NAMES.values():
 		if fieldname not in fieldnames:
 			raise ValidationError(_('Missing column in CSV file: "%(fieldname)s". Mandatory fields are %(all_names)s')%
-												 {'fieldname': fieldname, 'all_names': MANDATORY_FIELD_NAMES.values()})
+												 {'fieldname': fieldname, 'all_names': ', '.join([str(s) for s in MANDATORY_FIELD_NAMES.values()])})
 
 	return True
 
@@ -40,7 +40,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 	form_class = CSVImportMembersForm
 	success_url = reverse_lazy("members:members")
 	
-	def get_context_data(self):
+	def get_context_data(self, *args, **kwargs):
 		optional_fields = { str(s) for s in ALL_FIELD_NAMES.values() } - { str(s) for s in MANDATORY_FIELD_NAMES.values() }
 		return super().get_context_data() | { 
 			'mandatory_fields': MANDATORY_FIELD_NAMES.values(),
@@ -53,7 +53,6 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 			nbLines = 0
 			errors = []
 			csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")
-		# with csv_file.open() as csvf:
 			reader = csv.DictReader(csvf)
 			check_fields(reader.fieldnames) 
 			random.seed()
@@ -95,8 +94,29 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 							member = member.first()
 							break
 
-				# update member
+				address = {}
 				changed = False
+				for field in ADDRESS_FIELD_NAMES:
+					trfield = t(field)
+					if trfield in row: address[field] = row[trfield] 
+				# if len(address) == 5:   #we don't care if the address is incomplete 
+				if len(address) > 0:
+					found = Address.objects.filter(**address).first()
+					if found:
+						if member.address != found:
+							member.address = found
+							changed = True
+					else:
+						address = Address.objects.create(**address)
+						address.save()
+						member.address = address
+						changed = True
+
+					# if trfield in row and row[trfield] and member.address.__dict__[field] != row[trfield]:
+					# 	setattr(member.address, field, row[trfield])
+					# 	changed = True
+
+				# update member
 				for field in MEMBER_FIELD_NAMES:
 					trfield = t(field)
 					if trfield in row and row[trfield] and member.__dict__[field] != row[trfield]:  # TODO: What other checks?
@@ -132,6 +152,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 		form = CSVImportMembersForm(request.POST, request.FILES)
 		if form.is_valid():
 			csv_file = request.FILES["csv_file"]
+			# TODO: file size is unclear here: what is the real limit?
 			if csv_file.multiple_chunks():
 				size = math.floor(csv_file.size*100/(1024*1024))/100
 				messages.error(request,_("Uploaded file is too big (%(size)s MB).")%{'size': size})

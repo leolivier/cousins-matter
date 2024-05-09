@@ -37,7 +37,6 @@ MEMBER_FIELD_NAMES = {
 
 MANDATORY_FIELD_NAMES = ACCOUNT_FIELD_NAMES | { 
   'birthdate': pgettext_lazy('CSV Field', 'birthdate'), 
-  'phone': pgettext_lazy('CSV Field', 'phone')
   }
 
 ALL_FIELD_NAMES = ACCOUNT_FIELD_NAMES | MEMBER_FIELD_NAMES | ADDRESS_FIELD_NAMES

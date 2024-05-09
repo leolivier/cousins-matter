@@ -97,7 +97,7 @@ msgstr "prenom"
 #: members/models.py:27
 msgctxt "CSV Field"
 msgid "last_name"
-msgstr "nom_de_famille"
+msgstr "nom"
 
 #: members/models.py:31 members/models.py:39
 msgctxt "CSV Field"
@@ -676,7 +676,7 @@ msgstr "Page %(doc_page)s - %(title)s"
 #: members/views/views_import.py:29
 #, python-format
 msgid ""
-"Unknwon column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
+"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
 msgstr ""
 "Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
 "sont %(all_names)s"

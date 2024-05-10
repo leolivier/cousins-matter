@@ -186,4 +186,4 @@ class Member(models.Model):
           img.thumbnail(output_size)
           img = ImageOps.exif_transpose(img)  # avoid image rotating
           img.save(self.avatar.path)
-          logger.info(f"Resized and saved avatar for {self.get_full_name()} in {self.avatar.path}, size: {img.size}")
+          logger.debug(f"Resized and saved avatar for {self.get_full_name()} in {self.avatar.path}, size: {img.size}")

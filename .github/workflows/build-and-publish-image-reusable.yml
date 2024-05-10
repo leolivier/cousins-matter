@@ -137,8 +137,11 @@ jobs:
           labels: ${{ inputs.labels || steps.meta.outputs.labels }}
 
       - name: Test Docker Image
-        uses: addnab/docker-run-action@v3
-        with:
-          image: ${{ inputs.registry }}/${{ inputs.image}}:${{ inputs.tags || steps.meta.outputs.tags }}
-          run: python manage.py test --parallel
-    
+        env:
+          IMAGE: ${{ inputs.registry }}/${{ inputs.image}}:${{ inputs.tags || steps.meta.outputs.tags }}
+          COMMAND: python manage.py test --parallel
+          SOCKS_MOUNT: -v "/var/run/docker.sock":"/var/run/docker.sock"
+          MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
+        run: docker run --name ${{ inputs.image}} -p 8000:8000 $SOCKS_MOUNT $MOUNTS $IMAGE  -c "$COMMAND"
+
+

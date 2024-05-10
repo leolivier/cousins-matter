@@ -5,6 +5,6 @@ on: [push]
 
 jobs:
   test-build-and-push:
-    uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main
+    uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@test-image
     with:
       push: true

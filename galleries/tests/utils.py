@@ -34,7 +34,7 @@ class GalleryBaseTestCase(LoggedAccountTestCase):
 		# print("deleted test media files")
 		for gallery in Gallery.objects.filter(parent=None): gallery.delete()
 		if Photo.objects.all().count()>0:
-			print("destroying remaining photos")
+			# print("destroying remaining photos")
 			for photo in Photo.objects.all(): photo.delete()
 		super().tearDown()
 

@@ -138,13 +138,11 @@ jobs:
 
       - name: Test Docker Image
         env:
-          IMAGE: ${{ inputs.tags || steps.meta.outputs.tags }}
-          COMMAND: python manage.py test --parallel
           SOCKS_MOUNT: -v "/var/run/docker.sock":"/var/run/docker.sock"
           MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
         run: |
           ls -l /var/run/docker.sock
           mkdir -p ./data ./media
-          docker run --name ${{ inputs.image}} -p 8000:8000 $MOUNTS $IMAGE $COMMAND
+          docker run $MOUNTS ${{ inputs.tags || steps.meta.outputs.tags }} python manage.py test --parallel
 
 

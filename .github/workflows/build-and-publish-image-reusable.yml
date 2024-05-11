@@ -71,10 +71,10 @@ jobs:
     steps:
       - name: trace event trigger
         if: ${{ inputs.trace_event }}
+        env:
+          EVENT: ${{ inputs.trace_event }}
         run: |
-          echo "==============================================================================================="
-          echo "Triggering Event: ${{ inputs.trace_event }}"
-          echo "==============================================================================================="
+          echo $EVENT
 
       - name: Checkout
         uses: actions/checkout@v4

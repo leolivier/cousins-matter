@@ -8,3 +8,4 @@ jobs:
     uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main
     with:
       push: true
+      trace_event: ${{ toJson(github.event) }}

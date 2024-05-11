@@ -8,6 +8,11 @@ on:
 
     inputs:
 
+      trace_event:
+        description: 'Trace event which started the workflow run'
+        required: false
+        type: string
+
       push:
         description: 'Should the built image be pushed to the registry?'
         required: true
@@ -64,6 +69,13 @@ jobs:
     permissions:
       packages: write
     steps:
+      - name: trace event trigger
+        if: ${{ inputs.trace_event }}
+        run: |
+          echo "==============================================================================================="
+          echo "Triggering Event: ${{ inputs.trace_event }}"
+          echo "==============================================================================================="
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -146,6 +158,7 @@ jobs:
         run: |
           mkdir -p ./data ./media
           FIRST_TAG=$(echo "$TAGS" | cut -d ' ' -f 1)
+          echo "Tested image is $FIRST_TAG"
           docker run $MOUNTS $FIRST_TAG python manage.py test --parallel
 
 

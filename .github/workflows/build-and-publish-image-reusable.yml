@@ -144,8 +144,8 @@ jobs:
           MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
           TAGS: ${{ inputs.tags || steps.meta.outputs.tags }}
         run: |
-          ls -l /var/run/docker.sock
           mkdir -p ./data ./media
-          docker run $MOUNTS $TAGS[0] python manage.py test --parallel
+          FIRST_TAG=$(echo "$TAGS" | cut -d ' ' -f 1)
+          docker run $MOUNTS $FIRS_TAGS python manage.py test --parallel
 
 

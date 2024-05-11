@@ -1,11 +1,13 @@
-# creates a multiplatform image of cousins matter and push it to ghcr.io for each new release
+# creates a multiplatform image of cousins matter and push it to ghcr.io for each new published release
 name: Release build
 
-on: [release]
+on:
+  release:
+    types: [published]
 
 jobs:
   build-and-publish:
     uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main
     with:
-      push: ${{ github.event.action == 'published' }}
+      push: true
       trace_event: ${{ toJson(github.event) }}

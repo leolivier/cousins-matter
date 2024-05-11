@@ -84,7 +84,7 @@ jobs:
           # stop the build if there are Python syntax errors or undefined names
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --indent-size 2 --exclude migrations
 
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0.3
@@ -135,16 +135,16 @@ jobs:
           push: ${{ inputs.push }}
           tags: ${{ inputs.tags || steps.meta.outputs.tags }}
           labels: ${{ inputs.labels || steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Test Docker Image
         env:
-          IMAGE: ${{ inputs.tags || steps.meta.outputs.tags }}
-          COMMAND: python manage.py test --parallel
           SOCKS_MOUNT: -v "/var/run/docker.sock":"/var/run/docker.sock"
           MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
         run: |
           ls -l /var/run/docker.sock
           mkdir -p ./data ./media
-          docker run --name ${{ inputs.image}} -p 8000:8000 $MOUNTS $IMAGE $COMMAND
+          docker run $MOUNTS ${{ inputs.tags || steps.meta.outputs.tags }} python manage.py test --parallel
 
 

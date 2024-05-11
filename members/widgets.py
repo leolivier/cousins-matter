@@ -1,9 +1,11 @@
 from typing import Any
 from django.forms import Widget
 
+
 class FieldLinkWrapper(Widget):
   template_name = 'widgets/wrap_create_link.html'
-  def __init__(self, widget, 
+
+  def __init__(self, widget,
                can_add_related=False,
                can_change_related=False,
                **kwargs):
@@ -32,4 +34,3 @@ class FieldLinkWrapper(Widget):
 
   def id_for_label(self, id_):
       return self.widget.id_for_label(id_)
-

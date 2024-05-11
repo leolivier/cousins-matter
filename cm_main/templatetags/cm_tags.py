@@ -15,11 +15,7 @@ class ViewNode(Node):
         self.kwargs = kwargs
         self.init = False
 
-    def render(self, context):
-        if 'request' not in context:
-            raise TemplateSyntaxError("No request has been made.")
-
-        url_or_view = Variable(self.url_or_view).resolve(context)
+    def _resolve_args(self, context):
         # for an unknown reason, the first time, the args are not resolved
         if self.init:
             resolved_args = self.args
@@ -29,10 +25,18 @@ class ViewNode(Node):
             for arg in self.args:
                 resolved_args.append(Variable(arg).resolve(context))
             resolved_kwargs = {} if self.kwargs else None
-            
+
             for k, v in self.kwargs.items():
                 resolved_kwargs[k] = Variable(v).resolve(context)
             self.init = True
+        return resolved_args, resolved_kwargs
+
+    def render(self, context):
+        if 'request' not in context:
+            raise TemplateSyntaxError("No request has been made.")
+
+        url_or_view = Variable(self.url_or_view).resolve(context)
+        resolved_args, resolved_kwargs = self._resolve_args(context)
         try:
             view, args, kwargs = resolve(reverse(url_or_view, args=resolved_args, kwargs=resolved_kwargs))
         except NoReverseMatch:
@@ -45,10 +49,11 @@ class ViewNode(Node):
                 return (view(context['request'], *self.args, **self.kwargs)
                         .rendered_content)
             raise "%r is not callable" % view
-        except:
+        except Exception:
             if settings.DEBUG:
                 raise
         return None
+
 
 @register.tag(name='cm_tags')
 def do_view(parser, token):
@@ -63,6 +68,7 @@ def do_view(parser, token):
     # print(kwargs)
 
     return ViewNode(tokens[1], args, kwargs)
+
 
 @register.simple_tag
 def title(title_s):

@@ -24,7 +24,7 @@ from django.views.generic.base import TemplateView
 from cm_main.views import download_protected_media
 
 # from django.utils.translation import gettext_lazy as _
- 
+
 # admin.site.index_title = _('My Index Title')
 # admin.site.site_header = _('My Site Administration')
 # admin.site.site_title = _('My Site Management')
@@ -37,17 +37,22 @@ urlpatterns = [
     path("galleries/", include("galleries.urls")),
     path("polls/", include("polls.urls")),
     path("admin/", admin.site.urls),
-    #path("ckeditor/", include("ckeditor_uploader.urls")),
-    path('password/change/', auth_views.PasswordChangeView.as_view(template_name='accounts/password_change.html'), name='change_password'),
-    path('password-reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'), name='password_reset_confirm'),
-    path('password/reset', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html'), name='reset_password'),
-    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'), name='password_reset_done'),
-	path('password-reset/completed/', auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'), name='password_reset_complete'),
-    path('verification/', include('verify_email.urls')),	
+    # path("ckeditor/", include("ckeditor_uploader.urls")),
+    path('password/change/',
+         auth_views.PasswordChangeView.as_view(template_name='accounts/password_change.html'), name='change_password'),
+    path('password-reset/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'),
+         name='password_reset_confirm'),
+    path('password/reset',
+         auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html'), name='reset_password'),
+    path('password-reset/done/',
+         auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'),
+         name='password_reset_done'),
+    path('password-reset/completed/',
+         auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'),
+         name='password_reset_complete'),
+    path('verification/', include('verify_email.urls')),
     path("robots.txt", TemplateView.as_view(template_name="cm_main/robots.txt", content_type="text/plain")),
-	path('captcha/', include('captcha.urls')),
-	path('protected_media/<path:media>', download_protected_media, name="get_protected_media"),
+    path('captcha/', include('captcha.urls')),
+    path('protected_media/<path:media>', download_protected_media, name="get_protected_media"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-

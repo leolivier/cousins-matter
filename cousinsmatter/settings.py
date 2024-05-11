@@ -17,8 +17,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # load keys from .env
 env = environ.Env(
-	# set casting, default value
-	DEBUG=(bool, False)
+  # set casting, default value
+  DEBUG=(bool, False)
 )
 environ.Env.read_env(BASE_DIR / '.env')
 
@@ -37,11 +37,11 @@ LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-US')
 
 TIME_ZONE = env.str('TIME_ZONE', default='Europe/Paris')
 
-HOME_TITLE=env.str('HOME_TITLE', default='Cousins Matter!')
-HOME_CONTENT_UNSIGNED=env.str('HOME_CONTENT_UNSIGNED', multiline=True, default="")
-HOME_CONTENT_SIGNED=env.str('HOME_CONTENT_SIGNED', multiline=True, default="")
-HOME_LOGO=env.url('HOME_LOGO', default='/static/cm_main/images/cousinsmatter.jpg')
-SITE_COPYRIGHT=env.str('SITE_COPYRIGHT', default='Site Copyright © 2024 Cousins Matter. All rights reserved.')
+HOME_TITLE = env.str('HOME_TITLE', default='Cousins Matter!')
+HOME_CONTENT_UNSIGNED = env.str('HOME_CONTENT_UNSIGNED', multiline=True, default="")
+HOME_CONTENT_SIGNED = env.str('HOME_CONTENT_SIGNED', multiline=True, default="")
+HOME_LOGO = env.url('HOME_LOGO', default='/static/cm_main/images/cousinsmatter.jpg')
+SITE_COPYRIGHT = env.str('SITE_COPYRIGHT', default='Site Copyright © 2024 Cousins Matter. All rights reserved.')
 
 # Email properties
 EMAIL_HOST = env.str('EMAIL_HOST')
@@ -62,52 +62,52 @@ BIRTHDAY_DAYS = env.int('BIRTHDAY_DAYS', default=50)
 # Application definition
 
 INSTALLED_APPS = [
-	'daphne',
-	'accounts.apps.AccountsConfig',
-	'cm_main.apps.CmMainConfig',
-	'members.apps.MembersConfig',
-	'galleries.apps.GalleriesConfig',
-	'polls.apps.PollsConfig',
-	'crispy_forms',
-	'crispy_bulma',
-	'django_icons',
-	'verify_email.apps.VerifyEmailConfig',
-	'django.contrib.admin',
-	'django.contrib.auth',
-	'django.contrib.contenttypes',
-	'django.contrib.sessions',
-	'django.contrib.messages',
-	'django.contrib.staticfiles',
-	'captcha',
+  'daphne',
+  'accounts.apps.AccountsConfig',
+  'cm_main.apps.CmMainConfig',
+  'members.apps.MembersConfig',
+  'galleries.apps.GalleriesConfig',
+  'polls.apps.PollsConfig',
+  'crispy_forms',
+  'crispy_bulma',
+  'django_icons',
+  'verify_email.apps.VerifyEmailConfig',
+  'django.contrib.admin',
+  'django.contrib.auth',
+  'django.contrib.contenttypes',
+  'django.contrib.sessions',
+  'django.contrib.messages',
+  'django.contrib.staticfiles',
+  'captcha',
 ]
 
 MIDDLEWARE = [
-	'django.middleware.security.SecurityMiddleware',
-	'django.contrib.sessions.middleware.SessionMiddleware',
-	'django.middleware.common.CommonMiddleware',
-	'django.middleware.csrf.CsrfViewMiddleware',
-	'django.contrib.auth.middleware.AuthenticationMiddleware',
-	'django.contrib.messages.middleware.MessageMiddleware',
-	'django.middleware.clickjacking.XFrameOptionsMiddleware',
+  'django.middleware.security.SecurityMiddleware',
+  'django.contrib.sessions.middleware.SessionMiddleware',
+  'django.middleware.common.CommonMiddleware',
+  'django.middleware.csrf.CsrfViewMiddleware',
+  'django.contrib.auth.middleware.AuthenticationMiddleware',
+  'django.contrib.messages.middleware.MessageMiddleware',
+  'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'cousinsmatter.urls'
 
 TEMPLATES = [
-	{
-		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [],
-		'APP_DIRS': True,
-		'OPTIONS': {
-			'context_processors': [
-			'django.template.context_processors.debug',
-			'django.template.context_processors.request',
-			'django.contrib.auth.context_processors.auth',
-			'django.contrib.messages.context_processors.messages',
-			'django.template.context_processors.media',
-			],
-		},
-	},
+  {
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [],
+    'APP_DIRS': True,
+    'OPTIONS': {
+      'context_processors': [
+        'django.template.context_processors.debug',
+        'django.template.context_processors.request',
+        'django.contrib.auth.context_processors.auth',
+        'django.contrib.messages.context_processors.messages',
+        'django.template.context_processors.media',
+      ],
+    },
+  },
 ]
 
 WSGI_APPLICATION = 'cousinsmatter.wsgi.application'
@@ -118,10 +118,10 @@ ASGI_APPLICATION = "cousinsmatter.asgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': BASE_DIR / 'data' / 'db.sqlite3',
-	}
+  'default': {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'data' / 'db.sqlite3',
+  }
 }
 
 
@@ -129,18 +129,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-	{
-		'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-	},
-	{
-		'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-	},
-	{
-		'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-	},
-	{
-		'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-	},
+  {
+    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+  },
+  {
+    'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+  },
+  {
+    'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+  },
+  {
+    'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+  },
 ]
 
 
@@ -164,9 +164,9 @@ STATIC_URL = 'static/'
 MEDIA_REL = 'media'
 MEDIA_ROOT = BASE_DIR / MEDIA_REL
 if DEBUG:
-	MEDIA_URL = 'media/'
+  MEDIA_URL = 'media/'
 else:
-	MEDIA_URL = 'protected_media/'
+  MEDIA_URL = 'protected_media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -179,44 +179,44 @@ CRISPY_TEMPLATE_PACK = 'bulma'
 LOGIN_REDIRECT_URL = '/'
 # LOGIN_URL = '/accounts/login'
 LOGIN_URL = 'accounts:login'
-#LOGOUT_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = '/'
 
 DJANGO_ICONS = {
-	"ICONS": {
-		"account": {"name": "mdi mdi-account"},
-	},
+  "ICONS": {
+    "account": {"name": "mdi mdi-account"},
+  },
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 LOGGING = {
-	"version": 1,
-	"disable_existing_loggers": False,
-	"handlers": {
-		"console": {
-			"class": "logging.StreamHandler",
-		},
-	"file": {
-			"class": "logging.FileHandler",
-			"filename": "general.log",
-		},
-	},
-	"root": {
-		"handlers": ["console"],
-		"level": "WARNING",
-	},
-	"loggers": {
-		"django": {
-			"handlers": ["console", "file"],
-			"level": DJANGO_LOG_LEVEL,
-			"propagate": False,
-		},
-		"members": {
-			"handlers": ["console", "file"],
-			"level": CM_LOG_LEVEL,
-			"propagate": False,
-		},
-	},
+  "version": 1,
+  "disable_existing_loggers": False,
+  "handlers": {
+    "console": {
+      "class": "logging.StreamHandler",
+    },
+    "file": {
+      "class": "logging.FileHandler",
+      "filename": "general.log",
+    },
+  },
+  "root": {
+    "handlers": ["console"],
+    "level": "WARNING",
+  },
+  "loggers": {
+    "django": {
+      "handlers": ["console", "file"],
+      "level": DJANGO_LOG_LEVEL,
+      "propagate": False,
+    },
+    "members": {
+      "handlers": ["console", "file"],
+      "level": CM_LOG_LEVEL,
+      "propagate": False,
+    },
+  },
 }
 
 AVATARS_DIR = 'avatars'
@@ -229,11 +229,11 @@ VERIFICATION_FAILED_TEMPLATE = "accounts/email_verification_failed.html"
 REQUEST_NEW_EMAIL_TEMPLATE = "accounts/request_new_email.html"
 HTML_MESSAGE_TEMPLATE = "accounts/email_verification_msg.html"
 
-CAPTCHA_LENGTH=6
+CAPTCHA_LENGTH = 6
 
-PDF_SIZE=env.str('PDF_SIZE', 'A4')
+PDF_SIZE = env.str('PDF_SIZE', 'A4')
 
 GALLERIES_DIR = 'galleries'
-GALLERIES_THUMBNAIL_SIZE=300
+GALLERIES_THUMBNAIL_SIZE = 300
 GALLERIES_MAX_LOAD_SIZE = env.int('MAX_PHOTO_FILE_SIZE', 1024 * 1024 * 5)
 DEFAULT_GALLERY_COVER_URL = '/static/galleries/default-gallery-cover.jpg'

@@ -6,10 +6,6 @@ from django.utils import timezone
 from .models import Question
 
 
-def create_question(question_text="Past question.", days=-30):
-  pass
-
-
 class QuestionModelTests(TestCase):
   def test_was_published_recently_with_future_question(self):
     """
@@ -38,7 +34,8 @@ class QuestionModelTests(TestCase):
     recent_question = Question(pub_date=time)
     self.assertIs(recent_question.was_published_recently(), True)
 
-  def create_question(question_text, days):
+
+def create_question(question_text, days):
     """
     Create a question with the given `question_text` and published the
     given number of `days` offset to now (negative for questions published

@@ -146,6 +146,6 @@ jobs:
         run: |
           mkdir -p ./data ./media
           FIRST_TAG=$(echo "$TAGS" | cut -d ' ' -f 1)
-          docker run $MOUNTS $FIRS_TAGS python manage.py test --parallel
+          docker run $MOUNTS $FIRST_TAG python manage.py test --parallel
 
 

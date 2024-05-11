@@ -1,5 +1,5 @@
-# creates a multiplatform image of cousins matter and push it to ghcr.io for each new release
-name: Release build
+# creates a multiplatform image of cousins matter and push it to ghcr.io for each new push
+name: Push build
 
 on: [push]
 

@@ -142,9 +142,10 @@ jobs:
         env:
           SOCKS_MOUNT: -v "/var/run/docker.sock":"/var/run/docker.sock"
           MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
+          TAGS: ${{ inputs.tags || steps.meta.outputs.tags }}
         run: |
           ls -l /var/run/docker.sock
           mkdir -p ./data ./media
-          docker run $MOUNTS ${{ inputs.tags || steps.meta.outputs.tags }} python manage.py test --parallel
+          docker run $MOUNTS $TAGS[0] python manage.py test --parallel
 
 

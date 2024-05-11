@@ -1,5 +1,4 @@
 import logging
-from enum import Enum
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.urls import reverse
@@ -11,50 +10,54 @@ from verify_email.email_handler import send_verification_email
 from ..models import Member
 from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
 from cousinsmatter.utils import redirect_to_referer
-
 from accounts.forms import AccountUpdateForm
 
 logger = logging.getLogger(__name__)
 
+
 def editable(request, member):
     return member.managing_account.id == request.user.id
 
+
 def managing_member_name(member):
     return Member.objects.get(account__id=member.managing_account.id).get_full_name() if member else None
+
 
 class MembersView(LoginRequiredMixin, generic.ListView):
     template_name = "members/members.html"
     paginate_by = 100
     model = Member
 
+
 class MemberDetailView(LoginRequiredMixin, generic.DetailView):
     model = Member
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | \
-            { 
+            {
                 "can_edit": editable(self.request, self.object),
-                "managing_account_name": self.object.managing_account.username 
+                "managing_account_name": self.object.managing_account.username
             }
 
     def get_absolute_url(self):
         return reverse("members:detail", kwargs={"pk": self.pk})
 
+
 class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
     """View used to create a managed member"""
     model = Member
-    
+
     template_name = "members/member_upsert.html"
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {
-            "m_form": MemberUpdateForm(), 
-            "u_form": AccountUpdateForm(), 
-            "addr_form": AddressUpdateForm(), 
+            "m_form": MemberUpdateForm(),
+            "u_form": AccountUpdateForm(),
+            "addr_form": AddressUpdateForm(),
             "family_form": FamilyUpdateForm(),
             "title": _("Create Member"),
         })
-    
+
     def post(self, request, *args, **kwargs):
         # process the account first
         u_form = AccountUpdateForm(request.POST)
@@ -79,6 +82,7 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
 
         return redirect_to_referer(request)
 
+
 class EditMemberView(LoginRequiredMixin, generic.UpdateView):
     template_name = "members/member_upsert.html"
     title = _("Update Member Details")
@@ -87,17 +91,17 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
         member = get_object_or_404(Member, pk=pk)
         # force profile mode
         if member.account.id == request.user.id:
-                    self.title = _("My Profile") 
+            self.title = _("My Profile")
 
         return render(request, self.template_name, {
-            "m_form": MemberUpdateForm(instance=member), 
-            "u_form": AccountUpdateForm(instance=member.account), 
-            "addr_form": AddressUpdateForm(instance=member.address), 
+            "m_form": MemberUpdateForm(instance=member),
+            "u_form": AccountUpdateForm(instance=member.account),
+            "addr_form": AddressUpdateForm(instance=member.address),
             "family_form": FamilyUpdateForm(instance=member.family),
-            "pk":pk,
+            "pk": pk,
             "title": self.title,
             "managing_account_name": managing_member_name(member)})
-    
+
     def post(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
 
@@ -117,12 +121,15 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
                 member = m_form.save()
                 messages.success(request, _("Member successfully updated"))
                 return redirect("members:detail", member.id)
-            
-            else: logger.error(f"m_form error: {m_form.errors}")
 
-        else: logger.error(f"u_form error: {u_form.errors}")
+            else:
+                logger.error(f"m_form error: {m_form.errors}")
+
+        else:
+            logger.error(f"u_form error: {u_form.errors}")
 
         return redirect_to_referer(request)
+
 
 class EditProfileView(EditMemberView):
     """change the profile of the logged user (ie request.user.id = member.account.id)"""
@@ -131,8 +138,7 @@ class EditProfileView(EditMemberView):
     def get(self, request):
         member = Member.objects.get(account_id=request.user.id)
         return super().get(request, member.id)
-    
+
     def post(self, request):
         member = Member.objects.get(account_id=request.user.id)
         return super().post(request, member.id)
-

@@ -15,7 +15,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.contrib import admin
 from django.urls import path
 from django.views.i18n import JavaScriptCatalog
 from . import views
@@ -23,6 +22,6 @@ from . import views
 app_name = "cm_main"
 
 urlpatterns = [
-	path("", views.HomeView.as_view(), name="Home"),
-	path('jsi18n/cm_main', JavaScriptCatalog.as_view(packages=['cm_main']), name='javascript-catalog'),
+  path("", views.HomeView.as_view(), name="Home"),
+  path('jsi18n/cm_main', JavaScriptCatalog.as_view(packages=['cm_main']), name='javascript-catalog'),
 ]

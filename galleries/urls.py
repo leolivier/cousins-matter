@@ -12,5 +12,4 @@ urlpatterns = [
     path("<int:gallery>/photos", views_photo.PhotoAddView.as_view(), name="add_photo"),
     path("<int:gallery>/photos/<int:pk>", views_photo.PhotoDetailView.as_view(), name="photo"),
     path("bulk_upload", views_bulk.BulkUploadPhotosView.as_view(), name="bulk_upload"),
-
 ]

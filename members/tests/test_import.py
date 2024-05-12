@@ -56,17 +56,16 @@ class TestMemberImport(MemberTestCase):
     self.assertEqual(response.status_code, 200)
     self.assertContainsMessage(
       response, "error",
-      _('Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s') % {
-          'fieldname': "citi",
-          'all_names': ", ".join(ALL_FIELD_NAMES.keys())
-      }
-      )
+      'Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s' % {
+        'fieldname': "citi",
+        'all_names': ", ".join(ALL_FIELD_NAMES.keys())
+      })
 
   def test_missing_field(self):
     response = self.do_upload_file('import_members-missing-field.csv', 'en-US')
     self.assertEqual(response.status_code, 200)
     self.assertContainsMessage(response, "error",
-                               _('Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are %(all_names)s') % {
+                               'Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are %(all_names)s' % {
                                    'fieldname': "first_name",
                                    'all_names': ", ".join([str(s) for s in MANDATORY_FIELD_NAMES.keys()])
                                })

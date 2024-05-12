@@ -1,10 +1,10 @@
 from datetime import date
 from django.urls import reverse
+from django.utils.translation import gettext as _
+from django.core.exceptions import ValidationError
 from accounts.tests import CreatedAccountTestCase
 from ..models import Photo, Gallery
 from ..views.views_photo import PhotoAddView
-
-from django.core.exceptions import ValidationError
 from .utils import create_image, GalleryBaseTestCase
 from .tests_gallery import get_gallery_name
 
@@ -63,7 +63,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
     ap_url = reverse('galleries:add_photo', kwargs={'gallery': self.root_gallery.id})
     response = self.client.get(ap_url, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'galleries/edit_photo.html')
+    self.assertTemplateUsed(response, 'galleries/add_photo.html')
     self.assertIs(response.resolver_match.func.view_class, PhotoAddView)
 
     # print("response:", response)
@@ -97,3 +97,18 @@ class CreatePhotoViewTests(PhotoTestsBase):
     </a>
   </div>
 ''', html=True)
+
+
+class DeletePhotoViewTest(PhotoTestsBase):
+  def test_delete_photo(self):
+    # Create a photo
+    name = get_photo_name()
+    p = Photo(name=name, gallery=self.root_gallery, date=date.today(), image=self.image)
+    p.save()
+
+    # Delete the photo
+    url = reverse('galleries:delete_photo', kwargs={'gallery': self.root_gallery.id, 'pk': p.id})
+    response = self.client.post(url, follow=True)
+    self.assertRedirects(response, reverse('galleries:display', kwargs={'pk': self.root_gallery.id}), 302, 200)
+    self.assertFalse(Photo.objects.filter(pk=p.id).exists())
+    self.assertContainsMessage(response, "success", _('Photo deleted'))

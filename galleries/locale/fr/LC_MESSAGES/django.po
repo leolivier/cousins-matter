@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 12:41+0200\n"
+"POT-Creation-Date: 2024-05-12 10:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: galleries/forms.py:6
+#: galleries/forms.py:7
 msgid "Zip file"
 msgstr "Fichier ZIP"
 
-#: galleries/forms.py:7
+#: galleries/forms.py:8
 msgid ""
 "The zip file containing the photos to upload. All folders will be created as "
 "galleries and photos in these folders added to the galleries. All photos "
@@ -32,50 +32,64 @@ msgstr ""
 "créés en tant que galeries et les photos de ces dossiers seront ajoutées aux "
 "galeries. Toutes les photos doivent être dans des dossiers."
 
-#: galleries/models.py:19
+#: galleries/models.py:24 galleries/models.py:69
 msgid "A photo must belong to a gallery."
 msgstr "Une photo doit apprtenir à une galerie."
 
-#: galleries/models.py:34 galleries/templates/galleries/photo_detail.html:3
+#: galleries/models.py:43 galleries/templates/galleries/photo_detail.html:3
 msgid "Photo"
 msgstr "Photo"
 
-#: galleries/models.py:36 galleries/models.py:95
+#: galleries/models.py:45 galleries/models.py:104
 msgid "Name"
 msgstr "Nom"
 
-#: galleries/models.py:37 galleries/models.py:96
+#: galleries/models.py:46 galleries/models.py:105
 msgid "Description"
 msgstr "Description"
 
-#: galleries/models.py:39
+#: galleries/models.py:48
 msgid "Date"
 msgstr "Date"
 
-#: galleries/models.py:39
+#: galleries/models.py:48
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
 
-#: galleries/models.py:97
+#: galleries/models.py:106
 msgid "Cover Photo"
 msgstr "Photo de couverture"
 
-#: galleries/models.py:100 galleries/templates/galleries/show_gallery.html:42
+#: galleries/models.py:109 galleries/templates/galleries/show_gallery.html:37
 msgid "Parent gallery"
 msgstr "Galerie parente"
 
-#: galleries/models.py:105
+#: galleries/models.py:114
 msgid "galleries"
 msgstr "galeries"
 
-#: galleries/models.py:129
+#: galleries/models.py:138
 #, python-format
 msgid "Another sub gallery of %(parent)s with the same name already exists"
 msgstr "Une autre sous galerie de %(parent)s avec le même nom existe déjà"
 
-#: galleries/models.py:131
-msgid "Another root gallerwith the same name already exists"
+#: galleries/models.py:141
+msgid "Another root gallery with the same name already exists"
 msgstr "Une autre galerie racine avec le même nom existe déjà"
+
+#: galleries/templates/galleries/add_photo.html:3
+#: galleries/templates/galleries/add_photo.html:7
+msgid "Add Photo"
+msgstr "Ajout d'une Photo"
+
+#: galleries/templates/galleries/add_photo.html:11
+#: galleries/templates/galleries/edit_gallery.html:10
+msgid "Create"
+msgstr "Créer"
+
+#: galleries/templates/galleries/add_photo.html:12
+msgid "Create and add another one"
+msgstr "Créer et ajouter une autre"
 
 #: galleries/templates/galleries/bulk_upload.html:3
 #: galleries/templates/galleries/bulk_upload.html:6
@@ -91,29 +105,20 @@ msgstr "Télécharger"
 msgid "Create Gallery"
 msgstr "Création d'une Galerie"
 
-#: galleries/templates/galleries/edit_gallery.html:10
-#: galleries/templates/galleries/edit_photo.html:11
-msgid "Create"
-msgstr "Créer"
-
 #: galleries/templates/galleries/edit_photo.html:3
 #: galleries/templates/galleries/edit_photo.html:7
-msgid "Add Photo"
-msgstr "Ajout d'une Photo"
+#: galleries/templates/galleries/photo_detail.html:25
+msgid "Edit Photo"
+msgstr "Editer la Photo"
+
+#: galleries/templates/galleries/edit_photo.html:11
+msgid "Update"
+msgstr "Mettre à jour"
 
 #: galleries/templates/galleries/edit_photo.html:12
-msgid "Create and add another one"
-msgstr "Créer et ajouter une autre"
-
-#: galleries/templates/galleries/galleries_list.html:20
-#: galleries/templates/galleries/show_gallery.html:21
-msgid "photos"
-msgstr "photos"
-
-#: galleries/templates/galleries/galleries_list.html:22
-#: galleries/templates/galleries/show_gallery.html:23
-msgid "No photo"
-msgstr "Aucune photo"
+#: galleries/templates/galleries/photo_confirm_delete.html:21
+msgid "Cancel"
+msgstr "Annuler"
 
 #: galleries/templates/galleries/galleries_tree.html:3
 #: galleries/templates/galleries/galleries_tree.html:5
@@ -124,6 +129,44 @@ msgstr "Galeries"
 msgid "No galleries found"
 msgstr "Aucune galerie trouvée"
 
+#: galleries/templates/galleries/photo_confirm_delete.html:6
+#: galleries/templates/galleries/photo_detail.html:30
+msgid "Delete photo"
+msgstr "Supprimer la photo"
+
+#: galleries/templates/galleries/photo_confirm_delete.html:10
+#, python-format
+msgid "Are you sure you want to delete \"%(object)s\"?"
+msgstr "Es-tu sûr de vouloir supprimer \"%(object)s\"?"
+
+#: galleries/templates/galleries/photo_confirm_delete.html:17
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: galleries/templates/galleries/photo_counter.html:3
+#, python-format
+msgid "One photo"
+msgid_plural "%(counter)s photos"
+msgstr[0] "Une photo"
+msgstr[1] "%(counter)s photos"
+
+#: galleries/templates/galleries/photo_counter.html:5
+msgid "No photo"
+msgstr "Aucune photo"
+
+#: galleries/templates/galleries/photo_detail.html:10
+msgid "Previous"
+msgstr "Précédente"
+
+#: galleries/templates/galleries/photo_detail.html:19
+#, python-format
+msgid "Back to %(gname)s"
+msgstr "Retour à %(gname)s"
+
+#: galleries/templates/galleries/photo_detail.html:36
+msgid "Next"
+msgstr "Suivante"
+
 #: galleries/templates/galleries/photos_gallery.html:3
 msgid "Photos"
 msgstr "Photos"
@@ -132,19 +175,19 @@ msgstr "Photos"
 msgid "Show Gallery"
 msgstr "Afficher la Galerie"
 
-#: galleries/templates/galleries/show_gallery.html:29
+#: galleries/templates/galleries/show_gallery.html:24
 msgid "Children galleries"
 msgstr "Sous Galeries"
 
-#: galleries/templates/galleries/show_gallery.html:38
+#: galleries/templates/galleries/show_gallery.html:33
 msgid "Add<br/>Photos"
 msgstr "Ajouter<br/>Photos"
 
-#: galleries/views/views_bulk.py:43
+#: galleries/views/views_bulk.py:51
 msgid "Photos can't be at the root of the zip file."
 msgstr "Les photos ne peuvent pas être à la racine du fichier zip."
 
-#: galleries/views/views_bulk.py:61
+#: galleries/views/views_bulk.py:69
 msgid ""
 "Detected path traversal attempt, '..' is not allowed in paths inside the zip "
 "file"
@@ -152,17 +195,17 @@ msgstr ""
 "Tentative de traversée de chemin détectée, '..' n'est pas autorisé dans les "
 "chemins à l'intérieur du fichier zip"
 
-#: galleries/views/views_bulk.py:70
+#: galleries/views/views_bulk.py:78
 #, python-brace-format
 msgid "Imported from zipfile directory {path}"
 msgstr "Importé du répertoire {path} du fichier zip"
 
-#: galleries/views/views_bulk.py:98
+#: galleries/views/views_bulk.py:106
 #, python-brace-format
 msgid "Imported from zipfile directory {filename}"
 msgstr "Importé du fichier {filename} du fichier zip"
 
-#: galleries/views/views_bulk.py:170
+#: galleries/views/views_bulk.py:179
 msgid ""
 "Zip file uploaded: {len(self.galleries)} galleries and {self.nbPhotos} "
 "photos created"
@@ -170,9 +213,10 @@ msgstr ""
 "Fichier zip téléchargé : {len(self.galleries)} galeries et {self.nbPhotos} "
 "photos créées"
 
-#: galleries/views/views_photo.py:39
+#: galleries/views/views_photo.py:41
 msgid "Photo created"
 msgstr "Photo créée"
 
-#~ msgid "Parent<br/>gallery"
-#~ msgstr "Galerie<br/>parente"
+#: galleries/views/views_photo.py:64
+msgid "Photo deleted"
+msgstr "Photo supprimée"

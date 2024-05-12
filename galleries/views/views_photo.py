@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.db.models import OuterRef
 from ..models import Photo
@@ -58,6 +59,7 @@ class PhotoEditView(LoginRequiredMixin, generic.UpdateView):
   fields = ["name", "description", "image", "date", "gallery"]
 
 
+@login_required
 def delete_photo(request, gallery, pk):
   photo = get_object_or_404(Photo, pk=pk)
   photo.delete()

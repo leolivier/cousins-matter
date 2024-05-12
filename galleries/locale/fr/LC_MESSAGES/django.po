@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-12 10:52+0200\n"
+"POT-Creation-Date: 2024-05-12 19:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,7 +60,7 @@ msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
 msgid "Cover Photo"
 msgstr "Photo de couverture"
 
-#: galleries/models.py:109 galleries/templates/galleries/show_gallery.html:37
+#: galleries/models.py:109
 msgid "Parent gallery"
 msgstr "Galerie parente"
 
@@ -80,10 +80,10 @@ msgstr "Une autre galerie racine avec le même nom existe déjà"
 #: galleries/templates/galleries/add_photo.html:3
 #: galleries/templates/galleries/add_photo.html:7
 msgid "Add Photo"
-msgstr "Ajout d'une Photo"
+msgstr "Ajouter une Photo"
 
 #: galleries/templates/galleries/add_photo.html:11
-#: galleries/templates/galleries/edit_gallery.html:10
+#: galleries/templates/galleries/create_gallery.html:10
 msgid "Create"
 msgstr "Créer"
 
@@ -100,10 +100,21 @@ msgstr "Télécharger des photos en masse"
 msgid "Upload"
 msgstr "Télécharger"
 
-#: galleries/templates/galleries/edit_gallery.html:3
-#: galleries/templates/galleries/edit_gallery.html:6
+#: galleries/templates/galleries/create_gallery.html:3
+#: galleries/templates/galleries/create_gallery.html:6
 msgid "Create Gallery"
 msgstr "Création d'une Galerie"
+
+#: galleries/templates/galleries/edit_gallery.html:3
+#: galleries/templates/galleries/edit_gallery.html:6
+#: galleries/templates/galleries/gallery_detail.html:53
+msgid "Edit Gallery"
+msgstr "Modification d'une Galerie"
+
+#: galleries/templates/galleries/edit_gallery.html:10
+#: galleries/templates/galleries/edit_photo.html:11
+msgid "Update"
+msgstr "Mettre à jour"
 
 #: galleries/templates/galleries/edit_photo.html:3
 #: galleries/templates/galleries/edit_photo.html:7
@@ -111,11 +122,8 @@ msgstr "Création d'une Galerie"
 msgid "Edit Photo"
 msgstr "Editer la Photo"
 
-#: galleries/templates/galleries/edit_photo.html:11
-msgid "Update"
-msgstr "Mettre à jour"
-
 #: galleries/templates/galleries/edit_photo.html:12
+#: galleries/templates/galleries/gallery_confirm_delete.html:21
 #: galleries/templates/galleries/photo_confirm_delete.html:21
 msgid "Cancel"
 msgstr "Annuler"
@@ -129,6 +137,45 @@ msgstr "Galeries"
 msgid "No galleries found"
 msgstr "Aucune galerie trouvée"
 
+#: galleries/templates/galleries/gallery_confirm_delete.html:6
+#: galleries/templates/galleries/gallery_detail.html:58
+msgid "Delete gallery"
+msgstr "Supprimer une Galerie"
+
+#: galleries/templates/galleries/gallery_confirm_delete.html:10
+#, python-format
+msgid ""
+"Are you sure you want to delete \"%(object)s\" and all photos and sub "
+"galleries it contains?"
+msgstr ""
+"Es-tu sûr de vouloir supprimer \"%(object)s\" et toutes les photos et les "
+"sous galeries qu'elle contient ?"
+
+#: galleries/templates/galleries/gallery_confirm_delete.html:17
+#: galleries/templates/galleries/photo_confirm_delete.html:17
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: galleries/templates/galleries/gallery_detail.html:3
+msgid "Show Gallery"
+msgstr "Afficher la Galerie"
+
+#: galleries/templates/galleries/gallery_detail.html:24
+msgid "Children galleries"
+msgstr "Sous Galeries"
+
+#: galleries/templates/galleries/gallery_detail.html:36
+#: galleries/templates/galleries/photo_detail.html:19
+#, python-format
+msgid "Back to %(gname)s"
+msgstr "Retour à %(gname)s"
+
+#: galleries/templates/galleries/gallery_detail.html:47
+#, fuzzy
+#| msgid "Add Photo"
+msgid "Add Photos"
+msgstr "Ajout d'une Photo"
+
 #: galleries/templates/galleries/photo_confirm_delete.html:6
 #: galleries/templates/galleries/photo_detail.html:30
 msgid "Delete photo"
@@ -138,10 +185,6 @@ msgstr "Supprimer la photo"
 #, python-format
 msgid "Are you sure you want to delete \"%(object)s\"?"
 msgstr "Es-tu sûr de vouloir supprimer \"%(object)s\"?"
-
-#: galleries/templates/galleries/photo_confirm_delete.html:17
-msgid "Confirm"
-msgstr "Confirmer"
 
 #: galleries/templates/galleries/photo_counter.html:3
 #, python-format
@@ -158,11 +201,6 @@ msgstr "Aucune photo"
 msgid "Previous"
 msgstr "Précédente"
 
-#: galleries/templates/galleries/photo_detail.html:19
-#, python-format
-msgid "Back to %(gname)s"
-msgstr "Retour à %(gname)s"
-
 #: galleries/templates/galleries/photo_detail.html:36
 msgid "Next"
 msgstr "Suivante"
@@ -171,17 +209,13 @@ msgstr "Suivante"
 msgid "Photos"
 msgstr "Photos"
 
-#: galleries/templates/galleries/show_gallery.html:3
-msgid "Show Gallery"
-msgstr "Afficher la Galerie"
+#: galleries/tests/tests_gallery.py:220 galleries/views/views_gallery.py:53
+msgid "Gallery deleted"
+msgstr "Galerie supprimée avec tout son contenu"
 
-#: galleries/templates/galleries/show_gallery.html:24
-msgid "Children galleries"
-msgstr "Sous Galeries"
-
-#: galleries/templates/galleries/show_gallery.html:33
-msgid "Add<br/>Photos"
-msgstr "Ajouter<br/>Photos"
+#: galleries/tests/tests_photo.py:114 galleries/views/views_photo.py:66
+msgid "Photo deleted"
+msgstr "Photo supprimée"
 
 #: galleries/views/views_bulk.py:51
 msgid "Photos can't be at the root of the zip file."
@@ -213,10 +247,6 @@ msgstr ""
 "Fichier zip téléchargé : {len(self.galleries)} galeries et {self.nbPhotos} "
 "photos créées"
 
-#: galleries/views/views_photo.py:41
+#: galleries/views/views_photo.py:42
 msgid "Photo created"
 msgstr "Photo créée"
-
-#: galleries/views/views_photo.py:64
-msgid "Photo deleted"
-msgstr "Photo supprimée"

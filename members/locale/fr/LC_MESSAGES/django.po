@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-11 17:23+0200\n"
+"POT-Creation-Date: 2024-05-12 19:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -219,12 +219,10 @@ msgid "Address Detail"
 msgstr "Détail de l'Adresse"
 
 #: members/templates/members/address_detail.html:12
-
 msgid "Complementary Info"
 msgstr "Infos complémentaires"
 
 #: members/templates/members/address_detail.html:31
-
 msgid "Address used by:"
 msgstr "Adresse utilisées par:"
 
@@ -257,7 +255,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: members/templates/members/birthdays.html:3
-#: members/templates/members/members.html:12
+#: members/templates/members/members.html:10
 msgid "Birthdays"
 msgstr "Anniversaires"
 
@@ -362,13 +360,13 @@ msgstr "Détail d'un Membre"
 
 #: members/templates/members/member_detail.html:21
 #: members/templates/members/member_upsert.html:20
-#: members/tests/tests_member.py:203
+#: members/tests/tests_member.py:220
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/member_detail.html:23
 #: members/templates/members/member_upsert.html:22
-#: members/tests/tests_member.py:203
+#: members/tests/tests_member.py:220
 msgid "Managed member"
 msgstr "Membre géré"
 
@@ -451,19 +449,31 @@ msgid "This username is not available!"
 msgstr "Ce nom d'utilisateur est déjà pris!"
 
 #: members/templates/members/members.html:3
-#: members/templates/members/members.html:8
+#: members/templates/members/members.html:7
 msgid "Members List"
 msgstr "Liste des Membres"
 
-#: members/templates/members/members.html:15
+#: members/templates/members/members.html:14
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: members/templates/members/members.html:18 members/views/views_member.py:58
+#: members/templates/members/members.html:18 members/views/views_member.py:68
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: members/templates/members/members.html:36
+#: members/templates/members/members.html:25
+msgid "first name"
+msgstr "prénom"
+
+#: members/templates/members/members.html:28
+msgid "last name"
+msgstr "nom"
+
+#: members/templates/members/members.html:31
+msgid "Filter Members"
+msgstr "Filtrer les Membres"
+
+#: members/templates/members/members.html:53
 #: members/templates/members/members_directory.html:43
 msgid "No members found"
 msgstr "Pas de membre trouvé"
@@ -497,7 +507,7 @@ msgid "Invitation for %(invited)s to register to %(site_name)s"
 msgstr "Invitation pour %(invited)s à s'inscrire sur %(site_name)s"
 
 #: members/templates/members/registration_invite_email.html:20
-#: members/tests/tests_register.py:34
+#: members/tests/tests_register.py:30
 #, python-format
 msgid "Registration to the \"%(site_name)s\" site"
 msgstr "Enregistrement sur le site \"%(site_name)s\""
@@ -571,19 +581,19 @@ msgid "Invite me"
 msgstr "M'inviter"
 
 #: members/templates/members/registration_request_email.html:8
-#: members/tests/tests_register.py:97 members/views/views_registration.py:185
+#: members/tests/tests_register.py:93 members/views/views_registration.py:185
 #, python-format
 msgid "Registration request for %(site_name)s"
 msgstr "Demande d'enregistrement pour %(site_name)s"
 
 #: members/templates/members/registration_request_email.html:20
-#: members/tests/tests_register.py:102
+#: members/tests/tests_register.py:98
 #, python-format
 msgid "Registration request for the \"%(site_name)s\" site"
 msgstr "Demande d'enregistrement pour le site \"%(site_name)s\""
 
 #: members/templates/members/registration_request_email.html:24
-#: members/tests/tests_register.py:103
+#: members/tests/tests_register.py:99
 #, python-format
 msgid "%(name)s (%(email)s) requested to register to your cousinades site"
 msgstr ""
@@ -615,16 +625,47 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_register.py:29 members/views/views_registration.py:134
+#: members/tests/test_import.py:59 members/views/views_import.py:38
+#, python-format
+msgid ""
+"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
+msgstr ""
+"Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
+"sont %(all_names)s"
+
+#: members/tests/test_import.py:69 members/views/views_import.py:42
+#, python-format
+msgid ""
+"Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
+"%(all_names)s"
+msgstr ""
+"Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
+"obligatoires sont %(all_names)s"
+
+#: members/tests/tests_member.py:194 members/tests/tests_member.py:199
+#: members/views/views_member.py:103 members/views/views_member.py:122
+msgid "You do not have permission to edit this member."
+msgstr "Tu n'as pas la permission de modifier ce membre."
+
+#: members/tests/tests_register.py:21 members/views/views_registration.py:138
+#, python-format
+msgid "Invitation sent to %(email)s."
+msgstr "Invitation envoyée à %(email)s."
+
+#: members/tests/tests_register.py:25 members/views/views_registration.py:134
 #, python-format
 msgid "You are invited to register on %(site_name)s"
 msgstr "Tu as été invité.e à créer ton compte sur %(site_name)s"
 
-#: members/tests/tests_register.py:128
-msgid "Invalid CAPTCHA"
-msgstr ""
+#: members/tests/tests_register.py:88 members/views/views_registration.py:189
+msgid "Registration request sent."
+msgstr "Demande d'enregistrement envoyée."
 
-#: members/tests/tests_register.py:149 members/views/views_registration.py:90
+#: members/tests/tests_register.py:124
+msgid "Invalid CAPTCHA"
+msgstr "CAPTCHA invalide"
+
+#: members/tests/tests_register.py:145 members/views/views_registration.py:90
 #, python-format
 msgid ""
 "Hello %(username)s, your account has been created! You will now receive an "
@@ -635,7 +676,7 @@ msgstr ""
 "email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
 "terminer le processus de création de compte."
 
-#: members/tests/tests_register.py:158 members/views/views_registration.py:55
+#: members/tests/tests_register.py:154 members/views/views_registration.py:55
 msgid "Invalid link. Please contact the administrator."
 msgstr "Lien invalide. Merci de contacter l'administrateur."
 
@@ -666,23 +707,6 @@ msgstr "Dossier %(site_name)s"
 msgid "Page %(doc_page)s - %(title)s"
 msgstr "Page %(doc_page)s - %(title)s"
 
-#: members/views/views_import.py:38
-#, python-format
-msgid ""
-"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
-msgstr ""
-"Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
-"sont %(all_names)s"
-
-#: members/views/views_import.py:42
-#, python-format
-msgid ""
-"Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
-"%(all_names)s"
-msgstr ""
-"Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
-"obligatoires sont %(all_names)s"
-
 #: members/views/views_import.py:130
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
@@ -709,25 +733,25 @@ msgstr ""
 msgid "Warning: %(error)s"
 msgstr "Attention: %(error)s"
 
-#: members/views/views_member.py:80
+#: members/views/views_member.py:90
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: members/views/views_member.py:88
+#: members/views/views_member.py:98
 msgid "Update Member Details"
 msgstr "Modifier les détails d'un Membre"
 
-#: members/views/views_member.py:94 members/views/views_member.py:136
+#: members/views/views_member.py:108 members/views/views_member.py:153
 msgid "My Profile"
 msgstr "Mon Profil"
 
-#: members/views/views_member.py:116
+#: members/views/views_member.py:133
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Un courriel de vérification a été envoyé pour valider ta nouvelle adresse "
 "électronique."
 
-#: members/views/views_member.py:122
+#: members/views/views_member.py:139
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
@@ -749,8 +773,8 @@ msgid ""
 "You are already registered but not active. Please contact %(admin)s to "
 "activate your account"
 msgstr ""
-"Tu es déjà enregistré mais pas encore actif. Contacte %(admin)s pour activer ton "
-"compte."
+"Tu es déjà enregistré mais pas encore actif. Contacte %(admin)s pour activer "
+"ton compte."
 
 #: members/views/views_registration.py:108
 msgid "Only staff users can send invitations."
@@ -761,15 +785,13 @@ msgstr "Seuls les members du staff peuvent envoyer des invitations."
 msgid "User with this email already exists."
 msgstr "Un utilisateur avec cette adresse mail existe déjà."
 
-#: members/views/views_registration.py:138
-#, python-format
-msgid "Invitation sent to %(email)s."
-msgstr "Invitation envoyée à %(email)s."
-
-#: members/views/views_registration.py:189
-msgid "Registration request sent."
-msgstr "Demande d'enregistrement envoyée."
-
 #: members/views/views_registration.py:192
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossible d'envoyer un mail. Merci de contacter l'administrateur."
+
+#~ msgid ""
+#~ "Missing column in CSV file: \"{\"first_name\"}\". Mandatory fields are "
+#~ "{m_fields}"
+#~ msgstr ""
+#~ "Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
+#~ "obligatoires sont %(all_names)s"

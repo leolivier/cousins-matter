@@ -2,38 +2,55 @@
 {% load i18n cm_tags %}
 {% block title %}{% title _("Members List") %}{% endblock %}
 {% block content %}
-  <div class="media container">
-    <div class="media-left"></div>
-    <div class="media-content">
-      <h1 class="title">{% title _("Members List") %}</h1>
+<div class="container mb-5"> 
+  <div class="level">
+    <h1 class="title">{% title _("Members List") %}</h1>
+    <div class="buttons has-addons mt-5">
+      <a class="button is-large" href="{% url 'members:birthdays' %}"
+        title='{% translate "Birthdays" %}'>
+        <i class="icon"><span class="mdi mdi-cake-variant-outline"></span></i>
+      </a>
+      <a class="button is-large" href="{% url 'members:directory' %}"
+        title="{% translate 'Show directory' %}">
+        <i class="icon"><span class="mdi mdi-format-list-text"></span></i>
+      </a>
+      <a class="button is-large" href="{% url 'members:create' %}"
+        title="{% translate 'Create Member' %}">
+        <i class="icon"><span class="mdi mdi-plus-box-outline"></span></i>
+      </a>
     </div>
-    <div class="media-right">
-      <a class="button is-info" href="{% url 'members:birthdays' %}">
-        {% translate "Birthdays" %}
-      </a>
-      <a class="button is-primary" href="{% url 'members:directory' %}">
-        {% translate "Show directory" %}
-      </a>
-      <a class="button is-link" href="{% url 'members:create' %}">
-          {% translate "Create Member" %}
-      </a>
-    </div>
-  </div>
-  {% if member_list.count > 0 %}
-	<div class="fixed-grid has-auto-count">
-		<div class="grid">
-    {% for member in member_list %}
-      <div class="cell has-text-centered">
-        <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
-          <strong>{{ member.first_name }} {{ member.last_name }}</strong>
-        </a>
+    <form method="get">
+      <div class="field has-addons">
+        <div class="control">
+          <input class="input is-large" type="text" size="12" name="first_name_filter" placeholder="{% trans 'first name' %}">
+        </div>
+        <div class="control">
+          <input class="input is-large" type="text" size="12" name="last_name_filter" placeholder="{% trans 'last name' %}">
+        </div>
+        <div class="control">
+          <button class="button is-large is-link" type="submit" title="{% translate 'Filter Members' %}">
+            <i class="icon"><span class="mdi mdi-magnify"></span></i>
+          </button>
+        </div>
       </div>
-    {% endfor %}
+    </form>
+  </div>
+</div>
+{% if member_list.count > 0 %}
+<div class="fixed-grid has-auto-count">
+  <div class="grid">
+  {% for member in member_list %}
+    <div class="cell has-text-centered">
+      <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
+        <strong>{{ member.first_name }} {{ member.last_name }}</strong>
+      </a>
     </div>
-	</div>
-  {% else %}
-	<div>
-    <p>{% translate "No members found" %}.</p>
-	</div>
-  {% endif %}
+  {% endfor %}
+  </div>
+</div>
+{% else %}
+<div>
+  <p>{% translate "No members found" %}.</p>
+</div>
+{% endif %}
 {% endblock %}

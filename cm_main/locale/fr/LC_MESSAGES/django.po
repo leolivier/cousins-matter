@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 16:06+0200\n"
+"POT-Creation-Date: 2024-05-11 17:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cm_main/apps.py:7
+#: cm_main/apps.py:8
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
 
@@ -95,6 +95,6 @@ msgstr "Profil"
 msgid "Log Out"
 msgstr "Déconnexion"
 
-#: cm_main/views.py:27
+#: cm_main/views.py:35
 msgid "Media not found"
 msgstr "Média non trouvé"

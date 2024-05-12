@@ -48,8 +48,10 @@ class MemberTestCase(LoggedAccountTestCase):
             'last_name': member.account.last_name, 'email': member.account.username+'@test.com',
             'phone': '01 23 45 67 ' + counter, "birthdate": date.today()}
 
-  def create_member(self, member_data):
+  def create_member(self, member_data=None):
     """creates and returns a new member using provided member data"""
+    if member_data is None:
+      member_data = self.get_new_member_data()
     response = self.client.post(reverse("members:create"), member_data, follow=True)
     self.assertEqual(response.status_code, 200)
     new_member = Member.objects.filter(account__username=member_data['username']).first()
@@ -69,8 +71,7 @@ class MemberCreateTest(MemberTestCase):
 
   def test_create_managed_member_in_view_creates_user(self):
     prev_number = Member.objects.count()
-    new_member = self.get_new_member_data()
-    managed = self.create_member(new_member)
+    managed = self.create_member()
     new_number = Member.objects.count()
     # a new member has been created
     self.assertEqual(new_number, prev_number+1)
@@ -165,8 +166,11 @@ class ManagedMemberChangeTests(MemberTestCase):
   def setUp(self):
     super().setUp()
     # first create a new managed member
-    new_data = self.get_new_member_data()
-    self.managed = self.create_member(new_data)
+    self.managed = self.create_member()
+    self.active = self.create_member()
+    self.active.account.is_active = True
+    self.active.account.save()
+    self.assertTrue(self.active.account.is_active)
 
   def test_managed_change_view(self):
     # change the managed member data
@@ -181,6 +185,20 @@ class ManagedMemberChangeTests(MemberTestCase):
     self.assertEqual(self.managed.birthdate, new_data['birthdate'])
     self.assertEqual(self.managed.account.email, new_data['email'])
 
+    # chack that active members can't be changed
+    edit_url = reverse('members:member_edit', kwargs={'pk': self.active.id})
+    new_data = self.get_changed_member_data(self.managed)
+    # for get
+    response = self.client.get(edit_url, new_data, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertContainsMessage(response, "error", _("You do not have permission to edit this member."))
+    self.assertRedirects(response, reverse('members:detail', kwargs={'pk': self.active.id}))
+    # and post
+    response = self.client.post(edit_url, new_data, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertContainsMessage(response, "error", _("You do not have permission to edit this member."))
+    self.assertRedirects(response, reverse('members:detail', kwargs={'pk': self.active.id}))
+
 
 class TestDisplayMembers(MemberTestCase):
   def setUp(self):
@@ -188,8 +206,7 @@ class TestDisplayMembers(MemberTestCase):
     # create several managed members
     self.members = [self.member]
     for __ in range(3):
-      new_data = self.get_new_member_data()
-      self.members.append(self.create_member(new_data))
+      self.members.append(self.create_member())
 
   def test_view_one_member(self):
     member = self.members[3]
@@ -220,3 +237,51 @@ class TestDisplayMembers(MemberTestCase):
     </a>
   </div>
 ''', html)
+
+  def test_filter_members_display(self):
+
+    def check_is_in(content, member):
+      self.assertInHTML(f'''<div class="cell has-text-centered">
+        <a class="button" href="{reverse("members:detail", kwargs={'pk': member.id})}">
+          <strong>{member.get_full_name()}</strong></a></div>''', content)
+
+    def check_is_not_in(content, member):
+      # no assertNotContains or assertNotInHTML in django yet
+      self.assertNotIn(content, f'''<strong>{member.get_full_name()}</strong>''')
+      self.assertNotIn(content, f'''href={reverse("members:detail", kwargs={'pk': member.id})}>''')
+
+    def filter_member(member, first_name=False, last_name=False):
+      filter = {}
+      if first_name:
+        filter['first_name_filter'] = member.account.first_name[-4:]
+      if last_name:
+        filter['last_name_filter'] = member.account.last_name[-4:]
+      response = self.client.get(reverse("members:members"), filter)
+      # print(response.content)
+      self.assertEqual(response.status_code, 200)
+      return response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '')
+    
+    member1 = self.create_member()
+    member2 = self.create_member()
+    member3 = self.create_member()
+    # can see all memebers when not filtered
+    content = filter_member(None)
+    for member in [member1, member2, member3]:
+      check_is_in(content, member)
+
+    # filter on member1 first name part
+    content = filter_member(member1, first_name=True)
+    check_is_in(content, member1)
+    check_is_not_in(content, member2)
+    check_is_not_in(content, member3)
+    # filter on member2 last name part
+    content = filter_member(member2, last_name=True)
+    check_is_not_in(content, member1)
+    check_is_in(content, member2)
+    check_is_not_in(content, member3)
+
+    # filter on member3 first and last name part
+    content = filter_member(member3, first_name=True, last_name=True)
+    check_is_not_in(content, member1)
+    check_is_not_in(content, member2)
+    check_is_in(content, member3)

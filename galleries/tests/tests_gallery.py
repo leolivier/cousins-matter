@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 from accounts.tests import CreatedAccountTestCase
 from ..models import Gallery, Photo
 from .utils import create_image, GalleryBaseTestCase
-from ..views.views_gallery import GalleryCreateView, GalleryDisplayView, GalleryUpdateView
+from ..views.views_gallery import GalleryCreateView, GalleryDetailView, GalleryUpdateView
 
 COUNTER = 0
 
@@ -28,7 +28,7 @@ class CheckLoginRequired(CreatedAccountTestCase):
       # with another redirect afterward to the original url
       self.assertRedirects(response, self.next(self.login_url, rurl), 302, 200)
 
-    for url in ['galleries:edit', 'galleries:display', 'galleries:add_photo']:
+    for url in ['galleries:edit', 'galleries:detail', 'galleries:add_photo']:
       rurl = reverse(url, args=[1])
       response = self.client.get(rurl)
       self.assertRedirects(response, self.next(self.login_url, rurl), 302, 200)
@@ -84,7 +84,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     url = reverse("galleries:create")
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'galleries/edit_gallery.html')
+    self.assertTemplateUsed(response, 'galleries/create_gallery.html')
     self.assertIs(response.resolver_match.func.view_class, GalleryCreateView)
 
     gal_name = get_gallery_name()
@@ -94,31 +94,39 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     self.assertTrue(rg.cover_url() == settings.DEFAULT_GALLERY_COVER_URL)
 
   def test_create_sub_gallery(self):
+    # create a root gallery directly
     rgal_name = get_gallery_name()
     rg = Gallery(name=rgal_name)
     rg.save()
+    # create a sub gallery through view
     url = reverse("galleries:create")
     sgal_name = get_gallery_name()
     response = self.client.post(url, {'name': sgal_name, 'description': "a test sub gallery", 'parent': rg.id}, follow=True)
     self.assertTrue(response.status_code, 200)
     # print(response.content)
+    # get the sub gallery by name and parent
     sg = Gallery.objects.filter(name=sgal_name, parent=rg).first()
     self.assertIsNotNone(sg)
-    self.assertRedirects(response, reverse("galleries:display", args=[sg.id]), 302, 200)
+    # check redirects to the newly created gallery detail
+    self.assertRedirects(response, reverse("galleries:detail", args=[sg.id]), 302, 200)
+    # check the response contains the sub gallery details (name, photo count)
     self.assertContains(response, f'''<p>
   <strong class="title">{sg.name}</strong>
   <br>{sg.description}<br><small>{_("No photo")}</small>
 </p>''', html=True)
+    # check root gallery has the sub gallery for child
     self.assertTrue(rg.children.first().name == sgal_name)
-    self.assertContains(response, f'''<a href="{reverse("galleries:display", args=[rg.id])}">
-  <figure class="image is-128x128">
-    <img src="{settings.DEFAULT_GALLERY_COVER_URL}">
-    <figcaption class="has-text-centered">{rg.name}</figcaption>
-  </figure>
-</a>''', html=True)
+    # check the root gallery appears as the parent gallery in the details
+    self.assertContains(response, f'''<a class="button" href="{reverse('galleries:detail', args=[rg.id])}" 
+      title="{_("Back to %(gname)s") % {'gname': rg.name}}">
+      <span class="icon is-large">
+        <i class="mdi mdi-arrow-up-right"></i>
+      </span>
+    </a>''', html=True)
 
-    response = self.client.get(reverse("galleries:display", args=[rg.id]), follow=True)
-    url = reverse("galleries:display", args=[sg.id])
+    # check the sub gallery appears in the root gallery children list
+    response = self.client.get(reverse("galleries:detail", args=[rg.id]), follow=True)
+    url = reverse("galleries:detail", args=[sg.id])
     self.assertContains(response, f'''<article class="media">
   <figure class="media-left">
     <a class="image is-128x128" href="{url}"><img src="{sg.cover_url()}"></a>
@@ -144,7 +152,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     gal_name = get_gallery_name()
     response = self.client.post(url, {'name': gal_name, 'description': rg.description}, follow=True)
     self.assertTrue(response.status_code, 200)
-    self.assertIs(response.resolver_match.func.view_class, GalleryDisplayView)
+    self.assertIs(response.resolver_match.func.view_class, GalleryDetailView)
     # print(response.content)
     rg.refresh_from_db()
     self.assertEqual(rg.name, gal_name)
@@ -155,7 +163,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     name = get_gallery_name()
     gal = Gallery(name=name, parent=parent)
     gal.save()
-    url = reverse("galleries:display", args=[gal.id])
+    url = reverse("galleries:detail", args=[gal.id])
     html = f'''
 <div class="box">
   <article class="media">
@@ -184,3 +192,39 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     url = reverse("galleries:galleries")
     response = self.client.get(url)
     self.assertContains(response, htmls, html=True)
+
+
+class DeleteGalleryViewTest(GalleryBaseTestCase):
+  def rec_build_tree(self, n, parent, image):
+    # create n embedded galleries with one photo in each one
+    if n == 0:
+      return []
+    gal = Gallery(name=get_gallery_name(), parent=parent)
+    gal.save()
+    p = Photo(name=get_gallery_name(), gallery=gal, date=date.today(), image=image)
+    p.save()
+    res = self.rec_build_tree(n-1, gal, image)
+    return [(gal.id, p.id)] + res
+
+  def test_delete_gallery(self):
+    image = create_image("test-image-1.jpg")
+    lst = self.rec_build_tree(3, None, image)
+    # find the 1rst gallery below root
+    gal = lst[1][0]
+    self.assertIsNotNone(gal)
+    # delete the gallery
+    url = reverse("galleries:delete_gallery", kwargs={"pk": gal})
+    response = self.client.get(url, follow=True)
+
+    self.assertRedirects(response, reverse('galleries:galleries'), 302, 200)
+    self.assertContainsMessage(response, "success", _('Gallery deleted'))
+    # check root not removed
+    gid, pid = lst[0]
+    # print("gid/pid:", gid, pid)
+    self.assertTrue(Gallery.objects.filter(pk=gid).exists())
+    self.assertTrue(Photo.objects.filter(pk=pid).exists())
+    # check others removed
+    for gid, pid in lst[1:]:
+      # print("gid/pid:", gid, pid)
+      self.assertFalse(Gallery.objects.filter(pk=gid).exists())
+      self.assertFalse(Photo.objects.filter(pk=pid).exists())

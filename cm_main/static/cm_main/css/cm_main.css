@@ -21,3 +21,8 @@ body {
   width: auto;
   max-height: 100%;
 }
+
+/* override icon size */
+.button .icon.is-large {
+  font-size: 1.5rem !important;
+}

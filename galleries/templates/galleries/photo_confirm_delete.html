@@ -1,0 +1,27 @@
+{% load i18n %}
+<div class="modal" id="delete-photo-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<p class="modal-card-title">{% trans 'Delete photo' %}</p>
+			<button class="delete" aria-label="close"></button>
+		</header>
+		<section class="modal-card-body">
+				{% blocktranslate with object=photo.name %}Are you sure you want to delete "{{ object }}"?{% endblocktranslate %}
+		</section>
+		<footer class="modal-card-foot">
+			<div class="container">
+				<div class="field is-grouped is-grouped-centered">
+					<p class="control">
+						<a class="control button is-primary" href="{% url 'galleries:delete_photo' photo.gallery.id photo.id %}">
+						{%translate 'Confirm' %}
+						</a>
+					</p>
+					<p class="control">
+						<a type="reset" class="control button is-light" aria-label="close">{%trans "Cancel" %}</a>
+					</p>
+				</div>
+			</div>
+		</footer>
+	</div>
+</div>

@@ -25,8 +25,18 @@ def managing_member_name(member):
 
 class MembersView(LoginRequiredMixin, generic.ListView):
     template_name = "members/members.html"
-    paginate_by = 100
+    # paginate_by = 100
     model = Member
+
+    def get(self, request):
+        filter = {}
+        if 'first_name_filter' in request.GET and request.GET['first_name_filter']:
+            filter['account__first_name__icontains'] = request.GET['first_name_filter']
+        if 'last_name_filter' in request.GET and request.GET['last_name_filter']:
+            filter['account__last_name__icontains'] = request.GET['last_name_filter']
+        logger.debug("filter:", filter)
+        members = Member.objects.filter(**filter)
+        return render(request, self.template_name, {"member_list": members})
 
 
 class MemberDetailView(LoginRequiredMixin, generic.DetailView):
@@ -89,6 +99,10 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
 
     def get(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
+        if member.managing_account.id != request.user.id:
+            messages.error(request, _('You do not have permission to edit this member.'))
+            return redirect("members:detail", member.id)
+        
         # force profile mode
         if member.account.id == request.user.id:
             self.title = _("My Profile")
@@ -104,6 +118,9 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
 
     def post(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
+        if member.managing_account.id != request.user.id:
+            messages.error(request, _('You do not have permission to edit this member.'))
+            return redirect("members:detail", member.id)
 
         # create a form instance and populate it with data from the request on existing member
         m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)

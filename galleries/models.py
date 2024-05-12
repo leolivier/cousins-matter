@@ -93,7 +93,7 @@ class Photo(models.Model):
         size = sys.getsizeof(output_thumb)
         self.thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.jpg",
                                               'image/jpeg', size, None)
-        logger.info(f"Resized and saved thumbnail for {self.image.path} to {self.thumbnail.path}, size={size}")
+        logger.debug(f"Resized and saved thumbnail for {self.image.path} to {self.thumbnail.path}, size={size}")
       else:  # small photos are used directly as thumbnails
         self.thumbnail = self.image
 
@@ -125,7 +125,7 @@ class Gallery(models.Model):
     return f'{self.parent}/{self.name}' if self.parent else self.name
 
   def get_absolute_url(self):
-    return reverse("galleries:display", kwargs={"pk": self.pk})
+    return reverse("galleries:detail", kwargs={"pk": self.pk})
 
   def clean(self):
     # compute slug

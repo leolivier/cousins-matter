@@ -3,7 +3,7 @@
 {% for gallery in galleries %}
   <div class="box">
     <article class="media">
-      {% url 'galleries:display' gallery.id as gallery_url %}
+      {% url 'galleries:detail' gallery.id as gallery_url %}
       <figure class="media-left">
         <a class="image is-128x128" href="{{gallery_url}}">
           <img src="{{gallery.cover_url}}">
@@ -16,11 +16,7 @@
             <br/>
             {{ gallery.description }}
             <br/>
-            <small>{% if gallery.photo_set.count > 0 %}
-              {{ gallery.photo_set.count }} {% translate "photos" %}
-              {% else %}
-              {% trans 'No photo' %}
-              {% endif %}</small>
+            <small>{% include "galleries/photo_counter.html" %}</small>
           </p>
         </a>
         {% if recursive and gallery.children.count > 0 %}

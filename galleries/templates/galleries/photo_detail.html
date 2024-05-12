@@ -2,36 +2,57 @@
 {% load i18n cm_tags %}
 {% block title %}{% title _("Photo") %} {% endblock %}
 {% block content %}
-<div class="container mt-5">
+<div class="box">
 	<div class="card">
-		<div class="card-content">
-			<div class="box">
-				<div class="level">
-					{% if photo.previous_id %} 
-					<a href="{% url 'galleries:photo' photo.gallery.id photo.previous_id %}">
-						<span class="icon is-medium"><i class="mdi mdi-36px mdi-arrow-left-bold-box"></i></span>
+		<div class="container">
+			<div class="level">
+				{% if photo.previous_id %} 
+				<a href="{% url 'galleries:photo' photo.gallery.id photo.previous_id %}" title="{% trans 'Previous'%}">
+					<span class="icon is-large"><i class="mdi mdi-36px mdi-arrow-left-bold-box"></i></span>
+				</a>
+				{% else %}
+					<span class="icon is-large"><i class="mdi mdi-36px mdi-arrow-left-bold-box-outline"></i></span>
+				{% endif %}
+				<p class="title is-4">{{photo.name}}</p>
+				<p class="buttons has-addons">
+					<a class="button" href="{% url 'galleries:detail' photo.gallery.id %}" 
+						title="{% blocktranslate with gname=photo.gallery.name%}Back to {{gname}}{%endblocktranslate %}">
+						<span class="icon is-large">
+							<i class="mdi mdi-arrow-up-right"></i>
+						</span>
 					</a>
-					{% else %}
-						<span class="icon is-medium"><i class="mdi mdi-36px mdi-arrow-left-bold-box-outline"></i></span>
-					{% endif %}
-					<p class="title is-4">{{photo.name}}</p>
-					<p class="content">{{photo.description}}</p>
-					<a class="button is-link" href="{% url 'galleries:display' photo.gallery.id %}">
-						{{photo.gallery.name}}
+					<a class="button" href="{% url 'galleries:edit_photo' photo.gallery.id photo.id %}"
+						title="{% trans 'Edit Photo' %}">
+						<span class="icon is-large">
+							<i class="mdi mdi-image-edit-outline"></i>
+						</span>
 					</a>
+					<button class="button js-modal-trigger" data-target="delete-photo-modal" title="{% trans 'Delete photo' %}">
+						<span class="icon is-large">
+							<i class="mdi mdi-trash-can-outline"></i>
+						</span>
+					</button>
 					{% if photo.next_id %}
-					<a href="{% url 'galleries:photo' photo.gallery.id photo.next_id %}">
-						<span class="icon is-medium"><i class="mdi mdi-36px mdi-arrow-right-bold-box"></i></span>
+					<a href="{% url 'galleries:photo' photo.gallery.id photo.next_id %}" title="{% trans 'Next'%}">
+						<span class="icon is-large"><i class="mdi mdi-36px mdi-arrow-right-bold-box"></i></span>
 					</a>
 					{% else %}
-						<span class="icon is-medium"><i class="mdi mdi-36px mdi-arrow-right-bold-box-outline"></i></span>
+						<span class="icon is-large"><i class="mdi mdi-36px mdi-arrow-right-bold-box-outline"></i></span>
 					{% endif %}
-				</div>
+				</p>
+			</div>
+		</div>
+		<div class="card-content">
 			<div class="card-image">
 				<figure class="image">
 					<img src="{{photo.image.url}}">
 				</figure>
+			</div>
+		</div>
+		<div class="card-footer">
+			<p class="content">{{photo.description}}</p>
 		</div>
 	</div>
 </div>
+{% include "galleries/photo_confirm_delete.html" %}
 {% endblock %}

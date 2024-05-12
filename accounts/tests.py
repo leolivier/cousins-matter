@@ -76,6 +76,12 @@ class AccountTestCase(SimpleTestCase):
     logged = user.is_authenticated or self.client.login(username=self.superuser_name, password=self.superuser_pwd)
     self.assertTrue(logged)
 
+  def assertContainsMessage(self, response, type, message):
+    self.assertContains(response, f'''<li class="message is-{type}">
+      <div class="message-body">{message}
+      </div>
+    </li>''', html=True)
+
 
 class CreatedAccountTestCase(AccountTestCase):
   def setUp(self) -> None:

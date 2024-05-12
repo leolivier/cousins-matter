@@ -18,11 +18,7 @@ class MemberInviteTests(MemberTestCase):
     test_invite = {'invited': "Mr Freeze", 'email': 'test-cousinsmatter@maildrop.cc'}
     response = self.client.post(reverse("members:invite"), test_invite, follow=True)
     # pprint(vars(response))
-    self.assertContains(response,
-                        f'''<div class="message-body">
-                          {_("Invitation sent to %(email)s.") % {'email': test_invite['email']}}
-                        </div>''',
-                        html=True)
+    self.assertContainsMessage(response, "success", _("Invitation sent to %(email)s.") % {'email': test_invite['email']})
     self.assertEqual(len(mail.outbox), 1)
     self.assertSequenceEqual(mail.outbox[0].recipients(), [test_invite['email']])
     self.assertEqual(mail.outbox[0].subject,
@@ -89,7 +85,7 @@ class RequestRegistrationLinkTests(AccountTestCase):
     test_requester = {'name': "Mr Freeze", 'email': 'test-cousinsmatter@maildrop.cc',
                       'message': "Hi, it's me!", 'captcha_0': 'whatever', 'captcha_1': 'passed'}
     response = self.client.post(reverse("members:register_request"), test_requester, follow=True)
-    self.assertContains(response, f'''<div class="message-body">{_("Registration request sent.")}</div>''', html=True)
+    self.assertContainsMessage(response, "success", _("Registration request sent."))
     self.assertEqual(len(mail.outbox), 1)
     admin = User.objects.filter(is_superuser=True).first()
     self.assertIsNotNone(admin)

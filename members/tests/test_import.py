@@ -1,6 +1,7 @@
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import translation
+from django.utils.translation import gettext as _
 from datetime import date
 from ..models import ALL_FIELD_NAMES, MANDATORY_FIELD_NAMES, Member
 from .tests_member import MemberTestCase
@@ -53,18 +54,14 @@ class TestMemberImport(MemberTestCase):
   def test_wrong_field(self):
     response = self.do_upload_file('import_members-wrong-field.csv', 'en-US')
     self.assertEqual(response.status_code, 200)
-    self.assertContains(response, f'''<li class="message is-error">
-  <div class="message-body">
-    {f'Unknown column in CSV file: "citi". Valid fields are {", ".join([str(s) for s in ALL_FIELD_NAMES.keys()])}'}
-  </div>
-</li>''', html=True)
+    self.assertContainsMessage(
+      response, "error",
+      _(f'Unknown column in CSV file: "citi". Valid fields are {", ".join([str(s) for s in ALL_FIELD_NAMES.keys()])}')
+      )
 
   def test_missing_field(self):
     response = self.do_upload_file('import_members-missing-field.csv', 'en-US')
     self.assertEqual(response.status_code, 200)
     m_fields = ", ".join([str(s) for s in MANDATORY_FIELD_NAMES.keys()])
-    self.assertContains(response, f'''<li class="message is-error">
-  <div class="message-body">
-    {f'Missing column in CSV file: "first_name". Mandatory fields are {m_fields}'}
-  </div>
-</li>''', html=True)
+    self.assertContainsMessage(response, "error",
+                               _(f'Missing column in CSV file: "first_name". Mandatory fields are {m_fields}'))

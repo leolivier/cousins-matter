@@ -83,7 +83,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
       p.save()
       photos.append(p)
 
-    url = reverse('galleries:display', kwargs={'pk': self.root_gallery.id})
+    url = reverse('galleries:detail', kwargs={'pk': self.root_gallery.id})
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, 'galleries/galleries_list.html')
@@ -109,6 +109,6 @@ class DeletePhotoViewTest(PhotoTestsBase):
     # Delete the photo
     url = reverse('galleries:delete_photo', kwargs={'gallery': self.root_gallery.id, 'pk': p.id})
     response = self.client.post(url, follow=True)
-    self.assertRedirects(response, reverse('galleries:display', kwargs={'pk': self.root_gallery.id}), 302, 200)
+    self.assertRedirects(response, reverse('galleries:detail', kwargs={'pk': self.root_gallery.id}), 302, 200)
     self.assertFalse(Photo.objects.filter(pk=p.id).exists())
     self.assertContainsMessage(response, "success", _('Photo deleted'))

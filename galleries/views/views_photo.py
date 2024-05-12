@@ -64,4 +64,4 @@ def delete_photo(request, gallery, pk):
   photo = get_object_or_404(Photo, pk=pk)
   photo.delete()
   messages.success(request, _("Photo deleted"))
-  return redirect("galleries:display", gallery)
+  return redirect("galleries:detail", gallery)

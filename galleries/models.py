@@ -125,7 +125,7 @@ class Gallery(models.Model):
     return f'{self.parent}/{self.name}' if self.parent else self.name
 
   def get_absolute_url(self):
-    return reverse("galleries:display", kwargs={"pk": self.pk})
+    return reverse("galleries:detail", kwargs={"pk": self.pk})
 
   def clean(self):
     # compute slug

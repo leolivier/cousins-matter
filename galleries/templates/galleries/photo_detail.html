@@ -15,7 +15,7 @@
 				{% endif %}
 				<p class="title is-4">{{photo.name}}</p>
 				<p class="buttons has-addons">
-					<a class="button" href="{% url 'galleries:display' photo.gallery.id %}" 
+					<a class="button" href="{% url 'galleries:detail' photo.gallery.id %}" 
 						title="{% blocktranslate with gname=photo.gallery.name%}Back to {{gname}}{%endblocktranslate %}">
 						<span class="icon is-large">
 							<i class="mdi mdi-arrow-up-right"></i>

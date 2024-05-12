@@ -3,7 +3,7 @@
 {% for gallery in galleries %}
   <div class="box">
     <article class="media">
-      {% url 'galleries:display' gallery.id as gallery_url %}
+      {% url 'galleries:detail' gallery.id as gallery_url %}
       <figure class="media-left">
         <a class="image is-128x128" href="{{gallery_url}}">
           <img src="{{gallery.cover_url}}">

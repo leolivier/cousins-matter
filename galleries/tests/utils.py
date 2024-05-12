@@ -37,13 +37,12 @@ class GalleryBaseTestCase(LoggedAccountTestCase):
     super().setUp()
 
   def tearDown(self):
+    super().tearDown()
     if os.path.isdir(TEST_MEDIA_ROOT):
       shutil.rmtree(TEST_MEDIA_ROOT)
     # print("deleted test media files")
     for gallery in Gallery.objects.filter(parent=None):
       gallery.delete()
-    if Photo.objects.all().count() > 0:
-      # print("destroying remaining photos")
-      for photo in Photo.objects.all():
-        photo.delete()
-    super().tearDown()
+    self.assertEqual(Gallery.objects.count(), 0)
+    self.assertEqual(Photo.objects.count(), 0)
+

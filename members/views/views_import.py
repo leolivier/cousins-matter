@@ -58,7 +58,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       'media_root': settings.MEDIA_ROOT,
       }
 
-  def _update_account(self, account, row):
+  def _update_account(self, account, row, activate_users):
       """update account if needed"""
       changed = False
       # for all account fields but username
@@ -70,15 +70,19 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
           if row[trfield] and account.__dict__[field] != row[trfield]:
               setattr(account, field, row[trfield])
               changed = True
+      if not account.is_active and activate_users:
+          account.is_active = changed = True
+
       if changed:
           account.save()
       return changed
 
-  def _create_account(self, row):
+  def _create_account(self, row, activate_users):
       pwd = generate_random_string(16)
       return User.objects.create_user(row[t('username')], row[t('email')], pwd,
                                       first_name=row[t('first_name')],
-                                      last_name=row[t('last_name')])
+                                      last_name=row[t('last_name')],
+                                      is_active=activate_users)
 
   def _get_member(self, account, account_exists):
       if account_exists:  # then member also exists
@@ -114,7 +118,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
               changed = True
       return changed
 
-  def _update_member(self, member, row):
+  def _update_member(self, member, row, activate_users):
       changed = False
       error = None
       for field in MEMBER_FIELD_NAMES:
@@ -136,9 +140,13 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
               else:
                   setattr(member, field, row[trfield])
               changed = True
+      if member.account != member.managing_account and activate_users:
+        member.managing_account = member.account
+        changed = True
+
       return changed, error
 
-  def _import_csv(self, csv_file):
+  def _import_csv(self, csv_file, activate_users):
     nbMembers = 0
     nbLines = 0
     errors = []
@@ -152,13 +160,13 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         account = User.objects.filter(username=row[t('username')]).first()
         if account:  # found, use it
             account_exists = True
-            self._update_account(account, row)
+            self._update_account(account, row, activate_users)
         else:  # not found, create it
-            account = self._create_account(row)
+            account = self._create_account(row, activate_users)
 
         member = self._get_member(account, account_exists)
         changed_address = self._update_address(member, row)
-        changed_member, error = self._update_member(member, row)
+        changed_member, error = self._update_member(member, row, activate_users)
         if error:
             errors.append(error)
 
@@ -174,6 +182,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     form = CSVImportMembersForm(request.POST, request.FILES)
     if form.is_valid():
       csv_file = request.FILES["csv_file"]
+      activate_users = form.cleaned_data["activate_users"]  
       # TODO: file size is unclear here: what is the real limit?
       if csv_file.multiple_chunks():
         size = math.floor(csv_file.size*100/(1024*1024))/100
@@ -181,7 +190,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         return redirect_to_referer(request)
 
       try:
-        nbLines, nbMembers, errors = self._import_csv(csv_file)
+        nbLines, nbMembers, errors = self._import_csv(csv_file, activate_users)
         messages.success(request, _("CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or updated") %
                          {'nbLines': nbLines, 'nbMembers': nbMembers})
         for error in errors:

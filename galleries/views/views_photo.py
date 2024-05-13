@@ -42,9 +42,7 @@ class PhotoAddView(LoginRequiredMixin, generic.CreateView):
         messages.success(request, _("Photo created"))
         return redirect("galleries:add_photo", gallery)
       else:
-        redirect("galleries:photo", gallery, photo.id)
-
-    return super().post(request, *args, **kwargs)
+        return redirect("galleries:photo", gallery, photo.id)
 
   def get(self, request, gallery):
     # initialize gallery to the value in the url

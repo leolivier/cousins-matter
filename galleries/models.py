@@ -97,7 +97,7 @@ class Photo(models.Model):
       else:  # small photos are used directly as thumbnails
         self.thumbnail = self.image
 
-    super().save(force_update=True)
+    super().save(force_update=True, update_fields=['thumbnail'])
 
 
 class Gallery(models.Model):

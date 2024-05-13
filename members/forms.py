@@ -94,3 +94,4 @@ class CSVImportMembersForm(forms.Form):
                                validators=[validate_csv_extension],
                                widget=forms.FileInput(attrs={'accept': ".csv"})
                                )
+    activate_users = forms.BooleanField(label=_('Automatically activate imported users'))

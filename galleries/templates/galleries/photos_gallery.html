@@ -1,10 +1,57 @@
 {% load i18n %}
 <div class="container">
-	<p class="title">{% translate "Photos" %}</p>
+	<div class="level">
+		<div class="level-left">
+			<p class="buttons has-addons">
+				{% if page.has_previous %}
+				<a class="button" href="{% url 'galleries:detail_page' gallery.id 1 %}" title="{% trans 'First'%}">
+					<span class="icon is-large"><i class="mdi mdi-24px mdi-page-first"></i></span>
+				</a>
+				<a class="button" href="{% url 'galleries:detail_page' gallery.id page.previous_page_number %}" title="{% trans 'Previous'%}">
+					<span class="icon is-large"><i class="mdi mdi-24px mdi-chevron-left-box-outline"></i></span>
+				</a>
+				{% else %}
+				<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-page-first"></i></span>
+				<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-chevron-left-box-outline"></i></span>
+				{% endif %}
+			</p>
+		</div>
+		<div class="level-item">
+			<p class="subtitle is-6">{% blocktranslate %}Page {{current_page}} on {{num_pages}}{% endblocktranslate %}</p>
+		</div>
+		<div class="level-item">
+			{% if page_range|first > 1 %}<button class="button is-light">...</button>{%endif%}
+			{% for i in page_range %}
+			{% if i != current_page %}
+			<a class="button is-primary is-light" href="{%url 'galleries:detail_page' gallery.id i %}" 
+				title="{% blocktranslate %}got to page #{{i}}{% endblocktranslate %}">{{i}}</a>
+			{%else%}
+				<button class="button is-light"	title="{% blocktranslate %}page #{{i}}{% endblocktranslate %}">{{i}}</button>
+			{%endif%}
+			{% endfor %}
+			{% if page_range|last < num_pages %}<button class="button is-light">...</button>{%endif%}
+		</div>
+		<div class="level-right">
+			<p class="buttons has-addons">
+				{% if page.has_next %}
+				<a class="button" href="{% url 'galleries:detail_page' gallery.id page.next_page_number %}" title="{% trans 'Next'%}">
+					<span class="icon is-large"><i class="mdi mdi-24px mdi-chevron-right-box-outline"></i></span>
+				</a>
+				<a class="button" href="{% url 'galleries:detail_page' gallery.id num_pages %}" title="{% trans 'Next'%}">
+					<span class="icon is-large"><i class="mdi mdi-24px mdi-page-last"></i></span>
+				</a>
+				{% else %}
+				<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-chevron-right-box-outline"></i></span>
+				<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-page-last"></i></span>
+				{% endif %}
+			</p>
+		</div>
+	</div>
+
 	<div class="grid">
-		{% for photo in photos %}
+		{% for photo in page.object_list %}
 		<div class="cell">
-			<a href="{% url 'galleries:photo' gallery.id photo.id %}">
+			<a href="{% url 'galleries:photo' photo.id %}">
 				<figure class="image is-128x128">
 					<img src="{{photo.thumbnail.url}}">
 				</figure>

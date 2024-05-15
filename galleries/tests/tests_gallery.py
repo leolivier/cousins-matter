@@ -110,36 +110,31 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     # check redirects to the newly created gallery detail
     self.assertRedirects(response, reverse("galleries:detail", args=[sg.id]), 302, 200)
     # check the response contains the sub gallery details (name, photo count)
-    self.assertContains(response, f'''<p>
-  <strong class="title">{sg.name}</strong>
-  <br>{sg.description}<br><small>{_("No photo")}</small>
-</p>''', html=True)
+    self.assertContains(response, f'''<div class="media-content">
+  <h1 class="title">{sg.name}</h1>
+    <p class="content">{sg.description}</p>
+</div>''', html=True)
     # check root gallery has the sub gallery for child
     self.assertTrue(rg.children.first().name == sgal_name)
     # check the root gallery appears as the parent gallery in the details
     self.assertContains(response, f'''<a class="button" href="{reverse('galleries:detail', args=[rg.id])}" 
       title="{_("Back to %(gname)s") % {'gname': rg.name}}">
       <span class="icon is-large">
-        <i class="mdi mdi-arrow-up-right"></i>
+        <i class="mdi mdi-24px mdi-arrow-up-right"></i>
       </span>
     </a>''', html=True)
 
     # check the sub gallery appears in the root gallery children list
     response = self.client.get(reverse("galleries:detail", args=[rg.id]), follow=True)
     url = reverse("galleries:detail", args=[sg.id])
-    self.assertContains(response, f'''<article class="media">
-  <figure class="media-left">
-    <a class="image is-128x128" href="{url}"><img src="{sg.cover_url()}"></a>
-  </figure>
-  <div class="media-content">
-    <a class="content has-text-primary-dark" href="{url}">
-      <p><strong>{sg.name}</strong>
-        <br>{sg.description}<br>
-        <small>{_("No photo")}</small>
-      </p>
-    </a>
-  </div>
-</article>''', html=True)
+    self.assertContains(response, f'''<div class="container has-text-centered">
+  <a class="mr-2" href="{url}">
+    <figure class="image is-64x64" style="margin:auto">
+      <img src="{sg.cover_url()}">
+    </figure>
+    <figcaption>{sg.name}</figcaption>
+  </a>
+</div>''', html=True)
 
   def test_modify_gallery(self):
     gal_name = get_gallery_name()

@@ -1,4 +1,5 @@
 import logging
+from django.conf import settings
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -30,11 +31,18 @@ class GalleryDetailView(LoginRequiredMixin, generic.DetailView):
   template_name = "galleries/gallery_detail.html"
   model = Gallery
   fields = "__all__"
-# TODO: is this get needed?
 
-  def get(self, request, pk):  # TODO manage slug instead of pk
+  def get(self, request, pk, page=1):  # TODO manage slug instead of pk
     gallery = get_object_or_404(Gallery, pk=pk)
-    return render(request, self.template_name, context={"gallery": gallery})
+    page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_GALLERY_PAGE_SIZE
+    possible_page_sizes = [10, 25, 50, 100]
+    if page_size not in possible_page_sizes:
+      possible_page_sizes = sorted(possible_page_sizes + [int(page_size)])
+
+    return render(request, self.template_name, context={"gallery": gallery, 
+                                                        "page": page, 
+                                                        "page_size": page_size, 
+                                                        "possible_page_sizes": possible_page_sizes})
 
 
 class GalleryTreeView(LoginRequiredMixin, generic.ListView):

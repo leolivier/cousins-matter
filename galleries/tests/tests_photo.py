@@ -19,7 +19,7 @@ def get_photo_name():
 
 class CheckLoginRequired(CreatedAccountTestCase):
   def test_login_required(self):
-    rurl = reverse('galleries:photo', args=[1, 1])
+    rurl = reverse('galleries:photo', args=[1])
     response = self.client.get(rurl)
     self.assertRedirects(response, self.next(self.login_url, rurl), 302, 200)
 
@@ -86,11 +86,11 @@ class CreatePhotoViewTests(PhotoTestsBase):
     url = reverse('galleries:detail', kwargs={'pk': self.root_gallery.id})
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'galleries/galleries_list.html')
+    self.assertTemplateUsed(response, 'galleries/photos_gallery.html')
     for p in photos:
       self.assertContains(response, f'''
   <div class="cell">
-    <a href="{reverse('galleries:photo', args=[p.gallery.id, p.id])}">
+    <a href="{reverse('galleries:photo', args=[p.id])}">
       <figure class="image is-128x128">
         <img src="{p.thumbnail.url}">
       </figure>
@@ -107,7 +107,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
     p.save()
 
     # Delete the photo
-    url = reverse('galleries:delete_photo', kwargs={'gallery': self.root_gallery.id, 'pk': p.id})
+    url = reverse('galleries:delete_photo', args=[p.id])
     response = self.client.post(url, follow=True)
     self.assertRedirects(response, reverse('galleries:detail', kwargs={'pk': self.root_gallery.id}), 302, 200)
     self.assertFalse(Photo.objects.filter(pk=p.id).exists())

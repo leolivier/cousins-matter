@@ -3,70 +3,88 @@
 {% block title %}{% title _("Show Gallery") %} {% endblock %}
 {% block content %}
 <div class="box">
-	<article class="media">
-		{% url 'galleries:detail' gallery.id as gallery_url %}
-		<figure class="media-left">
-			<a class="image is-128x128" href="{{gallery_url}}">
-				<img src="{{gallery.cover_url}}">
-			</a>
-		</figure>
-		<div class="media-content">
-			<a class="content has-text-primary-dark" href="{{gallery_url}}">
-				<p>
-					<strong class="title">{{gallery.name}}</strong>
-					<br/>
-					{{ gallery.description }}
-					<br/>
-					<small>{% include "galleries/photo_counter.html" %}</small>
-				</p>
-			</a>
-			{% if gallery.children.count > 0 %}
-			<p class="container has-text-centered">{% translate "Children galleries" %}</p>
-			{# <div class="container is-flex is-align-items-center"> #}
-			<div class="level">
-				{% include_galleries gallery.children.all %}
-				</div>
-			{% endif %}
-		</div>
-		<div class="media-right">
-			<div class="level">
-				<p class="buttons has-addons">
-					{% if gallery.parent %}
-					<a class="button" href="{% url 'galleries:detail' gallery.parent.id %}" 
-						title="{% blocktranslate with gname=gallery.parent.name%}Back to {{gname}}{%endblocktranslate %}">
-						<span class="icon is-large">
-							<i class="mdi mdi-arrow-up-right"></i>
-						</span>
-					</a>
-					{%else%}
-					<span class="icon is-large is-light">
-						<i class="mdi mdi-arrow-up-right"></i>
-					</span>
-					{%endif%}
-					<a class="button is-link" href="{% url 'galleries:add_photo' gallery.id %}"
-						title="{% translate 'Add Photos' %}">
-						<span class="icon is-large">
-							<i class="mdi mdi-plus-box-outline"></i>
-						</span>
-					</a>
-					<a class="button" href="{% url 'galleries:edit' gallery.id %}"
-						title="{% trans 'Edit Gallery' %}">
-						<span class="icon is-large">
-							<i class="mdi mdi-image-edit-outline"></i>
-						</span>
-					</a>
-					<button class="button js-modal-trigger" data-target="delete-gallery-modal" title="{% trans 'Delete gallery' %}">
-						<span class="icon is-large">
-							<i class="mdi mdi-trash-can-outline"></i>
-						</span>
-					</button>
+	<div class="level">
+		<div class="level-left">
+			<div class="container is-fluid">
+				<a class="media" href="{% url 'galleries:detail' gallery.id %}">
+					<div class="media-left">
+						<figure class="image is-128x128">
+							<img src="{{gallery.cover_url}}">
+							<figcaption class="has-text-centered">{% include "galleries/photo_counter.html" %}</figcaption>
+						</figure>
+					</div>
+					<div class="media-content">
+						<h1 class="title">{{gallery.name}}</h1>
+						<p class="content">{{ gallery.description }}</p>
+					</div>
+				</a>
 			</div>
 		</div>
-	</article>
+		{% if gallery.children.count > 0 %}
+		<div class="level-item">
+			<p class="content mr-3">{% translate "Children galleries" %}</p>
+			{% for subgal in gallery.children.all %}
+			<div class="container has-text-centered">
+				<a class="mr-2" href="{% url 'galleries:detail' subgal.id %}">
+					<figure class="image is-64x64" style="margin:auto">
+						<img src="{{subgal.cover_url}}">
+					</figure>
+					<figcaption>{{subgal.name}}</figcaption>
+				</a>
+			</div>
+			{%endfor%}
+		</div>
+		{% endif %}
+		<div class="level-item">
+			<label class="mr-3">{% translate "Photos per page:" %}</label>
+			<form>
+				<div class="select">
+					<select name="page_size" onchange="this.form.submit()">
+					{%for size in possible_page_sizes %}
+						<option value="{{size}}" {%if page_size == size %}selected{%endif%}>{{size}}</option>
+					{%endfor%}
+					</select>
+				</div>
+			</form>
+		</div>
+		<div class="level-right">
+			<p class="buttons has-addons mt-0">
+				{% if gallery.parent %}
+				<a class="button" href="{% url 'galleries:detail' gallery.parent.id %}" 
+					title="{% blocktranslate with gname=gallery.parent.name%}Back to {{gname}}{%endblocktranslate %}">
+					<span class="icon is-large">
+						<i class="mdi mdi-24px mdi-arrow-up-right"></i>
+					</span>
+				</a>
+				{%else%}
+				<span class="icon is-large is-light">
+					<i class="mdi mdi-arrow-up-right"></i>
+				</span>
+				{%endif%}
+				<a class="button is-link" href="{% url 'galleries:add_photo' gallery.id %}"
+					title="{% translate 'Add Photos' %}">
+					<span class="icon is-large">
+						<i class="mdi mdi-24px mdi-plus-box-outline"></i>
+					</span>
+				</a>
+				<a class="button" href="{% url 'galleries:edit' gallery.id %}"
+					title="{% trans 'Edit Gallery' %}">
+					<span class="icon is-large">
+						<i class="mdi mdi-24px mdi-image-edit-outline"></i>
+					</span>
+				</a>
+				<button class="button js-modal-trigger" data-target="delete-gallery-modal" title="{% trans 'Delete gallery' %}">
+					<span class="icon is-large">
+						<i class="mdi mdi-24px mdi-trash-can-outline"></i>
+					</span>
+				</button>
+			</p>
+		</div>
+	</div>
 </div>
 
 <div class="container mt-5">
-	{% include_photos gallery %}
+	{% include_photos gallery page page_size %}
 </div>
 {% include "galleries/gallery_confirm_delete.html" %}
 {% endblock %}

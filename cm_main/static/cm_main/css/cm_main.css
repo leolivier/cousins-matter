@@ -23,6 +23,8 @@ body {
 }
 
 /* override icon size */
-.button .icon.is-large {
+/* .button .icon.is-large {
   font-size: 1.5rem !important;
-}
+} 
+must use  mdi-24px instead
+*/

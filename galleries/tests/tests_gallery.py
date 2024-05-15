@@ -120,7 +120,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     self.assertContains(response, f'''<a class="button" href="{reverse('galleries:detail', args=[rg.id])}" 
       title="{_("Back to %(gname)s") % {'gname': rg.name}}">
       <span class="icon is-large">
-        <i class="mdi mdi-arrow-up-right"></i>
+        <i class="mdi mdi-24px mdi-arrow-up-right"></i>
       </span>
     </a>''', html=True)
 

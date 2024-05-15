@@ -1,5 +1,4 @@
 import logging
-from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
@@ -93,7 +92,7 @@ class PhotoEditView(LoginRequiredMixin, generic.UpdateView):
 @login_required
 def delete_photo(request, pk):
   photo = get_object_or_404(Photo, pk=pk)
-  gallery = photo.gallery
+  gallery = photo.gallery.id
   photo.delete()
   messages.success(request, _("Photo deleted"))
   return redirect("galleries:detail", gallery)

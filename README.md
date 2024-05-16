@@ -1,3 +1,5 @@
+[![GitHub CI push build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/publish-image-on-push.yml/badge.svg?branch=main)](https://github.com/leolivier/cousins-matter/actions?query=workflow%3APush+build) [![GitHub CI release build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/publish-image-on-release.yml/badge.svg)](https://github.com/leolivier/cousins-matter/actions?query=workflow%Release+build) [![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/leolivier/cousins-matter/blob/main/LICENSE) [![Django](https://img.shields.io/badge/Django-5.0.2-green)](https://www.djangoproject.com/)
+
 <table>
  <tr>
   <td width="50%"><img src='https://raw.githubusercontent.com/leolivier/cousins-matter/main/cm_main/static/cm_main/images/cousinades.png' title="Cousins Matter!"></td>

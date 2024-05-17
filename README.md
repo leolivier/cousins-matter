@@ -1,4 +1,12 @@
-[![GitHub CI push build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/publish-image-on-push.yml/badge.svg?branch=main)](https://github.com/leolivier/cousins-matter/actions?query=workflow%3APush+build) [![GitHub CI release build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/publish-image-on-release.yml/badge.svg)](https://github.com/leolivier/cousins-matter/actions?query=workflow%Release+build) [![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/leolivier/cousins-matter/blob/main/LICENSE) [![Django](https://img.shields.io/badge/Django-5.0.2-green)](https://www.djangoproject.com/)
+<div style="display:block; align-items:center">
+
+![GitHub Release](https://img.shields.io/github/v/release/leolivier/cousins-matter) ![GitHub Release Date](https://img.shields.io/github/release-date/leolivier/cousins-matter) [![GitHub CI release build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/publish-image-on-release.yml/badge.svg)](https://github.com/leolivier/cousins-matter/actions?query=workflow%Release+build) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/leolivier/cousins-matter/latest)
+
+ ![GitHub License](https://img.shields.io/github/license/leolivier/cousins-matter) ![GitHub top language](https://img.shields.io/github/languages/top/leolivier/cousins-matter) [![Django](https://img.shields.io/badge/Django-5.0.2-green)](https://www.djangoproject.com/) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/leolivier/cousins-matter) ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/leolivier/cousins-matter) ![GitHub repo size](https://img.shields.io/github/repo-size/leolivier/cousins-matter)
+
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/leolivier/cousins-matter) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-raw/leolivier/cousins-matter) [![GitHub CI push build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/publish-image-on-push.yml/badge.svg?branch=main)](https://github.com/leolivier/cousins-matter/actions?query=workflow%3APush+build) 
+
+</div>
 
 <table>
  <tr>

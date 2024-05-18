@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-18 10:53+0200\n"
+"POT-Creation-Date: 2024-05-18 16:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,39 +22,39 @@ msgstr ""
 msgid "Members"
 msgstr "Membres"
 
-#: members/forms.py:73
+#: members/forms.py:74
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Nom de la personne invitée (apparaîtra dans l'e-mail reçu)"
 
-#: members/forms.py:74
+#: members/forms.py:75
 msgid "Email to send invitation"
 msgstr "Email auquel envoyer l'invitation"
 
-#: members/forms.py:78
+#: members/forms.py:79
 msgid "Your name"
 msgstr "Ton nom"
 
-#: members/forms.py:79
+#: members/forms.py:80
 msgid "Email where you will receive the link"
 msgstr "Email où tu recevras le lien"
 
-#: members/forms.py:80
+#: members/forms.py:81
 msgid "Message to the administrator"
 msgstr "Message à l'administrateur"
 
-#: members/forms.py:81
+#: members/forms.py:82
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Captcha (cliquez sur l'image pour la rafraîchir si elle est illisible)"
 
-#: members/forms.py:92
+#: members/forms.py:97
 msgid "CSV file"
 msgstr "Fichier CSV"
 
-#: members/forms.py:93
+#: members/forms.py:98
 msgid "The CSV file containing the members to import."
 msgstr "Le fichier CSV contenant les membres à importer."
 
-#: members/forms.py:97
+#: members/forms.py:102
 msgid "Automatically activate imported users"
 msgstr "Activer automatiquement les utilisateurs importés"
 
@@ -711,17 +711,12 @@ msgstr ""
 "Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
 "obligatoires sont %(all_names)s"
 
-#: members/views/views_import.py:134
+#: members/views/views_import.py:136
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar introuvable : %(avatar)s pour le nom d'utilisateur %(username)s. "
 "Ignoré..."
-
-#: members/views/views_import.py:189
-#, python-format
-msgid "Uploaded file is too big (%(size)s MB)."
-msgstr "Le fichier téléchargé est trop volumineux (%(size)s Mo)."
 
 #: members/views/views_import.py:194
 #, python-format
@@ -792,10 +787,3 @@ msgstr "Un utilisateur avec cette adresse mail existe déjà."
 #: members/views/views_registration.py:192
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossible d'envoyer un mail. Merci de contacter l'administrateur."
-
-#~ msgid ""
-#~ "Missing column in CSV file: \"{\"first_name\"}\". Mandatory fields are "
-#~ "{m_fields}"
-#~ msgstr ""
-#~ "Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
-#~ "obligatoires sont %(all_names)s"

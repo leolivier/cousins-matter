@@ -3,10 +3,11 @@ from django import forms
 from django.forms import ModelForm, Form
 from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 from captcha.fields import CaptchaField
 from .models import Member, Address, Family
 from .widgets import FieldLinkWrapper
-from django.conf import settings
+from cousinsmatter.utils import check_file_size
 
 
 class MemberUpdateForm(ModelForm):
@@ -88,10 +89,14 @@ def validate_csv_extension(value):
         raise ValidationError('File must be a csv file')
 
 
+def check_csv_file_size(file):
+  return check_file_size(file, settings.MAX_CSV_FILE_SIZE)
+
+
 class CSVImportMembersForm(forms.Form):
     csv_file = forms.FileField(label=_('CSV file'),
                                help_text=_("The CSV file containing the members to import."),
-                               validators=[validate_csv_extension],
+                               validators=[validate_csv_extension, check_csv_file_size],
                                widget=forms.FileInput(attrs={'accept': ".csv"})
                                )
     activate_users = forms.BooleanField(label=_('Automatically activate imported users'))

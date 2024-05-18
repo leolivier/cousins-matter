@@ -181,15 +181,13 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     return (nbLines, nbMembers, errors)
 
   def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+    def size_in_mb(size):
+      return math.floor(size*100/(1024*1024))/100
+
     form = CSVImportMembersForm(request.POST, request.FILES)
     if form.is_valid():
       csv_file = request.FILES["csv_file"]
-      activate_users = form.cleaned_data["activate_users"]  
-      # TODO: file size is unclear here: what is the real limit?
-      if csv_file.multiple_chunks():
-        size = math.floor(csv_file.size*100/(1024*1024))/100
-        messages.error(request, _("Uploaded file is too big (%(size)s MB).") % {'size': size})
-        return redirect_to_referer(request)
+      activate_users = form.cleaned_data["activate_users"]
 
       try:
         nbLines, nbMembers, errors = self._import_csv(csv_file, activate_users)

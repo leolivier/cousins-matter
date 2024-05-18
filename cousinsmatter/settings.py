@@ -53,8 +53,8 @@ EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', default="cousinsmatter@localhost")
 
 # log levels
-DJANGO_LOG_LEVEL = env.str('DJANGO_LOG_LEVEL', default='INFO')
-CM_LOG_LEVEL = env.str('CM_LOG_LEVEL', default='INFO')
+DJANGO_LOG_LEVEL = env.str('DJANGO_LOG_LEVEL', default='DEBUG')
+CM_LOG_LEVEL = env.str('CM_LOG_LEVEL', default='DEBUG')
 
 # Number of days for birthdays
 BIRTHDAY_DAYS = env.int('BIRTHDAY_DAYS', default=50)

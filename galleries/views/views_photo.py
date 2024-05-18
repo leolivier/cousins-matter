@@ -1,3 +1,4 @@
+from datetime import date
 import logging
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
@@ -8,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.paginator import Paginator
 from ..models import Photo
+from ..forms import PhotoForm
 
 logger = logging.getLogger(__name__)
 
@@ -64,29 +66,28 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
 class PhotoAddView(LoginRequiredMixin, generic.CreateView):
   template_name = "galleries/add_photo.html"
   model = Photo
-  fields = ["name", "description", "image", "date", "gallery"]
+  form_class = PhotoForm
 
   def post(self, request: HttpRequest, gallery, *args, **kwargs) -> HttpResponse:
-    form = self.get_form()
+    form = PhotoForm(request.POST, request.FILES)
     if form.is_valid():
       photo = form.save()
       if 'create-and-add' in request.POST:
         messages.success(request, _("Photo created"))
         return redirect("galleries:add_photo", gallery)
       else:
-        return redirect("galleries:photo", gallery, photo.id)
+        return redirect("galleries:photo", photo.id)
 
   def get(self, request, gallery):
-    # initialize gallery to the value in the url
-    self.initial.update({'gallery': gallery})
-    form = self.get_form()
+    # initialize gallery to the value in the url and current date
+    form = PhotoForm(initial={'gallery': gallery, 'date': date.today()})
     return render(request, self.template_name, {'form': form})
 
 
 class PhotoEditView(LoginRequiredMixin, generic.UpdateView):
   template_name = "galleries/edit_photo.html"
   model = Photo
-  fields = ["name", "description", "image", "date", "gallery"]
+  form_class = PhotoForm
 
 
 @login_required

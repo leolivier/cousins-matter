@@ -43,7 +43,7 @@ class Photo(models.Model):
   image = models.ImageField(_("Photo"), upload_to=photo_path)
   thumbnail = models.ImageField(upload_to=thumbnail_path, blank=True)
   name = models.CharField(_("Name"), max_length=70, blank=True)
-  description = models.TextField(_("Description"), max_length=300, blank=True)  # TODO: rich editor
+  description = models.TextField(_("Description"), max_length=3000, blank=True)
   slug = models.SlugField(max_length=70, blank=True, null=False)
   date = models.DateField(_("Date"), help_text=_("Click on the month name or the year to change them quickly"))
   gallery = models.ForeignKey('Gallery', verbose_name="Gallery", on_delete=models.CASCADE, blank=True)
@@ -102,7 +102,7 @@ class Photo(models.Model):
 
 class Gallery(models.Model):
   name = models.CharField(_("Name"), max_length=70)
-  description = models.TextField(_("Description"), max_length=300, blank=True)
+  description = models.TextField(_("Description"), max_length=3000, blank=True)
   cover = models.ForeignKey('Photo', verbose_name=_("Cover Photo"), null=True, blank=True,
                             on_delete=models.DO_NOTHING, related_name="cover_of"
                             )

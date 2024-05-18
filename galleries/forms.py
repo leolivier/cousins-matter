@@ -1,6 +1,8 @@
 from django import forms
 from django.utils.translation import gettext as _
 from .validators import validate_zipfile_extension
+from .models import Photo, Gallery
+from cm_main.widgets import RichTextarea
 
 
 class BulkUploadPhotosForm(forms.Form):
@@ -9,3 +11,21 @@ class BulkUploadPhotosForm(forms.Form):
                               validators=[validate_zipfile_extension],
                               widget=forms.FileInput(attrs={'accept': ".zip"})
                               )
+
+
+class PhotoForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields = ["name", "description", "image", "date", "gallery"]
+        widgets = {
+            "description": RichTextarea(),
+        }
+
+
+class GalleryForm(forms.ModelForm):
+    class Meta:
+        model = Gallery
+        fields = ["name", "description", "cover", "parent"]
+        widgets = {
+            "description": RichTextarea(),
+        }

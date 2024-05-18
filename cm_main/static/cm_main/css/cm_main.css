@@ -28,3 +28,51 @@ body {
 } 
 must use  mdi-24px instead
 */
+
+/* CSS for summernote text 
+rich-text is for text displayed in pages, note-editable is for the text inside the editor
+*/
+.rich-text h1, .note-editable h1 {
+	font-weight: bold;
+	font-size: 1.5rem;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.rich-text h2, .note-editable h2 {
+	font-weight: bold;
+	font-size: 1.3rem;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.rich-text h3, .note-editable h3 {
+	font-weight: bold;
+	font-size: 1.15rem;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.rich-text h4, .note-editable h4 {
+	font-weight: bold;
+	font-size: 1rem;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.rich-text blockquote, .note-editable blockquote {
+	font-weight: 100;
+	font-size: 1rem;
+	font-family:'Courier New', Courier, monospace
+}
+.rich-text code, .note-editable code {
+	font-weight: 100;
+	font-size: 1rem;
+	font-family:'Courier New', Courier, monospace
+}
+.rich-text ul li, .note-editable ul li {
+  list-style: disc;
+  margin-left: 2rem;
+}
+.rich-text ol li, .note-editable ol li {
+  list-style: decimal;
+  margin-left: 2rem;
+}
+
+
+/* to define a color theme, eg
+:root {
+  --bulma-primary-h:360deg;
+} */

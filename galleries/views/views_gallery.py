@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 
 from ..models import Gallery
+from ..forms import GalleryForm
 
 logger = logging.getLogger(__name__)
 
@@ -16,15 +17,19 @@ class GalleryCreateView(LoginRequiredMixin, generic.CreateView):
 
   template_name = "galleries/create_gallery.html"
   model = Gallery
-  fields = ["name", "description", "cover", "parent"]
-# TODO: check slug uniqueness
+  form_class = GalleryForm
+
+  def get(self, request, parent_gallery=None):
+    if parent_gallery:
+      self.initial.update({'parent': parent_gallery})
+    return super().get(request)
 
 
 class GalleryUpdateView(LoginRequiredMixin, generic.UpdateView):
 
   template_name = "galleries/edit_gallery.html"
   model = Gallery
-  fields = ["name", "description", "cover", "parent"]
+  form_class = GalleryForm
 
 
 class GalleryDetailView(LoginRequiredMixin, generic.DetailView):

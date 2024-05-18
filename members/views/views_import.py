@@ -85,17 +85,19 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
                                       is_active=activate_users)
 
   def _get_member(self, account, account_exists):
-      if account_exists:  # then member also exists
-          return Member.objects.get(account=account)
-      else:
-          # member will be created by user creation by using signals
-          # so we have to wait for it to be created.
-          # TODO: add a timeout
-          while True:
-              time.sleep(0.1)
-              member = Member.objects.filter(account=account).first()
-              if member:
-                  return member
+    if account_exists:  # then member also exists
+        return Member.objects.get(account=account)
+    else:
+        # member will be created by user creation by using signals
+        # so we have to wait for it to be created.
+        timeout = 3  # wait max for 3s
+        while timeout > 0:
+            timeout -= 0.1
+            time.sleep(0.1)
+            member = Member.objects.filter(account=account).first()
+            if member:
+                return member
+    raise TimeoutError()
 
   def _update_address(self, member, row):
       changed = False

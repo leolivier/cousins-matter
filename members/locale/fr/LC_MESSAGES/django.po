@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-12 19:46+0200\n"
+"POT-Creation-Date: 2024-05-18 10:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -53,6 +53,10 @@ msgstr "Fichier CSV"
 #: members/forms.py:93
 msgid "The CSV file containing the members to import."
 msgstr "Le fichier CSV contenant les membres à importer."
+
+#: members/forms.py:97
+msgid "Automatically activate imported users"
+msgstr "Activer automatiquement les utilisateurs importés"
 
 #: members/models.py:16
 msgctxt "CSV Field"
@@ -625,23 +629,6 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/test_import.py:59 members/views/views_import.py:38
-#, python-format
-msgid ""
-"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
-msgstr ""
-"Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
-"sont %(all_names)s"
-
-#: members/tests/test_import.py:69 members/views/views_import.py:42
-#, python-format
-msgid ""
-"Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
-"%(all_names)s"
-msgstr ""
-"Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
-"obligatoires sont %(all_names)s"
-
 #: members/tests/tests_member.py:194 members/tests/tests_member.py:199
 #: members/views/views_member.py:103 members/views/views_member.py:122
 msgid "You do not have permission to edit this member."
@@ -707,19 +694,36 @@ msgstr "Dossier %(site_name)s"
 msgid "Page %(doc_page)s - %(title)s"
 msgstr "Page %(doc_page)s - %(title)s"
 
-#: members/views/views_import.py:130
+#: members/views/views_import.py:38
+#, python-format
+msgid ""
+"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
+msgstr ""
+"Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
+"sont %(all_names)s"
+
+#: members/views/views_import.py:42
+#, python-format
+msgid ""
+"Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
+"%(all_names)s"
+msgstr ""
+"Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
+"obligatoires sont %(all_names)s"
+
+#: members/views/views_import.py:134
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar introuvable : %(avatar)s pour le nom d'utilisateur %(username)s. "
 "Ignoré..."
 
-#: members/views/views_import.py:180
+#: members/views/views_import.py:189
 #, python-format
 msgid "Uploaded file is too big (%(size)s MB)."
 msgstr "Le fichier téléchargé est trop volumineux (%(size)s Mo)."
 
-#: members/views/views_import.py:185
+#: members/views/views_import.py:194
 #, python-format
 msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
@@ -728,7 +732,7 @@ msgstr ""
 "Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres "
 "créés ou mis à jour"
 
-#: members/views/views_import.py:188
+#: members/views/views_import.py:197
 #, python-format
 msgid "Warning: %(error)s"
 msgstr "Attention: %(error)s"

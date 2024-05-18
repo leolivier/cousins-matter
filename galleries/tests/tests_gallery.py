@@ -83,9 +83,15 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
   def test_create_root_gallery(self):
     url = reverse("galleries:create")
     response = self.client.get(url)
+    # print(response.content)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, 'galleries/create_gallery.html')
     self.assertIs(response.resolver_match.func.view_class, GalleryCreateView)
+    # check rich editor by class richtextarea, the rest is dynamic in the browser, can't be tested
+    self.assertContains(response, 
+                        '''<div class="control"> <textarea name="description" cols="40" rows="10"
+                           maxlength="3000" class="richtextarea" id="id_description"> </textarea> </div>''',
+                        html=True)
 
     gal_name = get_gallery_name()
     response = self.client.post(url, {'name': gal_name, 'description': "a test root gallery"}, follow=True)

@@ -11,6 +11,7 @@ urlpatterns = [
     path("<int:pk>/<int:page>", views_gallery.GalleryDetailView.as_view(), name="detail_page"),
     path("<int:pk>/edit", views_gallery.GalleryUpdateView.as_view(), name="edit"),
     path("<int:pk>/delete", views_gallery.delete_gallery, name="delete_gallery"),
+    path("<int:parent_gallery>/createsub", views_gallery.GalleryCreateView.as_view(), name="create_sub"),
     path("<int:gallery>/photos", views_photo.PhotoAddView.as_view(), name="add_photo"),
     path("<int:gallery>/photos/<int:photo_num>", views_photo.PhotoDetailView.as_view(), name="photo_list"),
     path("photo/<int:pk>", views_photo.PhotoDetailView.as_view(), name="photo"),

@@ -62,11 +62,16 @@ class CreatePhotoViewTests(PhotoTestsBase):
   def test_create_photo_view(self):
     ap_url = reverse('galleries:add_photo', kwargs={'gallery': self.root_gallery.id})
     response = self.client.get(ap_url, follow=True)
+    # print("response:", response)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, 'galleries/add_photo.html')
     self.assertIs(response.resolver_match.func.view_class, PhotoAddView)
+    # check rich editor by class richtextarea, the rest is dynamic in the browser, can't be tested
+    self.assertContains(response, 
+                        '''<div class="control"> <textarea name="description" cols="40" rows="10"
+                           maxlength="3000" class="richtextarea" id="id_description"> </textarea> </div>''',
+                        html=True)
 
-    # print("response:", response)
     formdata = {'name': 'a photo', 'description': 'a description', 'gallery': self.root_gallery.id,
                 'date': date.today()}
     formclass = PhotoAddView().get_form_class()

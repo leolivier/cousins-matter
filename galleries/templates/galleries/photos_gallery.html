@@ -24,7 +24,7 @@
 			{% for i in page_range %}
 			{% if i != current_page %}
 			<a class="button is-primary is-light" href="{%url 'galleries:detail_page' gallery.id i %}" 
-				title="{% blocktranslate %}got to page #{{i}}{% endblocktranslate %}">{{i}}</a>
+				title="{% blocktranslate %}go to page #{{i}}{% endblocktranslate %}">{{i}}</a>
 			{%else%}
 				<button class="button is-light"	title="{% blocktranslate %}page #{{i}}{% endblocktranslate %}">{{i}}</button>
 			{%endif%}

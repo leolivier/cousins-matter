@@ -67,6 +67,12 @@
 						<i class="mdi mdi-24px mdi-plus-box-outline"></i>
 					</span>
 				</a>
+				<a class="button is-link" href="{% url 'galleries:create_sub' gallery.id %}"
+					title="{% translate 'Create Sub Gallery' %}">
+					<span class="icon is-large">
+						<i class="mdi mdi-24px mdi-folder-plus-outline"></i>
+					</span>
+				</a>
 				<a class="button" href="{% url 'galleries:edit' gallery.id %}"
 					title="{% trans 'Edit Gallery' %}">
 					<span class="icon is-large">

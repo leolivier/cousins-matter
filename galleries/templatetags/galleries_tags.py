@@ -5,7 +5,6 @@ from ..models import Photo
 register = Library()
 
 
-# TODO: manage pagination
 @register.inclusion_tag("galleries/photos_gallery.html")
 def include_photos(gallery, page_num, page_size):
   photos = Photo.objects.filter(gallery=gallery)
@@ -20,8 +19,6 @@ def include_photos(gallery, page_num, page_size):
           "current_page": page_num,
           "num_pages": ptor.num_pages,
           "gallery": gallery}
-
-# TODO: manage pagination
 
 
 @register.inclusion_tag("galleries/galleries_list.html")

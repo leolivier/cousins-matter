@@ -1,16 +1,17 @@
-from django.db import models
+import logging
+import os
+import sys
+from io import BytesIO
 from PIL import Image, ImageOps
+from django.db import models
 from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.template.defaultfilters import slugify
-import logging
-import os
-import sys
-
-from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.urls import reverse
+
+from cousinsmatter.utils import check_file_size
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +40,12 @@ def thumbnail_path(instance, filename):
   return get_path(instance, filename, 'thumbnails')
 
 
+def check_image_size(image):
+  return check_file_size(image, settings.MAX_PHOTO_FILE_SIZE)
+
+
 class Photo(models.Model):
-  image = models.ImageField(_("Photo"), upload_to=photo_path)
+  image = models.ImageField(_("Photo"), upload_to=photo_path, validators=[check_image_size])
   thumbnail = models.ImageField(upload_to=thumbnail_path, blank=True)
   name = models.CharField(_("Name"), max_length=70, blank=True)
   description = models.TextField(_("Description"), max_length=3000, blank=True)

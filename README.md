@@ -46,6 +46,7 @@ Many settings are available to customize the site:
 
 #### Security
 * SECRET_KEY: A secret key that protects your site. Must be outrageously complex!
+* MAX_REGISTRATION_AGE: Maximum validity duration for invitation tokens, default is 2MB
 
 #### General Customization
 * SITE_NAME: The name of the site, default is 'Cousins Matter!
@@ -58,6 +59,9 @@ Many settings are available to customize the site:
 * SITE_COPYRIGHT: Your site copyright, e.g. 'Copyright © 2024 Cousins Matter'.
 * PDF_SIZE: PDF page size for the printed directory. 'A4' or 'letter' size
 * DEFAULT_GALLERY_PAGE_SIZE: number of photos per gallery page (changeable on screen), default is 25
+* MAX_PHOTO_FILE_SIZE: Max size of each photo, default is 5MB
+* MAX_GALLERY_BULK_UPLOAD_SIZE: Maximum size of galleries zip bulk upload file, default is 20MB
+* MAX_CSV_FILE_SIZE: Maximum size of CSV import file, default is 2MB
 
 #### Log levels
 * DJANGO_LOG_LEVEL: Log level for django and internal libraries, default is DEBUG

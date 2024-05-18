@@ -1,28 +1,28 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# French Translations for Galleries app.
+# Copyright (C) 2024 Olivier LEVILLAIN
+# This file is distributed under the same license as the Members package.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-18 10:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: French <LL@li.org>\n"
+"Language: FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: galleries/forms.py:9
+#: galleries/forms.py:15
 msgid "Zip file"
 msgstr "Fichier ZIP"
 
-#: galleries/forms.py:10
+#: galleries/forms.py:16
 msgid ""
 "The zip file containing the photos to upload. All folders will be created as "
 "galleries and photos in these folders added to the galleries. All photos "
@@ -32,48 +32,48 @@ msgstr ""
 "créés en tant que galeries et les photos de ces dossiers seront ajoutées aux "
 "galeries. Toutes les photos doivent être dans des dossiers."
 
-#: galleries/models.py:24 galleries/models.py:69
+#: galleries/models.py:25 galleries/models.py:74
 msgid "A photo must belong to a gallery."
 msgstr "Une photo doit apprtenir à une galerie."
 
-#: galleries/models.py:43 galleries/templates/galleries/photo_detail.html:3
+#: galleries/models.py:48 galleries/templates/galleries/photo_detail.html:3
 msgid "Photo"
 msgstr "Photo"
 
-#: galleries/models.py:45 galleries/models.py:104
+#: galleries/models.py:50 galleries/models.py:109
 msgid "Name"
 msgstr "Nom"
 
-#: galleries/models.py:46 galleries/models.py:105
+#: galleries/models.py:51 galleries/models.py:110
 msgid "Description"
 msgstr "Description"
 
-#: galleries/models.py:48
+#: galleries/models.py:53
 msgid "Date"
 msgstr "Date"
 
-#: galleries/models.py:48
+#: galleries/models.py:53
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
 
-#: galleries/models.py:106
+#: galleries/models.py:111
 msgid "Cover Photo"
 msgstr "Photo de couverture"
 
-#: galleries/models.py:109
+#: galleries/models.py:114
 msgid "Parent gallery"
 msgstr "Galerie parente"
 
-#: galleries/models.py:114
+#: galleries/models.py:119
 msgid "galleries"
 msgstr "galeries"
 
-#: galleries/models.py:138
+#: galleries/models.py:143
 #, python-format
 msgid "Another sub gallery of %(parent)s with the same name already exists"
 msgstr "Une autre sous galerie de %(parent)s avec le même nom existe déjà"
 
-#: galleries/models.py:141
+#: galleries/models.py:146
 msgid "Another root gallery with the same name already exists"
 msgstr "Une autre galerie racine avec le même nom existe déjà"
 
@@ -252,11 +252,11 @@ msgstr "aller à la page n°%(i)s"
 msgid "page #%(i)s"
 msgstr "page n°%(i)s"
 
-#: galleries/tests/tests_gallery.py:215 galleries/views/views_gallery.py:66
+#: galleries/tests/tests_gallery.py:221 galleries/views/views_gallery.py:66
 msgid "Gallery deleted"
 msgstr "Galerie supprimée avec tout son contenu"
 
-#: galleries/tests/tests_photo.py:114 galleries/views/views_photo.py:98
+#: galleries/tests/tests_photo.py:119 galleries/views/views_photo.py:98
 msgid "Photo deleted"
 msgstr "Photo supprimée"
 

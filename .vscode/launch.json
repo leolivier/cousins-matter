@@ -24,7 +24,7 @@
 			"program": "${workspaceFolder}/manage.py",
 			"args": [
 					"test",
-					"members.tests.tests_member"
+					"members.tests.tests_import"
 //					"accounts"
 			],
 			"django": true,

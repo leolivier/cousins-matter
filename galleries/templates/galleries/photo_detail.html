@@ -3,88 +3,82 @@
 {% block title %}{% title _("Photo") %} {% endblock %}
 {% block content %}
 <div class="box">
-	<div class="card">
-		<div class="box">
-			<div class="level">
-				<div class="level-left">
-					<p class="buttons has-addons">
-						{% if page.has_previous %}
-						<a href="{% url 'galleries:photo_list' photo.gallery.id 1 %}" title="{% trans 'First'%}">
-							<span class="icon is-large"><i class="mdi mdi-24px mdi-page-first"></i></span>
-						</a>
-						<a href="{% url 'galleries:photo_list' photo.gallery.id page.previous_page_number %}" title="{% trans 'Previous'%}">
-							<span class="icon is-large"><i class="mdi mdi-24px mdi-chevron-left-box-outline"></i></span>
-						</a>
-						{% else %}
-						<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-page-first"></i></span>
-						<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-chevron-left-box-outline"></i></span>
-						{% endif %}
-					</p>
-				</div>
-				<div class="level-item">
-					<p class="title is-4 mr-5">{{photo.name}}</p>
-					<p class="subtitle is-6">({% blocktranslate with gname=photo.gallery.name%}Page {{current_photo}} on {{num_photos}} of gallery {{gname}}{% endblocktranslate %})</p>
-				</div>
-				<div class="level-item">
-					{% if photo_range|first > 1 %}<button class="button is-light">...</button>{%endif%}
-					{% for i in photo_range %}
-					{% if i != current_photo %}
-					<a class="button is-primary is-light" href="{%url 'galleries:photo_list' photo.gallery.id i %}" 
-						title="{% blocktranslate %}got to photo #{{i}}{% endblocktranslate %}">{{i}}</a>
-					{%else%}
-						<button class="button is-light" disabled title="{% blocktranslate %}photo #{{i}}{% endblocktranslate %}">{{i}}</button>
-					{%endif%}
-					{% endfor %}
-					{% if photo_range|last < num_pages %}<button class="button is-light">...</button>{%endif%}
-				</div>
-				<div class="level-item">
-					<p class="buttons has-addons">
-						<a class="button" href="{% url 'galleries:detail' photo.gallery.id %}" 
-						title="{% blocktranslate with gname=photo.gallery.name%}Back to {{gname}}{%endblocktranslate %}">
+	<div class="box">
+		<div class="level">
+			<div class="level-left">
+				<p class="buttons has-addons">
+					{% if page.has_previous %}
+					<a href="{% url 'galleries:photo_list' photo.gallery.id 1 %}" title="{% trans 'First'%}">
+						<span class="icon is-large"><i class="mdi mdi-24px mdi-page-first"></i></span>
+					</a>
+					<a href="{% url 'galleries:photo_list' photo.gallery.id page.previous_page_number %}" title="{% trans 'Previous'%}">
+						<span class="icon is-large"><i class="mdi mdi-24px mdi-chevron-left-box-outline"></i></span>
+					</a>
+					{% else %}
+					<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-page-first"></i></span>
+					<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-chevron-left-box-outline"></i></span>
+					{% endif %}
+				</p>
+			</div>
+			<div class="level-item">
+				<p class="title is-4 mr-5">{{photo.name}}</p>
+				<p class="subtitle is-6">({% blocktranslate with gname=photo.gallery.name%}Page {{current_photo}} on {{num_photos}} of gallery {{gname}}{% endblocktranslate %})</p>
+			</div>
+			<div class="level-item">
+				{% if photo_range|first > 1 %}<button class="button is-light">...</button>{%endif%}
+				{% for i in photo_range %}
+				{% if i != current_photo %}
+				<a class="button is-primary is-light" href="{%url 'galleries:photo_list' photo.gallery.id i %}" 
+					title="{% blocktranslate %}go to photo #{{i}}{% endblocktranslate %}">{{i}}</a>
+				{%else%}
+					<button class="button is-light" disabled title="{% blocktranslate %}photo #{{i}}{% endblocktranslate %}">{{i}}</button>
+				{%endif%}
+				{% endfor %}
+				{% if photo_range|last < num_pages %}<button class="button is-light">...</button>{%endif%}
+			</div>
+			<div class="level-item">
+				<p class="buttons has-addons">
+					<a class="button" href="{% url 'galleries:detail' photo.gallery.id %}" 
+					title="{% blocktranslate with gname=photo.gallery.name%}Back to {{gname}}{%endblocktranslate %}">
+					<span class="icon is-large">
+						<i class="mdi mdi-24px mdi-arrow-up-right"></i>
+					</span>
+					</a>
+					<a class="button" href="{% url 'galleries:edit_photo' photo.id %}"
+						title="{% trans 'Edit Photo' %}">
 						<span class="icon is-large">
-							<i class="mdi mdi-24px mdi-arrow-up-right"></i>
+							<i class="mdi mdi-24px mdi-image-edit-outline"></i>
 						</span>
-						</a>
-						<a class="button" href="{% url 'galleries:edit_photo' photo.id %}"
-							title="{% trans 'Edit Photo' %}">
-							<span class="icon is-large">
-								<i class="mdi mdi-24px mdi-image-edit-outline"></i>
-							</span>
-						</a>
-						<button class="button js-modal-trigger" data-target="delete-photo-modal" title="{% trans 'Delete photo' %}">
-							<span class="icon is-large">
-								<i class="mdi mdi-24px mdi-trash-can-outline"></i>
-							</span>
-						</button>
-					</p>
-				</div>
-				<div class="level-right">
-					<p class="buttons has-addons">
-						{% if page.has_next %}
-						<a class="button" href="{% url 'galleries:photo_list' photo.gallery.id page.next_page_number %}" title="{% trans 'Next'%}">
-							<span class="icon is-large"><i class="mdi mdi-24px mdi-chevron-right-box-outline"></i></span>
-						</a>
-						<a  class="button"href="{% url 'galleries:photo_list' photo.gallery.id num_photos %}" title="{% trans 'Next'%}">
-							<span class="icon is-large"><i class="mdi mdi-24px mdi-page-last"></i></span>
-						</a>
-						{% else %}
-						<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-chevron-right-box-outline"></i></span>
-						<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-page-last"></i></span>
-						{% endif %}
-					</p>
-				</div>
+					</a>
+					<button class="button js-modal-trigger" data-target="delete-photo-modal" title="{% trans 'Delete photo' %}">
+						<span class="icon is-large">
+							<i class="mdi mdi-24px mdi-trash-can-outline"></i>
+						</span>
+					</button>
+				</p>
+			</div>
+			<div class="level-right">
+				<p class="buttons has-addons">
+					{% if page.has_next %}
+					<a class="button" href="{% url 'galleries:photo_list' photo.gallery.id page.next_page_number %}" title="{% trans 'Next'%}">
+						<span class="icon is-large"><i class="mdi mdi-24px mdi-chevron-right-box-outline"></i></span>
+					</a>
+					<a  class="button"href="{% url 'galleries:photo_list' photo.gallery.id num_photos %}" title="{% trans 'Next'%}">
+						<span class="icon is-large"><i class="mdi mdi-24px mdi-page-last"></i></span>
+					</a>
+					{% else %}
+					<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-chevron-right-box-outline"></i></span>
+					<span class="button icon is-large" disabled><i class="mdi mdi-24px mdi-page-last"></i></span>
+					{% endif %}
+				</p>
 			</div>
 		</div>
-		<div class="card-content">
-			<div class="container">
-				<figure class="image">
-					<img src="{{photo.image.url}}">
-				</figure>
-			</div>
-		</div>
-		<div class="card-footer">
-			<p class="content">{{photo.description}}</p>
-		</div>
+	</div>
+	<div class="container">
+		<figure class="image">
+			<img src="{{photo.image.url}}">
+		</figure>
+		<div class="rich-text">{% autoescape off %}{{photo.description}}{% endautoescape %}</div>
 	</div>
 </div>
 {% include "galleries/photo_confirm_delete.html" %}

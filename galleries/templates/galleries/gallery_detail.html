@@ -61,13 +61,13 @@
 					<i class="mdi mdi-arrow-up-right"></i>
 				</span>
 				{%endif%}
-				<a class="button is-link" href="{% url 'galleries:add_photo' gallery.id %}"
+				<a class="button" href="{% url 'galleries:add_photo' gallery.id %}"
 					title="{% translate 'Add Photos' %}">
 					<span class="icon is-large">
-						<i class="mdi mdi-24px mdi-plus-box-outline"></i>
+						<i class="mdi mdi-24px mdi-image-plus-outline"></i>
 					</span>
 				</a>
-				<a class="button is-link" href="{% url 'galleries:create_sub' gallery.id %}"
+				<a class="button" href="{% url 'galleries:create_sub' gallery.id %}"
 					title="{% translate 'Create Sub Gallery' %}">
 					<span class="icon is-large">
 						<i class="mdi mdi-24px mdi-folder-plus-outline"></i>

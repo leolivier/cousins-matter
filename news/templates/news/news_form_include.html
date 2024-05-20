@@ -11,9 +11,9 @@
 					{{ contentform | crispy}}
 			</section>
 			<footer class="card-footer">
-				<div class="buttons">
+				<div class="buttons is-centered">
 					<button type="submit" class="button is-primary">{%translate "Submit" %}</button>
-					<button type="reset" class="button" aria-label="close">{%translate "Cancel" %}</button>
+					<a type="reset" class="button" aria-label="close" href="{%url 'news:display' news.id %}">{%translate "Cancel" %}</a>
 				</div>
 			</footer>
 		</form>

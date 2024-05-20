@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import generic
@@ -5,6 +6,7 @@ from django.core.paginator import Paginator
 from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.translation import gettext as _
 from cousinsmatter.utils import is_ajax
 from .models import News, NewsContent, Comment
 from .forms import NewsContentForm, NewsForm, CommentForm
@@ -37,8 +39,8 @@ class NewsDisplayView(generic.DetailView):
       object = get_object_or_404(News, pk=news_id)
       replies = NewsContent.objects.filter(news=news_id, news_first=None).all()
 
-      for r in replies:
-        print(r.content)
+    #   for r in replies:
+    #     print(r.content)
 
       return {
          'object': object,
@@ -88,7 +90,8 @@ class NewsEditView(generic.UpdateView):
       instance = get_object_or_404(News, pk=pk)
       newsform = NewsForm(instance=instance)
       contentform = NewsContentForm(instance=instance.first_content)
-      return render(request, "news/news_form.html", context={'newsform': newsform, 'contentform': contentform})
+      return render(request, "news/news_form.html", 
+                    context={'newsform': newsform, 'contentform': contentform, 'news': instance})
 
     def post(self, request, pk):
       instance = get_object_or_404(News, pk=pk)
@@ -103,6 +106,10 @@ class NewsEditView(generic.UpdateView):
         return redirect("news:display", news.id)
 
 
+class NewsDeleteView(generic.DeleteView):
+    model = News
+
+
 def add_reply(request, pk):
   reply = NewsContentForm(request.POST)
   reply.instance.news_id = pk
@@ -113,14 +120,27 @@ def add_reply(request, pk):
 
 
 def edit_reply(request, reply):
-  instance = get_object_or_404(NewsContent, pk=reply)
-  form = NewsContentForm(request.POST, instance=instance)
-  form.save()
-  return redirect(reverse("news:display", instance.news.id))
+  if is_ajax(request):
+    instance = get_object_or_404(NewsContent, pk=reply)
+    form = NewsContentForm(request.POST, instance=instance)
+    if form.is_valid():
+      replyobj = form.save()
+      return JsonResponse({"reply_id": replyobj.id, "reply_str": replyobj.content}, status=200)
+    else:
+      errors = form.errors.as_json()
+      return JsonResponse({"errors": errors}, status=400)
+  raise ValidationError("Forbidden non ajax request")
 
 
-class NewsDeleteView(generic.DeleteView):
-    model = News
+@csrf_exempt
+def delete_reply(request, reply):
+    if is_ajax(request):
+        reply = get_object_or_404(NewsContent, pk=reply)
+        if (News.objects.filter(first_content=reply).exists()):
+          raise ValidationError(_("Can't delete the first message of a thread!"))
+        reply.delete()
+        return JsonResponse({"reply_id": reply.id}, status=200)
+    raise ValidationError("Forbidden non ajax request")
 
 
 class CommentCreateView(generic.CreateView):
@@ -128,14 +148,14 @@ class CommentCreateView(generic.CreateView):
     form_class = CommentForm
 
     def post(self, request, content_id):
+      content = get_object_or_404(NewsContent, pk=content_id)
       form = CommentForm(request.POST)
       if form.is_valid():
         author = Member.objects.get(account__id=request.user.id)
         form.instance.author_id = author.id
         form.instance.news_content_id = content_id
         form.save()
-        news = News.objects.only('id').get(first_content__id=content_id)
-        return redirect("news:display", news.id)
+        return redirect("news:display", content.news.id)
 
 
 class CommentEditView(generic.UpdateView):
@@ -153,7 +173,7 @@ class CommentEditView(generic.UpdateView):
           else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)
-      raise ValueError("Forbidden non ajax request")
+      raise ValidationError("Forbidden non ajax request")
 
 
 @csrf_exempt
@@ -162,4 +182,4 @@ def delete_comment(request, pk):
         comment = get_object_or_404(Comment, pk=pk)
         comment.delete()
         return JsonResponse({"comment_id": comment.id}, status=200)
-    raise ValueError("Forbidden non ajax request")
+    raise ValidationError("Forbidden non ajax request")

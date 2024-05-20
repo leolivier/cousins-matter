@@ -3,53 +3,58 @@
 <div class="container">
 	<hr style="margin-bottom: 0;">
 	{% for comment in news.comment_set.all %}
-	<div class="level" id="comment-level-{{comment.id}}">
-		<div class="level-left">
-			<div class="content is-small">
-				<p class="mr-5" id="comment-content-{{comment.id}}">{{comment.content}}</p>
-			</div>
-		</div>
-		<div class="level-right">
-			<div class="container">
-				<p class="content is-small">
-					{{comment.author.get_full_name}}
-					<a href="{%url 'members:detail' comment.author.id %}">
-						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
-					</a>
-					<br>
-					{{comment.date}}
-				</p>
-			</div>
-			{% if comment.author.account.username == user.username %}
-			<a class="button" onclick="show_edit_comment_form('{{comment.id}}');">
-				<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
-			</a>
-			{%url "news:delete_comment" comment.id as delete_url%}
-			<a class="button" onclick="delete_comment('{{delete_url}}', '{{comment.id}}')">
-				<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
-			</a>
-			{%endif%}
-		</div>
-	</div>
-	<form method="POST" class="comment-form" id='edit-comment-{{comment.id}}'>
-		{% csrf_token %}
-		<div class="level">
-			<div class="level-left">{{comment_form|crispy}}</div>
-			<div class="level-right">
-				<div class="buttons">
-					<input type="submit" class="button is-link" value="{%trans 'Add'%}">
-					<input type="reset" class="button" value="{%trans 'Cancel'%}" 
-						onclick="hide_edit_comment_form('{{comment.id}}')">
+	<div class="container" id="comment-div-{{comment.id}}">
+		<div class="level" id="comment-level-{{comment.id}}">
+			<div class="level-left">
+				<div class="content is-small">
+					<p class="mr-5" id="comment-content-{{comment.id}}">{{comment.content}}</p>
 				</div>
 			</div>
+			<div class="level-right">
+				<div class="container">
+					<p class="content is-small">
+						{{comment.author.get_full_name}}
+						<a href="{%url 'members:detail' comment.author.id %}">
+							<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+						</a>
+						<br>
+						{{comment.date}}
+					</p>
+				</div>
+				{% if comment.author.account.username == user.username %}
+				<a class="button" onclick="show_edit_comment_form('{{comment.id}}');" title="{%trans 'Edit' %}">
+					<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
+				</a>
+				{%url "news:delete_comment" comment.id as delete_url%}
+				<a class="button" onclick="delete_comment('{{delete_url}}', '{{comment.id}}')" title="{%trans 'Delete' %}">
+					<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
+				</a>
+				{%endif%}
+			</div>
 		</div>
-	</form>	
-	<script>$(document).ready(()=>{
-		ajax_form_action('#edit-comment-{{comment.id}}', "{% url 'news:edit_comment' comment.id %}", (response)=>{
-			hide_edit_comment_form('{{comment.id}}', response.comment_str)
-		})
-	});</script>
-	<hr style="margin: 0;">
+		<form method="POST" class="comment-form" id='edit-comment-{{comment.id}}'>
+			{% csrf_token %}
+			<div class="level">
+				<div class="level-left">{{comment_form|crispy}}</div>
+				<div class="level-right">
+					<div class="buttons">
+						<button type="submit" class="button is-link" title="{%trans 'Update' %}">
+							<span class="icon"><i class="mdi mdi-check-circle-outline"></i></span>
+						</button>
+						<button type="reset" class="button" onclick="hide_edit_comment_form('{{comment.id}}')"  title="{%trans 'Cancel' %}">
+							<span class="icon"><i class="mdi mdi-close-circle-outline"></i></span>
+						</button>
+					</div>
+				</div>
+			</div>
+			<script>$(document).ready(()=>{
+				ajax_form_action('#edit-comment-{{comment.id}}', "{% url 'news:edit_comment' comment.id %}", (response)=>{
+					hide_edit_comment_form('{{comment.id}}', response.comment_str)
+				})
+			});</script>
+		</form>
+		<hr style="margin: 0;">
+	</div>
 	{% endfor %}
 	{% if news.comment_set.count > 0 %}
 	<a class="is-small content" onclick="show_comment_form('#create-comment-{{news_id}}');">{%trans 'Add comment'%}</a>

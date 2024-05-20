@@ -43,20 +43,30 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // function to set a form to make an AJAX call
-function set_modal_form_ajax(id, action, on_success, on_error) {
+function ajax_form_action(id, action, on_success, on_error=on_ajax_error) {
   $(id).submit(function () {
     // create an AJAX call
     $.ajax({
       data: $(this).serialize(), // get the form data
       type: $(this).attr('method'), // GET or POST
       url: action,
-      // on success
       success: on_success,
-      // on error
       error: on_error
     });
     return false;
   });
+}
+
+// function to execute an action (POST) through ajax with no form
+function ajax_action(action, on_success, on_error=on_ajax_error) {
+  $.ajax({
+    data: {}, // no data
+    type: 'POST',
+    url: action,
+    success: on_success,
+    error: on_error
+  });
+  return false;
 }
 
 // function to add a new option to a select

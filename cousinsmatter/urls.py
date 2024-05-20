@@ -37,7 +37,6 @@ urlpatterns = [
     path("galleries/", include("galleries.urls")),
     path("polls/", include("polls.urls")),
     path("admin/", admin.site.urls),
-    # path("ckeditor/", include("ckeditor_uploader.urls")),
     path('password/change/',
          auth_views.PasswordChangeView.as_view(template_name='accounts/password_change.html'), name='change_password'),
     path('password-reset/<uidb64>/<token>/',

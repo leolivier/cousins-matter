@@ -15,13 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.utils import timezone
 from django.urls import path
 from django.views.i18n import JavaScriptCatalog
+from django.views.decorators.http import last_modified
 from . import views
 
 app_name = "cm_main"
-
+last_modified_date = timezone.now()
 urlpatterns = [
   path("", views.HomeView.as_view(), name="Home"),
-  path('jsi18n/cm_main', JavaScriptCatalog.as_view(packages=['cm_main']), name='javascript-catalog'),
+  path('jsi18n/cm_main',
+       last_modified(lambda req, **kw: last_modified_date)(  # JS Catalog will be reloaded only at server restart
+          JavaScriptCatalog.as_view(packages=['cm_main'])),
+       name='javascript-catalog'),
 ]

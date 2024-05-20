@@ -30,7 +30,7 @@
     {% endblock %}
     </nav>
 
-    <div id="content">
+    <div id="content" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
       <div class="container">
         <ul class="messages">
           {% for message in messages %}

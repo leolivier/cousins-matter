@@ -68,6 +68,7 @@ INSTALLED_APPS = [
   'members.apps.MembersConfig',
   'galleries.apps.GalleriesConfig',
   'polls.apps.PollsConfig',
+  'news.apps.NewsConfig',
   'crispy_forms',
   'crispy_bulma',
   'django_icons',

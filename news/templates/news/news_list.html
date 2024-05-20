@@ -1,0 +1,42 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Latest News") %}{% endblock %}
+{% block content %}
+<div class="container">
+	<div class="level">
+		<div class="level-left title is-3">{% title _("Latest News") %}</div>
+		<div class="level-item">
+			{% if page_range|first > 1 %}<button class="button is-light">...</button>{%endif%}
+			{% for i in page_range %}
+			{% if i != current_page %}
+			<a class="button is-primary is-light" href="{%url 'news:page' i %}" 
+				title="{% blocktranslate %}go to page #{{i}}{% endblocktranslate %}">{{i}}</a>
+			{%else%}
+				<button class="button is-light"	title="{% blocktranslate %}page #{{i}}{% endblocktranslate %}">{{i}}</button>
+			{%endif%}
+			{% endfor %}
+			{% if page_range|last < num_pages %}<button class="button is-light">...</button>{%endif%}
+		</div>
+	</div>
+	
+	{%for news in object_list %}
+	<div class="level">
+		<div class="level-left">
+			<a class="block" href="{%url 'news:display' news.id%}">{{news.title}}</a>
+		</div>
+		<div class="level-item">
+			<div class="tags">
+				<p class="tag">
+					{{news.first_content.author.get_full_name}}
+					<a href="{%url 'members:detail' news.first_content.author.id %}">
+						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+					</a>
+				</p>
+				<p class="tag">{{news.first_content.date}}</p>
+			</div>
+		</div>
+	</div>
+	<hr style="margin:0">
+	{%endfor%}
+</div>
+{%endblock%}

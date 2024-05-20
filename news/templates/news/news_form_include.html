@@ -1,0 +1,21 @@
+{% load i18n crispy_forms_tags cm_tags %}
+<div class="container">
+	<div class="card">
+		<header class="card-header">
+			<p class="card-header-title">{% title title %}</p>
+		</header>
+		<form method="post" {%if action%}action="{{action}}"{%endif%}>
+			{% csrf_token %}
+			<section class="card-content">
+					{{ newsform | crispy}}
+					{{ contentform | crispy}}
+			</section>
+			<footer class="card-footer">
+				<div class="buttons">
+					<button type="submit" class="button is-primary">{%translate "Submit" %}</button>
+					<button type="reset" class="button" aria-label="close">{%translate "Cancel" %}</button>
+				</div>
+			</footer>
+		</form>
+	</div>
+</div>

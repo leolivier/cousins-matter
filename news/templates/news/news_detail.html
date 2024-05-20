@@ -1,0 +1,120 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags %}
+{% block header %}{%include "cm_main/include-summernote.html" %}{%endblock%}
+{% block title %}{% title _("News") %}{% endblock %}
+{% block content %}
+{%with content=object.first_content %}
+<script>
+	function hide_comment_form(sel) {
+		$(sel+' input:text').val(''); 
+		$(sel).hide()
+	}
+	function show_comment_form(sel) {
+		$(sel).show()
+	}
+	function show_edit_comment_form(id) {
+		form = $('#edit-comment-'+id)
+		level = $('#comment-level-'+id)
+		content = $('#comment-content-'+id)
+		input = $('#edit-comment-'+id+' input:text')
+		input.val(content.text());
+		level.hide()
+		form.show()
+	}
+	function hide_edit_comment_form(id, value=undefined) {
+		form = $('#edit-comment-'+id)
+		level = $('#comment-level-'+id)
+		content = $('#comment-content-'+id)
+		input = $('#edit-comment-'+id+' input:text')
+		if (value) { content.text(value); }
+		input.val('');
+		form.hide()
+		level.show()
+	}
+	function delete_comment(url, id) {
+		if (confirm("{%trans 'Are you sure?'%}")) {
+			ajax_action(url, (response)=>{
+				$('#edit-comment-'+id).remove()
+				$('#comment-level-'+id).remove()
+			})                
+   	}
+	}
+
+	$(document).ready(()=>{ hide_comment_form(".comment-form");})
+</script>
+
+<div class="container mt-5">
+	<div class="level">
+		<div class="level-left">
+			<div class="title is-2">{{object.title}}</div>
+		</div>
+		<div class="level-item">
+			<div class="container">
+				<p class="content is-small">
+					{{content.author.get_full_name}}
+					<a href="{%url 'members:detail' content.author.id %}">
+						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+					</a>
+					<br>
+					{{content.date}}
+				</p>
+			</div>
+		</div>
+		{% if object.first_content.author.account.username == user.username %}
+		<div class="level-right">
+			<a class="button" href="{% url 'news:edit' object.id %}">
+				<span class="is-hidden-mobile">{% translate "Edit" %}</span>
+				<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
+			</a>
+		</div>
+		{%endif%}
+	</div>
+	<div class="container">
+		{% autoescape off %}{{content.content}}{%endautoescape%}
+	</div>
+</div>
+{%include "news/comment_list.html" with news=content%}
+<hr>
+<div class="container">
+	
+	<p class="title is-4">
+		{%if nreplies > 0%}
+			{%blocktranslate%}{{nreplies}} answers{%endblocktranslate%}
+		{%else%}
+			{%trans 'No answer'%}
+			{%endif%}
+	</p>
+
+	{%for reply in replies %}
+	<hr>
+	<div class="container has-text-left">
+		{% autoescape off %}{{reply.content}}{%endautoescape%}
+		<div class="level">
+			<div class="level-left">
+				<p class="content is-small">
+					{{reply.author.get_full_name}}
+					<a href="{%url 'members:detail' reply.author.id %}">
+						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+					</a>
+					<br>
+					{{reply.date}}
+				</p>
+			</div>
+			{% if reply.author.account.username == user.username %}
+			<div class="level-right">
+				<a class="button" href="{% url 'news:edit_reply' reply.id %}">
+					<span class="is-hidden-mobile">{% translate "Edit" %}</span>
+					<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
+				</a>
+			</div>
+			{%endif%}
+		</div>
+		{%include "news/comment_list.html" with news=reply %}
+	</div>
+	{%endfor%}
+	<hr>
+</div>
+{%url "news:reply" object.id as url%}
+{%include "news/news_form_include.html" with title=_('Your answer') contentform=reply_form action=url %}
+{%endwith%}
+{% endblock %}

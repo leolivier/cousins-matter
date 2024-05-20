@@ -1,0 +1,18 @@
+{% extends "cm_main/base.html" %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block header %}{%include "cm_main/include-summernote.html" %}{%endblock%}
+{% block title %}
+  {% if object %}
+    {% title _("Edit News") %}
+  {%else%}
+		{% title _("Create News") %}
+	{%endif%}
+{% endblock %}
+
+{% block content %}
+  {% if object %}
+  	{%include "news/news_form_include.html" with title=_("Edit News") %}
+  {%else%}
+  	{%include "news/news_form_include.html" with title=_("Create News") %}
+	{%endif%}
+{% endblock %}

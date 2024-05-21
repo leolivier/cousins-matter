@@ -1,20 +1,20 @@
 from django.forms import ModelForm
 from cm_main.widgets import RichTextarea
-from .models import NewsContent, News, Comment
+from .models import Message, Post, Comment
 
 
-class NewsContentForm(ModelForm):
+class MessageForm(ModelForm):
   class Meta:
-    model = NewsContent
+    model = Message
     fields = ['content']
     widgets = {
         'content': RichTextarea(),
     }
 
 
-class NewsForm(ModelForm):
+class PostForm(ModelForm):
   class Meta:
-    model = News
+    model = Post
     fields = ['title']
 
 

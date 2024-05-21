@@ -3,29 +3,30 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from members.models import Member
+
 logger = logging.getLogger(__name__)
 
 
-class NewsContent(models.Model):
+class Message(models.Model):
   author = models.ForeignKey(Member, on_delete=models.CASCADE)
   date = models.DateTimeField(auto_now=True)
-  content = models.TextField(_('Content'), max_length=settings.NEWS_MAX_SIZE)
-  news = models.ForeignKey('News', on_delete=models.CASCADE, null=True, blank=True)
+  content = models.TextField(_('Content'), max_length=settings.MESSAGE_MAX_SIZE)
+  post = models.ForeignKey('Post', on_delete=models.CASCADE, null=True, blank=True)
 
   class Meta:
     ordering = ['date']
     indexes = [
-            models.Index(fields=["news", "author"]),
+            models.Index(fields=["post", "author"]),
     ]
 
 
-class News(models.Model):
+class Post(models.Model):
   title = models.CharField(_('Title'), max_length=120)
-  first_content = models.ForeignKey(NewsContent, related_name='news_first', on_delete=models.CASCADE)
+  first_message = models.ForeignKey(Message, related_name='first_of_post', on_delete=models.CASCADE)
 
   class Meta:
-    verbose_name_plural = _('news')
-    ordering = ['first_content__date']
+    verbose_name_plural = _('posts')
+    ordering = ['first_message__date']
     indexes = [
             models.Index(fields=["title"]),
     ]
@@ -34,12 +35,12 @@ class News(models.Model):
 class Comment(models.Model):
   author = models.ForeignKey(Member, on_delete=models.CASCADE)
   date = models.DateTimeField(auto_now=True)
-  news_content = models.ForeignKey(NewsContent, on_delete=models.CASCADE)
-  content = models.CharField(_('Comment'), max_length=settings.NEWS_COMMENTS_MAX_SIZE)
+  message = models.ForeignKey(Message, on_delete=models.CASCADE)
+  content = models.CharField(_('Comment'), max_length=settings.MESSAGE_COMMENTS_MAX_SIZE)
 
   class Meta:
     verbose_name_plural = _('comments')
-    ordering = ['news_content', 'date']
+    ordering = ['message', 'date']
     indexes = [
-            models.Index(fields=["news_content", "author"]),
+            models.Index(fields=["message", "author"]),
     ]

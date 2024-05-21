@@ -8,17 +8,17 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 from cousinsmatter.utils import is_ajax
-from .models import News, NewsContent, Comment
-from .forms import NewsContentForm, NewsForm, CommentForm
+from .models import Post, Message, Comment
+from .forms import MessageForm, PostForm, CommentForm
 from members.models import Member
 
 
-class NewsListView(generic.ListView):
-    model = News
+class PostsListView(generic.ListView):
+    model = Post
 
     def get_context_data(self, **kwargs):
       page_num = int(self.kwargs['page']) if 'page' in self.kwargs else 1
-      ptor = Paginator(News.objects.select_related('first_content').all().order_by('-first_content__date'), 2)
+      ptor = Paginator(Post.objects.select_related('first_message').all().order_by('-first_message__date'), 2)
       page = ptor.page(page_num)
       max_pages = 5
       # compute a page range from the initial range + or -max-pages
@@ -31,13 +31,13 @@ class NewsListView(generic.ListView):
       }
 
 
-class NewsDisplayView(generic.DetailView):
-    model = News
+class PostDisplayView(generic.DetailView):
+    model = Post
 
     def get_context_data(self, **kwargs):
-      news_id = self.kwargs['pk']
-      object = get_object_or_404(News, pk=news_id)
-      replies = NewsContent.objects.filter(news=news_id, news_first=None).all()
+      post_id = self.kwargs['pk']
+      object = get_object_or_404(Post, pk=post_id)
+      replies = Message.objects.filter(post=post_id, first_of_post=None).all()
 
     #   for r in replies:
     #     print(r.content)
@@ -47,82 +47,82 @@ class NewsDisplayView(generic.DetailView):
          'replies': replies,
          'nreplies': replies.count(),
          'comment_form': CommentForm(),
-         'reply_form': NewsContentForm(),
+         'reply_form': MessageForm(),
       }
 
 
-class NewsCreateView(generic.CreateView):
-    model = News
+class PostCreateView(generic.CreateView):
+    model = Post
 
     def get(self, request):
-      newsform = NewsForm()
-      contentform = NewsContentForm()
-      return render(request, "news/news_form.html", context={'newsform': newsform, 'contentform': contentform})
+      post_form = PostForm()
+      message_form = MessageForm()
+      return render(request, "forum/post_form.html", context={'post_form': post_form, 'message_form': message_form})
 
     def post(self, request):
-      newsform = NewsForm(request.POST)
-      contentform = NewsContentForm(request.POST)
-      news = content = None
-      if newsform.is_valid() and contentform.is_valid():
+      post_form = PostForm(request.POST)
+      message_form = MessageForm(request.POST)
+      post = message = None
+      if post_form.is_valid() and message_form.is_valid():
         try:
             author = Member.objects.only('id').get(account__id=request.user.id)
-            contentform.instance.author_id = author.id
+            message_form.instance.author_id = author.id
             with transaction.atomic():
-                content = contentform.save()
-                newsform.instance.first_content = content
-                news = newsform.save()
-                content.news = news
-                content.save()
-            return redirect("news:display", news.id)
+                message = message_form.save()
+                post_form.instance.first_message = message
+                post = post_form.save()
+                message.post = post
+                message.save()
+            return redirect("forum:display", post.id)
         except Exception as e:
-            if content and content.id:  # content saved, delete it
-              content.delete()
-            if news and news.id:  # news saved, delete it
-              news.delete()
+            if message and message.id:  # message saved, delete it
+              message.delete()
+            if post and post.id:  # post saved, delete it
+              post.delete()
             raise e
 
 
-class NewsEditView(generic.UpdateView):
-    model = News
-    form_class = NewsForm
+class PostEditView(generic.UpdateView):
+    model = Post
+    form_class = PostForm
 
     def get(self, request, pk):
-      instance = get_object_or_404(News, pk=pk)
-      newsform = NewsForm(instance=instance)
-      contentform = NewsContentForm(instance=instance.first_content)
-      return render(request, "news/news_form.html", 
-                    context={'newsform': newsform, 'contentform': contentform, 'news': instance})
+      instance = get_object_or_404(Post, pk=pk)
+      post_form = PostForm(instance=instance)
+      message_form = MessageForm(instance=instance.first_message)
+      return render(request, "forum/post_form.html",
+                    context={'post_form': post_form, 'message_form': message_form, 'post': instance})
 
     def post(self, request, pk):
-      instance = get_object_or_404(News, pk=pk)
-      if instance.first_content.author.account.id != request.user.id:
-        raise PermissionError("Only authors can edit their news")
+      instance = get_object_or_404(Post, pk=pk)
+      if instance.first_message.author.account.id != request.user.id:
+        raise PermissionError("Only authors can edit their posts")
 
-      newsform = NewsForm(request.POST, instance=instance)
-      contentform = NewsContentForm(request.POST, instance=instance.first_content)
-      if newsform.is_valid() and contentform.is_valid():
-        contentform.save()
-        news = newsform.save()
-        return redirect("news:display", news.id)
+      post_form = PostForm(request.POST, instance=instance)
+      message_form = MessageForm(request.POST, instance=instance.first_message)
+      if post_form.is_valid() and message_form.is_valid():
+        message_form.save()
+        post = post_form.save()
+        return redirect("forum:display", post.id)
 
 
-class NewsDeleteView(generic.DeleteView):
-    model = News
+class PostDeleteView(generic.DeleteView):
+    model = Post
 
 
 def add_reply(request, pk):
-  reply = NewsContentForm(request.POST)
-  reply.instance.news_id = pk
+  reply = MessageForm(request.POST)
+  reply.instance.post_id = pk
   author = Member.objects.only('id').get(account__id=request.user.id)
   reply.instance.author_id = author.id
   reply.save()
-  return redirect(reverse("news:display", args=[pk]))
+  return redirect(reverse("forum:display", args=[pk]))
 
 
 def edit_reply(request, reply):
   if is_ajax(request):
-    instance = get_object_or_404(NewsContent, pk=reply)
-    form = NewsContentForm(request.POST, instance=instance)
+    instance = get_object_or_404(Message, pk=reply)
+    form = MessageForm(request.POST, instance=instance)
     if form.is_valid():
       replyobj = form.save()
       return JsonResponse({"reply_id": replyobj.id, "reply_str": replyobj.content}, status=200)
@@ -135,8 +135,8 @@ def edit_reply(request, reply):
 @csrf_exempt
 def delete_reply(request, reply):
     if is_ajax(request):
-        reply = get_object_or_404(NewsContent, pk=reply)
-        if (News.objects.filter(first_content=reply).exists()):
+        reply = get_object_or_404(Message, pk=reply)
+        if (Post.objects.filter(first_message=reply).exists()):
           raise ValidationError(_("Can't delete the first message of a thread!"))
         reply.delete()
         return JsonResponse({"reply_id": reply.id}, status=200)
@@ -147,15 +147,15 @@ class CommentCreateView(generic.CreateView):
     model = Comment
     form_class = CommentForm
 
-    def post(self, request, content_id):
-      content = get_object_or_404(NewsContent, pk=content_id)
+    def post(self, request, message_id):
+      message = get_object_or_404(Message, pk=message_id)
       form = CommentForm(request.POST)
       if form.is_valid():
         author = Member.objects.get(account__id=request.user.id)
         form.instance.author_id = author.id
-        form.instance.news_content_id = content_id
+        form.instance.message_id = message_id
         form.save()
-        return redirect("news:display", content.news.id)
+        return redirect("forum:display", message.post.id)
 
 
 class CommentEditView(generic.UpdateView):

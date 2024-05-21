@@ -68,7 +68,7 @@ INSTALLED_APPS = [
   'members.apps.MembersConfig',
   'galleries.apps.GalleriesConfig',
   'polls.apps.PollsConfig',
-  'news.apps.NewsConfig',
+  'forum.apps.ForumConfig',
   'crispy_forms',
   'crispy_bulma',
   'django_icons',
@@ -242,7 +242,7 @@ DEFAULT_GALLERY_PAGE_SIZE = env.int('DEFAULT_GALLERY_PAGE_SIZE', 25)
 MAX_GALLERY_BULK_UPLOAD_SIZE = env.int('MAX_GALLERY_BULK_UPLOAD_SIZE', 20*1024*1024)
 MAX_CSV_FILE_SIZE = env.int('MAX_CSV_FILE_SIZE', 2*1024*1024)
 
-NEWS_MAX_SIZE = env.int('NEWS_MAX_SIZE', 1024*1024)
-NEWS_COMMENTS_MAX_SIZE = env.int('NEWS_COMMENTS_MAX_SIZE', 1000)
+MESSAGE_MAX_SIZE = env.int('MESSAGE_MAX_SIZE', 1024*1024)
+MESSAGE_COMMENTS_MAX_SIZE = env.int('MESSAGE_COMMENTS_MAX_SIZE', 1000)
 
 DARK_MODE = env.bool('DARK_MODE', False)

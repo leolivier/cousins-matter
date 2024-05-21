@@ -22,7 +22,7 @@
   * [Translations](#translations)
   * [Member Management](#member-management)
   * [Galleries](#galleries)
-  * [News/Forum](#newsforum)
+  * [Forum](#forum)
   * [Coming soon](#coming-soon)
 * [Easiest way to run it: Docker](#easiest-way-to-run-it-docker)
   * [The first time only](#the-first-time-only)
@@ -67,7 +67,7 @@
 * Photos can be imported in bulk using zip files. Each folder in the zip file becomes a gallery. Updates are managed
 * Gallery photo display is paginated
 
-## News/Forum
+## Forum
 * Active members can create posts
 * Active members can reply to other members' posts or add simple comments
 
@@ -188,8 +188,8 @@ Many settings are available to customize the site:
 * MAX_PHOTO_FILE_SIZE: Max size of each photo, default is 5MB
 * MAX_GALLERY_BULK_UPLOAD_SIZE: Maximum size of galleries zip bulk upload file, default is 20MB
 * MAX_CSV_FILE_SIZE: Maximum size of CSV import file, default is 2MB
-* NEWS_MAX_SIZE: News field size (take into account that it could contain one photo), default is 1MB
-* NEWS_COMMENTS_MAX_SIZE: Comments field size, default is 1000
+* MESSAGE_MAX_SIZE: Forum message field size (take into account that it could contain one photo), default is 1MB
+* MESSAGE_COMMENTS_MAX_SIZE: Comments field size, default is 1000
 
 ## Log levels
 * DJANGO_LOG_LEVEL: Log level for django and internal libraries, default is DEBUG

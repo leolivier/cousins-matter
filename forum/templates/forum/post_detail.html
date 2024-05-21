@@ -2,11 +2,11 @@
 {% load i18n cm_tags crispy_forms_tags static %}
 {% block header %}
 	{%include "cm_main/include-summernote.html" %}
-	<script src="{% static 'news/js/news.js' %}"></script>
+	<script src="{% static 'forum/js/forum.js' %}"></script>
 {%endblock%}
-{% block title %}{% title _("News") %}{% endblock %}
+{% block title %}{% title _("Post") %}{% endblock %}
 {% block content %}
-{%with content=object.first_content %}
+{%with message=object.first_message %}
 
 <div class="container mt-5">
 	<div class="level">
@@ -16,31 +16,31 @@
 		<div class="level-item">
 			<div class="container">
 				<p class="content is-small">
-					{{content.author.get_full_name}}
-					<a href="{%url 'members:detail' content.author.id %}">
+					{{message.author.get_full_name}}
+					<a href="{%url 'members:detail' message.author.id %}">
 						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
 					</a>
 					<br>
-					{{content.date}}
+					{{message.date}}
 				</p>
 			</div>
 		</div>
-		{% if object.first_content.author.account.username == user.username %}
+		{% if object.first_message.author.account.username == user.username %}
 		<div class="level-right">
-			<a class="button" href="{% url 'news:edit' object.id %}" title="{%trans 'Edit' %}">
+			<a class="button" href="{% url 'forum:edit' object.id %}" title="{%trans 'Edit' %}">
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
 			</a>
-			<a class="button" href="{% url 'news:delete' object.id %}" title="{%trans 'Delete' %}">
+			<a class="button" href="{% url 'forum:delete' object.id %}" title="{%trans 'Delete' %}">
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
 			</a>
 		</div>
 		{%endif%}
 	</div>
 	<div class="container">
-		{% autoescape off %}{{content.content}}{%endautoescape%}
+		{% autoescape off %}{{message.content}}{%endautoescape%}
 	</div>
 </div>
-{%include "news/comment_list.html" with news=content%}
+{%include "forum/comment_list.html" with message=message%}
 <hr>
 <div class="container">
 	
@@ -73,7 +73,7 @@
 					<a class="button" onclick="show_edit_reply_form('{{reply.id}}')" title="{%trans 'Edit' %}">
 						<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
 					</a>
-					{% url 'news:delete_reply' reply.id as delete_reply_url %}
+					{% url 'forum:delete_reply' reply.id as delete_reply_url %}
 					<a class="button" onclick="delete_reply('{{delete_reply_url}}', '{{reply.id}}')" title="{%trans 'Delete' %}">
 						<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
 					</a>
@@ -97,17 +97,17 @@
 				</div>
 			</div>
 			<script>$(document).ready(()=>{
-				ajax_form_action('#edit-reply-{{reply.id}}', "{% url 'news:edit_reply' reply.id %}", (response)=>{
+				ajax_form_action('#edit-reply-{{reply.id}}', "{% url 'forum:edit_reply' reply.id %}", (response)=>{
 					hide_edit_reply_form('{{reply.id}}', response.reply_str)
 				})
 			});</script>
 		</form>
-	{%include "news/comment_list.html" with news=reply %}
+	{%include "forum/comment_list.html" with message=reply %}
 	</div>
 	{%endfor%}
 	<hr>
 </div>
-{%url "news:reply" object.id as url%}
-{%include "news/news_form_include.html" with title=_('Your answer') contentform=reply_form action=url news=object %}
+{%url "forum:reply" object.id as url%}
+{%include "forum/post_form_include.html" with title=_('Your answer') message_form=reply_form action=url post=object %}
 {%endwith%}
 {% endblock %}

@@ -2,17 +2,17 @@
 {% load i18n crispy_forms_tags cm_tags %}
 {% block header %}{%include "cm_main/include-summernote.html" %}{%endblock%}
 {% block title %}
-  {% if news %}
-    {% title _("Edit News") %}
+  {% if post %}
+    {% title _("Edit Post") %}
   {%else%}
-		{% title _("Create News") %}
+		{% title _("Create Post") %}
 	{%endif%}
 {% endblock %}
 
 {% block content %}
-  {% if news %}
-  	{%include "news/news_form_include.html" with title=_("Edit News") %}
+  {% if post %}
+  	{%include "forum/post_form_include.html" with title=_("Edit Post") %}
   {%else%}
-  	{%include "news/news_form_include.html" with title=_("Create News") %}
+  	{%include "forum/post_form_include.html" with title=_("Create Post") %}
 	{%endif%}
 {% endblock %}

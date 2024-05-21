@@ -1,8 +1,8 @@
 {% load i18n crispy_forms_tags %}
-{%with news_id=news.id%}
+{%with message_id=message.id%}
 <div class="container">
 	<hr style="margin-bottom: 0;">
-	{% for comment in news.comment_set.all %}
+	{% for comment in message.comment_set.all %}
 	<div class="container" id="comment-div-{{comment.id}}">
 		<div class="level" id="comment-level-{{comment.id}}">
 			<div class="level-left">
@@ -25,7 +25,7 @@
 				<a class="button" onclick="show_edit_comment_form('{{comment.id}}');" title="{%trans 'Edit' %}">
 					<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
 				</a>
-				{%url "news:delete_comment" comment.id as delete_url%}
+				{%url "forum:delete_comment" comment.id as delete_url%}
 				<a class="button" onclick="delete_comment('{{delete_url}}', '{{comment.id}}')" title="{%trans 'Delete' %}">
 					<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
 				</a>
@@ -48,7 +48,7 @@
 				</div>
 			</div>
 			<script>$(document).ready(()=>{
-				ajax_form_action('#edit-comment-{{comment.id}}', "{% url 'news:edit_comment' comment.id %}", (response)=>{
+				ajax_form_action('#edit-comment-{{comment.id}}', "{% url 'forum:edit_comment' comment.id %}", (response)=>{
 					hide_edit_comment_form('{{comment.id}}', response.comment_str)
 				})
 			});</script>
@@ -56,15 +56,15 @@
 		<hr style="margin: 0;">
 	</div>
 	{% endfor %}
-	{% if news.comment_set.count > 0 %}
-	<a class="is-small content" onclick="show_comment_form('#create-comment-{{news_id}}');">{%trans 'Add comment'%}</a>
+	{% if message.comment_set.count > 0 %}
+	<a class="is-small content" onclick="show_comment_form('#create-comment-{{message_id}}');">{%trans 'Add comment'%}</a>
 	{% else %}
 	<p class="content is-small">
 		{% translate "No comment" %}. 
-		<a class="is-small content" onclick="show_comment_form('#create-comment-{{news_id}}')">{%trans 'Add comment'%}</a>
+		<a class="is-small content" onclick="show_comment_form('#create-comment-{{message_id}}')">{%trans 'Add comment'%}</a>
 	</p>
 	{% endif %}
-	<form action="{%url 'news:create_comment' news_id %}" id="create-comment-{{news_id}}" method="POST" class="comment-form">
+	<form action="{%url 'forum:create_comment' message_id %}" id="create-comment-{{message_id}}" method="POST" class="comment-form">
 		{% csrf_token %}
 		<div class="level">
 			<div class="level-left">{{comment_form|crispy}}</div>
@@ -72,7 +72,7 @@
 				<div class="buttons">
 					<input type="submit" class="button is-link" value="{%trans 'Add'%}">
 					<input type="reset" class="button" value="{%trans 'Cancel'%}" 
-						onclick="hide_comment_form('#create-comment-{{news_id}}')">
+						onclick="hide_comment_form('#create-comment-{{message_id}}')">
 				</div>
 			</div>
 		</div>

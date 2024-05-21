@@ -80,12 +80,12 @@ msgid "Bulk Upload"
 msgstr "Chargement en masse"
 
 #: cm_main/templates/cm_main/menu.html:67
-msgid "News"
-msgstr "Discussions"
+msgid "Forum"
+msgstr "Forum"
 
 #: cm_main/templates/cm_main/menu.html:72
-msgid "Create News"
-msgstr "Nouvelle discussion"
+msgid "Create Post"
+msgstr "Nouvelle Discussion"
 
 #: cm_main/templates/cm_main/menu.html:92
 msgid "Sign in"

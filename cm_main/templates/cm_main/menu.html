@@ -63,14 +63,14 @@
 		</div>
 
 		<div class="navbar-item has-dropdown is-hoverable">
-			<a class="navbar-item" href="{% url 'news:list' %}">
-				<span class="is-hidden-mobile">{% translate "News" %}</span>
-				<span class="icon is-large"><i class="mdi mdi-24px mdi-newspaper"></i></span>
+			<a class="navbar-item" href="{% url 'forum:list' %}">
+				<span class="is-hidden-mobile">{% translate "Forum" %}</span>
+				<span class="icon is-large"><i class="mdi mdi-24px mdi-forum"></i></span>
 			</a>
 			<div class="navbar-dropdown">
-				<a class="navbar-item" href="{% url 'news:create' %}">
-					{% translate "Create News" %}
-					<span class="icon is-large"><i class="mdi mdi-24px mdi-newspaper-plus"></i></span>
+				<a class="navbar-item" href="{% url 'forum:create' %}">
+					{% translate "Create Post" %}
+					<span class="icon is-large"><i class="mdi mdi-24px mdi-forum-plus-outline"></i></span>
 				</a>
 			</div>
 		</div>

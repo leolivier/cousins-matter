@@ -7,13 +7,16 @@
 		<form method="post" {%if action%}action="{{action}}"{%endif%}>
 			{% csrf_token %}
 			<section class="card-content">
-					{{ newsform | crispy}}
-					{{ contentform | crispy}}
+					{{ post_form | crispy}}
+					{{ message_form | crispy}}
 			</section>
 			<footer class="card-footer">
 				<div class="buttons is-centered">
 					<button type="submit" class="button is-primary">{%translate "Submit" %}</button>
-					<a type="reset" class="button" aria-label="close" href="{%url 'news:display' news.id %}">{%translate "Cancel" %}</a>
+					<a type="reset" class="button" aria-label="close" 
+						href="{%if post%}{%url 'forum:display' post.id %}{%else%}{%url 'forum:list'%}{%endif%}">
+						{%translate "Cancel" %}
+					</a>
 				</div>
 			</footer>
 		</form>

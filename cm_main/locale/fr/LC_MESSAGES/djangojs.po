@@ -34,4 +34,4 @@ msgid "Validate"
 msgstr "Valider"
 
 msgid "Are you sure?"
-msgid "Es-tu sûr?"
+msgstr "Es-tu sûr?"

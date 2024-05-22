@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-11 17:23+0200\n"
+"POT-Creation-Date: 2024-05-21 18:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -51,47 +51,55 @@ msgstr "Membres"
 msgid "Birthdays"
 msgstr "Anniversaires"
 
-#: cm_main/templates/cm_main/menu.html:27
+#: cm_main/templates/cm_main/menu.html:28
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: cm_main/templates/cm_main/menu.html:30
+#: cm_main/templates/cm_main/menu.html:32
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: cm_main/templates/cm_main/menu.html:34
+#: cm_main/templates/cm_main/menu.html:37
 msgid "Invite Member"
 msgstr "Inviter un Membre"
 
-#: cm_main/templates/cm_main/menu.html:37
+#: cm_main/templates/cm_main/menu.html:41
 msgid "Import from CSV"
 msgstr "Importer depuis un fichier CSV"
 
-#: cm_main/templates/cm_main/menu.html:45
+#: cm_main/templates/cm_main/menu.html:50
 msgid "Galleries"
 msgstr "Galeries"
 
-#: cm_main/templates/cm_main/menu.html:50
+#: cm_main/templates/cm_main/menu.html:55
 msgid "Create Gallery"
 msgstr "Créer une Galerie"
 
-#: cm_main/templates/cm_main/menu.html:53
+#: cm_main/templates/cm_main/menu.html:59
 msgid "Bulk Upload"
 msgstr "Chargement en masse"
 
-#: cm_main/templates/cm_main/menu.html:74
+#: cm_main/templates/cm_main/menu.html:67
+msgid "Forum"
+msgstr "Forum"
+
+#: cm_main/templates/cm_main/menu.html:72
+msgid "Create Post"
+msgstr "Nouvelle Discussion"
+
+#: cm_main/templates/cm_main/menu.html:92
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/menu.html:79
+#: cm_main/templates/cm_main/menu.html:97
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/menu.html:93
+#: cm_main/templates/cm_main/menu.html:111
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/menu.html:97
+#: cm_main/templates/cm_main/menu.html:115
 msgid "Log Out"
 msgstr "Déconnexion"
 

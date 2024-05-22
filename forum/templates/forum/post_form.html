@@ -1,0 +1,18 @@
+{% extends "cm_main/base.html" %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block header %}{%include "cm_main/include-summernote.html" %}{%endblock%}
+{% block title %}
+  {% if post %}
+    {% title _("Edit Post") %}
+  {%else%}
+		{% title _("Create Post") %}
+	{%endif%}
+{% endblock %}
+
+{% block content %}
+  {% if post %}
+  	{%include "forum/post_form_include.html" with title=_("Edit Post") %}
+  {%else%}
+  	{%include "forum/post_form_include.html" with title=_("Create Post") %}
+	{%endif%}
+{% endblock %}

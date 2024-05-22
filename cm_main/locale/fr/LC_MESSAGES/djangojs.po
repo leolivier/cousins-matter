@@ -33,3 +33,5 @@ msgstr "Maintenant"
 msgid "Validate"
 msgstr "Valider"
 
+msgid "Are you sure?"
+msgstr "Es-tu sûr?"

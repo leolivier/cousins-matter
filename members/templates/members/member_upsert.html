@@ -106,29 +106,29 @@
 		<script>
 			$(document).ready(function () {
 				// associate to each modal form created above an ajax processing function
-				set_modal_form_ajax('#create-address-modal-form', "{% url 'members:modal_create_address' %}", 
+				ajax_form_action('#create-address-modal-form', "{% url 'members:modal_create_address' %}", 
 											function(response) {
 													add_selected_option('#id_address', response.address_id, response.address_str, "{% translate 'Address created' %}");
-											}, on_ajax_error);
-				set_modal_form_ajax('#create-family-modal-form', "{% url 'members:modal_create_family' %}", 
+											});
+				ajax_form_action('#create-family-modal-form', "{% url 'members:modal_create_family' %}", 
 											function (response) {
 													add_selected_option('#id_family', response.family_id, response.family_name, "{% translate 'Family created' %}");
-											}, on_ajax_error);
+											});
 				{% if m_form.address.value %}
-					set_modal_form_ajax('#change-address-modal-form', "{% url 'members:modal_update_address' m_form.address.value %}", 
+					ajax_form_action('#change-address-modal-form', "{% url 'members:modal_update_address' m_form.address.value %}", 
 											function(response) { 
 												change_option('#id_address', response.address_id, response.address_str, "{% translate 'Address updated' %}"); 
-											}, on_ajax_error);
+											});
 											{% endif %}
 				{% if m_form.family.value %}
-					set_modal_form_ajax('#change-family-modal-form', "{% url 'members:modal_update_family' m_form.family.value %}", 
+					ajax_form_action('#change-family-modal-form', "{% url 'members:modal_update_family' m_form.family.value %}", 
 											function (response) {	('#id_family', response.family_id, response.family_name, "{% translate 'Family updated' %}");
-											}, on_ajax_error);
+											});
 				{% endif %}
-				set_modal_form_ajax('#create-parent-family-modal-form', "{% url 'members:modal_create_family' %}", 
+				ajax_form_action('#create-parent-family-modal-form', "{% url 'members:modal_create_family' %}", 
 											function (response) {
 													add_selected_option('#id_parent', response.family_id, response.family_name, "{% translate 'Parent family created' %}");
-											}, on_ajax_error);
+											});
 
 				// check user name is not taken for self registration
 				add_ajax_checker('id_username', "{% url 'accounts:validate_username' %}", "is_taken", "{% translate 'This username is not available!' %}")

@@ -68,6 +68,7 @@ INSTALLED_APPS = [
   'members.apps.MembersConfig',
   'galleries.apps.GalleriesConfig',
   'polls.apps.PollsConfig',
+  'forum.apps.ForumConfig',
   'crispy_forms',
   'crispy_bulma',
   'django_icons',
@@ -105,6 +106,7 @@ TEMPLATES = [
         'django.contrib.auth.context_processors.auth',
         'django.contrib.messages.context_processors.messages',
         'django.template.context_processors.media',
+        'cousinsmatter.context_processors.settings',
       ],
     },
   },
@@ -239,3 +241,8 @@ DEFAULT_GALLERY_COVER_URL = '/static/galleries/default-gallery-cover.jpg'
 DEFAULT_GALLERY_PAGE_SIZE = env.int('DEFAULT_GALLERY_PAGE_SIZE', 25)
 MAX_GALLERY_BULK_UPLOAD_SIZE = env.int('MAX_GALLERY_BULK_UPLOAD_SIZE', 20*1024*1024)
 MAX_CSV_FILE_SIZE = env.int('MAX_CSV_FILE_SIZE', 2*1024*1024)
+
+MESSAGE_MAX_SIZE = env.int('MESSAGE_MAX_SIZE', 1024*1024)
+MESSAGE_COMMENTS_MAX_SIZE = env.int('MESSAGE_COMMENTS_MAX_SIZE', 1000)
+
+DARK_MODE = env.bool('DARK_MODE', False)

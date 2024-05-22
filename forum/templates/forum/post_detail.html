@@ -1,0 +1,114 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags crispy_forms_tags static %}
+{% block header %}
+	{%include "cm_main/include-summernote.html" %}
+	<script src="{% static 'forum/js/forum.js' %}"></script>
+{%endblock%}
+{% block title %}{% title _("Post") %}{% endblock %}
+{% block content %}
+{%with message=object.first_message %}
+
+<div class="container mt-5">
+	<div class="level">
+		<div class="level-left">
+			<div class="title is-2">{{object.title}}</div>
+		</div>
+		<div class="level-item">
+			<div class="container">
+				<p class="content is-small">
+					{{message.author.get_full_name}}
+					<a href="{%url 'members:detail' message.author.id %}">
+						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+					</a>
+					<br>
+					{{message.date}}
+				</p>
+			</div>
+		</div>
+		{% if object.first_message.author.account.username == user.username %}
+		<div class="level-right">
+			<a class="button" href="{% url 'forum:edit' object.id %}" title="{%trans 'Edit' %}">
+				<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
+			</a>
+			<button class="button js-modal-trigger" data-target="delete-post-modal" title="{%trans 'Delete' %}">
+				<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
+			</button>
+		</div>
+		{%endif%}
+	</div>
+	<div class="container">
+		{% autoescape off %}{{message.content}}{%endautoescape%}
+	</div>
+</div>
+{%include "forum/comment_list.html" with message=message%}
+<hr>
+<div class="container">
+	
+	<p class="title is-4">
+		{%if nreplies > 0%}
+			{%blocktranslate%}{{nreplies}} answers{%endblocktranslate%}
+		{%else%}
+			{%trans 'No answer'%}
+			{%endif%}
+	</p>
+
+	{%for reply in replies %}
+	<div class="container has-text-left" id="reply-div-{{reply.id}}">
+		<hr>
+		<div class="block" id="reply-level-{{reply.id}}">
+			<span id="reply-content-{{reply.id}}">{% autoescape off %}{{reply.content}}{%endautoescape%}</span>
+			<div class="level">
+				<div class="level-left">
+					<p class="content is-small">
+						{{reply.author.get_full_name}}
+						<a href="{%url 'members:detail' reply.author.id %}">
+							<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+						</a>
+						<br>
+						{{reply.date}}
+					</p>
+				</div>
+				{% if reply.author.account.username == user.username %}
+				<div class="level-right">
+					<a class="button" onclick="show_edit_reply_form('{{reply.id}}')" title="{%trans 'Edit' %}">
+						<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
+					</a>
+					{% url 'forum:delete_reply' reply.id as delete_reply_url %}
+					<a class="button" onclick="delete_reply('{{delete_reply_url}}', '{{reply.id}}')" title="{%trans 'Delete' %}">
+						<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
+					</a>
+				</div>
+				{%endif%}
+			</div>
+		</div>
+		<form method="POST" class="reply-form" id='edit-reply-{{reply.id}}'>
+			{% csrf_token %}
+			<div class="level">
+				<div class="level-left">{{reply_form|crispy}}</div>
+				<div class="level-right">
+					<div class="buttons">
+						<button type="submit" class="button is-link" title="{%trans 'Update' %}">
+							<span class="icon"><i class="mdi mdi-check-circle-outline"></i></span>
+						</button>
+						<button type="reset" class="button" onclick="hide_edit_reply_form('{{reply.id}}')" title="{%trans 'Cancel' %}">
+							<span class="icon"><i class="mdi mdi-close-circle-outline"></i></span>
+						</button>
+					</div>
+				</div>
+			</div>
+			<script>$(document).ready(()=>{
+				ajax_form_action('#edit-reply-{{reply.id}}', "{% url 'forum:edit_reply' reply.id %}", (response)=>{
+					hide_edit_reply_form('{{reply.id}}', response.reply_str)
+				})
+			});</script>
+		</form>
+	{%include "forum/comment_list.html" with message=reply %}
+	</div>
+	{%endfor%}
+	<hr>
+</div>
+{%url "forum:reply" object.id as url%}
+{%include "forum/post_form_include.html" with title=_('Your answer') message_form=reply_form action=url post=object %}
+{%endwith%}
+{%include "forum/post_confirm_delete.html" %}
+{% endblock %}

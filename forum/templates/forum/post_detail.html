@@ -30,9 +30,9 @@
 			<a class="button" href="{% url 'forum:edit' object.id %}" title="{%trans 'Edit' %}">
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
 			</a>
-			<a class="button" href="{% url 'forum:delete' object.id %}" title="{%trans 'Delete' %}">
+			<button class="button js-modal-trigger" data-target="delete-post-modal" title="{%trans 'Delete' %}">
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
-			</a>
+			</button>
 		</div>
 		{%endif%}
 	</div>
@@ -110,4 +110,5 @@
 {%url "forum:reply" object.id as url%}
 {%include "forum/post_form_include.html" with title=_('Your answer') message_form=reply_form action=url post=object %}
 {%endwith%}
+{%include "forum/post_confirm_delete.html" %}
 {% endblock %}

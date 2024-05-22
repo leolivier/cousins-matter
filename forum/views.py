@@ -7,13 +7,16 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+
 from cousinsmatter.utils import is_ajax
 from .models import Post, Message, Comment
 from .forms import MessageForm, PostForm, CommentForm
 from members.models import Member
 
 
-class PostsListView(generic.ListView):
+class PostsListView(LoginRequiredMixin, generic.ListView):
     model = Post
 
     def get_context_data(self, **kwargs):
@@ -31,7 +34,7 @@ class PostsListView(generic.ListView):
       }
 
 
-class PostDisplayView(generic.DetailView):
+class PostDisplayView(LoginRequiredMixin, generic.DetailView):
     model = Post
 
     def get_context_data(self, **kwargs):
@@ -51,7 +54,7 @@ class PostDisplayView(generic.DetailView):
       }
 
 
-class PostCreateView(generic.CreateView):
+class PostCreateView(LoginRequiredMixin, generic.CreateView):
     model = Post
 
     def get(self, request):
@@ -82,7 +85,7 @@ class PostCreateView(generic.CreateView):
             raise e
 
 
-class PostEditView(generic.UpdateView):
+class PostEditView(LoginRequiredMixin, generic.UpdateView):
     model = Post
     form_class = PostForm
 
@@ -106,10 +109,14 @@ class PostEditView(generic.UpdateView):
         return redirect("forum:display", post.id)
 
 
-class PostDeleteView(generic.DeleteView):
-    model = Post
+@login_required
+def delete_post(request, pk):
+  post = get_object_or_404(Post, pk=pk)
+  post.delete()
+  return redirect('forum:list')
 
 
+@login_required
 def add_reply(request, pk):
   reply = MessageForm(request.POST)
   reply.instance.post_id = pk
@@ -119,6 +126,7 @@ def add_reply(request, pk):
   return redirect(reverse("forum:display", args=[pk]))
 
 
+@login_required
 def edit_reply(request, reply):
   if is_ajax(request):
     instance = get_object_or_404(Message, pk=reply)
@@ -133,17 +141,19 @@ def edit_reply(request, reply):
 
 
 @csrf_exempt
+@login_required
 def delete_reply(request, reply):
     if is_ajax(request):
         reply = get_object_or_404(Message, pk=reply)
         if (Post.objects.filter(first_message=reply).exists()):
           raise ValidationError(_("Can't delete the first message of a thread!"))
+        id = reply.id
         reply.delete()
-        return JsonResponse({"reply_id": reply.id}, status=200)
+        return JsonResponse({"reply_id": id}, status=200)
     raise ValidationError("Forbidden non ajax request")
 
 
-class CommentCreateView(generic.CreateView):
+class CommentCreateView(LoginRequiredMixin, generic.CreateView):
     model = Comment
     form_class = CommentForm
 
@@ -158,7 +168,7 @@ class CommentCreateView(generic.CreateView):
         return redirect("forum:display", message.post.id)
 
 
-class CommentEditView(generic.UpdateView):
+class CommentEditView(LoginRequiredMixin, generic.UpdateView):
     model = Comment
     form_class = CommentForm
 
@@ -177,9 +187,11 @@ class CommentEditView(generic.UpdateView):
 
 
 @csrf_exempt
+@login_required
 def delete_comment(request, pk):
     if is_ajax(request):
         comment = get_object_or_404(Comment, pk=pk)
+        id = comment.id
         comment.delete()
-        return JsonResponse({"comment_id": comment.id}, status=200)
+        return JsonResponse({"comment_id": id}, status=200)
     raise ValidationError("Forbidden non ajax request")

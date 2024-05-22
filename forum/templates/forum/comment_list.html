@@ -64,7 +64,7 @@
 		<a class="is-small content" onclick="show_comment_form('#create-comment-{{message_id}}')">{%trans 'Add comment'%}</a>
 	</p>
 	{% endif %}
-	<form action="{%url 'forum:create_comment' message_id %}" id="create-comment-{{message_id}}" method="POST" class="comment-form">
+	<form action="{%url 'forum:add_comment' message_id %}" id="create-comment-{{message_id}}" method="POST" class="comment-form">
 		{% csrf_token %}
 		<div class="level">
 			<div class="level-left">{{comment_form|crispy}}</div>

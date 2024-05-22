@@ -33,7 +33,7 @@ urlpatterns = [
     path("", include("cm_main.urls")),
     path("accounts/", include("accounts.urls")),
     path("members/", include("members.urls")),
-    path("forum/", include("forum.urls")),
+    path("posts/", include("forum.urls")),
     path("galleries/", include("galleries.urls")),
     path("polls/", include("polls.urls")),
     path("admin/", admin.site.urls),

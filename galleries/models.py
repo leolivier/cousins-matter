@@ -4,7 +4,7 @@ import sys
 from io import BytesIO
 from PIL import Image, ImageOps
 from django.db import models
-from django.forms import ValidationError
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.template.defaultfilters import slugify

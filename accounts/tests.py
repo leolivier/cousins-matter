@@ -2,6 +2,7 @@ from django.test import SimpleTestCase
 from django.urls import reverse
 from django.contrib.auth import get_user
 from django.contrib.auth.models import User
+from django.utils.http import urlencode
 
 
 def sreverse(url):
@@ -35,7 +36,7 @@ class AccountTestCase(SimpleTestCase):
         self.superuser = User.objects.create_superuser(self.superuser_name, self.superuser_email, self.superuser_pwd)
 
   def next(self, from_url, to_url):
-    return f"{from_url}?next={to_url}"
+    return f"{from_url}?{urlencode({'next': to_url})}"
 
   def get_or_create_account(self):
     if self.account is None:

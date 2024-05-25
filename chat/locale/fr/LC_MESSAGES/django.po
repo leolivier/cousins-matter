@@ -1,0 +1,63 @@
+# French translation of cousins_matter.
+# Copyright (C) 2024 Olivier LEVILLAIN <olivier@levillain.eu>
+# This file is distributed under the same license as the Cousins Matter package.
+# <olivier@levillain.eu>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Cousins Matter 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-25 13:25+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: French <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: chat/models.py:11
+msgid "chat room"
+msgstr "salle de chat"
+
+#: chat/models.py:12
+msgid "chat rooms"
+msgstr "salles de chat"
+
+#: chat/models.py:22
+msgid "message"
+msgstr "message"
+
+#: chat/templates/chat/chat.html:3 chat/templates/chat/chat.html:6
+msgid "Chat"
+msgstr "Chat"
+
+#: chat/templates/chat/chat.html:7
+msgid "Choose an existing room or create a new one."
+msgstr "Choisis une salle existante ou crées-en une nouvelle."
+
+#: chat/templates/chat/chat.html:10
+msgid "Rooms"
+msgstr "Salles"
+
+#: chat/templates/chat/chat.html:21
+msgid "Room name"
+msgstr "Nom de la salle"
+
+#: chat/templates/chat/chat.html:31
+msgid "Create room"
+msgstr "Créer une salle"
+
+#: chat/templates/chat/room.html:9
+msgid "Let's chat!"
+msgstr "Chattons!"
+
+#: chat/templates/chat/room.html:27
+msgid "Message"
+msgstr "Message"
+
+#: chat/templates/chat/room.html:33
+msgid "Submit"
+msgstr "Envoyer"

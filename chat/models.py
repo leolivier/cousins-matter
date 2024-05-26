@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.utils.translation import gettext as _
+from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ValidationError
 from django.utils.html import escape
@@ -42,7 +42,7 @@ class ChatRoom(models.Model):
 
 
 class ChatMessage(models.Model):
-  account = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+  account = models.ForeignKey(get_user_model(), on_delete=models.DO_NOTHING)
   room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
   content = models.TextField(_('message'), max_length=2*1024*1024)
   date_added = models.DateTimeField(auto_now_add=True)

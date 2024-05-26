@@ -5,7 +5,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from urllib.parse import unquote
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .models import ChatMessage, ChatRoom
 
 random.seed()
@@ -37,6 +37,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
   def save_message(self, account_id, room_slug, message):
     print('room slug: ', room_slug)
     room = ChatRoom.objects.get(slug=room_slug)
+    User = get_user_model()
     account = User.objects.get(pk=account_id)
     chat = ChatMessage.objects.create(account=account, room=room, content=message)
     return chat

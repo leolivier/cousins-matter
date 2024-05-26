@@ -30,7 +30,7 @@ def new_room(request):
           print("error on slug:", ' '.join(error[1]))
           pass
         case _:
-          messages.error(request, f'{error[0]}: {' '.join(error[1])}')
+          messages.error(request, f'{error[0]}: {" ".join(error[1])}')
     return redirect_to_referer(request)
 
 

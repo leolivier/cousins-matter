@@ -83,12 +83,12 @@ class MemberCreateTest(MemberTestCase):
 class MemberDeleteTest(MemberTestCase):
 
   def test_delete_member_deletes_user(self):
-    member = Member.objects.filter(account__username=self.account.username)
-    self.assertEqual(member.count(), 1)
-    member = member.first()
+    member = self.create_member()
+    id = member.id
+    username = member.account.username
     member.delete()
-    self.assertEqual(Member.objects.filter(id=member.id).count(), 0)
-    self.assertEqual(User.objects.filter(username=self.account.username).count(), 0)
+    self.assertEqual(Member.objects.filter(id=id).count(), 0)
+    self.assertEqual(User.objects.filter(username=username).count(), 0)
 
 
 class LoginRequiredTests(CreatedAccountTestCase):

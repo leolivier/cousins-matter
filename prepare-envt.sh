@@ -1,5 +1,3 @@
-#!/bin/bash
-
 export LIGHTTPD_PORT=${LIGHTTPD_PORT:=8001}
 export DJANGO_PORT=${DJANGO_PORT:=8000}
 
@@ -19,7 +17,7 @@ python manage.py migrate
 python manage.py check
 
 sudo=''
-if [ "$EUID" -ne 0 ];
+if [[ -n "$EUID" && $EUID -ne 0 ]];
 then sudo='sudo'
 fi
 $sudo mkdir -p "/var/log/supervisord" "/var/run/supervisord"

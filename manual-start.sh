@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 export APP_DIR=$PWD
 . ./prepare-envt.sh || exit 1
 supervisord=$(command -v supervisord)

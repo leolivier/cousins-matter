@@ -7,6 +7,7 @@ from asgiref.sync import sync_to_async
 from channels.testing import WebsocketCommunicator
 from accounts.tests import LoggedAccountTestCase
 from channels.routing import URLRouter
+from django.test import tag
 from .models import ChatMessage, ChatRoom
 from .routing import websocket_urlpatterns
 
@@ -43,6 +44,7 @@ class ChatRoomTests(LoggedAccountTestCase):
   </a>''', html=True)
 
 
+@tag("needs-redis")
 class ChatMessageTests(LoggedAccountTestCase):
   def setUp(self):
     self.room_name = 'test messages #1'

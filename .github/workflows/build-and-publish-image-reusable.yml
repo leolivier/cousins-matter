@@ -114,9 +114,9 @@ jobs:
           fail_on_empty: false
           sort_keys: false
 
-      - name: Test django
+      - name: Test django (skip redis needing tests)
         run: |
-          python ./manage.py test --parallel
+          python ./manage.py test --parallel --exclude-tag needs-redis
     
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3

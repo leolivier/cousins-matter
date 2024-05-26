@@ -1,14 +1,14 @@
-import json
 from urllib.parse import urlencode
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
-# from asgiref.sync import sync_to_async
+from asgiref.sync import sync_to_async
 from channels.testing import WebsocketCommunicator
 from accounts.tests import LoggedAccountTestCase
-from .consumers import ChatConsumer
+from channels.routing import URLRouter
 from .models import ChatMessage, ChatRoom
+from .routing import websocket_urlpatterns
 
 
 class ChatRoomTests(LoggedAccountTestCase):
@@ -48,21 +48,36 @@ class ChatMessageTests(LoggedAccountTestCase):
     self.room_name = 'test messages #1'
     self.slug = slugify(self.room_name)
     self.room = ChatRoom.objects.create(name=self.room_name)
+    super().setUp()
+
+  @sync_to_async
+  def get_room_first_msg(self):
+    return ChatMessage.objects.filter(room=self.room).first()
+
+  @sync_to_async
+  def check_msg_account(self, msg):
+    self.assertEqual(self.account, msg.account)
 
   async def test_chat_consumer(self):
     data = {
       'message': "this is my message!",
-      'account': 1,
-      'username': "anonymous",
+      'account': self.account.id,
+      'username': self.account.username,
       'room': self.slug,
     }
-    communicator = WebsocketCommunicator(ChatConsumer.as_asgi(), "/chat/{self.slug}")
+    application = URLRouter(websocket_urlpatterns)
+    communicator = WebsocketCommunicator(application, f"/chat/{self.slug}")
     connected, subprotocol = await communicator.connect()
     self.assertTrue(connected)
     # Test sending data as text
-    await communicator.send_to(text_data=json.dumps(data))
-    response = await communicator.receive_from()
+    await communicator.send_json_to(data)
+    response = await communicator.receive_json_from()
     print(response)
-    self.assertEqual(response, "hello")
+    self.assertEqual(response['message'], data['message'])
+    self.assertEqual(response['username'], data['username'])
+    msg = await self.get_room_first_msg()
+    self.assertIsNotNone(msg)
+    self.assertEqual(response['message'], msg.content)
+    await self.check_msg_account(msg)
     # Close
     await communicator.disconnect()

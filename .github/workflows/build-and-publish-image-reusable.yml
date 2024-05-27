@@ -160,4 +160,4 @@ jobs:
           FIRST_TAG=$(echo "$TAGS" | head -n 1)
           echo "Tested image is $FIRST_TAG"
           docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $FIRST_TAG
-          docker exec -it cousins-matter  python manage.py test 
+          docker exec cousins-matter  python manage.py test 

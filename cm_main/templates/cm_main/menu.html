@@ -75,6 +75,13 @@
 			</div>
 		</div>
 
+		<div class="navbar-item has-dropdown is-hoverable">
+			<a class="navbar-item" href="{% url 'chat:chat' %}">
+				<span class="is-hidden-mobile">{% translate "Chat" %}</span>
+				<span class="icon is-large"><i class="mdi mdi-24px mdi-chat"></i></span>
+			</a>
+		</div>
+
 		{% comment %}
 			<li><a href="{% url 'polls:polls' %}">{% translate "Polls" %}</a></li>
 			<li><a href="{% url 'admin:admin' %}">{% translate "Admin" %}</a></li>

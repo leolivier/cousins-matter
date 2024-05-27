@@ -1,10 +1,11 @@
 import logging
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from verify_email.email_handler import _VerifyEmail
+from cousinsmatter.utils import redirect_to_referer
 from ..models import Member
 
 logger = logging.getLogger(__name__)
@@ -38,6 +39,7 @@ class VerifyEmail(_VerifyEmail):
             )
 
             self.__send_email(msg, account.email)
+            logger.info(f"Activation link sent to {account.email} by {request.user.username}")
             return account
         except Exception:
             # account.delete()
@@ -64,7 +66,6 @@ def activate_account(request, pk):
         member.save()
         messages.success(request,
                          _("Account successfully activated. The owner of the account must now proceed as if (s)he had lost his/her password before being able to sign in."))  # noqa: E501
-        logger.info("Account activated by %s" % request.user.username)
+        logger.info(f"Account {member.account.username} activated by {request.user.username}")
 
-    logger.info("Request referer:  %s" % request.META['HTTP_REFERER'])
-    return redirect(request.META['HTTP_REFERER'])
+    return redirect_to_referer(request)

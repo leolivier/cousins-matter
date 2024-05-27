@@ -4,7 +4,7 @@ import sys
 from io import BytesIO
 from PIL import Image, ImageOps
 from django.db import models
-from django.forms import ValidationError
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.template.defaultfilters import slugify
@@ -28,7 +28,7 @@ def get_path(instance, filename, subdir=None):
     dir = os.path.join(dir, subdir)
   os.makedirs(os.path.join(settings.MEDIA_ROOT, dir), exist_ok=True)
   path = os.path.join(dir, filename)
-  logger.info(f"photo is stored in {path}")
+  logger.debug(f"photo is stored in {path}")
   return path
 
 

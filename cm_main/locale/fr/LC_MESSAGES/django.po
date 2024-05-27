@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 18:38+0200\n"
+"POT-Creation-Date: 2024-05-25 13:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr "Accueil"
 
 #: cm_main/templates/cm_main/base.html:55
 msgid "This site proudly built using"
-msgstr "Ce site est créé fièrement avec"
+msgstr "Ce site est fièrement propulsé par"
 
 #: cm_main/templates/cm_main/base.html:57
 msgid "The source code is licensed"
@@ -87,19 +87,23 @@ msgstr "Forum"
 msgid "Create Post"
 msgstr "Nouvelle Discussion"
 
-#: cm_main/templates/cm_main/menu.html:92
+#: cm_main/templates/cm_main/menu.html:80
+msgid "Chat"
+msgstr "Chat"
+
+#: cm_main/templates/cm_main/menu.html:99
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/menu.html:97
+#: cm_main/templates/cm_main/menu.html:104
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/menu.html:111
+#: cm_main/templates/cm_main/menu.html:118
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/menu.html:115
+#: cm_main/templates/cm_main/menu.html:122
 msgid "Log Out"
 msgstr "Déconnexion"
 

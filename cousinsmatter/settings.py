@@ -63,16 +63,17 @@ BIRTHDAY_DAYS = env.int('BIRTHDAY_DAYS', default=50)
 
 INSTALLED_APPS = [
   'daphne',
-  'accounts.apps.AccountsConfig',
-  'cm_main.apps.CmMainConfig',
-  'members.apps.MembersConfig',
-  'galleries.apps.GalleriesConfig',
-  'polls.apps.PollsConfig',
-  'forum.apps.ForumConfig',
+  'accounts',
+  'cm_main',
+  'members',
+  'galleries',
+  'polls',
+  'forum',
+  'chat',
   'crispy_forms',
   'crispy_bulma',
   'django_icons',
-  'verify_email.apps.VerifyEmailConfig',
+  'verify_email',
   'django.contrib.admin',
   'django.contrib.auth',
   'django.contrib.contenttypes',
@@ -80,6 +81,7 @@ INSTALLED_APPS = [
   'django.contrib.messages',
   'django.contrib.staticfiles',
   'captcha',
+  'channels',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +117,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cousinsmatter.wsgi.application'
 
 ASGI_APPLICATION = "cousinsmatter.asgi.application"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

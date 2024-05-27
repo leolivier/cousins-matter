@@ -34,6 +34,7 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("members/", include("members.urls")),
     path("posts/", include("forum.urls")),
+    path("chat/", include("chat.urls")),
     path("galleries/", include("galleries.urls")),
     path("polls/", include("polls.urls")),
     path("admin/", admin.site.urls),

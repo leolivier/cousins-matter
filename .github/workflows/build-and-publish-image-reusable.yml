@@ -114,9 +114,9 @@ jobs:
           fail_on_empty: false
           sort_keys: false
 
-      - name: Test django
+      - name: Test django (skip redis needing tests)
         run: |
-          python ./manage.py test --parallel
+          python ./manage.py test --parallel --exclude-tag needs-redis
     
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -159,6 +159,7 @@ jobs:
           mkdir -p ./data ./media
           FIRST_TAG=$(echo "$TAGS" | head -n 1)
           echo "Tested image is $FIRST_TAG"
-          docker run $MOUNTS $FIRST_TAG python manage.py test
-
-
+          docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $FIRST_TAG
+          # let the server start before running tests
+          sleep 10
+          docker exec cousins-matter  python manage.py test 

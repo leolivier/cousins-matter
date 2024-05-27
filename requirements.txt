@@ -9,3 +9,6 @@ django-simple-captcha>=0.6.0
 daphne>=4.1.2
 supervisor>=4.2.5
 reportlab>=4.2.0
+channels>=4.1.0 
+channels_redis>=4.2.0
+Babel>=2.15

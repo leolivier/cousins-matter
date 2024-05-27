@@ -159,6 +159,6 @@ jobs:
           mkdir -p ./data ./media
           FIRST_TAG=$(echo "$TAGS" | head -n 1)
           echo "Tested image is $FIRST_TAG"
-          docker run $MOUNTS $FIRST_TAG python manage.py test --parallel
+          docker run $MOUNTS $FIRST_TAG python manage.py test 
 
 

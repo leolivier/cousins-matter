@@ -176,11 +176,11 @@ class Member(models.Model):
     def clean(self):
       # If account is active, set managing account to current member account
       if self.account_id and self.account.is_active and self.managing_account != self.account:
-        logger.info(f"Cleaning member {self.get_full_name()}: changing managing account to himself")
+        logger.debug(f"Cleaning member {self.get_full_name()}: changing managing account to himself")
         self.managing_account = self.account
       elif self.managing_account is None:
         # If no managing account and account inactive, use admin account
-        logger.info(f"Cleaning member {self.get_full_name()}: changing managing account to admin")
+        logger.debug(f"Cleaning member {self.get_full_name()}: changing managing account to admin")
         self.managing_account = get_admin()
 
     def save(self, *args, **kwargs):

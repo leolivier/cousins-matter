@@ -99,7 +99,7 @@ class RegistrationLinkManager(TokenManager):
     """
     main verification and decryption happens here.
     """
-    logger.info(f'\n{"~" * 40}\nDecoding the link {encoded_email}/{encoded_token}\n{"~" * 40}\n')
+    logger.debug(f'\n{"~" * 40}\nDecoding the link {encoded_email}/{encoded_token}\n{"~" * 40}\n')
     decoded_email = urlsafe_b64decode(encoded_email).decode('UTF-8')
     # decoded_token = urlsafe_b64decode(encoded_token).decode('UTF-8')
     decoded_token = encoded_token

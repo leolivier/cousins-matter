@@ -28,7 +28,7 @@ def get_path(instance, filename, subdir=None):
     dir = os.path.join(dir, subdir)
   os.makedirs(os.path.join(settings.MEDIA_ROOT, dir), exist_ok=True)
   path = os.path.join(dir, filename)
-  logger.info(f"photo is stored in {path}")
+  logger.debug(f"photo is stored in {path}")
   return path
 
 

@@ -5,7 +5,7 @@ on: [push]
 
 jobs:
   test-build-and-push:
-    uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@chat
+    uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main
     with:
       push: true
       trace_event: ${{ toJson(github.event) }}

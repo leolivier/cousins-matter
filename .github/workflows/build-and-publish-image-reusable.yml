@@ -159,6 +159,5 @@ jobs:
           mkdir -p ./data ./media
           FIRST_TAG=$(echo "$TAGS" | head -n 1)
           echo "Tested image is $FIRST_TAG"
-          docker run $MOUNTS $FIRST_TAG python manage.py test 
-
-
+          docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $FIRST_TAG
+          docker exec -it cousins-matter  python manage.py test 

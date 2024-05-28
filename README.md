@@ -31,7 +31,7 @@
 
 ## Translations
 * Comes with English and French translations
-* Can be easily translated into any LTR language, see below. Not tested for RTL.
+* Can be easily translated into any LTR language, see [documentation](https://github.com/leolivier/cousins-matter/wiki#translate-to-a-new-language). Not tested for RTL.
 
 ## Member Management
 * Site admin can invite their cousins by email
@@ -59,8 +59,8 @@
 * Cousins Matter manages as many chat rooms as requested
 
 ## Documentation
-The documentation for installing, upgrading and running the application in on the wiki [Home](wiki) page
-The settings are documented on the wiki [Settings](settings) page.
+* The documentation for installing, upgrading and running the application in on the wiki [Home](https://github.com/leolivier/cousins-matter/wiki) page.
+* The settings are documented on the wiki [Settings](https://github.com/leolivier/cousins-matter/wiki/settings) page.
 
 ## Coming soon
   * Help/faq/about

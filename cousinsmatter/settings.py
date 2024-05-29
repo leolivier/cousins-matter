@@ -41,8 +41,8 @@ HOME_TITLE = env.str('HOME_TITLE', default='Cousins Matter!')
 HOME_CONTENT_UNSIGNED = env.str('HOME_CONTENT_UNSIGNED', multiline=True, default="")
 HOME_CONTENT_SIGNED = env.str('HOME_CONTENT_SIGNED', multiline=True, default="")
 HOME_LOGO = env.url('HOME_LOGO', default='/static/cm_main/images/cousinsmatter.jpg')
-SITE_COPYRIGHT = env.str('SITE_COPYRIGHT', default='Site Copyright © 2024 Cousins Matter. All rights reserved.')
-
+SITE_COPYRIGHT = env.str('SITE_COPYRIGHT', default=None)
+SITE_FOOTER = env.str('SITE_FOOTER', default=None)
 # Email properties
 EMAIL_HOST = env.str('EMAIL_HOST')
 EMAIL_PORT = env.int('EMAIL_PORT')

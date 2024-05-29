@@ -24,7 +24,6 @@ class HomeView(generic.TemplateView):
       "home_title": settings.HOME_TITLE,
       "home_content": settings.HOME_CONTENT_SIGNED if self.request.user.is_authenticated else settings.HOME_CONTENT_UNSIGNED,
       "home_logo": urlunparse(settings.HOME_LOGO),
-      "site_copyright": settings.SITE_COPYRIGHT
     }
 
 

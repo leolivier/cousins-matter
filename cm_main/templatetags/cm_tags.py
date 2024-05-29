@@ -4,8 +4,11 @@
 from django.template import Library, Node, Variable, TemplateSyntaxError
 from django.conf import settings
 from django.urls import reverse, resolve, NoReverseMatch
+from django.utils.translation import gettext_lazy as _
 
 register = Library()
+
+default_site_copyright = _('Copyright © 2024 Cousins Matter. All rights reserved.')
 
 
 class ViewNode(Node):
@@ -73,3 +76,8 @@ def do_view(parser, token):
 @register.simple_tag
 def title(title_s):
     return f"{settings.SITE_NAME} - {title_s}"
+
+
+@register.simple_tag
+def site_copyright():
+    return settings.SITE_COPYRIGHT if settings.SITE_COPYRIGHT is not None else default_site_copyright

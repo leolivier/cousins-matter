@@ -50,12 +50,14 @@
     </div>
     <footer class="footer">
       <div class="content has-text-centered">
-        <p>
-          {{site_copyright}}
+        {%if settings.SITE_FOOTER%}<p>{{settings.SITE_FOOTER}}</p>{%endif%}
+        <p class="is-size-6">
           {% translate 'This site proudly built using' %} 
           <a href="https://github.com/leolivier/cousins-matter"><strong>Cousins Matter</strong></a>.
           {% translate 'The source code is licensed' %} 
           <a href="http://opensource.org/licenses/mit-license.php"><i class="icon"><span class="mdi mdi-copyleft"></span></i>MIT</a>. 
+          <br/>
+          {%site_copyright%}
         </p>
       </div>
     </footer>

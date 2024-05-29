@@ -48,6 +48,15 @@
 					<td class="content has-text-right">{% translate "Family" %}</td>
 					<td class="content">{{ object.family }}</td>
 				</tr>
+				<tr>
+					<td class="content has-text-right">{% translate "Who I am" %}</td>
+					<td class="content">{{ object.description }}</td>
+				</tr>
+				<tr>
+					<td class="content has-text-right">{% translate "Hobbies" %}</td>
+					<td class="tags">{%for hobby in hobbies_list%}<span class="tag">{{hobby}}</span>{%endfor%}</td>
+				</tr>
+				
 			</table>
 		</div>
 		<div class="card-footer">

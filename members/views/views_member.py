@@ -46,7 +46,8 @@ class MemberDetailView(LoginRequiredMixin, generic.DetailView):
         return super().get_context_data(**kwargs) | \
             {
                 "can_edit": editable(self.request, self.object),
-                "managing_account_name": self.object.managing_account.username
+                "managing_account_name": self.object.managing_account.username,
+                "hobbies_list": [s.strip() for s in self.object.hobbies.split(',')] if self.object.hobbies else [],
             }
 
     def get_absolute_url(self):
@@ -96,6 +97,7 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
 class EditMemberView(LoginRequiredMixin, generic.UpdateView):
     template_name = "members/member_upsert.html"
     title = _("Update Member Details")
+    success_message = _("Member successfully updated")
 
     def get(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
@@ -136,7 +138,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
 
             if m_form.is_valid():
                 member = m_form.save()
-                messages.success(request, _("Member successfully updated"))
+                messages.success(request, self.success_message)
                 return redirect("members:detail", member.id)
 
             else:
@@ -151,6 +153,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
 class EditProfileView(EditMemberView):
     """change the profile of the logged user (ie request.user.id = member.account.id)"""
     title = _("My Profile")
+    success_message = _("Profile successfully updated")
 
     def get(self, request):
         member = Member.objects.get(account_id=request.user.id)

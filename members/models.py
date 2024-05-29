@@ -118,6 +118,11 @@ class Member(models.Model):
 
     family = models.ForeignKey(Family, verbose_name=_('Family'), on_delete=models.CASCADE, null=True, blank=True)
 
+    description = models.TextField(_("Who I am"), max_length=2*1024*1024, blank=True, null=True,
+                                   help_text=_("Describe yourself, your likes and dislikes..."))
+    hobbies = models.CharField(_("My hobbies"), blank=True, null=True, max_length=256,
+                               help_text=_("Provide a list of hobbies separated by commas"))
+
     class Meta:
       verbose_name = _('member')
       verbose_name_plural = _('members')

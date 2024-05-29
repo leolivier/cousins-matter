@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-25 13:25+0200\n"
+"POT-Creation-Date: 2024-05-29 11:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,15 +18,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: chat/models.py:11
+#: chat/models.py:15
 msgid "chat room"
 msgstr "salle de chat"
 
-#: chat/models.py:12
+#: chat/models.py:16
 msgid "chat rooms"
 msgstr "salles de chat"
 
-#: chat/models.py:22
+#: chat/models.py:31
+msgid "Another room with the same name already exists"
+msgstr "Une autre salle portant le même nom existe déjà"
+
+#: chat/models.py:37 chat/tests.py:32
+#, python-brace-format
+msgid ""
+"Another room with a similar name already exists ('{slug_name}'). Please "
+"choose a different name."
+msgstr "Une autre salle avec un nom similaire existe déjà ('{slug_name}'). Veuillez choisir un autre nom."
+
+#: chat/models.py:47
 msgid "message"
 msgstr "message"
 
@@ -50,14 +61,14 @@ msgstr "Nom de la salle"
 msgid "Create room"
 msgstr "Créer une salle"
 
-#: chat/templates/chat/room.html:9
+#: chat/templates/chat/room.html:6
 msgid "Let's chat!"
 msgstr "Chattons!"
 
-#: chat/templates/chat/room.html:27
+#: chat/templates/chat/room.html:25
 msgid "Message"
 msgstr "Message"
 
-#: chat/templates/chat/room.html:33
+#: chat/templates/chat/room.html:30
 msgid "Submit"
 msgstr "Envoyer"

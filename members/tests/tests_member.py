@@ -24,8 +24,17 @@ class MemberTestCase(LoggedAccountTestCase):
     super().setUp()
     self.member = Member.objects.get(account=self.account)
 
-  # def tearDown(self) -> None:
-  #   return super().tearDown()
+  base_avatar = "test_avatar.jpg"
+  test_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "test_avatar.jpg")
+  test_mini_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "mini_test_avatar.jpg")
+
+  def tearDown(self):
+    self.member.delete()
+    if os.path.isfile(self.test_avatar_jpg):
+      os.remove(self.test_avatar_jpg)
+    if os.path.isfile(self.test_mini_avatar_jpg):
+      os.remove(self.test_mini_avatar_jpg)
+    super().tearDown()
 
   def get_new(self, input_str, counter):
     """build a new string based on the passed one"""
@@ -151,15 +160,18 @@ class MemberProfileViewTest(MemberTestCase):
     from PIL import Image
     import sys
 
-    avatar_file = os.path.join(os.path.dirname(__file__), "test_avatar.jpg")
+    avatar_file = os.path.join(os.path.dirname(__file__), self.base_avatar)
     membuf = BytesIO()
     with Image.open(avatar_file) as img:
       img.save(membuf, format='JPEG', quality=90)
       size = sys.getsizeof(membuf)
-      self.member.avatar = InMemoryUploadedFile(membuf, 'ImageField', "test_avatar.jpg",
+      self.member.avatar = InMemoryUploadedFile(membuf, 'ImageField', self.base_avatar,
                                                 'image/jpeg', size, None)
     self.member.save()
-    self.assertTrue(os.path.isfile(os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, os.path.basename(avatar_file))))
+    self.assertTrue(os.path.isfile(self.test_avatar_jpg))
+    self.assertEqual(self.test_avatar_jpg, self.member.avatar.path)
+    self.assertTrue(os.path.isfile(self.test_mini_avatar_jpg))
+    self.assertEqual(self.test_mini_avatar_jpg, self.member.avatar_mini_path())
 
 
 class ManagedMemberChangeTests(MemberTestCase):

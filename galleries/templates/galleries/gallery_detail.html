@@ -8,7 +8,7 @@
 			<div class="container is-fluid">
 				<a class="media" href="{% url 'galleries:detail' gallery.id %}">
 					<div class="media-left">
-						<figure class="image is-128x128">
+						<figure class="image gallery-cover">
 							<img src="{{gallery.cover_url}}">
 							<figcaption class="has-text-centered">{% include "galleries/photo_counter.html" %}</figcaption>
 						</figure>
@@ -26,7 +26,7 @@
 			{% for subgal in gallery.children.all %}
 			<div class="container has-text-centered">
 				<a class="mr-2" href="{% url 'galleries:detail' subgal.id %}">
-					<figure class="image is-64x64" style="margin:auto">
+					<figure class="image sub-gallery-cover" style="margin:auto">
 						<img src="{{subgal.cover_url}}">
 					</figure>
 					<figcaption>{{subgal.name}}</figcaption>

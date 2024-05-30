@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-
+from django.db.models import Count
 from cousinsmatter.utils import is_ajax
 from .models import Post, Message, Comment
 from .forms import MessageForm, PostForm, CommentForm
@@ -21,13 +21,14 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
       page_num = int(self.kwargs['page']) if 'page' in self.kwargs else 1
-      ptor = Paginator(Post.objects.select_related('first_message').all().order_by('-first_message__date'), 2)
+      ptor = Paginator(Post.objects.select_related('first_message').annotate(num_messages=Count("message"))
+                       .all().order_by('-first_message__date'), 2)
       page = ptor.page(page_num)
       max_pages = 5
       # compute a page range from the initial range + or -max-pages
       page_range = ptor.page_range[max(0, page_num-max_pages-1):min(ptor.num_pages+1, page_num+max_pages)]
       return {
-        "object_list": page.object_list,
+        "posts": page.object_list,
         "page_range": page_range,
         "current_page": page_num,
         "num_pages": ptor.num_pages,

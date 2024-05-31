@@ -135,7 +135,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     url = reverse("galleries:detail", args=[sg.id])
     self.assertContains(response, f'''<div class="container has-text-centered">
   <a class="mr-2" href="{url}">
-    <figure class="image is-64x64" style="margin:auto">
+    <figure class="image sub-gallery-cover" style="margin:auto">
       <img src="{sg.cover_url()}">
     </figure>
     <figcaption>{sg.name}</figcaption>
@@ -169,7 +169,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
 <div class="box">
   <article class="media">
     <figure class="media-left">
-      <a class="image is-128x128" href="{url}">
+      <a class="image gallery-cover" href="{url}">
         <img src="{settings.DEFAULT_GALLERY_COVER_URL}">
       </a>
     </figure>

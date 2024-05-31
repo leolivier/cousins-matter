@@ -96,7 +96,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
       self.assertContains(response, f'''
   <div class="cell">
     <a href="{reverse('galleries:photo', args=[p.id])}">
-      <figure class="image is-128x128">
+      <figure class="image thumbnail">
         <img src="{p.thumbnail.url}">
       </figure>
     </a>

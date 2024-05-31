@@ -10,15 +10,13 @@ from accounts.tests import CreatedAccountTestCase, LoggedAccountTestCase
 from datetime import date
 import os
 
-COUNTER = 0
-
 
 class MemberTestCase(LoggedAccountTestCase):
+  COUNTER = 0
 
   def counter(self):
-    global COUNTER
-    COUNTER += 1
-    return str(COUNTER)
+    self.COUNTER += 1
+    return str(self.COUNTER)
 
   def setUp(self):
     super().setUp()
@@ -29,7 +27,8 @@ class MemberTestCase(LoggedAccountTestCase):
   test_mini_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "mini_test_avatar.jpg")
 
   def tearDown(self):
-    self.member.delete()
+    # if self.member.id is not None:
+    #   self.member.delete()
     if os.path.isfile(self.test_avatar_jpg):
       os.remove(self.test_avatar_jpg)
     if os.path.isfile(self.test_mini_avatar_jpg):
@@ -240,12 +239,12 @@ class TestDisplayMembers(MemberTestCase):
   def test_display_members(self):
     response = self.client.get(reverse("members:members"))
     html = response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '')
-    # pprint(vars(response))
+    # print(str(response.content))
     for i in range(len(self.members)):
       self.assertInHTML(f'''
   <div class="cell has-text-centered">
     <a class="button" href="/members/{self.members[i].id}/">
-      <strong>{self.members[i].account.first_name} {self.members[i].account.last_name}</strong>
+      <strong>{self.members[i].get_full_name()}</strong>
     </a>
   </div>
 ''', html)

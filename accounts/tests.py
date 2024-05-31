@@ -30,26 +30,15 @@ class AccountTestCase(SimpleTestCase):
 
   def setUp(self):
     super().setUp()
-    if not self.superuser:
-      self.superuser = User.objects.filter(username=self.superuser_name).first()
-      if not self.superuser:
-        self.superuser = User.objects.create_superuser(self.superuser_name, self.superuser_email, self.superuser_pwd)
+    self.superuser = User.objects.create_superuser(self.superuser_name, self.superuser_email, self.superuser_pwd)
+
+  def tearDown(self):
+    super().tearDown()
+    self.superuser.delete()
+    self.superuser = None
 
   def next(self, from_url, to_url):
     return f"{from_url}?{urlencode({'next': to_url})}"
-
-  def get_or_create_account(self):
-    if self.account is None:
-      faccount = User.objects.filter(username=self.username)
-      if faccount.exists():
-        self.account = faccount.first()
-      else:
-        self.account = User.objects.create_user(self.username, self.email, self.password,
-                                                first_name=self.first_name, last_name=self.last_name, is_active=True)
-    return self.account
-
-  def delete_account(self):
-    self.account.delete()
 
   def login(self):
     self.assertAccountExists()
@@ -87,11 +76,12 @@ class AccountTestCase(SimpleTestCase):
 class CreatedAccountTestCase(AccountTestCase):
   def setUp(self) -> None:
     super().setUp()
-    self.get_or_create_account()
+    self.account = User.objects.create_user(self.username, self.email, self.password,
+                                            first_name=self.first_name, last_name=self.last_name, is_active=True)
 
-  # def tearDown(self) -> None:
-  #   self.delete_account()
-  #   return super().tearDown()
+  def tearDown(self) -> None:
+    self.account.delete()
+    return super().tearDown()
 
 
 class LoggedAccountTestCase(CreatedAccountTestCase):

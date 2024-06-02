@@ -90,6 +90,7 @@ class BaseMemberTestCase(SimpleTestCase):
   test_mini_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "mini_test_avatar.jpg")
 
   def tearDown(self):
+    self.superuser.delete()
     self.member.delete()
     self.member = None
     for m in self.created_members:

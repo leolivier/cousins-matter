@@ -50,7 +50,7 @@ class TestMemberImport(MemberTestCase):
     for i in range(4):
       name = member_prefix + str(i+1)
       # print("name=", name)
-      m = Member.objects.get(account__username=name)
+      m = Member.objects.get(username=name)
       if activate_users:
         self.assertEqual(m.is_active, activate_users)
         self.assertIsNone(m.managing_member)

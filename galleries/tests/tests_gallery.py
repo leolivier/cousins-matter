@@ -87,7 +87,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     self.assertTemplateUsed(response, 'galleries/create_gallery.html')
     self.assertIs(response.resolver_match.func.view_class, GalleryCreateView)
     # check rich editor by class richtextarea, the rest is dynamic in the browser, can't be tested
-    self.assertContains(response, 
+    self.assertContains(response,
                         '''<div class="control"> <textarea name="description" cols="40" rows="10"
                            maxlength="3000" class="richtextarea" id="id_description"> </textarea> </div>''',
                         html=True)
@@ -122,7 +122,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     # check root gallery has the sub gallery for child
     self.assertTrue(rg.children.first().name == sgal_name)
     # check the root gallery appears as the parent gallery in the details
-    self.assertContains(response, f'''<a class="button" href="{reverse('galleries:detail', args=[rg.id])}" 
+    self.assertContains(response, f'''<a class="button" href="{reverse('galleries:detail', args=[rg.id])}"
       title="{_("Back to %(gname)s") % {'gname': rg.name}}">
       <span class="icon is-large">
         <i class="mdi mdi-24px mdi-arrow-up-right"></i>
@@ -134,7 +134,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     url = reverse("galleries:detail", args=[sg.id])
     self.assertContains(response, f'''<div class="container has-text-centered">
   <a class="mr-2" href="{url}">
-    <figure class="image is-64x64" style="margin:auto">
+    <figure class="image sub-gallery-cover" style="margin:auto">
       <img src="{sg.cover_url()}">
     </figure>
     <figcaption>{sg.name}</figcaption>
@@ -168,7 +168,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
 <div class="box">
   <article class="media">
     <figure class="media-left">
-      <a class="image is-128x128" href="{url}">
+      <a class="image gallery-cover" href="{url}">
         <img src="{settings.DEFAULT_GALLERY_COVER_URL}">
       </a>
     </figure>

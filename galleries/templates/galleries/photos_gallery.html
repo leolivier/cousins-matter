@@ -52,7 +52,7 @@
 		{% for photo in page.object_list %}
 		<div class="cell">
 			<a href="{% url 'galleries:photo' photo.id %}">
-				<figure class="image is-128x128">
+				<figure class="image thumbnail">
 					<img src="{{photo.thumbnail.url}}">
 				</figure>
 			</a>

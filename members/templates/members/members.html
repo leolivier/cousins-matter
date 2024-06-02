@@ -42,6 +42,11 @@
   {% for member in member_list %}
     <div class="cell has-text-centered">
       <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
+        {%if member.avatar%}
+        <figure class="image mini-avatar mr-2">
+					<img class="is-rounded" src="{{member.avatar_mini_url}}">
+				</figure>
+        {%endif%}
         <strong>{{ member.get_full_name }}</strong>
       </a>
     </div>

@@ -232,8 +232,13 @@ LOGGING = {
 }
 
 AVATARS_DIR = 'avatars'
+# If you update these sizes, update them accordingly
+# for .avatar and .mini-avatar CSS classes in
+# cm_main/static/cm_main/css/cm_main.css
 AVATARS_SIZE = 300
+AVATARS_MINI_SIZE = 48
 DEFAULT_AVATAR_URL = '/static/members/default-avatar.jpg'
+DEFAULT_MINI_AVATAR_URL = '/static/members/default-mini-avatar.jpg'
 
 VERIFICATION_SUCCESS_TEMPLATE = "members/email_verification_successful.html"
 VERIFICATION_FAILED_TEMPLATE = "members/email_verification_failed.html"

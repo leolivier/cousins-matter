@@ -35,7 +35,7 @@ class TestMemberImport(MemberTestCase):
     # print(response.content)
     return response
 
-  def do_test_import(self, file, lang, expected_num, activate_users=True):
+  def do_test_import(self, file, lang, expected_num, activate_users=True, member_prefix='member'):
     prev_num = Member.objects.count()
     response = self.do_upload_file(file, lang)
     self.assertEqual(response.status_code, 200)
@@ -47,8 +47,10 @@ class TestMemberImport(MemberTestCase):
     self.assertTrue(Member.objects.filter(birthdate=date(2000, 1, 3)).exists())
     self.assertTrue(Address.objects.filter(city='Blackpool').exists())
     self.assertTrue(Member.objects.filter(address__city='Blackpool').exists())
-    for name in ['member1', 'member2', 'member3', 'member4']:
-      m = Member.objects.get(username=name)
+    for i in range(4):
+      name = member_prefix + str(i+1)
+      # print("name=", name)
+      m = Member.objects.get(account__username=name)
       if activate_users:
         self.assertEqual(m.is_active, activate_users)
         self.assertIsNone(m.managing_member)
@@ -69,7 +71,7 @@ class TestMemberImport(MemberTestCase):
     self.assertEqual(member1.phone, "+45 01 02 03")
 
   def test_import_fr(self):
-    self.do_test_import('import_members-fr.csv', 'fr-FR', 4)
+    self.do_test_import('import_members-fr.csv', 'fr-FR', 4, member_prefix='member-fr')
 
   def test_wrong_field(self):
     response = self.do_upload_file('import_members-wrong-field.csv', 'en-US')

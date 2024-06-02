@@ -1,4 +1,3 @@
-# from pprint import pprint
 from django.urls import reverse
 from members.tests.tests_member import MemberTestCase
 from django.db import transaction

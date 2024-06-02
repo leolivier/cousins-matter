@@ -220,3 +220,12 @@ class Member(models.Model):
         mini_path = self.avatar_mini_path()
         if not os.path.isfile(mini_path):
           self._resize_avatar(settings.AVATARS_MINI_SIZE, mini_path)
+
+    def delete(self, *args, **kwargs):
+      super().delete(*args, **kwargs)
+      if self.avatar:
+        if os.path.isfile(self.avatar.path):
+          os.remove(self.avatar.path)
+        mini_path = self.avatar_mini_path()
+        if os.path.isfile(mini_path):
+          os.remove(mini_path)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-25 13:25+0200\n"
+"POT-Creation-Date: 2024-06-02 17:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -85,8 +85,9 @@ msgstr "Supprimer la conversation"
 msgid ""
 "Are you sure you want to delete \"%(object)s\" and all associated replies "
 "and comments?"
-msgstr "Êtes-vous sûr de vouloir supprimer \"%(object)s\" et toutes les réponses "
-"et les commentaires associés ?"
+msgstr ""
+"Êtes-vous sûr de vouloir supprimer \"%(object)s\" et toutes les réponses et "
+"les commentaires associés ?"
 
 #: forum/templates/forum/post_confirm_delete.html:17
 msgid "Confirm"
@@ -97,6 +98,7 @@ msgid "Post"
 msgstr "Discussion"
 
 #: forum/templates/forum/post_detail.html:49
+#: forum/templates/forum/post_list.html:34
 #, python-format
 msgid "%(nreplies)s answers"
 msgstr "%(nreplies)s réponse(s)"
@@ -128,16 +130,16 @@ msgstr "Soumettre"
 msgid "Latest Posts"
 msgstr "Dernières discussions"
 
-#: forum/templates/forum/post_list.html:13
+#: forum/templates/forum/post_list.html:14
 #, python-format
 msgid "go to page #%(i)s"
 msgstr "aller à la page n°%(i)s"
 
-#: forum/templates/forum/post_list.html:15
+#: forum/templates/forum/post_list.html:16
 #, python-format
 msgid "page #%(i)s"
 msgstr "page n°%(i)s"
 
-#: forum/views.py:149
+#: forum/views.py:150
 msgid "Can't delete the first message of a thread!"
 msgstr "Impossible de supprimer le premier message d'une discussion!"

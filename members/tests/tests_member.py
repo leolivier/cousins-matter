@@ -13,19 +13,30 @@ import os
 COUNTER = 0
 
 
+def get_counter():
+  global COUNTER
+  COUNTER += 1
+  # print('count=', COUNTER)
+  return str(COUNTER)
+
+
 class MemberTestCase(LoggedAccountTestCase):
-
-  def counter(self):
-    global COUNTER
-    COUNTER += 1
-    return str(COUNTER)
-
   def setUp(self):
     super().setUp()
     self.member = Member.objects.get(account=self.account)
+    self.created_members = []
 
-  # def tearDown(self) -> None:
-  #   return super().tearDown()
+  base_avatar = "test_avatar.jpg"
+  test_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "test_avatar.jpg")
+  test_mini_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "mini_test_avatar.jpg")
+
+  def tearDown(self):
+    # self.member.delete()
+    for m in self.created_members:
+      if m.id is not None:
+        m.delete()
+    self.created_members = []
+    super().tearDown()
 
   def get_new(self, input_str, counter):
     """build a new string based on the passed one"""
@@ -33,7 +44,7 @@ class MemberTestCase(LoggedAccountTestCase):
 
   def get_new_member_data(self):
     """returns a brand new member data (new username)"""
-    counter = self.counter()
+    counter = get_counter()
     uname = self.get_new(self.username, counter)
     new_password = self.get_new(self.password, counter)
 
@@ -43,7 +54,7 @@ class MemberTestCase(LoggedAccountTestCase):
 
   def get_changed_member_data(self, member):
     """returns a modified member dataset (same username and last_name)"""
-    counter = self.counter()
+    counter = get_counter()
     return {'username': member.account.username, 'first_name': self.get_new(member.account.first_name, counter),
             'last_name': member.account.last_name, 'email': member.account.username+'@test.com',
             'phone': '01 23 45 67 ' + counter, "birthdate": date.today()}
@@ -56,6 +67,7 @@ class MemberTestCase(LoggedAccountTestCase):
     self.assertEqual(response.status_code, 200)
     new_member = Member.objects.filter(account__username=member_data['username']).first()
     self.assertIsNotNone(new_member)
+    self.created_members.append(new_member)
     return new_member
 
 
@@ -151,15 +163,26 @@ class MemberProfileViewTest(MemberTestCase):
     from PIL import Image
     import sys
 
-    avatar_file = os.path.join(os.path.dirname(__file__), "test_avatar.jpg")
+    avatar_file = os.path.join(os.path.dirname(__file__), self.base_avatar)
     membuf = BytesIO()
     with Image.open(avatar_file) as img:
       img.save(membuf, format='JPEG', quality=90)
       size = sys.getsizeof(membuf)
-      self.member.avatar = InMemoryUploadedFile(membuf, 'ImageField', "test_avatar.jpg",
+      self.member.avatar = InMemoryUploadedFile(membuf, 'ImageField', self.base_avatar,
                                                 'image/jpeg', size, None)
     self.member.save()
-    self.assertTrue(os.path.isfile(os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, os.path.basename(avatar_file))))
+    self.assertTrue(os.path.isfile(self.member.avatar.path))
+    # reusing several times the same image which is renamed each time with a suffix
+    testbn_prefix, test_ext = os.path.splitext(self.test_avatar_jpg)
+    avatar_prefix, av_ext = os.path.splitext(self.member.avatar.path)
+    self.assertEqual(test_ext, test_ext)
+    self.assertTrue(avatar_prefix.startswith(testbn_prefix))
+    # same for mini avatar
+    self.assertTrue(os.path.isfile(self.member.avatar_mini_path()))
+    testbn_prefix, test_ext = os.path.splitext(self.test_mini_avatar_jpg)
+    avatar_prefix, av_ext = os.path.splitext(self.member.avatar_mini_path())
+    self.assertEqual(test_ext, test_ext)
+    self.assertTrue(avatar_prefix.startswith(testbn_prefix))
 
 
 class ManagedMemberChangeTests(MemberTestCase):
@@ -228,12 +251,16 @@ class TestDisplayMembers(MemberTestCase):
   def test_display_members(self):
     response = self.client.get(reverse("members:members"))
     html = response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '')
-    # pprint(vars(response))
+    # print(str(response.content))
     for i in range(len(self.members)):
+      avatar = '' if not self.members[i].avatar else f'''<figure class="image mini-avatar mr-2">
+                      <img class="is-rounded" src="{self.members[i].avatar_mini_url()}">
+                     </figure>'''
       self.assertInHTML(f'''
   <div class="cell has-text-centered">
     <a class="button" href="/members/{self.members[i].id}/">
-      <strong>{self.members[i].account.first_name} {self.members[i].account.last_name}</strong>
+      {avatar}
+      <strong>{self.members[i].get_full_name()}</strong>
     </a>
   </div>
 ''', html)
@@ -260,7 +287,7 @@ class TestDisplayMembers(MemberTestCase):
       # print(response.content)
       self.assertEqual(response.status_code, 200)
       return response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '')
-    
+
     member1 = self.create_member()
     member2 = self.create_member()
     member3 = self.create_member()

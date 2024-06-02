@@ -3,40 +3,48 @@
 {% block title %}{% title _("Latest Posts") %}{% endblock %}
 {% block content %}
 <div class="container">
-	<div class="level">
-		<div class="level-left title is-3">{% title _("Latest Posts") %}</div>
-		<div class="level-item">
-			{% if page_range|first > 1 %}<button class="button is-light">...</button>{%endif%}
-			{% for i in page_range %}
-			{% if i != current_page %}
-			<a class="button is-primary is-light" href="{%url 'forum:page' i %}" 
-				title="{% blocktranslate %}go to page #{{i}}{% endblocktranslate %}">{{i}}</a>
-			{%else%}
-				<button class="button is-light"	title="{% blocktranslate %}page #{{i}}{% endblocktranslate %}">{{i}}</button>
-			{%endif%}
-			{% endfor %}
-			{% if page_range|last < num_pages %}<button class="button is-light">...</button>{%endif%}
-		</div>
-	</div>
-	
-	{%for post in object_list %}
-	<div class="level">
-		<div class="level-left">
-			<a class="block" href="{%url 'forum:display' post.id%}">{{post.title}}</a>
-		</div>
-		<div class="level-item">
-			<div class="tags">
-				<p class="tag">
+	<div class="panel">
+		<p class="panel-heading">{% title _("Latest Posts") %}</p>
+		<div  id="post_list" style="max-height: 800px; overflow-y: scroll;">
+			<div class="panel-block">
+				{% if page_range|first > 1 %}<button class="button is-light">...</button>{%endif%}
+				{% for i in page_range %}
+				{% if i != current_page %}
+				<a class="button is-primary is-light" href="{%url 'forum:page' i %}" 
+					title="{% blocktranslate %}go to page #{{i}}{% endblocktranslate %}">{{i}}</a>
+				{%else%}
+					<button class="button is-light"	title="{% blocktranslate %}page #{{i}}{% endblocktranslate %}">{{i}}</button>
+				{%endif%}
+				{% endfor %}
+				{% if page_range|last < num_pages %}<button class="button is-light">...</button>{%endif%}
+			</div>
+		{%for post in posts %}
+			<div class="panel-block">
+				<figure class="image mini-avatar mr-2">
+					<img class="is-rounded" src="{{post.first_message.author.avatar_mini_url}}">
+				</figure>
+				<p class="has-text-primary has-text-weight-bold has-text-right mr-5">
 					{{post.first_message.author.get_full_name}}
 					<a href="{%url 'members:detail' post.first_message.author.id %}">
 						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
 					</a>
+					<br>
+					<span class="is-size-7">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>
+					<br>
+					<span class="tag">{%blocktranslate with nreplies=post.num_messages|add:-1%}{{nreplies}} answers{%endblocktranslate%}</span>
 				</p>
-				<p class="tag">{{post.first_message.date}}</p>
+				<p class="content">
+					<a class="block" href="{%url 'forum:display' post.id%}">
+						<span class="subtitle is-5 has-text-weight-bold">{{post.title}}</span><br>
+						<span class="subtitle is-6">
+							{% autoescape on %}
+							{{post.first_message.content|striptags|truncatechars:150 }}...
+							{% endautoescape %}
+						</span>
+					</a>
+				</p>
 			</div>
+		{%endfor%}
 		</div>
-	</div>
-	<hr style="margin:0">
-	{%endfor%}
 </div>
 {%endblock%}

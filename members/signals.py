@@ -15,7 +15,7 @@ def create_user_creates_member(sender, instance, created, **kwargs):
             logger.debug(f"User {instance.username} already has an associated member.")
         else:
             logger.debug(f"New user {instance.username}: creating associated member")
-            Member.objects.create(account=instance).save()
+            Member.objects.create(account=instance)
     else:  # existing user
         if instance.is_active:
             member = Member.objects.get(account__id=instance.id)

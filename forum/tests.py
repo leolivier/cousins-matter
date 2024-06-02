@@ -1,4 +1,3 @@
-from pprint import pprint
 from django.urls import reverse
 from accounts.tests import LoggedAccountTestCase
 from django.db import transaction
@@ -20,7 +19,9 @@ class ForumTestCase(LoggedAccountTestCase):
       self.message.save()
 
   def tearDown(self):
-    Post.objects.exclude(id=self.post.id).delete()
+    Post.objects.all().delete()
+    Message.objects.all().delete()  # should not be useful!
+    Comment.objects.all().delete()  # neither!
 
 
 class PostCreateTestCase(ForumTestCase):

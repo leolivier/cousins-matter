@@ -1,3 +1,4 @@
+import os
 from django.db import models
 import datetime
 from PIL import Image, ImageOps
@@ -160,6 +161,19 @@ class Member(models.Model):
     def avatar_url(self):
       return self.avatar.url if self.avatar else settings.DEFAULT_AVATAR_URL
 
+    def avatar_mini_url(self):
+      if self.avatar:
+        components = self.avatar.url.split('/')
+        components[-1] = 'mini_' + components[-1]
+        return '/'.join(components)
+      else:
+        return settings.DEFAULT_MINI_AVATAR_URL
+
+    def avatar_mini_path(self):
+      base = os.path.basename(self.avatar.path)
+      dirname = os.path.dirname(self.avatar.path)
+      return os.path.join(dirname, 'mini_'+base)
+
     def __str__(self) -> str:
       return self.get_full_name()
 
@@ -188,14 +202,30 @@ class Member(models.Model):
         logger.debug(f"Cleaning member {self.get_full_name()}: changing managing account to admin")
         self.managing_account = get_admin()
 
+    def _resize_avatar(self, max_size, save_path):
+      img = Image.open(self.avatar.path)
+      if img.height > max_size or img.width > max_size:
+        output_size = (max_size, max_size)
+        img.thumbnail(output_size)
+        img = ImageOps.exif_transpose(img)  # avoid image rotating
+        img.save(save_path)
+        logger.debug(f"Resized and saved avatar for {self.get_full_name()} in {save_path}, size: {img.size}")
+
     def save(self, *args, **kwargs):
       super().save(*args, **kwargs)
-      # resize avatar
       if self.avatar:
-        img = Image.open(self.avatar.path)
-        if img.height > settings.AVATARS_SIZE or img.width > settings.AVATARS_SIZE:
-          output_size = (settings.AVATARS_SIZE, settings.AVATARS_SIZE)
-          img.thumbnail(output_size)
-          img = ImageOps.exif_transpose(img)  # avoid image rotating
-          img.save(self.avatar.path)
-          logger.debug(f"Resized and saved avatar for {self.get_full_name()} in {self.avatar.path}, size: {img.size}")
+        # resize avatar
+        self._resize_avatar(settings.AVATARS_SIZE, self.avatar.path)
+        # generate minified for post/ads/chat
+        mini_path = self.avatar_mini_path()
+        if not os.path.isfile(mini_path):
+          self._resize_avatar(settings.AVATARS_MINI_SIZE, mini_path)
+
+    def delete(self, *args, **kwargs):
+      super().delete(*args, **kwargs)
+      if self.avatar:
+        if os.path.isfile(self.avatar.path):
+          os.remove(self.avatar.path)
+        mini_path = self.avatar_mini_path()
+        if os.path.isfile(mini_path):
+          os.remove(mini_path)

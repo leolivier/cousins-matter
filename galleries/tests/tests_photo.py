@@ -67,7 +67,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
     self.assertTemplateUsed(response, 'galleries/add_photo.html')
     self.assertIs(response.resolver_match.func.view_class, PhotoAddView)
     # check rich editor by class richtextarea, the rest is dynamic in the browser, can't be tested
-    self.assertContains(response, 
+    self.assertContains(response,
                         '''<div class="control"> <textarea name="description" cols="40" rows="10"
                            maxlength="3000" class="richtextarea" id="id_description"> </textarea> </div>''',
                         html=True)
@@ -96,7 +96,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
       self.assertContains(response, f'''
   <div class="cell">
     <a href="{reverse('galleries:photo', args=[p.id])}">
-      <figure class="image is-128x128">
+      <figure class="image thumbnail">
         <img src="{p.thumbnail.url}">
       </figure>
     </a>

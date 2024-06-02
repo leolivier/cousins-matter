@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-29 18:26+0200\n"
+"POT-Creation-Date: 2024-06-02 17:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -58,179 +58,179 @@ msgstr "Le fichier CSV contenant les membres à importer."
 msgid "Automatically activate imported users"
 msgstr "Activer automatiquement les utilisateurs importés"
 
-#: members/models.py:16
+#: members/models.py:17
 msgctxt "CSV Field"
 msgid "number_and_street"
 msgstr "numero_et_rue"
 
-#: members/models.py:17
+#: members/models.py:18
 msgctxt "CSV Field"
 msgid "address_complementary_info"
 msgstr "infos_complementaires_d_adresse"
 
-#: members/models.py:18
+#: members/models.py:19
 msgctxt "CSV Field"
 msgid "zip_code"
 msgstr "code_postal"
 
-#: members/models.py:19
+#: members/models.py:20
 msgctxt "CSV Field"
 msgid "city"
 msgstr "ville"
 
-#: members/models.py:20
+#: members/models.py:21
 msgctxt "CSV Field"
 msgid "country"
 msgstr "pays"
 
-#: members/models.py:24
+#: members/models.py:25
 msgctxt "CSV Field"
 msgid "username"
 msgstr "nom_de_compte"
 
-#: members/models.py:25
+#: members/models.py:26
 msgctxt "CSV Field"
 msgid "email"
 msgstr "email"
 
-#: members/models.py:26
+#: members/models.py:27
 msgctxt "CSV Field"
 msgid "first_name"
 msgstr "prenom"
 
-#: members/models.py:27
+#: members/models.py:28
 msgctxt "CSV Field"
 msgid "last_name"
 msgstr "nom"
 
-#: members/models.py:31 members/models.py:39
+#: members/models.py:32 members/models.py:40
 msgctxt "CSV Field"
 msgid "birthdate"
 msgstr "date_de_naissance"
 
-#: members/models.py:32
+#: members/models.py:33
 msgctxt "CSV Field"
 msgid "phone"
 msgstr "telephone"
 
-#: members/models.py:33
+#: members/models.py:34
 msgctxt "CSV Field"
 msgid "website"
 msgstr "site_web"
 
-#: members/models.py:34
+#: members/models.py:35
 msgctxt "CSV Field"
 msgid "family"
 msgstr "famille"
 
-#: members/models.py:35
+#: members/models.py:36
 msgctxt "CSV Field"
 msgid "avatar"
 msgstr "avatar"
 
-#: members/models.py:50 members/templates/members/members_directory.html:21
+#: members/models.py:51 members/templates/members/members_directory.html:21
 #: members/views/views_directory.py:42
 msgid "Name"
 msgstr "Nom"
 
-#: members/models.py:52 members/templates/members/family_detail.html:14
+#: members/models.py:53 members/templates/members/family_detail.html:14
 msgid "Parent family"
 msgstr "Famille parente"
 
-#: members/models.py:55
+#: members/models.py:56
 msgid "family"
 msgstr "famille"
 
-#: members/models.py:56
+#: members/models.py:57
 msgid "families"
 msgstr "familles"
 
-#: members/models.py:71 members/templates/members/address_detail.html:8
+#: members/models.py:72 members/templates/members/address_detail.html:8
 msgid "Number & Street name"
 msgstr "N° et nom de la voie"
 
-#: members/models.py:73
+#: members/models.py:74
 msgid "Complementary info"
 msgstr "Infos complémentaires"
 
-#: members/models.py:75 members/templates/members/address_detail.html:16
+#: members/models.py:76 members/templates/members/address_detail.html:16
 msgid "Zip code"
 msgstr "Code postal"
 
-#: members/models.py:77 members/templates/members/address_detail.html:20
+#: members/models.py:78 members/templates/members/address_detail.html:20
 msgid "City"
 msgstr "Ville"
 
-#: members/models.py:79 members/templates/members/address_detail.html:24
+#: members/models.py:80 members/templates/members/address_detail.html:24
 msgid "Country"
 msgstr "Pays"
 
-#: members/models.py:93
+#: members/models.py:94
 msgid "address"
 msgstr "adresse"
 
-#: members/models.py:94
+#: members/models.py:95
 msgid "addresses"
 msgstr "adresses"
 
-#: members/models.py:102
+#: members/models.py:103
 msgid "Linked Account"
 msgstr "Compte lié"
 
-#: members/models.py:104
+#: members/models.py:105
 msgid "Managing account"
 msgstr "Compte gérant ce membre"
 
-#: members/models.py:109 members/templates/members/member_detail.html:32
+#: members/models.py:110 members/templates/members/member_detail.html:32
 #: members/templates/members/members_directory.html:25
 #: members/views/views_directory.py:42
 msgid "Address"
 msgstr "Adresse"
 
-#: members/models.py:111 members/templates/members/member_detail.html:36
+#: members/models.py:112 members/templates/members/member_detail.html:36
 #: members/templates/members/members_directory.html:23
 #: members/views/views_directory.py:42
 msgid "Phone"
 msgstr "Téléphone"
 
-#: members/models.py:113 members/templates/members/member_detail.html:40
+#: members/models.py:114 members/templates/members/member_detail.html:40
 #: members/templates/members/members_directory.html:22
 msgid "Birthdate"
 msgstr "Date de naissance"
 
-#: members/models.py:114
+#: members/models.py:115
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
 
-#: members/models.py:117 members/templates/members/member_detail.html:44
+#: members/models.py:118 members/templates/members/member_detail.html:44
 msgid "Website"
 msgstr "Site web"
 
-#: members/models.py:119 members/templates/members/member_detail.html:48
+#: members/models.py:120 members/templates/members/member_detail.html:48
 msgid "Family"
 msgstr "Famille"
 
-#: members/models.py:121 members/templates/members/member_detail.html:52
+#: members/models.py:122 members/templates/members/member_detail.html:52
 msgid "Who I am"
 msgstr "Qui je suis"
 
-#: members/models.py:122
+#: members/models.py:123
 msgid "Describe yourself, your likes and dislikes..."
 msgstr "Décris-toi, dis ce que tu aimes ou n'aimes pas..."
 
-#: members/models.py:123
+#: members/models.py:124
 msgid "My hobbies"
 msgstr "Mes loisirs"
 
-#: members/models.py:124
+#: members/models.py:125
 msgid "Provide a list of hobbies separated by commas"
 msgstr "Donne un liste de loisirs séparés par des virgules"
 
-#: members/models.py:127
+#: members/models.py:128
 msgid "member"
 msgstr "membre"
 
-#: members/models.py:128
+#: members/models.py:129
 msgid "members"
 msgstr "members"
 
@@ -380,13 +380,13 @@ msgstr "Détail d'un Membre"
 
 #: members/templates/members/member_detail.html:21
 #: members/templates/members/member_upsert.html:20
-#: members/tests/tests_member.py:220
+#: members/tests/tests_member.py:243
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/member_detail.html:23
 #: members/templates/members/member_upsert.html:22
-#: members/tests/tests_member.py:220
+#: members/tests/tests_member.py:243
 msgid "Managed member"
 msgstr "Membre géré"
 
@@ -497,7 +497,7 @@ msgstr "nom"
 msgid "Filter Members"
 msgstr "Filtrer les Membres"
 
-#: members/templates/members/members.html:53
+#: members/templates/members/members.html:58
 #: members/templates/members/members_directory.html:43
 msgid "No members found"
 msgstr "Pas de membre trouvé"
@@ -653,7 +653,7 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_member.py:194 members/tests/tests_member.py:199
+#: members/tests/tests_member.py:217 members/tests/tests_member.py:222
 #: members/views/views_member.py:105 members/views/views_member.py:124
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."

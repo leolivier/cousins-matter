@@ -24,8 +24,11 @@
 			"program": "${workspaceFolder}/manage.py",
 			"args": [
 					"test",
+					"--failfast",
+					"-v",
+					"2",
 					"members.tests.tests_import"
-//					"accounts"
+					// "accounts"
 			],
 			"django": true,
 			"autoStartBrowser": false,

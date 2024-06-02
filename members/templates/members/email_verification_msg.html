@@ -8,7 +8,7 @@
     <title>{% translate 'Verify Email address' %}</title>
 
     <style>
-        {% include "accounts/email_msg_css.css" %}
+        {% include "members/email_msg_css.css" %}
     </style>
 </head>
 <body>
@@ -17,7 +17,7 @@
 
         <div class="green">
             <h1 class="center" style="padding:2px">
-                {% title _("Account Activation") %}
+                {% title _("Member Activation") %}
             </h1>
         </div>
 
@@ -27,7 +27,7 @@
         <div class="center">
             <p class="mt-2"><strong>{% translate 'Greetings!' %}</strong></p>
             <p class="mt-2">
-                {% translate "You received this mail because you attempted to make account on our website" %}<br>
+                {% translate "You received this mail because you attempted to create an account on our website" %}<br>
                 {% translate "Please click on the link below to confirm the email and activate your account." %}
             </p>
             <p class="mt-2">

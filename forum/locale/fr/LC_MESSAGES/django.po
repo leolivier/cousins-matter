@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 17:16+0200\n"
+"POT-Creation-Date: 2024-06-02 17:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -140,6 +140,6 @@ msgstr "aller à la page n°%(i)s"
 msgid "page #%(i)s"
 msgstr "page n°%(i)s"
 
-#: forum/views.py:150
+#: forum/views.py:149
 msgid "Can't delete the first message of a thread!"
 msgstr "Impossible de supprimer le premier message d'une discussion!"

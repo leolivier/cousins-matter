@@ -1,5 +1,4 @@
 from datetime import date
-from django.contrib.auth.models import User
 from django.urls import reverse
 from django.core import mail
 from django.utils.translation import gettext as _
@@ -7,9 +6,9 @@ from django.conf import settings
 from django.test import RequestFactory
 from django.test.utils import TestContextDecorator
 from captcha.conf import settings as captcha_settings
+from ..models import Member
 from ..registration_link_manager import RegistrationLinkManager
-from .tests_member import MemberTestCase
-from accounts.tests import AccountTestCase
+from .tests_member import MemberTestCase, BaseMemberTestCase
 
 
 class MemberInviteTests(MemberTestCase):
@@ -43,15 +42,15 @@ class MemberInviteTests(MemberTestCase):
       self.do_test_invite(self.member)
 
   def test_invite_member_staff(self):
-    self.account.is_staff = True  # setUp
-    self.account.save()
+    self.member.is_staff = True  # setUp
+    self.member.save()
     self.do_test_invite(self.member)
-    self.account.is_staff = False  # tearDown
-    self.account.save()
+    self.member.is_staff = False  # tearDown
+    self.member.save()
 
   def test_invite_member_superuser(self):
     self.superuser_login()
-    self.do_test_invite(self.superuser.member)
+    self.do_test_invite(self.superuser)
     self.client.logout()
     self.login()
 
@@ -78,7 +77,7 @@ class ignore_captcha_errors(TestContextDecorator):
     return cls
 
 
-class RequestRegistrationLinkTests(AccountTestCase):
+class RequestRegistrationLinkTests(BaseMemberTestCase):
   @ignore_captcha_errors()
   def test_request_registration(self):
 
@@ -87,7 +86,7 @@ class RequestRegistrationLinkTests(AccountTestCase):
     response = self.client.post(reverse("members:register_request"), test_requester, follow=True)
     self.assertContainsMessage(response, "success", _("Registration request sent."))
     self.assertEqual(len(mail.outbox), 1)
-    admin = User.objects.filter(is_superuser=True).first()
+    admin = Member.objects.filter(is_superuser=True).first()
     self.assertIsNotNone(admin)
     self.assertSequenceEqual(mail.outbox[0].recipients(), [admin.email])
     self.assertEqual(mail.outbox[0].subject, _("Registration request for %(site_name)s") % {'site_name': settings.SITE_NAME})
@@ -111,10 +110,7 @@ class RequestRegistrationLinkTests(AccountTestCase):
     test_requester = {'name': "Mr Freeze", 'email': self.superuser_email,
                       'message': "Hi, it's me!", 'captcha_0': 'whatever', 'captcha_1': 'passed'}
     response = self.client.post(reverse("members:register_request"), test_requester, follow=True)
-    self.assertContains(response, f'''
-<li class="message is-error">
-  <div class="message-body">{_("User with this email already exists.")}</div>
-</li>''', html=True)
+    self.assertContainsMessage(response, 'error', _("A member with this email already exists."))
 
   def test_request_registration_wrong_captcha(self):
     from ..forms import RegistrationRequestForm
@@ -124,7 +120,7 @@ class RequestRegistrationLinkTests(AccountTestCase):
     self.assertFormError(form, 'captcha', _("Invalid CAPTCHA"))
 
 
-class MemberRegisterTests(AccountTestCase):
+class MemberRegisterTests(BaseMemberTestCase):
 
   def test_register_view_ok(self):
     factory = RequestFactory()

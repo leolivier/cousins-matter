@@ -1,6 +1,5 @@
 
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect
@@ -12,9 +11,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 
 from ..registration_link_manager import RegistrationLinkManager
-from accounts.forms import AccountRegisterForm
-from ..forms import MemberInvitationForm, RegistrationRequestForm, MemberUpdateForm, \
-                    AddressUpdateForm, FamilyUpdateForm
+from ..forms import (MemberInvitationForm, RegistrationRequestForm,
+                     MemberRegistrationForm, AddressUpdateForm,
+                     FamilyUpdateForm)
 from cousinsmatter.utils import redirect_to_referer
 from ..models import Member
 from verify_email.email_handler import send_verification_email
@@ -26,30 +25,29 @@ class RegistrationCheckingView(generic.CreateView):
   template_name = "members/member_upsert.html"
 
   def check_before_register(self, request, encoded_email, token):
-    if RegistrationLinkManager().decrypt_link(encoded_email, token):
+    decoded_email = RegistrationLinkManager().decrypt_link(encoded_email, token)
+    if decoded_email:
       # check if user is already logged in
       if request.user.is_authenticated:
         messages.error(request, _("You are already logged in"))
         return redirect_to_referer(request)
       # check if member is already registered
-      account = User.objects.filter(email=request.POST.get("email"))
-      if account.exists():
-        account = account.first()
-        # if member is already registered but account not active, ask him to contact his/her managing account
-        if account.is_active:
+      member = Member.objects.filter(email=decoded_email)
+      if member.exists():
+        member = member.first()
+        # if member is already registered but is not active, ask him to contact his/her managing member
+        if member.is_active:
           messages.error(
             request,
-            _("A member with the same account name or email address is already registered. Please sign in instead")
+            _("A member with the same email address is already registered. Please sign in instead")
             )
           return redirect_to_referer(request)
         else:
-          manager = Member.objects.get(account__id=account.id).managing_account
+          manager = Member.objects.get(id=member.id).managing_member
           messages.error(request,
                          _("You are already registered but not active. Please contact %(admin)s to activate your account") %
-                         {'admin': manager.member.get_full_name()})
+                         {'admin': manager.get_full_name()})
           return redirect_to_referer(request)
-      else:
-          account = User.objects.filter(email=request.POST.get("username"))
       return None
     else:
       return HttpResponseBadRequest(_("Invalid link. Please contact the administrator."))
@@ -60,8 +58,7 @@ class RegistrationCheckingView(generic.CreateView):
       return checked_ko
     else:
       return render(request, self.template_name, {
-          "m_form": MemberUpdateForm(),
-          "u_form": AccountRegisterForm(),
+          "form": MemberRegistrationForm(),
           "addr_form": AddressUpdateForm(),
           "family_form": FamilyUpdateForm(),
           "title": self.title,
@@ -72,25 +69,17 @@ class RegistrationCheckingView(generic.CreateView):
     if checked_ko:
       return checked_ko
 
-    # start with account
-    u_form = AccountRegisterForm(request.POST)
+    form = MemberRegistrationForm(request.POST, request.FILES)
 
-    if u_form.is_valid():
-      account = send_verification_email(request, u_form)
-      # if new member, it has been created by the account creation
-      # retrieve it and recreate the member form with this instance
-      member = Member.objects.get(account=account)
-      m_form = MemberUpdateForm(request.POST, request.FILES, instance=member)
-      if m_form.is_valid():
-        member = m_form.save()
-
-        username = u_form.cleaned_data.get('username')
-        messages.success(
+    if form.is_valid():
+      send_verification_email(request, form)  # also saves the member
+      username = form.cleaned_data.get('username')
+      messages.success(
           request,
           _('Hello %(username)s, your account has been created! You will now receive an email to verify your email address. Click in the link inside the mail to finish the registration.') %  # noqa: E501
           {"username": username}
           )
-        return redirect("accounts:login")
+      return redirect("members:login")
 
     return redirect_to_referer(request)
 
@@ -115,8 +104,8 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
     email = form.cleaned_data['email']
     invited = form.cleaned_data['invited']
 
-    if User.objects.filter(email=email).exists():
-      messages.error(request, _('User with this email already exists.'))
+    if Member.objects.filter(email=email).exists():
+      messages.error(request, _('A member with this email already exists.'))
       return redirect_to_referer(request)
 
     invitation_url = RegistrationLinkManager().generate_link(request, email)
@@ -157,12 +146,12 @@ class RegistrationRequestView(generic.View):
     form = RegistrationRequestForm(request.POST)
     # Validate the form: the captcha field will automatically
     # check the input
-    if form.is_valid():  # human = True
+    if form.is_valid():  # Captcha OK
 
       site_name = settings.SITE_NAME
       requester_email = request.POST.get("email")
-      if User.objects.filter(email=requester_email).exists():
-        messages.error(request, _('User with this email already exists.'))
+      if Member.objects.filter(email=requester_email).exists():
+        messages.error(request, _('A member with this email already exists.'))
       else:
         requester_name = request.POST.get("name")
         requester_message = request.POST.get("message")
@@ -180,7 +169,7 @@ class RegistrationRequestView(generic.View):
         }
 
         msg = render_to_string("members/registration_request_email.html", context, request=request)
-        admin = User.objects.filter(is_superuser=True).first()
+        admin = Member.objects.filter(is_superuser=True).first()
         if send_mail(
           _("Registration request for %(site_name)s") % {'site_name': site_name}, strip_tags(msg),
           from_email=settings.DEFAULT_FROM_EMAIL,

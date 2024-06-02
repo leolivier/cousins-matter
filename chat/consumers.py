@@ -7,6 +7,7 @@ from urllib.parse import unquote
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from .models import ChatMessage, ChatRoom
+from members.models import Member
 
 random.seed()
 
@@ -34,23 +35,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
     )
 
   @sync_to_async
-  def save_message(self, account_id, room_slug, message):
+  def save_message(self, member_id, room_slug, message):
     # print('room slug: ', room_slug)
     room = ChatRoom.objects.get(slug=room_slug)
-    User = get_user_model()
-    account = User.objects.get(pk=account_id)
-    chat = ChatMessage.objects.create(account=account, room=room, content=message)
+    member = Member.objects.get(pk=member_id)
+    chat = ChatMessage.objects.create(member=member, room=room, content=message)
     return chat
 
   # Receive message from WebSocket
   async def receive(self, text_data):
     data = json.loads(text_data)
     message = data['message']
-    account_id = data['account']
+    member_id = data['member']
     username = data['username']
     room_slug = unquote(data['room'])
     # Save the message
-    msg = await self.save_message(account_id, room_slug, message)
+    msg = await self.save_message(member_id, room_slug, message)
     # Send it to room group
     await self.channel_layer.group_send(
       self.room_group_name,

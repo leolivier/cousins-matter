@@ -5,55 +5,38 @@
 {% block content %}
 	<h1 class="title has-text-centered is-1">{{title}}</h1>
 	<div class="media">
-		{% if m_form.instance %}
+	{% if form.instance %}
 		<div class="media-left">
     	<figure class="image thumbnail">
-        <img class="is-rounded" src="{{ m_form.instance.avatar_url }}">
+        <img class="is-rounded" src="{{ form.instance.avatar_url }}">
     	</figure>
 		</div>
-		{% endif %}
-		{% if u_form.instance %}
     <div class="media-content">
-      <p class="content"><strong>{{ u_form.instance.first_name }} {{ u_form.instance.last_name }}</strong>
-			{%if u_form.instance.email %}<small>&lt;{{ u_form.instance.email }}&gt;</small></p>{% endif %}
-			{%if u_form.instance.is_active %}
+      <p class="content"><strong>{{ form.instance.first_name }} {{ form.instance.last_name }}</strong>
+			{%if form.instance.email %}<small>&lt;{{ form.instance.email }}&gt;</small></p>{% endif %}
+			{%if form.instance.is_active %}
 				{% translate "Active member" %}
 			{% else %}
 				{% translate "Managed member" %}
 			{% endif %}
     </div>
+		{% if form.instance.id == request.user.id %}{# profile update #}
+		<div class="media-right">
+			<a class="button is-link" href="{% url 'change_password' %}">{% translate "Change Password" %}</a>
+		</div>
 		{% endif %}
-		{% if mode == "profile" %}
-    <div class="media-right">
-      <a class="button is-link" href="{% url 'change_password' %}">{% translate "Change Password" %}</a>
-    </div>
-		{% endif %}
+	{% endif %}
   </div>
 	<div class="container">
 		<form enctype="multipart/form-data" method="post">
-		{% csrf_token %}
-			
-		{% if read_only %}
-			<fieldset disabled="disabled">
-				{{ u_form | crispy }}
-				{{ m_form | crispy }}
-			</fieldset>
-			{% if managing_account_name %}
-			<p class="content mt-4">
-				<a class="button is-primary is-light" style="pointer-events: none">{% translate "Submit" %}</a>
-				{% blocktranslate with name=managing_account_name %}(Only {{name}} can manage this member){% endblocktranslate %}
-			</p>
-			{% endif %}
-		{% else %}
-			{{ u_form | crispy }}
-			{{ m_form | crispy }}
+			{% csrf_token %}
+			{{ form | crispy }}
 			<div class="buttons mt-4">
 				<input type="submit" class="button is-primary" value='{% translate "Submit" %}'>
-				{% if mode == "update_managed" %}
+				{% if form.instance and form.instance.managing_member and not form.instance.managing_member.id == request.user.id %} {# update managed member #}
 					<a class="button is-warning" href="{% url 'members:activate' pk %}">{% translate "Activate Account" %}</a>
 				{% endif %}
 			</div>
-		{% endif %}
 		</form>
 	</div>
 	<div class="container mt-4">
@@ -66,38 +49,31 @@
 	{% block modals %}
 
 		{% url 'members:create_address' as create_address %}
-		{% translate "New Address" as new_address %}
-		{% translate "Create" as create %}
-		{% with modal_id="create-address-modal" title=new_address url=create_address form=addr_form action=create %}
+		{% with modal_id="create-address-modal" title=_("New Address") url=create_address form=addr_form action=_("Create") %}
 			{% include "members/modal_form.html" %}
 		{% endwith %}
 
 		{% if m_form.address.value %}
-		{% url 'members:change_address' as change_address %}
-		{% translate "Change Address" as change_address %}
-		{% translate "Update" as update %}
-		{% with modal_id="change-address-modal" title=change_address url=change_address form=addr_form action=update %}
-			{% include "members/modal_form.html" %}
-		{% endwith %}
+			{% url 'members:change_address' as change_address %}
+			{% with modal_id="change-address-modal" title=_("Change Address") url=change_address form=addr_form action=_("Update") %}
+				{% include "members/modal_form.html" %}
+			{% endwith %}
 		{% endif %}
 		
 		{% url 'members:create_family' as create_family %}
-		{% translate "New Family" as new_family %}
-		{% with modal_id="create-family-modal" title=new_family url=create_family form=family_form action=create %}
+		{% with modal_id="create-family-modal" title=_("New Family") url=create_family form=family_form action=_("Create") %}
 			{% include "members/modal_form.html" %}
 		{% endwith %}
 
-		{% translate "New Parent Family" as new_parent_family %}
-		{% with modal_id="create-parent-family-modal" title=new_parent_family url=create_family form=family_form action=create %}
+		{% with modal_id="create-parent-family-modal" title=_("New Parent Family") url=create_family form=family_form action=_("Create") %}
 			{% include "members/modal_form.html" %}
 		{% endwith %}
 
 		{% if m_form.family.value %}
-		{% url 'members:change_family' as change_family %}
-		{% translate "Change Family" as change_family %}
-		{% with modal_id="change-family-modal" title=change_family url=change_family form=family_form action=update %}
-			{% include "members/modal_form.html" %}
-		{% endwith %}
+			{% url 'members:change_family' as change_family %}
+			{% with modal_id="change-family-modal" title=_("Change Family") url=change_family form=family_form action=_("Update") %}
+				{% include "members/modal_form.html" %}
+			{% endwith %}
 		{% endif %}
 
 	{% endblock modals %}
@@ -131,7 +107,7 @@
 											});
 
 				// check user name is not taken for self registration
-				add_ajax_checker('id_username', "{% url 'accounts:validate_username' %}", "is_taken", "{% translate 'This username is not available!' %}")
+				add_ajax_checker('id_username', "{% url 'members:validate_username' %}", "is_taken", "{% translate 'This username is not available!' %}")
 			})
 		</script>
 

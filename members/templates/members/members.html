@@ -47,7 +47,7 @@
 					<img class="is-rounded" src="{{member.avatar_mini_url}}">
 				</figure>
         {%endif%}
-        <strong>{{ member.first_name }} {{ member.last_name }}</strong>
+        <strong>{{ member.get_full_name }}</strong>
       </a>
     </div>
   {% endfor %}

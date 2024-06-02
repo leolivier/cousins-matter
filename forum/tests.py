@@ -1,17 +1,17 @@
 from django.urls import reverse
-from accounts.tests import LoggedAccountTestCase
+from members.tests.tests_member import MemberTestCase
 from django.db import transaction
 from django.core.exceptions import ValidationError
 from forum.views import PostCreateView, PostEditView
 from .models import Post, Message, Comment
 
 
-class ForumTestCase(LoggedAccountTestCase):
+class ForumTestCase(MemberTestCase):
 
   def setUp(self):
     super().setUp()
     with transaction.atomic():
-      self.message = Message(content="test message", author=self.account.member)
+      self.message = Message(content="test message", author=self.member)
       self.message.save()
       self.post = Post(title="a title", first_message=self.message)
       self.post.save()
@@ -20,8 +20,9 @@ class ForumTestCase(LoggedAccountTestCase):
 
   def tearDown(self):
     Post.objects.all().delete()
-    Message.objects.all().delete()  # should not be useful!
-    Comment.objects.all().delete()  # neither!
+    Message.objects.all().delete()
+    Comment.objects.all().delete()
+    super().tearDown()
 
 
 class PostCreateTestCase(ForumTestCase):
@@ -99,7 +100,7 @@ class PostReplyTestCase(ForumTestCase):
                         "message contents not equal to what was created")
 
   def test_edit_reply(self):
-    msg = Message(content="a reply to be modified", post=self.post, author=self.account.member)
+    msg = Message(content="a reply to be modified", post=self.post, author=self.member)
     msg.save()
     url = reverse("forum:edit_reply", args=[msg.id])
     reply_msg_content = 'a modified reply'
@@ -118,7 +119,7 @@ class PostReplyTestCase(ForumTestCase):
     # TODO: how to check the edit inside the page which is done in javascript?
 
   def test_delete_reply(self):
-    msg = Message(content="a reply to be deleted", post=self.post, author=self.account.member)
+    msg = Message(content="a reply to be deleted", post=self.post, author=self.member)
     msg.save()
     url = reverse("forum:delete_reply", args=[msg.id])
     cnt = Message.objects.filter(post=self.post.id).count()
@@ -137,6 +138,11 @@ class PostReplyTestCase(ForumTestCase):
 
 
 class CommentCreateTestCase(ForumTestCase):
+
+  def tearDown(self):
+    Comment.objects.all().delete()
+    super().tearDown()
+
   def test_add_comment_view(self):
     url = reverse("forum:add_comment", args=[self.message.id])
     content = 'a wonderful comment'
@@ -148,7 +154,7 @@ class CommentCreateTestCase(ForumTestCase):
     self.assertEqual(comment.first().content, content)
 
   def test_edit_comment(self):
-    comment = Comment(content="a comment to be modified", message=self.message, author=self.account.member)
+    comment = Comment(content="a comment to be modified", message=self.message, author=self.member)
     comment.save()
     url = reverse("forum:edit_comment", args=[comment.id])
     comment_content = 'a modified comment'
@@ -167,7 +173,7 @@ class CommentCreateTestCase(ForumTestCase):
     # TODO: how to check the edit inside the page which is done in javascript?
 
   def test_delete_comment(self):
-    comment = Comment(content="a comment to be deleted", message=self.message, author=self.account.member)
+    comment = Comment(content="a comment to be deleted", message=self.message, author=self.member)
     comment.save()
     url = reverse("forum:delete_comment", args=[comment.id])
     cnt = Comment.objects.filter(message=self.message.id).count()

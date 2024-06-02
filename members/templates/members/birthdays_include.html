@@ -7,7 +7,7 @@
       <div class="grid">
         {% for member, when in birthdays_list %}
         <div class="cell has-background-light-link has-text-right px-0 mx-0">
-            <a href="{% url 'members:detail' member.id %}">{{ member.account.first_name }} {{ member.account.last_name }}</a>
+            <a href="{% url 'members:detail' member.id %}">{{ member.first_name }} {{ member.last_name }}</a>
         </div>
         <div class="cell has-background-light-primary px-0 mx-0
                 has-text-{% if when == 0 %}danger{% elif when == 1 %}warning{% else %}primary{% endif %}">

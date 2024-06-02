@@ -21,7 +21,7 @@
 						{{comment.date}}
 					</p>
 				</div>
-				{% if comment.author.account.username == user.username %}
+				{% if comment.author.username == user.username %}
 				<a class="button" onclick="show_edit_comment_form('{{comment.id}}');" title="{%trans 'Edit' %}">
 					<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
 				</a>

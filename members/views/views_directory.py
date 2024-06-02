@@ -43,7 +43,7 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
       for member in Member.objects.all():
           dir_data.append([member.get_full_name(),
                           member.phone if member.phone else "",
-                          member.email(),
+                          member.email,
                           member.address.__str__() if member.address else ""
                            ])
       return dir_data

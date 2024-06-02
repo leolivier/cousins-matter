@@ -2,7 +2,7 @@ from datetime import date
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
-from accounts.tests import CreatedAccountTestCase
+from members.tests.tests_member import BaseMemberTestCase
 from ..models import Photo, Gallery
 from ..views.views_photo import PhotoAddView
 from .utils import create_image, GalleryBaseTestCase
@@ -17,7 +17,7 @@ def get_photo_name():
   return "photo #" + str(COUNTER)
 
 
-class CheckLoginRequired(CreatedAccountTestCase):
+class CheckLoginRequired(BaseMemberTestCase):
   def test_login_required(self):
     rurl = reverse('galleries:photo', args=[1])
     response = self.client.get(rurl)

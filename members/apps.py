@@ -6,6 +6,3 @@ class MembersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'members'
     verbose_name = _("Members")
-
-    def ready(self):
-        import members.signals  # noqa F401

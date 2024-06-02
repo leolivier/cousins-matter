@@ -69,7 +69,7 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
       post = message = None
       if post_form.is_valid() and message_form.is_valid():
         try:
-            author = Member.objects.only('id').get(account__id=request.user.id)
+            author = Member.objects.only('id').get(id=request.user.id)
             message_form.instance.author_id = author.id
             with transaction.atomic():
                 message = message_form.save()
@@ -99,7 +99,7 @@ class PostEditView(LoginRequiredMixin, generic.UpdateView):
 
     def post(self, request, pk):
       instance = get_object_or_404(Post, pk=pk)
-      if instance.first_message.author.account.id != request.user.id:
+      if instance.first_message.author.id != request.user.id:
         raise PermissionError("Only authors can edit their posts")
 
       post_form = PostForm(request.POST, instance=instance)
@@ -121,8 +121,7 @@ def delete_post(request, pk):
 def add_reply(request, pk):
   reply = MessageForm(request.POST)
   reply.instance.post_id = pk
-  author = Member.objects.only('id').get(account__id=request.user.id)
-  reply.instance.author_id = author.id
+  reply.instance.author_id = request.user.id
   reply.save()
   return redirect(reverse("forum:display", args=[pk]))
 
@@ -162,8 +161,7 @@ class CommentCreateView(LoginRequiredMixin, generic.CreateView):
       message = get_object_or_404(Message, pk=message_id)
       form = CommentForm(request.POST)
       if form.is_valid():
-        author = Member.objects.get(account__id=request.user.id)
-        form.instance.author_id = author.id
+        form.instance.author_id = request.user.id
         form.instance.message_id = message_id
         form.save()
         return redirect("forum:display", message.post.id)

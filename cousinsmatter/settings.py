@@ -63,7 +63,6 @@ BIRTHDAY_DAYS = env.int('BIRTHDAY_DAYS', default=50)
 
 INSTALLED_APPS = [
   'daphne',
-  'accounts',
   'cm_main',
   'members',
   'galleries',
@@ -190,8 +189,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bulma'
 
 LOGIN_REDIRECT_URL = '/'
-# LOGIN_URL = '/accounts/login'
-LOGIN_URL = 'accounts:login'
+# LOGIN_URL = '/members/login'
+LOGIN_URL = 'members:login'
 # LOGOUT_REDIRECT_URL = '/'
 
 DJANGO_ICONS = {
@@ -241,10 +240,10 @@ AVATARS_MINI_SIZE = 48
 DEFAULT_AVATAR_URL = '/static/members/default-avatar.jpg'
 DEFAULT_MINI_AVATAR_URL = '/static/members/default-mini-avatar.jpg'
 
-VERIFICATION_SUCCESS_TEMPLATE = "accounts/email_verification_successful.html"
-VERIFICATION_FAILED_TEMPLATE = "accounts/email_verification_failed.html"
-REQUEST_NEW_EMAIL_TEMPLATE = "accounts/request_new_email.html"
-HTML_MESSAGE_TEMPLATE = "accounts/email_verification_msg.html"
+VERIFICATION_SUCCESS_TEMPLATE = "members/email_verification_successful.html"
+VERIFICATION_FAILED_TEMPLATE = "members/email_verification_failed.html"
+REQUEST_NEW_EMAIL_TEMPLATE = "members/request_new_email.html"
+HTML_MESSAGE_TEMPLATE = "members/email_verification_msg.html"
 
 CAPTCHA_LENGTH = 6
 
@@ -262,3 +261,5 @@ MESSAGE_MAX_SIZE = env.int('MESSAGE_MAX_SIZE', 1024*1024)
 MESSAGE_COMMENTS_MAX_SIZE = env.int('MESSAGE_COMMENTS_MAX_SIZE', 1000)
 
 DARK_MODE = env.bool('DARK_MODE', False)
+
+AUTH_USER_MODEL = 'members.Member'

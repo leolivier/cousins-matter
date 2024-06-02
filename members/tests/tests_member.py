@@ -151,8 +151,8 @@ class BaseMemberTestCase(SimpleTestCase):
   def get_changed_member_data(self, member):
     """returns a modified member dataset (same username and last_name)"""
     counter = get_counter()
-    return {'username': member.account.username, 'first_name': self.get_new(member.account.first_name, counter),
-            'last_name': member.account.last_name, 'email': member.account.username+'@test.com',
+    return {'username': member.username, 'first_name': self.get_new(member.first_name, counter),
+            'last_name': member.last_name, 'email': member.username+'@test.com',
             'phone': '01 23 45 67 ' + counter, "birthdate": date.today()}
 
   def create_member(self, member_data=None):

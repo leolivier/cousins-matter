@@ -160,7 +160,7 @@ class Member(models.Model):
 
     def avatar_url(self):
       return self.avatar.url if self.avatar else settings.DEFAULT_AVATAR_URL
-    
+
     def avatar_mini_url(self):
       if self.avatar:
         components = self.avatar.url.split('/')

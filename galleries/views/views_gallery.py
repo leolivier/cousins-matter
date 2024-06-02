@@ -44,9 +44,9 @@ class GalleryDetailView(LoginRequiredMixin, generic.DetailView):
     if page_size not in possible_page_sizes:
       possible_page_sizes = sorted(possible_page_sizes + [int(page_size)])
 
-    return render(request, self.template_name, context={"gallery": gallery, 
-                                                        "page": page, 
-                                                        "page_size": page_size, 
+    return render(request, self.template_name, context={"gallery": gallery,
+                                                        "page": page,
+                                                        "page_size": page_size,
                                                         "possible_page_sizes": possible_page_sizes})
 
 

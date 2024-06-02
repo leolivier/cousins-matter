@@ -81,7 +81,7 @@ class CreatedAccountTestCase(AccountTestCase):
       self.account = User.objects.create_user(self.username, self.email, self.password,
                                               first_name=self.first_name, last_name=self.last_name, is_active=True)
 
-  # no tear down, we keep the account for all tests 
+  # no tear down, we keep the account for all tests
   # otherwise a lot of issues with member create/delete through signals
   # def tearDown(self) -> None:
   #   if User.objects.filter(id=self.account.id).exists():

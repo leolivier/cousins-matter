@@ -45,4 +45,3 @@ class GalleryBaseTestCase(LoggedAccountTestCase):
       gallery.delete()
     self.assertEqual(Gallery.objects.count(), 0)
     self.assertEqual(Photo.objects.count(), 0)
-

@@ -287,7 +287,7 @@ class TestDisplayMembers(MemberTestCase):
       # print(response.content)
       self.assertEqual(response.status_code, 200)
       return response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '')
-    
+
     member1 = self.create_member()
     member2 = self.create_member()
     member3 = self.create_member()

@@ -104,7 +104,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
         if member.managing_account.id != request.user.id:
             messages.error(request, _('You do not have permission to edit this member.'))
             return redirect("members:detail", member.id)
-        
+
         # force profile mode
         if member.account.id == request.user.id:
             self.title = _("My Profile")

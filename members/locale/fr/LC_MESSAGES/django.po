@@ -1016,16 +1016,11 @@ msgid "You are already logged in"
 msgstr "Tu es déjà connecté"
 
 #: members/views/views_registration.py:42
-#, fuzzy
-#| msgid ""
-#| "A member with the same account name or email address is already "
-#| "registered. Please sign in instead"
 msgid ""
 "A member with the same email address is already registered. Please sign in "
 "instead"
 msgstr ""
-"Un membre avec le même nom d'utilisateur ou la même adresse mail est déjà "
-"enregistré. Connecte-toi plutôt."
+"Un membre avec la même adresse mail est déjà enregistré. Connecte-toi plutôt."
 
 #: members/views/views_registration.py:48
 #, python-format

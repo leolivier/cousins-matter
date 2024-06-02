@@ -10,29 +10,32 @@ from accounts.tests import CreatedAccountTestCase, LoggedAccountTestCase
 from datetime import date
 import os
 
+COUNTER = 0
+
+
+def get_counter():
+  global COUNTER
+  COUNTER += 1
+  # print('count=', COUNTER)
+  return str(COUNTER)
+
 
 class MemberTestCase(LoggedAccountTestCase):
-  COUNTER = 0
-
-  def counter(self):
-    self.COUNTER += 1
-    return str(self.COUNTER)
-
   def setUp(self):
     super().setUp()
     self.member = Member.objects.get(account=self.account)
+    self.created_members = []
 
   base_avatar = "test_avatar.jpg"
   test_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "test_avatar.jpg")
   test_mini_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "mini_test_avatar.jpg")
 
   def tearDown(self):
-    # if self.member.id is not None:
-    #   self.member.delete()
-    if os.path.isfile(self.test_avatar_jpg):
-      os.remove(self.test_avatar_jpg)
-    if os.path.isfile(self.test_mini_avatar_jpg):
-      os.remove(self.test_mini_avatar_jpg)
+    # self.member.delete()
+    for m in self.created_members:
+      if m.id is not None:
+        m.delete()
+    self.created_members = []
     super().tearDown()
 
   def get_new(self, input_str, counter):
@@ -41,7 +44,7 @@ class MemberTestCase(LoggedAccountTestCase):
 
   def get_new_member_data(self):
     """returns a brand new member data (new username)"""
-    counter = self.counter()
+    counter = get_counter()
     uname = self.get_new(self.username, counter)
     new_password = self.get_new(self.password, counter)
 
@@ -51,7 +54,7 @@ class MemberTestCase(LoggedAccountTestCase):
 
   def get_changed_member_data(self, member):
     """returns a modified member dataset (same username and last_name)"""
-    counter = self.counter()
+    counter = get_counter()
     return {'username': member.account.username, 'first_name': self.get_new(member.account.first_name, counter),
             'last_name': member.account.last_name, 'email': member.account.username+'@test.com',
             'phone': '01 23 45 67 ' + counter, "birthdate": date.today()}
@@ -64,6 +67,7 @@ class MemberTestCase(LoggedAccountTestCase):
     self.assertEqual(response.status_code, 200)
     new_member = Member.objects.filter(account__username=member_data['username']).first()
     self.assertIsNotNone(new_member)
+    self.created_members.append(new_member)
     return new_member
 
 
@@ -167,10 +171,18 @@ class MemberProfileViewTest(MemberTestCase):
       self.member.avatar = InMemoryUploadedFile(membuf, 'ImageField', self.base_avatar,
                                                 'image/jpeg', size, None)
     self.member.save()
-    self.assertTrue(os.path.isfile(self.test_avatar_jpg))
-    self.assertEqual(self.test_avatar_jpg, self.member.avatar.path)
-    self.assertTrue(os.path.isfile(self.test_mini_avatar_jpg))
-    self.assertEqual(self.test_mini_avatar_jpg, self.member.avatar_mini_path())
+    self.assertTrue(os.path.isfile(self.member.avatar.path))
+    # reusing several times the same image which is renamed each time with a suffix
+    testbn_prefix, test_ext = os.path.splitext(self.test_avatar_jpg)
+    avatar_prefix, av_ext = os.path.splitext(self.member.avatar.path)
+    self.assertEqual(test_ext, test_ext)
+    self.assertTrue(avatar_prefix.startswith(testbn_prefix))
+    # same for mini avatar
+    self.assertTrue(os.path.isfile(self.member.avatar_mini_path()))
+    testbn_prefix, test_ext = os.path.splitext(self.test_mini_avatar_jpg)
+    avatar_prefix, av_ext = os.path.splitext(self.member.avatar_mini_path())
+    self.assertEqual(test_ext, test_ext)
+    self.assertTrue(avatar_prefix.startswith(testbn_prefix))
 
 
 class ManagedMemberChangeTests(MemberTestCase):
@@ -241,9 +253,13 @@ class TestDisplayMembers(MemberTestCase):
     html = response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '')
     # print(str(response.content))
     for i in range(len(self.members)):
+      avatar = '' if not self.members[i].avatar else f'''<figure class="image mini-avatar mr-2">
+                      <img class="is-rounded" src="{self.members[i].avatar_mini_url()}">
+                     </figure>'''
       self.assertInHTML(f'''
   <div class="cell has-text-centered">
     <a class="button" href="/members/{self.members[i].id}/">
+      {avatar}
       <strong>{self.members[i].get_full_name()}</strong>
     </a>
   </div>

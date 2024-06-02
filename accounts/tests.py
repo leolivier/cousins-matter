@@ -5,10 +5,6 @@ from django.contrib.auth.models import User
 from django.utils.http import urlencode
 
 
-def sreverse(url):
-  return reverse(url).rstrip('/')
-
-
 class AccountTestCase(SimpleTestCase):
   databases = '__all__'  # allow write to database
 
@@ -30,12 +26,16 @@ class AccountTestCase(SimpleTestCase):
 
   def setUp(self):
     super().setUp()
-    self.superuser = User.objects.create_superuser(self.superuser_name, self.superuser_email, self.superuser_pwd)
+    self.superuser = User.objects.filter(username=self.superuser_name).first()
+    if self.superuser is None:
+      self.superuser = User.objects.create_superuser(self.superuser_name, self.superuser_email, self.superuser_pwd)
 
-  def tearDown(self):
-    super().tearDown()
-    self.superuser.delete()
-    self.superuser = None
+  # no teardown, we keep the superuser for all tests
+  # otherwise a lot of issues with member create/delete through signals
+  # def tearDown(self):
+  #   # print("deleting super user")
+  #   # self.superuser.delete()
+  #   super().tearDown()
 
   def next(self, from_url, to_url):
     return f"{from_url}?{urlencode({'next': to_url})}"
@@ -76,18 +76,27 @@ class AccountTestCase(SimpleTestCase):
 class CreatedAccountTestCase(AccountTestCase):
   def setUp(self) -> None:
     super().setUp()
-    self.account = User.objects.create_user(self.username, self.email, self.password,
-                                            first_name=self.first_name, last_name=self.last_name, is_active=True)
+    self.account = User.objects.filter(username=self.username).first()
+    if self.account is None:
+      self.account = User.objects.create_user(self.username, self.email, self.password,
+                                              first_name=self.first_name, last_name=self.last_name, is_active=True)
 
-  def tearDown(self) -> None:
-    self.account.delete()
-    return super().tearDown()
+  # no tear down, we keep the account for all tests 
+  # otherwise a lot of issues with member create/delete through signals
+  # def tearDown(self) -> None:
+  #   if User.objects.filter(id=self.account.id).exists():
+  #     self.account.delete()
+  #   return super().tearDown()
 
 
 class LoggedAccountTestCase(CreatedAccountTestCase):
   def setUp(self):
     super().setUp()
     self.login()
+
+  def tearDown(self):
+    self.client.logout()
+    super().tearDown()
 
 
 class LoginRequiredTests(AccountTestCase):

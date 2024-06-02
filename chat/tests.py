@@ -81,7 +81,7 @@ class ChatMessageTests(MemberTestCase):
     # Test sending data as text
     await communicator.send_json_to(data)
     response = await communicator.receive_json_from()
-    print(response)
+    # print(response)
     self.assertEqual(response['message'], data['message'])
     self.assertEqual(response['username'], data['username'])
     msg = await self.get_room_first_msg()

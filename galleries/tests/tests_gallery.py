@@ -4,8 +4,7 @@ from datetime import date
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext as _
-
-from accounts.tests import CreatedAccountTestCase
+from members.tests.tests_member import BaseMemberTestCase
 from ..models import Gallery, Photo
 from .utils import create_image, GalleryBaseTestCase
 from ..views.views_gallery import GalleryCreateView, GalleryDetailView, GalleryUpdateView
@@ -19,7 +18,7 @@ def get_gallery_name():
   return "root gallery" + str(COUNTER)
 
 
-class CheckLoginRequired(CreatedAccountTestCase):
+class CheckLoginRequired(BaseMemberTestCase):
   def test_login_required(self):
     for url in ['galleries:galleries', 'galleries:create']:
       rurl = reverse(url)

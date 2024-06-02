@@ -6,11 +6,11 @@
 <div class="container">
     <h1 class="title">{% title _("Email Verification Successful!") %}</h1>
     <hr/>
-    <p class="content">{% translate "Your Email is verified successfully and account has been activated." %}</p>
-    <p class="content">{% translate "You can sign in with the credentials now..." %}</p>
+    <p class="content">{% translate "Your Email is verified successfully and your account has been activated." %}</p>
+    <p class="content">{% translate "You can sign in with your credentials now..." %}</p>
 </div>
 <div class="container mt-4">
-    <a href="{% url 'accounts:login' %}" class="button is-primary">
+    <a href="{% url 'members:login' %}" class="button is-primary">
         {% translate "Sign in" %}
     </a>
 </div>

@@ -16,56 +16,57 @@ AccountAlreadyVerified = Exception("Account already verified")
 class VerifyEmail(_VerifyEmail):
     """
     Subclass of (normally hidden) _Verify email class
-    Adds a send_activation_link method independantly of the account creation
+    Adds a send_activation_link method independantly of the member creation
     """
-    def send_activation_link(self, request, account, email=None):
-        """Sends an email to the account's email address with a link to verify the address.
-            If email is not None, it will be used instead of the account's email address"""
-        if account.is_active:
+    def send_activation_link(self, request, member, email=None):
+        """Sends an email to the member's email address with a link to verify the address.
+            If email is not None, it will be used instead of the member's email address"""
+        if member.is_active:
             raise AccountAlreadyVerified()
         if not email:
-            email = account.email
-        account.is_active = False
+            email = member.email
+        member.is_active = False
+        logger.info("User %s inactivated" % member.username)
         if email:
-            account.email = email
-        account.save()
+            member.email = email
+        member.save()
 
         try:
-            verification_url = self.token_manager.generate_link(request, account, account.email)
+            verification_url = self.token_manager.generate_link(request, member, member.email)
             msg = render_to_string(
                 self.settings.get('html_message_template', raise_exception=True),
-                {"link": verification_url, "inactive_user": account},
+                {"link": verification_url, "inactive_user": member},
                 request=request
             )
 
-            self.__send_email(msg, account.email)
-            logger.info(f"Activation link sent to {account.email} by {request.user.username}")
-            return account
+            self.__send_email(msg, member.email)
+            logger.info(f"Activation link sent to {member.email} by {request.user.username}")
+            return member
         except Exception:
-            # account.delete()
+            # member.delete()
             raise
 
 
 @login_required
-def activate_account(request, pk):
-    """activate the account of the member with id pk"""
+def activate_member(request, pk):
+    """activate the member with id pk"""
     member = get_object_or_404(Member, pk=pk)
     # TODO verify email
-    if member.account.is_active:
-        if member.managing_account != member.account:
-            member.managing_account = member.account
-            member.save()
-        messages.error(request, _("Error: Account already active"))
-    elif not member.account.email:
-        messages.error(request, _("Error: Account without email cannot be activated"))
+    if member.is_active:
+      if member.managing_member is not None:
+        member.managing_member = None
+        member.save()
+      messages.error(request, _("Error: Member already active"))
+    elif not member.email:
+        messages.error(request, _("Error: Member without email cannot be activated"))
     else:
-        member.account.is_active = True
-        member.account.save()
-        VerifyEmail().send_activation_link(request, member.account)
-        member.managing_account = member.account
+        member.is_active = True
+        member.save()
+        VerifyEmail().send_activation_link(request, member)
+        member.managing_member = None
         member.save()
         messages.success(request,
-                         _("Account successfully activated. The owner of the account must now proceed as if (s)he had lost his/her password before being able to sign in."))  # noqa: E501
-        logger.info(f"Account {member.account.username} activated by {request.user.username}")
+                         _("Member account successfully activated. The owner of the account must now proceed as if (s)he had lost his/her password before being able to sign in."))  # noqa: E501
+        logger.info(f"Member {member.username} activated by {request.user.username}")
 
     return redirect_to_referer(request)

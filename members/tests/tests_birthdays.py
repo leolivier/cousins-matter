@@ -33,14 +33,14 @@ class TestBirthdays(MemberTestCase):
       </div>
     '''
     self.assertContains(response, common_chain % {"member_id": member1.id,
-                                                  "first_name": member1.account.first_name,
-                                                  "last_name": member1.account.last_name}, html=True)
+                                                  "first_name": member1.first_name,
+                                                  "last_name": member1.last_name}, html=True)
     self.assertContains(response, common_chain % {"member_id": member2.id,
-                                                  "first_name": member2.account.first_name,
-                                                  "last_name": member2.account.last_name}, html=True)
+                                                  "first_name": member2.first_name,
+                                                  "last_name": member2.last_name}, html=True)
     self.assertContains(response, common_chain % {"member_id": member3.id,
-                                                  "first_name": member3.account.first_name,
-                                                  "last_name": member3.account.last_name}, html=True)
+                                                  "first_name": member3.first_name,
+                                                  "last_name": member3.last_name}, html=True)
 
     b_is_today = _("turns %(age)s today, happy birthday!") % {'age': member1.age()}
     c_is_today = f'''

@@ -11,7 +11,7 @@
 			{%for msg in chat_messages %}
 			<div class="panel-block  has-text-right">
 				<p class="has-text-primary has-text-weight-bold mr-5">
-					{{msg.account.username}}<br>
+					{{msg.member.username}}<br>
 					<span class="is-size-7">{{msg.date_added|date:"DATETIME_FORMAT"}}</span>
 				</p>
 				<p class="content">{{msg.content}}</p> 
@@ -37,7 +37,7 @@
 
 <script>
 	const $roomSlug = encodeURIComponent('{{room.slug}}')
-	const $account = '{{request.user.id}}'
+	const $member = '{{request.user.id}}'
 	const $userName = '{{request.user.username}}'
 
 	const $chatSocket = new WebSocket(
@@ -77,7 +77,7 @@
 
 		$chatSocket.send(JSON.stringify({
 			'message': $message,
-			'account': $account,
+			'member': $member,
 			'username': $userName,
 			'room': $roomSlug,
 		}));

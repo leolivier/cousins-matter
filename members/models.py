@@ -3,8 +3,8 @@ import datetime
 from PIL import Image, ImageOps
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from .managers import MemberManager
 from django.urls import reverse
 import logging
 from django.conf import settings
@@ -14,36 +14,29 @@ logger = logging.getLogger(__name__)
 # lists of fields for use in other modules
 ADDRESS_FIELD_NAMES = {
   'number_and_street': pgettext_lazy('CSV Field', 'number_and_street'),
-  'address_complementary_info': pgettext_lazy('CSV Field', 'address_complementary_info'),
+  'complementary_info': pgettext_lazy('CSV Field', 'address_complementary_info'),
   'zip_code': pgettext_lazy('CSV Field', 'zip_code'),
   'city': pgettext_lazy('CSV Field', 'city'),
   'country': pgettext_lazy('CSV Field', 'country')
 }
 
-ACCOUNT_FIELD_NAMES = {
+MANDATORY_MEMBER_FIELD_NAMES = {
   'username': pgettext_lazy('CSV Field', 'username'),
   'email': pgettext_lazy('CSV Field', 'email'),
   'first_name': pgettext_lazy('CSV Field', 'first_name'),
-  'last_name': pgettext_lazy('CSV Field', 'last_name')
+  'last_name': pgettext_lazy('CSV Field', 'last_name'),
+  'birthdate': pgettext_lazy('CSV Field', 'birthdate'),
   }
 
-MEMBER_FIELD_NAMES = {
-  'birthdate': pgettext_lazy('CSV Field', 'birthdate'),
+MEMBER_FIELD_NAMES = MANDATORY_MEMBER_FIELD_NAMES | {
   'phone': pgettext_lazy('CSV Field', 'phone'),
   'website': pgettext_lazy('CSV Field', 'website'),
   'family': pgettext_lazy('CSV Field', 'family'),
   'avatar': pgettext_lazy('CSV Field', 'avatar')
   }
 
-MANDATORY_FIELD_NAMES = ACCOUNT_FIELD_NAMES | {
-  'birthdate': pgettext_lazy('CSV Field', 'birthdate'),
-  }
 
-ALL_FIELD_NAMES = ACCOUNT_FIELD_NAMES | MEMBER_FIELD_NAMES | ADDRESS_FIELD_NAMES
-
-
-def get_admin():
-    return User.objects.filter(is_superuser=True).first()
+ALL_FIELD_NAMES = MEMBER_FIELD_NAMES | ADDRESS_FIELD_NAMES
 
 
 class Family(models.Model):
@@ -98,11 +91,9 @@ class Address(models.Model):
         ]
 
 
-class Member(models.Model):
-    account = models.OneToOneField('auth.User', verbose_name=_('Linked Account'), on_delete=models.CASCADE)
-
-    managing_account = models.ForeignKey('auth.User', verbose_name=_('Managing account'), on_delete=models.CASCADE,
-                                         related_name='managing_account', default=1)
+class Member(AbstractUser):
+    managing_member = models.ForeignKey('self', verbose_name=_('Managing member'), on_delete=models.CASCADE,
+                                        related_name='managed_members', null=True, blank=True, default=None)
 
     avatar = models.ImageField(upload_to=settings.AVATARS_DIR, blank=True, null=True)
 
@@ -123,45 +114,24 @@ class Member(models.Model):
     hobbies = models.CharField(_("My hobbies"), blank=True, null=True, max_length=256,
                                help_text=_("Provide a list of hobbies separated by commas"))
 
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["first_name", "last_name", "birthdate", "email"]
+
+    objects = MemberManager()
+
     class Meta:
       verbose_name = _('member')
       verbose_name_plural = _('members')
-      ordering = ['account__last_name', 'account__first_name']
+      ordering = ['last_name', 'first_name']
       indexes = [
-        models.Index(fields=["account", "birthdate"]),
+        models.Index(fields=["birthdate"]),
       ]
 
     def get_absolute_url(self):
       return reverse("members:detail", kwargs={"pk": self.pk})
 
-    def get_full_name(self):
-        if self.first_name and self.last_name:
-          return f"{self.first_name()} {self.last_name()}"
-        elif self.account_id:
-          return self.account.username
-        else:
-          return self.id
-
-    def get_short_name(self):
-        return self.account.username if self.account_id else f'member id: {self.id}'
-
-    def first_name(self):
-      return self.account.first_name if self.account_id else '?'
-
-    def last_name(self):
-      return self.account.last_name if self.account_id else '?'
-
-    def email(self):
-      return self.account.email if self.account else ''
-
-    def username(self):
-      return self.account.username if self.account else ''
-
     def avatar_url(self):
       return self.avatar.url if self.avatar else settings.DEFAULT_AVATAR_URL
-
-    def __str__(self) -> str:
-      return self.get_full_name()
 
     def next_birthday(self) -> datetime.date:
       today = datetime.date.today()
@@ -178,15 +148,18 @@ class Member(models.Model):
       years = today.year - self.birthdate.year
       return years if (today >= self.next_birthday()) else years-1
 
+    def get_manager(self):
+      return self.managing_member if self.managing_member else self
+
     def clean(self):
-      # If account is active, set managing account to current member account
-      if self.account_id and self.account.is_active and self.managing_account != self.account:
-        logger.debug(f"Cleaning member {self.get_full_name()}: changing managing account to himself")
-        self.managing_account = self.account
-      elif self.managing_account is None:
-        # If no managing account and account inactive, use admin account
-        logger.debug(f"Cleaning member {self.get_full_name()}: changing managing account to admin")
-        self.managing_account = get_admin()
+      # If member is active, set managing member to None
+      if self.is_active and self.managing_member is not None:
+        logger.debug(f"Cleaning member {self.get_full_name()}: changing managing member to himself")
+        self.managing_member = None
+      elif not self.is_active and self.managing_member is None:
+        # If no managing member and member is inactive, use admin member
+        logger.debug(f"Cleaning member {self.get_full_name()}: changing managing member to admin")
+        self.managing_member = Member.objects.filter(is_superuser=True).first()
 
     def save(self, *args, **kwargs):
       super().save(*args, **kwargs)

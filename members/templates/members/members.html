@@ -42,7 +42,7 @@
   {% for member in member_list %}
     <div class="cell has-text-centered">
       <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
-        <strong>{{ member.first_name }} {{ member.last_name }}</strong>
+        <strong>{{ member.get_full_name }}</strong>
       </a>
     </div>
   {% endfor %}

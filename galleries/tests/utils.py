@@ -1,5 +1,5 @@
 from django.test import override_settings
-from accounts.tests import LoggedAccountTestCase
+from members.tests.tests_member import MemberTestCase
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from io import BytesIO
 from PIL import Image
@@ -31,7 +31,7 @@ TEST_MEDIA_ROOT = os.path.join(os.path.dirname(__file__), "media")
 
 
 @override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
-class GalleryBaseTestCase(LoggedAccountTestCase):
+class GalleryBaseTestCase(MemberTestCase):
 
   def setUp(self):
     super().setUp()
@@ -45,4 +45,3 @@ class GalleryBaseTestCase(LoggedAccountTestCase):
       gallery.delete()
     self.assertEqual(Gallery.objects.count(), 0)
     self.assertEqual(Photo.objects.count(), 0)
-

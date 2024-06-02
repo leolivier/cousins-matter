@@ -13,11 +13,11 @@
 				</div>
 				<div class="media-content">
 					<p class="content">
-						<strong>{{ object.account.first_name }} {{ object.account.last_name }}</strong>
-						<small>&lt;{{ object.account.email }}&gt;</small>
+						<strong>{{ object.first_name }} {{ object.last_name }}</strong>
+						<small>&lt;{{ object.email }}&gt;</small>
 					</p>
-					<p class="content small">{{ object.account.username }}
-					({%if object.account.is_active %}
+					<p class="content small">{{ object.username }}
+					({%if object.is_active %}
 						{% translate "Active member" %}
 					{% else %}
 						{% translate "Managed member" %}
@@ -30,7 +30,7 @@
 			<table class="table">
 				<tr>
 					<td class="content has-text-right">{% translate "Address" %}</td>
-					<td class="content">{{ object.address }}</td>
+					<td class="content">{%if object.address%}{{ object.address }}{%endif%}</td>
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Phone" %}</td>
@@ -46,11 +46,11 @@
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Family" %}</td>
-					<td class="content">{{ object.family }}</td>
+					<td class="content">{%if object.family%}{{ object.family }}{%endif%}</td>
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Who I am" %}</td>
-					<td class="content">{{ object.description }}</td>
+					<td class="content">{%if object.description%}{{ object.description }}{%endif%}</td>
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Hobbies" %}</td>
@@ -67,9 +67,9 @@
 			>
 				{% translate "Edit" %}
 			</a>
-			{% if not can_edit and managing_account_name %}
+			{% if not can_edit and managing_member_name %}
 			<p class="content px-4">
-				{% blocktranslate with name=managing_account_name %}(Only {{name}} can manage this member){% endblocktranslate %}
+				{% blocktranslate with name=managing_member_name %}(Only {{name}} can manage this member){% endblocktranslate %}
 			</p>
 			{% endif %}
 		</div>

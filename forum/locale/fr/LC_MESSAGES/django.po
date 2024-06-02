@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-25 13:25+0200\n"
+"POT-Creation-Date: 2024-06-01 17:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -85,8 +85,9 @@ msgstr "Supprimer la conversation"
 msgid ""
 "Are you sure you want to delete \"%(object)s\" and all associated replies "
 "and comments?"
-msgstr "Êtes-vous sûr de vouloir supprimer \"%(object)s\" et toutes les réponses "
-"et les commentaires associés ?"
+msgstr ""
+"Êtes-vous sûr de vouloir supprimer \"%(object)s\" et toutes les réponses et "
+"les commentaires associés ?"
 
 #: forum/templates/forum/post_confirm_delete.html:17
 msgid "Confirm"
@@ -138,6 +139,6 @@ msgstr "aller à la page n°%(i)s"
 msgid "page #%(i)s"
 msgstr "page n°%(i)s"
 
-#: forum/views.py:149
+#: forum/views.py:148
 msgid "Can't delete the first message of a thread!"
 msgstr "Impossible de supprimer le premier message d'une discussion!"

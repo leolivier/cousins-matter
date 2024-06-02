@@ -93,11 +93,11 @@
 		<div class="navbar-item">
 			<div class="buttons">
 				{% if not user.is_authenticated %}
-				<a class="button is-light" href="{% url 'accounts:login' %}">
+				<a class="button is-light" href="{% url 'members:login' %}">
 					<span class="icon"><i class="mdi mdi-24px mdi-account-check"></i></span>
 					<span>{% translate "Sign in" %}</span>
 				</a>
-{#				<a class="button is-primary" href="{% url 'accounts:register' %}"> #}
+{#				<a class="button is-primary" href="{% url 'members:register' %}"> #}
 					<a class="button is-primary" href="{% url 'members:register_request' %}">
 					<span class="icon"><i class="mdi mdi-24px mdi-account-box-plus-outline"></i></span>
 					<span><strong>{% translate "Request invitation link" %}</strong></span>
@@ -116,7 +116,7 @@
 							<span class="icon"><i class="mdi mdi-24px mdi-account-box-edit-outline"></i></span>
 							<span>{% translate "Profile" %}</span>
 						</a>
-						<a class="navbar-item" href="{% url 'accounts:logout'%}">
+						<a class="navbar-item" href="{% url 'members:logout'%}">
 							<span class="icon"><i class="mdi mdi-24px mdi-account-arrow-right"></i></span>
 							<span>{% translate "Log Out" %}</span>
 						</a>

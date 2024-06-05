@@ -26,9 +26,9 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
       # print("page_size=", page_size)
       posts = Post.objects.select_related('first_message').annotate(num_messages=Count("message")) \
                   .all().order_by('-first_message__date')
-      ptor = Paginator(posts, page_size, reverse_link='members:members_page')
+      ptor = Paginator(posts, page_size, reverse_link='posts:page')
       # if page_num > ptor.num_pages:
-      #   return redirect(reverse('members:members_page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
+      #   return redirect(reverse('posts:page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
       page = ptor.get_page_data(page_num)
       return {"page": page}
 

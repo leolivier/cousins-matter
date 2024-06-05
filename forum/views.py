@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import generic
-from django.core.paginator import Paginator
+from cousinsmatter.utils import Paginator
 from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -21,18 +22,15 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
       page_num = int(self.kwargs['page']) if 'page' in self.kwargs else 1
-      ptor = Paginator(Post.objects.select_related('first_message').annotate(num_messages=Count("message"))
-                       .all().order_by('-first_message__date'), 2)
-      page = ptor.page(page_num)
-      max_pages = 5
-      # compute a page range from the initial range + or -max-pages
-      page_range = ptor.page_range[max(0, page_num-max_pages-1):min(ptor.num_pages+1, page_num+max_pages)]
-      return {
-        "posts": page.object_list,
-        "page_range": page_range,
-        "current_page": page_num,
-        "num_pages": ptor.num_pages,
-      }
+      page_size = int(self.kwargs["page_size"]) if "page_size" in self.kwargs else settings.DEFAULT_NUMBER_OF_SHOWN_MESSAGES
+      # print("page_size=", page_size)
+      posts = Post.objects.select_related('first_message').annotate(num_messages=Count("message")) \
+                  .all().order_by('-first_message__date')
+      ptor = Paginator(posts, page_size, reverse_link='members:members_page')
+      # if page_num > ptor.num_pages:
+      #   return redirect(reverse('members:members_page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
+      page = ptor.get_page_data(page_num)
+      return {"page": page}
 
 
 class PostDisplayView(LoginRequiredMixin, generic.DetailView):

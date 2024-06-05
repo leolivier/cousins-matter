@@ -81,3 +81,20 @@ def title(title_s):
 @register.simple_tag
 def site_copyright():
     return settings.SITE_COPYRIGHT if settings.SITE_COPYRIGHT is not None else default_site_copyright
+
+
+# TODO: test pagination with big lists of objects
+@register.inclusion_tag("cm_main/paginate_template.html")
+def paginate(page):
+    return {
+        "page_urls": page.page_links,
+        "page_range": page.page_range,
+        "first_page_url": page.first_page_link,
+        "last_page_url": page.last_page_link,
+        "prev_page_url": page.page_links[page.number-page.first-2] if page.has_previous() else None,
+        "next_page_url": page.page_links[page.number-page.first] if page.has_next() else None,
+        "current_page": page.number,
+        "possible_per_pages": page.possible_per_pages,
+        "page_size": page.paginator.per_page,
+        "num_pages": page.num_pages,
+    }

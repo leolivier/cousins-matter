@@ -53,7 +53,7 @@ class Paginator(paginator.Paginator):
         if page.first == 0:
             page.last = min(self.num_pages+1, 2*self.max_pages+1)
         elif page.last == self.num_pages+1:
-            page.firt = max(0, page.last-self.max_pages)
+            page.first = max(0, page.last-2*self.max_pages-1)
         page.page_range = self.page_range[page.first:page.last]
         page.num_pages = self.num_pages
         # compute page links

@@ -112,7 +112,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
         img = ImageOps.exif_transpose(img)  # avoid image rotating
         img.save(membuffer, format='JPEG', quality=90)  # save the img in mem buffer
         exifdata = img.getexif()  # get exif data for the image date
-
+        
       # reset buffer to beginning
       membuffer.seek(0)
       size = sys.getsizeof(membuffer)
@@ -124,7 +124,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
       DateTimeOriginal = 36867
       DateTime = 306
       date = exifdata.get(DateTimeOriginal) or exifdata.get(DateTime)
-      date = datetime.today() if date is None else \
+      date = datetime.today() if date is None or date.startswith("0000") else \
         datetime.strptime(date, "%Y:%m:%d %H:%M:%S").date()
       # create image from in memory buffer
       image = InMemoryUploadedFile(membuffer, 'ImageField', f"{filename_wo_ext}.jpg",
@@ -143,14 +143,14 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
       self.nbPhotos += 1
       return photo
 
-    def _handle_zip(self, zip_file):
+    def _handle_zip(self, request):
       """
       reads a zip file and creates galleries for each folder
       and photos inside these galleries for each image in the folder.
       Galleries are named by the folder names and photos by the image file names.
       Files which are not photos are simply ignored.
       """
-
+      zip_file = request.FILES["zipfile"]
       if not zipfile.is_zipfile(zip_file):
         raise zipfile.BadZipFile(f"{zip_file} is not a zip file")
 
@@ -162,19 +162,26 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
           path = info.filename
           if info.is_dir():  # gallery
             self._get_or_create_gallery(path)
-          elif mimetypes.guess_type(path)[0].startswith('image/'):  # photo
-            # extract the file in a temporary folder and create a photo
-            with tempfile.TemporaryDirectory() as temp:
-              filepath = zip_ref.extract(info, path=temp)
-              self._create_photo(info, filepath)
           else:
-            pass  # unknown file type, don't care
+            type, encoding = mimetypes.guess_type(path)
+            if type and type.startswith('image/'):  # photo
+              # extract the file in a temporary folder and create a photo
+              with tempfile.TemporaryDirectory() as temp:
+                filepath = zip_ref.extract(info, path=temp)
+                try:
+                  self._create_photo(info, filepath)
+                except OSError as oserror:
+                  # print an error but continue with next photo
+                  error_msg = _(f"Unable to import photo '{path}', it was ignored")
+                  messages.error(request, f'''{error_msg}: {oserror.strerror}''')
+            else:
+              pass  # unknown file type, don't care
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
       form = BulkUploadPhotosForm(request.POST, request.FILES)
       if form.is_valid():
         try:
-          self._handle_zip(request.FILES["zipfile"])
+          self._handle_zip(request)
           messages.success(request,
                            _(f"Zip file uploaded: {len(self.galleries)} galleries and {self.nbPhotos} photos created"))
         except Exception as e:

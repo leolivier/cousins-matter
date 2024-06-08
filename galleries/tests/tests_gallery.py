@@ -108,15 +108,20 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     sgal_name = get_gallery_name()
     response = self.client.post(url, {'name': sgal_name, 'description': "a test sub gallery", 'parent': rg.id}, follow=True)
     self.assertTrue(response.status_code, 200)
-    # print(response.content)
+    print(response.content)
     # get the sub gallery by name and parent
     sg = Gallery.objects.filter(name=sgal_name, parent=rg).first()
     self.assertIsNotNone(sg)
     # check redirects to the newly created gallery detail
     self.assertRedirects(response, reverse("galleries:detail", args=[sg.id]), 302, 200)
     # check the response contains the sub gallery details (name, photo count)
+    # weird behavior of assertContains which requires to add blank lines around 'no photo'
     self.assertContains(response, f'''<div class="media-content">
-  <h1 class="title">{sg.name}</h1>
+  <h1 class="title">{sg.name} (
+
+{_("No photo")}
+
+)</h1>
     <p class="content">{sg.description}</p>
 </div>''', html=True)
     # check root gallery has the sub gallery for child

@@ -1,3 +1,4 @@
+from urllib.parse import urlencode
 from django.conf import settings
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
@@ -20,37 +21,41 @@ from members.models import Member
 class PostsListView(LoginRequiredMixin, generic.ListView):
     model = Post
 
-    def get_context_data(self, **kwargs):
-      page_num = int(self.kwargs['page']) if 'page' in self.kwargs else 1
-      page_size = int(self.kwargs["page_size"]) if "page_size" in self.kwargs else settings.DEFAULT_POSTS_PER_PAGE
-      # print("page_size=", page_size)
+    def get(self, request, page=1):
+      page_num = page
+      page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_POSTS_PER_PAGE
+
       posts = Post.objects.select_related('first_message').annotate(num_messages=Count("message")) \
                   .all().order_by('-first_message__date')
-      ptor = Paginator(posts, page_size, reverse_link='posts:page')
-      # if page_num > ptor.num_pages:
-      #   return redirect(reverse('posts:page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
+      ptor = Paginator(posts, page_size, reverse_link='forum:page')
+      if page_num > ptor.num_pages:
+        return redirect(reverse('forum:page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
       page = ptor.get_page_data(page_num)
-      return {"page": page}
+      return render(request, "forum/post_list.html", {"page": page})
 
 
 class PostDisplayView(LoginRequiredMixin, generic.DetailView):
     model = Post
 
-    def get_context_data(self, **kwargs):
-      post_id = self.kwargs['pk']
-      object = get_object_or_404(Post, pk=post_id)
+    def get(self, request, pk, page_num=1):
+      post_id = pk
+      post = get_object_or_404(Post, pk=post_id)
+      page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_POSTS_PER_PAGE
+
       replies = Message.objects.filter(post=post_id, first_of_post=None).all()
-
-    #   for r in replies:
-    #     print(r.content)
-
-      return {
-         'object': object,
-         'replies': replies,
-         'nreplies': replies.count(),
+      ptor = Paginator(replies, page_size,
+                       compute_link=lambda page_num: reverse('forum:display_page', args=[post_id, page_num]))
+      if page_num > ptor.num_pages:
+        return redirect(reverse('forum:display_page',
+                                args=[post_id, ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
+      page = ptor.get_page_data(page_num)
+      return render(request, "forum/post_detail.html", {
+         "page": page,
+         "nreplies": replies.count(),
+         'post': post,
          'comment_form': CommentForm(),
          'reply_form': MessageForm(),
-      }
+      })
 
 
 class PostCreateView(LoginRequiredMixin, generic.CreateView):
@@ -192,3 +197,41 @@ def delete_comment(request, pk):
         comment.delete()
         return JsonResponse({"comment_id": id}, status=200)
     raise ValidationError("Forbidden non ajax request")
+
+
+def test_create_posts(request, num_posts):
+  connected_member = Member.objects.get(id=request.user.id)
+  for i in range(num_posts):
+    with transaction.atomic():
+      message = Message(content=f"a test message #{i}", author=connected_member)
+      message.save()
+      post = Post(title=f"a new post #{i}", first_message=message)
+      post.save()
+      message.post = post
+      message.save()
+
+
+def test_create_replies(request, num_replies):
+  connected_member = Member.objects.get(id=request.user.id)
+  with transaction.atomic():
+    message = Message(content="the first message", author=connected_member)
+    message.save()
+    post = Post(title="a post for testing a lot of replies", first_message=message)
+    post.save()
+    message.post = post
+    message.save()
+  for i in range(num_replies):
+    Message(content=f"a test reply #{i}", post=post, author=connected_member).save()
+
+
+def test_create_comments(request, num_comments):
+  connected_member = Member.objects.get(id=request.user.id)
+  with transaction.atomic():
+    message = Message(content="the commented message", author=connected_member)
+    message.save()
+    post = Post(title="a post for testing a lot of comments", first_message=message)
+    post.save()
+    message.post = post
+    message.save()
+  for i in range(num_comments):
+    Comment(content=f"a test comment #{i}", author=connected_member, message=message).save()

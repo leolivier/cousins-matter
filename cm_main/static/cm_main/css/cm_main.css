@@ -1,5 +1,5 @@
 body {
-	font-size: 20px;
+	--bulma-body-font-size: 20px;
 }
 
 /* RELATED WIDGET WRAPPER */
@@ -22,12 +22,16 @@ body {
   max-height: 100%;
 }
 
-/* override icon size */
-/* .button .icon.is-large {
-  font-size: 1.5rem !important;
-} 
-must use  mdi-24px instead
-*/
+/* class for photo in galleries */
+.photo img {
+	display: block;
+  width: auto;
+	height: auto;
+  max-width: fit-content;
+  max-height: fit-content;
+	margin-right: auto;
+	margin-left: auto;
+}
 
 /* CSS for summernote text 
 rich-text is for text displayed in pages, note-editable is for the text inside the editor

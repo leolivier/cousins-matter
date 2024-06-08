@@ -1,13 +1,16 @@
 from datetime import date
 import logging
+from django.forms import ValidationError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
+from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator as BasePaginator
+from cousinsmatter.utils import Paginator
 from ..models import Photo
 from ..forms import PhotoForm
 
@@ -18,49 +21,41 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
   template_name = "galleries/photo_detail.html"
   model = Photo
 
-  # TODO: all this is probably vastly inefficient!
-  def get_queryset(self):
-    if 'pk' not in self.kwargs:
-      gallery = self.kwargs['gallery']
-      ptor = Paginator(Photo.objects.filter(gallery=gallery), 1)
-      photo_num = self.kwargs['photo_num'] if 'photo_num' in self.kwargs else 1
+  def get(self, request, **kwargs):
+    """This method can be called either with a photo id, or with a gallery id and a photo number in the gallery 
+    (if photo num not given, it takes the first one)"""
+    if 'pk' not in kwargs:
+      # if we don't have the pk in args, let's find the proper photo based on the photo_num in the gallery
+      # using the BasePaginator ==> we try to find which photo is contained in the page, and use its pk
+      if 'gallery' not in kwargs:
+        raise ValidationError(_("Missing either photo id or gallery id"))
+      gallery_id = kwargs['gallery']
+      photo_num = kwargs['photo_num'] if 'photo_num' in kwargs else 1
+      ptor = BasePaginator(Photo.objects.filter(gallery=gallery_id), 1)
       page = ptor.page(photo_num)
+      # only one photo in the page, take it
       photo = page.object_list[0]
-      self.kwargs['pk'] = photo.id
-    return Photo.objects.filter(pk=self.kwargs['pk'])
+    else:
+      # we have the pk in the args, now compute the gallery and photo num
+      pk = kwargs['pk']
+      photo = Photo.objects.get(pk=pk)
+      gallery_id = photo.gallery.id
+      photo_num = 0
+      found = False
+      for id in Photo.objects.filter(gallery=gallery_id).values('id'):
+        photo_num += 1
+        if id['id'] == pk:
+          found = True
+          break
+      if not found:
+        raise ValueError(_("Photo not found on that page"))
 
-  def get_context_data(self, object):
-    return self.get_context_data_by_page_number(object) if 'photo_num' in self.kwargs else self.get_context_data_by_pk(object)
+    # Now, we have everything, we can repaginate
 
-  def get_context_data_by_pk(self, photo):
-    pk = self.kwargs['pk']
-    # photo = get_object_or_404(Photo, pk=pk)
-    gallery = photo.gallery
-    photo_num = 0
-    for id in Photo.objects.filter(gallery=gallery).values('id'):
-      photo_num += 1
-      if id['id'] == pk:
-        break
-    # no need to check if found as we did a get_object_or_404 above
-    self.kwargs['gallery'] = gallery
-    self.kwargs['photo_num'] = photo_num
-    return self.get_context_data_by_page_number(photo)
-
-  def get_context_data_by_page_number(self, photo):
-    gallery = self.kwargs['gallery']
-    ptor = Paginator(Photo.objects.filter(gallery=gallery), 1)
-    photo_num = self.kwargs['photo_num'] if 'photo_num' in self.kwargs else 1
-    page = ptor.page(photo_num)
-    # photo = page.object_list[0]
-    max_links = 5
-    photo_range = ptor.page_range[max(0, photo_num-max_links-1):min(ptor.num_pages+1, photo_num+max_links)]
-    return {
-      'photo': photo,
-      'page': page,
-      "photo_range": photo_range,
-      "current_photo": photo_num,
-      "num_photos": ptor.num_pages,
-    }
+    ptor = Paginator(Photo.objects.filter(gallery=gallery_id), 1,
+                     compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num]))
+    page = ptor.get_page_data(photo_num)
+    return render(request, self.template_name, {'page': page})
 
 
 class PhotoAddView(LoginRequiredMixin, generic.CreateView):

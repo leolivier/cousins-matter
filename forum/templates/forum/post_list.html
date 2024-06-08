@@ -7,7 +7,7 @@
 		<div class="panel-heading">
 			<span>{% title _("Latest Posts") %}</span>
 			<span class="has-text-right">
-				<a class="button ml-6" href="{%url 'forum:create'%}" title="{% trans 'Create Post' %}">
+				<a class="button ml-6" href="{%url 'forum:create'%}" aria-label="{% trans 'Create Post' %}">
 					<span class="icon"><i class="mdi mdi-24px mdi-plus-box-outline"></i></span>
 				</a>
 			</span>
@@ -19,11 +19,11 @@
 		{%for post in page.object_list %}
 			<div class="panel-block">
 				<figure class="image mini-avatar mr-2">
-					<img class="is-rounded" src="{{post.first_message.author.avatar_mini_url}}">
+					<img class="is-rounded" src="{{post.first_message.author.avatar_mini_url}}" alt="post.first_message.author.get_full_name">
 				</figure>
 				<p class="has-text-primary has-text-weight-bold has-text-right mr-5">
 					{{post.first_message.author.get_full_name}}
-					<a href="{%url 'members:detail' post.first_message.author.id %}">
+					<a href="{%url 'members:detail' post.first_message.author.id %}" aria-label="{%trans 'profile'}">
 						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
 					</a>
 					<br>
@@ -44,5 +44,6 @@
 			</div>
 		{%endfor%}
 		</div>
+	</div>
 </div>
 {%endblock%}

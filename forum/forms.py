@@ -22,3 +22,7 @@ class CommentForm(ModelForm):
   class Meta:
     model = Comment
     fields = ['content']
+
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    self.fields['content'].widget.attrs['id'] = 'id_comment_content'

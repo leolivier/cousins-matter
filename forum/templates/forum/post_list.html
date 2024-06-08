@@ -4,28 +4,26 @@
 {% block content %}
 <div class="container">
 	<div class="panel">
-		<p class="panel-heading">{% title _("Latest Posts") %}</p>
+		<div class="panel-heading">
+			<span>{% title _("Latest Posts") %}</span>
+			<span class="has-text-right">
+				<a class="button ml-6" href="{%url 'forum:create'%}" aria-label="{% trans 'Create Post' %}">
+					<span class="icon"><i class="mdi mdi-24px mdi-plus-box-outline"></i></span>
+				</a>
+			</span>
+		</div>
 		<div  id="post_list" style="max-height: 800px; overflow-y: scroll;">
 			<div class="panel-block">
-				{% if page_range|first > 1 %}<button class="button is-light">...</button>{%endif%}
-				{% for i in page_range %}
-				{% if i != current_page %}
-				<a class="button is-primary is-light" href="{%url 'forum:page' i %}" 
-					title="{% blocktranslate %}go to page #{{i}}{% endblocktranslate %}">{{i}}</a>
-				{%else%}
-					<button class="button is-light"	title="{% blocktranslate %}page #{{i}}{% endblocktranslate %}">{{i}}</button>
-				{%endif%}
-				{% endfor %}
-				{% if page_range|last < num_pages %}<button class="button is-light">...</button>{%endif%}
+				<div class="is-fullwidth" width="100%">{%paginate page%}</div>
 			</div>
-		{%for post in posts %}
+		{%for post in page.object_list %}
 			<div class="panel-block">
 				<figure class="image mini-avatar mr-2">
-					<img class="is-rounded" src="{{post.first_message.author.avatar_mini_url}}">
+					<img class="is-rounded" src="{{post.first_message.author.avatar_mini_url}}" alt="post.first_message.author.get_full_name">
 				</figure>
 				<p class="has-text-primary has-text-weight-bold has-text-right mr-5">
 					{{post.first_message.author.get_full_name}}
-					<a href="{%url 'members:detail' post.first_message.author.id %}">
+					<a href="{%url 'members:detail' post.first_message.author.id %}" aria-label="{%trans 'profile'}">
 						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
 					</a>
 					<br>
@@ -46,5 +44,6 @@
 			</div>
 		{%endfor%}
 		</div>
+	</div>
 </div>
 {%endblock%}

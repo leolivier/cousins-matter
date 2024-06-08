@@ -10,6 +10,7 @@ urlpatterns = [
   path('logout/', views_member.logout_member, name='logout'),
   path('validate_username', views_member.validate_username, name='validate_username'),
   path("", views_member.MembersView.as_view(), name="members"),
+  path("page/<int:page_num>", views_member.MembersView.as_view(), name="members_page"),
   path("<int:pk>/", views_member.MemberDetailView.as_view(), name="detail"),
   path("<int:pk>/edit", views_member.EditMemberView.as_view(), name="member_edit"),
   path("create/", views_member.CreateManagedMemberView.as_view(), name="create"),

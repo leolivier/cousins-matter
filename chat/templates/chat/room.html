@@ -2,11 +2,15 @@
 {% load i18n cm_tags %}
 {% block title %}{% title room.name %}{% endblock %}
 {% block content %}
+{%with chat_messages=page.object_list%}
 <div class="container">
 		<p class="title">{%trans "Let's chat!" %}</p>
 
 		<div class="panel">
 			<p class="panel-heading">{{room.name}}</p>
+			<div class="panel-block">
+				{%paginate page%}
+			</div>
 			<div  id="chat-messages" style="max-height: 500px; overflow-y: scroll;">
 			{%for msg in chat_messages %}
 			<div class="panel-block  has-text-right">
@@ -40,6 +44,11 @@
 	const $member = '{{request.user.id}}'
 	const $userName = '{{request.user.username}}'
 
+  function scrollMsgsBottom() {
+		$messages = $('#chat-messages')
+		$messages.scrollTop($messages[0].scrollHeight)
+	}
+
 	const $chatSocket = new WebSocket(
 		'ws://' + window.location.host + '/chat/' + $roomSlug
 	);
@@ -49,6 +58,7 @@
 	};
 
 	$chatSocket.onmessage = (e) => {
+		{%if page.number == page.num_pages%}
 		const $data = JSON.parse(e.data);
 		if ($data.message) {
 			$messages = $('#chat-messages')
@@ -58,12 +68,16 @@
 					'  <span class="is-size-7">' + $data.date_added + '</span></p>' +
 					'<p class="content">' + $data.message + '</p>' + 
 				'</div>');
-				$messages.scrollTop($messages[0].scrollHeight)
+				scrollMsgsBottom()
 		} else {
 			alert(gettext('The message was empty!'))
 		}
+		{%else%}
+		goto_page_url('{{page.last_page_link}}')
+		{%endif%}
 	};
 
+	scrollMsgsBottom()
 	$('#chat-message-input').focus();
 	$('#chat-message-input').on('keyup', (e) => {
 		if (e.keyCode === 13) {
@@ -85,4 +99,5 @@
 		$msg_el.val('');
 	});
 </script>
+{%endwith%}
 {% endblock %}

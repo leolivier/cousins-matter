@@ -1,4 +1,6 @@
 import logging
+from urllib.parse import urlencode
+from django.conf import settings
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.urls import reverse
@@ -8,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.http import JsonResponse
+from cousinsmatter.utils import Paginator
 from verify_email.email_handler import send_verification_email
 from cousinsmatter.utils import redirect_to_referer
 from ..models import Member
@@ -46,7 +49,7 @@ class MembersView(LoginRequiredMixin, generic.ListView):
     # paginate_by = 100
     model = Member
 
-    def get(self, request):
+    def get(self, request, page_num=1):
         filter = {}
         if 'first_name_filter' in request.GET and request.GET['first_name_filter']:
             filter['first_name__icontains'] = request.GET['first_name_filter']
@@ -54,7 +57,13 @@ class MembersView(LoginRequiredMixin, generic.ListView):
             filter['last_name__icontains'] = request.GET['last_name_filter']
         logger.debug("filter:", filter)
         members = Member.objects.filter(**filter)
-        return render(request, self.template_name, {"member_list": members})
+        page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_MEMBERS_PAGE_SIZE
+        # print("page_size=", page_size)
+        ptor = Paginator(members, page_size, reverse_link='members:members_page')
+        if page_num > ptor.num_pages:
+            return redirect(reverse('members:members_page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
+        page = ptor.get_page_data(page_num)
+        return render(request, self.template_name, {"page": page})
 
 
 class MemberDetailView(LoginRequiredMixin, generic.DetailView):

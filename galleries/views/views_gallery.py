@@ -40,14 +40,9 @@ class GalleryDetailView(LoginRequiredMixin, generic.DetailView):
   def get(self, request, pk, page=1):  # TODO manage slug instead of pk
     gallery = get_object_or_404(Gallery, pk=pk)
     page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_GALLERY_PAGE_SIZE
-    possible_page_sizes = [10, 25, 50, 100]
-    if page_size not in possible_page_sizes:
-      possible_page_sizes = sorted(possible_page_sizes + [int(page_size)])
-
     return render(request, self.template_name, context={"gallery": gallery,
-                                                        "page": page,
-                                                        "page_size": page_size,
-                                                        "possible_page_sizes": possible_page_sizes})
+                                                        "page_num": page,
+                                                        "page_size": page_size})
 
 
 class GalleryTreeView(LoginRequiredMixin, generic.ListView):

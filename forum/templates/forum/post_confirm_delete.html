@@ -7,13 +7,13 @@
 			<button class="delete" aria-label="close"></button>
 		</header>
 		<section class="modal-card-body">
-				{% blocktranslate with object=object.title %}Are you sure you want to delete "{{ object }}" and all associated replies and comments?{% endblocktranslate %}
+				{% blocktranslate with object=post.title %}Are you sure you want to delete "{{ post }}" and all associated replies and comments?{% endblocktranslate %}
 		</section>
 		<footer class="modal-card-foot">
 			<div class="container">
 				<div class="field is-grouped is-grouped-centered">
 					<p class="control">
-						<a class="control button is-primary" href="{% url 'forum:delete' object.id %}">
+						<a class="control button is-primary" href="{% url 'forum:delete' post.id %}">
 						{%translate 'Confirm' %}
 						</a>
 					</p>

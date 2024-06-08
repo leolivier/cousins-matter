@@ -83,9 +83,8 @@ def site_copyright():
     return settings.SITE_COPYRIGHT if settings.SITE_COPYRIGHT is not None else default_site_copyright
 
 
-# TODO: test pagination with big lists of objects
 @register.inclusion_tag("cm_main/paginate_template.html")
-def paginate(page):
+def paginate(page, no_per_page=False):
     return {
         "page_urls": page.page_links,
         "page_range": page.page_range,
@@ -97,4 +96,5 @@ def paginate(page):
         "possible_per_pages": page.possible_per_pages,
         "page_size": page.paginator.per_page,
         "num_pages": page.num_pages,
+        "no_per_page": no_per_page
     }

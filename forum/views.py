@@ -22,7 +22,7 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
       page_num = int(self.kwargs['page']) if 'page' in self.kwargs else 1
-      page_size = int(self.kwargs["page_size"]) if "page_size" in self.kwargs else settings.DEFAULT_NUMBER_OF_SHOWN_MESSAGES
+      page_size = int(self.kwargs["page_size"]) if "page_size" in self.kwargs else settings.DEFAULT_POSTS_PER_PAGE
       # print("page_size=", page_size)
       posts = Post.objects.select_related('first_message').annotate(num_messages=Count("message")) \
                   .all().order_by('-first_message__date')

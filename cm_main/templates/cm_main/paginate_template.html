@@ -13,7 +13,7 @@
 </script>
 {%endif%}
 {%with page_first=page_range|first page_last=page_range|last%}
-<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+<nav class="pagination is-centered" aria-label="pagination">
 	{% if prev_page_url %}
 	<a class="pagination-previous" onclick="goto_page_url('{{prev_page_url}}')">
 		<span class="icon is-large"><i class="mdi mdi-24px mdi-chevron-left-box-outline"></i></span>
@@ -26,9 +26,9 @@
 		<li>
 			<a class="pagination-link" onclick="goto_page_url('{{first_page_url}}')" title="{% trans 'go to first page'%}">1</a>
 		</li>
-			{% if page_first > 2 %}
-			<li><span class="pagination-ellipsis">&hellip;</span></li>
-			{%endif%}
+		{%endif%}
+		{% if page_first > 2 %}
+		<li><span class="pagination-ellipsis">&hellip;</span></li>
 		{%endif%}
 		{% for url in page_urls %}
 		{%with page_num=forloop.counter|add:page_first|add:-1%}

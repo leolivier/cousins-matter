@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-29 18:26+0200\n"
+"POT-Creation-Date: 2024-06-09 17:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -106,6 +106,28 @@ msgstr "Profil"
 #: cm_main/templates/cm_main/menu.html:122
 msgid "Log Out"
 msgstr "Déconnexion"
+
+#: cm_main/templates/cm_main/paginate_template.html:27
+msgid "go to first page"
+msgstr "aller à la 1ère page"
+
+#: cm_main/templates/cm_main/paginate_template.html:39
+#, python-format
+msgid "go to page #%(page_num)s"
+msgstr "aller à la page n°%(page_num)s"
+
+#: cm_main/templates/cm_main/paginate_template.html:42
+#, python-format
+msgid "page #%(page_num)s"
+msgstr "page n°%(page_num)s"
+
+#: cm_main/templates/cm_main/paginate_template.html:55
+msgid "go to last page"
+msgstr "aller à la dernière page"
+
+#: cm_main/templates/cm_main/paginate_template.html:62
+msgid "Items per page:"
+msgstr "Items par page"
 
 #: cm_main/templatetags/cm_tags.py:11
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."

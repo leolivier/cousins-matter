@@ -188,4 +188,5 @@ class EditProfileView(EditMemberView):
 def delete_member(request, pk):
     member = get_object_or_404(Member, pk=pk)
     member.delete()
+    messages.info(request, _("Member deleted"))
     return redirect(reverse("members:members"))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-18 10:53+0200\n"
+"POT-Creation-Date: 2024-06-09 17:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,7 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cousinsmatter/utils.py:24
+#: cousinsmatter/utils.py:27
 #, python-brace-format
 msgid "Uploaded file is too big ({sizemb}MB), maximum is {limitmb}MB."
-msgstr "Le fichier téléchargé est trop gros ({sizemb}MO), le maximum est de {limitmb}MO."
+msgstr ""
+"Le fichier téléchargé est trop gros ({sizemb}MO), le maximum est de {limitmb}"
+"MO."

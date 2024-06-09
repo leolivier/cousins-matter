@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 17:53+0200\n"
+"POT-Creation-Date: 2024-06-09 17:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -40,25 +40,25 @@ msgstr "commentaires"
 
 #: forum/templates/forum/comment_list.html:25
 #: forum/templates/forum/post_detail.html:30
-#: forum/templates/forum/post_detail.html:73
+#: forum/templates/forum/post_detail.html:74
 msgid "Edit"
 msgstr "Modifier"
 
 #: forum/templates/forum/comment_list.html:29
 #: forum/templates/forum/post_detail.html:33
-#: forum/templates/forum/post_detail.html:77
+#: forum/templates/forum/post_detail.html:78
 msgid "Delete"
 msgstr "Supprimer"
 
 #: forum/templates/forum/comment_list.html:41
-#: forum/templates/forum/post_detail.html:90
+#: forum/templates/forum/post_detail.html:91
 msgid "Update"
 msgstr "Mettre à jour"
 
 #: forum/templates/forum/comment_list.html:44
 #: forum/templates/forum/comment_list.html:74
 #: forum/templates/forum/post_confirm_delete.html:21
-#: forum/templates/forum/post_detail.html:93
+#: forum/templates/forum/post_detail.html:94
 #: forum/templates/forum/post_form_include.html:18
 msgid "Cancel"
 msgstr "Annuler"
@@ -83,11 +83,11 @@ msgstr "Supprimer la conversation"
 #: forum/templates/forum/post_confirm_delete.html:10
 #, python-format
 msgid ""
-"Are you sure you want to delete \"%(object)s\" and all associated replies "
-"and comments?"
+"Are you sure you want to delete \"%(post)s\" and all associated replies and "
+"comments?"
 msgstr ""
-"Êtes-vous sûr de vouloir supprimer \"%(object)s\" et toutes les réponses et "
-"les commentaires associés ?"
+"Êtes-vous sûr de vouloir supprimer \"%(post)s\" et toutes les réponses et "
+"commentaires associés ?"
 
 #: forum/templates/forum/post_confirm_delete.html:17
 msgid "Confirm"
@@ -98,16 +98,16 @@ msgid "Post"
 msgstr "Discussion"
 
 #: forum/templates/forum/post_detail.html:49
-#: forum/templates/forum/post_list.html:34
+#: forum/templates/forum/post_list.html:32
 #, python-format
 msgid "%(nreplies)s answers"
 msgstr "%(nreplies)s réponse(s)"
 
-#: forum/templates/forum/post_detail.html:51
+#: forum/templates/forum/post_detail.html:52
 msgid "No answer"
 msgstr "Pas de réponse"
 
-#: forum/templates/forum/post_detail.html:111
+#: forum/templates/forum/post_detail.html:112
 msgid "Your answer"
 msgstr "Ta réponse"
 
@@ -118,6 +118,7 @@ msgstr "Modifier le message"
 
 #: forum/templates/forum/post_form.html:8
 #: forum/templates/forum/post_form.html:16
+#: forum/templates/forum/post_list.html:10
 msgid "Create Post"
 msgstr "Créer une discussion"
 
@@ -126,20 +127,10 @@ msgid "Submit"
 msgstr "Soumettre"
 
 #: forum/templates/forum/post_list.html:3
-#: forum/templates/forum/post_list.html:7
+#: forum/templates/forum/post_list.html:8
 msgid "Latest Posts"
 msgstr "Dernières discussions"
 
-#: forum/templates/forum/post_list.html:14
-#, python-format
-msgid "go to page #%(i)s"
-msgstr "aller à la page n°%(i)s"
-
-#: forum/templates/forum/post_list.html:16
-#, python-format
-msgid "page #%(i)s"
-msgstr "page n°%(i)s"
-
-#: forum/views.py:149
+#: forum/views.py:152
 msgid "Can't delete the first message of a thread!"
 msgstr "Impossible de supprimer le premier message d'une discussion!"

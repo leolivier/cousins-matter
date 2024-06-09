@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 17:53+0200\n"
+"POT-Creation-Date: 2024-06-09 17:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -271,18 +271,19 @@ msgstr "Editer l'adresse"
 
 #: members/templates/members/address_form.html:17
 #: members/templates/members/family_form.html:17
-#: members/templates/members/member_upsert.html:35
+#: members/templates/members/member_upsert.html:42
 msgid "Submit"
 msgstr "Soumettre"
 
 #: members/templates/members/address_form.html:18
 #: members/templates/members/family_form.html:18
+#: members/templates/members/member_confirm_delete.html:45
 #: members/templates/members/modal_form.html:17
 msgid "Cancel"
 msgstr "Annuler"
 
 #: members/templates/members/birthdays.html:3
-#: members/templates/members/members.html:10
+#: members/templates/members/members.html:11
 msgid "Birthdays"
 msgstr "Anniversaires"
 
@@ -327,7 +328,7 @@ msgstr ""
 "l'aide de ce lien."
 
 #: members/templates/members/email_verification_failed.html:13
-#: members/templates/members/member_upsert.html:45
+#: members/templates/members/member_upsert.html:52
 msgid "Request a new link"
 msgstr "Demander un nouveau lien"
 
@@ -336,10 +337,8 @@ msgid "Verify Email address"
 msgstr "Vérifier l'adresse e-mail"
 
 #: members/templates/members/email_verification_msg.html:20
-#, fuzzy
-#| msgid "Member Detail"
 msgid "Member Activation"
-msgstr "Détail d'un Membre"
+msgstr "Activation d'un Membre"
 
 #: members/templates/members/email_verification_msg.html:24
 msgid "E-mail Confirmation"
@@ -497,18 +496,60 @@ msgstr "Mot de passe oublié?"
 msgid "Reset password"
 msgstr "Reinitialiser le mot de passe"
 
+#: members/templates/members/member_confirm_delete.html:8
+msgid "Delete My Account"
+msgstr "Supprimer mon compte?"
+
+#: members/templates/members/member_confirm_delete.html:10
+msgid "Delete Member"
+msgstr "Supprimer le Membre"
+
+#: members/templates/members/member_confirm_delete.html:17
+msgid ""
+"Are you sure you want to delete your account and all associated data? This "
+"is irrecoverable!"
+msgstr ""
+"Êtes-vous sûr de vouloir supprimer votre compte et toutes les données qui y sont associées ? "
+"C'est irrécupérable !"
+
+#: members/templates/members/member_confirm_delete.html:19
+#, python-format
+msgid ""
+"Are you sure you want to delete %(name)s's account and all associated data?"
+msgstr ""
+"Êtes-vous sûr de vouloir supprimer le compte de %(name)s et toutes les données associées ?"
+
+#: members/templates/members/member_confirm_delete.html:28
+#, python-format
+msgid ""
+"Enter \"<span class=\"has-text-danger\">%(username)s</span>\" in the field "
+"below before pressing confirm"
+msgstr ""
+"Entrez \"<span class=\"has-text-danger\">%(username)s</span>\" dans le champ "
+"ci-dessous avant d'appuyer sur confirmer."
+
+#: members/templates/members/member_confirm_delete.html:35
+msgid ""
+"Required. The account won't be deleted if the correct name is not entered."
+msgstr ""
+"Obligatoire. Le compte ne sera pas supprimé si le nom correct n'est pas saisi."
+
+#: members/templates/members/member_confirm_delete.html:41
+msgid "Confirm"
+msgstr "Confirmer"
+
 #: members/templates/members/member_detail.html:3
 msgid "Member Detail"
 msgstr "Détail d'un Membre"
 
 #: members/templates/members/member_detail.html:21
-#: members/templates/members/member_upsert.html:18
+#: members/templates/members/member_upsert.html:20
 #: members/tests/tests_member.py:362
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/member_detail.html:23
-#: members/templates/members/member_upsert.html:20
+#: members/templates/members/member_upsert.html:22
 #: members/tests/tests_member.py:362
 msgid "Managed member"
 msgstr "Membre géré"
@@ -526,70 +567,74 @@ msgstr "(Seul.e %(name)s peut gérer ce membre)"
 msgid "Edit Member"
 msgstr "Editer un Membre"
 
-#: members/templates/members/member_upsert.html:25
+#: members/templates/members/member_upsert.html:27
 msgid "Change Password"
 msgstr "Changer le mot de passe"
 
-#: members/templates/members/member_upsert.html:37
+#: members/templates/members/member_upsert.html:31
+msgid "Delete"
+msgstr "Supprimer"
+
+#: members/templates/members/member_upsert.html:44
 msgid "Activate Account"
 msgstr "Activer le compte"
 
-#: members/templates/members/member_upsert.html:43
+#: members/templates/members/member_upsert.html:50
 msgid "Lost your verification email?"
 msgstr "Mail de vérification perdu?"
 
-#: members/templates/members/member_upsert.html:52
+#: members/templates/members/member_upsert.html:59
 msgid "New Address"
 msgstr "Nouvelle Adresse"
 
-#: members/templates/members/member_upsert.html:52
-#: members/templates/members/member_upsert.html:64
-#: members/templates/members/member_upsert.html:68
+#: members/templates/members/member_upsert.html:59
+#: members/templates/members/member_upsert.html:71
+#: members/templates/members/member_upsert.html:75
 msgid "Create"
 msgstr "Créer"
 
-#: members/templates/members/member_upsert.html:58
+#: members/templates/members/member_upsert.html:65
 msgid "Change Address"
 msgstr "Modifier l'Adresse"
 
-#: members/templates/members/member_upsert.html:58
-#: members/templates/members/member_upsert.html:74
+#: members/templates/members/member_upsert.html:65
+#: members/templates/members/member_upsert.html:81
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: members/templates/members/member_upsert.html:64
+#: members/templates/members/member_upsert.html:71
 msgid "New Family"
 msgstr "Nouvelle Famille"
 
-#: members/templates/members/member_upsert.html:68
+#: members/templates/members/member_upsert.html:75
 msgid "New Parent Family"
 msgstr "Nouvell Famille Parente"
 
-#: members/templates/members/member_upsert.html:74
+#: members/templates/members/member_upsert.html:81
 msgid "Change Family"
 msgstr "Modifier la Famille"
 
-#: members/templates/members/member_upsert.html:87
+#: members/templates/members/member_upsert.html:94
 msgid "Address created"
 msgstr "Adresse créée"
 
-#: members/templates/members/member_upsert.html:91
+#: members/templates/members/member_upsert.html:98
 msgid "Family created"
 msgstr "Famille créée"
 
-#: members/templates/members/member_upsert.html:96
+#: members/templates/members/member_upsert.html:103
 msgid "Address updated"
 msgstr "Adresse mise à jour"
 
-#: members/templates/members/member_upsert.html:101
+#: members/templates/members/member_upsert.html:108
 msgid "Family updated"
 msgstr "Famille mise à jour"
 
-#: members/templates/members/member_upsert.html:106
+#: members/templates/members/member_upsert.html:113
 msgid "Parent family created"
 msgstr "Famille parente créée"
 
-#: members/templates/members/member_upsert.html:110
+#: members/templates/members/member_upsert.html:117
 msgid "This username is not available!"
 msgstr "Ce nom d'utilisateur est déjà pris!"
 
@@ -598,27 +643,28 @@ msgstr "Ce nom d'utilisateur est déjà pris!"
 msgid "Members List"
 msgstr "Liste des Membres"
 
-#: members/templates/members/members.html:14
+#: members/templates/members/members.html:15
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: members/templates/members/members.html:18 members/views/views_member.py:87
+#: members/templates/members/members.html:19 members/views/views_member.py:109
 msgid "Create Member"
 msgstr "Créer un Membre"
 
 #: members/templates/members/members.html:25
-msgid "first name"
-msgstr "prénom"
-
-#: members/templates/members/members.html:28
-msgid "last name"
-msgstr "nom"
-
-#: members/templates/members/members.html:31
+#: members/templates/members/members.html:36
 msgid "Filter Members"
 msgstr "Filtrer les Membres"
 
-#: members/templates/members/members.html:58
+#: members/templates/members/members.html:28
+msgid "first name"
+msgstr "prénom"
+
+#: members/templates/members/members.html:32
+msgid "last name"
+msgstr "nom"
+
+#: members/templates/members/members.html:63
 #: members/templates/members/members_directory.html:43
 msgid "No members found"
 msgstr "Pas de membre trouvé"
@@ -873,8 +919,12 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
+#: members/tests/tests_member.py:217 members/views/views_member.py:191
+msgid "Member deleted"
+msgstr "Membre supprimé"
+
 #: members/tests/tests_member.py:337 members/tests/tests_member.py:342
-#: members/views/views_member.py:119 members/views/views_member.py:133
+#: members/views/views_member.py:141 members/views/views_member.py:155
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
 
@@ -981,33 +1031,33 @@ msgstr ""
 msgid "Warning: %(error)s"
 msgstr "Attention: %(error)s"
 
-#: members/views/views_member.py:31
+#: members/views/views_member.py:34
 msgid "You have been logged out"
 msgstr "Tu as été déconnecté(e)"
 
-#: members/views/views_member.py:99
+#: members/views/views_member.py:121
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: members/views/views_member.py:107
+#: members/views/views_member.py:129
 msgid "Update Member Details"
 msgstr "Modifier les détails d'un Membre"
 
-#: members/views/views_member.py:108
+#: members/views/views_member.py:130
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
-#: members/views/views_member.py:143
+#: members/views/views_member.py:165
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Un courriel de vérification a été envoyé pour valider ta nouvelle adresse "
 "électronique."
 
-#: members/views/views_member.py:156
+#: members/views/views_member.py:178
 msgid "My Profile"
 msgstr "Mon Profil"
 
-#: members/views/views_member.py:157
+#: members/views/views_member.py:179
 msgid "Profile successfully updated"
 msgstr "Profil mis à jour avec succès"
 

@@ -13,6 +13,7 @@ urlpatterns = [
   path("page/<int:page_num>", views_member.MembersView.as_view(), name="members_page"),
   path("<int:pk>/", views_member.MemberDetailView.as_view(), name="detail"),
   path("<int:pk>/edit", views_member.EditMemberView.as_view(), name="member_edit"),
+  path("<int:pk>/delete", views_member.delete_member, name="delete"),
   path("create/", views_member.CreateManagedMemberView.as_view(), name="create"),
   path("profile/", views_member.EditProfileView.as_view(), name="profile"),
   path("register/request", views_registration.RegistrationRequestView.as_view(), name="register_request"),

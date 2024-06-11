@@ -26,7 +26,7 @@ class UsersManagersTests(TestCase):
         UserModel = get_user_model()
         self.assertEqual(UserModel, Member)
         member = UserModel.objects.create_member(username='foobar', email="normal@member.com", password="foo",
-                                                 first_name='foo', last_name='bar')
+                                                 first_name='foo', last_name='bar', privacy_consent=True)
         self.assertEqual(member.email, "normal@member.com")
         self.assertFalse(member.is_active)
         self.assertFalse(member.is_staff)
@@ -47,7 +47,7 @@ class UsersManagersTests(TestCase):
     def test_create_superuser(self):
         UserModel = get_user_model()
         admin_user = UserModel.objects.create_superuser(username="superuser", email="super@member.com", password="foo",
-                                                        first_name='foo', last_name='bar')
+                                                        first_name='foo', last_name='bar', privacy_consent=True)
         self.assertEqual(admin_user.email, "super@member.com")
         self.assertTrue(admin_user.is_active)
         self.assertTrue(admin_user.is_staff)
@@ -80,9 +80,9 @@ class BaseMemberTestCase(SimpleTestCase):
   def setUp(self):
     super().setUp()
     self.superuser = Member.objects.create_superuser(self.superuser_name, self.superuser_email, self.superuser_pwd,
-                                                     "Super", "Member")
+                                                     "Super", "Member", privacy_consent=True)
     self.member = Member.objects.create_member(self.username, self.email, self.password,
-                                               self.first_name, self.last_name, is_active=True)
+                                               self.first_name, self.last_name, is_active=True, privacy_consent=True)
     self.created_members = []
 
   base_avatar = "test_avatar.jpg"
@@ -146,7 +146,7 @@ class BaseMemberTestCase(SimpleTestCase):
 
     return {'username': uname, 'password': new_password, 'email': uname+'@test.com',
             'first_name': self.get_new(self.first_name, counter), 'last_name': self.get_new(self.last_name, counter),
-            'phone': '01 23 45 67 ' + counter, "birthdate": date.today()}
+            'phone': '01 23 45 67 ' + counter, "birthdate": date.today(), "privacy_consent": True}
 
   def get_changed_member_data(self, member):
     """returns a modified member dataset (same username and last_name)"""

@@ -12,62 +12,8 @@ from .widgets import FieldLinkWrapper
 from cousinsmatter.utils import check_file_size
 
 
-def clean_avatar(cleaned_data, changed_data):
-  avatar = cleaned_data['avatar']
-  # print(f"Validating avatar for {self.instance.get_full_name()} in {avatar}")
-  if 'avatar' not in changed_data:
-    # print("No change in avatar, skipping validation")
-    return avatar
-  try:
-    # validate file size
-    if len(avatar) > settings.AVATAR_MAX_SIZE:
-        nMB = settings.AVATAR_MAX_SIZE / 1024 / 1024
-        raise ValidationError(
-            f'Avatar file size may not exceed {nMB} bytes.')
-
-  except AttributeError:
-      """
-      Handles case when we are updating the member
-      and do not supply a new avatar
-      """
-      pass
-
-  return avatar
-
-
-class MemberRegistrationForm(UserCreationForm):
-  class Meta:
-    model = Member
-    localized_fields = "__all__"
-    fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'avatar',
-              'birthdate', 'address', 'phone', 'website', 'family']
-
-  def __init__(self, *args, **kwargs):
-    super().__init__(*args, **kwargs)
-    can_change_family = self.instance and self.instance.family
-    self.fields['family'].widget = FieldLinkWrapper(self.fields['family'].widget, can_add_related=True,
-                                                    can_change_related=can_change_family)
-    can_change_address = self.instance and self.instance.address
-    self.fields['address'].widget = FieldLinkWrapper(self.fields['address'].widget, can_add_related=True,
-                                                     can_change_related=can_change_address)
-    # force email, first and last name to be required  # TODO: is this useful?
-    self.fields['first_name'].required = True
-    self.fields['last_name'].required = True
-    self.fields['email'].required = True
-
-  def clean_avatar(self):
-    return clean_avatar(self.cleaned_data, self.changed_data)
-
-
-class MemberUpdateForm(UserChangeForm):
-  class Meta:
-    model = Member
-    localized_fields = "__all__"
-    fields = ['username', 'email', 'first_name', 'last_name', 'avatar',
-              'birthdate', 'address', 'phone', 'website', 'family']
-
-  def __init__(self, *args, **kwargs):
-    super().__init__(*args, **kwargs)
+class MemberFormMixin():
+  def initialize_fields(self, *args, **kwargs):
     can_change_family = self.instance and self.instance.family
     self.fields['family'].widget = FieldLinkWrapper(self.fields['family'].widget, can_add_related=True,
                                                     can_change_related=can_change_family)
@@ -79,7 +25,56 @@ class MemberUpdateForm(UserChangeForm):
     self.fields['last_name'].required = True
 
   def clean_avatar(self):
-    return clean_avatar(self.cleaned_data, self.changed_data)
+    avatar = self.cleaned_data['avatar']
+    # print(f"Validating avatar for {self.instance.get_full_name()} in {avatar}")
+    if 'avatar' not in self.changed_data:
+      # print("No change in avatar, skipping validation")
+      return avatar
+    try:
+      # validate file size
+      if len(avatar) > settings.AVATAR_MAX_SIZE:
+          nMB = settings.AVATAR_MAX_SIZE / 1024 / 1024
+          raise ValidationError(
+              f'Avatar file size may not exceed {nMB} bytes.')
+
+    except AttributeError:
+        """
+        Handles case when we are updating the member
+        and do not supply a new avatar
+        """
+        pass
+
+    return avatar
+
+
+class MemberRegistrationForm(MemberFormMixin, UserCreationForm):
+  class Meta:
+    model = Member
+    localized_fields = "__all__"
+    fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'avatar',
+              'birthdate', 'address', 'phone', 'website', 'family', 'privacy_consent']
+
+  def __init__(self, *args, **kwargs):
+    super(UserCreationForm, self).__init__(*args, **kwargs)
+    self.initialize_fields(*args, **kwargs)
+    # force email to be required  # TODO: is this useful?
+    self.fields['email'].required = True
+    privacy_link = f'/pages/{settings.LANGUAGE_CODE}/about/privacy/'
+    self.fields['privacy_consent'].help_text = \
+      f"By checking this box, you consent to the <a target='blank' href='{privacy_link}'>privacy policy</a> of this site"
+    self.fields['privacy_consent'].required = True
+
+
+class MemberUpdateForm(MemberFormMixin, UserChangeForm):
+  class Meta:
+    model = Member
+    localized_fields = "__all__"
+    fields = ['username', 'email', 'first_name', 'last_name', 'avatar',
+              'birthdate', 'address', 'phone', 'website', 'family']
+
+  def __init__(self, *args, **kwargs):
+    super(UserChangeForm, self).__init__(*args, **kwargs)
+    self.initialize_fields(*args, **kwargs)
 
 
 class AddressUpdateForm(ModelForm):

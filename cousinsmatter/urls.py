@@ -54,4 +54,5 @@ urlpatterns = [
     path("robots.txt", TemplateView.as_view(template_name="cm_main/robots.txt", content_type="text/plain")),
     path('captcha/', include('captcha.urls')),
     path('protected_media/<path:media>', download_protected_media, name="get_protected_media"),
+    path("pages/", include("django.contrib.flatpages.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

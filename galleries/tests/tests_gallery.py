@@ -108,7 +108,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     sgal_name = get_gallery_name()
     response = self.client.post(url, {'name': sgal_name, 'description': "a test sub gallery", 'parent': rg.id}, follow=True)
     self.assertTrue(response.status_code, 200)
-    print(response.content)
+    # print(response.content)
     # get the sub gallery by name and parent
     sg = Gallery.objects.filter(name=sgal_name, parent=rg).first()
     self.assertIsNotNone(sg)

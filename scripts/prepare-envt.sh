@@ -16,6 +16,8 @@ echo "migrating the database..."
 python manage.py migrate
 python manage.py check
 
+./scripts/import-flatpages.sh
+
 sudo=''
 if [[ -n "$EUID" && $EUID -ne 0 ]];
 then sudo='sudo'

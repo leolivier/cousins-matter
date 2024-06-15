@@ -1,0 +1,7 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title flatpage.title %}{% endblock %}
+{% block content %}
+<div class="container">
+{{ flatpage.content }}
+{%endblock content%}

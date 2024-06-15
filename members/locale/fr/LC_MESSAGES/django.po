@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-09 17:05+0200\n"
+"POT-Creation-Date: 2024-06-15 19:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,39 +22,39 @@ msgstr ""
 msgid "Members"
 msgstr "Membres"
 
-#: members/forms.py:108
+#: members/forms.py:103
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Nom de la personne invitée (apparaîtra dans l'e-mail reçu)"
 
-#: members/forms.py:109
+#: members/forms.py:104
 msgid "Email to send invitation"
 msgstr "Email auquel envoyer l'invitation"
 
-#: members/forms.py:113
+#: members/forms.py:108
 msgid "Your name"
 msgstr "Ton nom"
 
-#: members/forms.py:114
+#: members/forms.py:109
 msgid "Email where you will receive the link"
 msgstr "Email où tu recevras le lien"
 
-#: members/forms.py:115
+#: members/forms.py:110
 msgid "Message to the administrator"
 msgstr "Message à l'administrateur"
 
-#: members/forms.py:116
+#: members/forms.py:111
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Captcha (cliquez sur l'image pour la rafraîchir si elle est illisible)"
 
-#: members/forms.py:131
+#: members/forms.py:126
 msgid "CSV file"
 msgstr "Fichier CSV"
 
-#: members/forms.py:132
+#: members/forms.py:127
 msgid "The CSV file containing the members to import."
 msgstr "Le fichier CSV contenant les membres à importer."
 
-#: members/forms.py:136
+#: members/forms.py:131
 msgid "Automatically activate imported users"
 msgstr "Activer automatiquement les utilisateurs importés"
 
@@ -234,11 +234,15 @@ msgstr "Mes loisirs"
 msgid "Provide a list of hobbies separated by commas"
 msgstr "Donne un liste de loisirs séparés par des virgules"
 
-#: members/models.py:124
+#: members/models.py:118
+msgid "Privacy consent"
+msgstr "Consentement à la protection de la vie privée"
+
+#: members/models.py:126
 msgid "member"
 msgstr "membre"
 
-#: members/models.py:125
+#: members/models.py:127
 msgid "members"
 msgstr "members"
 
@@ -283,6 +287,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: members/templates/members/birthdays.html:3
+#: members/templates/members/members.html:11
 #: members/templates/members/members.html:11
 msgid "Birthdays"
 msgstr "Anniversaires"
@@ -338,6 +343,7 @@ msgstr "Vérifier l'adresse e-mail"
 
 #: members/templates/members/email_verification_msg.html:20
 msgid "Member Activation"
+msgstr "Activation d'un Membre"
 msgstr "Activation d'un Membre"
 
 #: members/templates/members/email_verification_msg.html:24
@@ -543,14 +549,14 @@ msgid "Member Detail"
 msgstr "Détail d'un Membre"
 
 #: members/templates/members/member_detail.html:21
-#: members/templates/members/member_upsert.html:20
-#: members/tests/tests_member.py:362
+#: members/templates/members/member_upsert.html:18
+#: members/tests/tests_member.py:366
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/member_detail.html:23
-#: members/templates/members/member_upsert.html:22
-#: members/tests/tests_member.py:362
+#: members/templates/members/member_upsert.html:20
+#: members/tests/tests_member.py:366
 msgid "Managed member"
 msgstr "Membre géré"
 
@@ -644,27 +650,15 @@ msgid "Members List"
 msgstr "Liste des Membres"
 
 #: members/templates/members/members.html:15
+#: members/templates/members/members.html:15
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: members/templates/members/members.html:19 members/views/views_member.py:109
+#: members/templates/members/members.html:19 members/views/views_member.py:96
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: members/templates/members/members.html:25
-#: members/templates/members/members.html:36
-msgid "Filter Members"
-msgstr "Filtrer les Membres"
-
-#: members/templates/members/members.html:28
-msgid "first name"
-msgstr "prénom"
-
-#: members/templates/members/members.html:32
-msgid "last name"
-msgstr "nom"
-
-#: members/templates/members/members.html:63
+#: members/templates/members/members.html:43
 #: members/templates/members/members_directory.html:43
 msgid "No members found"
 msgstr "Pas de membre trouvé"
@@ -792,7 +786,7 @@ msgid "Invitation for %(invited)s to register to %(site_name)s"
 msgstr "Invitation pour %(invited)s à s'inscrire sur %(site_name)s"
 
 #: members/templates/members/registration_invite_email.html:20
-#: members/tests/tests_register.py:29
+#: members/tests/tests_register.py:31
 #, python-format
 msgid "Registration to the \"%(site_name)s\" site"
 msgstr "Enregistrement sur le site \"%(site_name)s\""
@@ -866,19 +860,19 @@ msgid "Invite me"
 msgstr "M'inviter"
 
 #: members/templates/members/registration_request_email.html:8
-#: members/tests/tests_register.py:92 members/views/views_registration.py:174
+#: members/tests/tests_register.py:94 members/views/views_registration.py:175
 #, python-format
 msgid "Registration request for %(site_name)s"
 msgstr "Demande d'enregistrement pour %(site_name)s"
 
 #: members/templates/members/registration_request_email.html:20
-#: members/tests/tests_register.py:97
+#: members/tests/tests_register.py:99
 #, python-format
 msgid "Registration request for the \"%(site_name)s\" site"
 msgstr "Demande d'enregistrement pour le site \"%(site_name)s\""
 
 #: members/templates/members/registration_request_email.html:24
-#: members/tests/tests_register.py:98
+#: members/tests/tests_register.py:100
 #, python-format
 msgid "%(name)s (%(email)s) requested to register to your cousinades site"
 msgstr ""
@@ -919,39 +913,35 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_member.py:217 members/views/views_member.py:191
-msgid "Member deleted"
-msgstr "Membre supprimé"
-
-#: members/tests/tests_member.py:337 members/tests/tests_member.py:342
-#: members/views/views_member.py:141 members/views/views_member.py:155
+#: members/tests/tests_member.py:341 members/tests/tests_member.py:346
+#: members/views/views_member.py:128 members/views/views_member.py:142
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
 
-#: members/tests/tests_register.py:20 members/views/views_registration.py:127
+#: members/tests/tests_register.py:22 members/views/views_registration.py:128
 #, python-format
 msgid "Invitation sent to %(email)s."
 msgstr "Invitation envoyée à %(email)s."
 
-#: members/tests/tests_register.py:24 members/views/views_registration.py:123
+#: members/tests/tests_register.py:26 members/views/views_registration.py:124
 #, python-format
 msgid "You are invited to register on %(site_name)s"
 msgstr "Tu as été invité.e à créer ton compte sur %(site_name)s"
 
-#: members/tests/tests_register.py:87 members/views/views_registration.py:178
+#: members/tests/tests_register.py:89 members/views/views_registration.py:179
 msgid "Registration request sent."
 msgstr "Demande d'enregistrement envoyée."
 
-#: members/tests/tests_register.py:113 members/views/views_registration.py:108
-#: members/views/views_registration.py:154
+#: members/tests/tests_register.py:115 members/views/views_registration.py:109
+#: members/views/views_registration.py:155
 msgid "A member with this email already exists."
 msgstr "Un membre ayant cette adresse mail existe déjà."
 
-#: members/tests/tests_register.py:120
+#: members/tests/tests_register.py:122
 msgid "Invalid CAPTCHA"
 msgstr "CAPTCHA invalide"
 
-#: members/tests/tests_register.py:141 members/views/views_registration.py:79
+#: members/tests/tests_register.py:147 members/views/views_registration.py:79
 #, python-format
 msgid ""
 "Hello %(username)s, your account has been created! You will now receive an "
@@ -962,9 +952,13 @@ msgstr ""
 "email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
 "terminer le processus de création de compte."
 
-#: members/tests/tests_register.py:150 members/views/views_registration.py:53
+#: members/tests/tests_register.py:158 members/views/views_registration.py:53
 msgid "Invalid link. Please contact the administrator."
 msgstr "Lien invalide. Merci de contacter l'administrateur."
+
+#: members/tests/tests_register.py:166
+msgid "This field is required."
+msgstr "Ce champ est obligatoire."
 
 #: members/views/views_activate.py:59
 msgid "Error: Member already active"
@@ -1032,32 +1026,33 @@ msgid "Warning: %(error)s"
 msgstr "Attention: %(error)s"
 
 #: members/views/views_member.py:34
+#: members/views/views_member.py:34
 msgid "You have been logged out"
 msgstr "Tu as été déconnecté(e)"
 
-#: members/views/views_member.py:121
+#: members/views/views_member.py:108
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: members/views/views_member.py:129
+#: members/views/views_member.py:116
 msgid "Update Member Details"
 msgstr "Modifier les détails d'un Membre"
 
-#: members/views/views_member.py:130
+#: members/views/views_member.py:117
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
-#: members/views/views_member.py:165
+#: members/views/views_member.py:152
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Un courriel de vérification a été envoyé pour valider ta nouvelle adresse "
 "électronique."
 
-#: members/views/views_member.py:178
+#: members/views/views_member.py:165
 msgid "My Profile"
 msgstr "Mon Profil"
 
-#: members/views/views_member.py:179
+#: members/views/views_member.py:166
 msgid "Profile successfully updated"
 msgstr "Profil mis à jour avec succès"
 
@@ -1081,10 +1076,10 @@ msgstr ""
 "Tu es déjà enregistré mais pas encore actif. Contacte %(admin)s pour activer "
 "ton compte."
 
-#: members/views/views_registration.py:97
+#: members/views/views_registration.py:98
 msgid "Only staff users can send invitations."
 msgstr "Seuls les members du staff peuvent envoyer des invitations."
 
-#: members/views/views_registration.py:181
+#: members/views/views_registration.py:182
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossible d'envoyer un mail. Merci de contacter l'administrateur."

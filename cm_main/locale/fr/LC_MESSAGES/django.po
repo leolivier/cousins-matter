@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-09 17:05+0200\n"
+"POT-Creation-Date: 2024-06-14 22:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -43,67 +43,71 @@ msgstr ""
 "valeurs dans le fichier.env pour les variables HOME_CONTENT_UNSIGNED et "
 "HOME_CONTENT_SIGNED."
 
-#: cm_main/templates/cm_main/menu.html:19
+#: cm_main/templates/cm_main/menu.html:18
+msgid "Edit Pages"
+msgstr "Editer les Pages"
+
+#: cm_main/templates/cm_main/menu.html:24
 msgid "Members"
 msgstr "Membres"
 
-#: cm_main/templates/cm_main/menu.html:24
+#: cm_main/templates/cm_main/menu.html:29
 msgid "Birthdays"
 msgstr "Anniversaires"
 
-#: cm_main/templates/cm_main/menu.html:28
+#: cm_main/templates/cm_main/menu.html:33
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: cm_main/templates/cm_main/menu.html:32
+#: cm_main/templates/cm_main/menu.html:37
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: cm_main/templates/cm_main/menu.html:37
+#: cm_main/templates/cm_main/menu.html:42
 msgid "Invite Member"
 msgstr "Inviter un Membre"
 
-#: cm_main/templates/cm_main/menu.html:41
+#: cm_main/templates/cm_main/menu.html:46
 msgid "Import from CSV"
 msgstr "Importer depuis un fichier CSV"
 
-#: cm_main/templates/cm_main/menu.html:50
+#: cm_main/templates/cm_main/menu.html:55
 msgid "Galleries"
 msgstr "Galeries"
 
-#: cm_main/templates/cm_main/menu.html:55
+#: cm_main/templates/cm_main/menu.html:60
 msgid "Create Gallery"
 msgstr "Créer une Galerie"
 
-#: cm_main/templates/cm_main/menu.html:59
+#: cm_main/templates/cm_main/menu.html:64
 msgid "Bulk Upload"
 msgstr "Chargement en masse"
 
-#: cm_main/templates/cm_main/menu.html:67
+#: cm_main/templates/cm_main/menu.html:72
 msgid "Forum"
 msgstr "Forum"
 
-#: cm_main/templates/cm_main/menu.html:72
+#: cm_main/templates/cm_main/menu.html:77
 msgid "Create Post"
 msgstr "Nouvelle Discussion"
 
-#: cm_main/templates/cm_main/menu.html:80
+#: cm_main/templates/cm_main/menu.html:85
 msgid "Chat"
 msgstr "Chat"
 
-#: cm_main/templates/cm_main/menu.html:99
+#: cm_main/templates/cm_main/menu.html:128
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/menu.html:104
+#: cm_main/templates/cm_main/menu.html:133
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/menu.html:118
+#: cm_main/templates/cm_main/menu.html:147
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/menu.html:122
+#: cm_main/templates/cm_main/menu.html:151
 msgid "Log Out"
 msgstr "Déconnexion"
 
@@ -114,12 +118,12 @@ msgstr "aller à la 1ère page"
 #: cm_main/templates/cm_main/paginate_template.html:39
 #, python-format
 msgid "go to page #%(page_num)s"
-msgstr "aller à la page n°%(page_num)s"
+msgstr "aller à la page #%(page_num)s"
 
 #: cm_main/templates/cm_main/paginate_template.html:42
 #, python-format
 msgid "page #%(page_num)s"
-msgstr "page n°%(page_num)s"
+msgstr "page #%(page_num)s"
 
 #: cm_main/templates/cm_main/paginate_template.html:55
 msgid "go to last page"

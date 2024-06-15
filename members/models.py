@@ -115,6 +115,8 @@ class Member(AbstractUser):
     hobbies = models.CharField(_("My hobbies"), blank=True, null=True, max_length=256,
                                help_text=_("Provide a list of hobbies separated by commas"))
 
+    privacy_consent = models.BooleanField(_("Privacy consent"), default=False, blank=False, null=False)
+
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["first_name", "last_name", "birthdate", "email"]
 

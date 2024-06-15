@@ -1,5 +1,8 @@
-body {
+:root {
 	--bulma-body-font-size: 20px;
+/* to define a color theme, eg
+  --bulma-primary-h:360deg;
+*/
 }
 
 /* RELATED WIDGET WRAPPER */
@@ -66,11 +69,11 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 	font-size: 1rem;
 	font-family:'Courier New', Courier, monospace
 }
-.rich-text ul li, .note-editable ul li {
+.rich-text ul li, .note-editable ul li, ul.bullet li {
   list-style: disc;
   margin-left: 2rem;
 }
-.rich-text ol li, .note-editable ol li {
+.rich-text ol li, .note-editable ol li, ol.ordered li {
   list-style: decimal;
   margin-left: 2rem;
 }
@@ -98,11 +101,3 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 	height: 64px;
 	width: 64px;
 }
-
-
-
-
-/* to define a color theme, eg
-:root {
-  --bulma-primary-h:360deg;
-} */

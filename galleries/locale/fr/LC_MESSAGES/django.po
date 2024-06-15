@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-09 17:12+0200\n"
+"POT-Creation-Date: 2024-06-15 19:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -109,6 +109,7 @@ msgstr "Création d'une Galerie"
 #: galleries/templates/galleries/edit_gallery.html:3
 #: galleries/templates/galleries/edit_gallery.html:7
 #: galleries/templates/galleries/gallery_detail.html:64
+#: galleries/templates/galleries/gallery_detail.html:64
 msgid "Edit Gallery"
 msgstr "Modification d'une Galerie"
 
@@ -119,6 +120,7 @@ msgstr "Mettre à jour"
 
 #: galleries/templates/galleries/edit_photo.html:3
 #: galleries/templates/galleries/edit_photo.html:10
+#: galleries/templates/galleries/photo_detail.html:25
 #: galleries/templates/galleries/photo_detail.html:25
 msgid "Edit Photo"
 msgstr "Editer la Photo"
@@ -139,6 +141,7 @@ msgid "No galleries found"
 msgstr "Aucune galerie trouvée"
 
 #: galleries/templates/galleries/gallery_confirm_delete.html:6
+#: galleries/templates/galleries/gallery_detail.html:69
 #: galleries/templates/galleries/gallery_detail.html:69
 msgid "Delete gallery"
 msgstr "Supprimer une Galerie"
@@ -162,20 +165,30 @@ msgid "Show Gallery"
 msgstr "Afficher la Galerie"
 
 #: galleries/templates/galleries/gallery_detail.html:24
+#: galleries/templates/galleries/gallery_detail.html:24
 msgid "Children galleries"
 msgstr "Sous Galeries"
 
+#: galleries/templates/galleries/gallery_detail.html:41
+#: galleries/templates/galleries/photo_detail.html:19
 #: galleries/templates/galleries/gallery_detail.html:41
 #: galleries/templates/galleries/photo_detail.html:19
 #, python-format
 msgid "Back to %(gname)s"
 msgstr "Retour à %(gname)s"
 
+#: galleries/templates/galleries/gallery_detail.html:52
+#, fuzzy
+#| msgid "Add Photo"
+msgid "Add Photos"
+msgstr "Ajout d'une Photo"
+
 #: galleries/templates/galleries/gallery_detail.html:58
 msgid "Create Sub Gallery"
 msgstr "Créer une Sous-Galerie"
 
 #: galleries/templates/galleries/photo_confirm_delete.html:6
+#: galleries/templates/galleries/photo_detail.html:30
 #: galleries/templates/galleries/photo_detail.html:30
 msgid "Delete photo"
 msgstr "Supprimer la photo"
@@ -200,11 +213,15 @@ msgstr "Aucune photo"
 #, python-format
 msgid "Gallery %(gname)s"
 msgstr "Galerie %(gname)s"
+msgid "Gallery %(gname)s"
+msgstr "Galerie %(gname)s"
 
+#: galleries/tests/tests_gallery.py:225 galleries/views/views_gallery.py:61
 #: galleries/tests/tests_gallery.py:225 galleries/views/views_gallery.py:61
 msgid "Gallery deleted"
 msgstr "Galerie supprimée avec tout son contenu"
 
+#: galleries/tests/tests_photo.py:119 galleries/views/views_photo.py:93
 #: galleries/tests/tests_photo.py:119 galleries/views/views_photo.py:93
 msgid "Photo deleted"
 msgstr "Photo supprimée"
@@ -237,6 +254,12 @@ msgid "Unable to import photo '{path}', it was ignored"
 msgstr "Impossible d'importer la photo '{path}', elle a été ignorée"
 
 #: galleries/views/views_bulk.py:186
+#: galleries/views/views_bulk.py:175
+#, python-brace-format
+msgid "Unable to import photo '{path}', it was ignored"
+msgstr "Impossible d'importer la photo '{path}', elle a été ignorée"
+
+#: galleries/views/views_bulk.py:186
 msgid ""
 "Zip file uploaded: {len(self.galleries)} galleries and {self.nbPhotos} "
 "photos created"
@@ -244,6 +267,15 @@ msgstr ""
 "Fichier zip téléchargé : {len(self.galleries)} galeries et {self.nbPhotos} "
 "photos créées"
 
+#: galleries/views/views_photo.py:31
+msgid "Missing either photo id or gallery id"
+msgstr "Il manque l'identifiant de la photo ou de la galerie"
+
+#: galleries/views/views_photo.py:51
+msgid "Photo not found on that page"
+msgstr "Photo non trouvée sur cette page"
+
+#: galleries/views/views_photo.py:71
 #: galleries/views/views_photo.py:31
 msgid "Missing either photo id or gallery id"
 msgstr "Il manque l'identifiant de la photo ou de la galerie"

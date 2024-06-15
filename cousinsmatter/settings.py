@@ -33,7 +33,11 @@ MAX_REGISTRATION_AGE = env.int('MAX_REGISTRATION_AGE', default=2*24*3600)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'])
 
-LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-US')
+LANGUAGES = [
+    ("fr", "Français"),
+    ("en", "English"),
+]
+LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-us')
 
 TIME_ZONE = env.str('TIME_ZONE', default='Europe/Paris')
 
@@ -59,6 +63,7 @@ CM_LOG_LEVEL = env.str('CM_LOG_LEVEL', default='INFO')
 # Number of days for birthdays
 BIRTHDAY_DAYS = env.int('BIRTHDAY_DAYS', default=50)
 
+SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
@@ -69,6 +74,7 @@ INSTALLED_APPS = [
   'polls',
   'forum',
   'chat',
+  'pages',
   'crispy_forms',
   'crispy_bulma',
   'django_icons',
@@ -79,6 +85,8 @@ INSTALLED_APPS = [
   'django.contrib.sessions',
   'django.contrib.messages',
   'django.contrib.staticfiles',
+  'django.contrib.sites',
+  'django.contrib.flatpages',
   'captcha',
   'channels',
 ]
@@ -91,6 +99,7 @@ MIDDLEWARE = [
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
+  'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
   # 'cousinsmatter.htmlvalidator.HtmlValidatorMiddleware',
 ]
 
@@ -269,3 +278,5 @@ DEFAULT_MEMBERS_PAGE_SIZE = env.int('DEFAULT_MEMBERS_PAGE_SIZE', 25)
 DEFAULT_POSTS_PER_PAGE = env.int('DEFAULT_POSTS_PER_PAGE', 25)
 DEFAULT_CHATMESSAGES_PER_PAGE = env.int('DEFAULT_CHATMESSAGES_PER_PAGE', 25)
 DEFAULT_CHATROOMS_PER_PAGE = env.int('DEFAULT_CHATROOMS_PER_PAGE', 25)
+
+PAGES_URL_PREFIX = 'pages'

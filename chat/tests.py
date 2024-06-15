@@ -29,7 +29,8 @@ class ChatRoomTests(MemberTestCase):
     response = self.client.get(reverse('chat:new_room') + '?' + urlencode({'name': '#'+room_name+'!'}), follow=True)
     slug_name = room_name
     self.assertContainsMessage(response, 'error',
-                                _(f"Another room with a similar name already exists ('{slug_name}'). Please choose a different name."))  # noqa E501
+                               _(f"Another room with a similar name already exists ('{slug_name}'). "
+                                 "Please choose a different name."))
     ChatRoom.objects.all().delete()
 
   def test_list_rooms(self):

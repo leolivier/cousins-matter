@@ -66,7 +66,8 @@ def activate_member(request, pk):
         member.managing_member = None
         member.save()
         messages.success(request,
-                         _("Member account successfully activated. The owner of the account must now proceed as if (s)he had lost his/her password before being able to sign in."))  # noqa: E501
+                         _("Member account successfully activated. The owner of the account must now proceed "
+                           "as if (s)he had lost his/her password before being able to sign in."))
         logger.info(f"Member {member.username} activated by {request.user.username}")
 
     return redirect_to_referer(request)

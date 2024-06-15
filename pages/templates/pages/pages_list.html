@@ -1,0 +1,25 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Pages") %} {% endblock %}
+{% block content %}
+<div class="container">
+	<nav class="panel">
+		<p class="panel-heading">
+			{%title _('Pages') %}
+			<a class="button ml-6" href="{%url 'pages-edit:create'%}" title="{% trans 'Create Page' %}">
+				<span class="icon is-large"><i class="mdi mdi-24px mdi-plus-box-outline"></i></span>
+			</a>
+		</p>
+		{%for page in object_list%}
+		<div class="panel-block">
+			<a href="{%url 'pages-edit:update' page.url %}">
+				<span class="panel-icon">
+					<i class="mdi mdi-24px mdi-page-next" aria-hidden="true"></i>
+				</span>
+				{{page.title}}
+			</a>
+		</div>
+		{%endfor%}
+	</nav>
+</div>
+{%endblock content%}

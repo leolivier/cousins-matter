@@ -6,6 +6,8 @@ from django.conf import settings
 from django.test import RequestFactory
 from django.test.utils import TestContextDecorator
 from captcha.conf import settings as captcha_settings
+
+from ..forms import MemberRegistrationForm
 from ..models import Member
 from ..registration_link_manager import RegistrationLinkManager
 from .tests_member import MemberTestCase, BaseMemberTestCase
@@ -134,11 +136,17 @@ class MemberRegisterTests(BaseMemberTestCase):
 
     user = {'username': 'test_register_view', 'password1': self.password, 'password2': self.password,
             'first_name': self.first_name, 'last_name': self.last_name,
-            'email': 'test_register_view@test.com', 'phone': '01 23 45 67 78', "birthdate": date.today()}
+            'email': 'test_register_view@test.com', 'phone': '01 23 45 67 78',
+            "birthdate": date.today(), "privacy_consent": True}
 
+    form = MemberRegistrationForm(user)
+    self.assertFormError(form, 'privacy_consent', [])
     response = self.client.post(invitation_url, user, follow=True)
+    # print(response.content.decode().replace('\\n', '\n').replace('\\t', '\t'))
     self.assertContains(response,
-                        _('Hello %(username)s, your account has been created! You will now receive an email to verify your email address. Click in the link inside the mail to finish the registration.') %  # noqa E501
+                        _('Hello %(username)s, your account has been created! '
+                          'You will now receive an email to verify your email address. '
+                          'Click in the link inside the mail to finish the registration.') %
                         {"username": user['username']})
 
   def test_register_view_wrong_token(self):
@@ -148,3 +156,11 @@ class MemberRegisterTests(BaseMemberTestCase):
     invitation_url = RegistrationLinkManager().generate_link(request, email) + 'wrong'
     response = self.client.get(invitation_url)
     self.assertContains(response, _("Invalid link. Please contact the administrator."), status_code=400)
+
+  def test_register_needs_consent(self):
+    user = {'username': 'test_register_view', 'password1': self.password, 'password2': self.password,
+            'first_name': self.first_name, 'last_name': self.last_name,
+            'email': 'test_register_view@test.com', 'phone': '01 23 45 67 78',
+            "birthdate": date.today()}
+    form = MemberRegistrationForm(user)
+    self.assertFormError(form, 'privacy_consent', [_("This field is required.")])

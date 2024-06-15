@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import path
 
 from . import views
@@ -17,7 +18,11 @@ urlpatterns = [
     path("<int:message_id>/comments", views.CommentCreateView.as_view(), name="add_comment"),
     path("comments/<int:pk>/edit", views.CommentEditView.as_view(), name="edit_comment"),
     path("comments/<int:pk>/delete", views.delete_comment, name="delete_comment"),
+]
+
+if settings.DEBUG:
+  urlpatterns += [
     path("test/create_posts/<int:num_posts>", views.test_create_posts, name="test_create_posts"),
     path("test/create_replies/<int:num_replies>", views.test_create_replies, name="test_create_replies"),
     path("test/create_comments/<int:num_comments>", views.test_create_comments, name="test_create_comments"),
-]
+  ]

@@ -1,5 +1,4 @@
-{% load i18n %}
-{% load static %}
+{% load i18n flatpages menupages_tags static %}
 <div class="navbar-brand">
 	<a class="navbar-item" href="/">
 		<img src="{% static 'cm_main/images/cousinades.png' %}" width="112" height="28">
@@ -14,6 +13,12 @@
 
 <div id="navMenu" class="navbar-menu">
 	<div class="navbar-start">
+		{% if user.is_superuser %}
+		<a class="navbar-item" href="{%url 'pages-edit:list'%}">
+			{%trans 'Edit Pages'%}
+		</a>
+		{%endif%}
+		{%get_menu_pages%}
 		<div class="navbar-item has-dropdown is-hoverable">
 			<a class="navbar-item" href="{% url 'members:members' %}">
 				<span class="is-hidden-mobile">{% translate "Members" %}</span>
@@ -90,6 +95,30 @@
 	</div>
 
 	<div class="navbar-end">
+		<div class="navbar-item">
+			<div class="navbar-item has-dropdown is-hoverable">
+				<button class="button navbar-link is-light">
+					<span class="icon is-large">
+						<i class="mdi mdi-24px mdi-help-circle-outline"></i>
+					</span>
+				</button>
+				{%with about_prefix='/pages/'|add:settings.LANGUAGE_CODE|add:'/about/' private_prefix='/pages/'|add:settings.LANGUAGE_CODE|add:'/private/'%}
+				{% get_flatpages about_prefix  as about_pages %}
+				{% get_flatpages private_prefix as private_pages %}
+				<div class="navbar-dropdown is-right">
+					{% for page in about_pages %}
+        	<a class="navbar-item" href="{{ page.url }}">{{ page.title }}</a>
+    			{% endfor %}
+					{% if user.is_authenticated and private_pages.count > 0 %}
+					<hr>
+					{% for page in private_pages %}
+        	<a class="navbar-item" href="{{ page.url }}">{{ page.title }}</a>
+    			{% endfor %}
+					{%endif%}
+				</div>
+				{%endwith%}
+			</div>
+		</div>
 		<div class="navbar-item">
 			<div class="buttons">
 				{% if not user.is_authenticated %}

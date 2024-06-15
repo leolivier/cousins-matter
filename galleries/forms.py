@@ -13,7 +13,9 @@ def check_zip_size(file):
 
 class BulkUploadPhotosForm(forms.Form):
     zipfile = forms.FileField(label=_('Zip file'),
-                              help_text=_('The zip file containing the photos to upload. All folders will be created as galleries and photos in these folders added to the galleries. All photos must be in folders.'),  # noqa E501
+                              help_text=_('The zip file containing the photos to upload. '
+                                          'All folders will be created as galleries and photos in these folders '
+                                          'added to the galleries. All photos must be in folders.'),
                               validators=[validate_zipfile_extension, check_zip_size],
                               widget=forms.FileInput(attrs={'accept': ".zip"})
                               )

@@ -26,7 +26,7 @@ COPY . .
 EXPOSE 8000
 
 # runs the production server
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/app/scripts/entrypoint.sh"]
 CMD ["supervisord", "-c", "/app/supervisord.conf"]
 
 VOLUME [ "/app/data" ]

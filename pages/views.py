@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -22,13 +22,7 @@ class PageCreateView(LoginRequiredMixin, generic.CreateView):
       page.sites.set([Site.objects.get(pk=settings.SITE_ID)])
       page.save()
       return redirect(page.url)
-
-    for field, error in form.errors.items():
-      if field == '__all__':
-        messages.error(request, error)
-      else:
-        messages.error(request, f'{field}:{error}')
-    return redirect_to_referer(request)
+    return render(request, self.template_name, {'form': form})
 
 
 class PageUpdateView(LoginRequiredMixin, generic.UpdateView):

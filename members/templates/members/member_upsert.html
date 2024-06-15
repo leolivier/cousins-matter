@@ -3,28 +3,35 @@
 {% block title %}{% title _("Edit Member") %} {% endblock %}
 {% block header %}{%include "cm_main/include-bulma-calendar.html" %}{%endblock%}
 {% block content %}
+{%with member=form.instance%}
 	<h1 class="title has-text-centered is-1">{{title}}</h1>
-	<div class="media">
-	{% if form.instance %}
+	<div class="media mr-5 ml-5">
+	{% if member %}
 		<div class="media-left">
     	<figure class="image thumbnail">
-        <img class="is-rounded" src="{{ form.instance.avatar_url }}">
+        <img class="is-rounded" src="{{ member.avatar_url }}">
     	</figure>
 		</div>
     <div class="media-content">
-      <p class="content"><strong>{{ form.instance.first_name }} {{ form.instance.last_name }}</strong>
-			{%if form.instance.email %}<small>&lt;{{ form.instance.email }}&gt;</small></p>{% endif %}
-			{%if form.instance.is_active %}
+      <p class="content"><strong>{{ member.first_name }} {{ member.last_name }}</strong>
+				({{member.username}})
+			{%if member.email %}<small>&lt;{{ member.email }}&gt;</small></p>{% endif %}
+			{%if member.is_active %}
 				{% translate "Active member" %}
 			{% else %}
 				{% translate "Managed member" %}
 			{% endif %}
     </div>
-		{% if form.instance.id == request.user.id %}{# profile update #}
+		{% if member.id == request.user.id %}{# profile update #}
 		<div class="media-right">
 			<a class="button is-link" href="{% url 'change_password' %}">{% translate "Change Password" %}</a>
 		</div>
 		{% endif %}
+		<div class="media-right">
+			<button class="button is-danger js-modal-trigger" data-target="delete-member-modal" title="{%trans 'Delete' %}">
+				<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
+			</button>
+		</div>
 	{% endif %}
   </div>
 	<div class="container">
@@ -33,7 +40,7 @@
 			{{ form | crispy }}
 			<div class="buttons mt-4">
 				<input type="submit" class="button is-primary" value='{% translate "Submit" %}'>
-				{% if form.instance and form.instance.managing_member and not form.instance.managing_member.id == request.user.id %} {# update managed member #}
+				{% if member and member.managing_member and not member.managing_member.id == request.user.id %} {# update managed member #}
 					<a class="button is-warning" href="{% url 'members:activate' pk %}">{% translate "Activate Account" %}</a>
 				{% endif %}
 			</div>
@@ -112,5 +119,6 @@
 		</script>
 
 	{% endblock javascript %}
-
+	{%if member and member.id %}{%include "members/member_confirm_delete.html" %}{%endif%}
+{%endwith%}
 {% endblock content %}

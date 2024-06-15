@@ -19,8 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: cousinsmatter/utils.py:27
+#: cousinsmatter/utils.py:27
 #, python-brace-format
 msgid "Uploaded file is too big ({sizemb}MB), maximum is {limitmb}MB."
+msgstr ""
+"Le fichier téléchargé est trop gros ({sizemb}MO), le maximum est de {limitmb}"
+"MO."
 msgstr ""
 "Le fichier téléchargé est trop gros ({sizemb}MO), le maximum est de {limitmb}"
 "MO."

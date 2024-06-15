@@ -41,16 +41,19 @@ msgstr "commentaires"
 #: forum/templates/forum/comment_list.html:25
 #: forum/templates/forum/post_detail.html:30
 #: forum/templates/forum/post_detail.html:74
+#: forum/templates/forum/post_detail.html:74
 msgid "Edit"
 msgstr "Modifier"
 
 #: forum/templates/forum/comment_list.html:29
 #: forum/templates/forum/post_detail.html:33
 #: forum/templates/forum/post_detail.html:78
+#: forum/templates/forum/post_detail.html:78
 msgid "Delete"
 msgstr "Supprimer"
 
 #: forum/templates/forum/comment_list.html:41
+#: forum/templates/forum/post_detail.html:91
 #: forum/templates/forum/post_detail.html:91
 msgid "Update"
 msgstr "Mettre à jour"
@@ -58,6 +61,7 @@ msgstr "Mettre à jour"
 #: forum/templates/forum/comment_list.html:44
 #: forum/templates/forum/comment_list.html:74
 #: forum/templates/forum/post_confirm_delete.html:21
+#: forum/templates/forum/post_detail.html:94
 #: forum/templates/forum/post_detail.html:94
 #: forum/templates/forum/post_form_include.html:18
 msgid "Cancel"
@@ -85,7 +89,11 @@ msgstr "Supprimer la conversation"
 msgid ""
 "Are you sure you want to delete \"%(post)s\" and all associated replies and "
 "comments?"
+"Are you sure you want to delete \"%(post)s\" and all associated replies and "
+"comments?"
 msgstr ""
+"Êtes-vous sûr de vouloir supprimer \"%(post)s\" et toutes les réponses et "
+"commentaires associés ?"
 "Êtes-vous sûr de vouloir supprimer \"%(post)s\" et toutes les réponses et "
 "commentaires associés ?"
 
@@ -99,14 +107,17 @@ msgstr "Discussion"
 
 #: forum/templates/forum/post_detail.html:49
 #: forum/templates/forum/post_list.html:32
+#: forum/templates/forum/post_list.html:32
 #, python-format
 msgid "%(nreplies)s answers"
 msgstr "%(nreplies)s réponse(s)"
 
 #: forum/templates/forum/post_detail.html:52
+#: forum/templates/forum/post_detail.html:52
 msgid "No answer"
 msgstr "Pas de réponse"
 
+#: forum/templates/forum/post_detail.html:112
 #: forum/templates/forum/post_detail.html:112
 msgid "Your answer"
 msgstr "Ta réponse"
@@ -119,6 +130,7 @@ msgstr "Modifier le message"
 #: forum/templates/forum/post_form.html:8
 #: forum/templates/forum/post_form.html:16
 #: forum/templates/forum/post_list.html:10
+#: forum/templates/forum/post_list.html:10
 msgid "Create Post"
 msgstr "Créer une discussion"
 
@@ -128,9 +140,11 @@ msgstr "Soumettre"
 
 #: forum/templates/forum/post_list.html:3
 #: forum/templates/forum/post_list.html:8
+#: forum/templates/forum/post_list.html:8
 msgid "Latest Posts"
 msgstr "Dernières discussions"
 
+#: forum/views.py:152
 #: forum/views.py:152
 msgid "Can't delete the first message of a thread!"
 msgstr "Impossible de supprimer le premier message d'une discussion!"

@@ -60,24 +60,8 @@ class TestCreatePage(TestPage):
                 "This value must contain only letters, numbers, dots, "
                 "underscores, dashes, slashes or tildes."
             )])
-    self._test_create_page({
-        'url': f'{self.pages_prefix}/2nd-title/',
-        'title': '2nd title',
-        'content': '2nd content',
-      })
-    response = self.client.post(reverse("pages-edit:create"), {
-        'url': f'{self.pages_prefix}/2nd-title/3rd-title/',
-        'title': '3rd title',
-        'content': '3rd content',
-      }, follow=True)
 
-    self.print_response(response)
-    self.assertContains(response, f'''
-<ul class="errorlist"><li>
-      {_("A flatpage cannot be a subpage of another flatpage, check your URLs")}
-</li></ul>''', html=True)
-
-  def test_same_url(self):
+  def test_url_checks_with_other_pages(self):
     # first create one page
     self._test_create_page()
     # then try to create another one with the same url
@@ -86,10 +70,15 @@ class TestCreatePage(TestPage):
       'title': 'another title',
       'content': 'another content',
     }
-    response = self.client.post(reverse("pages-edit:create"), new_page_data, follow=True)
-    # self.print_response(response)
-    error_message = escape(_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']})
-    self.assertContains(response, f'<ul class="errorlist"><li>{error_message}</li></ul>', html=True)
+    form = PageForm(new_page_data)
+    self.assertFormError(form, 'url', [_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']}])
+    # now, try to create with "sub url"
+    form = PageForm({
+        'url': f'{self.page_data['url']}/3rd-title/',
+        'title': '3rd title',
+        'content': '3rd content',
+      })
+    self.assertFormError(form, 'url', [_("A flatpage cannot be a subpage of another flatpage, check your URLs")])
 
 
 class TestUpdatePage(TestPage):
@@ -122,10 +111,9 @@ class TestUpdatePage(TestPage):
 
     # Now try to update page 2 with the same url with the same URL as page1
     new_page_data['url'] = page1.url
-    response = self.client.post(reverse("pages-edit:update", args=[page2.url]), new_page_data, follow=True)
-    # self.print_response(response)
-    error_message = escape(_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']})
-    self.assertContains(response, f'<ul class="errorlist"><li>{error_message}</li></ul>', html=True)
+    new_page_data['id'] = page2.id
+    form = PageForm(new_page_data)
+    self.assertFormError(form, 'url', [_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']}])
 
 
 class TestDisplayPageList(TestPage):

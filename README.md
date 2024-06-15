@@ -58,6 +58,9 @@
 * Connected members can chat in live mode with other connected members
 * Cousins Matter manages as many chat rooms as requested
 
+# Pages
+Admins can create static HTML pages and publish them on the site. 
+
 ## Documentation
 * The documentation for installing, upgrading and running the application in on the wiki [Home](https://github.com/leolivier/cousins-matter/wiki) page.
 * The settings are documented on the wiki [Settings](https://github.com/leolivier/cousins-matter/wiki/settings) page.
@@ -65,6 +68,8 @@
 ## Coming soon
   * Help/faq/about
   * Classifieds from all members
+  * Event Planner (Cousinades)
   * Genealogy
+  * Polls
   * Color Themes
   * ...

@@ -74,6 +74,7 @@ INSTALLED_APPS = [
   'polls',
   'forum',
   'chat',
+  'pages',
   'crispy_forms',
   'crispy_bulma',
   'django_icons',
@@ -277,3 +278,5 @@ DEFAULT_MEMBERS_PAGE_SIZE = env.int('DEFAULT_MEMBERS_PAGE_SIZE', 25)
 DEFAULT_POSTS_PER_PAGE = env.int('DEFAULT_POSTS_PER_PAGE', 25)
 DEFAULT_CHATMESSAGES_PER_PAGE = env.int('DEFAULT_CHATMESSAGES_PER_PAGE', 25)
 DEFAULT_CHATROOMS_PER_PAGE = env.int('DEFAULT_CHATROOMS_PER_PAGE', 25)
+
+PAGES_URL_PREFIX = 'pages'

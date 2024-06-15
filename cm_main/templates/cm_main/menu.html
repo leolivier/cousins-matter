@@ -1,4 +1,4 @@
-{% load i18n flatpages static %}
+{% load i18n flatpages menupages_tags static %}
 <div class="navbar-brand">
 	<a class="navbar-item" href="/">
 		<img src="{% static 'cm_main/images/cousinades.png' %}" width="112" height="28">
@@ -13,6 +13,12 @@
 
 <div id="navMenu" class="navbar-menu">
 	<div class="navbar-start">
+		{% if user.is_superuser %}
+		<a class="navbar-item" href="{%url 'pages-edit:list'%}">
+			{%trans 'Edit Pages'%}
+		</a>
+		{%endif%}
+		{%get_menu_pages%}
 		<div class="navbar-item has-dropdown is-hoverable">
 			<a class="navbar-item" href="{% url 'members:members' %}">
 				<span class="is-hidden-mobile">{% translate "Members" %}</span>

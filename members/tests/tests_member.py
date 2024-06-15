@@ -99,6 +99,9 @@ class BaseMemberTestCase(SimpleTestCase):
     self.created_members = []
     return super().tearDown()
 
+  def print_response(self, response):
+    print(response.content.decode().replace('\\t', '\t').replace('\\n', '\n'))
+
   def next(self, from_url, to_url):
     return f"{from_url}?{urlencode({'next': to_url})}"
 

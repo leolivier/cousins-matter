@@ -72,8 +72,9 @@ class TestCreatePage(TestPage):
     form = PageForm(new_page_data)
     self.assertFormError(form, 'url', [_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']}])
     # now, try to create with "sub url"
+    url = self.page_data['url']
     form = PageForm({
-        'url': f'{self.page_data['url']}/3rd-title/',
+        'url': f'{url}/3rd-title/',
         'title': '3rd title',
         'content': '3rd content',
       })

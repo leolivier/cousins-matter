@@ -76,7 +76,8 @@ class RegistrationCheckingView(generic.CreateView):
       username = form.cleaned_data.get('username')
       messages.success(
           request,
-          _('Hello %(username)s, your account has been created! You will now receive an email to verify your email address. Click in the link inside the mail to finish the registration.') %  # noqa: E501
+          _('Hello %(username)s, your account has been created! You will now receive an email '
+            'to verify your email address. Click in the link inside the mail to finish the registration.') %
           {"username": username}
           )
       return redirect("members:login")

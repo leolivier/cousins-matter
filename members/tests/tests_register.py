@@ -144,7 +144,9 @@ class MemberRegisterTests(BaseMemberTestCase):
     response = self.client.post(invitation_url, user, follow=True)
     # print(response.content.decode().replace('\\n', '\n').replace('\\t', '\t'))
     self.assertContains(response,
-                        _('Hello %(username)s, your account has been created! You will now receive an email to verify your email address. Click in the link inside the mail to finish the registration.') %  # noqa E501
+                        _('Hello %(username)s, your account has been created! '
+                          'You will now receive an email to verify your email address. '
+                          'Click in the link inside the mail to finish the registration.') %
                         {"username": user['username']})
 
   def test_register_view_wrong_token(self):

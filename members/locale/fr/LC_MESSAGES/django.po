@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-14 22:13+0200\n"
+"POT-Creation-Date: 2024-06-15 19:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -505,13 +505,13 @@ msgstr "Détail d'un Membre"
 
 #: members/templates/members/member_detail.html:21
 #: members/templates/members/member_upsert.html:18
-#: members/tests/tests_member.py:363
+#: members/tests/tests_member.py:366
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/member_detail.html:23
 #: members/templates/members/member_upsert.html:20
-#: members/tests/tests_member.py:363
+#: members/tests/tests_member.py:366
 msgid "Managed member"
 msgstr "Membre géré"
 
@@ -810,7 +810,7 @@ msgid "Invite me"
 msgstr "M'inviter"
 
 #: members/templates/members/registration_request_email.html:8
-#: members/tests/tests_register.py:94 members/views/views_registration.py:174
+#: members/tests/tests_register.py:94 members/views/views_registration.py:175
 #, python-format
 msgid "Registration request for %(site_name)s"
 msgstr "Demande d'enregistrement pour %(site_name)s"
@@ -863,27 +863,27 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_member.py:338 members/tests/tests_member.py:343
+#: members/tests/tests_member.py:341 members/tests/tests_member.py:346
 #: members/views/views_member.py:128 members/views/views_member.py:142
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
 
-#: members/tests/tests_register.py:22 members/views/views_registration.py:127
+#: members/tests/tests_register.py:22 members/views/views_registration.py:128
 #, python-format
 msgid "Invitation sent to %(email)s."
 msgstr "Invitation envoyée à %(email)s."
 
-#: members/tests/tests_register.py:26 members/views/views_registration.py:123
+#: members/tests/tests_register.py:26 members/views/views_registration.py:124
 #, python-format
 msgid "You are invited to register on %(site_name)s"
 msgstr "Tu as été invité.e à créer ton compte sur %(site_name)s"
 
-#: members/tests/tests_register.py:89 members/views/views_registration.py:178
+#: members/tests/tests_register.py:89 members/views/views_registration.py:179
 msgid "Registration request sent."
 msgstr "Demande d'enregistrement envoyée."
 
-#: members/tests/tests_register.py:115 members/views/views_registration.py:108
-#: members/views/views_registration.py:154
+#: members/tests/tests_register.py:115 members/views/views_registration.py:109
+#: members/views/views_registration.py:155
 msgid "A member with this email already exists."
 msgstr "Un membre ayant cette adresse mail existe déjà."
 
@@ -902,11 +902,11 @@ msgstr ""
 "email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
 "terminer le processus de création de compte."
 
-#: members/tests/tests_register.py:156 members/views/views_registration.py:53
+#: members/tests/tests_register.py:158 members/views/views_registration.py:53
 msgid "Invalid link. Please contact the administrator."
 msgstr "Lien invalide. Merci de contacter l'administrateur."
 
-#: members/tests/tests_register.py:164
+#: members/tests/tests_register.py:166
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
@@ -1025,10 +1025,10 @@ msgstr ""
 "Tu es déjà enregistré mais pas encore actif. Contacte %(admin)s pour activer "
 "ton compte."
 
-#: members/views/views_registration.py:97
+#: members/views/views_registration.py:98
 msgid "Only staff users can send invitations."
 msgstr "Seuls les members du staff peuvent envoyer des invitations."
 
-#: members/views/views_registration.py:181
+#: members/views/views_registration.py:182
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossible d'envoyer un mail. Merci de contacter l'administrateur."

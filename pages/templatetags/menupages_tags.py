@@ -25,7 +25,7 @@ def loop_on_menupages(menu_pages, page_tree, level):
         raise ValueError("cant find %s" % upper_level)  # should have been put by previous level
     if item:
       if isinstance(tree_level, FlatPage):
-        raise ValidationError(_("A page cannot be a subpage of another page, check your URLs"))
+        raise ValidationError(_("A flatpage cannot be a subpage of another flatpage, check your URLs"))
       done = False
       if item not in tree_level:
         tree_level[item] = {}

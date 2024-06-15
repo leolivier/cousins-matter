@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-14 22:13+0200\n"
+"POT-Creation-Date: 2024-06-15 19:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,44 +17,57 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
 #: pages/apps.py:8 pages/templates/pages/pages_list.html:3
 #: pages/templates/pages/pages_list.html:8
 msgid "Pages"
 msgstr "Pages"
 
-#: pages/forms.py:13
+#: pages/forms.py:15
 msgid "URL"
 msgstr "URL"
 
-#: pages/forms.py:17
+#: pages/forms.py:19
 #, python-brace-format
 msgid ""
 "Example: “{pages_prefix}about/contact/”. Make sure to have leading "
 "{pages_prefix} and trailing slash."
 msgstr ""
-"Exemple : \"{pages_prefix}about/contact/\". Veillez à ce que l'URL commence par "
-"{pages_prefix} et se termine par une barre oblique."
-#: pages/forms.py:22
+"Exemple : \"{pages_prefix}about/contact/\". Veillez à ce que l'URL commence "
+"par {pages_prefix} et se termine par une barre oblique."
+
+#: pages/forms.py:24 pages/tests.py:60
 msgid ""
 "This value must contain only letters, numbers, dots, underscores, dashes, "
 "slashes or tildes."
 msgstr ""
-"Cette valeur ne doit contenir que des lettres, des chiffres, des points, "
-"des traits de soulignement, des tirets, des barres obliques ou tildes"
+"Cette valeur ne doit contenir que des lettres, des chiffres, des points, des "
+"traits de soulignement, des tirets, des barres obliques ou tildes"
 
-#: pages/forms.py:44
+#: pages/forms.py:46
 #, python-brace-format
 msgid "URLs MUST start with {pages_prefix}"
 msgstr "Les URL DOIVENT commencer par {pages_prefix}."
 
-#: pages/forms.py:48
+#: pages/forms.py:50 pages/tests.py:53
 msgid "URL is missing a trailing slash."
 msgstr "Il manque une barre oblique à la fin de l'URL."
 
-#: pages/forms.py:59
+#: pages/forms.py:54
+#, python-brace-format
+msgid "URLs cannot be only {pages_prefix}, please add some path behind"
+msgstr ""
+
+#: pages/forms.py:67 pages/tests.py:91 pages/tests.py:127
 #, python-format
 msgid "Flatpage with url %(url)s already exists"
 msgstr "Une page avec l'url %(url)s existe déjà"
+
+#: pages/forms.py:72 pages/templatetags/menupages_tags.py:28
+msgid "A flatpage cannot be a subpage of another flatpage, check your URLs"
+msgstr ""
+"Une flatpage ne peut pas être une sous-page d'une autre flatpage, vérifie "
+"tes URL."
 
 #: pages/templates/pages/page_form.html:3
 #: pages/templates/pages/page_form.html:7
@@ -69,6 +82,14 @@ msgstr "Mettre la page à jour"
 msgid "Create Page"
 msgstr "Créer une Page"
 
-#: pages/templatetags/menupages_tags.py:41
-msgid "A page cannot be a subpage of another page, check your URLs"
-msgstr "Une page ne peut pas être une sous-page d'une autre page, vérifiez vos URL."
+#: pages/tests.py:50
+#, python-brace-format
+msgid "URLs MUST start with {self.pages_prefix}"
+msgstr "Les URL DOIVENT commencer par {self.pages_prefix}."
+
+#: pages/tests.py:56
+#, python-brace-format
+msgid "URLs cannot be only {self.pages_prefix}, please add some path behind"
+msgstr ""
+"Les URL ne peuvent pas être uniquement {self.pages_prefix}, merci d'ajouter "
+"un chemin d'accès derrière."

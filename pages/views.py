@@ -24,7 +24,10 @@ class PageCreateView(LoginRequiredMixin, generic.CreateView):
       return redirect(page.url)
 
     for field, error in form.errors.items():
-      messages.error(request, f'{field}:{error}')
+      if field == '__all__':
+        messages.error(request, error)
+      else:
+        messages.error(request, f'{field}:{error}')
     return redirect_to_referer(request)
 
 

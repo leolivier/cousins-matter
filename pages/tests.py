@@ -1,4 +1,3 @@
-from django.utils.html import escape
 from django.conf import settings
 from django.urls import reverse
 from members.tests.tests_member import MemberTestCase

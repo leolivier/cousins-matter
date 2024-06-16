@@ -1,24 +1,13 @@
-{% load i18n static cm_tags %}
+{% load cm_tags menupages_tags %}
 <div class="container">
-  <div class="media">
-    <figure class="media-left">
-      <p class="image home-logo">
-				<img src="{{home_logo}}">
-      </p>
-    </figure>
-    <div class="media-content">
-			<h1 class="title">{{home_title}}</h1>
-			<div class="content">
-				{% autoescape off %}
-				{% if home_content == "" %}
-					{% translate "No home content yet, please provide values in .env for variables HOME_CONTENT_UNSIGNED and HOME_CONTENT_SIGNED." %}
-				{% else %}
-					{{home_content}}
-				{% endif %}
-				{% endautoescape %}
-			</div>
-    </div>
-  </div>
-	{% if user.is_authenticated %}
-	{% cm_tags "members:include_birthdays" %}
-	{% endif %}
+	{%with page_prefix="/pages/"|add:settings.LANGUAGE_CODE|add:"/home/"%}
+	{%if user.is_authenticated%}
+		{%include_page page_prefix|add:"authenticated/"%}
+		{% if settings.INCLUDE_BIRTHDAYS_IN_HOMEPAGE%}
+			{% get_view "members:include_birthdays" %}
+		{% endif %}
+	{%else%}
+		{%include_page page_prefix|add:"unauthenticated/"%}
+	{%endif%}
+	{%endwith%}
+</div>

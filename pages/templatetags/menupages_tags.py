@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.template import Library
 from django.contrib.flatpages.models import FlatPage
 from django.conf import settings
@@ -57,3 +58,10 @@ def get_menu_pages():
 @register.inclusion_tag("pages/menu_pages_level.html")
 def menu_level(level, sublevels):
   return {'level': level, 'sublevels': sublevels}
+
+
+@register.inclusion_tag("pages/include_page.html")
+def include_page(url):
+  # print("including page", url)
+  page = get_object_or_404(FlatPage, url=url)
+  return {'content': page.content}

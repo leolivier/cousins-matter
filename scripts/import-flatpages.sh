@@ -1,6 +1,6 @@
 #!/bin/bash
 
-templates=$(find cm_main/templates/flatpages/ -type f -name '*.html' ! -name default.html)
+templates=$(find pages/templates/predefined/ -type f -name '*.html' ! -name default.html)
 for template in $templates
 do
 	title=$(grep '<h1' $template |sed -e 's@^\s*<h1[^>]*>@@;s@</h1>\s*$@@;' | sed -e "s/'/\&quot;/g")

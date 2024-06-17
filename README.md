@@ -58,8 +58,9 @@
 * Connected members can chat in live mode with other connected members
 * Cousins Matter manages as many chat rooms as requested
 
-# Pages
-Admins can create static HTML pages and publish them on the site. 
+# Pages / CMS
+Basic CMS features: admins can create static HTML pages and publish them on the site. 
+The home page can also be configured this way. 
 
 ## Documentation
 * The documentation for installing, upgrading and running the application in on the wiki [Home](https://github.com/leolivier/cousins-matter/wiki) page.

@@ -4,6 +4,7 @@ from django.urls import reverse
 from members.tests.tests_member import MemberTestCase
 from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import gettext as _, override as lang_override
+from members.tests.tests_birthdays import TestBirthdaysMixin
 from .forms import PageForm
 
 
@@ -234,26 +235,27 @@ class TestHomePageMixin(TestPageMixin):
         return response
 
 
-class TestAuthenticatedHomePage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
-  def no_birthdays(self, lang):
-    with lang_override(lang):
-      return f'''
-  <div>
-    <p>{_("No birthdays in next %(ndays)s days") % {'ndays': settings.BIRTHDAY_DAYS}}.</p>
-  </div>
-  '''
+class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageTestCase, MemberTestCase):
 
   @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=False)
   def test_home_page_without_birthdays(self):
     for lang in ['fr-FR', 'en-US']:
       response = self.check_home_page(lang, "authenticated")
-      self.assertNotContains(response, _(self.no_birthdays(lang)), html=True)
+      with lang_override(lang):
+        if (self.member and self.member.birthdate):
+          self.check_birthday_today(self.member, response, reversed=True)
+        else:
+          self.check_no_birthdays(response, reversed=True)
 
   @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=True)
   def test_home_page_with_birthdays(self):
     for lang in ['fr-FR', 'en-US']:
       response = self.check_home_page(lang, "authenticated")
-      self.assertContains(response, _(self.no_birthdays(lang)), html=True)
+      with lang_override(lang):
+        if (self.member and self.member.birthdate):
+          self.check_birthday_today(self.member, response)
+        else:
+          self.check_no_birthdays(response)
 
 
 class TestUnAuthenticatedHomePage(TestHomePageMixin, BasePageTestCase, TestCase):

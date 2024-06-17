@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from django.template import Library
 from django.contrib.flatpages.models import FlatPage
 from django.conf import settings
@@ -62,6 +61,7 @@ def menu_level(level, sublevels):
 
 @register.inclusion_tag("pages/include_page.html")
 def include_page(url):
-  # print("including page", url)
-  page = get_object_or_404(FlatPage, url=url)
-  return {'content': page.content}
+  # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
+  page = FlatPage.objects.filter(url=url).first()
+  return {'content': page.content if page is not None else _(f"Cannot load page from url {url}, it was not found in the "
+                                                             "database. Please contact the administrator of the site")}

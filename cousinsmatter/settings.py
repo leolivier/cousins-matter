@@ -41,10 +41,8 @@ LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-us')
 
 TIME_ZONE = env.str('TIME_ZONE', default='Europe/Paris')
 
-HOME_TITLE = env.str('HOME_TITLE', default='Cousins Matter!')
-HOME_CONTENT_UNSIGNED = env.str('HOME_CONTENT_UNSIGNED', multiline=True, default="")
-HOME_CONTENT_SIGNED = env.str('HOME_CONTENT_SIGNED', multiline=True, default="")
-HOME_LOGO = env.url('HOME_LOGO', default='/static/cm_main/images/cousinsmatter.jpg')
+INCLUDE_BIRTHDAYS_IN_HOMEPAGE = env.bool('INCLUDE_BIRTHDAYS_IN_HOMEPAGE', True)
+
 SITE_COPYRIGHT = env.str('SITE_COPYRIGHT', default=None)
 SITE_FOOTER = env.str('SITE_FOOTER', default=None)
 # Email properties

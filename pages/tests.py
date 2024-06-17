@@ -1,12 +1,13 @@
 from django.conf import settings
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from members.tests.tests_member import MemberTestCase
 from django.contrib.flatpages.models import FlatPage
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, override as lang_override
 from .forms import PageForm
 
 
-class TestPage(MemberTestCase):
+class BasePageTestCase():
   pages_prefix = f'/{settings.PAGES_URL_PREFIX}/'
 
   def setUp(self):
@@ -21,6 +22,8 @@ class TestPage(MemberTestCase):
     FlatPage.objects.all().delete()
     super().tearDown()
 
+
+class TestPageMixin():
   def _test_create_page(self, page_data=None, prresp=False):
     if page_data is None:
       page_data = self.page_data
@@ -35,7 +38,7 @@ class TestPage(MemberTestCase):
     return page
 
 
-class TestCreatePage(TestPage):
+class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_create_page(self):
     response = self.client.get(reverse("pages-edit:create"))
     self.assertTemplateUsed(response, "pages/page_form.html")
@@ -81,7 +84,7 @@ class TestCreatePage(TestPage):
     self.assertFormError(form, 'url', [_("A flatpage cannot be a subpage of another flatpage, check your URLs")])
 
 
-class TestUpdatePage(TestPage):
+class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_update_page(self):
     # first create it
     page = self._test_create_page()
@@ -116,7 +119,7 @@ class TestUpdatePage(TestPage):
     self.assertFormError(form, 'url', [_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']}])
 
 
-class TestDisplayPageList(TestPage):
+class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_display_page(self):
     # first create 2 pages with different urls
     page1 = self._test_create_page()
@@ -142,7 +145,7 @@ class TestDisplayPageList(TestPage):
   </div>''', html=True)
 
 
-class TestDisplayPageMenu(TestPage):
+class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_display_page_menu(self):
     page_list_data = [
       {
@@ -162,7 +165,8 @@ class TestDisplayPageMenu(TestPage):
       }
     ]
     pages = [self._test_create_page(page_data) for page_data in page_list_data]
-    response = self.client.get(reverse('cm_main:Home'))
+    response = self.client.get(reverse('pages-edit:list'), follow=True)
+    self.assertEqual(response.status_code, 200)
     self.assertContains(response, f'''
 <a class="navbar-item" href="{pages[0].url}">
   <span class="icon is-large"><i class="mdi mdi-24px mdi-page-next-outline"></i></span>
@@ -187,17 +191,73 @@ class TestDisplayPageMenu(TestPage):
 </div>''', html=True)
 
   def test_display_bad_page_menu(self):
-    bad_page_list_data = [
-      {
+    bad_page_data = {
         'url': f'{self.pages_prefix}1rst-title/',  # doesn't start with /pages/publish=>won't appear in the navbar
         'title': 'first title',
         'content': 'first content',
-      },
-    ]
-    pages = [self._test_create_page(page_data) for page_data in bad_page_list_data]
-    response = self.client.get(reverse('cm_main:Home'))
+      }
+
+    bad_page = self._test_create_page(bad_page_data)
+    response = self.client.get(reverse('pages-edit:list'), follow=True)
+    # print("response", response)
+    self.assertEqual(response.status_code, 200)
     self.assertNotContains(response, f'''
-<a class="navbar-item" href="{pages[0].url}">
+<a class="navbar-item" href="{bad_page.url}">
   <span class="icon is-large"><i class="mdi mdi-24px mdi-page-next-outline"></i></span>
-  {pages[0].title}
+  {bad_page.title}
 </a>''', html=True)
+
+
+class TestHomePageMixin(TestPageMixin):
+  def setUp(self):
+    super().setUp()
+    # create home pages in the database
+    base_content = "<p class='content'>a wonderful content for an home page with an image: <img src='/data/my-image.png'></p>"
+    self.home_pages = {}
+    for lang in ['fr-FR', 'en-US']:
+      self.home_pages[lang] = {}
+      for kind in ['authenticated', 'unauthenticated']:
+        content = f'{base_content} <p>language code={lang} and auth={kind}</p>'
+        self.home_pages[lang][kind] = FlatPage.objects.create(
+          url=f'/pages/{lang}/home/{kind}/',
+          title='a home page',
+          content=content
+        )
+
+  def check_home_page(self, lang, auth):
+    with lang_override(lang):
+      with override_settings(LANGUAGE_CODE=lang):
+        response = self.client.get(reverse('cm_main:Home'), follow=True)
+        # print(response.content.decode().replace('\\t', '\t').replace('\\n', '\n'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.home_pages[lang][auth].content, html=True)
+        return response
+
+
+class TestAuthenticatedHomePage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
+  def no_birthdays(self, lang):
+    with lang_override(lang):
+      return f'''
+  <div>
+    <p>{_("No birthdays in next %(ndays)s days") % {'ndays': settings.BIRTHDAY_DAYS}}.</p>
+  </div>
+  '''
+
+  @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=False)
+  def test_home_page_without_birthdays(self):
+    for lang in ['fr-FR', 'en-US']:
+      response = self.check_home_page(lang, "authenticated")
+      self.assertNotContains(response, _(self.no_birthdays(lang)), html=True)
+
+  @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=True)
+  def test_home_page_with_birthdays(self):
+    for lang in ['fr-FR', 'en-US']:
+      response = self.check_home_page(lang, "authenticated")
+      self.assertContains(response, _(self.no_birthdays(lang)), html=True)
+
+
+class TestUnAuthenticatedHomePage(TestHomePageMixin, BasePageTestCase, TestCase):
+
+  def test_unauthenticated_home_page(self):
+    for lang in ['fr-FR', 'en-US']:
+      self.check_home_page(lang, "unauthenticated")

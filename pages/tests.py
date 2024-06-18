@@ -1,6 +1,8 @@
+from datetime import date, timedelta
 from django.conf import settings
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from members.models import Member
 from members.tests.tests_member import MemberTestCase
 from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import gettext as _, override as lang_override
@@ -236,26 +238,46 @@ class TestHomePageMixin(TestPageMixin):
 
 
 class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageTestCase, MemberTestCase):
+  def check_if_birthdays(self, response, reversed=False):
+    today = date.today()
+    tomorrow = today + timedelta(days=1)
+    members = Member.objects.filter(birthdate__isnull=False)
+    # print(f"\nchecking birthdays with include={settings.INCLUDE_BIRTHDAYS_IN_HOMEPAGE} "
+    #       f"reversed={reversed} and lang={settings.LANGUAGE_CODE} "
+    #       "for response:")
+    # self.print_response(response)
+    if members.count() > 0:
+      for member in members:
+        next_birthday = member.next_birthday()
+        # print("checking member", member.get_full_name(), "next birthday", next_birthday, end=' ')
+        if next_birthday == date.today():
+          # print(f"should {'not' if reversed else ''} be today")
+          self.check_birthday_today(member, response, reversed)
+        elif next_birthday == tomorrow:
+          # print(f"should {'not' if reversed else ''} be tomorrow")
+          self.check_birthdays_tomorrow(member, response, reversed)
+        elif next_birthday < today + timedelta(days=settings.BIRTHDAY_DAYS):
+          # print(f"should {'not' if reversed else ''} be after tomorrow")
+          self.check_birthdays_after_tomorrow(member, response, reversed)
+        else:
+          # print("should never be printed (too late)")
+          pass
+    else:
+      self.check_no_birthdays(response, reversed)
 
   @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=False)
   def test_home_page_without_birthdays(self):
     for lang in ['fr-FR', 'en-US']:
-      response = self.check_home_page(lang, "authenticated")
       with lang_override(lang):
-        if (self.member and self.member.birthdate):
-          self.check_birthday_today(self.member, response, reversed=True)
-        else:
-          self.check_no_birthdays(response, reversed=True)
+        response = self.check_home_page(lang, "authenticated")
+        self.check_if_birthdays(response, reversed=True)
 
   @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=True)
   def test_home_page_with_birthdays(self):
     for lang in ['fr-FR', 'en-US']:
-      response = self.check_home_page(lang, "authenticated")
       with lang_override(lang):
-        if (self.member and self.member.birthdate):
-          self.check_birthday_today(self.member, response)
-        else:
-          self.check_no_birthdays(response)
+        response = self.check_home_page(lang, "authenticated")
+        self.check_if_birthdays(response)
 
 
 class TestUnAuthenticatedHomePage(TestHomePageMixin, BasePageTestCase, TestCase):

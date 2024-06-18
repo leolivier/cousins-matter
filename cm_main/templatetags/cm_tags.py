@@ -58,8 +58,8 @@ class ViewNode(Node):
         return None
 
 
-@register.tag(name='cm_tags')
-def do_view(parser, token):
+@register.tag(name='get_view')
+def get_view(parser, token):
     args, kwargs, tokens = [], {}, token.split_contents()
     if len(tokens) < 2:
         raise TemplateSyntaxError(

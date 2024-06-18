@@ -1,4 +1,3 @@
-from typing import Any
 import logging
 import os
 import mimetypes
@@ -8,7 +7,6 @@ import zipfile
 from django.views import generic
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from urllib.parse import urlunparse
 from wsgiref.util import FileWrapper
 from django.http import StreamingHttpResponse, Http404
 from django.utils.translation import gettext as _
@@ -18,13 +16,6 @@ logger = logging.getLogger(__name__)
 
 class HomeView(generic.TemplateView):
   template_name = "cm_main/base.html"
-
-  def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-    return {
-      "home_title": settings.HOME_TITLE,
-      "home_content": settings.HOME_CONTENT_SIGNED if self.request.user.is_authenticated else settings.HOME_CONTENT_UNSIGNED,
-      "home_logo": urlunparse(settings.HOME_LOGO),
-    }
 
 
 @login_required

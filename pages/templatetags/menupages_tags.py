@@ -57,3 +57,11 @@ def get_menu_pages():
 @register.inclusion_tag("pages/menu_pages_level.html")
 def menu_level(level, sublevels):
   return {'level': level, 'sublevels': sublevels}
+
+
+@register.inclusion_tag("pages/include_page.html")
+def include_page(url):
+  # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
+  page = FlatPage.objects.filter(url=url).first()
+  return {'content': page.content if page is not None else _(f"Cannot load page from url {url}, it was not found in the "
+                                                             "database. Please contact the administrator of the site")}

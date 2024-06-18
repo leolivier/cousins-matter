@@ -112,7 +112,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
         img = ImageOps.exif_transpose(img)  # avoid image rotating
         img.save(membuffer, format='JPEG', quality=90)  # save the img in mem buffer
         exifdata = img.getexif()  # get exif data for the image date
-        
+
       # reset buffer to beginning
       membuffer.seek(0)
       size = sys.getsizeof(membuffer)

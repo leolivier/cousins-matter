@@ -22,7 +22,7 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
   model = Photo
 
   def get(self, request, **kwargs):
-    """This method can be called either with a photo id, or with a gallery id and a photo number in the gallery 
+    """This method can be called either with a photo id, or with a gallery id and a photo number in the gallery
     (if photo num not given, it takes the first one)"""
     if 'pk' not in kwargs:
       # if we don't have the pk in args, let's find the proper photo based on the photo_num in the gallery

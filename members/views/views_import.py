@@ -2,7 +2,6 @@ import logging
 import csv
 import random
 import os
-import math
 import io
 import string
 from django.core.files import File
@@ -38,7 +37,7 @@ def check_fields(fieldnames):
   for fieldname in MANDATORY_MEMBER_FIELD_NAMES.values():
     if fieldname not in fieldnames:
       raise ValidationError(_('Missing column in CSV file: "%(fieldname)s". Mandatory fields are %(all_names)s') %
-                            {'fieldname': fieldname, 
+                            {'fieldname': fieldname,
                              'all_names': ', '.join([str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()])})
 
   return True
@@ -59,7 +58,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 
   def _create_member(self, row, activate_users):
     """create new member based on row content.
-       returns created member and errors if any 
+       returns created member and errors if any
     """
     member = Member()
     error = None
@@ -95,7 +94,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 
   def _manage_family(self, member, family_name):
     member.family = Family.objects.get_or_create(name=family_name, parent=None)
-       
+
   def _update_member(self, member, row, activate_users):
     "update an existing memebr based on row content"
     changed = False

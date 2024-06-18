@@ -5,7 +5,6 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from urllib.parse import unquote
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from .models import ChatMessage, ChatRoom
 from members.models import Member
 

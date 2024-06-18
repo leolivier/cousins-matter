@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-15 19:10+0200\n"
+"POT-Creation-Date: 2024-06-18 20:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -288,7 +288,6 @@ msgstr "Annuler"
 
 #: members/templates/members/birthdays.html:3
 #: members/templates/members/members.html:11
-#: members/templates/members/members.html:11
 msgid "Birthdays"
 msgstr "Anniversaires"
 
@@ -298,19 +297,19 @@ msgid "Birthdays in the next %(ndays)s days"
 msgstr "Anniversaires dans les %(ndays)s prochains jours"
 
 #: members/templates/members/birthdays_include.html:15
-#: members/tests/tests_birthdays.py:45
+#: members/tests/tests_birthdays.py:31
 #, python-format
 msgid "turns %(age)s today, happy birthday!"
 msgstr "a %(age)s ans aujourd'hui, joyeux anniversaire!"
 
 #: members/templates/members/birthdays_include.html:17
-#: members/tests/tests_birthdays.py:56
+#: members/tests/tests_birthdays.py:43
 #, python-format
 msgid "will turn %(age)s tomorrow, happy birthday!"
 msgstr "aura %(age)s ans demain, joyeux anniversaire!"
 
 #: members/templates/members/birthdays_include.html:20
-#: members/tests/tests_birthdays.py:68
+#: members/tests/tests_birthdays.py:56
 #, python-format
 msgid "will turn %(age)s on %(birthday)s"
 msgstr "aura %(age)s ans %(birthday)s"
@@ -343,7 +342,6 @@ msgstr "Vérifier l'adresse e-mail"
 
 #: members/templates/members/email_verification_msg.html:20
 msgid "Member Activation"
-msgstr "Activation d'un Membre"
 msgstr "Activation d'un Membre"
 
 #: members/templates/members/email_verification_msg.html:24
@@ -515,15 +513,16 @@ msgid ""
 "Are you sure you want to delete your account and all associated data? This "
 "is irrecoverable!"
 msgstr ""
-"Êtes-vous sûr de vouloir supprimer votre compte et toutes les données qui y sont associées ? "
-"C'est irrécupérable !"
+"Êtes-vous sûr de vouloir supprimer votre compte et toutes les données qui y "
+"sont associées ? C'est irrécupérable !"
 
 #: members/templates/members/member_confirm_delete.html:19
 #, python-format
 msgid ""
 "Are you sure you want to delete %(name)s's account and all associated data?"
 msgstr ""
-"Êtes-vous sûr de vouloir supprimer le compte de %(name)s et toutes les données associées ?"
+"Êtes-vous sûr de vouloir supprimer le compte de %(name)s et toutes les "
+"données associées ?"
 
 #: members/templates/members/member_confirm_delete.html:28
 #, python-format
@@ -538,7 +537,8 @@ msgstr ""
 msgid ""
 "Required. The account won't be deleted if the correct name is not entered."
 msgstr ""
-"Obligatoire. Le compte ne sera pas supprimé si le nom correct n'est pas saisi."
+"Obligatoire. Le compte ne sera pas supprimé si le nom correct n'est pas "
+"saisi."
 
 #: members/templates/members/member_confirm_delete.html:41
 msgid "Confirm"
@@ -549,14 +549,14 @@ msgid "Member Detail"
 msgstr "Détail d'un Membre"
 
 #: members/templates/members/member_detail.html:21
-#: members/templates/members/member_upsert.html:18
-#: members/tests/tests_member.py:366
+#: members/templates/members/member_upsert.html:20
+#: members/tests/tests_member.py:365
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/member_detail.html:23
-#: members/templates/members/member_upsert.html:20
-#: members/tests/tests_member.py:366
+#: members/templates/members/member_upsert.html:22
+#: members/tests/tests_member.py:365
 msgid "Managed member"
 msgstr "Membre géré"
 
@@ -650,15 +650,27 @@ msgid "Members List"
 msgstr "Liste des Membres"
 
 #: members/templates/members/members.html:15
-#: members/templates/members/members.html:15
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: members/templates/members/members.html:19 members/views/views_member.py:96
+#: members/templates/members/members.html:19 members/views/views_member.py:109
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: members/templates/members/members.html:43
+#: members/templates/members/members.html:25
+#: members/templates/members/members.html:36
+msgid "Filter Members"
+msgstr "Filtrer les Membres"
+
+#: members/templates/members/members.html:28
+msgid "first name"
+msgstr "prénom"
+
+#: members/templates/members/members.html:32
+msgid "last name"
+msgstr "nom"
+
+#: members/templates/members/members.html:63
 #: members/templates/members/members_directory.html:43
 msgid "No members found"
 msgstr "Pas de membre trouvé"
@@ -913,8 +925,12 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_member.py:341 members/tests/tests_member.py:346
-#: members/views/views_member.py:128 members/views/views_member.py:142
+#: members/tests/tests_member.py:220 members/views/views_member.py:191
+msgid "Member deleted"
+msgstr "Membre supprimé"
+
+#: members/tests/tests_member.py:340 members/tests/tests_member.py:345
+#: members/views/views_member.py:141 members/views/views_member.py:155
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
 
@@ -987,7 +1003,7 @@ msgstr "Dossier %(site_name)s"
 msgid "Page %(doc_page)s - %(title)s"
 msgstr "Page %(doc_page)s - %(title)s"
 
-#: members/views/views_import.py:36
+#: members/views/views_import.py:35
 #, python-format
 msgid ""
 "Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
@@ -995,7 +1011,7 @@ msgstr ""
 "Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
 "sont %(all_names)s"
 
-#: members/views/views_import.py:40
+#: members/views/views_import.py:39
 #, python-format
 msgid ""
 "Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
@@ -1004,14 +1020,14 @@ msgstr ""
 "Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
 "obligatoires sont %(all_names)s"
 
-#: members/views/views_import.py:88
+#: members/views/views_import.py:87
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar introuvable : %(avatar)s pour le nom d'utilisateur %(username)s. "
 "Ignoré..."
 
-#: members/views/views_import.py:188
+#: members/views/views_import.py:187
 #, python-format
 msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
@@ -1020,39 +1036,38 @@ msgstr ""
 "Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres "
 "créés ou mis à jour"
 
-#: members/views/views_import.py:191
+#: members/views/views_import.py:190
 #, python-format
 msgid "Warning: %(error)s"
 msgstr "Attention: %(error)s"
 
 #: members/views/views_member.py:34
-#: members/views/views_member.py:34
 msgid "You have been logged out"
 msgstr "Tu as été déconnecté(e)"
 
-#: members/views/views_member.py:108
+#: members/views/views_member.py:121
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: members/views/views_member.py:116
+#: members/views/views_member.py:129
 msgid "Update Member Details"
 msgstr "Modifier les détails d'un Membre"
 
-#: members/views/views_member.py:117
+#: members/views/views_member.py:130
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
-#: members/views/views_member.py:152
+#: members/views/views_member.py:165
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Un courriel de vérification a été envoyé pour valider ta nouvelle adresse "
 "électronique."
 
-#: members/views/views_member.py:165
+#: members/views/views_member.py:178
 msgid "My Profile"
 msgstr "Mon Profil"
 
-#: members/views/views_member.py:166
+#: members/views/views_member.py:179
 msgid "Profile successfully updated"
 msgstr "Profil mis à jour avec succès"
 

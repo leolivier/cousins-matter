@@ -107,7 +107,7 @@ class HtmlValidatorMiddleware:
             return response
         # run html-validate as a subprocess connected to stdin and stdout pipes
         config_file = os.path.join(os.path.dirname(__file__), '.htmlvalidate.json')
-        with subprocess.Popen(['html-validate', '--stdin', '-c', config_file, '--max-warnings', 10], 
+        with subprocess.Popen(['html-validate', '--stdin', '-c', config_file, '--max-warnings', 10],
                               stdin=subprocess.PIPE, stdout=subprocess.PIPE) as validator:
             # write response content to validator input
             validator.stdin.write(response.content)

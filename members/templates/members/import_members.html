@@ -30,7 +30,7 @@
 	<form method="post" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form | crispy}}
-		<button type="submit" class="button is-primary" name="create">{%translate "Import" %}</button>
+		<button type="submit" class="button is-primary upload-button" name="create">{%translate "Import" %}</button>
 	</form>
 </div>
 {% endblock %}

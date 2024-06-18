@@ -1,18 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Functions to open and close a modal
-  function openModal($el) {
-    $el.classList.add('is-active');
-  }
+$(document).ready(() => {
+  // alias is-error to is-danger
+  $('.is-error').addClass('is-danger');
 
-  function closeModal($el) {
-    $el.classList.remove('is-active');
-  }
-
-  function closeAllModals() {
-    (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-      closeModal($modal);
-    });
-  }
+  // add is-loading class on upload buttons when they are triggered
+  $('.upload-button').on('click', (el) => { 
+    // $(this).addClass('is-loading');  this does not work :(
+    el.currentTarget.classList.add("is-loading");
+  });
 
   // Add a click event on buttons to open a specific modal
   (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
@@ -33,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeModal($target);
       });
     }
-});
+  });
 
   // Add a keyboard event to close all modals
   document.addEventListener('keydown', (event) => {
@@ -43,6 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+// Functions to open and close a modal
+function openModal($el) {
+  $el.classList.add('is-active');
+}
+
+function closeModal($el) {
+  $el.classList.remove('is-active');
+}
+
+function closeAllModals() {
+  (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+    closeModal($modal);
+  });
+}
 
 // function to set a form to make an AJAX call
 function ajax_form_action(id, action, on_success, on_error=on_ajax_error) {
@@ -116,10 +125,6 @@ function on_ajax_error(response) {
   } else console.log(response)
 }
 
-// alias is-error to is-danger
-$(document).ready(function() {
-  $('.is-error').addClass('is-danger');
-});
 
 // function to add an ajax checker to a field
 // if response[response_field] is true, then error triggered

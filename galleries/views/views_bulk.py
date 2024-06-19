@@ -13,11 +13,14 @@ from datetime import datetime
 from io import BytesIO
 from django.forms import ValidationError
 from django.http import HttpRequest, HttpResponse
-from django.urls import reverse_lazy
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
+
+from cousinsmatter.utils import redirect_to_referer
 
 from ..models import Gallery, Photo
 from ..forms import BulkUploadPhotosForm
@@ -174,6 +177,9 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
                   # print an error but continue with next photo
                   error_msg = _(f"Unable to import photo '{path}', it was ignored")
                   messages.error(request, f'''{error_msg}: {oserror.strerror}''')
+                except ValidationError as verr:
+                  for err in verr.messages:
+                    messages.error(request, err)
             else:
               pass  # unknown file type, don't care
 
@@ -184,7 +190,13 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
           self._handle_zip(request)
           messages.success(request,
                            _(f"Zip file uploaded: {len(self.galleries)} galleries and {self.nbPhotos} photos created"))
+          return redirect(reverse("galleries:galleries"))
+        except ValidationError as e:
+          for err in e.messages:
+            messages.error(request, err)
+          return redirect_to_referer(request)
         except Exception as e:
           messages.error(request, e.__str__())
-          raise
-      return super().post(request, *args, **kwargs)
+          return redirect_to_referer(request)
+      else:
+        return render(request, self.template_name, {'form': form})

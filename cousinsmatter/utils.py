@@ -24,7 +24,8 @@ def check_file_size(file, limit):
     if file.size > limit:
         limitmb = math.floor(limit*100/(1024*1024))/100
         sizemb = math.floor(file.size*100/(1024*1024))/100
-        raise ValidationError(_(f"Uploaded file is too big ({sizemb}MB), maximum is {limitmb}MB."))
+        filename = file.name
+        raise ValidationError(_(f"Uploaded file {filename} is too big ({sizemb}MB), maximum is {limitmb}MB."))
 
 
 class Paginator(paginator.Paginator):

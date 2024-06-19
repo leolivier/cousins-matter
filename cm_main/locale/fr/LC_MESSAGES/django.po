@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-14 22:13+0200\n"
+"POT-Creation-Date: 2024-06-18 20:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -33,15 +33,6 @@ msgstr "Ce site est fièrement propulsé par"
 #: cm_main/templates/cm_main/base.html:57
 msgid "The source code is licensed"
 msgstr "Le code source est sous licence"
-
-#: cm_main/templates/cm_main/home.html:14
-msgid ""
-"No home content yet, please provide values in .env for variables "
-"HOME_CONTENT_UNSIGNED and HOME_CONTENT_SIGNED."
-msgstr ""
-"Aucun contenu n'est défini pour la page d'accueil, merci de fournir les "
-"valeurs dans le fichier.env pour les variables HOME_CONTENT_UNSIGNED et "
-"HOME_CONTENT_SIGNED."
 
 #: cm_main/templates/cm_main/menu.html:18
 msgid "Edit Pages"
@@ -137,6 +128,6 @@ msgstr "Items par page"
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 
-#: cm_main/views.py:34
+#: cm_main/views.py:25
 msgid "Media not found"
 msgstr "Média non trouvé"

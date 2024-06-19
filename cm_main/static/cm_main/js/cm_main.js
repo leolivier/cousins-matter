@@ -1,11 +1,15 @@
-$(document).ready(() => {
+$(document).ready(function() {
   // alias is-error to is-danger
   $('.is-error').addClass('is-danger');
 
   // add is-loading class on upload buttons when they are triggered
-  $('.upload-button').on('click', (el) => { 
-    // $(this).addClass('is-loading');  this does not work :(
-    el.currentTarget.classList.add("is-loading");
+  $('.upload-button').on('click', function(el) { 
+    $(this).addClass('is-loading'); 
+  });
+
+  // close notification box on delete
+  $('.notification .delete').on('click', function(el) {
+    $(this).parent().remove()
   });
 
   // Add a click event on buttons to open a specific modal

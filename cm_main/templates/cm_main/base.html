@@ -32,6 +32,15 @@
 
     <div id="content" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
       <div class="container">
+        {%get_flatpages "/pages/admin-message/" as admin_messages%}
+        {%for admin_message in admin_messages %}
+        <div class="notification is-info">
+          <button class="delete"></button>
+          {%autoescape off%}
+          {{admin_message.content}}
+          {%endautoescape%}
+        </div>
+        {%endfor%}
         <ul class="messages">
           {% for message in messages %}
           <li{% if message.tags %} class="message is-{{ message.tags }}"{% endif %}>

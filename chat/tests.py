@@ -35,14 +35,36 @@ class ChatRoomTests(MemberTestCase):
 
   def test_list_rooms(self):
     rooms = [ChatRoom.objects.create(name='Chat Room #%i' % i) for i in range(5)]
+    ChatMessage.objects.create(room=rooms[0], content='a message', member=self.member)
     response = self.client.get(reverse('chat:chat'))
-    for i in range(5):
+    # self.print_response(response)
+    nmsgs = 1
+    self.assertContains(response, f'''
+<div class="panel-block">
+  <figure class="image mini-avatar mr-2">
+    <img class="is-rounded" src="{self.member.avatar_mini_url()}" alt="foobar">
+  </figure>
+  <p class="content">
+    {_('Created by:')}<br>
+    <span class="has-text-primary has-text-weight-bold has-text-right mr-5">
+      {self.member.username}
+    <a href="{reverse('members:detail', args=[self.member.id])}" aria-label="{_('profile')}">
+      <span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+    </a>
+    <br>
+    <span class="tag mr-3">{_(f"{nmsgs} message(s)")}</span>
+  </p>
+  <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a> 
+</div>''', html=True)
+    for i in range(1, 5):
+      nmsgs = 0
       self.assertContains(response, f'''
   <a class="panel-block" href="{reverse('chat:room', args=[rooms[i].slug])}">
     <span class="panel-icon">
       <i class="mdi mdi-24px mdi-chat-outline" aria-hidden="true"></i>
     </span>
-    {rooms[i].name}
+    <span class="tag mr-3">{_(f"{nmsgs} message(s)")}</span>
+    <span class="title is-size-6">{rooms[i].name}</span>
   </a>''', html=True)
     ChatRoom.objects.all().delete()
 

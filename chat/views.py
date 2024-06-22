@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.contrib import messages
+from django.db.models import Count, OuterRef, Subquery
 from urllib.parse import unquote, urlencode
 
 from cousinsmatter.utils import redirect_to_referer, Paginator
@@ -13,13 +14,37 @@ from .models import ChatMessage, ChatRoom
 
 @login_required
 def chat(request, page_num=1):
-  chat_rooms = ChatRoom.objects.all()
+  # Subquery to get the author of the first related ChatMessage instance of a room
+  first_msg_auth_subquery = ChatMessage.objects.filter(
+    room=OuterRef('pk')
+  ).order_by(
+      'date_added'
+  )[:1].select_related(
+        'member'
+  ).values('member_id')
+
+  # Annotate room instances with the first message and the number of messages in the room
+  chat_rooms = ChatRoom.objects.all().annotate(
+    num_messages=Count("chatmessage"),
+    first_message_author=Subquery(first_msg_auth_subquery)
+    )
   page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_CHATROOMS_PER_PAGE
 
   ptor = Paginator(chat_rooms, page_size, reverse_link="chat:chat_page")
   if page_num > ptor.num_pages:
       return redirect(reverse('chat:chat_page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
   page = ptor.get_page_data(page_num)
+  author_ids = [room.first_message_author for room in page.object_list if room.first_message_author is not None]
+  # print("author ids", author_ids)
+  authors = Member.objects.filter(id__in=author_ids)
+  for room in page.object_list:
+    if room.first_message_author:
+      # print("first msg auth=", room.first_message_author)
+      for author in authors:
+        # print("author name:", author.username)
+        if room.first_message_author == author.id:
+          room.first_message_author = author
+      # print("final author:", room.first_message_author)
   return render(request, 'chat/chat.html', {"page": page})
 
 

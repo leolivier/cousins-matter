@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-29 11:48+0200\n"
+"POT-Creation-Date: 2024-06-23 16:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -55,11 +55,25 @@ msgstr "Choisis une salle existante ou crées-en une nouvelle."
 msgid "Rooms"
 msgstr "Salles"
 
-#: chat/templates/chat/chat.html:22
+#: chat/templates/chat/chat.html:13
+msgid "%(nmsgs)s message"
+msgid_plural "%(nmsgs)s messages"
+msgstr[0] "%(nmsgs)s message"
+msgstr[1] "%(nmsgs)s messages"
+
+#: chat/templates/chat/chat.html:24
+msgid "Created by:"
+msgstr "Créer par:"
+
+#: chat/templates/chat/chat.html:27
+msgid "profile"
+msgstr "profil"
+
+#: chat/templates/chat/chat.html:49
 msgid "Room name"
 msgstr "Nom de la salle"
 
-#: chat/templates/chat/chat.html:32
+#: chat/templates/chat/chat.html:59
 msgid "Create room"
 msgstr "Créer une salle"
 

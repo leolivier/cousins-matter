@@ -95,7 +95,7 @@ class RequestRegistrationLinkTests(BaseMemberTestCase):
     for content, type in mail.outbox[0].alternatives:
       if type == 'text/html':
         break
-    print("content=", content)
+    # print("content=", content)
     self.assertInHTML(_("Registration request for the \"%(site_name)s\" site") % {'site_name': settings.SITE_NAME}, content)
     self.assertInHTML(_("%(name)s (%(email)s) requested to register to your cousinades site") %
                       {'name': test_requester['name'], 'email': test_requester['email']}, content)

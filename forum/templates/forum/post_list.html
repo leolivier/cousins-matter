@@ -12,7 +12,7 @@
 				</a>
 			</span>
 		</div>
-		<div  id="post_list" style="max-height: 800px; overflow-y: scroll;">
+		<div  id="post_list">
 			<div class="panel-block">
 				<div class="is-fullwidth" width="100%">{%paginate page%}</div>
 			</div>
@@ -29,11 +29,39 @@
 					<br>
 					<span class="is-size-7">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>
 					<br>
-					<span class="tag">{%blocktranslate with nreplies=post.num_messages|add:-1%}{{nreplies}} answers{%endblocktranslate%}</span>
+					<span class="tag">
+						{%blocktranslate count nreplies=post.num_messages|add:-1 trimmed %}
+						{{nreplies}} answer
+						{%plural%}
+						{{nreplies}} answers
+						{%endblocktranslate%}
+					</span>
+					<span class="tag">
+						{%blocktranslate count nfollowers=post.followers.count trimmed %}
+						{{nfollowers}} follower
+						{%plural%}
+						{{nfollowers}} followers
+						{%endblocktranslate%}
+					</span>
 				</p>
 				<p class="content">
 					<a class="block" href="{%url 'forum:display' post.id%}">
-						<span class="subtitle is-5 has-text-weight-bold">{{post.title}}</span><br>
+						<span class="subtitle is-5 has-text-weight-bold">{{post.title}}</span>
+						<a class="button" href="{%url 'forum:toggle_follow' post.id %}" 
+						{%if request.user in post.followers.all %}
+							{%trans 'unfollow' as unfollow%}
+							aria-label="{{unfollow}}" title="{{unfollow}}">
+							<span class="icon is-large">
+								<i class="mdi mdi-24px mdi-arrow-down-bold-hexagon-outline"></i>
+						{%else%}
+							{%trans 'follow' as follow%}
+							aria-label="{{follow}}" title="{{follow}}">
+							<span class="icon is-large">
+								<i class="mdi mdi-24px mdi-arrow-up-bold-hexagon-outline"></i>
+						{%endif%}
+							</span>
+						</a>
+						<br>
 						<span class="subtitle is-6">
 							{% autoescape on %}
 							{{post.first_message.content|striptags|truncatechars:150 }}...

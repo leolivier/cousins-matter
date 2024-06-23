@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-18 20:16+0200\n"
+"POT-Creation-Date: 2024-06-23 16:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -26,11 +26,11 @@ msgstr "Les Cousins Comptent!"
 msgid "Home"
 msgstr "Accueil"
 
-#: cm_main/templates/cm_main/base.html:55
+#: cm_main/templates/cm_main/base.html:64
 msgid "This site proudly built using"
 msgstr "Ce site est fièrement propulsé par"
 
-#: cm_main/templates/cm_main/base.html:57
+#: cm_main/templates/cm_main/base.html:66
 msgid "The source code is licensed"
 msgstr "Le code source est sous licence"
 
@@ -86,19 +86,19 @@ msgstr "Nouvelle Discussion"
 msgid "Chat"
 msgstr "Chat"
 
-#: cm_main/templates/cm_main/menu.html:128
+#: cm_main/templates/cm_main/menu.html:121
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/menu.html:133
+#: cm_main/templates/cm_main/menu.html:126
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/menu.html:147
+#: cm_main/templates/cm_main/menu.html:140
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/menu.html:151
+#: cm_main/templates/cm_main/menu.html:144
 msgid "Log Out"
 msgstr "Déconnexion"
 
@@ -124,7 +124,7 @@ msgstr "aller à la dernière page"
 msgid "Items per page:"
 msgstr "Items par page"
 
-#: cm_main/templatetags/cm_tags.py:11
+#: cm_main/templatetags/cm_tags.py:12
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 

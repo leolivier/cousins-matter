@@ -2,7 +2,7 @@ from django.urls import reverse
 from members.tests.tests_member import MemberTestCase
 from django.db import transaction
 from django.core.exceptions import ValidationError
-from forum.views import PostCreateView, PostEditView
+from forum.views.views_post import PostCreateView, PostEditView
 from .models import Post, Message, Comment
 
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-18 20:15+0200\n"
+"POT-Creation-Date: 2024-06-23 16:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Exemple : \"{pages_prefix}about/contact/\". Veillez à ce que l'URL commence "
 "par {pages_prefix} et se termine par une barre oblique."
 
-#: pages/forms.py:24 pages/tests.py:65
+#: pages/forms.py:24 pages/tests/tests_crud.py:30
 msgid ""
 "This value must contain only letters, numbers, dots, underscores, dashes, "
 "slashes or tildes."
@@ -49,7 +49,7 @@ msgstr ""
 msgid "URLs MUST start with {pages_prefix}"
 msgstr "Les URL DOIVENT commencer par {pages_prefix}."
 
-#: pages/forms.py:50 pages/tests.py:58
+#: pages/forms.py:50 pages/tests/tests_crud.py:23
 msgid "URL is missing a trailing slash."
 msgstr "Il manque une barre oblique à la fin de l'URL."
 
@@ -58,12 +58,13 @@ msgstr "Il manque une barre oblique à la fin de l'URL."
 msgid "URLs cannot be only {pages_prefix}, please add some path behind"
 msgstr ""
 
-#: pages/forms.py:67 pages/tests.py:79 pages/tests.py:122
+#: pages/forms.py:67 pages/tests/tests_crud.py:44 pages/tests/tests_crud.py:87
 #, python-format
 msgid "Flatpage with url %(url)s already exists"
 msgstr "Une page avec l'url %(url)s existe déjà"
 
-#: pages/forms.py:72 pages/templatetags/menupages_tags.py:28 pages/tests.py:87
+#: pages/forms.py:72 pages/templatetags/menupages_tags.py:28
+#: pages/tests/tests_crud.py:52
 msgid "A flatpage cannot be a subpage of another flatpage, check your URLs"
 msgstr ""
 "Une flatpage ne peut pas être une sous-page d'une autre flatpage, vérifie "
@@ -88,15 +89,15 @@ msgid ""
 "Cannot load page from url {url}, it was not found in the database. Please "
 "contact the administrator of the site"
 msgstr ""
-"Impossible de charger la page de l'url {url}, elle n'a pas été trouvée dans la base de données. "
-"Merci de contacter l'administrateur du site"
+"Impossible de charger la page de l'url {url}, elle n'a pas été trouvée dans "
+"la base de données. Merci de contacter l'administrateur du site"
 
-#: pages/tests.py:55
+#: pages/tests/tests_crud.py:20
 #, python-brace-format
 msgid "URLs MUST start with {self.pages_prefix}"
 msgstr "Les URL DOIVENT commencer par {self.pages_prefix}."
 
-#: pages/tests.py:61
+#: pages/tests/tests_crud.py:26
 #, python-brace-format
 msgid "URLs cannot be only {self.pages_prefix}, please add some path behind"
 msgstr ""

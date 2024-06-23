@@ -45,7 +45,7 @@ def managing_member_name(member):
 
 
 class MembersView(LoginRequiredMixin, generic.ListView):
-    template_name = "members/members.html"
+    template_name = "members/members/members.html"
     # paginate_by = 100
     model = Member
 
@@ -81,6 +81,7 @@ class MembersView(LoginRequiredMixin, generic.ListView):
 
 class MemberDetailView(LoginRequiredMixin, generic.DetailView):
     model = Member
+    template_name = "members/members/member_detail.html"
 
     def get_context_data(self, **kwargs):
         member = self.object
@@ -99,7 +100,7 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
     """View used to create a managed member"""
     model = Member
 
-    template_name = "members/member_upsert.html"
+    template_name = "members/members/member_upsert.html"
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {
@@ -125,7 +126,7 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
 
 
 class EditMemberView(LoginRequiredMixin, generic.UpdateView):
-    template_name = "members/member_upsert.html"
+    template_name = "members/members/member_upsert.html"
     title = _("Update Member Details")
     success_message = _("Member successfully updated")
 
@@ -175,6 +176,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
 
 class EditProfileView(EditMemberView):
     """change the profile of the logged user (ie request.user.id = member.id)"""
+    template_name = "members/members/member_upsert.html"
     title = _("My Profile")
     success_message = _("Profile successfully updated")
 

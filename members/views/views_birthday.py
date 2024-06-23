@@ -33,9 +33,9 @@ def _birthdays(request, template_name) -> HttpResponse:
 
 @login_required
 def birthdays(request) -> HttpResponse:
-  return _birthdays(request, "members/birthdays.html")
+  return _birthdays(request, "members/members/birthdays.html")
 
 
 @login_required
 def include_birthdays(request) -> HttpResponse:
-  return _birthdays(request, "members/birthdays_include.html")
+  return _birthdays(request, "members/members/birthdays_include.html")

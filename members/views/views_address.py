@@ -12,20 +12,24 @@ logger = logging.getLogger(__name__)
 
 class AddressDetailView(LoginRequiredMixin, generic.DetailView):
     model = Address
+    template_name = "members/address/address_detail.html"
 
 
 class AddressCreateView(LoginRequiredMixin, generic.CreateView):
     model = Address
+    template_name = "members/address/address_form.html"
     fields = "__all__"
 
 
 class AddressUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Address
+    template_name = "members/address/address_form.html"
     fields = "__all__"
 
 
 class ModalAddressCreateView(LoginRequiredMixin, generic.CreateView):
     model = Address
+    template_name = "members/address/address_form.html"
     fields = "__all__"
 
     def post(self, request, *args, **kwargs):
@@ -45,6 +49,7 @@ class ModalAddressCreateView(LoginRequiredMixin, generic.CreateView):
 
 class ModalAddressUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Address
+    template_name = "members/address/address_form.html"
     fields = "__all__"
 
     def post(self, request, *args, **kwargs):

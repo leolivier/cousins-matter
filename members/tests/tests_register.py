@@ -95,7 +95,7 @@ class RequestRegistrationLinkTests(BaseMemberTestCase):
     for content, type in mail.outbox[0].alternatives:
       if type == 'text/html':
         break
-    # print(content)
+    print("content=", content)
     self.assertInHTML(_("Registration request for the \"%(site_name)s\" site") % {'site_name': settings.SITE_NAME}, content)
     self.assertInHTML(_("%(name)s (%(email)s) requested to register to your cousinades site") %
                       {'name': test_requester['name'], 'email': test_requester['email']}, content)
@@ -131,7 +131,7 @@ class MemberRegisterTests(BaseMemberTestCase):
     invitation_url = RegistrationLinkManager().generate_link(request, email)
     response = self.client.get(invitation_url, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'members/member_upsert.html')
+    self.assertTemplateUsed(response, 'members/members/member_upsert.html')
     self.assertContains(response, f'''<h1 class="title has-text-centered is-1">{_("Sign up")}</h1>''', html=True)
 
     user = {'username': 'test_register_view', 'password1': self.password, 'password2': self.password,

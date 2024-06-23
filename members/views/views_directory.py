@@ -25,7 +25,7 @@ LIST_STYLE = TableStyle(
 
 
 class MembersDirectoryView(LoginRequiredMixin, generic.ListView):
-    template_name = "members/members_directory.html"
+    template_name = "members/members/members_directory.html"
     paginate_by = 100
     model = Member
 

@@ -244,7 +244,7 @@ class MemberProfileViewTest(MemberTestCase):
     profile_url = reverse('members:profile')
     response = self.client.get(profile_url)
     # pprint(vars(response))
-    self.assertTemplateUsed(response, 'members/member_upsert.html')
+    self.assertTemplateUsed(response, 'members/members/member_upsert.html')
     self.assertIs(response.resolver_match.func.view_class, EditProfileView)
 
     self.assertContains(response, f'''<input type="text" name="username" value="{self.username}"
@@ -360,7 +360,7 @@ class TestDisplayMembers(MemberTestCase):
     response = self.client.get(detail_url)
     self.assertEqual(response.status_code, 200)
     # pprint(vars(response))
-    self.assertTemplateUsed(response, 'members/member_detail.html')
+    self.assertTemplateUsed(response, 'members/members/member_detail.html')
     self.assertIs(response.resolver_match.func.view_class, MemberDetailView)
     active = _("Active member") if member.is_active else _("Managed member")
     self.assertContains(response, f'''<p class="content small">{member.username} ( {active} )</p>''', html=True)

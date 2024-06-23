@@ -1,6 +1,7 @@
 # based on https://stackoverflow.com/questions/17178525/django-how-to-include-a-view-from-within-a-template#56476932
 # this view and tag allows including a view into another view. see template/cm_main/base.html as an example
 # TODO: deliver this as a reusable piece of code
+import os
 from django.template import Library, Node, Variable, TemplateSyntaxError
 from django.conf import settings
 from django.urls import reverse, resolve, NoReverseMatch
@@ -85,6 +86,7 @@ def site_copyright():
 
 @register.inclusion_tag("cm_main/paginate_template.html")
 def paginate(page, no_per_page=False):
+    # print("page=", page)
     return {
         "page_urls": page.page_links,
         "page_range": page.page_range,
@@ -98,3 +100,31 @@ def paginate(page, no_per_page=False):
         "num_pages": page.num_pages,
         "no_per_page": no_per_page
     }
+
+
+def find_static_file(url):
+    # Extract the path of the static file from its URL
+    static_path = url.replace(settings.STATIC_URL, '')
+    # get application
+    application = static_path.split('/')[0]
+    # Builds the full path of the file
+    full_path = os.path.join(settings.STATIC_ROOT, static_path)
+    # check if the file exists
+    if os.path.exists(full_path):
+        return full_path
+    else:  # if not, try to find it in the application static folder
+        full_path = os.path.join(settings.BASE_DIR, application, 'static', static_path)
+        if os.path.exists(full_path):
+            return full_path
+        else:
+            return None
+
+
+@register.inclusion_tag("cm_main/inline_css.html")
+def inline_css(css_url):
+    css_path = find_static_file(css_url)
+    if css_path is None:
+        raise TemplateSyntaxError(f"The file {css_url} does not exist.")
+    with open(css_path, "r") as f:
+        css = f.read()
+    return {'css': css}

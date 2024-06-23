@@ -44,7 +44,7 @@ def check_fields(fieldnames):
 
 
 class CSVImportView(LoginRequiredMixin, generic.FormView):
-  template_name = "members/import_members.html"
+  template_name = "members/members/import_members.html"
   form_class = CSVImportMembersForm
   success_url = reverse_lazy("members:members")
 

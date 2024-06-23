@@ -7,34 +7,67 @@
 {% block title %}{% title _("Post") %}{% endblock %}
 {% block content %}
 {%with message=post.first_message %}
-
+{%blocktranslate asvar trans_nreplies count nreplies=post.message_set.count|add:-1 trimmed %}
+	{{nreplies}} answer
+{%plural%}
+	{{nreplies}} answers
+{%endblocktranslate%}
 <div class="container mt-5">
 	<div class="level">
 		<div class="level-left">
 			<div class="title is-2">{{post.title}}</div>
 		</div>
 		<div class="level-item">
+			<figure class="image mini-avatar mr-2">
+				<img class="is-rounded" src="{{message.author.avatar_mini_url}}" alt="message.author.get_full_name">
+			</figure>
 			<div class="container">
-				<p class="content is-small">
+				<p class="content is-size-6">
 					{{message.author.get_full_name}}
 					<a href="{%url 'members:detail' message.author.id %}">
 						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
 					</a>
 					<br>
-					{{message.date}}
+					<span class="is-size-6">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>
 				</p>
 			</div>
+			<div class="container">
+				<span class="tag is-medium">{{trans_nreplies}}</span>
+				<br>
+				<span class="tag is-medium">
+					{%blocktranslate count nfollowers=post.followers.count trimmed %}
+					{{nfollowers}} follower
+					{%plural%}
+					{{nfollowers}} followers
+					{%endblocktranslate%}
+				</span>
+				</div>
 		</div>
-		{% if post.first_message.author.username == user.username %}
 		<div class="level-right">
+			{% if post.first_message.author.username == user.username %}
 			<a class="button" href="{% url 'forum:edit' post.id %}" title="{%trans 'Edit' %}">
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
 			</a>
 			<button class="button js-modal-trigger" data-target="delete-post-modal" title="{%trans 'Delete' %}">
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
 			</button>
+			{%else%}
+			<a	class="button" href="{%url 'forum:toggle_follow' post.id %}" 
+				{%if request.user in post.followers.all %}
+				{%trans 'unfollow' as unfollow%}
+				aria-label="{{unfollow}}" title="{{unfollow}}">
+				<span class="icon is-large">
+					<i class="mdi mdi-24px mdi-arrow-down-bold-hexagon-outline"></i>
+				{%else%}
+				{%trans 'follow' as follow%}
+				aria-label="{{follow}}" title="{{follow}}">
+				<span class="icon is-large">
+					<i class="mdi mdi-24px mdi-arrow-up-bold-hexagon-outline"></i>
+				{%endif%}
+				</span>
+			</a>
+			{%endif%}
 		</div>
-		{%endif%}
 	</div>
 	<div class="container">
 		{% autoescape off %}{{message.content}}{%endautoescape%}
@@ -44,9 +77,9 @@
 <hr>
 <div class="container">
 	
-	<p class="title is-4">
+	<p class="tag is-medium mb-4">
 		{%if nreplies > 0%}
-			{%blocktranslate%}{{nreplies}} answers{%endblocktranslate%}
+			{{trans_nreplies}}
 			{%paginate page%}
 		{%else%}
 			{%trans 'No answer'%}

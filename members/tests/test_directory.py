@@ -20,7 +20,7 @@ class TestMemberDirectory(MemberTestCase):
 
     response = self.client.get(reverse('members:directory'))
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'members/members_directory.html')
+    self.assertTemplateUsed(response, 'members/members/members_directory.html')
     self.assertIs(response.resolver_match.func.view_class, MembersDirectoryView)
     # print(response.content)
     for member in self.members:

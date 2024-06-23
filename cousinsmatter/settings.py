@@ -248,10 +248,10 @@ AVATARS_MINI_SIZE = 48
 DEFAULT_AVATAR_URL = '/static/members/default-avatar.jpg'
 DEFAULT_MINI_AVATAR_URL = '/static/members/default-mini-avatar.jpg'
 
-VERIFICATION_SUCCESS_TEMPLATE = "members/email_verification_successful.html"
-VERIFICATION_FAILED_TEMPLATE = "members/email_verification_failed.html"
-REQUEST_NEW_EMAIL_TEMPLATE = "members/request_new_email.html"
-HTML_MESSAGE_TEMPLATE = "members/email_verification_msg.html"
+VERIFICATION_SUCCESS_TEMPLATE = "members/registration/email_verification_successful.html"
+VERIFICATION_FAILED_TEMPLATE = "members/registration/email_verification_failed.html"
+REQUEST_NEW_EMAIL_TEMPLATE = "members/registration/request_new_email.html"
+HTML_MESSAGE_TEMPLATE = "members/email/email_verification_msg.html"
 
 CAPTCHA_LENGTH = 6
 

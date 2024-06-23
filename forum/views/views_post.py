@@ -1,10 +1,10 @@
 from urllib.parse import urlencode
 from django.conf import settings
+from django.contrib import messages
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import generic
-from cousinsmatter.utils import Paginator
 from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -12,9 +12,12 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from cousinsmatter.utils import is_ajax
-from .models import Post, Message, Comment
-from .forms import MessageForm, PostForm, CommentForm
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
+from cousinsmatter.utils import Paginator, is_ajax
+from ..models import Post, Message
+from ..forms import MessageForm, PostForm, CommentForm
 from members.models import Member
 
 
@@ -156,82 +159,26 @@ def delete_reply(request, reply):
     raise ValidationError("Forbidden non ajax request")
 
 
-class CommentCreateView(LoginRequiredMixin, generic.CreateView):
-    model = Comment
-    form_class = CommentForm
-
-    def post(self, request, message_id):
-      message = get_object_or_404(Message, pk=message_id)
-      form = CommentForm(request.POST)
-      if form.is_valid():
-        form.instance.author_id = request.user.id
-        form.instance.message_id = message_id
-        form.save()
-        return redirect("forum:display", message.post.id)
-
-
-class CommentEditView(LoginRequiredMixin, generic.UpdateView):
-    model = Comment
-    form_class = CommentForm
-
-    def post(self, request, pk):
-      if is_ajax(request):
-          comment = get_object_or_404(Comment, pk=pk)
-          # create a form instance from the request and save it
-          form = CommentForm(request.POST, instance=comment)
-          if form.is_valid():
-            comment = form.save()
-            return JsonResponse({"comment_id": comment.id, "comment_str": comment.content}, status=200)
-          else:
-            errors = form.errors.as_json()
-            return JsonResponse({"errors": errors}, status=400)
-      raise ValidationError("Forbidden non ajax request")
-
-
-@csrf_exempt
 @login_required
-def delete_comment(request, pk):
-    if is_ajax(request):
-        comment = get_object_or_404(Comment, pk=pk)
-        id = comment.id
-        comment.delete()
-        return JsonResponse({"comment_id": id}, status=200)
-    raise ValidationError("Forbidden non ajax request")
-
-
-def test_create_posts(request, num_posts):
-  connected_member = Member.objects.get(id=request.user.id)
-  for i in range(num_posts):
-    with transaction.atomic():
-      message = Message(content=f"a test message #{i}", author=connected_member)
-      message.save()
-      post = Post(title=f"a new post #{i}", first_message=message)
-      post.save()
-      message.post = post
-      message.save()
-
-
-def test_create_replies(request, num_replies):
-  connected_member = Member.objects.get(id=request.user.id)
-  with transaction.atomic():
-    message = Message(content="the first message", author=connected_member)
-    message.save()
-    post = Post(title="a post for testing a lot of replies", first_message=message)
-    post.save()
-    message.post = post
-    message.save()
-  for i in range(num_replies):
-    Message(content=f"a test reply #{i}", post=post, author=connected_member).save()
-
-
-def test_create_comments(request, num_comments):
-  connected_member = Member.objects.get(id=request.user.id)
-  with transaction.atomic():
-    message = Message(content="the commented message", author=connected_member)
-    message.save()
-    post = Post(title="a post for testing a lot of comments", first_message=message)
-    post.save()
-    message.post = post
-    message.save()
-  for i in range(num_comments):
-    Comment(content=f"a test comment #{i}", author=connected_member, message=message).save()
+def toggle_follow(request, pk):
+  post = get_object_or_404(Post, pk=pk)
+  if post.followers.filter(id=request.user.id).exists():
+    post.followers.remove(request.user)
+    messages.success(request, _("You are no longer following this post"))
+  else:
+    post.followers.add(request.user)
+    messages.success(request, _("You are now following this post"))
+    # send email to poster to tell him someone is following his post
+    if post.first_message.author.id != request.user.id:  # don't send email to yourself
+      post_url = request.build_absolute_uri(reverse("forum:display", args=[pk]))
+      follower_name = request.user.get_full_name()
+      post_title = post.title
+      send_mail(
+        _(f'New follower to your post "{post_title}"'),
+        _(f'{follower_name} is now following your post "{post_title}"'),
+        settings.DEFAULT_FROM_EMAIL,
+        [request.user.email],
+        html_message=render_to_string('forum/email/new_follower.html', 
+                                      {'post': post, 'follower': request.user, 'post_url': post_url}),
+      )
+  return redirect(reverse("forum:display", args=[pk]))

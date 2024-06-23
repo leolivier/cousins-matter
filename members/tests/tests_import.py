@@ -18,7 +18,7 @@ class TestMemberImport(MemberTestCase):
   def test_get_import(self):
     response = self.client.get(reverse('members:csv_import'))
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'members/import_members.html')
+    self.assertTemplateUsed(response, 'members/members/import_members.html')
     self.assertIs(response.resolver_match.func.view_class, CSVImportView)
 
   def do_upload_file(self, file, lang, activate_users=True):

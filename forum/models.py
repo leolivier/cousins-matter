@@ -23,6 +23,8 @@ class Message(models.Model):
 class Post(models.Model):
   title = models.CharField(_('Title'), max_length=120)
   first_message = models.ForeignKey(Message, related_name='first_of_post', on_delete=models.CASCADE)
+  followers = models.ManyToManyField(Member, related_name='followed_posts', blank=True,
+                                     limit_choices_to={"is_active": True})
 
   class Meta:
     verbose_name_plural = _('posts')

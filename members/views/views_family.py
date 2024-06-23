@@ -13,20 +13,24 @@ logger = logging.getLogger(__name__)
 
 class FamilyDetailView(LoginRequiredMixin, generic.DetailView):
     model = Family
+    template_name = "members/family/family_detail.html"
 
 
 class FamilyCreateView(LoginRequiredMixin, generic.CreateView):
     model = Family
+    template_name = "members/family/family_form.html"
     fields = "__all__"
 
 
 class FamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Family
+    template_name = "members/family/family_form.html"
     fields = "__all__"
 
 
 class ModalFamilyCreateView(LoginRequiredMixin, generic.CreateView):
     model = Family
+    template_name = "members/family/family_form.html"
     fields = "__all__"
 
     def post(self, request, *args, **kwargs):
@@ -45,6 +49,7 @@ class ModalFamilyCreateView(LoginRequiredMixin, generic.CreateView):
 
 class ModalFamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Family
+    template_name = "members/family/family_form.html"
     fields = "__all__"
 
     def post(self, request, *args, **kwargs):

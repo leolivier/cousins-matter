@@ -22,7 +22,7 @@ from django.conf import settings
 
 class RegistrationCheckingView(generic.CreateView):
   title = _("Sign up")
-  template_name = "members/member_upsert.html"
+  template_name = "members/members/member_upsert.html"
 
   def check_before_register(self, request, encoded_email, token):
     decoded_email = RegistrationLinkManager().decrypt_link(encoded_email, token)
@@ -115,7 +115,7 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
     from_email = request.user.email
 
     msg = render_to_string(
-      "members/registration_invite_email.html",
+      "members/email/registration_invite_email.html",
       {"link": invitation_url, "admin": admin, "site_name": site_name, "invited": invited},
       request=request
     )
@@ -134,11 +134,11 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
       form = MemberInvitationForm(initial={'email': email})
     else:
       form = MemberInvitationForm()
-    return render(request, "members/registration_invite.html", {'form': form})
+    return render(request, "members/registration/registration_invite.html", {'form': form})
 
 
 class RegistrationRequestView(generic.View):
-  template_name = 'members/registration_request.html'
+  template_name = 'members/registration/registration_request.html'
 
   def post(self, request):
     """
@@ -169,7 +169,7 @@ class RegistrationRequestView(generic.View):
           "link": absolute_link
         }
 
-        msg = render_to_string("members/registration_request_email.html", context, request=request)
+        msg = render_to_string("members/email/registration_request_email.html", context, request=request)
         admin = Member.objects.filter(is_superuser=True).first()
         if send_mail(
           _("Registration request for %(site_name)s") % {'site_name': site_name}, strip_tags(msg),

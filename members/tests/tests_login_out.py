@@ -7,7 +7,7 @@ class LoginTests(BaseMemberTestCase):
     self.assertMemberExists()
     response = self.client.get(self.login_url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'members/login.html')
+    self.assertTemplateUsed(response, 'members/login/login.html')
     response = self.client.post(self.login_url, {'username': self.username, 'password': self.password}, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertMemberIsLogged()
@@ -18,7 +18,7 @@ class PasswordTests(MemberTestCase):
   def test_change_password_view(self):
     response = self.client.get(self.change_password_url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'members/password_change.html')
+    self.assertTemplateUsed(response, 'members/login/password_change.html')
     newpass = self.password+'1'
 
     # check password change

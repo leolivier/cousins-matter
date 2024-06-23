@@ -6,7 +6,7 @@ from .views import views_address, views_activate, views_family, \
 
 app_name = "members"
 urlpatterns = [
-  path('login/', auth_views.LoginView.as_view(template_name='members/login.html'), name='login'),
+  path('login/', auth_views.LoginView.as_view(template_name='members/login/login.html'), name='login'),
   path('logout/', views_member.logout_member, name='logout'),
   path('validate_username', views_member.validate_username, name='validate_username'),
   path("", views_member.MembersView.as_view(), name="members"),

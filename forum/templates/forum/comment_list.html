@@ -1,6 +1,13 @@
 {% load i18n crispy_forms_tags %}
 {%with message_id=message.id%}
 <div class="container">
+	<span class="tag">
+	{%blocktranslate count ncomments=message.comment_set.count trimmed %}
+		{{ncomments}} comment
+	{%plural%}
+		{{ncomments}} comments
+	{%endblocktranslate%}
+	</span>
 	<hr style="margin-bottom: 0;">
 	{% for comment in message.comment_set.all %}
 	<div class="container" id="comment-div-{{comment.id}}">
@@ -56,14 +63,9 @@
 		<hr style="margin: 0;">
 	</div>
 	{% endfor %}
-	{% if message.comment_set.count > 0 %}
+
 	<a class="is-small content" onclick="show_comment_form('#create-comment-{{message_id}}');">{%trans 'Add comment'%}</a>
-	{% else %}
-	<p class="content is-small">
-		{% translate "No comment" %}. 
-		<a class="is-small content" onclick="show_comment_form('#create-comment-{{message_id}}')">{%trans 'Add comment'%}</a>
-	</p>
-	{% endif %}
+
 	<form action="{%url 'forum:add_comment' message_id %}" id="create-comment-{{message_id}}" method="POST" class="comment-form">
 		{% csrf_token %}
 		<div class="level">

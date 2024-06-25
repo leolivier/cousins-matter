@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 16:30+0200\n"
+"POT-Creation-Date: 2024-06-23 19:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -56,6 +56,7 @@ msgid "Rooms"
 msgstr "Salles"
 
 #: chat/templates/chat/chat.html:13
+#, python-format
 msgid "%(nmsgs)s message"
 msgid_plural "%(nmsgs)s messages"
 msgstr[0] "%(nmsgs)s message"

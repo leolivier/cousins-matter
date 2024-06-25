@@ -63,7 +63,7 @@ class ChatRoomTests(MemberTestCase):
     <span class="panel-icon">
       <i class="mdi mdi-24px mdi-chat-outline" aria-hidden="true"></i>
     </span>
-    <span class="tag mr-3">{_(f"{nmsgs} messages")}</span>
+    <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
     <span class="title is-size-6">{rooms[i].name}</span>
   </a>''', html=True)
     ChatRoom.objects.all().delete()

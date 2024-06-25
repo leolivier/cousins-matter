@@ -129,10 +129,11 @@ class TestFollower(ForumTestCase):
         break
     # print("content=", content)
     html = _("%(author)s posted the following message on '%(post_title)s':") % {'author': author, 'post_title': post_title}
+    reply_msg_content = reply_msg_content.replace('\n', '<br>')
     html = f'''<p class="mt-2">
   <strong>{html}</strong>
   <br>
-  <i>{reply_msg_content.replace('\n', '<br>')}</i>
+  <i>{reply_msg_content}</i>
 </p>'''
     self.assertInHTML(html, content)
 

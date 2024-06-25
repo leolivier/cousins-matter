@@ -54,7 +54,7 @@ class ChatRoomTests(MemberTestCase):
     <br>
     <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
   </p>
-  <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a> 
+  <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
 </div>''', html=True)
     for i in range(1, 5):
       nmsgs = 0

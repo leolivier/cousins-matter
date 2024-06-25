@@ -6,7 +6,6 @@ from django.utils.translation import gettext as _
 from django.core import mail
 
 from ..models import Comment
-from .tests_reply import get_absolute_url
 
 
 class CommentCreateTestCase(ForumTestCase):
@@ -78,7 +77,7 @@ class TestFollower(ForumTestCase):
     # self.print_response(response)
 
     # create yet another member who will post a comment to the first message of the post
-    new_poster = self.create_member_and_login()
+    self.create_member_and_login()
     # poster posts a comment on the first message to the post
     url = reverse("forum:add_comment", args=[self.post.first_message.id])
     comment_msg_content = 'a comment'
@@ -89,9 +88,6 @@ class TestFollower(ForumTestCase):
     message = self.post.first_message
     comment = Comment.objects.get(message=message.id, content=comment_msg_content)
     author = comment.author.get_full_name()
-    follower_name = follower.get_full_name()
-    site_name = settings.SITE_NAME
-    post_url = get_absolute_url(reverse('forum:display', args=[self.post.id]))
 
     # new member 1 should have received an email because he is following the post
     # and original post author should have received an email to say he has a folllower
@@ -112,10 +108,11 @@ class TestFollower(ForumTestCase):
     # print("content=", content)
     html = _("%(author)s posted the following comment on '%(post_title)s':") % \
       {'author': author, 'post_title': post_title}
+    comment_msg_content = comment_msg_content.replace('\n', '<br>')
     html = f'''<p class="mt-2">
   <strong>{html}</strong>
   <br>
-  <i>{comment_msg_content.replace('\n', '<br>')}</i>
+  <i>{comment_msg_content}</i>
 </p>'''
     self.assertInHTML(html, content)
 

@@ -4,24 +4,26 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>{% translate 'New follower' %}</title>
+		{% translate 'New comment on followed post' as trans_title %}
+		<title>{% title trans_title %}</title>
 		{% inline_css "cm_main/css/email_msg_css.css" %}
 	</head>
 	<body>
 		<div class="container">
 			<div class="green">
 				<h1 class="center" style="padding:2px">
-					{%blocktranslate asvar trans_title with post_title=post.title %}Your post '{{post_title}}' has a new follower!{%endblocktranslate%}
 					{% title trans_title%}
 				</h1>
 			</div>
-			<div class="center">
-				<p class="mt-2">
-					{%blocktranslate with follower_name=follower.get_full_name post_title=post.title trimmed%}
-					{{follower_name}} is now following your post <a href="{{post_url}}">"{{post_title}}"</a> on {{site_name}}
-					{%endblocktranslate%}
-				</p>
-			</div>
+			<p class="mt-2">
+				<strong>
+				{%blocktranslate with post_title=post.title author=comment.author.get_full_name trimmed%}
+				{{author}} posted the following comment on '{{post_title}}':
+				{%endblocktranslate%}
+				</strong>
+				<br>
+				<i>{%autoescape off%}{{comment.content|linebreaksbr}}{%endautoescape%}</i>
+			</p>
 			<p class="small mt-3 center">{% trans "Do not reply to this mail, it is machine generated." %}</p>
 		</div>
 	</body>

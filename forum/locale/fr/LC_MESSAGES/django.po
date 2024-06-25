@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 16:28+0200\n"
+"POT-Creation-Date: 2024-06-25 14:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -38,47 +38,65 @@ msgstr "Commentaire"
 msgid "comments"
 msgstr "commentaires"
 
-#: forum/templates/forum/comment_list.html:25
-#: forum/templates/forum/post_detail.html:30
-#: forum/templates/forum/post_detail.html:74
+#: forum/templates/forum/comment_list.html:5
+#, python-format
+msgid "%(ncomments)s comment"
+msgid_plural "%(ncomments)s comments"
+msgstr[0] "%(ncomments)s commentaire"
+msgstr[1] "%(ncomments)s commentaires"
+
+#: forum/templates/forum/comment_list.html:32
+#: forum/templates/forum/post_detail.html:48
+#: forum/templates/forum/post_detail.html:107
 msgid "Edit"
 msgstr "Modifier"
 
-#: forum/templates/forum/comment_list.html:29
-#: forum/templates/forum/post_detail.html:33
-#: forum/templates/forum/post_detail.html:78
+#: forum/templates/forum/comment_list.html:36
+#: forum/templates/forum/post_detail.html:51
+#: forum/templates/forum/post_detail.html:111
 msgid "Delete"
 msgstr "Supprimer"
 
-#: forum/templates/forum/comment_list.html:41
-#: forum/templates/forum/post_detail.html:91
+#: forum/templates/forum/comment_list.html:48
+#: forum/templates/forum/post_detail.html:124
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: forum/templates/forum/comment_list.html:44
-#: forum/templates/forum/comment_list.html:74
+#: forum/templates/forum/comment_list.html:51
+#: forum/templates/forum/comment_list.html:76
 #: forum/templates/forum/post_confirm_delete.html:21
-#: forum/templates/forum/post_detail.html:94
+#: forum/templates/forum/post_detail.html:127
 #: forum/templates/forum/post_form_include.html:18
 msgid "Cancel"
 msgstr "Annuler"
 
-#: forum/templates/forum/comment_list.html:60
-#: forum/templates/forum/comment_list.html:64
+#: forum/templates/forum/comment_list.html:67
 msgid "Add comment"
 msgstr "Ajouter un commentaire"
 
-#: forum/templates/forum/comment_list.html:63
-msgid "No comment"
-msgstr "Pas de commentaire"
-
-#: forum/templates/forum/comment_list.html:73
+#: forum/templates/forum/comment_list.html:75
 msgid "Add"
 msgstr "Ajouter"
 
+#: forum/templates/forum/email/new_comment_to_followers.html:7
+msgid "New comment on followed post"
+msgstr "Nouveau commentaire sur un post suivi"
+
+#: forum/templates/forum/email/new_comment_to_followers.html:20
+#: forum/tests/tests_comments.py:113
+#, python-format
+msgid "%(author)s posted the following comment on '%(post_title)s':"
+msgstr "%(author)s a posté le commentaire suivant sur '%(post_title)s' :"
+
+#: forum/templates/forum/email/new_comment_to_followers.html:27
+#: forum/templates/forum/email/new_follower.html:25
+#: forum/templates/forum/email/new_message_to_followers.html:27
+msgid "Do not reply to this mail, it is machine generated."
+msgstr "Ne répond pas à cet e-mail, il a été généré automatiquement."
+
 #: forum/templates/forum/email/new_follower.html:7
-msgid "Verify Email address"
-msgstr "Vérifier l'adresse e-mail"
+msgid "New follower"
+msgstr "Nouveau follower"
 
 #: forum/templates/forum/email/new_follower.html:14
 #, python-format
@@ -86,6 +104,7 @@ msgid "Your post '%(post_title)s' has a new follower!"
 msgstr "Ton post '%(post_title)s' a un nouveau follower !"
 
 #: forum/templates/forum/email/new_follower.html:20
+#: forum/tests/tests_reply.py:114
 #, python-format
 msgid ""
 "%(follower_name)s is now following your post <a "
@@ -94,9 +113,15 @@ msgstr ""
 "%(follower_name)s suit maintenant ton post <a "
 "href=\"%(post_url)s\">\"%(post_title)s\"</a> sur %(site_name)s"
 
-#: forum/templates/forum/email/new_follower.html:23
-msgid "Do not reply to this mail, it is machine generated."
-msgstr "Ne répond pas à cet e-mail, il a été généré automatiquement."
+#: forum/templates/forum/email/new_message_to_followers.html:7
+msgid "New message on followed post"
+msgstr "Nouveau message sur un post suivi"
+
+#: forum/templates/forum/email/new_message_to_followers.html:20
+#: forum/tests/tests_reply.py:131
+#, python-format
+msgid "%(author)s posted the following message on '%(post_title)s':"
+msgstr "%(author)s a posté le message suivant sur '%(post_title)s' :"
 
 #: forum/templates/forum/post_confirm_delete.html:6
 msgid "Delete post"
@@ -119,16 +144,37 @@ msgstr "Confirmer"
 msgid "Post"
 msgstr "Discussion"
 
-#: forum/templates/forum/post_detail.html:49
+#: forum/templates/forum/post_detail.html:10
+#: forum/templates/forum/post_list.html:33
 #, python-format
-msgid "%(nreplies)s answers"
-msgstr "%(nreplies)s réponse(s)"
+msgid "%(nreplies)s answer"
+msgid_plural "%(nreplies)s answers"
+msgstr[0] "%(nreplies)s réponse"
+msgstr[1] "%(nreplies)s réponses"
 
-#: forum/templates/forum/post_detail.html:52
+#: forum/templates/forum/post_detail.html:38
+#: forum/templates/forum/post_list.html:40
+#, python-format
+msgid "%(nfollowers)s follower"
+msgid_plural "%(nfollowers)s followers"
+msgstr[0] "%(nfollowers)s follower"
+msgstr[1] "%(nfollowers)s followers"
+
+#: forum/templates/forum/post_detail.html:57
+#: forum/templates/forum/post_list.html:52
+msgid "unfollow"
+msgstr "ne plus suivre"
+
+#: forum/templates/forum/post_detail.html:62
+#: forum/templates/forum/post_list.html:57
+msgid "follow"
+msgstr "suivre"
+
+#: forum/templates/forum/post_detail.html:85
 msgid "No answer"
 msgstr "Pas de réponse"
 
-#: forum/templates/forum/post_detail.html:112
+#: forum/templates/forum/post_detail.html:145
 msgid "Your answer"
 msgstr "Ta réponse"
 
@@ -152,46 +198,48 @@ msgstr "Soumettre"
 msgid "Latest Posts"
 msgstr "Dernières discussions"
 
-#: forum/templates/forum/post_list.html:33
+#: forum/tests/tests_comments.py:106 forum/views/views_follow.py:72
 #, python-format
-msgid "%(nreplies)s answer"
-msgid_plural "%(nreplies)s answers"
-msgstr[0] "%(nreplies)s réponse"
-msgstr[1] "%(nreplies)s réponses"
+msgid "New comment on post \"%(post_title)s\""
+msgstr "Nouveau commentaire sur le post \"%(post_title)s\""
 
-#: forum/templates/forum/post_list.html:41
+#: forum/tests/tests_reply.py:108 forum/views/views_follow.py:28
 #, python-format
-msgid "%(nfollowers)s follower"
-msgid_plural "%(nfollowers)s followers"
-msgstr[0] "%(nfollowers)s follower"
-msgstr[1] "%(nfollowers)s followers"
+msgid "New follower to your post \"%(post_title)s\""
+msgstr "Nouveau follower pour ton post \"%(post_title)s\""
 
-#: forum/templates/forum/post_list.html:53
-msgid "unfollow"
-msgstr "ne plus suivre"
+#: forum/tests/tests_reply.py:124 forum/views/views_follow.py:49
+#, python-format
+msgid "New reply to post \"%(post_title)s\""
+msgstr "Nouvelle réponse au post \"%(post_title)s\""
 
-#: forum/templates/forum/post_list.html:58
-msgid "follow"
-msgstr "suivre"
-
-#: forum/views/views_post.py:155
-msgid "Can't delete the first message of a thread!"
-msgstr "Impossible de supprimer le premier message d'une discussion!"
-
-#: forum/views/views_post.py:167
+#: forum/views/views_follow.py:18
 msgid "You are no longer following this post"
 msgstr "Tu ne suis plus cette discussion"
 
-#: forum/views/views_post.py:170
+#: forum/views/views_follow.py:21
 msgid "You are now following this post"
 msgstr "Tu suis maintenant cette discussion"
 
-#: forum/views/views_post.py:177
-#, python-brace-format
-msgid "New follower to your post \"{post_title}\""
-msgstr "Nouveau follower pour ton post \"{post_title}\""
+#: forum/views/views_follow.py:29
+#, python-format
+msgid "%(follower_name)s is now following your post \"%(post_title)s\""
+msgstr "%(follower_name)s suit maintenant ton post \"%(post_title)s\""
 
-#: forum/views/views_post.py:178
-#, python-brace-format
-msgid "{follower_name} is now following your post \"{post_title}\""
-msgstr "{follower_name} suit maintenant ton post \"{post_title}\""
+#: forum/views/views_follow.py:50
+#, python-format
+msgid ""
+"%(follower_name)s has posted a new message in the post \"%(post_title)s\""
+msgstr ""
+"%(follower_name)s a posté un nouveau message sur le post \"%(post_title)s\""
+
+#: forum/views/views_follow.py:73
+#, python-format
+msgid ""
+"%(follower_name)s has added a new comment in the post \"%(post_title)s\""
+msgstr ""
+"%(follower_name)s a ajouté un nouveau commentaire sur le post \"%(post_title)s\""
+
+#: forum/views/views_post.py:154
+msgid "Can't delete the first message of a thread!"
+msgstr "Impossible de supprimer le premier message d'une discussion!"

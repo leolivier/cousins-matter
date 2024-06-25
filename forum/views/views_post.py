@@ -1,6 +1,5 @@
 from urllib.parse import urlencode
 from django.conf import settings
-from django.contrib import messages
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -12,10 +11,9 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
 
 from cousinsmatter.utils import Paginator, is_ajax
+from forum.views.views_follow import check_followers_on_message
 from ..models import Post, Message
 from ..forms import MessageForm, PostForm, CommentForm
 from members.models import Member
@@ -128,7 +126,8 @@ def add_reply(request, pk):
   reply = MessageForm(request.POST)
   reply.instance.post_id = pk
   reply.instance.author_id = request.user.id
-  reply.save()
+  message = reply.save()
+  check_followers_on_message(message)
   return redirect(reverse("forum:display", args=[pk]))
 
 
@@ -157,28 +156,3 @@ def delete_reply(request, reply):
         reply.delete()
         return JsonResponse({"reply_id": id}, status=200)
     raise ValidationError("Forbidden non ajax request")
-
-
-@login_required
-def toggle_follow(request, pk):
-  post = get_object_or_404(Post, pk=pk)
-  if post.followers.filter(id=request.user.id).exists():
-    post.followers.remove(request.user)
-    messages.success(request, _("You are no longer following this post"))
-  else:
-    post.followers.add(request.user)
-    messages.success(request, _("You are now following this post"))
-    # send email to poster to tell him someone is following his post
-    if post.first_message.author.id != request.user.id:  # don't send email to yourself
-      post_url = request.build_absolute_uri(reverse("forum:display", args=[pk]))
-      follower_name = request.user.get_full_name()
-      post_title = post.title
-      send_mail(
-        _(f'New follower to your post "{post_title}"'),
-        _(f'{follower_name} is now following your post "{post_title}"'),
-        settings.DEFAULT_FROM_EMAIL,
-        [request.user.email],
-        html_message=render_to_string('forum/email/new_follower.html', 
-                                      {'post': post, 'follower': request.user, 'post_url': post_url}),
-      )
-  return redirect(reverse("forum:display", args=[pk]))

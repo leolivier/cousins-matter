@@ -9,7 +9,7 @@ class TestMemberDirectory(MemberTestCase):
     super().setUp()
     self.members = []
     for _ in range(4):
-      self.members.append(self.create_member(self.get_new_member_data()))
+      self.members.append(self.create_member())
 
   def tearDown(self):
     for member in self.members:

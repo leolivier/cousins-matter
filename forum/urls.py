@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.urls import path
 
-from .views import views_comment, views_post, views_test
+from .views import views_comment, views_post, views_test, views_follow
 
 app_name = "forum"
 urlpatterns = [
@@ -18,7 +18,7 @@ urlpatterns = [
     path("<int:message_id>/comments", views_comment.CommentCreateView.as_view(), name="add_comment"),
     path("comments/<int:pk>/edit", views_comment.CommentEditView.as_view(), name="edit_comment"),
     path("comments/<int:pk>/delete", views_comment.delete_comment, name="delete_comment"),
-    path("<int:pk>/toggle-follow", views_post.toggle_follow, name="toggle_follow"),
+    path("<int:pk>/toggle-follow", views_follow.toggle_follow, name="toggle_follow"),
 ]
 
 if settings.DEBUG:

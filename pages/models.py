@@ -8,4 +8,3 @@ def create_page(url, title, content):
   page.sites.set([Site.objects.get(pk=settings.SITE_ID)])
   page.save()
   return page
-

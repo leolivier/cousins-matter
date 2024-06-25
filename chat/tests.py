@@ -54,7 +54,7 @@ class ChatRoomTests(MemberTestCase):
     <br>
     <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
   </p>
-  <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a> 
+  <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
 </div>''', html=True)
     for i in range(1, 5):
       nmsgs = 0
@@ -63,7 +63,7 @@ class ChatRoomTests(MemberTestCase):
     <span class="panel-icon">
       <i class="mdi mdi-24px mdi-chat-outline" aria-hidden="true"></i>
     </span>
-    <span class="tag mr-3">{_(f"{nmsgs} messages")}</span>
+    <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
     <span class="title is-size-6">{rooms[i].name}</span>
   </a>''', html=True)
     ChatRoom.objects.all().delete()

@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from cousinsmatter.utils import is_ajax
+from forum.views.views_follow import check_followers_on_comment
 from ..models import Message, Comment
 from ..forms import CommentForm
 
@@ -20,7 +21,8 @@ class CommentCreateView(LoginRequiredMixin, generic.CreateView):
       if form.is_valid():
         form.instance.author_id = request.user.id
         form.instance.message_id = message_id
-        form.save()
+        comment = form.save()
+        check_followers_on_comment(comment)
         return redirect("forum:display", message.post.id)
 
 

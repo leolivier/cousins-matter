@@ -159,10 +159,32 @@ class BaseMemberTestCase(SimpleTestCase):
             'phone': '01 23 45 67 ' + counter, "birthdate": date.today()}
 
   def create_member(self, member_data=None):
-    """creates and returns a new member using provided member data"""
+    """creates and returns a new member using provided member data.
+    If the member data is None, a new one is created.
+    """
     if member_data is None:
       member_data = self.get_new_member_data()
-    return Member.objects.create_member(**member_data)
+    new_member = Member.objects.create_member(**member_data)
+    self.created_members.append(new_member)
+    return new_member
+
+  def create_member_and_login(self, member_data=None):
+    """creates and returns a new member using provided member data.
+    If the member data is None, a new one is created.
+    The user is logged in by the method"""
+    if member_data is None:
+      member_data = self.get_new_member_data()
+    passwd = member_data['password']  # save password before hashing
+    new_member = Member.objects.create_member(**member_data, is_active=True)
+    # 1rst logout then login as new_member
+    self.client.logout()
+    logged = self.client.login(username=new_member.username, password=passwd)
+    self.assertTrue(logged)
+    current_member = get_user(self.client)
+    self.assertEqual(current_member.username, new_member.username)
+    self.assertTrue(current_member.is_authenticated)
+    self.created_members.append(new_member)
+    return new_member
 
   def create_member_by_view(self, member_data=None):
     """creates and returns a new member through the UI using provided member data.

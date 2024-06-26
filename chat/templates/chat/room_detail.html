@@ -1,0 +1,84 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags static crispy_forms_tags %}
+{%block header %}
+<script>
+const $roomSlug = encodeURIComponent('{{room.slug}}');
+const $member = '{{request.user.id}}';
+const $userName = '{{request.user.username}}';
+const $pageNumber = {{page.number}};
+const $numPages = {{page.num_pages}};
+const $lastPageLink = '{{page.last_page_link}}';
+const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
+</script>
+<script src="{% static 'chat/js/chat.js' %}"></script>
+{%endblock%}
+{% block title %}{% title room.name %}{% endblock %}
+{% block content %}
+{%with chat_messages=page.object_list%}
+<div class="container">
+		<p class="title">{%trans "Let's chat!" %}</p>
+
+		<div class="panel">
+			<div class="panel-heading">
+				<span id="show-room-name">{{room.name}}</span>
+				<form method="POST" id="room-edit-form">
+					{% csrf_token %}
+						<p class="control">
+							<input class="input" type="text" placeholder="{%trans 'Room name'%}" id="room-name-input" name="room-name">
+						</p>
+						<div class="control buttons">
+							<button type="reset" class="button" onclick="hide_edit_room_form()"  title="{%trans 'Cancel' %}">
+								<span class="icon"><i class="mdi mdi-close-circle-outline"></i></span>
+							</button>
+								<button type="submit" class="button is-link" title="{%trans 'Update' %}">
+								<span class="icon"><i class="mdi mdi-check-circle-outline"></i></span>
+							</button>
+						</div>
+				</form>
+				{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
+				{%include "cm_main/followers/followers-count-tag.html" with followed_object=room %}
+				{%if room.owner == request.user %}
+					<a class="button is-primary is-outlined is-pulled-right" onclick="show_edit_room_form();" title="{%trans 'Edit' %}">
+						<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
+					</a>
+					{%url "chat:delete_room" room.id as delete_url%}
+					<a class="button is-primary is-outlined is-pulled-right" onclick="delete_room('{{delete_url}}', '{{room.id}}')"
+						 title="{%trans 'Delete' %}">
+						<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
+					</a>
+				{%else%}
+					{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room %}
+				{%endif%}
+		
+				</div>
+			<div class="panel-block">
+				{%paginate page%}
+			</div>
+			<div  id="chat-messages" style="max-height: 500px; overflow-y: scroll;">
+			{%for msg in chat_messages %}
+			<div class="panel-block  has-text-right">
+				<p class="has-text-primary has-text-weight-bold mr-5">
+					{{msg.member.username}}<br>
+					<span class="is-size-7">{{msg.date_added|date:"DATETIME_FORMAT"}}</span>
+				</p>
+				<p class="content">{{msg.content}}</p> 
+				
+			</div>
+			{%endfor%}
+		</div>
+		<div class="panel-block">
+				<div class="field is-grouped is-flex-grow-5">
+					<div class="control is-flex-grow-5">
+						<input class="input" type="text" placeholder="{%trans 'Message' %}" id="chat-message-input">
+					</div>
+					<div class="control">
+						<a class="button is-primary" id="chat-message-submit">
+							<span class="icon is-large"><i class="mdi mdi-24px mdi-send-variant-outline"></i></span>
+							<span class="is-hidden-mobile">{%trans 'Submit' %}</span>
+						</a>
+					</div>
+				</div>
+		</div>
+	</div>
+</div>{%endwith%}
+{% endblock %}

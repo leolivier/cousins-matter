@@ -1,0 +1,29 @@
+{% load i18n cm_tags %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>{% title title%}</title>
+		{% inline_css "cm_main/css/email_msg_css.css" %}
+	</head>
+	<body>
+		<div class="container">
+			<div class="green">
+				<h1 class="center" style="padding:2px">
+					{% title title%}
+				</h1>
+			</div>
+			<p class="mt-2">
+				<strong>
+				{%blocktranslate trimmed%}
+				{{author_name}} added the following {{obj_type}} on {{followed_type}} <a href="{{followed_object_url}}">'{{followed_object_name}}'</a>:
+				{%endblocktranslate%}
+				</strong>
+				<br>
+				<i>{%autoescape off%}{{message|linebreaksbr}}{%endautoescape%}</i>
+			</p>
+			<p class="small mt-3 center">{% trans "Do not reply to this mail, it is machine generated." %}</p>
+		</div>
+	</body>
+</html>

@@ -31,17 +31,11 @@
 					<span class="is-size-6">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>
 				</p>
 			</div>
-			<div class="container">
-				<span class="tag is-medium">{{trans_nreplies}}</span>
+			<div class="container has-text-weight-bold">
+				<span class="tag">{{trans_nreplies}}</span>
 				<br>
-				<span class="tag is-medium">
-					{%blocktranslate count nfollowers=post.followers.count trimmed %}
-					{{nfollowers}} follower
-					{%plural%}
-					{{nfollowers}} followers
-					{%endblocktranslate%}
-				</span>
-				</div>
+				{%include "cm_main/followers/followers-count-tag.html" with followed_object=post %}
+			</div>
 		</div>
 		<div class="level-right">
 			{% if post.first_message.author.username == user.username %}
@@ -52,21 +46,9 @@
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
 			</button>
 			{%else%}
-			<a	class="button" href="{%url 'forum:toggle_follow' post.id %}" 
-				{%if request.user in post.followers.all %}
-				{%trans 'unfollow' as unfollow%}
-				aria-label="{{unfollow}}" title="{{unfollow}}">
-				<span class="icon is-large">
-					<i class="mdi mdi-24px mdi-arrow-down-bold-hexagon-outline"></i>
-				{%else%}
-				{%trans 'follow' as follow%}
-				aria-label="{{follow}}" title="{{follow}}">
-				<span class="icon is-large">
-					<i class="mdi mdi-24px mdi-arrow-up-bold-hexagon-outline"></i>
+				{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
+				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=post %}
 				{%endif%}
-				</span>
-			</a>
-			{%endif%}
 		</div>
 	</div>
 	<div class="container">

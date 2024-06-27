@@ -1,4 +1,15 @@
 $(document).ready(function() {
+
+  // "navbar-burger" management
+  $('.navbar-burger').on('click', function(el) {
+      // Get the target from the "data-target" attribute
+      const target = $(this).data('target');
+      const $target = $('#'+target); // this is the navbar-menu
+      // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+      $(this).toggleClass('is-active');
+      $target.toggleClass('is-active');
+    });
+
   // alias is-error to is-danger
   $('.is-error').addClass('is-danger');
 
@@ -13,28 +24,25 @@ $(document).ready(function() {
   });
 
   // Add a click event on buttons to open a specific modal
-  (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-    const modal = $trigger.dataset.target;
-    const $target = document.getElementById(modal);
+  $('.js-modal-trigger').each(function(index) {
+    const modal = $(this).data('target');
+    const $target = $('#'+modal);
     // console.log('adding openmodal to '+$target+' modal='+modal)
-    $trigger.addEventListener('click', () => {
+    $(this).on('click', () => {
       openModal($target);
     });
   });
 
   // Add a click event on various child elements to close the parent modal
-  (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-    if (! $close.classList.contains('keep-open-on-click')) {
-      const $target = $close.closest('.modal');
-
-      $close.addEventListener('click', () => {
-        closeModal($target);
-      });
-    }
-  });
+  $('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button').
+    not('.keep-open-on-click').
+    on('click', function(el) {
+      const $target = $(this).closest('.modal');
+      closeModal($target);
+    });
 
   // Add a keyboard event to close all modals
-  document.addEventListener('keydown', (event) => {
+  $(document).on('keydown', (event) => {
     if(event.key === "Escape") {
       closeAllModals();
     }
@@ -44,17 +52,15 @@ $(document).ready(function() {
 
 // Functions to open and close a modal
 function openModal($el) {
-  $el.classList.add('is-active');
+  $el.addClass('is-active');
 }
 
 function closeModal($el) {
-  $el.classList.remove('is-active');
+  $el.removeClass('is-active');
 }
 
 function closeAllModals() {
-  (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-    closeModal($modal);
-  });
+  $('.modal').removeClass('is-active');
 }
 
 // function to set a form to make an AJAX call

@@ -106,6 +106,14 @@ def edit_room(request, room_slug):
 
 
 @login_required
+def delete_room(request, room_slug):
+  room = get_object_or_404(ChatRoom, slug=room_slug)
+  room.delete()
+  messages.success(request, f"Chat room {room.name} deleted")
+  return redirect("chat:chat")
+
+
+@login_required
 def test_create_rooms(request, num_rooms):
   for i in range(num_rooms):
     ChatRoom(name=f"a chat room #{i}").save()

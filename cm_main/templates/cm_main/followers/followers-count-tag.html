@@ -1,5 +1,5 @@
 {%load i18n%}
-<span class="tag">
+<span class="tag {{extra_class}}">
 	{%blocktranslate count nfollowers=followed_object.followers.count trimmed %}
 	{{nfollowers}} follower
 	{%plural%}

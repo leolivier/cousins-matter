@@ -19,32 +19,25 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 		<p class="title">{%trans "Let's chat!" %}</p>
 
 		<div class="panel">
-			<div class="panel-heading">
+			<div class="panel-heading is-flex">
 				<span id="show-room-name">{{room.name}}</span>
 				<form method="POST" id="room-edit-form">
 					{% csrf_token %}
-						<p class="control">
-							<input class="input" type="text" placeholder="{%trans 'Room name'%}" id="room-name-input" name="room-name">
-						</p>
-						<div class="control buttons">
-							<button type="reset" class="button" onclick="hide_edit_room_form()"  title="{%trans 'Cancel' %}">
-								<span class="icon"><i class="mdi mdi-close-circle-outline"></i></span>
-							</button>
-								<button type="submit" class="button is-link" title="{%trans 'Update' %}">
-								<span class="icon"><i class="mdi mdi-check-circle-outline"></i></span>
-							</button>
-						</div>
+						<span class="control">
+							<input class="input" style="width: auto;" type="text" placeholder="{%trans 'Room name'%}" 
+										id="room-name-input" name="room-name" title="{%trans 'hit return to submit, escape to give up'%}">
+						</span>
 				</form>
 				{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
-				{%include "cm_main/followers/followers-count-tag.html" with followed_object=room %}
+				{%include "cm_main/followers/followers-count-tag.html" with followed_object=room extra_class="ml-auto mr-5"%}
 				{%if room.owner == request.user %}
-					<a class="button is-primary is-outlined is-pulled-right" onclick="show_edit_room_form();" title="{%trans 'Edit' %}">
+				{%url 'chat:room-delete' room.slug as delete_url%}
+				<a class="button is-primary is-outlined is-pulled-right" onclick="delete_room('{{delete_url}}');"
+					 title="{%trans 'Delete' %}">
+					<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
+				</a>
+				<a class="button is-primary is-outlined is-pulled-right" onclick="toggle_edit_room_form();" title="{%trans 'Edit' %}">
 						<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
-					</a>
-					{%url "chat:delete_room" room.id as delete_url%}
-					<a class="button is-primary is-outlined is-pulled-right" onclick="delete_room('{{delete_url}}', '{{room.id}}')"
-						 title="{%trans 'Delete' %}">
-						<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
 					</a>
 				{%else%}
 					{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room %}
@@ -52,7 +45,7 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 		
 				</div>
 			<div class="panel-block">
-				{%paginate page%}
+				<span class="control">{%paginate page%}</span>
 			</div>
 			<div  id="chat-messages" style="max-height: 500px; overflow-y: scroll;">
 			{%for msg in chat_messages %}

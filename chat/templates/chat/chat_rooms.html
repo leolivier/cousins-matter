@@ -26,7 +26,9 @@
 				</div>
 			</span>
 		</div>
-		<div class="panel-block">{%paginate page%}</div>
+		<div class="panel-block">
+			<span class="control">{%paginate page%}</span>
+		</div>
 		{% for room in page.object_list %}
 			{%blocktranslate asvar trans_nmsgs count nmsgs=room.num_messages trimmed%}
 				{{nmsgs}} message

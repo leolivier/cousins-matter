@@ -7,22 +7,24 @@
 	<p class="content">{%trans 'Choose an existing room or create a new one.'%}</p>
 
 	<nav class="panel">
-		<p class="panel-heading">{%trans 'Rooms' %}</p>
-		<div class="panel-block">
-			<p class="control has-icons-left">
-				<input class="input" type="text" placeholder="{%trans 'Room name'%}" id="room-name-input">
-				<span class="icon is-left">
-					<i class="mdi mdi-24px mdi-chat-plus" aria-hidden="true"></i>
-				</span>
-			</p>
-			<div class="control ml-3">
-				<a class="button is-primary" id="room-name-submit">
-					<span class="icon">
-						<i class="mdi mdi-24px mdi-chat-plus-outline" aria-hidden="true"></i>
+		<div class="panel-heading is-flex is-align-items-center">
+			<span>{%trans 'Rooms' %}</span>
+			<span class="field has-addons ml-auto">  {# margin-left: auto to push on the right#}
+				<div class="control has-icons-left">
+					<input class="input" type="text" placeholder="{%trans 'Room name'%}" id="room-name-input">
+					<span class="icon is-left">
+						<i class="mdi mdi-24px mdi-chat-plus" aria-hidden="true"></i>
 					</span>
-					<span class="is-hidden-mobile">{%trans 'Create room' %}</span>
-				</a>
-			</div>
+				</div>
+				<div class="control">
+					<a class="button is-primary" id="room-name-submit">
+						<span class="icon">
+							<i class="mdi mdi-24px mdi-chat-plus-outline" aria-hidden="true"></i>
+						</span>
+						<span class="is-hidden-mobile">{%trans 'Create room' %}</span>
+					</a>
+				</div>
+			</span>
 		</div>
 		<div class="panel-block">{%paginate page%}</div>
 		{% for room in page.object_list %}

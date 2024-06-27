@@ -39,6 +39,7 @@ class ChatRoomTests(MemberTestCase):
     response = self.client.get(reverse('chat:chat'))
     # self.print_response(response)
     nmsgs = 1
+    nfollowers = 0
     self.assertContains(response, f'''
 <div class="panel-block">
   <figure class="image mini-avatar mr-2">
@@ -48,24 +49,34 @@ class ChatRoomTests(MemberTestCase):
     {_('Created by:')}<br>
     <span class="has-text-primary has-text-weight-bold has-text-right mr-5">
       {self.member.username}
-    <a href="{reverse('members:detail', args=[self.member.id])}" aria-label="{_('profile')}">
-      <span class="icon"><i class="mdi mdi-open-in-new"></i></span>
-    </a>
-    <br>
-    <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
+      <a href="{reverse('members:detail', args=[self.member.id])}" aria-label="{_('profile')}">
+        <span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+      </a>
+      <br>
+      <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
+      <span class="tag ">{_(f'{nfollowers} follower')}</span>
+    </span>
   </p>
   <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
+  <a class="button ml-3 mr-3 is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}"
+    aria-label="{_('follow')}" title="{_('follow')}">
+    <span class="icon is-large"><i class="mdi mdi-24px mdi-arrow-up-bold-hexagon-outline"></i></span>
+  </a>
 </div>''', html=True)
+    nmsgs = 0
     for i in range(1, 5):
-      nmsgs = 0
       self.assertContains(response, f'''
-  <a class="panel-block" href="{reverse('chat:room', args=[rooms[i].slug])}">
-    <span class="panel-icon">
-      <i class="mdi mdi-24px mdi-chat-outline" aria-hidden="true"></i>
-    </span>
+<div class="panel-block">
+  <span class="panel-icon"><i class="mdi mdi-24px mdi-chat-outline" aria-hidden="true"></i></span>
+  <a class="block" href="{reverse('chat:room', args=[rooms[i].slug])}">
     <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
-    <span class="title is-size-6">{rooms[i].name}</span>
-  </a>''', html=True)
+    <span class="title is-size-6">{rooms[i].name}</span> 
+  </a>
+  <a class="button ml-3 mr-3 is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}" 
+    aria-label="{_('follow')}" title="{_('follow')}">
+    <span class="icon is-large"><i class="mdi mdi-24px mdi-arrow-up-bold-hexagon-outline"></i></span>
+  </a>
+</div>''', html=True)
     ChatRoom.objects.all().delete()
 
 

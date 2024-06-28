@@ -6,7 +6,7 @@
 	<div class="panel">
 		<div class="panel-heading">
 			<span>{% title _("Latest Posts") %}</span>
-			<span class="has-text-right">
+			<span class="is-pulled-right">
 				<a class="button ml-6" href="{%url 'forum:create'%}" aria-label="{% trans 'Create Post' %}">
 					<span class="icon"><i class="mdi mdi-24px mdi-plus-box-outline"></i></span>
 				</a>
@@ -36,31 +36,13 @@
 						{{nreplies}} answers
 						{%endblocktranslate%}
 					</span>
-					<span class="tag">
-						{%blocktranslate count nfollowers=post.followers.count trimmed %}
-						{{nfollowers}} follower
-						{%plural%}
-						{{nfollowers}} followers
-						{%endblocktranslate%}
-					</span>
+					{%include "cm_main/followers/followers-count-tag.html" with followed_object=post %}
 				</p>
 				<p class="content">
 					<a class="block" href="{%url 'forum:display' post.id%}">
 						<span class="subtitle is-5 has-text-weight-bold">{{post.title}}</span>
-						<a class="button" href="{%url 'forum:toggle_follow' post.id %}" 
-						{%if request.user in post.followers.all %}
-							{%trans 'unfollow' as unfollow%}
-							aria-label="{{unfollow}}" title="{{unfollow}}">
-							<span class="icon is-large">
-								<i class="mdi mdi-24px mdi-arrow-down-bold-hexagon-outline"></i>
-						{%else%}
-							{%trans 'follow' as follow%}
-							aria-label="{{follow}}" title="{{follow}}">
-							<span class="icon is-large">
-								<i class="mdi mdi-24px mdi-arrow-up-bold-hexagon-outline"></i>
-						{%endif%}
-							</span>
-						</a>
+						{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
+						{%include "cm_main/followers/toggle-follow-button.html" with followed_object=post %}
 						<br>
 						<span class="subtitle is-6">
 							{% autoescape on %}

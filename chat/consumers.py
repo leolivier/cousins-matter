@@ -5,6 +5,9 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from urllib.parse import unquote
 from django.conf import settings
+from django.urls import reverse
+
+from cm_main.followers import check_followers
 from .models import ChatMessage, ChatRoom
 from members.models import Member
 
@@ -39,6 +42,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     room = ChatRoom.objects.get(slug=room_slug)
     member = Member.objects.get(pk=member_id)
     chat = ChatMessage.objects.create(member=member, room=room, content=message)
+    check_followers(room, {'chat message': message}, member, reverse('chat:room', args=[room.slug]))
     return chat
 
   # Receive message from WebSocket

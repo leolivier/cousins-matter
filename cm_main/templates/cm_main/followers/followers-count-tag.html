@@ -1,0 +1,8 @@
+{%load i18n%}
+<span class="tag {{extra_class}}">
+	{%blocktranslate count nfollowers=followed_object.followers.count trimmed %}
+	{{nfollowers}} follower
+	{%plural%}
+	{{nfollowers}} followers
+	{%endblocktranslate%}
+</span>

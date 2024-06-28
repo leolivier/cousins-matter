@@ -10,6 +10,8 @@ class ChatRoom(models.Model):
   name = models.CharField(max_length=255)
   slug = models.CharField(max_length=255, blank=True)
   date_added = models.DateTimeField(auto_now_add=True)
+  followers = models.ManyToManyField(Member, related_name='followed_chat_rooms', blank=True,
+                                     limit_choices_to={"is_active": True})
 
   class Meta:
     verbose_name = _('chat room')
@@ -39,6 +41,16 @@ class ChatRoom(models.Model):
   def save(self, *args, **kwargs):
     self.full_clean()
     super().save(*args, **kwargs)
+
+  def first_message(self):
+    return self.chatmessage_set.first()
+
+  def owner(self):
+    first_message = self.first_message()
+    return first_message.member if first_message else None
+
+  def last_message(self):
+    return self.chatmessage_set.last()
 
 
 class ChatMessage(models.Model):

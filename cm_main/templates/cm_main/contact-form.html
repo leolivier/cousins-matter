@@ -1,0 +1,17 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags crispy_forms_tags %}
+{% block header %}{%include "cm_main/include-summernote.html" %}{%endblock%}
+{% block title %}{% title _("Contact Form") %}{% endblock %}
+{% block content %}
+<div class="container">
+	<h1 class="title">{% title _("Contact Form") %}</h1>
+	<p class="content">{% trans "Please fill out the form below to contact the admin of this site:" %} {{site_admin}}</p>
+	<form method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form|crispy }}
+		<div class="buttons">
+			<button type="submit" class="button is-primary" name="create">{%translate "Send" %}</button>
+			<button type="cancel" class="button is-light" name="cancel">{%translate "Cancel" %}</button>
+		</div>
+	</form>
+{%endblock content %}

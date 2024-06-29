@@ -6,10 +6,18 @@ import zipfile
 
 from django.views import generic
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from wsgiref.util import FileWrapper
 from django.http import StreamingHttpResponse, Http404
 from django.utils.translation import gettext as _
+from django.contrib.auth import get_user_model, get_user
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.template.loader import render_to_string
+from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
+
+from .forms import ContactForm
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +43,57 @@ def download_protected_media(request, media):
   response["Content-Length"] = os.path.getsize(the_file)
   response["Content-Disposition"] = f"attachment; filename={filename}"
   return response
+
+
+class ContactView(LoginRequiredMixin, generic.FormView):
+  template_name = "cm_main/contact-form.html"
+  form_class = ContactForm
+  success_url = "/"
+  admin = get_user_model().objects.filter(is_superuser=True).first()
+
+  def get_context_data(self, **kwargs):
+    return {'site_admin': self.admin.get_full_name(), 'form': self.form_class()}
+
+  def post(self, request, *args, **kwargs):
+    form = self.form_class(request.POST, request.FILES)
+    if form.is_valid():
+      # send an email to the admin (ie first superuser)
+      sender = get_user(request)
+      title = _("You have a new message from %(name)s (%(email)s). ") % {
+           "name": sender.get_full_name(), "email": sender.email}
+      email = EmailMultiAlternatives(
+        _("Contact form"),
+        title + _("But your mailer tools is too old to show it :'("),
+        sender.email,
+        [self.admin.email],
+      )
+      # attach an HTML version of the message
+      html_message = render_to_string('cm_main/email-contact-form.html', {
+        'title': title,
+        'sender': sender,
+        'message': form.cleaned_data['message'],
+        'site_name': settings.SITE_NAME,
+      })
+      email.attach_alternative(html_message, "text/html")
+
+      # attach the uploaded file if any
+      if 'attachment' in request.FILES:
+        uploaded_file = request.FILES.get('attachment')
+        if isinstance(uploaded_file, InMemoryUploadedFile) or isinstance(uploaded_file, TemporaryUploadedFile):
+          email.attach(uploaded_file.name, uploaded_file.read(), uploaded_file.content_type)
+        else:
+          raise ValueError(_("This file type is not supported"))
+      # else:
+      #   print("No attachments, file list is")
+      #   for f in request.FILES:
+      #     print(f)
+      # and send the email
+      email.send(fail_silently=False)
+
+      messages.success(request, _("Your message has been sent"))
+      return self.form_valid(form)
+
+    return self.form_invalid(form)
 
 
 def send_zipfile(request):

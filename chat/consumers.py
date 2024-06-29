@@ -42,7 +42,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     room = ChatRoom.objects.get(slug=room_slug)
     member = Member.objects.get(pk=member_id)
     chat = ChatMessage.objects.create(member=member, room=room, content=message)
-    check_followers(room, {'chat message': message}, member, reverse('chat:room', args=[room.slug]))
+    check_followers(None, room, {'chat message': message}, member, reverse('chat:room', args=[room.slug]))
     return chat
 
   # Receive message from WebSocket

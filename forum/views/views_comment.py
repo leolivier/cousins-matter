@@ -22,7 +22,7 @@ class CommentCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.author_id = request.user.id
         form.instance.message_id = message_id
         comment = form.save()
-        check_followers_on_comment(comment)
+        check_followers_on_comment(request, comment)
         return redirect("forum:display", message.post.id)
 
 

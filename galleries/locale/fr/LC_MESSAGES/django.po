@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-18 20:17+0200\n"
+"POT-Creation-Date: 2024-06-29 13:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -205,15 +205,15 @@ msgstr "Galerie %(gname)s"
 msgid "Gallery deleted"
 msgstr "Galerie supprimée avec tout son contenu"
 
-#: galleries/tests/tests_photo.py:119 galleries/views/views_photo.py:93
+#: galleries/tests/tests_photo.py:119 galleries/views/views_photo.py:92
 msgid "Photo deleted"
 msgstr "Photo supprimée"
 
-#: galleries/views/views_bulk.py:54
+#: galleries/views/views_bulk.py:53
 msgid "Photos can't be at the root of the zip file."
 msgstr "Les photos ne peuvent pas être à la racine du fichier zip."
 
-#: galleries/views/views_bulk.py:72
+#: galleries/views/views_bulk.py:71
 msgid ""
 "Detected path traversal attempt, '..' is not allowed in paths inside the zip "
 "file"
@@ -221,22 +221,22 @@ msgstr ""
 "Tentative de traversée de chemin détectée, '..' n'est pas autorisé dans les "
 "chemins à l'intérieur du fichier zip"
 
-#: galleries/views/views_bulk.py:81
+#: galleries/views/views_bulk.py:80
 #, python-brace-format
 msgid "Imported from zipfile directory {path}"
 msgstr "Importé du répertoire {path} du fichier zip"
 
-#: galleries/views/views_bulk.py:109
+#: galleries/views/views_bulk.py:108
 #, python-brace-format
 msgid "Imported from zipfile directory {filename}"
 msgstr "Importé du fichier {filename} du fichier zip"
 
-#: galleries/views/views_bulk.py:178
+#: galleries/views/views_bulk.py:177
 #, python-brace-format
 msgid "Unable to import photo '{path}', it was ignored"
 msgstr "Impossible d'importer la photo '{path}', elle a été ignorée"
 
-#: galleries/views/views_bulk.py:192
+#: galleries/views/views_bulk.py:191
 msgid ""
 "Zip file uploaded: {len(self.galleries)} galleries and {self.nbPhotos} "
 "photos created"
@@ -244,14 +244,14 @@ msgstr ""
 "Fichier zip téléchargé : {len(self.galleries)} galeries et {self.nbPhotos} "
 "photos créées"
 
-#: galleries/views/views_photo.py:31
+#: galleries/views/views_photo.py:30
 msgid "Missing either photo id or gallery id"
 msgstr "Il manque l'identifiant de la photo ou de la galerie"
 
-#: galleries/views/views_photo.py:51
+#: galleries/views/views_photo.py:50
 msgid "Photo not found on that page"
 msgstr "Photo non trouvée sur cette page"
 
-#: galleries/views/views_photo.py:71
+#: galleries/views/views_photo.py:70
 msgid "Photo created"
 msgstr "Photo créée"

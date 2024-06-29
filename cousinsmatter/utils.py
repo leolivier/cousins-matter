@@ -1,12 +1,26 @@
 # util functions for member views
 
 import math
+from pathlib import PosixPath
 # from pprint import pprint
+from django.conf import settings
 from django.forms import ValidationError
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.core import paginator
+from django.db import connections
+
+
+# terrible hack!!!
+def is_testing():
+    for connection in connections.all():
+        # print(f"searching test in {connection.settings_dict['NAME']}...")
+        if not isinstance(connection.settings_dict['NAME'], PosixPath):
+            # print("found")
+            return True
+    # print("no test connection found")
+    return False
 
 
 def is_ajax(request):
@@ -64,3 +78,11 @@ class Paginator(paginator.Paginator):
         page.possible_per_pages = self.possible_per_pages
         # pprint(vars(page))
         return page
+
+
+def get_absolute_url_wo_request(url):
+    if is_testing():
+        return "http://testserver" + url
+    if not settings.SITE_URL:
+        raise ValueError("settings.SITE_URL is not set")
+    return settings.SITE_URL + url

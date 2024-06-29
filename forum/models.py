@@ -19,6 +19,9 @@ class Message(models.Model):
             models.Index(fields=["post", "author"]),
     ]
 
+  def __str__(self):
+    return self.content[:100]
+
 
 class Post(models.Model):
   title = models.CharField(_('Title'), max_length=120)
@@ -33,6 +36,9 @@ class Post(models.Model):
             models.Index(fields=["title"]),
     ]
 
+  def __str__(self):
+    return self.title
+
 
 class Comment(models.Model):
   author = models.ForeignKey(Member, on_delete=models.CASCADE)
@@ -46,3 +52,6 @@ class Comment(models.Model):
     indexes = [
             models.Index(fields=["message", "author"]),
     ]
+
+  def __str__(self):
+    return self.content[:100]

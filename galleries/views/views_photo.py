@@ -1,7 +1,6 @@
 from datetime import date
 import logging
 from django.forms import ValidationError
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
@@ -63,7 +62,7 @@ class PhotoAddView(LoginRequiredMixin, generic.CreateView):
   model = Photo
   form_class = PhotoForm
 
-  def post(self, request: HttpRequest, gallery, *args, **kwargs) -> HttpResponse:
+  def post(self, request, gallery, *args, **kwargs):
     form = PhotoForm(request.POST, request.FILES)
     if form.is_valid():
       photo = form.save()

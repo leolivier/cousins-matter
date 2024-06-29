@@ -12,7 +12,6 @@ from PIL import Image, ImageOps
 from datetime import datetime
 from io import BytesIO
 from django.forms import ValidationError
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
@@ -183,7 +182,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
             else:
               pass  # unknown file type, don't care
 
-    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+    def post(self, request, *args, **kwargs):
       form = BulkUploadPhotosForm(request.POST, request.FILES)
       if form.is_valid():
         try:

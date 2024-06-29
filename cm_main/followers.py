@@ -7,8 +7,10 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.mail import send_mail
 
+from cousinsmatter.utils import get_absolute_url_wo_request
 
-def check_followers(followed_object, new_internal_object, author, followed_object_url):
+
+def check_followers(request, followed_object, new_internal_object, author, followed_object_url):
   """
     Sends an email to the followers of a followed object (followed_object) to which a new element new_internal_object is added.
     new_internal_object must be {'type': 'string'}, the type is used in the email subject and the value in the email body.
@@ -24,6 +26,10 @@ def check_followers(followed_object, new_internal_object, author, followed_objec
   follower_emails = [follower.email for follower in followed_object.followers.all() if follower.id != author.id]
   author_name = author.get_full_name()
   followed_object_name = str(followed_object)
+  followed_object_url = request.build_absolute_uri(followed_object_url) if request \
+    else get_absolute_url_wo_request(followed_object_url)
+  if not followed_object_name:
+    raise ValueError('followed object has no name')
   followed_type = followed_object._meta.verbose_name
   title = _('New %(obj_type)s added to %(followed_type)s "%(followed_object_name)s"') % {
                 'obj_type': obj_type,
@@ -55,7 +61,7 @@ def check_followers(followed_object, new_internal_object, author, followed_objec
 
 
 # Base view function to toggle follow for a given object
-def toggle_follow(request, followed_object, author, followed_object_url):
+def toggle_follow(request, followed_object, owner, followed_object_url):
 
   followed_type = followed_object._meta.verbose_name
   if followed_object.followers.filter(id=request.user.id).exists():
@@ -65,10 +71,12 @@ def toggle_follow(request, followed_object, author, followed_object_url):
     followed_object.followers.add(request.user)
     messages.success(request, _(f"You are now following this {followed_type}"))
     # send email to author of followed object to tell him someone is following his object
-    if author and author.id != request.user.id:  # don't send email to yourself or to nobody
+    if owner and owner.id != request.user.id:  # don't send email to yourself or to nobody
       followed_url = request.build_absolute_uri(followed_object_url)
       follower_name = request.user.get_full_name()
       followed_object_name = str(followed_object)
+      if not followed_object_name:
+        raise ValueError('followed object has no name')
       title = _('New follower to your %(followed_type)s "%(followed_object_name)s"') % {
         'followed_type': followed_type, 'followed_object_name': followed_object_name}
       message = _('%(follower_name)s is now following your %(followed_type)s "%(followed_object_name)s"') % {
@@ -77,10 +85,11 @@ def toggle_follow(request, followed_object, author, followed_object_url):
         title,
         message,
         settings.DEFAULT_FROM_EMAIL,
-        [followed_object.first_message.author.email],
+        [owner.email],
         html_message=render_to_string('cm_main/followers/new_follower.html', {
           'follower_name': follower_name,
           'followed_type': followed_type,
+          'followed_object_name': followed_object_name,
           'title': title,
           'followed_url': followed_url,
           'site_name': settings.SITE_NAME}),

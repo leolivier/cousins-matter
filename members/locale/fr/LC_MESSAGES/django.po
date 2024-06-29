@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 16:16+0200\n"
+"POT-Creation-Date: 2024-06-29 13:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -681,13 +681,13 @@ msgstr "Détail d'un Membre"
 
 #: members/templates/members/members/member_detail.html:21
 #: members/templates/members/members/member_upsert.html:20
-#: members/tests/tests_member.py:365
+#: members/tests/tests_member.py:391
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/members/member_detail.html:23
 #: members/templates/members/members/member_upsert.html:22
-#: members/tests/tests_member.py:365
+#: members/tests/tests_member.py:391
 msgid "Managed member"
 msgstr "Membre géré"
 
@@ -936,11 +936,11 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_member.py:220 members/views/views_member.py:193
+#: members/tests/tests_member.py:246 members/views/views_member.py:193
 msgid "Member deleted"
 msgstr "Membre supprimé"
 
-#: members/tests/tests_member.py:340 members/tests/tests_member.py:345
+#: members/tests/tests_member.py:366 members/tests/tests_member.py:371
 #: members/views/views_member.py:142 members/views/views_member.py:156
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
@@ -1014,7 +1014,7 @@ msgstr "Dossier %(site_name)s"
 msgid "Page %(doc_page)s - %(title)s"
 msgstr "Page %(doc_page)s - %(title)s"
 
-#: members/views/views_import.py:35
+#: members/views/views_import.py:34
 #, python-format
 msgid ""
 "Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
@@ -1022,7 +1022,7 @@ msgstr ""
 "Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
 "sont %(all_names)s"
 
-#: members/views/views_import.py:39
+#: members/views/views_import.py:38
 #, python-format
 msgid ""
 "Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
@@ -1031,14 +1031,14 @@ msgstr ""
 "Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
 "obligatoires sont %(all_names)s"
 
-#: members/views/views_import.py:87
+#: members/views/views_import.py:86
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar introuvable : %(avatar)s pour le nom d'utilisateur %(username)s. "
 "Ignoré..."
 
-#: members/views/views_import.py:187
+#: members/views/views_import.py:185
 #, python-format
 msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
@@ -1047,7 +1047,7 @@ msgstr ""
 "Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres "
 "créés ou mis à jour"
 
-#: members/views/views_import.py:190
+#: members/views/views_import.py:188
 #, python-format
 msgid "Warning: %(error)s"
 msgstr "Attention: %(error)s"

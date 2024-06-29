@@ -127,7 +127,7 @@ def add_reply(request, pk):
   reply.instance.post_id = pk
   reply.instance.author_id = request.user.id
   message = reply.save()
-  check_followers_on_message(message)
+  check_followers_on_message(request, message)
   return redirect(reverse("forum:display", args=[pk]))
 
 

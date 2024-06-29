@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 19:39+0200\n"
+"POT-Creation-Date: 2024-06-29 13:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,74 +18,87 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: chat/models.py:15
+#: chat/models.py:17
 msgid "chat room"
-msgstr "salle de chat"
+msgstr "salon de chat"
 
-#: chat/models.py:16
+#: chat/models.py:18
 msgid "chat rooms"
-msgstr "salles de chat"
+msgstr "salons de chat"
 
-#: chat/models.py:31
+#: chat/models.py:33
 msgid "Another room with the same name already exists"
-msgstr "Une autre salle portant le même nom existe déjà"
+msgstr "Un autre salon portant le même nom existe déjà"
 
-#: chat/models.py:37 chat/tests.py:32
+#: chat/models.py:39 chat/tests.py:37
 #, python-brace-format
 msgid ""
 "Another room with a similar name already exists ('{slug_name}'). Please "
 "choose a different name."
 msgstr ""
-"Une autre salle avec un nom similaire existe déjà ('{slug_name}'). Veuillez "
+"Un autre salon avec un nom similaire existe déjà ('{slug_name}'). Veuillez "
 "choisir un autre nom."
 
-#: chat/models.py:47
+#: chat/models.py:59
 msgid "message"
 msgstr "message"
 
-#: chat/templates/chat/chat.html:3 chat/templates/chat/chat.html:6
+#: chat/templates/chat/chat_rooms.html:3 chat/templates/chat/chat_rooms.html:6
 msgid "Chat"
 msgstr "Chat"
 
-#: chat/templates/chat/chat.html:7
+#: chat/templates/chat/chat_rooms.html:7
 msgid "Choose an existing room or create a new one."
-msgstr "Choisis une salle existante ou crées-en une nouvelle."
+msgstr "Choisis un salon existant ou crées-en un nouveau."
 
-#: chat/templates/chat/chat.html:10
+#: chat/templates/chat/chat_rooms.html:11
 msgid "Rooms"
-msgstr "Salles"
+msgstr "Salons"
 
-#: chat/templates/chat/chat.html:13
+#: chat/templates/chat/chat_rooms.html:14
+#: chat/templates/chat/room_detail.html:27
+msgid "Room name"
+msgstr "Nom du salon"
+
+#: chat/templates/chat/chat_rooms.html:24
+msgid "Create room"
+msgstr "Créer un salon"
+
+#: chat/templates/chat/chat_rooms.html:33
 #, python-format
 msgid "%(nmsgs)s message"
 msgid_plural "%(nmsgs)s messages"
 msgstr[0] "%(nmsgs)s message"
 msgstr[1] "%(nmsgs)s messages"
 
-#: chat/templates/chat/chat.html:24
+#: chat/templates/chat/chat_rooms.html:44
 msgid "Created by:"
 msgstr "Créer par:"
 
-#: chat/templates/chat/chat.html:27
+#: chat/templates/chat/chat_rooms.html:47
 msgid "profile"
 msgstr "profil"
 
-#: chat/templates/chat/chat.html:49
-msgid "Room name"
-msgstr "Nom de la salle"
-
-#: chat/templates/chat/chat.html:59
-msgid "Create room"
-msgstr "Créer une salle"
-
-#: chat/templates/chat/room.html:7
+#: chat/templates/chat/room_detail.html:19
 msgid "Let's chat!"
 msgstr "Chattons!"
 
-#: chat/templates/chat/room.html:29
+#: chat/templates/chat/room_detail.html:28
+msgid "hit return to submit, escape to give up"
+msgstr "retour pour soumettre, échap pour abandonner"
+
+#: chat/templates/chat/room_detail.html:36
+msgid "Delete"
+msgstr "Supprimer"
+
+#: chat/templates/chat/room_detail.html:39
+msgid "Edit"
+msgstr "Modifier"
+
+#: chat/templates/chat/room_detail.html:65
 msgid "Message"
 msgstr "Message"
 
-#: chat/templates/chat/room.html:34
+#: chat/templates/chat/room_detail.html:70
 msgid "Submit"
 msgstr "Envoyer"

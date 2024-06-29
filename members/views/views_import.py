@@ -6,7 +6,6 @@ import io
 import string
 from django.core.files import File
 from django.forms import ValidationError
-from django.http import HttpRequest, HttpResponse
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views import generic
@@ -174,8 +173,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 
     return (nbLines, nbMembers, errors)
 
-  def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-
+  def post(self, request, *args, **kwargs):
     self.request = request
     form = CSVImportMembersForm(request.POST, request.FILES)
     if form.is_valid():

@@ -1,9 +1,7 @@
-from django.conf import settings
 from django.urls import reverse
+from cm_main.tests import TestFollowersMixin
 from forum.tests.tests_post import ForumTestCase
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _
-from django.core import mail
 
 from ..models import Comment
 
@@ -62,7 +60,7 @@ class CommentCreateTestCase(ForumTestCase):
     # TODO: how to check the removal inside the page which is done in javascript?
 
 
-class TestFollower(ForumTestCase):
+class TestFollower(TestFollowersMixin, ForumTestCase):
 
   def test_follow_post_on_comment(self):
     original_poster = self.member
@@ -84,40 +82,18 @@ class TestFollower(ForumTestCase):
     response = self.client.post(url, {'content': comment_msg_content}, follow=True)
     self.assertEqual(response.status_code, 200)
 
-    post_title = self.post.title
     message = self.post.first_message
     comment = Comment.objects.get(message=message.id, content=comment_msg_content)
-    author = comment.author.get_full_name()
 
-    # new member 1 should have received an email because he is following the post
-    # and original post author should have received an email to say he has a folllower
-    self.assertEqual(len(mail.outbox), 2)
-    # first email is for the author, tested somewhere else, don't care
-
-    # second email is for the followers, no recipients, only bcc
-    follower_message = mail.outbox[1]
-    self.assertEqual(follower_message.from_email, settings.DEFAULT_FROM_EMAIL)
-    self.assertSequenceEqual(follower_message.to, [])
-    self.assertSequenceEqual(follower_message.bcc, [follower.email])
-    subject = _('New comment on post "%(post_title)s"') % {'post_title': post_title}
-    # print("subject", subject)
-    self.assertEqual(follower_message.subject, subject)
-    for content, type in follower_message.alternatives:
-      if type == 'text/html':
-        break
-    # print("content=", content)
-    html = _("%(author)s posted the following comment on '%(post_title)s':") % \
-      {'author': author, 'post_title': post_title}
-    comment_msg_content = comment_msg_content.replace('\n', '<br>')
-    html = f'''<p class="mt-2">
-  <strong>{html}</strong>
-  <br>
-  <i>{comment_msg_content}</i>
-</p>'''
-    self.assertInHTML(html, content)
-
+    self.check_followers_emails(
+      follower=follower,
+      sender=comment.author,
+      owner=original_poster,
+      url=reverse('forum:display', args=[self.post.id]),
+      followed_object=self.post,
+      created_object=comment,
+      created_content=comment_msg_content,
+    )
     # login back as self.member
     self.client.logout()
     self.login()
-    # reste mailbox
-    mail.outbox = []

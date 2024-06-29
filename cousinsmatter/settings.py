@@ -23,7 +23,7 @@ env = environ.Env(
 environ.Env.read_env(BASE_DIR / '.env')
 
 SITE_NAME = env.str('SITE_NAME', default='Cousins Matter')
-SITE_DOMAIN = env.str('SITE_DOMAIN', '127.0.0.1')
+SITE_URL = env.str('SITE_URL', 'http://127.0.0.1')
 
 SECRET_KEY = env.str('SECRET_KEY')
 

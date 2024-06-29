@@ -1,14 +1,8 @@
-from django.conf import settings
 from django.urls import reverse
 from django.core.exceptions import ValidationError
-from django.core import mail
-from django.utils.translation import gettext as _
+from cm_main.tests import TestFollowersMixin
 from forum.tests.tests_post import ForumTestCase
 from ..models import Message
-
-
-def get_absolute_url(url):
-  return 'http://testserver%s' % (url)
 
 
 class PostReplyTestCase(ForumTestCase):
@@ -62,7 +56,7 @@ class PostReplyTestCase(ForumTestCase):
     # TODO: how to check the removal inside the page which is done in javascript?
 
 
-class TestFollower(ForumTestCase):
+class TestFollower(TestFollowersMixin, ForumTestCase):
 
   def test_follow_post(self):
     original_poster = self.member
@@ -73,7 +67,7 @@ class TestFollower(ForumTestCase):
     url = reverse("forum:toggle_follow", args=[self.post.id])
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertIsNotNone(self.post.followers.filter(username=follower.username).first())
+    self.assertEqual(self.post.followers.first(), follower)
     # self.print_response(response)
 
     # create yet another member who will post a reply to the post
@@ -85,60 +79,18 @@ class TestFollower(ForumTestCase):
     self.assertEqual(response.status_code, 200)
     self.assertRedirects(response, reverse('forum:display', args=[self.post.id]))
 
-    post_title = self.post.title
     message = Message.objects.get(post=self.post, content=reply_msg_content)
     self.assertEqual(message.author, new_poster)
-    author = message.author.get_full_name()
-    follower_name = follower.get_full_name()
-    site_name = settings.SITE_NAME
-    post_url = get_absolute_url(reverse('forum:display', args=[self.post.id]))
 
-    # new member 1 should have received an email because he is following the post
-    # and original post author should have received an email to say he has a folllower
-    self.assertEqual(len(mail.outbox), 2)
-    # first email is for the author
-    author_message = mail.outbox[0]
-    # second email is for the followers
-    follower_message = mail.outbox[1]
-
-    # first email is for the author
-    self.assertEqual(author_message.from_email, settings.DEFAULT_FROM_EMAIL)
-    self.assertSequenceEqual(author_message.recipients(), [original_poster.email])
-    self.assertSequenceEqual(author_message.bcc, [])
-    subject = _('New follower to your post "%(post_title)s"') % {'post_title': post_title}
-    # print("subject", subject)
-    self.assertEqual(author_message.subject, subject)
-    for content, type in author_message.alternatives:
-      if type == 'text/html':
-        break
-    html = _('%(follower_name)s is now following your post <a href="%(post_url)s">\"%(post_title)s\"</a> on %(site_name)s') % \
-      {'follower_name': follower_name, 'post_title': post_title, 'post_url': post_url, 'site_name': site_name}
-    html = f'<div class="center"><p class="mt-2">{html}</p></div>'.replace('&quot;', '"')
-    # print(content)
-    self.assertInHTML(html, content)
-
-    # second email is for the followers, no recipients, only bcc
-    self.assertEqual(follower_message.from_email, settings.DEFAULT_FROM_EMAIL)
-    self.assertSequenceEqual(follower_message.to, [])
-    self.assertSequenceEqual(follower_message.bcc, [follower.email])
-    subject = _('New reply to post "%(post_title)s"') % {'post_title': post_title}
-    # print("subject", subject)
-    self.assertEqual(follower_message.subject, subject)
-    for content, type in follower_message.alternatives:
-      if type == 'text/html':
-        break
-    # print("content=", content)
-    html = _("%(author)s posted the following message on '%(post_title)s':") % {'author': author, 'post_title': post_title}
-    reply_msg_content = reply_msg_content.replace('\n', '<br>')
-    html = f'''<p class="mt-2">
-  <strong>{html}</strong>
-  <br>
-  <i>{reply_msg_content}</i>
-</p>'''
-    self.assertInHTML(html, content)
+    self.check_followers_emails(follower=follower,
+                                sender=new_poster,
+                                owner=original_poster,
+                                url=reverse('forum:display', args=[self.post.id]),
+                                followed_object=self.post,
+                                created_object=message,
+                                created_content=reply_msg_content,
+                                )
 
     # login back as self.member
     self.client.logout()
     self.login()
-    # reste mailbox
-    mail.outbox = []

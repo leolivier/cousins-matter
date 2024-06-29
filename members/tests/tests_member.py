@@ -106,10 +106,20 @@ class BaseMemberTestCase(SimpleTestCase):
     return f"{from_url}?{urlencode({'next': to_url})}"
 
   def login(self):
+    self.client.logout()
     self.assertMemberExists()
     member = get_user(self.client)
     logged = member.is_authenticated or self.client.login(username=self.username, password=self.password)
     self.assertTrue(logged)
+
+  def login_as(self, member):
+    # 1rst logout then login as member
+    self.client.logout()
+    logged = self.client.login(username=member.username, password=member.password)
+    self.assertTrue(logged)
+    current_member = get_user(self.client)
+    self.assertEqual(current_member.username, member.username)
+    self.assertTrue(current_member.is_authenticated)
 
   def assertMemberExists(self):
     self.assertTrue(Member.objects.filter(username=self.username).exists())
@@ -158,32 +168,28 @@ class BaseMemberTestCase(SimpleTestCase):
             'last_name': member.last_name, 'email': member.username+'@test.com',
             'phone': '01 23 45 67 ' + counter, "birthdate": date.today()}
 
-  def create_member(self, member_data=None):
+  def create_member(self, member_data=None, is_active=False):
     """creates and returns a new member using provided member data.
     If the member data is None, a new one is created.
     """
     if member_data is None:
       member_data = self.get_new_member_data()
-    new_member = Member.objects.create_member(**member_data)
+      # save password before hashing
+      passwd = member_data['password']
+    else:
+      passwd = member_data['password']
+    new_member = Member.objects.create_member(**member_data, is_active=is_active)
+    # store real password instead of hashed one so that we can login with it afterward
+    new_member.password = passwd
     self.created_members.append(new_member)
     return new_member
 
   def create_member_and_login(self, member_data=None):
     """creates and returns a new member using provided member data.
     If the member data is None, a new one is created.
-    The user is logged in by the method"""
-    if member_data is None:
-      member_data = self.get_new_member_data()
-    passwd = member_data['password']  # save password before hashing
-    new_member = Member.objects.create_member(**member_data, is_active=True)
-    # 1rst logout then login as new_member
-    self.client.logout()
-    logged = self.client.login(username=new_member.username, password=passwd)
-    self.assertTrue(logged)
-    current_member = get_user(self.client)
-    self.assertEqual(current_member.username, new_member.username)
-    self.assertTrue(current_member.is_authenticated)
-    self.created_members.append(new_member)
+    The user is set as active and logged in by the method"""
+    new_member = self.create_member(member_data, is_active=True)
+    self.login_as(new_member)
     return new_member
 
   def create_member_by_view(self, member_data=None):

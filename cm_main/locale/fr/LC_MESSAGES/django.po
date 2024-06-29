@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 16:16+0200\n"
+"POT-Creation-Date: 2024-06-29 13:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,6 +22,47 @@ msgstr ""
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
 
+#: cm_main/followers.py:34 cm_main/tests.py:57
+#, python-format
+msgid ""
+"New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
+msgstr ""
+"Nouveau %(obj_type)s ajouté au %(followed_type)s \"%(followed_object_name)s\""
+
+#: cm_main/followers.py:41
+#, python-format
+msgid ""
+"%(follower_name)s has added a new %(obj_type)s in the %(followed_type)s "
+"\"%(followed_object_name)s\""
+msgstr ""
+"%(follower_name)s a ajouté un nouveau %(obj_type)s au %(followed_type)s "
+"\"%(followed_object_name)s\""
+
+#: cm_main/followers.py:69
+#, python-brace-format
+msgid "You are no longer following this {followed_type}"
+msgstr "Tu ne suis plus ce {followed_type}"
+
+#: cm_main/followers.py:72
+#, python-brace-format
+msgid "You are now following this {followed_type}"
+msgstr "Tu suis maintenant ce {followed_type}"
+
+#: cm_main/followers.py:80 cm_main/tests.py:32
+#, python-format
+msgid "New follower to your %(followed_type)s \"%(followed_object_name)s\""
+msgstr ""
+"Nouveau follower pour ton %(followed_type)s \"%(followed_object_name)s\""
+
+#: cm_main/followers.py:82
+#, python-format
+msgid ""
+"%(follower_name)s is now following your %(followed_type)s "
+"\"%(followed_object_name)s\""
+msgstr ""
+"%(follower_name)s suit maintenant ton %(followed_type)s "
+"\"%(followed_object_name)s\""
+
 #: cm_main/templates/cm_main/base.html:8
 msgid "Home"
 msgstr "Accueil"
@@ -33,6 +74,55 @@ msgstr "Ce site est fièrement propulsé par"
 #: cm_main/templates/cm_main/base.html:66
 msgid "The source code is licensed"
 msgstr "Le code source est sous licence"
+
+#: cm_main/templates/cm_main/base.html:72
+msgid "Copyright © 2024 Cousins Matter. All rights reserved."
+msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
+
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:19
+#: cm_main/tests.py:68
+#, python-format
+msgid ""
+"%(author_name)s added the following %(obj_type)s on %(followed_type)s <a "
+"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
+msgstr ""
+"%(author_name)s a ajouté le %(obj_type)s suivant sur %(followed_type)s <a "
+"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
+
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:26
+#: cm_main/templates/cm_main/followers/new_follower.html:27
+msgid "Do not reply to this mail, it is machine generated."
+msgstr "Ne pas répondre à ce mail, il est généré par une machine."
+
+#: cm_main/templates/cm_main/followers/followers-count-tag.html:3
+#, python-format
+msgid "%(nfollowers)s follower"
+msgid_plural "%(nfollowers)s followers"
+msgstr[0] "%(nfollowers)s follower"
+msgstr[1] "%(nfollowers)s followers"
+
+#: cm_main/templates/cm_main/followers/new_follower.html:14
+#, python-format
+msgid "Your %(followed_type)s '%(followed_object_name)s' has a new follower!"
+msgstr ""
+"Ton %(followed_type)s '%(followed_object_name)s' a un nouveau follower!"
+
+#: cm_main/templates/cm_main/followers/new_follower.html:22 cm_main/tests.py:40
+#, python-format
+msgid ""
+"%(follower_name)s is now following your %(followed_type)s <a "
+"href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> on %(site_name)s"
+msgstr ""
+"%(follower_name)s suit maintenant ton %(followed_type)s <a "
+"href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> sur %(site_name)s"
+
+#: cm_main/templates/cm_main/followers/toggle-follow-button.html:4
+msgid "unfollow"
+msgstr "ne plus suivre"
+
+#: cm_main/templates/cm_main/followers/toggle-follow-button.html:9
+msgid "follow"
+msgstr "suivre"
 
 #: cm_main/templates/cm_main/menu.html:18
 msgid "Edit Pages"
@@ -123,10 +213,6 @@ msgstr "aller à la dernière page"
 #: cm_main/templates/cm_main/paginate_template.html:62
 msgid "Items per page:"
 msgstr "Items par page"
-
-#: cm_main/templatetags/cm_tags.py:12
-msgid "Copyright © 2024 Cousins Matter. All rights reserved."
-msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 
 #: cm_main/views.py:25
 msgid "Media not found"

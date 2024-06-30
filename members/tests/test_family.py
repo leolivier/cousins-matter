@@ -2,7 +2,7 @@ from django.urls import reverse
 from ..views.views_family import FamilyCreateView, FamilyUpdateView, FamilyDetailView, \
                                  ModalFamilyCreateView, ModalFamilyUpdateView
 from ..models import Family
-from .tests_member import MemberTestCase
+from .tests_member_base import MemberTestCase
 
 FAMILY_COUNT = 0
 

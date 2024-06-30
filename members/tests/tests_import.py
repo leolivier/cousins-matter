@@ -4,7 +4,7 @@ from django.utils import translation
 # from django.utils.translation import gettext as _
 from datetime import date
 from ..models import ALL_FIELD_NAMES, MANDATORY_MEMBER_FIELD_NAMES, Member, Address
-from .tests_member import MemberTestCase
+from .tests_member_base import MemberTestCase
 from ..views.views_import import CSVImportView
 import os
 

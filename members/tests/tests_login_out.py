@@ -1,9 +1,10 @@
-from .tests_member import BaseMemberTestCase, MemberTestCase
+from .tests_member_base import MemberTestCase
 
 
-class LoginTests(BaseMemberTestCase):
+class LoginTests(MemberTestCase):
 
   def test_login_view(self):
+    self.client.logout()  # make sure nobodys logged in
     self.assertMemberExists()
     response = self.client.get(self.login_url)
     self.assertEqual(response.status_code, 200)

@@ -1,6 +1,6 @@
 from django.http import FileResponse
 from django.urls import reverse
-from .tests_member import MemberTestCase
+from .tests_member_base import MemberTestCase
 from ..views.views_directory import MembersDirectoryView, MembersPrintDirectoryView
 
 

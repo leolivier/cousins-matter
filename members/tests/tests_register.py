@@ -10,7 +10,7 @@ from captcha.conf import settings as captcha_settings
 from ..forms import MemberRegistrationForm
 from ..models import Member
 from ..registration_link_manager import RegistrationLinkManager
-from .tests_member import MemberTestCase, BaseMemberTestCase
+from .tests_member_base import MemberTestCase, TestLoginRequiredMixin
 
 
 class MemberInviteTests(MemberTestCase):
@@ -79,7 +79,7 @@ class ignore_captcha_errors(TestContextDecorator):
     return cls
 
 
-class RequestRegistrationLinkTests(BaseMemberTestCase):
+class RequestRegistrationLinkTests(TestLoginRequiredMixin, MemberTestCase):
   @ignore_captcha_errors()
   def test_request_registration(self):
 
@@ -122,9 +122,10 @@ class RequestRegistrationLinkTests(BaseMemberTestCase):
     self.assertFormError(form, 'captcha', _("Invalid CAPTCHA"))
 
 
-class MemberRegisterTests(BaseMemberTestCase):
+class MemberRegisterTests(MemberTestCase):
 
   def test_register_view_ok(self):
+    self.client.logout()  # logout everybody
     factory = RequestFactory()
     request = factory.get('/dummy-path')
     email = 'test-cousinsmatter@maildrop.cc'

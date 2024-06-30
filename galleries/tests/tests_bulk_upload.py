@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from ..models import Gallery, Photo
 from ..views import views_bulk
-from .utils import GalleryBaseTestCase, test_file_full_path
+from .tests_utils import GalleryBaseTestCase, test_file_full_path
 
 
 class TestBulkUpload(GalleryBaseTestCase):

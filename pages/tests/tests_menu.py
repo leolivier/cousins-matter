@@ -1,5 +1,5 @@
 from django.urls import reverse
-from members.tests.tests_member import MemberTestCase
+from members.tests.tests_member_base import MemberTestCase
 from .test_base import BasePageTestCase, TestPageMixin
 
 

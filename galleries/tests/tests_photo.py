@@ -1,11 +1,12 @@
 from datetime import date
+from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
-from members.tests.tests_member import BaseMemberTestCase
+from members.tests.tests_member import TestLoginRequiredMixin
 from ..models import Photo, Gallery
 from ..views.views_photo import PhotoAddView
-from .utils import create_image, GalleryBaseTestCase
+from .tests_utils import create_image, GalleryBaseTestCase
 from .tests_gallery import get_gallery_name
 
 COUNTER = 0
@@ -17,11 +18,9 @@ def get_photo_name():
   return "photo #" + str(COUNTER)
 
 
-class CheckLoginRequired(BaseMemberTestCase):
+class CheckLoginRequired(TestLoginRequiredMixin, TestCase):
   def test_login_required(self):
-    rurl = reverse('galleries:photo', args=[1])
-    response = self.client.get(rurl)
-    self.assertRedirects(response, self.next(self.login_url, rurl), 302, 200)
+    self.assertRedirectsToLogin('galleries:photo', args=[1])
 
 
 class PhotoTestsBase(GalleryBaseTestCase):

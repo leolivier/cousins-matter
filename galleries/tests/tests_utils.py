@@ -1,5 +1,5 @@
 from django.test import override_settings
-from members.tests.tests_member import MemberTestCase
+from members.tests.tests_member_base import MemberTestCase
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from io import BytesIO
 from PIL import Image

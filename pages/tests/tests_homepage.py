@@ -3,7 +3,7 @@ from django.conf import settings
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from members.models import Member
-from members.tests.tests_member import MemberTestCase
+from members.tests.tests_member_base import MemberTestCase
 from django.utils.translation import override as lang_override
 from members.tests.tests_birthdays import TestBirthdaysMixin
 from pages.models import create_page

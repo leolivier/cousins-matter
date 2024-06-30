@@ -1,6 +1,6 @@
 from django.urls import reverse
 from django.db import transaction
-from members.tests.tests_member import MemberTestCase
+from members.tests.tests_member_base import MemberTestCase
 from ..views.views_post import PostCreateView, PostEditView
 from ..models import Post, Message, Comment
 

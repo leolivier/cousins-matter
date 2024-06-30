@@ -12,7 +12,7 @@ from channels.testing import WebsocketCommunicator
 from channels.routing import URLRouter
 
 from cm_main.tests import TestFollowersMixin
-from members.tests.tests_member import MemberTestCase
+from members.tests.tests_member_base import MemberTestCase
 from .models import ChatMessage, ChatRoom
 from .routing import websocket_urlpatterns
 

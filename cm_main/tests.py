@@ -4,9 +4,8 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from members.models import Member
-from members.tests.tests_member import MemberTestCase
+from members.tests.tests_member_base import MemberTestCase
 from .forms import ContactForm
-
 
 
 def get_absolute_url(url):
@@ -111,10 +110,8 @@ class TestContactForm(MemberTestCase):
     # check email
     self.assertEqual(len(mail.outbox), 1)
     self.assertEqual(mail.outbox[0].subject, _('Contact form'))
-    # Puzzling! The superuser is self.superuser in the test code but int the view code,
-    # it is the superuser of the real database! TODO: fix this !
     self.assertEqual(Member.objects.filter(is_superuser=True).first(), self.superuser)
-    # self.assertSequenceEqual(mail.outbox[0].to, [self.superuser.email])
+    self.assertSequenceEqual(mail.outbox[0].to, [self.superuser.email])
     for content, type in mail.outbox[0].alternatives:
       if type == 'text/html':
         break

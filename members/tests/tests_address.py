@@ -1,7 +1,7 @@
 from django.urls import reverse
 from ..views.views_address import AddressCreateView, AddressUpdateView, ModalAddressCreateView, ModalAddressUpdateView
 from ..models import Address
-from .tests_member import MemberTestCase
+from .tests_member_base import MemberTestCase
 
 TEST_ADDR = {
   'number_and_street': "1 Avenue des Champs-Elysées",

@@ -1,23 +1,14 @@
-from urllib.parse import urlencode
+from django.conf import settings
 from django.urls import reverse
 from django.db.utils import IntegrityError
 from django.utils.formats import localize
 from django.utils.translation import gettext as _
-from django.conf import settings
-from django.contrib.auth import get_user_model, get_user
-from django.test import SimpleTestCase, TestCase
+from django.contrib.auth import get_user_model
+from django.test import TestCase
 from ..views.views_member import EditProfileView, MemberDetailView
 from ..models import Member
-from datetime import date
+from .tests_member_base import TestLoginRequiredMixin, MemberTestCase
 import os
-COUNTER = 0
-
-
-def get_counter():
-  global COUNTER
-  COUNTER += 1
-  # print('count=', COUNTER)
-  return str(COUNTER)
 
 
 class UsersManagersTests(TestCase):
@@ -58,140 +49,7 @@ class UsersManagersTests(TestCase):
                 first_name='foo', last_name='bar')
 
 
-class BaseMemberTestCase(SimpleTestCase):
-  databases = '__all__'  # allow write to database
-
-  member = None
-  username = 'foobar'
-  password = 'vWx12/gtV"'
-  email = "foo@bar.com"
-  first_name = "foo"
-  last_name = "bar"
-
-  superuser = None
-  superuser_name = "superuser"
-  superuser_pwd = "SuPerUser1!"
-  superuser_email = "superuser@test.com"
-
-  login_url = reverse('members:login')
-  logout_url = reverse('members:logout')
-  change_password_url = reverse('change_password')
-
-  def setUp(self):
-    super().setUp()
-    self.superuser = Member.objects.create_superuser(self.superuser_name, self.superuser_email, self.superuser_pwd,
-                                                     "Super", "Member", privacy_consent=True)
-    self.member = Member.objects.create_member(self.username, self.email, self.password,
-                                               self.first_name, self.last_name, is_active=True, privacy_consent=True)
-    self.created_members = []
-
-  base_avatar = "test_avatar.jpg"
-  test_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "test_avatar.jpg")
-  test_mini_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "mini_test_avatar.jpg")
-
-  def tearDown(self):
-    self.superuser.delete()
-    self.member.delete()
-    self.member = None
-    for m in self.created_members:
-      if m.id is not None:
-        m.delete()
-    self.created_members = []
-    return super().tearDown()
-
-  def print_response(self, response):
-    print(response.content.decode().replace('\\t', '\t').replace('\\n', '\n'))
-
-  def next(self, from_url, to_url):
-    return f"{from_url}?{urlencode({'next': to_url})}"
-
-  def login(self):
-    self.client.logout()
-    self.assertMemberExists()
-    member = get_user(self.client)
-    logged = member.is_authenticated or self.client.login(username=self.username, password=self.password)
-    self.assertTrue(logged)
-
-  def login_as(self, member):
-    # 1rst logout then login as member
-    self.client.logout()
-    logged = self.client.login(username=member.username, password=member.password)
-    self.assertTrue(logged)
-    current_member = get_user(self.client)
-    self.assertEqual(current_member.username, member.username)
-    self.assertTrue(current_member.is_authenticated)
-
-  def assertMemberExists(self):
-    self.assertTrue(Member.objects.filter(username=self.username).exists())
-
-  def assertMemberIsLogged(self):
-    member = get_user(self.client)
-    self.assertTrue(member.is_authenticated)
-
-  def assertMemberIsNotLogged(self):
-    umemberer = get_user(self.client)
-    self.assertFalse(umemberer.is_authenticated)
-
-  def superuser_login(self):
-    self.assertIsNotNone(self.superuser)
-    member = get_user(self.client)
-    if member.is_authenticated and not member.is_superuser:
-      self.client.logout()
-      member = get_user(self.client)  # is refresh needed?
-    logged = member.is_authenticated or self.client.login(username=self.superuser_name, password=self.superuser_pwd)
-    self.assertTrue(logged)
-
-  def assertContainsMessage(self, response, type, message):
-    self.assertContains(response, f'''<li class="message is-{type}">
-      <div class="message-body">{message}
-      </div>
-    </li>''', html=True)
-
-  def get_new(self, input_str, counter):
-    """build a new string based on the passed one"""
-    return input_str + counter
-
-  def get_new_member_data(self):
-    """returns a brand new member data (new username)"""
-    counter = get_counter()
-    uname = self.get_new(self.username, counter)
-    new_password = self.get_new(self.password, counter)
-
-    return {'username': uname, 'password': new_password, 'email': uname+'@test.com',
-            'first_name': self.get_new(self.first_name, counter), 'last_name': self.get_new(self.last_name, counter),
-            'phone': '01 23 45 67 ' + counter, "birthdate": date.today(), "privacy_consent": True}
-
-  def get_changed_member_data(self, member):
-    """returns a modified member dataset (same username and last_name)"""
-    counter = get_counter()
-    return {'username': member.username, 'first_name': self.get_new(member.first_name, counter),
-            'last_name': member.last_name, 'email': member.username+'@test.com',
-            'phone': '01 23 45 67 ' + counter, "birthdate": date.today()}
-
-  def create_member(self, member_data=None, is_active=False):
-    """creates and returns a new member using provided member data.
-    If the member data is None, a new one is created.
-    """
-    if member_data is None:
-      member_data = self.get_new_member_data()
-      # save password before hashing
-      passwd = member_data['password']
-    else:
-      passwd = member_data['password']
-    new_member = Member.objects.create_member(**member_data, is_active=is_active)
-    # store real password instead of hashed one so that we can login with it afterward
-    new_member.password = passwd
-    self.created_members.append(new_member)
-    return new_member
-
-  def create_member_and_login(self, member_data=None):
-    """creates and returns a new member using provided member data.
-    If the member data is None, a new one is created.
-    The user is set as active and logged in by the method"""
-    new_member = self.create_member(member_data, is_active=True)
-    self.login_as(new_member)
-    return new_member
-
+class MemberViewTestMixin():
   def create_member_by_view(self, member_data=None):
     """creates and returns a new member through the UI using provided member data.
     Compared to create_member directly to DB, created users are supposed to be managed
@@ -208,17 +66,7 @@ class BaseMemberTestCase(SimpleTestCase):
     return new_member
 
 
-class MemberTestCase(BaseMemberTestCase):
-  def setUp(self):
-    super().setUp()
-    self.login()
-
-  def tearDown(self):
-    self.client.logout()
-    super().tearDown()
-
-
-class MemberCreateTest(MemberTestCase):
+class MemberCreateTest(MemberViewTestMixin, MemberTestCase):
 
   def test_create_member_with_same_username(self):
     with self.assertRaises(IntegrityError):
@@ -234,7 +82,7 @@ class MemberCreateTest(MemberTestCase):
     self.assertEqual(managed.managing_member, self.member)
 
 
-class MemberDeleteTest(MemberTestCase):
+class MemberDeleteTest(MemberViewTestMixin, MemberTestCase):
 
   def test_delete_member(self):
     member = self.create_member()
@@ -250,23 +98,20 @@ class MemberDeleteTest(MemberTestCase):
     self.assertEqual(Member.objects.filter(username=member.username).count(), 0)
 
 
-class LoginRequiredTests(BaseMemberTestCase):
+class LoginRequiredTests(TestLoginRequiredMixin, TestCase):
 
   def test_login_required(self):
     for url in ['members:logout', 'change_password', 'members:members', 'members:profile',
                 'members:create', 'members:birthdays']:
-      rurl = reverse(url)
-      response = self.client.get(rurl)
-      # checks that the response is a redirect (302) to the login page
-      # with another redirect afterward to the original url
-      self.assertRedirects(response, self.next(self.login_url, rurl), 302, 200)
+      self.assertRedirectsToLogin(url)
     for url in ['members:member_edit', 'members:detail']:
-      rurl = reverse(url, args=(f'{self.member.id}', ))
-      response = self.client.get(rurl)
-      self.assertRedirects(response, self.next(self.login_url, rurl), 302, 200)
+      self.assertRedirectsToLogin(url, args=(1,))
 
 
 class MemberProfileViewTest(MemberTestCase):
+  base_avatar = "test_avatar.jpg"
+  test_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "test_avatar.jpg")
+  test_mini_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "mini_test_avatar.jpg")
 
   def test_member_profile_view(self):
     profile_url = reverse('members:profile')
@@ -330,7 +175,7 @@ class MemberProfileViewTest(MemberTestCase):
     self.assertTrue(avatar_prefix.startswith(testbn_prefix))
 
 
-class ManagedMemberChangeTests(MemberTestCase):
+class ManagedMemberChangeTests(MemberViewTestMixin, MemberTestCase):
   def setUp(self):
     super().setUp()
     # first create a new managed member

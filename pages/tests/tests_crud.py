@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import reverse
-from members.tests.tests_member import MemberTestCase
+from members.tests.tests_member_base import MemberTestCase
 from django.utils.translation import gettext as _
 from ..forms import PageForm
 from .test_base import BasePageTestCase, TestPageMixin

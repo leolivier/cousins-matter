@@ -2,7 +2,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.translation import gettext as _
-from .tests_member import MemberTestCase
+from .tests_member_base import MemberTestCase
 from datetime import date, timedelta
 
 

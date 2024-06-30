@@ -116,6 +116,7 @@ jobs:
 
       - name: Test django (skip redis needing tests)
         run: |
+          python ./manage.py migrate
           python ./manage.py test --parallel --exclude-tag needs-redis
     
       - name: Set up QEMU

@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
 from django.test import tag
-from django.contrib.auth import get_user
+from django.contrib.auth import aget_user
 
 from asgiref.sync import sync_to_async
 from channels.testing import WebsocketCommunicator
@@ -99,20 +99,12 @@ class ChatMessageTestBase(MemberTestCase):
     super().tearDown()
 
   @sync_to_async
-  def get_room_first_msg(self):
-    return ChatMessage.objects.filter(room=self.room).first()
-
-  @sync_to_async
   def check_msg_member(self, msg):
     self.assertEqual(self.member, msg.member)
 
-  @sync_to_async
-  def async_get_user(self):
-    return get_user(self.client)
-
   async def send_chat_message(self, msg):
     # sender is the currently connected user
-    sender = await self.async_get_user()
+    sender = await aget_user(self.client)
     data = {
       'message': msg,
       'member': sender.id,
@@ -128,6 +120,7 @@ class ChatMessageTestBase(MemberTestCase):
     return communicator
 
 
+@tag("needs-redis")
 class ChatMessageTests(ChatMessageTestBase):
   async def test_chat_consumer(self):
     msg = 'this is my message to the world!'
@@ -136,7 +129,7 @@ class ChatMessageTests(ChatMessageTestBase):
     # print(response)
     self.assertEqual(response['message'], msg)
     self.assertEqual(response['username'], self.member.username)
-    message = await self.get_room_first_msg()
+    message = await ChatMessage.objects.filter(room=self.room).afirst()
     self.assertIsNotNone(msg)
     self.assertEqual(response['message'], message.content)
     await self.check_msg_member(message)
@@ -146,51 +139,41 @@ class ChatMessageTests(ChatMessageTestBase):
 
 @tag("needs-redis")
 class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageTestBase):
-  @sync_to_async
-  def assertFollowersCountEqual(self, count):
-    self.assertEqual(self.room.followers.count(), count)
 
   @sync_to_async
-  def assertFirstFollowerIs(self, follower):
-    self.assertEqual(self.room.followers.first(), follower)
-
-  @sync_to_async
-  def async_create_member_and_login(self):
+  def acreate_member_and_login(self):
     return self.create_member_and_login()
 
   @sync_to_async
-  def async_post(self, url, *args, **kwargs):
+  def apost(self, url, *args, **kwargs):
     return self.client.post(url, *args, **kwargs)
 
   @sync_to_async
-  def async_login_as(self, member):
+  def alogin_as(self, member):
     return self.login_as(member)
-
-  @sync_to_async
-  def async_get_message(self, content):
-    return ChatMessage.objects.get(content=content)
 
   async def test_follow_room(self):
     # we should start with zéro followers
-    await self.assertFollowersCountEqual(0)
+    self.assertEqual(await self.room.followers.acount(), 0)
 
     # now create a new member and login, he will send a first
     # message on the room and become the owner
-    new_poster = await self.async_create_member_and_login()
+    new_poster = await self.acreate_member_and_login()
     msg = 'this is the first message on the room si I am the owner!'
     communicator = await self.send_chat_message(msg)
     # Close communication
     await communicator.disconnect()
 
     # create another new member and login, he will be the follower
-    follower = await self.async_create_member_and_login()
-    await self.async_post(reverse('chat:toggle_follow', args=[self.slug]))
+    follower = await self.acreate_member_and_login()
+    await self.apost(reverse('chat:toggle_follow', args=[self.slug]))
     # now we should have one follower which is the new member
-    await self.assertFollowersCountEqual(1)
-    await self.assertFirstFollowerIs(follower)
+    self.assertEqual(await self.room.followers.acount(), 1)
+    # and the first follower should be the new member
+    self.assertEqual(await self.room.followers.afirst(), follower)
 
     # now log again as new_poster and send another message on the room
-    await self.async_login_as(new_poster)
+    await self.alogin_as(new_poster)
     msg = 'this is a message to my followers!'
     communicator = await self.send_chat_message(msg)
     # Close communication
@@ -202,15 +185,15 @@ class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageTestBase):
       owner=new_poster,
       url=reverse('chat:room', args=[self.slug]),
       followed_object=self.room,
-      created_object=await self.async_get_message(msg),
+      created_object=await ChatMessage.objects.aget(room=self.room, content=msg),
       created_content=msg,
     )
 
     # login back as follower
-    await self.async_login_as(follower)
+    await self.alogin_as(follower)
     # now unfollow the room
-    await self.async_post(reverse('chat:toggle_follow', args=[self.slug]))
-    await self.assertFollowersCountEqual(0)
+    await self.apost(reverse('chat:toggle_follow', args=[self.slug]))
+    self.assertEqual(await self.room.followers.acount(), 0)
 
     # login back as self.member
-    # await self.async_login_as(self.member)
+    # await self.alogin_as(self.member)

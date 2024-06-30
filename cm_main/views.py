@@ -49,7 +49,12 @@ class ContactView(LoginRequiredMixin, generic.FormView):
   template_name = "cm_main/contact-form.html"
   form_class = ContactForm
   success_url = "/"
-  admin = get_user_model().objects.filter(is_superuser=True).first()
+  _admin = None
+
+  def admin(self):
+    if self._admin is None:
+      self._admin = get_user_model().objects.filter(is_superuser=True).first()
+    return self._admin
 
   def get_context_data(self, **kwargs):
     return {'site_admin': self.admin.get_full_name(), 'form': self.form_class()}
@@ -83,10 +88,7 @@ class ContactView(LoginRequiredMixin, generic.FormView):
           email.attach(uploaded_file.name, uploaded_file.read(), uploaded_file.content_type)
         else:
           raise ValueError(_("This file type is not supported"))
-      # else:
-      #   print("No attachments, file list is")
-      #   for f in request.FILES:
-      #     print(f)
+
       # and send the email
       email.send(fail_silently=False)
 

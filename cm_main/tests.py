@@ -1,6 +1,12 @@
 from django.conf import settings
 from django.core import mail
+from django.urls import reverse
 from django.utils.translation import gettext as _
+
+from members.models import Member
+from members.tests.tests_member import MemberTestCase
+from .forms import ContactForm
+
 
 
 def get_absolute_url(url):
@@ -79,5 +85,55 @@ class TestFollowersMixin():
   <i>{created_content}</i>
 </p>'''
     self.assertInHTML(html, content)
+    # reset mailbox
+    mail.outbox = []
+
+
+class TestContactForm(MemberTestCase):
+  def test_contact_form(self):
+    """test the contact form"""
+    response = self.client.get(reverse('cm_main:contact'))
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, 'cm_main/contact-form.html')
+
+    # test the form with invalid data
+    form = ContactForm({
+      'name': 'John Doe',
+      'email': 'john.doe@example.com',
+    })
+    self.assertFormError(form, 'message', _('This field is required.'))
+
+    # test the form with valid data, message only
+    test_msg = 'This is a test message.'
+    response = self.client.post(reverse('cm_main:contact'), {'message': test_msg}, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, _('Your message has been sent'))
+    # check email
+    self.assertEqual(len(mail.outbox), 1)
+    self.assertEqual(mail.outbox[0].subject, _('Contact form'))
+    # Puzzling! The superuser is self.superuser in the test code but int the view code,
+    # it is the superuser of the real database! TODO: fix this !
+    self.assertEqual(Member.objects.filter(is_superuser=True).first(), self.superuser)
+    # self.assertSequenceEqual(mail.outbox[0].to, [self.superuser.email])
+    for content, type in mail.outbox[0].alternatives:
+      if type == 'text/html':
+        break
+    # print(content)
+    subject = _("You have a new message from %(name)s (%(email)s). ") % {
+           "name": self.member.get_full_name(), "email": self.member.email}
+    self.assertInHTML(settings.SITE_NAME + ' - ' + subject, content)
+    msg = _("%(sender_name)s sent you the following message from %(site_name)s:") % {
+      'sender_name': self.member.get_full_name(),
+      'site_name': settings.SITE_NAME,
+    }
+    html_message = _('''<p class="mt-2">
+  <strong>%(msg)s</strong>
+  <br>
+  <i>%(message)s</i>
+  </p>''') % {
+      'msg': msg,
+      'message': test_msg.replace('\n', '<br>'),
+    }
+    self.assertInHTML(html_message, content)
     # reset mailbox
     mail.outbox = []

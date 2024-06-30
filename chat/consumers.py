@@ -37,12 +37,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
     )
 
   @sync_to_async
-  def save_message(self, member_id, room_slug, message):
+  def acheck_followers(self, room, data, member, url):
+    check_followers(None, room, data, member, url)
+
+  async def save_message(self, member_id, room_slug, message):
     # print('room slug: ', room_slug)
-    room = ChatRoom.objects.get(slug=room_slug)
-    member = Member.objects.get(pk=member_id)
-    chat = ChatMessage.objects.create(member=member, room=room, content=message)
-    check_followers(None, room, {'chat message': message}, member, reverse('chat:room', args=[room.slug]))
+    room = await ChatRoom.objects.aget(slug=room_slug)
+    member = await Member.objects.aget(pk=member_id)
+    chat = await ChatMessage.objects.acreate(member=member, room=room, content=message)
+    await self.acheck_followers(room, {'chat message': message}, member, reverse('chat:room', args=[room.slug]))
     return chat
 
   # Receive message from WebSocket

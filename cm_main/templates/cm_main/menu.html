@@ -103,11 +103,15 @@
 					</span>
 				</button>
 				{%with about_prefix='/pages/'|add:settings.LANGUAGE_CODE|add:'/about/' private_prefix='/pages/'|add:settings.LANGUAGE_CODE|add:'/private/'%}
-				{% get_flatpages about_prefix  as about_pages %}
+				{% get_flatpages about_prefix as about_pages %}
 				<div class="navbar-dropdown is-right">
 					{% for page in about_pages %}
         	<a class="navbar-item" href="{{ page.url }}">{{ page.title }}</a>
     			{% endfor %}
+					{%if about_pages %}
+					<hr class="navbar-divider">
+					{%endif%}
+					<a class="navbar-item" href="{% url 'cm_main:contact' %}">{%trans "Contact the site admin" %}</a>
 				</div>
 				{%endwith%}
 			</div>

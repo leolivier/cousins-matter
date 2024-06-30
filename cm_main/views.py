@@ -57,7 +57,7 @@ class ContactView(LoginRequiredMixin, generic.FormView):
     return self._admin
 
   def get_context_data(self, **kwargs):
-    return {'site_admin': self.admin.get_full_name(), 'form': self.form_class()}
+    return {'site_admin': self.admin().get_full_name(), 'form': self.form_class()}
 
   def post(self, request, *args, **kwargs):
     form = self.form_class(request.POST, request.FILES)
@@ -70,7 +70,7 @@ class ContactView(LoginRequiredMixin, generic.FormView):
         _("Contact form"),
         title + _("But your mailer tools is too old to show it :'("),
         sender.email,
-        [self.admin.email],
+        [self.admin().email],
       )
       # attach an HTML version of the message
       html_message = render_to_string('cm_main/email-contact-form.html', {

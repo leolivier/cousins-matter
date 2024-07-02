@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 13:57+0200\n"
+"POT-Creation-Date: 2024-07-02 18:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,14 +22,28 @@ msgstr ""
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
 
-#: cm_main/followers.py:34 cm_main/tests.py:57
+#: cm_main/followers.py:52
+#, python-format
+msgid "New %(followed_type)s \"%(followed_object_name)s\""
+msgstr "Nouveau %(followed_type)s \"%(followed_object_name)s\""
+
+#: cm_main/followers.py:56
+#, python-format
+msgid ""
+"%(follower_name)s has created a new %(followed_type)s "
+"\"%(followed_object_name)s\""
+msgstr ""
+"%(follower_name)s a créé un nouveau %(followed_type)s "
+"\"%(followed_object_name)s\""
+
+#: cm_main/followers.py:61 cm_main/tests.py:57
 #, python-format
 msgid ""
 "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
 msgstr ""
 "Nouveau %(obj_type)s ajouté au %(followed_type)s \"%(followed_object_name)s\""
 
-#: cm_main/followers.py:41
+#: cm_main/followers.py:66
 #, python-format
 msgid ""
 "%(follower_name)s has added a new %(obj_type)s in the %(followed_type)s "
@@ -38,23 +52,23 @@ msgstr ""
 "%(follower_name)s a ajouté un nouveau %(obj_type)s au %(followed_type)s "
 "\"%(followed_object_name)s\""
 
-#: cm_main/followers.py:69
+#: cm_main/followers.py:99
 #, python-brace-format
 msgid "You are no longer following this {followed_type}"
 msgstr "Tu ne suis plus ce {followed_type}"
 
-#: cm_main/followers.py:72
+#: cm_main/followers.py:102
 #, python-brace-format
 msgid "You are now following this {followed_type}"
 msgstr "Tu suis maintenant ce {followed_type}"
 
-#: cm_main/followers.py:80 cm_main/tests.py:32
+#: cm_main/followers.py:110 cm_main/tests.py:32
 #, python-format
 msgid "New follower to your %(followed_type)s \"%(followed_object_name)s\""
 msgstr ""
 "Nouveau follower pour ton %(followed_type)s \"%(followed_object_name)s\""
 
-#: cm_main/followers.py:82
+#: cm_main/followers.py:112
 #, python-format
 msgid ""
 "%(follower_name)s is now following your %(followed_type)s "
@@ -79,17 +93,26 @@ msgstr "Le code source est sous licence"
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 
-#: cm_main/templates/cm_main/followers/email-followers-on-change.html:19
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:20
+#, python-format
+msgid ""
+"%(author_name)s created the following %(followed_type)s <a "
+"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
+msgstr ""
+"%(author_name)s a créé le %(followed_type)s suivant <a "
+"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
+
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:24
 #: cm_main/tests.py:68
 #, python-format
 msgid ""
 "%(author_name)s added the following %(obj_type)s on %(followed_type)s <a "
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 msgstr ""
-"%(author_name)s a ajouté le %(obj_type)s suivant sur %(followed_type)s <a "
+"%(author_name)s a ajouté le %(obj_type)s suivant sur le %(followed_type)s <a "
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 
-#: cm_main/templates/cm_main/followers/email-followers-on-change.html:26
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:32
 #: cm_main/templates/cm_main/followers/new_follower.html:27
 msgid "Do not reply to this mail, it is machine generated."
 msgstr "Ne pas répondre à ce mail, il est généré par une machine."

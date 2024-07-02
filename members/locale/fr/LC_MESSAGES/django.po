@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 13:57+0200\n"
+"POT-Creation-Date: 2024-07-01 20:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -194,21 +194,21 @@ msgid "Managing member"
 msgstr "Compte gérant ce membre"
 
 #: members/models.py:101
-#: members/templates/members/members/member_detail.html:32
+#: members/templates/members/members/member_detail.html:35
 #: members/templates/members/members/members_directory.html:25
 #: members/views/views_directory.py:42
 msgid "Address"
 msgstr "Adresse"
 
 #: members/models.py:103
-#: members/templates/members/members/member_detail.html:36
+#: members/templates/members/members/member_detail.html:43
 #: members/templates/members/members/members_directory.html:23
 #: members/views/views_directory.py:42
 msgid "Phone"
 msgstr "Téléphone"
 
 #: members/models.py:105
-#: members/templates/members/members/member_detail.html:40
+#: members/templates/members/members/member_detail.html:47
 #: members/templates/members/members/members_directory.html:22
 msgid "Birthdate"
 msgstr "Date de naissance"
@@ -218,17 +218,17 @@ msgid "Click on the month name or the year to change them quickly"
 msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
 
 #: members/models.py:109
-#: members/templates/members/members/member_detail.html:44
+#: members/templates/members/members/member_detail.html:51
 msgid "Website"
 msgstr "Site web"
 
 #: members/models.py:111
-#: members/templates/members/members/member_detail.html:48
+#: members/templates/members/members/member_detail.html:55
 msgid "Family"
 msgstr "Famille"
 
 #: members/models.py:113
-#: members/templates/members/members/member_detail.html:52
+#: members/templates/members/members/member_detail.html:59
 msgid "Who I am"
 msgstr "Qui je suis"
 
@@ -248,11 +248,15 @@ msgstr "Donne un liste de loisirs séparés par des virgules"
 msgid "Privacy consent"
 msgstr "Consentement à la protection de la vie privée"
 
-#: members/models.py:126
+#: members/models.py:120
+msgid "Followers"
+msgstr "Followers"
+
+#: members/models.py:129
 msgid "member"
 msgstr "membre"
 
-#: members/models.py:127
+#: members/models.py:130
 msgid "members"
 msgstr "members"
 
@@ -274,7 +278,7 @@ msgstr "Cette adresse n'est utilisée par personne"
 
 #: members/templates/members/address/address_detail.html:48
 #: members/templates/members/family/family_detail.html:23
-#: members/templates/members/members/member_detail.html:68
+#: members/templates/members/members/member_detail.html:75
 msgid "Edit"
 msgstr "Editer"
 
@@ -335,8 +339,18 @@ msgid "Verify"
 msgstr "Vérifier"
 
 #: members/templates/members/email/email_verification_msg.html:39
+#: members/templates/members/email/new_follower.html:22
 msgid "Do not reply to this mail, it is machine generated."
 msgstr "Ne pas répondre à ce mail, il est généré par ordinateur."
+
+#: members/templates/members/email/new_follower.html:17
+#, python-format
+msgid ""
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
+"is now following you on %(site_name)s!"
+msgstr ""
+"Bonjour %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
+"te suit maintenant sur %(site_name)s!"
 
 #: members/templates/members/email/registration_invite_email.html:8
 #, python-format
@@ -679,23 +693,29 @@ msgstr "Confirmer"
 msgid "Member Detail"
 msgstr "Détail d'un Membre"
 
-#: members/templates/members/members/member_detail.html:21
+#: members/templates/members/members/member_detail.html:24
 #: members/templates/members/members/member_upsert.html:20
-#: members/tests/tests_member.py:391
+#: members/tests/tests_member.py:393
 msgid "Active member"
 msgstr "Membre actif"
 
-#: members/templates/members/members/member_detail.html:23
+#: members/templates/members/members/member_detail.html:26
 #: members/templates/members/members/member_upsert.html:22
-#: members/tests/tests_member.py:391
+#: members/tests/tests_member.py:393
 msgid "Managed member"
 msgstr "Membre géré"
 
-#: members/templates/members/members/member_detail.html:56
+#: members/templates/members/members/member_detail.html:39
+#: members/templates/members/members/members_directory.html:24
+#: members/views/views_directory.py:42
+msgid "Email"
+msgstr "Email"
+
+#: members/templates/members/members/member_detail.html:63
 msgid "Hobbies"
 msgstr "Loisirs"
 
-#: members/templates/members/members/member_detail.html:72
+#: members/templates/members/members/member_detail.html:79
 #, python-format
 msgid "(Only %(name)s can manage this member)"
 msgstr "(Seul.e %(name)s peut gérer ce membre)"
@@ -821,11 +841,6 @@ msgstr "Annuaire des Membres"
 msgid "Print as PDF"
 msgstr "Imprimer en PDF"
 
-#: members/templates/members/members/members_directory.html:24
-#: members/views/views_directory.py:42
-msgid "Email"
-msgstr "Email"
-
 #: members/templates/members/registration/email_verification_failed.html:3
 #: members/templates/members/registration/email_verification_failed.html:7
 msgid "Invalid Link!"
@@ -936,11 +951,11 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_member.py:246 members/views/views_member.py:193
+#: members/tests/tests_member.py:248 members/views/views_member.py:193
 msgid "Member deleted"
 msgstr "Membre supprimé"
 
-#: members/tests/tests_member.py:366 members/tests/tests_member.py:371
+#: members/tests/tests_member.py:368 members/tests/tests_member.py:373
 #: members/views/views_member.py:142 members/views/views_member.py:156
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
@@ -1013,6 +1028,29 @@ msgstr "Dossier %(site_name)s"
 #, python-format
 msgid "Page %(doc_page)s - %(title)s"
 msgstr "Page %(doc_page)s - %(title)s"
+
+#: members/views/views_followers.py:21
+msgid "You can't follow yourself!"
+msgstr "Tu ne peux pas te suivre toi-même!"
+
+#: members/views/views_followers.py:24
+#,  python-format
+msgid "You are no longer following %(followed_name)s"
+msgstr "Tu ne suis plus %(followed_name)s"
+
+#: members/views/views_followers.py:27
+#, python-format
+msgid "You are now following %(followed_name)s"
+msgstr "Tu suis maintentant %(followed_name)s"
+
+#: members/views/views_followers.py:31
+msgid "You have a new follower!"
+msgstr "Tu as un nouveau follower!"
+
+#: members/views/views_followers.py:32
+#, python-format
+msgid "%(follower_name)s is now following you!"
+msgstr "%(follower_name)s te suit maintenant!"
 
 #: members/views/views_import.py:34
 #, python-format

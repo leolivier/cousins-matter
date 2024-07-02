@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 
 from cousinsmatter.utils import Paginator, is_ajax
-from forum.views.views_follow import check_followers_on_message
+from forum.views.views_follow import check_followers_on_message, check_followers_on_new_post
 from ..models import Post, Message
 from ..forms import MessageForm, PostForm, CommentForm
 from members.models import Member
@@ -81,6 +81,8 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
                 post = post_form.save()
                 message.post = post
                 message.save()
+            # send notifications to followers
+            check_followers_on_new_post(request, post)
             return redirect("forum:display", post.id)
         except Exception as e:
             if message and message.id:  # message saved, delete it
@@ -123,11 +125,11 @@ def delete_post(request, pk):
 
 @login_required
 def add_reply(request, pk):
-  reply = MessageForm(request.POST)
-  reply.instance.post_id = pk
-  reply.instance.author_id = request.user.id
-  message = reply.save()
-  check_followers_on_message(request, message)
+  replyForm = MessageForm(request.POST)
+  replyForm.instance.post_id = pk
+  replyForm.instance.author_id = request.user.id
+  reply = replyForm.save()
+  check_followers_on_message(request, reply)
   return redirect(reverse("forum:display", args=[pk]))
 
 

@@ -16,10 +16,16 @@
 			</div>
 			<p class="mt-2">
 				<strong>
-				{%blocktranslate trimmed%}
-				{{author_name}} added the following {{obj_type}} on {{followed_type}} <a href="{{followed_object_url}}">'{{followed_object_name}}'</a>:
-				{%endblocktranslate%}
-				</strong>
+				{%if creation%}
+					{%blocktranslate trimmed%}
+					{{author_name}} created the following {{followed_type}} <a href="{{followed_object_url}}">'{{followed_object_name}}'</a>:
+					{%endblocktranslate%}
+			{%else%}
+					{%blocktranslate trimmed%}
+					{{author_name}} added the following {{obj_type}} on {{followed_type}} <a href="{{followed_object_url}}">'{{followed_object_name}}'</a>:
+					{%endblocktranslate%}
+				{%endif%}
+			</strong>
 				<br>
 				<i>{%autoescape off%}{{message|linebreaksbr}}{%endautoescape%}</i>
 			</p>

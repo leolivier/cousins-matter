@@ -2,22 +2,25 @@
 {% load i18n cm_tags %}
 {% block title %}{% title _("Member Detail") %} {% endblock %}
 {% block content %}
+{%with member=object %}
 <div class="container mt-5">
 	<div class="card">
 		<div class="card-header">
 			<div class="media">
 				<div class="media-left">
 					<figure class="image avatar">
-						<img class="is-rounded" src="{{ object.avatar_url }}">
+						<img class="is-rounded" src="{{ member.avatar_url }}">
 					</figure>
 				</div>
 				<div class="media-content">
 					<p class="content">
-						<strong>{{ object.first_name }} {{ object.last_name }}</strong>
-						<small>&lt;{{ object.email }}&gt;</small>
+						<strong>{{ member.first_name }} {{ member.last_name }}</strong>
+						<small>&lt;{{ member.email }}&gt;</small>
+						{%include "cm_main/followers/followers-count-tag.html" with followed_object=object %}
+
 					</p>
-					<p class="content small">{{ object.username }}
-					({%if object.is_active %}
+					<p class="content small">{{ member.username }}
+					({%if member.is_active %}
 						{% translate "Active member" %}
 					{% else %}
 						{% translate "Managed member" %}
@@ -30,27 +33,31 @@
 			<table class="table">
 				<tr>
 					<td class="content has-text-right">{% translate "Address" %}</td>
-					<td class="content">{%if object.address%}{{ object.address }}{%endif%}</td>
+					<td class="content">{%if member.address%}{{ member.address }}{%endif%}</td>
+				</tr>
+				<tr>
+					<td class="content has-text-right">{% translate "Email" %}</td>
+					<td class="content">{{ member.email }}</td>
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Phone" %}</td>
-					<td class="content">{{ object.phone }}</td>
+					<td class="content">{{ member.phone }}</td>
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Birthdate" %}</td>
-					<td class="content">{{ object.birthdate }}</td>
+					<td class="content">{{ member.birthdate }}</td>
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Website" %}</td>
-					<td class="content">{{ object.website }}</td>
+					<td class="content">{{ member.website }}</td>
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Family" %}</td>
-					<td class="content">{%if object.family%}{{ object.family }}{%endif%}</td>
+					<td class="content">{%if member.family%}{{ member.family }}{%endif%}</td>
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Who I am" %}</td>
-					<td class="content">{%if object.description%}{{ object.description }}{%endif%}</td>
+					<td class="content">{%if member.description%}{{ member.description }}{%endif%}</td>
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Hobbies" %}</td>
@@ -61,7 +68,7 @@
 		</div>
 		<div class="card-footer">
 			<a class="button is-primary" 
-				{% if can_edit %} href="{% url 'members:member_edit' object.id %}"
+				{% if can_edit %} href="{% url 'members:member_edit' member.id %}"
 				{% else %} disabled="" 
 				{% endif %}
 			>
@@ -71,8 +78,12 @@
 			<p class="content px-4">
 				{% blocktranslate with name=managing_member_name %}(Only {{name}} can manage this member){% endblocktranslate %}
 			</p>
+			{%else%}
+				{%url 'members:toggle_follow' member.id as toggle_follow_url %}
+				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=object %}
 			{% endif %}
 		</div>
 	</div>
 </div>
+{%endwith%}
 {% endblock %}

@@ -54,8 +54,13 @@ def chat(request, page_num=1):
 def new_room(request):
   room_name = unquote(request.GET['name'])
   try:
-    room = ChatRoom.objects.get_or_create(name=room_name)[0]
-    return redirect(reverse('chat:room', args=[room.slug]))
+    room, created = ChatRoom.objects.get_or_create(name=room_name)
+    room_url = reverse('chat:room', args=[room.slug])
+    # if room was created, check user followers
+    if created:
+      print("room created, checking followers")
+      followers.check_followers(request, room, request.user, room_url)
+    return redirect(room_url)
   except ValidationError as ve:
     for error in ve:
       match error[0]:

@@ -2,11 +2,12 @@ import os
 from django.conf import settings
 from datetime import date
 from django.core.exceptions import ValidationError
+from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from members.tests.tests_member import BaseMemberTestCase
+from members.tests.tests_member_base import TestLoginRequiredMixin
 from ..models import Gallery, Photo
-from .utils import create_image, GalleryBaseTestCase
+from .tests_utils import create_image, GalleryBaseTestCase
 from ..views.views_gallery import GalleryCreateView, GalleryDetailView, GalleryUpdateView
 
 COUNTER = 0
@@ -18,19 +19,13 @@ def get_gallery_name():
   return "root gallery" + str(COUNTER)
 
 
-class CheckLoginRequired(BaseMemberTestCase):
+class CheckLoginRequired(TestLoginRequiredMixin, TestCase):
   def test_login_required(self):
     for url in ['galleries:galleries', 'galleries:create']:
-      rurl = reverse(url)
-      response = self.client.get(rurl)
-      # checks that the response is a redirect (302) to the login page
-      # with another redirect afterward to the original url
-      self.assertRedirects(response, self.next(self.login_url, rurl), 302, 200)
+      self.assertRedirectsToLogin(url)
 
     for url in ['galleries:edit', 'galleries:detail', 'galleries:add_photo']:
-      rurl = reverse(url, args=[1])
-      response = self.client.get(rurl)
-      self.assertRedirects(response, self.next(self.login_url, rurl), 302, 200)
+      self.assertRedirectsToLogin(url, args=[1])
 
 
 class CreateGalleryTest(GalleryBaseTestCase):

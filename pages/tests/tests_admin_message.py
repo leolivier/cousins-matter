@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import reverse
-from members.tests.tests_member import MemberTestCase
+from members.tests.tests_member_base import MemberTestCase
 from ..models import create_page
 from .test_base import BasePageTestCase, TestPageMixin
 

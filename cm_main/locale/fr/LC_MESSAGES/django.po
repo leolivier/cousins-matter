@@ -77,6 +77,22 @@ msgstr ""
 "%(follower_name)s suit maintenant ton %(followed_type)s "
 "\"%(followed_object_name)s\""
 
+#: cm_main/forms.py:8
+msgid "Your message"
+msgstr "Ton message"
+
+#: cm_main/forms.py:9
+msgid "Please keep it short and avoid images."
+msgstr "Merci d'être bref et d'éviter les images."
+
+#: cm_main/forms.py:10
+msgid "Attach file"
+msgstr "Attacher un fichier"
+
+#: cm_main/forms.py:11
+msgid "You can attach a file here if needed"
+msgstr "Tu peux attacher un fichier ici si nécessaire"
+
 #: cm_main/templates/cm_main/base.html:8
 msgid "Home"
 msgstr "Accueil"
@@ -103,6 +119,38 @@ msgstr ""
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 
 #: cm_main/templates/cm_main/followers/email-followers-on-change.html:24
+#: cm_main/templates/cm_main/base.html:75
+#: cm_main/templates/cm_main/menu.html:115
+msgid "Contact the site admin"
+msgstr "Contacter l'administrateur du site"
+
+#: cm_main/templates/cm_main/contact-form.html:4
+#: cm_main/templates/cm_main/contact-form.html:7
+msgid "Contact Form"
+msgstr "Formulaire de contact"
+
+#: cm_main/templates/cm_main/contact-form.html:8
+msgid "Please fill out the form below to contact the admin of this site:"
+msgstr "Merci de remplir le formulaire ci-dessous pour contacter l'administrateur de ce site :"
+
+#: cm_main/templates/cm_main/contact-form.html:13
+msgid "Send"
+msgstr "Envoyer"
+
+#: cm_main/templates/cm_main/contact-form.html:14
+msgid "Cancel"
+msgstr "Annuler"
+
+#: cm_main/templates/cm_main/email-contact-form.html:19
+#, python-format
+msgid "%(sender_name)s sent you the following message from %(site_name)s:"
+msgstr "%(sender_name)s t'a envoyé le message suivant depuis %(site_name)s:"
+
+#: cm_main/templates/cm_main/email-contact-form.html:26
+msgid "You can directly reply to this email to answer him/her."
+msgstr "Tu peux répondre directement à cet email pour lui répondre."
+
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:19
 #: cm_main/tests.py:68
 #, python-format
 msgid ""
@@ -199,19 +247,19 @@ msgstr "Nouvelle Discussion"
 msgid "Chat"
 msgstr "Chat"
 
-#: cm_main/templates/cm_main/menu.html:121
+#: cm_main/templates/cm_main/menu.html:125
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/menu.html:126
+#: cm_main/templates/cm_main/menu.html:130
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/menu.html:140
+#: cm_main/templates/cm_main/menu.html:144
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/menu.html:144
+#: cm_main/templates/cm_main/menu.html:148
 msgid "Log Out"
 msgstr "Déconnexion"
 
@@ -237,6 +285,27 @@ msgstr "aller à la dernière page"
 msgid "Items per page:"
 msgstr "Items par page"
 
-#: cm_main/views.py:25
+#: cm_main/views.py:33
 msgid "Media not found"
 msgstr "Média non trouvé"
+
+#: cm_main/views.py:62
+#, python-format
+msgid "You have a new message from %(name)s (%(email)s). "
+msgstr "Tu as reçu un nouveau message de %(name)s (%(email)s). "
+
+#: cm_main/views.py:65
+msgid "Contact form"
+msgstr "Formulaire de contact"
+
+#: cm_main/views.py:66
+msgid "But your mailer tools is too old to show it :'("
+msgstr "Mais ton logiciel de messagerie est trop vieux pour l'afficher :'("
+
+#: cm_main/views.py:84
+msgid "This file type is not supported"
+msgstr "Ce type de fichier n'est pas supporté"
+
+#: cm_main/views.py:92
+msgid "Your message has been sent"
+msgstr "Ton message a été envoyé"

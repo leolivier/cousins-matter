@@ -31,5 +31,5 @@ def check_followers_on_message(request, message):
 def check_followers_on_comment(request, comment):
   """sends an email to followers of the post if the comment is a reply to a message of the post"""
   post = comment.message.post
-  followers.check_followers(request, post.owner(), post, post_url(post.id),
+  followers.check_followers(request, post, post.owner(), post_url(post.id),
                             comment, comment.author)

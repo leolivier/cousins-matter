@@ -55,10 +55,12 @@ class TestFollowersMixin():
     # print(content)
     self.assertInHTML(html, content)
 
-    # second email is for the followers, no recipients, only bcc
+    # second email is for the followers, no recipients, only bcc. The owner is considered as implicit follower
     self.assertEqual(follower_message.from_email, settings.DEFAULT_FROM_EMAIL)
     self.assertSequenceEqual(follower_message.to, [])
-    self.assertSequenceEqual(follower_message.bcc, [follower.email])
+    self.assertEqual(len(follower_message.bcc), 2)
+    self.assertIn(follower.email, follower_message.bcc)
+    self.assertIn(owner.email, follower_message.bcc)
     subject = _('New %(obj_type)s added to %(followed_type)s "%(followed_object_name)s"') % {
                 'obj_type': obj_type,
                 'followed_object_name': followed_object_name,

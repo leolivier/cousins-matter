@@ -1,4 +1,5 @@
 
+import logging
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -8,6 +9,8 @@ from django.contrib import messages
 from django.core.mail import send_mail
 
 from cousinsmatter.utils import get_absolute_url_wo_request
+
+logger = logging.getLogger(__name__)
 
 
 def check_followers(request, followed_object, followed_object_owner, followed_object_url, 
@@ -28,18 +31,23 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
   obj_str = str(new_internal_object)
   # get the emails of the followers of the followed object except the author of the new object
   follower_emails = [follower.email for follower in followed_object.followers.all() if follower.id != author.id]
+  logger.debug('follower email:', follower_emails)
   # also send emails to the followers of the owner
   follower_emails += [follower.email for follower in followed_object_owner.followers.all()]
+  logger.debug('follower email + owner followers emails:', follower_emails)
   # and also to the owner (he is an implicit follower of his own objects)
   follower_emails.append(followed_object_owner.email)
+  logger.debug('follower email + owner:', follower_emails)
   # remove duplicates
   follower_emails = list(set(follower_emails))
   # remove empty emails or None emails
   follower_emails = [email for email in follower_emails if email]
 
   if len(follower_emails) == 0:
-    print(f"{obj_type}:{obj_str} change is not interesting anyone")
+    logger.debug(f"{obj_type}:'{obj_str}' change is not interesting anyone")
     return
+  else:
+    logger.debug(f"{obj_type}:'{obj_str}' change is interesting for {len(follower_emails)} people: {follower_emails}")
 
   author_name = author.get_full_name()
   followed_object_name = str(followed_object)

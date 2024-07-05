@@ -39,6 +39,9 @@ class Post(models.Model):
   def __str__(self):
     return self.title
 
+  def owner(self):
+    return self.first_message.author if self.first_message else None
+
 
 class Comment(models.Model):
   author = models.ForeignKey(Member, on_delete=models.CASCADE)

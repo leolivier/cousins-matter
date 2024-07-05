@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
 from django.test import tag
 from django.contrib.auth import aget_user
-
+from django.core import mail
 from asgiref.sync import sync_to_async
 from channels.testing import WebsocketCommunicator
 from channels.routing import URLRouter
@@ -15,6 +15,11 @@ from cm_main.tests import TestFollowersMixin
 from members.tests.tests_member_base import MemberTestCase
 from .models import ChatMessage, ChatRoom
 from .routing import websocket_urlpatterns
+
+
+@sync_to_async
+def astr(obj):
+  return str(obj)
 
 
 class ChatRoomTests(MemberTestCase):
@@ -85,8 +90,24 @@ class ChatRoomTests(MemberTestCase):
     ChatRoom.objects.all().delete()
 
 
-@tag("needs-redis")
-class ChatMessageTestBase(MemberTestCase):
+class ChatMessageSenderMixin():
+  async def send_chat_message(self, msg, room_slug):
+    # sender is the currently connected user
+    sender = await aget_user(self.client)
+    data = {
+      'message': msg,
+      'member': sender.id,
+      'username': sender.username,
+      'room': room_slug,
+    }
+    application = URLRouter(websocket_urlpatterns)
+    communicator = WebsocketCommunicator(application, f"/chat/{room_slug}")
+    connected, subprotocol = await communicator.connect()
+    self.assertTrue(connected)
+    # Test sending data as text
+    await communicator.send_json_to(data)
+    return communicator
+
   def setUp(self):
     super().setUp()
     self.room_name = 'test messages #1'
@@ -102,29 +123,12 @@ class ChatMessageTestBase(MemberTestCase):
   def check_msg_member(self, msg):
     self.assertEqual(self.member, msg.member)
 
-  async def send_chat_message(self, msg):
-    # sender is the currently connected user
-    sender = await aget_user(self.client)
-    data = {
-      'message': msg,
-      'member': sender.id,
-      'username': sender.username,
-      'room': self.slug,
-    }
-    application = URLRouter(websocket_urlpatterns)
-    communicator = WebsocketCommunicator(application, f"/chat/{self.slug}")
-    connected, subprotocol = await communicator.connect()
-    self.assertTrue(connected)
-    # Test sending data as text
-    await communicator.send_json_to(data)
-    return communicator
-
 
 @tag("needs-redis")
-class ChatMessageTests(ChatMessageTestBase):
+class ChatMessageTests(ChatMessageSenderMixin, MemberTestCase):
   async def test_chat_consumer(self):
     msg = 'this is my message to the world!'
-    communicator = await self.send_chat_message(msg)
+    communicator = await self.send_chat_message(msg, self.slug)
     response = await communicator.receive_json_from()
     # print(response)
     self.assertEqual(response['message'], msg)
@@ -138,7 +142,7 @@ class ChatMessageTests(ChatMessageTestBase):
 
 
 @tag("needs-redis")
-class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageTestBase):
+class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageSenderMixin, MemberTestCase):
 
   @sync_to_async
   def acreate_member_and_login(self):
@@ -156,13 +160,16 @@ class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageTestBase):
     # we should start with zéro followers
     self.assertEqual(await self.room.followers.acount(), 0)
 
-    # now create a new member and login, he will send a first
+    # create a new member and login, he will send a first
     # message on the room and become the owner
     new_poster = await self.acreate_member_and_login()
     msg = 'this is the first message on the room si I am the owner!'
-    communicator = await self.send_chat_message(msg)
+    communicator = await self.send_chat_message(msg, self.slug)
     # Close communication
     await communicator.disconnect()
+
+    # make sure the outbox is empty
+    mail.outbox = []
 
     # create another new member and login, he will be the follower
     follower = await self.acreate_member_and_login()
@@ -175,10 +182,12 @@ class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageTestBase):
     # now log again as new_poster and send another message on the room
     await self.alogin_as(new_poster)
     msg = 'this is a message to my followers!'
-    communicator = await self.send_chat_message(msg)
+    communicator = await self.send_chat_message(msg, self.slug)
     # Close communication
     await communicator.disconnect()
 
+    # get the message
+    message = await ChatMessage.objects.aget(room=self.room, content=msg)
     self.check_followers_emails(
       follower=follower,
       sender=new_poster,
@@ -186,7 +195,7 @@ class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageTestBase):
       url=reverse('chat:room', args=[self.slug]),
       followed_object=self.room,
       created_object=await ChatMessage.objects.aget(room=self.room, content=msg),
-      created_content=msg,
+      created_content=await astr(message),
     )
 
     # login back as follower

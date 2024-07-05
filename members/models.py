@@ -117,6 +117,9 @@ class Member(AbstractUser):
 
     privacy_consent = models.BooleanField(_("Privacy consent"), default=False, blank=False, null=False)
 
+    followers = models.ManyToManyField('self', verbose_name=_('Followers'), related_name='following',
+                                       symmetrical=False, blank=True)
+
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["first_name", "last_name", "birthdate", "email"]
 

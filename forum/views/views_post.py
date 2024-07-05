@@ -90,6 +90,8 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
             if post and post.id:  # post saved, delete it
               post.delete()
             raise e
+      # if the form is invalid, an error message will be displayed
+      return render(request, "forum/post_form.html", context={'post_form': post_form, 'message_form': message_form})
 
 
 class PostEditView(LoginRequiredMixin, generic.UpdateView):

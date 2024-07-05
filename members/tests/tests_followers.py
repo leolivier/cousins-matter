@@ -1,3 +1,4 @@
+from django.test import tag
 from django.urls import reverse
 from django.core import mail
 from asgiref.sync import sync_to_async
@@ -91,6 +92,7 @@ class TestMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, Membe
     self.do_test_toggle_unfollow_member(followed)
 
 
+@tag("needs-redis")
 class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, MemberTestCase):
   # def tearDown(self):
   #   ChatMessageSenderMixin.tearDown(self)

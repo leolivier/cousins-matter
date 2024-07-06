@@ -109,7 +109,7 @@ class Gallery(models.Model):
   name = models.CharField(_("Name"), max_length=70)
   description = models.TextField(_("Description"), max_length=3000, blank=True)
   cover = models.ForeignKey('Photo', verbose_name=_("Cover Photo"), null=True, blank=True,
-                            on_delete=models.DO_NOTHING, related_name="cover_of"
+                            on_delete=models.SET_NULL, related_name="cover_of"
                             )
   parent = models.ForeignKey('self', verbose_name=_("Parent gallery"), null=True, blank=True,
                              on_delete=models.CASCADE, related_name='children')

@@ -158,7 +158,7 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
       created_object=message,
       created_content=await astr(message),
     )
-    await room.adelete()
+    # await room.adelete()
 
     # now, let follower create a room and it's 1rst message and let the
     # followed reply to it, and check the email to the follower
@@ -193,7 +193,7 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
       created_object=message,
       created_content=await astr(message),
     )
-    await room.adelete()
+    # await room.adelete()
 
     # test unfollow
     await self.ado_test_toggle_unfollow_member(followed)

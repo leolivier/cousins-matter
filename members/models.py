@@ -98,7 +98,7 @@ class Member(AbstractUser):
 
     avatar = models.ImageField(upload_to=settings.AVATARS_DIR, blank=True, null=True)
 
-    address = models.ForeignKey(Address, verbose_name=_('Address'), null=True, blank=True, on_delete=models.DO_NOTHING)
+    address = models.ForeignKey(Address, verbose_name=_('Address'), null=True, blank=True, on_delete=models.SET_NULL)
 
     phone = models.CharField(_('Phone'), max_length=32, blank=True)
 

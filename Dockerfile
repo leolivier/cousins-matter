@@ -8,9 +8,9 @@ LABEL org.opencontainers.image.licenses=MIT
 
 WORKDIR /app
 
-# install lighttpd for serving static and media files and redis for chat
+# install lighttpd for serving static and media files, redis for chat, sqlite3 and acl for init
 RUN apt-get update &&\
-		apt-get install -y lighttpd lsb-release curl gpg &&\
+		apt-get install -y lighttpd lsb-release curl gpg sqlite3 acl &&\
 		curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg &&\
 		echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" > /etc/apt/sources.list.d/redis.list &&\
 		apt-get update &&\

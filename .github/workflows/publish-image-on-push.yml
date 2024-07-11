@@ -1,8 +1,11 @@
-# creates a multiplatform image of cousins matter and push it to ghcr.io for each new push
+# creates a multiplatform image of cousins matter and push it to ghcr.io for each new push on a branch (ignore tags)
 name: Push build
 
-on: [push]
-
+on: 
+  push:
+    branches: ['*']
+    tags-ignore: ['*']
+  
 jobs:
   test-build-and-push:
     uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main

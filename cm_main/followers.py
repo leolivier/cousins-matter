@@ -13,11 +13,11 @@ from cousinsmatter.utils import get_absolute_url_wo_request
 logger = logging.getLogger(__name__)
 
 
-def check_followers(request, followed_object, followed_object_owner, followed_object_url, 
+def check_followers(request, followed_object, followed_object_owner, followed_object_url,
                     new_internal_object=None, author=None):
   """
     Sends an email to the followers of a followed object (followed_object) to which a new element new_internal_object is added.
-    new_internal_object is the just create object, 
+    new_internal_object is the just create object,
     author is the member who created the new object, and followed_object_url is an url to display the followed object.
     followers are the members who follow the followed object, and they are stored in the followed_object.followers attribute.
     It is assumed that str(followed_object) returns a string that can be used in the name of the followed object.

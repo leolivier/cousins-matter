@@ -339,8 +339,7 @@ class TestActivateManagedMember(MemberTestCase):
     url = match.group(0)
     # print('url:', url)
     response = self.client.get(url, follow=True)
-    self.assertContainsMessage(response, "success", 
+    self.assertContainsMessage(response, "success",
                                _("Your email has been verified and your account is now activated. Please set your password."))
     managed.refresh_from_db()
     self.assertTrue(managed.is_active)
-

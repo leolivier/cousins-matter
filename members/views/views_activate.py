@@ -114,7 +114,7 @@ def check_activation(request, encoded_email, token):
         uidb64 = urlsafe_base64_encode(force_bytes(member.pk))
         token = default_token_generator.make_token(member)
         reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uidb64, 'token': token})
-        messages.success(request, 
+        messages.success(request,
                          _("Your email has been verified and your account is now activated. Please set your password."))
         return redirect(reset_url)
 

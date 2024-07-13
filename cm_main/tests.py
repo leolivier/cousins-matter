@@ -177,10 +177,11 @@ class TestContactForm(MemberTestCase):
       'sender_name': self.member.get_full_name(),
       'site_name': settings.SITE_NAME,
     }
+    test_msg = test_msg.replace('\n', '<br>')
     html_message = f'''<p class="mt-2">
   <strong>{msg}</strong>
   <br>
-  <i>{test_msg.replace('\n', '<br>')}</i>
+  <i>{test_msg}</i>
   </p>'''
     self.assertInHTML(html_message, content)
     # reset mailbox

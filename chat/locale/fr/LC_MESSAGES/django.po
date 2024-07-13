@@ -73,7 +73,7 @@ msgstr[1] "%(nmsgs)s messages"
 
 #: chat/templates/chat/chat_rooms.html:44
 msgid "Created by:"
-msgstr "Créer par:"
+msgstr "Créé par:"
 
 #: chat/templates/chat/chat_rooms.html:47
 msgid "profile"

@@ -21,7 +21,7 @@
 		{%get_menu_pages%}
 		<div class="navbar-item has-dropdown is-hoverable">
 			<a class="navbar-item" href="{% url 'members:members' %}">
-				<span class="is-hidden-mobile">{% translate "Members" %}</span>
+				{% translate "Members" %}
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-account-group-outline"></i></span>
 			</a>
 			<div class="navbar-dropdown is-right">
@@ -52,7 +52,7 @@
 
 		<div class="navbar-item has-dropdown is-hoverable">
 			<a class="navbar-item" href="{% url 'galleries:galleries' %}">
-				<span class="is-hidden-mobile">{% translate "Galleries" %}</span>
+				{% translate "Galleries" %}
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-folder-multiple-image"></i></span>
 			</a>
 			<div class="navbar-dropdown">
@@ -69,7 +69,7 @@
 
 		<div class="navbar-item has-dropdown is-hoverable">
 			<a class="navbar-item" href="{% url 'forum:list' %}">
-				<span class="is-hidden-mobile">{% translate "Forum" %}</span>
+				{% translate "Forum" %}
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-forum"></i></span>
 			</a>
 			<div class="navbar-dropdown">
@@ -82,7 +82,7 @@
 
 		<div class="navbar-item has-dropdown is-hoverable">
 			<a class="navbar-item" href="{% url 'chat:chat' %}">
-				<span class="is-hidden-mobile">{% translate "Chat" %}</span>
+				{% translate "Chat" %}
 				<span class="icon is-large"><i class="mdi mdi-24px mdi-chat"></i></span>
 			</a>
 		</div>

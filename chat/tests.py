@@ -50,6 +50,7 @@ class ChatRoomTests(MemberTestCase):
     # self.print_response(response)
     nmsgs = 1
     nfollowers = 0
+    follow = _('Follow')
     self.assertContains(response, f'''
 <div class="panel-block">
   <figure class="image mini-avatar mr-2">
@@ -68,9 +69,10 @@ class ChatRoomTests(MemberTestCase):
     </span>
   </p>
   <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
-  <a class="button ml-3 mr-3 is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}"
-    aria-label="{_('follow')}" title="{_('follow')}">
-    <span class="icon is-large"><i class="mdi mdi-24px mdi-arrow-up-bold-hexagon-outline"></i></span>
+  <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}"
+    aria-label="{follow}" title="{follow}">
+    <span class="icon is-large"><i class="mdi mdi-24px mdi-link-variant"></i></span>
+    <span>{follow}</span>
   </a>
 </div>''', html=True)
     nmsgs = 0
@@ -82,9 +84,10 @@ class ChatRoomTests(MemberTestCase):
     <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
     <span class="title is-size-6">{rooms[i].name}</span>
   </a>
-  <a class="button ml-3 mr-3 is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}"
-    aria-label="{_('follow')}" title="{_('follow')}">
-    <span class="icon is-large"><i class="mdi mdi-24px mdi-arrow-up-bold-hexagon-outline"></i></span>
+  <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}"
+    aria-label="{follow}" title="{follow}">
+    <span class="icon is-large"><i class="mdi mdi-24px mdi-link-variant"></i></span>
+    <span>{follow}</span>
   </a>
 </div>''', html=True)
     ChatRoom.objects.all().delete()

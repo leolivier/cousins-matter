@@ -167,3 +167,15 @@ function add_ajax_checker(id, validator_url, response_field, error_message) {
     return false;
   })
 }
+
+// to be used eg as <button onclick="printSection($('.printable')">
+function printSection(el) {
+  var originalContent = $('body').html();
+  var printedContent = $(el).clone();
+  
+  $('body').empty().html(printedContent);
+  window.print();
+  $('body').html(originalContent);
+}
+
+

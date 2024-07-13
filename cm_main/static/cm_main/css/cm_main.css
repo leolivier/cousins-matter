@@ -78,18 +78,38 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
   margin-left: 2rem;
 }
 
-.avatar {
-	width: 300px;
-	height: 300px;
-}
+@media screen {
+	@media (max-width: 768px) {
+		.avatar {
+			width: 128px;
+			height: 128px;
+		}
+	
+		.mini-avatar {
+			width: 48px;
+			height: 48px;
+		}
 
-.mini-avatar {
-	width: 48px;
-	height: 48px;
-}
+		.home-logo img {
+			height: 150px;
+		}
+	}
 
-.home-logo img {
-	height: 250px;
+	@media (min-width: 769px) {
+		.avatar {
+			width: 300px;
+			height: 300px;
+		}
+
+		.mini-avatar {
+			width: 48px;
+			height: 48px;
+		}
+
+		.home-logo img {
+			height: 250px;
+		}
+	}
 }
 
 .gallery-cover, .thumbnail {

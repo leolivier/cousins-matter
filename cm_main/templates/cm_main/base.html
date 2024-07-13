@@ -8,7 +8,7 @@
     <title>{% block title %}{% title _("Home") %}{% endblock %}</title>
     {# bulma stylesheet #}
     <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+          href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css">
      {# material design icons #}
      <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -30,7 +30,7 @@
     {% endblock %}
     </nav>
 
-    <div id="content" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
+    <div id="columns" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
       <div class="container">
         {%get_flatpages "/pages/admin-message/" as admin_messages%}
         {%for admin_message in admin_messages %}

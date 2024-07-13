@@ -9,12 +9,12 @@
 		</div>
 		<div class="level-right buttons">
 			<button class="button" onclick="printSection($('.printable'))">
-				<span class="icon"><i class="mdi mdi-24px mdi-printer"></i></span>
+				{%icon "print" %}
 				<span>{% translate "Print"%}</span>
 			</button>
 			{% translate "Print as PDF" as trpdf %}
 			<a class="button" href="{% url 'members:print_directory' %}">
-				<span class="icon"><i class="mdi mdi-24px mdi-file-pdf-box"></i></span>
+				{%icon "pdf" %}
 				<span>{% translate "Print as PDF" %}</span>
 			</a>
 		</div>

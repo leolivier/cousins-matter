@@ -25,7 +25,7 @@
 				<p class="content is-size-6">
 					{{message.author.get_full_name}}
 					<a href="{%url 'members:detail' message.author.id %}">
-						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+						{%icon "member-link" %}
 					</a>
 					<br>
 					<span class="is-size-6">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>
@@ -40,10 +40,10 @@
 		<div class="level-right">
 			{% if post.first_message.author.username == user.username %}
 			<a class="button" href="{% url 'forum:edit' post.id %}" title="{%trans 'Edit' %}">
-				<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
+				{%icon "edit" %}
 			</a>
 			<button class="button js-modal-trigger" data-target="delete-post-modal" title="{%trans 'Delete' %}">
-				<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
+				{%icon "delete" %}
 			</button>
 			{%else%}
 				{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
@@ -78,7 +78,7 @@
 					<p class="content is-small">
 						{{reply.author.get_full_name}}
 						<a href="{%url 'members:detail' reply.author.id %}">
-							<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+							{%icon "member-link" %}
 						</a>
 						<br>
 						{{reply.date}}
@@ -87,11 +87,11 @@
 				{% if reply.author.username == user.username %}
 				<div class="level-right">
 					<a class="button" onclick="show_edit_reply_form('{{reply.id}}')" title="{%trans 'Edit' %}">
-						<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
+						{%icon "edit" %}
 					</a>
 					{% url 'forum:delete_reply' reply.id as delete_reply_url %}
 					<a class="button" onclick="delete_reply('{{delete_reply_url}}', '{{reply.id}}')" title="{%trans 'Delete' %}">
-						<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
+						{%icon "delete" %}
 					</a>
 				</div>
 				{%endif%}
@@ -104,10 +104,10 @@
 				<div class="level-right">
 					<div class="buttons">
 						<button type="submit" class="button is-link" title="{%trans 'Update' %}">
-							<span class="icon"><i class="mdi mdi-check-circle-outline"></i></span>
+							{%icon "submit" %}
 						</button>
 						<button type="reset" class="button" onclick="hide_edit_reply_form('{{reply.id}}')" title="{%trans 'Cancel' %}">
-							<span class="icon"><i class="mdi mdi-close-circle-outline"></i></span>
+							{%icon "cancel" %}
 						</button>
 					</div>
 				</div>

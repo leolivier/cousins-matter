@@ -1,18 +1,14 @@
-{%load i18n%}
+{%load i18n cm_tags%}
 <a class="button {{extra_class}}" href="{{toggle_follow_url}}" 
 {%if request.user in followed_object.followers.all %}
 	{%trans "Stop Following" as unfollow%}
 	aria-label="{{unfollow}}" title="{{unfollow}}">
-	<span class="icon is-large">
-		<i class="mdi mdi-24px mdi-link-variant-off"></i>
-	</span>
+	{%icon "unfollow" %}
 	<span>{{unfollow}}</span>
 {%else%}
 	{%trans 'Follow' as follow%}
 	aria-label="{{follow}}" title="{{follow}}">
-	<span class="icon is-large">
-		<i class="mdi mdi-24px mdi-link-variant"></i>
-	</span>
+	{%icon "follow" %}
 	<span>{{follow}}</span>
 {%endif%}
 </a>

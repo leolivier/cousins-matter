@@ -73,9 +73,7 @@
 				{% else %} disabled
 				{% endif %}
 			>
-			<span class="icon is-large">
-				<i class="mdi mdi-24px mdi-pencil"></i>
-			</span>
+			{%icon "edit" %}
 			<span>{% translate "Edit" %}</span>
 			</a>
 			{% if not can_edit and managing_member_name %}

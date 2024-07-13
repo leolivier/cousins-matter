@@ -22,7 +22,7 @@
 					<p class="content is-small">
 						{{comment.author.get_full_name}}
 						<a href="{%url 'members:detail' comment.author.id %}">
-							<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+							{%icon "member-link" %}
 						</a>
 						<br>
 						{{comment.date}}
@@ -30,11 +30,11 @@
 				</div>
 				{% if comment.author.username == user.username %}
 				<a class="button" onclick="show_edit_comment_form('{{comment.id}}');" title="{%trans 'Edit' %}">
-					<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
+					{%icon "edit" %}
 				</a>
 				{%url "forum:delete_comment" comment.id as delete_url%}
 				<a class="button" onclick="delete_comment('{{delete_url}}', '{{comment.id}}')" title="{%trans 'Delete' %}">
-					<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
+					{%icon "delete" %}
 				</a>
 				{%endif%}
 			</div>
@@ -46,10 +46,10 @@
 				<div class="level-right">
 					<div class="buttons">
 						<button type="submit" class="button is-link" title="{%trans 'Update' %}">
-							<span class="icon"><i class="mdi mdi-check-circle-outline"></i></span>
+							{%icon "submit" %}
 						</button>
 						<button type="reset" class="button" onclick="hide_edit_comment_form('{{comment.id}}')"  title="{%trans 'Cancel' %}">
-							<span class="icon"><i class="mdi mdi-close-circle-outline"></i></span>
+							{%icon "cancel" %}
 						</button>
 					</div>
 				</div>

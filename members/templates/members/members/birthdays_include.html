@@ -1,13 +1,13 @@
-{% load i18n members_extras %}
+{% load i18n members_extras cm_tags %}
 {% if birthdays_list %}
 <div class="container">
     <h1 class="title has-text-centered">{% blocktranslate %}Birthdays in the next {{ndays}} days{% endblocktranslate %}</h1>
     <hr>
     <div class="fixed-grid has-2-cols is-col-min-8">
-      <div class="grid">
+      <div class="grid  is-vcentered">
         {% for member, when in birthdays_list %}
         {%with bcolor=when|birthday_color %}
-        <div class="cell has-background-{{bcolor}}-light has-text-right px-1 mx-0">
+        <div class="cell has-background-{{bcolor}}-light px-1 mx-0 is-flex is-align-items-center is-justify-content-right">
             <a href="{% url 'members:detail' member.id %}" class="has-text-{{bcolor}} ">{{ member.first_name }} {{ member.last_name }}</a>
         </div>
         <div class="cell has-background-{{bcolor}}-light px-1 mx-0
@@ -21,10 +21,8 @@
                 {% blocktranslate with age=member.age|add:1 birthday=member.next_birthday|date:"l d F" %}will turn {{ age }} on {{ birthday }}{% endblocktranslate %}
             {% endif %}
             {% if when == 0 or when == 1 %}
-            <span class="icon"><i class="mdi mdi-cake-variant-outline"></i></span>
-            <span class="icon"><i class="mdi mdi-cake-variant"></i></span>
-            <span class="icon"><i class="mdi mdi-cake-variant-outline"></i></span>
-        {% endif %}
+            {%icon "birthday" %} {%icon "birthday-variant" %} {%icon "birthday" %}
+            {% endif %}
         </div>
         {% endwith %}
         {% endfor %}

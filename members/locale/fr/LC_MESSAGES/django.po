@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-13 13:30+0200\n"
+"POT-Creation-Date: 2024-07-13 16:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -289,10 +289,9 @@ msgstr "Editer l'adresse"
 
 #: members/templates/members/address/address_form.html:17
 #: members/templates/members/family/family_form.html:17
-#: members/templates/members/members/member_activated.html:14
-#: members/templates/members/members/member_upsert.html:52
+#: members/templates/members/members/member_upsert.html:60
 msgid "Submit"
-msgstr "Soumettre"
+msgstr "Envoyer"
 
 #: members/templates/members/address/address_form.html:18
 #: members/templates/members/family/family_form.html:18
@@ -318,14 +317,14 @@ msgid "Greetings!"
 msgstr "Salutations!"
 
 #: members/templates/members/email/email_verification_msg.html:27
-#: members/tests/tests_member.py:330
+#: members/tests/tests_member.py:331
 msgid ""
 "You received this mail because you attempted to create an account on our "
 "website"
 msgstr "Tu reçois ce mail car tu essayes de créer un compte sur notre site web"
 
 #: members/templates/members/email/email_verification_msg.html:28
-#: members/tests/tests_member.py:331
+#: members/tests/tests_member.py:332
 msgid ""
 "Please click on the link below to confirm the email and activate your "
 "account."
@@ -577,19 +576,19 @@ msgid "Birthdays in the next %(ndays)s days"
 msgstr "Anniversaires dans les %(ndays)s prochains jours"
 
 #: members/templates/members/members/birthdays_include.html:16
-#: members/tests/tests_birthdays.py:31
+#: members/tests/tests_birthdays.py:38
 #, python-format
 msgid "turns %(age)s today, happy birthday!"
 msgstr "a %(age)s ans aujourd'hui, joyeux anniversaire!"
 
 #: members/templates/members/members/birthdays_include.html:18
-#: members/tests/tests_birthdays.py:43
+#: members/tests/tests_birthdays.py:42
 #, python-format
 msgid "will turn %(age)s tomorrow, happy birthday!"
 msgstr "aura %(age)s ans demain, joyeux anniversaire!"
 
 #: members/templates/members/members/birthdays_include.html:21
-#: members/tests/tests_birthdays.py:56
+#: members/tests/tests_birthdays.py:47
 #, python-format
 msgid "will turn %(age)s on %(birthday)s"
 msgstr "aura %(age)s ans %(birthday)s"
@@ -649,19 +648,6 @@ msgstr ""
 msgid "Import"
 msgstr "Importer"
 
-#: members/templates/members/members/member_activated.html:3
-#: members/templates/members/members/member_activated.html:6
-msgid "Member activated"
-msgstr "Membre activé"
-
-#: members/templates/members/members/member_activated.html:8
-msgid ""
-"Your account has been activated, you can now create your password below and "
-"sign in."
-msgstr ""
-"Ton compte a été activé, tu peux maintenant créer ton mot de passe ci-dessous "
-"et te connecter."
-
 #: members/templates/members/members/member_confirm_delete.html:8
 msgid "Delete My Account"
 msgstr "Supprimer mon compte?"
@@ -711,14 +697,14 @@ msgid "Member Detail"
 msgstr "Détail d'un Membre"
 
 #: members/templates/members/members/member_detail.html:25
-#: members/templates/members/members/member_upsert.html:22
-#: members/tests/tests_member.py:239
+#: members/templates/members/members/member_upsert.html:23
+#: members/tests/tests_member.py:240
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/members/member_detail.html:27
-#: members/templates/members/members/member_upsert.html:24
-#: members/tests/tests_member.py:239
+#: members/templates/members/members/member_upsert.html:25
+#: members/tests/tests_member.py:240
 msgid "Managed member"
 msgstr "Membre géré"
 
@@ -737,87 +723,87 @@ msgstr "Loisirs"
 msgid "(Only %(name)s can manage this member)"
 msgstr "(Seul.e %(name)s peut gérer ce membre)"
 
-#: members/templates/members/members/member_upsert.html:3
-msgid "Edit Member"
-msgstr "Editer un Membre"
-
-#: members/templates/members/members/member_upsert.html:32
+#: members/templates/members/members/member_upsert.html:34
 msgid "Change Password"
 msgstr "Changer le mot de passe"
 
-#: members/templates/members/members/member_upsert.html:37
+#: members/templates/members/members/member_upsert.html:39
 msgid "Activate Account"
 msgstr "Activer le compte"
 
-#: members/templates/members/members/member_upsert.html:40
+#: members/templates/members/members/member_upsert.html:42
 msgid "Delete"
 msgstr "Supprimer"
 
-#: members/templates/members/members/member_upsert.html:42
+#: members/templates/members/members/member_upsert.html:46
+msgid "Remove my account"
+msgstr "Supprimer mon compte"
+
+#: members/templates/members/members/member_upsert.html:48
 msgid "Delete member"
 msgstr "Supprimer le Membre"
 
-#: members/templates/members/members/member_upsert.html:57
+#: members/templates/members/members/member_upsert.html:65
 msgid "Lost your verification email?"
 msgstr "Mail de vérification perdu?"
 
-#: members/templates/members/members/member_upsert.html:59
+#: members/templates/members/members/member_upsert.html:67
 #: members/templates/members/registration/email_verification_failed.html:13
 msgid "Request a new link"
 msgstr "Demander un nouveau lien"
 
-#: members/templates/members/members/member_upsert.html:66
+#: members/templates/members/members/member_upsert.html:74
 msgid "New Address"
 msgstr "Nouvelle Adresse"
 
-#: members/templates/members/members/member_upsert.html:66
-#: members/templates/members/members/member_upsert.html:78
-#: members/templates/members/members/member_upsert.html:82
+#: members/templates/members/members/member_upsert.html:74
+#: members/templates/members/members/member_upsert.html:86
+#: members/templates/members/members/member_upsert.html:90
 msgid "Create"
 msgstr "Créer"
 
-#: members/templates/members/members/member_upsert.html:72
+#: members/templates/members/members/member_upsert.html:80
 msgid "Change Address"
 msgstr "Modifier l'Adresse"
 
-#: members/templates/members/members/member_upsert.html:72
-#: members/templates/members/members/member_upsert.html:88
+#: members/templates/members/members/member_upsert.html:80
+#: members/templates/members/members/member_upsert.html:96
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: members/templates/members/members/member_upsert.html:78
+#: members/templates/members/members/member_upsert.html:86
 msgid "New Family"
 msgstr "Nouvelle Famille"
 
-#: members/templates/members/members/member_upsert.html:82
+#: members/templates/members/members/member_upsert.html:90
 msgid "New Parent Family"
 msgstr "Nouvell Famille Parente"
 
-#: members/templates/members/members/member_upsert.html:88
+#: members/templates/members/members/member_upsert.html:96
 msgid "Change Family"
 msgstr "Modifier la Famille"
 
-#: members/templates/members/members/member_upsert.html:101
+#: members/templates/members/members/member_upsert.html:109
 msgid "Address created"
 msgstr "Adresse créée"
 
-#: members/templates/members/members/member_upsert.html:105
+#: members/templates/members/members/member_upsert.html:113
 msgid "Family created"
 msgstr "Famille créée"
 
-#: members/templates/members/members/member_upsert.html:110
+#: members/templates/members/members/member_upsert.html:118
 msgid "Address updated"
 msgstr "Adresse mise à jour"
 
-#: members/templates/members/members/member_upsert.html:115
+#: members/templates/members/members/member_upsert.html:123
 msgid "Family updated"
 msgstr "Famille mise à jour"
 
-#: members/templates/members/members/member_upsert.html:120
+#: members/templates/members/members/member_upsert.html:128
 msgid "Parent family created"
 msgstr "Famille parente créée"
 
-#: members/templates/members/members/member_upsert.html:124
+#: members/templates/members/members/member_upsert.html:132
 msgid "This username is not available!"
 msgstr "Ce nom d'utilisateur est déjà pris!"
 
@@ -978,22 +964,22 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_member.py:99 members/views/views_member.py:193
+#: members/tests/tests_member.py:100 members/views/views_member.py:193
 msgid "Member deleted"
 msgstr "Membre supprimé"
 
-#: members/tests/tests_member.py:214 members/tests/tests_member.py:219
+#: members/tests/tests_member.py:215 members/tests/tests_member.py:220
 #: members/views/views_member.py:142 members/views/views_member.py:156
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
 
-#: members/tests/tests_member.py:342 members/views/views_activate.py:118
+#: members/tests/tests_member.py:343 members/views/views_activate.py:118
 msgid ""
 "Your email has been verified and your account is now activated. Please set "
 "your password."
 msgstr ""
-"Ton adresse e-mail a été vérifiée avec succès et ton compte est maintenant activé."
-"Merci de définir ton mot de passe."
+"Ton adresse e-mail a été vérifiée avec succès et ton compte est maintenant "
+"activé.Merci de définir ton mot de passe."
 
 #: members/tests/tests_register.py:23 members/views/views_registration.py:129
 #, python-format
@@ -1052,8 +1038,8 @@ msgid ""
 "the password reset screen."
 msgstr ""
 "Membre activé avec succès. Le/la propriétaire du compte va maintenant "
-"recevoir un email contenant un lien d'activation puis sera redirigé.e "
-"vers l'écran de réinitialisation du mot de passe."
+"recevoir un email contenant un lien d'activation puis sera redirigé.e vers "
+"l'écran de réinitialisation du mot de passe."
 
 #: members/views/views_activate.py:105 members/views/views_registration.py:42
 msgid ""
@@ -1064,7 +1050,9 @@ msgstr ""
 
 #: members/views/views_activate.py:126
 msgid "Something went wrong while activating your account. Please try again."
-msgstr "Quelque chose s'est mal passé lors de l'activation de ton compte. Réessaye stp."
+msgstr ""
+"Quelque chose s'est mal passé lors de l'activation de ton compte. Réessaye "
+"stp."
 
 #: members/views/views_activate.py:128
 msgid "The link has lived its life :( Request a new one!"
@@ -1080,7 +1068,9 @@ msgstr ""
 
 #: members/views/views_activate.py:133
 msgid "You have exceeded the maximum verification requests! Contact admin."
-msgstr "Tu as dépassé le nombre maximum de demandes de vérification! Contacte l'admin."
+msgstr ""
+"Tu as dépassé le nombre maximum de demandes de vérification! Contacte "
+"l'admin."
 
 #: members/views/views_directory.py:59
 #, python-format
@@ -1203,3 +1193,4 @@ msgstr "Seuls les members du staff peuvent envoyer des invitations."
 #: members/views/views_registration.py:183
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossible d'envoyer un mail. Merci de contacter l'administrateur."
+

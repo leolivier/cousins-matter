@@ -9,15 +9,15 @@
       <div class="buttons has-addons mt-5">
         <a class="button is-large" href="{% url 'members:birthdays' %}"
           title='{% translate "Birthdays" %}'>
-          <i class="icon"><span class="mdi mdi-cake-variant-outline"></span></i>
+          {%icon "birthday" %}
         </a>
         <a class="button is-large" href="{% url 'members:directory' %}"
           title="{% translate 'Show directory' %}">
-          <i class="icon"><span class="mdi mdi-format-list-text"></span></i>
+          {%icon "directory-variant" %}
         </a>
         <a class="button is-large" href="{% url 'members:create' %}"
           title="{% translate 'Create Member' %}">
-          <i class="icon"><span class="mdi mdi-plus-box-outline"></span></i>
+          {%icon "new" %}
         </a>
       </div>
     </div>
@@ -35,7 +35,7 @@
           </div>
           <div class="control">
             <button class="button is-link" type="submit" title="{% translate 'Filter Members' %}">
-              <i class="icon"><span class="mdi mdi-magnify"></span></i>
+              {%icon "search" %}
             </button>
           </div>
         </div>

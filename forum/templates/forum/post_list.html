@@ -7,8 +7,9 @@
 		<div class="panel-heading">
 			<span>{% title _("Latest Posts") %}</span>
 			<span class="is-pulled-right">
-				<a class="button ml-6" href="{%url 'forum:create'%}" aria-label="{% trans 'Create Post' %}">
-					<span class="icon"><i class="mdi mdi-24px mdi-plus-box-outline"></i></span>
+				{% trans 'Create Post' as create_label %}
+				<a class="button ml-6" href="{%url 'forum:create'%}" aria-label="{{create_label}}" title="{{create_label}}">
+					{%icon "new-forum" %}
 				</a>
 			</span>
 		</div>
@@ -24,7 +25,7 @@
 				<p class="has-text-primary has-text-weight-bold has-text-right mr-5">
 					{{post.first_message.author.get_full_name}}
 					<a href="{%url 'members:detail' post.first_message.author.id %}" aria-label="{%trans 'profile'}">
-						<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+						{%icon "member-link" %}
 					</a>
 					<br>
 					<span class="is-size-7">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>

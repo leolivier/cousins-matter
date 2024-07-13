@@ -31,7 +31,7 @@
 	{%endif%}
 	<a class="pagination-previous 
 		{% if prev_page_url %}" onclick="goto_page_url('{{prev_page_url}}')"{% else %}is-disabled"{%endif%}>
-		<span class="icon"><i class="mdi mdi-24px mdi-chevron-left-box-outline"></i></span>
+		{%icon "pagination-previous" %}
 	</a>
 	
 	<ul class="pagination-list">
@@ -70,12 +70,9 @@
 			{%endwith%}
 		{%endif%}
 	</ul>
-	{% if next_page_url %}
-	<a class="pagination-next"  onclick="goto_page_url('{{next_page_url}}')">
-		<span class="icon is-large"><i class="mdi mdi-24px mdi-chevron-right-box-outline"></i></span>
+	<a class="pagination-next 
+		{% if next_page_url %}" onclick="goto_page_url('{{next_page_url}}')"{% else %}is-disabled"{%endif%}>
+		{%icon "pagination-next" %}
 	</a>
-	{% else %}
-	<span class="pagination-next icon is-large" disabled><i class="mdi mdi-24px mdi-chevron-right-box-outline"></i></span>
-	{%endif%}
 {%endwith%}	
 </nav>

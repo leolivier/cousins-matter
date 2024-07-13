@@ -17,20 +17,14 @@
 				<p class="buttons has-addons">
 					<a class="button" href="{% url 'galleries:detail' photo.gallery.id %}" 
 					title="{% blocktranslate with gname=photo.gallery.name%}Back to {{gname}}{%endblocktranslate %}">
-					<span class="icon is-large">
-						<i class="mdi mdi-24px mdi-arrow-up-right"></i>
-					</span>
+					{%icon "back" %}
 					</a>
 					<a class="button" href="{% url 'galleries:edit_photo' photo.id %}"
 						title="{% trans 'Edit Photo' %}">
-						<span class="icon is-large">
-							<i class="mdi mdi-24px mdi-image-edit-outline"></i>
-						</span>
+						{%icon "edit-photo" %}
 					</a>
 					<button class="button js-modal-trigger" data-target="delete-photo-modal" title="{% trans 'Delete photo' %}">
-						<span class="icon is-large">
-							<i class="mdi mdi-24px mdi-trash-can-outline"></i>
-						</span>
+						{%icon "delete" %}
 					</button>
 				</p>
 			</div>

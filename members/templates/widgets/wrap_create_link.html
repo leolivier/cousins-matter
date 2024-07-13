@@ -1,4 +1,4 @@
-{% load i18n static %}
+{% load i18n static cm_tags %}
 <div class="related-widget-wrapper">
 	{{ rendered_widget }}
 	{% block links %}
@@ -7,7 +7,7 @@
 		<a class="change-related button js-modal-trigger" 
 			id="id_change_{{ name }}_link" data-target="change-{{ name }}-modal"
 			title="{% blocktranslate %}Change selected {{ name }}{% endblocktranslate %}">
-			<img src="{% static 'admin/img/icon-changelink.svg' %}" alt="" width="20" height="20">
+			{%icon "edit" %}
 		</a>
 		{% endif %}
 		{% if can_add_related %}
@@ -15,7 +15,7 @@
 			id="id_create_{{ name }}_link" data-target="create-{{ name }}-modal"
 			{% translate name as translated_name %}
 			title="{% blocktranslate %}Add another {{ translated_name }}{% endblocktranslate %}">
-			<img src="{% static 'admin/img/icon-addlink.svg' %}" alt="" width="20" height="20">
+			{%icon "new" %}
 		</a>
 		{% endif %}
 		{% endspaceless %}

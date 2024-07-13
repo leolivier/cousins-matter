@@ -1,4 +1,4 @@
-{% load i18n flatpages menupages_tags static %}
+{% load i18n flatpages menupages_tags cm_tags static %}
 <div class="navbar-brand">
 	<a class="navbar-item" href="/">
 		<img src="{% static 'cm_main/images/cousinades.png' %}" width="112" height="28">
@@ -22,29 +22,29 @@
 		<div class="navbar-item has-dropdown is-hoverable">
 			<a class="navbar-item" href="{% url 'members:members' %}">
 				{% translate "Members" %}
-				<span class="icon is-large"><i class="mdi mdi-24px mdi-account-group-outline"></i></span>
+				{%icon "members" %}
 			</a>
 			<div class="navbar-dropdown is-right">
 				<a class="navbar-item" href="{% url 'members:birthdays' %}">
 					{% translate "Birthdays" %}
-					<span class="icon is-large"><i class="mdi mdi-24px mdi-cake-variant-outline"></i></span>
+					{%icon "birthday" %}
 				</a>
 				<a class="navbar-item" href="{% url 'members:directory' %}">
 					{% translate "Show directory" %}
-					<span class="icon is-large"><i class="mdi mdi-24px mdi-book-alphabet"></i></span>
+					{%icon "directory-variant" %}
 				</a>
 				<a class="navbar-item" href="{% url 'members:create' %}">
 						{% translate "Create Member" %}
-						<span class="icon is-large"><i class="mdi mdi-24px mdi-account-plus"></i></span>
+						{%icon "new-member" %}
 				</a>
 				{% if user.is_superuser %}
 					<a class="navbar-item" href="{% url 'members:invite' %}">
 						{% translate "Invite Member" %}
-						<span class="icon is-large"><i class="mdi mdi-24px mdi-card-account-mail-outline"></i></span>
+						{%icon "invite-member" %}
 					</a>
 					<a class="navbar-item" href="{% url 'members:csv_import' %}">
 						{% translate "Import from CSV" %}
-						<span class="icon is-large"><i class="mdi mdi-24px mdi-account-multiple-plus-outline"></i></span>
+						{%icon "import-members" %}
 					</a>
 					{% endif %}
 			</div>
@@ -53,16 +53,16 @@
 		<div class="navbar-item has-dropdown is-hoverable">
 			<a class="navbar-item" href="{% url 'galleries:galleries' %}">
 				{% translate "Galleries" %}
-				<span class="icon is-large"><i class="mdi mdi-24px mdi-folder-multiple-image"></i></span>
+				{%icon "galleries" %}
 			</a>
 			<div class="navbar-dropdown">
 				<a class="navbar-item" href="{% url 'galleries:create' %}">
 					{% translate "Create Gallery" %}
-					<span class="icon is-large"><i class="mdi mdi-24px mdi-file-image-plus-outline"></i></span>
+					{%icon "new-gallery" %}
 				</a>
 				<a class="navbar-item" href="{% url 'galleries:bulk_upload' %}">
 					{% translate "Bulk Upload" %}
-					<span class="icon is-large"><i class="mdi mdi-24px mdi-folder-plus-outline"></i></span>
+					{%icon "import-galleries" %}
 				</a>
 			</div>
 		</div>
@@ -70,12 +70,12 @@
 		<div class="navbar-item has-dropdown is-hoverable">
 			<a class="navbar-item" href="{% url 'forum:list' %}">
 				{% translate "Forum" %}
-				<span class="icon is-large"><i class="mdi mdi-24px mdi-forum"></i></span>
+				{%icon "forum" %}
 			</a>
 			<div class="navbar-dropdown">
 				<a class="navbar-item" href="{% url 'forum:create' %}">
 					{% translate "Create Post" %}
-					<span class="icon is-large"><i class="mdi mdi-24px mdi-forum-plus-outline"></i></span>
+					{%icon "new-forum" %}
 				</a>
 			</div>
 		</div>
@@ -83,7 +83,7 @@
 		<div class="navbar-item has-dropdown is-hoverable">
 			<a class="navbar-item" href="{% url 'chat:chat' %}">
 				{% translate "Chat" %}
-				<span class="icon is-large"><i class="mdi mdi-24px mdi-chat"></i></span>
+				{%icon "chat" %}
 			</a>
 		</div>
 
@@ -98,9 +98,7 @@
 		<div class="navbar-item">
 			<div class="navbar-item has-dropdown is-hoverable">
 				<button class="button navbar-link is-light">
-					<span class="icon is-large">
-						<i class="mdi mdi-24px mdi-help-circle-outline"></i>
-					</span>
+					{%icon "help" %}
 				</button>
 				{%with about_prefix='/pages/'|add:settings.LANGUAGE_CODE|add:'/about/' private_prefix='/pages/'|add:settings.LANGUAGE_CODE|add:'/private/'%}
 				{% get_flatpages about_prefix as about_pages %}
@@ -120,30 +118,28 @@
 			<div class="buttons">
 				{% if not user.is_authenticated %}
 				<a class="button is-light" href="{% url 'members:login' %}">
-					<span class="icon"><i class="mdi mdi-24px mdi-account-check"></i></span>
+					{%icon "login" %}
 					<span>{% translate "Sign in" %}</span>
 				</a>
 {#				<a class="button is-primary" href="{% url 'members:register' %}"> #}
 					<a class="button is-primary" href="{% url 'members:register_request' %}">
-					<span class="icon"><i class="mdi mdi-24px mdi-account-box-plus-outline"></i></span>
+					{%icon "invite-request" %}
 					<span><strong>{% translate "Request invitation link" %}</strong></span>
 				</a>
 				{% else %}
 				<div class="navbar-item has-dropdown is-hoverable">
 					<button class="button navbar-link is-light">
 						<span>{{user.username}}</span>
-						<span class="icon is-large">
-							<i class="mdi mdi-24px mdi-account-outline"></i>
-						</span>
+						{%icon "member" %}
 					</button>
 					<div class="navbar-dropdown is-right">
 						<p class="has-text-centered is-size-4"><strong>{{user.username}}</strong></p>
 						<a class="navbar-item" href="{% url 'members:profile' %}">
-							<span class="icon"><i class="mdi mdi-24px mdi-account-box-edit-outline"></i></span>
+							{%icon "profile" %}
 							<span>{% translate "Profile" %}</span>
 						</a>
 						<a class="navbar-item" href="{% url 'members:logout'%}">
-							<span class="icon"><i class="mdi mdi-24px mdi-account-arrow-right"></i></span>
+							{%icon "logout" %}
 							<span>{% translate "Log Out" %}</span>
 						</a>
 					</div>

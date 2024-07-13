@@ -2,14 +2,14 @@
 {%if sublevels.title%} 
 {# sublevels is a Page, we're at the bottom of the tree, provide the link #}
 <a class="navbar-item" href="{{sublevels.url}}">
-	<span class="icon is-large"><i class="mdi mdi-24px mdi-page-next-outline"></i></span>
+	{%icon "page" %}
 	{{sublevels.title}}
 </a>
 {%else%}
 <div class="navbar-item has-dropdown is-hoverable">
 	
 	<p class="navbar-link">
-		<span class="icon is-large"><i class="mdi mdi-24px mdi-page-next"></i></span>
+		{%icon "page" %}
 		{{level}}
 	</p>
 	<div class="navbar-dropdown is-right">

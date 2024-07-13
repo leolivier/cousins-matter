@@ -75,7 +75,6 @@ INSTALLED_APPS = [
   'pages',
   'crispy_forms',
   'crispy_bulma',
-  'django_icons',
   'verify_email',
   'django.contrib.admin',
   'django.contrib.auth',
@@ -202,9 +201,64 @@ LOGIN_URL = 'members:login'
 # LOGOUT_REDIRECT_URL = '/'
 
 DJANGO_ICONS = {
-  "ICONS": {
-    "account": {"name": "mdi mdi-account"},
-  },
+    # footer icons
+    "copyleft": "copyleft",
+    # main icons
+    "back": "arrow-up-left",
+    "delete": "trash-can-outline",
+    "edit": "pencil-outline",
+    "save": "content-save-outline",
+    "submit": "check-circle-outline",
+    "cancel": "close-circle-outline",
+    "new": "plus-box-outline",
+    "send-message": "send-variant-outline",
+    "search": "magnify",
+    "print": "printer",
+    "pdf": "file-pdf-box",
+    "help": "help-circle-outline",
+    # auth icons
+    "signin": "login",
+    "signout": "logout",
+    "signup": "account-plus",
+    "change-password": "lock-reset",
+    # pagination icons
+    "pagination-previous": "chevron-left-box-outline",
+    "pagination-next": "chevron-right-box-outline",
+    # follow icons
+    "follow": "link-variant",
+    "unfollow": "link-variant-off",
+    # member icons
+    "member": "account-outline",
+    "member-link": "open-in-new",
+    "new-member": "account-plus-outline",
+    "invite-member": "card-account-mail-outline",
+    "invite-request": "account-box-plus-outline",
+    "import-members": "account-multiple-plus-outline",
+    "activate-member": "account-reactivate",
+    "members": "account-group-outline",
+    "profile": "account-box-edit-outline",
+    "birthday": "cake-variant-outline",
+    "birthday-variant": "cake-variant",
+    "directory": "format-list-text",
+    "directory-variant": "book-alphabet",
+    # gallery icons
+    "galleries": "folder-multiple-image",
+    "new-gallery": "file-image-plus-outline",
+    "edit-gallery": "image-edit",
+    "import-galleries": "folder-plus-outline",
+    "new-photo": "image-plus-outline",
+    "edit-photo": "image-edit-outline",
+    # forum icons
+    "forum": "forum-outline",
+    "new-forum": "forum-plus-outline",
+    # chat icons
+    "new-chat-room": "chat-plus-outline",
+    "chat-room": "chat",
+    # page icons
+    "page": "page-next",
+    "new-page": "book-open-page-variant-outline",
+    "edit-page": "note-edit-outline",
+    
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -39,37 +39,25 @@
 				{% if gallery.parent %}
 				<a class="button" href="{% url 'galleries:detail' gallery.parent.id %}" 
 					title="{% blocktranslate with gname=gallery.parent.name%}Back to {{gname}}{%endblocktranslate %}">
-					<span class="icon is-large">
-						<i class="mdi mdi-24px mdi-arrow-up-right"></i>
-					</span>
+					{%icon "back" %}
 				</a>
 				{%else%}
-				<span class="icon is-large is-light">
-					<i class="mdi mdi-arrow-up-right"></i>
-				</span>
+				{%icon "back" "is-light"%}
 				{%endif%}
 				<a class="button" href="{% url 'galleries:add_photo' gallery.id %}"
 					title="{% translate 'Add Photo' %}">
-					<span class="icon is-large">
-						<i class="mdi mdi-24px mdi-image-plus-outline"></i>
-					</span>
+					{%icon "new-photo" %}
 				</a>
 				<a class="button" href="{% url 'galleries:create_sub' gallery.id %}"
 					title="{% translate 'Create Sub Gallery' %}">
-					<span class="icon is-large">
-						<i class="mdi mdi-24px mdi-folder-plus-outline"></i>
-					</span>
+					{%icon "new-gallery" %}
 				</a>
 				<a class="button" href="{% url 'galleries:edit' gallery.id %}"
 					title="{% trans 'Edit Gallery' %}">
-					<span class="icon is-large">
-						<i class="mdi mdi-24px mdi-image-edit-outline"></i>
-					</span>
+					{%icon "edit-gallery" %}
 				</a>
 				<button class="button js-modal-trigger" data-target="delete-gallery-modal" title="{% trans 'Delete gallery' %}">
-					<span class="icon is-large">
-						<i class="mdi mdi-24px mdi-trash-can-outline"></i>
-					</span>
+					{%icon "delete" %}
 				</button>
 			</p>
 		</div>

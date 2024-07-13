@@ -128,7 +128,7 @@ msgstr "Créer une discussion"
 
 #: forum/templates/forum/post_form_include.html:15
 msgid "Submit"
-msgstr "Soumettre"
+msgstr "Envoyer"
 
 #: forum/templates/forum/post_list.html:3
 #: forum/templates/forum/post_list.html:8

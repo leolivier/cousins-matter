@@ -5,6 +5,7 @@ import os
 from django.template import Library, Node, Variable, TemplateSyntaxError
 from django.conf import settings
 from django.urls import reverse, resolve, NoReverseMatch
+from django.utils.safestring import mark_safe
 
 register = Library()
 
@@ -120,3 +121,17 @@ def inline_css(css_url):
     with open(css_path, "r") as f:
         css = f.read()
     return {'css': css}
+
+
+@register.simple_tag
+def icon(name, clazz="icon", aria_hidden=False):
+    name = name.lower()
+    if name in settings.DJANGO_ICONS:
+        name = settings.DJANGO_ICONS[name]
+    if clazz != "icon":
+        if "icon" not in clazz:
+            clazz = "icon " + clazz
+    return mark_safe(f'''
+<span class="is-large {clazz}">
+    <i class="mdi mdi-24px mdi-{name}" aria-hidden='true'></i>
+</span>''')

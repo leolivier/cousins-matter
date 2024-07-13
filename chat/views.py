@@ -32,7 +32,7 @@ def chat(request, page_num=1):
   chat_rooms = ChatRoom.objects.all().annotate(
     num_messages=Count("chatmessage"),
     first_message_author=Subquery(first_msg_auth_subquery)
-    )
+    ).order_by('date_added')
   page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_CHATROOMS_PER_PAGE
 
   ptor = Paginator(chat_rooms, page_size, reverse_link="chat:chat_page")

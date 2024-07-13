@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# This script removes all untagged versions of the package cousins-matter on ghcr.io
-# USE WITH CAUTION!!!
+echo "This script removes all untagged versions of the package cousins-matter on ghcr.io"
+echo "Images without tags can be the one of each platform (amd64, arm64, etc.) and removing them will end up in"
+echo "an error \"Manifest not found\"! So USE WITH CAUTION!!!"
+read -p "Type 'GO' to continue: " go
+[[ $go == 'GO' ]] || exit 1
+
 while true;
 do
   ids=/tmp/untagged_package_ids

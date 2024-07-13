@@ -6,6 +6,7 @@ from django.conf import settings
 from django.test import RequestFactory
 from django.test.utils import TestContextDecorator
 from captcha.conf import settings as captcha_settings
+from verify_email.app_configurations import GetFieldFromSettings
 
 from ..forms import MemberRegistrationForm
 from ..models import Member
@@ -133,13 +134,14 @@ class MemberRegisterTests(MemberTestCase):
     response = self.client.get(invitation_url, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, 'members/members/member_upsert.html')
-    self.assertContains(response, f'''<h1 class="title has-text-centered is-1">{_("Sign up")}</h1>''', html=True)
+    self.assertContains(response, f'''<h1 class="title has-text-centered is-2">{_("Sign up")}</h1>''', html=True)
 
     user = {'username': 'test_register_view', 'password1': self.password, 'password2': self.password,
             'first_name': self.first_name, 'last_name': self.last_name,
             'email': 'test_register_view@test.com', 'phone': '01 23 45 67 78',
             "birthdate": date.today(), "privacy_consent": True}
 
+    mail.outbox = []  # reset mailbox
     form = MemberRegistrationForm(user)
     self.assertFormError(form, 'privacy_consent', [])
     response = self.client.post(invitation_url, user, follow=True)
@@ -149,6 +151,9 @@ class MemberRegisterTests(MemberTestCase):
                           'You will now receive an email to verify your email address. '
                           'Click in the link inside the mail to finish the registration.') %
                         {"username": user['username']})
+    self.assertEqual(len(mail.outbox), 1)
+    self.assertSequenceEqual(mail.outbox[0].to, [user['email']])
+    self.assertEqual(mail.outbox[0].subject, GetFieldFromSettings().get('subject'))
 
   def test_register_view_wrong_token(self):
     factory = RequestFactory()

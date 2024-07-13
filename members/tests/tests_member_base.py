@@ -127,7 +127,8 @@ class MemberTestCase(TestCase):
       passwd = member_data['password']
     else:
       passwd = member_data['password']
-    new_member = Member.objects.create_member(**member_data, is_active=is_active)
+    new_member = Member.objects.create_member(**member_data, is_active=is_active, 
+                                              managing_member=None if is_active else self.member)
     # store real password instead of hashed one so that we can login with it afterward
     new_member.password = passwd
     self.created_members.append(new_member)

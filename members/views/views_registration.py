@@ -35,14 +35,15 @@ class RegistrationCheckingView(generic.CreateView):
       member = Member.objects.filter(email=decoded_email)
       if member.exists():
         member = member.first()
-        # if member is already registered but is not active, ask him to contact his/her managing member
+        # if member is already active, redirect to login page
         if member.is_active:
           messages.error(
             request,
-            _("A member with the same email address is already registered. Please sign in instead")
+            _("A member with the same email address is already active. Please sign in instead")
             )
-          return redirect_to_referer(request)
+          return redirect(reverse("members:login"))
         else:
+          # if member is already registered but is not active, ask him to contact his/her managing member
           manager = Member.objects.get(id=member.id).managing_member
           messages.error(request,
                          _("You are already registered but not active. Please contact %(admin)s to activate your account") %

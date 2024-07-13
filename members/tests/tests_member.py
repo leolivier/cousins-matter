@@ -1,3 +1,5 @@
+import re
+import os
 from django.conf import settings
 from django.urls import reverse
 from django.db.utils import IntegrityError
@@ -5,10 +7,12 @@ from django.utils.formats import localize
 from django.utils.translation import gettext as _
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.core import mail
+from verify_email.app_configurations import GetFieldFromSettings
 from ..views.views_member import EditProfileView, MemberDetailView
 from ..models import Member
 from .tests_member_base import TestLoginRequiredMixin, MemberTestCase
-import os
+from cm_main.tests import get_absolute_url
 
 
 class UsersManagersTests(TestCase):
@@ -180,10 +184,7 @@ class ManagedMemberChangeTests(MemberViewTestMixin, MemberTestCase):
     super().setUp()
     # first create a new managed member
     self.managed = self.create_member_by_view()
-    self.active = self.create_member()
-    self.active.is_active = True
-    self.active.save(update_fields=['is_active'])
-    self.active.refresh_from_db()
+    self.active = self.create_member(None, is_active=True)
     self.assertTrue(self.active.is_active)
 
   def tearDown(self):
@@ -206,10 +207,11 @@ class ManagedMemberChangeTests(MemberViewTestMixin, MemberTestCase):
 
     # chack that active members can't be changed
     edit_url = reverse('members:member_edit', kwargs={'pk': self.active.id})
-    new_data = self.get_changed_member_data(self.managed)
+    new_data = self.get_changed_member_data(self.active)
     # for get
     response = self.client.get(edit_url, new_data, follow=True)
     self.assertEqual(response.status_code, 200)
+    # self.print_response(response)
     self.assertContainsMessage(response, "error", _("You do not have permission to edit this member."))
     self.assertRedirects(response, reverse('members:detail', kwargs={'pk': self.active.id}))
     # and post
@@ -236,7 +238,7 @@ class TestDisplayMembers(MemberTestCase):
     self.assertTemplateUsed(response, 'members/members/member_detail.html')
     self.assertIs(response.resolver_match.func.view_class, MemberDetailView)
     active = _("Active member") if member.is_active else _("Managed member")
-    self.assertContains(response, f'''<p class="content small">{member.username} ( {active} )</p>''', html=True)
+    self.assertContains(response, f'''<p class="content small">{member.username}<br>( {active} )</p>''', html=True)
     bdate = localize(member.birthdate, use_l10n=True)
     self.assertContains(response, f'''<tr>
           <td class="content has-text-right">{_("Birthdate")}</td>
@@ -307,3 +309,38 @@ class TestDisplayMembers(MemberTestCase):
     check_is_not_in(content, member1)
     check_is_not_in(content, member2)
     check_is_in(content, member3)
+
+
+class TestActivateManagedMember(MemberTestCase):
+  def test_activate(self):
+    managed = self.create_member()
+    self.assertIsNotNone(managed)
+    self.assertFalse(managed.is_active)
+    self.assertEqual(managed.managing_member, self.member)
+    mail.outbox = []
+    response = self.client.post(reverse("members:activate", args=[managed.id]), follow=True)
+    self.assertEqual(response.status_code, 200)
+    managed.refresh_from_db()
+    self.assertEqual(len(mail.outbox), 1)
+    email = mail.outbox[0]
+    self.assertSequenceEqual(email.to, [managed.email])
+    self.assertEqual(email.subject, GetFieldFromSettings().get('subject'))
+    for content, type in email.alternatives:
+      if type == 'text/html':
+        break
+    s1 = _("You received this mail because you attempted to create an account on our website")
+    s2 = _("Please click on the link below to confirm the email and activate your account.")
+    self.assertInHTML(f'''<p class="mt-2">{s1}<br>{s2}</p>''', content)
+    url = reverse("members:check_activation", args=["uidb64", "token"]).replace("uidb64/token", "")
+    url = get_absolute_url(url) + r'[^"]+'
+    # print('url:', url, 'content', content)
+    match = re.search(url, content)
+    self.assertIsNotNone(match)
+    url = match.group(0)
+    # print('url:', url)
+    response = self.client.get(url, follow=True)
+    self.assertContainsMessage(response, "success", 
+                               _("Your email has been verified and your account is now activated. Please set your password."))
+    managed.refresh_from_db()
+    self.assertTrue(managed.is_active)
+

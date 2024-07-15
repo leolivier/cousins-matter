@@ -25,8 +25,8 @@ class TestPageMixin():
       page_data = self.page_data
     # print('creating page', page_data['url'], page_data['title'])
     response = self.client.post(reverse("pages-edit:create"), page_data, follow=True)
-    # if prresp:
-    self.print_response(response)
+    if prresp:
+      self.print_response(response)
     self.assertRedirects(response, flatpage_url(page_data['url']), 302, 200)
     self.assertTemplateUsed(response, 'flatpages/default.html')
     page = FlatPage.objects.get(url=page_data['url'])

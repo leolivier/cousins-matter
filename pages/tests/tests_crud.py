@@ -17,6 +17,7 @@ class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     self.login()  # now log back as a normal user
 
   def test_url_checks_with_other_pages(self):
+    self.superuser_login()  # only superuser can create pages
     # first create one page
     self._test_create_page()
     # then try to create another one with the same url
@@ -30,36 +31,40 @@ class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     # now, try to create with "sub url"
     url = self.page_data['url']
     form = PageForm({
-        'url': f'{url}/3rd-title',
+        'url': f'{url}/3rd-title/',
         'title': '3rd title',
         'content': '3rd content',
       })
     self.assertFormError(form, 'url', [_("A flatpage cannot be a subpage of another flatpage, check your URLs")])
+    self.login()  # now log back as a normal user
 
 
 class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_update_page(self):
+    self.superuser_login()  # only superuser can create pages
     # first create it
     page = self._test_create_page()
     # now try to update it
     new_page_data = {
-      'url': '/another-level/another-title',
+      'url': '/another-level/another-title/',
       'title': 'another title',
       'content': 'another content',
     }
-    response = self.client.post(reverse("pages-edit:update", args=[page.url]), new_page_data, follow=True)
+    response = self.client.post(reverse("pages-edit:update", args=[page.id]), new_page_data, follow=True)
     self.assertEqual(response.status_code, 200)
     page.refresh_from_db()
     self.assertEqual(page.url, new_page_data['url'])
     self.assertEqual(page.title, new_page_data['title'])
     self.assertEqual(page.content, new_page_data['content'])
+    self.login()  # now log back as a normal user
 
   def test_same_url(self):
+    self.superuser_login()  # only superuser can create pages
     # first create 2 pages with different urls
     page1 = self._test_create_page()
     # 2nd page
     new_page_data = {
-      'url': '/another-level/another-title',
+      'url': '/another-level/another-title/',
       'title': 'another title',
       'content': 'another content',
     }
@@ -70,28 +75,33 @@ class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     new_page_data['id'] = page2.id
     form = PageForm(new_page_data)
     self.assertFormError(form, 'url', [_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']}])
+    self.login()  # now log back as a normal user
 
 
 class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_display_page(self):
+    self.superuser_login()  # only superuser can create pages
     # first create 2 pages with different urls
     page1 = self._test_create_page()
     # 2nd page
     new_page_data = {
-      'url': '/another-level/another-title',
+      'url': '/another-level/another-title/',
       'title': 'another title',
       'content': 'another content',
     }
     page2 = self._test_create_page(new_page_data)
     # now, display them
     response = self.client.get(reverse("pages-edit:list"))
-    self.print_response(response)
+    # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     for page in [page1, page2]:
       self.assertContains(response, f'''
   <div class="panel-block">
-    <a href="{reverse('pages-edit:update', args=[page.url])}">
+    <a href="{reverse('pages-edit:update', args=[page.id])}">
       {icon('edit-page', 'panel-icon')}
-      {page.title}
+      {page.url}
     </a>
+    &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<strong>{page.title}</strong>
   </div>''', html=True)
+
+    self.login()  # now log back as a normal user

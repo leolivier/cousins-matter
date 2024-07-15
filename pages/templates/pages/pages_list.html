@@ -13,7 +13,7 @@
 		</p>
 		{%for page in object_list%}
 		<div class="panel-block">
-			<a href="{%url 'pages-edit:update' page.id %}" class="is-col-min-8">
+			<a href="{%url 'pages-edit:update' page.id %}">
 				{%icon "edit-page" "panel-icon"%}
 				{{page.url}}
 			</a>

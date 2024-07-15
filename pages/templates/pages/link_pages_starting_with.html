@@ -1,0 +1,9 @@
+{%load menupages_tags%}
+{%for page in pages%}
+  {%if page.registration_required and request.user.is_authenticated or not page.registration_required%}
+    <a class="{{css_class}}" href="{{page.url}}">{{page.title}}</a> 
+  {%endif%}
+{%endfor%}
+{%if pages and hr %}
+	<{{hr}}>
+{%endif%}

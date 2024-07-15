@@ -1,4 +1,3 @@
-{%load menupages_tags%}
 {%for level, sublevels in page_tree.items %}
-	{%menu_level level sublevels%}
+	{%include "pages/menu_pages_level.html" with level=level sublevels=sublevels %}
 {%endfor%}

@@ -1,20 +1,19 @@
-{%load menupages_tags%}
+{%load menupages_tags cm_tags%}
 {%if sublevels.title%} 
 {# sublevels is a Page, we're at the bottom of the tree, provide the link #}
-<a class="navbar-item" href="{{sublevels.url}}">
-	{%icon "page" %}
+<a class="navbar-item" href="{%url 'django.contrib.flatpages.views.flatpage' sublevels.url%}">
 	{{sublevels.title}}
+	{%icon "page" %}
 </a>
 {%else%}
 <div class="navbar-item has-dropdown is-hoverable">
-	
-	<p class="navbar-link">
-		{%icon "page" %}
+	<p class="navbar-item"> 
 		{{level}}
+		{%icon "page-level" %}
 	</p>
 	<div class="navbar-dropdown is-right">
 		{%for sublevel, subsublevels in sublevels.items%}
-		{%menu_level sublevel subsublevels%}
+		{%include "pages/menu_pages_level.html" with level=sublevel sublevels=subsublevels %}
 	{%endfor%}
 	</div>
 </div>

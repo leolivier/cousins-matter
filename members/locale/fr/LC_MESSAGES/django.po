@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-15 20:54+0200\n"
+"POT-Creation-Date: 2024-07-16 21:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -368,19 +368,28 @@ msgstr "Enregistrement sur le site \"%(site_name)s\""
 
 #: members/templates/members/email/registration_invite_email.html:22
 #, python-format
-msgid "Hello %(invited)s, this is %(admin)s!"
-msgstr "Bonjour %(invited)s, c'est %(admin)s!"
+msgid "Hello %(invited)s, this is %(inviter)s!"
+msgstr "Bonjour %(invited)s, c'est %(inviter)s!"
 
-#: members/templates/members/email/registration_invite_email.html:23
+#: members/templates/members/email/registration_invite_email.html:24
 #, python-format
 msgid ""
 "I invite you to register on the %(site_name)s website I created for managing "
 "our big family!"
 msgstr ""
-"Je t'invite à t'inscrire sur le site %(site_name)s que j'ai créé pour gérer "
-"notre grande famille !"
+"Je t'invite à t'inscrire sur le site web %(site_name)s que j'ai créé "
+"pour gérer notre grande famille !"
 
-#: members/templates/members/email/registration_invite_email.html:28
+#: members/templates/members/email/registration_invite_email.html:26
+#, python-format
+msgid ""
+"I invite you to register on the %(site_name)s website created by %(admin)s "
+"for managing our big family!"
+msgstr ""
+"Je t'invite à t'inscrire sur le site web %(site_name)s créé par %(admin)s "
+"pour gérer notre grande famille !"
+
+#: members/templates/members/email/registration_invite_email.html:32
 msgid ""
 "On this site, you will find a directory of the family members and a lot of "
 "features on birthdays, photos, forums, ads,..."
@@ -389,7 +398,7 @@ msgstr ""
 "nombreuses fonctionnalités sur les anniversaires, les photos, les nouvelles, "
 "les annonces,..."
 
-#: members/templates/members/email/registration_invite_email.html:31
+#: members/templates/members/email/registration_invite_email.html:35
 msgid ""
 "If you know the administrator and knows he created this site, please click "
 "on the link below to go to the site and create your account."
@@ -397,22 +406,24 @@ msgstr ""
 "Si tu connais l'administrateur et tu sais qu'il a créé ce site, clique sur "
 "le lien ci-dessous pour aller sur le site et créer ton compte."
 
-#: members/templates/members/email/registration_invite_email.html:34
+#: members/templates/members/email/registration_invite_email.html:38
 #, python-format
 msgid ""
-"You can also reply to this email to contact %(admin)s and check with him if "
-"he really invited you..."
+"You can also reply to this email to contact <a href=\"mailto:"
+"%(inviter_email)s\">%(inviter)s</a> and check with him if he really invited "
+"you..."
 msgstr ""
-"Tu peux également répondre à ce mail pour contacter %(admin)s et vérifier "
-"avec lui qu'il t'a bien invité(e)..."
+"Tu peux également répondre à ce mail pour contacter <a href=\"mailto:"
+"%(inviter_email)s\">%(inviter)s</a> et vérifier avec lui qu'il t'a bien "
+"invité(e)..."
 
-#: members/templates/members/email/registration_invite_email.html:39
+#: members/templates/members/email/registration_invite_email.html:43
 #: members/views/views_registration.py:24
 msgid "Sign up"
 msgstr "S'enregistrer"
 
 #: members/templates/members/email/registration_request_email.html:8
-#: members/tests/tests_register.py:95 members/views/views_registration.py:176
+#: members/tests/tests_register.py:95 members/views/views_registration.py:197
 #, python-format
 msgid "Registration request for %(site_name)s"
 msgstr "Demande d'enregistrement pour %(site_name)s"
@@ -445,6 +456,42 @@ msgstr ""
 #: members/templates/members/email/registration_request_email.html:33
 msgid "Open invitation page"
 msgstr "Ouvrir la page d'invitation"
+
+#: members/templates/members/email/registration_sent_email.html:8
+#, python-format
+msgid "New invitation to register on %(site_name)s"
+msgstr "Nouvelle invitation à s'inscrire sur %(site_name)s"
+
+#: members/templates/members/email/registration_sent_email.html:15
+#: members/views/views_registration.py:142
+#, python-format
+msgid ""
+"Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s"
+msgstr ""
+"Invitation à s'inscrire sur %(site_name)s envoyée par %(inviter)s à "
+"%(invited)s"
+
+#: members/templates/members/email/registration_sent_email.html:22
+#, python-format
+msgid ""
+"Hello %(admin)s, for your information, %(inviter)s (%(inviter_email)s) sent "
+"an invitation to %(invited)s (%(invited_email)s) to register on the "
+"%(site_name)s website."
+msgstr ""
+"Bonjour %(admin)s, pour information, %(inviter)s (%(inviter_email)s) a "
+"envoyé une invitation à %(invited)s (%(invited_email)s) pour s'inscrire sur "
+"le site web %(site_name)s."
+
+#: members/templates/members/email/registration_sent_email.html:28
+#, python-format
+msgid ""
+"There is now way to block this invitation, so if you don't know %(invited)s "
+"or don't want him/her to register on this site, please contact him/her or "
+"%(inviter)s using the following emails:"
+msgstr ""
+"Il n'y a pas de moyen de bloquer cette invitation, donc si tu ne connais pas "
+"%(invited)s ou ne veux pas qu'il/elle s'enregistre sur ce site, merci de "
+"contacter cette personne ou %(inviter)s en utilisant les courriels suivants:"
 
 #: members/templates/members/family/family_detail.html:3
 msgid "Family Detail"
@@ -981,22 +1028,22 @@ msgstr ""
 "Ton adresse e-mail a été vérifiée avec succès et ton compte est maintenant "
 "activé.Merci de définir ton mot de passe."
 
-#: members/tests/tests_register.py:23 members/views/views_registration.py:129
+#: members/tests/tests_register.py:23 members/views/views_registration.py:150
 #, python-format
 msgid "Invitation sent to %(email)s."
 msgstr "Invitation envoyée à %(email)s."
 
-#: members/tests/tests_register.py:27 members/views/views_registration.py:125
+#: members/tests/tests_register.py:27 members/views/views_registration.py:127
 #, python-format
 msgid "You are invited to register on %(site_name)s"
 msgstr "Tu as été invité.e à créer ton compte sur %(site_name)s"
 
-#: members/tests/tests_register.py:90 members/views/views_registration.py:180
+#: members/tests/tests_register.py:90 members/views/views_registration.py:201
 msgid "Registration request sent."
 msgstr "Demande d'enregistrement envoyée."
 
-#: members/tests/tests_register.py:116 members/views/views_registration.py:110
-#: members/views/views_registration.py:156
+#: members/tests/tests_register.py:116 members/views/views_registration.py:108
+#: members/views/views_registration.py:177
 msgid "A member with this email already exists."
 msgstr "Un membre ayant cette adresse mail existe déjà."
 
@@ -1186,10 +1233,6 @@ msgstr ""
 "Tu es déjà enregistré mais pas encore actif. Contacte %(admin)s pour activer "
 "ton compte."
 
-#: members/views/views_registration.py:99
-msgid "Only staff users can send invitations."
-msgstr "Seuls les members du staff peuvent envoyer des invitations."
-
-#: members/views/views_registration.py:183
+#: members/views/views_registration.py:204
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossible d'envoyer un mail. Merci de contacter l'administrateur."

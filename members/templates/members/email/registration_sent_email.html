@@ -1,0 +1,38 @@
+{% load i18n cm_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% blocktranslate %}New invitation to register on {{site_name}}{% endblocktranslate %}</title>
+    {% inline_css "cm_main/css/email_msg_css.css" %}
+</head>
+<body>
+    <div class="container"> 
+      <div class="green">
+          <h1 class="center" style="padding:2px">
+            {% blocktranslate trimmed%}
+            Invitation to register on {{site_name}} sent by {{inviter}} to {{invited}}
+            {% endblocktranslate %}
+          </h1>
+      </div>
+
+      <h3>
+      {%blocktranslate trimmed %}
+      Hello {{admin}}, for your information, {{inviter}} ({{inviter_email}}) sent an invitation to {{invited}} ({{invited_email}}) to register on the {{site_name}} website.
+      {% endblocktranslate %}
+      </h3>
+      <hr>
+      <p>
+          {%blocktranslate trimmed %}
+          There is now way to block this invitation, so if you don't know {{invited}} or don't want him/her to register on this site, please contact him/her or {{inviter}} using the following emails:
+          {% endblocktranslate %}
+        <ul>
+          <li><a href="mailto:{{inviter_email}}>">{{inviter}}</a></li>
+          <li><a href="mailto:{{invited_email}}>">{{invited}}</a></li>
+        </ul>
+      </p>
+    </div>
+</body>
+</html>

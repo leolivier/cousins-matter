@@ -95,8 +95,6 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
     an invitation link from the admin. This link is sent to the user by email and contains a token.
     The user can then use the link to open the registration form and register.
     """
-    if not request.user.is_staff:
-      raise PermissionError(_("Only staff users can send invitations."))
 
     form = MemberInvitationForm(request.POST)
     if not form.is_valid():
@@ -112,20 +110,43 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
 
     invitation_url = RegistrationLinkManager().generate_link(request, email)
     site_name = settings.SITE_NAME
-    admin = request.user.get_full_name()
+    inviter = request.user
+    admin = Member.objects.filter(is_superuser=True).first()
+    admin_name = admin.get_full_name()
     from_email = request.user.email
 
     msg = render_to_string(
       "members/email/registration_invite_email.html",
-      {"link": invitation_url, "admin": admin, "site_name": site_name, "invited": invited},
+      {"link": invitation_url, "admin": admin_name, "site_name": site_name, 
+       "invited": invited, 'invited_email': email, 'inviter': inviter.get_full_name(),
+       'inviter_email': inviter.email},
       request=request
     )
 
     send_mail(
       _("You are invited to register on %(site_name)s") % {'site_name': site_name}, strip_tags(msg),
       from_email=from_email,
-      recipient_list=[email], html_message=msg
+      recipient_list=[email],
+      html_message=msg
     )
+
+    if admin != inviter:  # warn the admin if the inviter is not the admin
+      msg = render_to_string(
+        "members/email/registration_sent_email.html",
+        {"admin": admin_name, "site_name": site_name, "invited": invited,
+         'invited_email': email, 'inviter': inviter.get_full_name(),
+         'inviter_email': inviter.email},
+        request=request
+      )
+      send_mail(
+        _("Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s") %
+        {'site_name': site_name, 'inviter': inviter.get_full_name(), 'inviter_email': inviter.email,
+         'invited': invited, 'invited_email': email},
+        strip_tags(msg),
+        from_email=from_email,
+        recipient_list=[admin.email],
+        html_message=msg
+      )
     messages.success(request, _("Invitation sent to %(email)s.") % {'email': email})
     return redirect_to_referer(request)
 

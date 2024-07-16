@@ -13,7 +13,7 @@
         </a>
         <a class="button is-large" href="{% url 'members:directory' %}"
           title="{% translate 'Show directory' %}">
-          {%icon "directory-variant" %}
+          {%icon "directory" %}
         </a>
         <a class="button is-large" href="{% url 'members:create' %}"
           title="{% translate 'Create Member' %}">
@@ -47,7 +47,7 @@
   <div class="grid mx-3 is-col-min-8">
     {% for member in page.object_list %}
       <div class="cell has-text-centered">
-        <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
+        <a class="button {% cycle 'is-dark' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
           {%if member.avatar%}
           <figure class="image mini-avatar mr-2">
             <img class="is-rounded" src="{{member.avatar_mini_url}}">

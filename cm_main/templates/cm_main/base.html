@@ -24,11 +24,11 @@
     <script src="{% url 'cm_main:javascript-catalog' %}"></script>
   </head>
   <body>
-    <nav class="navbar is-dark has-shadow" role="navigation" aria-label="main navigation">
+    
     {% block navbar %}
       {% include "cm_main/navbar.html" %}
     {% endblock %}
-    </nav>
+   
 
     <div class="columns" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
 {%comment%}

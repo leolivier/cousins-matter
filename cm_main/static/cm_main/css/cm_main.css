@@ -5,6 +5,21 @@
 */
 }
 
+/* add a 3rd level to bulma's menus */
+.navbar-dropdown .navbar-item.has-dropdown {
+	padding-right: var(--bulma-size-1);
+}
+.navbar-dropdown .navbar-dropdown {
+	left: 100%;
+	top: -0.5rem; /* =-var(--bulma-dropdown-content-padding-top);*/
+}
+.navbar-item.has-dropdown:not(.is-hoverable) .navbar-dropdown {
+	display: none;
+}
+.navbar-item.has-dropdown.is-active > .navbar-dropdown {
+	display: block;
+}
+
 /* RELATED WIDGET WRAPPER */
 .related-widget-wrapper {
   display: flex;

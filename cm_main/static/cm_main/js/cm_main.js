@@ -10,6 +10,51 @@ $(document).ready(function() {
       $target.toggleClass('is-active');
     });
 
+  // Function for opening/closing submenus
+  function toggleDropdown($element) {
+    $element.addClass('is-active');
+    $element.children('.navbar-item.has-dropdown').removeClass('is-active');
+    // $element.parents('.navbar-item.has-dropdown').siblings('.navbar-item.has-dropdown').removeClass('is-active');
+  }
+
+  // Management of sub-menu opening on mouse-over (desktop only)
+  $('.navbar-item.has-dropdown').on('mouseenter', function() {
+      if ($(window).width() > 1023) {
+          toggleDropdown($(this));
+      }
+  });
+
+  // Management of sub-menu opening on click (mobile and desktop)
+  $('.navbar-item.has-dropdown > .navbar-link').on('click', function(e) {
+      e.preventDefault();
+      var $dropdown = $(this).closest('.navbar-item.has-dropdown');
+      if ($(window).width() > 1023) {
+          toggleDropdown($dropdown);
+      } else {
+          $dropdown.toggleClass('is-active');
+          $dropdown.siblings('.navbar-item.has-dropdown').removeClass('is-active');
+      }
+  });
+
+  // Close submenus on outgoing hover (desktop only)
+  $('.navbar-item.has-dropdown').on('mouseleave', function() {
+      if ($(window).width() > 1023) {
+          $(this).removeClass('is-active');
+      }
+  });
+
+  // Prevent immediate closure when hovering over sub-menus
+  $('.navbar-dropdown').on('mouseenter', function(e) {
+      e.stopPropagation();
+  });
+
+  // Close submenus when clicked outside
+  $(document).on('click', function(e) {
+      if (!$(e.target).closest('.navbar-item.has-dropdown').length) {
+          $('.navbar-item.has-dropdown').removeClass('is-active');
+      }
+  });
+
   // alias is-error to is-danger
   $('.is-error').addClass('is-danger');
 

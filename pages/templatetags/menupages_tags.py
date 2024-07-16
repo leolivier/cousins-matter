@@ -21,22 +21,27 @@ def pages_menu():
   menu_pages = FlatPage.objects.filter(url__istartswith=settings.MENU_PAGE_URL_PREFIX)
   # logger.debug(menu_pages.query)
   page_tree = {}
+  last_tree = None
   start = len(settings.MENU_PAGE_URL_PREFIX)
   for page in menu_pages:
+    trc = ''
     url = page.url[start:-1]
-    logger.debug('url:', url)
+    logger.debug(trc, 'url:', url)
     tree_level = page_tree
     for level in url.split('/'):
+      trc += '\t'
       if level == '':
         continue
-      logger.debug('level:', level)
+      logger.debug(trc, 'level:', level)
       if level not in tree_level:
-        logger.debug('level not in tree_level')
-        tree_level[level] = {}
+        logger.debug(trc, 'is not in tree_level')
         last_tree = tree_level
+        tree_level[level] = {}
       tree_level = tree_level[level]
-      logger.debug("tree for level:", level, "is", page_tree)
-    last_tree[level] = page
+      logger.debug(trc, "tree for level:", level, "is", last_tree, '\n', trc, 'full tree', page_tree)
+    del last_tree[level]
+    last_tree[page.title] = page
+
     logger.debug('tree for url:', page.url, 'is', page_tree)
   logger.debug("final tree:", page_tree)
   return {'page_tree': page_tree}
@@ -56,6 +61,8 @@ def pages_sidemenu():
   # logger.debug(menu_pages.query)
   page_tree = {}
   start = len(settings.MENU_PAGE_URL_PREFIX)
+  last_tree = None
+  previous_tree = None
   for page in menu_pages:
     url = page.url[start:-1]
     logger.debug('url:', url)
@@ -67,10 +74,13 @@ def pages_sidemenu():
       if level not in tree_level:
         logger.debug('level not in tree_level')
         tree_level[level] = {}
+        previous_tree = last_tree
         last_tree = tree_level
       tree_level = tree_level[level]
       logger.debug("tree for level:", level, "is", page_tree)
-    last_tree[level] = page
+    assert previous_tree is not None
+    del previous_tree[level]
+    previous_tree[page.title] = page
     logger.debug('tree for url:', page.url, 'is', page_tree)
   logger.debug("final tree:", page_tree)
   return {'page_tree': page_tree}

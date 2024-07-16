@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.core import mail
 from django.utils.translation import gettext as _
 from django.conf import settings
+from django.contrib.auth import get_user
 from django.test import RequestFactory
 from django.test.utils import TestContextDecorator
 from captcha.conf import settings as captcha_settings
@@ -16,12 +17,16 @@ from .tests_member_base import MemberTestCase, TestLoginRequiredMixin
 
 class MemberInviteTests(MemberTestCase):
 
-  def do_test_invite(self, sender):
+  def do_test_invite(self):
+    sender = get_user(self.client)
     test_invite = {'invited': "Mr Freeze", 'email': 'test-cousinsmatter@maildrop.cc'}
     response = self.client.post(reverse("members:invite"), test_invite, follow=True)
     # pprint(vars(response))
     self.assertContainsMessage(response, "success", _("Invitation sent to %(email)s.") % {'email': test_invite['email']})
-    self.assertEqual(len(mail.outbox), 1)
+    # if invite not sent by superuser, he receives a notification
+    for m in mail.outbox:
+      print(m.subject)
+    self.assertEqual(len(mail.outbox), 1 if sender == self.superuser else 2)
     self.assertSequenceEqual(mail.outbox[0].recipients(), [test_invite['email']])
     self.assertEqual(mail.outbox[0].subject,
                      _("You are invited to register on %(site_name)s") % {'site_name': settings.SITE_NAME})
@@ -30,30 +35,50 @@ class MemberInviteTests(MemberTestCase):
         break
     # print("content=", content)
     self.assertInHTML(_("Registration to the \"%(site_name)s\" site") % {'site_name': settings.SITE_NAME}, content)
+    if sender.is_superuser:
+      msg = _("I invite you to register on the %(site_name)s website I created for managing our big family!") % \
+       {'site_name': settings.SITE_NAME}
+    else:
+      msg = _("I invite you to register on the %(site_name)s website created by %(admin)s for managing our big family!") % \
+       {'site_name': settings.SITE_NAME, 'admin': self.superuser.get_full_name()}
+
     self.assertInHTML(f'''<h2 class="center">
-      {_("Hello %(invited)s, this is %(admin)s!") %
-       {'invited': test_invite['invited'], 'admin': sender.get_full_name()}} <br/>
-      {_("I invite you to register on the %(site_name)s website I created for managing our big family!") %
-       {'site_name': settings.SITE_NAME}}
+      {_("Hello %(invited)s, this is %(inviter)s!") %
+       {'invited': test_invite['invited'], 'inviter': sender.get_full_name()}} <br/>
+      {msg}
       </h2>''', content)
+    if not sender.is_superuser:
+      for content, type in mail.outbox[1].alternatives:
+        if type == 'text/html':
+          break
+      print("content=", content)
+      self.assertInHTML(f'''
+<h1 class="center" style="padding:2px">
+  {_("Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s") %
+        {'site_name': settings.SITE_NAME, 'inviter': sender.get_full_name(), 'invited': test_invite['invited']}}
+</h1>''', content)
     mail.outbox = []  # reset test mailbox
 
-  def test_invite_member_not_staff(self):
+  def xtest_invite_member_not_staff(self):
     # only superuser and staff cans send invites
     self.login()
     with self.assertRaises(PermissionError):
-      self.do_test_invite(self.member)
+      self.do_test_invite()
 
-  def test_invite_member_staff(self):
+  def xtest_invite_member_staff(self):
     self.member.is_staff = True  # setUp
     self.member.save()
-    self.do_test_invite(self.member)
+    self.do_test_invite()
     self.member.is_staff = False  # tearDown
     self.member.save()
 
+  def test_invite_member(self):
+    self.login()
+    self.do_test_invite()
+
   def test_invite_member_superuser(self):
     self.superuser_login()
-    self.do_test_invite(self.superuser)
+    self.do_test_invite()
     self.client.logout()
     self.login()
 

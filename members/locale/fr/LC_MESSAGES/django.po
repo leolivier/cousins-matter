@@ -1058,7 +1058,7 @@ msgid ""
 "email to verify your email address. Click in the link inside the mail to "
 "finish the registration."
 msgstr ""
-"Hello %(username)s, ton compte a été créé! Tu vas maintenant recevoir un "
+"Bonjour %(username)s, ton compte a été créé! Tu vas maintenant recevoir un "
 "email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
 "terminer le processus de création de compte."
 

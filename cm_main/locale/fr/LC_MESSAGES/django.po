@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-13 13:37+0200\n"
+"POT-Creation-Date: 2024-07-15 20:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -97,20 +97,21 @@ msgstr "Tu peux attacher un fichier ici si nécessaire"
 msgid "Home"
 msgstr "Accueil"
 
-#: cm_main/templates/cm_main/base.html:64
+#: cm_main/templates/cm_main/base.html:72
 msgid "This site proudly built using"
 msgstr "Ce site est fièrement propulsé par"
 
-#: cm_main/templates/cm_main/base.html:66
+#: cm_main/templates/cm_main/base.html:74
 msgid "The source code is licensed"
 msgstr "Le code source est sous licence"
 
-#: cm_main/templates/cm_main/base.html:72
+#: cm_main/templates/cm_main/base.html:80
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 
-#: cm_main/templates/cm_main/base.html:75
-#: cm_main/templates/cm_main/menu.html:115
+#: cm_main/templates/cm_main/base.html:83
+#: cm_main/templates/cm_main/navbar.html:119
+#: cm_main/templates/cm_main/side-menu.html:106
 msgid "Contact the site admin"
 msgstr "Contacter l'administrateur du site"
 
@@ -193,76 +194,88 @@ msgstr ""
 msgid "Stop Following"
 msgstr "Arréter de suivre"
 
-#: cm_main/templates/cm_main/followers/toggle-follow-button.html:11
+#: cm_main/templates/cm_main/followers/toggle-follow-button.html:9
 #, fuzzy
 msgid "Follow"
 msgstr "Suivre"
 
-#: cm_main/templates/cm_main/menu.html:18
-msgid "Edit Pages"
-msgstr "Editer les Pages"
-
-#: cm_main/templates/cm_main/menu.html:24
+#: cm_main/templates/cm_main/navbar.html:19
+#: cm_main/templates/cm_main/side-menu.html:4
 msgid "Members"
 msgstr "Membres"
 
-#: cm_main/templates/cm_main/menu.html:29
+#: cm_main/templates/cm_main/navbar.html:24
+#: cm_main/templates/cm_main/side-menu.html:14
 msgid "Birthdays"
 msgstr "Anniversaires"
 
-#: cm_main/templates/cm_main/menu.html:33
+#: cm_main/templates/cm_main/navbar.html:28
+#: cm_main/templates/cm_main/side-menu.html:20
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: cm_main/templates/cm_main/menu.html:37
+#: cm_main/templates/cm_main/navbar.html:32
+#: cm_main/templates/cm_main/side-menu.html:26
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: cm_main/templates/cm_main/menu.html:42
+#: cm_main/templates/cm_main/navbar.html:37
+#: cm_main/templates/cm_main/side-menu.html:33
 msgid "Invite Member"
 msgstr "Inviter un Membre"
 
-#: cm_main/templates/cm_main/menu.html:46
+#: cm_main/templates/cm_main/navbar.html:41
+#: cm_main/templates/cm_main/side-menu.html:39
 msgid "Import from CSV"
 msgstr "Importer depuis un fichier CSV"
 
-#: cm_main/templates/cm_main/menu.html:55
+#: cm_main/templates/cm_main/navbar.html:50
+#: cm_main/templates/cm_main/side-menu.html:45
 msgid "Galleries"
 msgstr "Galeries"
 
-#: cm_main/templates/cm_main/menu.html:60
+#: cm_main/templates/cm_main/navbar.html:55
+#: cm_main/templates/cm_main/side-menu.html:55
 msgid "Create Gallery"
 msgstr "Créer une Galerie"
 
-#: cm_main/templates/cm_main/menu.html:64
+#: cm_main/templates/cm_main/navbar.html:59
+#: cm_main/templates/cm_main/side-menu.html:61
 msgid "Bulk Upload"
 msgstr "Chargement en masse"
 
-#: cm_main/templates/cm_main/menu.html:72
+#: cm_main/templates/cm_main/navbar.html:67
 msgid "Forum"
 msgstr "Forum"
 
-#: cm_main/templates/cm_main/menu.html:77
+#: cm_main/templates/cm_main/navbar.html:72
+#: cm_main/templates/cm_main/side-menu.html:76
 msgid "Create Post"
 msgstr "Nouvelle Discussion"
 
-#: cm_main/templates/cm_main/menu.html:85
+#: cm_main/templates/cm_main/navbar.html:80
+#: cm_main/templates/cm_main/side-menu.html:81
 msgid "Chat"
 msgstr "Chat"
 
-#: cm_main/templates/cm_main/menu.html:125
+#: cm_main/templates/cm_main/navbar.html:103
+#: cm_main/templates/cm_main/side-menu.html:93
+msgid "Edit Pages"
+msgstr "Editer les Pages"
+
+#: cm_main/templates/cm_main/navbar.html:128
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/menu.html:130
+#: cm_main/templates/cm_main/navbar.html:133
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/menu.html:144
+#: cm_main/templates/cm_main/navbar.html:145
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/menu.html:148
+#: cm_main/templates/cm_main/navbar.html:149
 msgid "Log Out"
 msgstr "Déconnexion"
 
@@ -288,6 +301,34 @@ msgstr "page #%(page_num)s"
 msgid "go to last page"
 msgstr "aller à la dernière page"
 
+#: cm_main/templates/cm_main/side-menu.html:8
+msgid "Members List"
+msgstr "Liste des Membres"
+
+#: cm_main/templates/cm_main/side-menu.html:49
+msgid "Galleries Gallery"
+msgstr "Galerie des Galeries"
+
+#: cm_main/templates/cm_main/side-menu.html:66
+msgid "Forums"
+msgstr "Forums"
+
+#: cm_main/templates/cm_main/side-menu.html:70
+msgid "Posts List"
+msgstr "Liste des Posts"
+
+#: cm_main/templates/cm_main/side-menu.html:85
+msgid "Chat Rooms"
+msgstr "Salons de discussion"
+
+#: cm_main/templates/cm_main/side-menu.html:89
+msgid "Settings"
+msgstr "Paramètres"
+
+#: cm_main/templates/cm_main/side-menu.html:98
+msgid "Help"
+msgstr "Aide"
+
 #: cm_main/tests.py:34
 msgid "You have a new follower!"
 msgstr "Tu as un nouveau follower!"
@@ -298,34 +339,35 @@ msgid ""
 "Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
 "is now following you on %(site_name)s!"
 msgstr ""
-"Bonjour %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
-"te suit maintenant sur %(site_name)s!"
+"Bonjour %(followed_name)s, <br><a "
+"href=\"%(follower_url)s\">%(follower_name)s</a> te suit maintenant sur "
+"%(site_name)s!"
 
 #: cm_main/tests.py:157
 msgid "This field is required."
 msgstr "Ce champ est obigatoire."
 
-#: cm_main/tests.py:163 cm_main/views.py:95
+#: cm_main/tests.py:163 cm_main/views.py:100
 msgid "Your message has been sent"
 msgstr "Ton message a été envoyé"
 
-#: cm_main/tests.py:166 cm_main/views.py:70
+#: cm_main/tests.py:166 cm_main/views.py:75
 msgid "Contact form"
 msgstr "Formulaire de contact"
 
-#: cm_main/tests.py:173 cm_main/views.py:67
+#: cm_main/tests.py:173 cm_main/views.py:72
 #, python-format
 msgid "You have a new message from %(name)s (%(email)s). "
 msgstr "Tu as reçu un nouveau message de %(name)s (%(email)s). "
 
-#: cm_main/views.py:33
+#: cm_main/views.py:38
 msgid "Media not found"
 msgstr "Média non trouvé"
 
-#: cm_main/views.py:71
+#: cm_main/views.py:76
 msgid "But your mailer tools is too old to show it :'("
 msgstr "Mais ton logiciel de messagerie est trop vieux pour l'afficher :'("
 
-#: cm_main/views.py:90
+#: cm_main/views.py:95
 msgid "This file type is not supported"
 msgstr "Ce type de fichier n'est pas supporté"

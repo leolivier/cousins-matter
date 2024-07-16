@@ -56,7 +56,7 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
     ]
     pages = [self._test_create_page(page_data) for page_data in page_list_data]
     response = self.client.get(reverse('pages-edit:list'), follow=True)
-    self.print_response(response)
+    # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     page_icon = icon('page')
     level_icon = icon('page-level')

@@ -12,6 +12,7 @@ from channels.testing import WebsocketCommunicator
 from channels.routing import URLRouter
 
 from cm_main.tests import TestFollowersMixin
+from cm_main.templatetags.cm_tags import icon
 from members.tests.tests_member_base import MemberTestCase
 from .models import ChatMessage, ChatRoom
 from .routing import websocket_urlpatterns
@@ -61,7 +62,7 @@ class ChatRoomTests(MemberTestCase):
     <span class="has-text-primary has-text-weight-bold has-text-right mr-5">
       {self.member.username}
       <a href="{reverse('members:detail', args=[self.member.id])}" aria-label="{_('profile')}">
-        <span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+        {icon('member-link')}
       </a>
       <br>
       <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
@@ -71,7 +72,7 @@ class ChatRoomTests(MemberTestCase):
   <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
   <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}"
     aria-label="{follow}" title="{follow}">
-    <span class="icon is-large"><i class="mdi mdi-24px mdi-link-variant"></i></span>
+    {icon('follow')}
     <span>{follow}</span>
   </a>
 </div>''', html=True)
@@ -79,14 +80,14 @@ class ChatRoomTests(MemberTestCase):
     for i in range(1, 5):
       self.assertContains(response, f'''
 <div class="panel-block">
-  <span class="panel-icon"><i class="mdi mdi-24px mdi-chat-outline" aria-hidden="true"></i></span>
+  {icon('chat', 'panel-icon')}
   <a class="block" href="{reverse('chat:room', args=[rooms[i].slug])}">
     <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
     <span class="title is-size-6">{rooms[i].name}</span>
   </a>
   <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}"
     aria-label="{follow}" title="{follow}">
-    <span class="icon is-large"><i class="mdi mdi-24px mdi-link-variant"></i></span>
+    {icon('follow')}
     <span>{follow}</span>
   </a>
 </div>''', html=True)

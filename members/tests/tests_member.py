@@ -120,7 +120,7 @@ class MemberProfileViewTest(MemberTestCase):
   def test_member_profile_view(self):
     profile_url = reverse('members:profile')
     response = self.client.get(profile_url)
-    # pprint(vars(response))
+    # self.print_response(response)
     self.assertTemplateUsed(response, 'members/members/member_upsert.html')
     self.assertIs(response.resolver_match.func.view_class, EditProfileView)
 

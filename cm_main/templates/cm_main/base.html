@@ -26,36 +26,44 @@
   <body>
     <nav class="navbar is-dark has-shadow" role="navigation" aria-label="main navigation">
     {% block navbar %}
-      {% include "cm_main/menu.html" %}
+      {% include "cm_main/navbar.html" %}
     {% endblock %}
     </nav>
 
-    <div id="columns" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
-      <div class="container">
-        {%get_flatpages "/pages/admin-message/" as admin_messages%}
-        {%for admin_message in admin_messages %}
-        <div class="notification is-info">
-          <button class="delete"></button>
-          {%autoescape off%}
-          {{admin_message.content}}
-          {%endautoescape%}
-        </div>
-        {%endfor%}
-        <ul class="messages">
-          {% for message in messages %}
-          <li{% if message.tags %} class="message is-{{ message.tags }}"{% endif %}>
-            <div class="message-body">
-              {% autoescape off %}
-                {{ message }}
-              {% endautoescape %}
-            </div>
-          </li>
-          {% endfor %}
-        </ul>
+    <div class="columns" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
+{%comment%}
+      <div id="left" class="column is-one-fifth mx-2">
+        {% block sidemenu %}
+         {% include "cm_main/side-menu.html" %}
+        {% endblock %}
       </div>
-      {% block content %}
-        {% include "cm_main/home.html" %}
-      {% endblock %}
+      <div class="column is-three-fifth">
+{%endcomment%}
+      <div class="column">
+        <div class="block">
+          {%get_flatpages "/pages/admin-message/" as admin_messages%}
+          {%for admin_message in admin_messages %}
+          <div class="notification is-info">
+            <button class="delete"></button>
+            {%autoescape off%}
+            {{admin_message.content}}
+            {%endautoescape%}
+          </div>
+          {%endfor%}
+          <ul class="messages">
+          {% for message in messages %}
+            <li{% if message.tags %} class="message is-{{ message.tags }}"{% endif %}>
+              <div class="message-body">
+                {% autoescape off %}{{ message }}{% endautoescape %}
+              </div>
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
+        {% block content %}
+          {% include "cm_main/home.html" %}
+        {% endblock %}
+      </div>
     </div>
     <footer class="footer">
       <div class="content has-text-centered">
@@ -73,20 +81,12 @@
           {%endif%}
           <br/>
           <a href="{%url 'cm_main:contact'%}">{%trans "Contact the site admin"%}</a> | 
-          {%with about_prefix='/pages/'|add:settings.LANGUAGE_CODE|add:'/about/' private_prefix='/pages/'|add:settings.LANGUAGE_CODE|add:'/private/'%}
+          {%with about_prefix='/'|add:settings.LANGUAGE_CODE|add:'/about/' %}
             {% get_flatpages about_prefix as about_pages %}
-            {% get_flatpages private_prefix as private_pages %}
             {% for page in about_pages %}
               <a href="{{ page.url }}">{{ page.title }}</a> 
               {%if forloop.counter != about_pages|length %}|{%endif%}
             {% endfor %}
-            {% if user.is_authenticated and private_pages.count > 0 %}
-              |
-              {% for page in private_pages %}
-                <a href="{{ page.url }}">{{ page.title }}</a>
-                {%if forloop.counter != about_pages|length %}|{%endif%}
-                {% endfor %}
-            {%endif%}
           {%endwith%}
         </p>
       </div>

@@ -1,9 +1,12 @@
+from datetime import date, timedelta
+
 from django.conf import settings
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.translation import gettext as _
+
+from cm_main.templatetags.cm_tags import icon
 from .tests_member_base import MemberTestCase
-from datetime import date, timedelta
 
 
 class TestBirthdaysMixin():
@@ -16,17 +19,14 @@ class TestBirthdaysMixin():
   def check_birthday(self, member, color, expected_chain, with_icons=False, response=None, reversed=False):
     response = response or self.client.get(reverse("members:birthdays"))
     # self.print_response(response)
-    common_chain = f'''<div class="cell has-background-{color}-light has-text-right px-1 mx-0">
-            <a class="has-text-{color}" href="/members/{member.id}/">{member.get_full_name()}</a>
-      </div>'''
+    common_chain = f'''<div class="cell has-background-{color}-light px-1 mx-0 is-flex
+      is-align-items-center is-justify-content-right">
+      <a class="has-text-{color}" href="/members/{member.id}/">{member.get_full_name()}</a>
+  </div>'''
     tester = self.assertNotContains if reversed else self.assertContains
     tester(response, common_chain, html=True)
 
-    icons = '''
-<span class="icon"><i class="mdi mdi-cake-variant-outline"></i></span>
-<span class="icon"><i class="mdi mdi-cake-variant"></i></span>
-<span class="icon"><i class="mdi mdi-cake-variant-outline"></i></span>
-''' if with_icons else ''
+    icons = f'''{icon('birthday')}{icon('birthday-variant')}{icon('birthday')}''' if with_icons else ''
     expected_chain = f'''
 <div class="cell has-background-{color}-light px-1 mx-0 has-text-{color}">
 {expected_chain}

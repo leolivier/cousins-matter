@@ -97,8 +97,9 @@ MIDDLEWARE = [
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
   'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-  # 'cousinsmatter.htmlvalidator.HtmlValidatorMiddleware',
 ]
+# if DEBUG:
+#   MIDDLEWARE.append('cousinsmatter.htmlvalidator.HtmlValidatorMiddleware')
 
 ROOT_URLCONF = 'cousinsmatter.urls'
 
@@ -216,6 +217,7 @@ DJANGO_ICONS = {
     "print": "printer",
     "pdf": "file-pdf-box",
     "help": "help-circle-outline",
+    "settings": "cog-outline",
     # auth icons
     "signin": "login",
     "signout": "logout",
@@ -256,9 +258,9 @@ DJANGO_ICONS = {
     "chat-room": "chat",
     # page icons
     "page": "page-next",
+    "page-level": "page-next-outline",
     "new-page": "book-open-page-variant-outline",
     "edit-page": "note-edit-outline",
-    
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -331,4 +333,7 @@ DEFAULT_POSTS_PER_PAGE = env.int('DEFAULT_POSTS_PER_PAGE', 25)
 DEFAULT_CHATMESSAGES_PER_PAGE = env.int('DEFAULT_CHATMESSAGES_PER_PAGE', 25)
 DEFAULT_CHATROOMS_PER_PAGE = env.int('DEFAULT_CHATROOMS_PER_PAGE', 25)
 
-PAGES_URL_PREFIX = 'pages'
+PAGES_URL_PREFIX = 'pages/'
+PRIVACY_URL = f'{LANGUAGE_CODE}/about/privacy/'
+TERMS_URL = f'{LANGUAGE_CODE}/about/terms/'
+MENU_PAGE_URL_PREFIX = '/publish/'

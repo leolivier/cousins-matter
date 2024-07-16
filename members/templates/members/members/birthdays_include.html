@@ -4,7 +4,7 @@
     <h1 class="title has-text-centered">{% blocktranslate %}Birthdays in the next {{ndays}} days{% endblocktranslate %}</h1>
     <hr>
     <div class="fixed-grid has-2-cols is-col-min-8">
-      <div class="grid  is-vcentered">
+      <div class="grid">
         {% for member, when in birthdays_list %}
         {%with bcolor=when|birthday_color %}
         <div class="cell has-background-{{bcolor}}-light px-1 mx-0 is-flex is-align-items-center is-justify-content-right">

@@ -13,13 +13,18 @@ from wsgiref.util import FileWrapper
 from django.http import StreamingHttpResponse, Http404
 from django.utils.translation import gettext as _
 from django.contrib.auth import get_user_model, get_user
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.template.loader import render_to_string
 from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 
 from .forms import ContactForm
 
 logger = logging.getLogger(__name__)
+
+
+class OnlyAdminMixin(LoginRequiredMixin, PermissionRequiredMixin):
+  raise_exception = True
+  permission_required = "is_superuser"
 
 
 class HomeView(generic.TemplateView):

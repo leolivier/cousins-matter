@@ -131,7 +131,9 @@ def icon(name, clazz="icon", aria_hidden=False):
     if clazz != "icon":
         if "icon" not in clazz:
             clazz = "icon " + clazz
+    if "is-medium" not in clazz and "is-small" not in clazz:
+      clazz += " is-large"
     return mark_safe(f'''
-<span class="is-large {clazz}">
+<span class="{clazz}">
     <i class="mdi mdi-24px mdi-{name}" aria-hidden='true'></i>
 </span>''')

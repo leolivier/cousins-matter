@@ -1,6 +1,6 @@
 {% load cm_tags menupages_tags %}
-<div class="container">
-	{%with page_prefix="/pages/"|add:settings.LANGUAGE_CODE|add:"/home/"%}
+<div class="column">
+	{%with page_prefix="/"|add:settings.LANGUAGE_CODE|add:"/home/"%}
 	{%if user.is_authenticated%}
 		{%include_page page_prefix|add:"authenticated/"%}
 		{% if settings.INCLUDE_BIRTHDAYS_IN_HOMEPAGE%}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 13:57+0200\n"
+"POT-Creation-Date: 2024-07-16 21:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -30,11 +30,11 @@ msgstr "Titre"
 msgid "posts"
 msgstr "discussions"
 
-#: forum/models.py:47
+#: forum/models.py:50
 msgid "Comment"
 msgstr "Commentaire"
 
-#: forum/models.py:50
+#: forum/models.py:53
 msgid "comments"
 msgstr "commentaires"
 
@@ -100,7 +100,7 @@ msgid "Post"
 msgstr "Discussion"
 
 #: forum/templates/forum/post_detail.html:10
-#: forum/templates/forum/post_list.html:33
+#: forum/templates/forum/post_list.html:34
 #, python-format
 msgid "%(nreplies)s answer"
 msgid_plural "%(nreplies)s answers"
@@ -135,6 +135,6 @@ msgstr "Envoyer"
 msgid "Latest Posts"
 msgstr "Dernières discussions"
 
-#: forum/views/views_post.py:154
+#: forum/views/views_post.py:158
 msgid "Can't delete the first message of a thread!"
 msgstr "Impossible de supprimer le premier message d'une discussion!"

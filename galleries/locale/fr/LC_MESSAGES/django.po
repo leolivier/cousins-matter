@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 13:57+0200\n"
+"POT-Creation-Date: 2024-07-16 21:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -79,7 +79,7 @@ msgstr "Une autre galerie racine avec le même nom existe déjà"
 
 #: galleries/templates/galleries/add_photo.html:3
 #: galleries/templates/galleries/add_photo.html:10
-#: galleries/templates/galleries/gallery_detail.html:52
+#: galleries/templates/galleries/gallery_detail.html:48
 msgid "Add Photo"
 msgstr "Ajouter une Photo"
 
@@ -108,7 +108,7 @@ msgstr "Création d'une Galerie"
 
 #: galleries/templates/galleries/edit_gallery.html:3
 #: galleries/templates/galleries/edit_gallery.html:7
-#: galleries/templates/galleries/gallery_detail.html:64
+#: galleries/templates/galleries/gallery_detail.html:56
 msgid "Edit Gallery"
 msgstr "Modification d'une Galerie"
 
@@ -119,7 +119,7 @@ msgstr "Mettre à jour"
 
 #: galleries/templates/galleries/edit_photo.html:3
 #: galleries/templates/galleries/edit_photo.html:10
-#: galleries/templates/galleries/photo_detail.html:25
+#: galleries/templates/galleries/photo_detail.html:23
 msgid "Edit Photo"
 msgstr "Editer la Photo"
 
@@ -139,7 +139,7 @@ msgid "No galleries found"
 msgstr "Aucune galerie trouvée"
 
 #: galleries/templates/galleries/gallery_confirm_delete.html:6
-#: galleries/templates/galleries/gallery_detail.html:69
+#: galleries/templates/galleries/gallery_detail.html:59
 msgid "Delete gallery"
 msgstr "Supprimer une Galerie"
 
@@ -171,12 +171,12 @@ msgstr "Sous Galeries"
 msgid "Back to %(gname)s"
 msgstr "Retour à %(gname)s"
 
-#: galleries/templates/galleries/gallery_detail.html:58
+#: galleries/templates/galleries/gallery_detail.html:52
 msgid "Create Sub Gallery"
 msgstr "Créer une Sous-Galerie"
 
 #: galleries/templates/galleries/photo_confirm_delete.html:6
-#: galleries/templates/galleries/photo_detail.html:30
+#: galleries/templates/galleries/photo_detail.html:26
 msgid "Delete photo"
 msgstr "Supprimer la photo"
 
@@ -201,11 +201,11 @@ msgstr "Aucune photo"
 msgid "Gallery %(gname)s"
 msgstr "Galerie %(gname)s"
 
-#: galleries/tests/tests_gallery.py:225 galleries/views/views_gallery.py:61
+#: galleries/tests/tests_gallery.py:220 galleries/views/views_gallery.py:61
 msgid "Gallery deleted"
 msgstr "Galerie supprimée avec tout son contenu"
 
-#: galleries/tests/tests_photo.py:119 galleries/views/views_photo.py:92
+#: galleries/tests/tests_photo.py:118 galleries/views/views_photo.py:92
 msgid "Photo deleted"
 msgstr "Photo supprimée"
 

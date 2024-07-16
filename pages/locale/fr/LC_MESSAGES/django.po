@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-15 21:01+0200\n"
+"POT-Creation-Date: 2024-07-16 21:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,13 +18,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: pages/apps.py:8 pages/templates/pages/pages_list.html:3
+#: pages/apps.py:8 pages/templates/pages/menu_pages.html:3
+#: pages/templates/pages/pages_list.html:3
 #: pages/templates/pages/pages_list.html:8
 #: pages/templates/pages/sidemenu_pages.html:2
 msgid "Pages"
 msgstr "Pages"
 
-#: pages/forms.py:35 pages/tests/tests_crud.py:37
+#: pages/forms.py:34 pages/tests/tests_crud.py:30 pages/tests/tests_crud.py:77
+#, python-format
+msgid "Flatpage with url %(url)s already exists"
+msgstr "Une page avec l'url %(url)s existe déjà"
+
+#: pages/forms.py:38 pages/tests/tests_crud.py:38
 msgid "A flatpage cannot be a subpage of another flatpage, check your URLs"
 msgstr ""
 "Une flatpage ne peut pas être une sous-page d'une autre flatpage, vérifie "
@@ -44,7 +50,7 @@ msgstr "Mettre la page à jour"
 msgid "Create Page"
 msgstr "Créer une Page"
 
-#: pages/templatetags/menupages_tags.py:95
+#: pages/templatetags/menupages_tags.py:105
 #, python-brace-format
 msgid ""
 "Cannot load page from url {url}, it was not found in the database. Please "
@@ -52,9 +58,3 @@ msgid ""
 msgstr ""
 "Impossible de charger la page de l'url {url}, elle n'a pas été trouvée dans "
 "la base de données. Merci de contacter l'administrateur du site"
-
-#: pages/tests/tests_crud.py:29 pages/tests/tests_crud.py:72
-#, python-format
-msgid "Flatpage with url %(url)s already exists"
-msgstr "Une page avec l'url %(url)s existe déjà"
-

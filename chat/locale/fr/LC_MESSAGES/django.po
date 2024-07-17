@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 13:57+0200\n"
+"POT-Creation-Date: 2024-07-16 21:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr "salons de chat"
 msgid "Another room with the same name already exists"
 msgstr "Un autre salon portant le même nom existe déjà"
 
-#: chat/models.py:39 chat/tests.py:37
+#: chat/models.py:39 chat/tests.py:43
 #, python-brace-format
 msgid ""
 "Another room with a similar name already exists ('{slug_name}'). Please "
@@ -60,22 +60,22 @@ msgstr "Salons"
 msgid "Room name"
 msgstr "Nom du salon"
 
-#: chat/templates/chat/chat_rooms.html:24
+#: chat/templates/chat/chat_rooms.html:18
 msgid "Create room"
 msgstr "Créer un salon"
 
-#: chat/templates/chat/chat_rooms.html:33
+#: chat/templates/chat/chat_rooms.html:30
 #, python-format
 msgid "%(nmsgs)s message"
 msgid_plural "%(nmsgs)s messages"
 msgstr[0] "%(nmsgs)s message"
 msgstr[1] "%(nmsgs)s messages"
 
-#: chat/templates/chat/chat_rooms.html:44
+#: chat/templates/chat/chat_rooms.html:41
 msgid "Created by:"
-msgstr "Créer par:"
+msgstr "Créé par:"
 
-#: chat/templates/chat/chat_rooms.html:47
+#: chat/templates/chat/chat_rooms.html:44
 msgid "profile"
 msgstr "profil"
 
@@ -102,3 +102,7 @@ msgstr "Message"
 #: chat/templates/chat/room_detail.html:70
 msgid "Submit"
 msgstr "Envoyer"
+
+#: chat/tests.py:54
+msgid "Follow"
+msgstr "Suivre"

@@ -21,7 +21,7 @@ class TestHomePageMixin(TestPageMixin):
       for kind in ['authenticated', 'unauthenticated']:
         content = f'{base_content} <p>language code={lang} and auth={kind}</p>'
         self.home_pages[lang][kind] = create_page(
-          url=f'/pages/{lang}/home/{kind}/',
+          url=f'/{lang}/home/{kind}/',
           title='a home page',
           content=content
         )
@@ -30,7 +30,7 @@ class TestHomePageMixin(TestPageMixin):
     with lang_override(lang):
       with override_settings(LANGUAGE_CODE=lang):
         response = self.client.get(reverse('cm_main:Home'), follow=True)
-        # print(response.content.decode().replace('\\t', '\t').replace('\\n', '\n'))
+        # self.print_response(response)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.home_pages[lang][auth].content, html=True)
         return response

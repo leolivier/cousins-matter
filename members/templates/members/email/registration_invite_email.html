@@ -19,8 +19,12 @@
         </div>
 
         <h2 class="center">
-        {% blocktranslate %}Hello {{invited}}, this is {{admin }}!{% endblocktranslate %}<br/>
-        {% blocktranslate %}I invite you to register on the {{site_name}} website I created for managing our big family!{% endblocktranslate %}
+        {% blocktranslate %}Hello {{invited}}, this is {{inviter}}!{% endblocktranslate %}<br/>
+        {%if admin == inviter%}
+            {% blocktranslate %}I invite you to register on the {{site_name}} website I created for managing our big family!{% endblocktranslate %}
+        {%else%}
+            {% blocktranslate %}I invite you to register on the {{site_name}} website created by {{admin}} for managing our big family!{% endblocktranslate %}
+        {%endif%}
         </h2>
         <hr>
         <div class="center">
@@ -31,16 +35,13 @@
             {% translate "If you know the administrator and knows he created this site, please click on the link below to go to the site and create your account." %}
             </p>
             <p class="small mt-3 center">
-            {% blocktranslate %}You can also reply to this email to contact {{admin}} and check with him if he really invited you...{% endblocktranslate %}
+            {% blocktranslate %}You can also reply to this email to contact <a href="mailto:{{inviter_email}}">{{inviter}}</a> and check with him if he really invited you...{% endblocktranslate %}
             </p>
         </div>
         <div class="center mt-3">
             <hr>
             <a href="{{link}}" class="button green" >{% translate "Sign up" %}</a>
         </div>
-    
-
     </div>
-   
 </body>
 </html>

@@ -6,18 +6,18 @@
 	<nav class="panel">
 		<p class="panel-heading">
 			{%title _('Pages') %}
-			<a class="button ml-6" href="{%url 'pages-edit:create'%}" title="{% trans 'Create Page' %}">
-				<span class="icon is-large"><i class="mdi mdi-24px mdi-plus-box-outline"></i></span>
+			<a class="button is-pulled-right" href="{%url 'pages-edit:create'%}" title="{% trans 'Create Page' %}">
+				{%icon "new-page" %}
+				<span class="is-hidden-mobile">{% trans 'Create Page' %}</span>
 			</a>
 		</p>
 		{%for page in object_list%}
 		<div class="panel-block">
-			<a href="{%url 'pages-edit:update' page.url %}">
-				<span class="panel-icon">
-					<i class="mdi mdi-24px mdi-page-next" aria-hidden="true"></i>
-				</span>
-				{{page.title}}
+			<a href="{%url 'pages-edit:update' page.id %}">
+				{%icon "edit-page" "panel-icon"%}
+				{{page.url}}
 			</a>
+			&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<strong>{{page.title}}</strong>
 		</div>
 		{%endfor%}
 	</nav>

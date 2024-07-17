@@ -3,19 +3,25 @@
 {% block title %}{% title _("Members Directory") %}{% endblock %}
 {% block content %}
 <div class="container">
-	<div class="media">
-		<div class="media-left"></div>
-		<div class="media-content">
-			<h1 class="title">{% title _("Members Directory") %}</h1>
-			<hr/>
+	<div class="level">
+		<div class="level-left">
+			<h1 class="title has-text-centered">{% title _("Members Directory") %}</h1>
 		</div>
-		<div class="media-right">
-			<a class="button is-primary" href="{% url 'members:print_directory' %}">
-				{% translate "Print as PDF" %}
+		<div class="level-right buttons">
+			<button class="button" onclick="printSection($('.printable'))">
+				{%icon "print" %}
+				<span>{% translate "Print"%}</span>
+			</button>
+			{% translate "Print as PDF" as trpdf %}
+			<a class="button" href="{% url 'members:print_directory' %}">
+				{%icon "pdf" %}
+				<span>{% translate "Print as PDF" %}</span>
 			</a>
 		</div>
 	</div>
   {% if member_list %}
+	<hr/>
+	<section class="section printable">
 	<table class="table">
 		<tr>
 			<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Name" %}</th>
@@ -38,6 +44,7 @@
 		</tr>
     {% endfor %}
 	</table>
+	</section>
   {% else %}
 	<div>
     <p>{% translate "No members found" %}.</p>

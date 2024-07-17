@@ -1,15 +1,15 @@
-from django.conf import settings
 from django.urls import reverse
 from django.contrib.flatpages.models import FlatPage
 
+from pages.utils import flatpage_url
+
 
 class BasePageTestCase():
-  pages_prefix = f'/{settings.PAGES_URL_PREFIX}/'
 
   def setUp(self):
     super().setUp()
     self.page_data = {
-      'url': f'{self.pages_prefix}a-title/',
+      'url': '/a-level/a-slug/',
       'title': 'a title',
       'content': 'a content',
     }
@@ -27,8 +27,12 @@ class TestPageMixin():
     response = self.client.post(reverse("pages-edit:create"), page_data, follow=True)
     if prresp:
       self.print_response(response)
-    self.assertEqual(response.status_code, 200)
+    self.assertRedirects(response, flatpage_url(page_data['url']), 302, 200)
+    self.assertTemplateUsed(response, 'flatpages/default.html')
     page = FlatPage.objects.get(url=page_data['url'])
     self.assertIsNotNone(page)
     self.assertEqual(page_data['url'], page.url)
+    self.assertContains(response, f'''<div class="container">
+{page_data['content']}
+</div>''', html=True)
     return page

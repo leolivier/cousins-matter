@@ -4,50 +4,50 @@
 {% block content %}
 <div class="container mb-5"> 
   <div class="level">
-    <h1 class="level-left title">{% title _("Members List") %}</h1>
+    <h1 class="level-left title mx-5 has-text-centered">{% title _("Members List") %}</h1>
     <div class="level-item">
       <div class="buttons has-addons mt-5">
         <a class="button is-large" href="{% url 'members:birthdays' %}"
           title='{% translate "Birthdays" %}'>
-          <i class="icon"><span class="mdi mdi-cake-variant-outline"></span></i>
+          {%icon "birthday" %}
         </a>
         <a class="button is-large" href="{% url 'members:directory' %}"
           title="{% translate 'Show directory' %}">
-          <i class="icon"><span class="mdi mdi-format-list-text"></span></i>
+          {%icon "directory" %}
         </a>
         <a class="button is-large" href="{% url 'members:create' %}"
           title="{% translate 'Create Member' %}">
-          <i class="icon"><span class="mdi mdi-plus-box-outline"></span></i>
+          {%icon "new" %}
         </a>
       </div>
-      <div class="level-item ml-3">
-        <form method="get">
-          <span class="content is-size-6">{%trans "Filter Members"%}:</span>
-          <div class="field has-addons">
-            <div class="control">
-              <input class="input" type="text" size="12" name="first_name_filter" placeholder="{% trans 'first name' %}"
-              {%if request.GET.first_name_filter%}value="{{request.GET.first_name_filter}}"{%endif%}>
-            </div>
-            <div class="control">
-              <input class="input" type="text" size="12" name="last_name_filter" placeholder="{% trans 'last name' %}"
-              {%if request.GET.last_name_filter%}value="{{request.GET.last_name_filter}}"{%endif%}>
-            </div>
-            <div class="control">
-              <button class="button is-link" type="submit" title="{% translate 'Filter Members' %}">
-                <i class="icon"><span class="mdi mdi-magnify"></span></i>
-              </button>
-            </div>
+    </div>
+    <div class="level-item ml-3">
+      <form method="get">
+        <span class="content is-size-6">{%trans "Filter Members"%}:</span>
+        <div class="field has-addons">
+          <div class="control">
+            <input class="input" type="text" size="12" name="first_name_filter" placeholder="{% trans 'first name' %}"
+            {%if request.GET.first_name_filter%}value="{{request.GET.first_name_filter}}"{%endif%}>
           </div>
-        </form>
-      </div>
+          <div class="control">
+            <input class="input" type="text" size="12" name="last_name_filter" placeholder="{% trans 'last name' %}"
+            {%if request.GET.last_name_filter%}value="{{request.GET.last_name_filter}}"{%endif%}>
+          </div>
+          <div class="control">
+            <button class="button is-link" type="submit" title="{% translate 'Filter Members' %}">
+              {%icon "search" %}
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
   {%paginate page %}
   {% if page.object_list.count > 0 %}
-  <div class="grid">
+  <div class="grid mx-3 is-col-min-8">
     {% for member in page.object_list %}
       <div class="cell has-text-centered">
-        <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
+        <a class="button {% cycle 'is-dark' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
           {%if member.avatar%}
           <figure class="image mini-avatar mr-2">
             <img class="is-rounded" src="{{member.avatar_mini_url}}">

@@ -32,12 +32,12 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 				{%include "cm_main/followers/followers-count-tag.html" with followed_object=room extra_class="ml-auto mr-5"%}
 				{%if room.owner == request.user %}
 				{%url 'chat:room-delete' room.slug as delete_url%}
-				<a class="button is-primary is-outlined is-pulled-right" onclick="delete_room('{{delete_url}}');"
+				<a class="button is-responsive is-pulled-right" onclick="delete_room('{{delete_url}}');"
 					 title="{%trans 'Delete' %}">
-					<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline"></i></span>
+					{%icon "delete" %}
 				</a>
-				<a class="button is-primary is-outlined is-pulled-right" onclick="toggle_edit_room_form();" title="{%trans 'Edit' %}">
-						<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline"></i></span>
+				<a class="button is-responsive is-pulled-right" onclick="toggle_edit_room_form();" title="{%trans 'Edit' %}">
+						{%icon "edit" %}
 					</a>
 				{%else%}
 					{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room %}
@@ -66,7 +66,7 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 					</div>
 					<div class="control">
 						<a class="button is-primary" id="chat-message-submit">
-							<span class="icon is-large"><i class="mdi mdi-24px mdi-send-variant-outline"></i></span>
+							{%icon "send-message" %}
 							<span class="is-hidden-mobile">{%trans 'Submit' %}</span>
 						</a>
 					</div>

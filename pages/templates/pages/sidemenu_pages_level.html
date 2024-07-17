@@ -1,0 +1,17 @@
+{%load menupages_tags cm_tags%}
+<li>
+{%if sublevels.title%} 
+	{# sublevels is a Page, we're at the bottom of the tree, provide the link #}
+	<a href="{%url 'django.contrib.flatpages.views.flatpage' sublevels.url%}">
+		<span>{{sublevels.title}}</span>
+		{%icon "page" "is-small ml-2" %}
+	</a>
+{%else%}
+	<span>{{level}} {%icon "page-level" "ml-2 is-small" %}</span>
+	<ul>
+	{%for sublevel, subsublevels in sublevels.items%}
+		{%include "pages/sidemenu_pages_level.html" with level=sublevel sublevels=subsublevels %}
+	{%endfor%}
+	</ul>
+{%endif%}
+</li>

@@ -1,9 +1,12 @@
+from datetime import date, timedelta
+
 from django.conf import settings
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.translation import gettext as _
+
+from cm_main.templatetags.cm_tags import icon
 from .tests_member_base import MemberTestCase
-from datetime import date, timedelta
 
 
 class TestBirthdaysMixin():
@@ -13,53 +16,36 @@ class TestBirthdaysMixin():
     new_data['birthdate'] = bday
     return self.create_member(new_data)
 
-  def check_birthday(self, member, expected_chain, response=None, reversed=False):
+  def check_birthday(self, member, color, expected_chain, with_icons=False, response=None, reversed=False):
     response = response or self.client.get(reverse("members:birthdays"))
-    common_chain = '''
-      <div class="cell has-background-light-link has-text-right px-0 mx-0">
-        <a href="/members/%(member_id)s/">%(first_name)s %(last_name)s</a>
-      </div>
-    '''
+    # self.print_response(response)
+    common_chain = f'''<div class="cell has-background-{color}-light px-1 mx-0 is-flex
+      is-align-items-center is-justify-content-right">
+      <a class="has-text-{color}" href="/members/{member.id}/">{member.get_full_name()}</a>
+  </div>'''
     tester = self.assertNotContains if reversed else self.assertContains
-    tester(response, common_chain % {"member_id": member.id,
-                                     "first_name": member.first_name,
-                                     "last_name": member.last_name}, html=True)
+    tester(response, common_chain, html=True)
 
+    icons = f'''{icon('birthday')}{icon('birthday-variant')}{icon('birthday')}''' if with_icons else ''
+    expected_chain = f'''
+<div class="cell has-background-{color}-light px-1 mx-0 has-text-{color}">
+{expected_chain}
+{icons}
+</div>'''
     tester(response, expected_chain, html=True)
 
   def check_birthday_today(self, member, response=None, reversed=False):
     b_is_today = _("turns %(age)s today, happy birthday!") % {'age': member.age()}
-    c_is_today = f'''
-      <div class="cell has-background-light-primary px-0 mx-0 has-text-danger">
-        {b_is_today}
-        <i class="icon"><span class="mdi mdi-cake-variant-outline"></span></i>
-        <i class="icon"><span class="mdi mdi-cake-variant"></span></i>
-        <i class="icon"><span class="mdi mdi-cake-variant-outline"></span></i>
-      </div>
-    '''
-    self.check_birthday(member, c_is_today, response, reversed)
+    self.check_birthday(member, 'danger', b_is_today, with_icons=True, response=response, reversed=reversed)
 
   def check_birthdays_tomorrow(self, member, response=None, reversed=False):
     b_is_tomorrow = _("will turn %(age)s tomorrow, happy birthday!") % {'age': member.age()+1}
-    c_is_tomorrow = f'''
-      <div class="cell has-background-light-primary px-0 mx-0 has-text-warning">
-        {b_is_tomorrow}
-        <i class="icon"><span class="mdi mdi-cake-variant-outline"></span></i>
-        <i class="icon"><span class="mdi mdi-cake-variant"></span></i>
-        <i class="icon"><span class="mdi mdi-cake-variant-outline"></span></i>
-      </div>
-    '''
-    self.check_birthday(member, c_is_tomorrow, response, reversed)
+    self.check_birthday(member, 'warning', b_is_tomorrow, with_icons=True, response=response, reversed=reversed)
 
   def check_birthdays_after_tomorrow(self, member, response=None, reversed=False):
     b_date = date_format(member.next_birthday(), "l d F", use_l10n=True)
     b_is_after = _("will turn %(age)s on %(birthday)s") % {'age': member.age()+1, 'birthday': b_date}
-    c_is_after = f'''
-      <div class="cell has-background-light-primary px-0 mx-0 has-text-primary">
-        {b_is_after}
-      </div>
-    '''
-    self.check_birthday(member, c_is_after, response, reversed)
+    self.check_birthday(member, 'link', b_is_after, with_icons=False, response=response, reversed=reversed)
 
   def check_no_birthdays(self, response=None, reversed=False):
     no_bdays = f'''

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-02 18:52+0200\n"
+"POT-Creation-Date: 2024-07-16 21:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,12 +22,12 @@ msgstr ""
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
 
-#: cm_main/followers.py:52
+#: cm_main/followers.py:60 cm_main/tests.py:87
 #, python-format
 msgid "New %(followed_type)s \"%(followed_object_name)s\""
 msgstr "Nouveau %(followed_type)s \"%(followed_object_name)s\""
 
-#: cm_main/followers.py:56
+#: cm_main/followers.py:64
 #, python-format
 msgid ""
 "%(follower_name)s has created a new %(followed_type)s "
@@ -36,14 +36,14 @@ msgstr ""
 "%(follower_name)s a créé un nouveau %(followed_type)s "
 "\"%(followed_object_name)s\""
 
-#: cm_main/followers.py:61 cm_main/tests.py:57
+#: cm_main/followers.py:69 cm_main/tests.py:99
 #, python-format
 msgid ""
 "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
 msgstr ""
 "Nouveau %(obj_type)s ajouté au %(followed_type)s \"%(followed_object_name)s\""
 
-#: cm_main/followers.py:66
+#: cm_main/followers.py:74
 #, python-format
 msgid ""
 "%(follower_name)s has added a new %(obj_type)s in the %(followed_type)s "
@@ -52,23 +52,23 @@ msgstr ""
 "%(follower_name)s a ajouté un nouveau %(obj_type)s au %(followed_type)s "
 "\"%(followed_object_name)s\""
 
-#: cm_main/followers.py:99
+#: cm_main/followers.py:107
 #, python-brace-format
 msgid "You are no longer following this {followed_type}"
 msgstr "Tu ne suis plus ce {followed_type}"
 
-#: cm_main/followers.py:102
+#: cm_main/followers.py:110
 #, python-brace-format
 msgid "You are now following this {followed_type}"
 msgstr "Tu suis maintenant ce {followed_type}"
 
-#: cm_main/followers.py:110 cm_main/tests.py:32
+#: cm_main/followers.py:118 cm_main/tests.py:36
 #, python-format
 msgid "New follower to your %(followed_type)s \"%(followed_object_name)s\""
 msgstr ""
 "Nouveau follower pour ton %(followed_type)s \"%(followed_object_name)s\""
 
-#: cm_main/followers.py:112
+#: cm_main/followers.py:120
 #, python-format
 msgid ""
 "%(follower_name)s is now following your %(followed_type)s "
@@ -97,30 +97,21 @@ msgstr "Tu peux attacher un fichier ici si nécessaire"
 msgid "Home"
 msgstr "Accueil"
 
-#: cm_main/templates/cm_main/base.html:64
+#: cm_main/templates/cm_main/base.html:72
 msgid "This site proudly built using"
 msgstr "Ce site est fièrement propulsé par"
 
-#: cm_main/templates/cm_main/base.html:66
+#: cm_main/templates/cm_main/base.html:74
 msgid "The source code is licensed"
 msgstr "Le code source est sous licence"
 
-#: cm_main/templates/cm_main/base.html:72
+#: cm_main/templates/cm_main/base.html:80
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 
-#: cm_main/templates/cm_main/followers/email-followers-on-change.html:20
-#, python-format
-msgid ""
-"%(author_name)s created the following %(followed_type)s <a "
-"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
-msgstr ""
-"%(author_name)s a créé le %(followed_type)s suivant <a "
-"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
-
-#: cm_main/templates/cm_main/followers/email-followers-on-change.html:24
-#: cm_main/templates/cm_main/base.html:75
-#: cm_main/templates/cm_main/menu.html:115
+#: cm_main/templates/cm_main/base.html:83
+#: cm_main/templates/cm_main/navbar.html:119
+#: cm_main/templates/cm_main/side-menu.html:106
 msgid "Contact the site admin"
 msgstr "Contacter l'administrateur du site"
 
@@ -131,7 +122,9 @@ msgstr "Formulaire de contact"
 
 #: cm_main/templates/cm_main/contact-form.html:8
 msgid "Please fill out the form below to contact the admin of this site:"
-msgstr "Merci de remplir le formulaire ci-dessous pour contacter l'administrateur de ce site :"
+msgstr ""
+"Merci de remplir le formulaire ci-dessous pour contacter l'administrateur de "
+"ce site :"
 
 #: cm_main/templates/cm_main/contact-form.html:13
 msgid "Send"
@@ -141,7 +134,7 @@ msgstr "Envoyer"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: cm_main/templates/cm_main/email-contact-form.html:19
+#: cm_main/templates/cm_main/email-contact-form.html:19 cm_main/tests.py:176
 #, python-format
 msgid "%(sender_name)s sent you the following message from %(site_name)s:"
 msgstr "%(sender_name)s t'a envoyé le message suivant depuis %(site_name)s:"
@@ -150,8 +143,18 @@ msgstr "%(sender_name)s t'a envoyé le message suivant depuis %(site_name)s:"
 msgid "You can directly reply to this email to answer him/her."
 msgstr "Tu peux répondre directement à cet email pour lui répondre."
 
-#: cm_main/templates/cm_main/followers/email-followers-on-change.html:19
-#: cm_main/tests.py:68
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:20
+#: cm_main/tests.py:91
+#, python-format
+msgid ""
+"%(author_name)s created the following %(followed_type)s <a "
+"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
+msgstr ""
+"%(author_name)s a créé le %(followed_type)s suivant <a "
+"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
+
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:24
+#: cm_main/tests.py:104
 #, python-format
 msgid ""
 "%(author_name)s added the following %(obj_type)s on %(followed_type)s <a "
@@ -178,7 +181,7 @@ msgid "Your %(followed_type)s '%(followed_object_name)s' has a new follower!"
 msgstr ""
 "Ton %(followed_type)s '%(followed_object_name)s' a un nouveau follower!"
 
-#: cm_main/templates/cm_main/followers/new_follower.html:22 cm_main/tests.py:40
+#: cm_main/templates/cm_main/followers/new_follower.html:22 cm_main/tests.py:53
 #, python-format
 msgid ""
 "%(follower_name)s is now following your %(followed_type)s <a "
@@ -188,124 +191,185 @@ msgstr ""
 "href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> sur %(site_name)s"
 
 #: cm_main/templates/cm_main/followers/toggle-follow-button.html:4
-msgid "unfollow"
-msgstr "ne plus suivre"
+msgid "Stop Following"
+msgstr "Arréter de suivre"
 
 #: cm_main/templates/cm_main/followers/toggle-follow-button.html:9
-msgid "follow"
-msgstr "suivre"
+msgid "Follow"
+msgstr "Suivre"
 
-#: cm_main/templates/cm_main/menu.html:18
-msgid "Edit Pages"
-msgstr "Editer les Pages"
-
-#: cm_main/templates/cm_main/menu.html:24
+#: cm_main/templates/cm_main/navbar.html:20
+#: cm_main/templates/cm_main/side-menu.html:4
 msgid "Members"
 msgstr "Membres"
 
-#: cm_main/templates/cm_main/menu.html:29
+#: cm_main/templates/cm_main/navbar.html:25
+#: cm_main/templates/cm_main/side-menu.html:14
 msgid "Birthdays"
 msgstr "Anniversaires"
 
-#: cm_main/templates/cm_main/menu.html:33
+#: cm_main/templates/cm_main/navbar.html:29
+#: cm_main/templates/cm_main/side-menu.html:20
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: cm_main/templates/cm_main/menu.html:37
+#: cm_main/templates/cm_main/navbar.html:33
+#: cm_main/templates/cm_main/side-menu.html:26
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: cm_main/templates/cm_main/menu.html:42
+#: cm_main/templates/cm_main/navbar.html:37
+#: cm_main/templates/cm_main/side-menu.html:33
 msgid "Invite Member"
 msgstr "Inviter un Membre"
 
-#: cm_main/templates/cm_main/menu.html:46
-msgid "Import from CSV"
-msgstr "Importer depuis un fichier CSV"
-
-#: cm_main/templates/cm_main/menu.html:55
+#: cm_main/templates/cm_main/navbar.html:45
+#: cm_main/templates/cm_main/side-menu.html:45
 msgid "Galleries"
 msgstr "Galeries"
 
-#: cm_main/templates/cm_main/menu.html:60
+#: cm_main/templates/cm_main/navbar.html:50
+#: cm_main/templates/cm_main/side-menu.html:55
 msgid "Create Gallery"
 msgstr "Créer une Galerie"
 
-#: cm_main/templates/cm_main/menu.html:64
+#: cm_main/templates/cm_main/navbar.html:54
+#: cm_main/templates/cm_main/side-menu.html:61
 msgid "Bulk Upload"
 msgstr "Chargement en masse"
 
-#: cm_main/templates/cm_main/menu.html:72
+#: cm_main/templates/cm_main/navbar.html:62
 msgid "Forum"
 msgstr "Forum"
 
-#: cm_main/templates/cm_main/menu.html:77
+#: cm_main/templates/cm_main/navbar.html:67
+#: cm_main/templates/cm_main/side-menu.html:76
 msgid "Create Post"
 msgstr "Nouvelle Discussion"
 
-#: cm_main/templates/cm_main/menu.html:85
+#: cm_main/templates/cm_main/navbar.html:75
+#: cm_main/templates/cm_main/side-menu.html:81
 msgid "Chat"
 msgstr "Chat"
 
-#: cm_main/templates/cm_main/menu.html:125
+#: cm_main/templates/cm_main/navbar.html:98
+#: cm_main/templates/cm_main/side-menu.html:93
+msgid "Edit Pages"
+msgstr "Editer les Pages"
+
+#: cm_main/templates/cm_main/navbar.html:102
+msgid "Import members from CSV"
+msgstr "Importer des membres depuis un CSV"
+
+#: cm_main/templates/cm_main/navbar.html:128
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/menu.html:130
+#: cm_main/templates/cm_main/navbar.html:132
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/menu.html:144
+#: cm_main/templates/cm_main/navbar.html:144
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/menu.html:148
+#: cm_main/templates/cm_main/navbar.html:148
 msgid "Log Out"
 msgstr "Déconnexion"
 
-#: cm_main/templates/cm_main/paginate_template.html:27
+#: cm_main/templates/cm_main/paginate_template.html:20
+msgid "Items per page:"
+msgstr "Items par page"
+
+#: cm_main/templates/cm_main/paginate_template.html:40
 msgid "go to first page"
 msgstr "aller à la 1ère page"
 
-#: cm_main/templates/cm_main/paginate_template.html:39
+#: cm_main/templates/cm_main/paginate_template.html:52
 #, python-format
 msgid "go to page #%(page_num)s"
 msgstr "aller à la page #%(page_num)s"
 
-#: cm_main/templates/cm_main/paginate_template.html:42
+#: cm_main/templates/cm_main/paginate_template.html:55
 #, python-format
 msgid "page #%(page_num)s"
 msgstr "page #%(page_num)s"
 
-#: cm_main/templates/cm_main/paginate_template.html:55
+#: cm_main/templates/cm_main/paginate_template.html:68
 msgid "go to last page"
 msgstr "aller à la dernière page"
 
-#: cm_main/templates/cm_main/paginate_template.html:62
-msgid "Items per page:"
-msgstr "Items par page"
+#: cm_main/templates/cm_main/side-menu.html:8
+msgid "Members List"
+msgstr "Liste des Membres"
 
-#: cm_main/views.py:33
-msgid "Media not found"
-msgstr "Média non trouvé"
+#: cm_main/templates/cm_main/side-menu.html:39
+msgid "Import from CSV"
+msgstr "Importer depuis un fichier CSV"
 
-#: cm_main/views.py:62
+#: cm_main/templates/cm_main/side-menu.html:49
+msgid "Galleries Gallery"
+msgstr "Galerie des Galeries"
+
+#: cm_main/templates/cm_main/side-menu.html:66
+msgid "Forums"
+msgstr "Forums"
+
+#: cm_main/templates/cm_main/side-menu.html:70
+msgid "Posts List"
+msgstr "Liste des Posts"
+
+#: cm_main/templates/cm_main/side-menu.html:85
+msgid "Chat Rooms"
+msgstr "Salons de discussion"
+
+#: cm_main/templates/cm_main/side-menu.html:89
+msgid "Settings"
+msgstr "Paramètres"
+
+#: cm_main/templates/cm_main/side-menu.html:98
+msgid "Help"
+msgstr "Aide"
+
+#: cm_main/tests.py:34
+msgid "You have a new follower!"
+msgstr "Tu as un nouveau follower!"
+
+#: cm_main/tests.py:45
+#, python-format
+msgid ""
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
+"is now following you on %(site_name)s!"
+msgstr ""
+"Bonjour %(followed_name)s, <br><a "
+"href=\"%(follower_url)s\">%(follower_name)s</a> te suit maintenant sur "
+"%(site_name)s!"
+
+#: cm_main/tests.py:157
+msgid "This field is required."
+msgstr "Ce champ est obigatoire."
+
+#: cm_main/tests.py:163 cm_main/views.py:100
+msgid "Your message has been sent"
+msgstr "Ton message a été envoyé"
+
+#: cm_main/tests.py:166 cm_main/views.py:75
+msgid "Contact form"
+msgstr "Formulaire de contact"
+
+#: cm_main/tests.py:173 cm_main/views.py:72
 #, python-format
 msgid "You have a new message from %(name)s (%(email)s). "
 msgstr "Tu as reçu un nouveau message de %(name)s (%(email)s). "
 
-#: cm_main/views.py:65
-msgid "Contact form"
-msgstr "Formulaire de contact"
+#: cm_main/views.py:38
+msgid "Media not found"
+msgstr "Média non trouvé"
 
-#: cm_main/views.py:66
+#: cm_main/views.py:76
 msgid "But your mailer tools is too old to show it :'("
 msgstr "Mais ton logiciel de messagerie est trop vieux pour l'afficher :'("
 
-#: cm_main/views.py:84
+#: cm_main/views.py:95
 msgid "This file type is not supported"
 msgstr "Ce type de fichier n'est pas supporté"
-
-#: cm_main/views.py:92
-msgid "Your message has been sent"
-msgstr "Ton message a été envoyé"

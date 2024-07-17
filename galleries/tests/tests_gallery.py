@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext as _
+
+from cm_main.templatetags.cm_tags import icon
 from members.tests.tests_member_base import TestLoginRequiredMixin
 from ..models import Gallery, Photo
 from .tests_utils import create_image, GalleryBaseTestCase
@@ -124,9 +126,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     # check the root gallery appears as the parent gallery in the details
     self.assertContains(response, f'''<a class="button" href="{reverse('galleries:detail', args=[rg.id])}"
       title="{_("Back to %(gname)s") % {'gname': rg.name}}">
-      <span class="icon is-large">
-        <i class="mdi mdi-24px mdi-arrow-up-right"></i>
-      </span>
+      {icon('back')}
     </a>''', html=True)
 
     # check the sub gallery appears in the root gallery children list

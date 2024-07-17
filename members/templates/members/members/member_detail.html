@@ -3,12 +3,12 @@
 {% block title %}{% title _("Member Detail") %} {% endblock %}
 {% block content %}
 {%with member=object %}
-<div class="container mt-5">
+<div class="container">
 	<div class="card">
 		<div class="card-header">
 			<div class="media">
 				<div class="media-left">
-					<figure class="image avatar">
+					<figure class="image avatar mx-2 my-2">
 						<img class="is-rounded" src="{{ member.avatar_url }}">
 					</figure>
 				</div>
@@ -20,6 +20,7 @@
 
 					</p>
 					<p class="content small">{{ member.username }}
+						<br>
 					({%if member.is_active %}
 						{% translate "Active member" %}
 					{% else %}
@@ -30,7 +31,7 @@
 			</div>
 		</div>
 		<div class="card-content">
-			<table class="table">
+			<table class="table mx-auto">
 				<tr>
 					<td class="content has-text-right">{% translate "Address" %}</td>
 					<td class="content">{%if member.address%}{{ member.address }}{%endif%}</td>
@@ -66,13 +67,14 @@
 				
 			</table>
 		</div>
-		<div class="card-footer">
-			<a class="button is-primary" 
+		<div class="card-footer buttons is-centered">
+			<a class="button" 
 				{% if can_edit %} href="{% url 'members:member_edit' member.id %}"
-				{% else %} disabled="" 
+				{% else %} disabled
 				{% endif %}
 			>
-				{% translate "Edit" %}
+			{%icon "edit" %}
+			<span>{% translate "Edit" %}</span>
 			</a>
 			{% if not can_edit and managing_member_name %}
 			<p class="content px-4">

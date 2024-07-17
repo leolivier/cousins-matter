@@ -17,3 +17,13 @@ def members_header(title):
           href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
   </head>
 """
+
+
+@register.filter
+def birthday_color(when):
+  if when == 0:
+    return 'danger'
+  elif when == 1:
+    return 'warning'
+  else:
+    return 'link'

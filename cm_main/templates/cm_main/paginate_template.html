@@ -13,14 +13,27 @@
 </script>
 {%endif%}
 {%with page_first=page_range|first page_last=page_range|last%}
-<nav class="pagination is-centered" aria-label="pagination">
-	{% if prev_page_url %}
-	<a class="pagination-previous" onclick="goto_page_url('{{prev_page_url}}')">
-		<span class="icon is-large"><i class="mdi mdi-24px mdi-chevron-left-box-outline"></i></span>
-	</a>
-	{% else %}
-	<span class="pagination-previous icon is-large" disabled><i class="mdi mdi-24px mdi-chevron-left-box-outline"></i></span>
+<nav class="pagination mx-3" aria-label="pagination" role="pagination">
+	
+	{% if not no_per_page%}
+	<div class="pagination-previous" style="box-shadow: unset; border-style: hidden;">
+		<label class="mr-3">{% translate "Items per page:" %}</label>
+		<form>
+			<div class="select">
+				<select id="page_size" name="page_size" onchange="this.form.submit()">
+				{%for per_page in possible_per_pages %}
+					<option value="{{per_page}}" {%if per_page == page_size %}selected{%endif%}>{{per_page}}</option>
+				{%endfor%}
+				</select>
+			</div>
+		</form>
+	</div>
 	{%endif%}
+	<a class="pagination-previous 
+		{% if prev_page_url %}" onclick="goto_page_url('{{prev_page_url}}')"{% else %}is-disabled"{%endif%}>
+		{%icon "pagination-previous" %}
+	</a>
+	
 	<ul class="pagination-list">
 		{% if page_first > 1 %}
 		<li>
@@ -57,26 +70,9 @@
 			{%endwith%}
 		{%endif%}
 	</ul>
-	{% if not no_per_page%}
-	<div class="pagination-next" style="box-shadow: unset; border-style: hidden;">
-		<label class="mr-3">{% translate "Items per page:" %}</label>
-		<form>
-			<div class="select">
-				<select id="page_size" name="page_size" onchange="this.form.submit()">
-				{%for per_page in possible_per_pages %}
-					<option value="{{per_page}}" {%if per_page == page_size %}selected{%endif%}>{{per_page}}</option>
-				{%endfor%}
-				</select>
-			</div>
-		</form>
-	</div>
-	{%endif%}
-	{% if next_page_url %}
-	<a class="pagination-next"  onclick="goto_page_url('{{next_page_url}}')">
-		<span class="icon is-large"><i class="mdi mdi-24px mdi-chevron-right-box-outline"></i></span>
+	<a class="pagination-next 
+		{% if next_page_url %}" onclick="goto_page_url('{{next_page_url}}')"{% else %}is-disabled"{%endif%}>
+		{%icon "pagination-next" %}
 	</a>
-	{% else %}
-	<span class="pagination-next icon is-large" disabled><i class="mdi mdi-24px mdi-chevron-right-box-outline"></i></span>
-	{%endif%}
 {%endwith%}	
 </nav>

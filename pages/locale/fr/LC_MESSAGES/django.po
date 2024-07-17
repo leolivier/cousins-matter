@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 16:16+0200\n"
+"POT-Creation-Date: 2024-07-16 21:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,53 +18,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: pages/apps.py:8 pages/templates/pages/pages_list.html:3
+#: pages/apps.py:8 pages/templates/pages/menu_pages.html:3
+#: pages/templates/pages/pages_list.html:3
 #: pages/templates/pages/pages_list.html:8
+#: pages/templates/pages/sidemenu_pages.html:2
 msgid "Pages"
 msgstr "Pages"
 
-#: pages/forms.py:15
-msgid "URL"
-msgstr "URL"
-
-#: pages/forms.py:19
-#, python-brace-format
-msgid ""
-"Example: “{pages_prefix}about/contact/”. Make sure to have leading "
-"{pages_prefix} and trailing slash."
-msgstr ""
-"Exemple : \"{pages_prefix}about/contact/\". Veillez à ce que l'URL commence "
-"par {pages_prefix} et se termine par une barre oblique."
-
-#: pages/forms.py:24 pages/tests/tests_crud.py:30
-msgid ""
-"This value must contain only letters, numbers, dots, underscores, dashes, "
-"slashes or tildes."
-msgstr ""
-"Cette valeur ne doit contenir que des lettres, des chiffres, des points, des "
-"traits de soulignement, des tirets, des barres obliques ou tildes"
-
-#: pages/forms.py:46
-#, python-brace-format
-msgid "URLs MUST start with {pages_prefix}"
-msgstr "Les URL DOIVENT commencer par {pages_prefix}."
-
-#: pages/forms.py:50 pages/tests/tests_crud.py:23
-msgid "URL is missing a trailing slash."
-msgstr "Il manque une barre oblique à la fin de l'URL."
-
-#: pages/forms.py:54
-#, python-brace-format
-msgid "URLs cannot be only {pages_prefix}, please add some path behind"
-msgstr ""
-
-#: pages/forms.py:67 pages/tests/tests_crud.py:44 pages/tests/tests_crud.py:87
+#: pages/forms.py:34 pages/tests/tests_crud.py:30 pages/tests/tests_crud.py:77
 #, python-format
 msgid "Flatpage with url %(url)s already exists"
 msgstr "Une page avec l'url %(url)s existe déjà"
 
-#: pages/forms.py:72 pages/templatetags/menupages_tags.py:28
-#: pages/tests/tests_crud.py:52
+#: pages/forms.py:38 pages/tests/tests_crud.py:38
 msgid "A flatpage cannot be a subpage of another flatpage, check your URLs"
 msgstr ""
 "Une flatpage ne peut pas être une sous-page d'une autre flatpage, vérifie "
@@ -80,10 +46,11 @@ msgstr "Mettre la page à jour"
 #: pages/templates/pages/page_form.html:7
 #: pages/templates/pages/page_form.html:11
 #: pages/templates/pages/pages_list.html:9
+#: pages/templates/pages/pages_list.html:11
 msgid "Create Page"
 msgstr "Créer une Page"
 
-#: pages/templatetags/menupages_tags.py:66
+#: pages/templatetags/menupages_tags.py:105
 #, python-brace-format
 msgid ""
 "Cannot load page from url {url}, it was not found in the database. Please "
@@ -91,15 +58,3 @@ msgid ""
 msgstr ""
 "Impossible de charger la page de l'url {url}, elle n'a pas été trouvée dans "
 "la base de données. Merci de contacter l'administrateur du site"
-
-#: pages/tests/tests_crud.py:20
-#, python-brace-format
-msgid "URLs MUST start with {self.pages_prefix}"
-msgstr "Les URL DOIVENT commencer par {self.pages_prefix}."
-
-#: pages/tests/tests_crud.py:26
-#, python-brace-format
-msgid "URLs cannot be only {self.pages_prefix}, please add some path behind"
-msgstr ""
-"Les URL ne peuvent pas être uniquement {self.pages_prefix}, merci d'ajouter "
-"un chemin d'accès derrière."

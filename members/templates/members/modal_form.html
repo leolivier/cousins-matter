@@ -1,4 +1,4 @@
-{% load i18n crispy_forms_tags %}
+{% load i18n crispy_forms_tags cm_tags %}
 <div class="modal" id="{{ modal_id }}">
 	<div class="modal-background"></div>
 	<div class="modal-card">
@@ -12,11 +12,25 @@
 					{{ form | crispy}}
 			</section>
 			<footer class="modal-card-foot">
-				<div class="buttons">
-					<button type="submit" class="button is-primary">{%translate action %}</button>
-					<button type="reset" class="button" aria-label="close">{%translate "Cancel" %}</button>
+				<div class="buttons mx-auto">
+					<button type="submit" class="button">
+						{%icon "submit" %}
+						<span>{%trans action %}</span>
+					</button>
+					<button type="reset" class="button" aria-label="close">
+						{%icon "cancel" %}
+						<span>{%translate "Cancel" %}</span>
+					</button>
 				</div>
 			</footer>
 		</form>
+		<script>
+		$(document).ready(function () {
+			// associate to each modal form created above an ajax processing function
+			ajax_form_action('#{{modal_id}}-form', "{{action_url}}", function(response) {
+				{{function}}
+			});
+		});
+		</script>
 	</div>
 </div>

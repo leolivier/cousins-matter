@@ -5,7 +5,7 @@ for template in $templates
 do
 	title=$(grep '<h1' $template |sed -e 's@^\s*<h1[^>]*>@@;s@</h1>\s*$@@;' | sed -e "s/'/\&quot;/g")
 	url=$(dirname $template)/$(basename $template .html)
-	url=$(echo $url|sed -e 's@pages/templates/predefined@/pages@')/
+	url=$(echo $url|sed -e 's@pages/templates/predefined@@')'/'
 	query='SELECT count(*) FROM django_flatpage WHERE url='"'"$url"'"';'
 	found=$(echo "$query" | sqlite3 data/db.sqlite3)
 	echo $url : found=$found

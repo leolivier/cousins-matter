@@ -12,16 +12,13 @@
 			<span class="field has-addons ml-auto">  {# margin-left: auto to push on the right#}
 				<div class="control has-icons-left">
 					<input class="input" type="text" placeholder="{%trans 'Room name'%}" id="room-name-input">
-					<span class="icon is-left">
-						<i class="mdi mdi-24px mdi-chat-plus" aria-hidden="true"></i>
-					</span>
+					{%icon 'new-chat-room' 'is-left'>
 				</div>
 				<div class="control">
-					<a class="button is-primary" id="room-name-submit">
-						<span class="icon">
-							<i class="mdi mdi-24px mdi-chat-plus-outline" aria-hidden="true"></i>
-						</span>
-						<span class="is-hidden-mobile">{%trans 'Create room' %}</span>
+					{%trans 'Create room' as create_room%}
+					<a class="button is-responsive" id="room-name-submit" title="{{create_room}}">
+						{%icon 'new-chat-room'%}
+						<span class="is-hidden-mobile">{{create_room}}</span>
 					</a>
 				</div>
 			</span>
@@ -45,7 +42,7 @@
 					<span class="has-text-primary has-text-weight-bold has-text-right mr-5">
 						{{room.first_message_author.username}}
 						<a href="{%url 'members:detail' room.first_message_author.id %}" aria-label="{%trans 'profile'%}">
-							<span class="icon"><i class="mdi mdi-open-in-new"></i></span>
+							{%icon "member-link" %}
 						</a>
 						<br>
 						<span class="tag mr-3">{{trans_nmsgs}}</span>
@@ -54,16 +51,14 @@
 				</p>
 				<a class="title is-size-6" href="{%url 'chat:room' room.slug %}">{{room.name}}</a> 
 				{%else%}
-				<span class="panel-icon">
-					<i class="mdi mdi-24px mdi-chat-outline" aria-hidden="true"></i>
-				</span>
+				{%icon "chat" "panel-icon" %}
 				<a class="block" href="{%url 'chat:room' room.slug %}">
 					<span class="tag mr-3">{{trans_nmsgs}}</span>
 					<span class="title is-size-6">{{room.name}}</span> 
 				</a>
 				{%endif%}
 				{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
-				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room %}
+				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room extra_class="is-pulled-right"%}
 			</div>
 		{%endfor%}
 	</nav>

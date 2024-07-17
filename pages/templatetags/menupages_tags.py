@@ -1,67 +1,113 @@
+import logging
 from django.template import Library
 from django.contrib.flatpages.models import FlatPage
 from django.conf import settings
 from django.utils.translation import gettext as _
-from django.core.exceptions import ValidationError
 
 register = Library()
-
-menu_pages_url_prefix = f'/{settings.PAGES_URL_PREFIX}/publish/'
-
-
-def loop_on_menupages(menu_pages, page_tree, level):
-  done = True
-  for page in menu_pages:
-    tree_level = page_tree
-    upper_tree = None
-    item = page.split_url[level] if level < len(page.split_url) else None
-    for upper_level in page.split_url[0:level]:
-      if not upper_level:
-        break
-      if upper_level in tree_level:
-        upper_tree = tree_level
-        tree_level = tree_level[upper_level]
-      else:
-        raise ValueError("cant find %s" % upper_level)  # should have been put by previous level
-    if item:
-      if isinstance(tree_level, FlatPage):
-        raise ValidationError(_("A flatpage cannot be a subpage of another flatpage, check your URLs"))
-      done = False
-      if item not in tree_level:
-        tree_level[item] = {}
-    elif upper_level:
-      if not page.url.startswith(menu_pages_url_prefix):
-        page.url = menu_pages_url_prefix + page.url
-      upper_tree[upper_level] = page
-  return done
+logger = logging.getLogger(__name__)
 
 
 @register.inclusion_tag("pages/menu_pages.html")
-def get_menu_pages():
-  menu_pages = FlatPage.objects.filter(url__startswith=menu_pages_url_prefix)
+def pages_menu():
+  """
+  Retrieves all flat pages that start with the menu page URL prefix and creates a nested tree structure
+  based on their URLs. The resulting tree is passed to the "pages/menu_pages.html" template for rendering.
 
+  Returns:
+    dict: A dictionary containing the nested tree structure of the flat pages. The dictionary leaves are
+    the urls of the flat pages.
+  """
+  menu_pages = FlatPage.objects.filter(url__istartswith=settings.MENU_PAGE_URL_PREFIX)
+  # logger.debug(menu_pages.query)
+  page_tree = {}
+  last_tree = None
+  start = len(settings.MENU_PAGE_URL_PREFIX)
   for page in menu_pages:
-    page.url = page.url[len(menu_pages_url_prefix):]
-    page.split_url = page.url.split('/')
+    trc = ''
+    url = page.url[start:-1]
+    logger.debug(trc, 'url:', url)
+    tree_level = page_tree
+    for level in url.split('/'):
+      trc += '\t'
+      if level == '':
+        continue
+      logger.debug(trc, 'level:', level)
+      if level not in tree_level:
+        logger.debug(trc, 'is not in tree_level')
+        last_tree = tree_level
+        tree_level[level] = {}
+      tree_level = tree_level[level]
+      logger.debug(trc, "tree for level:", level, "is", last_tree, '\n', trc, 'full tree', page_tree)
+    del last_tree[level]
+    last_tree[page.title] = page
 
-  page_tree = {page.split_url[0]: {} for page in menu_pages}
-  done = False
-  level = 1
-  while not done:
-    done = loop_on_menupages(menu_pages, page_tree, level)
-    level += 1
-  # print("tree:", page_tree)
+    logger.debug('tree for url:', page.url, 'is', page_tree)
+  logger.debug("final tree:", page_tree)
   return {'page_tree': page_tree}
 
 
-@register.inclusion_tag("pages/menu_pages_level.html")
-def menu_level(level, sublevels):
-  return {'level': level, 'sublevels': sublevels}
+@register.inclusion_tag("pages/sidemenu_pages.html")
+def pages_sidemenu():
+  """
+  Retrieves all flat pages that start with the menu page URL prefix and creates a nested tree structure
+  based on their URLs. The resulting tree is passed to the "pages/menu_pages.html" template for rendering.
+
+  Returns:
+    dict: A dictionary containing the nested tree structure of the flat pages. The dictionary leaves are
+    the urls of the flat pages.
+  """
+  menu_pages = FlatPage.objects.filter(url__istartswith=settings.MENU_PAGE_URL_PREFIX)
+  # logger.debug(menu_pages.query)
+  page_tree = {}
+  start = len(settings.MENU_PAGE_URL_PREFIX)
+  last_tree = None
+  previous_tree = None
+  for page in menu_pages:
+    url = page.url[start:-1]
+    logger.debug('url:', url)
+    tree_level = page_tree
+    for level in url.split('/'):
+      if level == '':
+        continue
+      logger.debug('level:', level)
+      if level not in tree_level:
+        logger.debug('level not in tree_level')
+        tree_level[level] = {}
+        previous_tree = last_tree
+        last_tree = tree_level
+      tree_level = tree_level[level]
+      logger.debug("tree for level:", level, "is", page_tree)
+    assert previous_tree is not None
+    del previous_tree[level]
+    previous_tree[page.title] = page
+    logger.debug('tree for url:', page.url, 'is', page_tree)
+  logger.debug("final tree:", page_tree)
+  return {'page_tree': page_tree}
 
 
 @register.inclusion_tag("pages/include_page.html")
 def include_page(url):
+  """
+  Renders a page based on the provided URL. 
+  Retrieves the FlatPage object corresponding to the URL and returns its content
+  if found, else returns a message indicating the page was not found in the database.
+  The resulting content is passed to the "pages/include_page.html" template for rendering.
+  Args:
+    url (str): The URL of the page to include.
+
+  Returns:
+    dict: A dictionary containing the content of the page if it exists, 
+          or an error message if the page is not found.
+  """
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
   page = FlatPage.objects.filter(url=url).first()
   return {'content': page.content if page is not None else _(f"Cannot load page from url {url}, it was not found in the "
                                                              "database. Please contact the administrator of the site")}
+
+
+@register.inclusion_tag("pages/link_pages_starting_with.html")
+def link_pages_starting_with(url_prefix, css_class='', hr=''):
+  # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
+  pages = FlatPage.objects.filter(url__istartswith=url_prefix)
+  return {'pages': pages, 'css_class': css_class, 'hr': hr}

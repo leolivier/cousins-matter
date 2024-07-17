@@ -67,14 +67,18 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
 </a>''', html=True)
     self.assertContains(response, f'''
 <div class="navbar-item has-dropdown is-hoverable">
-  <p class="navbar-item">level {level_icon}</p>
-  <div class="navbar-dropdown is-right">
-    <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[1].url}">
-      {pages[1].title}  {page_icon}
-    </a>
-    <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[2].url}">
-      {pages[2].title} {page_icon}
-    </a>
+  <div class="navbar-link">level {level_icon}</div>
+  <div class="navbar-dropdown">
+    <div class="navbar-item has-dropdown is-hoverable">
+      <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[1].url}">
+        {pages[1].title}  {page_icon}
+      </a>
+    </div>
+    <div class="navbar-item has-dropdown is-hoverable">
+      <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[2].url}">
+        {pages[2].title} {page_icon}
+      </a>
+    </div>
   </div>
 </div>''', html=True)
 

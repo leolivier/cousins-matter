@@ -117,7 +117,7 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
 
     msg = render_to_string(
       "members/email/registration_invite_email.html",
-      {"link": invitation_url, "admin": admin_name, "site_name": site_name, 
+      {"link": invitation_url, "admin": admin_name, "site_name": site_name,
        "invited": invited, 'invited_email': email, 'inviter': inviter.get_full_name(),
        'inviter_email': inviter.email},
       request=request

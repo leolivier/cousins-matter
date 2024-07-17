@@ -89,7 +89,7 @@ def pages_sidemenu():
 @register.inclusion_tag("pages/include_page.html")
 def include_page(url):
   """
-  Renders a page based on the provided URL. 
+  Renders a page based on the provided URL.
   Retrieves the FlatPage object corresponding to the URL and returns its content
   if found, else returns a message indicating the page was not found in the database.
   The resulting content is passed to the "pages/include_page.html" template for rendering.
@@ -97,7 +97,7 @@ def include_page(url):
     url (str): The URL of the page to include.
 
   Returns:
-    dict: A dictionary containing the content of the page if it exists, 
+    dict: A dictionary containing the content of the page if it exists,
           or an error message if the page is not found.
   """
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap

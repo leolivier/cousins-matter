@@ -247,7 +247,7 @@ class TestDisplayMembers(MemberTestCase):
 
   def test_display_members(self):
     response = self.client.get(reverse("members:members"))
-    html = response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '')
+    html = response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '').replace('is-dark', '')
     # print(str(response.content))
     for i in range(len(self.members)):
       avatar = '' if not self.members[i].avatar else f'''<figure class="image mini-avatar mr-2">
@@ -283,13 +283,14 @@ class TestDisplayMembers(MemberTestCase):
       response = self.client.get(reverse("members:members"), filter)
       # print(response.content)
       self.assertEqual(response.status_code, 200)
-      return response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '')
+      return response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '').replace('is-dark', '')
 
     member1 = self.create_member()
     member2 = self.create_member()
     member3 = self.create_member()
     # can see all memebers when not filtered
     content = filter_member(None)
+    # print(content)
     for member in [member1, member2, member3]:
       check_is_in(content, member)
 

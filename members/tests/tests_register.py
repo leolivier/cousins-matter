@@ -51,7 +51,7 @@ class MemberInviteTests(MemberTestCase):
       for content, type in mail.outbox[1].alternatives:
         if type == 'text/html':
           break
-      print("content=", content)
+      # print("content=", content)
       self.assertInHTML(f'''
 <h1 class="center" style="padding:2px">
   {_("Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s") %

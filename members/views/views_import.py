@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import slugify
 from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm
 from cousinsmatter.utils import redirect_to_referer
@@ -152,8 +153,9 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     check_fields(reader.fieldnames)
     random.seed()
     for row in reader:
+      # normalize username using slugify
+      username = slugify(row[t('username')], allow_unicode=True)
       # search for an existing member with this username
-      username = row[t('username')]
       member = Member.objects.filter(username=username).first()
       if member:  # found, use it
         changed_member, error = self._update_member(member, row, activate_users)

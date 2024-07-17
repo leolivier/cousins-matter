@@ -24,8 +24,6 @@ class MemberInviteTests(MemberTestCase):
     # pprint(vars(response))
     self.assertContainsMessage(response, "success", _("Invitation sent to %(email)s.") % {'email': test_invite['email']})
     # if invite not sent by superuser, he receives a notification
-    for m in mail.outbox:
-      print(m.subject)
     self.assertEqual(len(mail.outbox), 1 if sender == self.superuser else 2)
     self.assertSequenceEqual(mail.outbox[0].recipients(), [test_invite['email']])
     self.assertEqual(mail.outbox[0].subject,

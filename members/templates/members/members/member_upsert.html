@@ -4,10 +4,10 @@
 {% block header %}{%include "cm_main/include-bulma-calendar.html" %}{%endblock%}
 {% block content %}
 {%with member=form.instance%}
-<div class="container">
+<div class="container px-2">
 	<h1 class="title has-text-centered is-2">{{title}}</h1>
 	{% if member and member.id %} {# existing member #}
-	<div class="level mx-2 my-2">
+	<div class="level px-2 my-2">
 		<div class="level-left">
     	<figure class="image thumbnail">
         <img class="is-rounded" src="{{ member.avatar_url }}">
@@ -52,7 +52,7 @@
 		</div>
   </div>
 	{% endif %}
-	<div class="container mx-2">
+	<div class="container px-2">
 		<form enctype="multipart/form-data" method="post">
 			{% csrf_token %}
 			{{ form | crispy }}

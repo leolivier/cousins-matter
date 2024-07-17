@@ -5,7 +5,7 @@
 <div class="container">
 	<div class="level">
 		<div class="level-left">
-			<h1 class="title has-text-centered">{% title _("Members Directory") %}</h1>
+			<h1 class="title has-text-centered printable">{% title _("Members Directory") %}</h1>
 		</div>
 		<div class="level-right buttons">
 			<button class="button" onclick="printSection($('.printable'))">
@@ -22,28 +22,28 @@
   {% if member_list %}
 	<hr/>
 	<section class="section printable">
-	<table class="table">
-		<tr>
-			<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Name" %}</th>
-			<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Birthdate" %}</th>
-			<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Phone" %}</th>
-			<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Email" %}</th>
-			<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Address" %}</th>
-		</tr>
-    {% for member in member_list %}
-		<tr>
-      <td class="has-text-centered">
-        <a class="button is-link is-light" href="{% url 'members:detail' member.id %}">
-          <strong>{{ member.get_full_name }}</strong>
-        </a>
-      </td>
-			<td class="has-text-centered">{{ member.birthdate | date }}</td>
-			<td class="has-text-centered">{{ member.phone }}</td>
-			<td class="has-text-centered">{{ member.email }}</td>
-			<td class="has-text-centered">{%if member.address %}{{ member.address }}{% endif %}</td>
-		</tr>
-    {% endfor %}
-	</table>
+		<table class="table">
+			<tr>
+				<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Name" %}</th>
+				<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Birthdate" %}</th>
+				<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Phone" %}</th>
+				<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Email" %}</th>
+				<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Address" %}</th>
+			</tr>
+			{% for member in member_list %}
+			<tr>
+				<td class="has-text-centered">
+					<a class="button is-link is-light" href="{% url 'members:detail' member.id %}">
+						<strong>{{ member.get_full_name }}</strong>
+					</a>
+				</td>
+				<td class="has-text-centered">{{ member.birthdate | date:"SHORT_DATE_FORMAT" }}</td>
+				<td class="has-text-centered">{{ member.phone }}</td>
+				<td class="has-text-centered">{{ member.email }}</td>
+				<td class="has-text-centered">{%if member.address %}{{ member.address }}{% endif %}</td>
+			</tr>
+			{% endfor %}
+		</table>
 	</section>
   {% else %}
 	<div>

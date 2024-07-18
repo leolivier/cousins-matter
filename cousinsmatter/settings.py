@@ -219,6 +219,8 @@ DJANGO_ICONS = {
     "pdf": "file-pdf-box",
     "help": "help-circle-outline",
     "settings": "cog-outline",
+    "menu-open": "menu-open",
+    "menu-close": "menu-close",
     # auth icons
     "signin": "login",
     "signout": "logout",

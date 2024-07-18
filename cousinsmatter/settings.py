@@ -210,6 +210,7 @@ DJANGO_ICONS = {
     "edit": "pencil-outline",
     "save": "content-save-outline",
     "submit": "check-circle-outline",
+    "update": "check-underline-circle-outline",
     "cancel": "close-circle-outline",
     "new": "plus-box-outline",
     "send-message": "send-variant-outline",

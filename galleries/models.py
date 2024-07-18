@@ -133,6 +133,9 @@ class Gallery(models.Model):
     return reverse("galleries:detail", kwargs={"pk": self.pk})
 
   def clean(self):
+    # check parent_id != id
+    if self.parent_id == self.pk:
+      raise ValidationError(_("Cannot be the parent of itself"))
     # compute slug
     if not self.slug:
       slug = slugify(self.name)
@@ -157,3 +160,9 @@ class Gallery(models.Model):
 
   def cover_url(self):
     return self.cover.thumbnail.url if self.cover else settings.DEFAULT_GALLERY_COVER_URL
+
+  def rec_children_list(self):
+    result = [self.pk]
+    for child in self.children.all():
+        result.extend(child.rec_children_list())
+    return result

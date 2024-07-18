@@ -37,3 +37,12 @@ class GalleryForm(forms.ModelForm):
         widgets = {
             "description": RichTextarea(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.instance = kwargs.get('instance')
+        # print("init gallery form for instance", self.instance, "id", self.instance.pk)
+        if self.instance and self.instance.pk:
+            children = self.instance.rec_children_list()
+            # print(children)
+            self.fields["parent"].queryset = Gallery.objects.exclude(pk__in=children)

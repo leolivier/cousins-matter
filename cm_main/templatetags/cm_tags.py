@@ -135,5 +135,5 @@ def icon(name, clazz="icon", aria_hidden=False):
       clazz += " is-large"
     return mark_safe(f'''
 <span class="{clazz}">
-    <i class="mdi mdi-24px mdi-{name}" aria-hidden='true'></i>
+    <i class="mdi mdi-24px mdi-{name}" aria-hidden="true"></i>
 </span>''')

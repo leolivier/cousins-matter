@@ -58,7 +58,7 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
 
 
 class PhotoAddView(LoginRequiredMixin, generic.CreateView):
-  template_name = "galleries/add_photo.html"
+  template_name = "galleries/photo_form.html"
   model = Photo
   form_class = PhotoForm
 
@@ -79,7 +79,7 @@ class PhotoAddView(LoginRequiredMixin, generic.CreateView):
 
 
 class PhotoEditView(LoginRequiredMixin, generic.UpdateView):
-  template_name = "galleries/edit_photo.html"
+  template_name = "galleries/photo_form.html"
   model = Photo
   form_class = PhotoForm
 

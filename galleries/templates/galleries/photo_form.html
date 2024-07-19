@@ -1,0 +1,37 @@
+{% extends "cm_main/base.html" %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block title %}
+	{%if form.instance.pk %}
+		{% title _("Edit Photo") %}
+	{%else%}
+		{% title _("Add Photo") %}
+	{%endif%}
+{% endblock %}
+{% block header %}
+	{%include "cm_main/include-bulma-calendar.html" %}
+	{%include "cm_main/include-summernote.html" %}
+{%endblock%}
+{% block content %}
+<div class="container mt-5 px-2">
+	<h1 class="title has-text-centered">
+	{%if form.instance.pk %}
+		{% title _("Edit Photo") %}
+	{%else%}
+		{% title _("Add Photo") %}
+	{%endif%}
+	</h1>
+	<form method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form | crispy}}
+		<p class="buttons is-centered">
+			{%if form.instance.pk %}
+			<button type="submit" class="button is-dark" name="update">{%icon "update"%} <span>{%translate "Update" %}</span></button>
+			<button type="cancel" class="button is-light" name="cancel">{%icon "cancel"%} <span>{%translate "Cancel" %}</span></button>
+			{%else%}
+			<button type="submit" class="button is-dark" name="create">{%icon "submit"%} <span>{%translate "Create" %}</span></button>
+			<button type="submit" class="button is-link" name="create-and-add">{%icon "submit-plus"%} <span>{%translate "Create and add another one" %}</span></button>
+			{%endif%}
+		</p>
+	</form>
+</div>
+{% endblock %}

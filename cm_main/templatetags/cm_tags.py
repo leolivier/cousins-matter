@@ -87,8 +87,9 @@ class TitleNode(Node):
         self.var_name = var_name
 
     def render(self, context):
-        print("title=", self.title.var, "var_name=", self.var_name)
-        title = Variable(self.title).resolve(context) if self.title.is_var else str(self.title.var)
+        # print("title=", self.title.var, "var_name=", self.var_name)
+        var = str(self.title.var)
+        title = Variable(var).resolve(context) if self.title.is_var else var
         title = get_title(title)
         if self.var_name:
             context[self.var_name] = title

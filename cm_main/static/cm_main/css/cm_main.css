@@ -43,12 +43,13 @@
 /* class for photo in galleries */
 .photo img {
 	display: block;
-  width: auto;
+  width: 100%;
 	height: auto;
   max-width: fit-content;
   max-height: fit-content;
 	margin-right: auto;
 	margin-left: auto;
+	border-radius: var(--bulma-radius-medium);
 }
 
 /* CSS for summernote text 

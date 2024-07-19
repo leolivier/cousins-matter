@@ -19,16 +19,16 @@ class TestBirthdaysMixin():
   def check_birthday(self, member, color, expected_chain, with_icons=False, response=None, reversed=False):
     response = response or self.client.get(reverse("members:birthdays"))
     # self.print_response(response)
-    common_chain = f'''<div class="cell has-background-{color}-light px-1 mx-0 is-flex
-      is-align-items-center is-justify-content-right">
-      <a class="has-text-{color}" href="/members/{member.id}/">{member.get_full_name()}</a>
+    common_chain = f'''<div class="cell has-background-{color}-light ml-2 pl-2 pr-1 is-flex
+        is-align-items-center is-justify-content-right">
+      <a href="/members/{member.id}/" class="has-text-{color}">{member.get_full_name()}</a>
   </div>'''
     tester = self.assertNotContains if reversed else self.assertContains
     tester(response, common_chain, html=True)
 
     icons = f'''{icon('birthday')}{icon('birthday-variant')}{icon('birthday')}''' if with_icons else ''
     expected_chain = f'''
-<div class="cell has-background-{color}-light px-1 mx-0 has-text-{color}">
+<div class="cell has-background-{color}-light mr-2 pl-1 pr-2 has-text-{color}">
 {expected_chain}
 {icons}
 </div>'''

@@ -40,9 +40,10 @@ class GalleryForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.instance = kwargs.get('instance')
         # print("init gallery form for instance", self.instance, "id", self.instance.pk)
         if self.instance and self.instance.pk:
+            # prevent a gallery from being its own parent
             children = self.instance.rec_children_list()
-            # print(children)
             self.fields["parent"].queryset = Gallery.objects.exclude(pk__in=children)
+            # covers must be in the gallery
+            self.fields["cover"].queryset = Photo.objects.filter(gallery=self.instance)

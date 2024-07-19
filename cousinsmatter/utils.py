@@ -81,7 +81,7 @@ class Paginator(paginator.Paginator):
 
 
 def get_absolute_url_wo_request(url):
-    if is_testing():
+    if is_testing():  # terrible hack :(
         return "http://testserver" + url
     if not settings.SITE_URL:
         raise ValueError("settings.SITE_URL is not set")

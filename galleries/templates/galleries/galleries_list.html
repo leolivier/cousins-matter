@@ -1,30 +1,26 @@
 {% load i18n galleries_tags static %}
 {% block content %}
-{% for gallery in galleries %}
-  <div class="box">
-    <article class="media">
-      {% url 'galleries:detail' gallery.id as gallery_url %}
-      <figure class="media-left">
-        <a class="image gallery-cover" href="{{gallery_url}}">
+  {% for gallery in galleries %}
+  <div class="container">
+    {% url 'galleries:detail' gallery.id as gallery_url %}
+    <div class="section">
+      <figure class="image gallery-cover is-pulled-left mr-3 mb-3">
+        <a href="{{gallery_url}}">
           <img src="{{gallery.cover_url}}">
         </a>
       </figure>
-      <div class="media-content">
-        <a class="content has-text-primary-dark" href="{{gallery_url}}">
-          <p>
-            <strong>{{gallery.name}}</strong>
-            <br/>
-            {{ gallery.description }}
-            <br/>
-            <small>{% include "galleries/photo_counter.html" %}</small>
-          </p>
-        </a>
-        {% if recursive and gallery.children.count > 0 %}
-          {% include_galleries gallery.children.all recursive=recursive %}
-        {% endif %}
-      </div>
-    </article>
+      <a class="content has-text-primary-dark" href="{{gallery_url}}">
+        <p>
+          <strong>{{gallery.name}}</strong>
+          {% include "galleries/photo_counter.html" %}
+          <br/>
+          {{ gallery.description }}
+        </p>
+      </a>
+      {% if recursive and gallery.children.count > 0 %}
+        {% include_galleries gallery.children.all recursive=recursive %}
+      {% endif %}
+    </div>
   </div>
-
-{% endfor %}
+  {% endfor %}
 {% endblock %}

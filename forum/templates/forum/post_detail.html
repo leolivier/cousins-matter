@@ -97,7 +97,7 @@
 				{%endif%}
 			</div>
 		</div>
-		<form method="POST" class="reply-form" id='edit-reply-{{reply.id}}'>
+		<form method="POST" class="reply-form is-overlay" id='edit-reply-{{reply.id}}'>
 			{% csrf_token %}
 			<div class="level">
 				<div class="level-left">{{reply_form|crispy}}</div>

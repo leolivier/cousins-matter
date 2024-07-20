@@ -177,3 +177,8 @@ def icon(name, clazz="icon", aria_hidden=False):
 <span class="{clazz}">
     <i class="mdi mdi-24px mdi-{name}" aria-hidden="true"></i>
 </span>''')
+
+
+@register.inclusion_tag("cm_main/navbar_item.html")
+def navbar_item(url, name, icon):
+    return {'url': url, 'name': name, 'icon': icon}

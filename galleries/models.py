@@ -135,7 +135,7 @@ class Gallery(models.Model):
   def clean(self):
     # check parent_id != id
     if self.pk and self.parent_id == self.pk:
-      raise ValidationError(_("Cannot be the parent of itself"))
+      raise ValidationError(_("A gallery can't be its own parent!"))
     # compute slug
     if not self.slug:
       slug = slugify(self.name)

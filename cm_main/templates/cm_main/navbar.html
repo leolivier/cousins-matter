@@ -16,70 +16,46 @@
 		<div class="navbar-start">
 			{%pages_menu%}
 			<div class="navbar-item has-dropdown is-hoverable">
-				<a class="navbar-item" href="{% url 'members:members' %}">
-					{% translate "Members" %}
-					{%icon "members" %}
-				</a>
+				{% url 'members:members' as members_url%}
+				{%navbar_item members_url _("Members") "members" %}
 				<div class="navbar-dropdown is-right">
-					<a class="navbar-item" href="{% url 'members:birthdays' %}">
-						{% translate "Birthdays" %}
-						{%icon "birthday" %}
-					</a>
-					<a class="navbar-item" href="{% url 'members:directory' %}">
-						{% translate "Show directory" %}
-						{%icon "directory" %}
-					</a>
-					<a class="navbar-item" href="{% url 'members:create' %}">
-							{% translate "Create Member" %}
-							{%icon "new-member" %}
-					</a>
-					<a class="navbar-item" href="{% url 'members:invite' %}">
-						{% translate "Invite Member" %}
-						{%icon "invite-member" %}
-					</a>
+					{% url 'members:directory' as dir_url %}
+					{%navbar_item dir_url _("Show directory") "directory" %}
+					{% url 'members:create' as create_url%}
+					{%navbar_item  create_url _("Create Member") "new-member" %}
+					{% url 'members:invite' as invite_url%}
+					{%navbar_item invite_url _("Invite Member") "invite-member" %}
 				</div>
 			</div>
 
 			<div class="navbar-item has-dropdown is-hoverable">
-				<a class="navbar-item" href="{% url 'galleries:galleries' %}">
-					{% translate "Galleries" %}
-					{%icon "galleries" %}
-				</a>
+				{% url 'galleries:galleries' as galleries_url%}
+				{%navbar_item galleries_url _("Galleries") "galleries" %}
 				<div class="navbar-dropdown">
-					<a class="navbar-item" href="{% url 'galleries:create' %}">
-						{% translate "Create Gallery" %}
-						{%icon "new-gallery" %}
-					</a>
-					<a class="navbar-item" href="{% url 'galleries:bulk_upload' %}">
-						{% translate "Bulk Upload" %}
-						{%icon "import-galleries" %}
-					</a>
+					{% url 'galleries:create' as galleries_url%}
+					{%navbar_item galleries_url _("Create Gallery") "new-gallery" %}
+					{% url 'galleries:bulk_upload' as galleries_url%}
+					{%navbar_item galleries_url _("Bulk Upload") "import-galleries" %}
 				</div>
 			</div>
 
 			<div class="navbar-item has-dropdown is-hoverable">
-				<a class="navbar-item" href="{% url 'forum:list' %}">
-					{% translate "Forum" %}
-					{%icon "forum" %}
-				</a>
+				{% url 'forum:list' as forum_url%}
+				{%navbar_item forum_url _("Forum") "forum" %}
 				<div class="navbar-dropdown">
-					<a class="navbar-item" href="{% url 'forum:create' %}">
-						{% translate "Create Post" %}
-						{%icon "new-forum" %}
-					</a>
+					{% url 'forum:create' as forum_url%}
+					{%navbar_item forum_url _("Create Post") "new-forum" %}
 				</div>
 			</div>
 
 			<div class="navbar-item has-dropdown is-hoverable">
-				<a class="navbar-item" href="{% url 'chat:chat' %}">
-					{% translate "Chat" %}
-					{%icon "chat" %}
-				</a>
+				{% url 'chat:chat' as chat_url%}
+				{%navbar_item chat_url _("Chat") "chat" %}
 			</div>
 
 			{% comment %}
-				<li><a href="{% url 'polls:polls' %}">{% translate "Polls" %}</a></li>
-				<li><a href="{% url 'admin:admin' %}">{% translate "Admin" %}</a></li>
+				<li><a href="{% url 'polls:polls' %}">{%trans "Polls" %}</a></li>
+				<li><a href="{% url 'admin:admin' %}">{%trans "Admin" %}</a></li>
 			</ul>
 			{% endcomment %}
 
@@ -91,65 +67,54 @@
 				<button class="button navbar-link is-light">
 					{%icon "settings" %}
 				</button>
-				<div class="navbar-dropdown">
-					{% if user.is_superuser %}
-					<a class="navbar-item" href="{%url 'pages-edit:list'%}">
-						{%trans 'Edit Pages'%}
-						{%icon "edit-page"%}
-					</a>
-					<a class="navbar-item" href="{% url 'members:csv_import' %}">
-						{% translate "Import members from CSV" %}
-						{%icon "import-members" %}
-					</a>
-					{% endif %}
+				<div class="navbar-dropdown is-right">
+				{% if user.is_superuser %}
+					{% url 'pages-edit:list' as page_url%}
+					{%navbar_item page_url _("Edit Pages") "edit-page" %}
+					{% url 'members:csv_import' as import_url%}
+					{%navbar_item import_url _("Import members from CSV") "import-members" %}
 					<hr class='navbar-divider'>
-					{% link_pages_starting_with '/admin/' "navbar-item" "hr class='navbar-divider'"%}
-					<span class="navbar-item">No user settings yet</span>
+				{% endif %}
+					{% link_pages_starting_with '/admin/' "admin" %}
+					{%navbar_item "#" _("No user settings yet") "account-cog" %}
 				</div>
-	</div>
+			</div>
 			<div class="navbar-item has-dropdown is-hoverable">
 				<button class="button navbar-link is-light">
 					{%icon "help" %}
 				</button>
 				{%with about_prefix='/'|add:settings.LANGUAGE_CODE|add:'/about/' private_prefix='/private/'%}
 				<div class="navbar-dropdown is-right">
-					{% link_pages_starting_with about_prefix "navbar-item" "hr class='navbar-divider'" %}
-					{% link_pages_starting_with private_prefix "navbar-item" "hr class='navbar-divider'" %}
-					<a class="navbar-item" href="{% url 'cm_main:contact' %}">{%trans "Contact the site admin" %}</a>
+					{% link_pages_starting_with about_prefix "information" %}
+					{% link_pages_starting_with private_prefix "private" %}
+					{% url 'cm_main:contact' as contact_url%}
+					{%navbar_item contact_url _("Contact the site admin") "contact" %}
 				</div>
 				{%endwith%}
 			</div>
+			{% if not user.is_authenticated %}
 			<div class="navbar-item">
 				<div class="buttons">
-					{% if not user.is_authenticated %}
-					<a class="button is-light" href="{% url 'members:login' %}">
+					<a class="button is-link" href="{% url 'members:login' %}">
 						{%icon "login" %}
-						<span>{% translate "Sign in" %}</span>
+						<span>{%trans "Sign in" %}</span>
 					</a>
-						<a class="button is-primary" href="{% url 'members:register_request' %}">
+					<a class="button has-background-link-light has-text-link" href="{% url 'members:register_request' %}">
 						{%icon "invite-request" %}
-						<span><strong>{% translate "Request invitation link" %}</strong></span>
+						<span><strong>{%trans "Request invitation link" %}</strong></span>
 					</a>
-					{% else %}
-					<div class="navbar-item has-dropdown is-hoverable">
-						<button class="button navbar-link is-light">
-							<span>{{user.username}}</span>
-							{%icon "member" %}
-						</button>
-						<div class="navbar-dropdown is-right">
-							<p class="has-text-centered is-size-4"><strong>{{user.username}}</strong></p>
-							<a class="navbar-item" href="{% url 'members:profile' %}">
-								{%icon "profile" %}
-								<span>{% translate "Profile" %}</span>
-							</a>
-							<a class="navbar-item" href="{% url 'members:logout'%}">
-								{%icon "logout" %}
-								<span>{% translate "Log Out" %}</span>
-							</a>
-						</div>
-					</div>
-				{% endif %}
 				</div>
+			</div>
+			{% else %}
+			<div class="navbar-item has-dropdown is-hoverable">
+				{%navbar_item "#" user.username "member" %}
+				<div class="navbar-dropdown is-right">
+					{% url 'members:profile' as profile_url%}
+					{%navbar_item profile_url _("Profile") "profile" %}
+					{% url 'members:logout' as v_url%}
+					{%navbar_item logout_url _("Log Out") "logout" %}
+				</div>
+				{% endif %}
 			</div>
 		</div>
 	</div>

@@ -1,8 +1,8 @@
 :root {
 	--bulma-body-font-size: 20px;
-/* to define a color theme, eg
-  --bulma-primary-h:360deg;
-*/
+	--bulma-link-h: 277deg !important;
+	--bulma-link-s: 100% !important;
+  --bulma-link-l: 57% !important;
 }
 
 /* add a 3rd level to bulma's menus */
@@ -124,6 +124,11 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 
 		.home-logo img {
 			height: 250px;
+		}
+	}
+	@media (min-width: 1025px) {
+		.navbar-dropdown {
+			font-size: var(--bulma-body-font-size)
 		}
 	}
 }

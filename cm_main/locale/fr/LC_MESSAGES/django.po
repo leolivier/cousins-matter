@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 21:09+0200\n"
+"POT-Creation-Date: 2024-07-20 18:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -97,21 +97,20 @@ msgstr "Tu peux attacher un fichier ici si nécessaire"
 msgid "Home"
 msgstr "Accueil"
 
-#: cm_main/templates/cm_main/base.html:72
+#: cm_main/templates/cm_main/base.html:64
 msgid "This site proudly built using"
 msgstr "Ce site est fièrement propulsé par"
 
-#: cm_main/templates/cm_main/base.html:74
+#: cm_main/templates/cm_main/base.html:66
 msgid "The source code is licensed"
 msgstr "Le code source est sous licence"
 
-#: cm_main/templates/cm_main/base.html:80
+#: cm_main/templates/cm_main/base.html:72
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 
-#: cm_main/templates/cm_main/base.html:83
-#: cm_main/templates/cm_main/navbar.html:119
-#: cm_main/templates/cm_main/side-menu.html:106
+#: cm_main/templates/cm_main/base.html:75
+#: cm_main/templates/cm_main/navbar.html:92
 msgid "Contact the site admin"
 msgstr "Contacter l'administrateur du site"
 
@@ -198,82 +197,75 @@ msgstr "Arréter de suivre"
 msgid "Follow"
 msgstr "Suivre"
 
+#: cm_main/templates/cm_main/include-summernote.html:5
+msgid "Toggle Note Editor Toolbar"
+msgstr "Afficher/Masquer la barre d'outils"
+
 #: cm_main/templates/cm_main/navbar.html:20
-#: cm_main/templates/cm_main/side-menu.html:4
 msgid "Members"
 msgstr "Membres"
 
-#: cm_main/templates/cm_main/navbar.html:25
-#: cm_main/templates/cm_main/side-menu.html:14
-msgid "Birthdays"
-msgstr "Anniversaires"
-
-#: cm_main/templates/cm_main/navbar.html:29
-#: cm_main/templates/cm_main/side-menu.html:20
+#: cm_main/templates/cm_main/navbar.html:23
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: cm_main/templates/cm_main/navbar.html:33
-#: cm_main/templates/cm_main/side-menu.html:26
+#: cm_main/templates/cm_main/navbar.html:25
 msgid "Create Member"
 msgstr "Créer un Membre"
 
-#: cm_main/templates/cm_main/navbar.html:37
-#: cm_main/templates/cm_main/side-menu.html:33
+#: cm_main/templates/cm_main/navbar.html:27
 msgid "Invite Member"
 msgstr "Inviter un Membre"
 
-#: cm_main/templates/cm_main/navbar.html:45
-#: cm_main/templates/cm_main/side-menu.html:45
+#: cm_main/templates/cm_main/navbar.html:33
 msgid "Galleries"
 msgstr "Galeries"
 
-#: cm_main/templates/cm_main/navbar.html:50
-#: cm_main/templates/cm_main/side-menu.html:55
+#: cm_main/templates/cm_main/navbar.html:36
 msgid "Create Gallery"
 msgstr "Créer une Galerie"
 
-#: cm_main/templates/cm_main/navbar.html:54
-#: cm_main/templates/cm_main/side-menu.html:61
+#: cm_main/templates/cm_main/navbar.html:38
 msgid "Bulk Upload"
 msgstr "Chargement en masse"
 
-#: cm_main/templates/cm_main/navbar.html:62
+#: cm_main/templates/cm_main/navbar.html:44
 msgid "Forum"
 msgstr "Forum"
 
-#: cm_main/templates/cm_main/navbar.html:67
-#: cm_main/templates/cm_main/side-menu.html:76
+#: cm_main/templates/cm_main/navbar.html:47
 msgid "Create Post"
 msgstr "Nouvelle Discussion"
 
-#: cm_main/templates/cm_main/navbar.html:75
-#: cm_main/templates/cm_main/side-menu.html:81
+#: cm_main/templates/cm_main/navbar.html:53
 msgid "Chat"
 msgstr "Chat"
 
-#: cm_main/templates/cm_main/navbar.html:98
-#: cm_main/templates/cm_main/side-menu.html:93
+#: cm_main/templates/cm_main/navbar.html:74
 msgid "Edit Pages"
 msgstr "Editer les Pages"
 
-#: cm_main/templates/cm_main/navbar.html:102
+#: cm_main/templates/cm_main/navbar.html:76
 msgid "Import members from CSV"
 msgstr "Importer des membres depuis un CSV"
 
-#: cm_main/templates/cm_main/navbar.html:128
+#: cm_main/templates/cm_main/navbar.html:80
+msgid "No user settings yet"
+msgstr "Pas encore de paramètres utilisateur"
+
+#: cm_main/templates/cm_main/navbar.html:101
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/navbar.html:132
+#: cm_main/templates/cm_main/navbar.html:105
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/navbar.html:144
+#: cm_main/templates/cm_main/navbar.html:117
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/navbar.html:148
+#: cm_main/templates/cm_main/navbar.html:121
 msgid "Log Out"
 msgstr "Déconnexion"
 
@@ -298,38 +290,6 @@ msgstr "page #%(page_num)s"
 #: cm_main/templates/cm_main/paginate_template.html:68
 msgid "go to last page"
 msgstr "aller à la dernière page"
-
-#: cm_main/templates/cm_main/side-menu.html:8
-msgid "Members List"
-msgstr "Liste des Membres"
-
-#: cm_main/templates/cm_main/side-menu.html:39
-msgid "Import from CSV"
-msgstr "Importer depuis un fichier CSV"
-
-#: cm_main/templates/cm_main/side-menu.html:49
-msgid "Galleries Gallery"
-msgstr "Galerie des Galeries"
-
-#: cm_main/templates/cm_main/side-menu.html:66
-msgid "Forums"
-msgstr "Forums"
-
-#: cm_main/templates/cm_main/side-menu.html:70
-msgid "Posts List"
-msgstr "Liste des Posts"
-
-#: cm_main/templates/cm_main/side-menu.html:85
-msgid "Chat Rooms"
-msgstr "Salons de discussion"
-
-#: cm_main/templates/cm_main/side-menu.html:89
-msgid "Settings"
-msgstr "Paramètres"
-
-#: cm_main/templates/cm_main/side-menu.html:98
-msgid "Help"
-msgstr "Aide"
 
 #: cm_main/tests.py:34
 msgid "You have a new follower!"

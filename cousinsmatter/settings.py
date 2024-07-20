@@ -222,6 +222,9 @@ DJANGO_ICONS = {
     "settings": "cog-outline",
     "menu-open": "menu-open",
     "menu-close": "menu-close",
+    "information": "information-outline",
+    "contact": "card-account-mail-outline",
+    "private": "eye-lock-outline",
     # auth icons
     "signin": "login",
     "signout": "logout",

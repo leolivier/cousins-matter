@@ -24,23 +24,47 @@ def astr(obj):
 
 
 class ChatRoomTests(MemberTestCase):
+  def do_check_chat_room(self, room_name, slug):
+    url = reverse('chat:new_room') + '?' + urlencode({'name': room_name})
+    response = self.client.get(url, follow=True)
+    # self.print_response(response)
+    # should be redirected to room detail
+    self.assertTemplateUsed(response, 'chat/room_detail.html')
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, f'<span id="show-room-name">{room_name}</span>', html=True)
+    follow = _('Follow')
+    self.assertContains(response, f'''
+<a class="button " href="{reverse("chat:toggle_follow", args=[slug])}"
+   aria-label="{follow}" title="{follow}">
+  <span class="icon is-large">
+    <i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i>
+  </span>
+  <span>{follow}</span>
+</a>''', html=True)
+    rooms = ChatRoom.objects.filter(slug=slug)
+    self.assertEqual(rooms.count(), 1)
+    return rooms.first()
+
   def test_create_chat_room(self):
     room_name = 'a clean room'
     slug = slugify(room_name)
     self.assertFalse(ChatRoom.objects.filter(slug=slug).exists())
-    response = self.client.get(reverse('chat:new_room') + '?' + urlencode({'name': room_name}), follow=True)
-    self.assertTrue(response.status_code, 200)
-    rooms = ChatRoom.objects.filter(slug=slug)
-    self.assertEqual(rooms.count(), 1)
-    response = self.client.get(reverse('chat:new_room') + '?' + urlencode({'name': room_name}), follow=True)
-    rooms = ChatRoom.objects.filter(slug=slug)
-    self.assertEqual(rooms.count(), 1, "Two rooms with the same slug created")
+    self.do_check_chat_room(room_name, slug)
+    # try a second time with the exact same name
+    # the way it is coded, this will redirect to the existing room and create an error
+    self.do_check_chat_room(room_name, slug)
+    # now, try with a direct creation, and check it raises a ValidationError
     with self.assertRaises(ValidationError):
       ChatRoom.objects.create(name=room_name)
-    response = self.client.get(reverse('chat:new_room') + '?' + urlencode({'name': '#'+room_name+'!'}), follow=True)
-    slug_name = room_name
+    # and finally, try with a different room name but which has the same slug
+    new_room_name = '#'+room_name+'!'
+    new_slug = slugify(new_room_name)
+    self.assertEqual(new_slug, slug)
+    url = reverse('chat:new_room') + '?' + urlencode({'name': new_room_name})
+    response = self.client.get(url, follow=True)
+    # self.print_response(response)
     self.assertContainsMessage(response, 'error',
-                               _(f"Another room with a similar name already exists ('{slug_name}'). "
+                               _(f"Another room with a similar name already exists ('{room_name}'). "
                                  "Please choose a different name."))
     ChatRoom.objects.all().delete()
 

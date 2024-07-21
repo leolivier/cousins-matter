@@ -2,9 +2,11 @@ from datetime import date, timedelta
 from django.conf import settings
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils.translation import override as lang_override
+from django.contrib.flatpages.models import FlatPage
+
 from members.models import Member
 from members.tests.tests_member_base import MemberTestCase
-from django.utils.translation import override as lang_override
 from members.tests.tests_birthdays import TestBirthdaysMixin
 from pages.models import create_page
 from .test_base import BasePageTestCase, TestPageMixin
@@ -19,9 +21,13 @@ class TestHomePageMixin(TestPageMixin):
     for lang in ['fr-FR', 'en-US']:
       self.home_pages[lang] = {}
       for kind in ['authenticated', 'unauthenticated']:
+        url = f'/{lang}/home/{kind}/'
+        # first, remove the one created by the fixture in other classes
+        FlatPage.objects.filter(url=url).delete()
+        # then create the new one
         content = f'{base_content} <p>language code={lang} and auth={kind}</p>'
         self.home_pages[lang][kind] = create_page(
-          url=f'/{lang}/home/{kind}/',
+          url=url,
           title='a home page',
           content=content
         )

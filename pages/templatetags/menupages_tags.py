@@ -1,6 +1,5 @@
 import logging
-from django.http import Http404
-from django.template import Library
+from django.template import Library, TemplateSyntaxError
 from django.contrib.flatpages.models import FlatPage
 from django.conf import settings
 from django.utils.safestring import mark_safe
@@ -67,8 +66,8 @@ def include_page(url):
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
   page = FlatPage.objects.filter(url=url).first()
   if page is None:
-    raise Http404(_(f"Cannot load page from url {url}, it was not found in the "
-                    "database. Please contact the administrator of the site"))
+    raise TemplateSyntaxError(_(f"Cannot load page from url {url}, it was not found in the "
+                                "database. Please contact the administrator of the site"))
   return mark_safe(page.content)
 
 

@@ -31,7 +31,7 @@ def redirect_to_referer(request):
     if request.META.get('HTTP_REFERER'):
         return redirect(request.META.get('HTTP_REFERER'))
     else:
-        return redirect('/')
+        return redirect(reverse("cm_main:Home"))
 
 
 def check_file_size(file, limit):

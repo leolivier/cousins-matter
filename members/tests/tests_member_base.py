@@ -15,6 +15,7 @@ def get_counter():
 
 
 class MemberTestCase(TestCase):
+  fixtures = ['init-pages.json']
 
   member = None
   username = 'foobar'

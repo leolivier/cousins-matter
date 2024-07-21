@@ -6,6 +6,7 @@ import io
 import string
 from django.core.files import File
 from django.forms import ValidationError
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views import generic
@@ -14,7 +15,6 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm
-from cousinsmatter.utils import redirect_to_referer
 from django.conf import settings
 
 from ..models import ALL_FIELD_NAMES, MANDATORY_MEMBER_FIELD_NAMES, MEMBER_FIELD_NAMES, ADDRESS_FIELD_NAMES
@@ -96,7 +96,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     member.family = Family.objects.get_or_create(name=family_name, parent=None)
 
   def _update_member(self, member, row, activate_users):
-    "update an existing memebr based on row content"
+    "update an existing member based on row content"
     changed = False
     # for all member fields but username
     # if new value for this field, then override existing one
@@ -187,10 +187,10 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         messages.success(request, _("CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or updated") %
                          {'nbLines': nbLines, 'nbMembers': nbMembers})
         for error in errors:
-          messages.errors(request, _("Warning: %(error)s") % {'error': error})
+          messages.warning(request, _("Warning: %(error)s") % {'error': error})
       except ValidationError as ve:
         messages.error(request, ve.message)
-        return redirect_to_referer(request)
+        return render(request, self.template_name, {'form': form})
       except Exception as e:
         messages.error(request, e.__str__())
         raise

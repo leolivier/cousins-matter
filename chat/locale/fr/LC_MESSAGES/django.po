@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 21:35+0200\n"
+"POT-Creation-Date: 2024-07-22 14:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr "salons de chat"
 msgid "Another room with the same name already exists"
 msgstr "Un autre salon portant le même nom existe déjà"
 
-#: chat/models.py:39 chat/tests.py:43
+#: chat/models.py:39
 #, python-brace-format
 msgid ""
 "Another room with a similar name already exists ('{slug_name}'). Please "
@@ -103,6 +103,15 @@ msgstr "Message"
 msgid "Submit"
 msgstr "Envoyer"
 
-#: chat/tests.py:54
+#: chat/tests.py:35 chat/tests.py:78
 msgid "Follow"
 msgstr "Suivre"
+
+#: chat/tests.py:67
+#, python-brace-format
+msgid ""
+"Another room with a similar name already exists ('{room_name}'). Please "
+"choose a different name."
+msgstr ""
+"Un autre salon avec un nom similaire existe déjà ('{room_name}'). Veuillez "
+"choisir un autre nom."

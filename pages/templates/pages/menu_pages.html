@@ -1,6 +1,6 @@
 {%load i18n cm_tags%}
 <div class="navbar-item has-dropdown">
-	<div class="navbar-item">{%trans 'Pages'%} {%icon "page-level" %}</div>
+	{%navbar_item "#"	_("Pages") "page-level" %}
 	<div class="navbar-dropdown">
 		{%for level, sublevels in page_tree.items %}
 			{%include "pages/menu_pages_level.html" with level=level sublevels=sublevels %}

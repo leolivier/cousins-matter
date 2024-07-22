@@ -2,7 +2,8 @@
 <div class="container">
 	<div class="card">
 		<header class="card-header">
-			<p class="card-header-title">{% title title %}</p>
+			{# depending where it is include, we must use has-text-centered or is-centered #}
+			<p class="card-header-title has-text-centered is-centered">{% title title %}</p>
 		</header>
 		<form method="post" {%if action%}action="{{action}}"{%endif%}>
 			{% csrf_token %}
@@ -11,11 +12,13 @@
 					{{ message_form | crispy}}
 			</section>
 			<footer class="card-footer">
-				<div class="buttons is-centered">
-					<button type="submit" class="button is-primary">{%translate "Submit" %}</button>
+				<div class="buttons mx-auto">
+					<button type="submit" class="button is-dark">
+						{%icon "send" %} <span>{%translate "Send" %}</span>
+					</button>
 					<a type="reset" class="button" aria-label="close" 
 						href="{%if post%}{%url 'forum:display' post.id %}{%else%}{%url 'forum:list'%}{%endif%}">
-						{%translate "Cancel" %}
+						{%icon "cancel" %} <span>{%translate "Cancel" %}</span>
 					</a>
 				</div>
 			</footer>

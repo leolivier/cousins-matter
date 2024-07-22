@@ -56,10 +56,15 @@
 		<form enctype="multipart/form-data" method="post">
 			{% csrf_token %}
 			{{ form | crispy }}
-			<div class="buttons mt-4 is-centered">
-				<button type="submit" class="button">
-					{%icon "save" %}
-					<span>{% translate "Submit" %}</span>
+			<div class="buttons is-centered">
+				<button type="submit" class="button is-dark">
+				{%if form.instance.pk %}
+					{%icon "update"%}
+					<span>{%translate "Update" %}</span>
+				{%else%}
+					{%icon "create"%}
+					<span>{%translate "Create" %}</span>
+				{%endif%}
 				</button>
 			</div>
 		</form>
@@ -75,33 +80,33 @@
 		{% url 'members:modal_create_address' as create_address %}
 		{%trans "Address created" as address_created %}
 		{% with function="add_selected_option('#id_address', response.address_id, response.address_str, '"|add:address_created|add:"');" %}
-			{% include "members/modal_form.html" with modal_id="create-address-modal" title=_("New Address") action_url=create_address form=addr_form action=_("Create") function=function %}
+			{% include "members/modal_form.html" with modal_id="create-address-modal" title=_("New Address") action_url=create_address form=addr_form function=function %}
 		{% endwith %}
 
 		{% if form.address.value %}
 			{% url 'members:modal_update_address' m_form.address.value as change_address %}
 			{% trans 'Address updated' as address_updated%}
 			{% with function="change_option('#id_address', response.address_id, response.address_str, '"|add:address_updated|add:"');" %}
-				{% include "members/modal_form.html" with modal_id="change-address-modal" title=_("Change Address") action_url=change_address form=addr_form action=_("Update") function=function %}
+				{% include "members/modal_form.html" with modal_id="change-address-modal" title=_("Change Address") action_url=change_address form=addr_form function=function %}
 			{% endwith %}
 		{% endif %}
 		
 		{% url 'members:modal_create_family' as create_family %}
 		{% trans 'Family created' as family_created %}
 		{% with function="add_selected_option('#id_family', response.family_id, response.family_name, '"|add:family_created|add:"');" %}
-			{% include "members/modal_form.html" with modal_id="create-family-modal" title=_("New Family") action_url=create_family form=family_form action=_("Create") function=function %}
+			{% include "members/modal_form.html" with modal_id="create-family-modal" title=_("New Family") action_url=create_family form=family_form function=function %}
 		{% endwith %}
 
 		{% trans 'Parent family created' as parent_family_created %}
 		{% with function="add_selected_option('#id_parent', response.family_id, response.family_name, '"|add:parent_family_created|add:"');" %}
-			{% include "members/modal_form.html" with modal_id="create-parent-family-modal" title=_("New Parent Family") action_url=create_family form=family_form action=_("Create") function=function %}
+			{% include "members/modal_form.html" with modal_id="create-parent-family-modal" title=_("New Parent Family") action_url=create_family form=family_form function=function %}
 		{% endwith %}
 
 		{% if form.family.value %}
 			{% url 'members:modal_update_family' m_form.family.value as change_family %}
 			{% trans 'Family updated' as family_updated %}
 			{% with function="change_option('#id_family', response.family_id, response.family_name, '"|add:family_updated|add:"');" %}
-				{% include "members/modal_form.html" with modal_id="change-family-modal" title=_("Change Family") url=change_family form=family_form action=_("Update") function=function %}
+				{% include "members/modal_form.html" with modal_id="change-family-modal" title=_("Change Family") url=change_family form=family_form function=function %}
 			{% endwith %}
 		{% endif %}
 

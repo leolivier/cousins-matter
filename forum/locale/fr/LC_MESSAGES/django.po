@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 21:35+0200\n"
+"POT-Creation-Date: 2024-07-22 14:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -47,26 +47,26 @@ msgstr[1] "%(ncomments)s commentaires"
 
 #: forum/templates/forum/comment_list.html:32
 #: forum/templates/forum/post_detail.html:42
-#: forum/templates/forum/post_detail.html:89
+#: forum/templates/forum/post_detail.html:90
 msgid "Edit"
 msgstr "Modifier"
 
 #: forum/templates/forum/comment_list.html:36
 #: forum/templates/forum/post_detail.html:45
-#: forum/templates/forum/post_detail.html:93
+#: forum/templates/forum/post_detail.html:94
 msgid "Delete"
 msgstr "Supprimer"
 
 #: forum/templates/forum/comment_list.html:48
-#: forum/templates/forum/post_detail.html:106
+#: forum/templates/forum/post_detail.html:108
 msgid "Update"
 msgstr "Mettre à jour"
 
 #: forum/templates/forum/comment_list.html:51
 #: forum/templates/forum/comment_list.html:76
 #: forum/templates/forum/post_confirm_delete.html:21
-#: forum/templates/forum/post_detail.html:109
-#: forum/templates/forum/post_form_include.html:18
+#: forum/templates/forum/post_detail.html:111
+#: forum/templates/forum/post_form_include.html:21
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -111,7 +111,7 @@ msgstr[1] "%(nreplies)s réponses"
 msgid "No answer"
 msgstr "Pas de réponse"
 
-#: forum/templates/forum/post_detail.html:127
+#: forum/templates/forum/post_detail.html:129
 msgid "Your answer"
 msgstr "Ta réponse"
 
@@ -126,9 +126,9 @@ msgstr "Modifier le message"
 msgid "Create Post"
 msgstr "Créer une discussion"
 
-#: forum/templates/forum/post_form_include.html:15
-msgid "Submit"
-msgstr "Envoyer"
+#: forum/templates/forum/post_form_include.html:17
+msgid "Send"
+msgstr ""
 
 #: forum/templates/forum/post_list.html:3
 #: forum/templates/forum/post_list.html:8

@@ -2,12 +2,17 @@
 {% load i18n crispy_forms_tags cm_tags %}
 {% block title %}{% title _("Bulk Upload Photos") %}{% endblock %}
 {% block content %}
-<div class="container mt-5">
-	<h1 class="title">{% title _("Bulk Upload Photos") %}</h1>
+<div class="container mt-5 px-2">
+	<h1 class="title has-text-centered">{% title _("Bulk Upload Photos") %}</h1>
 	<form method="post"  enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form | crispy}}
-		<button type="submit" class="button is-success upload-button">{%translate "Upload" %}</button>
+		<p class="buttons is-centered">
+			<button type="submit" class="button is-dark upload-button">
+				{%icon "upload"%}
+				<span>{%translate "Upload" %}</span>
+			</button>
+		</p>
 	</form>
 </div>
 {% endblock %}

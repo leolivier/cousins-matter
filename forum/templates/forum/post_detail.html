@@ -86,25 +86,27 @@
 				</div>
 				{% if reply.author.username == user.username %}
 				<div class="level-right">
-					<a class="button" onclick="show_edit_reply_form('{{reply.id}}')" title="{%trans 'Edit' %}">
-						{%icon "edit" %}
-					</a>
-					{% url 'forum:delete_reply' reply.id as delete_reply_url %}
-					<a class="button" onclick="delete_reply('{{delete_reply_url}}', '{{reply.id}}')" title="{%trans 'Delete' %}">
-						{%icon "delete" %}
-					</a>
+					<div class="buttons">
+						<a class="button" onclick="show_edit_reply_form('{{reply.id}}')" title="{%trans 'Edit' %}">
+							{%icon "edit" %}
+						</a>
+						{% url 'forum:delete_reply' reply.id as delete_reply_url %}
+						<a class="button" onclick="delete_reply('{{delete_reply_url}}', '{{reply.id}}')" title="{%trans 'Delete' %}">
+							{%icon "delete" %}
+						</a>
+					</div>
 				</div>
 				{%endif%}
 			</div>
 		</div>
-		<form method="POST" class="reply-form is-overlay" id='edit-reply-{{reply.id}}'>
+		<form method="POST" class="reply-form" id='edit-reply-{{reply.id}}'>
 			{% csrf_token %}
 			<div class="level">
-				<div class="level-left">{{reply_form|crispy}}</div>
+				<div class="level-left is-flex-shrink-3">{{reply_form|crispy}}</div>
 				<div class="level-right">
 					<div class="buttons">
-						<button type="submit" class="button is-link" title="{%trans 'Update' %}">
-							{%icon "submit" %}
+						<button type="submit" class="button is-dark" title="{%trans 'Update' %}">
+							{%icon "send" %}
 						</button>
 						<button type="reset" class="button" onclick="hide_edit_reply_form('{{reply.id}}')" title="{%trans 'Cancel' %}">
 							{%icon "cancel" %}

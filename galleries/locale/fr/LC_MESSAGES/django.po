@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-20 18:26+0200\n"
+"POT-Creation-Date: 2024-07-22 14:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -86,30 +86,9 @@ msgstr "Une autre galerie racine avec le même nom existe déjà"
 msgid "Bulk Upload Photos"
 msgstr "Télécharger des photos en masse"
 
-#: galleries/templates/galleries/bulk_upload.html:10
+#: galleries/templates/galleries/bulk_upload.html:13
 msgid "Upload"
 msgstr "Télécharger"
-
-#: galleries/templates/galleries/create_gallery.html:3
-#: galleries/templates/galleries/create_gallery.html:7
-msgid "Create Gallery"
-msgstr "Création d'une Galerie"
-
-#: galleries/templates/galleries/create_gallery.html:11
-#: galleries/templates/galleries/photo_form.html:31
-msgid "Create"
-msgstr "Créer"
-
-#: galleries/templates/galleries/edit_gallery.html:3
-#: galleries/templates/galleries/edit_gallery.html:7
-#: galleries/templates/galleries/gallery_detail.html:56
-msgid "Edit Gallery"
-msgstr "Modification d'une Galerie"
-
-#: galleries/templates/galleries/edit_gallery.html:14
-#: galleries/templates/galleries/photo_form.html:28
-msgid "Update"
-msgstr "Mettre à jour"
 
 #: galleries/templates/galleries/galleries_tree.html:3
 #: galleries/templates/galleries/galleries_tree.html:5
@@ -172,6 +151,27 @@ msgstr "Ajouter une Photo"
 #: galleries/templates/galleries/gallery_detail.html:52
 msgid "Create Sub Gallery"
 msgstr "Créer une Sous-Galerie"
+
+#: galleries/templates/galleries/gallery_detail.html:56
+#: galleries/templates/galleries/gallery_form.html:5
+#: galleries/templates/galleries/gallery_form.html:15
+msgid "Edit Gallery"
+msgstr "Modification d'une Galerie"
+
+#: galleries/templates/galleries/gallery_form.html:7
+#: galleries/templates/galleries/gallery_form.html:17
+msgid "Create Gallery"
+msgstr "Création d'une Galerie"
+
+#: galleries/templates/galleries/gallery_form.html:27
+#: galleries/templates/galleries/photo_form.html:28
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: galleries/templates/galleries/gallery_form.html:30
+#: galleries/templates/galleries/photo_form.html:31
+msgid "Create"
+msgstr "Créer"
 
 #: galleries/templates/galleries/photo_confirm_delete.html:6
 #: galleries/templates/galleries/photo_detail.html:30

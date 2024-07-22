@@ -20,7 +20,20 @@
 	display: block;
 }
 
-/* RELATED WIDGET WRAPPER */
+.navbar {
+	--bulma-navbar-divider-background-l:92% !important;
+}
+
+@media screen and (min-width: 1024px) {
+	.navbar-dropdown .navbar-link {
+		padding-inline-end: 3rem;
+		padding: .375rem 1rem 0.375rem 0rem;
+		white-space: nowrap;
+		height: 2rem;
+	}
+}
+
+	/* RELATED WIDGET WRAPPER */
 .related-widget-wrapper {
   display: flex;
   gap: 0 10px;

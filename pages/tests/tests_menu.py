@@ -58,27 +58,28 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
     response = self.client.get(reverse('pages-edit:list'), follow=True)
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
-    page_icon = icon('page')
-    level_icon = icon('page-level')
+    page_icon = icon('page', 'is-small mr-3')
+    level_icon = icon('page-level', 'ml-0')
     self.assertContains(response, f'''
 <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[0].url}">
-  {pages[0].title}
   {page_icon}
+  <span>{pages[0].title}</span>
 </a>''', html=True)
     self.assertContains(response, f'''
 <div class="navbar-item has-dropdown is-hoverable">
-  <div class="navbar-link">level {level_icon}</div>
+  <p class="navbar-link">
+    {level_icon}
+    <span>level</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </p>
   <div class="navbar-dropdown">
-    <div class="navbar-item has-dropdown is-hoverable">
-      <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[1].url}">
-        {pages[1].title}  {page_icon}
-      </a>
-    </div>
-    <div class="navbar-item has-dropdown is-hoverable">
-      <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[2].url}">
-        {pages[2].title} {page_icon}
-      </a>
-    </div>
+    <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[1].url}">
+      {page_icon}
+      <span>{pages[1].title}</span>
+    </a>
+    <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[2].url}">
+      {page_icon}
+      <span>{pages[2].title}</span>
+    </a>
   </div>
 </div>''', html=True)
 

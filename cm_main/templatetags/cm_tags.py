@@ -182,3 +182,10 @@ def icon(name, clazz="icon", aria_hidden=False):
 @register.inclusion_tag("cm_main/navbar_item.html")
 def navbar_item(url, name, icon):
     return {'url': url, 'name': name, 'icon': icon}
+
+
+@register.filter(name='startswith')
+def startswith(text, starts):
+    if isinstance(text, str):
+        return text.startswith(starts)
+    return False

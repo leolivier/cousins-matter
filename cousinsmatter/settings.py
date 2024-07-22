@@ -210,7 +210,8 @@ DJANGO_ICONS = {
     "edit": "pencil-outline",
     "save": "content-save-outline",
     "submit": "check-circle-outline",
-    "submit-plus": "checkbox-marked-circle-plus-outline",
+    "create": "checkbox-marked-circle-auto-outline",
+    "create-plus": "checkbox-marked-circle-plus-outline",
     "update": "check-underline-circle-outline",
     "cancel": "close-circle-outline",
     "new": "plus-box-outline",
@@ -225,6 +226,7 @@ DJANGO_ICONS = {
     "information": "information-outline",
     "contact": "card-account-mail-outline",
     "private": "eye-lock-outline",
+    "upload": "upload-box-outline",
     # auth icons
     "signin": "login",
     "signout": "logout",

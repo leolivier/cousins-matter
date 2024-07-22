@@ -28,15 +28,17 @@
 						{{comment.date}}
 					</p>
 				</div>
-				{% if comment.author.username == user.username %}
-				<a class="button" onclick="show_edit_comment_form('{{comment.id}}');" title="{%trans 'Edit' %}">
-					{%icon "edit" %}
-				</a>
-				{%url "forum:delete_comment" comment.id as delete_url%}
-				<a class="button" onclick="delete_comment('{{delete_url}}', '{{comment.id}}')" title="{%trans 'Delete' %}">
-					{%icon "delete" %}
-				</a>
-				{%endif%}
+				<p class="buttons is-centered">
+					{% if comment.author.username == user.username %}
+					<a class="button" onclick="show_edit_comment_form('{{comment.id}}');" title="{%trans 'Edit' %}">
+						{%icon "edit" %}
+					</a>
+					{%url "forum:delete_comment" comment.id as delete_url%}
+					<a class="button" onclick="delete_comment('{{delete_url}}', '{{comment.id}}')" title="{%trans 'Delete' %}">
+						{%icon "delete" %}
+					</a>
+					{%endif%}
+				</p>
 			</div>
 		</div>
 		<form method="POST" class="comment-form" id='edit-comment-{{comment.id}}'>

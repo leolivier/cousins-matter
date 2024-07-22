@@ -12,7 +12,7 @@
 {%plural%}
 	{{nreplies}} answers
 {%endblocktranslate%}
-<div class="container mt-5">
+<div class="container mt-5 px-2">
 	<div class="level">
 		<div class="level-left">
 			<div class="title is-2">{{post.title}}</div>
@@ -39,12 +39,14 @@
 		</div>
 		<div class="level-right">
 			{% if post.first_message.author.username == user.username %}
-			<a class="button" href="{% url 'forum:edit' post.id %}" title="{%trans 'Edit' %}">
-				{%icon "edit" %}
-			</a>
-			<button class="button js-modal-trigger" data-target="delete-post-modal" title="{%trans 'Delete' %}">
-				{%icon "delete" %}
-			</button>
+			<div class="buttons">
+				<a class="button" href="{% url 'forum:edit' post.id %}" title="{%trans 'Edit' %}">
+					{%icon "edit" %}
+				</a>
+				<button class="button js-modal-trigger" data-target="delete-post-modal" title="{%trans 'Delete' %}">
+					{%icon "delete" %}
+				</button>
+			</div>
 			{%else%}
 				{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
 				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=post %}

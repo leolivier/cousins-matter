@@ -155,3 +155,13 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 	height: 64px;
 	width: 64px;
 }
+
+/* fix a bulma bug */
+	.button .icon {
+		margin-inline-end: calc(var(--bulma-button-padding-horizontal)*-.5) !important;
+		margin-inline-start: calc(var(--bulma-button-padding-horizontal)*-.5) !important;
+	}
+	.button:has(> :last-child:not(.is-hidden-mobile)) .icon:first-child:not(:last-child) {
+		margin-inline-end: calc(var(--bulma-button-padding-horizontal).25) !important;
+		margin-inline-start: calc(var(--bulma-button-padding-horizontal)-.5) !important;
+	}

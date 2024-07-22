@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class GalleryCreateView(LoginRequiredMixin, generic.CreateView):
 
-  template_name = "galleries/create_gallery.html"
+  template_name = "galleries/gallery_form.html"
   model = Gallery
   form_class = GalleryForm
 
@@ -27,7 +27,7 @@ class GalleryCreateView(LoginRequiredMixin, generic.CreateView):
 
 class GalleryUpdateView(LoginRequiredMixin, generic.UpdateView):
 
-  template_name = "galleries/edit_gallery.html"
+  template_name = "galleries/gallery_form.html"
   model = Gallery
   form_class = GalleryForm
 

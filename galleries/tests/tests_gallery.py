@@ -81,7 +81,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     response = self.client.get(url)
     # print(response.content)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'galleries/create_gallery.html')
+    self.assertTemplateUsed(response, 'galleries/gallery_form.html')
     self.assertIs(response.resolver_match.func.view_class, GalleryCreateView)
     # check rich editor by class richtextarea, the rest is dynamic in the browser, can't be tested
     self.assertContains(response,

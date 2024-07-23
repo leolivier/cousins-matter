@@ -113,7 +113,7 @@ def do_title(parser, token):
                 "second argument to '%s' must be 'as'" % bits[0]
             )
         var_name = bits[3]
-    
+
     return TitleNode(title, var_name)
 
 

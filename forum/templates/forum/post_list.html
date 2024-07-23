@@ -5,7 +5,7 @@
 <div class="container">
 	<div class="panel">
 		<div class="panel-heading is-flex is-align-items-center is-justify-content-center">
-			{% title _("Latest Posts") %}
+			<span class="is-flex-grow-1 has-text-centered">{% title _("Latest Posts") %}</span>
 			{% trans 'Create Post' as create_label %}
 			<a class="button ml-6" href="{%url 'forum:create'%}" aria-label="{{create_label}}" title="{{create_label}}">
 				{%icon "new-forum" %} <span class="is-hidden-mobile ml-3">{{create_label}}</span>
@@ -54,7 +54,7 @@
 				</div>
 				<div class="mr-1">
 					{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
-					{%include "cm_main/followers/toggle-follow-button.html" with followed_object=post %}
+					{%include "cm_main/followers/toggle-follow-button.html" with followed_object=post extra_class="is-pulled-right" is_hidden_mobile="true"%}
 				</div>
 			</div>
 		{%endfor%}

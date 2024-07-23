@@ -115,8 +115,8 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 		}
 	
 		.mini-avatar {
-			width: 48px;
-			height: 48px;
+			width: 64px;
+			height: 64px;
 		}
 
 		.home-logo img {
@@ -131,8 +131,8 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 		}
 
 		.mini-avatar {
-			width: 48px;
-			height: 48px;
+			width: 128px;
+			height: 128px;
 		}
 
 		.home-logo img {

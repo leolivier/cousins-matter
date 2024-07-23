@@ -4,13 +4,13 @@
 	{%trans "Stop Following" as unfollow%}
 	aria-label="{{unfollow}}" title="{{unfollow}}">
 	{%icon "unfollow" %}
-	<span>{{unfollow}}</span>
+	<span {%if is_hidden_mobile%}class="is-hidden-mobile"{%endif%}>{{unfollow}}</span>
 </a>
 {%else%}
 <a class="button {{extra_class}}" href="{{toggle_follow_url}}" 
 	{%trans 'Follow' as follow%}
 	aria-label="{{follow}}" title="{{follow}}">
 	{%icon "follow" %}
-	<span>{{follow}}</span>
+	<span {%if is_hidden_mobile%}class="is-hidden-mobile"{%endif%}>{{follow}}</span>
 </a>
 {%endif%}

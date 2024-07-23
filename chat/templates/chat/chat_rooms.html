@@ -58,7 +58,7 @@
 				</a>
 				{%endif%}
 				{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
-				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room extra_class="is-pulled-right"%}
+				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room extra_class="is-pulled-right" is_hidden_mobile="true"%}
 			</div>
 		{%endfor%}
 	</nav>

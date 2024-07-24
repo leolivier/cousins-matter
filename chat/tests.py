@@ -72,7 +72,7 @@ class ChatRoomTests(MemberTestCase):
     rooms = [ChatRoom.objects.create(name='Chat Room #%i' % i) for i in range(5)]
     ChatMessage.objects.create(room=rooms[0], content='a message', member=self.member)
     response = self.client.get(reverse('chat:chat'))
-    # self.print_response(response)
+    self.print_response(response)
     nmsgs = 1
     nfollowers = 0
     follow = _('Follow')
@@ -97,7 +97,7 @@ class ChatRoomTests(MemberTestCase):
   <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}"
     aria-label="{follow}" title="{follow}">
     {icon('follow')}
-    <span>{follow}</span>
+    <span class="is-hidden-mobile">{follow}</span>
   </a>
 </div>''', html=True)
     nmsgs = 0
@@ -112,7 +112,7 @@ class ChatRoomTests(MemberTestCase):
   <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}"
     aria-label="{follow}" title="{follow}">
     {icon('follow')}
-    <span>{follow}</span>
+    <span class="is-hidden-mobile">{follow}</span>
   </a>
 </div>''', html=True)
     ChatRoom.objects.all().delete()

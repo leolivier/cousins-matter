@@ -5,12 +5,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import generic
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.core.exceptions import RequestDataTooBig
 
 from cousinsmatter.utils import Paginator, is_ajax
 from forum.views.views_follow import check_followers_on_message, check_followers_on_new_post
@@ -62,6 +63,13 @@ class PostDisplayView(LoginRequiredMixin, generic.DetailView):
 class PostCreateView(LoginRequiredMixin, generic.CreateView):
     model = Post
 
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except RequestDataTooBig:
+            return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
+
     def get(self, request):
       post_form = PostForm()
       message_form = MessageForm()
@@ -98,6 +106,13 @@ class PostEditView(LoginRequiredMixin, generic.UpdateView):
     model = Post
     form_class = PostForm
 
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except RequestDataTooBig:
+            return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
+
     def get(self, request, pk):
       instance = get_object_or_404(Post, pk=pk)
       post_form = PostForm(instance=instance)
@@ -109,13 +124,14 @@ class PostEditView(LoginRequiredMixin, generic.UpdateView):
       instance = get_object_or_404(Post, pk=pk)
       if instance.first_message.author.id != request.user.id:
         raise PermissionError("Only authors can edit their posts")
-
       post_form = PostForm(request.POST, instance=instance)
       message_form = MessageForm(request.POST, instance=instance.first_message)
       if post_form.is_valid() and message_form.is_valid():
         message_form.save()
         post = post_form.save()
         return redirect("forum:display", post.id)
+      return render(request, "forum/post_form.html",
+                    context={'post_form': post_form, 'message_form': message_form, 'post': instance})
 
 
 @login_required

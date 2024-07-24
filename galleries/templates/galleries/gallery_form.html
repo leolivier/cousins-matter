@@ -7,7 +7,9 @@
 		{% title _("Create Gallery") %}
 	{% endif %}
 {% endblock %}
-{% block header %}{%include "cm_main/include-summernote.html" %}{%endblock%}
+{% block header %}
+	{%include "cm_main/include-summernote.html" with maxsize=settings.COMMENT_MAX_SIZE %}
+{%endblock%}
 {% block content %}
 <div class="container mt-5 px-2">
 	<h1 class="title has-text-centered">

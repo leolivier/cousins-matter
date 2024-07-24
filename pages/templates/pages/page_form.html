@@ -1,7 +1,7 @@
 {% extends "cm_main/base.html" %}
 {% load i18n crispy_forms_tags cm_tags %}
 {% block title %}{%if form.instance%}{% title _("Update Page") %}{%else%}{% title _("Create Page") %}{%endif%}{% endblock %}
-{% block header %}{%include "cm_main/include-summernote.html" %}{%endblock%}
+{% block header %}{%include "cm_main/include-summernote.html" with maxsize=settings.PAGE_MAX_SIZE %}{%endblock%}
 {% block content %}
 <div class="container mt-5">
 	<h1 class="title">{%if form.instance%}{% title _("Update Page") %}{%else%}{% title _("Create Page") %}{%endif%}</h1>

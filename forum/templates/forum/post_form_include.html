@@ -5,7 +5,7 @@
 			{# depending where it is included, we must use has-text-centered or is-centered #}
 			<p class="card-header-title has-text-centered is-centered">{% title title %}</p>
 		</header>
-		<form method="post" class="check-content-size" {%if action%}action="{{action}}"{%endif%}>
+		<form method="post" {%if action%}action="{{action}}"{%endif%}>
 			{% csrf_token %}
 			<section class="card-content">
 					{{ post_form | crispy}}

@@ -1,10 +1,13 @@
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect
 from django.views import generic
-from django.http import JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import RequestDataTooBig
+from django.utils.translation import gettext as _
+
 from cousinsmatter.utils import is_ajax
 from forum.views.views_follow import check_followers_on_comment
 from ..models import Message, Comment
@@ -14,6 +17,13 @@ from ..forms import CommentForm
 class CommentCreateView(LoginRequiredMixin, generic.CreateView):
     model = Comment
     form_class = CommentForm
+
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except RequestDataTooBig:
+            return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
 
     def post(self, request, message_id):
       message = get_object_or_404(Message, pk=message_id)
@@ -29,6 +39,13 @@ class CommentCreateView(LoginRequiredMixin, generic.CreateView):
 class CommentEditView(LoginRequiredMixin, generic.UpdateView):
     model = Comment
     form_class = CommentForm
+
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except RequestDataTooBig:
+            return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
 
     def post(self, request, pk):
       if is_ajax(request):

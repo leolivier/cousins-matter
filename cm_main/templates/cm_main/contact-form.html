@@ -1,6 +1,8 @@
 {% extends "cm_main/base.html" %}
 {% load i18n cm_tags crispy_forms_tags %}
-{% block header %}{%include "cm_main/include-summernote.html" %}{%endblock%}
+{% block header %}
+{%include "cm_main/include-summernote.html" with maxsize=settings.DATA_UPLOAD_MAX_MEMORY_SIZE %}
+{%endblock%}
 {% block title %}{% title _("Contact Form") %}{% endblock %}
 {% block content %}
 <div class="container px-2">

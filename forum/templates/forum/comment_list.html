@@ -41,7 +41,7 @@
 				</p>
 			</div>
 		</div>
-		<form method="POST" class="comment-form check-content-size" id='edit-comment-{{comment.id}}'>
+		<form method="POST" class="comment-form" id='edit-comment-{{comment.id}}'>
 			{% csrf_token %}
 			<div class="level">
 				<div class="level-left">{{comment_form|crispy}}</div>

@@ -1,9 +1,8 @@
 {% extends "cm_main/base.html" %}
 {% load i18n cm_tags crispy_forms_tags static %}
 {% block header %}
-	{%include "cm_main/include-summernote.html" %}
+	{%include "cm_main/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
 	<script src="{% static 'forum/js/forum.js' %}"></script>
-	<script src="{% static 'forum/js/check-posts-size.js' %}"></script>
 {%endblock%}
 {% block title %}{% title _("Post") %}{% endblock %}
 {% block content %}
@@ -97,7 +96,7 @@
 				{%endif%}
 			</div>
 		</div>
-		<form method="POST" class="reply-form check-content-size" id='edit-reply-{{reply.id}}'>
+		<form method="POST" class="reply-form" id='edit-reply-{{reply.id}}'>
 			{% csrf_token %}
 			<div class="level">
 				<div class="level-left is-flex-shrink-3">{{reply_form|crispy}}</div>

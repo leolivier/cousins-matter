@@ -1,6 +1,8 @@
 {% extends "cm_main/base.html" %}
-{% load i18n crispy_forms_tags cm_tags %}
-{% block header %}{%include "cm_main/include-summernote.html" %}{%endblock%}
+{% load i18n crispy_forms_tags cm_tags static %}
+{% block header %}
+	{%include "cm_main/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
+{%endblock%}
 {% block title %}
   {% if post %}
     {% title _("Edit Post") %}

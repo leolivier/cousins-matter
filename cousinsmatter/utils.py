@@ -2,6 +2,7 @@
 
 import math
 from pathlib import PosixPath
+from contextlib import contextmanager
 # from pprint import pprint
 from django.conf import settings
 from django.forms import ValidationError
@@ -86,3 +87,13 @@ def get_absolute_url_wo_request(url):
     if not settings.SITE_URL:
         raise ValueError("settings.SITE_URL is not set")
     return settings.SITE_URL + url
+
+
+@contextmanager
+def temporary_log_level(logger, level):
+    original_level = logger.level
+    logger.setLevel(level)
+    try:
+        yield
+    finally:
+        logger.setLevel(original_level)

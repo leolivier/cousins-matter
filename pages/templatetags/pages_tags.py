@@ -4,27 +4,28 @@ from django.contrib.flatpages.models import FlatPage
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
+# from cousinsmatter.utils import temporary_log_level
 
 register = Library()
 logger = logging.getLogger(__name__)
 
 
-@register.inclusion_tag("pages/menu_pages.html")
-def pages_menu():
+def build_pages_tree(prefix=None):
   """
-  Retrieves all flat pages that start with the menu page URL prefix and creates a nested tree structure
-  based on their URLs. The resulting tree is passed to the "pages/menu_pages.html" template for rendering.
+  Based on given flat pages list filters by "url starting with prefix" if prefix provided, creates a nested tree structure
+  based on their URLs.
 
   Returns:
     dict: A dictionary containing the nested tree structure of the flat pages. The dictionary leaves are
     the urls of the flat pages.
   """
-  menu_pages = FlatPage.objects.filter(url__istartswith=settings.MENU_PAGE_URL_PREFIX)
-  # logger.debug(menu_pages.query)
+  fps = FlatPage.objects
+  pages = fps.filter(url__istartswith=prefix) if prefix else fps.all()
+
   page_tree = {}
   last_tree = None
-  start = len(settings.MENU_PAGE_URL_PREFIX)
-  for page in menu_pages:
+  start = len(prefix) if prefix else 0
+  for page in pages:
     trc = ''
     url = page.url[start:-1]
     logger.debug(trc, 'url:', url)
@@ -45,7 +46,35 @@ def pages_menu():
 
     logger.debug('tree for url:', page.url, 'is', page_tree)
   logger.debug("final tree:", page_tree)
-  return {'page_tree': page_tree}
+  return page_tree
+
+
+@register.inclusion_tag("pages/menu_pages.html")
+def pages_menu():
+  """
+  Creates a nested tree structure from all flat pages that start with the menu page URL prefix
+  and pass it to the "pages/menu_pages.html" template for rendering.
+  """
+  return {'page_tree': build_pages_tree(settings.MENU_PAGE_URL_PREFIX)}
+
+
+@register.inclusion_tag("pages/page_subtree.html")
+def pages_tree():
+  """
+  Creates a nested tree structure from all flat pages and pass it to 
+  the "pages/page_tree.html" template for rendering.
+  """
+  # with temporary_log_level(logger, logging.WARNING):
+  return {'page_tree': build_pages_tree()}
+
+
+@register.filter
+def make_dict(key, value):
+  """used in recursive calls of page_subtree.html to transform tuples
+    (key, value) returned by dict.items into {key: value} as page_subtree
+    can onky deal with dicts.
+  """
+  return {key: value}
 
 
 @register.simple_tag

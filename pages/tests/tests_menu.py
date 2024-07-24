@@ -10,7 +10,7 @@ from .test_base import BasePageTestCase, TestPageMixin
 
 class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_only_superuser_can_create_pages(self):
-    response = self.client.get(reverse('pages-edit:list'))
+    response = self.client.get(reverse('pages-edit:edit_list'))
     self.assertEqual(response.status_code, 403)
     page_data = {
         'url': '/publish/1rst-title33333/',
@@ -55,7 +55,7 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
       }
     ]
     pages = [self._test_create_page(page_data) for page_data in page_list_data]
-    response = self.client.get(reverse('pages-edit:list'), follow=True)
+    response = self.client.get(reverse('pages-edit:edit_list'), follow=True)
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     page_icon = icon('page', 'is-small mr-3')
@@ -92,7 +92,7 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
       }
 
     bad_page = self._test_create_page(bad_page_data)
-    response = self.client.get(reverse('pages-edit:list'), follow=True)
+    response = self.client.get(reverse('pages-edit:edit_list'), follow=True)
     # print("response", response)
     self.assertEqual(response.status_code, 200)
     self.assertNotContains(response, f'''

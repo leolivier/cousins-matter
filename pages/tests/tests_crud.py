@@ -91,7 +91,7 @@ class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
     }
     page2 = self._test_create_page(new_page_data)
     # now, display them
-    response = self.client.get(reverse("pages-edit:list"))
+    response = self.client.get(reverse("pages-edit:edit_list"))
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     for page in [page1, page2]:

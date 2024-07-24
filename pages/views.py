@@ -39,6 +39,11 @@ class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
     return render(request, self.template_name, {'form': form})
 
 
-class PageListView(OnlyAdminMixin, generic.ListView):
+class PageAdminListView(OnlyAdminMixin, generic.ListView):
   model = FlatPage
-  template_name = "pages/pages_list.html"
+  template_name = "pages/pages_admin_list.html"
+
+
+class PageTreeView(OnlyAdminMixin, generic.ListView):
+  model = FlatPage
+  template_name = "pages/page_tree.html"

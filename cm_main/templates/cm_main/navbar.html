@@ -1,4 +1,4 @@
-{% load i18n flatpages menupages_tags cm_tags static %}
+{% load i18n flatpages pages_tags cm_tags static %}
 <nav class="navbar is-primary has-shadow" role="navigation" aria-label="main navigation">
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
@@ -69,7 +69,7 @@
 				</button>
 				<div class="navbar-dropdown is-right">
 				{% if user.is_superuser %}
-					{% url 'pages-edit:list' as page_url%}
+					{% url 'pages-edit:edit_list' as page_url%}
 					{%navbar_item page_url _("Edit Pages") "edit-page" %}
 					{% url 'members:csv_import' as import_url%}
 					{%navbar_item import_url _("Import members from CSV") "import-members" %}

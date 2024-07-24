@@ -165,3 +165,21 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 		margin-inline-end: calc(var(--bulma-button-padding-horizontal).25) !important;
 		margin-inline-start: calc(var(--bulma-button-padding-horizontal)-.5) !important;
 	}
+
+	/* tree management */
+.tree-item {
+	padding-left: calc(var(--bulma-size-large)*2.2);
+}
+.tree-root > .tree-item {
+	padding-left: 0;
+}
+.tree-root > .tree-item > .tree-level {
+	padding-left: calc(var(--bulma-size-large)*1.2);
+}
+.tree-item::before {
+	content: "└─ ";
+	color: hsl(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l));
+}
+.tree-root > .tree-item::before {
+	content: "";
+}

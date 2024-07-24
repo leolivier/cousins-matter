@@ -1,4 +1,4 @@
-{%load menupages_tags cm_tags%}
+{%load pages_tags cm_tags%}
 {%if sublevels.title%} {# sublevels is a page, we're at the bottom of the tree, provide the link #}
 	{%url 'django.contrib.flatpages.views.flatpage' sublevels.url as fp_url %}
 	{%navbar_item fp_url sublevels.title "page"%}

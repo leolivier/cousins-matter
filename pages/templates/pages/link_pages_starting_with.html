@@ -1,4 +1,4 @@
-{%load menupages_tags cm_tags %}
+{%load pages_tags cm_tags %}
 {%for page in pages%}
   {%if page.registration_required and request.user.is_authenticated or not page.registration_required%}
     {%navbar_item page.url page.title icon %}

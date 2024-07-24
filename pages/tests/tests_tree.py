@@ -27,9 +27,10 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
       for _ in range(nbl):
         levels.append(random.choice(page_data['levels']))
       jlevels = '/'.join(levels)
+      title = page_data['title']
       data = {
         'url': f'/{jlevels}/{slug}/',
-        'title': f'{page_data['title']} #{i+1}',
+        'title': f'{title} #{i+1}',
         'content': f'{page_data['content']} #{i+1}',
       }
       page = self._test_create_page(data)

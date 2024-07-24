@@ -20,7 +20,8 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     pages = []
     for i in range(5):
       nbl = random.randint(1, 4)
-      title = f'{page_data['title']} #{i+1}'
+      title = page_data['title']
+      title = f'{title} #{i+1}'
       slug = slugify(title)
       levels = []
       for _ in range(nbl):

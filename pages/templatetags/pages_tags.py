@@ -61,7 +61,7 @@ def pages_menu():
 @register.inclusion_tag("pages/page_subtree.html")
 def pages_tree():
   """
-  Creates a nested tree structure from all flat pages and pass it to 
+  Creates a nested tree structure from all flat pages and pass it to
   the "pages/page_tree.html" template for rendering.
   """
   # with temporary_log_level(logger, logging.WARNING):

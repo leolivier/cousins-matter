@@ -53,7 +53,9 @@ class MemberTestCase(TestCase):
     return super().tearDown()
 
   def print_response(self, response):
+    print('*'*80)
     print(response.content.decode().replace('\\t', '\t').replace('\\n', '\n'))
+    print('*'*80)
 
   def login(self):
     self.client.logout()

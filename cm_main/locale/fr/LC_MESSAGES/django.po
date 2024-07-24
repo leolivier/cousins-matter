@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-20 18:26+0200\n"
+"POT-Creation-Date: 2024-07-24 20:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -114,22 +114,22 @@ msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 msgid "Contact the site admin"
 msgstr "Contacter l'administrateur du site"
 
-#: cm_main/templates/cm_main/contact-form.html:4
-#: cm_main/templates/cm_main/contact-form.html:7
+#: cm_main/templates/cm_main/contact-form.html:6
+#: cm_main/templates/cm_main/contact-form.html:9
 msgid "Contact Form"
 msgstr "Formulaire de contact"
 
-#: cm_main/templates/cm_main/contact-form.html:8
+#: cm_main/templates/cm_main/contact-form.html:10
 msgid "Please fill out the form below to contact the admin of this site:"
 msgstr ""
 "Merci de remplir le formulaire ci-dessous pour contacter l'administrateur de "
 "ce site :"
 
-#: cm_main/templates/cm_main/contact-form.html:13
+#: cm_main/templates/cm_main/contact-form.html:15
 msgid "Send"
 msgstr "Envoyer"
 
-#: cm_main/templates/cm_main/contact-form.html:14
+#: cm_main/templates/cm_main/contact-form.html:16
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -193,13 +193,17 @@ msgstr ""
 msgid "Stop Following"
 msgstr "Arréter de suivre"
 
-#: cm_main/templates/cm_main/followers/toggle-follow-button.html:9
+#: cm_main/templates/cm_main/followers/toggle-follow-button.html:11
 msgid "Follow"
 msgstr "Suivre"
 
-#: cm_main/templates/cm_main/include-summernote.html:5
+#: cm_main/templates/cm_main/include-summernote.html:6
 msgid "Toggle Note Editor Toolbar"
 msgstr "Afficher/Masquer la barre d'outils"
+
+#: cm_main/templates/cm_main/include-summernote.html:7
+msgid "Remaining characters:"
+msgstr "Caractères restants:"
 
 #: cm_main/templates/cm_main/navbar.html:20
 msgid "Members"
@@ -261,11 +265,11 @@ msgstr "Connexion"
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/navbar.html:117
+#: cm_main/templates/cm_main/navbar.html:114
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/navbar.html:121
+#: cm_main/templates/cm_main/navbar.html:116
 msgid "Log Out"
 msgstr "Déconnexion"
 
@@ -309,27 +313,27 @@ msgstr ""
 msgid "This field is required."
 msgstr "Ce champ est obigatoire."
 
-#: cm_main/tests.py:163 cm_main/views.py:100
+#: cm_main/tests.py:163 cm_main/views.py:101
 msgid "Your message has been sent"
 msgstr "Ton message a été envoyé"
 
-#: cm_main/tests.py:166 cm_main/views.py:75
+#: cm_main/tests.py:166 cm_main/views.py:76
 msgid "Contact form"
 msgstr "Formulaire de contact"
 
-#: cm_main/tests.py:173 cm_main/views.py:72
+#: cm_main/tests.py:173 cm_main/views.py:73
 #, python-format
 msgid "You have a new message from %(name)s (%(email)s). "
 msgstr "Tu as reçu un nouveau message de %(name)s (%(email)s). "
 
-#: cm_main/views.py:38
+#: cm_main/views.py:39
 msgid "Media not found"
 msgstr "Média non trouvé"
 
-#: cm_main/views.py:76
+#: cm_main/views.py:77
 msgid "But your mailer tools is too old to show it :'("
 msgstr "Mais ton logiciel de messagerie est trop vieux pour l'afficher :'("
 
-#: cm_main/views.py:95
+#: cm_main/views.py:96
 msgid "This file type is not supported"
 msgstr "Ce type de fichier n'est pas supporté"

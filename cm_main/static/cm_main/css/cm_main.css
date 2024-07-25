@@ -157,15 +157,17 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 }
 
 /* fix a bulma bug */
-	.button .icon {
-		margin-inline-end: calc(var(--bulma-button-padding-horizontal)*-.5) !important;
-		margin-inline-start: calc(var(--bulma-button-padding-horizontal)*-.5) !important;
+@media screen {
+	@media (max-width: 768px) {
+		.button .icon {
+			margin-inline-end: calc(var(--bulma-button-padding-horizontal)*-.5) !important;
+			margin-inline-start: calc(var(--bulma-button-padding-horizontal)*-.5) !important;
+		}
+		.button:has(> :last-child:not(.is-hidden-mobile)) .icon:first-child:not(:last-child) {
+			margin-inline-end: calc(var(--bulma-button-padding-horizontal).25) !important;
+			margin-inline-start: calc(var(--bulma-button-padding-horizontal)-.5) !important;
+		} 
 	}
-	.button:has(> :last-child:not(.is-hidden-mobile)) .icon:first-child:not(:last-child) {
-		margin-inline-end: calc(var(--bulma-button-padding-horizontal).25) !important;
-		margin-inline-start: calc(var(--bulma-button-padding-horizontal)-.5) !important;
-	}
-
 	/* tree management */
 .tree-item {
 	padding-left: calc(var(--bulma-size-large)*2.2);

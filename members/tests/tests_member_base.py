@@ -81,8 +81,8 @@ class MemberTestCase(TestCase):
     self.assertTrue(member.is_authenticated)
 
   def assertMemberIsNotLogged(self):
-    umemberer = get_user(self.client)
-    self.assertFalse(umemberer.is_authenticated)
+    member = get_user(self.client)
+    self.assertFalse(member.is_authenticated)
 
   def superuser_login(self):
     self.assertIsNotNone(self.superuser)

@@ -12,7 +12,6 @@ from channels.testing import WebsocketCommunicator
 from channels.routing import URLRouter
 
 from cm_main.tests import TestFollowersMixin
-from cm_main.templatetags.cm_tags import icon
 from members.tests.tests_member_base import MemberTestCase
 from .models import ChatMessage, ChatRoom
 from .routing import websocket_urlpatterns
@@ -98,7 +97,7 @@ class ChatRoomTests(MemberTestCase):
     <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
   </div>
   <div class="mr-1">
-    <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}" 
+    <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}"
       aria-label="{follow}" title="{follow}">
       <span class="icon is-large">
         <i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i>
@@ -126,10 +125,10 @@ class ChatRoomTests(MemberTestCase):
     <span class="tag ">{_(f'{nfollowers} follower')}</span>
   </div>
   <div class="is-flex-grow-1">
-    <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[i].slug])}">{rooms[i].name}</a> 
+    <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[i].slug])}">{rooms[i].name}</a>
   </div>
   <div class="mr-1">
-    <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}" 
+    <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}"
       aria-label="{follow}" title="{follow}">
       <span class="icon is-large">
        <i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i>

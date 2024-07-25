@@ -72,48 +72,71 @@ class ChatRoomTests(MemberTestCase):
     rooms = [ChatRoom.objects.create(name='Chat Room #%i' % i) for i in range(5)]
     ChatMessage.objects.create(room=rooms[0], content='a message', member=self.member)
     response = self.client.get(reverse('chat:chat'))
-    # self.print_response(response)
+    self.print_response(response)
     nmsgs = 1
     nfollowers = 0
     follow = _('Follow')
     self.assertContains(response, f'''
-<div class="panel-block">
-  <figure class="image mini-avatar mr-2">
-    <img class="is-rounded" src="{self.member.avatar_mini_url()}" alt="foobar">
-  </figure>
-  <p class="content">
-    {_('Created by:')}<br>
-    <span class="has-text-primary has-text-weight-bold has-text-right mr-5">
-      {self.member.username}
-      <a href="{reverse('members:detail', args=[self.member.id])}" aria-label="{_('profile')}">
-        {icon('member-link')}
-      </a>
-      <br>
-      <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
-      <span class="tag ">{_(f'{nfollowers} follower')}</span>
-    </span>
-  </p>
-  <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
-  <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}"
-    aria-label="{follow}" title="{follow}">
-    {icon('follow')}
-    <span class="is-hidden-mobile">{follow}</span>
-  </a>
+<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
+  <div class="px-1">
+    <figure class="image mini-avatar mr-2">
+      <img class="is-rounded" src="{self.member.avatar_mini_url()}" alt="foobar">
+    </figure>
+  </div>
+  <div class="has-text-primary has-text-weight-bold has-text-right mr-5">
+    {self.member.get_full_name()}
+    <a href="{reverse("members:detail", kwargs={'pk': self.member.id})}" aria-label="profil">
+      <span class="icon is-large">
+        <i class="mdi mdi-24px mdi-open-in-new" aria-hidden="true"></i>
+      </span>
+    </a>
+    <br>
+    <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
+    <span class="tag ">{_(f'{nfollowers} follower')}</span>
+  </div>
+  <div class="is-flex-grow-1">
+    <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
+  </div>
+  <div class="mr-1">
+    <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}" 
+      aria-label="{follow}" title="{follow}">
+      <span class="icon is-large">
+        <i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i>
+      </span>
+      <span class="is-hidden-mobile">{follow}</span>
+    </a>
+  </div>
 </div>''', html=True)
     nmsgs = 0
     for i in range(1, 5):
       self.assertContains(response, f'''
-<div class="panel-block">
-  {icon('chat', 'panel-icon')}
-  <a class="block" href="{reverse('chat:room', args=[rooms[i].slug])}">
+<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
+  <div class="px-1">
+    <figure class="image mini-avatar mr-2">
+      <img class="is-rounded" src="/static/members/default-mini-avatar.jpg">
+    </figure>
+  </div>
+  <div class="has-text-primary has-text-weight-bold has-text-right mr-5">
+    {_("No author yet")}
+    <span class="icon has-text-link is-large">
+      <i class="mdi mdi-24px mdi-chat" aria-hidden="true"></i>
+    </span>
+    <br>
     <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
-    <span class="title is-size-6">{rooms[i].name}</span>
-  </a>
-  <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}"
-    aria-label="{follow}" title="{follow}">
-    {icon('follow')}
-    <span class="is-hidden-mobile">{follow}</span>
-  </a>
+    <span class="tag ">{_(f'{nfollowers} follower')}</span>
+  </div>
+  <div class="is-flex-grow-1">
+    <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[i].slug])}">{rooms[i].name}</a> 
+  </div>
+  <div class="mr-1">
+    <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}" 
+      aria-label="{follow}" title="{follow}">
+      <span class="icon is-large">
+       <i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i>
+      </span>
+      <span class="is-hidden-mobile">{follow}</span>
+    </a>
+  </div>
 </div>''', html=True)
     ChatRoom.objects.all().delete()
 

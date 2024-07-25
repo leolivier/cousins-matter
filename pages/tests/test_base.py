@@ -32,7 +32,7 @@ class TestPageMixin():
     page = FlatPage.objects.get(url=page_data['url'])
     self.assertIsNotNone(page)
     self.assertEqual(page_data['url'], page.url)
-    self.assertContains(response, f'''<div class="container">
+    self.assertContains(response, f'''<div class="container px-2">
 {page_data['content']}
 </div>''', html=True)
     return page

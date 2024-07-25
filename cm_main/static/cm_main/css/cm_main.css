@@ -168,7 +168,9 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 			margin-inline-start: calc(var(--bulma-button-padding-horizontal)-.5) !important;
 		} 
 	}
-	/* tree management */
+}
+
+/* tree management */
 .tree-item {
 	padding-left: calc(var(--bulma-size-large)*2.2);
 }

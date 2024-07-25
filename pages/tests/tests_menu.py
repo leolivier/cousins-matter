@@ -10,7 +10,7 @@ from .test_base import BasePageTestCase, TestPageMixin
 
 class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_only_superuser_can_create_pages(self):
-    response = self.client.get(reverse('pages-edit:list'))
+    response = self.client.get(reverse('pages-edit:edit_list'))
     self.assertEqual(response.status_code, 403)
     page_data = {
         'url': '/publish/1rst-title33333/',
@@ -55,30 +55,31 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
       }
     ]
     pages = [self._test_create_page(page_data) for page_data in page_list_data]
-    response = self.client.get(reverse('pages-edit:list'), follow=True)
+    response = self.client.get(reverse('pages-edit:edit_list'), follow=True)
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
-    page_icon = icon('page')
-    level_icon = icon('page-level')
+    page_icon = icon('page', 'is-small mr-3')
+    level_icon = icon('page-level', 'ml-0')
     self.assertContains(response, f'''
 <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[0].url}">
-  {pages[0].title}
   {page_icon}
+  <span>{pages[0].title}</span>
 </a>''', html=True)
     self.assertContains(response, f'''
 <div class="navbar-item has-dropdown is-hoverable">
-  <div class="navbar-link">level {level_icon}</div>
+  <p class="navbar-link">
+    {level_icon}
+    <span>level</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </p>
   <div class="navbar-dropdown">
-    <div class="navbar-item has-dropdown is-hoverable">
-      <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[1].url}">
-        {pages[1].title}  {page_icon}
-      </a>
-    </div>
-    <div class="navbar-item has-dropdown is-hoverable">
-      <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[2].url}">
-        {pages[2].title} {page_icon}
-      </a>
-    </div>
+    <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[1].url}">
+      {page_icon}
+      <span>{pages[1].title}</span>
+    </a>
+    <a class="navbar-item" href="/{settings.PAGES_URL_PREFIX}{pages[2].url}">
+      {page_icon}
+      <span>{pages[2].title}</span>
+    </a>
   </div>
 </div>''', html=True)
 
@@ -91,7 +92,7 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
       }
 
     bad_page = self._test_create_page(bad_page_data)
-    response = self.client.get(reverse('pages-edit:list'), follow=True)
+    response = self.client.get(reverse('pages-edit:edit_list'), follow=True)
     # print("response", response)
     self.assertEqual(response.status_code, 200)
     self.assertNotContains(response, f'''

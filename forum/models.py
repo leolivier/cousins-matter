@@ -20,7 +20,8 @@ class Message(models.Model):
     ]
 
   def __str__(self):
-    return self.content[:100]
+    # return self.content
+    return self.content
 
 
 class Post(models.Model):

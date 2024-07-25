@@ -4,10 +4,10 @@
 {% block header %}{%include "cm_main/include-bulma-calendar.html" %}{%endblock%}
 {% block content %}
 {%with member=form.instance%}
-<div class="container">
+<div class="container px-2">
 	<h1 class="title has-text-centered is-2">{{title}}</h1>
 	{% if member and member.id %} {# existing member #}
-	<div class="level mx-2 my-2">
+	<div class="level px-2 my-2">
 		<div class="level-left">
     	<figure class="image thumbnail">
         <img class="is-rounded" src="{{ member.avatar_url }}">
@@ -27,39 +27,46 @@
 			{% endif %}
 			</p>
     </div>
-		<div class="level-right buttons">
-			{% if member.id == request.user.id %}{# profile update #}
-			<a class="button" href="{% url 'change_password' %}">
-				{%icon "change-password" %}
-				<span>{% translate "Change Password" %}</span>
-			</a>
-			{%elif member.managing_member and member.managing_member.id == request.user.id %} {# update managed member #}
-			<a class="button" href="{% url 'members:activate' pk %}">
-				{%icon "activate-member" %}
-				<span>{% translate "Activate Account" %}</span>
-			</a>
-			{% endif %}
-			<button class="button js-modal-trigger" data-target="delete-member-modal" title="{%trans 'Delete' %}">
-				{%icon "delete" %}
-				<span>
-					{% if member.id == request.user.id %}{# profile update #}
-					{%trans "Remove my account" %}
-					{% else %}
-					{%trans "Delete member" %}
-					{% endif %}
-				</span>
-			</button>
+		<div class="level-right is-flex-shrink-1">
+			<div class="buttons is-centered">
+				{% if member.id == request.user.id %}{# profile update #}
+				<a class="button" href="{% url 'change_password' %}">
+					{%icon "change-password" %}
+					<span>{% translate "Change Password" %}</span>
+				</a>
+				{%elif member.managing_member and member.managing_member.id == request.user.id %} {# update managed member #}
+				<a class="button" href="{% url 'members:activate' pk %}">
+					{%icon "activate-member" %}
+					<span>{% translate "Activate Account" %}</span>
+				</a>
+				{% endif %}
+				<button class="button js-modal-trigger" data-target="delete-member-modal" title="{%trans 'Delete' %}">
+					{%icon "delete" %}
+					<span>
+						{% if member.id == request.user.id %}{# profile update #}
+						{%trans "Remove my account" %}
+						{% else %}
+						{%trans "Delete member" %}
+						{% endif %}
+					</span>
+				</button>
+			</div>
 		</div>
   </div>
 	{% endif %}
-	<div class="container mx-2">
+	<div class="container px-2">
 		<form enctype="multipart/form-data" method="post">
 			{% csrf_token %}
 			{{ form | crispy }}
-			<div class="buttons mt-4 is-centered">
-				<button type="submit" class="button is-responsive">
-					{%icon "save" %}
-					<span>{% translate "Submit" %}</span>
+			<div class="buttons is-centered">
+				<button type="submit" class="button is-dark">
+				{%if form.instance.pk %}
+					{%icon "update"%}
+					<span>{%translate "Update" %}</span>
+				{%else%}
+					{%icon "create"%}
+					<span>{%translate "Create" %}</span>
+				{%endif%}
 				</button>
 			</div>
 		</form>
@@ -75,33 +82,33 @@
 		{% url 'members:modal_create_address' as create_address %}
 		{%trans "Address created" as address_created %}
 		{% with function="add_selected_option('#id_address', response.address_id, response.address_str, '"|add:address_created|add:"');" %}
-			{% include "members/modal_form.html" with modal_id="create-address-modal" title=_("New Address") action_url=create_address form=addr_form action=_("Create") function=function %}
+			{% include "members/modal_form.html" with modal_id="create-address-modal" title=_("New Address") action_url=create_address form=addr_form function=function %}
 		{% endwith %}
 
 		{% if form.address.value %}
 			{% url 'members:modal_update_address' m_form.address.value as change_address %}
 			{% trans 'Address updated' as address_updated%}
 			{% with function="change_option('#id_address', response.address_id, response.address_str, '"|add:address_updated|add:"');" %}
-				{% include "members/modal_form.html" with modal_id="change-address-modal" title=_("Change Address") action_url=change_address form=addr_form action=_("Update") function=function %}
+				{% include "members/modal_form.html" with modal_id="change-address-modal" title=_("Change Address") action_url=change_address form=addr_form function=function %}
 			{% endwith %}
 		{% endif %}
 		
 		{% url 'members:modal_create_family' as create_family %}
 		{% trans 'Family created' as family_created %}
 		{% with function="add_selected_option('#id_family', response.family_id, response.family_name, '"|add:family_created|add:"');" %}
-			{% include "members/modal_form.html" with modal_id="create-family-modal" title=_("New Family") action_url=create_family form=family_form action=_("Create") function=function %}
+			{% include "members/modal_form.html" with modal_id="create-family-modal" title=_("New Family") action_url=create_family form=family_form function=function %}
 		{% endwith %}
 
 		{% trans 'Parent family created' as parent_family_created %}
 		{% with function="add_selected_option('#id_parent', response.family_id, response.family_name, '"|add:parent_family_created|add:"');" %}
-			{% include "members/modal_form.html" with modal_id="create-parent-family-modal" title=_("New Parent Family") action_url=create_family form=family_form action=_("Create") function=function %}
+			{% include "members/modal_form.html" with modal_id="create-parent-family-modal" title=_("New Parent Family") action_url=create_family form=family_form function=function %}
 		{% endwith %}
 
 		{% if form.family.value %}
 			{% url 'members:modal_update_family' m_form.family.value as change_family %}
 			{% trans 'Family updated' as family_updated %}
 			{% with function="change_option('#id_family', response.family_id, response.family_name, '"|add:family_updated|add:"');" %}
-				{% include "members/modal_form.html" with modal_id="change-family-modal" title=_("Change Family") url=change_family form=family_form action=_("Update") function=function %}
+				{% include "members/modal_form.html" with modal_id="change-family-modal" title=_("Change Family") url=change_family form=family_form function=function %}
 			{% endwith %}
 		{% endif %}
 

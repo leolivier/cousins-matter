@@ -33,5 +33,11 @@ msgstr "Maintenant"
 msgid "Validate"
 msgstr "Valider"
 
-msgid "Are you sure?"
-msgstr "Es-tu sûr?"
+msgid "Are you sure you want to delete this comment?"
+msgstr "Es-tu sûr de vouloir supprimer ce commentaire?"
+
+msgid "Are you sure you want to delete this reply and its comments?"
+msgstr "Es-tu sûr de vouloir supprimer cette réponse et ses commentaires?"
+
+msgid "The message content is too large. Please select smaller images."
+msgstr "Le contenu du message est trop grand. Merci de sélectionner des images plus petites."

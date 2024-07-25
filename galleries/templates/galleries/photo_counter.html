@@ -1,6 +1,8 @@
 {% load i18n %}
+<span class="tag">
 {% if gallery.photo_set.count > 0 %}
 {% blocktranslate count counter=gallery.photo_set.count %}One photo{% plural %}{{ counter }} photos{% endblocktranslate %}
 {% else %}
 {% trans 'No photo' %}
 {% endif %}
+</span>

@@ -2,12 +2,14 @@
 {% load i18n crispy_forms_tags cm_tags %}
 {% block title %}{% title _("Invite Members") %} {% endblock %}
 {% block content %}
-<div class="container mt-5">
-	<h1 class="title">{% title _("Invite Members") %}</h1>
+<div class="container px-2 mt-5">
+	<h1 class="title has-text-centered">{% title _("Invite Members") %}</h1>
 	<form method="post">
 		{% csrf_token %}
 		{{ form | crispy}}
-		<button type="submit" class="button is-success">{%translate "Invite" %}</button>
+		<p class="buttons is-centered">
+			<button type="submit" class="button is-success">{%translate "Invite" %}</button>
+		</p>
 	</form>
 </div>
 {% endblock %}

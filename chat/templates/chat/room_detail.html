@@ -15,16 +15,16 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 {% block title %}{% title room.name %}{% endblock %}
 {% block content %}
 {%with chat_messages=page.object_list%}
-<div class="container">
-		<p class="title">{%trans "Let's chat!" %}</p>
+<div class="container px-2">
+		<h1 class="title has-text-centered">{%trans "Let's chat!" %}</h1>
 
 		<div class="panel">
-			<div class="panel-heading is-flex">
+			<div class="panel-heading is-flex is-align-items-center is-justify-content-center">
 				<span id="show-room-name">{{room.name}}</span>
 				<form method="POST" id="room-edit-form">
 					{% csrf_token %}
 						<span class="control">
-							<input class="input" style="width: auto;" type="text" placeholder="{%trans 'Room name'%}" 
+							<input class="input" class="is-flex-grow-1" type="text" placeholder="{%trans 'Room name'%}" 
 										id="room-name-input" name="room-name" title="{%trans 'hit return to submit, escape to give up'%}">
 						</span>
 				</form>
@@ -47,11 +47,15 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 			<div class="panel-block">
 				<span class="control">{%paginate page%}</span>
 			</div>
-			<div  id="chat-messages" style="max-height: 500px; overflow-y: scroll;">
+			<div  id="chat-messages">
 			{%for msg in chat_messages %}
-			<div class="panel-block  has-text-right">
+			<div class="panel-block has-text-right is-flex is-flex-wrap-wrap is-align-items-flex-start">
 				<p class="has-text-primary has-text-weight-bold mr-5">
-					{{msg.member.username}}<br>
+					{{msg.member.username}}
+					<a href="{%url 'members:detail' msg.member.id %}" aria-label="{%trans 'profile'%}">
+						{%icon "member-link" %}
+					</a>
+					<br>
 					<span class="is-size-7">{{msg.date_added|date:"DATETIME_FORMAT"}}</span>
 				</p>
 				<p class="content">{{msg.content}}</p> 

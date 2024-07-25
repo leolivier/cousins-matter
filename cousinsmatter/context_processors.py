@@ -2,6 +2,7 @@ from django.conf import settings as django_settings
 
 # Write here the settings you want to expose to the templates.
 EXPOSED_SETTINGS = [
+  'DATA_UPLOAD_MAX_MEMORY_SIZE',
   # 'BASE_DIR',
   'SITE_NAME',
   'SITE_DOMAIN',
@@ -28,8 +29,8 @@ EXPOSED_SETTINGS = [
   # 'DEFAULT_GALLERY_PAGE_SIZE',
   'MAX_GALLERY_BULK_UPLOAD_SIZE',
   'MAX_CSV_FILE_SIZE',
-  # 'MESSAGE_MAX_SIZE',
-  # 'MESSAGE_COMMENTS_MAX_SIZE',
+  'MESSAGE_MAX_SIZE',
+  'MESSAGE_COMMENTS_MAX_SIZE',
   'DARK_MODE',
 ]
 

@@ -81,7 +81,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     response = self.client.get(url)
     # print(response.content)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'galleries/create_gallery.html')
+    self.assertTemplateUsed(response, 'galleries/gallery_form.html')
     self.assertIs(response.resolver_match.func.view_class, GalleryCreateView)
     # check rich editor by class richtextarea, the rest is dynamic in the browser, can't be tested
     self.assertContains(response,
@@ -105,7 +105,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     sgal_name = get_gallery_name()
     response = self.client.post(url, {'name': sgal_name, 'description': "a test sub gallery", 'parent': rg.id}, follow=True)
     self.assertTrue(response.status_code, 200)
-    # print(response.content)
+    # self.print_response(response)
     # get the sub gallery by name and parent
     sg = Gallery.objects.filter(name=sgal_name, parent=rg).first()
     self.assertIsNotNone(sg)
@@ -113,13 +113,14 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     self.assertRedirects(response, reverse("galleries:detail", args=[sg.id]), 302, 200)
     # check the response contains the sub gallery details (name, photo count)
     # weird behavior of assertContains which requires to add blank lines around 'no photo'
-    self.assertContains(response, f'''<div class="media-content">
-  <h1 class="title">{sg.name} (
-
-{_("No photo")}
-
-)</h1>
-    <p class="content">{sg.description}</p>
+    self.assertContains(response, f'''
+<div class="container">
+  <figure class="image gallery-cover is-pulled-left mr-3 mb-3 is-flex is-align-items-center is-justify-content-center">
+    <img src="{sg.cover_url()}">
+  </figure>
+  <span class="title is-4">{sg.name}</span>
+  <span class="tag">{_("No photo")}</span>
+  <p>{sg.description}</p>
 </div>''', html=True)
     # check root gallery has the sub gallery for child
     self.assertTrue(rg.children.first().name == sgal_name)
@@ -131,13 +132,16 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
 
     # check the sub gallery appears in the root gallery children list
     response = self.client.get(reverse("galleries:detail", args=[rg.id]), follow=True)
+    # self.print_response(response)
     url = reverse("galleries:detail", args=[sg.id])
-    self.assertContains(response, f'''<div class="container has-text-centered">
-  <a class="mr-2" href="{url}">
-    <figure class="image sub-gallery-cover" style="margin:auto">
+    self.assertContains(response, f'''
+<p class="content has-text-centered mr-3">{_("Children galleries")}</p>
+<div class="grid">
+  <a class="cell mr-2" href="{url}">
+    <figure class="image sub-gallery-cover mx-auto">
       <img src="{sg.cover_url()}">
     </figure>
-    <figcaption>{sg.name}</figcaption>
+    <p class="has-text-centered">{sg.name}</p>
   </a>
 </div>''', html=True)
 
@@ -161,36 +165,35 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     if n == 0:
       return ''
     name = get_gallery_name()
-    gal = Gallery(name=name, parent=parent)
+    gal = Gallery(name=name, parent=parent, description=f'a test gallery named {name}')
     gal.save()
     url = reverse("galleries:detail", args=[gal.id])
     html = f'''
-<div class="box">
-  <article class="media">
-    <figure class="media-left">
-      <a class="image gallery-cover" href="{url}">
-        <img src="{settings.DEFAULT_GALLERY_COVER_URL}">
+<div class="container">
+  <div class="section">
+    <figure class="image gallery-cover is-pulled-left mr-3 mb-3">
+      <a href="{url}">
+        <img src="{gal.cover_url()}">
       </a>
     </figure>
-    <div class="media-content">
-      <a class="content has-text-primary-dark" href="{url}">
-        <p>
-          <strong>{gal.name}</strong>
-          <br>{gal.description}<br>
-          <small>{_("No photo")}</small>
-        </p>
-      </a>
-      {self.rec_build_tree(n-1, gal)}
-    </div>
-  </article>
-</div>
-    '''
+    <a class="content has-text-primary-dark" href="{url}">
+      <p>
+        <strong>{gal.name}</strong>
+        <span class="tag">{_("No photo")}</span>
+        <br/>
+        {gal.description}
+      </p>
+    </a>
+    {self.rec_build_tree(n-1, gal)}
+  </div>
+</div>'''
     return html
 
   def test_tree_view(self):
     htmls = self.rec_build_tree(4, None)
     url = reverse("galleries:galleries")
     response = self.client.get(url)
+    # self.print_response(response)
     self.assertContains(response, htmls, html=True)
 
 

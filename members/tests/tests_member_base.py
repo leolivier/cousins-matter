@@ -15,6 +15,7 @@ def get_counter():
 
 
 class MemberTestCase(TestCase):
+  fixtures = ['init-pages.json']
 
   member = None
   username = 'foobar'
@@ -52,7 +53,9 @@ class MemberTestCase(TestCase):
     return super().tearDown()
 
   def print_response(self, response):
+    print('*'*80)
     print(response.content.decode().replace('\\t', '\t').replace('\\n', '\n'))
+    print('*'*80)
 
   def login(self):
     self.client.logout()
@@ -78,8 +81,8 @@ class MemberTestCase(TestCase):
     self.assertTrue(member.is_authenticated)
 
   def assertMemberIsNotLogged(self):
-    umemberer = get_user(self.client)
-    self.assertFalse(umemberer.is_authenticated)
+    member = get_user(self.client)
+    self.assertFalse(member.is_authenticated)
 
   def superuser_login(self):
     self.assertIsNotNone(self.superuser)

@@ -12,7 +12,6 @@ from channels.testing import WebsocketCommunicator
 from channels.routing import URLRouter
 
 from cm_main.tests import TestFollowersMixin
-from cm_main.templatetags.cm_tags import icon
 from members.tests.tests_member_base import MemberTestCase
 from .models import ChatMessage, ChatRoom
 from .routing import websocket_urlpatterns
@@ -24,23 +23,47 @@ def astr(obj):
 
 
 class ChatRoomTests(MemberTestCase):
+  def do_check_chat_room(self, room_name, slug):
+    url = reverse('chat:new_room') + '?' + urlencode({'name': room_name})
+    response = self.client.get(url, follow=True)
+    # self.print_response(response)
+    # should be redirected to room detail
+    self.assertTemplateUsed(response, 'chat/room_detail.html')
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, f'<span id="show-room-name">{room_name}</span>', html=True)
+    follow = _('Follow')
+    self.assertContains(response, f'''
+<a class="button " href="{reverse("chat:toggle_follow", args=[slug])}"
+   aria-label="{follow}" title="{follow}">
+  <span class="icon is-large">
+    <i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i>
+  </span>
+  <span>{follow}</span>
+</a>''', html=True)
+    rooms = ChatRoom.objects.filter(slug=slug)
+    self.assertEqual(rooms.count(), 1)
+    return rooms.first()
+
   def test_create_chat_room(self):
     room_name = 'a clean room'
     slug = slugify(room_name)
     self.assertFalse(ChatRoom.objects.filter(slug=slug).exists())
-    response = self.client.get(reverse('chat:new_room') + '?' + urlencode({'name': room_name}), follow=True)
-    self.assertTrue(response.status_code, 200)
-    rooms = ChatRoom.objects.filter(slug=slug)
-    self.assertEqual(rooms.count(), 1)
-    response = self.client.get(reverse('chat:new_room') + '?' + urlencode({'name': room_name}), follow=True)
-    rooms = ChatRoom.objects.filter(slug=slug)
-    self.assertEqual(rooms.count(), 1, "Two rooms with the same slug created")
+    self.do_check_chat_room(room_name, slug)
+    # try a second time with the exact same name
+    # the way it is coded, this will redirect to the existing room and create an error
+    self.do_check_chat_room(room_name, slug)
+    # now, try with a direct creation, and check it raises a ValidationError
     with self.assertRaises(ValidationError):
       ChatRoom.objects.create(name=room_name)
-    response = self.client.get(reverse('chat:new_room') + '?' + urlencode({'name': '#'+room_name+'!'}), follow=True)
-    slug_name = room_name
+    # and finally, try with a different room name but which has the same slug
+    new_room_name = '#'+room_name+'!'
+    new_slug = slugify(new_room_name)
+    self.assertEqual(new_slug, slug)
+    url = reverse('chat:new_room') + '?' + urlencode({'name': new_room_name})
+    response = self.client.get(url, follow=True)
+    # self.print_response(response)
     self.assertContainsMessage(response, 'error',
-                               _(f"Another room with a similar name already exists ('{slug_name}'). "
+                               _(f"Another room with a similar name already exists ('{room_name}'). "
                                  "Please choose a different name."))
     ChatRoom.objects.all().delete()
 
@@ -48,48 +71,71 @@ class ChatRoomTests(MemberTestCase):
     rooms = [ChatRoom.objects.create(name='Chat Room #%i' % i) for i in range(5)]
     ChatMessage.objects.create(room=rooms[0], content='a message', member=self.member)
     response = self.client.get(reverse('chat:chat'))
-    # self.print_response(response)
+    self.print_response(response)
     nmsgs = 1
     nfollowers = 0
     follow = _('Follow')
     self.assertContains(response, f'''
-<div class="panel-block">
-  <figure class="image mini-avatar mr-2">
-    <img class="is-rounded" src="{self.member.avatar_mini_url()}" alt="foobar">
-  </figure>
-  <p class="content">
-    {_('Created by:')}<br>
-    <span class="has-text-primary has-text-weight-bold has-text-right mr-5">
-      {self.member.username}
-      <a href="{reverse('members:detail', args=[self.member.id])}" aria-label="{_('profile')}">
-        {icon('member-link')}
-      </a>
-      <br>
-      <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
-      <span class="tag ">{_(f'{nfollowers} follower')}</span>
-    </span>
-  </p>
-  <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
-  <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}"
-    aria-label="{follow}" title="{follow}">
-    {icon('follow')}
-    <span>{follow}</span>
-  </a>
+<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
+  <div class="px-1">
+    <figure class="image mini-avatar mr-2">
+      <img class="is-rounded" src="{self.member.avatar_mini_url()}" alt="foobar">
+    </figure>
+  </div>
+  <div class="has-text-primary has-text-weight-bold has-text-right mr-5">
+    {self.member.get_full_name()}
+    <a href="{reverse("members:detail", kwargs={'pk': self.member.id})}" aria-label="profil">
+      <span class="icon is-large">
+        <i class="mdi mdi-24px mdi-open-in-new" aria-hidden="true"></i>
+      </span>
+    </a>
+    <br>
+    <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
+    <span class="tag ">{_(f'{nfollowers} follower')}</span>
+  </div>
+  <div class="is-flex-grow-1">
+    <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
+  </div>
+  <div class="mr-1">
+    <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}"
+      aria-label="{follow}" title="{follow}">
+      <span class="icon is-large">
+        <i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i>
+      </span>
+      <span class="is-hidden-mobile">{follow}</span>
+    </a>
+  </div>
 </div>''', html=True)
     nmsgs = 0
     for i in range(1, 5):
       self.assertContains(response, f'''
-<div class="panel-block">
-  {icon('chat', 'panel-icon')}
-  <a class="block" href="{reverse('chat:room', args=[rooms[i].slug])}">
+<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
+  <div class="px-1">
+    <figure class="image mini-avatar mr-2">
+      <img class="is-rounded" src="/static/members/default-mini-avatar.jpg">
+    </figure>
+  </div>
+  <div class="has-text-primary has-text-weight-bold has-text-right mr-5">
+    {_("No author yet")}
+    <span class="icon has-text-link is-large">
+      <i class="mdi mdi-24px mdi-chat" aria-hidden="true"></i>
+    </span>
+    <br>
     <span class="tag mr-3">{_(f"{nmsgs} message")}</span>
-    <span class="title is-size-6">{rooms[i].name}</span>
-  </a>
-  <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}"
-    aria-label="{follow}" title="{follow}">
-    {icon('follow')}
-    <span>{follow}</span>
-  </a>
+    <span class="tag ">{_(f'{nfollowers} follower')}</span>
+  </div>
+  <div class="is-flex-grow-1">
+    <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[i].slug])}">{rooms[i].name}</a>
+  </div>
+  <div class="mr-1">
+    <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}"
+      aria-label="{follow}" title="{follow}">
+      <span class="icon is-large">
+       <i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i>
+      </span>
+      <span class="is-hidden-mobile">{follow}</span>
+    </a>
+  </div>
 </div>''', html=True)
     ChatRoom.objects.all().delete()
 

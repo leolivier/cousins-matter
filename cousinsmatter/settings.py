@@ -58,6 +58,9 @@ DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', default="cousinsmatter@localh
 DJANGO_LOG_LEVEL = env.str('DJANGO_LOG_LEVEL', default='INFO')
 CM_LOG_LEVEL = env.str('CM_LOG_LEVEL', default='INFO')
 
+# default max upload size is 2.5MB but could be overridden
+DATA_UPLOAD_MAX_MEMORY_SIZE = env.int('DATA_UPLOAD_MAX_MEMORY_SIZE', default=2.5 * 1024 * 1024)
+
 # Number of days for birthdays
 BIRTHDAY_DAYS = env.int('BIRTHDAY_DAYS', default=50)
 
@@ -210,6 +213,9 @@ DJANGO_ICONS = {
     "edit": "pencil-outline",
     "save": "content-save-outline",
     "submit": "check-circle-outline",
+    "create": "checkbox-marked-circle-auto-outline",
+    "create-plus": "checkbox-marked-circle-plus-outline",
+    "update": "check-underline-circle-outline",
     "cancel": "close-circle-outline",
     "new": "plus-box-outline",
     "send-message": "send-variant-outline",
@@ -218,6 +224,12 @@ DJANGO_ICONS = {
     "pdf": "file-pdf-box",
     "help": "help-circle-outline",
     "settings": "cog-outline",
+    "menu-open": "menu-open",
+    "menu-close": "menu-close",
+    "information": "information-outline",
+    "contact": "card-account-mail-outline",
+    "private": "eye-lock-outline",
+    "upload": "upload-box-outline",
     # auth icons
     "signin": "login",
     "signout": "logout",
@@ -321,9 +333,6 @@ DEFAULT_GALLERY_PAGE_SIZE = env.int('DEFAULT_GALLERY_PAGE_SIZE', 25)
 MAX_GALLERY_BULK_UPLOAD_SIZE = env.int('MAX_GALLERY_BULK_UPLOAD_SIZE', 20*1024*1024)
 MAX_CSV_FILE_SIZE = env.int('MAX_CSV_FILE_SIZE', 2*1024*1024)
 
-MESSAGE_MAX_SIZE = env.int('MESSAGE_MAX_SIZE', 1024*1024)
-MESSAGE_COMMENTS_MAX_SIZE = env.int('MESSAGE_COMMENTS_MAX_SIZE', 1000)
-
 DARK_MODE = env.bool('DARK_MODE', False)
 
 AUTH_USER_MODEL = 'members.Member'
@@ -332,8 +341,15 @@ DEFAULT_MEMBERS_PAGE_SIZE = env.int('DEFAULT_MEMBERS_PAGE_SIZE', 25)
 DEFAULT_POSTS_PER_PAGE = env.int('DEFAULT_POSTS_PER_PAGE', 25)
 DEFAULT_CHATMESSAGES_PER_PAGE = env.int('DEFAULT_CHATMESSAGES_PER_PAGE', 25)
 DEFAULT_CHATROOMS_PER_PAGE = env.int('DEFAULT_CHATROOMS_PER_PAGE', 25)
+MESSAGE_MAX_SIZE = env.int('MESSAGE_MAX_SIZE', DATA_UPLOAD_MAX_MEMORY_SIZE)
+MESSAGE_COMMENTS_MAX_SIZE = env.int('MESSAGE_COMMENTS_MAX_SIZE', 400)
+
+CONTACT_MAX_SIZE = env.int('CONTACT_MAX_SIZE', 1024*1024)
 
 PAGES_URL_PREFIX = 'pages/'
 PRIVACY_URL = f'{LANGUAGE_CODE}/about/privacy/'
 TERMS_URL = f'{LANGUAGE_CODE}/about/terms/'
 MENU_PAGE_URL_PREFIX = '/publish/'
+PAGE_MAX_SIZE = env.int('PAGE_MAX_SIZE', 10*1024*1024)
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = max(DATA_UPLOAD_MAX_MEMORY_SIZE, MESSAGE_MAX_SIZE, PAGE_MAX_SIZE)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 21:09+0200\n"
+"POT-Creation-Date: 2024-07-24 20:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,10 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: pages/apps.py:8 pages/templates/pages/menu_pages.html:3
-#: pages/templates/pages/pages_list.html:3
-#: pages/templates/pages/pages_list.html:8
-#: pages/templates/pages/sidemenu_pages.html:2
+#: pages/apps.py:8 pages/templates/pages/menu_pages.html:4
+#: pages/templates/pages/pages_admin_list.html:3
+#: pages/templates/pages/pages_admin_list.html:8
 msgid "Pages"
 msgstr "Pages"
 
@@ -45,12 +44,17 @@ msgstr "Mettre la page à jour"
 #: pages/templates/pages/page_form.html:3
 #: pages/templates/pages/page_form.html:7
 #: pages/templates/pages/page_form.html:11
-#: pages/templates/pages/pages_list.html:9
-#: pages/templates/pages/pages_list.html:11
+#: pages/templates/pages/pages_admin_list.html:9
+#: pages/templates/pages/pages_admin_list.html:11
 msgid "Create Page"
 msgstr "Créer une Page"
 
-#: pages/templatetags/menupages_tags.py:105
+#: pages/templates/pages/page_tree.html:3
+#: pages/templates/pages/page_tree.html:7
+msgid "Pages Tree"
+msgstr "Arbre des Pages"
+
+#: pages/templatetags/pages_tags.py:98
 #, python-brace-format
 msgid ""
 "Cannot load page from url {url}, it was not found in the database. Please "

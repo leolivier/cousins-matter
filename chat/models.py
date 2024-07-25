@@ -34,9 +34,9 @@ class ChatRoom(models.Model):
 
     slug_room = ChatRoom.objects.filter(slug=self.slug)
     if slug_room.exists():
-      slug_name = escape(slug_room.first().name)
+      room_name = escape(slug_room.first().name)
       raise ValidationError(
-        _(f"Another room with a similar name already exists ('{slug_name}'). Please choose a different name."))
+        _(f"Another room with a similar name already exists ('{room_name}'). Please choose a different name."))
 
   def save(self, *args, **kwargs):
     self.full_clean()
@@ -66,6 +66,7 @@ class ChatMessage(models.Model):
     ]
 
   def __str__(self):
-    room = self.room.name if len(self.room.name) < 20 else f'{self.room.name[:20]}...'
-    msg = self.content if len(self.content) < 100 else f'{self.content[:100]}...'
-    return f'{room}:{msg}'
+    # room = self.room.name if len(self.room.name) < 20 else f'{self.room.name[:20]}...'
+    # msg = self.content if len(self.content) < 100 else f'{self.content[:100]}...'
+    # return f'{room}:{msg}'
+    return f'{self.room}:{self.content}'

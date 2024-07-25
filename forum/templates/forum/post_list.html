@@ -4,25 +4,25 @@
 {% block content %}
 <div class="container">
 	<div class="panel">
-		<div class="panel-heading">
-			<span>{% title _("Latest Posts") %}</span>
-			<span class="is-pulled-right">
-				{% trans 'Create Post' as create_label %}
-				<a class="button ml-6" href="{%url 'forum:create'%}" aria-label="{{create_label}}" title="{{create_label}}">
-					{%icon "new-forum" %}
-				</a>
-			</span>
+		<div class="panel-heading is-flex is-align-items-center is-justify-content-center">
+			<span class="is-flex-grow-1 has-text-centered">{% title _("Latest Posts") %}</span>
+			{% trans 'Create Post' as create_label %}
+			<a class="button ml-6" href="{%url 'forum:create'%}" aria-label="{{create_label}}" title="{{create_label}}">
+				{%icon "new-forum" %} <span class="is-hidden-mobile ml-3">{{create_label}}</span>
+			</a>
+		</div>
+		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
+			{%paginate page%}
 		</div>
 		<div  id="post_list">
-			<div class="panel-block">
-				<div class="is-fullwidth" width="100%">{%paginate page%}</div>
-			</div>
 		{%for post in page.object_list %}
-			<div class="panel-block">
-				<figure class="image mini-avatar mr-2">
-					<img class="is-rounded" src="{{post.first_message.author.avatar_mini_url}}" alt="post.first_message.author.get_full_name">
-				</figure>
-				<p class="has-text-primary has-text-weight-bold has-text-right mr-5">
+			<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
+				<div class="px-1">
+					<figure class="image mini-avatar mr-2">
+						<img class="is-rounded" src="{{post.first_message.author.avatar_mini_url}}" alt="post.first_message.author.get_full_name">
+					</figure>
+				</div>
+				<div class="has-text-primary has-text-weight-bold has-text-right mr-5">
 					{{post.first_message.author.get_full_name}}
 					<a href="{%url 'members:detail' post.first_message.author.id %}" aria-label="{%trans 'profile'}">
 						{%icon "member-link" %}
@@ -38,20 +38,24 @@
 						{%endblocktranslate%}
 					</span>
 					{%include "cm_main/followers/followers-count-tag.html" with followed_object=post %}
-				</p>
-				<p class="content">
-					<a class="block" href="{%url 'forum:display' post.id%}">
-						<span class="subtitle is-5 has-text-weight-bold">{{post.title}}</span>
-						{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
-						{%include "cm_main/followers/toggle-follow-button.html" with followed_object=post %}
-						<br>
-						<span class="subtitle is-6">
-							{% autoescape on %}
-							{{post.first_message.content|striptags|truncatechars:150 }}...
-							{% endautoescape %}
-						</span>
-					</a>
-				</p>
+				</div>
+				<div class="is-flex-grow-1">
+					<p class="content">
+						<a class="block" href="{%url 'forum:display' post.id%}">
+							<span class="subtitle is-5 has-text-weight-bold">{{post.title}}</span>
+							<br>
+							<span class="subtitle is-6">
+								{% autoescape on %}
+								{{post.first_message.content|striptags|truncatechars:150 }}...
+								{% endautoescape %}
+							</span>
+						</a>
+					</p>
+				</div>
+				<div class="mr-1">
+					{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
+					{%include "cm_main/followers/toggle-follow-button.html" with followed_object=post extra_class="is-pulled-right" is_hidden_mobile="true"%}
+				</div>
 			</div>
 		{%endfor%}
 		</div>

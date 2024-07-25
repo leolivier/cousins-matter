@@ -2,7 +2,7 @@
 {% load i18n galleries_tags cm_tags %}
 {% block title %}{% title _("Galleries") %}{% endblock %}
 {% block content %}
-  <h1 class="container title">{% title _("Galleries") %}</h1>
+  <h1 class="title has-text-centered">{% title _("Galleries") %}</h1>
   {% if galleries.count == 0 %}
   <div class="container has-text-centered has-text-warning has-background-warning-light">{% translate "No galleries found" %}</div>
   {% endif %}

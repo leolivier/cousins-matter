@@ -1,9 +1,79 @@
-{% load static %}
+{% load static i18n cm_tags %}
 <!-- include summernote lite css/js -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-{{settings.LANGUAGE_CODE}}.js"></script>
+{%trans "Toggle Note Editor Toolbar" as trtoggle%}
+{%trans "Remaining characters:" as trchar%}
+{% with summernoteMaxSize=maxsize|default_if_none:settings.DATA_UPLOAD_MAX_MEMORY_SIZE %}
 <script>
-	$(document).ready(function() {
-  $('.richtextarea').summernote();
-});
+	summernoteMaxSize = parseInt('{{summernoteMaxSize}}');
 </script>
+{%endwith%}
+
+<script>
+	summernoteLang = '{{settings.LANGUAGE_CODE}}';
+	$(document).ready(function() {
+	  $('.richtextarea').summernote(
+			{
+				lang: summernoteLang,
+				callbacks: {
+					onKeydown: function (e) { 
+						var t = e.currentTarget.innerText;
+						if (t.length >= summernoteMaxSize) {
+							if (e.keyCode != 8 && !(e.keyCode >=37 && e.keyCode <=40) && e.keyCode != 46 && !(e.keyCode == 88 && e.ctrlKey) && !(e.keyCode == 67 && e.ctrlKey) && !(e.keyCode == 65 && e.ctrlKey))
+								e.preventDefault(); 
+						}  
+					},
+					onKeyup: function (e) {
+						var t = e.currentTarget.innerText;
+						$('#maxContentPost').text(summernoteMaxSize - t.length -1);
+					},
+					onPaste: function (e) {
+						var t = e.currentTarget.innerText;
+						var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+						e.preventDefault();
+						var maxPaste = bufferText.length;
+						if(t.length + bufferText.length > summernoteMaxSize){
+							maxPaste = summernoteMaxSize - t.length;
+						}
+						if(maxPaste > 0){
+							document.execCommand('insertText', false, bufferText.substring(0, maxPaste));
+						}
+						$('#maxContentPost').text(summernoteMaxSize - t.length - maxPaste);
+					}
+				}
+			}
+		);
+		const initial_size = $('.richtextarea').summernote('code').length;
+		$('.richtextarea').before(`
+			<button class="button" id="toggle-note-editor-toolbar" title="{{trtoggle}}">
+				{%icon "menu-open" %}
+			</button>
+		`).parent().after(`
+			<p class="is-size-6 has-text-right">{{trchar}} <span id="maxContentPost" class="has-text-right">`+initial_size+`</span></p>
+		`);
+
+		$('#toggle-note-editor-toolbar').on('click', function(e) {
+			e.preventDefault();
+    	$('.note-editor > .note-toolbar').toggle(300);
+			$icon = $(this).find('i')
+			$icon.toggleClass('mdi-menu-open').toggleClass('mdi-menu-close');
+  	});
+	});
+</script>
+<style>
+	@media (max-width: 768px) {
+			.note-editor > .note-toolbar {
+					display: none;
+			}
+			#toggle-note-editor-toolbar {
+					display: block;
+			}
+	}
+	@media (min-width: 769px) {
+			#toggle-note-editor-toolbar {
+					display: none;
+			}
+	}
+</style>

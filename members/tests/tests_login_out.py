@@ -13,6 +13,14 @@ class LoginTests(MemberTestCase):
     self.assertEqual(response.status_code, 200)
     self.assertMemberIsLogged()
 
+  def test_logout_view(self):
+    self.client.logout()  # make sure nobodys logged in
+    self.login()
+    response = self.client.get(self.logout_url, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertMemberIsNotLogged()
+    self.assertTemplateUsed(response, 'members/login/login.html')
+
 
 class PasswordTests(MemberTestCase):
 

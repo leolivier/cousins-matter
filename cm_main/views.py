@@ -4,6 +4,7 @@ import mimetypes
 import tempfile
 import zipfile
 
+from django.shortcuts import render
 from django.views import generic
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -98,9 +99,8 @@ class ContactView(LoginRequiredMixin, generic.FormView):
       email.send(fail_silently=False)
 
       messages.success(request, _("Your message has been sent"))
-      return self.form_valid(form)
 
-    return self.form_invalid(form)
+    return render(request, self.template_name, {'form': form})
 
 
 def send_zipfile(request):

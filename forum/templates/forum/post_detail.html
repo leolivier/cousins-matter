@@ -1,7 +1,7 @@
 {% extends "cm_main/base.html" %}
 {% load i18n cm_tags crispy_forms_tags static %}
 {% block header %}
-	{%include "cm_main/include-summernote.html" %}
+	{%include "cm_main/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
 	<script src="{% static 'forum/js/forum.js' %}"></script>
 {%endblock%}
 {% block title %}{% title _("Post") %}{% endblock %}
@@ -12,53 +12,50 @@
 {%plural%}
 	{{nreplies}} answers
 {%endblocktranslate%}
-<div class="container mt-5">
+<div class="container mt-5 px-2">
 	<div class="level">
 		<div class="level-left">
 			<div class="title is-2">{{post.title}}</div>
 		</div>
 		<div class="level-item">
-			<figure class="image mini-avatar mr-2">
+			<figure class="image mini-avatar mr-2 is-flex is-align-items-center is-justify-content-center">
 				<img class="is-rounded" src="{{message.author.avatar_mini_url}}" alt="message.author.get_full_name">
 			</figure>
-			<div class="container">
-				<p class="content is-size-6">
-					{{message.author.get_full_name}}
-					<a href="{%url 'members:detail' message.author.id %}">
-						{%icon "member-link" %}
-					</a>
-					<br>
-					<span class="is-size-6">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>
-				</p>
-			</div>
-			<div class="container has-text-weight-bold">
-				<span class="tag">{{trans_nreplies}}</span>
+			<div class="has-text-primary has-text-weight-bold has-text-centered mr-5">
+				{{message.author.get_full_name}}
+				<a href="{%url 'members:detail' message.author.id %}">
+					{%icon "member-link" %}
+				</a>
 				<br>
+				<span class="is-size-7">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>
+				<br>
+				<span class="tag">{{trans_nreplies}}</span>
 				{%include "cm_main/followers/followers-count-tag.html" with followed_object=post %}
 			</div>
 		</div>
-		<div class="level-right">
+		<div class="level-right is-flex-shrink-1">
 			{% if post.first_message.author.username == user.username %}
-			<a class="button" href="{% url 'forum:edit' post.id %}" title="{%trans 'Edit' %}">
-				{%icon "edit" %}
-			</a>
-			<button class="button js-modal-trigger" data-target="delete-post-modal" title="{%trans 'Delete' %}">
-				{%icon "delete" %}
-			</button>
+			<div class="buttons">
+				<a class="button" href="{% url 'forum:edit' post.id %}" title="{%trans 'Edit' %}">
+					{%icon "edit" %}
+				</a>
+				<button class="button js-modal-trigger" data-target="delete-post-modal" title="{%trans 'Delete' %}">
+					{%icon "delete" %}
+				</button>
+			</div>
 			{%else%}
 				{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
 				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=post %}
 			{%endif%}
 		</div>
 	</div>
-	<div class="container">
+	<div class="container px-2">
 		{% autoescape off %}{{message.content}}{%endautoescape%}
 	</div>
 </div>
 {%include "forum/comment_list.html" with message=message%}
 <hr>
-<div class="container">
-	
+<div class="container px-2">
 	<p class="tag is-medium mb-4">
 		{%if nreplies > 0%}
 			{{trans_nreplies}}
@@ -86,13 +83,15 @@
 				</div>
 				{% if reply.author.username == user.username %}
 				<div class="level-right">
-					<a class="button" onclick="show_edit_reply_form('{{reply.id}}')" title="{%trans 'Edit' %}">
-						{%icon "edit" %}
-					</a>
-					{% url 'forum:delete_reply' reply.id as delete_reply_url %}
-					<a class="button" onclick="delete_reply('{{delete_reply_url}}', '{{reply.id}}')" title="{%trans 'Delete' %}">
-						{%icon "delete" %}
-					</a>
+					<div class="buttons">
+						<a class="button" onclick="show_edit_reply_form('{{reply.id}}')" title="{%trans 'Edit' %}">
+							{%icon "edit" %}
+						</a>
+						{% url 'forum:delete_reply' reply.id as delete_reply_url %}
+						<a class="button" onclick="delete_reply('{{delete_reply_url}}', '{{reply.id}}')" title="{%trans 'Delete' %}">
+							{%icon "delete" %}
+						</a>
+					</div>
 				</div>
 				{%endif%}
 			</div>
@@ -100,11 +99,11 @@
 		<form method="POST" class="reply-form" id='edit-reply-{{reply.id}}'>
 			{% csrf_token %}
 			<div class="level">
-				<div class="level-left">{{reply_form|crispy}}</div>
+				<div class="level-left is-flex-shrink-3">{{reply_form|crispy}}</div>
 				<div class="level-right">
 					<div class="buttons">
-						<button type="submit" class="button is-link" title="{%trans 'Update' %}">
-							{%icon "submit" %}
+						<button type="submit" class="button is-dark" title="{%trans 'Update' %}">
+							{%icon "send" %}
 						</button>
 						<button type="reset" class="button" onclick="hide_edit_reply_form('{{reply.id}}')" title="{%trans 'Cancel' %}">
 							{%icon "cancel" %}

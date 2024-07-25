@@ -63,7 +63,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
     response = self.client.get(ap_url, follow=True)
     # print("response:", response)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'galleries/add_photo.html')
+    self.assertTemplateUsed(response, 'galleries/photo_form.html')
     self.assertIs(response.resolver_match.func.view_class, PhotoAddView)
     # check rich editor by class richtextarea, the rest is dynamic in the browser, can't be tested
     self.assertContains(response,
@@ -89,15 +89,17 @@ class CreatePhotoViewTests(PhotoTestsBase):
 
     url = reverse('galleries:detail', kwargs={'pk': self.root_gallery.id})
     response = self.client.get(url)
+    # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, 'galleries/photos_gallery.html')
     for p in photos:
       self.assertContains(response, f'''
-  <div class="cell">
+  <div class="cell has-text-centered">
     <a href="{reverse('galleries:photo', args=[p.id])}">
-      <figure class="image thumbnail">
+      <figure class="image thumbnail mx-auto">
         <img src="{p.thumbnail.url}">
       </figure>
+      <p>{p.name}</p>
     </a>
   </div>
 ''', html=True)

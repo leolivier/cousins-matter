@@ -1,0 +1,15 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags pages_tags %}
+{% block title %}{% title _("Pages Tree") %}{% endblock %}
+{% block content %}
+<section class="section">
+	<div class="container px-2">
+			<h1 class="title is-3">{% title _("Pages Tree") %}</h1>
+			<div class="box">
+					<ul class="tree-root">
+						{%pages_tree%}
+					</ul>
+			</div>
+	</div>
+</section>
+{%endblock content%}

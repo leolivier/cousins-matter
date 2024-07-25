@@ -3,17 +3,21 @@
 {% block title %}{% title _("Photo") %} {% endblock %}
 {% block content %}
 {%with photo=page.object_list|first%}
-<div class="box">
+<div class="container px-2">
 	<div class="box">
 		<div class="level">
 			<div class="level-left">
-				<p class="title is-4 mr-5">{{photo.name}}</p>
-				<p class="subtitle is-6">({% blocktranslate with gname=photo.gallery.name%}Gallery {{gname}}{% endblocktranslate %})</p>
+				<div class="container has-text-centered">
+					<p class="title is-4">{{photo.name}}</p>
+					<p class="subtitle is-6">
+						({% blocktranslate with gname=photo.gallery.name%}Gallery {{gname}}{% endblocktranslate %})
+					</p>
+				</div>
 			</div>
 			<div class="level-item">
 				{%paginate page True %}
 			</div>
-			<div class="level-item">
+			<div class="level-right">
 				<p class="buttons has-addons">
 					<a class="button" href="{% url 'galleries:detail' photo.gallery.id %}" 
 					title="{% blocktranslate with gname=photo.gallery.name%}Back to {{gname}}{%endblocktranslate %}">

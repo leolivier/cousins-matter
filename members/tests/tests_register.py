@@ -155,6 +155,7 @@ class MemberRegisterTests(MemberTestCase):
     email = 'test-cousinsmatter@maildrop.cc'
     invitation_url = RegistrationLinkManager().generate_link(request, email)
     response = self.client.get(invitation_url, follow=True)
+    # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, 'members/members/member_upsert.html')
     self.assertContains(response, f'''<h1 class="title has-text-centered is-2">{_("Sign up")}</h1>''', html=True)

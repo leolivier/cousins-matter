@@ -68,6 +68,11 @@ $(document).ready(function() {
     $(this).parent().remove()
   });
 
+  // close message box on delete
+  $('.message .message-header .delete').on('click', function(el) {
+    $(this).parent().parent().remove()
+  });
+
   // Add a click event on buttons to open a specific modal
   $('.js-modal-trigger').each(function(index) {
     const modal = $(this).data('target');
@@ -160,7 +165,12 @@ function add_message(kind, message) {
       <button class="delete" aria-label="delete"></button>\
     </div>\
     <div class="message-body">' + message + '</div></li>');
-}
+  // close message box on delete
+  $('.message .message-header .delete').on('click', function(el) {
+    $(this).parent().parent().remove()
+  });
+ }
+
 function add_error_message(message) {
   add_message('error', message);
 }

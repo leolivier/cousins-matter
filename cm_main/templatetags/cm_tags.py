@@ -72,9 +72,49 @@ def get_view(parser, token):
     return ViewNode(tokens[1], args, kwargs)
 
 
-@register.simple_tag
-def title(title_s):
-    return f"{settings.SITE_NAME} - {title_s}"
+def get_title(title):
+    return f"{settings.SITE_NAME} - {title}"
+
+
+# @register.simple_tag
+# def title(title_s):
+#     return get_title(title_s)
+
+
+class TitleNode(Node):
+    def __init__(self, title, var_name):
+        self.title = title
+        self.var_name = var_name
+
+    def render(self, context):
+        # print("title=", self.title.var, "var_name=", self.var_name)
+        var = str(self.title.var)
+        title = Variable(var).resolve(context) if self.title.is_var else var
+        title = get_title(title)
+        if self.var_name:
+            context[self.var_name] = title
+            print(f"context[{self.var_name}]={context[self.var_name]}")
+            return ""
+        return mark_safe(title)
+
+
+@register.tag(name='title')
+def do_title(parser, token):
+    bits = token.split_contents()
+    if len(bits) > 4:
+        raise TemplateSyntaxError("'%s' takes at most 3 arguments" % bits[0])
+    if len(bits) < 2:
+        raise TemplateSyntaxError("'%s' takes at least one argument" % bits[0])
+    title = parser.compile_filter(bits[1])
+    var_name = None
+    if len(bits) > 2:
+        if bits[2] != 'as':
+            raise TemplateSyntaxError(
+                "second argument to '%s' must be 'as'" % bits[0]
+            )
+        var_name = bits[3]
+
+    return TitleNode(title, var_name)
 
 
 @register.inclusion_tag("cm_main/paginate_template.html")
@@ -135,5 +175,17 @@ def icon(name, clazz="icon", aria_hidden=False):
       clazz += " is-large"
     return mark_safe(f'''
 <span class="{clazz}">
-    <i class="mdi mdi-24px mdi-{name}" aria-hidden='true'></i>
+    <i class="mdi mdi-24px mdi-{name}" aria-hidden="true"></i>
 </span>''')
+
+
+@register.inclusion_tag("cm_main/navbar_item.html")
+def navbar_item(url, name, icon):
+    return {'url': url, 'name': name, 'icon': icon}
+
+
+@register.filter(name='startswith')
+def startswith(text, starts):
+    if isinstance(text, str):
+        return text.startswith(starts)
+    return False

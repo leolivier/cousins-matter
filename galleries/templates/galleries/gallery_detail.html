@@ -2,36 +2,33 @@
 {% load i18n galleries_tags static cm_tags %}
 {% block title %}{% title _("Show Gallery") %} {% endblock %}
 {% block content %}
-<div class="box">
+<div class="container px-3">
 	<div class="level">
 		<div class="level-left">
-			<div class="container is-fluid">
-				<a class="media" href="{% url 'galleries:detail' gallery.id %}">
-					<div class="media-left">
-						<figure class="image gallery-cover">
-							<img src="{{gallery.cover_url}}">
-						</figure>
-					</div>
-					<div class="media-content">
-						<h1 class="title">{{gallery.name}} ({% include "galleries/photo_counter.html" %})</h1>
-						<p class="content">{{ gallery.description }}</p>
-					</div>
-				</a>
+			<div class="container">
+				<figure class="image gallery-cover is-pulled-left mr-3 mb-3 is-flex is-align-items-center is-justify-content-center">
+					<img src="{{gallery.cover_url}}">
+				</figure>
+				<span class="title is-4">{{gallery.name}}</span>
+				{% include "galleries/photo_counter.html" %}
+				<p>{{ gallery.description }}</p>
 			</div>
 		</div>
 		{% if gallery.children.count > 0 %}
 		<div class="level-item">
-			<p class="content mr-3">{% translate "Children galleries" %}</p>
-			{% for subgal in gallery.children.all %}
-			<div class="container has-text-centered">
-				<a class="mr-2" href="{% url 'galleries:detail' subgal.id %}">
-					<figure class="image sub-gallery-cover" style="margin:auto">
-						<img src="{{subgal.cover_url}}">
-					</figure>
-					<figcaption>{{subgal.name}}</figcaption>
-				</a>
+			<div class="container">
+				<p class="content has-text-centered mr-3">{% translate "Children galleries" %}</p>
+				<div class="grid">
+				{% for subgal in gallery.children.all %}
+					<a class="cell mr-2" href="{% url 'galleries:detail' subgal.id %}">
+						<figure class="image sub-gallery-cover mx-auto">
+							<img src="{{subgal.cover_url}}">
+						</figure>
+						<p class="has-text-centered">{{subgal.name}}</p>
+					</a>
+				{%endfor%}
+				</div>
 			</div>
-			{%endfor%}
 		</div>
 		{% endif %}
 		<div class="level-right">
@@ -42,7 +39,10 @@
 					{%icon "back" %}
 				</a>
 				{%else%}
-				{%icon "back" "is-light"%}
+				<a class="button" href="{% url 'galleries:galleries' %}" 
+					title="{%trans 'Back to galleries list' %}">
+					{%icon "back" %}
+				</a>
 				{%endif%}
 				<a class="button" href="{% url 'galleries:add_photo' gallery.id %}"
 					title="{% translate 'Add Photo' %}">

@@ -7,10 +7,10 @@
       <div class="grid">
         {% for member, when in birthdays_list %}
         {%with bcolor=when|birthday_color %}
-        <div class="cell has-background-{{bcolor}}-light px-1 mx-0 is-flex is-align-items-center is-justify-content-right">
+        <div class="cell has-background-{{bcolor}}-light ml-2 pl-2 pr-1 is-flex is-align-items-center is-justify-content-right">
             <a href="{% url 'members:detail' member.id %}" class="has-text-{{bcolor}} ">{{ member.first_name }} {{ member.last_name }}</a>
         </div>
-        <div class="cell has-background-{{bcolor}}-light px-1 mx-0
+        <div class="cell has-background-{{bcolor}}-light mr-2 pl-1 pr-2
                 has-text-{{bcolor}}">
             {% if when == 0 %}
                 {% blocktranslate with age=member.age %}turns {{ age }} today, happy birthday!{% endblocktranslate %}

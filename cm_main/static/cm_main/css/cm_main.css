@@ -1,8 +1,8 @@
 :root {
 	--bulma-body-font-size: 20px;
-/* to define a color theme, eg
-  --bulma-primary-h:360deg;
-*/
+	--bulma-link-h: 277deg !important;
+	--bulma-link-s: 100% !important;
+  --bulma-link-l: 57% !important;
 }
 
 /* add a 3rd level to bulma's menus */
@@ -20,7 +20,20 @@
 	display: block;
 }
 
-/* RELATED WIDGET WRAPPER */
+.navbar {
+	--bulma-navbar-divider-background-l:92% !important;
+}
+
+@media screen and (min-width: 1024px) {
+	.navbar-dropdown .navbar-link {
+		padding-inline-end: 3rem;
+		padding: .375rem 1rem 0.375rem 0rem;
+		white-space: nowrap;
+		height: 2rem;
+	}
+}
+
+	/* RELATED WIDGET WRAPPER */
 .related-widget-wrapper {
   display: flex;
   gap: 0 10px;
@@ -43,12 +56,13 @@
 /* class for photo in galleries */
 .photo img {
 	display: block;
-  width: auto;
+  width: 100%;
 	height: auto;
   max-width: fit-content;
   max-height: fit-content;
 	margin-right: auto;
 	margin-left: auto;
+	border-radius: var(--bulma-radius-medium);
 }
 
 /* CSS for summernote text 
@@ -101,8 +115,8 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 		}
 	
 		.mini-avatar {
-			width: 48px;
-			height: 48px;
+			width: 64px;
+			height: 64px;
 		}
 
 		.home-logo img {
@@ -117,12 +131,17 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 		}
 
 		.mini-avatar {
-			width: 48px;
-			height: 48px;
+			width: 128px;
+			height: 128px;
 		}
 
 		.home-logo img {
 			height: 250px;
+		}
+	}
+	@media (min-width: 1025px) {
+		.navbar-dropdown {
+			font-size: var(--bulma-body-font-size)
 		}
 	}
 }
@@ -135,4 +154,36 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 .sub-gallery-cover {
 	height: 64px;
 	width: 64px;
+}
+
+/* fix a bulma bug */
+@media screen {
+	@media (max-width: 768px) {
+		.button .icon {
+			margin-inline-end: calc(var(--bulma-button-padding-horizontal)*-.5) !important;
+			margin-inline-start: calc(var(--bulma-button-padding-horizontal)*-.5) !important;
+		}
+		.button:has(> :last-child:not(.is-hidden-mobile)) .icon:first-child:not(:last-child) {
+			margin-inline-end: calc(var(--bulma-button-padding-horizontal).25) !important;
+			margin-inline-start: calc(var(--bulma-button-padding-horizontal)-.5) !important;
+		} 
+	}
+}
+
+/* tree management */
+.tree-item {
+	padding-left: calc(var(--bulma-size-large)*2.2);
+}
+.tree-root > .tree-item {
+	padding-left: 0;
+}
+.tree-root > .tree-item > .tree-level {
+	padding-left: calc(var(--bulma-size-large)*1.2);
+}
+.tree-item::before {
+	content: "└─ ";
+	color: hsl(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l));
+}
+.tree-root > .tree-item::before {
+	content: "";
 }

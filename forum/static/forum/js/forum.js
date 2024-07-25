@@ -18,7 +18,7 @@ function hide_edit_comment_form(id, value=undefined) {
 	$('#comment-level-'+id).show()
 }
 function delete_comment(url, id) {
-	if (confirm(gettext("Are you sure?"))) {
+	if (confirm(gettext("Are you sure you want to delete this comment?"))) {
 		ajax_action(url, (response)=>{
 			$('#comment-div-'+id).remove()
 		})                
@@ -45,7 +45,7 @@ function hide_edit_reply_form(id, value=undefined) {
 }
 
 function delete_reply(url, id) {
-	if (confirm(gettext("Are you sure?"))) {
+	if (confirm(gettext("Are you sure you want to delete this replyy and its comments?"))) {
 		ajax_action(url, (response)=>{
 			$('#reply-div-'+id).remove()
 		})                
@@ -55,4 +55,4 @@ function delete_reply(url, id) {
 $(document).ready(()=>{
 	$('.comment-form').hide();
 	$('.reply-form').hide()
-})
+});

@@ -23,6 +23,12 @@ class MemberFormMixin():
     # force first and last name to be required  # TODO: is this useful?
     self.fields['first_name'].required = True
     self.fields['last_name'].required = True
+    # we don't need the password field, it's useless and harmful
+    # the generated code is wrong (it creates a link to f"../../{self.instance.pk}/password/")
+    # which is not what we want, and furthermore we have a link to change password in the template
+    # so we remove the password field
+    if 'password' in self.fields:
+      del self.fields['password']
 
   def clean_avatar(self):
     avatar = self.cleaned_data['avatar']
@@ -70,9 +76,10 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
     localized_fields = "__all__"
     fields = ['username', 'email', 'first_name', 'last_name', 'avatar',
               'birthdate', 'address', 'phone', 'website', 'family']
+    exclude = ['password']
 
   def __init__(self, *args, **kwargs):
-    super(UserChangeForm, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self.initialize_fields(*args, **kwargs)
 
 

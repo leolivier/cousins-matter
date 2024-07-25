@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.db.models import Count, OuterRef, Subquery
 from urllib.parse import unquote, urlencode
 
-from cousinsmatter.utils import redirect_to_referer, Paginator, is_ajax
+from cousinsmatter.utils import Paginator, is_ajax
 from cm_main import followers
 from members.models import Member
 from .models import ChatMessage, ChatRoom
@@ -74,7 +74,7 @@ def new_room(request):
           pass
         case _:
           messages.error(request, f'{error[0]}: {" ".join(error[1])}')
-    return redirect_to_referer(request)
+    return redirect(reverse('chat:chat'))
 
 
 @login_required

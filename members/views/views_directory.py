@@ -9,8 +9,9 @@ from reportlab.lib.units import inch
 from django.http import FileResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
-
+from django.utils.text import slugify
 from django.conf import settings
+
 from ..models import Member
 
 LIST_STYLE = TableStyle(
@@ -36,7 +37,11 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
       buffer = self._generate_directory_pdf()
       # FileResponse sets the Content-Disposition header so that browsers
       # present the option to save the file.
-      return FileResponse(buffer, as_attachment=True, filename="directory.pdf")
+      filename = f"{slugify(self.title())}.pdf"
+      return FileResponse(buffer, as_attachment=True, filename=filename)
+
+    def title(self):
+        return _('%(site_name)s directory') % {'site_name': settings.SITE_NAME}
 
     def _get_directory_data(self):
       dir_data = [[_("Name"), _("Phone"), _('Email'), _("Address")]]
@@ -56,7 +61,7 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
       elif settings.PDF_SIZE == 'letter':
           pdf_size = letter
 
-      title = _('%(site_name)s directory') % {'site_name': settings.SITE_NAME}
+      title = self.title()
 
       def add_footer(canvas, doc):
           canvas.saveState()

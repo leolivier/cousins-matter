@@ -56,20 +56,6 @@ class MembersView(LoginRequiredMixin, generic.ListView):
         if 'last_name_filter' in request.GET and request.GET['last_name_filter']:
             filter['last_name__icontains'] = request.GET['last_name_filter']
         members = Member.objects.filter(**filter)
-        # filter = []
-        # query = 'SELECT * from members_member WHERE '
-        # if 'first_name_filter' in request.GET and request.GET['first_name_filter']:
-        #     filter.append(globalize_for_search(request.GET['first_name_filter']))
-        #     query += 'first_name GLOB %s '
-        # if 'last_name_filter' in request.GET and request.GET['last_name_filter']:
-        #     filter.append(globalize_for_search(request.GET['last_name_filter']))
-        #     query += 'last_name GLOB %s '
-
-        # if len(filter) > 0:
-        #     members = Member.objects.raw(query, filter)
-        #     logger.info("query:", query, "filter: ", filter, 'count', members.count())
-        # else:
-        #     members = Member.objects.all()
         page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_MEMBERS_PAGE_SIZE
         # print("page_size=", page_size)
         ptor = Paginator(members, page_size, reverse_link='members:members_page')

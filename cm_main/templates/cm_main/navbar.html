@@ -111,7 +111,7 @@
 				<div class="navbar-dropdown is-right">
 					{% url 'members:profile' as profile_url%}
 					{%navbar_item profile_url _("Profile") "profile" %}
-					{% url 'members:logout' as v_url%}
+					{% url 'members:logout' as logout_url%}
 					{%navbar_item logout_url _("Log Out") "logout" %}
 				</div>
 			</div>

@@ -4,7 +4,6 @@ from django.core import mail
 from django.utils.translation import gettext as _
 from django.conf import settings
 from django.contrib.auth import get_user
-from django.test import RequestFactory
 from django.test.utils import TestContextDecorator
 from captcha.conf import settings as captcha_settings
 from verify_email.app_configurations import GetFieldFromSettings
@@ -12,7 +11,7 @@ from verify_email.app_configurations import GetFieldFromSettings
 from ..forms import MemberRegistrationForm
 from ..models import Member
 from ..registration_link_manager import RegistrationLinkManager
-from .tests_member_base import MemberTestCase, TestLoginRequiredMixin
+from .tests_member_base import MemberTestCase, TestLoginRequiredMixin, get_fake_request
 
 
 class MemberInviteTests(MemberTestCase):
@@ -124,7 +123,7 @@ class RequestRegistrationLinkTests(TestLoginRequiredMixin, MemberTestCase):
     self.assertInHTML(_("%(name)s (%(email)s) requested to register to your cousinades site") %
                       {'name': test_requester['name'], 'email': test_requester['email']}, content)
     self.assertInHTML(f'''<div class="container">{test_requester['message']}</div>''', content)
-    request = RequestFactory().get('/dummy_path')
+    request = get_fake_request()
     absolute_link = request.build_absolute_uri(reverse("members:invite"))
     self.assertInHTML(f'''<a href="{absolute_link}?mail={test_requester['email']}" class="button green">
                             {_("Open invitation page")}
@@ -150,8 +149,7 @@ class MemberRegisterTests(MemberTestCase):
 
   def test_register_view_ok(self):
     self.client.logout()  # logout everybody
-    factory = RequestFactory()
-    request = factory.get('/dummy-path')
+    request = get_fake_request()
     email = 'test-cousinsmatter@maildrop.cc'
     invitation_url = RegistrationLinkManager().generate_link(request, email)
     response = self.client.get(invitation_url, follow=True)
@@ -180,8 +178,7 @@ class MemberRegisterTests(MemberTestCase):
     self.assertEqual(mail.outbox[0].subject, GetFieldFromSettings().get('subject'))
 
   def test_register_view_wrong_token(self):
-    factory = RequestFactory()
-    request = factory.get('/dummy-path')
+    request = get_fake_request()
     email = 'test-cousinsmatter@maildrop.cc'
     invitation_url = RegistrationLinkManager().generate_link(request, email) + 'wrong'
     response = self.client.get(invitation_url)

@@ -22,16 +22,17 @@ env = environ.Env(
 )
 environ.Env.read_env(BASE_DIR / '.env')
 
-SITE_NAME = env.str('SITE_NAME', default='Cousins Matter')
-SITE_URL = env.str('SITE_URL', 'http://127.0.0.1')
+DEBUG = env.bool('DEBUG', False)
 
 SECRET_KEY = env.str('SECRET_KEY')
 
-DEBUG = env.bool('DEBUG', False)
-
-MAX_REGISTRATION_AGE = env.int('MAX_REGISTRATION_AGE', default=2*24*3600)
+SITE_NAME = env.str('SITE_NAME', default='Cousins Matter')
+SITE_DOMAIN = env.str('SITE_DOMAIN', None)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'])
+CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
+
 
 LANGUAGES = [
     ("fr", "Français"),
@@ -79,6 +80,7 @@ INSTALLED_APPS = [
   'crispy_forms',
   'crispy_bulma',
   'verify_email',
+  'corsheaders',
   'django.contrib.admin',
   'django.contrib.auth',
   'django.contrib.contenttypes',
@@ -94,6 +96,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
   'django.middleware.security.SecurityMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
+  'corsheaders.middleware.CorsMiddleware',
   'django.middleware.common.CommonMiddleware',
   'django.middleware.csrf.CsrfViewMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -203,6 +206,7 @@ LOGIN_REDIRECT_URL = '/'
 # LOGIN_URL = '/members/login'
 LOGIN_URL = 'members:login'
 # LOGOUT_REDIRECT_URL = '/'
+MAX_REGISTRATION_AGE = env.int('MAX_REGISTRATION_AGE', default=2*24*3600)
 
 DJANGO_ICONS = {
     # footer icons

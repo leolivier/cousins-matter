@@ -8,8 +8,6 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.mail import send_mail
 
-from cousinsmatter.utils import get_absolute_url_wo_request
-
 logger = logging.getLogger(__name__)
 
 
@@ -19,7 +17,9 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
     Sends an email to the followers of a followed object (followed_object) to which a new element new_internal_object is added.
     new_internal_object is the just create object,
     author is the member who created the new object, and followed_object_url is an url to display the followed object.
-    followers are the members who follow the followed object, and they are stored in the followed_object.followers attribute.
+    If the request is not given (ie is None), then the followed_object_url ùust be an absolute URL, otherwise it has to be a 
+    reative URL.
+    Followers are the members who follow the followed object, and they are stored in the followed_object.followers attribute.
     It is assumed that str(followed_object) returns a string that can be used in the name of the followed object.
   """
   if new_internal_object is None:
@@ -51,8 +51,9 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
 
   author_name = author.get_full_name()
   followed_object_name = str(followed_object)
-  followed_object_url = request.build_absolute_uri(followed_object_url) if request \
-    else get_absolute_url_wo_request(followed_object_url)
+  if request:
+    followed_object_url = request.build_absolute_uri(followed_object_url)
+    # otherwise, must be an absolute url!
   if not followed_object_name:
     raise ValueError('followed object has no name')
   followed_type = followed_object._meta.verbose_name

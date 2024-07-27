@@ -23,12 +23,6 @@ function toggle_edit_room_form() {
 	$('#chat-message-input').focus();
 }
 
-function delete_room(url) {
-	if (confirm(gettext('Are you sure you want to delete this room?'))) {
-		window.location.href = url;
-	}
-}
-
 $(document).ready(()=>{
 	// hide the room form
 	$('#room-edit-form').hide();

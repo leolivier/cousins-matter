@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-25 11:09+0200\n"
+"POT-Creation-Date: 2024-07-27 17:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr "salons de discussion"
 msgid "Another room with the same name already exists"
 msgstr "Un autre salon portant le même nom existe déjà"
 
-#: models.py:39 tests.py:67
+#: models.py:39 tests.py:66
 #, python-brace-format
 msgid ""
 "Another room with a similar name already exists ('{room_name}'). Please "
@@ -70,13 +70,13 @@ msgid_plural "%(nmsgs)s messages"
 msgstr[0] "%(nmsgs)s message"
 msgstr[1] "%(nmsgs)s messages"
 
-#: templates/chat/chat_rooms.html:41
-msgid "Created by:"
-msgstr "Créé par:"
-
-#: templates/chat/chat_rooms.html:44
+#: templates/chat/chat_rooms.html:44 templates/chat/room_detail.html:53
 msgid "profile"
 msgstr "profil"
+
+#: templates/chat/chat_rooms.html:61
+msgid "No author yet"
+msgstr "Pas encore d'auteur"
 
 #: templates/chat/room_detail.html:19
 msgid "Let's chat!"
@@ -86,22 +86,34 @@ msgstr "Discutons!"
 msgid "hit return to submit, escape to give up"
 msgstr "retour pour soumettre, échap pour abandonner"
 
-#: templates/chat/room_detail.html:36
+#: templates/chat/room_detail.html:34
 msgid "Delete"
 msgstr "Supprimer"
 
-#: templates/chat/room_detail.html:39
+#: templates/chat/room_detail.html:37
 msgid "Edit"
 msgstr "Modifier"
 
-#: templates/chat/room_detail.html:65
+#: templates/chat/room_detail.html:67
 msgid "Message"
 msgstr "Message"
 
-#: templates/chat/room_detail.html:70
+#: templates/chat/room_detail.html:72
 msgid "Submit"
 msgstr "Envoyer"
 
-#: tests.py:35 tests.py:78
+#: templates/chat/room_detail.html:81
+msgid "Room deletion"
+msgstr "Suppression du salon"
+
+#: templates/chat/room_detail.html:82
+#, python-format
+msgid ""
+"Are you sure you want to delete the room \"%(room_name)s\" and all its "
+"messages?"
+msgstr ""
+"Voulez-vous supprimer le salon \"%(room_name)s\" et tous ses messages ?"
+
+#: tests.py:34 tests.py:77
 msgid "Follow"
 msgstr "Suivre"

@@ -39,7 +39,7 @@
 				<a class="button" href="{% url 'forum:edit' post.id %}" title="{%trans 'Edit' %}">
 					{%icon "edit" %}
 				</a>
-				<button class="button js-modal-trigger" data-target="delete-post-modal" title="{%trans 'Delete' %}">
+				<button class="button js-modal-trigger" data-target="delete-item-modal" title="{%trans 'Delete' %}">
 					{%icon "delete" %}
 				</button>
 			</div>
@@ -125,5 +125,11 @@
 {%url "forum:reply" post.id as url%}
 {%include "forum/post_form_include.html" with title=_('Your answer') message_form=reply_form action=url post=post %}
 {%endwith%}
-{%include "forum/post_confirm_delete.html" %}
+
+{% trans 'Delete post' as delete_title%}
+{% blocktranslate asvar delete_msg with object=post.title trimmed %}
+	Are you sure you want to delete "{{ post }}" and all associated replies and comments?
+{% endblocktranslate %}
+{% url 'forum:delete' post.id as delete_url %}
+{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title ays_msg=delete_msg action_url=delete_url expected_value=post.title %}
 {% endblock %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-24 20:38+0200\n"
+"POT-Creation-Date: 2024-07-27 16:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,12 +22,12 @@ msgstr ""
 msgid "Cousins Matter!"
 msgstr "Les Cousins Comptent!"
 
-#: cm_main/followers.py:60 cm_main/tests.py:87
+#: cm_main/followers.py:61 cm_main/tests.py:87
 #, python-format
 msgid "New %(followed_type)s \"%(followed_object_name)s\""
 msgstr "Nouveau %(followed_type)s \"%(followed_object_name)s\""
 
-#: cm_main/followers.py:64
+#: cm_main/followers.py:65
 #, python-format
 msgid ""
 "%(follower_name)s has created a new %(followed_type)s "
@@ -36,14 +36,14 @@ msgstr ""
 "%(follower_name)s a créé un nouveau %(followed_type)s "
 "\"%(followed_object_name)s\""
 
-#: cm_main/followers.py:69 cm_main/tests.py:99
+#: cm_main/followers.py:70 cm_main/tests.py:99
 #, python-format
 msgid ""
 "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
 msgstr ""
 "Nouveau %(obj_type)s ajouté au %(followed_type)s \"%(followed_object_name)s\""
 
-#: cm_main/followers.py:74
+#: cm_main/followers.py:75
 #, python-format
 msgid ""
 "%(follower_name)s has added a new %(obj_type)s in the %(followed_type)s "
@@ -52,23 +52,23 @@ msgstr ""
 "%(follower_name)s a ajouté un nouveau %(obj_type)s au %(followed_type)s "
 "\"%(followed_object_name)s\""
 
-#: cm_main/followers.py:107
+#: cm_main/followers.py:108
 #, python-brace-format
 msgid "You are no longer following this {followed_type}"
 msgstr "Tu ne suis plus ce {followed_type}"
 
-#: cm_main/followers.py:110
+#: cm_main/followers.py:111
 #, python-brace-format
 msgid "You are now following this {followed_type}"
 msgstr "Tu suis maintenant ce {followed_type}"
 
-#: cm_main/followers.py:118 cm_main/tests.py:36
+#: cm_main/followers.py:119 cm_main/tests.py:36
 #, python-format
 msgid "New follower to your %(followed_type)s \"%(followed_object_name)s\""
 msgstr ""
 "Nouveau follower pour ton %(followed_type)s \"%(followed_object_name)s\""
 
-#: cm_main/followers.py:120
+#: cm_main/followers.py:121
 #, python-format
 msgid ""
 "%(follower_name)s is now following your %(followed_type)s "
@@ -114,31 +114,85 @@ msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 msgid "Contact the site admin"
 msgstr "Contacter l'administrateur du site"
 
-#: cm_main/templates/cm_main/contact-form.html:6
-#: cm_main/templates/cm_main/contact-form.html:9
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:26
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:52
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:30
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:56
+#: cm_main/templates/cm_main/contact/contact-form.html:16
+msgid "Cancel"
+msgstr "Annuler"
+
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:38
+#, python-format
+msgid ""
+"Enter \"<span class=\"has-text-danger\">%(expected_value)s</span>\" in the "
+"field below before pressing confirm"
+msgstr ""
+"Saisis \"<span class=\"has-text-danger\">%(expected_value)s</span>\" dans le "
+"champ ci-dessous avant d'appuyer sur confirmer."
+
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:46
+msgid ""
+"Mandatory. Deletion will not take place until the correct value is entered."
+msgstr ""
+"Obligatoire. La suppression n'aura pas lieu tant que la valeur correcte ne "
+"sera pas saisie."
+
+#: cm_main/templates/cm_main/common/include-summernote.html:6
+msgid "Toggle Note Editor Toolbar"
+msgstr "Afficher/Masquer la barre d'outils"
+
+#: cm_main/templates/cm_main/common/include-summernote.html:7
+msgid "Remaining characters:"
+msgstr "Caractères restants:"
+
+#: cm_main/templates/cm_main/common/paginate_template.html:20
+msgid "Items per page:"
+msgstr "Items par page"
+
+#: cm_main/templates/cm_main/common/paginate_template.html:40
+msgid "go to first page"
+msgstr "aller à la 1ère page"
+
+#: cm_main/templates/cm_main/common/paginate_template.html:52
+#, python-format
+msgid "go to page #%(page_num)s"
+msgstr "aller à la page #%(page_num)s"
+
+#: cm_main/templates/cm_main/common/paginate_template.html:55
+#, python-format
+msgid "page #%(page_num)s"
+msgstr "page #%(page_num)s"
+
+#: cm_main/templates/cm_main/common/paginate_template.html:68
+msgid "go to last page"
+msgstr "aller à la dernière page"
+
+#: cm_main/templates/cm_main/contact/contact-form.html:6
+#: cm_main/templates/cm_main/contact/contact-form.html:9
 msgid "Contact Form"
 msgstr "Formulaire de contact"
 
-#: cm_main/templates/cm_main/contact-form.html:10
+#: cm_main/templates/cm_main/contact/contact-form.html:10
 msgid "Please fill out the form below to contact the admin of this site:"
 msgstr ""
 "Merci de remplir le formulaire ci-dessous pour contacter l'administrateur de "
 "ce site :"
 
-#: cm_main/templates/cm_main/contact-form.html:15
+#: cm_main/templates/cm_main/contact/contact-form.html:15
 msgid "Send"
 msgstr "Envoyer"
 
-#: cm_main/templates/cm_main/contact-form.html:16
-msgid "Cancel"
-msgstr "Annuler"
-
-#: cm_main/templates/cm_main/email-contact-form.html:19 cm_main/tests.py:176
+#: cm_main/templates/cm_main/contact/email-contact-form.html:19
+#: cm_main/tests.py:176
 #, python-format
 msgid "%(sender_name)s sent you the following message from %(site_name)s:"
 msgstr "%(sender_name)s t'a envoyé le message suivant depuis %(site_name)s:"
 
-#: cm_main/templates/cm_main/email-contact-form.html:26
+#: cm_main/templates/cm_main/contact/email-contact-form.html:26
 msgid "You can directly reply to this email to answer him/her."
 msgstr "Tu peux répondre directement à cet email pour lui répondre."
 
@@ -196,14 +250,6 @@ msgstr "Arréter de suivre"
 #: cm_main/templates/cm_main/followers/toggle-follow-button.html:11
 msgid "Follow"
 msgstr "Suivre"
-
-#: cm_main/templates/cm_main/include-summernote.html:6
-msgid "Toggle Note Editor Toolbar"
-msgstr "Afficher/Masquer la barre d'outils"
-
-#: cm_main/templates/cm_main/include-summernote.html:7
-msgid "Remaining characters:"
-msgstr "Caractères restants:"
 
 #: cm_main/templates/cm_main/navbar.html:20
 msgid "Members"
@@ -272,28 +318,6 @@ msgstr "Profil"
 #: cm_main/templates/cm_main/navbar.html:116
 msgid "Log Out"
 msgstr "Déconnexion"
-
-#: cm_main/templates/cm_main/paginate_template.html:20
-msgid "Items per page:"
-msgstr "Items par page"
-
-#: cm_main/templates/cm_main/paginate_template.html:40
-msgid "go to first page"
-msgstr "aller à la 1ère page"
-
-#: cm_main/templates/cm_main/paginate_template.html:52
-#, python-format
-msgid "go to page #%(page_num)s"
-msgstr "aller à la page #%(page_num)s"
-
-#: cm_main/templates/cm_main/paginate_template.html:55
-#, python-format
-msgid "page #%(page_num)s"
-msgstr "page #%(page_num)s"
-
-#: cm_main/templates/cm_main/paginate_template.html:68
-msgid "go to last page"
-msgstr "aller à la dernière page"
 
 #: cm_main/tests.py:34
 msgid "You have a new follower!"

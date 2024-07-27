@@ -1,7 +1,7 @@
 {% extends "cm_main/base.html" %}
 {% load i18n cm_tags crispy_forms_tags static %}
 {% block header %}
-	{%include "cm_main/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
+	{%include "cm_main/common/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
 	<script src="{% static 'forum/js/forum.js' %}"></script>
 {%endblock%}
 {% block title %}{% title _("Post") %}{% endblock %}

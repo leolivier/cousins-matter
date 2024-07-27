@@ -147,7 +147,7 @@ class TestContactForm(MemberTestCase):
     """test the contact form"""
     response = self.client.get(reverse('cm_main:contact'))
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'cm_main/contact-form.html')
+    self.assertTemplateUsed(response, 'cm_main/contact/contact-form.html')
 
     # test the form with invalid data
     form = ContactForm({

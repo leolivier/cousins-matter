@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.contrib.flatpages.models import FlatPage
 
 from cm_main.templatetags.cm_tags import icon
 from members.tests.tests_member_base import MemberTestCase
@@ -104,4 +105,21 @@ class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
     &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<strong>{page.title}</strong>
   </div>''', html=True)
 
+    self.login()  # now log back as a normal user
+
+
+class TestDeletePage(TestPageMixin, BasePageTestCase, MemberTestCase):
+  def test_delete_page(self):
+    # get the # of pages at start
+    npages = FlatPage.objects.count()
+    self.superuser_login()  # only superuser can create pages
+    # first, create a page
+    page = self._test_create_page()
+    self.assertEqual(FlatPage.objects.filter(url=page.url).count(), 1)
+    self.assertEqual(FlatPage.objects.count(), npages + 1)
+    # now, delete it
+    response = self.client.get(reverse("pages-edit:delete", args=[page.id]), follow=True)
+    # self.print_response(response)
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(FlatPage.objects.count(), npages)
     self.login()  # now log back as a normal user

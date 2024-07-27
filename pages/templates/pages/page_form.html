@@ -7,10 +7,11 @@
 		{% title _("Create Page") %}
 	{%endif%}
 {% endblock %}
-{% block header %}{%include "cm_main/common/include-summernote.html" with maxsize=settings.PAGE_MAX_SIZE %}{%endblock%}
+{% block header %}
+	{%include "cm_main/common/include-summernote.html" with maxsize=settings.PAGE_MAX_SIZE %}
+{%endblock%}
 {% block content %}
 <div class="container mt-5 px-2">
-	update={{update}}
 	<h1 class="title has-text-centered">
 		{%if form.instance.pk%}
 			{% title _("Update Page") %}
@@ -29,11 +30,17 @@
 				{%endif%}
 			</button>
 			{%if form.instance.pk%}
-			<button class="button is-danger" onclick="areyousure({{form.instance.pk}})">
+			<button class="button js-modal-trigger" data-target="delete-item-modal">
 				{%icon "delete"%} <span>{%trans "Delete Page"%}</span>
 			</button>
 			{%endif%}
 		</div>
 	</form>
 </div>
+{%if form.instance.pk%}
+	{%trans "Delete Page" as delete_title %}
+	{%blocktranslate asvar delete_msg with title=form.instance.title%}Are you sure you want to delete the page "{{title}}"?{%endblocktranslate%}
+	{%url "pages-edit:delete" form.instance.pk as delete_url%}
+	{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title ays_msg=delete_msg action_url=delete_url expected_value=page.title %}
+{%endif%}
 {% endblock %}

@@ -8,4 +8,5 @@ urlpatterns = [
     path("admin", views.PageAdminListView.as_view(), name="edit_list"),
     path("create", views.PageCreateView.as_view(), name="create"),
     path("<int:pk>", views.PageUpdateView.as_view(), name="update"),
+    path("<int:pk>/delete", views.PageDeleteView.as_view(), name="delete"),
 ]

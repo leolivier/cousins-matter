@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.models import Site
+from django.contrib import messages
+from django.utils.translation import gettext as _
 
 from cm_main.views import OnlyAdminMixin
 from .utils import flatpage_url
@@ -47,3 +49,12 @@ class PageAdminListView(OnlyAdminMixin, generic.ListView):
 class PageTreeView(OnlyAdminMixin, generic.ListView):
   model = FlatPage
   template_name = "pages/page_tree.html"
+
+
+class PageDeleteView(OnlyAdminMixin, generic.View):
+
+  def get(self, request, pk):
+    page = get_object_or_404(FlatPage, pk=pk)
+    page.delete()
+    messages.success(request, _("Page \"%(title)s\" deleted") % {"title": page.title})
+    return redirect("pages-edit:edit_list")

@@ -4,9 +4,9 @@
 {% block content %}
 <div class="container">
 	<nav class="panel">
-		<p class="panel-heading">
-			{%title _('Pages') %}
-			<a class="button is-pulled-right" href="{%url 'pages-edit:create'%}" title="{% trans 'Create Page' %}">
+		<p class="panel-heading is-flex is-align-items-center is-justify-content-center">
+			<span class="is-flex-grow-1 has-text-centered">{%title _('Pages') %}</span>
+			<a class="button mx-auto" href="{%url 'pages-edit:create'%}" title="{% trans 'Create Page' %}">
 				{%icon "new-page" %}
 				<span class="is-hidden-mobile">{% trans 'Create Page' %}</span>
 			</a>

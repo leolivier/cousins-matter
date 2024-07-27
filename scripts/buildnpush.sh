@@ -24,6 +24,7 @@ platforms='linux/amd64,linux/arm64'
 echo $CR_PAT | docker login ghcr.io -u leolivier  --password-stdin
 
 # build and push
+echo "docker buildx build --platform $platforms -t $image:$tag --push ."
 docker buildx build --platform $platforms -t $image:$tag --push .
 
 if [[ -n $other_tags ]];

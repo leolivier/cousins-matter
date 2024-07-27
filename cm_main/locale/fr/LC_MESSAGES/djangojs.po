@@ -41,3 +41,12 @@ msgstr "Es-tu sûr de vouloir supprimer cette réponse et ses commentaires?"
 
 msgid "The message content is too large. Please select smaller images."
 msgstr "Le contenu du message est trop grand. Merci de sélectionner des images plus petites."
+
+msgid "Deletion confirmed..."
+msgstr "Suppression confirmée..."
+
+msgid "The message was empty!"
+msgstr "Le message est vide !"
+
+msgid "Not valid!"
+msgstr "Non valide !"

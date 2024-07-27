@@ -78,8 +78,9 @@ $(document).ready(function() {
     const modal = $(this).data('target');
     const $target = $('#'+modal);
     // console.log('adding openmodal to '+$target+' modal='+modal)
-    $(this).on('click', () => {
+    $(this).on('click', (e) => {
       openModal($target);
+      e.preventDefault(); // block event even in a form
     });
   });
 

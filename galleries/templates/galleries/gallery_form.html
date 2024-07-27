@@ -8,7 +8,7 @@
 	{% endif %}
 {% endblock %}
 {% block header %}
-	{%include "cm_main/include-summernote.html" with maxsize=settings.COMMENT_MAX_SIZE %}
+	{%include "cm_main/common/include-summernote.html" with maxsize=settings.COMMENT_MAX_SIZE %}
 {%endblock%}
 {% block content %}
 <div class="container mt-5 px-2">

@@ -117,7 +117,7 @@ def do_title(parser, token):
     return TitleNode(title, var_name)
 
 
-@register.inclusion_tag("cm_main/paginate_template.html")
+@register.inclusion_tag("cm_main/common/paginate_template.html")
 def paginate(page, no_per_page=False):
     # print("page=", page)
     return {
@@ -153,7 +153,7 @@ def find_static_file(url):
             return None
 
 
-@register.inclusion_tag("cm_main/inline_css.html")
+@register.inclusion_tag("cm_main/common/inline_css.html")
 def inline_css(css_url):
     css_path = find_static_file(css_url)
     if css_path is None:

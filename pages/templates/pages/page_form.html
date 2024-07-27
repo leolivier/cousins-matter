@@ -1,16 +1,46 @@
 {% extends "cm_main/base.html" %}
 {% load i18n crispy_forms_tags cm_tags %}
-{% block title %}{%if form.instance%}{% title _("Update Page") %}{%else%}{% title _("Create Page") %}{%endif%}{% endblock %}
-{% block header %}{%include "cm_main/include-summernote.html" with maxsize=settings.PAGE_MAX_SIZE %}{%endblock%}
+{% block title %}
+	{%if form.instance.pk%}
+		{% title _("Update Page") %}
+	{%else%}
+		{% title _("Create Page") %}
+	{%endif%}
+{% endblock %}
+{% block header %}
+	{%include "cm_main/common/include-summernote.html" with maxsize=settings.PAGE_MAX_SIZE %}
+{%endblock%}
 {% block content %}
 <div class="container mt-5 px-2">
-	<h1 class="title has-text-centered">{%if form.instance%}{% title _("Update Page") %}{%else%}{% title _("Create Page") %}{%endif%}</h1>
+	<h1 class="title has-text-centered">
+		{%if form.instance.pk%}
+			{% title _("Update Page") %}
+		{%else%}
+			{% title _("Create Page") %}
+		{%endif%}</h1>
 	<form method="post">
 		{% csrf_token %}
 		{{ form | crispy}}
 		<div class="buttons is-centered">
-			<button type="submit" class="button is-dark">{%if form.instance%}{%trans "Update Page"%}{%else%}{%trans "Create Page"%}{%endif%}</button>
+			<button type="submit" class="button is-dark">
+				{%if form.instance.pk %}
+					{%icon "update"%} <span>{%trans "Update Page"%}</span>
+				{%else%}
+					{%icon "create"%} <span>{%trans "Create Page"%}</span>
+				{%endif%}
+			</button>
+			{%if form.instance.pk%}
+			<button class="button js-modal-trigger" data-target="delete-item-modal">
+				{%icon "delete"%} <span>{%trans "Delete Page"%}</span>
+			</button>
+			{%endif%}
 		</div>
 	</form>
 </div>
+{%if form.instance.pk%}
+	{%trans "Delete Page" as delete_title %}
+	{%blocktranslate asvar delete_msg with title=form.instance.title%}Are you sure you want to delete the page "{{title}}"?{%endblocktranslate%}
+	{%url "pages-edit:delete" form.instance.pk as delete_url%}
+	{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title ays_msg=delete_msg action_url=delete_url expected_value=page.title %}
+{%endif%}
 {% endblock %}

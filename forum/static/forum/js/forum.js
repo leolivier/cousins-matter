@@ -45,7 +45,7 @@ function hide_edit_reply_form(id, value=undefined) {
 }
 
 function delete_reply(url, id) {
-	if (confirm(gettext("Are you sure you want to delete this replyy and its comments?"))) {
+	if (confirm(gettext("Are you sure you want to delete this reply and its comments?"))) {
 		ajax_action(url, (response)=>{
 			$('#reply-div-'+id).remove()
 		})                

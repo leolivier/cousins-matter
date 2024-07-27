@@ -40,11 +40,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
       self.room_group_name,
       self.channel_name
     )
-    logger.warn(f"websocket disconnected: {close_code}")
-    super().disconnect(close_code)
+    logger.debug(f"websocket disconnected: {close_code}")
+    await super().disconnect(close_code)
 
   async def close(self, code=None, reason=None):
-    logger.warn(f"websocket closed connection: {code} {reason}")
+    logger.debug(f"websocket closed connection: {code} {reason}")
     await super().close(code, reason)
 
   @sync_to_async

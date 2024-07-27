@@ -1,7 +1,7 @@
 {% extends "members/base_members.html" %}
 {% load i18n crispy_forms_tags cm_tags %}
 {% block title %}{% title title %} {% endblock %}
-{% block header %}{%include "cm_main/include-bulma-calendar.html" %}{%endblock%}
+{% block header %}{%include "cm_main/common/include-bulma-calendar.html" %}{%endblock%}
 {% block content %}
 {%with member=form.instance%}
 <div class="container px-2">
@@ -40,7 +40,7 @@
 					<span>{% translate "Activate Account" %}</span>
 				</a>
 				{% endif %}
-				<button class="button js-modal-trigger" data-target="delete-member-modal" title="{%trans 'Delete' %}">
+				<button class="button js-modal-trigger" data-target="delete-item-modal" title="{%trans 'Delete' %}">
 					{%icon "delete" %}
 					<span>
 						{% if member.id == request.user.id %}{# profile update #}
@@ -122,6 +122,16 @@
 			});
 		</script>
 	{% endblock javascript %}
-	{%if member and member.id %}{%include "members/members/member_confirm_delete.html" %}{%endif%}
+	{%if member and member.id %}
+		{% if form.instance.id == request.user.id %}{# profile removal #}
+			{% trans "Delete My Account" as delete_title %}
+			{% trans "Are you sure you want to delete your account and all associated data? This is irrecoverable!" as delete_msg %}
+		{%else%}{# managed member removal #}
+			{% trans "Delete Member" as delete_title %}
+			{% blocktranslate  asvar delete_msg with name=member.get_full_name trimmed %}Are you sure you want to delete {{ name }}'s account and all associated data?{% endblocktranslate %}
+		{%endif%}
+		{% url 'members:delete' member.id as delete_url %}
+		{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title ays_msg=delete_msg action_url=delete_url expected_value=member.username %}
+	{%endif%}
 {%endwith%}
 {% endblock content %}

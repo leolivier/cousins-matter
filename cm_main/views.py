@@ -52,7 +52,7 @@ def download_protected_media(request, media):
 
 
 class ContactView(LoginRequiredMixin, generic.FormView):
-  template_name = "cm_main/contact-form.html"
+  template_name = "cm_main/contact/contact-form.html"
   form_class = ContactForm
   success_url = "/"
   _admin = None
@@ -79,7 +79,7 @@ class ContactView(LoginRequiredMixin, generic.FormView):
         [self.admin().email],
       )
       # attach an HTML version of the message
-      html_message = render_to_string('cm_main/email-contact-form.html', {
+      html_message = render_to_string('cm_main/contact/email-contact-form.html', {
         'title': title,
         'sender': sender,
         'message': form.cleaned_data['message'],

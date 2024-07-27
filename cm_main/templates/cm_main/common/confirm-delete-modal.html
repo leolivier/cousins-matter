@@ -1,0 +1,81 @@
+{%comment%}
+This is a generic delete modal form. It can be included only once per page.
+It shows an {{ays_title}} and an {{ays_msg}}.
+If {{expected_value}} is empty, only a message is shown and a confirm button is enough
+otherwise, a form is added a,d the user must fill an input text with the given
+{{expected_value}} before being able to click on confirm. In case of confirmation,
+{{action_url}} is triggered.
+To trigger this modal dialog,create a button in the form:
+<button class="button is-danger js-modal-trigger" data-target="delete-item-modal">delete this</button>
+{%endcomment%}
+{% load i18n %}
+<div class="modal" id="delete-item-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<p class="modal-card-title">{{ays_title}}</p>
+			<button class="delete" aria-label="close"></button>
+		</header>
+		<section class="modal-card-body">
+			{{ays_msg}}
+		</section>
+		<footer class="modal-card-foot">
+			<div class="container">
+				{%if not expected_value %} {# soft confirmation: no field to be filled by the user #}
+				<div class="field is-grouped is-grouped-centered">
+					<p class="control">
+						<a class="control button is-danger" href="{{action_url}}">
+						{%translate 'Confirm' %}
+						</a>
+					</p>
+					<p class="control">
+						<a type="reset" class="control button is-light" aria-label="close">{%trans "Cancel" %}</a>
+					</p>
+				</div>
+				{%else%} {# hard confirmation: add a field to be filled by the user to confirm #}
+				<form method="post" action="{{action_url}}" id="delete_item_form">
+					{%csrf_token%}
+					<div class="field">
+						<label class="label">{%autoescape off%}
+							{%blocktranslate%}Enter "<span class="has-text-danger">{{expected_value}}</span>" in the field below before pressing confirm{%endblocktranslate%}
+							{%endautoescape%}</label>
+						<div class="control">
+							<input type="text" id="deletion_confirmation_input" name="confirmation_check" 
+								value="" maxlength="150" class="input" required="" aria-describedby="deletion_confirmation_helptext">
+						</div>
+						<span id="confirmation_validation_span" class="has-text-danger"></span>
+						<p id="deletion_confirmation_helptext" class="help">
+							{%trans "Mandatory. Deletion will not take place until the correct value is entered."%}
+						</p>
+					</div>
+					<div class="field is-grouped is-grouped-centered">
+						<p class="control">
+							<button type="submit" class="control button is-danger keep-open-on-click">
+							{%translate 'Confirm' %}
+							</button>
+						</p>
+						<p class="control">
+							<button type="reset" class="control button is-light" aria-label="close">{%trans "Cancel" %}</button>
+						</p>
+					</div>
+				</form>
+				{%endif%}
+			</div>
+		</footer>
+	</div>
+</div>
+<script>
+	$(document).ready(() => {
+		$("#delete_item_form").on("submit", (event) => {
+			const $entered_confirmation = $("#deletion_confirmation_input").val();
+			if ( $entered_confirmation == "{{expected_value}}" ) {
+				$("#confirmation_validation_span").text(gettext("Deletion confirmed...")).show().fadeOut(2000);
+				setTimeout(()=>{closeModal($("#delete-item-modal"))}, 3000);
+				return;
+			}
+	 
+			$("#confirmation_validation_span").text(gettext("Not valid!")).show().fadeOut(2000);
+			event.preventDefault();
+		});
+	})
+</script>

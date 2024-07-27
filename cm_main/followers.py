@@ -17,7 +17,7 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
     Sends an email to the followers of a followed object (followed_object) to which a new element new_internal_object is added.
     new_internal_object is the just create object,
     author is the member who created the new object, and followed_object_url is an url to display the followed object.
-    If the request is not given (ie is None), then the followed_object_url ùust be an absolute URL, otherwise it has to be a 
+    If the request is not given (ie is None), then the followed_object_url ùust be an absolute URL, otherwise it has to be a
     reative URL.
     Followers are the members who follow the followed object, and they are stored in the followed_object.followers attribute.
     It is assumed that str(followed_object) returns a string that can be used in the name of the followed object.

@@ -3,8 +3,7 @@
 import math
 from pathlib import PosixPath
 from contextlib import contextmanager
-# from pprint import pprint
-from django.conf import settings
+
 from django.forms import ValidationError
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -13,15 +12,23 @@ from django.core import paginator
 from django.db import connections
 
 
-# terrible hack!!!
+# terrible hack to check if we are in testing mode!!!
+IS_TESTING = None
+
+
 def is_testing():
+    global IS_TESTING
+    if IS_TESTING is not None:
+        return IS_TESTING
+    IS_TESTING = False
     for connection in connections.all():
         # print(f"searching test in {connection.settings_dict['NAME']}...")
         if not isinstance(connection.settings_dict['NAME'], PosixPath):
             # print("found")
-            return True
+            IS_TESTING = True
+            break
     # print("no test connection found")
-    return False
+    return IS_TESTING
 
 
 def is_ajax(request):
@@ -79,14 +86,6 @@ class Paginator(paginator.Paginator):
         page.possible_per_pages = self.possible_per_pages
         # pprint(vars(page))
         return page
-
-
-def get_absolute_url_wo_request(url):
-    if is_testing():  # terrible hack :(
-        return "http://testserver" + url
-    if not settings.SITE_URL:
-        raise ValueError("settings.SITE_URL is not set")
-    return settings.SITE_URL + url
 
 
 @contextmanager

@@ -71,7 +71,7 @@ class ChatRoomTests(MemberTestCase):
     rooms = [ChatRoom.objects.create(name='Chat Room #%i' % i) for i in range(5)]
     ChatMessage.objects.create(room=rooms[0], content='a message', member=self.member)
     response = self.client.get(reverse('chat:chat'))
-    self.print_response(response)
+    # self.print_response(response)
     nmsgs = 1
     nfollowers = 0
     follow = _('Follow')
@@ -141,7 +141,7 @@ class ChatRoomTests(MemberTestCase):
 
 
 class ChatMessageSenderMixin():
-  async def send_chat_message(self, msg, room_slug):
+  async def send_chat_message(self, msg, room_slug, disconnect=True):
     # sender is the currently connected user
     sender = await aget_user(self.client)
     data = {
@@ -156,7 +156,10 @@ class ChatMessageSenderMixin():
     self.assertTrue(connected)
     # Test sending data as text
     await communicator.send_json_to(data)
-    return communicator
+    if disconnect:
+      await communicator.disconnect()
+    else:
+      return communicator
 
   def setUp(self):
     super().setUp()
@@ -178,7 +181,7 @@ class ChatMessageSenderMixin():
 class ChatMessageTests(ChatMessageSenderMixin, MemberTestCase):
   async def test_chat_consumer(self):
     msg = 'this is my message to the world!'
-    communicator = await self.send_chat_message(msg, self.slug)
+    communicator = await self.send_chat_message(msg, self.slug, disconnect=False)
     response = await communicator.receive_json_from()
     # print(response)
     self.assertEqual(response['message'], msg)
@@ -214,9 +217,7 @@ class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageSenderMixin, MemberTe
     # message on the room and become the owner
     new_poster = await self.acreate_member_and_login()
     msg = 'this is the first message on the room si I am the owner!'
-    communicator = await self.send_chat_message(msg, self.slug)
-    # Close communication
-    await communicator.disconnect()
+    await self.send_chat_message(msg, self.slug)
 
     # make sure the outbox is empty
     mail.outbox = []
@@ -232,9 +233,7 @@ class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageSenderMixin, MemberTe
     # now log again as new_poster and send another message on the room
     await self.alogin_as(new_poster)
     msg = 'this is a message to my followers!'
-    communicator = await self.send_chat_message(msg, self.slug)
-    # Close communication
-    await communicator.disconnect()
+    await self.send_chat_message(msg, self.slug)
 
     # get the message
     message = await ChatMessage.objects.aget(room=self.room, content=msg)

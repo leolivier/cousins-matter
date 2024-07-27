@@ -145,9 +145,7 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
 
     # now, followed will create a message on the room
     msg = 'this is the first message on the room so I become the owner!'
-    communicator = await self.send_chat_message(msg, room_slug=room.slug)
-    # Close communication
-    await communicator.disconnect()
+    await self.send_chat_message(msg, room_slug=room.slug)
     message = await ChatMessage.objects.aget(room=room, content=msg)
     self.check_new_content_email(
       follower=follower,
@@ -170,18 +168,14 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
     room = await ChatRoom.objects.aget(name=room_name)
     room_url = get_absolute_url(reverse('chat:room', args=[room.slug]))
     first_msg = "a 1rst msg in the followed's room"
-    communicator = await self.send_chat_message(first_msg, room_slug=room.slug)
-    # Close communication
-    await communicator.disconnect()
+    await self.send_chat_message(first_msg, room_slug=room.slug)
 
     # force reset the mail outbox.
     mail.outbox = []
     # now, followed will reply to the follower's message
     await self.alogin_as(followed)
     reply_msg = "a reply to be followed's room"
-    communicator = await self.send_chat_message(reply_msg, room_slug=room.slug)
-    # Close communication
-    await communicator.disconnect()
+    await self.send_chat_message(reply_msg, room_slug=room.slug)
 
     message = await ChatMessage.objects.aget(room=room, content=reply_msg)
     self.check_new_content_email(

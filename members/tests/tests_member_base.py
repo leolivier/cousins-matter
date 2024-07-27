@@ -1,9 +1,11 @@
+from datetime import date
 from urllib.parse import urlencode
 from django.urls import reverse
 from django.contrib.auth import get_user
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
+
 from ..models import Member
-from datetime import date
+
 COUNTER = 0
 
 
@@ -12,6 +14,10 @@ def get_counter():
   COUNTER += 1
   # print('count=', COUNTER)
   return str(COUNTER)
+
+
+def get_fake_request():
+    return RequestFactory().get('/dummy-path')
 
 
 class MemberTestCase(TestCase):

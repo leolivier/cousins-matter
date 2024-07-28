@@ -7,11 +7,17 @@
 {% block title %}{% title _("Post") %}{% endblock %}
 {% block content %}
 {%with message=post.first_message %}
-{%blocktranslate asvar trans_nreplies count nreplies=post.message_set.count|add:-1 trimmed %}
-	{{nreplies}} answer
-{%plural%}
-	{{nreplies}} answers
-{%endblocktranslate%}
+	{%if nreplies > 0%}
+		{%blocktranslate asvar trans_nreplies count nreplies=post.message_set.count|add:-1 trimmed %}
+			{{nreplies}} answer
+			{%plural%}
+			{{nreplies}} answers
+			{%endblocktranslate%}
+	{%else%}
+		{%trans 'No answer' as trans_nreplies%}
+	{%endif%}
+
+
 <div class="container mt-5 px-2">
 	<div class="level">
 		<div class="level-left">
@@ -29,7 +35,7 @@
 				<br>
 				<span class="is-size-7">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>
 				<br>
-				<span class="tag">{{trans_nreplies}}</span>
+				<span class="tag" id="nb-replies-id1">{{trans_nreplies}}</span>
 				{%include "cm_main/followers/followers-count-tag.html" with followed_object=post %}
 			</div>
 		</div>
@@ -56,12 +62,10 @@
 {%include "forum/comment_list.html" with message=message%}
 <hr>
 <div class="container px-2">
-	<p class="tag is-medium mb-4">
-		{%if nreplies > 0%}
-			{{trans_nreplies}}
+	<p class="tag is-medium mb-4" id="nb-replies-id2">
+		{{trans_nreplies}}
+		{%if nreplies > 0 %}
 			{%paginate page%}
-		{%else%}
-			{%trans 'No answer'%}
 		{%endif%}
 	</p>
 

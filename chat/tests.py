@@ -141,15 +141,7 @@ class ChatRoomTests(MemberTestCase):
 
 
 class ChatMessageSenderMixin():
-  async def send_chat_message(self, msg, room_slug, disconnect=True):
-    # sender is the currently connected user
-    sender = await aget_user(self.client)
-    data = {
-      'message': msg,
-      'member': sender.id,
-      'username': sender.username,
-      'room': room_slug,
-    }
+  async def _send_msg(self, room_slug, data, disconnect):
     application = URLRouter(websocket_urlpatterns)
     communicator = WebsocketCommunicator(application, f"/chat/{room_slug}")
     connected, subprotocol = await communicator.connect()
@@ -160,6 +152,29 @@ class ChatMessageSenderMixin():
       await communicator.disconnect()
     else:
       return communicator
+
+  async def send_chat_message(self, msg, room_slug, disconnect=True):
+    # sender is the currently connected user
+    sender = await aget_user(self.client)
+    data = {
+      'action': 'create_chat_message',
+      'args': {
+        'message': msg,
+        'member': sender.id,
+        'username': sender.username,
+        'room': room_slug,
+      }
+    }
+    return await self._send_msg(room_slug, data, disconnect)
+
+  async def send_delete_message(self, room_slug, msgid):
+    data = {
+      'action': 'delete_chat_message',
+      'args': {
+        'msgid': msgid
+      }
+    }
+    return await self._send_msg(room_slug, data, disconnect=True)
 
   def setUp(self):
     super().setUp()
@@ -172,10 +187,6 @@ class ChatMessageSenderMixin():
     self.room = None
     super().tearDown()
 
-  @sync_to_async
-  def check_msg_member(self, msg):
-    self.assertEqual(self.member, msg.member)
-
 
 @tag("needs-redis")
 class ChatMessageTests(ChatMessageSenderMixin, MemberTestCase):
@@ -184,14 +195,19 @@ class ChatMessageTests(ChatMessageSenderMixin, MemberTestCase):
     communicator = await self.send_chat_message(msg, self.slug, disconnect=False)
     response = await communicator.receive_json_from()
     # print(response)
-    self.assertEqual(response['message'], msg)
-    self.assertEqual(response['username'], self.member.username)
+    self.assertTrue('args' in response)
+    self.assertEqual(response['args']['message'], msg)
+    self.assertEqual(response['args']['username'], self.member.username)
     message = await ChatMessage.objects.filter(room=self.room).afirst()
     self.assertIsNotNone(msg)
-    self.assertEqual(response['message'], message.content)
-    await self.check_msg_member(message)
-    # Close
+    self.assertEqual(response['args']['message'], message.content)
+    self.assertEqual(self.member.id, message.member_id)
+    # Close communication
     await communicator.disconnect()
+
+    # now, delete the message
+    await self.send_delete_message(self.slug, message.id)
+    self.assertEqual(await ChatMessage.objects.acount(), 0)
 
 
 @tag("needs-redis")

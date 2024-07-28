@@ -16,6 +16,6 @@ urlpatterns = [
 ]
 if settings.DEBUG:
   urlpatterns += [
-    path('test/create_rooms/<int:num_rooms>', views.test_create_rooms, name='test_create_rooms'),
-    path('test/create_messages/<int:num_messages>', views.test_create_messages, name='test_create_messages'),
+    path('test/create_rooms/<int:num_rooms>', views.create_test_rooms, name='test_create_rooms'),
+    path('test/create_messages/<int:num_messages>', views.create_test_messages, name='test_create_messages'),
   ]

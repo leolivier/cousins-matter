@@ -5,8 +5,8 @@
 const $roomSlug = encodeURIComponent('{{room.slug}}');
 const $member = '{{request.user.id}}';
 const $userName = '{{request.user.username}}';
-const $pageNumber = {{page.number}};
-const $numPages = {{page.num_pages}};
+const $pageNumber = parseInt('{{page.number}}');
+const $numPages = parseInt('{{page.num_pages}}');
 const $lastPageLink = '{{page.last_page_link}}';
 const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 </script>
@@ -47,7 +47,8 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 			</div>
 			<div  id="chat-messages">
 			{%for msg in chat_messages %}
-			<div class="panel-block has-text-right is-flex is-flex-wrap-wrap is-align-items-flex-start">
+			{# WARNING!!! The code of below <div> is duplicated in chat.js, function append_message_data #}
+			<div class="panel-block has-text-right is-flex is-flex-wrap-wrap is-align-items-flex-start" id="message-div-{{msg.id}}">
 				<p class="has-text-primary has-text-weight-bold mr-5">
 					{{msg.member.username}}
 					<a href="{%url 'members:detail' msg.member.id %}" aria-label="{%trans 'profile'%}">
@@ -56,8 +57,12 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 					<br>
 					<span class="is-size-7">{{msg.date_added|date:"DATETIME_FORMAT"}}</span>
 				</p>
-				<p class="content">{{msg.content}}</p> 
-				
+				<p class="content is-flex-grow-1 has-text-left">{{msg.content}}</p> 
+				{%if request.user == msg.member %}
+				<div class="button is-pulled-right delete-chat-message" title="{%trans 'Delete' %}" data-msgid="{{msg.id}}">
+					{%icon "delete" %}
+				</div>
+				{%endif%}
 			</div>
 			{%endfor%}
 		</div>

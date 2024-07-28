@@ -1,4 +1,5 @@
 import logging
+from urllib.parse import unquote, urlencode
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -7,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.db.models import Count, OuterRef, Subquery
-from urllib.parse import unquote, urlencode
 
 from cousinsmatter.utils import Paginator, is_ajax
 from cm_main import followers
@@ -122,14 +122,14 @@ def delete_room(request, room_slug):
 
 
 @login_required
-def test_create_rooms(request, num_rooms):
+def create_test_rooms(request, num_rooms):
   for i in range(num_rooms):
     ChatRoom(name=f"a chat room #{i}").save()
   return redirect("chat:chat")
 
 
 @login_required
-def test_create_messages(request, num_messages):
+def create_test_messages(request, num_messages):
   room = ChatRoom.objects.create(name="A chat room for testing a lot of messages")
   connected_member = Member.objects.get(id=request.user.id)
   for i in range(num_messages):

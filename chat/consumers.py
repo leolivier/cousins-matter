@@ -7,6 +7,7 @@ from asgiref.sync import sync_to_async
 from urllib.parse import unquote
 from django.conf import settings
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from cm_main.followers import check_followers
 from cm_main.tests import get_absolute_url
@@ -96,29 +97,41 @@ class ChatConsumer(AsyncWebsocketConsumer):
 # 		}
 # 	}
 # }
+  def _build_absolute_url(self, relative_url):
+    # big hack...
+    headers = dict(self.scope['headers'])
+    origin = headers.get(b'origin', b'').decode()
+    if origin == '':
+      if is_testing():
+        return get_absolute_url(relative_url)
+      else:
+        raise ValueError("Missing origin header")
+    else:
+      return f"{origin}{relative_url}"
 
   async def save_message(self, member_id, room_slug, msg_content):
     # print('room slug: ', room_slug)
     room = await ChatRoom.objects.aget(slug=room_slug)
     member = await Member.objects.aget(pk=member_id)
     message = await ChatMessage.objects.acreate(member=member, room=room, content=msg_content)
-    # big hack...
-    headers = dict(self.scope['headers'])
-    origin = headers.get(b'origin', b'').decode()
-    if origin == '':
-      if is_testing():
-        url = get_absolute_url(reverse('chat:room', args=[room_slug]))
-      else:
-        raise ValueError("Missing origin header")
-    else:
-      url = f"{origin}{reverse('chat:room', args=[room_slug])}"
-    # url = reverse('chat:room', args=[room_slug])
+    url = self._build_absolute_url(reverse('chat:room', args=[room_slug]))
     await self.acheck_followers(room, message, member, url)
     return message
 
   # Receive message from WebSocket
   async def receive(self, text_data):
     data = json.loads(text_data)
+    action = data['action']
+    args = data['args']
+    match action:
+      case 'create_chat_message':
+        await self.receive_create_chat_message(args)
+      case 'delete_chat_message':
+        await self.receive_delete_chat_message(args)
+      case _:
+        raise ValueError(f"Unknown action: {action}")
+
+  async def receive_create_chat_message(self, data):
     message = data['message']
     member_id = data['member']
     username = data['username']
@@ -129,22 +142,59 @@ class ChatConsumer(AsyncWebsocketConsumer):
     await self.channel_layer.group_send(
       self.room_group_name,
       {
-        'type': 'chat_message',
+        'type': 'create_chat_message',
         'message': message,
         'username': username,
         'date_added': format_datetime(msg.date_added, tzinfo=settings.TIME_ZONE, locale=self.locale),
+        'msgid': msg.id,
       }
     )
 
   # Receive message from room group
-  async def chat_message(self, event):
-    message = event['message']
-    username = event['username']
-    date_added = event['date_added']
-
+  async def create_chat_message(self, event):
+    # create delete_url and member_url
+    msgid = event['msgid']
+    msg = await ChatMessage.objects.aget(pk=msgid)
     # Send message to WebSocket
     await self.send(text_data=json.dumps({
-      'message': message,
-      'username': username,
-      'date_added': date_added
+      'action': 'create_chat_message',
+      'args': {
+        'message': event['message'],
+        'username': event['username'],
+        'date_added': event['date_added'],
+        'msgid': msgid,
+        'member_url': reverse('members:detail', args=[msg.member_id]),
+      }
+    }))
+
+  async def receive_delete_chat_message(self, data):
+    msgid = data['msgid']
+    message = await ChatMessage.objects.aget(pk=msgid)
+    if 'asgi' not in self.scope:
+      print('no asgi in data:', self.scope)
+    elif 'user' not in self.scope['asgi']:
+      print("no user in asgi:", self.scope['asgi'])
+    else:
+      user = self.scope['asgi']['user']
+      if user.pk != message.member_id:
+        raise PermissionError(_("You can only delete your own messages"))
+    # delete the message
+    await message.adelete()
+    # print("message deleted!", msgid)
+    # Send delete message to room group
+    await self.channel_layer.group_send(
+      self.room_group_name,
+      {
+        'type': 'delete_chat_message',
+        'msgid': msgid
+      }
+    )
+
+  async def delete_chat_message(self, event):
+    # Send message to WebSocket
+    await self.send(text_data=json.dumps({
+      'action': 'delete_chat_message',
+      'args': {
+        'msgid': event['msgid'],
+      }
     }))

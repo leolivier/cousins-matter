@@ -50,3 +50,13 @@ msgstr "Le message est vide !"
 
 msgid "Not valid!"
 msgstr "Non valide !"
+
+msgid "%s answer"
+msgid_plural "%s answers"
+msgstr[0] "%s réponse"
+msgstr[1] "%s réponses"
+
+msgid "%s comment"
+msgid_plural "%s comments"
+msgstr[0] "%s commentaire"
+msgstr[1] "%s commentaires"

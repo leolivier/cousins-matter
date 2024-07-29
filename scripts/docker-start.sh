@@ -21,7 +21,8 @@ It will first check if a .env file exist in the chosen directory.
 If not, it will download the .env.example from github, rename it to .env and invite the user to edit it, then exit.
 Otherwise, it will create the media and data sub directories if needed.
 Then it will pull the image '$image:<tag>'.
-And finally, it will start the image with the proper mounted volumes,the right port and the right command.
+Afterwards, it will start the image with the proper mounted volumes,the right port and the right command.
+And finally, it will check if a superuser already exists in the database, other wise it will run the command to create it.
 
 EOF
 	exit 0
@@ -63,7 +64,7 @@ is_in_list() {
 
 if [[ -d $directory ]]; then
 	# Check first-level files and folders to avoid using an existing folder not dedicated to cousins-matter
-	allowed_files=(.env .env-example docker-compose.yml)
+	allowed_files=(.env .env-example docker-start.sh docker-compose.yml)
 	allowed_dirs=(media data)
 	echo "directory $directory exists, checking it does contain only allowed files and directories..."
 	for item in "$directory"/*; do
@@ -122,3 +123,16 @@ echo "starting $container"
 docker run --name $container -p $port:8000 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media $tagged_image
 echo "started"
 
+echo "Waiting for the container to be ready..."
+for i in {1..10}; do
+ sleep 1
+ echo -n '.'
+done
+echo
+
+echo "checking if superuser exists..."
+if [[ $(docker exec cousins-matter python manage.py shell -c "from members.models import Member; print(Member.objects.filter(is_superuser=True).exists())" 2>/dev/null) == 'True' ]]; 
+then echo "superuser already exists"
+else echo "creating superuser..."
+		docker exec -it $container python manage.py createsuperuser
+fi

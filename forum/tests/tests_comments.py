@@ -1,5 +1,5 @@
 from django.urls import reverse
-from cm_main.tests import TestFollowersMixin
+from cm_main.tests.tests_followers import TestFollowersMixin
 from forum.tests.tests_post import ForumTestCase
 from django.core.exceptions import ValidationError
 

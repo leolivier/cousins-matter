@@ -26,6 +26,7 @@ last_modified_date = timezone.now()
 urlpatterns = [
   path("", views.HomeView.as_view(), name="Home"),
   path("contact/", views.ContactView.as_view(), name="contact"),
+  path("about/", views.statistics, name="about"),
   path('jsi18n/cm_main',
        last_modified(lambda req, **kw: last_modified_date)(  # JS Catalog will be reloaded only at server restart
           JavaScriptCatalog.as_view(packages=['cm_main'])),

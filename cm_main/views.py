@@ -18,6 +18,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.template.loader import render_to_string
 from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 
+from galleries.models import Gallery, Photo
+from members.models import Member
+
 from .forms import ContactForm
 
 logger = logging.getLogger(__name__)
@@ -130,3 +133,29 @@ def send_zipfile(request):
   response["Content-Disposition"] = "attachment; filename=file.zip"
   temp.seek(0)
   return response
+
+
+@login_required
+def statistics(request):
+  admin = Member.objects.filter(is_superuser=True).first()
+  stats = {
+    _('Members'): {
+      _('Total number of members'): Member.objects.count(),
+      _('Number of active members'): Member.objects.filter(is_active=True).count(),
+      _('Number of managed members'): Member.objects.filter(is_active=False).count(),
+    },
+    _('Site'): {
+      _('Site name'): settings.SITE_NAME,
+      _('Site URL'): request.build_absolute_uri('/'),
+      _('Application Version'): settings.APP_VERSION,
+    },
+    _('Administrator'): {
+      _('Administrator full name'): admin.get_full_name(),
+      _('Administrator email'): admin.email,
+    },
+    _('Galleries'): {
+      _('Number of galleries'): Gallery.objects.count(),
+      _('Number of photos'): Photo.objects.count(),
+    }
+  }
+  return render(request, 'cm_main/about/site-stats.html', {'stats': stats})

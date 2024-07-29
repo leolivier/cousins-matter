@@ -6,8 +6,27 @@ on:
     types: [prereleased, published]
 
 jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    
+    - name: Update release.txt
+      run: |
+        echo ${{ github.ref_name }} > release.txt
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add release.txt
+        git commit -m "Update release.txt to version ${{ github.ref_name }}"
+        git push
+
   build-and-publish:
-    uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main
+    needs: update-version
+    uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@leolivier-issue85
     with:
       push: true
       trace_event: ${{ toJson(github.event) }}
+      version: ${{ github.ref_name }}
+

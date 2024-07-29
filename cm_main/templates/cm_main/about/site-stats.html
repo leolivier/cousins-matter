@@ -1,0 +1,46 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags crispy_forms_tags %}
+{% block title %}{% title _("Site Statistics") %}{% endblock %}
+{% block content %}
+<div class="container px-2">
+	<h1 class="title has-text-centered">{% title _("Site Statistics") %}</h1>
+	<p class="content">{% trans "This page displays some statistics about this site:" %} {{site_admin}}</p>
+	<section class="panel">
+		<p class="panel-heading">{% title _("Statistics") %}</p>
+		<div class="panel-tabs">
+		{% for category in stats.keys %}
+		{%with scategory=category|slugify%}
+		<a class="stat-category {%if forloop.first%}is-active{%endif%}" data-category="{{ scategory }}">{{ scategory }}</a>
+		{%endwith%}
+		{% endfor %}
+		</div>
+		{% for category, category_data in stats.items %}
+		{%with scategory=category|slugify%}
+		<div class="panel-category" id="category-{{ scategory }}">
+    	{% for key, value in category_data.items %}
+			<div class="panel-block">
+				{%icon "stats" "panel-icon"%}
+				{{ key }}: <span class="tag ml-3">{{ value }}</span>
+			</div>
+			{% endfor %}
+		</div>
+		{%endwith%}
+		{% endfor %}
+	</section>
+</div>
+<script>
+	$(document).ready(() => {
+		$('.stat-category').on('click', function(event) {
+			$('.stat-category').removeClass('is-active');
+			$(this).addClass('is-active');
+			$('.panel-category').hide();
+			category = $(this).data('category');
+			$('#category-' + category).show();
+		});
+		$active_category = $('.stat-category.is-active')
+		$category = $active_category.data('category');
+		$('.panel-category').hide();
+		$('#category-' + $category).show();
+	})
+</script>
+{%endblock content %}

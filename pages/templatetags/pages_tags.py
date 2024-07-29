@@ -93,13 +93,23 @@ def include_page(url):
     Http404: if the page was not found in the database
   """
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
-  page = FlatPage.objects.filter(url__iexact=url).first()
-  if page and url != page.url:
-    logger.info(f'searched for,{url}, found {page.url}')
-  if page is None:
-    raise TemplateSyntaxError(_(f"Cannot load page from url {url}, it was not found in the "
-                                "database. Please contact the administrator of the site"))
+  pages = FlatPage.objects.filter(url=url).first()
+  if pages is None:
+    pages = FlatPage.objects.filter(url__iexact=url)
+    count = pages.count()
+    match count:
+      case 0:
+        raise TemplateSyntaxError(_(f"Cannot load page from url {url}, it was not found in the "
+                                  "database. Please contact the administrator of the site"))
+      case 1:
+        page = pages.first()
+        logger.info(f'searched for page with url={url}, found {page.url}')
+      case _:
+        page = pages.first()
+        matches = ", ".join([p.url for p in pages])
+        logger.warn(f'searched for page with url={url}, found {count} almost matching pages: {matches}, using {page.url}')
   return mark_safe(page.content)
+
 
 
 @register.inclusion_tag("pages/link_pages_starting_with.html")

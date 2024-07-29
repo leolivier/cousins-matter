@@ -171,9 +171,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     msgid = data['msgid']
     message = await ChatMessage.objects.aget(pk=msgid)
     if 'asgi' not in self.scope:
-      print('no asgi in data:', self.scope)
+      logger.info('no asgi in data:', self.scope)
     elif 'user' not in self.scope['asgi']:
-      print("no user in asgi:", self.scope['asgi'])
+      logger.info("no user in asgi:", self.scope['asgi'])
     else:
       user = self.scope['asgi']['user']
       if user.pk != message.member_id:

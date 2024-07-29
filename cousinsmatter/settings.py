@@ -20,7 +20,7 @@ env = environ.Env(
   # set casting, default value
   DEBUG=(bool, False)
 )
-environ.Env.read_env(BASE_DIR / '.env')
+environ.Env.read_env(BASE_DIR / '.env', overwrite=True)
 
 DEBUG = env.bool('DEBUG', False)
 
@@ -56,7 +56,7 @@ LANGUAGES = [
     ("en", "English"),
 ]
 LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-us')
-
+print("LANGUAGE_CODE", LANGUAGE_CODE)
 TIME_ZONE = env.str('TIME_ZONE', default='Europe/Paris')
 
 INCLUDE_BIRTHDAYS_IN_HOMEPAGE = env.bool('INCLUDE_BIRTHDAYS_IN_HOMEPAGE', True)

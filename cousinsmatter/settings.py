@@ -23,7 +23,8 @@ env = environ.Env(
 environ.Env.read_env(BASE_DIR / '.env', overwrite=True)
 
 DEBUG = env.bool('DEBUG', False)
-
+if DEBUG:
+  print(f"WARNING! DEBUG={DEBUG}. This is not suited for production!")
 SECRET_KEY = env.str('SECRET_KEY')
 
 # Static files (CSS, JavaScript, Images)
@@ -56,7 +57,6 @@ LANGUAGES = [
     ("en", "English"),
 ]
 LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-us')
-print("LANGUAGE_CODE", LANGUAGE_CODE)
 TIME_ZONE = env.str('TIME_ZONE', default='Europe/Paris')
 
 INCLUDE_BIRTHDAYS_IN_HOMEPAGE = env.bool('INCLUDE_BIRTHDAYS_IN_HOMEPAGE', True)
@@ -360,3 +360,6 @@ MENU_PAGE_URL_PREFIX = '/publish/'
 PAGE_MAX_SIZE = env.int('PAGE_MAX_SIZE', 10*1024*1024)
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = max(DATA_UPLOAD_MAX_MEMORY_SIZE, MESSAGE_MAX_SIZE, PAGE_MAX_SIZE)
+
+ALLOW_MEMBERS_TO_CREATE_MEMBERS = env.bool('ALLOW_MEMBERS_TO_CREATE_MEMBERS', True)
+ALLOW_MEMBERS_TO_INVITE_MEMBERS = env.bool('ALLOW_MEMBERS_TO_INVITE_MEMBERS', True)

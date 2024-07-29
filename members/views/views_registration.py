@@ -1,7 +1,7 @@
 
 from django.contrib import messages
 from django.core.mail import send_mail
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -88,6 +88,11 @@ class RegistrationCheckingView(generic.CreateView):
 
 class MemberInvitationView(LoginRequiredMixin, generic.View):
 
+  def check_before_invitation(self, request):
+      if request.user.is_superuser or settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS:
+        return None
+      return HttpResponseForbidden(_("Only superusers can invite members"))
+
   def post(self, request):
     """
     Sends an email with a registration link to the user's email address.
@@ -95,7 +100,9 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
     an invitation link from the admin. This link is sent to the user by email and contains a token.
     The user can then use the link to open the registration form and register.
     """
-
+    ko = self.check_before_invitation(request)
+    if ko:
+      return ko
     form = MemberInvitationForm(request.POST)
     if not form.is_valid():
       messages.error(request, form.errors)
@@ -151,6 +158,9 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
     return redirect_to_referer(request)
 
   def get(self, request):
+    ko = self.check_before_invitation(request)
+    if ko:
+      return ko
     email = request.GET.get('mail')
     if email:
       form = MemberInvitationForm(initial={'email': email})

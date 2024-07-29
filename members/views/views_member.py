@@ -9,7 +9,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from cousinsmatter.utils import Paginator
 from verify_email.email_handler import send_verification_email
 from cousinsmatter.utils import redirect_to_referer
@@ -85,10 +85,17 @@ class MemberDetailView(LoginRequiredMixin, generic.DetailView):
 class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
     """View used to create a managed member"""
     model = Member
-
     template_name = "members/members/member_upsert.html"
 
+    def check_before_creation(self, request):
+      if request.user.is_superuser or settings.ALLOW_MEMBERS_TO_CREATE_MEMBERS:
+        return None
+      return HttpResponseForbidden(_("Only superusers can create members"))
+
     def get(self, request, *args, **kwargs):
+        ko = self.check_before_creation(request)
+        if ko:
+            return ko
         return render(request, self.template_name, {
             "form": MemberUpdateForm(),
             "addr_form": AddressUpdateForm(),
@@ -97,6 +104,9 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
         })
 
     def post(self, request, *args, **kwargs):
+        ko = self.check_before_creation(request)
+        if ko:
+            return ko
         form = MemberUpdateForm(request.POST, request.FILES)
         if form.is_valid():
             member = form.save()

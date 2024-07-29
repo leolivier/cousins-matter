@@ -10,7 +10,7 @@
 
 <table>
  <tr>
-  <td width="50%"><img src='https://raw.githubusercontent.com/leolivier/cousins-matter/main/cm_main/static/cm_main/images/cousinades.png' title="Cousins Matter!"></td>
+  <td width="50%"><img src='https://raw.githubusercontent.com/leolivier/cousins-matter/main/cm_main/static/cm_main/images/cousinades.jpg' title="Cousins Matter!"></td>
   <td> <h1>Cousins Matter project</h1>
    <p>An application for managing large families, listing all your cousins and allowing them to manage their own profiles. It also provide various features like photo galleries, forums, chat rooms, ...</p>
   </td>

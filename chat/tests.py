@@ -1,5 +1,6 @@
 from urllib.parse import urlencode
 
+from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -11,7 +12,7 @@ from asgiref.sync import sync_to_async
 from channels.testing import WebsocketCommunicator
 from channels.routing import URLRouter
 
-from cm_main.tests import TestFollowersMixin
+from cm_main.tests.tests_followers import TestFollowersMixin
 from members.tests.tests_member_base import MemberTestCase
 from .models import ChatMessage, ChatRoom
 from .routing import websocket_urlpatterns
@@ -112,7 +113,7 @@ class ChatRoomTests(MemberTestCase):
 <div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
   <div class="px-1">
     <figure class="image mini-avatar mr-2">
-      <img class="is-rounded" src="/static/members/default-mini-avatar.jpg">
+      <img class="is-rounded" src="{settings.DEFAULT_AVATAR_URL}">
     </figure>
   </div>
   <div class="has-text-primary has-text-weight-bold has-text-right mr-5">

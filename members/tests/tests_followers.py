@@ -4,7 +4,8 @@ from django.core import mail
 from asgiref.sync import sync_to_async
 from chat.models import ChatMessage, ChatRoom
 from chat.tests import ChatMessageSenderMixin
-from cm_main.tests import TestFollowersMixin, get_absolute_url
+from cm_main.tests import get_absolute_url
+from cm_main.tests.tests_followers import TestFollowersMixin
 from forum.models import Message, Post
 from .tests_member_base import MemberTestCase
 

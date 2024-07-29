@@ -27,11 +27,15 @@
 				<div class="navbar-dropdown is-right">
 					{% url 'members:directory' as dir_url %}
 					{%navbar_item dir_url _("Show directory") "directory" %}
-					{% url 'members:create' as create_url%}
-					{%navbar_item  create_url _("Create Member") "new-member" %}
-					{% url 'members:invite' as invite_url%}
-					{%navbar_item invite_url _("Invite Member") "invite-member" %}
-				</div>
+					{%if user.is_superuser or settings.ALLOW_MEMBERS_TO_CREATE_MEMBERS%}
+						{% url 'members:create' as create_url%}
+						{%navbar_item  create_url _("Create Member") "new-member" %}
+					{%endif%}
+					{%if user.is_superuser or settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS%}
+						{% url 'members:invite' as invite_url%}
+						{%navbar_item invite_url _("Invite Member") "invite-member" %}
+						{%endif%}
+					</div>
 			</div>
 
 			<div class="navbar-item has-dropdown is-hoverable">

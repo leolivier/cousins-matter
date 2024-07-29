@@ -1,4 +1,5 @@
 from datetime import date
+from django.test import override_settings
 from django.urls import reverse
 from django.core import mail
 from django.utils.translation import gettext as _
@@ -16,11 +17,15 @@ from .tests_member_base import MemberTestCase, TestLoginRequiredMixin, get_fake_
 
 class MemberInviteTests(MemberTestCase):
 
-  def do_test_invite(self):
+  def do_test_invite(self, should_fail=False):
     sender = get_user(self.client)
     test_invite = {'invited': "Mr Freeze", 'email': 'test-cousinsmatter@maildrop.cc'}
     response = self.client.post(reverse("members:invite"), test_invite, follow=True)
-    # pprint(vars(response))
+    # self.print_response(response)
+    if should_fail:
+      self.assertEqual(response.status_code, 403)
+      self.assertEqual(response.content.decode(), _("Only superusers can invite members"))
+      return
     self.assertContainsMessage(response, "success", _("Invitation sent to %(email)s.") % {'email': test_invite['email']})
     # if invite not sent by superuser, he receives a notification
     self.assertEqual(len(mail.outbox), 1 if sender == self.superuser else 2)
@@ -56,21 +61,23 @@ class MemberInviteTests(MemberTestCase):
 </h1>''', content)
     mail.outbox = []  # reset test mailbox
 
-  def xtest_invite_member_not_staff(self):
-    # only superuser and staff cans send invites
+  def test_invite_member_not_staff(self):
+    # depending on settings,only superuser and staff cans send invites
     self.login()
-    with self.assertRaises(PermissionError):
-      self.do_test_invite()
+    with override_settings(ALLOW_MEMBERS_TO_INVITE_MEMBERS=False):
+      self.do_test_invite(should_fail=True)
 
-  def xtest_invite_member_staff(self):
-    self.member.is_staff = True  # setUp
-    self.member.save()
-    self.do_test_invite()
-    self.member.is_staff = False  # tearDown
-    self.member.save()
+  def test_invite_member_staff(self):
+    self.superuser_login()
+    # should work anyway
+    with override_settings(ALLOW_MEMBERS_TO_INVITE_MEMBERS=False):
+      self.do_test_invite()
+    # log back in again as normal member
+    self.login()
 
   def test_invite_member(self):
     self.login()
+    # default settings for ALLOW_MEMBERS_TO_INVITE_MEMBERS=True, so should work
     self.do_test_invite()
 
   def test_invite_member_superuser(self):

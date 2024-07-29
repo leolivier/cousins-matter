@@ -111,7 +111,6 @@ def include_page(url):
   return mark_safe(page.content)
 
 
-
 @register.inclusion_tag("pages/link_pages_starting_with.html")
 def link_pages_starting_with(url_prefix, icon):
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap

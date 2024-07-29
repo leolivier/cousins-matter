@@ -46,6 +46,7 @@ INCLUDE_BIRTHDAYS_IN_HOMEPAGE = env.bool('INCLUDE_BIRTHDAYS_IN_HOMEPAGE', True)
 
 SITE_COPYRIGHT = env.str('SITE_COPYRIGHT', default=None)
 SITE_FOOTER = env.str('SITE_FOOTER', default=None)
+SITE_LOGO = env.str('SITE_LOGO', default=None)
 # Email properties
 EMAIL_HOST = env.str('EMAIL_HOST')
 EMAIL_PORT = env.int('EMAIL_PORT')

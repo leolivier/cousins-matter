@@ -93,8 +93,8 @@ def include_page(url):
     Http404: if the page was not found in the database
   """
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
-  pages = FlatPage.objects.filter(url=url).first()
-  if pages is None:
+  page = FlatPage.objects.filter(url=url).first()
+  if page is None:
     pages = FlatPage.objects.filter(url__iexact=url)
     count = pages.count()
     match count:

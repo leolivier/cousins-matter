@@ -26,6 +26,23 @@ DEBUG = env.bool('DEBUG', False)
 
 SECRET_KEY = env.str('SECRET_KEY')
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.0/howto/static-files/
+STATIC_REL = 'static'
+STATIC_ROOT = BASE_DIR / STATIC_REL
+STATIC_URL = 'static/'
+# STATICFILES_DIRS = []
+
+MEDIA_REL = 'media'
+MEDIA_ROOT = BASE_DIR / MEDIA_REL
+if DEBUG:
+  MEDIA_URL = MEDIA_REL + '/'
+else:
+  MEDIA_URL = f'protected_{MEDIA_REL}/'
+
+PUBLIC_MEDIA_ROOT = MEDIA_ROOT / 'public'
+PUBLIC_MEDIA_URL = f'/{MEDIA_REL}/public/'
+
 SITE_NAME = env.str('SITE_NAME', default='Cousins Matter')
 SITE_DOMAIN = env.str('SITE_DOMAIN', None)
 
@@ -46,7 +63,7 @@ INCLUDE_BIRTHDAYS_IN_HOMEPAGE = env.bool('INCLUDE_BIRTHDAYS_IN_HOMEPAGE', True)
 
 SITE_COPYRIGHT = env.str('SITE_COPYRIGHT', default=None)
 SITE_FOOTER = env.str('SITE_FOOTER', default=None)
-SITE_LOGO = env.str('SITE_LOGO', default=None)
+SITE_LOGO = env.str('SITE_LOGO', default='cm_main/images/cousinades.jpg')
 # Email properties
 EMAIL_HOST = env.str('EMAIL_HOST')
 EMAIL_PORT = env.int('EMAIL_PORT')
@@ -179,21 +196,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_REL = 'static'
-STATIC_ROOT = BASE_DIR / STATIC_REL
-STATIC_URL = 'static/'
-# STATICFILES_DIRS = []
-
-MEDIA_REL = 'media'
-MEDIA_ROOT = BASE_DIR / MEDIA_REL
-if DEBUG:
-  MEDIA_URL = 'media/'
-else:
-  MEDIA_URL = 'protected_media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

@@ -3,10 +3,10 @@
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
 			<img src=
-			{%if settings.SITE_LOGO and settings.SITE_LOGO|startswith:"/media/public" %}
+			{%if settings.SITE_LOGO|startswith:"/media/public" %}
 				"{{settings.SITE_LOGO}}"
 			{%else%}
-				"{% static 'cm_main/images/cousinades.jpg' %}"
+				"{% static settings.SITE_LOGO %}"
 			{%endif%}
 			width="112" height="28">
 		</a>

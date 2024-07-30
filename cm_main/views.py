@@ -4,6 +4,7 @@ import mimetypes
 import tempfile
 import zipfile
 import requests
+from packaging import version
 
 from django.shortcuts import render
 from django.views import generic
@@ -160,18 +161,34 @@ def get_github_release_version(owner, repo):
 
 @login_required
 def statistics(request):
+  from django.utils.safestring import mark_safe
   admin = Member.objects.filter(is_superuser=True).first()
   latest_release = get_github_release_version('leolivier', 'cousins-matter')
-  if latest_release != settings.APP_VERSION:
-    release_warning = _("Your version is not up-to-date, please update it.")
+  latest_version = version.parse(latest_release)
+  current_version = version.parse(settings.APP_VERSION)
+  if current_version < latest_version:
+    release_warning = _("Your version is not up-to-date.")
+    if request.user.is_superuser:
+      release_warning += "<br>"
+      release_warning += _("Please update it by running the following command:<br><code>./scripts/docker-start.sh -u</code>")
+      release_warning = mark_safe(release_warning)
+
     latest_release = {
       'value': latest_release,
-      'warning': release_warning
+      'warning': release_warning,
+      'icon': 'poop'
+    }
+  elif current_version == latest_version:
+    latest_release = {
+      'value': latest_release,
+      'info': _("Your version is up-to-date."),
+      'icon': 'cool'
     }
   else:
     latest_release = {
       'value': latest_release,
-      'info': _("Your version is up-to-date.")
+      'warning': _("Your version is newer than the latest release (?!?)"),
+      'icon': 'confused'
     }
 
   stats = {

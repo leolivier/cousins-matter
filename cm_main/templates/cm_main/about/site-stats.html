@@ -19,7 +19,11 @@
 		<div class="panel-category" id="category-{{ scategory }}">
     	{% for key, value in category_data.items %}
 			<div class="panel-block">
-				{%icon "stats" "panel-icon"%}
+				{%if value.icon %}
+					{%icon value.icon "panel-icon"%}
+				{%else%}
+					{%icon "stats" "panel-icon"%}
+				{%endif%}
 				<span class="is-size-5">{{ key }}</span>: 
 				{%if value.info %}
 				<span class="notification is-info ml-3">{{ value.value }}</span>

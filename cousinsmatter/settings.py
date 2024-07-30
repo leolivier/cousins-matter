@@ -239,6 +239,13 @@ DJANGO_ICONS = {
     "upload": "upload-box-outline",
     "about": "information-variant",
     "stats": "chart-box-outline",
+    # emoticons
+    "thumb-up": "thumb-up-outline",
+    "thumb-down": "thumb-down-outline",
+    "poop": "emoticon-poop-outline",
+    "confused": "robot-confused-outline",
+    "cool": "emoticon-cool-outline",
+    "wink": "emoticon-wink-outline",
     # auth icons
     "signin": "login",
     "signout": "logout",

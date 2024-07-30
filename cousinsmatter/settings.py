@@ -237,6 +237,15 @@ DJANGO_ICONS = {
     "contact": "card-account-mail-outline",
     "private": "eye-lock-outline",
     "upload": "upload-box-outline",
+    "about": "information-variant",
+    "stats": "chart-box-outline",
+    # emoticons
+    "thumb-up": "thumb-up-outline",
+    "thumb-down": "thumb-down-outline",
+    "poop": "emoticon-poop-outline",
+    "confused": "robot-confused-outline",
+    "cool": "emoticon-cool-outline",
+    "wink": "emoticon-wink-outline",
     # auth icons
     "signin": "login",
     "signout": "logout",
@@ -363,3 +372,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = max(DATA_UPLOAD_MAX_MEMORY_SIZE, MESSAGE_MAX_SIZE,
 
 ALLOW_MEMBERS_TO_CREATE_MEMBERS = env.bool('ALLOW_MEMBERS_TO_CREATE_MEMBERS', True)
 ALLOW_MEMBERS_TO_INVITE_MEMBERS = env.bool('ALLOW_MEMBERS_TO_INVITE_MEMBERS', True)
+
+# read version from release.txt
+with open(BASE_DIR / 'release.txt', 'r') as f:
+  APP_VERSION = f.read().strip()

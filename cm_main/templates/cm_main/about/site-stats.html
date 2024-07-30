@@ -1,0 +1,62 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags crispy_forms_tags %}
+{% block title %}{% title _("Site Statistics") %}{% endblock %}
+{% block content %}
+<div class="container px-2">
+	<h1 class="title has-text-centered">{% title _("Site Statistics") %}</h1>
+	<p class="content">{% trans "This page displays some statistics about this site:" %} {{site_admin}}</p>
+	<section class="panel">
+		<p class="panel-heading">{% title _("Statistics") %}</p>
+		<div class="panel-tabs">
+		{% for category in stats.keys %}
+		{%with scategory=category|slugify%}
+		<a class="stat-category {%if forloop.first%}is-active{%endif%}" data-category="{{ scategory }}">{{ category }}</a>
+		{%endwith%}
+		{% endfor %}
+		</div>
+		{% for category, category_data in stats.items %}
+		{%with scategory=category|slugify%}
+		<div class="panel-category" id="category-{{ scategory }}">
+    	{% for key, value in category_data.items %}
+			<div class="panel-block">
+				{%if value.icon %}
+					{%icon value.icon "panel-icon"%}
+				{%else%}
+					{%icon "stats" "panel-icon"%}
+				{%endif%}
+				<span class="is-size-5">{{ key }}</span>: 
+				{%if value.info %}
+				<span class="notification is-info ml-3">{{ value.value }}</span>
+				<span class="notification is-success ml-3">{{ value.info }}</span>
+				{%elif value.warning %}
+				<span class="notification is-info ml-3">{{ value.value }}</span>
+				<span class="notification is-warning ml-3">{{ value.warning }}</span>
+				{%elif value.error %}
+				<span class="notification is-info ml-3">{{ value.value }}</span>
+				<span class="notification is-danger ml-3">{{ value.error }}</span>
+				{%else%}
+				<span class="notification is-info ml-3">{{ value }}</span>
+				{%endif%}
+			</div>
+			{% endfor %}
+		</div>
+		{%endwith%}
+		{% endfor %}
+	</section>
+</div>
+<script>
+	$(document).ready(() => {
+		$('.stat-category').on('click', function(event) {
+			$('.stat-category').removeClass('is-active');
+			$(this).addClass('is-active');
+			$('.panel-category').hide();
+			category = $(this).data('category');
+			$('#category-' + category).show();
+		});
+		$active_category = $('.stat-category.is-active')
+		$category = $active_category.data('category');
+		$('.panel-category').hide();
+		$('#category-' + $category).show();
+	})
+</script>
+{%endblock content %}

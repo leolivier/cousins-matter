@@ -93,10 +93,13 @@
 				<button class="button navbar-link is-light">
 					{%icon "help" %}
 				</button>
+				
 				{%with about_prefix='/'|add:settings.LANGUAGE_CODE|add:'/about/' private_prefix='/private/'%}
 				<div class="navbar-dropdown is-right">
 					{% link_pages_starting_with about_prefix "information" %}
 					{% link_pages_starting_with private_prefix "private" %}
+					{%url 'cm_main:about' as about_url%}
+					{%navbar_item about_url _("About the site") "about" %}
 					{% url 'cm_main:contact' as contact_url%}
 					{%navbar_item contact_url _("Contact the site admin") "contact" %}
 				</div>

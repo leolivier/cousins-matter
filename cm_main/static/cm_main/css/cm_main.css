@@ -187,3 +187,7 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 .tree-root > .tree-item::before {
 	content: "";
 }
+
+.panel-block > .notification:not(last-child) {
+	margin-bottom: 0;
+}

@@ -62,15 +62,18 @@
 Basic CMS features: admins can create static HTML pages and publish them on the site. 
 The home page can also be configured this way as well as the privcay policy, the about pages... 
 
+# Theming
+Admin can easily define their own theme (colors, font, ...)
+
 ## Documentation
 * The documentation for installing, upgrading and running the application in on the wiki [Home](https://github.com/leolivier/cousins-matter/wiki) page.
 * The settings are documented on the wiki [Settings](https://github.com/leolivier/cousins-matter/wiki/settings) page.
+* The customization (apart from the settings) is described at [Customization](https://github.com/leolivier/cousins-matter/wiki/customization)
 
 ## Coming soon
-  * Help/faq/about
+  * Help/faq
   * Classifieds from all members
   * Event Planner (Cousinades)
   * Genealogy
   * Polls
-  * Color Themes
   * ...

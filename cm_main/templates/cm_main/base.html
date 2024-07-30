@@ -1,6 +1,6 @@
 {% load i18n static flatpages cm_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,7 +20,11 @@
     {# cousins matter css and js#}
     <link rel="stylesheet" href="{% static 'cm_main/css/cm_main.css' %}">
     <script src="{% static 'cm_main/js/cm_main.js' %}"></script>
+    {# Custom CSS Theme#}
+    <link rel="stylesheet" href="{{settings.PUBLIC_MEDIA_URL}}/theme.css">
+    {# favicon #}
     <link rel="shortcut icon" type="image/png" href="{% static 'cm_main/images/favicon.jpg' %}"/>
+    {# javascript catalog #}
     <script src="{% url 'cm_main:javascript-catalog' %}"></script>
   </head>
   <body>
@@ -30,7 +34,7 @@
     {% endblock %}
    
 
-    <div class="columns" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
+    <div class="columns">
       <div class="column">
         <div class="block">
           {%get_flatpages "/pages/admin-message/" as admin_messages%}

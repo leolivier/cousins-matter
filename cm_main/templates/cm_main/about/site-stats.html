@@ -10,7 +10,7 @@
 		<div class="panel-tabs">
 		{% for category in stats.keys %}
 		{%with scategory=category|slugify%}
-		<a class="stat-category {%if forloop.first%}is-active{%endif%}" data-category="{{ scategory }}">{{ scategory }}</a>
+		<a class="stat-category {%if forloop.first%}is-active{%endif%}" data-category="{{ scategory }}">{{ category }}</a>
 		{%endwith%}
 		{% endfor %}
 		</div>
@@ -20,7 +20,19 @@
     	{% for key, value in category_data.items %}
 			<div class="panel-block">
 				{%icon "stats" "panel-icon"%}
-				{{ key }}: <span class="tag ml-3">{{ value }}</span>
+				<span class="is-size-5">{{ key }}</span>: 
+				{%if value.info %}
+				<span class="notification is-info ml-3">{{ value.value }}</span>
+				<span class="notification is-success ml-3">{{ value.info }}</span>
+				{%elif value.warning %}
+				<span class="notification is-info ml-3">{{ value.value }}</span>
+				<span class="notification is-warning ml-3">{{ value.warning }}</span>
+				{%elif value.error %}
+				<span class="notification is-info ml-3">{{ value.value }}</span>
+				<span class="notification is-danger ml-3">{{ value.error }}</span>
+				{%else%}
+				<span class="notification is-info ml-3">{{ value }}</span>
+				{%endif%}
 			</div>
 			{% endfor %}
 		</div>

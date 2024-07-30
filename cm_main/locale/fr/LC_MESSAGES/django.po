@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-29 23:17+0200\n"
+"POT-Creation-Date: 2024-07-30 13:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -263,7 +263,7 @@ msgstr "Arréter de suivre"
 msgid "Follow"
 msgstr "Suivre"
 
-#: templates/cm_main/navbar.html:26 views.py:142
+#: templates/cm_main/navbar.html:26 views.py:185
 msgid "Members"
 msgstr "Membres"
 
@@ -279,7 +279,7 @@ msgstr "Créer un Membre"
 msgid "Invite Member"
 msgstr "Inviter un Membre"
 
-#: templates/cm_main/navbar.html:43 views.py:156
+#: templates/cm_main/navbar.html:43 views.py:190
 msgid "Galleries"
 msgstr "Galeries"
 
@@ -341,15 +341,15 @@ msgstr "Déconnexion"
 msgid "This field is required."
 msgstr "Ce champ est obigatoire."
 
-#: tests/test_contactform.py:29 views.py:104
+#: tests/test_contactform.py:29 views.py:108
 msgid "Your message has been sent"
 msgstr "Ton message a été envoyé"
 
-#: tests/test_contactform.py:32 views.py:79
+#: tests/test_contactform.py:32 views.py:83
 msgid "Contact form"
 msgstr "Formulaire de contact"
 
-#: tests/test_contactform.py:39 views.py:76
+#: tests/test_contactform.py:39 views.py:80
 #, python-format
 msgid "You have a new message from %(name)s (%(email)s). "
 msgstr "Tu as reçu un nouveau message de %(name)s (%(email)s). "
@@ -368,62 +368,109 @@ msgstr ""
 "href=\"%(follower_url)s\">%(follower_name)s</a> te suit maintenant sur "
 "%(site_name)s!"
 
-#: views.py:42
+#: views.py:46
 msgid "Media not found"
 msgstr "Média non trouvé"
 
-#: views.py:80
+#: views.py:84
 msgid "But your mailer tools is too old to show it :'("
 msgstr "Mais ton logiciel de messagerie est trop vieux pour l'afficher :'("
 
-#: views.py:99
+#: views.py:103
 msgid "This file type is not supported"
 msgstr "Ce type de fichier n'est pas supporté"
 
-#: views.py:143
-msgid "Total number of members"
-msgstr "Nombre total de membres"
+#: views.py:159
+#, python-format
+msgid "Error: %s"
+msgstr "Erreur : %s"
 
-#: views.py:144
-msgid "Number of active members"
-msgstr "Nombre de membres actifs"
+#: views.py:167
+msgid "Your version is not up-to-date, please update it."
+msgstr "Cette version n'est pas à jour, merci de la mettre à jour."
 
-#: views.py:145
-msgid "Number of managed members"
-msgstr "Nombre de membres gérés"
+#: views.py:175
+msgid "Your version is up-to-date."
+msgstr "La version est à jour."
 
-#: views.py:147
+#: views.py:179
 msgid "Site"
 msgstr "Site"
 
-#: views.py:148
+#: views.py:180
 msgid "Site name"
 msgstr "Nom du site"
 
-#: views.py:149
+#: views.py:181
 msgid "Site URL"
 msgstr "URL du site"
 
-#: views.py:150
+#: views.py:182
 msgid "Application Version"
 msgstr "Version de l'application"
 
-#: views.py:152
-msgid "Administrator"
-msgstr "Administrateur"
+#: views.py:183
+msgid "Latest release"
+msgstr "Dernière version"
 
-#: views.py:153
-msgid "Administrator full name"
-msgstr "Nom complet de l'administrateur"
+#: views.py:186
+msgid "Total number of members"
+msgstr "Nombre total de membres"
 
-#: views.py:154
-msgid "Administrator email"
-msgstr "Email de l'administrateur"
+#: views.py:187
+msgid "Number of active members"
+msgstr "Nombre de membres actifs"
 
-#: views.py:157
+#: views.py:188
+msgid "Number of managed members"
+msgstr "Nombre de membres gérés"
+
+#: views.py:191
 msgid "Number of galleries"
 msgstr "Nombre de galeries"
 
-#: views.py:158
+#: views.py:192
 msgid "Number of photos"
 msgstr "Nombre de photos"
+
+#: views.py:194
+msgid "Forums"
+msgstr "Forums"
+
+#: views.py:195
+msgid "Number of posts"
+msgstr "Nombre de discussions"
+
+#: views.py:196
+msgid "Number of post messages"
+msgstr "Nombre de messages dans les discussions"
+
+#: views.py:197
+msgid "Number of message comments"
+msgstr "Nombre de commentaires de messages"
+
+#: views.py:199
+msgid "Chats"
+msgstr "Salons de discussion"
+
+#: views.py:200
+#, fuzzy
+#| msgid "Number of photos"
+msgid "Number of chat rooms"
+msgstr "Nombre de salons de discussion"
+
+#: views.py:201
+msgid "Number of chat messages"
+msgstr "Nombre de messages dans les salons"
+
+#: views.py:203
+msgid "Administrator"
+msgstr "Administrateur"
+
+#: views.py:204
+msgid "This site is managed by"
+msgstr "Ce site est géré par"
+
+#: views.py:205
+msgid "Administrator email"
+msgstr "Email de l'administrateur"

@@ -93,7 +93,7 @@ class TitleNode(Node):
         title = get_title(title)
         if self.var_name:
             context[self.var_name] = title
-            print(f"context[{self.var_name}]={context[self.var_name]}")
+            # print(f"context[{self.var_name}]={context[self.var_name]}")
             return ""
         return mark_safe(title)
 

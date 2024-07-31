@@ -71,7 +71,7 @@ class ChatRoomTests(MemberTestCase):
   def test_list_rooms(self):
     rooms = [ChatRoom.objects.create(name='Chat Room #%i' % i) for i in range(5)]
     ChatMessage.objects.create(room=rooms[0], content='a message', member=self.member)
-    response = self.client.get(reverse('chat:chat'))
+    response = self.client.get(reverse('chat:chat_rooms'))
     # self.print_response(response)
     nmsgs = 1
     nfollowers = 0

@@ -108,15 +108,15 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 }
 
 @media screen {
+	.mini-avatar {
+		width: 64px;
+		height: 64px;
+	}
+
 	@media (max-width: 768px) {
 		.avatar {
 			width: 128px;
 			height: 128px;
-		}
-	
-		.mini-avatar {
-			width: 64px;
-			height: 64px;
 		}
 
 		.home-logo img {
@@ -128,11 +128,6 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 		.avatar {
 			width: 300px;
 			height: 300px;
-		}
-
-		.mini-avatar {
-			width: 128px;
-			height: 128px;
 		}
 
 		.home-logo img {

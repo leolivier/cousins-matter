@@ -25,7 +25,7 @@ import tempfile
 import zipfile
 
 from .forms import ContactForm
-from chat.models import ChatMessage, ChatRoom
+from chat.models import ChatMessage, ChatRoom, PrivateChatRoom
 from forum.models import Comment, Message, Post
 from galleries.models import Gallery, Photo
 from members.models import Member
@@ -207,6 +207,10 @@ def statistics(request):
       'icon': 'poop'
     }
 
+  all_messages_count = ChatMessage.objects.count()
+  public_chat_rooms = ChatRoom.objects.public()
+  public_chat_messages_count = ChatMessage.objects.filter(room__in=public_chat_rooms).count()
+
   stats = {
     _('Site'): {
       _('Site name'): settings.SITE_NAME,
@@ -230,7 +234,11 @@ def statistics(request):
     },
     _("Chats"): {
       _('Number of chat rooms'): ChatRoom.objects.count(),
-      _('Number of chat messages'): ChatMessage.objects.count(),
+      _('Number of public chat rooms'): ChatRoom.public().count(),
+      _('Number of private chat rooms'): PrivateChatRoom.count(),
+      _('Number of chat messages'): all_messages_count,
+      _('Number of private chat messages'): all_messages_count - public_chat_messages_count,
+      _('Number of public chat messages'): public_chat_messages_count,
     },
     _('Administrator'): {
       _('This site is managed by'): admin.get_full_name(),

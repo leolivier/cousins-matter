@@ -239,6 +239,7 @@ DJANGO_ICONS = {
     "upload": "upload-box-outline",
     "about": "information-variant",
     "stats": "chart-box-outline",
+    "leave-group": "account-multiple-minus-outline",
     # emoticons
     "thumb-up": "thumb-up-outline",
     "thumb-down": "thumb-down-outline",

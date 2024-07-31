@@ -29,16 +29,36 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 						</span>
 				</form>
 				{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
-				{%include "cm_main/followers/followers-count-tag.html" with followed_object=room extra_class="ml-auto mr-5"%}
+				{%if private%}
+					{%include "cm_main/followers/followers-count-tag.html" with followed_object=room extra_class="ml-auto mr-5" name="members" %}
+				{%else%}
+					{%include "cm_main/followers/followers-count-tag.html" with followed_object=room extra_class="ml-auto mr-5"%}
+				{%endif%}
 				{%if room.owner == request.user %}
 				<a class="button is-responsive is-pulled-right js-modal-trigger" data-target="delete-item-modal" title="{%trans 'Delete' %}">
 					{%icon "delete" %}
 				</a>
 				<a class="button is-responsive is-pulled-right" onclick="toggle_edit_room_form();" title="{%trans 'Edit' %}">
 						{%icon "edit" %}
-					</a>
+				</a>
 				{%else%}
-					{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room %}
+					{%if private%}
+					<div class="mr-1 buttons has-addons is-rounded">
+						{%trans 'Leave this room' as leave_room%}
+						<a class="button" title="{{leave_room}}" href="{% url 'chat:leave_private_room' room.slug %}">
+							{%icon 'leave-group'%}
+							<span class="is-hidden-mobile">{{leave_room}}</span>
+						</a>
+						<a class="button" href="{%url 'chat:private_room_members' room.slug %}">
+							{%icon "members" %} <span>{%trans 'Room Members' %}</span>
+						</a>
+						<a class="button" href="{%url 'chat:private_room_admins' room.slug %}">
+							{%icon "members" %} <span>{%trans 'Room Admins' %}</span>
+						</a>
+					</div>
+					{%else%}
+						{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room %}
+					{%endif%}
 				{%endif%}
 		
 				</div>

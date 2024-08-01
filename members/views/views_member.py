@@ -1,8 +1,10 @@
 import logging
 from urllib.parse import urlencode
 from django.conf import settings
+from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
+from django.db.models import Q
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import logout
@@ -12,7 +14,7 @@ from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
 from cousinsmatter.utils import Paginator
 from verify_email.email_handler import send_verification_email
-from cousinsmatter.utils import redirect_to_referer
+from cousinsmatter.utils import redirect_to_referer, is_ajax
 from ..models import Member
 from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
 
@@ -41,7 +43,7 @@ def editable(request, member):
 
 
 def managing_member_name(member):
-    return Member.objects.get(id=member.managing_member.id).get_full_name() if member and member.managing_member else None
+    return Member.objects.get(id=member.managing_member.id).full_name if member and member.managing_member else None
 
 
 class MembersView(LoginRequiredMixin, generic.ListView):
@@ -188,3 +190,19 @@ def delete_member(request, pk):
     member.delete()
     messages.info(request, _("Member deleted"))
     return redirect(reverse("members:members"))
+
+
+@login_required
+def search_members(request):
+    if not is_ajax(request):
+      raise ValidationError("Forbidden non ajax request")
+
+    query = request.GET.get('q', '')
+    members = Member.objects.filter(
+        Q(last_name__icontains=query) | 
+        Q(first_name__icontains=query) |
+        Q(last_name__icontains=query.split()[-1]) |
+        Q(first_name__icontains=query.split()[0])
+    ).distinct()[:12]  # Limited to 12 results
+    data = [{'id': m.id, 'text': m.full_name} for m in members]
+    return JsonResponse({'results': data})

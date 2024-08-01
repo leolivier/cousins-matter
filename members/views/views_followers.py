@@ -15,7 +15,7 @@ def toggle_follow(request, pk):
   follower = request.user
   followed = get_object_or_404(Member, pk=pk)
   followed_url = reverse('members:detail', args=[pk])
-  followed_name = followed.get_full_name()
+  followed_name = followed.full_name
 
   if followed == follower:
     messages.error(request, _("You can't follow yourself!"))
@@ -27,7 +27,7 @@ def toggle_follow(request, pk):
     messages.success(request, _("You are now following %(followed_name)s") % {'followed_name': followed_name})
     # send email to followed to tell him/her someone is following him/her
     followed_url = followed_url
-    follower_name = follower.get_full_name()
+    follower_name = follower.full_name
     title = _('You have a new follower!')
     message = _('%(follower_name)s is now following you!') % {'follower_name': follower_name}
     follower_url = request.build_absolute_uri(reverse('members:detail', args=[follower.id]))

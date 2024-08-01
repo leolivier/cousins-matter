@@ -20,9 +20,9 @@ urlpatterns = [
   path('private/room', views_private_rooms.new_private_room, name='new_private_room'),
   path('private/room/<str:room_slug>', views_private_rooms.private_chat_room, name='private_room'),
   path('private/room/<str:room_slug>/<int:page_num>', views_private_rooms.private_chat_room, name='private_room_page'),
-  path('private/room/<str:room_slug>/add_member/<int:member_id>', views_private_rooms.add_member_to_private_room,
+  path('private/room/<str:room_slug>/add_member/', views_private_rooms.add_member_to_private_room,
        name='add_member_to_private_room'),
-  path('private/room/<str:room_slug>/add_admin/<int:member_id>', views_private_rooms.add_admin_to_private_room,
+  path('private/room/<str:room_slug>/add_admin/', views_private_rooms.add_admin_to_private_room,
        name='add_admin_to_private_room'),
   path('private/room/<str:room_slug>/remove_member/<int:member_id>', views_private_rooms.remove_member_from_private_room,
        name='remove_member_from_private_room'),
@@ -36,6 +36,7 @@ urlpatterns = [
        name='private_room_members'),
   path('private/room/<str:room_slug>/admins/', views_private_rooms.list_private_room_admins,
        name='private_room_admins'),
+  path('private/room/<str:room_slug>/search_members', views_private_rooms.search_private_members, name='search_private_members'),
 ]
 if settings.DEBUG:
   urlpatterns += [

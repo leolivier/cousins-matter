@@ -1,5 +1,6 @@
 {% extends "cm_main/base.html" %}
 {% load i18n cm_tags %}
+{%block header %}{%include "cm_main/common/include-select2.html" %}{% endblock%}
 {% block title %}{% title _("Private Room Members") %} {% endblock %}
 {% block content %}
 <div class="container px-2">
@@ -22,13 +23,15 @@
 					{%icon 'leave-group'%}
 					<span class="is-hidden-mobile">{{leave_room}}</span>
 				</a>
-				{%if user in room.admins.all %}
-				<a class="button" href="{%url 'chat:add_member_to_private_room' room.slug 0 %}">
-						{%icon "members" %} <span>{%trans 'Add Members to Room' %}</span>
-				</a>
-				{%endif%}
 			</div>
 		</div>
+		{%if user in room.admins.all %}
+		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
+			{%trans "Add member to the room" as tr_add_member%}
+			{% url "members:search_members" as search_url %}
+			{%include "chat/private/add-member.html" with add_url='chat:add_member_to_private_room'%}
+		</div>
+		{%endif%}
 		{% for member in members %}
 		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
 			<div class="panel-icon mini-avatar is-flex is-align-items-center is-justify-content-center is-flex-shrink-5 image">

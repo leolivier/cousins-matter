@@ -37,15 +37,15 @@ class TestFollowersMixin():
     if followed_object == owner:
       message = _('Hi %(followed_name)s, <br><a href="%(follower_url)s">%(follower_name)s</a> '
                   'is now following you on %(site_name)s!') % {
-                  'followed_name': followed_object.get_full_name(),
+                  'followed_name': followed_object.full_name,
                   'follower_url': get_absolute_url(reverse('members:detail', args=[follower.pk])),
-                  'follower_name': follower.get_full_name(),
+                  'follower_name': follower.full_name,
                   'site_name': settings.SITE_NAME
                   }
     else:
       message = _("%(follower_name)s is now following your %(followed_type)s "
                   "<a href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> on %(site_name)s") % {
-        'follower_name': follower.get_full_name(),
+        'follower_name': follower.full_name,
         'followed_type': followed_type,
         'followed_url': followed_url,
         'followed_object_name': followed_object_name,
@@ -84,7 +84,7 @@ class TestFollowersMixin():
       message = _("%(author_name)s created the following %(followed_type)s "
                   "<a href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
                   ) % {
-                    'author_name': owner.get_full_name(),
+                    'author_name': owner.full_name,
                     'followed_type': followed_type,
                     'followed_object_url': followed_url,
                     'followed_object_name': followed_object_name}
@@ -96,7 +96,7 @@ class TestFollowersMixin():
       }
       message = _("%(author_name)s added the following %(obj_type)s on %(followed_type)s "
                   "<a href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:") % {
-                    'author_name': sender.get_full_name(),
+                    'author_name': sender.full_name,
                     'obj_type': obj_type,
                     'followed_type': followed_type,
                     'followed_object_url': followed_url,

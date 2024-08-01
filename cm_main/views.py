@@ -73,7 +73,7 @@ class ContactView(LoginRequiredMixin, generic.FormView):
     return self._admin
 
   def get_context_data(self, **kwargs):
-    return {'site_admin': self.admin().get_full_name(), 'form': self.form_class()}
+    return {'site_admin': self.admin().full_name, 'form': self.form_class()}
 
   def post(self, request, *args, **kwargs):
     form = self.form_class(request.POST, request.FILES)
@@ -81,7 +81,7 @@ class ContactView(LoginRequiredMixin, generic.FormView):
       # send an email to the admin (ie first superuser)
       sender = get_user(request)
       title = _("You have a new message from %(name)s (%(email)s). ") % {
-           "name": sender.get_full_name(), "email": sender.email}
+           "name": sender.full_name, "email": sender.email}
       email = EmailMultiAlternatives(
         _("Contact form"),
         title + _("But your mailer tools is too old to show it :'("),
@@ -241,7 +241,7 @@ def statistics(request):
       _('Number of public chat messages'): public_chat_messages_count,
     },
     _('Administrator'): {
-      _('This site is managed by'): admin.get_full_name(),
+      _('This site is managed by'): admin.full_name,
       _('Administrator email'): admin.email,
     },
   }

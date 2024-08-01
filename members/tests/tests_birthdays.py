@@ -21,7 +21,7 @@ class TestBirthdaysMixin():
     # self.print_response(response)
     common_chain = f'''<div class="cell has-background-{color}-light ml-2 pl-2 pr-1 is-flex
         is-align-items-center is-justify-content-right">
-      <a href="/members/{member.id}/" class="has-text-{color}">{member.get_full_name()}</a>
+      <a href="/members/{member.id}/" class="has-text-{color}">{member.full_name}</a>
   </div>'''
     tester = self.assertNotContains if reversed else self.assertContains
     tester(response, common_chain, html=True)
@@ -35,16 +35,16 @@ class TestBirthdaysMixin():
     tester(response, expected_chain, html=True)
 
   def check_birthday_today(self, member, response=None, reversed=False):
-    b_is_today = _("turns %(age)s today, happy birthday!") % {'age': member.age()}
+    b_is_today = _("turns %(age)s today, happy birthday!") % {'age': member.age}
     self.check_birthday(member, 'danger', b_is_today, with_icons=True, response=response, reversed=reversed)
 
   def check_birthdays_tomorrow(self, member, response=None, reversed=False):
-    b_is_tomorrow = _("will turn %(age)s tomorrow, happy birthday!") % {'age': member.age()+1}
+    b_is_tomorrow = _("will turn %(age)s tomorrow, happy birthday!") % {'age': member.age+1}
     self.check_birthday(member, 'warning', b_is_tomorrow, with_icons=True, response=response, reversed=reversed)
 
   def check_birthdays_after_tomorrow(self, member, response=None, reversed=False):
-    b_date = date_format(member.next_birthday(), "l d F", use_l10n=True)
-    b_is_after = _("will turn %(age)s on %(birthday)s") % {'age': member.age()+1, 'birthday': b_date}
+    b_date = date_format(member.next_birthday, "l d F", use_l10n=True)
+    b_is_after = _("will turn %(age)s on %(birthday)s") % {'age': member.age+1, 'birthday': b_date}
     self.check_birthday(member, 'link', b_is_after, with_icons=False, response=response, reversed=reversed)
 
   def check_no_birthdays(self, response=None, reversed=False):

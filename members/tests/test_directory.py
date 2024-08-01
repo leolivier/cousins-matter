@@ -26,7 +26,7 @@ class TestMemberDirectory(MemberTestCase):
     for member in self.members:
         member_link = f'''
         <a class="button is-link is-light" href="{reverse("members:detail", args=[member.id])}">
-          <strong>{member.get_full_name()}</strong>
+          <strong>{member.full_name}</strong>
         </a>
         '''
         self.assertContains(response, member_link, html=True)

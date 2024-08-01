@@ -53,8 +53,8 @@ class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageT
     # self.print_response(response)
     if members.count() > 0:
       for member in members:
-        next_birthday = member.next_birthday()
-        # print("checking member", member.get_full_name(), "next birthday", next_birthday, end=' ')
+        next_birthday = member.next_birthday
+        # print("checking member", member.full_name, "next birthday", next_birthday, end=' ')
         if next_birthday == date.today():
           # print(f"should {'not' if reversed else ''} be today")
           self.check_birthday_today(member, response, reversed)

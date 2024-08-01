@@ -80,11 +80,11 @@ class ChatRoomTests(MemberTestCase):
 <div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
   <div class="px-1">
     <figure class="image mini-avatar mr-2">
-      <img class="is-rounded" src="{self.member.avatar_mini_url()}" alt="foobar">
+      <img class="is-rounded" src="{self.member.avatar_mini_url}" alt="foobar">
     </figure>
   </div>
   <div class="has-text-primary has-text-weight-bold has-text-right mr-5">
-    {self.member.get_full_name()}
+    {self.member.full_name}
     <a href="{reverse("members:detail", kwargs={'pk': self.member.id})}" aria-label="profil">
       <span class="icon is-large">
         <i class="mdi mdi-24px mdi-open-in-new" aria-hidden="true"></i>

@@ -37,10 +37,10 @@ class TestContactForm(MemberTestCase):
         break
     # print(content)
     subject = _("You have a new message from %(name)s (%(email)s). ") % {
-           "name": self.member.get_full_name(), "email": self.member.email}
+           "name": self.member.full_name, "email": self.member.email}
     self.assertInHTML(settings.SITE_NAME + ' - ' + subject, content)
     msg = _("%(sender_name)s sent you the following message from %(site_name)s:") % {
-      'sender_name': self.member.get_full_name(),
+      'sender_name': self.member.full_name,
       'site_name': settings.SITE_NAME,
     }
     test_msg = test_msg.replace('\n', '<br>')

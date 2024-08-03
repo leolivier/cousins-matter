@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-22 14:23+0200\n"
+"POT-Creation-Date: 2024-08-03 18:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -154,21 +154,21 @@ msgstr "Créer une Sous-Galerie"
 
 #: galleries/templates/galleries/gallery_detail.html:56
 #: galleries/templates/galleries/gallery_form.html:5
-#: galleries/templates/galleries/gallery_form.html:15
+#: galleries/templates/galleries/gallery_form.html:17
 msgid "Edit Gallery"
 msgstr "Modification d'une Galerie"
 
 #: galleries/templates/galleries/gallery_form.html:7
-#: galleries/templates/galleries/gallery_form.html:17
+#: galleries/templates/galleries/gallery_form.html:19
 msgid "Create Gallery"
 msgstr "Création d'une Galerie"
 
-#: galleries/templates/galleries/gallery_form.html:27
+#: galleries/templates/galleries/gallery_form.html:29
 #: galleries/templates/galleries/photo_form.html:28
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: galleries/templates/galleries/gallery_form.html:30
+#: galleries/templates/galleries/gallery_form.html:32
 #: galleries/templates/galleries/photo_form.html:31
 msgid "Create"
 msgstr "Créer"

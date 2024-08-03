@@ -6,7 +6,7 @@ from django.contrib.sites.models import Site
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
-from cm_main.views import OnlyAdminMixin
+from cm_main.views.views_general import OnlyAdminMixin
 from .utils import flatpage_url
 from .forms import PageForm
 

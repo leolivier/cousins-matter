@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.utils.text import slugify
 
 from members.models import Member
 from ..models import ChatMessage, ChatRoom
@@ -59,9 +60,7 @@ def chat_rooms(request, page_num=1):
 def new_room(request):
   room_name = unquote(request.GET['name'])
   try:
-    from django.utils.text import slugify
-    slug = slugify(room_name)
-    room, created = ChatRoom.objects.get_or_create(slug=slug)
+    room, created = ChatRoom.objects.get_or_create(name=room_name)
     if not room.is_public():
       raise ValidationError(_("A private room with almost the same name already exists: %s") % room.name)
     room_url = reverse('chat:room', args=[room.slug])
@@ -76,8 +75,10 @@ def new_room(request):
         case '__all__':
           messages.error(request, ' '.join(error[1]))
         case 'slug':
-          print("error on slug:", ' '.join(error[1]))
-          pass
+          similar_room = ChatRoom.objects.get(slug=slugify(room_name))
+          messages.error(request,
+                         _(f"Another room with a similar name already exists ('{similar_room.name}'). "
+                           "Please choose a different name."))
         case _:
           messages.error(request, f'{error[0]}: {" ".join(error[1])}')
     return redirect(reverse('chat:chat_rooms'))

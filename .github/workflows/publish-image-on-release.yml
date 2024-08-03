@@ -4,6 +4,7 @@ name: Release build
 on:
   release:
     types: [prereleased, published]
+  workflow_dispatch: 
 
 jobs:
   update-version:

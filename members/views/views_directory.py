@@ -46,7 +46,7 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
     def _get_directory_data(self):
       dir_data = [[_("Name"), _("Phone"), _('Email'), _("Address")]]
       for member in Member.objects.all():
-          dir_data.append([member.get_full_name(),
+          dir_data.append([member.full_name,
                           member.phone if member.phone else "",
                           member.email,
                           member.address.__str__() if member.address else ""

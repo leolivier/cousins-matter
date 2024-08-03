@@ -49,7 +49,7 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
   else:
     logger.debug(f"{obj_type}:'{obj_str}' change is interesting for {len(follower_emails)} people: {follower_emails}")
 
-  author_name = author.get_full_name()
+  author_name = author.full_name
   followed_object_name = str(followed_object)
   if request:
     followed_object_url = request.build_absolute_uri(followed_object_url)
@@ -112,7 +112,7 @@ def toggle_follow(request, followed_object, owner, followed_object_url):
     # send email to author of followed object to tell him someone is following his object
     if owner and owner.id != request.user.id:  # don't send email to yourself or to nobody
       followed_url = request.build_absolute_uri(followed_object_url)
-      follower_name = request.user.get_full_name()
+      follower_name = request.user.full_name
       followed_object_name = str(followed_object)
       if not followed_object_name:
         raise ValueError('followed object has no name')

@@ -1,0 +1,31 @@
+{%load i18n cm_tags%}
+<form id="add-member-form" method="post" action="{%url add_url room.slug %}">
+	{% csrf_token %}
+	<select id="member-select" name="member-id" style="width: 300px;"></select>
+	<button class="button" type="submit">{%icon "new-member" %} {{tr_add_member}}</button>
+</form>
+{%trans 'Search a member...' as placeholder %}
+<script>
+	$(document).ready(function() {
+			$('#member-select').select2({
+					ajax: {
+							url: '{{search_url}}',
+							dataType: 'json',
+							delay: 250,
+							data: function (params) {
+									return {
+											q: params.term
+									};
+							},
+							processResults: function (data) {
+									return {
+											results: data.results
+									};
+							},
+							cache: true
+					},
+					minimumInputLength: 2,
+					placeholder: '{{placeholder}}'
+			});
+	});
+	</script>

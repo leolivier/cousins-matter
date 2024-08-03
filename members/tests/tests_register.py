@@ -42,11 +42,11 @@ class MemberInviteTests(MemberTestCase):
        {'site_name': settings.SITE_NAME}
     else:
       msg = _("I invite you to register on the %(site_name)s website created by %(admin)s for managing our big family!") % \
-       {'site_name': settings.SITE_NAME, 'admin': self.superuser.get_full_name()}
+       {'site_name': settings.SITE_NAME, 'admin': self.superuser.full_name}
 
     self.assertInHTML(f'''<h2 class="center">
       {_("Hello %(invited)s, this is %(inviter)s!") %
-       {'invited': test_invite['invited'], 'inviter': sender.get_full_name()}} <br/>
+       {'invited': test_invite['invited'], 'inviter': sender.full_name}} <br/>
       {msg}
       </h2>''', content)
     if not sender.is_superuser:
@@ -57,7 +57,7 @@ class MemberInviteTests(MemberTestCase):
       self.assertInHTML(f'''
 <h1 class="center" style="padding:2px">
   {_("Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s") %
-        {'site_name': settings.SITE_NAME, 'inviter': sender.get_full_name(), 'invited': test_invite['invited']}}
+        {'site_name': settings.SITE_NAME, 'inviter': sender.full_name, 'invited': test_invite['invited']}}
 </h1>''', content)
     mail.outbox = []  # reset test mailbox
 

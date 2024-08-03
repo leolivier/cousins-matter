@@ -172,9 +172,10 @@ class MemberProfileViewTest(MemberTestCase):
     self.assertEqual(test_ext, test_ext)
     self.assertTrue(avatar_prefix.startswith(testbn_prefix))
     # same for mini avatar
-    self.assertTrue(os.path.isfile(self.member.avatar_mini_path()))
+    mini_path = self.member.avatar_mini_path
+    self.assertTrue(os.path.isfile(mini_path))
     testbn_prefix, test_ext = os.path.splitext(self.test_mini_avatar_jpg)
-    avatar_prefix, av_ext = os.path.splitext(self.member.avatar_mini_path())
+    avatar_prefix, av_ext = os.path.splitext(mini_path)
     self.assertEqual(test_ext, test_ext)
     self.assertTrue(avatar_prefix.startswith(testbn_prefix))
 
@@ -251,13 +252,13 @@ class TestDisplayMembers(MemberTestCase):
     # print(str(response.content))
     for i in range(len(self.members)):
       avatar = '' if not self.members[i].avatar else f'''<figure class="image mini-avatar mr-2">
-                      <img class="is-rounded" src="{self.members[i].avatar_mini_url()}">
+                      <img class="is-rounded" src="{self.members[i].avatar_mini_url}">
                      </figure>'''
       self.assertInHTML(f'''
   <div class="cell has-text-centered">
     <a class="button" href="/members/{self.members[i].id}/">
       {avatar}
-      <strong>{self.members[i].get_full_name()}</strong>
+      <strong>{self.members[i].full_name}</strong>
     </a>
   </div>
 ''', html)
@@ -267,11 +268,11 @@ class TestDisplayMembers(MemberTestCase):
     def check_is_in(content, member):
       self.assertInHTML(f'''<div class="cell has-text-centered">
         <a class="button" href="{reverse("members:detail", kwargs={'pk': member.id})}">
-          <strong>{member.get_full_name()}</strong></a></div>''', content)
+          <strong>{member.full_name}</strong></a></div>''', content)
 
     def check_is_not_in(content, member):
       # no assertNotContains or assertNotInHTML in django yet
-      self.assertNotIn(content, f'''<strong>{member.get_full_name()}</strong>''')
+      self.assertNotIn(content, f'''<strong>{member.full_name}</strong>''')
       self.assertNotIn(content, f'''href={reverse("members:detail", kwargs={'pk': member.id})}>''')
 
     def filter_member(member, first_name=False, last_name=False):

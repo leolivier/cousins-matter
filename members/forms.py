@@ -32,7 +32,7 @@ class MemberFormMixin():
 
   def clean_avatar(self):
     avatar = self.cleaned_data['avatar']
-    # print(f"Validating avatar for {self.instance.get_full_name()} in {avatar}")
+    # print(f"Validating avatar for {self.instance.full_name} in {avatar}")
     if 'avatar' not in self.changed_data:
       # print("No change in avatar, skipping validation")
       return avatar

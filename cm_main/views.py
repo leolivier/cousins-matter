@@ -25,7 +25,7 @@ import tempfile
 import zipfile
 
 from .forms import ContactForm
-from chat.models import ChatMessage, ChatRoom
+from chat.models import ChatMessage, ChatRoom, PrivateChatRoom
 from forum.models import Comment, Message, Post
 from galleries.models import Gallery, Photo
 from members.models import Member
@@ -73,7 +73,7 @@ class ContactView(LoginRequiredMixin, generic.FormView):
     return self._admin
 
   def get_context_data(self, **kwargs):
-    return {'site_admin': self.admin().get_full_name(), 'form': self.form_class()}
+    return {'site_admin': self.admin().full_name, 'form': self.form_class()}
 
   def post(self, request, *args, **kwargs):
     form = self.form_class(request.POST, request.FILES)
@@ -81,7 +81,7 @@ class ContactView(LoginRequiredMixin, generic.FormView):
       # send an email to the admin (ie first superuser)
       sender = get_user(request)
       title = _("You have a new message from %(name)s (%(email)s). ") % {
-           "name": sender.get_full_name(), "email": sender.email}
+           "name": sender.full_name, "email": sender.email}
       email = EmailMultiAlternatives(
         _("Contact form"),
         title + _("But your mailer tools is too old to show it :'("),
@@ -207,6 +207,10 @@ def statistics(request):
       'icon': 'poop'
     }
 
+  all_messages_count = ChatMessage.objects.count()
+  public_chat_rooms = ChatRoom.objects.public()
+  public_chat_messages_count = ChatMessage.objects.filter(room__in=public_chat_rooms).count()
+
   stats = {
     _('Site'): {
       _('Site name'): settings.SITE_NAME,
@@ -230,10 +234,14 @@ def statistics(request):
     },
     _("Chats"): {
       _('Number of chat rooms'): ChatRoom.objects.count(),
-      _('Number of chat messages'): ChatMessage.objects.count(),
+      _('Number of public chat rooms'): ChatRoom.public().count(),
+      _('Number of private chat rooms'): PrivateChatRoom.count(),
+      _('Number of chat messages'): all_messages_count,
+      _('Number of private chat messages'): all_messages_count - public_chat_messages_count,
+      _('Number of public chat messages'): public_chat_messages_count,
     },
     _('Administrator'): {
-      _('This site is managed by'): admin.get_full_name(),
+      _('This site is managed by'): admin.full_name,
       _('Administrator email'): admin.email,
     },
   }

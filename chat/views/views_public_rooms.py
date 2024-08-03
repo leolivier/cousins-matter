@@ -1,24 +1,27 @@
 import logging
-from urllib.parse import unquote, urlencode
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
+from django.db.models import Count, OuterRef, Subquery
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
-from django.contrib import messages
-from django.db.models import Count, OuterRef, Subquery
+from django.utils.translation import gettext as _
+from django.utils.text import slugify
 
+from members.models import Member
+from ..models import ChatMessage, ChatRoom
 from cousinsmatter.utils import Paginator, is_ajax
 from cm_main import followers
-from members.models import Member
-from .models import ChatMessage, ChatRoom
+
+from urllib.parse import unquote, urlencode
 
 logger = logging.getLogger(__name__)
 
 
 @login_required
-def chat(request, page_num=1):
+def chat_rooms(request, page_num=1):
   # Subquery to get the author of the first related ChatMessage instance of a room
   first_msg_auth_subquery = ChatMessage.objects.filter(
     room=OuterRef('pk')
@@ -29,7 +32,7 @@ def chat(request, page_num=1):
   ).values('member_id')
 
   # Annotate room instances with the first message and the number of messages in the room
-  chat_rooms = ChatRoom.objects.all().annotate(
+  chat_rooms = ChatRoom.objects.public().annotate(
     num_messages=Count("chatmessage"),
     first_message_author=Subquery(first_msg_auth_subquery)
     ).order_by('date_added')
@@ -58,6 +61,8 @@ def new_room(request):
   room_name = unquote(request.GET['name'])
   try:
     room, created = ChatRoom.objects.get_or_create(name=room_name)
+    if not room.is_public():
+      raise ValidationError(_("A private room with almost the same name already exists: %s") % room.name)
     room_url = reverse('chat:room', args=[room.slug])
     # if room was created, check user followers
     if created:
@@ -70,11 +75,13 @@ def new_room(request):
         case '__all__':
           messages.error(request, ' '.join(error[1]))
         case 'slug':
-          print("error on slug:", ' '.join(error[1]))
-          pass
+          similar_room = ChatRoom.objects.get(slug=slugify(room_name))
+          messages.error(request,
+                         _(f"Another room with a similar name already exists ('{similar_room.name}'). "
+                           "Please choose a different name."))
         case _:
           messages.error(request, f'{error[0]}: {" ".join(error[1])}')
-    return redirect(reverse('chat:chat'))
+    return redirect(reverse('chat:chat_rooms'))
 
 
 @login_required
@@ -103,6 +110,8 @@ def toggle_follow(request, room_slug):
 def edit_room(request, room_slug):
   if is_ajax(request):
     room = get_object_or_404(ChatRoom, slug=room_slug)
+    if request.user != room.owner():
+      raise ValidationError(_("Only the owner of a room can edit it"))
     # print(request.POST)
     if 'room-name' not in request.POST:
       raise ValidationError("No room name provided")
@@ -116,23 +125,9 @@ def edit_room(request, room_slug):
 @login_required
 def delete_room(request, room_slug):
   room = get_object_or_404(ChatRoom, slug=room_slug)
+  if request.user != room.owner():
+    messages.error(request, _("Only the owner of a room can delete it"))
+    return redirect(reverse('chat:chat_rooms'))
   room.delete()
   messages.success(request, f"Chat room {room.name} deleted")
-  return redirect("chat:chat")
-
-
-@login_required
-def create_test_rooms(request, num_rooms):
-  for i in range(num_rooms):
-    ChatRoom(name=f"a chat room #{i}").save()
-  return redirect("chat:chat")
-
-
-@login_required
-def create_test_messages(request, num_messages):
-  room = ChatRoom.objects.create(name="A chat room for testing a lot of messages")
-  connected_member = Member.objects.get(id=request.user.id)
-  for i in range(num_messages):
-    ChatMessage(room=room, member=connected_member,
-                content=f"a chat message #{i}").save()
-  return redirect("chat:room", args=[room.slug])
+  return redirect('chat:chat_rooms')

@@ -47,7 +47,7 @@ class RegistrationCheckingView(generic.CreateView):
           manager = Member.objects.get(id=member.id).managing_member
           messages.error(request,
                          _("You are already registered but not active. Please contact %(admin)s to activate your account") %
-                         {'admin': manager.get_full_name()})
+                         {'admin': manager.full_name})
           return redirect_to_referer(request)
       return None
     else:
@@ -119,13 +119,13 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
     site_name = settings.SITE_NAME
     inviter = request.user
     admin = Member.objects.filter(is_superuser=True).first()
-    admin_name = admin.get_full_name()
+    admin_name = admin.full_name
     from_email = request.user.email
 
     msg = render_to_string(
       "members/email/registration_invite_email.html",
       {"link": invitation_url, "admin": admin_name, "site_name": site_name,
-       "invited": invited, 'invited_email': email, 'inviter': inviter.get_full_name(),
+       "invited": invited, 'invited_email': email, 'inviter': inviter.full_name,
        'inviter_email': inviter.email},
       request=request
     )
@@ -141,13 +141,13 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
       msg = render_to_string(
         "members/email/registration_sent_email.html",
         {"admin": admin_name, "site_name": site_name, "invited": invited,
-         'invited_email': email, 'inviter': inviter.get_full_name(),
+         'invited_email': email, 'inviter': inviter.full_name,
          'inviter_email': inviter.email},
         request=request
       )
       send_mail(
         _("Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s") %
-        {'site_name': site_name, 'inviter': inviter.get_full_name(), 'inviter_email': inviter.email,
+        {'site_name': site_name, 'inviter': inviter.full_name, 'inviter_email': inviter.email,
          'invited': invited, 'invited_email': email},
         strip_tags(msg),
         from_email=from_email,

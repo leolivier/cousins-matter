@@ -136,9 +136,11 @@ class Member(AbstractUser):
     def get_absolute_url(self):
       return reverse("members:detail", kwargs={"pk": self.pk})
 
+    @property
     def avatar_url(self):
       return self.avatar.url if self.avatar else settings.DEFAULT_AVATAR_URL
 
+    @property
     def avatar_mini_url(self):
       if self.avatar:
         components = self.avatar.url.split('/')
@@ -147,14 +149,20 @@ class Member(AbstractUser):
       else:
         return settings.DEFAULT_MINI_AVATAR_URL
 
+    @property
     def avatar_mini_path(self):
       base = os.path.basename(self.avatar.path)
       dirname = os.path.dirname(self.avatar.path)
       return os.path.join(dirname, 'mini_'+base)
 
+    @property
+    def full_name(self) -> str:
+      return self.get_full_name()
+
     def __str__(self) -> str:
       return self.get_full_name()
 
+    @property
     def next_birthday(self) -> datetime.date:
       today = datetime.date.today()
       year = today.year
@@ -165,10 +173,11 @@ class Member(AbstractUser):
         return self.birthdate.replace(year=year)
       return datetime.date(2999, 1, 1)
 
+    @property
     def age(self) -> int:
       today = datetime.date.today()
       years = today.year - self.birthdate.year
-      return years if (today >= self.next_birthday()) else years-1
+      return years if (today >= self.next_birthday) else years-1
 
     def get_manager(self):
       return self.managing_member if self.managing_member else self
@@ -176,11 +185,11 @@ class Member(AbstractUser):
     def clean(self):
       # If member is active, set managing member to None
       if self.is_active and self.managing_member is not None:
-        logger.debug(f"Cleaning member {self.get_full_name()}: changing managing member to himself")
+        logger.debug(f"Cleaning member {self.full_name}: changing managing member to himself")
         self.managing_member = None
       elif not self.is_active and self.managing_member is None:
         # If no managing member and member is inactive, use admin member
-        logger.debug(f"Cleaning member {self.get_full_name()}: changing managing member to admin")
+        logger.debug(f"Cleaning member {self.full_name}: changing managing member to admin")
         self.managing_member = Member.objects.filter(is_superuser=True).first()
 
     def _resize_avatar(self, max_size, save_path):
@@ -190,7 +199,7 @@ class Member(AbstractUser):
         img.thumbnail(output_size)
         img = ImageOps.exif_transpose(img)  # avoid image rotating
         img.save(save_path)
-        logger.debug(f"Resized and saved avatar for {self.get_full_name()} in {save_path}, size: {img.size}")
+        logger.debug(f"Resized and saved avatar for {self.full_name} in {save_path}, size: {img.size}")
 
     def save(self, *args, **kwargs):
       super().save(*args, **kwargs)
@@ -198,7 +207,7 @@ class Member(AbstractUser):
         # resize avatar
         self._resize_avatar(settings.AVATARS_SIZE, self.avatar.path)
         # generate minified for post/ads/chat
-        mini_path = self.avatar_mini_path()
+        mini_path = self.avatar_mini_path
         if not os.path.isfile(mini_path):
           self._resize_avatar(settings.AVATARS_MINI_SIZE, mini_path)
 
@@ -207,6 +216,6 @@ class Member(AbstractUser):
       if self.avatar:
         if os.path.isfile(self.avatar.path):
           os.remove(self.avatar.path)
-        mini_path = self.avatar_mini_path()
+        mini_path = self.avatar_mini_path
         if os.path.isfile(mini_path):
           os.remove(mini_path)

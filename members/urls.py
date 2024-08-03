@@ -17,6 +17,7 @@ urlpatterns = [
   path("<int:pk>/toggle-follow", views_followers.toggle_follow, name="toggle_follow"),
   path("create/", views_member.CreateManagedMemberView.as_view(), name="create"),
   path("profile/", views_member.EditProfileView.as_view(), name="profile"),
+  path('search/', views_member.search_members, name='search_members'),
   path("register/request", views_registration.RegistrationRequestView.as_view(), name="register_request"),
   path("register/invite", views_registration.MemberInvitationView.as_view(), name="invite"),
   path("register/<str:encoded_email>/<str:token>", views_registration.RegistrationCheckingView.as_view(), name="register"),

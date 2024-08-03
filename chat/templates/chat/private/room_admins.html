@@ -1,0 +1,53 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags %}
+{%block header %}{%include "cm_main/common/include-select2.html" %}{% endblock%}
+{% block title %}{% title _("Private Room Admins") %}{% endblock %}
+{% block content %}
+<div class="container px-2">
+	<h1 class="title is-centered">{% title _("Private Room Admins") %}</h1>
+	<div class="panel">
+		<div class="panel-heading is-flex is-align-items-center is-justify-content-center">
+			<span class="is-flex-grow-1 has-text-centered">
+				{%blocktranslate with room_name=room.name trimmed%}
+				Administrators of "{{room_name}}" private room
+				{%endblocktranslate%}
+			</span>
+			{%trans 'Back to room' as back_room%}
+			<div class="buttons has-addons is-rounded ml-auto">  {# ml-auto to push on the right#}
+				<a class="button" title="{{back_room}}" href="{% url 'chat:private_room' room.slug %}">
+					{%icon 'back'%}
+					<span class="is-hidden-mobile">{{back_room}}</span>
+				</a>
+				{%trans 'Leave admins of this room' as leave_room%}
+				<a class="button" title="{{leave_room}}" href="{% url 'chat:leave_private_room_admins' room.slug %}">
+					{%icon 'leave-group'%}
+					<span class="is-hidden-mobile">{{leave_room}}</span>
+				</a>
+			</div>
+		</div>
+		{%if user in room.admins.all %}
+		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
+			{%trans "Add admin to the room" as tr_add_member%}
+			{% url "chat:search_private_members" room_slug as search_url %}
+			{%include "chat/private/add-member.html" with add_url='chat:add_admin_to_private_room'%}
+		</div>
+		{%endif%}
+		{% for admin in room.admins.all %}
+		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
+			<div class="panel-icon mini-avatar is-flex is-align-items-center is-justify-content-center is-flex-shrink-5 image">
+				<img class="is-rounded" src="{{admin.avatar_mini_url}}"	alt="{{admin.username}}">
+			</div>
+			<div class="has-text-primary has-text-weight-bold has-text-left is-flex-grow-1 mr-5">
+				{{admin.get_full_name}}
+				<a href="{%url 'members:detail' admin.id %}" aria-label="{%trans 'profile'%}">
+					{%icon "member-link" %}
+				</a>
+			</div>
+			<a class="button" href="{%url 'chat:remove_admin_from_private_room' room.slug admin.id %}">
+				{%icon "leave-group" %} <span>{%trans 'Remove Admin from Room' %}</span>
+			</a>
+		</div>
+		{%endfor%}
+	</div>
+</div>
+{% endblock %}

@@ -59,8 +59,13 @@
 			</div>
 
 			<div class="navbar-item has-dropdown is-hoverable">
-				{% url 'chat:chat' as chat_url%}
-				{%navbar_item chat_url _("Chat") "chat" %}
+				{%navbar_item "#" _("Chat") "chat" %}
+				<div class="navbar-dropdown">
+					{% url 'chat:chat_rooms' as chat_url%}
+					{%navbar_item chat_url _("Public Chat Rooms") "chat" %}
+					{% url 'chat:private_chat_rooms' as chat_url%}
+					{%navbar_item chat_url _("Private Chat Rooms") "chat" %}
+					</div>
 			</div>
 
 			{% comment %}

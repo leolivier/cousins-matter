@@ -13,6 +13,13 @@ jobs:
       with:
         fetch-depth: 0
     
+    - name: Checkout the branch
+      run: |
+        # Fetch all branches and tags
+        git fetch --all
+        # Checkout the branch that triggered the release
+        git checkout ${{ github.ref_name }}
+
     - name: Update release.txt
       run: |
         echo "${{ github.event.release.tag_name }}" > release.txt
@@ -22,7 +29,7 @@ jobs:
         git config --global user.email "github-actions@github.com"
         git add release.txt
         git commit -m "Update release.txt to version ${{ github.event.release.tag_name }}"
-        git push origin HEAD:${{ github.ref }}
+        git push origin HEAD:${{ github.ref_name }}
 
   build-and-publish:
     needs: update-version
@@ -31,4 +38,3 @@ jobs:
       push: true
       trace_event: ${{ toJson(github.event) }}
       version: ${{ github.event.release.tag_name }}
-

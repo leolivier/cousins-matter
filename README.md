@@ -57,6 +57,9 @@
 ## Chat
 * Connected members can chat in live mode with other connected members
 * Cousins Matter manages as many chat rooms as requested
+* Members can create private chat rooms and select the members who can participate in these rooms. 
+  The creator of the room becomes admin in this room and can add other members and elect admins in these members.
+  Admins can invite other members and other admins
 
 # Pages / CMS
 Basic CMS features: admins can create static HTML pages and publish them on the site. 

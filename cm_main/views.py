@@ -234,8 +234,8 @@ def statistics(request):
     },
     _("Chats"): {
       _('Number of chat rooms'): ChatRoom.objects.count(),
-      _('Number of public chat rooms'): ChatRoom.public().count(),
-      _('Number of private chat rooms'): PrivateChatRoom.count(),
+      _('Number of public chat rooms'): ChatRoom.objects.public().count(),
+      _('Number of private chat rooms'): PrivateChatRoom.objects.count(),
       _('Number of chat messages'): all_messages_count,
       _('Number of private chat messages'): all_messages_count - public_chat_messages_count,
       _('Number of public chat messages'): public_chat_messages_count,

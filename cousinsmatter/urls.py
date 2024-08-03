@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
-from cm_main.views import download_protected_media
+from cm_main.views.views_general import download_protected_media
 
 # from django.utils.translation import gettext_lazy as _
 

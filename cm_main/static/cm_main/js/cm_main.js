@@ -234,4 +234,8 @@ function printSection(el) {
   $('body').html(originalContent);
 }
 
-
+function confirm_and_redirect(message, action_url) {
+	if (confirm(message)) {
+			window.location.replace(action_url);
+	}
+}

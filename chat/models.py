@@ -59,7 +59,7 @@ class ChatRoom(models.Model):
     return self.chatmessage_set.last()
 
   def is_public(self):
-    return not self.privatechatroom
+    return not hasattr(self, 'privatechatroom')
 
   @classmethod
   def FlaggedRooms(cls, *filters):

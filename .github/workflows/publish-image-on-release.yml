@@ -15,14 +15,14 @@ jobs:
     
     - name: Update release.txt
       run: |
-        echo ${{ github.ref_name }} > release.txt
+        echo "${{ github.event.release.tag_name }}" > release.txt
         echo -n "release.txt contains: "
         cat release.txt
-        git config user.name github-actions
-        git config user.email github-actions@github.com
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
         git add release.txt
-        git commit -m "Update release.txt to version ${{ github.ref_name }}"
-        git push
+        git commit -m "Update release.txt to version ${{ github.event.release.tag_name }}"
+        git push origin HEAD:${{ github.ref }}
 
   build-and-publish:
     needs: update-version
@@ -30,5 +30,5 @@ jobs:
     with:
       push: true
       trace_event: ${{ toJson(github.event) }}
-      version: ${{ github.ref_name }}
+      version: ${{ github.event.release.tag_name }}
 

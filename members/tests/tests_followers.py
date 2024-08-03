@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.core import mail
 from asgiref.sync import sync_to_async
 from chat.models import ChatMessage, ChatRoom
-from chat.tests import ChatMessageSenderMixin
+from chat.tests.tests_mixin import ChatMessageSenderMixin
 from cm_main.tests import get_absolute_url
 from cm_main.tests.tests_followers import TestFollowersMixin
 from forum.models import Message, Post

@@ -13,24 +13,26 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    
-    - name: Checkout the branch
+  
+    - name: Checkout the tag
       run: |
-        # Fetch all branches and tags
-        git fetch --all
-        # Checkout the branch that triggered the release
-        git checkout ${{ github.ref_name }}
+        git fetch --all --tags
+        git checkout ${{ github.ref }}
 
     - name: Update release.txt
       run: |
-        echo "${{ github.event.release.tag_name }}" > release.txt
+        echo "${{ github.ref_name }}" > release.txt
         echo -n "release.txt contains: "
         cat release.txt
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
         git add release.txt
-        git commit -m "Update release.txt to version ${{ github.event.release.tag_name }}"
-        git push origin HEAD:${{ github.ref_name }}
+        git commit -m "Update release.txt to version ${{ github.ref_name }}"
+
+    - name: Update tag
+      run: |
+        git push origin :refs/tags/${{ github.ref_name }}
+        git push origin HEAD:refs/tags/${{ github.ref_name }}
 
   build-and-publish:
     needs: update-version

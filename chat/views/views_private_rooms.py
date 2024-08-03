@@ -7,11 +7,13 @@ from django.db.models import Count, OuterRef, Subquery, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.text import slugify
 from django.utils.translation import gettext as _
+
 from urllib.parse import unquote, urlencode
 
 from members.models import Member
-from ..models import ChatMessage, PrivateChatRoom
+from ..models import ChatMessage, ChatRoom, PrivateChatRoom
 from cousinsmatter.utils import Paginator, is_ajax
 
 
@@ -24,9 +26,9 @@ def search_private_members(request, room_slug):
     Search for private members in a given chat room.
 
     This view is accessible only to authenticated users. It performs an AJAX search
-    for private members in a chat room based on the provided query. The search is 
-    case-insensitive and matches the query against the `last_name`, `first_name`, 
-    last name's last word, and first name's first word of the `Member` model. 
+    for private members in a chat room based on the provided query. The search is
+    case-insensitive and matches the query against the `last_name`, `first_name`,
+    last name's last word, and first name's first word of the `Member` model.
     The results are limited to the first 12 matching members.
 
     Parameters:
@@ -51,7 +53,7 @@ def search_private_members(request, room_slug):
     members = Member.objects.filter(
         followed_chat_rooms=room
     ).filter(
-        Q(last_name__icontains=query) | 
+        Q(last_name__icontains=query) |
         Q(first_name__icontains=query) |
         Q(last_name__icontains=query.split()[-1]) |
         Q(first_name__icontains=query.split()[0])
@@ -134,18 +136,15 @@ def new_private_room(request):
   private_room_name = unquote(request.GET['name'])
   try:
     private_room, created = PrivateChatRoom.objects.get_or_create(name=private_room_name)
+    room_url = reverse('chat:private_room', args=[private_room.slug])
     if created:  # if room was created, add user who created it as member (ie followers which is reused for that) and admins
       private_room.followers.add(request.user)
       private_room.admins.add(request.user)
       private_room.save()
-
-    room_url = reverse('chat:private_room', args=[private_room.slug])
-    # if room was created, check user followers
-    # ### MAYBE NOT ADAPTED; IF SOMEONE CREATES A PRIVATE ROOM AND DOES NOT WANT TO INVITE HIS/HER FOLLOWERS,
-    # ### NO NEED TO TELL THE FOLLOWERS THAT HE/SHE CREATED THE ROOM WHERE THE FOLLOWER WON'T BE ADDED
-    # if created:
-    #   logger.debug("private room created, checking followers")
-    #   followers.check_followers(request, private_room, request.user, room_url)
+      # even if room was created, we don't check user followers because:
+      # IT MIGHT NOT BE ADAPTED; IF SOMEONE CREATES A PRIVATE ROOM AND DOES NOT WANT TO INVITE HIS/HER FOLLOWERS,
+      # NO NEED TO TELL THE FOLLOWERS THAT HE/SHE CREATED THE ROOM WHERE THE FOLLOWER WON'T BE ADDED
+      #   followers.check_followers(request, private_room, request.user, room_url)
     return redirect(room_url)
   except ValidationError as ve:
     for error in ve:
@@ -153,8 +152,10 @@ def new_private_room(request):
         case '__all__':
           messages.error(request, ' '.join(error[1]))
         case 'slug':
-          print("error on slug:", ' '.join(error[1]))
-          pass
+          similar_room = ChatRoom.objects.get(slug=slugify(private_room_name))
+          messages.error(request,
+                         _(f"Another room with a similar name already exists ('{similar_room.name}'). "
+                           "Please choose a different name."))
         case _:
           messages.error(request, f'{error[0]}: {" ".join(error[1])}')
     return redirect(reverse('chat:private_chat_rooms'))
@@ -240,7 +241,7 @@ def list_private_room_members(request, room_slug):
   if request.user not in room.followers.all():
     messages.error(request, _("You are not a member of this private room"))
     return redirect(reverse('chat:private_chat_rooms'))
-  return render(request, 'chat/private/room_members.html', {'room': room, 'members': room.followers.all()})
+  return render(request, 'chat/private/room_members.html', {'room': room})
 
 
 @login_required
@@ -329,9 +330,10 @@ def remove_member_from_private_room(request, room_slug, member_id):
       if member in room.admins.all():
         room.admins.remove(member)
       room.save()
+      messages.success(request, _("%s has been removed from the room") % member.full_name)
   else:
     messages.warning(request, _("This user is not a member of this private room"))
-  return redirect(reverse('chat:privat_room_members', args=[room.slug]))
+  return redirect(reverse('chat:private_room_members', args=[room.slug]))
 
 
 @login_required
@@ -366,14 +368,19 @@ def leave_private_room(request, room_slug):
     messages.error(request, _("You are not a member of this private room"))
     return redirect(reverse('chat:private_chat_rooms'))
   else:
-    if room.followers.count() < 2:
+    if room.followers.count() == 1:
       messages.error(request, _("You are the only member in this private room. "
                                 "Please add another one before removing yourself."))
+    elif request.user in room.admins.all() and room.admins.count() == 1:
+      messages.error(request, _("You are the only admin in this private room. "
+                                "If you leave the room, no one will be left. "
+                                "Please add another admin from the members before you remove yourself."))
     else:
       room.followers.remove(request.user)
       if request.user in room.admins.all():
         room.admins.remove(request.user)
       room.save()
+      messages.success(request, _("You have left the room"))
   return redirect(reverse('chat:private_chat_rooms'))
 
 
@@ -401,7 +408,7 @@ def list_private_room_admins(request, room_slug):
   if request.user not in room.followers.all():
     messages.error(request, _("You are not a member of this private room"))
     return redirect(reverse('chat:private_chat_rooms'))
-  return render(request, 'chat/private/room_admins.html', {'room': room, 'admins': room.admins.all()})
+  return render(request, 'chat/private/room_admins.html', {'room': room})
 
 
 @login_required

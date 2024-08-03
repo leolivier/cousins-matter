@@ -32,7 +32,7 @@
 			{%include "chat/private/add-member.html" with add_url='chat:add_member_to_private_room'%}
 		</div>
 		{%endif%}
-		{% for member in members %}
+		{% for member in room.followers.all %}
 		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
 			<div class="panel-icon mini-avatar is-flex is-align-items-center is-justify-content-center is-flex-shrink-5 image">
 				<img class="is-rounded" src="{{member.avatar_mini_url}}"	alt="{{member.username}}">

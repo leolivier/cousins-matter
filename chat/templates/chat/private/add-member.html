@@ -2,7 +2,7 @@
 <form id="add-member-form" method="post" action="{%url add_url room.slug %}">
 	{% csrf_token %}
 	<select id="member-select" name="member-id" style="width: 300px;"></select>
-	<button class button type="submit">{%icon "new-member" %} {{tr_add_member}}</button>
+	<button class="button" type="submit">{%icon "new-member" %} {{tr_add_member}}</button>
 </form>
 {%trans 'Search a member...' as placeholder %}
 <script>

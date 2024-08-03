@@ -57,12 +57,18 @@
 		{%endif%}
 
 		{%trans "No author yet" as nobody %}
-
+		{% with admin=room.admins.first %}
 		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
 			<div class="panel-icon mini-avatar is-flex is-align-items-center is-justify-content-center is-flex-shrink-5 image">
 				<img class="is-rounded" 
-						src="{{room.first_message_author.avatar_mini_url|default:settings.DEFAULT_AVATAR_URL}}"
-						alt="{{room.first_message_author.username|default:nobody}}">
+				{%if private%}
+					src="{{admin.avatar_mini_url}}"
+					alt="{{admin.username}}" 
+				{%else%}
+					src="{{room.first_message_author.avatar_mini_url|default:settings.DEFAULT_AVATAR_URL}}"
+					alt="{{room.first_message_author.username|default:nobody}}"
+				{%endif%}
+				>
 			</div>
 			<div class="is-flex-shrink-1 has-text-primary has-text-weight-bold mr-5">
 				{%if private%}
@@ -106,6 +112,7 @@
 			</div>
 			{%endif%}
 		</div>
+		{%endwith%}
 	{%endfor%}
 	</div>
 </div>

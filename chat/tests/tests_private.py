@@ -68,6 +68,36 @@ class PrivateChatRoomTestsMixin():
 </div>
 ''', html=True)
 
+  def get_leave_text(self, room):
+    leave_room = _('Leave this room')
+    areyousure = _("Are you sure you want to leave this room?")
+
+    return f'''
+    <button class="button"
+    onclick="confirm_and_redirect('{areyousure}', '{reverse('chat:leave_private_room', args=[room.slug])}')" 
+    title="{leave_room}">
+    {icon('leave-group')}
+    <span class="is-hidden-mobile">{leave_room}</span>
+  </button>'''
+
+  def get_remove_text(self, room, member, is_admin=False):
+    if is_admin:
+      remove_member = _('Remove Admin from Room')
+      areyousure = _("Are you sure you want to remove this admin from the room?")
+      remove_url = reverse('chat:remove_admin_from_private_room', args=[room.slug, member.id])
+    else:
+      remove_member = _('Remove Member from Room')
+      areyousure = _("Are you sure you want to remove this member from the room?")
+      remove_url = reverse('chat:remove_member_from_private_room', args=[room.slug, member.id])
+
+    return f'''
+<button class="button"
+    onclick="confirm_and_redirect('{areyousure}', '{remove_url}')" 
+    title="{remove_member}">
+  {icon('leave-group')}
+  <span>{remove_member}</span>
+</button>'''
+
   def check_private_members_list(self, response, room, member):
     self.assertContains(response, f'''
 <div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
@@ -80,9 +110,7 @@ class PrivateChatRoomTestsMixin():
       {icon("member-link")}
     </a>
   </div>
-  <a class="button" href="{reverse('chat:remove_member_from_private_room', args=[room.slug, member.id])}">
-    {icon("leave-group")} <span>{_('Remove Member from Room')}</span>
-  </a>
+  {self.get_remove_text(room, member)}
 </div>''', html=True)
 
   def check_private_admins_list(self, response, room, admin):
@@ -97,9 +125,7 @@ class PrivateChatRoomTestsMixin():
       {icon("member-link")}
     </a>
   </div>
-  <a class="button" href="{reverse('chat:remove_admin_from_private_room', args=[room.slug, admin.id])}">
-    {icon("leave-group")} <span>{_('Remove Admin from Room')}</span>
-  </a>
+   {self.get_remove_text(room, admin, is_admin=True)}
 </div>''', html=True)
 
 
@@ -168,17 +194,13 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
       response = self.client.post(reverse('chat:add_member_to_private_room', args=[self.room.slug]),
                                   {'member-id': member.id}, follow=True)
       back_to_room = _('Back to room')
-      leave_room = _('Leave this room')
       self.assertContains(response, f'''
 <div class="buttons has-addons is-rounded ml-auto">
   <a class="button" title="{back_to_room}" href="{reverse('chat:private_room', args=[self.room.slug])}">
     {icon('back')}
     <span class="is-hidden-mobile">{back_to_room}</span>
   </a>
-  <a class="button" title="{leave_room}" href="{reverse('chat:leave_private_room', args=[self.room.slug])}">
-    {icon('leave-group')}
-    <span class="is-hidden-mobile">{leave_room}</span>
-  </a>
+  {self.get_leave_text(self.room)}
 </div>''', html=True)
       # remove csrf token before checking
       content = response.content.decode('utf-8')
@@ -192,7 +214,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     # then list the members
     response = self.client.get(reverse('chat:private_room_members', args=[self.room.slug]), follow=True)
     # self.print_response(response)
-    for member in (self.member, *self.created_members):
+    for member in (*self.created_members, self.member):
       self.check_private_members_list(response, self.room, member)
     # then delete some members and remove some others from the list
     self.created_members[0].delete()
@@ -220,17 +242,13 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
       response = self.client.post(reverse('chat:add_member_to_private_room', args=[self.room.slug]),
                                   {'member-id': member.id}, follow=True)
       back_to_room = _('Back to room')
-      leave_room = _('Leave this room')
       self.assertContains(response, f'''
 <div class="buttons has-addons is-rounded ml-auto">
   <a class="button" title="{back_to_room}" href="{reverse('chat:private_room', args=[self.room.slug])}">
     {icon('back')}
     <span class="is-hidden-mobile">{back_to_room}</span>
   </a>
-  <a class="button" title="{leave_room}" href="{reverse('chat:leave_private_room', args=[self.room.slug])}">
-    {icon('leave-group')}
-    <span class="is-hidden-mobile">{leave_room}</span>
-  </a>
+  {self.get_leave_text(self.room)}
 </div>''', html=True)
       # remove csrf token before checking
       content = response.content.decode('utf-8')
@@ -245,6 +263,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     second_member = random.choice(self.created_members)
     # then list the members
     response = self.client.get(reverse('chat:private_room_admins', args=[self.room.slug]), follow=True)
+    # self.print_response(response)
     # only self.member and not second_member should be in the list
     self.check_private_admins_list(response, self.room, self.member)
     self.assertNotContains(response, second_member.full_name)
@@ -348,14 +367,11 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
 
     # check a member can access a private room
     response = self.client.get(reverse('chat:private_room', args=[self.room.slug]), follow=True)
+    # self.print_response(response)
     self.assertTemplateUsed(response, "chat/room_detail.html")
-    leave_room = _('Leave this room')
     self.assertContains(response, f'''
 <div class="mr-1 buttons has-addons is-rounded">
-  <a class="button" title="{leave_room}" href="{reverse('chat:leave_private_room', args=[self.room.slug])}">
-    {icon('leave-group')}
-    <span class="is-hidden-mobile">{leave_room}</span>
-  </a>
+  {self.get_leave_text(self.room)}
   <a class="button" href="{reverse('chat:private_room_members', args=[self.room.slug])}">
     {icon("members")} <span>{_('Room Members')}</span>
   </a>

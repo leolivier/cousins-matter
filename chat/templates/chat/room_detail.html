@@ -45,10 +45,12 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 					{%if private%}
 					<div class="mr-1 buttons has-addons is-rounded">
 						{%trans 'Leave this room' as leave_room%}
-						<a class="button" title="{{leave_room}}" href="{% url 'chat:leave_private_room' room.slug %}">
+						{%url 'chat:leave_private_room' room.slug as leave_url %}
+						{%trans "Are you sure you want to leave this room?" as areyousure %}
+						<button class="button" onclick="confirm_and_redirect('{{areyousure}}', '{{leave_url}}')" title="{{leave_room}}">
 							{%icon 'leave-group'%}
 							<span class="is-hidden-mobile">{{leave_room}}</span>
-						</a>
+						</button>
 						<a class="button" href="{%url 'chat:private_room_members' room.slug %}">
 							{%icon "members" %} <span>{%trans 'Room Members' %}</span>
 						</a>

@@ -19,10 +19,12 @@
 					<span class="is-hidden-mobile">{{back_room}}</span>
 				</a>
 				{%trans 'Leave this room' as leave_room%}
-				<a class="button" title="{{leave_room}}" href="{% url 'chat:leave_private_room' room.slug %}">
+				{%url 'chat:leave_private_room' room.slug as leave_url %}
+				{%trans "Are you sure you want to leave this room?" as areyousure %}
+				<button class="button" onclick="confirm_and_redirect('{{areyousure}}', '{{leave_url}}')" title="{{leave_room}}">
 					{%icon 'leave-group'%}
 					<span class="is-hidden-mobile">{{leave_room}}</span>
-				</a>
+				</button>
 			</div>
 		</div>
 		{%if user in room.admins.all %}
@@ -43,9 +45,12 @@
 					{%icon "member-link" %}
 				</a>
 			</div>
-			<a class="button" href="{%url 'chat:remove_member_from_private_room' room.slug member.id %}">
-				{%icon "leave-group" %} <span>{%trans 'Remove Member from Room' %}</span>
-			</a>
+			{%trans 'Remove Member from Room' as leave_room%}
+			{%url 'chat:remove_member_from_private_room' room.slug member.id as remove_url %}
+			{%trans "Are you sure you want to remove this member from the room?" as areyousure %}
+			<button class="button" onclick="confirm_and_redirect('{{areyousure}}', '{{remove_url}}')" title="{{leave_room}}">
+				{%icon "leave-group" %} <span>{{leave_room}}</span>
+			</button>
 		</div>
 		{%endfor%}
 	</div>

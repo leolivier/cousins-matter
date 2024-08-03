@@ -34,8 +34,34 @@ jobs:
         git push origin :refs/tags/${{ github.ref_name }}
         git push origin HEAD:refs/tags/${{ github.ref_name }}
 
-  build-and-publish:
+  check-repository:
     needs: update-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+      
+      - name: Fetch latest changes
+        run: |
+          git fetch --all --tags
+          git checkout ${{ github.ref }}
+          git pull origin ${{ github.ref }}
+      
+      - name: Debug - Check release.txt content
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "release.txt content:"
+          cat release.txt
+          echo "Git status:"
+          git status
+          echo "Latest commit:"
+          git log -1
+
+  build-and-publish:
+    needs: [update-version, check-repository]
     uses: leolivier/cousins-matter/.github/workflows/build-and-publish-image-reusable.yml@main
     with:
       push: true

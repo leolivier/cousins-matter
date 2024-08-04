@@ -1,0 +1,148 @@
+# Creates a multiplatform image of cousins matter and push it to ghcr.io for each new release
+
+name: Image Build & Push
+
+on:
+  push:
+    branches: []
+    tags-ignore: []
+  
+  release:
+    types: [prereleased, published]
+
+  workflow_dispatch:
+
+
+env:
+  # The registry where the image will be pushed.
+  REGISTRY: 'ghcr.io'
+  # name of the docker image
+  IMAGE_NAME: ${{ github.repository }}
+  # a list of platform architecture to be built in the image.
+  PLATFORMS: 'linux/amd64,linux/arm64'
+  # Should the built image be pushed to the registry?
+  PUSH: ${{ github.event_name == 'release' && true || github.event_name == 'push' && true || false }}
+  # how to compute image tags
+  TAGS_DEF: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'push' && 'type=ref,event=branch' || 'type=sha' }}
+  # version of the application 
+  # VERSION: ${{ github.event.release.tag_name || github.ref_name }}
+
+jobs:
+  test-build-image-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: trace event trigger
+        run: |
+          echo ${{ toJson(github.event) }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required to get all tags
+
+      - name: Determine version
+        id: get_version
+        run: |
+            if [[ ${{ github.event_name }} == 'release' ]]; then
+              echo "VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+            elif [[ ${{ github.ref }} == refs/tags/* ]]; then
+              echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            else
+              echo "VERSION=$(git describe --tags --abbrev=0)-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+            fi
+    
+      - name: Create release.txt
+        run: echo ${{ steps.get_version.outputs.VERSION }} > release.txt
+
+      - name: Upload release.txt
+        uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: release.txt
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install flake8 tblib
+          pip install -r requirements.txt
+
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --indent-size 2 --exclude migrations
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0.3
+        with:
+          envkey_SECRET_KEY: 'django-insecure-this-is-just-for-test'
+          envkey_SITE_NAME: 'My Beautiful Site'
+          envkey_ALLOWED_HOSTS: '127.0.0.1,localhost'
+          envkey_LANGUAGE_CODE: 'fr-FR'
+          envkey_EMAIL_HOST: 'smtp.gmail.com'
+          envkey_EMAIL_PORT: 465
+          envkey_EMAIL_HOST_USER: 'nobody@gmail.com'
+          envkey_EMAIL_HOST_PASSWORD: 'no matter'
+          directory: .
+          file_name: .env
+          fail_on_empty: false
+          sort_keys: false
+
+      - name: Test django (skip redis needing tests)
+        run: |
+          python ./manage.py test --parallel --exclude-tag needs-redis
+    
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR.io
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: ${{ env.TAGS_DEF }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: ${{ env.PLATFORMS }}
+          push: ${{ env.PUSH }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test Docker Image
+        env:
+          SOCKS_MOUNT: -v "/var/run/docker.sock":"/var/run/docker.sock"
+          MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          mkdir -p ./data ./media ./media/public
+          touch ./media/public/theme.css
+          FIRST_TAG=$(echo "$TAGS" | head -n 1)
+          echo "Tested image is $FIRST_TAG"
+          docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $FIRST_TAG
+          # let the server start before running tests
+          sleep 10
+          docker exec cousins-matter  python manage.py test 

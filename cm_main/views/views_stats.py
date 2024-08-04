@@ -93,37 +93,55 @@ def statistics(request):
   public_chat_messages_count = ChatMessage.objects.filter(room__in=public_chat_rooms).count()
 
   stats = {
-    _('Site'): {
-      _('Site name'): settings.SITE_NAME,
-      _('Site URL'): request.build_absolute_uri('/'),
-      _('Application Version'): settings.APP_VERSION,
-      _('Latest release'): get_latest_release_text(request),
+    'site': {
+      'key': _('Site'),
+      'stats': [
+        {'key': _('Site name'), 'value': settings.SITE_NAME},
+        {'key': _('Site URL'), 'value': request.build_absolute_uri('/')},
+        {'key': _('Application Version'), 'value': settings.APP_VERSION},
+        {'key': _('Latest release'), 'value': get_latest_release_text(request)},
+      ]
     },
-    _('Members'): {
-      _('Total number of members'): Member.objects.count(),
-      _('Number of active members'): Member.objects.filter(is_active=True).count(),
-      _('Number of managed members'): Member.objects.filter(is_active=False).count(),
+    'members': {
+      'key': _('Members'),
+      'stats': [
+        {'key': _('Total number of members'), 'value': Member.objects.count()},
+        {'key': _('Number of active members'), 'value': Member.objects.filter(is_active=True).count()},
+        {'key': _('Number of managed members'), 'value': Member.objects.filter(is_active=False).count()},
+      ]
     },
-    _('Galleries'): {
-      _('Number of galleries'): Gallery.objects.count(),
-      _('Number of photos'): Photo.objects.count(),
+    'galleries': {
+      'key': _('Galleries'),
+      'stats': [
+        {'key': _('Number of galleries'), 'value': Gallery.objects.count()},
+        {'key': _('Number of photos'), 'value': Photo.objects.count()},
+      ]
     },
-    _("Forums"): {
-      _('Number of posts'): Post.objects.count(),
-      _('Number of post messages'): Message.objects.count(),
-      _('Number of message comments'): Comment.objects.count(),
+    'forums': {
+      'key': _('Forums'),
+      'stats': [
+        {'key': _('Number of posts'), 'value': Post.objects.count()},
+        {'key': _('Number of post messages'), 'value': Message.objects.count()},
+        {'key': _('Number of message comments'), 'value': Comment.objects.count()},
+      ]
     },
-    _("Chats"): {
-      _('Number of chat rooms'): ChatRoom.objects.count(),
-      _('Number of public chat rooms'): ChatRoom.objects.public().count(),
-      _('Number of private chat rooms'): PrivateChatRoom.objects.count(),
-      _('Number of chat messages'): all_messages_count,
-      _('Number of private chat messages'): all_messages_count - public_chat_messages_count,
-      _('Number of public chat messages'): public_chat_messages_count,
+    'chats': {
+      'key': _('Chats'),
+      'stats': [
+        {'key': _('Number of chat rooms'), 'value': ChatRoom.objects.count()},
+        {'key': _('Number of public chat rooms'), 'value': ChatRoom.objects.public().count()},
+        {'key': _('Number of private chat rooms'), 'value': PrivateChatRoom.objects.count()},
+        {'key': _('Number of chat messages'), 'value': all_messages_count},
+        {'key': _('Number of private chat messages'), 'value': all_messages_count - public_chat_messages_count},
+        {'key': _('Number of public chat messages'), 'value': public_chat_messages_count},
+      ]
     },
-    _('Administrator'): {
-      _('This site is managed by'): admin.full_name,
-      _('Administrator email'): admin.email,
+    'admin': {
+      'key': _('Administrator'),
+      'stats': [
+        {'key': _('This site is managed by'), 'value': admin.full_name},
+        {'key': _('Administrator email'), 'value': admin.email},
+      ]
     },
   }
   return render(request, 'cm_main/about/site-stats.html', {'stats': stats})

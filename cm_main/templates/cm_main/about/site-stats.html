@@ -8,36 +8,36 @@
 	<section class="panel">
 		<p class="panel-heading">{% title _("Statistics") %}</p>
 		<div class="panel-tabs">
-		{% for category in stats.keys %}
-		{%with scategory=category|slugify%}
-		<a class="stat-category {%if forloop.first%}is-active{%endif%}" data-category="{{ scategory }}">{{ category }}</a>
+		{% for category, data in stats.items %}
+		{%with scategory=data.key|slugify%}
+		<a class="stat-category {%if forloop.first%}is-active{%endif%}" data-category="{{ scategory }}">{{ data.key }}</a>
 		{%endwith%}
 		{% endfor %}
 		</div>
-		{% for category, category_data in stats.items %}
-		{%with scategory=category|slugify%}
+		{% for category, data in stats.items %}
+		{%with scategory=data.key|slugify%}
 		<div class="panel-category" id="category-{{ scategory }}">
-    	{% for key, value in category_data.items %}
+    	{% for property in data.stats %}
+			{%with key=property.key value=property.value%}
 			<div class="panel-block">
 				{%if value.icon %}
 					{%icon value.icon "panel-icon"%}
 				{%else%}
 					{%icon "stats" "panel-icon"%}
 				{%endif%}
-				<span class="is-size-5">{{ key }}</span>: 
+				<span class="is-size-5 is-flex-grow-1">{{ key }} :</span>
+				<span class="notification is-info ml-3">
+					{%if value.value %}{{ value.value }}{%else%}{{value}}{%endif%}
+				</span>
 				{%if value.info %}
-				<span class="notification is-info ml-3">{{ value.value }}</span>
 				<span class="notification is-success ml-3">{{ value.info }}</span>
 				{%elif value.warning %}
-				<span class="notification is-info ml-3">{{ value.value }}</span>
 				<span class="notification is-warning ml-3">{{ value.warning }}</span>
 				{%elif value.error %}
-				<span class="notification is-info ml-3">{{ value.value }}</span>
 				<span class="notification is-danger ml-3">{{ value.error }}</span>
-				{%else%}
-				<span class="notification is-info ml-3">{{ value }}</span>
 				{%endif%}
 			</div>
+			{%endwith%}
 			{% endfor %}
 		</div>
 		{%endwith%}

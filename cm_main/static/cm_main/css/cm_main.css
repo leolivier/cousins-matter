@@ -183,6 +183,17 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 	content: "";
 }
 
-.panel-block > .notification:not(last-child) {
+.panel-block > .notification:not(:last-child) {
 	margin-bottom: 0;
+}
+/* a notification which has no notification before it or which  */
+/* is the only one in the panel-block has a minimu length */
+.panel-block .notification:not(.notification + .notification) {
+	min-width: 4.61em;
+	text-align: center;
+	flex-basis: auto;
+  flex-shrink: 0;
+}
+.panel-tabs {
+	flex-wrap: wrap;
 }

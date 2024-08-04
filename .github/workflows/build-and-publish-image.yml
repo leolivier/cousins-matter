@@ -34,8 +34,10 @@ jobs:
       packages: write
     steps:
       - name: trace event trigger
+        env:
+          EVENT: ${{ toJson(github.event) }}
         run: |
-          echo ${{ toJson(github.event) }}
+          echo $EVENT
 
       - name: Checkout
         uses: actions/checkout@v4

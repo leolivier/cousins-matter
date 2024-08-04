@@ -2,7 +2,7 @@
 name: Push build
 
 on: 
-  push:
+  # push:
     # branches: []
     # tags-ignore: []
   workflow_dispatch: 

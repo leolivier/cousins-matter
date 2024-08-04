@@ -52,7 +52,7 @@ jobs:
             elif [[ ${{ github.ref }} == refs/tags/* ]]; then
               echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
             else
-              echo "VERSION=$(git describe --tags --abbrev=0)-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+              echo "VERSION=$(git describe --tags --abbrev=0)+$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
             fi
     
       - name: Create release.txt

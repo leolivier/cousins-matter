@@ -4,8 +4,11 @@ import random
 import os
 import io
 import string
+
+from django.contrib.auth.decorators import login_required
 from django.core.files import File
 from django.forms import ValidationError
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -13,6 +16,7 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
+
 from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm
 from django.conf import settings
@@ -93,7 +97,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         return None
 
   def _manage_family(self, member, family_name):
-    member.family = Family.objects.get_or_create(name=family_name, parent=None)
+    member.family = Family.objects.get_or_create(name=family_name)
 
   def _update_member(self, member, row, activate_users):
     "update an existing member based on row content"
@@ -195,3 +199,32 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         messages.error(request, e.__str__())
         raise
     return super().post(request, *args, **kwargs)
+
+
+@login_required
+def export_members_to_csv(request):
+  # Create an HTTP response with the CSV content type
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename="members.csv"'
+
+  writer = csv.writer(response)
+
+  # Write CSV header
+  writer.writerow(ALL_FIELD_NAMES.values())
+
+  # Retrieve member data
+  members = Member.objects.all().select_related('address').select_related('family').order_by('username')
+
+  # Write member data to CSV file
+  for member in members:
+    row = []
+    for field in MEMBER_FIELD_NAMES.keys():
+      if field == 'family':
+        row.append(member.family.name if member.family else '')
+      else:
+        row.append(getattr(member, field, ''))
+    for field in ADDRESS_FIELD_NAMES.keys():
+      row.append(getattr(member.address, field, '') if member.address else '')
+    writer.writerow(row)
+
+  return response

@@ -36,7 +36,9 @@
 					{%if user.is_superuser or settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS%}
 						{% url 'members:invite' as invite_url%}
 						{%navbar_item invite_url _("Invite Member") "invite-member" %}
-						{%endif%}
+					{%endif%}
+					{% url 'members:export_members_to_csv' as export_url%}
+					{%navbar_item export_url _("Export Members as CSV") "import-members" %}
 					</div>
 			</div>
 

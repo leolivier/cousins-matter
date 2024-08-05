@@ -38,4 +38,5 @@ urlpatterns = [
   path("directory", views_directory.MembersDirectoryView.as_view(), name="directory"),
   path("directory/print", views_directory.MembersPrintDirectoryView.as_view(), name="print_directory"),
   path("import", views_import.CSVImportView.as_view(), name="csv_import"),
+  path('export', views_import.export_members_to_csv, name='export_members_to_csv'),
 ]

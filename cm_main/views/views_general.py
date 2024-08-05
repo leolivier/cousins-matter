@@ -31,7 +31,7 @@ def download_protected_media(request, media):
   the_file = settings.MEDIA_ROOT / media
   if not os.path.isfile(the_file):
     raise Http404(_("Media not found"))
-  filename = os.path.basename(the_file)
+  # filename = os.path.basename(the_file)
   chunk_size = 8192
   response = StreamingHttpResponse(
       FileWrapper(
@@ -39,9 +39,11 @@ def download_protected_media(request, media):
           chunk_size,
       ),
       content_type=mimetypes.guess_type(the_file)[0],
+
   )
   response["Content-Length"] = os.path.getsize(the_file)
-  response["Content-Disposition"] = f"attachment; filename={filename}"
+  # response["Content-Disposition"] = f"inline; filename={filename}"
+  response["Content-Disposition"] = "inline"
   return response
 
 

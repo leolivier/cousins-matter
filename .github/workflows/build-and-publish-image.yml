@@ -29,6 +29,7 @@ env:
 
 jobs:
   test-build-image-publish:
+    if: github.event_name == 'release' || github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-latest
     permissions:
       packages: write

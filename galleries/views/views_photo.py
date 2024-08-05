@@ -65,12 +65,18 @@ class PhotoAddView(LoginRequiredMixin, generic.CreateView):
   def post(self, request, gallery, *args, **kwargs):
     form = PhotoForm(request.POST, request.FILES)
     if form.is_valid():
-      photo = form.save()
-      if 'create-and-add' in request.POST:
-        messages.success(request, _("Photo created"))
-        return redirect("galleries:add_photo", gallery)
-      else:
-        return redirect("galleries:photo", photo.id)
+      try:  # issue 120: if any exception during the thumbnail creation process, remove the photo from the database
+        photo = form.save()
+        if 'create-and-add' in request.POST:
+          messages.success(request, _("Photo created"))
+          return redirect("galleries:add_photo", gallery)
+        else:
+          return redirect("galleries:photo", photo.id)
+      except ValidationError as e:
+        logger.error(e)
+        messages.error(request, _("Error when creating this photo. "
+                                  "Try to convert it in another format before retrying to upload it."))
+        return render(request, self.template_name, {'form': form})
 
   def get(self, request, gallery):
     # initialize gallery to the value in the url and current date

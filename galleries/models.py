@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 from io import BytesIO
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageFile
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -14,6 +14,9 @@ from django.urls import reverse
 from cousinsmatter.utils import check_file_size
 
 logger = logging.getLogger(__name__)
+
+# issue #120 try to avoid error about truncated images when creating thumbnails
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 def get_path(instance, filename, subdir=None):
@@ -84,25 +87,31 @@ class Photo(models.Model):
     # need to save first to uplad the image
     super().save(*args, **kwargs)
 
-    # create thumbnail
-    tns = settings.GALLERIES_THUMBNAIL_SIZE
-    output_thumb = BytesIO()
-    filename = os.path.basename(self.image.path)
-    file, ext = os.path.splitext(filename)
-    with Image.open(self.image.path) as img:
-      if img.height > tns or img.width > tns:
-        size = tns, tns
-        img.thumbnail(size)
-        img = ImageOps.exif_transpose(img)  # avoid image rotating
-        img.save(output_thumb, format='JPEG', quality=90)
-        size = sys.getsizeof(output_thumb)
-        self.thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.jpg",
-                                              'image/jpeg', size, None)
-        logger.debug(f"Resized and saved thumbnail for {self.image.path} to {self.thumbnail.path}, size={size}")
-      else:  # small photos are used directly as thumbnails
-        self.thumbnail = self.image
+    try:
+      # create thumbnail
+      tns = settings.GALLERIES_THUMBNAIL_SIZE
+      output_thumb = BytesIO()
+      filename = os.path.basename(self.image.path)
+      file, ext = os.path.splitext(filename)
+      with Image.open(self.image.path) as img:
+        if img.height > tns or img.width > tns:
+          size = tns, tns
+          img.thumbnail(size)
+          img = ImageOps.exif_transpose(img)  # avoid image rotating
+          img.save(output_thumb, format='JPEG', quality=90)
+          size = sys.getsizeof(output_thumb)
+          self.thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.jpg",
+                                                'image/jpeg', size, None)
+          logger.debug(f"Resized and saved thumbnail for {self.image.path} to {self.thumbnail.path}, size={size}")
+        else:  # small photos are used directly as thumbnails
+          self.thumbnail = self.image
 
-    super().save(force_update=True, update_fields=['thumbnail'])
+      super().save(force_update=True, update_fields=['thumbnail'])
+
+    except Exception as e:
+      # issue #120: if any exception during the thumbnail creation process, remove the photo from the database
+      self.delete()
+      raise ValidationError(f"Error during saving photo: {e}")
 
 
 class Gallery(models.Model):

@@ -199,7 +199,7 @@ def search_members(request):
 
     query = request.GET.get('q', '')
     members = Member.objects.filter(
-        Q(last_name__icontains=query) | 
+        Q(last_name__icontains=query) |
         Q(first_name__icontains=query) |
         Q(last_name__icontains=query.split()[-1]) |
         Q(first_name__icontains=query.split()[0])

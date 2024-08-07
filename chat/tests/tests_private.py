@@ -74,7 +74,7 @@ class PrivateChatRoomTestsMixin():
 
     return f'''
     <button class="button"
-    onclick="confirm_and_redirect('{areyousure}', '{reverse('chat:leave_private_room', args=[room.slug])}')" 
+    onclick="confirm_and_redirect('{areyousure}', '{reverse('chat:leave_private_room', args=[room.slug])}')"
     title="{leave_room}">
     {icon('leave-group')}
     <span class="is-hidden-mobile">{leave_room}</span>
@@ -92,7 +92,7 @@ class PrivateChatRoomTestsMixin():
 
     return f'''
 <button class="button"
-    onclick="confirm_and_redirect('{areyousure}', '{remove_url}')" 
+    onclick="confirm_and_redirect('{areyousure}', '{remove_url}')"
     title="{remove_member}">
   {icon('leave-group')}
   <span>{remove_member}</span>
@@ -225,7 +225,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     # then list the members again (this is the default redirection)
     self.assertTemplateUsed(response, 'chat/private/room_members.html')
     self.assertNotContains(response, self.created_members[0].full_name)
-    self.assertContainsMessage(response, "success", 
+    self.assertContainsMessage(response, "success",
                                _("%s has been removed from the room") % self.created_members[1].full_name)
     for member in (self.member, *self.created_members):
       self.check_private_members_list(response, self.room, self.member)
@@ -326,7 +326,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     # and retest
     response = self.client.get(reverse('chat:leave_private_room', args=[self.room.slug]),
                                follow=True)
-    self.assertContainsMessage(response, 'error', 
+    self.assertContainsMessage(response, 'error',
                                _("You are the only admin in this private room. "
                                  "If you leave the room, no one will be left. "
                                  "Please add another admin from the members before you remove yourself."))
@@ -334,7 +334,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.room.admins.add(second_member)
     self.room.save()
     # and retest
-    response = self.client.get(reverse('chat:leave_private_room', args=[self.room.slug]), follow=True)  
+    response = self.client.get(reverse('chat:leave_private_room', args=[self.room.slug]), follow=True)
     # self.print_response(response)
     self.assertContainsMessage(response, 'success', _("You have left the room"))
     self.assertEqual(PrivateChatRoom.objects.filter(name=self.room.name).count(), 1)

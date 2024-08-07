@@ -289,7 +289,6 @@ def export_members_to_csv(request):
   # Retrieve member data
   members = members.select_related('address').select_related('family').order_by('username')
 
-
   # Write member data to CSV file
   for member in members:
     row = []

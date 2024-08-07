@@ -224,6 +224,7 @@ DJANGO_ICONS = {
     "create-plus": "checkbox-marked-circle-plus-outline",
     "update": "check-underline-circle-outline",
     "cancel": "close-circle-outline",
+    "clear": "backspace-outline",
     "new": "plus-box-outline",
     "send-message": "send-variant-outline",
     "search": "magnify",

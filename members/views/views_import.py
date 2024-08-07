@@ -8,7 +8,7 @@ import string
 from django.contrib.auth.decorators import login_required
 from django.core.files import File
 from django.forms import ValidationError
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -16,6 +16,8 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
+
+from cousinsmatter.utils import is_ajax
 
 from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm
@@ -202,7 +204,75 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 
 
 @login_required
+def select_name(request):
+    if not is_ajax(request):
+      raise ValidationError("Forbidden non ajax request")
+
+    query = request.GET.get('q', '')
+    # List of matching names, case insensitive, limited to 12 results
+    names = Member.objects.filter(last_name__icontains=query) \
+                          .values_list('last_name', flat=True) \
+                          .distinct() \
+                          .order_by('last_name')[:12]
+    t_names = set(name.title() for name in names)
+    # print(names, '->', t_names)
+    data = [{'id': name, 'text': name} for name in t_names]
+    return JsonResponse({'results': data})
+
+
+@login_required
+def select_family(request):
+    if not is_ajax(request):
+      raise ValidationError("Forbidden non ajax request")
+
+    query = request.GET.get('q', '')
+    # List of matching familynames, case insensitive, limited to 12 results
+    families = Family.objects.filter(name__icontains=query) \
+                             .values_list('name', flat=True) \
+                             .distinct() \
+                             .order_by('name')[:12]
+    data = [{'id': family, 'text': family} for family in families]
+    return JsonResponse({'results': data})
+
+
+@login_required
+def select_city(request):
+    if not is_ajax(request):
+      raise ValidationError("Forbidden non ajax request")
+
+    query = request.GET.get('q', '')
+    # List of matching city names, case insensitive, limited to 12 results
+    cities = Address.objects.filter(city__icontains=query) \
+                            .values_list('city', flat=True) \
+                            .distinct() \
+                            .order_by('city')[:12]
+    data = [{'id': city.id, 'text': city.city} for city in cities]
+    return JsonResponse({'results': data})
+
+
+@login_required
+def select_members_to_export(request):
+  return render(request, 'members/members/export_members.html')
+
+
+@login_required
 def export_members_to_csv(request):
+  if request.method != 'POST':
+    raise ValidationError(_('Method not allowed'))
+
+  city = request.POST.get('city-id')
+  family = request.POST.get('family-id')
+  name = request.POST.get('name-id')
+
+  members = Member.objects.all()
+  if city:
+    members.filter(address__city=city)
+  if family:
+    members.filter(family__name=family)
+  if name:
+    members.filter(last_name=name)
+
+  print([(m.last_name, m.address.city if m.address else '', m.family.name if m.family else '') for m in members])
   # Create an HTTP response with the CSV content type
   response = HttpResponse(content_type='text/csv')
   response['Content-Disposition'] = 'attachment; filename="members.csv"'
@@ -213,7 +283,7 @@ def export_members_to_csv(request):
   writer.writerow(ALL_FIELD_NAMES.values())
 
   # Retrieve member data
-  members = Member.objects.all().select_related('address').select_related('family').order_by('username')
+  members = members.select_related('address').select_related('family').order_by('username')
 
   # Write member data to CSV file
   for member in members:

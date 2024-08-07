@@ -197,3 +197,14 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 .panel-tabs {
 	flex-wrap: wrap;
 }
+.select2-selector {
+	width: 300px;
+}
+.clear-select2 {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: calc(var(--bulma-button-padding-horizontal) - var(--bulma-button-border-width) - 2px);
+}
+/* .select2-container {
+	padding-top: 0.5em;
+} */

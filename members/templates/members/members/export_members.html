@@ -10,7 +10,7 @@
 		{% trans "All fields are present and empty if not present in the database. "%}
 		{%if user.is_superuser%}
 			<br>
-			{% trans "Admins can re-import the files after modification with any proper CSV modification tool."%}
+			{% trans "Admins can re-import the files after modification with any CSV editor."%}
 		{%endif%}
 	</p>
 	<form id="add-member-form" method="post" action="{%url 'members:export_members_to_csv' %}">

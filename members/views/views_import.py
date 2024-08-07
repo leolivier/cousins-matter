@@ -215,7 +215,6 @@ def select_name(request):
                           .distinct() \
                           .order_by('last_name')[:12]
     t_names = set(name.title() for name in names)
-    # print(names, '->', t_names)
     data = [{'id': name, 'text': name} for name in t_names]
     return JsonResponse({'results': data})
 
@@ -231,7 +230,8 @@ def select_family(request):
                              .values_list('name', flat=True) \
                              .distinct() \
                              .order_by('name')[:12]
-    data = [{'id': family, 'text': family} for family in families]
+    t_families = set(family.title() for family in families)
+    data = [{'id': family, 'text': family} for family in t_families]
     return JsonResponse({'results': data})
 
 
@@ -246,7 +246,9 @@ def select_city(request):
                             .values_list('city', flat=True) \
                             .distinct() \
                             .order_by('city')[:12]
-    data = [{'id': city.id, 'text': city.city} for city in cities]
+    t_cities = set(city.title() for city in cities)
+    data = [{'id': city, 'text': city} for city in t_cities]
+
     return JsonResponse({'results': data})
 
 
@@ -263,16 +265,18 @@ def export_members_to_csv(request):
   city = request.POST.get('city-id')
   family = request.POST.get('family-id')
   name = request.POST.get('name-id')
+  print('city: ', city, ' family: ', family, ' name: ', name)
 
   members = Member.objects.all()
   if city:
-    members.filter(address__city=city)
+    members = members.filter(address__city=city)
   if family:
-    members.filter(family__name=family)
+    members = members.filter(family__name=family)
   if name:
-    members.filter(last_name=name)
+    members = members.filter(last_name=name)
 
-  print([(m.last_name, m.address.city if m.address else '', m.family.name if m.family else '') for m in members])
+  # print([(m.last_name, m.address.city if m.address else '', m.family.name if m.family else '') for m in members])
+  print(members.query)
   # Create an HTTP response with the CSV content type
   response = HttpResponse(content_type='text/csv')
   response['Content-Disposition'] = 'attachment; filename="members.csv"'
@@ -284,6 +288,7 @@ def export_members_to_csv(request):
 
   # Retrieve member data
   members = members.select_related('address').select_related('family').order_by('username')
+
 
   # Write member data to CSV file
   for member in members:

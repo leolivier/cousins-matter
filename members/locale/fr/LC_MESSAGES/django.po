@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 18:18+0200\n"
+"POT-Creation-Date: 2024-08-07 20:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -645,10 +645,72 @@ msgstr "aura %(age)s ans %(birthday)s"
 msgid "No birthdays in next %(ndays)s days"
 msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
 
+#: members/templates/members/members/export_members.html:4
 #: members/templates/members/members/import_members.html:3
 #: members/templates/members/members/import_members.html:6
 msgid "Import Members"
 msgstr "Importation de Membres"
+
+#: members/templates/members/members/export_members.html:7
+msgid "Export Members"
+msgstr "Exportation de Membres"
+
+#: members/templates/members/members/export_members.html:9
+msgid ""
+"You can export members to a CSV file. The first line of the file contains "
+"the field names. "
+msgstr ""
+"Tu peux exporter des membres vers un fichier CSV. La première ligne du fichier "
+"contient les noms des champs. "
+
+#: members/templates/members/members/export_members.html:10
+msgid "All fields are present and empty if not present in the database. "
+msgstr ""
+"Tous les champs sont présents et vides si ils ne sont pas presents dans "
+"la base de données. "
+
+#: members/templates/members/members/export_members.html:13
+msgid ""
+"Admins can re-import the files after modification with any CSV editor."
+msgstr ""
+"Les administrateurs peuvent re-importer les fichiers à la modification avec "
+"n'importe quel éditeur de CSV."
+
+#: members/templates/members/members/export_members.html:18
+msgid "Select members to export"
+msgstr "Sélectionner les membres à exporter"
+
+#: members/templates/members/members/export_members.html:21
+msgid "Family filter"
+msgstr "Filtre sur la Famille"
+
+#: members/templates/members/members/export_members.html:26
+msgid "City filter"
+msgstr "Filtre sur la Ville"
+
+#: members/templates/members/members/export_members.html:31
+msgid "Last name filter"
+msgstr "Filtre sur le nom de famille"
+
+#: members/templates/members/members/export_members.html:40
+msgid "Export"
+msgstr "Exporter"
+
+#: members/templates/members/members/export_members.html:51
+msgid "Select a name..."
+msgstr "Selectionner un nom..."
+
+#: members/templates/members/members/export_members.html:55
+msgid "Select a city..."
+msgstr "Selectionner une ville..."
+
+#: members/templates/members/members/export_members.html:59
+msgid "Select a family..."
+msgstr "Selectionner une famille..."
+
+#: members/templates/members/members/export_members.html:85
+msgid "Clear selection"
+msgstr "Vider la sélection"
 
 #: members/templates/members/members/import_members.html:8
 msgid ""
@@ -1144,7 +1206,7 @@ msgstr "Tu as un nouveau follower!"
 msgid "%(follower_name)s is now following you!"
 msgstr "%(follower_name)s te suit maintenant!"
 
-#: members/views/views_import.py:35
+#: members/views/views_import.py:41
 #, python-format
 msgid ""
 "Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
@@ -1152,7 +1214,7 @@ msgstr ""
 "Colonne inconnue dans le fichier CSV : \"%(fieldname)s\". Les champs valides "
 "sont %(all_names)s"
 
-#: members/views/views_import.py:39
+#: members/views/views_import.py:45
 #, python-format
 msgid ""
 "Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
@@ -1161,14 +1223,14 @@ msgstr ""
 "Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
 "obligatoires sont %(all_names)s"
 
-#: members/views/views_import.py:87
+#: members/views/views_import.py:93
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar introuvable : %(avatar)s pour le nom d'utilisateur %(username)s. "
 "Ignoré..."
 
-#: members/views/views_import.py:187
+#: members/views/views_import.py:193
 #, python-format
 msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
@@ -1177,10 +1239,14 @@ msgstr ""
 "Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres "
 "créés ou mis à jour"
 
-#: members/views/views_import.py:190
+#: members/views/views_import.py:196
 #, python-format
 msgid "Warning: %(error)s"
 msgstr "Attention: %(error)s"
+
+#: members/views/views_import.py:263
+msgid "Method not allowed"
+msgstr "Méthode non autorisée"
 
 #: members/views/views_member.py:36
 msgid "You have been logged out"

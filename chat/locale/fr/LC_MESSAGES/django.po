@@ -270,16 +270,12 @@ msgstr[0] "%(nfollowers)s follower"
 msgstr[1] "%(nfollowers)s followers"
 
 #: chat/views/views_private_rooms.py:157 chat/views/views_public_rooms.py:80
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Another room with a similar name already exists ('{room_name}'). Please "
-#| "choose a different name."
 msgid ""
 "Another room with a similar name already exists ('{similar_room.name}'). "
 "Please choose a different name."
 msgstr ""
-"Un autre salon avec un nom similaire existe déjà ('{room_name}'). Veuillez "
-"choisir un autre nom."
+"Un autre salon avec un nom similaire existe déjà ('{similar_room.name}'). Merci "
+"de choisir un autre nom."
 
 #: chat/views/views_private_rooms.py:273 chat/views/views_private_rooms.py:439
 msgid "Method not allowed"

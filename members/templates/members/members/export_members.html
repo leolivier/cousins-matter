@@ -1,0 +1,95 @@
+{% extends "cm_main/base.html" %}
+{% load i18n crispy_forms_tags cm_tags %}
+{%block header %}{%include "cm_main/common/include-select2.html" %}{%endblock%}
+{% block title %}{% title _("Import Members") %}{% endblock %}
+{% block content %}
+<div class="container mt-5 px-2">
+	<h1 class="title has-text-centered">{% title _("Export Members") %}</h1>
+	<p class="content has-text-justified">
+		{% trans "You can export members to a CSV file. The first line of the file contains the field names. " %}
+		{% trans "All fields are present and empty if not present in the database. "%}
+		{%if user.is_superuser%}
+			<br>
+			{% trans "Admins can re-import the files after modification with any CSV editor."%}
+		{%endif%}
+	</p>
+	<form id="add-member-form" method="post" action="{%url 'members:export_members_to_csv' %}">
+		{% csrf_token %}
+		<p class="content is-medium">{% trans "Select members to export" %} :</p>
+		<div class="level">
+			<div class="control">
+				<label class="label">{% trans "Family filter" %}</label>
+				<select name="family-id" class="select2-selector"></select>
+				<button class="button clear-select2">{%icon "clear" %}</button>
+			</div>
+			<div class="control">
+				<label class="label">{% trans "City filter" %}</label>
+				<select name="city-id" class="select2-selector"></select>
+				<button class="button clear-select2">{%icon "clear" %}</button>
+			</div>
+			<div class="control">
+				<label class="label">{% trans "Last name filter" %}</label>
+				<select name="name-id" class="select2-selector"></select>
+				<button class="button clear-select2">{%icon "clear" %}</button>
+			</div>
+		</div>
+	{#		<p class="content is-medium">{% trans "Number of selected members" %}:#}
+		{#			<span class="notification is-info ml-3"></span>#}
+		{#		</p>#}
+		<div class="buttons is-centered">
+			<button class="button" type="submit">{%icon "import-members" %} <span>{%trans "Export"%}</span></button>
+		</div>
+	</form>
+</div>
+<script>
+	$(document).ready(function() {
+		$('.select2-selector').each(function(index, element) {
+			var $select, $url, $placeholder, $clear_button;
+			$select = $(this);
+			switch($(this).attr('name')) {
+				case 'name-id':
+					$placeholder = '{%trans "Select a name..." %}';
+					$url = '{%url "members:select_name"%}';
+					break;
+				case 'city-id':
+					$placeholder = '{%trans "Select a city..." %}';
+					$url = '{%url "members:select_city"%}';
+					break;
+				case 'family-id':
+					$placeholder = '{%trans "Select a family..." %}';
+					$url = '{%url "members:select_family"%}';
+					break;
+			};
+//			alert('placeholder: '+$placeholder+' url: '+$url);
+			$(this).select2({
+				ajax: {
+					url: $url,
+					dataType: 'json',
+					delay: 250,
+					data: function (params) {
+										return {
+												q: params.term
+										};
+								},
+								processResults: function (data) {
+										return {
+												results: data.results
+										};
+								},
+								cache: true
+						},
+						minimumInputLength: 2,
+						placeholder: $placeholder
+			});
+			$clearButton = $select.siblings('button.clear-select2');
+			$clearButton.attr('title', '{%trans "Clear selection" %}');
+			$clearButton.on('click', function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+					$select.val(null).trigger('change');
+					$select.select2('close');
+			});
+		});
+	});
+	</script>
+{% endblock %}

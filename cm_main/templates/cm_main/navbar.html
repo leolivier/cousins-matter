@@ -36,7 +36,7 @@
 					{%if user.is_superuser or settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS%}
 						{% url 'members:invite' as invite_url%}
 						{%navbar_item invite_url _("Invite Member") "invite-member" %}
-						{%endif%}
+					{%endif%}
 					</div>
 			</div>
 
@@ -90,10 +90,14 @@
 					{%navbar_item page_url _("Edit Pages") "edit-page" %}
 					{% url 'members:csv_import' as import_url%}
 					{%navbar_item import_url _("Import members from CSV") "import-members" %}
-					<hr class='navbar-divider'>
 				{% endif %}
+					{% url 'members:select_members_to_export' as export_url%}
+					{%navbar_item export_url _("Export Members as CSV") "import-members" %}
+{%comment%}
+					<hr class='navbar-divider'>
 					{% link_pages_starting_with '/admin/' "admin" %}
 					{%navbar_item "#" _("No user settings yet") "account-cog" %}
+{%endcomment%}
 				</div>
 			</div>
 			<div class="navbar-item has-dropdown is-hoverable">

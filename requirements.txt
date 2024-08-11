@@ -1,9 +1,9 @@
-django==5.0.8
+django>=5.1
 pillow>=10.4.0
 django-crispy-forms>=2.3
 crispy-bulma>=0.11.0
 django-environ>=0.11.2
-Django-Verify-Email>=2.0.3
+django-email-validation>=2.0.5
 django-simple-captcha>=0.6.0
 daphne>=4.1.2
 supervisor>=4.2.5

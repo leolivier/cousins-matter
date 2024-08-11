@@ -1,5 +1,7 @@
 from datetime import date
+import os
 from urllib.parse import urlencode
+from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth import get_user
 from django.test import RequestFactory, TestCase
@@ -38,6 +40,10 @@ class MemberTestCase(TestCase):
   login_url = reverse('members:login')
   logout_url = reverse('members:logout')
   change_password_url = reverse('change_password')
+
+  base_avatar = "test_avatar.jpg"
+  test_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "test_avatar.jpg")
+  test_mini_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "mini_test_avatar.jpg")
 
   @classmethod
   def setUpTestData(cls):

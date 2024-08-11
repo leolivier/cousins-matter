@@ -36,7 +36,7 @@ urlpatterns = [
        name='private_room_members'),
   path('private/room/<str:room_slug>/admins/', views_private_rooms.list_private_room_admins,
        name='private_room_admins'),
-  path('private/room/<str:room_slug>/search_members', views_private_rooms.search_private_members, 
+  path('private/room/<str:room_slug>/search_members', views_private_rooms.search_private_members,
        name='search_private_members'),
 ]
 if settings.DEBUG:

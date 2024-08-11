@@ -4,8 +4,11 @@ import random
 import os
 import io
 import string
+
+from django.contrib.auth.decorators import login_required
 from django.core.files import File
 from django.forms import ValidationError
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -13,6 +16,9 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
+
+from cousinsmatter.utils import is_ajax
+
 from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm
 from django.conf import settings
@@ -64,13 +70,12 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     error = None
     for field in MEMBER_FIELD_NAMES:
       trfield = t(field)
-      if trfield in row and row[trfield] and member.__dict__[field] != row[trfield]:
+      if trfield in row and row[trfield]:
         if field == 'family':
           self._manage_family(member, row[trfield])
         elif field == 'avatar':
           error = self._manage_avatar(member, row[trfield], row[t('username')])
-
-        else:
+        elif member.__dict__[field] != row[trfield]:
           setattr(member, field, row[trfield])
 
     member.is_active = activate_users
@@ -81,19 +86,30 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     return member, error
 
   def _manage_avatar(self, member, avatar_file, username):
-    avatar = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, avatar_file)
+    avatar = os.path.join(settings.MEDIA_REL, settings.AVATARS_DIR, avatar_file)
+    # avatar not changed
+    if member.avatar and member.avatar.path == avatar:
+      return (None, False)
+
     # avatar image must already exist
     if not os.path.exists(avatar):
-        return _("Avatar not found: %(avatar)s for username %(username)s. Ignored...") % \
-                {'avatar': avatar, 'username': username}
+      return (_("Avatar not found: %(avatar)s for username %(username)s. Ignored...") %
+              {'avatar': avatar, 'username': username}, False)
     else:
+      try:
         with open(avatar, 'rb') as image_file:
-            image = File(image_file)
-            member.avatar.save(avatar, image)
-        return None
+          image = File(image_file)
+          member.avatar.save(avatar, image)
+          return (None, True)
+      except Exception as e:
+        return (_("Error saving avatar (%(error)s): %(avatar)s for username %(username)s. Ignored...") %
+                {'error': e, 'avatar': avatar, 'username': username}, False)
 
   def _manage_family(self, member, family_name):
-    member.family = Family.objects.get_or_create(name=family_name, parent=None)
+    if member.family and member.family.name == family_name:
+      return False
+    member.family, created = Family.objects.get_or_create(name=family_name)
+    return True
 
   def _update_member(self, member, row, activate_users):
     "update an existing member based on row content"
@@ -105,14 +121,15 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       if field == 'username':
         continue
       trfield = t(field)
-      if trfield in row and row[trfield] and member.__dict__[field] != row[trfield]:
+      if trfield in row and row[trfield]:
         if field == 'family':
-          self._manage_family(member, row[trfield])
+          changed = changed or self._manage_family(member, row[trfield])
         elif field == 'avatar':
-          error = self._manage_avatar(member, row[trfield], row[t('username')])
-        else:
+          error, modified = self._manage_avatar(member, row[trfield], row[t('username')])
+          changed = changed or modified
+        elif member.__dict__[field] != row[trfield]:
           setattr(member, field, row[trfield])
-      changed = True
+          changed = True
 
     if activate_users:
       if member.managing_member is not None:
@@ -195,3 +212,104 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         messages.error(request, e.__str__())
         raise
     return super().post(request, *args, **kwargs)
+
+
+@login_required
+def select_name(request):
+    if not is_ajax(request):
+      raise ValidationError("Forbidden non ajax request")
+
+    query = request.GET.get('q', '')
+    # List of matching names, case insensitive, limited to 12 results
+    names = Member.objects.filter(last_name__icontains=query) \
+                          .values_list('last_name', flat=True) \
+                          .distinct() \
+                          .order_by('last_name')[:12]
+    t_names = set(name.title() for name in names)
+    data = [{'id': name, 'text': name} for name in t_names]
+    return JsonResponse({'results': data})
+
+
+@login_required
+def select_family(request):
+    if not is_ajax(request):
+      raise ValidationError("Forbidden non ajax request")
+
+    query = request.GET.get('q', '')
+    # List of matching familynames, case insensitive, limited to 12 results
+    families = Family.objects.filter(name__icontains=query) \
+                             .values_list('name', flat=True) \
+                             .distinct() \
+                             .order_by('name')[:12]
+    t_families = set(family.title() for family in families)
+    data = [{'id': family, 'text': family} for family in t_families]
+    return JsonResponse({'results': data})
+
+
+@login_required
+def select_city(request):
+    if not is_ajax(request):
+      raise ValidationError("Forbidden non ajax request")
+
+    query = request.GET.get('q', '')
+    # List of matching city names, case insensitive, limited to 12 results
+    cities = Address.objects.filter(city__icontains=query) \
+                            .values_list('city', flat=True) \
+                            .distinct() \
+                            .order_by('city')[:12]
+    t_cities = set(city.title() for city in cities)
+    data = [{'id': city, 'text': city} for city in t_cities]
+
+    return JsonResponse({'results': data})
+
+
+@login_required
+def select_members_to_export(request):
+  return render(request, 'members/members/export_members.html')
+
+
+@login_required
+def export_members_to_csv(request):
+  if request.method != 'POST':
+    raise ValidationError(_('Method not allowed'))
+
+  city = request.POST.get('city-id')
+  family = request.POST.get('family-id')
+  name = request.POST.get('name-id')
+  # print('city: ', city, ' family: ', family, ' name: ', name)
+
+  members = Member.objects.all()
+  if city:
+    members = members.filter(address__city=city)
+  if family:
+    members = members.filter(family__name=family)
+  if name:
+    members = members.filter(last_name=name)
+
+  # print([(m.last_name, m.address.city if m.address else '', m.family.name if m.family else '') for m in members])
+  # print(members.query)
+  # Create an HTTP response with the CSV content type
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename="members.csv"'
+
+  writer = csv.writer(response)
+
+  # Write CSV header
+  writer.writerow(ALL_FIELD_NAMES.values())
+
+  # Retrieve member data
+  members = members.select_related('address').select_related('family').order_by('username')
+
+  # Write member data to CSV file
+  for member in members:
+    row = []
+    for field in MEMBER_FIELD_NAMES.keys():
+      if field == 'family':
+        row.append(member.family.name if member.family else '')
+      else:
+        row.append(getattr(member, field, ''))
+    for field in ADDRESS_FIELD_NAMES.keys():
+      row.append(getattr(member.address, field, '') if member.address else '')
+    writer.writerow(row)
+
+  return response

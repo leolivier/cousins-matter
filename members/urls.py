@@ -22,7 +22,6 @@ urlpatterns = [
   path("register/invite", views_registration.MemberInvitationView.as_view(), name="invite"),
   path("register/<str:encoded_email>/<str:token>", views_registration.RegistrationCheckingView.as_view(), name="register"),
   path("<int:pk>/activate/", views_activate.activate_member, name="activate"),
-  path("check_activation/<str:encoded_email>/<str:token>", views_activate.check_activation, name="check_activation"),
   path("birthdays", views_birthday.birthdays, name="birthdays"),
   path("include_birthdays", views_birthday.include_birthdays, name="include_birthdays"),
   path("address/<int:pk>/", views_address.AddressDetailView.as_view(), name="address_detail"),

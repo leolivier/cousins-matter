@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.core import mail
 from verify_email.app_configurations import GetFieldFromSettings
+from verify_email.views import verify_user_and_activate
 from ..views.views_member import EditProfileView, MemberDetailView
 from ..models import Member
 from .tests_member_base import TestLoginRequiredMixin, MemberTestCase
@@ -333,15 +334,16 @@ class TestActivateManagedMember(MemberTestCase):
     s1 = _("You received this mail because you attempted to create an account on our website")
     s2 = _("Please click on the link below to confirm the email and activate your account.")
     self.assertInHTML(f'''<p class="mt-2">{s1}<br>{s2}</p>''', content)
-    url = reverse("members:check_activation", args=["uidb64", "token"]).replace("uidb64/token", "")
-    url = get_absolute_url(url) + r'[^"]+'
+    url = reverse(verify_user_and_activate, args=['XXX_encoded_email__XXX', "XXX_token_XXX"])
+    url = get_absolute_url(url.replace("/XXX_encoded_email__XXX/XXX_token_XXX", "")) + r'[^"]+'
     # print('url:', url, 'content', content)
     match = re.search(url, content)
     self.assertIsNotNone(match)
     url = match.group(0)
     # print('url:', url)
     response = self.client.get(url, follow=True)
-    self.assertContainsMessage(response, "success",
-                               _("Your email has been verified and your account is now activated. Please set your password."))
+    tr1 = f'{_("Your Email is verified successfully and your account has been activated.")}'
+    tr2 = f'{_("You can sign in with your credentials now...")}'
+    self.assertContains(response, f'<p class="content">{tr1}</p><p class="content">{tr2}</p>', html=True)
     managed.refresh_from_db()
     self.assertTrue(managed.is_active)

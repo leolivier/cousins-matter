@@ -1,6 +1,5 @@
 import re
 import os
-from django.conf import settings
 from django.urls import reverse
 from django.db.utils import IntegrityError
 from django.utils.formats import localize

@@ -86,7 +86,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     return member, error
 
   def _manage_avatar(self, member, avatar_file, username):
-    avatar = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, avatar_file)
+    avatar = os.path.join(settings.MEDIA_REL, settings.AVATARS_DIR, avatar_file)
     # avatar not changed
     if member.avatar and member.avatar.path == avatar:
       return (None, False)

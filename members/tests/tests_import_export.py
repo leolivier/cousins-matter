@@ -68,7 +68,7 @@ class TestMemberImport(TestImportMixin, MemberTestCase):
         avatar_from = os.path.join(os.path.dirname(__file__), 'resources', self.base_avatar)
         if not os.path.exists(avatar_from):
           raise Exception("Test avatar file not found in resources")
-        shutil.copyfile(self.test_avatar_jpg, avatar_from)
+        shutil.copyfile(avatar_from, avatar)
 
   def test_get_import(self):
     response = self.client.get(reverse('members:csv_import'))

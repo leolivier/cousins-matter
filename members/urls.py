@@ -1,8 +1,8 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import views_address, views_activate, views_family, \
+from .views import views_address, views_activate, views_family, views_import_export, \
                   views_member, views_birthday, views_registration, \
-                  views_directory, views_import, views_followers
+                  views_directory, views_followers
 
 app_name = "members"
 urlpatterns = [
@@ -36,11 +36,11 @@ urlpatterns = [
   path("family/<int:pk>/update", views_family.FamilyUpdateView.as_view(), name="update_family"),
   path("directory", views_directory.MembersDirectoryView.as_view(), name="directory"),
   path("directory/print", views_directory.MembersPrintDirectoryView.as_view(), name="print_directory"),
-  path("import", views_import.CSVImportView.as_view(), name="csv_import"),
-  path('export', views_import.select_members_to_export, name='select_members_to_export'),
-  path('csv-export', views_import.export_members_to_csv, name='export_members_to_csv'),
-  path('select-name/', views_import.select_name, name='select_name'),
-  path('select-city/', views_import.select_city, name='select_city'),
-  path('select-family/', views_import.select_family, name='select_family'),
+  path("import", views_import_export.CSVImportView.as_view(), name="csv_import"),
+  path('export', views_import_export.select_members_to_export, name='select_members_to_export'),
+  path('csv-export', views_import_export.export_members_to_csv, name='export_members_to_csv'),
+  path('select-name/', views_import_export.select_name, name='select_name'),
+  path('select-city/', views_import_export.select_city, name='select_city'),
+  path('select-family/', views_import_export.select_family, name='select_family'),
 
 ]

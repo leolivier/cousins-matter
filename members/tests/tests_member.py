@@ -114,9 +114,6 @@ class LoginRequiredTests(TestLoginRequiredMixin, TestCase):
 
 
 class MemberProfileViewTest(MemberTestCase):
-  base_avatar = "test_avatar.jpg"
-  test_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "test_avatar.jpg")
-  test_mini_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "mini_test_avatar.jpg")
 
   def test_member_profile_view(self):
     profile_url = reverse('members:profile')
@@ -158,7 +155,7 @@ class MemberProfileViewTest(MemberTestCase):
     from PIL import Image
     import sys
 
-    avatar_file = os.path.join(os.path.dirname(__file__), self.base_avatar)
+    avatar_file = os.path.join(os.path.dirname(__file__), 'resources', self.base_avatar)
     membuf = BytesIO()
     with Image.open(avatar_file) as img:
       img.save(membuf, format='JPEG', quality=90)

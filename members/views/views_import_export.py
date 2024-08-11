@@ -70,13 +70,12 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     error = None
     for field in MEMBER_FIELD_NAMES:
       trfield = t(field)
-      if trfield in row and row[trfield] and member.__dict__[field] != row[trfield]:
+      if trfield in row and row[trfield]:
         if field == 'family':
           self._manage_family(member, row[trfield])
         elif field == 'avatar':
           error = self._manage_avatar(member, row[trfield], row[t('username')])
-
-        else:
+        elif member.__dict__[field] != row[trfield]:
           setattr(member, field, row[trfield])
 
     member.is_active = activate_users
@@ -88,18 +87,29 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 
   def _manage_avatar(self, member, avatar_file, username):
     avatar = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, avatar_file)
+    # avatar not changed
+    if member.avatar and member.avatar.path == avatar:
+      return (None, False)
+
     # avatar image must already exist
     if not os.path.exists(avatar):
-        return _("Avatar not found: %(avatar)s for username %(username)s. Ignored...") % \
-                {'avatar': avatar, 'username': username}
+      return (_("Avatar not found: %(avatar)s for username %(username)s. Ignored...") %
+              {'avatar': avatar, 'username': username}, False)
     else:
+      try:
         with open(avatar, 'rb') as image_file:
-            image = File(image_file)
-            member.avatar.save(avatar, image)
-        return None
+          image = File(image_file)
+          member.avatar.save(avatar, image)
+          return (None, True)
+      except Exception as e:
+        return (_("Error saving avatar (%(error)s): %(avatar)s for username %(username)s. Ignored...") %
+                {'error': e, 'avatar': avatar, 'username': username}, False)
 
   def _manage_family(self, member, family_name):
-    member.family = Family.objects.get_or_create(name=family_name)
+    if member.family and member.family.name == family_name:
+      return False
+    member.family, created = Family.objects.get_or_create(name=family_name)
+    return True
 
   def _update_member(self, member, row, activate_users):
     "update an existing member based on row content"
@@ -111,14 +121,15 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       if field == 'username':
         continue
       trfield = t(field)
-      if trfield in row and row[trfield] and member.__dict__[field] != row[trfield]:
+      if trfield in row and row[trfield]:
         if field == 'family':
-          self._manage_family(member, row[trfield])
+          changed = changed or self._manage_family(member, row[trfield])
         elif field == 'avatar':
-          error = self._manage_avatar(member, row[trfield], row[t('username')])
-        else:
+          error, modified = self._manage_avatar(member, row[trfield], row[t('username')])
+          changed = changed or modified
+        elif member.__dict__[field] != row[trfield]:
           setattr(member, field, row[trfield])
-      changed = True
+          changed = True
 
     if activate_users:
       if member.managing_member is not None:
@@ -265,7 +276,7 @@ def export_members_to_csv(request):
   city = request.POST.get('city-id')
   family = request.POST.get('family-id')
   name = request.POST.get('name-id')
-  print('city: ', city, ' family: ', family, ' name: ', name)
+  # print('city: ', city, ' family: ', family, ' name: ', name)
 
   members = Member.objects.all()
   if city:
@@ -276,7 +287,7 @@ def export_members_to_csv(request):
     members = members.filter(last_name=name)
 
   # print([(m.last_name, m.address.city if m.address else '', m.family.name if m.family else '') for m in members])
-  print(members.query)
+  # print(members.query)
   # Create an HTTP response with the CSV content type
   response = HttpResponse(content_type='text/csv')
   response['Content-Disposition'] = 'attachment; filename="members.csv"'

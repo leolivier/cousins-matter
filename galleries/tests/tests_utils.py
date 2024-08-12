@@ -1,14 +1,14 @@
-from django.test import override_settings
-from members.tests.tests_member_base import MemberTestCase
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from io import BytesIO
 from PIL import Image
-import sys
 import os
 import shutil
+import sys
 
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
+from cousinsmatter.context_processors import override_settings
 from galleries.models import Gallery, Photo
+from members.tests.tests_member_base import MemberTestCase
 
 
 def test_file_full_path(image_file_basename):

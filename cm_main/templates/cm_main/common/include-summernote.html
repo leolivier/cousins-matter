@@ -5,14 +5,12 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-{{settings.LANGUAGE_CODE}}.js"></script>
 {%trans "Toggle Note Editor Toolbar" as trtoggle%}
 {%trans "Remaining characters:" as trchar%}
-{% with summernoteMaxSize=maxsize|default_if_none:settings.DATA_UPLOAD_MAX_MEMORY_SIZE %}
-<script>
-	summernoteMaxSize = parseInt('{{summernoteMaxSize}}');
-</script>
-{%endwith%}
 
 <script>
-	summernoteLang = '{{settings.LANGUAGE_CODE}}';
+	maxsize=('{{maxsize}}' == '' ? '{{settings.DATA_UPLOAD_MAX_MEMORY_SIZE}}' : '{{maxsize}}');
+	summernoteMaxSize = parseInt(maxsize);
+	// alert('summernoteMaxSize='+summernoteMaxSize);
+	var summernoteLang = '{{settings.LANGUAGE_CODE}}';
 	$(document).ready(function() {
 	  $('.richtextarea').summernote(
 			{
@@ -26,11 +24,12 @@
 						}  
 					},
 					onKeyup: function (e) {
-						var t = e.currentTarget.innerText;
+						var t = e.currentTarget.innerHTML;
+						// alert('t.length='+t.length+' summernoteMaxSize='+summernoteMaxSize);
 						$('#maxContentPost').text(summernoteMaxSize - t.length -1);
 					},
 					onPaste: function (e) {
-						var t = e.currentTarget.innerText;
+						var t = e.currentTarget.innerHTML;
 						var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
 						e.preventDefault();
 						var maxPaste = bufferText.length;
@@ -41,11 +40,18 @@
 							document.execCommand('insertText', false, bufferText.substring(0, maxPaste));
 						}
 						$('#maxContentPost').text(summernoteMaxSize - t.length - maxPaste);
-					}
+					},
+					onChange: function(e) {  // e = content string after change
+						remaining = summernoteMaxSize - e.length -1;
+						$('#maxContentPost').text(remaining);
+						if (remaining <= 0) {
+							alert(gettext("Max size reached!"));
+						}
+					},
 				}
 			}
 		);
-		const initial_size = $('.richtextarea').summernote('code').length;
+		const initial_size = summernoteMaxSize - $('.richtextarea').summernote('code').length;
 		$('.richtextarea').before(`
 			<button class="button" id="toggle-note-editor-toolbar" title="{{trtoggle}}">
 				{%icon "menu-open" %}

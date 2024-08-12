@@ -33,19 +33,17 @@ EXPOSED_SETTINGS = [
   'MAX_CSV_FILE_SIZE',
   'MESSAGE_MAX_SIZE',
   'MESSAGE_COMMENTS_MAX_SIZE',
+  'COMMENT_MAX_SIZE',
   'DARK_MODE',
   'ALLOW_MEMBERS_TO_CREATE_MEMBERS',
   'ALLOW_MEMBERS_TO_INVITE_MEMBERS',
   'PUBLIC_MEDIA_URL',
+  'PAGE_MAX_SIZE',
 ]
+
+settings_in_templates = {attr: getattr(django_settings, attr) for attr in EXPOSED_SETTINGS if (hasattr(django_settings, attr))}
 
 
 def settings(request):
     """expose settings to templates"""
-    settings_in_templates = {}
-    for attr in EXPOSED_SETTINGS:
-        if (hasattr(django_settings, attr)):
-            settings_in_templates[attr] = getattr(django_settings, attr)
-    return {
-        'settings': settings_in_templates,
-    }
+    return {'settings': settings_in_templates}

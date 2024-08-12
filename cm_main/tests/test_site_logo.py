@@ -2,8 +2,10 @@ import os
 import shutil
 from django.conf import settings
 from django.urls import reverse
-from django.test import TestCase, override_settings
+from django.test import TestCase
 from django.templatetags.static import static
+
+from cousinsmatter.context_processors import override_settings
 
 
 class TestSiteLogo(TestCase):
@@ -14,7 +16,7 @@ class TestSiteLogo(TestCase):
     logo_basefilename = 'test-logo.jpg'
     logo_full_path = os.path.join(settings.MEDIA_ROOT, 'public', logo_basefilename)
     logo_testresources_file = os.path.join(os.path.dirname(__file__), 'resources', logo_basefilename)
-    logo_url = f'{settings.PUBLIC_MEDIA_URL}/{logo_basefilename}'
+    logo_url = f'{settings.PUBLIC_MEDIA_URL}{logo_basefilename}'
 
     current_logo_url = static(settings.SITE_LOGO)
     format = '''<a class="navbar-item" href="/">

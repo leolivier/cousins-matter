@@ -1,4 +1,6 @@
+from typing import Any
 from django.conf import settings as django_settings
+from django.test import override_settings as django_override_settings
 
 # Write here the settings you want to expose to the templates.
 EXPOSED_SETTINGS = [
@@ -33,19 +35,40 @@ EXPOSED_SETTINGS = [
   'MAX_CSV_FILE_SIZE',
   'MESSAGE_MAX_SIZE',
   'MESSAGE_COMMENTS_MAX_SIZE',
+  'COMMENT_MAX_SIZE',
   'DARK_MODE',
   'ALLOW_MEMBERS_TO_CREATE_MEMBERS',
   'ALLOW_MEMBERS_TO_INVITE_MEMBERS',
   'PUBLIC_MEDIA_URL',
+  'PAGE_MAX_SIZE',
 ]
+
+
+def _compute_settings_in_templates():
+  """
+  Computes and returns a dictionary containing the settings which can be exposed to the templates.
+  """
+  return {attr: getattr(django_settings, attr) for attr in EXPOSED_SETTINGS if (hasattr(django_settings, attr))}
+
+
+# initialize the settings in templates only once to optimize performance
+_settings_in_templates = _compute_settings_in_templates()
 
 
 def settings(request):
     """expose settings to templates"""
-    settings_in_templates = {}
-    for attr in EXPOSED_SETTINGS:
-        if (hasattr(django_settings, attr)):
-            settings_in_templates[attr] = getattr(django_settings, attr)
-    return {
-        'settings': settings_in_templates,
-    }
+    # settings are pre computed in global variable
+    return {'settings': _settings_in_templates}
+
+
+class override_settings(django_override_settings):
+  """override settings as usual for tests but also expose them in templates"""
+  def enable(self) -> Any | None:
+    super().enable()
+    global _settings_in_templates
+    _settings_in_templates = _compute_settings_in_templates()
+
+  def disable(self) -> Any | None:
+    super().disable()
+    global _settings_in_templates
+    _settings_in_templates = _compute_settings_in_templates()

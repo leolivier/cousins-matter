@@ -1,10 +1,11 @@
 from datetime import date, timedelta
 from django.conf import settings
-from django.test import TestCase, override_settings
+from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import override as lang_override
 from django.contrib.flatpages.models import FlatPage
 
+from cousinsmatter.context_processors import override_settings
 from members.models import Member
 from members.tests.tests_member_base import MemberTestCase
 from members.tests.tests_birthdays import TestBirthdaysMixin

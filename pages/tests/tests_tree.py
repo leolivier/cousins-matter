@@ -33,6 +33,7 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
         'url': f'/{jlevels}/{slug}/',
         'title': f'{title} #{i+1}',
         'content': f'{content} #{i+1}',
+        'save': 'true',
       }
       page = self._test_create_page(data)
       pages.append(page)

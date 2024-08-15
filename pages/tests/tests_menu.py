@@ -16,6 +16,7 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
         'url': '/publish/1rst-title33333/',
         'title': 'first title',
         'content': 'first content',
+        'save': 'true',
       }
     response = self.client.post(reverse("pages-edit:create"), page_data)
     self.assertEqual(response.status_code, 403)
@@ -42,16 +43,19 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
         'url': '/publish/1rst-title/',
         'title': 'first title',
         'content': 'first content',
+        'save': 'true',
       },
       {
         'url': '/publish/level/2nd-title/',
         'title': '2nd title',
         'content': '2nd content',
+        'save': 'true',
       },
       {
         'url': '/publish/level/3rd-title/',
         'title': '3rd title',
         'content': '3rd content',
+        'save': 'true',
       }
     ]
     pages = [self._test_create_page(page_data) for page_data in page_list_data]
@@ -89,6 +93,7 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
         'url': '/foo/1rst-title/',  # doesn't start with /publish=>won't appear in the navbar
         'title': 'first title',
         'content': 'first content',
+        'save': 'true',
       }
 
     bad_page = self._test_create_page(bad_page_data)

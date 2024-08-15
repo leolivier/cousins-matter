@@ -22,12 +22,15 @@
 		{% csrf_token %}
 		{{ form | crispy}}
 		<div class="buttons is-centered">
-			<button type="submit" class="button is-dark">
+			<button type="submit" name="save"class="button is-dark">
 				{%if form.instance.pk %}
 					{%icon "update"%} <span>{%trans "Update Page"%}</span>
 				{%else%}
 					{%icon "create"%} <span>{%trans "Create Page"%}</span>
 				{%endif%}
+			</button>
+			<button type="submit" name="save-and-continue" class="button is-primary">
+				{%icon "update"%} <span>{%trans "Save Page and Continue Editing"%}</span>
 			</button>
 			{%if form.instance.pk%}
 			<button class="button js-modal-trigger" data-target="delete-item-modal">

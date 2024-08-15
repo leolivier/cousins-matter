@@ -77,8 +77,9 @@ DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', default="cousinsmatter@localh
 DJANGO_LOG_LEVEL = env.str('DJANGO_LOG_LEVEL', default='INFO')
 CM_LOG_LEVEL = env.str('CM_LOG_LEVEL', default='INFO')
 
-# default max upload size is 2.5MB but could be overridden
-DATA_UPLOAD_MAX_MEMORY_SIZE = env.int('DATA_UPLOAD_MAX_MEMORY_SIZE', default=2.5 * 1024 * 1024)
+# default max upload size is 2.5MB but could be overridden.
+# WARNING:THIS VARIABLE IS RECOMPUTED AT THE END OF THE FILE!
+DATA_UPLOAD_MAX_MEMORY_SIZE = env.int('DATA_UPLOAD_MAX_MEMORY_SIZE', default=2.5 * 1024 * 1024)  # 2.5MB
 
 # Number of days for birthdays
 BIRTHDAY_DAYS = env.int('BIRTHDAY_DAYS', default=50)
@@ -330,7 +331,7 @@ AVATARS_DIR = 'avatars'
 # for .avatar and .mini-avatar CSS classes in
 # cm_main/static/cm_main/css/cm_main.css
 AVATARS_SIZE = 300
-AVATARS_MINI_SIZE = 48
+AVATARS_MINI_SIZE = 64
 DEFAULT_AVATAR_URL = '/static/members/default-avatar.jpg'
 DEFAULT_MINI_AVATAR_URL = '/static/members/default-mini-avatar.jpg'
 
@@ -341,15 +342,15 @@ HTML_MESSAGE_TEMPLATE = "members/email/email_verification_msg.html"
 
 CAPTCHA_LENGTH = 6
 
-PDF_SIZE = env.str('PDF_SIZE', 'A4')
+PDF_SIZE = env.str('PDF_SIZE', 'A4')  # or 'letter'
 
 GALLERIES_DIR = 'galleries'
 GALLERIES_THUMBNAIL_SIZE = 300
-MAX_PHOTO_FILE_SIZE = env.int('MAX_PHOTO_FILE_SIZE', 1024 * 1024 * 5)
+MAX_PHOTO_FILE_SIZE = env.int('MAX_PHOTO_FILE_SIZE', 1024 * 1024 * 5)  # 5MB
 DEFAULT_GALLERY_COVER_URL = '/static/galleries/default-gallery-cover.jpg'
 DEFAULT_GALLERY_PAGE_SIZE = env.int('DEFAULT_GALLERY_PAGE_SIZE', 25)
-MAX_GALLERY_BULK_UPLOAD_SIZE = env.int('MAX_GALLERY_BULK_UPLOAD_SIZE', 20*1024*1024)
-MAX_CSV_FILE_SIZE = env.int('MAX_CSV_FILE_SIZE', 2*1024*1024)
+MAX_GALLERY_BULK_UPLOAD_SIZE = env.int('MAX_GALLERY_BULK_UPLOAD_SIZE', 20*1024*1024)  # 20MB
+MAX_CSV_FILE_SIZE = env.int('MAX_CSV_FILE_SIZE', 2*1024*1024)  # 2MB
 
 DARK_MODE = env.bool('DARK_MODE', False)
 
@@ -362,13 +363,13 @@ DEFAULT_CHATROOMS_PER_PAGE = env.int('DEFAULT_CHATROOMS_PER_PAGE', 25)
 MESSAGE_MAX_SIZE = env.int('MESSAGE_MAX_SIZE', DATA_UPLOAD_MAX_MEMORY_SIZE)
 MESSAGE_COMMENTS_MAX_SIZE = env.int('MESSAGE_COMMENTS_MAX_SIZE', 400)
 
-CONTACT_MAX_SIZE = env.int('CONTACT_MAX_SIZE', 1024*1024)
+CONTACT_MAX_SIZE = env.int('CONTACT_MAX_SIZE', 1024*1024)  # 1MB
 
 PAGES_URL_PREFIX = 'pages/'
 PRIVACY_URL = f'{LANGUAGE_CODE}/about/privacy/'
 TERMS_URL = f'{LANGUAGE_CODE}/about/terms/'
 MENU_PAGE_URL_PREFIX = '/publish/'
-PAGE_MAX_SIZE = env.int('PAGE_MAX_SIZE', 10*1024*1024)
+PAGE_MAX_SIZE = env.int('PAGE_MAX_SIZE', 10*1024*1024)  # 10MB
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = max(DATA_UPLOAD_MAX_MEMORY_SIZE, MESSAGE_MAX_SIZE, PAGE_MAX_SIZE)
 

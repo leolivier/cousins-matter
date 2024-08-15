@@ -22,7 +22,12 @@ class PageCreateView(OnlyAdminMixin, generic.CreateView):
       page = form.save()
       page.sites.set([Site.objects.get(pk=settings.SITE_ID)])
       page.save()
-      return redirect(flatpage_url(page.url))
+      if 'save' in request.POST:
+        return redirect(flatpage_url(page.url))
+      elif 'save-and-continue' in request.POST:
+        messages.success(request, _("Page \"%(title)s\" saved") % {"title": page.title})
+      else:
+        raise ValueError("Unexpected button: {}".format(request.POST))
     return render(request, self.template_name, {'form': form})
 
 
@@ -36,8 +41,12 @@ class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
     form = PageForm(request.POST, instance=page)
     if form.is_valid():
       page = form.save()
-      return redirect(flatpage_url(page.url))
-
+      if 'save' in request.POST:
+        return redirect(flatpage_url(page.url))
+      elif 'save-and-continue' in request.POST:
+        messages.success(request, _("Page \"%(title)s\" saved") % {"title": page.title})
+      else:
+        raise ValueError("Unexpected button: {}".format(request.POST))
     return render(request, self.template_name, {'form': form})
 
 

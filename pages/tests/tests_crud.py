@@ -17,6 +17,20 @@ class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     self._test_create_page()
     self.login()  # now log back as a normal user
 
+  def test_create_and_continue_page(self):
+    self.superuser_login()  # only superuser can create pages
+    response = self.client.get(reverse("pages-edit:create"))
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "pages/page_form.html")
+    new_page_data = {
+      'url': self.page_data['url'],
+      'title': self.page_data['title'],
+      'content': self.page_data['content'],
+      'save-and-continue': 'true'
+    }
+    self._test_create_page(new_page_data)
+    self.login()  # now log back as a normal user
+
   def test_url_checks_with_other_pages(self):
     self.superuser_login()  # only superuser can create pages
     # first create one page
@@ -26,6 +40,7 @@ class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
       'url': self.page_data['url'],
       'title': 'another title',
       'content': 'another content',
+      'save': 'true'
     }
     form = PageForm(new_page_data)
     self.assertFormError(form, 'url', [_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']}])
@@ -35,6 +50,7 @@ class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
         'url': f'{url}/3rd-title/',
         'title': '3rd title',
         'content': '3rd content',
+        'save': 'true'
       })
     self.assertFormError(form, 'url', [_("A flatpage cannot be a subpage of another flatpage, check your URLs")])
     self.login()  # now log back as a normal user
@@ -50,9 +66,30 @@ class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
       'url': '/another-level/another-title/',
       'title': 'another title',
       'content': 'another content',
+      'save': 'true'
     }
     response = self.client.post(reverse("pages-edit:update", args=[page.id]), new_page_data, follow=True)
     self.assertEqual(response.status_code, 200)
+    page.refresh_from_db()
+    self.assertEqual(page.url, new_page_data['url'])
+    self.assertEqual(page.title, new_page_data['title'])
+    self.assertEqual(page.content, new_page_data['content'])
+    self.login()  # now log back as a normal user
+
+  def test_update_and_continue_page(self):
+    self.superuser_login()  # only superuser can create pages
+    # first create it
+    page = self._test_create_page()
+    # now try to update it
+    new_page_data = {
+      'url': '/another-level/another-title/',
+      'title': 'another title',
+      'content': 'another content',
+      'save-and-continue': 'true'
+    }
+    response = self.client.post(reverse("pages-edit:update", args=[page.id]), new_page_data, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "pages/page_form.html")
     page.refresh_from_db()
     self.assertEqual(page.url, new_page_data['url'])
     self.assertEqual(page.title, new_page_data['title'])
@@ -68,6 +105,7 @@ class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
       'url': '/another-level/another-title/',
       'title': 'another title',
       'content': 'another content',
+      'save': 'true'
     }
     page2 = self._test_create_page(new_page_data)
 
@@ -89,6 +127,7 @@ class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
       'url': '/another-level/another-title/',
       'title': 'another title',
       'content': 'another content',
+      'save': 'true'
     }
     page2 = self._test_create_page(new_page_data)
     # now, display them

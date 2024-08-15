@@ -1,7 +1,10 @@
 {% extends "members/base_members.html" %}
 {% load i18n crispy_forms_tags cm_tags %}
 {% block title %}{% title title %} {% endblock %}
-{% block header %}{%include "cm_main/common/include-bulma-calendar.html" %}{%endblock%}
+{% block header %}
+	{%include "cm_main/common/include-bulma-calendar.html" %}
+	{%include "cm_main/common/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
+{%endblock%}
 {% block content %}
 {%with member=form.instance%}
 <div class="container px-2">

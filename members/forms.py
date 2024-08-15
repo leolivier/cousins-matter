@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from captcha.fields import CaptchaField
+
+from cm_main.widgets import RichTextarea
 from .models import Member, Address, Family
 from .widgets import FieldLinkWrapper
 from cousinsmatter.utils import check_file_size
@@ -29,6 +31,9 @@ class MemberFormMixin():
     # so we remove the password field
     if 'password' in self.fields:
       del self.fields['password']
+    # description is a rich text field
+    if 'description' in self.fields:
+      self.fields['description'].widget = RichTextarea()
 
   def clean_avatar(self):
     avatar = self.cleaned_data['avatar']
@@ -58,7 +63,7 @@ class MemberRegistrationForm(MemberFormMixin, UserCreationForm):
     model = Member
     localized_fields = "__all__"
     fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'avatar',
-              'birthdate', 'address', 'phone', 'website', 'family', 'privacy_consent']
+              'birthdate', 'address', 'phone', 'description', 'hobbies', 'website', 'family', 'privacy_consent']
 
   def __init__(self, *args, **kwargs):
     super(UserCreationForm, self).__init__(*args, **kwargs)
@@ -75,7 +80,7 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
     model = Member
     localized_fields = "__all__"
     fields = ['username', 'email', 'first_name', 'last_name', 'avatar',
-              'birthdate', 'address', 'phone', 'website', 'family']
+              'birthdate', 'address', 'phone', 'description', 'hobbies', 'website', 'family']
     exclude = ['password']
 
   def __init__(self, *args, **kwargs):

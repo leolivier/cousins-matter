@@ -187,8 +187,10 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
       if form.is_valid():
         try:
           self._handle_zip(request)
+          lg = len(self.galleries)
+          nbp = self.nbPhotos
           messages.success(request,
-                           _(f"Zip file uploaded: {len(self.galleries)} galleries and {self.nbPhotos} photos created"))
+                           _(f"Zip file uploaded: {lg} galleries and {nbp} photos created"))
           return redirect(reverse("galleries:galleries"))
         except ValidationError as e:
           for err in e.messages:

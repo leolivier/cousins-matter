@@ -1,0 +1,2273 @@
+# French Translations for Members app.
+# Copyright (C) 2024 Olivier LEVILLAIN
+# This file is distributed under the same license as the Members package.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-11 19:16+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Auto-po-lyglot (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: French <LL@li.org>\n"
+"Language: FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Explanation:  The English word "Members" is directly translated to the
+#. German word "Mitglieder" in this context. This word accurately reflects the
+#. meaning of "Members" in a general sense, referring to people who belong to
+#. a group or organization.
+#: apps.py:8
+msgid "Members"
+msgstr "Mitglieder"
+
+#. Explanation: The provided English sentence is ambiguous.  The French
+#. translation clarifies that the name of the person invited will appear in
+#. the email received. This clarification helps to ensure accurate and
+#. consistent translation.
+#: forms.py:109
+msgid "Name of the invited person (will appear in the received email)"
+msgstr "Name desInvitees (wird im erhaltenen E-Mail angezeigt)"
+
+#. Explanation: The English phrase "Email to send invitation" is a clear
+#. instruction, and the French translation accurately reflects this.  The use
+#. of "E-Mail" for email and "l'invitation" for the invitation is consistent
+#. with the context.
+#: forms.py:110
+msgid "Email to send invitation"
+msgstr "E-Mail zur Einladung"
+
+#. Explanation:  The English phrase "Your name" is directly translated to "Ton
+#. nom" in French. The German word for "name" is "Name".
+#. Let me know if you have any other sentences you'd like me to translate!
+#: forms.py:114
+msgid "Your name"
+msgstr "Ihr Name"
+
+#. Explanation: The French translation is clear and concise.  The German
+#. translation maintains a similar structure to the French version, using
+#. "E-Mail" for the email type and "in der du den Link erhältst" to convey the
+#. meaning of receiving the link.
+#: forms.py:115
+msgid "Email where you will receive the link"
+msgstr "E-Mail, in der du den Link erhältst"
+
+#. Explanation:  The French translation, "Message à l'administrateur," is a
+#. clear and concise way to say "Message for the administrator." The German
+#. translation maintains this meaning while using appropriate terminology.
+#: forms.py:116
+msgid "Message to the administrator"
+msgstr "Nachricht für den Administrator"
+
+#. Explanation: The French translation is a bit ambiguous. It needs to be
+#. clarified that the user should click on the image to refresh it if they
+#. can't read it.  The German translation clarifies this by adding "klicken
+#. Sie auf die Bild, um es zu aktualisieren, wenn Sie es nicht lesen können"
+#: forms.py:117
+msgid "Captcha (click on the image to refresh if you can't read it)"
+msgstr ""
+"CAPTCHA (klicken Sie auf die Bild, um es zu aktualisieren, wenn Sie es nicht"
+" lesen können)"
+
+#. Explanation: The English term "CSV file" is a standard abbreviation for the
+#. format.  The German translation, "CSV-Datei," directly translates this
+#. abbreviation into German.
+#: forms.py:132
+msgid "CSV file"
+msgstr "CSV-Datei"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the CSV file contains information about
+#. members to be imported.  The use of "der" for "the" and "CSV-Datei" for
+#. "CSV file" maintains consistency with the original sentence's structure.
+#: forms.py:133
+msgid "The CSV file containing the members to import."
+msgstr "Der CSV-Datei mit den Mitgliedern zum Importieren."
+
+#. Explanation: The French translation, "Activer automatiquement les
+#. utilisateurs importés," translates to "Activate automatically the imported
+#. users."  The German translation accurately reflects this meaning.
+#. Let me know if you have any other sentences you'd like me to translate!
+#: forms.py:137
+msgid "Automatically activate imported users"
+msgstr "Automatisch Benutzer aktivieren"
+
+#. Explanation: The French translation, "Le nom d'utilisateur doit être
+#. fuourni," is ambiguous and needs clarification.  It seems like the user
+#. intended to say "Der Benutzername muss gesetzt werden." This translates
+#. directly to "The username must be set".
+#: managers.py:14
+msgid "The username must be set"
+msgstr "Der Benutzername muss gesetzt werden"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. English and French sentences. It uses the appropriate terminology and
+#. grammatical structure to convey the same idea as the original text.  The
+#. use of "ein Superbenutzer" (a super user) directly translates to
+#. "Superuser" in English, while "is_staff=True" is translated into
+#. "is_staff=True".
+#: managers.py:35
+msgid "Superuser must have is_staff=True."
+msgstr "Ein Superbenutzer muss is_staff=True sein."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that a super user must have `is_superuser`
+#. set to True.  The English sentence "Superuser must have is_superuser=True"
+#. can be ambiguous as it could refer to either granting access or setting a
+#. specific value for a variable.
+#: managers.py:37
+msgid "Superuser must have is_superuser=True."
+msgstr "Ein Superbenutzer muss is_superuser=True sein."
+
+#. Explanation: The English phrase "number and street" is translated into
+#. German as "Nummer und Straße". This accurately reflects the meaning of both
+#. phrases in a way that preserves their original intent.
+#: models.py:17
+msgctxt "CSV Field"
+msgid "number_and_street"
+msgstr "Nummer und Straße"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that it is information about an address.
+#. The use of "Adresse_complementary_info" in German maintains a clear and
+#. consistent structure with the provided context.
+#: models.py:18
+msgctxt "CSV Field"
+msgid "address_complementary_info"
+msgstr "Adresse_komplementär_Informationen"
+
+#. Explanation: The English word "zip code" is a common abbreviation for the
+#. postal code.  The French term "code_postal" is the standard and widely used
+#. term for this in France.
+#: models.py:19
+msgctxt "CSV Field"
+msgid "zip_code"
+msgstr "Zip-Code"
+
+#. Explanation:  "City" is a general term for urban areas. In German, the word
+#. "Stadt" refers to a city or town, which is a more specific and accurate
+#. translation of "city".
+#: models.py:20
+msgctxt "CSV Field"
+msgid "city"
+msgstr "Stadt"
+
+#. Explanation:  Both "country" and "land" refer to a defined geographical
+#. area. While "country" is more common in English, "land" is also used
+#. frequently in both languages. In this case, the context of the sentence
+#. doesn't require a specific nuance or formality that would warrant using one
+#. over the other.
+#: models.py:21
+msgctxt "CSV Field"
+msgid "country"
+msgstr "Land"
+
+#. Explanation:  The English word "username" is translated directly into the
+#. German word "Benutzername." This accurately reflects the meaning of both
+#. terms. The French translation, "nom_de_compte," provides a more literal
+#. translation of the English word "username," which is closer to the French
+#. term for user account.
+#: models.py:25
+msgctxt "CSV Field"
+msgid "username"
+msgstr "Benutzername"
+
+#. Explanation: The English word "email" is directly transliterated into the
+#. German word "E-Mail".  The context provided does not require any further
+#. explanation.
+#: models.py:26
+msgctxt "CSV Field"
+msgid "email"
+msgstr "E-Mail"
+
+#. Explanation:  "First name" is a direct translation of "prenom", which
+#. refers to the given name. The German word "Vorname" directly translates to
+#. "given name".
+#: models.py:27
+msgctxt "CSV Field"
+msgid "first_name"
+msgstr "Vorname"
+
+#. Explanation:  The English word "last_name" is translated to "Nom" in
+#. French. The German word "Letzte Name" accurately reflects the meaning of
+#. "last name" in a similar way as "nom" does in French.
+#: models.py:28
+msgctxt "CSV Field"
+msgid "last_name"
+msgstr "Letzte Name"
+
+#. Explanation:  The English word "birthdate" is translated directly into
+#. German as "Geburtsdatum". This accurately reflects the meaning of both
+#. terms.
+#: models.py:29
+msgctxt "CSV Field"
+msgid "birthdate"
+msgstr "Geburtsdatum"
+
+#. Explanation: The English word "phone" is a general term for any device used
+#. to make and receive calls. In French, "téléphone" is the standard term for
+#. this type of device.  The context provided by the French translation helps
+#. clarify that it refers to a phone in its literal sense.
+#: models.py:33
+msgctxt "CSV Field"
+msgid "phone"
+msgstr "Telefon"
+
+#. Explanation: The English word "website" is a common term for an online
+#. platform.  The French translation, "site_web," accurately reflects this
+#. meaning. It's important to note that the context of the sentence would be
+#. necessary to determine if there are any specific nuances or contexts that
+#. might require further clarification.
+#: models.py:34
+msgctxt "CSV Field"
+msgid "website"
+msgstr "Website"
+
+#. Explanation:  The English word "family" is directly translated to the
+#. German word "Familie". This is a straightforward and accurate translation.
+#: models.py:35
+msgctxt "CSV Field"
+msgid "family"
+msgstr "Familie"
+
+#. This is a direct translation of the English word "avatar" and its French
+#. equivalent. The meaning remains consistent, as both terms refer to a
+#. representation of a person or character in digital media.
+#: models.py:36
+msgctxt "CSV Field"
+msgid "avatar"
+msgstr "Avatar"
+
+#. Explanation:  Both the English and French translations are simple, direct
+#. nouns. The meaning is clear and unambiguous in both languages.
+#: models.py:44 templates/members/members/members_directory.html:27
+#: views/views_directory.py:47
+msgid "Name"
+msgstr "Name"
+
+#. Explanation:  The English phrase "Parent family" can be translated into
+#. German as "Elternfamilie". This is a common and accurate translation that
+#. reflects the meaning of the original phrase. It refers to the nuclear
+#. family unit, including parents and their children.
+#: models.py:46 templates/members/family/family_detail.html:14
+msgid "Parent family"
+msgstr "Elternfamilie"
+
+#. Explanation:  "Famille" is the French word for "family." The English word
+#. "family" has a similar meaning in both languages.
+#: models.py:49
+msgid "family"
+msgstr "Familie"
+
+#. Explanation: The English word "families" is directly translated to the
+#. German word "Familien" which means "family units".  The context of the
+#. sentences provided does not require any further explanation.
+#: models.py:50
+msgid "families"
+msgstr "Familien"
+
+#. Explanation: The French translation, "N° et nom de la voie," is a clear and
+#. concise way to express the meaning of "Number & Street name."  It
+#. accurately captures the intended meaning.
+#: models.py:65 templates/members/address/address_detail.html:8
+msgid "Number & Street name"
+msgstr "Nummer & Straße"
+
+#. Explanation: The English phrase "Complementary info" is a bit ambiguous and
+#. could be interpreted in different ways.  The French translation, "Infos
+#. complémentaires," provides more context by directly translating the word
+#. "info" as "informations" and adding the word "complémentaire" to indicate
+#. that it's additional information.
+#: models.py:67
+msgid "Complementary info"
+msgstr "Komplizierte Informationen"
+
+#. Explanation:  "Zip code" is a common term in English, but it's often used
+#. to refer to the postal code of a specific area. In German, "Gebietscode" is
+#. a more accurate and widely understood translation for this concept. It
+#. directly translates to "area code," which captures the essence of what a
+#. zip code represents.
+#: models.py:69 templates/members/address/address_detail.html:16
+msgid "Zip code"
+msgstr "Gebietscode"
+
+#. Explanation:  "City" is a general term for urban areas. In French, "ville"
+#. is the most common word for city. It's important to note that in German,
+#. "Stadt" is also a general term for an urban area.
+#. Let me know if you have any other sentences you would like me to translate!
+#: models.py:71 templates/members/address/address_detail.html:20
+msgid "City"
+msgstr "Stadt"
+
+#. Explanation:  Both "Country" and "Land" refer to a geographical area with
+#. defined borders. The French translation, "Pays," is the most accurate
+#. equivalent in this context.
+#: models.py:73 templates/members/address/address_detail.html:24
+msgid "Country"
+msgstr "Land"
+
+#. Explanation: The English word "address" is a direct translation of the
+#. French word "adresse". Both words refer to a specific location or place.
+#: models.py:87
+msgid "address"
+msgstr "Adresse"
+
+#. Explanation: The French translation "adresses" is a direct translation of
+#. the English word "addresses".  The German word for "addresses" is
+#. "Adressen."
+#: models.py:88
+msgid "addresses"
+msgstr "Adressen"
+
+#. Explanation:  "Managing member" is a common term in business law and
+#. finance. In German, the most accurate translation would be
+#. "Geschäftsführer," which directly translates to "managing member." It's
+#. important to use this specific term as it accurately reflects the meaning
+#. of the English phrase.
+#: models.py:96
+msgid "Managing member"
+msgstr "Geschäftsführer"
+
+#. Explanation: The provided English and French translations are
+#. straightforward.  The word "address" in English is directly translated to
+#. "adresse" in French, preserving the meaning of both languages.
+#: models.py:101 templates/members/members/member_detail.html:36
+#: templates/members/members/members_directory.html:31
+#: views/views_directory.py:47
+msgid "Address"
+msgstr "Adresse"
+
+#. Explanation:  The English word "Phone" is directly translated to the German
+#. word "Telefon". This is a straightforward and accurate translation.
+#: models.py:103 templates/members/members/member_detail.html:44
+#: templates/members/members/members_directory.html:29
+#: views/views_directory.py:47
+msgid "Phone"
+msgstr "Telefon"
+
+#. Explanation: The English word "birthdate" is translated directly to the
+#. German word "Geburtsdatum".  This accurately reflects the meaning of both
+#. terms.
+#: models.py:105 templates/members/members/member_detail.html:48
+#: templates/members/members/members_directory.html:28
+msgid "Birthdate"
+msgstr "Geburtsdatum"
+
+#. Explanation: The French translation is clear and concise.  The German
+#. translation uses the same structure as the French translation to convey the
+#. meaning of "Click on the month name or the year to change them quickly".
+#: models.py:106
+msgid "Click on the month name or the year to change them quickly"
+msgstr "Klicke auf den Monat oder das Jahr, um sie schnell zu ändern"
+
+#. The English word "website" is a general term for an online collection of
+#. related web pages, often used to describe the home page or main part of a
+#. company's internet presence. The French translation "Site web" accurately
+#. reflects this meaning.
+#: models.py:109 templates/members/members/member_detail.html:52
+msgid "Website"
+msgstr "Website"
+
+#. Explanation: The English word "family" is directly translated to the German
+#. word "Familie".  This accurately reflects the meaning of both words in
+#. their respective languages.
+#: models.py:111 templates/members/members/member_detail.html:56
+msgid "Family"
+msgstr "Familie"
+
+#. Explanation: The English phrase "Who I am" is a question about one's
+#. identity.  The French translation, "Qui je suis," directly translates this
+#. meaning to "who I am." It uses the pronoun "je" (I) and the verb "être" (to
+#. be).
+#: models.py:113 templates/members/members/member_detail.html:60
+msgid "Who I am"
+msgstr "Wer ich bin"
+
+#. Explanation: The French translation provides context for the English
+#. sentence.  The German translation aims to capture the same meaning and tone
+#. as the French translation.
+#: models.py:114
+msgid "Describe yourself, your likes and dislikes..."
+msgstr "Beschreibe dich selbst, deine Vorlieben und Unvorlieben..."
+
+#. Explanation: The English phrase "My hobbies" translates directly to "Mes
+#. loisirs" in French.  The German word for hobby is "Hobbys".
+#. Let me know if you have any other sentences you'd like me to translate!
+#: models.py:115
+msgid "My hobbies"
+msgstr "Meine Hobbys"
+
+#. **Explanation:**  The German translation aims to capture the meaning and
+#. tone of the English sentence while maintaining a clear structure. The
+#. phrase "Bitte gib..." is used for requests in formal settings.  "Liste von
+#. Hobbys" translates directly to "list of hobbies," and "getrennt durch
+#. Kommas" means "separated by commas."
+#: models.py:116
+msgid "Provide a list of hobbies separated by commas"
+msgstr "Bitte gib eine Liste von Hobbys, getrennt durch Kommas, an."
+
+#. Explanation: The English phrase "Privacy consent" is translated into German
+#. as "Datenschutz-Einwilligung." This accurately reflects the meaning of both
+#. phrases.  "Datenschutz" means "data privacy," and "Einwilligung" means
+#. "consent."
+#. Let me know if you have any other sentences to translate!
+#: models.py:118
+msgid "Privacy consent"
+msgstr "Datenschutz-Einwilligung"
+
+#. Explanation: The provided English and French translations are both
+#. accurate.  The word "followers" is a noun that refers to people who support
+#. or admire someone or something. It's important to use the correct term in
+#. German, which is "Follower".
+#: models.py:120
+msgid "Followers"
+msgstr "Follower"
+
+#. Explanation:  "Member" is a general term for someone who belongs to a group
+#. or organization. In German, "Mitglied" specifically refers to a member of a
+#. club, association, or society. The French translation "membre" also
+#. accurately reflects this meaning.
+#: models.py:129
+msgid "member"
+msgstr "Mitglied"
+
+#. Explanation: The English word "members" is directly transliterated into the
+#. German word "Mitglieder".  The context of the sentences does not require
+#. any further explanation.
+#: models.py:130
+msgid "members"
+msgstr "Mitglieder"
+
+#. Explanation: The French translation, "Détail de l'Adresse," is a clear and
+#. concise way to express the meaning of "Address Detail." It translates
+#. directly to "Detail of the Address" in German.  The use of "Details" is
+#. appropriate for this context as it indicates that there are specific pieces
+#. of information about an address.
+#: templates/members/address/address_detail.html:3
+msgid "Address Detail"
+msgstr "Adresse Details"
+
+#. Explanation: The English phrase "Complementary Info" is a bit ambiguous and
+#. can be interpreted in different ways.  The French translation, "Infos
+#. complémentaires," provides a more precise meaning by directly translating
+#. the word "complementary." This implies additional information that
+#. complements or enhances the main topic.
+#: templates/members/address/address_detail.html:12
+msgid "Complementary Info"
+msgstr "Komplizierte Informationen"
+
+#. Explanation: The French translation "Adresse utilisées par:" is a bit
+#. ambiguous. It could mean either "address used by" or "addresses used by".
+#. The German translation "Adresse verwendet von:" clarifies that the address
+#. is being used in a specific context, and it's more direct than the French
+#. translation.
+#: templates/members/address/address_detail.html:31
+msgid "Address used by:"
+msgstr "Adresse verwendet von:"
+
+#. Explanation: The English sentence means that the address is unused.  The
+#. French translation accurately conveys this meaning in German.
+#. Let me know if you have any other sentences to translate!
+#: templates/members/address/address_detail.html:43
+msgid "Address not used by anyone"
+msgstr "Adresse wird nicht verwendet"
+
+#. Explanation:  Both "Edit" and "Editer" refer to the act of making changes.
+#. "Bearbeiten" is a more direct German equivalent, meaning "to edit" or "to
+#. modify." It captures the same nuance as the French translation.
+#: templates/members/address/address_detail.html:48
+#: templates/members/family/family_detail.html:23
+#: templates/members/members/member_detail.html:77
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#. Explanation: The English phrase "Edit Address" is translated into German as
+#. "Bearbeiten Sie Ihre Adresse". This translates to "Edit your address" in a
+#. clear and concise manner.  The French translation, "Editer l'adresse",
+#. provides the context for understanding that the user wants to modify their
+#. address information.
+#: templates/members/address/address_form.html:3
+#: templates/members/address/address_form.html:8
+msgid "Edit Address"
+msgstr "Bearbeiten Sie Ihre Adresse"
+
+#. Explanation: The English word "submit" has a broad meaning, but in the
+#. context of this sentence, it likely refers to submitting something for
+#. review or approval. "Envoyer" is a more direct and specific term that
+#. translates to "to send" or "to submit," which aligns with the intended
+#. meaning of "submit."
+#: templates/members/address/address_form.html:17
+#: templates/members/family/family_form.html:17
+msgid "Submit"
+msgstr "Senden"
+
+#. Explanation:  "Cancel" and "Annuler" both mean the same thing in English
+#. and French. The German word "Abbrechen" is a more direct translation of
+#. "cancel" that emphasizes the act of stopping or terminating something.
+#: templates/members/address/address_form.html:18
+#: templates/members/family/family_form.html:18
+#: templates/members/modal_form.html:31
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#. Explanation: The French translation, "Vérifier l'adresse e-mail,"
+#. translates to "Verify the email address" in German.  The word "überprüfen"
+#. means "verify" and is a direct equivalent of "vérifier" in French.
+#: templates/members/email/email_verification_msg.html:8
+msgid "Verify Email address"
+msgstr "Überprüfen Sie die E-Mail-Adresse"
+
+#. Explanation: The English phrase "Member Activation" is translated into
+#. German as "Mitgliedseinstellung". This translates to "Membership
+#. activation" which accurately reflects the meaning of the original text.
+#: templates/members/email/email_verification_msg.html:17
+msgid "Member Activation"
+msgstr "Mitgliedseinstellung"
+
+#. Explanation: The English phrase "Email Confirmation" is translated into
+#. German as "E-Mail-Bestätigung". This accurately reflects the meaning of the
+#. original sentence, preserving the context and nuance.  The French
+#. translation "Confirmation de l'e-mail" provides a clear understanding of
+#. the email confirmation process.
+#: templates/members/email/email_verification_msg.html:21
+msgid "E-mail Confirmation"
+msgstr "E-Mail-Bestätigung"
+
+#. Explanation: The English phrase "Greetings!" is a general greeting, and the
+#. French translation "Salutations!"  is more formal. While both are
+#. appropriate for different situations, "Hallo!" is a more casual and direct
+#. way to say "greetings." It's a common greeting in German-speaking
+#. countries.
+#: templates/members/email/email_verification_msg.html:25
+msgid "Greetings!"
+msgstr "Hallo!"
+
+#. Explanation: The French translation accurately conveys the meaning of the
+#. English sentence.  The German translation aims to be as literal and
+#. accurate as possible, while also maintaining a natural flow and tone.
+#: templates/members/email/email_verification_msg.html:27
+#: tests/tests_member.py:334
+msgid ""
+"You received this mail because you attempted to create an account on our "
+"website"
+msgstr ""
+"Du hast diese E-Mail erhalten, weil du versucht hast, ein Konto auf unserer "
+"Website zu erstellen."
+
+#. Explanation: The French translation is a bit ambiguous as it doesn't
+#. clearly state the action of clicking on the link.  The German translation
+#. clarifies this by explicitly stating "Bitte klicken Sie auf den Link
+#. unten".
+#: templates/members/email/email_verification_msg.html:28
+#: tests/tests_member.py:335
+msgid ""
+"Please click on the link below to confirm the email and activate your "
+"account."
+msgstr ""
+"Bitte klicken Sie auf den Link unten, um die E-Mail zu bestätigen und Ihr "
+"Konto zu aktivieren."
+
+#. Explanation: The French translation, "Tu nous rejoindras juste après la
+#. vérification!", is a bit ambiguous. It suggests that the speaker will join
+#. them after the verification process.  The German translation tries to
+#. capture this meaning by using the phrase "Du wirst uns nach der Überprüfung
+#. bei uns sein!"
+#: templates/members/email/email_verification_msg.html:31
+msgid "You'll be joining us right after the verification !"
+msgstr "Du wirst uns nach der Überprüfung bei uns sein!"
+
+#. Explanation:  Both "verify" and "vérifier" mean to confirm the truth or
+#. accuracy of something. In this context, "überprüfen" is a more direct and
+#. idiomatic German equivalent of "verifying". It carries a similar meaning to
+#. "verify" in English.
+#: templates/members/email/email_verification_msg.html:36
+msgid "Verify"
+msgstr "Überprüfen"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English and French sentences. It uses the formal "Bitte" to address the
+#. recipient politely, while also using "maschinell generiert" to clearly
+#. indicate that the email is not a human response.
+#: templates/members/email/email_verification_msg.html:39
+#: templates/members/email/new_follower.html:22
+msgid "Do not reply to this mail, it is machine generated."
+msgstr ""
+"Bitte antworten Sie nicht an diese E-Mail, sie ist maschinell generiert."
+
+#. Explanation: The French translation is a bit ambiguous as it uses "te suit
+#. maintenant" which can be interpreted in two ways.  The German translation
+#. aims to clarify the meaning of the sentence by using a more direct and
+#. unambiguous phrasing.
+#: templates/members/email/new_follower.html:17
+#, python-format
+msgid ""
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a>"
+" is now following you on %(site_name)s!"
+msgstr ""
+"Hallo %(followed_name)s, <br><a "
+"href=\"%(follower_url)s\">%(follower_name)s</a> ist jetzt auf %(site_name)s "
+"gefolgt!\","
+
+#. Explanation: This German translation accurately reflects the meaning of the
+#. English and French sentences. The placeholders are kept in their original
+#. positions, as requested.  The sentence is translated directly from the
+#. provided text, with no changes to the structure or wording.
+#: templates/members/email/registration_invite_email.html:8
+#, python-format
+msgid "Invitation for %(invited)s to register to %(site_name)s"
+msgstr "Einladung für %(invited)s zur Registrierung bei %(site_name)s"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that registration is taking place on a
+#. website.  The use of "Anmeldung" (registration) and "Website" (website) in
+#. German aligns with the context of the sentence.
+#: templates/members/email/registration_invite_email.html:17
+#: tests/tests_register.py:39
+#, python-format
+msgid "Registration to the \"%(site_name)s\" site"
+msgstr "Anmeldung auf der Website \"%(site_name)s"
+
+#. Explanation: The provided context and the French translation are ambiguous.
+#. The English sentence is a greeting to an individual named "invited". The
+#. French translation uses the same structure as the English sentence, but
+#. it's important to note that the French translation does not explicitly
+#. state who is speaking or what they are doing. Therefore, I have translated
+#. the sentence in German using the provided context and French translation.
+#: templates/members/email/registration_invite_email.html:22
+#, python-format
+msgid "Hello %(invited)s, this is %(inviter)s!"
+msgstr "Hallo %(invited)s, das ist %(inviter)s!\","
+
+#. Explanation: The translation aims to capture the meaning and tone of the
+#. original French text. It uses a more formal and direct style in German
+#. while maintaining the same structure and key elements from the French
+#. version.
+#: templates/members/email/registration_invite_email.html:24
+#: tests/tests_register.py:41
+#, python-format
+msgid ""
+"I invite you to register on the %(site_name)s website I created for managing"
+" our big family!"
+msgstr ""
+"Ich lade dich ein, dich auf der %(site_name)s-Website anzumelden, die ich "
+"für die Verwaltung unserer großen Familie erstellt habe!"
+
+#. Explanation: The translation aims to capture the original meaning and tone
+#. of the French text. It uses a more formal language suitable for a website
+#. invitation.  The use of "Ich lade dich ein" is a common way to invite
+#. someone to register on a website in German.
+#: templates/members/email/registration_invite_email.html:26
+#: tests/tests_register.py:44
+#, python-format
+msgid ""
+"I invite you to register on the %(site_name)s website created by %(admin)s "
+"for managing our big family!"
+msgstr ""
+"Ich lade dich ein, dich auf der Website %(site_name)s anzumelden, die von "
+"%(admin)s erstellt wurde, um unsere große Familie zu verwalten!"
+
+#. **Explanation:**  The translation aims to capture the meaning of both the
+#. English and French sentences. It uses a clear and concise style while
+#. maintaining the original structure of the sentences.
+#. Let me know if you have any other sentences you'd like me to translate!
+#: templates/members/email/registration_invite_email.html:32
+msgid ""
+"On this site, you will find a directory of the family members and a lot of "
+"features on birthdays, photos, forums, ads,..."
+msgstr ""
+"Auf dieser Website findest du einen Familienverzeichnis und viele Funktionen"
+" zu Geburtstagen, Fotos, Foren, Anzeigen usw."
+
+#. **Explanation:** The French translation clarifies the meaning of "knows he
+#. created this site" which is ambiguous in English.  The German translation
+#. maintains a similar structure and tone to the French translation while
+#. ensuring clarity for the user.
+#: templates/members/email/registration_invite_email.html:35
+msgid ""
+"If you know the administrator and knows he created this site, please click "
+"on the link below to go to the site and create your account."
+msgstr ""
+"Wenn Sie den Administrator kennen und wissen, dass er diesen Webauftritt "
+"erstellt hat, klicken Sie bitte auf den folgenden Link, um zum Webauftritt "
+"zu gelangen und sich ein Konto anzumelden."
+
+#. **Explanation:** The translation aims to capture the original meaning and
+#. tone of the English text. It uses a direct and concise style while
+#. maintaining the same structure as the French translation.
+#: templates/members/email/registration_invite_email.html:38
+#, python-format
+msgid ""
+"You can also reply to this email to contact <a "
+"href=\"mailto:%(inviter_email)s\">%(inviter)s</a> and check with him if he "
+"really invited you..."
+msgstr ""
+"Du kannst auch eine Antwort auf diese E-Mail senden, um mit <a "
+"href=\"mailto:%(inviter_email)s\">%(inviter)s</a> Kontakt aufzunehmen und "
+"überprüfen, ob er dich wirklich eingeladen hat."
+
+#. Explanation:  "Sign up" is a common English phrase that refers to the act
+#. of creating an account or registering for something. The French translation
+#. "S'enregistrer" directly translates this meaning, emphasizing the
+#. registration process.
+#. Let me know if you have any other sentences you would like me to translate!
+#: templates/members/email/registration_invite_email.html:43
+#: views/views_registration.py:24
+msgid "Sign up"
+msgstr "Registrieren"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates a registration request for a specific site.
+#. The use of "Registrierungsanfrage" directly translates to "registration
+#. request" in English and maintains the context provided by the placeholder
+#. names.
+#: templates/members/email/registration_request_email.html:8
+#: tests/tests_register.py:124 views/views_registration.py:207
+#, python-format
+msgid "Registration request for %(site_name)s"
+msgstr "Registrierungsanfrage für %(site_name)s"
+
+#. Explanation: The German translation accurately captures the meaning of the
+#. French phrase, translating the request for registration into a specific
+#. location.  The use of "Registrierungsanfrage" and "Standort" reflects the
+#. context of the sentence.
+#: templates/members/email/registration_request_email.html:17
+#: tests/tests_register.py:129
+#, python-format
+msgid "Registration request for the \"%(site_name)s\" site"
+msgstr "Registrierungsanfrage für den '%(site_name)s'-Standort"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the person requested to register on the
+#. website.  The English sentence is ambiguous as it could mean "the person
+#. requested to register" or "the person registered".  The French translation
+#. clarifies this ambiguity by stating "a demandé à s'enregistrer", which
+#. means "requested to register." The German translation maintains this
+#. meaning and uses a similar structure for clarity.
+#: templates/members/email/registration_request_email.html:21
+#: tests/tests_register.py:130
+#, python-format
+msgid "%(name)s (%(email)s) requested to register to your cousinades site"
+msgstr "%(name)s (%(email)s) hat sich angemeldet für die Cousinades-Website."
+
+#. Explanation: The English sentence is clear and concise.  The French
+#. translation accurately conveys the meaning of the original text by using
+#. the formal "Voici" to introduce the message.
+#: templates/members/email/registration_request_email.html:23
+msgid "Here is the message he sent:"
+msgstr "Hier ist die Nachricht, die er geschickt hat:"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase by using "Du hast diese E-Mail erhalten" to convey that the
+#. recipient received the email.  The use of "der" before "Administrator" is
+#. correct and consistent with the context.
+#: templates/members/email/registration_request_email.html:28
+#, python-format
+msgid ""
+"You received this mail because you are the administrator of the "
+"\"%(site_name)s\" site."
+msgstr ""
+"Du hast diese E-Mail erhalten, weil du der Administrator des Sites "
+"\"%(site_name)s\" bist."
+
+#. Explanation: The English phrase "Open invitation page" is translated into
+#. German as "Offene Einladungsseite".  The word "offene" means "open" in
+#. German. This accurately reflects the meaning of the original sentence,
+#. while also maintaining a consistent tone and nuance.
+#: templates/members/email/registration_request_email.html:33
+msgid "Open invitation page"
+msgstr "Offene Einladungsseite"
+
+#. Explanation: The English sentence is a bit ambiguous as it could mean
+#. either an invitation to register on the site or an invitation to join the
+#. site.  The French translation clarifies that this is an invitation to
+#. register on the site by using "Nouvelle invitation à s'inscrire".
+#: templates/members/email/registration_sent_email.html:8
+#, python-format
+msgid "New invitation to register on %(site_name)s"
+msgstr "Neue Einladung zur Registrierung auf %(site_name)s"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, capturing the essence of the invitation to register on a
+#. website and its sender.  The use of "Einladung zur Registrierung"
+#. (invitation to registration) directly translates the English phrase's
+#. meaning while maintaining the original sentence structure.
+#: templates/members/email/registration_sent_email.html:15
+#: views/views_registration.py:149
+#, python-format
+msgid ""
+"Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s"
+msgstr ""
+"Einladung zur Registrierung auf %(site_name)s von %(inviter)s an %(invited)s"
+
+#. Explanation: The French translation provides context for the English
+#. sentence.  The German translation aims to maintain the same structure and
+#. meaning as the French translation while using appropriate German grammar
+#. and vocabulary.
+#: templates/members/email/registration_sent_email.html:22
+#, python-format
+msgid ""
+"Hello %(admin)s, for your information, %(inviter)s (%(inviter_email)s) sent "
+"an invitation to %(invited)s (%(invited_email)s) to register on the "
+"%(site_name)s website."
+msgstr ""
+"Hallo %(admin)s, für Ihre Information hat %(inviter)s (%(inviter_email)s) "
+"eine Einladung an %(invited)s (%(invited_email)s) geschickt, um sich auf der"
+" Website %(site_name)s anzumelden."
+
+#. **Explanation:**  The translation aims to capture the meaning of both the
+#. English and French sentences while maintaining the original structure. The
+#. use of "Es gibt keine Möglichkeit" in German directly translates to "There
+#. is no way" in English.
+#: templates/members/email/registration_sent_email.html:28
+#, python-format
+msgid ""
+"There is now way to block this invitation, so if you don't know %(invited)s "
+"or don't want him/her to register on this site, please contact him/her or "
+"%(inviter)s using the following emails:"
+msgstr ""
+"Es gibt keine Möglichkeit, diese Einladung zu blockieren. Wenn Sie "
+"%(invited)s nicht kennen oder ihn/sie nicht dazu bringen möchten, sich auf "
+"dieser Website anzumelden, kontaktieren Sie bitte diesen Person oder "
+"%(inviter)s per E-Mail:"
+
+#. Explanation: The English phrase "Family Detail" is translated into German
+#. as "Familiendetail". This accurately reflects the meaning of both the
+#. original and contextual translations.  The term "Familiendetail" directly
+#. translates to "family detail", which captures the essence of the English
+#. phrase.
+#: templates/members/family/family_detail.html:3
+msgid "Family Detail"
+msgstr "Familiendetail"
+
+#. Explanation: The English term "Family name" is directly translated to the
+#. German term "Familienname".  This accurately reflects the meaning of both
+#. terms.
+#: templates/members/family/family_detail.html:9
+msgid "Family name"
+msgstr "Familienname"
+
+#. Explanation: The French translation accurately conveys the meaning of the
+#. English sentence, which states that this family has no formally declared
+#. lineage.  The German translation uses a similar structure to the French,
+#. using "keine erklarierte Familienlinie" for a more direct and accurate
+#. translation.
+#: templates/members/family/family_detail.html:18
+msgid "This family has no declared parent family."
+msgstr "Diese Familie hat keine erklarierte Familienlinie."
+
+#. Explanation: The English phrase "Edit Family" is translated to "Editer la
+#. Famille" in French. This translates directly into German as "Bearbeiten
+#. Familie".  The word "Bearbeiten" means "edit" and "Familie" remains the
+#. same.
+#: templates/members/family/family_form.html:3
+#: templates/members/family/family_form.html:8
+msgid "Edit Family"
+msgstr "Bearbeiten Familie"
+
+#. Explanation: The English phrase "Sign in" is a common term for the act of
+#. logging into an account.  The French translation "Se connecter" means to
+#. connect, which accurately captures this meaning.
+#: templates/members/login/login.html:9 templates/members/login/login.html:13
+#: templates/members/login/password_reset.html:18
+#: templates/members/login/password_reset_complete.html:9
+#: templates/members/login/password_reset_confirm.html:28
+#: templates/members/registration/email_verification_successful.html:14
+msgid "Sign in"
+msgstr "Anmeldung"
+
+#. Explanation: The French translation, "Besoin d'un compte?", is a direct and
+#. accurate translation of the English phrase "Need an account?".  The German
+#. translation uses a similar structure to convey the same meaning.
+#: templates/members/login/login.html:17
+msgid "Need An Account?"
+msgstr "Braucht man ein Konto?"
+
+#. Explanation: The English phrase "Request invitation link" can be translated
+#. into German as "Bitte um Einladungslink". This translates the meaning of
+#. the request for an invitation link.  The French translation, "Demander une
+#. invitation", is a more literal translation that focuses on the action of
+#. requesting the invitation.
+#: templates/members/login/login.html:18
+msgid "Request invitation link"
+msgstr "Bitte um Einladungslink"
+
+#. Explanation: The English phrase "Password Forgotten?" is a direct question
+#. about someone's forgotten password.  The French translation, "Mot de passe
+#. oublié?", uses the same structure and wording to convey the same meaning in
+#. a natural way.
+#: templates/members/login/login.html:21
+#: templates/members/login/password_change.html:17
+msgid "Password Forgotten?"
+msgstr "Passwort vergessen?"
+
+#. Explanation: The English phrase "Reset password" is translated into German
+#. as "Zurücksetzen des Passworts". This accurately reflects the meaning of
+#. both phrases, with "Zurücksetzen" meaning "reset" and "Passwort" referring
+#. to "password."
+#: templates/members/login/login.html:22
+#: templates/members/login/password_change.html:18
+msgid "Reset password"
+msgstr "Zurücksetzen des Passworts"
+
+#. Explanation: The English phrase "Password Change" is translated directly
+#. into German as "Passwort ändern". This accurately reflects the meaning of
+#. both phrases.  The French translation, "Changement du mot de passe", is a
+#. direct equivalent to the English phrase.
+#: templates/members/login/password_change.html:9
+msgid "Password Change"
+msgstr "Passwort ändern"
+
+#. Explanation: The French translation, "Changer le mot de passe," is a direct
+#. and accurate translation of the English phrase "Change password."  The
+#. German translation maintains this accuracy by using the same structure and
+#. terminology.
+#. Let me know if you have any other sentences to translate!
+#: templates/members/login/password_change.html:13
+msgid "Change password"
+msgstr "Ändern Sie Ihr Passwort"
+
+#. Explanation: The English phrase "Password resetting" is a common term for
+#. the process of changing or resetting a user's password.  The French
+#. translation, "Réinitialisation du mot de passe," accurately reflects this
+#. meaning. It uses the correct terminology and grammatical structure to
+#. convey the same idea in French.
+#: templates/members/login/password_reset.html:9
+msgid "Password resetting"
+msgstr "Passwort zurücksetzen"
+
+#. Explanation: The French translation, "Envoyer un lien de réinitialisation,"
+#. is ambiguous. It can be interpreted as either sending an email with a link
+#. to reset the password or a physical link.  The German translation "Senden
+#. Sie einen Zurücksetzen-Link" clarifies that it's about sending a link for
+#. resetting a password.
+#: templates/members/login/password_reset.html:13
+msgid "Send a reset link"
+msgstr "Senden Sie einen Zurücksetzen-Link"
+
+#. Explanation: The French translation accurately captures the meaning of the
+#. English sentence. It uses a question format to ask if the password has been
+#. forgotten, which is consistent with the original intent.  The German
+#. translation employs a similar structure and phrasing for clarity.
+#: templates/members/login/password_reset.html:17
+#: templates/members/login/password_reset_confirm.html:27
+msgid "Password Not Forgotten?"
+msgstr "Passwort nicht vergessen?"
+
+#. Explanation: The English phrase "Password reset complete" translates
+#. directly to "Reinitialisation du mot de passe terminée" in French.  The
+#. German translation accurately reflects the meaning of the French sentence,
+#. conveying that the password reset process has been completed successfully.
+#: templates/members/login/password_reset_complete.html:6
+msgid "Password reset complete"
+msgstr "Passwort-Wiederherstellung abgeschlossen"
+
+#. Explanation: The French translation clarifies the meaning of the English
+#. sentence, which is that the password has been set.  The German translation
+#. maintains this clarity and uses the appropriate verb "festgelegt" to convey
+#. the same idea as "defined".
+#: templates/members/login/password_reset_complete.html:7
+msgid "Your password has been set.  You may go ahead and sign in now."
+msgstr "Dein Passwort wurde festgelegt. Du kannst jetzt anmelden."
+
+#. Explanation: The English phrase "Password reset confirmation" is translated
+#. directly into German as "Passwort-Wiederherstellung-Bestätigung". This
+#. accurately reflects the meaning of the original sentence.  The French
+#. translation, "Confirmation de la réinitialisation du mot de passe",
+#. provides a clear and accurate understanding of the concept in French.
+#: templates/members/login/password_reset_confirm.html:11
+msgid "Password reset confirmation"
+msgstr "Passwort-Wiederherstellung-Bestätigung"
+
+#. Explanation: The French translation is a bit ambiguous and could be
+#. interpreted as "Please enter your new password twice so we can verify you
+#. typed it in correctly".  The German translation clarifies the meaning of
+#. the sentence by stating that the user needs to enter the password twice for
+#. verification.
+#: templates/members/login/password_reset_confirm.html:12
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Bitte geben Sie Ihr neues Passwort zweimal ein, damit wir überprüfen können,"
+" dass Sie es korrekt eingegeben haben."
+
+#. Explanation: The provided English sentence translates directly to the
+#. German phrase "Ändern Sie mein Passwort".  The French translation,
+#. "Modifier mon mot de passe," is accurate and reflects the meaning of the
+#. original.
+#: templates/members/login/password_reset_confirm.html:17
+msgid "Change my password"
+msgstr "Ändern Sie mein Passwort"
+
+#. Explanation: The French translation provided is accurate and clear in
+#. conveying the meaning of the English sentence.  The German translation
+#. attempts to maintain the same level of clarity and accuracy as the French
+#. translation.
+#: templates/members/login/password_reset_confirm.html:23
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+"Der Passwortsperrlink war ungültig, möglicherweise weil er bereits verwendet"
+" wurde. Bitte beantragen Sie eine neue Passwort-Wiederherstellung."
+
+#. Explanation: The English phrase "Password reset sent" is translated into
+#. German as "Passwort zurücksetzen wurde versendet".  The French translation,
+#. "Reinitialisation du mot de passe envoyée", provides context for the
+#. sentence. It clarifies that a password reset has been initiated and is
+#. being sent to the user.
+#: templates/members/login/password_reset_done.html:6
+msgid "Password reset sent"
+msgstr "Passwort zurücksetzen wurde versendet"
+
+#. **Explanation:** The French translation clarifies that the instructions are
+#. sent via email if an account exists with the provided email address.  The
+#. German translation maintains this clarity and uses a more formal tone to
+#. match the context of the original sentence.
+#: templates/members/login/password_reset_done.html:7
+msgid ""
+"We’ve emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+"Wir haben Ihnen E-Mail mit Anweisungen zur Passwortänderung geschickt, falls"
+" ein Konto mit der eingegebenen E-Mail-Adresse existiert. Sie erhalten diese"
+" bald."
+
+#. Explanation: The French translation clarifies the meaning of "If you don't
+#. receive an email," which can be ambiguous.  The German translation
+#. maintains this clarity by using a more direct and explicit phrasing.
+#: templates/members/login/password_reset_done.html:9
+msgid ""
+"If you don’t receive an email, please make sure you’ve entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"Wenn Sie kein E-Mail erhalten, überprüfen Sie bitte, ob Sie die Adresse "
+"eingegeben haben, mit der Sie sich angemeldet haben, und prüfen Sie Ihren "
+"Spam-Ordner."
+
+#. Explanation: The English word "Birthday" is a general term for the day of
+#. birth.  The French word "Anniversaire" refers to a celebration of a
+#. specific birthday, and it's used in this context to refer to the day of
+#. birth.
+#: templates/members/members/birthdays.html:3
+#: templates/members/members/members.html:11
+msgid "Birthdays"
+msgstr "Geburtstage"
+
+#. Explanation: The English sentence is about birthdays occurring within a
+#. specific timeframe.  The French translation, while accurate, uses the word
+#. "anniversaires" which can be translated as "birthdays."  In German, we use
+#. "Geburtdaten" to refer to birthdays.
+#: templates/members/members/birthdays_include.html:4
+#, python-format
+msgid "Birthdays in the next %(ndays)s days"
+msgstr "Geburtdaten in den nächsten %(ndays)s Tagen"
+
+#. Explanation: The provided English sentence is ambiguous. It could refer to
+#. a person turning a specific age or simply celebrating their birthday in
+#. general.  The French translation clarifies that the person is turning a
+#. specific age and celebrates their birthday.
+#: templates/members/members/birthdays_include.html:16
+#: tests/tests_birthdays.py:38
+#, python-format
+msgid "turns %(age)s today, happy birthday!"
+msgstr "Heute feiert %(age)s-jähriges, Happy Birthday!"
+
+#. Explanation: The provided English sentence is a bit ambiguous.  The phrase
+#. "will turn" implies the person will be turning a certain age on the next
+#. day.  We need to translate this into German while preserving the meaning
+#. and tone of the original text.
+#: templates/members/members/birthdays_include.html:18
+#: tests/tests_birthdays.py:42
+#, python-format
+msgid "will turn %(age)s tomorrow, happy birthday!"
+msgstr "wird morgen %(age)s, Happy Birthday!"
+
+#. Explanation: The provided English sentence describes a future event where
+#. the subject will reach a certain age.  The French translation, "aura
+#. %(age)s ans %(birthday)s," accurately reflects this meaning by using the
+#. present tense ("aura") and specifying the age and birthday in the context
+#. of the sentence.
+#: templates/members/members/birthdays_include.html:21
+#: tests/tests_birthdays.py:47
+#, python-format
+msgid "will turn %(age)s on %(birthday)s"
+msgstr "wird %(age)s auf %(birthday)s"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that there are no birthdays within the next
+#. number of days.  The English phrase "No birthdays in next %(ndays)s days"
+#. is ambiguous as it can mean either "no birthdays in the next few days" or
+#. "no birthdays in the next 10 days". The French translation makes it clear
+#. that it is a specific number of days, so the German version "Keine
+#. Geburtstage in den nächsten %(ndays)s Tagen" follows this interpretation.
+#: templates/members/members/birthdays_include.html:34
+#, python-format
+msgid "No birthdays in next %(ndays)s days"
+msgstr "Keine Geburtstage in den nächsten %(ndays)s Tagen"
+
+#. Explanation: The English phrase "Import Members" translates to
+#. "Mitgliederauswahl importieren" in German. This is a more accurate and
+#. natural way to express the meaning of importing members in German.  The
+#. French translation, "Importation de Membres," provides context for the
+#. sentence.
+#: templates/members/members/export_members.html:4
+#: templates/members/members/import_members.html:3
+#: templates/members/members/import_members.html:6
+msgid "Import Members"
+msgstr "Mitgliederauswahl importieren"
+
+#. Explanation: The English phrase "Export Members" is translated into German
+#. as "AusEXPORT-Mitglieder". This translates to "Export members" in a clear
+#. and concise way.  The use of the term "AusEXPORT" suggests that these are
+#. members specifically related to an export function or process.
+#: templates/members/members/export_members.html:7
+msgid "Export Members"
+msgstr "AusEXPORT-Mitglieder"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French sentence, while also maintaining a consistent tone and structure.
+#. The use of "Du kannst" (You can) and "Die erste Zeile des Dokuments" (the
+#. first line of the document) is appropriate for the context.
+#: templates/members/members/export_members.html:9
+msgid ""
+"You can export members to a CSV file. The first line of the file contains "
+"the field names. "
+msgstr ""
+"Du kannst Mitglieder in ein CSV-Datei exportieren. Die erste Zeile des "
+"Dokuments enthält die Feldnamen."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. English and French sentences. It captures the essence of the original text
+#. by using the correct grammatical structure and word choice.  The use of
+#. "vorhanden und leer" accurately conveys the idea that the fields are
+#. present but empty if they're not in the database, while "wenn sie nicht im
+#. Datenbank vorhanden sind" clarifies the condition for emptiness.
+#: templates/members/members/export_members.html:10
+msgid "All fields are present and empty if not present in the database. "
+msgstr ""
+"Alle Felder sind vorhanden und leer, wenn sie nicht im Datenbank vorhanden "
+"sind."
+
+#. Explanation: The French translation is clear and accurate.  The German
+#. translation maintains the same meaning as the French translation.
+#: templates/members/members/export_members.html:13
+msgid "Admins can re-import the files after modification with any CSV editor."
+msgstr ""
+"Administratoren können die Dateien nach Modifikation wieder importieren, mit"
+" jedem CSV-Editor."
+
+#. Explanation: The English phrase "Select members to export" can be
+#. translated into German as "Wählen Sie Mitglieder zum Exportieren aus". This
+#. translates the meaning of selecting specific members for export.  The
+#. French translation, "Sélectionner les membres à exporter", is a more
+#. literal translation that reflects the French language's emphasis on
+#. specificity and action verbs.
+#: templates/members/members/export_members.html:18
+msgid "Select members to export"
+msgstr "Wählen Sie Mitglieder zum Exportieren aus"
+
+#. Explanation: The English phrase "Family filter" is translated directly into
+#. German as "Familienfilter". This accurately reflects the meaning of both
+#. phrases.  The term "Familienfilter" in German refers to a filter that
+#. specifically targets family-related data or information, such as filtering
+#. for family members or family-specific content.
+#: templates/members/members/export_members.html:21
+msgid "Family filter"
+msgstr "Familienfilter"
+
+#. Explanation: The English phrase "City filter" is translated directly into
+#. German as "Stadtfilter". This accurately reflects the meaning of both
+#. phrases.  The French translation, "Filtre sur la Ville," can be ambiguous
+#. and requires a more direct translation for clarity in the German context.
+#: templates/members/members/export_members.html:26
+msgid "City filter"
+msgstr "Stadtfilter"
+
+#. Explanation: The English phrase "Last name filter" is translated into
+#. German as "Letzter Name Filter".  This accurately reflects the meaning of
+#. the original phrase, which refers to a filter that allows you to select
+#. entries based on last names.
+#: templates/members/members/export_members.html:31
+msgid "Last name filter"
+msgstr "Letzter Name Filter"
+
+#. Explanation: Both "export" and "exporter" are used to refer to the process
+#. of sending goods or services from one country to another. The French
+#. translation, "Exporter," is a direct equivalent in meaning.  The German
+#. word "Exportieren" accurately reflects this meaning.
+#: templates/members/members/export_members.html:40
+msgid "Export"
+msgstr "Exportieren"
+
+#. Explanation: The French translation, "Selectionner un nom...", is ambiguous
+#. and requires context to be fully understood.  The German translation,
+#. "Wählen Sie einen Namen aus...", clarifies the meaning of the sentence by
+#. using a more direct and unambiguous phrasing.
+#: templates/members/members/export_members.html:51
+msgid "Select a name..."
+msgstr "Wählen Sie einen Namen aus..."
+
+#. Explanation: The French translation, "Selectionner une ville...", is a
+#. direct and clear instruction to select a city.  The German translation
+#. maintains the same meaning and tone as the French version.
+#: templates/members/members/export_members.html:55
+msgid "Select a city..."
+msgstr "Wählen Sie eine Stadt..."
+
+#. Explanation: The French translation, "Selectionner une famille...", implies
+#. the user is choosing from a list of families.  The German translation
+#. maintains this meaning by using the verb "Wählen" (to choose) and the noun
+#. "Familie" (family).
+#: templates/members/members/export_members.html:59
+msgid "Select a family..."
+msgstr "Wählen Sie eine Familie..."
+
+#. Explanation:  The English phrase "Clear selection" translates directly to
+#. "Vider la sélection" in French. The meaning is clear and consistent with
+#. both the English and French translations.
+#. Let me know if you have any other sentences you'd like me to translate!
+#: templates/members/members/export_members.html:85
+msgid "Clear selection"
+msgstr "Klare Auswahl"
+
+#. Explanation: The translation aims to maintain the original meaning and tone
+#. of the English sentence while using appropriate German terminology.  The
+#. French translation is used as a reference point for understanding the
+#. context and then translating it into German.
+#: templates/members/members/import_members.html:8
+msgid ""
+"You can import members from a CSV file. The first line of the file must "
+"contain the field names as described below."
+msgstr ""
+"Du kannst Mitglieder aus einem CSV-Datei importieren. Die erste Zeile des "
+"Dokuments muss die Feldnamen enthalten, wie unten beschrieben."
+
+#. **Explanation:**  This translation accurately conveys the meaning of the
+#. English sentence. It uses the appropriate German word order and grammatical
+#. structure to reflect the meaning of the French translation. The use of "der
+#. Datei" for "the file" is consistent with the context, while "Spalten" means
+#. columns in this context.
+#: templates/members/members/import_members.html:13
+msgid "The file must contain at least these columns:"
+msgstr "Der Datei muss mindestens diese Spalten enthalten:"
+
+#. Explanation: The German translation accurately captures the meaning and
+#. tone of the French translation, while maintaining a consistent grammatical
+#. structure.  The use of "du" in the German sentence is similar to the French
+#. "Tu," which reflects the informal, conversational tone of the original
+#. text.
+#: templates/members/members/import_members.html:16
+msgid "You can also add these optional columns:"
+msgstr "Du kannst auch diese optionalen Spalten hinzufügen:"
+
+#. Explanation: The French translation, "Les avatars doivent être des noms de
+#. fichiers images," is a clear and accurate translation of the English
+#. sentence. It conveys the meaning that avatars must be image file names.
+#. The German translation maintains this meaning while using appropriate
+#. grammatical structures.
+#: templates/members/members/import_members.html:19
+msgid "Avatars must be image file names."
+msgstr "Avatars müssen Bilddatei-Namen sein."
+
+#. Explanation: This German translation accurately captures the meaning of the
+#. English and French sentences. The use of "Sie" for "They" is consistent
+#. with the formal tone of the original text, while "manuell" accurately
+#. conveys the idea of manual upload.  The placeholder "%(media_root)s" is
+#. kept in its original place to maintain consistency with the context.
+#: templates/members/members/import_members.html:20
+#, python-format
+msgid ""
+"They must be uploaded manually first in the avatars folders of the "
+"%(media_root)s folder."
+msgstr ""
+"Sie müssen zuerst manuell in den Avatar-Ordnern des Ordner %(media_root)s "
+"hochgeladen werden."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the person must enter the birthdate in
+#. the specified format.  The English sentence "The date of birth must be
+#. entered in the format YYYY/MM/DD" can be ambiguous as it can mean both
+#. "giving a ring" and "making a phone call" colloquially. The French
+#. translation makes it clear that it is a phone call, so the German version
+#. "Die Geburtsdatum muss im Format YYYY/MM/DD eingegeben werden." follows
+#. this interpretation.
+#: templates/members/members/import_members.html:23
+msgid "The date of birth must be entered in the format YYYY/MM/DD."
+msgstr "Die Geburtsdatum muss im Format YYYY/MM/DD eingegeben werden."
+
+#. Explanation: The German translation accurately captures the meaning of the
+#. English and French sentences. It uses the appropriate grammatical structure
+#. and word choices to convey the same information in a clear and concise
+#. manner.  The sentence is translated directly from the original text while
+#. maintaining the intended meaning.
+#: templates/members/members/import_members.html:26
+msgid ""
+"Families must be entered by name. They will be created on the fly if they "
+"don't already exist."
+msgstr ""
+"Familien müssen per Namen eingetragen werden. Sie werden automatisch "
+"erstellt, wenn sie nicht bereits existieren."
+
+#. Explanation:  Both "import" and "importer" are used to translate the
+#. English word "Import". The German word "Importieren" is a direct
+#. translation of the English word "Import" in this context.
+#: templates/members/members/import_members.html:33
+msgid "Import"
+msgstr "Importieren"
+
+#. Explanation: The English phrase "Member Detail" is translated into German
+#. as "Mitglied Details". This reflects the meaning of the French phrase
+#. "Détail d'un Membre," which means "detail of a member."  The translation
+#. accurately captures the intended meaning.
+#: templates/members/members/member_detail.html:3
+msgid "Member Detail"
+msgstr "Mitglied Details"
+
+#. Explanation: The English phrase "Active member" is translated directly into
+#. German as "Aktive Mitglied".  This accurately reflects the meaning of both
+#. phrases.
+#: templates/members/members/member_detail.html:25
+#: templates/members/members/member_upsert.html:23 tests/tests_member.py:242
+msgid "Active member"
+msgstr "Aktive Mitglied"
+
+#. Explanation: The English phrase "Managed member" is ambiguous. It could
+#. refer to a member who has been managed by someone or a member that has been
+#. assigned to a specific role.  The French translation, "Membre géré,"
+#. clarifies the meaning of "managed member" as it implies that the member has
+#. been assigned a specific task or responsibility.
+#: templates/members/members/member_detail.html:27
+#: templates/members/members/member_upsert.html:25 tests/tests_member.py:242
+msgid "Managed member"
+msgstr "Ge manage Member"
+
+#. Explanation: The English word "email" is a commonly understood term and its
+#. French equivalent, "Email," maintains the same spelling.  The context
+#. provided does not require any further explanation or clarification.
+#: templates/members/members/member_detail.html:40
+#: templates/members/members/members_directory.html:30
+#: views/views_directory.py:47
+msgid "Email"
+msgstr "E-Mail"
+
+#. Explanation: The English word "Hobbies" is a noun referring to activities
+#. done for enjoyment.  The French word "Loisirs" translates directly to
+#. "leisure" and encompasses the same concept of enjoyable pursuits.
+#: templates/members/members/member_detail.html:64
+msgid "Hobbies"
+msgstr "Hobbys"
+
+#. **Explanation:** The German translation accurately reflects the meaning of
+#. the French phrase, which indicates that only the specified person
+#. (represented by `%(name)s`) can manage this member.  The use of "nur" and
+#. "sein" in the German translation maintains the same grammatical structure
+#. as the French phrase.
+#: templates/members/members/member_detail.html:81
+#, python-format
+msgid "(Only %(name)s can manage this member)"
+msgstr "Nur %(name)s kann dieses Mitglied verwalten."
+
+#. Explanation: The French translation, "Changer le mot de passe," is a direct
+#. and accurate representation of the English phrase "Change Password."  The
+#. German translation maintains this accuracy by using the same structure and
+#. wording.
+#: templates/members/members/member_upsert.html:35
+msgid "Change Password"
+msgstr "Ändern Sie Ihr Passwort"
+
+#. Explanation: The French translation, "Activer le compte," indicates the
+#. user is being asked to activate their account.  The German translation
+#. maintains this meaning by using the verb "Aktivieren" which means
+#. "activate."  It also uses the noun "Konto" for "account" in a similar way
+#. as the French translation.
+#: templates/members/members/member_upsert.html:40
+msgid "Activate Account"
+msgstr "Aktivieren Sie Konto"
+
+#. Explanation:  While both "Delete" and "Supprimer" mean to remove or erase,
+#. the German word "Löschen" is a more direct and accurate translation of the
+#. English phrase in this context. It conveys the action of deleting something
+#. completely from existence.
+#: templates/members/members/member_upsert.html:43
+msgid "Delete"
+msgstr "Löschen"
+
+#. Explanation: The English phrase "Remove my account" can be understood as a
+#. request to delete the user's account.  The French translation, "Supprimer
+#. mon compte," accurately conveys this meaning in German.
+#: templates/members/members/member_upsert.html:47
+msgid "Remove my account"
+msgstr "Lösche mein Konto"
+
+#. Explanation: The French translation, "Supprimer le Membre," is a direct and
+#. clear translation of the English phrase "Delete member."  The German
+#. translation uses the verb "löschen" (to delete) to accurately convey the
+#. meaning. It also includes the word "Mitglied" (member), which is used in
+#. both languages to refer to a member of a group or organization.
+#: templates/members/members/member_upsert.html:49
+msgid "Delete member"
+msgstr "Löschen Sie den Mitglied"
+
+#. Explanation:  Both "Update" and "Mettre à jour" mean to bring something up-
+#. to-date. The German word "Aktualisieren" directly translates to "update" in
+#. English, while the French word "Mettre à jour" also conveys this meaning.
+#: templates/members/members/member_upsert.html:65
+#: templates/members/modal_form.html:27
+msgid "Update"
+msgstr "Aktualisieren"
+
+#. Explanation:  Both "Create" and "Créer" mean the same thing in English and
+#. French. The German word "Erstellen" is a direct translation of "create"
+#. that captures the essence of the action.
+#: templates/members/members/member_upsert.html:68
+#: templates/members/modal_form.html:23
+msgid "Create"
+msgstr "Erstellen"
+
+#. Explanation: The English sentence asks if the user has lost their
+#. verification email.  The French translation, "Mail de vérification perdu?",
+#. is a direct translation of this question into French. This translates to
+#. "Have you lost your confirmation email?".
+#: templates/members/members/member_upsert.html:75
+msgid "Lost your verification email?"
+msgstr "Haben Sie Ihre Bestätigungs-E-Mail verloren?"
+
+#. Explanation: The French translation, "Demander un nouveau lien," indicates
+#. that the user is requesting a new link.  The German translation maintains
+#. this meaning by using the phrase "Bitte einen neuen Link anfordern." This
+#. translates to "Please request a new link".
+#: templates/members/members/member_upsert.html:77
+#: templates/members/registration/email_verification_failed.html:13
+msgid "Request a new link"
+msgstr "Bitte einen neuen Link anfordern"
+
+#. Explanation:  The English phrase "Address created" is translated to
+#. "Adresse wurde erstellt" in German. This accurately reflects the meaning of
+#. the French translation, which means "address created." The use of "wurde
+#. erstellt" conveys the action of creating an address.
+#: templates/members/members/member_upsert.html:83
+msgid "Address created"
+msgstr "Adresse wurde erstellt"
+
+#. Explanation: The English phrase "New Address" is directly translated to
+#. "Neue Adresse" in German.  The word "Neue" means "new" and "Adresse" means
+#. "address." This maintains the meaning of the original sentence.
+#: templates/members/members/member_upsert.html:85
+msgid "New Address"
+msgstr "Neue Adresse"
+
+#. Explanation: The English phrase "Address updated" is translated directly
+#. into German as "Adresse aktualisiert". This accurately reflects the meaning
+#. of both the English and French phrases.  The use of "ist aktualisiert" in
+#. German maintains the same grammatical structure and conveys the same idea
+#. as the original sentence.
+#: templates/members/members/member_upsert.html:90
+msgid "Address updated"
+msgstr "Adresse aktualisiert"
+
+#. Explanation: The English phrase "Change Address" is translated into German
+#. as "Ändern Sie Ihre Adresse". This translates directly to "Change your
+#. address" in English.  The French translation, "Modifier l'Adresse", is also
+#. a direct translation of the English phrase and maintains the same meaning.
+#: templates/members/members/member_upsert.html:92
+msgid "Change Address"
+msgstr "Ändern Sie Ihre Adresse"
+
+#. Explanation: The English phrase "Family created" can be ambiguous, as it
+#. could refer to a family being formed or established.  The French
+#. translation "Famille créée" clarifies that the meaning is about
+#. establishing a family unit.
+#: templates/members/members/member_upsert.html:97
+msgid "Family created"
+msgstr "Familie gegründet"
+
+#. Explanation: This German translation accurately reflects the meaning of the
+#. French phrase "Nouvelle Famille," which translates to "new family."  The
+#. word "Neue" in German means "new," and "Familie" means "family." The
+#. sentence is a simple statement about a new family unit.
+#: templates/members/members/member_upsert.html:99
+msgid "New Family"
+msgstr "Neue Familie"
+
+#. Explanation: The English phrase "Parent family created" is translated into
+#. German as "Elternfamilie gegründet". This accurately reflects the meaning
+#. of the original text.  The French translation, "Famille parente créée,"
+#. provides context for a more precise understanding of the sentence's
+#. meaning.
+#: templates/members/members/member_upsert.html:102
+msgid "Parent family created"
+msgstr "Elternfamilie gegründet"
+
+#. Explanation: The English phrase "New Parent Family" is translated into
+#. German as "Neue Elternfamilie". This accurately reflects the meaning of the
+#. original text, using the appropriate word for family in German.  The French
+#. translation "Nouvelle Famille Parente" provides context and clarifies that
+#. this refers to a new family unit with parents.
+#: templates/members/members/member_upsert.html:104
+msgid "New Parent Family"
+msgstr "Neue Elternfamilie"
+
+#. Explanation: The English phrase "Family updated" can be interpreted in two
+#. ways, either as a change to the family structure or an update of
+#. information about the existing family.  The French translation "Famille
+#. mise à jour" is more specific and accurately reflects the meaning of
+#. "updated" in this context.
+#: templates/members/members/member_upsert.html:109
+msgid "Family updated"
+msgstr "Familie aktualisiert"
+
+#. Explanation: The English phrase "Change Family" can be interpreted in
+#. several ways.  The French translation, "Modifier la Famille," directly
+#. translates to "Modify the Family." This is a clear and unambiguous way to
+#. convey the meaning of changing or altering the family unit.
+#: templates/members/members/member_upsert.html:111
+msgid "Change Family"
+msgstr "Ändern Sie die Familie"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. French phrase, "Ce nom d'utilisateur est déjà pris!". It uses a similar
+#. structure and vocabulary to express that the username is already taken.
+#. The use of "Dieser" (this) clarifies the context of the sentence.
+#: templates/members/members/member_upsert.html:121
+msgid "This username is not available!"
+msgstr "Dieser Benutzername ist nicht verfügbar!"
+
+#. Explanation: The English phrase "Delete My Account" is a direct request to
+#. delete an account. The French translation, "Supprimer mon compte?",
+#. translates this directly into the question format. It's important to note
+#. that the French translation uses the pronoun "mon" which means "my".
+#: templates/members/members/member_upsert.html:127
+msgid "Delete My Account"
+msgstr "Lösche mein Konto"
+
+#. Explanation: The French translation accurately conveys the seriousness of
+#. deleting an account and its associated data.  The German translation
+#. maintains this tone by using "sind Sie sicher" to emphasize the
+#. irreversible nature of deletion.
+#: templates/members/members/member_upsert.html:128
+msgid ""
+"Are you sure you want to delete your account and all associated data? This "
+"is irrecoverable!"
+msgstr ""
+"Sind Sie sicher, dass Sie Ihr Konto löschen und alle zugehörigen Daten "
+"löschen möchten? Das ist endgültig!"
+
+#. Explanation: The French translation, "Supprimer le Membre," is a direct and
+#. clear translation of the English phrase "Delete Member."  The German
+#. translation maintains this clarity and accuracy.
+#: templates/members/members/member_upsert.html:130
+msgid "Delete Member"
+msgstr "Löschen Sie Mitglied"
+
+#. Explanation: The French translation is a bit ambiguous as it uses the word
+#. "supprimer".  The German translation aims to clarify that the user is
+#. asking about deleting an account and associated data.
+#: templates/members/members/member_upsert.html:131
+#, python-format
+msgid ""
+"Are you sure you want to delete %(name)s's account and all associated data?"
+msgstr ""
+"Seht ihr sicher, dass Sie den Account von %(name)s löschen und alle "
+"zugehörigen Daten entfernen wollen?"
+
+#. Explanation: The English phrase "Members List" is translated directly to
+#. "Liste der Mitglieder" in German.  The word "Mitglieder" (members) is used,
+#. which is a common and accurate way to refer to the list of members in
+#. German.
+#: templates/members/members/members.html:3
+#: templates/members/members/members.html:7
+msgid "Members List"
+msgstr "Mitgliederliste"
+
+#. Explanation: The English phrase "Show directory" can be translated into
+#. German as "Zeige Verzeichnis".  This is a direct translation of the
+#. meaning, and it accurately reflects the intended action.
+#: templates/members/members/members.html:15
+msgid "Show directory"
+msgstr "Zeige Verzeichnis"
+
+#. Explanation: The English phrase "Create Member" is translated into German
+#. as "Erstellen Sie Mitglied". This accurately reflects the meaning of both
+#. phrases.  The French word "Membre" translates to "Member" in English, and
+#. this is reflected in the German translation.
+#: templates/members/members/members.html:19 views/views_member.py:105
+msgid "Create Member"
+msgstr "Erstellen Sie Mitglied"
+
+#. Explanation: The English phrase "Filter Members" is translated directly
+#. into German as "Filter Mitglieder". This accurately reflects the meaning of
+#. both phrases.  The French translation, "Filtrer les Membres," provides a
+#. clear and concise way to express the same concept in French.
+#: templates/members/members/members.html:26
+#: templates/members/members/members.html:37
+msgid "Filter Members"
+msgstr "Filter Mitglieder"
+
+#. Explanation:  "Prénom" is the French word for "first name". The German word
+#. "Vorname" translates to "given name" or "first name" in English.
+#: templates/members/members/members.html:29
+msgid "first name"
+msgstr "Vorname"
+
+#. Explanation: In English, "last name" refers to the last part of a person's
+#. name.  In French, "nom" is used for both first and last names. The context
+#. provided in the French translation ("nom") implies that it is referring to
+#. the last name.
+#: templates/members/members/members.html:33
+msgid "last name"
+msgstr "Name"
+
+#. Explanation: The English phrase "No members found" is translated into
+#. German as "Keine Mitglieder gefunden". This accurately reflects the meaning
+#. of the original text, conveying that there are no members in the system.
+#. The French translation "Pas de membre trouvé" also conveys this meaning.
+#: templates/members/members/members.html:63
+#: templates/members/members/members_directory.html:50
+msgid "No members found"
+msgstr "Keine Mitglieder gefunden"
+
+#. Explanation: The English phrase "Members Directory" is translated directly
+#. into German as "Mitgliederverzeichnis".  This accurately reflects the
+#. meaning of both terms.
+#: templates/members/members/members_directory.html:3
+#: templates/members/members/members_directory.html:8
+msgid "Members Directory"
+msgstr "Mitgliederverzeichnis"
+
+#. Explanation:  "Print" is a general term for the act of producing an image
+#. or text on paper. In German, "drucken" is a more common and accurate
+#. translation for this concept.
+#. Let me know if you'd like to try another example!
+#: templates/members/members/members_directory.html:13
+msgid "Print"
+msgstr "Drucken"
+
+#. Explanation: The English phrase "Print as PDF" is translated directly into
+#. German as "Drucken als PDF".  This accurately reflects the meaning of both
+#. phrases.
+#: templates/members/members/members_directory.html:15
+#: templates/members/members/members_directory.html:18
+msgid "Print as PDF"
+msgstr "Drucken als PDF"
+
+#. **Explanation:** The French translation provides a clear and concise
+#. warning about the modification of the element. It emphasizes that this
+#. action will affect all other members using it and encourages them to create
+#. a new one if they prefer not to have their element modified.
+#: templates/members/modal_form.html:14
+msgid ""
+"WARNING: This element will be modified for all other members using it! "
+"Please create a new one if that's not what you want to achieve."
+msgstr ""
+"WARNUNG: Dieser Bestandteil wird für alle anderen Mitglieder, die ihn "
+"verwenden, geändert! Bitte erstelle einen neuen, falls das nicht der "
+"gewünschte Effekt sein soll."
+
+#. Explanation: The French translation, "Lien invalide!", is a direct and
+#. accurate translation of the English phrase "Invalid Link!". It conveys the
+#. same meaning in German.  The use of "Ungültiger Link" directly translates
+#. to "Invalid Link" in English.
+#: templates/members/registration/email_verification_failed.html:3
+#: templates/members/registration/email_verification_failed.html:7
+msgid "Invalid Link!"
+msgstr "Ungültiger Link!"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English sentence. It uses the correct grammar and vocabulary to express
+#. that the link is invalid or already used.  The phrase "Wir können ihn nicht
+#. überprüfen" means "We cannot verify it".
+#: templates/members/registration/email_verification_failed.html:9
+msgid ""
+"This link is invalid or been used already, we cannot verify using this link."
+msgstr ""
+"Dieser Link ist ungültig oder wurde bereits verwendet, wir können ihn nicht "
+"überprüfen."
+
+#. Explanation: The English phrase "Email Verification Successful!" is a clear
+#. and concise statement of success.  The French translation, while using the
+#. same structure, maintains the formality and clarity of the original
+#. sentence.
+#: templates/members/registration/email_verification_successful.html:3
+#: templates/members/registration/email_verification_successful.html:7
+msgid "Email Verification Successful!"
+msgstr "E-Mail-Verifizierung erfolgreich!"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English and French sentences. It uses the correct grammatical structure and
+#. vocabulary to reflect the original text's message about email verification
+#. and account activation.  The use of "Ihre E-Mail" (Your Email) and "Ihr
+#. Konto" (Your Account) is consistent with the context, while maintaining a
+#. formal tone.
+#: templates/members/registration/email_verification_successful.html:9
+msgid ""
+"Your Email is verified successfully and your account has been activated."
+msgstr ""
+"Ihre E-Mail wurde erfolgreich verifiziert und Ihr Konto wurde aktiviert."
+
+#. Explanation: The French translation, "Tu peux te connecter avec tes
+#. identifiants maintenant...", is a clear and concise way to convey the
+#. meaning of the English sentence. It uses the appropriate verb conjugation
+#. ("tu peux") and the correct term for credentials ("tes identifiants").
+#: templates/members/registration/email_verification_successful.html:10
+msgid "You can sign in with your credentials now..."
+msgstr "Du kannst dich jetzt mit deinen Zugangsdaten anmelden..."
+
+#. Explanation: The English phrase "Link Expired!" translates to "Link ist
+#. abgelaufen!" in German.  The meaning is clear and the French translation
+#. accurately conveys the same message as the original sentence.
+#: templates/members/registration/link_expired.html:3
+#: templates/members/registration/link_expired.html:7
+msgid "Link Expired!"
+msgstr "Link ist abgelaufen!"
+
+#. Explanation: The French translation accurately captures the meaning of the
+#. English sentence.  The German translation maintains the same tone and
+#. conveys the intended message. "Der Link hat sein Leben verbracht"
+#. translates to "The link has lived its life" which is a direct translation
+#. of the French phrase "Ce lien a vécu sa vie".
+#: templates/members/registration/link_expired.html:9
+msgid "The link has lived its life :( Can not validate a dead link..."
+msgstr ""
+"Der Link hat sein Leben verbracht :( Kann keinen lebenden Link bestätigen..."
+
+#. Explanation: The English phrase "Request Another one" is a request for more
+#. information.  The French translation, "Demander un nouveau lien," means to
+#. "ask for another link." This translation accurately captures the meaning of
+#. the original sentence and preserves the tone and nuance of the request.
+#: templates/members/registration/link_expired.html:13
+msgid "Request Another one"
+msgstr "Bitte weitere Anfrage"
+
+#. Explanation: The English phrase "New Email Sent" is translated into German
+#. as "Neue E-Mail versendet". This accurately reflects the meaning of the
+#. original text.  The French translation, "Nouvel e-mail envoyé!", provides a
+#. clear and concise indication that an email has been sent.
+#: templates/members/registration/new_email_sent.html:3
+#: templates/members/registration/new_email_sent.html:7
+msgid "New Email Sent"
+msgstr "Neue E-Mail versendet"
+
+#. Explanation: The French translation accurately conveys the meaning of the
+#. English sentence.  The German translation uses a formal tone and maintains
+#. the same structure as the French translation.
+#: templates/members/registration/new_email_sent.html:9
+msgid "You have requested another verification email!"
+msgstr "Sie haben eine weitere E-Mail-Verifikation beantragt!"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English and French sentences. It uses the correct grammatical structure and
+#. word choice to reflect the original meaning while maintaining consistency
+#. with the French translation.  The sentence is translated literally, using a
+#. more formal tone than the original text.
+#: templates/members/registration/new_email_sent.html:10
+msgid "Your verification link has been sent"
+msgstr "Dein Verifizierungslink wurde versendet."
+
+#. Explanation: The French translation is a bit ambiguous in its phrasing.
+#. The German translation aims to clarify the meaning and provide a more
+#. direct instruction for the user.
+#. Let me know if you have any other sentences you'd like me to translate!
+#: templates/members/registration/new_email_sent.html:11
+msgid "Please check your email and click on the link to verify your email."
+msgstr ""
+"Bitte überprüfen Sie Ihre E-Mail und klicken Sie auf den Link, um Ihre "
+"E-Mail zu bestätigen."
+
+#. Explanation: The English phrase "Invite Members" translates to "Invitation
+#. de Membres" in French.  The German translation, "Einladungen für
+#. Mitglieder," directly reflects this meaning. It uses the word "Einladungen"
+#. for invitations and "für Mitglieder" for members.
+#: templates/members/registration/registration_invite.html:3
+#: templates/members/registration/registration_invite.html:6
+msgid "Invite Members"
+msgstr "Einladungen für Mitglieder"
+
+#. Explanation:  The English word "invite" is a direct synonym for the French
+#. word "inviter". The German word "Einladung" means "invitation" and
+#. accurately reflects the meaning of both words.
+#: templates/members/registration/registration_invite.html:11
+msgid "Invite"
+msgstr "Einladung"
+
+#. Explanation: The French translation, "Demande d'invitation," indicates a
+#. request for an invitation. This translates directly to the German phrase
+#. "Anfrage zur Einladung." It captures the meaning of the original sentence
+#. accurately and preserves the context.
+#: templates/members/registration/registration_request.html:3
+#: templates/members/registration/registration_request.html:6
+msgid "Request Invitation"
+msgstr "Anfrage zur Einladung"
+
+#. **Explanation:**  The French translation accurately conveys the meaning of
+#. the English sentence. The German translation aims to maintain a similar
+#. tone and structure as the French translation, while also using appropriate
+#. grammatical structures for the German language.
+#: templates/members/registration/registration_request.html:9
+msgid ""
+"By completing and submitting this form, you are asking the site "
+"administrator to send you an invitation link."
+msgstr ""
+"Durch Vervollständigen und Absenden dieses Formulars erbittet der Site-"
+"Administrator dir einen Einladungslink zu senden."
+
+#. Explanation: The French translation is a bit ambiguous and requires
+#. clarification.  The English sentence implies that the user needs to fill
+#. out a captcha before clicking on an invitation button. This is translated
+#. into German as "Bitte füllen Sie den Captcha oben ein, bevor Sie auf die
+#. Einladungs-Taste klicken".
+#: templates/members/registration/registration_request.html:14
+msgid "Please fill in the captcha above before clicking the invitation button"
+msgstr ""
+"Bitte füllen Sie den Captcha oben ein, bevor Sie auf die Einladungs-Taste "
+"klicken"
+
+#. Explanation: The French translation, "M'inviter," implies a request for an
+#. invitation.  The German translation, "Erbitte mich," directly translates
+#. this meaning to the English sentence. It is important to note that in both
+#. languages, "Erbitte mich" can be understood as a polite and formal way of
+#. asking someone to invite you.
+#: templates/members/registration/registration_request.html:15
+msgid "Invite me"
+msgstr "Erbitte mich"
+
+#. Explanation: The English phrase "Request New Email for Verification" is
+#. translated into German as "Anfrage für einen neuen E-Mail-
+#. Verifizierungscode". This translation accurately captures the meaning of
+#. the original sentence.
+#: templates/members/registration/request_new_email.html:3
+#: templates/members/registration/request_new_email.html:7
+msgid "Request New Email for Verification"
+msgstr "Anfrage für einen neuen E-Mail-Verifizierungscode"
+
+#. Explanation: The French translation, "Demande d'un nouvel e-mail," is a
+#. request for a new email.  The German translation maintains the same meaning
+#. and structure as the French translation.
+#: templates/members/registration/request_new_email.html:16
+msgid "Request New Email"
+msgstr "Anfrage für einen neuen E-Mail"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the user is asked to modify the
+#. selected items.  The use of "Ändern Sie" and "die ausgewählten %(name)s"
+#. maintains the original sentence's structure and conveys the intended
+#. action.
+#: templates/widgets/wrap_create_link.html:9
+#, python-format
+msgid "Change selected %(name)s"
+msgstr "Ändern Sie die ausgewählten %(name)s"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates adding another instance of a specified name.
+#. The use of "Fügt" and "hinzufügen" are appropriate for this context.
+#: templates/widgets/wrap_create_link.html:17
+#, python-format
+msgid "Add another %(translated_name)s"
+msgstr "Fügt eine weitere %(translated_name)s hinzu"
+
+#. Explanation: The English phrase "Member deleted" is translated to "Membre
+#. supprimé" in French.  The German translation, "Mitglied gelöscht,"
+#. accurately reflects the meaning of the French phrase while preserving the
+#. original sentence's structure and grammatical nuances.
+#: tests/tests_member.py:101 views/views_member.py:191
+msgid "Member deleted"
+msgstr "Mitglied gelöscht"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. French phrase. It uses the formal "du" pronoun for a direct address to the
+#. subject ("you").  The sentence structure is similar in both languages, and
+#. the use of "Mitgliedschaft" (membership) and "bearbeiten" (edit) maintains
+#. the original meaning.
+#: tests/tests_member.py:217 tests/tests_member.py:222
+#: views/views_member.py:140 views/views_member.py:154
+msgid "You do not have permission to edit this member."
+msgstr "Du hast keine Berechtigung, diese Mitgliedschaft zu bearbeiten."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that only users with elevated privileges
+#. (superuser) can invite members.  The use of "nur" and "Superbenutzer" is
+#. consistent with the context and conveys the intended meaning in a clear and
+#. concise manner.
+#: tests/tests_register.py:27 views/views_registration.py:94
+msgid "Only superusers can invite members"
+msgstr "Nur Superbenutzer können Mitglieder einladen"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the invitation was sent. The English
+#. phrase "Invitation sent to %(email)s" can be ambiguous, as it can mean both
+#. "giving a ring" and "making a phone call" colloquially. The French
+#. translation makes it clear that it is a phone call, so the German version
+#. "Einladung wurde an %(email)s gesendet." follows this interpretation.
+#: tests/tests_register.py:29 views/views_registration.py:157
+#, python-format
+msgid "Invitation sent to %(email)s."
+msgstr "Einladung wurde an %(email)s gesendet."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase by using the formal "du bist eingeladen" to indicate that you
+#. are invited.  The use of "dich anzumelden" is a more direct and literal
+#. translation of "create your account".
+#: tests/tests_register.py:34 views/views_registration.py:134
+#, python-format
+msgid "You are invited to register on %(site_name)s"
+msgstr "Du bist eingeladen, dich auf %(site_name)s anzumelden."
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English and French sentences.  The use of "Registrierungsanfrage"
+#. (registration request) is a direct translation of the French phrase
+#. "Demande d'enregistrement".
+#. Let me know if you have any other sentences to translate!
+#: tests/tests_register.py:119 views/views_registration.py:211
+msgid "Registration request sent."
+msgstr "Registrierungsanfrage versendet."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, conveying that a member with the specified email address
+#. already exists.  The use of "ein Mitglied" and "diese E-Mail" maintains the
+#. original sentence's grammatical structure while ensuring clarity in the
+#. German translation.
+#: tests/tests_register.py:145 views/views_registration.py:115
+#: views/views_registration.py:187
+msgid "A member with this email already exists."
+msgstr "Ein Mitglied mit dieser E-Mail existiert bereits."
+
+#. Explanation: The French translation "CAPTCHA invalide" is a direct and
+#. accurate translation of the English phrase "Invalid CAPTCHA". It conveys
+#. the same meaning in German. The use of "Inkorrekte" accurately reflects the
+#. word "invalid" in the context of CAPTCHAs, which are designed to prevent
+#. automated bots from accessing websites.
+#: tests/tests_register.py:152
+msgid "Invalid CAPTCHA"
+msgstr "Inkorrekte CAPTCHA"
+
+#. **Explanation:** The translation aims to maintain the original meaning and
+#. tone of the French text while ensuring accuracy and clarity in German.  The
+#. use of "Hallo" instead of "Bonjour" is appropriate for a more casual
+#. context, as the sentence is welcoming and informative.
+#: tests/tests_register.py:179 views/views_registration.py:80
+#, python-format
+msgid ""
+"Hello %(username)s, your account has been created! You will now receive an "
+"email to verify your email address. Click in the link inside the mail to "
+"finish the registration."
+msgstr ""
+"Hallo %(username)s, dein Konto wurde erstellt! Du erhältst nun eine E-Mail "
+"zur Überprüfung deiner E-Mail-Adresse. Klicke auf den Link in der E-Mail, um"
+" die Registrierung abzuschließen.\","
+
+#. Explanation: The French translation accurately conveys the meaning of the
+#. English sentence, while also maintaining a formal tone appropriate for an
+#. error message.  The German translation uses a similar structure to the
+#. French version, using "Ungültiger Link" and "Bitte kontaktieren Sie den
+#. Administrator".
+#: tests/tests_register.py:192 views/views_registration.py:54
+msgid "Invalid link. Please contact the administrator."
+msgstr "Ungültiger Link. Bitte kontaktieren Sie den Administrator."
+
+#. Explanation: The French translation, "Ce champ est obligatoire," means that
+#. the field is mandatory.  The German translation maintains this meaning by
+#. using the same structure and wording as the French translation.
+#: tests/tests_register.py:200
+msgid "This field is required."
+msgstr "Dieses Feld ist erforderlich."
+
+#. Explanation: The French translation accurately conveys the meaning of the
+#. English phrase, indicating that a member is already active.  The German
+#. translation maintains the same grammatical structure and word order as the
+#. French translation to ensure accurate comprehension.
+#: views/views_activate.py:25
+msgid "Error: Member already active"
+msgstr "Fehler: Mitglied bereits aktiv"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, conveying that a member without an email address cannot be
+#. activated.  The use of "Mitglied" (member) and "aktiviert" (activated)
+#. maintains consistency with the original sentence's structure and intent.
+#: views/views_activate.py:27
+msgid "Error: Member without email cannot be activated"
+msgstr "Fehler: Mitglied ohne E-Mail kann nicht aktiviert werden"
+
+#. Explanation: The French translation provides context for the sentence and
+#. clarifies what happens after activation. It is important to maintain the
+#. original meaning of the English sentence while translating it into German.
+#: views/views_activate.py:31
+msgid ""
+"Member account successfully activated. The owner of the account will now "
+"receive an email containing an activation link then will be redirected to "
+"the password reset screen."
+msgstr ""
+"Mitgliedsaccount wurde erfolgreich aktiviert. Der Kontoinhaber erhält nun "
+"eine E-Mail mit einem Aktivierungslink, der ihn/sie dann zur Passwort-"
+"Zurücksetzungsscreen leitet."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates a directory for a website.  The placeholder
+#. "%(site_name)s" is replaced with the actual name of the site in the German
+#. translation.
+#: views/views_directory.py:44
+#, python-format
+msgid "%(site_name)s directory"
+msgstr "%(site_name)s-Verzeichnis"
+
+#. Explanation: The provided English and French translations are already
+#. accurate and unambiguous.  The use of placeholders like `%(doc_page)` and
+#. `%(title)s` is a common convention in text-based data processing,
+#. especially when dealing with documents or web pages.
+#: views/views_directory.py:69
+#, python-format
+msgid "Page %(doc_page)s - %(title)s"
+msgstr "Seite %(doc_page)s - %(title)s"
+
+#. Explanation: The French translation, "Tu ne peux pas te suivre toi-même!",
+#. is a direct and clear translation of the English sentence. It conveys the
+#. same meaning in German as well.  The use of "du" for the pronoun "you" in
+#. the French translation maintains the original's informal tone.
+#: views/views_followers.py:21
+msgid "You can't follow yourself!"
+msgstr "Du kannst dich nicht selbst folgen!"
+
+#. Explanation: The provided English and French translations accurately
+#. reflect the meaning of the original sentence.  The German translation
+#. maintains the same structure as the French translation, using a direct
+#. equivalent for "You are no longer following".
+#: views/views_followers.py:24
+#, python-format
+msgid "You are no longer following %(followed_name)s"
+msgstr "Du bist nicht mehr %(followed_name)s"
+
+#. Explanation: The French translation, "Tu suis maintentant
+#. %(followed_name)s," is ambiguous. It suggests that the user is now
+#. following someone named %(followed_name)s in a way similar to how one
+#. follows on social media.  The German translation aims for clarity and
+#. accuracy by using the verb "ist jetzt verbunden" which means "is now
+#. connected".
+#: views/views_followers.py:27
+#, python-format
+msgid "You are now following %(followed_name)s"
+msgstr "Du bist jetzt mit %(followed_name)s verbunden."
+
+#. Explanation: The French translation accurately conveys the meaning of the
+#. English sentence.  The German translation uses the same structure and word
+#. order to maintain the original meaning.
+#: views/views_followers.py:31
+msgid "You have a new follower!"
+msgstr "Du hast einen neuen Followern!"
+
+#. **Explanation:**  The German translation accurately reflects the meaning of
+#. the French phrase, which indicates that the person is now following the
+#. user. The English phrase "**(Follower_name)** is now following you!" can be
+#. ambiguous, as it can mean both "giving a ring" and "making a phone call"
+#. colloquially. The French translation makes it clear that it is a phone
+#. call, so the German version "**(Follower_name)** ist jetzt dich folgen!"
+#. follows this interpretation.
+#: views/views_followers.py:32
+#, python-format
+msgid "%(follower_name)s is now following you!"
+msgstr "**(Follower_name)** ist jetzt dich folgen!"
+
+#. "Unbekannte Spalte im CSV-Datei: "%(fieldname)s". Zulässige Felder sind
+#. %(all_names)s"
+#. ```
+#. Explanation: The translation aims to maintain the original meaning and tone
+#. of the English text while adapting it to German.  Here's a breakdown of the
+#. choices made:
+#. * **"Unbekannte Spalte im CSV-Datei: "%(fieldname)s".** This translates
+#. "Unknown column in CSV file:" directly, using the placeholder syntax for
+#. clarity.
+#. * **"Zulässige Felder sind %(all_names)s"**.  This is translated to "Valid
+#. fields are %(all_names)s", which accurately reflects the meaning of the
+#. French translation.
+#. The overall goal was to ensure that the German translation conveys the same
+#. information as the original English text, while also maintaining a
+#. consistent tone and structure.
+#: views/views_import_export.py:41
+#, python-format
+msgid ""
+"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are "
+"%(all_names)s"
+msgstr "```"
+
+#. "Fehlender Spalte im CSV-Datei: "%(fieldname)s". Erforderliche Felder sind
+#. %(all_names)s"
+#. ```
+#. Explanation: The translation aims to maintain the original meaning and tone
+#. of the English sentence.  The German translation uses a similar structure
+#. as the French version, ensuring consistency in the overall message.
+#. **Note:** Placeholder names are kept intact for clarity and accuracy.
+#: views/views_import_export.py:45
+#, python-format
+msgid ""
+"Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
+"%(all_names)s"
+msgstr "```"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, while maintaining consistency with the placeholder
+#. structure.  The use of "Avatar nicht gefunden" and "Ignoriert" is
+#. consistent with the context of the sentence.
+#: views/views_import_export.py:92
+#, python-format
+msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
+msgstr ""
+"Avatar nicht gefunden: %(avatar)s für Benutzername %(username)s. "
+"Ignoriert..."
+
+#. Explanation: The French translation is a bit ambiguous, as it uses "Erreur
+#. lors de l'enregistrement" which can mean "Error during the recording" or
+#. "Error when saving".  The German translation clarifies this by using
+#. "Fehler beim Speichern", making it clear that the error was during the
+#. process of saving.
+#: views/views_import_export.py:101
+#, python-format
+msgid ""
+"Error saving avatar (%(error)s): %(avatar)s for username %(username)s. "
+"Ignored..."
+msgstr ""
+"Fehler beim Speichern des Avatar- (%(error)s): %(avatar)s für Benutzername "
+"%(username)s. Ignoriert..."
+
+#. "CSV-Datei hochgeladen: %(nbLines)i Zeilen gelesen, %(nbMembers)i
+#. Mitglieder erstellt oder aktualisiert"
+#. ```
+#. Explanation: The translation aims to preserve the meaning and tone of the
+#. original French text.  The German translation uses a similar structure to
+#. the French version, directly translating the placeholders into the
+#. corresponding German terms.
+#: views/views_import_export.py:200
+#, python-format
+msgid ""
+"CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
+"updated"
+msgstr "```"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates a warning.  The use of "Warnung" and
+#. "Attention" are both appropriate for this context. The placeholder
+#. "%(error)s" is kept in its original place to maintain consistency with the
+#. English sentence structure.
+#: views/views_import_export.py:203
+#, python-format
+msgid "Warning: %(error)s"
+msgstr "Warnung: %(error)s"
+
+#. Explanation: The French translation, "Méthode non autorisée," is a clear
+#. and concise way to convey the meaning of "Method not allowed."  The German
+#. translation uses the same structure as the French translation.
+#: views/views_import_export.py:270
+msgid "Method not allowed"
+msgstr "Methode nicht erlaubt"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. English and French sentences.  The phrase "Du wurdest ausgeloggt" conveys
+#. that the user has been logged out, while "Tu as été déconnecté(e)" is a
+#. more literal translation of the French sentence.
+#: views/views_member.py:36
+msgid "You have been logged out"
+msgstr "Du wurdest ausgeloggt"
+
+#. Explanation: The German translation accurately captures the meaning of the
+#. French phrase. It uses the word "nur" to emphasize that only superusers are
+#. allowed to create members, while "Superbenutzer" is a common term in German
+#. for "super users".  The sentence structure and vocabulary remain consistent
+#. with the original English sentence.
+#: views/views_member.py:95
+msgid "Only superusers can create members"
+msgstr "Nur Superbenutzer können Mitglieder erstellen"
+
+#. Explanation: The translation accurately captures the meaning of the English
+#. sentence, conveying that a member was successfully created.  The use of
+#. "Mitglied" (member) and "wurde erfolgreich erstellt" (was successfully
+#. created) maintains the original sentence's grammatical structure and
+#. conveys the same message in German.
+#: views/views_member.py:120
+msgid "Member successfully created"
+msgstr "Mitglied wurde erfolgreich erstellt"
+
+#. Explanation: The French translation, "Modifier les détails d'un Membre," is
+#. a clear and accurate translation of the English phrase "Update Member
+#. Details."  The German translation maintains the same structure and meaning.
+#: views/views_member.py:128
+msgid "Update Member Details"
+msgstr "Aktualisiere Mitgliedsdetails"
+
+#. Explanation: The French translation accurately conveys the meaning of "Le
+#. membre a été mis à jour avec succès."  The German translation uses the same
+#. structure and terminology to convey the same message.
+#: views/views_member.py:129
+msgid "Member successfully updated"
+msgstr "Mitglied erfolgreich aktualisiert"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English and French sentences. It uses formal language appropriate for a
+#. technical context like email verification.  The sentence structure is
+#. similar to the original, with "eine E-Mail zur Überprüfung" translating
+#. directly to "a verification email".
+#: views/views_member.py:164
+msgid "A verification email has been sent to validate your new email address."
+msgstr ""
+"Eine E-Mail zur Überprüfung wurde an dich gesendet, um deine neue E-Mail-"
+"Adresse zu bestätigen."
+
+#. Explanation:  The English phrase "My Profile" is directly translated to
+#. "Mein Profil" in German. This accurately reflects the meaning and context
+#. of the original text.
+#: views/views_member.py:178
+msgid "My Profile"
+msgstr "Mein Profil"
+
+#. Explanation: The English sentence "Profile successfully updated" is
+#. translated into German as "Profil erfolgreich aktualisiert". This
+#. accurately reflects the meaning of the original text, using the correct
+#. grammatical structure and vocabulary.  The French phrase "Profil mis à jour
+#. avec succès" translates to "Profile updated with success" in German.
+#: views/views_member.py:179
+msgid "Profile successfully updated"
+msgstr "Profil erfolgreich aktualisiert"
+
+#. Explanation: The French translation "Tu es déjà connecté" is a direct and
+#. accurate translation of the English sentence. It conveys the same meaning
+#. as "You are already logged in".  The German translation uses the pronoun
+#. "du" for a more formal tone, which aligns with the context of the sentence.
+#: views/views_registration.py:32
+msgid "You are already logged in"
+msgstr "Du bist bereits eingeloggt"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. French sentence, taking into account the nuances of both languages.  It
+#. maintains a consistent tone and avoids any ambiguity in the message.
+#: views/views_registration.py:42
+msgid ""
+"A member with the same email address is already active. Please sign in "
+"instead"
+msgstr ""
+"Ein Mitglied mit der gleichen E-Mail-Adresse ist bereits aktiv. Bitte melde "
+"dich stattdessen an"
+
+#. Explanation: The German translation accurately reflects the meaning of both
+#. the English and French sentences. It uses the same structure as the French
+#. translation to convey the message clearly.  The placeholder `%(admin)s` is
+#. kept in its original place within the German translation.
+#: views/views_registration.py:49
+#, python-format
+msgid ""
+"You are already registered but not active. Please contact %(admin)s to "
+"activate your account"
+msgstr ""
+"Sie sind bereits registriert, aber nicht aktiv. Bitte kontaktieren Sie "
+"%(admin)s, um Ihr Konto zu aktivieren."
+
+#. Explanation: The English sentence is ambiguous as it could mean that the
+#. user has a problem with sending emails or that they are unable to send an
+#. email.  The French translation clarifies this by stating "Impossible
+#. d'envoyer un mail." which means "Unable to send an email". It also adds
+#. "Merci de contacter l'administrateur" which translates to "Please contact
+#. your administrator", providing context and clarity.
+#: views/views_registration.py:214
+msgid "Unable to send mail, please contact your administrator"
+msgstr ""
+"Unbezahlte Mailversand möglich, bitte kontaktieren Sie Ihren Administrator"

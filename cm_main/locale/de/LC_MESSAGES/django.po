@@ -1,0 +1,974 @@
+# French translation of cousins_matter.
+# Copyright (C) 2024 Olivier LEVILLAIN <olivier@levillain.eu>
+# This file is distributed under the same license as the Cousins Matter package.
+# <olivier@levillain.eu>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Cousins Matter 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-07 20:09+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Auto-po-lyglot (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: French <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Explanation: This is a direct translation of the English phrase, capturing
+#. its meaning and tone. The French translation "Les Cousins Comptent!"
+#. conveys the same sentiment as "Cousins Matter!" in a clear and concise
+#. manner. It emphasizes the significance of family ties and relationships
+#. within the context of cousins.
+#: cm_main/apps.py:8
+msgid "Cousins Matter!"
+msgstr "Cousins Matter!"
+
+#. Explanation: The provided sentence is a template for describing a new
+#. object.  The German translation maintains the same structure and uses
+#. "Neuer" to indicate "new".  The placeholders are kept in their original
+#. position, as they are crucial for understanding the context of the
+#. sentence.
+#: cm_main/followers.py:61 cm_main/tests/tests_followers.py:80
+#, python-format
+msgid "New %(followed_type)s \"%(followed_object_name)s\""
+msgstr "Neuer %(followed_type)s %(followed_object_name)s"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, using placeholders to maintain the original sentence
+#. structure.  The use of "hat" and "Erstellt" is consistent with the context
+#. and maintains the grammatical structure of the original sentence.
+#: cm_main/followers.py:65
+#, python-format
+msgid ""
+"%(follower_name)s has created a new %(followed_type)s "
+"\"%(followed_object_name)s\""
+msgstr ""
+"**(Follower_name)** hat ein neues **(followed_type)** erstellt: "
+"**(followed_object_name)**"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, while preserving the original sentence structure and
+#. placeholders.  The use of "ein" for "a new" and "wurde" for "was added"
+#. maintains consistency with the original text's tone and style.
+#: cm_main/followers.py:70 cm_main/tests/tests_followers.py:92
+#, python-format
+msgid "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
+msgstr ""
+"Ein neues %(obj_type)s wurde zum %(followed_type)s hinzugefügt: "
+"%(followed_object_name)s"
+
+#. **Explanation:**  The provided text is a placeholder-based translation. The
+#. placeholders are crucial to understanding the sentence's meaning.
+#. * **Placeholders:**
+#.     * `%(follower_name)s`: Represents the name of the person adding the new
+#. object.
+#.     * `%(obj_type)s`: Represents the type of object being added.
+#.     * `%(followed_type)s`: Represents the category or context where the
+#. object is being added (e.g., "profile", "project").
+#.     * `%(followed_object_name)s`: Represents the name of the specific
+#. object being added.
+#. * **Translation:** The German translation accurately reflects the meaning
+#. of the French phrase by using the placeholders to represent the actual
+#. objects and categories in the sentence.  The use of "hat" for "a ajouté"
+#. and "hinzugefügt" for "added" is a common way to translate this type of
+#. sentence.
+#: cm_main/followers.py:75
+#, python-format
+msgid ""
+"%(follower_name)s has added a new %(obj_type)s in the %(followed_type)s "
+"\"%(followed_object_name)s\""
+msgstr ""
+"**(follower_name)** hat einen neuen **%(obj_type)** in der "
+"**%(followed_type)** hinzugefügt: **%(followed_object_name)**"
+
+#. Explanation: The German translation aims to capture the meaning of the
+#. French phrase while maintaining a consistent grammatical structure.  The
+#. use of "Du bist nicht mehr" conveys that the subject is no longer following
+#. something, and "Folge dieser {followed_type}" clarifies the specific type
+#. of content being referred to.
+#: cm_main/followers.py:108
+#, python-brace-format
+msgid "You are no longer following this {followed_type}"
+msgstr "Du bist nicht mehr Folge dieser {followed_type}"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the person is now following a specific
+#. type.  The use of "folgst" and "ist" in the sentence maintains consistency
+#. with the context of the original text.
+#: cm_main/followers.py:111
+#, python-brace-format
+msgid "You are now following this {followed_type}"
+msgstr "Du folgst jetzt dieser {followed_type}."
+
+#. Explanation: The German translation aims to maintain the meaning and tone
+#. of the French translation.  The use of "Neuer Follower" (new follower),
+#. "für dein %(followed_type)s" (for your %(followed_type)s), and
+#. "%(followed_object_name)s" directly translates the placeholder names into
+#. their corresponding German equivalents, while also maintaining a consistent
+#. structure with the French translation.
+#: cm_main/followers.py:119 cm_main/tests/tests_followers.py:29
+#, python-format
+msgid "New follower to your %(followed_type)s \"%(followed_object_name)s\""
+msgstr "Neuer Follower für dein %(followed_type)s: %(followed_object_name)s"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the person is now following a specific
+#. type of user.  The use of placeholders like "(follower_name)" and
+#. "(followed_type)" in the original sentence are retained in the German
+#. translation to maintain consistency with the context.
+#: cm_main/followers.py:121
+#, python-format
+msgid ""
+"%(follower_name)s is now following your %(followed_type)s "
+"\"%(followed_object_name)s\""
+msgstr ""
+"**(Follower_name)s ist jetzt dein %(followed_type)s "
+"**%(followed_object_name)s**"
+
+#. Explanation: The translation accurately reflects the meaning of the English
+#. and French sentences.  "Ton message" is a direct translation of "Your
+#. message" in French, while "Dein Nachricht" uses German word order to
+#. reflect the same meaning.
+#: cm_main/forms.py:8
+msgid "Your message"
+msgstr "Dein Nachricht"
+
+#. Explanation: The French translation, "Merci d'être bref et d'éviter les
+#. images," is a request for brevity in communication.  The German translation
+#. maintains the same meaning and tone while using the appropriate word order
+#. and structure.
+#: cm_main/forms.py:9
+msgid "Please keep it short and avoid images."
+msgstr "Bitte halten Sie es kurz und vermeiden Sie Bilder."
+
+#. Explanation: The French translation, "Attacher un fichier," means "attach a
+#. file."  The German translation "Verknüpfen Sie ein Datei" uses the same
+#. meaning as the French translation.
+#. Let me know if you have any other sentences you'd like to translate!
+#: cm_main/forms.py:10
+msgid "Attach file"
+msgstr "Verknüpfen Sie ein Datei"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English and French sentences.  It uses the appropriate word order and
+#. grammatical structure to reflect the intended meaning.
+#: cm_main/forms.py:11
+msgid "You can attach a file here if needed"
+msgstr "Du kannst hier ein Dokument anhängen, wenn nötig"
+
+#. Explanation:  The English phrase "Site Statistics" is translated into
+#. German as "Website-Statistiken". This accurately reflects the meaning of
+#. the original text. The use of "Website" in German is a direct translation
+#. of "site," and "Statistiken" means statistics.
+#: cm_main/templates/cm_main/about/site-stats.html:3
+#: cm_main/templates/cm_main/about/site-stats.html:6
+msgid "Site Statistics"
+msgstr "Website-Statistiken"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English and French sentences.  It maintains the same structure and uses
+#. appropriate terminology for a website context.
+#: cm_main/templates/cm_main/about/site-stats.html:7
+msgid "This page displays some statistics about this site:"
+msgstr "Diese Seite zeigt einige Statistiken über diese Website an:"
+
+#. Explanation:  The English word "statistics" is directly translated to the
+#. German word "Statistiken". This is a straightforward and accurate
+#. translation.
+#. Let me know if you have any other sentences you'd like me to translate!
+#: cm_main/templates/cm_main/about/site-stats.html:9
+msgid "Statistics"
+msgstr "Statistiken"
+
+#. Explanation: "Home" in English is a general term for a place of residence.
+#. "Accueil" in French translates to "home" as well, but it can also be used
+#. more broadly to mean "welcome" or "entrance." The context provided by the
+#. French translation helps us understand that the word "Home" refers to a
+#. place of residence.
+#: cm_main/templates/cm_main/base.html:8
+msgid "Home"
+msgstr "Heim"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the website was built with pride.  The
+#. English phrase "proudly built" can be ambiguous in terms of the specific
+#. method used to build the site, so the German version "Diese Website stolz
+#. gebaut mit" follows this interpretation.
+#: cm_main/templates/cm_main/base.html:68
+msgid "This site proudly built using"
+msgstr "Diese Website stolz gebaut mit"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the code is under a license.  The
+#. English phrase "The source code is licensed" can be ambiguous as it can
+#. mean both "giving a ring" and "making a phone call" colloquially. The
+#. French translation makes it clear that it is a phone call, so the German
+#. version "Die Quellcode ist lizenziert" follows this interpretation.
+#: cm_main/templates/cm_main/base.html:70
+msgid "The source code is licensed"
+msgstr "Die Quellcode ist lizenziert"
+
+#. Explanation: The provided English and French translations accurately
+#. reflect the meaning of the original text.  The German translation uses the
+#. standard copyright symbol (©) and includes the specific year, as well as
+#. the phrase "Alle Rechte vorbehalten," which translates to "All rights
+#. reserved" in English.
+#: cm_main/templates/cm_main/base.html:76
+msgid "Copyright © 2024 Cousins Matter. All rights reserved."
+msgstr "Urheberrecht © 2024 Cousins Matter. Alle Rechte vorbehalten."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the user should contact the
+#. administrator of the website.  The use of "Kontaktiere" and "Site-
+#. Administrator" maintains the original intent and context.
+#: cm_main/templates/cm_main/base.html:79
+#: cm_main/templates/cm_main/navbar.html:116
+msgid "Contact the site admin"
+msgstr "Kontaktiere den Site-Administrator"
+
+#. Explanation:  Both "Confirm" and "Confirmer" are generally used to indicate
+#. agreement or acceptance. The German word "Bestätigen" translates to
+#. "confirm" in a similar way to the English phrase, as it implies an act of
+#. verifying or endorsing something.
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:28
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:54
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#. Explanation:  "Cancel" and "Annuler" both mean to cancel or terminate
+#. something. The German word "Abbrechen" is a more direct translation of the
+#. English phrase, conveying the same meaning as "Cancel".
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:32
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:58
+#: cm_main/templates/cm_main/contact/contact-form.html:16
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#. Explanation: The translation aims to maintain the original meaning and tone
+#. of the French text. It uses a more direct and clear language, while also
+#. preserving the context provided by the placeholders.  The use of "Bitte
+#. geben Sie" ("Please enter") is a common way to request an action in German.
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:40
+#, python-format
+msgid ""
+"Enter \"<span class=\"has-text-danger\">%(expected_value)s</span>\" in the "
+"field below before pressing confirm"
+msgstr ""
+"Bitte geben Sie \"<span class=\\\"has-text-"
+"danger\\\">%(expected_value)s</span>\" in das Feld unten ein, bevor Sie "
+"bestätigen\","
+
+#. Explanation: The French translation clarifies that the deletion will only
+#. occur after a correct value is entered.  The German translation aims to
+#. maintain the same meaning and tone as the French version while using
+#. appropriate German grammar and vocabulary.
+#: cm_main/templates/cm_main/common/confirm-delete-modal.html:48
+msgid ""
+"Mandatory. Deletion will not take place until the correct value is entered."
+msgstr ""
+"Pflicht. Die Löschung findet erst statt, wenn die korrekte Wert eingegeben "
+"wird."
+
+#. Explanation: The English phrase "Toggle Note Editor Toolbar" is a command
+#. to show or hide the toolbar.  The French translation, "Afficher/Masquer la
+#. barre d'outils," translates this into German as "Schalten Sie die
+#. Notizbearbeitungs-Werkzeugleiste ein."
+#: cm_main/templates/cm_main/common/include-summernote.html:6
+msgid "Toggle Note Editor Toolbar"
+msgstr "Schalten Sie die Notizbearbeitungs-Werkzeugleiste ein"
+
+#. Explanation: The English phrase "Remaining characters:" is translated into
+#. German as "Verbleibende Zeichen:" This accurately reflects the meaning of
+#. the original text.  The term "Verbleibende" means "remaining" and "Zeichen"
+#. means "characters."
+#: cm_main/templates/cm_main/common/include-summernote.html:7
+msgid "Remaining characters:"
+msgstr "Verbleibende Zeichen:"
+
+#. Explanation: The French translation, "Items par page," is a direct and
+#. accurate representation of the English phrase "Items per page."  It uses
+#. the word "par" to indicate "per" in French. This translation maintains the
+#. meaning and clarity of the original sentence.
+#: cm_main/templates/cm_main/common/paginate_template.html:20
+msgid "Items per page:"
+msgstr "Items pro Seite:"
+
+#. Explanation:  The English phrase "go to first page" is translated directly
+#. into German as "Gehe zur ersten Seite". The French translation "aller à la
+#. 1ère page" is a more literal translation, while the German translation uses
+#. the verb "gehen" which means "to go", and "zur ersten Seite" specifies the
+#. direction.  This maintains the meaning of the original sentence in a clear
+#. and concise way.
+#: cm_main/templates/cm_main/common/paginate_template.html:40
+msgid "go to first page"
+msgstr "Gehe zur ersten Seite"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. English and French sentences.  The use of "Gehe" (go to) and "zur Seite"
+#. (to the page) is consistent with the context, while "Seite #%(page_num)s"
+#. maintains the placeholder format for accurate translation.
+#: cm_main/templates/cm_main/common/paginate_template.html:52
+#, python-format
+msgid "go to page #%(page_num)s"
+msgstr "Gehe zur Seite #%(page_num)s"
+
+#. Explanation: The provided English and French translations are already clear
+#. and unambiguous.  The German translation should maintain this clarity,
+#. using the same structure as the original sentences.
+#: cm_main/templates/cm_main/common/paginate_template.html:55
+#, python-format
+msgid "page #%(page_num)s"
+msgstr "Seite #%(page_num)s"
+
+#. Explanation: The English phrase "go to last page" is translated into German
+#. as "Gehe zur letzten Seite". This translates the meaning of going to the
+#. last page in a document.  The French translation "Aller à la dernière page"
+#. also conveys this meaning, but it's important to note that the German
+#. translation maintains the same grammatical structure and word order for
+#. clarity and consistency.
+#: cm_main/templates/cm_main/common/paginate_template.html:68
+msgid "go to last page"
+msgstr "Gehe zur letzten Seite"
+
+#. Explanation: The English term "Contact Form" is translated directly to
+#. "Formulaire de contact" in French.  The German word "Kontaktformular"
+#. accurately reflects the meaning of the English phrase, as it refers to a
+#. form used for contacting someone or something.
+#: cm_main/templates/cm_main/contact/contact-form.html:6
+#: cm_main/templates/cm_main/contact/contact-form.html:9
+msgid "Contact Form"
+msgstr "Kontaktformular"
+
+#. Explanation: The French translation is already quite clear and concise. I
+#. have translated the sentence to German while keeping the same structure and
+#. meaning as the French version.  The use of "Bitte ausfüllen Sie" means
+#. "Please fill out," and "mit dem Administrator dieser Website in Kontakt zu
+#. treten" means "to contact the administrator of this website."
+#: cm_main/templates/cm_main/contact/contact-form.html:10
+msgid "Please fill out the form below to contact the admin of this site:"
+msgstr ""
+"Bitte ausfüllen Sie das Formular unten, um mit dem Administrator dieser "
+"Website in Kontakt zu treten:"
+
+#. Explanation: The English word "send" is a verb that can be translated into
+#. German as "senden".  The context of the sentences provided, "Send" and
+#. "Envoyer," suggests a straightforward translation.
+#: cm_main/templates/cm_main/contact/contact-form.html:15
+msgid "Send"
+msgstr "Senden"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the sender sent a message from the
+#. specified website.  The use of placeholders like "%(sender_name)s" and
+#. "%(site_name)s" is crucial for maintaining the original sentence's
+#. structure and conveying the intended meaning in German.
+#: cm_main/templates/cm_main/contact/email-contact-form.html:19
+#: cm_main/tests/test_contactform.py:42
+#, python-format
+msgid "%(sender_name)s sent you the following message from %(site_name)s:"
+msgstr ""
+"%(sender_name)s hat dir den folgenden Text von %(site_name)s geschickt:"
+
+#. Explanation: The French translation clarifies the context of the English
+#. sentence.  The phrase "You can directly reply to this email" is translated
+#. into a more direct and clear German version. It emphasizes that the
+#. recipient should respond directly to the email for an answer.
+#: cm_main/templates/cm_main/contact/email-contact-form.html:26
+msgid "You can directly reply to this email to answer him/her."
+msgstr "Du kannst direkt auf diese E-Mail antworten, um ihn zu beantworten."
+
+#. Explanation: The provided text is a fragment of HTML code, and the
+#. placeholders are used to represent specific data.  The translation aims to
+#. maintain the original structure while preserving the meaning.
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:20
+#: cm_main/tests/tests_followers.py:84
+#, python-format
+msgid ""
+"%(author_name)s created the following %(followed_type)s <a "
+"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
+msgstr ""
+"**(author_name)s hat die folgenden %(followed_type)s erstellt: <a "
+"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
+
+#. Explanation: The translation aims to preserve the original sentence's
+#. structure and meaning.
+#. The placeholders are kept in their original positions, ensuring that they
+#. remain relevant for understanding the context of the sentence.
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:24
+#: cm_main/tests/tests_followers.py:97
+#, python-format
+msgid ""
+"%(author_name)s added the following %(obj_type)s on %(followed_type)s <a "
+"href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
+msgstr ""
+"%(author_name)s hat den folgenden %(obj_type)s auf %(followed_type)s "
+"hinzugefügt: <a "
+"href=\"%(followed_object_url)s\">%(followed_object_name)s</a>:"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English sentence. It uses the appropriate phrasing and grammatical
+#. structure to reflect the original message's intent.  The use of "Bitte
+#. antworten Sie nicht" emphasizes that the recipient should not reply, while
+#. "sie ist maschinell generiert" clarifies that the email is generated by a
+#. machine.
+#: cm_main/templates/cm_main/followers/email-followers-on-change.html:32
+#: cm_main/templates/cm_main/followers/new_follower.html:27
+msgid "Do not reply to this mail, it is machine generated."
+msgstr ""
+"Bitte antworten Sie nicht an diese E-Mail, sie ist maschinell generiert."
+
+#. Explanation: The provided English and French translations are both
+#. accurate.  The placeholder `%(nfollowers)s` is a variable that needs to be
+#. replaced with the actual number of followers in the original sentence. In
+#. German, we use "Mitglied" as the word for member.
+#: cm_main/templates/cm_main/followers/followers-count-tag.html:4
+#, python-format
+msgid "%(nfollowers)s member"
+msgid_plural "%(nfollowers)s members"
+msgstr[0] "%(nfollowers)s membre"
+msgstr[1] "%(nfollowers)s membres"
+
+#. Explanation: The provided text is a placeholder that needs to be translated
+#. into German.  The placeholder format is used for representing the number of
+#. followers in the sentence. It should remain as it is, without any
+#. translation or changes.
+#: cm_main/templates/cm_main/followers/followers-count-tag.html:10
+#, python-format
+msgid "%(nfollowers)s follower"
+msgid_plural "%(nfollowers)s followers"
+msgstr[0] "%(nfollowers)s follower"
+msgstr[1] "%(nfollowers)s followers"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, capturing the essence of "Your %(followed_type)s
+#. '%(followed_object_name)s' has a new follower!" while maintaining the same
+#. structure and grammatical elements.
+#: cm_main/templates/cm_main/followers/new_follower.html:14
+#, python-format
+msgid "Your %(followed_type)s '%(followed_object_name)s' has a new follower!"
+msgstr ""
+"Dein %(followed_type)s '%(followed_object_name)s' hat einen neuen Follower!"
+
+#. Explanation: The translation aims to reflect the original meaning of the
+#. sentence, which is about someone following another user on a specific
+#. platform.
+#. The use of "ist jetzt" and "dein" in German accurately conveys this idea.  
+#. The French translation's structure remains consistent with the English
+#. version, using similar phrasing for clarity.
+#: cm_main/templates/cm_main/followers/new_follower.html:22
+#: cm_main/tests/tests_followers.py:46
+#, python-format
+msgid ""
+"%(follower_name)s is now following your %(followed_type)s <a "
+"href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> on %(site_name)s"
+msgstr ""
+"**(follower_name)s ist jetzt dein %(followed_type)s <a "
+"href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> auf "
+"%(site_name)s\"**"
+
+#. Explanation: The English phrase "Stop Following" is translated into German
+#. as "Stopp Folgen". This accurately reflects the meaning of the French
+#. phrase, which means to stop following someone.  The word "Folgen" in German
+#. directly translates to "following" and is used to convey the same idea as
+#. "Arréter de suivre" in French.
+#: cm_main/templates/cm_main/followers/toggle-follow-button.html:4
+msgid "Stop Following"
+msgstr "Stopp Folgen"
+
+#. Explanation:  Both "follow" and "suivre" mean to pursue or keep up with
+#. something. The German word "folgen" is a direct translation of the English
+#. word "follow" in this context, conveying the same meaning as the French
+#. phrase "Suivre".
+#: cm_main/templates/cm_main/followers/toggle-follow-button.html:11
+msgid "Follow"
+msgstr "Folgen"
+
+#. Explanation: The English word "Members" is directly translated to the
+#. German word "Mitglieder".  This is a straightforward and accurate
+#. translation.
+#: cm_main/templates/cm_main/navbar.html:26 cm_main/views/views_stats.py:106
+msgid "Members"
+msgstr "Mitglieder"
+
+#. Explanation: The English word "Birthday" is a general term for the day
+#. someone was born.  The French word "Anniversaire" refers to a celebration
+#. of a person's birthday.
+#: cm_main/templates/cm_main/navbar.html:29
+msgid "Birthdays"
+msgstr "Geburtstag"
+
+#. Explanation: The English phrase "Show directory" is translated into German
+#. as "Zeige Verzeichnis". This translates the meaning of the English phrase
+#. accurately.
+#: cm_main/templates/cm_main/navbar.html:31
+msgid "Show directory"
+msgstr "Zeige Verzeichnis"
+
+#. Explanation: The English phrase "Create Member" is translated into German
+#. as "Erstellen Sie Mitglied". This accurately reflects the meaning of both
+#. phrases, conveying that a member should be created.  The use of "Mitglied"
+#. directly translates to "Member" in German.
+#: cm_main/templates/cm_main/navbar.html:34
+msgid "Create Member"
+msgstr "Erstellen Sie Mitglied"
+
+#. Explanation: The English phrase "Invite Member" can be interpreted in two
+#. ways. It could mean inviting someone to join a group or organization, or it
+#. could refer to sending an invitation for a specific event.  The French
+#. translation "Inviter un Membre" is more ambiguous and requires context to
+#. determine the exact meaning.
+#. For example, if the sentence refers to inviting someone to join a club,
+#. then "Einladung zum Mitglied werden" would be appropriate. If the sentence
+#. refers to an event, then "Inviter un Membre" might be better suited.
+#: cm_main/templates/cm_main/navbar.html:38
+msgid "Invite Member"
+msgstr "Einladung zum Mitglied werden"
+
+#. Explanation: The English word "Galleries" is a plural noun referring to
+#. spaces for displaying art.  The French word "Galeries" is also a plural
+#. noun, but it refers to the same concept of exhibition spaces.  Therefore,
+#. the translation should be consistent with this meaning.
+#: cm_main/templates/cm_main/navbar.html:45 cm_main/views/views_stats.py:114
+msgid "Galleries"
+msgstr "Gallerie"
+
+#. Explanation: The English phrase "Create Gallery" is translated directly
+#. into German as "Erstelle Galerie". This accurately reflects the meaning of
+#. both phrases.  The use of "Galerie" in French and "Gallery" in English
+#. maintains the same semantic structure, conveying the intent to create a
+#. gallery.
+#: cm_main/templates/cm_main/navbar.html:48
+msgid "Create Gallery"
+msgstr "Erstelle Galerie"
+
+#. Explanation:  The English phrase "Bulk Upload" refers to the process of
+#. transferring a large amount of data at once. The French translation,
+#. "Chargement en masse," directly translates this meaning into "Mass upload."
+#. Let me know if you have any other sentences you'd like me to translate!
+#: cm_main/templates/cm_main/navbar.html:50
+msgid "Bulk Upload"
+msgstr "Maschinelle Datenübertragung"
+
+#. Explanation: The English word "Forum" is already a clear and unambiguous
+#. term. It refers to an online or offline space for discussion, debate, or
+#. exchange of ideas.  The French translation maintains the same meaning.
+#: cm_main/templates/cm_main/navbar.html:56
+msgid "Forum"
+msgstr "Forum"
+
+#. Explanation:  The English phrase "Create Post" is translated to "Nouvelle
+#. Discussion" in French. This translates directly into the German phrase
+#. "Erstelle einen Beitrag". The meaning of this phrase is consistent with the
+#. context provided, as it refers to creating a new post or discussion.
+#: cm_main/templates/cm_main/navbar.html:59
+msgid "Create Post"
+msgstr "Erstelle einen Beitrag"
+
+#. Explanation: The English word "chat" can refer to a conversation or a type
+#. of animal.  The French translation, "Chat," is the most accurate and direct
+#. translation in this context. It preserves the original meaning without
+#. ambiguity.
+#: cm_main/templates/cm_main/navbar.html:64
+msgid "Chat"
+msgstr "Chat"
+
+#. Explanation: The English phrase "Public Chat Rooms" is translated into
+#. German as "Öffentliche Chaträume". This accurately reflects the meaning of
+#. both phrases.  The French term "Salons de discussion publique" translates
+#. to "public chat rooms" in German, preserving the original meaning and
+#. context.
+#: cm_main/templates/cm_main/navbar.html:67
+msgid "Public Chat Rooms"
+msgstr "Öffentliche Chaträume"
+
+#. Explanation: The English phrase "Private Chat Rooms" is translated into
+#. German as "Privat-Chat-Rooms". This accurately reflects the meaning of the
+#. original text, while also maintaining a consistent tone and style.  The
+#. French translation "Salons de discussion privée" provides context for
+#. understanding the meaning of the English phrase.
+#: cm_main/templates/cm_main/navbar.html:69
+msgid "Private Chat Rooms"
+msgstr "Privat-Chat-Rooms"
+
+#. Explanation: The French translation, "Editer les Pages," is a direct and
+#. accurate translation of the English phrase "Edit Pages."  The German
+#. translation, "Bearbeiten Sie Seiten," uses the verb "bearbeiten" (to edit)
+#. to accurately reflect the meaning.
+#: cm_main/templates/cm_main/navbar.html:91
+msgid "Edit Pages"
+msgstr "Bearbeiten Sie Seiten"
+
+#. Explanation: The English phrase "Import members from CSV" is translated
+#. into German as "Importiere Mitglieder aus CSV". This translates the meaning
+#. of the original sentence, which means to import members from a CSV file.
+#. The French translation "Importer des membres depuis un CSV" is used for
+#. context and helps clarify the meaning.
+#: cm_main/templates/cm_main/navbar.html:93
+msgid "Import members from CSV"
+msgstr "Importiere Mitglieder aus CSV"
+
+#. Explanation: The English phrase "Export Members as CSV" is translated into
+#. German as "Exportiere Mitglieder als CSV".  This accurately reflects the
+#. meaning and intent of the original sentence.
+#. Let me know if you have any other sentences you'd like to translate!
+#: cm_main/templates/cm_main/navbar.html:96
+msgid "Export Members as CSV"
+msgstr "Exportiere Mitglieder als CSV"
+
+#. Explanation: The English phrase "About the site" is translated into German
+#. as "Über den Site". This translates to "about the website" in English.  The
+#. word "über" means "about" or "regarding" in German, and it's used here to
+#. indicate that this is a description of the website itself.
+#: cm_main/templates/cm_main/navbar.html:114
+msgid "About the site"
+msgstr "Über den Site"
+
+#. Explanation:  "Sign in" is a general term for logging in, while "Connexion"
+#. is more specific to the act of connecting to a system or service. The
+#. German translation "Anmelden" captures the meaning of both terms and
+#. accurately reflects the intended action.
+#: cm_main/templates/cm_main/navbar.html:125
+msgid "Sign in"
+msgstr "Anmelden"
+
+#. Explanation: The French translation, "Demander un lien d'invitation,"
+#. translates to "Please request an invitation link" in German.  The English
+#. phrase "Request invitation link" is translated into a more idiomatic and
+#. natural-sounding German equivalent.
+#: cm_main/templates/cm_main/navbar.html:129
+msgid "Request invitation link"
+msgstr "Bitte um Einladungslink"
+
+#. Explanation: The English word "Profile" is a direct translation of the
+#. French word "Profil". Both words refer to a detailed description or
+#. representation of a person, place, or thing.  The context provided in the
+#. prompt does not require any further explanation.
+#: cm_main/templates/cm_main/navbar.html:138
+msgid "Profile"
+msgstr "Profil"
+
+#. Explanation:  The English phrase "Log Out" translates directly to
+#. "Déconnexion" in French. This is a common and unambiguous term for logging
+#. out of an account or system. The German translation accurately reflects the
+#. meaning of the English phrase.
+#: cm_main/templates/cm_main/navbar.html:140
+msgid "Log Out"
+msgstr "Ausloggen"
+
+#. Explanation: The French translation, "Ce champ est obigatoire," means that
+#. the field is mandatory.  The German translation maintains this meaning and
+#. uses a similar structure to the French sentence.
+#: cm_main/tests/test_contactform.py:23
+msgid "This field is required."
+msgstr "Dieses Feld ist erforderlich."
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English and French sentences.  It uses the correct grammatical structure
+#. for this type of statement.
+#: cm_main/tests/test_contactform.py:29 cm_main/views/views_contact.py:65
+msgid "Your message has been sent"
+msgstr "Ihre Nachricht wurde versendet."
+
+#. Explanation: The English phrase "Contact form" is translated directly into
+#. German as "Kontaktformular". This term accurately reflects the meaning of a
+#. form used for contacting someone or an organization.  It's a common and
+#. widely understood term in both languages.
+#: cm_main/tests/test_contactform.py:32 cm_main/views/views_contact.py:40
+msgid "Contact form"
+msgstr "Kontaktformular"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, capturing the essence of receiving a new message from a
+#. specific person.  The use of "Du" for the pronoun "You" in German aligns
+#. with the context and maintains the original sentence's tone and style.
+#: cm_main/tests/test_contactform.py:39 cm_main/views/views_contact.py:37
+#, python-format
+msgid "You have a new message from %(name)s (%(email)s). "
+msgstr "Du hast eine neue Nachricht von %(name)s (%(email)s)."
+
+#. Explanation: The French translation accurately conveys the meaning of the
+#. English sentence. It uses the appropriate pronoun "tu" for the second
+#. person singular, and the word "nouveau" means "new".  The German
+#. translation maintains this same structure and tone.
+#: cm_main/tests/tests_followers.py:27
+msgid "You have a new follower!"
+msgstr "Du hast einen neuen Follower!"
+
+#. Explanation: The French translation provides context for the sentence.  The
+#. German translation maintains the same structure and tone as the French
+#. translation while using appropriate German words and grammar.
+#: cm_main/tests/tests_followers.py:38
+#, python-format
+msgid ""
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a>"
+" is now following you on %(site_name)s!"
+msgstr ""
+"Hallo %(followed_name)s, <br><a "
+"href=\"%(follower_url)s\">%(follower_name)s</a> ist jetzt auf %(site_name)s "
+"gefolgt!\","
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French sentence. It captures the intended tone and conveys the same message
+#. as the original.  The use of "Aber" (But) and "kein" (no) in the German
+#. translation maintains a similar structure to the French sentence.
+#: cm_main/views/views_contact.py:41
+msgid "But your mailer tools is too old to show it :'("
+msgstr "Aber dein Mail-Tool ist zu alt, um es anzuzeigen :'("
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English sentence. It uses the same structure as the French translation,
+#. with a slight change in word order for grammatical consistency.  The phrase
+#. "Dieser Dateityp wird nicht unterstützt" directly translates to "This file
+#. type is not supported."
+#: cm_main/views/views_contact.py:60
+msgid "This file type is not supported"
+msgstr "Dieser Dateityp wird nicht unterstützt"
+
+#. Explanation: The English phrase "Media not found" is a common error
+#. message.  The German translation accurately conveys the meaning of "media
+#. not found," using the correct word for media ("Medien").
+#. Let me know if you have any other sentences you'd like me to translate!
+#: cm_main/views/views_general.py:33
+msgid "Media not found"
+msgstr "Medien nicht gefunden"
+
+#. Explanation: The English phrase "Version not found" is translated into
+#. German as "Versions nicht gefunden". This accurately reflects the meaning
+#. of the original text.  The use of "nicht gefunden" directly translates to
+#. "not found" in German, which aligns with the intended meaning.
+#: cm_main/views/views_stats.py:41 cm_main/views/views_stats.py:81
+msgid "Version not found"
+msgstr "Versions nicht gefunden"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. French phrase, "La version n'est pas à jour," while maintaining a similar
+#. tone and structure.  The use of "Ihre Version" (your version) in German
+#. reflects the context of the original sentence.
+#: cm_main/views/views_stats.py:55
+msgid "Your version is not up-to-date."
+msgstr "Ihre Version ist nicht aktuell."
+
+#. Explanation: The French translation provides context and clarifies the
+#. action required.  The German translation maintains this clarity by using a
+#. similar structure to the French translation.
+#: cm_main/views/views_stats.py:58
+msgid ""
+"Please update it by running the following command:<br><code>docker-start.sh "
+"-u</code>"
+msgstr ""
+"Bitte aktualisieren Sie es, indem Sie den folgenden Befehl "
+"ausführen:<br><code>docker-start.sh -u</code>"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the version is up-to-date.  The English
+#. phrase "Your version is up-to-date" can be ambiguous as it could mean
+#. either the software or the user's version is updated. The French
+#. translation clarifies that the version in question is current and therefore
+#. the German translation "Ihre Version ist aktuell." follows this
+#. interpretation.
+#: cm_main/views/views_stats.py:69
+msgid "Your version is up-to-date."
+msgstr "Ihre Version ist aktuell."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. English and French sentences.  The use of "Ihre Version" for "Your version"
+#. and "neueste Veröffentlichung" for "latest release" maintains consistency
+#. with the original text.
+#: cm_main/views/views_stats.py:75
+msgid "Your version is newer than the latest release (?!?)"
+msgstr "Ihre Version ist neuer als die neueste Veröffentlichung (?!?)"
+
+#. Explanation: The English word "site" can refer to a physical location, but
+#. in the context of websites, it is commonly used as a synonym for "website".
+#. The French translation "Site" is already accurate and unambiguous.
+#: cm_main/views/views_stats.py:97
+msgid "Site"
+msgstr "Website"
+
+#. Explanation: The English phrase "Site name" is a general term for the name
+#. of a website.  The French translation, "Nom du site," directly translates
+#. this meaning into French. It's important to note that in German, "Webseite-
+#. Name" is a more specific and accurate translation than simply "Website."
+#: cm_main/views/views_stats.py:99
+msgid "Site name"
+msgstr "Webseite-Name"
+
+#. Explanation:  The English phrase "Site URL" is a general term for the web
+#. address of a website. The French translation "URL du site" is more
+#. specific, referring to the actual internet address of a website.
+#: cm_main/views/views_stats.py:100
+msgid "Site URL"
+msgstr "Website-URL"
+
+#. Explanation: The English phrase "Application Version" is a clear and
+#. concise description of the software version.  The French translation,
+#. "Version de l'application," maintains this clarity and accurately conveys
+#. the meaning.
+#: cm_main/views/views_stats.py:101
+msgid "Application Version"
+msgstr "Anwendungsversion"
+
+#. Explanation: The French translation "Dernière version" means "the latest
+#. version."  The German translation "Die neueste Version" is a direct and
+#. accurate translation of the French phrase. It maintains the same meaning as
+#. the original sentence, conveying that it refers to the most recent release.
+#: cm_main/views/views_stats.py:102
+msgid "Latest release"
+msgstr "Die neueste Version"
+
+#. Explanation: The French translation, "Nombre total de membres," is a direct
+#. and accurate representation of the meaning.  The German translation uses
+#. the phrase "Gesamtzahl der Mitglieder" to convey the same idea as the
+#. French translation. This translates directly to "total number of members."
+#: cm_main/views/views_stats.py:108
+msgid "Total number of members"
+msgstr "Gesamtzahl der Mitglieder"
+
+#. Explanation: The English phrase "Number of active members" is translated
+#. into German as "Anzahl der aktiven Mitglieder". This accurately reflects
+#. the meaning and uses a direct equivalent for both the number and the term
+#. "members."  The French translation, "Nombre de membres actifs," provides
+#. context to the sentence.
+#: cm_main/views/views_stats.py:109
+msgid "Number of active members"
+msgstr "Anzahl der aktiven Mitglieder"
+
+#. Explanation: The English phrase "Number of managed members" is translated
+#. into German as "Anzahl der verwalteten Mitglieder". This accurately
+#. reflects the meaning of the original text, using a more literal and direct
+#. translation.  The French translation "Nombre de membres gérés" provides
+#. context for understanding the sentence's meaning.
+#: cm_main/views/views_stats.py:110
+msgid "Number of managed members"
+msgstr "Anzahl der verwalteten Mitglieder"
+
+#. Explanation: The English phrase "Number of galleries" is translated into
+#. German as "Anzahl der Galerien". This directly translates the meaning of
+#. the English phrase, accurately conveying the concept of counting or listing
+#. the number of galleries.
+#: cm_main/views/views_stats.py:116
+msgid "Number of galleries"
+msgstr "Anzahl der Galerien"
+
+#. Explanation: The French translation, "Nombre de photos," is a direct and
+#. accurate representation of the English phrase "Number of photos."  The
+#. German translation uses the word "Anzahl" for "number," which is a common
+#. way to express this concept in German.
+#: cm_main/views/views_stats.py:117
+msgid "Number of photos"
+msgstr "Anzahl der Fotos"
+
+#. Explanation: The English word "forums" is a direct translation of the
+#. French word "Forums".  The meaning and context are clear.
+#: cm_main/views/views_stats.py:121
+msgid "Forums"
+msgstr "Foren"
+
+#. Explanation: The English phrase "Number of posts" translates directly to
+#. "Anzahl der Beiträge" in German.  The word "Beiträge" means "contributions"
+#. or "posts". This is a common and accurate way to express the meaning in
+#. German.
+#: cm_main/views/views_stats.py:123
+msgid "Number of posts"
+msgstr "Anzahl der Beiträge"
+
+#. Explanation: The English phrase "Number of post messages" is translated
+#. into German as "Anzahl der Posts". This accurately reflects the meaning of
+#. the original phrase, which refers to the number of posts in a discussion.
+#: cm_main/views/views_stats.py:124
+msgid "Number of post messages"
+msgstr "Anzahl der Posts"
+
+#. Explanation: The English phrase "Number of message comments" is translated
+#. into German as "Anzahl der Nachrichtenkommentare". This translates the
+#. meaning of the original text accurately.  The word "Anzahl" means "number",
+#. and "Nachrichtenkommentare" refers to "message comments."
+#: cm_main/views/views_stats.py:125
+msgid "Number of message comments"
+msgstr "Anzahl der Nachrichtenkommentare"
+
+#. Explanation: The English word "chats" is a slang term for online chat
+#. rooms.  The French translation "Salons de discussion" means "discussion
+#. rooms," which accurately reflects the meaning of "Chats."
+#: cm_main/views/views_stats.py:129
+msgid "Chats"
+msgstr "Chats"
+
+#. Explanation: The English phrase "Number of chat rooms" is translated into
+#. German as "Anzahl der Chatrooms".  The word "Anzahl" means "number" in
+#. German, and "Chatrooms" is translated directly.
+#: cm_main/views/views_stats.py:131
+msgid "Number of chat rooms"
+msgstr "Anzahl der Chatrooms"
+
+#. Explanation: The English phrase "Number of public chat rooms" is translated
+#. into German as "Anzahl der öffentlichen Chatrooms".  The word "Anzahl"
+#. means "number" in German, and "öffentlichen" refers to the fact that these
+#. are public chat rooms.
+#: cm_main/views/views_stats.py:132
+msgid "Number of public chat rooms"
+msgstr "Anzahl der öffentlichen Chatrooms"
+
+#. Explanation: The English phrase "Number of private chat rooms" is
+#. translated into German as "Anzahl privater Chaträume". This accurately
+#. reflects the meaning of the original sentence.  The word "Anzahl" means
+#. "number" in German, and "privater" translates to "private" in the context
+#. of a chat room.
+#: cm_main/views/views_stats.py:133
+msgid "Number of private chat rooms"
+msgstr "Anzahl privater Chaträume"
+
+#. Explanation: The English phrase "Number of chat messages" is translated
+#. into German as "Anzahl der Chatnachrichten". This accurately reflects the
+#. meaning and context of the original sentence.  The word "Anzahl" means
+#. "number" in German, while "Chatnachrichten" refers to the messages within a
+#. chat room or conversation.
+#: cm_main/views/views_stats.py:134
+msgid "Number of chat messages"
+msgstr "Anzahl der Chatnachrichten"
+
+#. Explanation: The English phrase "Number of private chat messages"
+#. translates directly to "Anzahl privater Chat-Nachrichten" in German.  The
+#. French translation, "Nombre de messages dans les salons publics", is a bit
+#. ambiguous and needs clarification for a precise translation.
+#: cm_main/views/views_stats.py:135
+msgid "Number of private chat messages"
+msgstr "Anzahl privater Chat-Nachrichten"
+
+#. Explanation: The English phrase "Number of public chat messages" is
+#. translated into German as "Anzahl der öffentlichen Chat-Nachrichten". This
+#. accurately reflects the meaning of the original sentence.  The French
+#. translation, "Nombre de messages dans les salons privés", provides a clear
+#. and concise understanding of the context.
+#: cm_main/views/views_stats.py:136
+msgid "Number of public chat messages"
+msgstr "Anzahl der öffentlichen Chat-Nachrichten"
+
+#. Explanation:  Both "Administrator" and "Administrateur" are accurate
+#. translations for the English term "Administrator". They both refer to a
+#. person with administrative authority.
+#: cm_main/views/views_stats.py:140
+msgid "Administrator"
+msgstr "Administrator"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the website is managed by a person or
+#. entity.  The English sentence "This site is managed by" can be ambiguous as
+#. it could mean either "the website is being managed by someone" or "the
+#. website is being managed by something". The French translation clarifies
+#. this ambiguity and reflects the intended meaning of the sentence.
+#: cm_main/views/views_stats.py:142
+msgid "This site is managed by"
+msgstr "Diese Website wird verwaltet von"
+
+#. Explanation: The English phrase "Administrator email" is a clear and
+#. concise way to refer to an email sent by or related to the administrator.
+#. The French translation, "Email de l'administrateur," uses the same
+#. structure but with more formal language.
+#: cm_main/views/views_stats.py:143
+msgid "Administrator email"
+msgstr "Administrator-E-Mail"

@@ -34,7 +34,7 @@ msgstr ""
 
 #: models.py:25 models.py:74
 msgid "A photo must belong to a gallery."
-msgstr "Une photo doit apprtenir à une galerie."
+msgstr "Une photo doit appartenir à une galerie."
 
 #: models.py:48 templates/galleries/photo_detail.html:3
 msgid "Photo"
@@ -111,7 +111,7 @@ msgid ""
 "galleries it contains?"
 msgstr ""
 "Es-tu sûr de vouloir supprimer \"%(object)s\" et toutes les photos et les "
-"sous galeries qu'elle contient ?"
+"sous-galeries qu'elle contient ?"
 
 #: templates/galleries/gallery_confirm_delete.html:17
 #: templates/galleries/photo_confirm_delete.html:17
@@ -130,7 +130,7 @@ msgstr "Afficher la Galerie"
 
 #: templates/galleries/gallery_detail.html:20
 msgid "Children galleries"
-msgstr "Sous Galeries"
+msgstr "Sous-Galeries"
 
 #: templates/galleries/gallery_detail.html:38
 #: templates/galleries/photo_detail.html:23
@@ -244,10 +244,10 @@ msgstr "Impossible d'importer la photo '{path}', elle a été ignorée"
 
 #: views/views_bulk.py:191
 msgid ""
-"Zip file uploaded: {len(self.galleries)} galleries and {self.nbPhotos} "
+"Zip file uploaded: {lg} galleries and {nbp} "
 "photos created"
 msgstr ""
-"Fichier zip téléchargé : {len(self.galleries)} galeries et {self.nbPhotos} "
+"Fichier zip téléchargé : {lg} galeries et {nbp} "
 "photos créées"
 
 #: views/views_photo.py:30

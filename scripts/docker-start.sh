@@ -6,16 +6,17 @@ image=ghcr.io/leolivier/$container
 function usage() {
 	cat << EOF
 
-usage: $0 [-h] [-v] [-u] [-t tag|-l] [-d directory] [-p port]
+usage: $0 [-h] [-q] [-u] [-f] [-t tag|-l] [-d directory] [-p port]
 
 Starts the cousins-matter docker container
 
 args:
 	-h: print this help and exit
-	-v: verbose traces
+	-q: quiet mode, default is verbose
 	-u: if provided, $(basename $0) will first try to stop and remove an existing 'cousins-matter' container before starting a new one.
 	-t tag: the tag of the image
 	-l: short for '-t latest'
+	-f: force restart even if the container already runs the requested image (if -l or tag=latest, restart even if the latest image is already running)
 	-d directory: the directory where the data will be stored, will be created if it doesn't exist, defaults to current directory.
 	-p port: the port where CousinsMatter app will be served, defaults to 8000.
 
@@ -46,8 +47,10 @@ directory=$PWD
 port=8000
 update=false
 current_tag=$(docker container ls 2>/dev/null | awk -v name="$container" '$NF == name {split($2, a, ":"); print (a[2] ? a[2] : "latest")}');
+force=false
+be_verbose=true
 
-while getopts ":huvlt:d:p:" opt; do
+while getopts ":hufqlt:d:p:" opt; do
 	case $opt in
 		h) usage;;
 		u) update=true;;
@@ -55,20 +58,21 @@ while getopts ":huvlt:d:p:" opt; do
 		t) tag=$OPTARG;;
 		d) directory=$OPTARG;;
 		p) port=$OPTARG;;
-		v) be_verbose=true;;
+		q) be_verbose=false;;
+		f) force=true;;
 		\?) echo "Invalid option -$OPTARG" >&2
 				usage;;
 	esac
 done
 
-if [[ $be_verbose == true ]]; then
-	verbose() {
-		echo "$@"
-	}
+if [[ $be_verbose == false ]]; then
+    verbose() {
+        :
+    }
 else
-	verbose() {
-		:
-	}
+    verbose() {
+        echo "$@"
+    }
 fi
 
 if [[ -z $tag ]]; then
@@ -83,7 +87,7 @@ fi
 
 tagged_image=$image:$tag
 
-if [[ -s $current_tag && $current_tag == $tag && $update != true ]]; then
+if [[ -s $current_tag && $current_tag == $tag && $update != true && $force == false ]]; then
 	echo "Container already running with tag $current_tag, use update flag -u or another tag to update"
 	exit 0
 fi
@@ -209,9 +213,9 @@ if [ -n "$current_tag" ]; then
 	fi
 fi
 
-if [ "$update" = true ]; then
+if [[ "$update" == true || $force == true ]]; then
 	verbose "Stopping and removing the container if it exists..."
-	if $(docker ps | grep "$image" > /dev/null); then
+	if $(docker ps | grep "$container" > /dev/null); then
 		docker stop $container
 		verbose "old container stopped"
 	fi
@@ -219,23 +223,24 @@ if [ "$update" = true ]; then
 		docker rm $container
 		verbose "old container removed"
 	fi
+	verbose "starting $container"
+	docker run --name $container -p $port:8000 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media $tagged_image
+	verbose "started"
+
+	verbose "Waiting for the container to be ready..."
+	for i in {1..10}; do
+		sleep 1
+		echo -n '.'
+	done
+	verbose
+
+	verbose "checking if superuser exists..."
+	if [[ $(docker exec cousins-matter python manage.py shell -c "from members.models import Member; print(Member.objects.filter(is_superuser=True).exists())" 2>/dev/null) == 'True' ]]; then
+		verbose "superuser already exists"
+	else
+		echo "creating superuser..."
+		docker exec -it $container python manage.py createsuperuser
+	fi
+
 fi
-
-verbose "starting $container"
-docker run --name $container -p $port:8000 -d -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media $tagged_image
-verbose "started"
-
-verbose "Waiting for the container to be ready..."
-for i in {1..10}; do
-	sleep 1
-	echo -n '.'
-done
-verbose
-
-verbose "checking if superuser exists..."
-if [[ $(docker exec cousins-matter python manage.py shell -c "from members.models import Member; print(Member.objects.filter(is_superuser=True).exists())" 2>/dev/null) == 'True' ]]; then
-	verbose "superuser already exists"
-else
-	echo "creating superuser..."
-	docker exec -it $container python manage.py createsuperuser
-fi
+verbose "done"

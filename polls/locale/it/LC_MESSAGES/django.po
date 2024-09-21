@@ -1,0 +1,28 @@
+# Italian Translations for Cousins-matter app.
+# Copyright (C) 2024 Olivier LEVILLAIN
+# This file is distributed under the same license as the application.
+# This file was generated from cousins-matter/polls/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the claude-3-5-sonnet-20240620 model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-17 12:57+0100\n"
+"PO-Revision-Date: 2024-09-21 19:25+00:00\n"
+"\n"
+"Last-Translator: Auto-po-lyglot using claude-3-5-sonnet-20240620 (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: polls/apps.py:8
+msgid "Polls"
+msgstr "Sondaggi"

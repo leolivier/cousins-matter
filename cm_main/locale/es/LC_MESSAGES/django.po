@@ -55,8 +55,8 @@ msgid ""
 "%(follower_name)s has created a new %(followed_type)s "
 "\"%(followed_object_name)s\""
 msgstr ""
-"%{follower_name}s ha creado un nuevo %{followed_type}s "
-"%{followed_object_name}"
+"%(follower_name)s ha creado un nuevo %(followed_type)s "
+"\"%(followed_object_name)s\""
 
 #. Explanation: This Spanish translation maintains the structure and meaning
 #. of the French sentence. The placeholders are kept in their original
@@ -69,12 +69,12 @@ msgstr ""
 #, python-format
 msgid "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
 msgstr ""
-"Nuevo %(obj_type)s añadido al %(followed_type)s \"%(followed_object_name)s"
+"Nuevo %(obj_type)s añadido al %(followed_type)s \"%(followed_object_name)s\""
 
 #. Explanation: This Spanish translation maintains the structure and
 #. placeholders of the original English sentence, ensuring that the context
-#. translations are preserved. The placeholders %{follower_name}, %{obj_type},
-#. %{followed_type}, and %{followed_object_name} remain in their exact
+#. translations are preserved. The placeholders %(follower_name}, %(obj_type},
+#. %(followed_type}, and %(followed_object_name} remain in their exact
 #. positions to maintain semantic integrity.
 #: cm_main/followers.py:75
 #, python-format
@@ -82,8 +82,8 @@ msgid ""
 "%(follower_name)s has added a new %(obj_type)s in the %(followed_type)s "
 "\"%(followed_object_name)s\""
 msgstr ""
-"%{follower_name}s ha añadido un nuevo %{obj_type} al "
-"%{followed_type}%{followed_object_name}"
+"%(follower_name)s ha añadido un nuevo %(obj_type)s al "
+"%(followed_type)s \"%(followed_object_name)s\""
 
 #. Explanation: This Spanish translation reflects the meaning of the French
 #. phrase, which indicates that the person is no longer following something.
@@ -117,7 +117,7 @@ msgstr "¡Estás ahora siguiendo este {followed_type}"
 #: cm_main/followers.py:119 cm_main/tests/tests_followers.py:29
 #, python-format
 msgid "New follower to your %(followed_type)s \"%(followed_object_name)s\""
-msgstr "%s ha creado un nuevo %s: %s"
+msgstr "Nuevo seguidor a tu %(followed_type)s \"%(followed_object_name)s\""
 
 #. Explanation: This Spanish translation maintains the structure and meaning
 #. of the original English sentence, including the use of placeholders. The
@@ -125,8 +125,8 @@ msgstr "%s ha creado un nuevo %s: %s"
 #. %(followed_object_name)" is used to clarify that the person is following
 #. (suiting) something, not creating a new instance or object as in some
 #. contexts where "a créé un nouveau" might be interpreted. Therefore,
-#. "%({follower_name}s) ahora sigue tu %{followed_type}s
-#. %{followed_object_name}" accurately reflects this context and preserves the
+#. "%({follower_name)s) ahora sigue tu %(followed_type)s
+#. %(followed_object_name)s" accurately reflects this context and preserves the
 #. original meaning while using the appropriate Spanish translation for the
 #. French phrase.
 #: cm_main/followers.py:121
@@ -135,7 +135,7 @@ msgid ""
 "%(follower_name)s is now following your %(followed_type)s "
 "\"%(followed_object_name)s\""
 msgstr ""
-"%({follower_name}s) ahora sigue tu %{followed_type}s %{followed_object_name}"
+"%(follower_name)s ahora sigue tu %(followed_type)s \"%(followed_object_name)s\""
 
 #. Explanation: This translation maintains the meaning and tone of the
 #. original English phrase. The French translation "Ton message" directly
@@ -412,7 +412,7 @@ msgstr "Enviar"
 #: cm_main/tests/test_contactform.py:42
 #, python-format
 msgid "%(sender_name)s sent you the following message from %(site_name)s:"
-msgstr "%{sender_name}s te envió el siguiente mensaje desde %{site_name}."
+msgstr "%(sender_name)s te envió el siguiente mensaje desde %(site_name)s."
 
 #. Explanation: This Spanish translation accurately conveys the meaning of the
 #. original English sentence. The phrase "directly reply" is translated as
@@ -439,8 +439,8 @@ msgid ""
 "%(author_name)s created the following %(followed_type)s <a "
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 msgstr ""
-"%({author_name})s ha creado el siguiente %(followed_type)s <a "
-"href=\\\"{followed_object_url}\\\">{followed_object_name}</a>:"
+"%(author_name)s ha creado el siguiente %(followed_type)s <a "
+"href=\"%(followed_object_url)s\">%(followed_object_name)s</a>:"
 
 #. Explanation: This translation maintains the structure and placeholders of
 #. the original English sentence, ensuring that the context translations are
@@ -454,9 +454,9 @@ msgid ""
 "%(author_name)s added the following %(obj_type)s on %(followed_type)s <a "
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 msgstr ""
-"%({author_name})s ha añadido el %{obj_type}s siguiente en el "
-"%{followed_type}s <a "
-"href=\\\"{followed_object_url}\\\">{%({followed_object_name})s}</a>:"
+"%(author_name)s ha añadido el %(obj_type)s siguiente en el "
+"%(followed_type)s <a "
+"href=\"%(followed_object_url)s\">%(followed_object_name)s</a>:"
 
 #. Explanation: This Spanish translation accurately conveys the meaning of the
 #. original English sentence and its French context. The phrase "Do not reply
@@ -481,8 +481,8 @@ msgstr "No responder a este correo electrónico, es generado por una máquina."
 #, python-format
 msgid "%(nfollowers)s member"
 msgid_plural "%(nfollowers)s members"
-msgstr[0] "%(nfollowers)s membre"
-msgstr[1] "%(nfollowers)s membres"
+msgstr[0] "%(nfollowers)s miembro"
+msgstr[1] "%(nfollowers)s miembros"
 
 #. Explanation: The placeholders in the original English and French sentences
 #. are identical, indicating that they should be kept as is in the Spanish
@@ -505,12 +505,12 @@ msgstr[1] "%(nfollowers)s followers"
 #: cm_main/templates/cm_main/followers/new_follower.html:14
 #, python-format
 msgid "Your %(followed_type)s '%(followed_object_name)s' has a new follower!"
-msgstr "%s ha creado un nuevo %s: %s"
+msgstr "¡Tu %(followed_type)s '%(followed_object_name)s' tiene un nuevo seguidor!"
 
 #. Explanation: This Spanish translation maintains the structure and
 #. placeholders of the original English sentence, ensuring that the context
-#. translations are accurately reflected. The placeholders %{follower_name},
-#. %{followed_type}, %{followed_object_name}, and %{site_name} are kept in
+#. translations are accurately reflected. The placeholders %(follower_name},
+#. %(followed_type}, %(followed_object_name}, and %(site_name} are kept in
 #. their respective positions to preserve the meaning and format of the
 #. original text. The phrase "is now following" is translated as "sigue
 #. ahora," which conveys the same sense of current action and relationship
@@ -524,8 +524,8 @@ msgid ""
 "%(follower_name)s is now following your %(followed_type)s <a "
 "href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> on %(site_name)s"
 msgstr ""
-"%{follower_name}s sigue ahora tu %{followed_type} <a "
-"href=\\\"%%{followed_url}\\\">%{followed_object_name}</a> en %{site_name}"
+"%(follower_name)s sigue ahora tu %(followed_type)s <a "
+"href=\"%(followed_url)s\">%(followed_object_name)s</a> en %(site_name)s"
 
 #. Explanation: This Spanish translation accurately reflects the meaning of
 #. the French phrase, which indicates that the person should cease following
@@ -552,7 +552,7 @@ msgstr "Suscribirse"
 #. of individuals who are part of a group or organization.
 #: cm_main/templates/cm_main/navbar.html:26 cm_main/views/views_stats.py:106
 msgid "Members"
-msgstr "Membres"
+msgstr "Miembros"
 
 #. Explanation: This translation is straightforward as both the English and
 #. French phrases directly translate to "anniversaries" in Spanish. There are
@@ -615,11 +615,10 @@ msgstr "Criar una Galería"
 #. a process where multiple files or items are uploaded at once. In the
 #. provided French context, which translates to "Chargement en masse," this
 #. term accurately captures the essence of uploading large quantities of data
-#. or files in one go. Therefore, the Spanish translation remains as "Bulk
-#. Upload."
+#. or files in one go. 
 #: cm_main/templates/cm_main/navbar.html:50
 msgid "Bulk Upload"
-msgstr "Bulk Upload"
+msgstr "Carga masiva"
 
 #. Explanation: The English phrase "Forum" is a direct and identical term in
 #. both languages, so no translation or adjustment is necessary. The context
@@ -782,7 +781,7 @@ msgstr "Formulario de contacto"
 #: cm_main/tests/test_contactform.py:39 cm_main/views/views_contact.py:37
 #, python-format
 msgid "You have a new message from %(name)s (%(email)s). "
-msgstr "%s ha recibido un nuevo mensaje de %s (%s)."
+msgstr "Tienes un nuevo mensaje de %(name)s (%(email)s)."
 
 #. Explanation: This Spanish translation accurately conveys the meaning of the
 #. French phrase, which indicates that someone has become a new follower. The

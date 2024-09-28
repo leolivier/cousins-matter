@@ -1,0 +1,149 @@
+# Portuguese Translations for NO NAME FOUND app.
+# Copyright (C) 2024 Olivier LEVILLAIN
+# This file is distributed under the same license as the application.
+# This file was generated from /home/olivi/devt/cousins-matter/pages/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the llama3.2:3b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-15 18:05+0200\n"
+"PO-Revision-Date: 2024-09-28 04:23+00:00\n"
+"\n"
+"Last-Translator: Auto-po-lyglot using llama3.2:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: PT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Explanation: The English and French translations are identical, suggesting
+#. that the term "Pages" is used in both languages to refer to a unit of
+#. written content. In Portuguese, this translation is consistent with the
+#. French version, using the word "páginas" to convey the same meaning.
+#: apps.py:8 templates/pages/menu_pages.html:4
+#: templates/pages/pages_admin_list.html:3
+#: templates/pages/pages_admin_list.html:8
+msgid "Pages"
+msgstr "Páginas"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a flat page with the given URL already exists.
+#. The English sentence uses a placeholder for the URL, while the French
+#. translation includes it in the sentence. The Portuguese version maintains
+#. this format to preserve the original context and clarity.
+#: forms.py:34 tests/tests_crud.py:31 tests/tests_crud.py:78
+#, python-format
+msgid "Flatpage with url %(url)s already exists"
+msgstr "Pagina plana com url %(url)s já existe"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a flatpage cannot be a subpage of another
+#. flatpage. The English sentence is warning against this possibility and
+#. advising to check the URLs, so the Portuguese version "verifique suas URLs"
+#. maintains the same tone and advice.
+#: forms.py:38 tests/tests_crud.py:39
+msgid "A flatpage cannot be a subpage of another flatpage, check your URLs"
+msgstr ""
+"Uma página de flatpage não pode ser uma sub página de outra página de "
+"flatpage, verifique suas URLs."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a common way to express updating or refreshing a webpage.
+#. The English phrase "Update Page" can be interpreted in different ways, but
+#. the French and Portuguese translations convey the idea of making changes to
+#. a page, which is consistent with the original meaning.
+#: templates/pages/page_form.html:5 templates/pages/page_form.html:17
+#: templates/pages/page_form.html:27
+msgid "Update Page"
+msgstr "Atualizar Página"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation. The English phrase
+#. "Create Page" can be interpreted in different ways, but the French
+#. translation makes it clear that the action is to create a new page.
+#: templates/pages/page_form.html:7 templates/pages/page_form.html:19
+#: templates/pages/page_form.html:29 templates/pages/pages_admin_list.html:9
+#: templates/pages/pages_admin_list.html:11
+msgid "Create Page"
+msgstr "Criar Página"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates saving a page and continuing to edit it. The
+#. English phrase is clear in its intention, and the Portuguese version
+#. follows this interpretation.
+#: templates/pages/page_form.html:33
+msgid "Save Page and Continue Editing"
+msgstr "Salvar Página e Continuar Editando"
+
+#. Explanation: The English phrase "Delete Page" can be interpreted in
+#. different ways, such as deleting a page from a document or deleting a
+#. webpage. However, the French translation "Supprimer la Page" makes it clear
+#. that the action is to delete a specific page. In Portuguese, we use the
+#. word "Página" to refer to a web page, so the translation "Apagar Página"
+#. follows this interpretation.
+#: templates/pages/page_form.html:37 templates/pages/page_form.html:44
+msgid "Delete Page"
+msgstr "Apagar Página"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is asking if the user is sure they want to delete a specific
+#. page. The English sentence uses a placeholder for the page title, and the
+#. French translation also uses this placeholder. The Portuguese version
+#. maintains the same format and places the placeholder in the same location
+#. as in the original sentence.
+#: templates/pages/page_form.html:45
+#, python-format
+msgid "Are you sure you want to delete the page \"%(title)s\"?"
+msgstr "Você está seguro de querer apagar a página '%(title)s'?"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a literal and poetic description of a tree with pages or
+#. leaves. The English phrase "Pages Tree" can be ambiguous, as it could refer
+#. to a book or a collection of pages, but in this context, the French
+#. translation suggests a more figurative meaning, where the tree represents a
+#. repository of knowledge or stories.
+#: templates/pages/page_tree.html:3 templates/pages/page_tree.html:7
+msgid "Pages Tree"
+msgstr "Árvore das Páginas"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the page could not be loaded from the provided
+#. URL because it was not found in the database. The English sentence is
+#. somewhat formal and uses a more polite tone, while the French translation
+#. maintains this politeness with "Merci" (thank you).
+#: templatetags/pages_tags.py:102
+#, python-brace-format
+msgid ""
+"Cannot load page from url {url}, it was not found in the database. Please "
+"contact the administrator of the site"
+msgstr ""
+"Não é possível carregar a página do URL {url}, ela não foi encontrada na "
+"base de dados. Por favor, entre em contato com o administrador do site."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a page has been saved. The English phrase
+#. "Page "%(title)s" saved" can be ambiguous, as it can mean both "saving a
+#. page with a specific title" and "saving a page in general". The French
+#. translation makes it clear that it is saving a page, so the Portuguese
+#. version follows this interpretation.
+#: views.py:28 views.py:47
+#, python-format
+msgid "Page \"%(title)s\" saved"
+msgstr "página '%(title)s' salva"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a page was deleted. The English phrase "Page
+#. "%(title)s" deleted" uses a placeholder for the title of the page, and the
+#. Portuguese version follows this interpretation by using the same
+#. placeholder.
+#: views.py:68
+#, python-format
+msgid "Page \"%(title)s\" deleted"
+msgstr "página '%(title)s' excluída"

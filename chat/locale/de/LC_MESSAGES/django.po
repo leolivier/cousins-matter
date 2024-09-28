@@ -194,7 +194,7 @@ msgstr "Privatraum-Verwalter"
 #: chat/templates/chat/private/room_admins.html:11
 #, python-format
 msgid "Administrators of \"%(room_name)s\" private room"
-msgstr "Verwalter des privaten Räumlichkeiten „%(room_name)“"
+msgstr "Verwalter des privaten Räumlichkeiten „%(room_name)s“"
 
 #. Explanation: The English phrase "Back to room" can be interpreted in two
 #. ways, depending on the context.  The French translation "Retour au salon"
@@ -248,7 +248,7 @@ msgstr "Privatraum Mitglieder"
 #: chat/templates/chat/private/room_members.html:11
 #, python-format
 msgid "Members of \"%(room_name)s\" private room"
-msgstr "Mitglieder des privaten Raumes '%(room_name)'"
+msgstr "Mitglieder des privaten Raumes '%(room_name)s'"
 
 #. Explanation: The French translation, "Quitter ce salon," means "leave this
 #. room."  The German translation, "Gehen Sie diesen Raum aus," uses the verb
@@ -344,7 +344,7 @@ msgid ""
 "Are you sure you want to delete the room \"%(room_name)s\" and all its "
 "messages?"
 msgstr ""
-"Bist du sicher, dass du den Raum \„%(room_name)s\“ und alle seine Nachrichten "
+"Bist du sicher, dass du den Raum \"%(room_name)s\" und alle seine Nachrichten "
 "löschen willst?"
 #. Explanation: The provided placeholders are part of a specific format and
 #. should be kept in their original position.  The German translation

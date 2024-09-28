@@ -897,7 +897,7 @@ msgstr "Registro de solicitud para el sitio '%(site_name)s'"
 #, python-format
 msgid "%(name)s (%(email)s) requested to register to your cousinades site"
 msgstr ""
-"%({name}s (%{email}) ha pedido para registrarse en tu sitio de cousinadas."
+"%(name)s (%(email)s) ha pedido para registrarse en tu sitio de cousinadas."
 
 #: templates/members/email/registration_request_email.html:23
 msgid "Here is the message he sent:"
@@ -1291,7 +1291,7 @@ msgstr "Birthday en los próximos %(ndays)s días"
 #: tests/tests_birthdays.py:38
 #, python-format
 msgid "turns %(age)s today, happy birthday!"
-msgstr "{age} años hoy, feliz cumpleaños!"
+msgstr "%(age)s años hoy, feliz cumpleaños!"
 
 #. Explanation: This Spanish translation reflects the meaning of the French
 #. phrase, which indicates that someone will be a certain age tomorrow and
@@ -2512,8 +2512,8 @@ msgid ""
 "Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
 "%(all_names)s"
 msgstr ""
-"%s columna ausente en el archivo CSV: \"%(fieldname)s\". Los campos "
-"obligatorios son %(all_names)s"
+"Fehlende Spalte in der CSV-Datei: \"%(fieldname)s\". Obligatorische Felder "
+"sind %(all_names)s"
 
 #. Explanation: This Spanish translation accurately reflects the meaning of
 #. the provided French sentence, maintaining the same structure and
@@ -2560,8 +2560,8 @@ msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
 "updated"
 msgstr ""
-"%s ha sido cargado como archivo CSV : %(nbLines)i líneas leídas, "
-"%(nbMembers)i miembros creados o actualizados"
+"CSV-Datei hochgeladen: %(nbLines)i Zeilen gelesen, %(nbMembers)i Mitglieder "
+"erstellt oder aktualisiert"
 
 #. Explanation: This Spanish translation maintains the structure and meaning
 #. of the original English and French sentences. The placeholder "%(error)s"

@@ -47,8 +47,8 @@ msgid ""
 "%(follower_name)s has created a new %(followed_type)s "
 "\"%(followed_object_name)s\""
 msgstr ""
-"**(Follower_name)** hat ein neues **(followed_type)** erstellt: "
-"**(followed_object_name)**"
+"%(follower_name)s hat ein neues %(followed_type)s erstellt: "
+"%(followed_object_name)s"
 
 #. Explanation: The German translation accurately reflects the meaning of the
 #. French phrase, while preserving the original sentence structure and
@@ -82,8 +82,8 @@ msgid ""
 "%(follower_name)s has added a new %(obj_type)s in the %(followed_type)s "
 "\"%(followed_object_name)s\""
 msgstr ""
-"**(follower_name)** hat einen neuen **%(obj_type)** in der "
-"**%(followed_type)** hinzugefügt: **%(followed_object_name)**"
+"%(follower_name)s hat einen neuen **%(obj_type)s in der "
+"**%(followed_type)s hinzugefügt: **%(followed_object_name)s"
 
 #. Explanation: The German translation aims to capture the meaning of the
 #. French phrase while maintaining a consistent grammatical structure.  The
@@ -126,8 +126,8 @@ msgid ""
 "%(follower_name)s is now following your %(followed_type)s "
 "\"%(followed_object_name)s\""
 msgstr ""
-"**(Follower_name)s ist jetzt dein %(followed_type)s "
-"**%(followed_object_name)s**"
+"%(follower_name)s ist jetzt dein %(followed_type)s "
+"\"%(followed_object_name)s\""
 
 #. Explanation: The translation accurately reflects the meaning of the English
 #. and French sentences.  "Ton message" is a direct translation of "Your
@@ -391,7 +391,7 @@ msgid ""
 "%(author_name)s created the following %(followed_type)s <a "
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 msgstr ""
-"**(author_name)s hat die folgenden %(followed_type)s erstellt: <a "
+"%(author_name)s hat die folgenden %(followed_type)s erstellt: <a "
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 
 #. Explanation: The translation aims to preserve the original sentence's
@@ -466,7 +466,7 @@ msgid ""
 "%(follower_name)s is now following your %(followed_type)s <a "
 "href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> on %(site_name)s"
 msgstr ""
-"**(follower_name)s ist jetzt dein %(followed_type)s <a "
+"%(follower_name)s ist jetzt dein %(followed_type)s <a "
 "href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> auf "
 "%(site_name)s\"**"
 

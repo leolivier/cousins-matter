@@ -1,0 +1,632 @@
+# Portuguese Translations for NO NAME FOUND app.
+# Copyright (C) 2024 Olivier LEVILLAIN
+# This file is distributed under the same license as the application.
+# This file was generated from /home/olivi/devt/cousins-matter/chat/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the llama3.2:3b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Cousins Matter 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-03 18:18+0200\n"
+"PO-Revision-Date: 2024-09-27 22:09+00:00\n"
+"\n"
+"Last-Translator: Auto-po-lyglot using llama3.2:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: French <LL@li.org>\n"
+"Language: PT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the user can only delete their own messages.
+#. The English sentence is clear and direct about this limitation, so the
+#. Portuguese version follows a similar tone and clarity.
+#: chat/consumers.py:180
+msgid "You can only delete your own messages"
+msgstr "Você pode apenas apagar seus próprios mensagens."
+
+#. Explanation: The Portuguese translation maintains the same meaning and
+#. connotation as the original English phrase, using the word "salão" to
+#. convey a sense of informal gathering or meeting place.
+#: chat/models.py:34
+msgid "chat room"
+msgstr "Salão de chat"
+
+#. Explanation: The English term "chat rooms" refers to online spaces for
+#. real-time text-based communication. The French translation "salons de
+#. discussion" conveys a similar meaning, emphasizing the social aspect of
+#. these online spaces. In Portuguese, this translation is maintained as
+#. "salões de discussão".
+#: chat/models.py:35
+msgid "chat rooms"
+msgstr "Salões de discussão"
+
+#. Explanation: The English and French translations are identical, so the
+#. Portuguese translation is also a direct copy of the original.
+#: chat/models.py:77
+msgid "message"
+msgstr "mensagem"
+
+#. Explanation: The English phrase "private chat room" can be ambiguous, as it
+#. can refer to a private conversation or a private space. The French
+#. translation "salon de discussion privée" makes it clear that it is a
+#. private space for discussion, which is the most common interpretation in
+#. this context. In Portuguese, we use the term "salão" to refer to a room or
+#. a space, and "conversação privada" to indicate that it's a private
+#. conversation.
+#: chat/models.py:97
+msgid "private chat room"
+msgstr "Salão de conversação privado"
+
+#. Explanation: The English phrase "private chat rooms" indicates that the
+#. rooms are for personal, private conversations. In contrast, the French
+#. phrase "salons de discussion publique" suggests public discussion areas,
+#. which is not what the original English sentence intended to convey.
+#. Therefore, the Portuguese translation "Salas privadas" maintains
+#. consistency with the intended meaning of the original English sentence.
+#: chat/models.py:98
+msgid "private chat rooms"
+msgstr "Salas privadas"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates private chat rooms. The English phrase is
+#. straightforward and clear in its intention, so the Portuguese version
+#. follows this interpretation.
+#: chat/templates/chat/chat_rooms.html:5
+#: chat/templates/chat/chat_rooms.html:14
+msgid "Private Chat Rooms"
+msgstr "Salas de conversação privadas"
+
+#. Explanation: The English term "Chat Rooms" refers to online spaces where
+#. people can engage in real-time conversations. The French translation
+#. "Salons de discussion" accurately conveys this meaning, emphasizing the
+#. social and interactive aspect of these virtual spaces. In Portuguese, the
+#. translation "Salas de discussão" maintains the same nuance, suggesting a
+#. space for conversation and interaction among users.
+#: chat/templates/chat/chat_rooms.html:7
+#: chat/templates/chat/chat_rooms.html:16
+msgid "Chat Rooms"
+msgstr "Salas de discussão"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is clear and direct. The English sentence provides two
+#. options for the user to choose from, while the French translation maintains
+#. this clarity by using the verb "crées-en" (to create) in a way that implies
+#. creating a new room.
+#: chat/templates/chat/chat_rooms.html:19
+msgid "Choose an existing room or create a new one."
+msgstr "Escolha uma sala existente ou crie uma nova."
+
+#. Explanation: The Portuguese translation maintains the same structure and
+#. meaning as the French original, indicating the name of a room.
+#: chat/templates/chat/chat_rooms.html:26
+#: chat/templates/chat/room_detail.html:27
+msgid "Room name"
+msgstr "Nome do salão"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates creating a private room. The English phrase "Create
+#. private room" is straightforward and clear in its intention, so the
+#. Portuguese version follows this interpretation.
+#: chat/templates/chat/chat_rooms.html:31
+msgid "Create private room"
+msgstr "Criar uma sala privada"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates creating a new space or room. The English phrase
+#. "Create room" is more general and can be interpreted in different ways, but
+#. the French translation makes it clear that it's about creating a specific
+#. type of space (un salon).
+#: chat/templates/chat/chat_rooms.html:33
+msgid "Create room"
+msgstr "Criar uma sala"
+
+#. Explanation: The English phrase "%(nmsgs)s message" is likely a placeholder
+#. for a variable that represents the number of messages, and the Portuguese
+#. translation "mensagem" means "message". Since the French translation is
+#. identical to the original, it's clear that the meaning remains the same.
+#: chat/templates/chat/chat_rooms.html:47 chat/tests/tests_private.py:46
+#: chat/tests/tests_public.py:64 chat/tests/tests_public.py:94
+#, python-format
+msgid "%(nmsgs)s message"
+msgid_plural "%(nmsgs)s messages"
+msgstr[0] "%(nmsgs)s mensagem"
+msgstr[1] "%(nmsgs)s mensagens"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that there is no author yet. The English phrase "No
+#. author yet" can be ambiguous, as it can mean both "there is no author" and
+#. "the author has not been found yet". However, in this context, the phrase
+#. implies that there is still a need to find or assign an author, making the
+#. Portuguese translation "Não há autor ainda" more accurate.
+#: chat/templates/chat/chat_rooms.html:59 chat/tests/tests_public.py:95
+msgid "No author yet"
+msgstr "Não há autor ainda"
+
+#. Explanation: The English word "profile" and the French word "profil" both
+#. refer to a person's or thing's outline or characteristics, often used in
+#. contexts like social media profiles.
+#: chat/templates/chat/chat_rooms.html:76
+#: chat/templates/chat/chat_rooms.html:81
+#: chat/templates/chat/private/room_admins.html:42
+#: chat/templates/chat/private/room_members.html:42
+#: chat/templates/chat/room_detail.html:74 chat/tests/tests_private.py:43
+#: chat/tests/tests_public.py:67
+msgid "profile"
+msgstr "Perfil"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the members are part of a specific room or
+#. area. The English phrase "Room Members" is more general and could refer to
+#. any type of membership, whereas the French translation makes it clear that
+#. it is a specific group within a room.
+#: chat/templates/chat/chat_rooms.html:102
+#: chat/templates/chat/room_detail.html:53
+msgid "Room Members"
+msgstr "Membros do quarto"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the administrators are responsible for the
+#. room. The English phrase "Room Admins" is a common abbreviation used to
+#. refer to individuals who manage or oversee a specific room or area. The
+#. Portuguese version "Administradores do quarto" follows this interpretation
+#. and maintains consistency with the French translation.
+#: chat/templates/chat/chat_rooms.html:105
+#: chat/templates/chat/room_detail.html:56
+msgid "Room Admins"
+msgstr "Administradores do quarto"
+
+#. Explanation: The English phrase "Search a member" can be ambiguous, as it
+#. could mean both searching for someone and also referring to the act of
+#. finding or discovering something. However, in this context, where the
+#. French translation is "Rechercher un membre", which implies looking for a
+#. specific person or entity, the Portuguese translation "Procurar um membro"
+#. follows this interpretation, suggesting a search for a member within a
+#. group or organization.
+#: chat/templates/chat/private/add-member.html:7
+msgid "Search a member..."
+msgstr "Procurar um membro..."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which specifically mentions the private room. The English phrase
+#. "Private Room Admins" is more general and could refer to any type of
+#. administration or management role in a private setting. The French
+#. translation makes it clear that it is about the administrators of a
+#. specific private room, so the Portuguese version follows this
+#. interpretation.
+#: chat/templates/chat/private/room_admins.html:4
+#: chat/templates/chat/private/room_admins.html:7
+msgid "Private Room Admins"
+msgstr "Administração de Sala Privada"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that it is a private room. The English phrase
+#. "Administrators of '%(room_name)s' private room" can be ambiguous, as it
+#. could refer to any type of private space. However, the French translation
+#. makes it clear that it is a specific type of private room, so the
+#. Portuguese version follows this interpretation.
+#: chat/templates/chat/private/room_admins.html:11
+#, python-format
+msgid "Administrators of \"%(room_name)s\" private room"
+msgstr "Administrações de '%(room_name)s' sala privada"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a return to a specific room. The English phrase
+#. "Back to room" can be ambiguous, as it could refer to returning to any
+#. room. The French translation makes it clear that it is a return to a
+#. specific room, so the Portuguese version "Volto ao quarto" follows this
+#. interpretation.
+#: chat/templates/chat/private/room_admins.html:15
+#: chat/templates/chat/private/room_members.html:15
+#: chat/tests/tests_private.py:170 chat/tests/tests_private.py:222
+msgid "Back to room"
+msgstr "Volto ao quarto"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the user wants to remove or leave the
+#. administrators of a specific room. The English sentence is clear and
+#. direct, while the French translation makes it explicit. In Portuguese,
+#. "deixar" means to leave or remove, and "administradores" refers
+#. specifically to the people in charge of managing a space or system.
+#: chat/templates/chat/private/room_admins.html:21
+msgid "Leave admins of this room"
+msgstr "Deixe os administradores desse salão"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates adding an administrator to a room. The English
+#. phrase "Add admin to the room" is clear and direct, so the Portuguese
+#. version follows this interpretation.
+#: chat/templates/chat/private/room_admins.html:30
+msgid "Add admin to the room"
+msgstr "Adicionar um administrador ao salão"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates removing the administrator from the room. The
+#. English phrase "Remove Admin from Room" is clear and direct, so the
+#. Portuguese version follows this interpretation.
+#: chat/templates/chat/private/room_admins.html:47
+msgid "Remove Admin from Room"
+msgstr "Remova o administrador do quarto."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a private room or space. The English phrase
+#. "Private Room Members" can be ambiguous, as it could refer to members of a
+#. private club or organization, but in this context, it seems to indicate
+#. that the individuals are part of a private room or space, possibly for a
+#. specific event or gathering.
+#: chat/templates/chat/private/room_members.html:4
+#: chat/templates/chat/private/room_members.html:7
+msgid "Private Room Members"
+msgstr "Membros do quarto privado"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a private room. The English phrase "Members of
+#. "%(room_name)s" private room" can be ambiguous, as it refers to a specific
+#. group of people in a private space. The French translation makes it clear
+#. that it is a private room, so the Portuguese version "sala privada" follows
+#. this interpretation.
+#: chat/templates/chat/private/room_members.html:11
+#, python-format
+msgid "Members of \"%(room_name)s\" private room"
+msgstr "Membros do quarto privado \"%(room_name)s\""
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person should leave the current room. The
+#. English phrase "Leave this room" is direct and clear, so the Portuguese
+#. version follows a similar tone and intention.
+#: chat/templates/chat/private/room_members.html:21
+#: chat/templates/chat/room_detail.html:47 chat/tests/tests_private.py:171
+#: chat/tests/tests_private.py:223 chat/tests/tests_private.py:352
+msgid "Leave this room"
+msgstr "Deixe este sala."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates adding a new member to the room. The English phrase
+#. "Add member to the room" is clear and direct, so the Portuguese version
+#. follows this interpretation.
+#: chat/templates/chat/private/room_members.html:30
+msgid "Add member to the room"
+msgstr "Adicionar um membro à sala"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates removing a member from a room. The English phrase
+#. "Remove Member from Room" is clear and direct, so the Portuguese version
+#. follows this interpretation.
+#: chat/templates/chat/private/room_members.html:47
+msgid "Remove Member from Room"
+msgstr "Remover Membro de Sala"
+
+#. Explanation: The Portuguese translation maintains the informal and friendly
+#. tone of the original English sentence, using the phrase "Vamos conversar"
+#. which is a common way to invite someone to talk or chat.
+#: chat/templates/chat/room_detail.html:19
+msgid "Let's chat!"
+msgstr "Vamos conversar!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that pressing Return is used to submit and pressing
+#. Escape is used to give up. The English phrase "hit return to submit, escape
+#. to give up" can be ambiguous, as it can mean both submitting a form or
+#. giving up on an activity.
+#: chat/templates/chat/room_detail.html:28
+msgid "hit return to submit, escape to give up"
+msgstr "Pressione Enter para enviar, pressione Esc para desistir"
+
+#. Explanation: The English word "Delete" can have different meanings
+#. depending on the context, such as deleting a file or deleting an account.
+#. However, in general, it means to remove or get rid of something. The
+#. Portuguese translation "Apagar" is more neutral and can be used in various
+#. contexts, including removing files, accounts, or even deleting a task.
+#: chat/templates/chat/room_detail.html:38
+#: chat/templates/chat/room_detail.html:82
+msgid "Delete"
+msgstr "Apagar"
+
+#. Explanation: This translation reflects the meaning of the French phrase,
+#. which is to modify or change something. The English word "Edit" can also
+#. refer to a process of reviewing and revising written content, but in this
+#. context, both translations are suitable.
+#: chat/templates/chat/room_detail.html:41
+msgid "Edit"
+msgstr "Editar"
+
+#. Explanation: The English and French translations are identical, so the
+#. Portuguese translation is also a direct copy.
+#: chat/templates/chat/room_detail.html:92
+msgid "Message"
+msgstr "mensagem"
+
+#. Explanation: The English word "Submit" can have different meanings
+#. depending on the context, such as to send or to agree with. However, in
+#. this case, considering the French translation "Envoyer", which means "to
+#. send", the Portuguese translation "Enviar" is consistent and accurate for
+#. the context of submitting something, likely a form or document.
+#: chat/templates/chat/room_detail.html:97
+msgid "Submit"
+msgstr "Enviar"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a deliberate removal or erasure of the room. The
+#. English phrase "Room deletion" is concise and direct, implying a technical
+#. or administrative action to remove the room from existence or availability.
+#. The French translation "Suppression du salon" conveys a similar idea,
+#. suggesting a formal or official process of removing the room.
+#: chat/templates/chat/room_detail.html:106
+msgid "Room deletion"
+msgstr "Remoção de sala."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is asking if you are sure to delete a specific room and all
+#. its associated messages. The English sentence uses a placeholder for the
+#. room name, while the French translation includes it directly. The
+#. Portuguese version follows this format, keeping the placeholder in the same
+#. location as in the original sentence.
+#: chat/templates/chat/room_detail.html:107
+#, python-format
+msgid ""
+"Are you sure you want to delete the room \"%(room_name)s\" and all its "
+"messages?"
+msgstr ""
+"Você está seguro de querer apagar a sala '%(room_name)s' e todas as "
+"mensagens?"
+
+#. Explanation: The English phrase "%(nfollowers)s member" is likely referring
+#. to a "member" of the followers, implying that the follower count is being
+#. used as an adjective. In Portuguese, this meaning is preserved with the
+#. translation "%s membro", which maintains the noun "membro" (meaning
+#. "member") and uses it in the context of the follower count.
+#: chat/tests/tests_private.py:47
+#, python-format
+msgid "%(nfollowers)s member"
+msgid_plural "%(nfollowers)s members"
+msgstr[0] "%(nfollowers)s membro"
+msgstr[1] "%(nfollowers)s membros"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that another room with a similar name already
+#. exists and asks to choose a different one. The English sentence is slightly
+#. rephrased for better clarity, but the overall message remains the same.
+#: chat/tests/tests_private.py:129 chat/tests/tests_public.py:55
+#, python-brace-format
+msgid ""
+"Another room with a similar name already exists ('{room_name}'). Please "
+"choose a different name."
+msgstr ""
+"Outro quarto com um nome semelhante já existe ('{room_name}'). Por favor, "
+"escolha um nome diferente."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person was physically removed from the
+#. room. The English sentence "has been removed" implies a removal action,
+#. while the French and Portuguese translations use the verb "remover", which
+#. also conveys this idea.
+#: chat/tests/tests_private.py:207 chat/tests/tests_private.py:283
+#: chat/views/views_private_rooms.py:333
+#, python-format
+msgid "%s has been removed from the room"
+msgstr "%s foi removido do salão."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that only members of a private room can become
+#. administrators. The English sentence is clear and direct about the
+#. exclusivity of membership to access admin privileges.
+#: chat/tests/tests_private.py:217 chat/views/views_private_rooms.py:450
+msgid "Only members of this private room can become admins"
+msgstr ""
+"Somente os membros deste quarto privado podem se tornar administradores."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that there is only one member in a private room and
+#. asks to add another one before removing the current one.
+#: chat/tests/tests_private.py:272 chat/views/views_private_rooms.py:326
+msgid ""
+"This member is the only one in this private room. Please add another one "
+"before removing this one."
+msgstr ""
+"Este membro é o único em este sala privada. Por favor, adicione outro antes "
+"de remover este."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is the only member in a private
+#. room and needs to add another one before leaving. The English sentence can
+#. be ambiguous, as it uses colloquial expressions like "member" and "remove
+#. yourself", whereas the French translation makes it clear that it's about
+#. being the only person in a private space.
+#: chat/tests/tests_private.py:300 chat/views/views_private_rooms.py:372
+msgid ""
+"You are the only member in this private room. Please add another one before "
+"removing yourself."
+msgstr ""
+"Você é o único membro nesse sala privada. Por favor, adicione outro antes de"
+" se retirar."
+
+#. Explanation: This translation reflects the meaning of the French phrase,
+#. which indicates that there is only one administrator in the private room
+#. and if they leave, no one will remain. The English sentence also implies
+#. that the speaker wants to add another administrator before leaving, so the
+#. Portuguese version maintains this nuance.
+#: chat/tests/tests_private.py:311 chat/views/views_private_rooms.py:375
+msgid ""
+"You are the only admin in this private room. If you leave the room, no one "
+"will be left. Please add another admin from the members before you remove "
+"yourself."
+msgstr ""
+"Você é o único administrador desse salão privado. Se você sair do salão, "
+"ninguém ficará. Por favor, adicione outro administrador dos membros antes de"
+" se retirar."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person has left a specific location (the
+#. room/salon). The English phrase "You have left the room" can be ambiguous,
+#. but in this context, it is clear that the speaker is referring to leaving a
+#. physical space.
+#: chat/tests/tests_private.py:320 chat/views/views_private_rooms.py:383
+msgid "You have left the room"
+msgstr "Você saiu da sala."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is not a member of the private
+#. room. The English sentence and its context translation make it clear that
+#. "this private room" refers to a specific, exclusive space, so the
+#. Portuguese version "este salão privado" follows this interpretation.
+#: chat/tests/tests_private.py:346 chat/views/views_private_rooms.py:205
+#: chat/views/views_private_rooms.py:242 chat/views/views_private_rooms.py:368
+#: chat/views/views_private_rooms.py:409
+msgid "You are not a member of this private room"
+msgstr "Você não é um membro deste salão privado."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is not an administrator of a
+#. private room. The English sentence can be ambiguous, as it could refer to
+#. any type of private space or organization. However, in this context, where
+#. "admin" likely refers to administrative access or control, the French and
+#. Portuguese translations make it clear that the person does not have such
+#. authority over the private room.
+#: chat/tests/tests_private.py:370 chat/views/views_private_rooms.py:278
+#: chat/views/views_private_rooms.py:321 chat/views/views_private_rooms.py:443
+#: chat/views/views_private_rooms.py:491 chat/views/views_private_rooms.py:532
+msgid "You are not an admin of this private room"
+msgstr "Você não é administrador desse quarto privado."
+
+#. Explanation: The English phrase "Follow" can have multiple meanings,
+#. including to track or pursue someone or something. In this context, the
+#. French translation "Suivre" is more literal and implies tracking or
+#. following someone or something. The Portuguese translation "Seguir"
+#. captures this meaning, suggesting a sense of movement or progression in
+#. relation to what is being followed.
+#: chat/tests/tests_public.py:23 chat/tests/tests_public.py:66
+msgid "Follow"
+msgstr "Seguir"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a singular noun. The English phrase "%(nfollowers)s
+#. follower" can be ambiguous, as it can mean both "followers" and "followed
+#. by". However, in this context, it seems to refer to a single person who
+#. follows someone else, so the Portuguese translation uses the singular form
+#. "seguidor".
+#: chat/tests/tests_public.py:65
+#, python-format
+msgid "%(nfollowers)s follower"
+msgid_plural "%(nfollowers)s followers"
+msgstr[0] "%(nfollowers)s seguidor"
+msgstr[1] "%(nfollowers)s seguidores"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that another room with a similar name already
+#. exists and asks to choose a different one. The English sentence is slightly
+#. rephrased for better clarity, but the overall message remains the same.
+#: chat/views/views_private_rooms.py:157 chat/views/views_public_rooms.py:80
+msgid ""
+"Another room with a similar name already exists ('{similar_room.name}'). "
+"Please choose a different name."
+msgstr ""
+"Outro quarto com um nome semelhante já existe ('{similar_room.name}'). Por "
+"favor, escolha um nome diferente."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a specific method is not allowed. The English
+#. phrase "Method not allowed" is commonly used in HTTP responses to indicate
+#. that a particular request method (e.g., GET, POST, PUT, DELETE) is not
+#. supported or permitted for a given resource.
+#: chat/views/views_private_rooms.py:273 chat/views/views_private_rooms.py:439
+msgid "Method not allowed"
+msgstr "Método não permitido"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is already a member of the private
+#. room. The English sentence implies that the user has been invited or added
+#. to the room, whereas the French translation makes it clear that the user is
+#. an existing member.
+#: chat/views/views_private_rooms.py:288 chat/views/views_private_rooms.py:455
+msgid "This user is already a member of this private room"
+msgstr "Este usuário já é um membro deste quarto privado"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is not a member of the private
+#. room. The English sentence uses "user" and "room", while the French
+#. translation uses "utilisateur" (meaning user) and "salon" (meaning room),
+#. but with the adjective "privé" to indicate it's a private space.
+#: chat/views/views_private_rooms.py:335
+msgid "This user is not a member of this private room"
+msgstr "Este usuário não é membro deste quarto privado"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which emphasizes the necessity of having at least one administrator
+#. in a private room and provides instructions on how to add another one
+#. before removing an existing one.
+#: chat/views/views_private_rooms.py:497
+msgid ""
+"There must be at least one admin in a private room. Please add another one "
+"before removing this one."
+msgstr ""
+"Existem pelo menos um administrador em uma sala privada. Por favor, adicione"
+" outro antes de remover esse outro."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is not an administrator of a
+#. private room. The English sentence "This member is not an admin of this
+#. private room" can be ambiguous, as it could refer to any type of membership
+#. or access level. The French translation makes it clear that it is a
+#. specific role (administrateur) and context (salon privé), so the Portuguese
+#. version follows this interpretation.
+#: chat/views/views_private_rooms.py:503
+msgid "This member is not an admin of this private room"
+msgstr "Este membro não é administrador deste quarto privado"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which emphasizes the necessity of having at least one administrator
+#. in a private room and provides additional instructions on how to proceed.
+#: chat/views/views_private_rooms.py:536
+msgid ""
+"There must be at least one admin in a private room. Please add another one "
+"before removing yourself."
+msgstr ""
+"Existem pelo menos um administrador em uma sala privada. Por favor, adicione"
+" outro antes de se retirar."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person was removed from the administrative
+#. role in a private room. The English sentence "You have been removed from
+#. the admins of this private room" can be ambiguous, as it can mean both
+#. being removed from an admin group and being removed from a private space.
+#. The French translation makes it clear that it is a removal from the
+#. administrative role in a private space, so the Portuguese version follows
+#. this interpretation.
+#: chat/views/views_private_rooms.py:541
+msgid "You have been removed from the admins of this private room."
+msgstr "Você foi removido dos administradores deste quarto privado."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that another private room with a similar name
+#. already exists. The English sentence is slightly ambiguous due to the use
+#. of "almost the same name", but the French translation makes it clear that
+#. it's about an existing room with a very similar name.
+#: chat/views/views_public_rooms.py:65
+#, python-format
+msgid "A private room with almost the same name already exists: %s"
+msgstr "Um quarto particular com quase o mesmo nome já existe: %s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that only the owner has the right to modify the
+#. room. The English sentence is somewhat ambiguous, but the French
+#. translation makes it clear that it's about the owner having exclusive
+#. editing rights.
+#: chat/views/views_public_rooms.py:114
+msgid "Only the owner of a room can edit it"
+msgstr "Somente o proprietário de uma sala pode editar."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that only the owner has the right to delete the
+#. room. The English sentence is ambiguous, as it could be interpreted in a
+#. more general sense, but the French translation makes it clear that it's
+#. specific to the owner, so the Portuguese version follows this
+#. interpretation.
+#: chat/views/views_public_rooms.py:129
+msgid "Only the owner of a room can delete it"
+msgstr "Somente o proprietário de uma sala pode apagar-a."

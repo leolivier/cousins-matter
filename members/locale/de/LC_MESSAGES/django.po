@@ -2060,15 +2060,15 @@ msgstr "Du hast einen neuen Followern!"
 
 #. **Explanation:**  The German translation accurately reflects the meaning of
 #. the French phrase, which indicates that the person is now following the
-#. user. The English phrase "**(Follower_name)** is now following you!" can be
+#. user. The English phrase "%(Follower_name}s is now following you!" can be
 #. ambiguous, as it can mean both "giving a ring" and "making a phone call"
 #. colloquially. The French translation makes it clear that it is a phone
-#. call, so the German version "**(Follower_name)** ist jetzt dich folgen!"
+#. call, so the German version "%(Follower_name}s ist jetzt dich folgen!"
 #. follows this interpretation.
 #: views/views_followers.py:32
 #, python-format
 msgid "%(follower_name)s is now following you!"
-msgstr "**(Follower_name)** ist jetzt dich folgen!"
+msgstr "%(follower_name)s ist jetzt dich folgen!"
 
 #. "Unbekannte Spalte im CSV-Datei: "%(fieldname)s". Zulässige Felder sind
 #. %(all_names)s"
@@ -2090,11 +2090,10 @@ msgstr "**(Follower_name)** ist jetzt dich folgen!"
 msgid ""
 "Unknown column in CSV file: \"%(fieldname)s\". Valid fields are "
 "%(all_names)s"
-msgstr "```"
+msgstr ""
+"Fehlender Spalte im CSV-Datei: \"%(fieldname)s\". Erforderliche Felder sind "
+"%(all_names)s"
 
-#. "Fehlender Spalte im CSV-Datei: "%(fieldname)s". Erforderliche Felder sind
-#. %(all_names)s"
-#. ```
 #. Explanation: The translation aims to maintain the original meaning and tone
 #. of the English sentence.  The German translation uses a similar structure
 #. as the French version, ensuring consistency in the overall message.
@@ -2104,7 +2103,9 @@ msgstr "```"
 msgid ""
 "Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
 "%(all_names)s"
-msgstr "```"
+msgstr ""
+"Unbekannte Spalte in der CSV-Datei: \"%(fieldname)s\". Gültige Felder sind "
+"%(all_names)s"
 
 #. Explanation: The German translation accurately reflects the meaning of the
 #. French phrase, while maintaining consistency with the placeholder
@@ -2143,7 +2144,9 @@ msgstr ""
 msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
 "updated"
-msgstr "```"
+msgstr ""
+"CSV-Datei hochgeladen: %(nbLines)i Zeilen gelesen, %(nbMembers)i Mitglieder erstellt oder "
+"aktualisiert"
 
 #. Explanation: The German translation accurately reflects the meaning of the
 #. French phrase, which indicates a warning.  The use of "Warnung" and

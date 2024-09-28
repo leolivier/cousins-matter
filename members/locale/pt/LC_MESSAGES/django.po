@@ -1,0 +1,2448 @@
+# Portuguese Translations for NO NAME FOUND app.
+# Copyright (C) 2024 Olivier LEVILLAIN
+# This file is distributed under the same license as the application.
+# This file was generated from /home/olivi/devt/cousins-matter/members/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the llama3.2:3b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-11 19:16+0200\n"
+"PO-Revision-Date: 2024-09-27 20:20+00:00\n"
+"\n"
+"Last-Translator: Auto-po-lyglot using llama3.2:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: French <LL@li.org>\n"
+"Language: PT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Explanation: The English word "members" can refer to individuals who belong
+#. to a group or organization, but the French translation "membres" is more
+#. general and can also mean "members" in a broader sense, such as in
+#. mathematics (set of members) or in other contexts.
+#: apps.py:8
+msgid "Members"
+msgstr "membros"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the name of the invited person will appear in
+#. the received email. The English sentence is slightly ambiguous, as it could
+#. also mean "the name of the person who sent the email". However, the context
+#. provided by the French translation makes it clear that it refers to the
+#. recipient's email, so the Portuguese version follows this interpretation.
+#: forms.py:109
+msgid "Name of the invited person (will appear in the received email)"
+msgstr "Nome da pessoa convidada (aparecerá no e-mail recebido)"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that it is an email used to send an invitation. The
+#. English phrase "Email to send invitation" can be ambiguous, as it could
+#. refer to any type of email. The French translation makes it clear that it
+#. is specifically for sending invitations, so the Portuguese version follows
+#. this interpretation.
+#: forms.py:110
+msgid "Email to send invitation"
+msgstr "Email para enviar uma convite"
+
+#. Explanation: The French translation "Ton nom" is used to address someone,
+#. whereas the English phrase "Your name" can be a question or an inquiry
+#. about someone's identity. In Portuguese, we use "Seu nome" to refer to
+#. someone's name in general, without any specific context of addressing or
+#. questioning.
+#: forms.py:114
+msgid "Your name"
+msgstr "Seu nome"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the email contains a link that will be
+#. received by the recipient. The English phrase is somewhat ambiguous, but
+#. the French translation makes it clear that it's an email with a link to be
+#. received, so the Portuguese version follows this interpretation.
+#: forms.py:115
+msgid "Email where you will receive the link"
+msgstr "Email onde você receberá o link"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a formal and polite way to address an administrator. The
+#. English phrase "Message to the administrator" is clear and direct, but in
+#. Portuguese, it's more common to use the word "mensagem" (meaning message)
+#. followed by "para o administrador", which conveys the same idea with a
+#. slightly different tone.
+#: forms.py:116
+msgid "Message to the administrator"
+msgstr "mensagem para o administrador"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the user needs to click on the image to
+#. refresh it if they are unable to read it. The English phrase "Captcha
+#. (click on the image to refresh if you can't read it)" is clear about the
+#. action required, while the French and Portuguese translations make this
+#. requirement explicit by using the verb "rafraîchir" (to refresh).
+#: forms.py:117
+msgid "Captcha (click on the image to refresh if you can't read it)"
+msgstr "Capcha (clique na imagem para refrescar se você não consegue ler)"
+
+#. Explanation: The English phrase "CSV file" is commonly used to refer to a
+#. plain text file that contains comma-separated values. In Portuguese, the
+#. term "arquivo" is used to translate "file", and "CSV" remains unchanged as
+#. it's an abbreviation for a specific format.
+#: forms.py:132
+msgid "CSV file"
+msgstr "Arquivo CSV"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a specific CSV file that contains the members to be
+#. imported. The English phrase is more general and could refer to any CSV
+#. file with member data, whereas the French and Portuguese translations make
+#. it clear that it's a specific file intended for importing.
+#: forms.py:133
+msgid "The CSV file containing the members to import."
+msgstr "O arquivo CSV que contém os membros para importar."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the action should be performed automatically
+#. for the imported users. The English phrase and its context translation
+#. convey a sense of automation, so the Portuguese version "Ativar
+#. automaticamente os usuários importados" follows this interpretation.
+#: forms.py:137
+msgid "Automatically activate imported users"
+msgstr "Ativar automaticamente os usuários importados"
+
+#. Explanation: The Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the username must be provided or defined. The
+#. English sentence can be ambiguous, as it only states a requirement without
+#. specifying what needs to be done. The French translation makes it clear
+#. that the user needs to provide the username, so the Portuguese version "O
+#. nome de usuário deve ser definido" follows this interpretation.
+#: managers.py:14
+msgid "The username must be set"
+msgstr "O nome de usuário deve ser definido"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the superuser must have a certain attribute
+#. (is_staff) set to True. The English sentence and its context translation
+#. make it clear that "is_staff" is an attribute or property, so the
+#. Portuguese version uses the verb "ter" (to have) in the present tense,
+#. indicating a necessary condition for being a superuser.
+#: managers.py:35
+msgid "Superuser must have is_staff=True."
+msgstr "O superusuário deve ter is_staff=True."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the superuser has a specific attribute
+#. (is_superuser) set to True. The English sentence and its context
+#. translation make it clear that "must have" implies a requirement or
+#. necessity, so the Portuguese version maintains this nuance.
+#: managers.py:37
+msgid "Superuser must have is_superuser=True."
+msgstr "O usuário de superação deve ter is_superuser=True."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a combination of number and street. The English
+#. phrase "number_and_street" can be ambiguous, as it can mean both "number"
+#. and "street" separately. The French translation makes it clear that it is a
+#. combination, so the Portuguese version "número e rua" follows this
+#. interpretation.
+#: models.py:17
+msgctxt "CSV Field"
+msgid "number_and_street"
+msgstr "número e rua"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that it refers to additional information about an
+#. address. The English term "address_complementary_info" suggests a specific
+#. type of information related to an address, and the Portuguese version
+#. "Informações complementares de endereço" follows this interpretation.
+#: models.py:18
+msgctxt "CSV Field"
+msgid "address_complementary_info"
+msgstr "Informações complementares de endereço"
+
+#. Explanation: The English term "zip code" refers to a specific format of
+#. postal codes used in the United States, whereas the French term
+#. "code_postal" is more general and can refer to any type of postal code. In
+#. this translation, I have maintained consistency with the French translation
+#. by using the same term for the concept, but note that the Portuguese
+#. equivalent may vary depending on the context.
+#: models.py:19
+msgctxt "CSV Field"
+msgid "zip_code"
+msgstr "codigo_postal"
+
+#. Explanation: The English word "city" is translated to the Portuguese word
+#. "cidade", which refers to a large human settlement. This translation is
+#. consistent with the French translation "ville", which also means city or
+#. town, and maintains the same meaning in both languages.
+#: models.py:20
+msgctxt "CSV Field"
+msgid "city"
+msgstr "cidade"
+
+#. Explanation: The English word "country" refers to a nation or state, while
+#. the French word "pays" also encompasses this meaning. However, in some
+#. contexts, "pays" can specifically refer to a region within France, whereas
+#. "país" is more commonly used to refer to a country in general.
+#: models.py:21
+msgctxt "CSV Field"
+msgid "country"
+msgstr "País"
+
+#. Explanation: The English term "username" is commonly used to refer to a
+#. user's chosen name or identifier on a computer system, network, or online
+#. platform. In Portuguese, the equivalent term is "nome de usuário", which
+#. literally means "user name".
+#: models.py:25
+msgctxt "CSV Field"
+msgid "username"
+msgstr "nome de usuário"
+
+#. Explanation: The English word "email" is a common abbreviation for
+#. "electronic mail". In Portuguese, the translation maintains this meaning.
+#: models.py:26
+msgctxt "CSV Field"
+msgid "email"
+msgstr "e-mail"
+
+#. Explanation: The English phrase "first_name" typically refers to a person's
+#. given name, while the French phrase "prenom" also means "given name". In
+#. Portuguese, the equivalent term is "nome", which maintains the same meaning
+#. and connotation as both the English and French phrases.
+#: models.py:27
+msgctxt "CSV Field"
+msgid "first_name"
+msgstr "Nome"
+
+#. Explanation: The English word "last_name" typically refers to a person's
+#. surname, while the French word "nom" can refer to both surname and given
+#. name. In this context, it is likely that the translator intended to use the
+#. Portuguese word "nome", which specifically means surname.
+#: models.py:28
+msgctxt "CSV Field"
+msgid "last_name"
+msgstr "Nome"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a specific term used to refer to a person's birth date.
+#. The English word "birthdate" can be ambiguous in certain contexts, but in
+#. this case, it refers to a person's birthdate, making the Portuguese
+#. translation "Data de nascimento" an accurate and precise choice.
+#: models.py:29
+msgctxt "CSV Field"
+msgid "birthdate"
+msgstr "Data de nascimento"
+
+#. Explanation: The English word "phone" and the French word "telephone" are
+#. synonyms, referring to a device used for communication. The Portuguese
+#. translation "telefone" is consistent with the French translation,
+#. maintaining the same meaning and nuance.
+#: models.py:33
+msgctxt "CSV Field"
+msgid "phone"
+msgstr "Telefone"
+
+#. Explanation: The French translation "site_web" is a compound word that
+#. includes the general term for website, which is "site". This suggests that
+#. the English phrase "website" can be translated to Portuguese as simply
+#. "site", without any additional context or nuances.
+#: models.py:34
+msgctxt "CSV Field"
+msgid "website"
+msgstr "site"
+
+#. Explanation: The English word "family" and the French word "famille" share
+#. a similar meaning, referring to a group of people related by blood or
+#. marriage. In Portuguese, the translation is "família".
+#: models.py:35
+msgctxt "CSV Field"
+msgid "family"
+msgstr "Família"
+
+#. Explanation: The English and French translations are identical, suggesting
+#. that the term "avatar" is widely recognized and used in both languages
+#. without any specific cultural or contextual nuances.
+#: models.py:36
+msgctxt "CSV Field"
+msgid "avatar"
+msgstr "Avatar"
+
+#. Explanation: The English word "Name" and the French word "Nom" both refer
+#. to a person's or thing's identity, so the Portuguese translation "Nome" is
+#. consistent with the meaning of the original words.
+#: models.py:44 templates/members/members/members_directory.html:27
+#: views/views_directory.py:47
+msgid "Name"
+msgstr "Nome"
+
+#. Explanation: The English phrase "Parent family" can be ambiguous, as it can
+#. refer to either a biological or adoptive family. However, the French
+#. translation "Famille parente" suggests that it is an adoptive or
+#. stepfamily, which is not explicitly stated in the original English
+#. sentence. Therefore, the Portuguese translation "Família" maintains the
+#. ambiguity and neutrality of the original phrase.
+#: models.py:46 templates/members/family/family_detail.html:14
+msgid "Parent family"
+msgstr "Família"
+
+#. Explanation: The English word "family" and the French word "famille" both
+#. refer to a group of people related by birth, marriage, or adoption. In
+#. Portuguese, the translation is "família", which maintains the same meaning
+#. as in French.
+#: models.py:49
+msgid "family"
+msgstr "Família"
+
+#. Explanation: The Portuguese word for "families" is "famílias", which
+#. reflects the same meaning as the English and French words.
+#: models.py:50
+msgid "families"
+msgstr "Famílias"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that it is a street address with both a number and
+#. a street name. The English phrase "Number & Street name" can be ambiguous,
+#. as it could refer to either a single unit or an address with multiple
+#. components. The French translation makes it clear that it is a complete
+#. address, so the Portuguese version follows this interpretation.
+#: models.py:65 templates/members/address/address_detail.html:8
+msgid "Number & Street name"
+msgstr "Número e nome da rua"
+
+#. Explanation: The Portuguese translation maintains the same meaning and tone
+#. as the French original, using the word "complementares" to convey the idea
+#. of additional or supplementary information.
+#: models.py:67
+msgid "Complementary info"
+msgstr "Informações complementares"
+
+#. Explanation: The Portuguese term for zip code is a direct translation of
+#. the French phrase "Code postal".
+#: models.py:69 templates/members/address/address_detail.html:16
+msgid "Zip code"
+msgstr "Numéro de código postal"
+
+#. Explanation: The English word "City" and the French word "Ville" both refer
+#. to a large human settlement, so the Portuguese translation "Cidade" is
+#. consistent with the meaning of both the original English and French
+#. phrases.
+#: models.py:71 templates/members/address/address_detail.html:20
+msgid "City"
+msgstr "Cidade"
+
+#. Explanation: The French translation "Pays" is used to refer to a country,
+#. and the Portuguese translation "País" follows this meaning.
+#: models.py:73 templates/members/address/address_detail.html:24
+msgid "Country"
+msgstr "País"
+
+#. Explanation: The English word "address" can refer to a physical location or
+#. an email address. In the context of the French translation "adresse", it is
+#. likely referring to a physical location, so the Portuguese translation
+#. "Endereço" follows this interpretation.
+#: models.py:87
+msgid "address"
+msgstr "Endereço"
+
+#. Explanation: The French translation contains a typo, with an extra 's' at
+#. the end. The Portuguese translation corrects this error and maintains
+#. consistency with the intended meaning of the original phrase.
+#: models.py:88
+msgid "addresses"
+msgstr "endereços"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a specific type of account or membership that is
+#. managed by someone else. The English phrase "Managing member" can be
+#. ambiguous, but in this context, it seems to refer to a person who has
+#. control over an account or membership, making the Portuguese version
+#. "Membro gerente" a suitable translation.
+#: models.py:96
+msgid "Managing member"
+msgstr "Membro gerente"
+
+#. Explanation: The English word "Address" can refer to a physical location or
+#. a mailing address, while the French word "Adresse" typically refers to a
+#. person's address. In this case, the Portuguese translation "Endereço" is
+#. more general and can be used in both contexts.
+#: models.py:101 templates/members/members/member_detail.html:36
+#: templates/members/members/members_directory.html:31
+#: views/views_directory.py:47
+msgid "Address"
+msgstr "Endereço"
+
+#. Explanation: The English word "Phone" and the French word "Téléphone" are
+#. synonyms, referring to a device used for communication. The Portuguese
+#. translation "Telefone" maintains this equivalence.
+#: models.py:103 templates/members/members/member_detail.html:44
+#: templates/members/members/members_directory.html:29
+#: views/views_directory.py:47
+msgid "Phone"
+msgstr "Telefone"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation. The English term
+#. "Birthdate" refers to the date of birth, while the French phrase "Date de
+#. naissance" also conveys this same meaning.
+#: models.py:105 templates/members/members/member_detail.html:48
+#: templates/members/members/members_directory.html:28
+msgid "Birthdate"
+msgstr "Data do nascimento"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that clicking on the month name or year will allow
+#. for quick changes. The original English sentence is clear and concise, but
+#. the French translation adds a slight nuance by using "modifier rapidement",
+#. which implies making changes quickly, whereas the English sentence simply
+#. says "change them quickly".
+#: models.py:106
+msgid "Click on the month name or the year to change them quickly"
+msgstr "Clique em nome do mês ou do ano para mudá-los rapidamente"
+
+#. Explanation: The French translation "Site web" is a compound word that
+#. combines the words "site" and "web". In Portuguese, it's common to use only
+#. "site" as the translation of "website".
+#: models.py:109 templates/members/members/member_detail.html:52
+msgid "Website"
+msgstr "Site"
+
+#. Explanation: The word "família" is the Portuguese translation of the
+#. English and French term "family". It maintains the same meaning and
+#. connotation as its original translations.
+#: models.py:111 templates/members/members/member_detail.html:56
+msgid "Family"
+msgstr "Família"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a common way to ask about someone's identity. The English
+#. phrase "Who I am" can be ambiguous, as it could also mean "What I am", but
+#. in this context, the French translation makes it clear that it is asking
+#. for information about the speaker's identity, and the Portuguese version
+#. follows this interpretation.
+#: models.py:113 templates/members/members/member_detail.html:60
+msgid "Who I am"
+msgstr "Quem sou"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is an invitation to describe oneself and their preferences.
+#. The English sentence can be ambiguous, but the French translation makes it
+#. clear that it's a personal description with likes and dislikes.
+#: models.py:114
+msgid "Describe yourself, your likes and dislikes..."
+msgstr "Descreva-se, seus gostos e desgostos..."
+
+#. Explanation: The French translation "Mes loisirs" is a common way to
+#. express one's leisure activities or pastimes. In Portuguese, the word
+#. "hobbies" has been translated directly, maintaining the same meaning and
+#. context as in English.
+#: models.py:115
+msgid "My hobbies"
+msgstr "Meus hobbies"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is clear and direct. The English sentence can be ambiguous,
+#. but the French translation makes it explicit that we are looking for a list
+#. of hobbies separated by commas. The Portuguese version follows this
+#. interpretation.
+#: models.py:116
+msgid "Provide a list of hobbies separated by commas"
+msgstr "Liste os hobbies separados por vírgulas."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which explicitly mentions the concept of protecting personal life.
+#. The English phrase "Privacy consent" is more general and could refer to
+#. various types of consent related to privacy, whereas the French translation
+#. makes it clear that it's specifically about protecting personal life.
+#: models.py:118
+msgid "Privacy consent"
+msgstr "Consentimento à proteção da vida privada"
+
+#. Explanation: The English and French translations are identical, so the
+#. Portuguese translation is also direct and literal.
+#: models.py:120
+msgid "Followers"
+msgstr "Seguidores"
+
+#. Explanation: The English word "member" and its French equivalent "membre"
+#. have the same meaning, referring to a person who belongs to an organization
+#. or group.
+#: models.py:129
+msgid "member"
+msgstr "membro"
+
+#. Explanation: The English and French translations are identical, suggesting
+#. that the term "members" is used in a context where its meaning is already
+#. clear. In Portuguese, the word "membros" can refer to members of an
+#. organization or group, making it a suitable translation for this sentence.
+#: models.py:130
+msgid "members"
+msgstr "membros"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a detailed description or information about an
+#. address. The English phrase "Address Detail" is straightforward and clear,
+#. while the French translation adds a touch of formality with the word
+#. "détail", emphasizing that it's a specific detail about the address.
+#: templates/members/address/address_detail.html:3
+msgid "Address Detail"
+msgstr "Detalhe da Endereço"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates additional or supplementary information. The
+#. English phrase "Complementary Info" is commonly used in technical and
+#. business contexts to refer to such information.
+#: templates/members/address/address_detail.html:12
+msgid "Complementary Info"
+msgstr "Informações Complementares"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the address is being used or employed for
+#. something. The English phrase "Address used by" can be ambiguous, as it can
+#. mean both "address associated with" and "address being used". The French
+#. translation makes it clear that it is an address being used, so the
+#. Portuguese version "Endereço utilizado por." follows this interpretation.
+#: templates/members/address/address_detail.html:31
+msgid "Address used by:"
+msgstr "Endereço utilizado por:"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the address is not being used by anyone. The
+#. English phrase "Address not used by anyone" can be ambiguous, as it could
+#. refer to an unused address in general or specifically to a situation where
+#. no one is using it. The French translation makes it clear that it is a
+#. specific case of an unused address, so the Portuguese version follows this
+#. interpretation.
+#: templates/members/address/address_detail.html:43
+msgid "Address not used by anyone"
+msgstr "Esta casa não é usada por ninguém."
+
+#. Explanation: This translation reflects the meaning of the French phrase,
+#. which is a direct and literal translation of the English word "Edit". The
+#. verb "éditer" in French means to edit or revise something.
+#: templates/members/address/address_detail.html:48
+#: templates/members/family/family_detail.html:23
+#: templates/members/members/member_detail.html:77
+msgid "Edit"
+msgstr "Editar"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation. The English phrase "Edit
+#. Address" implies that the user wants to modify or update their address,
+#. while the French phrase "Editer l'adresse" also conveys this idea.
+#: templates/members/address/address_form.html:3
+#: templates/members/address/address_form.html:8
+msgid "Edit Address"
+msgstr "Editar endereço"
+
+#. Explanation: The English word "Submit" can have different meanings
+#. depending on the context, such as to send or to agree with. However, in
+#. this case, considering the French translation "Envoyer", which implies
+#. sending or transmitting, the Portuguese translation "Enviar" is consistent
+#. and accurate.
+#: templates/members/address/address_form.html:17
+#: templates/members/family/family_form.html:17
+msgid "Submit"
+msgstr "Enviar"
+
+#. Explanation: The English word "Cancel" and the French word "Annuler" both
+#. convey the idea of stopping or reversing an action. In Portuguese,
+#. "Cancelar" is a direct translation that maintains this meaning, indicating
+#. the cancellation of something.
+#: templates/members/address/address_form.html:18
+#: templates/members/family/family_form.html:18
+#: templates/members/modal_form.html:31
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation. The English phrase
+#. "Verify Email address" can be slightly ambiguous, but in this context, it
+#. clearly indicates that the action is to verify an email address, making the
+#. Portuguese version accurate.
+#: templates/members/email/email_verification_msg.html:8
+msgid "Verify Email address"
+msgstr "Verificar endereço de e-mail"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a specific action related to member activation. The
+#. English phrase "Member Activation" is straightforward and clearly conveys
+#. the idea of activating a member's account or status. The Portuguese version
+#. "Ativação de Membro" maintains this clarity and precision.
+#: templates/members/email/email_verification_msg.html:17
+msgid "Member Activation"
+msgstr "Ativação de Membro"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation of the English term. The
+#. word "e-mail" is not commonly used in Portuguese, but "confirmação de
+#. e-mail" is widely accepted as a correct translation.
+#: templates/members/email/email_verification_msg.html:21
+msgid "E-mail Confirmation"
+msgstr "Confirmação de E-mail"
+
+#. Explanation: The English phrase "Greetings!" is a common way to express
+#. salutation, but in Portuguese, it's more common to use the word "Ossé!"
+#. which is an informal way of saying "Hello" or "Hi", and can be used as a
+#. greeting.
+#: templates/members/email/email_verification_msg.html:25
+msgid "Greetings!"
+msgstr "Ossé!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is trying to create an account on
+#. the website. The English sentence can be ambiguous, as it could also mean
+#. "you received this mail because you attempted to access a restricted area"
+#. or something similar. However, in the context provided by the French
+#. translation, it's clear that the focus is on creating an account, so the
+#. Portuguese version follows this interpretation.
+#: templates/members/email/email_verification_msg.html:27
+#: tests/tests_member.py:334
+msgid ""
+"You received this mail because you attempted to create an account on our "
+"website"
+msgstr ""
+"Você recebeu este e-mail porque você tentou criar uma conta no nosso site."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is polite and formal. The English sentence is a standard
+#. request for users to verify their email address and activate their account
+#. after signing up or registering. The French translation maintains this tone
+#. and clarity, while the Portuguese version follows suit with a similar
+#. structure and wording.
+#: templates/members/email/email_verification_msg.html:28
+#: tests/tests_member.py:335
+msgid ""
+"Please click on the link below to confirm the email and activate your "
+"account."
+msgstr ""
+"Por favor, clique no link abaixo para confirmar o endereço de e-mail e "
+"ativar sua conta."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person will join the group immediately
+#. after completing the verification process. The English sentence uses the
+#. future tense "will be joining", while the French translation uses the
+#. present conditional "vous rejoindrez", which implies a more immediate
+#. action.
+#: templates/members/email/email_verification_msg.html:31
+msgid "You'll be joining us right after the verification !"
+msgstr "Você estará se juntando a nós logo após a verificação!"
+
+#. Explanation: The English word "Verify" and the French word "Vérifier" both
+#. convey the meaning of checking or confirming something, making the
+#. Portuguese translation "Verificar" a direct equivalent.
+#: templates/members/email/email_verification_msg.html:36
+msgid "Verify"
+msgstr "Verificar"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which clearly indicates that the email is machine-generated and
+#. should not be replied to. The English sentence's tone is also preserved in
+#. the Portuguese version, conveying a sense of warning or caution.
+#: templates/members/email/email_verification_msg.html:39
+#: templates/members/email/new_follower.html:22
+msgid "Do not reply to this mail, it is machine generated."
+msgstr "Não responda a este e-mail, ele foi gerado por máquina."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is now following the other person
+#. on a specific site. The English sentence uses a more casual tone with "Hi"
+#. and "is now following", while the French translation maintains a more
+#. formal tone with "Bonjour" and "te suit maintenant".
+#: templates/members/email/new_follower.html:17
+#, python-format
+msgid ""
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a>"
+" is now following you on %(site_name)s!"
+msgstr ""
+"Olá %(followed_name)s, <br><a "
+"href=\"%(follower_url)s\">%(follower_name)s</a> está agora seguindo você em "
+"%(site_name)s!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is an invitation to register on a specific website. The
+#. placeholder names are kept in their original form to maintain consistency
+#. with the context translation.
+#: templates/members/email/registration_invite_email.html:8
+#, python-format
+msgid "Invitation for %(invited)s to register to %(site_name)s"
+msgstr "Convite para %(invited)s se registrarem em %(site_name)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a registration on the specified website. The
+#. English phrase uses a placeholder for the site name, while the French
+#. translation also uses this placeholder to maintain consistency with the
+#. original text.
+#: templates/members/email/registration_invite_email.html:17
+#: tests/tests_register.py:39
+#, python-format
+msgid "Registration to the \"%(site_name)s\" site"
+msgstr "Registo no sítio \"%(site_name)s\""
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is addressing someone who has been
+#. invited. The English phrase "Hello %(invited)s, this is %(inviter)s!" can
+#. be ambiguous, as it can mean both "greeting" and "introduction". The French
+#. translation makes it clear that it is an introduction, so the Portuguese
+#. version "Olá %%(invited)s, isso é %%(inviter)s!" follows this
+#. interpretation.
+#: templates/members/email/registration_invite_email.html:22
+#, python-format
+msgid "Hello %(invited)s, this is %(inviter)s!"
+msgstr "Olá %(invited)s, isso é %(inviter)s!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the speaker created a website for managing
+#. their family. The English phrase "I invite you to register on the
+#. %(site_name)s website I created" is slightly ambiguous, as it could imply
+#. that the speaker is inviting someone to register on any website with the
+#. name "%(site_name)s". However, the French translation makes it clear that
+#. the speaker has specifically created a website for this purpose. The
+#. Portuguese version follows this interpretation and uses the phrase "que eu
+#. criei" to emphasize that the speaker is the creator of the website.
+#: templates/members/email/registration_invite_email.html:24
+#: tests/tests_register.py:41
+#, python-format
+msgid ""
+"I invite you to register on the %(site_name)s website I created for managing"
+" our big family!"
+msgstr ""
+"Eu convido você a se registrar no site web %(site_name)s que eu criei para "
+"gerenciar nossa grande família!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is inviting the recipient to
+#. register on a specific website created by an administrator for managing
+#. their family. The English phrase "I invite you to register on the
+#. %(site_name)s website created by %(admin)s for managing our big family!"
+#. can be ambiguous, as it mentions a "big family", but the French translation
+#. makes it clear that it is a specific family being referred to.
+#: templates/members/email/registration_invite_email.html:26
+#: tests/tests_register.py:44
+#, python-format
+msgid ""
+"I invite you to register on the %(site_name)s website created by %(admin)s "
+"for managing our big family!"
+msgstr ""
+"Eu convido você a se registrar no site web %(site_name)s criado por "
+"%(admin)s para gerenciar nossa grande família!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the website offers a directory of family
+#. members and many features related to birthdays, photos, forums, and ads.
+#. The original English sentence is somewhat ambiguous, but the provided
+#. French translation makes it clear what can be expected from the website.
+#: templates/members/email/registration_invite_email.html:32
+msgid ""
+"On this site, you will find a directory of the family members and a lot of "
+"features on birthdays, photos, forums, ads,..."
+msgstr ""
+"Este site oferece um diretório dos membros da família e uma grande "
+"quantidade de recursos sobre aniversários, fotos, fóruns, anúncios,..."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the user should click on the provided link to
+#. access the site and create an account. The original English sentence is
+#. somewhat wordy, but the French translation makes it clear and concise.
+#: templates/members/email/registration_invite_email.html:35
+msgid ""
+"If you know the administrator and knows he created this site, please click "
+"on the link below to go to the site and create your account."
+msgstr ""
+"Se você conhece o administrador e sabe que ele criou este site, por favor, "
+"clique no link abaixo para ir ao site e criar sua conta."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person can respond to the email to contact
+#. the inviter and verify if they really invited the recipient. The English
+#. sentence "You can also reply to this email to contact <inviter> and check
+#. with him if he really invited you..." is ambiguous, as it does not specify
+#. whether the contact is for a new invitation or an existing one. The French
+#. translation makes it clear that it is for a new invitation, using the
+#. phrase "qu'il t'a bien invité(e)".
+#: templates/members/email/registration_invite_email.html:38
+#, python-format
+msgid ""
+"You can also reply to this email to contact <a "
+"href=\"mailto:%(inviter_email)s\">%(inviter)s</a> and check with him if he "
+"really invited you..."
+msgstr ""
+"Você também pode responder a este e-mail para entrar em contato com <a "
+"href='mailto:%(inviter_email)s'>%(inviter)s</a> e verificar se ele realmente"
+" convidou você..."
+
+#. Explanation: The Portuguese translation "Se inscrever" is a direct
+#. equivalent of the French phrase "S'enregistrer", which means to register or
+#. sign up.
+#: templates/members/email/registration_invite_email.html:43
+#: views/views_registration.py:24
+msgid "Sign up"
+msgstr "Se inscrever"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a formal registration request. The English sentence uses a
+#. placeholder for the site name, and the French translation maintains this
+#. format. In Portuguese, "registo" is used to refer to a registration or
+#. enrollment process, and "solicitação" means a request or application.
+#: templates/members/email/registration_request_email.html:8
+#: tests/tests_register.py:124 views/views_registration.py:207
+#, python-format
+msgid "Registration request for %(site_name)s"
+msgstr "Registo de solicitação para %(site_name)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a registration request for a specific website. The
+#. English phrase "Registration request for the "%(site_name)s" site" uses a
+#. placeholder to indicate the name of the website, while the French
+#. translation makes it clear that it is a registration request for a specific
+#. site.
+#: templates/members/email/registration_request_email.html:17
+#: tests/tests_register.py:129
+#, python-format
+msgid "Registration request for the \"%(site_name)s\" site"
+msgstr "Pedido de registo para o sítio \"%(site_name)s\""
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person requested to register on their
+#. cousin's website. The English phrase "%(name)s (%(email)s) requested to
+#. register to your cousinades site" can be ambiguous, as it uses the word
+#. "cousinades", which is not a standard term in Portuguese. The French
+#. translation makes it clear that it is a request to register on a specific
+#. website related to cousins, so the Portuguese version follows this
+#. interpretation.
+#: templates/members/email/registration_request_email.html:21
+#: tests/tests_register.py:130
+#, python-format
+msgid "%(name)s (%(email)s) requested to register to your cousinades site"
+msgstr ""
+"%(name)s (%(email)s) solicitou-se inscrever no seu site de parentesco."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that it is a message sent by someone. The English
+#. phrase can be ambiguous, but the French translation makes it clear that it
+#. is a message sent, so the Portuguese version "Éssa é a mensagem que ele
+#. enviou." follows this interpretation.
+#: templates/members/email/registration_request_email.html:23
+msgid "Here is the message he sent:"
+msgstr "Éssa é a mensagem que ele enviou."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person received an email because they are
+#. the administrator of a specific website. The English sentence uses a
+#. placeholder for the site name, and the Portuguese version maintains this
+#. format to preserve the context and clarity of the original text.
+#: templates/members/email/registration_request_email.html:28
+#, python-format
+msgid ""
+"You received this mail because you are the administrator of the "
+"\"%(site_name)s\" site."
+msgstr ""
+"Você recebeu este e-mail porque você é o administrador do '%(site_name)s' "
+"site."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates opening an invitation page. The English phrase
+#. "Open invitation page" is clear and direct, so the Portuguese version
+#. follows this interpretation.
+#: templates/members/email/registration_request_email.html:33
+msgid "Open invitation page"
+msgstr "página de convite aberta"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a new invitation to register. The placeholder
+#. "%(site_name)s" is kept in its original position and remains untranslated,
+#. as it refers to the name of the website or platform where registration
+#. takes place.
+#: templates/members/email/registration_sent_email.html:8
+#, python-format
+msgid "New invitation to register on %(site_name)s"
+msgstr "Nova convite para se registrar em %(site_name)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person sent an invitation to register on a
+#. specific website. The English phrase "Invitation to register on
+#. %(site_name)s sent by %(inviter)s to %(invited)s" is ambiguous, as it can
+#. be interpreted in different ways. However, based on the context provided by
+#. the French translation, it seems that the intention was to convey that the
+#. invitation was sent from one person (%(inviter)s) to another person
+#. (%(invited)s), with the specific website being %(site_name)s.
+#: templates/members/email/registration_sent_email.html:15
+#: views/views_registration.py:149
+#, python-format
+msgid ""
+"Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s"
+msgstr ""
+"%(site_name)s criou uma convite para se registrar em %(site_name)s, enviada "
+"por %(inviter)s para %(invited)s"
+
+#. Explanation: This translation maintains the same structure and context as
+#. the original English sentence, while adapting it to Portuguese. The
+#. placeholders are kept in their original position to preserve the intended
+#. meaning and avoid any potential ambiguity.
+#: templates/members/email/registration_sent_email.html:22
+#, python-format
+msgid ""
+"Hello %(admin)s, for your information, %(inviter)s (%(inviter_email)s) sent "
+"an invitation to %(invited)s (%(invited_email)s) to register on the "
+"%(site_name)s website."
+msgstr ""
+"Olá %(admin)s, para informações, %(inviter)s (%(inviter_email)s) enviou uma "
+"solicitação de inscrição para %(invited)s (%(invited_email)s) no site "
+"%(site_name)s."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that there is no way to block the invitation. The
+#. English sentence can be ambiguous, as it mentions not knowing or not
+#. wanting someone to register on a site. However, the French translation
+#. makes it clear that it's about blocking an invitation, so the Portuguese
+#. version follows this interpretation.
+#: templates/members/email/registration_sent_email.html:28
+#, python-format
+msgid ""
+"There is now way to block this invitation, so if you don't know %(invited)s "
+"or don't want him/her to register on this site, please contact him/her or "
+"%(inviter)s using the following emails:"
+msgstr ""
+"Não há forma de bloquear essa convite, portanto, se você não conhece "
+"%(invited)s ou não deseja que ele/ela se inscreva neste site, por favor "
+"entre em contato com ele/ela ou %(inviter)s usando os seguintes e-mails:"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a detailed description or information about the
+#. family. The English phrase "Family Detail" is concise and can be
+#. interpreted in different ways, but the French translation makes it clear
+#. that it refers to a specific detail or aspect of the family, hence the
+#. Portuguese version "Detalhe da Família".
+#: templates/members/family/family_detail.html:3
+msgid "Family Detail"
+msgstr "Detalhe da Família"
+
+#. Explanation: The Portuguese translation "Nome Familiar" is used to refer to
+#. a person's family name, which is the same meaning as the French phrase "Nom
+#. de Famille".
+#: templates/members/family/family_detail.html:9
+msgid "Family name"
+msgstr "Nome Familiar"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the family does not have a declared parent
+#. family. The English sentence can be ambiguous, as it could mean "no parent
+#. family at all", but in this context, it seems to imply that there is no
+#. officially recognized or declared parent family.
+#: templates/members/family/family_detail.html:18
+msgid "This family has no declared parent family."
+msgstr "Esta família não tem uma família parental declarada."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a specific action on the family unit. The English
+#. phrase "Edit Family" can be ambiguous, as it could refer to editing
+#. information about families in general or specifically to editing family
+#. relationships. The French translation makes it clear that it is about
+#. modifying the family itself, so the Portuguese version "Editar Família"
+#. follows this interpretation.
+#: templates/members/family/family_form.html:3
+#: templates/members/family/family_form.html:8
+msgid "Edit Family"
+msgstr "Editar Família"
+
+#. Explanation: The English phrase "Sign in" is a common way to ask someone to
+#. log in or authenticate themselves, whereas the French phrase "Se connecter"
+#. also means to log in or connect. In this case, both translations convey the
+#. same meaning and usage, so the Portuguese translation "Entrar" is used.
+#: templates/members/login/login.html:9 templates/members/login/login.html:13
+#: templates/members/login/password_reset.html:18
+#: templates/members/login/password_reset_complete.html:9
+#: templates/members/login/password_reset_confirm.html:28
+#: templates/members/registration/email_verification_successful.html:14
+msgid "Sign in"
+msgstr "Entrar"
+
+#. Explanation: The English phrase "Need An Account?" is a common question
+#. used in online applications, asking if the user already has an account. The
+#. Portuguese translation "Você precisa de um conta?" maintains the same
+#. meaning and tone as the original French translation "Besoin d'un compte?",
+#. which also uses the formal "compte" to ask for an account.
+#: templates/members/login/login.html:17
+msgid "Need An Account?"
+msgstr "Você precisa de um conta?"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is to ask for an invitation. The English phrase "Request
+#. invitation link" can be ambiguous, as it can mean both requesting a link
+#. and asking for an invitation. The French translation makes it clear that it
+#. is asking for an invitation, so the Portuguese version "Pedir um link de
+#. convite" follows this interpretation.
+#: templates/members/login/login.html:18
+msgid "Request invitation link"
+msgstr "Pedir um link de convite"
+
+#. Explanation: The English phrase "Password Forgotten?" is a common way to
+#. ask if someone has forgotten their password. In Portuguese, the translation
+#. "Senha Esquecida?" maintains the same meaning and tone as the original
+#. phrase.
+#: templates/members/login/login.html:21
+#: templates/members/login/password_change.html:17
+msgid "Password Forgotten?"
+msgstr "Senha Esquecida?"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a common way to express the concept of resetting a
+#. password in many languages. The English phrase "Reset password" is also
+#. widely used and understood, but the Portuguese version "Resetar senha"
+#. follows the same idea as the French translation.
+#: templates/members/login/login.html:22
+#: templates/members/login/password_change.html:18
+msgid "Reset password"
+msgstr "Resetar senha"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a change in password. The English phrase "Password
+#. Change" is straightforward and clear, while the French translation provides
+#. more context and precision. In Portuguese, "senha" is used to refer to a
+#. password, making the translation consistent with the original text.
+#: templates/members/login/password_change.html:9
+msgid "Password Change"
+msgstr "Alteração de senha"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a common way to express the idea of changing one's
+#. password. The English phrase "Change password" can be translated directly
+#. into Portuguese as "Alterar senha", maintaining the same meaning and
+#. context as the original sentence.
+#: templates/members/login/password_change.html:13
+msgid "Change password"
+msgstr "Alterar senha"
+
+#. Explanation: The English phrase "Password resetting" can be translated to
+#. Portuguese as "Resetação de senha", which is a common term used in many
+#. countries, especially in Brazil. This translation reflects the meaning of
+#. the French phrase, which indicates the process of resetting or changing a
+#. password.
+#: templates/members/login/password_reset.html:9
+msgid "Password resetting"
+msgstr "Resetação de senha"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is to send a reset link. The English phrase "Send a reset
+#. link" is clear and direct, and the Portuguese version follows this
+#. interpretation.
+#: templates/members/login/password_reset.html:13
+msgid "Send a reset link"
+msgstr "Enviar um link de reinicialização"
+
+#. Explanation: The Portuguese translation maintains the same tone and
+#. question mark as the original English sentence, reflecting the meaning of
+#. the French phrase.
+#: templates/members/login/password_reset.html:17
+#: templates/members/login/password_reset_confirm.html:27
+msgid "Password Not Forgotten?"
+msgstr "Senha não esquecida?"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the password reset operation was completed
+#. successfully. The English phrase "Password reset complete" is a standard
+#. notification message used in many systems, and its translation to
+#. Portuguese should convey the same sense of completion and success.
+#: templates/members/login/password_reset_complete.html:6
+msgid "Password reset complete"
+msgstr "Senha reiniciada com sucesso"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the password has been set and the user can now
+#. log in. The English sentence is written in a formal tone, suggesting an
+#. automated system or a notification, while the French translation maintains
+#. this tone.
+#: templates/members/login/password_reset_complete.html:7
+msgid "Your password has been set.  You may go ahead and sign in now."
+msgstr "Seu senha foi definida. Você pode prosseguir e fazer login agora."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a confirmation for resetting the password. The
+#. English phrase is straightforward and clear in its meaning, while the
+#. French translation provides more detail about the specific action being
+#. confirmed. The Portuguese version maintains this clarity and precision.
+#: templates/members/login/password_reset_confirm.html:11
+msgid "Password reset confirmation"
+msgstr "Confirmação de reinicialização do senha"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which emphasizes the importance of verifying that the user has
+#. entered their new password correctly. The English sentence is somewhat
+#. ambiguous, as it could be interpreted as simply asking for confirmation
+#. without emphasizing the need to verify correctness.
+#: templates/members/login/password_reset_confirm.html:12
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Por favor, insira seu novo senha duas vezes para que possamos verificar se "
+"você digitou corretamente."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a change to the user's password. The English phrase
+#. "Change my password" is clear and direct, while the French translation uses
+#. more formal language to convey the same idea. In Portuguese, we use the
+#. verb "alterar" to indicate a change or modification, making it consistent
+#. with the French translation.
+#: templates/members/login/password_reset_confirm.html:17
+msgid "Change my password"
+msgstr "Alterar minha senha."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the password reset link is invalid and may
+#. have already been used by someone else. The English sentence provides
+#. additional context to clarify this, so the Portuguese version "O link de
+#. resetar senha foi inválido, possivelmente porque já foi usado. Por favor,
+#. solicite uma nova resetar senha." follows this interpretation.
+#: templates/members/login/password_reset_confirm.html:23
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+"O link de resetar senha foi inválido, possivelmente porque já foi usado. Por"
+" favor, solicite uma nova resetar senha."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a password reset was successfully sent. The
+#. English phrase "Password reset sent" is straightforward and implies that
+#. the action has been completed. The French translation makes it clear that
+#. the password reset was initiated, so the Portuguese version "Mot de passe
+#. reinitialisé" follows this interpretation.
+#: templates/members/login/password_reset_done.html:6
+msgid "Password reset sent"
+msgstr "Mot de passe reinitialisé"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which provides instructions for setting a password and explains
+#. that they will be sent shortly if an account exists with the provided email
+#. address. The English sentence is slightly ambiguous, as it uses "We've
+#. emailed" which can imply that the action happened in the past, but the
+#. context translation makes it clear that the instruction was sent recently.
+#: templates/members/login/password_reset_done.html:7
+msgid ""
+"We’ve emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+"Nosso e-mail te enviou instruções para configurar sua senha, se um perfil "
+"existir com o e-mail que você inseriu. Você deve receber essas instruções "
+"breve tempo."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the user should verify their email address and
+#. check their spam folder if they don't receive an email. The original
+#. English sentence is somewhat formal, while the French translation is more
+#. direct and concise. The Portuguese version maintains a similar tone and
+#. clarity.
+#: templates/members/login/password_reset_done.html:9
+msgid ""
+"If you don’t receive an email, please make sure you’ve entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"Se você não receber um e-mail, certifique-se de que você inseriu a endereço "
+"que você registrou, e verifique sua caixa de spam."
+
+#. Explanation: The English term "Birthdays" can refer to the anniversary of
+#. one's birth, while "Data de nascimento" in Portuguese is a more literal
+#. translation, emphasizing the date of birth.
+#: templates/members/members/birthdays.html:3
+#: templates/members/members/members.html:11
+msgid "Birthdays"
+msgstr "Data de nascimento"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that there are upcoming birthdays. The English
+#. phrase "Birthdays in the next X days" can be ambiguous, as it can mean both
+#. "birthdays that will occur within a certain timeframe" and "upcoming
+#. birthdays". The French translation makes it clear that it is about upcoming
+#. birthdays, so the Portuguese version follows this interpretation.
+#: templates/members/members/birthdays_include.html:4
+#, python-format
+msgid "Birthdays in the next %(ndays)s days"
+msgstr "Data de aniversário nos próximos %(ndays)s dias"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is turning a certain age today and
+#. wishing them a happy birthday. The English phrase "turns %(age)s today,
+#. happy birthday!" can be ambiguous, as it can mean both "is turning a
+#. certain age" and "wishing someone a happy birthday". The French translation
+#. makes it clear that it is a birthday wish, so the Portuguese version
+#. follows this interpretation.
+#: templates/members/members/birthdays_include.html:16
+#: tests/tests_birthdays.py:38
+#, python-format
+msgid "turns %(age)s today, happy birthday!"
+msgstr "Vira %(age)s anos hoje, feliz aniversário!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person will turn a certain age on the next
+#. day, and it is a birthday celebration. The English phrase "will turn
+#. %(age)s tomorrow, happy birthday!" makes it clear that it is a birthday, so
+#. the Portuguese version "Vai dar %(age)s anos amanhã, feliz aniversário!"
+#. follows this interpretation.
+#: templates/members/members/birthdays_include.html:18
+#: tests/tests_birthdays.py:42
+#, python-format
+msgid "will turn %(age)s tomorrow, happy birthday!"
+msgstr "Vai dar %(age)s anos amanhã, feliz aniversário!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person will have a certain age on a
+#. specific birthday. The English phrase "will turn X on Y" is commonly used
+#. to express this idea, so the Portuguese version follows this
+#. interpretation.
+#: templates/members/members/birthdays_include.html:21
+#: tests/tests_birthdays.py:47
+#, python-format
+msgid "will turn %(age)s on %(birthday)s"
+msgstr "Vai dar %(age)s anos no %(birthday)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that there are no birthdays in the upcoming days.
+#. The English sentence uses a placeholder for the number of days, and the
+#. French translation makes it clear that it is referring to a specific period
+#. of time.
+#: templates/members/members/birthdays_include.html:34
+#, python-format
+msgid "No birthdays in next %(ndays)s days"
+msgstr "Não há aniversários nos próximos %(ndays)s dias"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation. The English phrase
+#. "Import Members" is clear and concise, and the Portuguese version follows
+#. this simplicity while maintaining the same meaning.
+#: templates/members/members/export_members.html:4
+#: templates/members/members/import_members.html:3
+#: templates/members/members/import_members.html:6
+msgid "Import Members"
+msgstr "Importar Membros"
+
+#. Explanation: The English phrase "Export Members" can be interpreted in
+#. different ways, but the context of the French translation "Exportation de
+#. Membres" suggests that it refers to exporting members or data from a group
+#. or organization. The Portuguese translation "Exportar Membros" follows this
+#. interpretation, indicating that the action is related to exporting members
+#. or data.
+#: templates/members/members/export_members.html:7
+msgid "Export Members"
+msgstr "Exportar Membros"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the user can export members to a CSV file and
+#. provides additional context about the structure of the exported file.
+#: templates/members/members/export_members.html:9
+msgid ""
+"You can export members to a CSV file. The first line of the file contains "
+"the field names. "
+msgstr ""
+"Você pode exportar membros para um arquivo CSV. A primeira linha do arquivo "
+"contém os nomes dos campos."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that all fields are present and empty if they are
+#. not present in the database. The original English sentence is a bit
+#. ambiguous, but the French translation makes it clear that "present" refers
+#. to being in the database, so the Portuguese version follows this
+#. interpretation.
+#: templates/members/members/export_members.html:10
+msgid "All fields are present and empty if not present in the database. "
+msgstr ""
+"Todos os campos estão presentes e vazios se não estiverem presentes na base "
+"de dados."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that administrators can re-import files after
+#. making modifications with any CSV editor. The English sentence is clear and
+#. concise, so no further explanation is needed.
+#: templates/members/members/export_members.html:13
+msgid "Admins can re-import the files after modification with any CSV editor."
+msgstr ""
+"Administradores podem reimportar os arquivos após a modificação com qualquer"
+" editor CSV."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation. The English phrase
+#. "Select members to export" can be slightly rephrased in Portuguese as
+#. "Selecione os membros para exportar", maintaining the same meaning and tone
+#. as the original sentence.
+#: templates/members/members/export_members.html:18
+msgid "Select members to export"
+msgstr "Selecione os membros para exportar"
+
+#. Explanation: The English phrase "Family filter" can be interpreted in
+#. different ways, but the context of the French translation "Filtre sur la
+#. Famille" suggests that it refers to a setting or option related to family
+#. content. In this case, the Portuguese translation "Filtra de Família"
+#. maintains the same meaning and connotation as the original English phrase.
+#: templates/members/members/export_members.html:21
+msgid "Family filter"
+msgstr "Filtra de Família"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a filter for cities. The English phrase "City
+#. filter" is more general and could refer to any type of filter, whereas the
+#. French translation makes it clear that it's specifically for cities, so the
+#. Portuguese version follows this interpretation.
+#: templates/members/members/export_members.html:26
+msgid "City filter"
+msgstr "Filtra pela Cidade"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a filtering or sorting by last name. The English
+#. phrase "Last name filter" suggests a specific action being taken on the
+#. last names, whereas the French and Portuguese translations imply a more
+#. general concept of filtering or sorting by this criterion.
+#: templates/members/members/export_members.html:31
+msgid "Last name filter"
+msgstr "Filtra por último nome"
+
+#. Explanation: The English word "export" and the French word "exporter" both
+#. convey the idea of sending or transferring something out of a country, but
+#. in this case, the translations are identical.
+#: templates/members/members/export_members.html:40
+msgid "Export"
+msgstr "Exportar"
+
+#. Explanation: The English phrase "Select a name" can be interpreted as both
+#. selecting an option and choosing a person's name. However, the French
+#. translation "Selectionner un nom" makes it clear that the context is about
+#. choosing a name, which aligns with the Portuguese translation "Escolher um
+#. nome".
+#: templates/members/members/export_members.html:51
+msgid "Select a name..."
+msgstr "Escolher um nome..."
+
+#. Explanation: The English phrase "Select a city..." is often used in the
+#. context of selecting a location, and the French translation "Selectionner
+#. une ville..." accurately conveys this meaning. In Portuguese, the verb
+#. "selecionar" means to select or choose, and adding the definite article
+#. "uma" before the noun "cidade" makes the sentence grammatically correct and
+#. idiomatic.
+#: templates/members/members/export_members.html:55
+msgid "Select a city..."
+msgstr "Selecione uma cidade..."
+
+#. Explanation: The English phrase "Select a family" can be interpreted in
+#. different ways, but the French translation makes it clear that the context
+#. is about selecting or choosing a family. In Portuguese, the verb
+#. "selecionar" (to select) is used to convey this meaning, resulting in the
+#. translation "Selecione uma família...".
+#: templates/members/members/export_members.html:59
+msgid "Select a family..."
+msgstr "Selecione uma família..."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the selection should be cleared. The English
+#. phrase "Clear selection" is a common instruction in user interfaces, and
+#. the Portuguese version follows this interpretation.
+#: templates/members/members/export_members.html:85
+msgid "Clear selection"
+msgstr "Seleção clara"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that importing members from a CSV file is allowed
+#. and provides instructions on how to format the first line of the file. The
+#. English sentence is clear about the requirement for the field names, while
+#. the French translation makes it explicit by using the word "doit" (must)
+#. and providing more detail with the phrase "comme décrit ci-dessous" (as
+#. described below).
+#: templates/members/members/import_members.html:8
+msgid ""
+"You can import members from a CSV file. The first line of the file must "
+"contain the field names as described below."
+msgstr ""
+"Você pode importar membros de um arquivo CSV. A primeira linha do arquivo "
+"deve conter os nomes dos campos como descrito abaixo."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the file must contain a minimum number of
+#. specified columns. The English sentence is clear and direct, while the
+#. French translation adds a more formal tone with "doit contenir", which
+#. means "must contain".
+#: templates/members/members/import_members.html:13
+msgid "The file must contain at least these columns:"
+msgstr "O arquivo deve conter pelo menos essas colunas:"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that it is possible to add optional columns. The
+#. English sentence uses a more informal tone, while the French translation
+#. maintains a formal tone, so the Portuguese version follows this formal
+#. interpretation.
+#: templates/members/members/import_members.html:16
+msgid "You can also add these optional columns:"
+msgstr "Você também pode adicionar essas colunas opcionais."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that avatar names should be image file names. The
+#. English sentence is clear and direct about the requirement for avatar names
+#. to be image file names, so the Portuguese version follows this
+#. interpretation.
+#: templates/members/members/import_members.html:19
+msgid "Avatars must be image file names."
+msgstr "Os avatares devem ser nomes de arquivos de imagem."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the files must be uploaded manually before
+#. being placed in the avatars folder. The English sentence uses a placeholder
+#. for the media root directory, which is preserved in the Portuguese
+#. translation to maintain consistency with the original context.
+#: templates/members/members/import_members.html:20
+#, python-format
+msgid ""
+"They must be uploaded manually first in the avatars folders of the "
+"%(media_root)s folder."
+msgstr ""
+"Devem ser carregados manualmente primeiro no pasto de avatares do diretório "
+"%(media_root)s."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the date of birth must be provided in a
+#. specific format. The English phrase "The date of birth must be entered in
+#. the format YYYY/MM/DD" suggests that the format should include four digits
+#. for the year, two digits for the month, and two digits for the day. The
+#. French translation makes it clear that this is the expected format, so the
+#. Portuguese version follows this interpretation.
+#: templates/members/members/import_members.html:23
+msgid "The date of birth must be entered in the format YYYY/MM/DD."
+msgstr "O dia do nascimento deve ser inserido no formato AAAA/MM/JJ."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which emphasizes the importance of entering families by name and
+#. indicates that they will be created on the fly if they do not already
+#. exist.
+#: templates/members/members/import_members.html:26
+msgid ""
+"Families must be entered by name. They will be created on the fly if they "
+"don't already exist."
+msgstr ""
+"Famílias devem ser inseridas pelo nome. Elas serão criadas à vista se não já"
+" existirem."
+
+#. Explanation: The English word "Import" and its French equivalent "Importer"
+#. both convey the idea of bringing something into a system or country, often
+#. with regulatory or financial implications. In Portuguese, the translation
+#. "Importar" accurately captures this meaning.
+#: templates/members/members/import_members.html:33
+msgid "Import"
+msgstr "Importar"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a detailed description or information about a
+#. member. The English phrase "Member Detail" is straightforward and implies a
+#. summary or overview of a member's details, while the French translation
+#. makes it clear that it is a more specific and detailed description.
+#: templates/members/members/member_detail.html:3
+msgid "Member Detail"
+msgstr "Detalhe do Membro"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is an active member. The English
+#. phrase "Active member" can be ambiguous, but in this context, it clearly
+#. conveys the idea of being actively involved or engaged as a member.
+#: templates/members/members/member_detail.html:25
+#: templates/members/members/member_upsert.html:23 tests/tests_member.py:242
+msgid "Active member"
+msgstr "Membro ativo"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is a managed member. The English
+#. phrase "Managed member" can be ambiguous, as it can refer to a member who
+#. has been assigned or delegated certain responsibilities. The French
+#. translation makes it clear that it is a managed member, so the Portuguese
+#. version "Membro gerido" follows this interpretation.
+#: templates/members/members/member_detail.html:27
+#: templates/members/members/member_upsert.html:25 tests/tests_member.py:242
+msgid "Managed member"
+msgstr "Membro gerido"
+
+#. Explanation: The English word "Email" is a common term for electronic mail,
+#. and its Portuguese equivalent "Correio eletrônico" conveys the same
+#. meaning.
+#: templates/members/members/member_detail.html:40
+#: templates/members/members/members_directory.html:30
+#: views/views_directory.py:47
+msgid "Email"
+msgstr "Correio eletrônico"
+
+#. Explanation: The English word "Hobbies" refers to activities or interests
+#. pursued in one's free time. In Portuguese, the translation "Atividades" is
+#. more literal and conveys a similar meaning, but it can also imply a sense
+#. of leisure or recreational pursuits.
+#: templates/members/members/member_detail.html:64
+msgid "Hobbies"
+msgstr "Atividades"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that only a specific person (the one with the name
+#. specified by the placeholder) can manage this member. The English sentence
+#. is ambiguous, as it could be interpreted in different ways, but the French
+#. translation makes it clear that it's about a specific person having
+#. exclusive management rights.
+#: templates/members/members/member_detail.html:81
+#, python-format
+msgid "(Only %(name)s can manage this member)"
+msgstr "(Só %(name)s pode gerenciar este membro)"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a common way to express the idea of changing one's
+#. password in many contexts. The English phrase "Change Password" is also
+#. widely used and understood in this sense.
+#: templates/members/members/member_upsert.html:35
+msgid "Change Password"
+msgstr "Alterar Senha"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation. The English phrase
+#. "Activate Account" can be slightly ambiguous, but in this context, it
+#. clearly means to activate an existing account, making the Portuguese
+#. version "Ativar Conta" a suitable translation.
+#: templates/members/members/member_upsert.html:40
+msgid "Activate Account"
+msgstr "Ativar Conta"
+
+#. Explanation: The English word "Delete" can have different meanings
+#. depending on the context, such as deleting a file or deleting an account.
+#. However, in general, it means to remove or get rid of something. The
+#. Portuguese translation "Apagar" is more neutral and can be used in various
+#. contexts, making it a suitable choice for this sentence.
+#: templates/members/members/member_upsert.html:43
+msgid "Delete"
+msgstr "Apagar"
+
+#. Explanation: The English phrase "Remove my account" can be ambiguous, as it
+#. could refer to removing a user's account from a service or platform.
+#. However, the French translation "Supprimer mon compte" makes it clear that
+#. it is referring to deleting a personal account. In Portuguese, we use the
+#. term "perfil" instead of "compte", which also implies a personal account.
+#: templates/members/members/member_upsert.html:47
+msgid "Remove my account"
+msgstr "Remova meu perfil."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the action is to remove or delete a member.
+#. The English phrase "Delete member" can be ambiguous, as it can refer to
+#. various contexts such as deleting a user account or removing a person from
+#. a group. The French translation makes it clear that it is about removing a
+#. specific entity (le Membre), so the Portuguese version "Apagar membro"
+#. follows this interpretation.
+#: templates/members/members/member_upsert.html:49
+msgid "Delete member"
+msgstr "Apagar membro"
+
+#. Explanation: The English word "Update" can have different meanings, such as
+#. to make something new or recent, or to install software. In this context,
+#. the Portuguese translation "Atualizar" is more literal and idiomatic,
+#. conveying the idea of updating or modifying something.
+#: templates/members/members/member_upsert.html:65
+#: templates/members/modal_form.html:27
+msgid "Update"
+msgstr "Atualizar"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. word, which is a verb that means to create or make something. The English
+#. word "Create" also has this same meaning, so the Portuguese version "Criar"
+#. follows this interpretation.
+#: templates/members/members/member_upsert.html:68
+#: templates/members/modal_form.html:23
+msgid "Create"
+msgstr "Crear"
+
+#. Explanation: The English phrase is a question asking if the user has lost
+#. their verification email. The French translation makes it clear that it's a
+#. question, and the Portuguese version maintains this tone while using the
+#. correct verb conjugation to convey the same meaning.
+#: templates/members/members/member_upsert.html:75
+msgid "Lost your verification email?"
+msgstr "Você perdeu seu e-mail de verificação?"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is to ask for or request something. In this context, it means
+#. to ask for a new link, which is a common request in many situations, such
+#. as when a user wants to access a webpage that has been removed or changed.
+#: templates/members/members/member_upsert.html:77
+#: templates/members/registration/email_verification_failed.html:13
+msgid "Request a new link"
+msgstr "Pedir um novo link"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a new address has been created. The English
+#. phrase "Address created" is straightforward and implies the creation of a
+#. new address, so the Portuguese version follows this interpretation.
+#: templates/members/members/member_upsert.html:83
+msgid "Address created"
+msgstr "Endereço criado"
+
+#. Explanation: The Portuguese translation maintains the same meaning and tone
+#. as the original English phrase, using the word "nova" to indicate a new
+#. address.
+#: templates/members/members/member_upsert.html:85
+msgid "New Address"
+msgstr "Nova Endereço"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the address has been updated. The English
+#. phrase "Address updated" is a common way to describe this action in an
+#. informal context, while the Portuguese version "Endereço atualizado"
+#. follows the formal and more precise equivalent used in official contexts.
+#: templates/members/members/member_upsert.html:90
+msgid "Address updated"
+msgstr "Endereço atualizado"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a change to be made. The English phrase "Change
+#. Address" can imply both changing an address and modifying it, while the
+#. French translation makes it clear that it is about making changes to an
+#. existing address.
+#: templates/members/members/member_upsert.html:92
+msgid "Change Address"
+msgstr "Alterar Endereço"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a family was created or established. The
+#. English phrase "Family created" can be ambiguous, as it can mean both "a
+#. family came into existence" and "family members were created", but in this
+#. context, it seems to imply the former.
+#: templates/members/members/member_upsert.html:97
+msgid "Family created"
+msgstr "Família criou."
+
+#. Explanation: The Portuguese translation maintains the same meaning and tone
+#. as the French original, using the word "nova" to indicate a new family.
+#: templates/members/members/member_upsert.html:99
+msgid "New Family"
+msgstr "Nova Família"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a parent family was created. The English
+#. phrase "Parent family created" can be ambiguous, as it can mean both "a
+#. family with parents" and "the creation of a family". The French translation
+#. makes it clear that it is a family with parents, so the Portuguese version
+#. "Família parental criou" follows this interpretation.
+#: templates/members/members/member_upsert.html:102
+msgid "Parent family created"
+msgstr "Família parental criou"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a family with new parents. The English phrase "New
+#. Parent Family" can be ambiguous, as it can refer to either a family with
+#. new parents or a support group for new parents. The French translation
+#. makes it clear that it is a family with new parents, so the Portuguese
+#. version "Nova Família de Pais" follows this interpretation.
+#: templates/members/members/member_upsert.html:104
+msgid "New Parent Family"
+msgstr "Nova Família de Pais"
+
+#. Explanation: The English phrase "Family updated" can be interpreted in
+#. different ways, but the context of the French translation "Famille mise à
+#. jour" suggests that it refers to updating a family's information or data.
+#. In Portuguese, this is translated as "Família atualizada", which maintains
+#. the same meaning and connotation as the original English phrase.
+#: templates/members/members/member_upsert.html:109
+msgid "Family updated"
+msgstr "Família atualizada"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates a change or modification to the family. The English
+#. phrase "Change Family" can be interpreted as changing one's own family or
+#. altering the concept of family in general, while the French translation
+#. makes it clear that it is about modifying an existing family unit.
+#: templates/members/members/member_upsert.html:111
+msgid "Change Family"
+msgstr "Alterar a Família"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the username is already taken. The English
+#. phrase "This username is not available!" suggests that it's currently
+#. unavailable for use, but in this context, it seems to be stating a fact
+#. about the current availability of the username.
+#: templates/members/members/member_upsert.html:121
+msgid "This username is not available!"
+msgstr "Este nome de usuário não está disponível!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a more polite and formal way to ask if someone wants to
+#. delete their account. The English phrase "Delete My Account" can be direct
+#. and blunt, whereas the French translation adds a question mark at the end,
+#. making it more considerate and inviting.
+#: templates/members/members/member_upsert.html:127
+msgid "Delete My Account"
+msgstr "Apagar meu perfil."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a warning about the permanent deletion of an account and
+#. its associated data. The English sentence uses a more casual tone, while
+#. the French translation maintains a formal tone, which is consistent with
+#. the warning message.
+#: templates/members/members/member_upsert.html:128
+msgid ""
+"Are you sure you want to delete your account and all associated data? This "
+"is irrecoverable!"
+msgstr ""
+"Você está seguro de querer apagar seu conta e todos os dados associados? "
+"Isso é irreversível!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation. The English phrase
+#. "Delete Member" can be interpreted in different ways, but the French
+#. translation makes it clear that it's about removing or deleting a member,
+#. so the Portuguese version follows this interpretation.
+#: templates/members/members/member_upsert.html:130
+msgid "Delete Member"
+msgstr "Apagar Membro"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a confirmation question about deleting an account and its
+#. associated data. The English sentence uses a placeholder for the name,
+#. while the French translation explicitly mentions "le compte" (the account),
+#. making it clear that the deletion includes both the account itself and all
+#. related data.
+#: templates/members/members/member_upsert.html:131
+#, python-format
+msgid ""
+"Are you sure you want to delete %(name)s's account and all associated data?"
+msgstr ""
+"Você está seguro de querer apagar o perfil de %(name)s e todas as "
+"informações relacionadas?"
+
+#. Explanation: The English phrase "Members List" can be ambiguous, as it
+#. could refer to a list of members in an organization or a list of people who
+#. are part of a group. However, the French translation "Liste des Membres"
+#. suggests that it is a specific list of members, likely within a particular
+#. context such as a company or club. The Portuguese translation "Lista de
+#. Membros" follows this interpretation and provides a clear and concise
+#. description of the content.
+#: templates/members/members/members.html:3
+#: templates/members/members/members.html:7
+msgid "Members List"
+msgstr "Lista de Membros"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the action is to show or display the
+#. directory. The English phrase "Show directory" is a direct and literal
+#. translation, while the French phrase uses the verb "afficher", which
+#. implies a more formal or official context, but in this case, it's used in
+#. an informal way to simply indicate showing something.
+#: templates/members/members/members.html:15
+msgid "Show directory"
+msgstr "Mostrar diretório"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation. The English phrase
+#. "Create Member" is clear and concise, and the Portuguese version follows
+#. this simplicity while maintaining the same tone and nuance as the original
+#. text.
+#: templates/members/members/members.html:19 views/views_member.py:105
+msgid "Create Member"
+msgstr "Criar Membro"
+
+#. Explanation: The English phrase "Filter Members" can be interpreted in
+#. different ways, but the French translation "Filtrer les Membres" makes it
+#. clear that it refers to filtering members of a group. In Portuguese, the
+#. translation "Filtra os Membros" maintains this meaning and clarity.
+#: templates/members/members/members.html:26
+#: templates/members/members/members.html:37
+msgid "Filter Members"
+msgstr "Filtra os Membros"
+
+#. Explanation: The English term "first name" refers to the person's given or
+#. initial name, whereas the French equivalent "prénom" is more commonly used
+#. in formal contexts. In informal settings, the Portuguese term "nome" is
+#. often used instead.
+#: templates/members/members/members.html:29
+msgid "first name"
+msgstr "Nome"
+
+#. Explanation: The English phrase "last name" refers to the surname of a
+#. person, which is equivalent to the French word "nom". In Portuguese, this
+#. term is also used to refer to the family name or surname.
+#: templates/members/members/members.html:33
+msgid "last name"
+msgstr "Último nome"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that no members were found. The English phrase "No
+#. members found" is a common error message in many systems, and the French
+#. translation makes it clear that it's an indication of not finding any
+#. members.
+#: templates/members/members/members.html:63
+#: templates/members/members/members_directory.html:50
+msgid "No members found"
+msgstr "Não encontraram membros"
+
+#. Explanation: The English phrase "Members Directory" refers to a list or
+#. catalog of members, while the French phrase "Annuaire des Membres"
+#. specifically indicates that it is an annual directory. In Portuguese, we
+#. use the term "Registro de Membros" to convey this meaning, which is
+#. consistent with the French translation.
+#: templates/members/members/members_directory.html:3
+#: templates/members/members/members_directory.html:8
+msgid "Members Directory"
+msgstr "Registro de Membros"
+
+#. Explanation: The English word "Print" and the French word "Imprimer" both
+#. convey the idea of producing a physical copy or output, but in different
+#. contexts. In English, "print" can also mean to display on a screen (e.g.,
+#. print a document). However, in this context, with the translation
+#. "Imprimer", it's clear that the focus is on producing a physical copy,
+#. which aligns with the French meaning of "imprimer".
+#: templates/members/members/members_directory.html:13
+msgid "Print"
+msgstr "Imprimir"
+
+#. Explanation: The English phrase "Print as PDF" is commonly used to instruct
+#. software or systems to print a document in Portable Document Format (PDF),
+#. which preserves its layout and formatting. The Portuguese translation
+#. "Imprimir como PDF" accurately conveys this meaning, suggesting that the
+#. printed output should be in PDF format.
+#: templates/members/members/members_directory.html:15
+#: templates/members/members/members_directory.html:18
+msgid "Print as PDF"
+msgstr "Imprimir como PDF"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the element will be modified for all other
+#. members who use it. The English warning is more formal and uses the word
+#. "achieve", while the French version uses "souhaites" to convey a similar
+#. idea.
+#: templates/members/modal_form.html:14
+msgid ""
+"WARNING: This element will be modified for all other members using it! "
+"Please create a new one if that's not what you want to achieve."
+msgstr ""
+"AVISO: Este elemento será modificado para todos os outros membros que o "
+"usam! Por favor, crie um novo se isso não for o que você deseja alcançar."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the link is invalid. The English phrase
+#. "Invalid Link!" is a common way to express this idea in an informal manner,
+#. while the French translation uses the more formal and precise term "lien
+#. invalide".
+#: templates/members/registration/email_verification_failed.html:3
+#: templates/members/registration/email_verification_failed.html:7
+msgid "Invalid Link!"
+msgstr "Link inválido!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the link is invalid or has already been used.
+#. The English sentence uses "been used", which can be ambiguous in some
+#. contexts, while the French translation makes it clear that it's a past
+#. participle ("a déjà été utilisé").
+#: templates/members/registration/email_verification_failed.html:9
+msgid ""
+"This link is invalid or been used already, we cannot verify using this link."
+msgstr ""
+"Este link está inválido ou já foi usado, não podemos verificar usando este "
+"link."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the email verification process was successful.
+#. The English phrase and the French translation convey a sense of completion
+#. and success, so the Portuguese version maintains this tone.
+#: templates/members/registration/email_verification_successful.html:3
+#: templates/members/registration/email_verification_successful.html:7
+msgid "Email Verification Successful!"
+msgstr "Verificação de E-mail Realizada com Sucesso!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the email verification was successful and the
+#. account has been activated. The English sentence is clear about both events
+#. happening simultaneously, so the Portuguese version maintains this clarity.
+#: templates/members/registration/email_verification_successful.html:9
+msgid ""
+"Your Email is verified successfully and your account has been activated."
+msgstr "Seu e-mail foi verificado com sucesso e o seu conta foi ativada."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the user has the opportunity to log in with
+#. their credentials at this moment. The English phrase "You can sign in with
+#. your credentials now..." suggests a more formal or automated process, while
+#. the French and Portuguese translations convey a sense of permission or
+#. invitation to proceed.
+#: templates/members/registration/email_verification_successful.html:10
+msgid "You can sign in with your credentials now..."
+msgstr "Você pode se conectar com seus dados de acesso agora..."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the link has expired. The English phrase "Link
+#. Expired!" is a common way to indicate that a link is no longer valid or has
+#. reached its expiration date.
+#: templates/members/registration/link_expired.html:3
+#: templates/members/registration/link_expired.html:7
+msgid "Link Expired!"
+msgstr "O link expirou!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person or entity (the link) has lived its
+#. life and is now dead. The English phrase "The link has lived its life :(
+#. Can not validate a dead link..." suggests that the link was active at some
+#. point but is no longer valid, while the French translation makes it clear
+#. that the link is indeed dead.
+#: templates/members/registration/link_expired.html:9
+msgid "The link has lived its life :( Can not validate a dead link..."
+msgstr "O link viveu sua vida :(\" Não é possível validar um link morto..."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates requesting a new link. The English phrase "Request
+#. Another one" can be interpreted as both requesting something in general and
+#. specifically asking for another instance of something. The French
+#. translation makes it clear that it is about requesting a new link, so the
+#. Portuguese version "Pedir outro" follows this interpretation.
+#: templates/members/registration/link_expired.html:13
+msgid "Request Another one"
+msgstr "Pedir outro"
+
+#. Explanation: The English phrase "New Email Sent" can be interpreted as
+#. either a notification that a new email has been sent or an action of
+#. sending a new email. The French translation "Nouvel e-mail envoyé!" makes
+#. it clear that the action is being taken, which aligns with the common usage
+#. in digital communication.
+#: templates/members/registration/new_email_sent.html:3
+#: templates/members/registration/new_email_sent.html:7
+msgid "New Email Sent"
+msgstr "Novo e-mail enviado!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the user has requested an additional
+#. verification email. The English sentence is clear and direct, while the
+#. French translation makes it explicit that the request is for another email,
+#. not just a confirmation or notification.
+#: templates/members/registration/new_email_sent.html:9
+msgid "You have requested another verification email!"
+msgstr "Você solicitou outro e-mail de verificação!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the verification link was sent. The English
+#. phrase is straightforward and implies that the link has been successfully
+#. delivered to the user, while the French translation makes it clear that
+#. it's a notification about the sending of the link.
+#: templates/members/registration/new_email_sent.html:10
+msgid "Your verification link has been sent"
+msgstr "Seu link de verificação foi enviado."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is polite and formal. The English sentence is a common
+#. instruction to check email for verification purposes, while the French
+#. translation adds a touch of politeness with "Merci" (thank you).
+#: templates/members/registration/new_email_sent.html:11
+msgid "Please check your email and click on the link to verify your email."
+msgstr ""
+"Por favor, verifique seu e-mail e clique no link para verificar seu endereço"
+" de e-mail."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct and literal translation. The English phrase
+#. "Invite Members" can be interpreted as an invitation to join or participate
+#. in something, while the French phrase makes it clear that it's about
+#. inviting members, likely to a group or organization.
+#: templates/members/registration/registration_invite.html:3
+#: templates/members/registration/registration_invite.html:6
+msgid "Invite Members"
+msgstr "Convidar Membros"
+
+#. Explanation: The English word "Invite" can have different meanings, such as
+#. to ask someone to a party or to suggest something. However, the French
+#. translation "Inviter" generally means to invite or propose something, which
+#. is consistent with the most common usage of the word in both languages.
+#: templates/members/registration/registration_invite.html:11
+msgid "Invite"
+msgstr "Convidar"
+
+#. Explanation: The Portuguese translation maintains the same meaning and tone
+#. as the French original, using the word "convite" to convey the idea of an
+#. invitation.
+#: templates/members/registration/registration_request.html:3
+#: templates/members/registration/registration_request.html:6
+msgid "Request Invitation"
+msgstr "Pedida de convite"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the user is requesting the administrator to
+#. send an invitation link. The English sentence can be ambiguous, but the
+#. French translation makes it clear that the user is making a request, so the
+#. Portuguese version follows this interpretation.
+#: templates/members/registration/registration_request.html:9
+msgid ""
+"By completing and submitting this form, you are asking the site "
+"administrator to send you an invitation link."
+msgstr ""
+"Por completar e enviar este formulário, você está solicitando ao "
+"administrador do site que o envie um link de convite."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is polite and formal. The English sentence is clear and
+#. direct, but the Portuguese version maintains a similar tone and politeness,
+#. using "por favor" to convey a sense of courtesy.
+#: templates/members/registration/registration_request.html:14
+msgid "Please fill in the captcha above before clicking the invitation button"
+msgstr ""
+"Por favor, preencha o captcha acima antes de clicar no botão de convidação"
+
+#. Explanation: The Portuguese translation "Convidem-me" is a formal way of
+#. saying "Invite me". In informal contexts, it would be more common to use
+#. "Convide-me" or simply "Conviça-me", but in formal situations, the verb
+#. conjugation used here is more suitable.
+#: templates/members/registration/registration_request.html:15
+msgid "Invite me"
+msgstr "Convidem-me"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a formal request for a new email address to be verified.
+#. The English phrase is clear and direct, while the Portuguese version
+#. maintains the same level of formality and precision.
+#: templates/members/registration/request_new_email.html:3
+#: templates/members/registration/request_new_email.html:7
+msgid "Request New Email for Verification"
+msgstr "Pedir um novo e-mail para verificação"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which is a direct request for a new email. The English phrase
+#. "Request New Email" is clear and concise, and the Portuguese version
+#. follows this same clarity and formality.
+#: templates/members/registration/request_new_email.html:16
+msgid "Request New Email"
+msgstr "Pedir um novo e-mail"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the action is to modify or change the selected
+#. items. The English phrase "Change selected %(name)s" can be ambiguous, as
+#. it can refer to changing a specific item or category, but the French
+#. translation makes it clear that it's about modifying the selection itself.
+#: templates/widgets/wrap_create_link.html:9
+#, python-format
+msgid "Change selected %(name)s"
+msgstr "Alterar os %(name)s selecionados"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates adding another item. The English phrase "Add
+#. another %(translated_name)s" can be ambiguous, as it can mean both "adding
+#. a new name" and "adding another name". The French translation makes it
+#. clear that it is about adding another item, so the Portuguese version "%s
+#. adiciona outro %s" follows this interpretation.
+#: templates/widgets/wrap_create_link.html:17
+#, python-format
+msgid "Add another %(translated_name)s"
+msgstr "Adicionar mais %(translated_name)s"
+
+#. Explanation: The English phrase "Member deleted" can be interpreted in
+#. different ways, but the context of the French translation "Membre supprimé"
+#. suggests that it is referring to a member being removed or excluded from
+#. something. In Portuguese, the translation "Membro excluído" maintains this
+#. meaning and conveys a sense of removal or exclusion.
+#: tests/tests_member.py:101 views/views_member.py:191
+msgid "Member deleted"
+msgstr "Membro excluído"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person does not have permission to modify
+#. a specific member. The English sentence can be ambiguous, but the context
+#. provided by the French translation makes it clear that it is about editing
+#. permissions for a member.
+#: tests/tests_member.py:217 tests/tests_member.py:222
+#: views/views_member.py:140 views/views_member.py:154
+msgid "You do not have permission to edit this member."
+msgstr "Você não tem permissão para editar esse membro."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that only superusers have the permission to invite
+#. members. The English sentence is a statement of restriction, implying that
+#. others cannot do so. The Portuguese version "Somente os superusuários podem
+#. convidar membros." accurately conveys this idea.
+#: tests/tests_register.py:27 views/views_registration.py:94
+msgid "Only superusers can invite members"
+msgstr "Somente os superusuários podem convidar membros."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that an invitation was sent to a specific email
+#. address. The English sentence uses a placeholder for the email address, and
+#. the Portuguese version maintains this format while translating the rest of
+#. the sentence.
+#: tests/tests_register.py:29 views/views_registration.py:157
+#, python-format
+msgid "Invitation sent to %(email)s."
+msgstr "Convite enviado para %(email)s."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person was invited to register on a
+#. specific website. The English sentence uses a placeholder for the site
+#. name, and the French translation makes it clear that it is an invitation to
+#. create an account on a particular site.
+#: tests/tests_register.py:34 views/views_registration.py:134
+#, python-format
+msgid "You are invited to register on %(site_name)s"
+msgstr "Convidamo-lo a registar-se em %(site_name)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a registration request was successfully sent.
+#. The English phrase is straightforward and implies a successful action, so
+#. the Portuguese version follows this interpretation.
+#: tests/tests_register.py:119 views/views_registration.py:211
+msgid "Registration request sent."
+msgstr "Registro de solicitação enviada."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a member with the same email address already
+#. exists in the system. The English sentence is clear and concise, while the
+#. French translation provides more detail about the existence of the member,
+#. making it easier to understand the context.
+#: tests/tests_register.py:145 views/views_registration.py:115
+#: views/views_registration.py:187
+msgid "A member with this email already exists."
+msgstr "Um membro com este e-mail já existe."
+
+#. Explanation: The English phrase "Invalid CAPTCHA" can be ambiguous, as it
+#. could also mean that the CAPTCHA is not valid in a certain context.
+#. However, based on the French translation "CAPTCHA invalide", which implies
+#. that the CAPTCHA itself is invalid or incorrect, the Portuguese translation
+#. "CAPTCHA inválido" follows this interpretation.
+#: tests/tests_register.py:152
+msgid "Invalid CAPTCHA"
+msgstr "CAPTCHA inválido"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the account has been created and provides
+#. instructions on how to verify the email address and complete the
+#. registration process. The placeholders are kept in their original position
+#. to maintain consistency with the context translation.
+#: tests/tests_register.py:179 views/views_registration.py:80
+#, python-format
+msgid ""
+"Hello %(username)s, your account has been created! You will now receive an "
+"email to verify your email address. Click in the link inside the mail to "
+"finish the registration."
+msgstr ""
+"Olá %(username)s, seu conta foi criada! Você agora receberá um e-mail para "
+"verificar sua endereço de e-mail. Clique no link dentro do e-mail para "
+"concluir o processo de inscrição."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the link is invalid and needs to be reported
+#. to the administrator. The English phrase "Invalid link. Please contact the
+#. administrator" conveys a sense of error and requires action from the user,
+#. while the Portuguese version maintains this tone and clarity.
+#: tests/tests_register.py:192 views/views_registration.py:54
+msgid "Invalid link. Please contact the administrator."
+msgstr "Link inválido. Por favor, entre em contato com o administrador."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the field is mandatory or compulsory. The
+#. English phrase and the French translation convey a similar message, so the
+#. Portuguese version follows this interpretation.
+#: tests/tests_register.py:200
+msgid "This field is required."
+msgstr "Este campo é obrigatório."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a member is already active. The English phrase
+#. "Error: Member already active" can be ambiguous, as it could also indicate
+#. an error in the activation process. However, based on the context provided
+#. by the French translation, it seems to suggest that the member's status is
+#. already active, making the Portuguese translation "Erro: Membro já ativo" a
+#. suitable interpretation.
+#: views/views_activate.py:25
+msgid "Error: Member already active"
+msgstr "Erro: Membro já ativo"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a member without an email address cannot be
+#. activated. The English phrase "Error: Member without email cannot be
+#. activated" is clear and concise, but the French translation makes it
+#. explicit that the issue is with the absence of an email address, so the
+#. Portuguese version follows this interpretation.
+#: views/views_activate.py:27
+msgid "Error: Member without email cannot be activated"
+msgstr "Erro: Membro sem e-mail não pode ser ativado"
+
+#. Explanation: This translation reflects the meaning of the French phrase,
+#. which indicates that the account has been successfully activated and the
+#. owner will receive an email with an activation link. The English sentence
+#. can be ambiguous, as it mentions "password reset screen", which could imply
+#. that the password needs to be reset before activation. However, the context
+#. translation makes it clear that the activation process is complete, and the
+#. password reset step occurs afterwards.
+#: views/views_activate.py:31
+msgid ""
+"Member account successfully activated. The owner of the account will now "
+"receive an email containing an activation link then will be redirected to "
+"the password reset screen."
+msgstr ""
+"Conta do membro ativada com sucesso. O proprietário da conta agora receberá "
+"um e-mail com um link de ativação, que o levará à tela de resetar a senha."
+
+#. Explanation: The English phrase uses a placeholder format, but the
+#. Portuguese translation maintains the same structure and meaning. The French
+#. translation also uses the same placeholder format, so the Portuguese
+#. version follows this pattern to preserve consistency.
+#: views/views_directory.py:44
+#, python-format
+msgid "%(site_name)s directory"
+msgstr "%(site_name)s diretório"
+
+#. Explanation: The English phrase is a template for displaying information
+#. about a page, with placeholders for the document page number and title. The
+#. French translation maintains this structure, indicating that it is still a
+#. template for displaying information about a page.
+#: views/views_directory.py:69
+#, python-format
+msgid "Page %(doc_page)s - %(title)s"
+msgstr "Pagina %(doc_page)s - %(title)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which emphasizes that it is impossible to follow oneself. The
+#. English phrase and its French equivalent convey a sense of self-referential
+#. paradox, making the Portuguese version consistent with this interpretation.
+#: views/views_followers.py:21
+msgid "You can't follow yourself!"
+msgstr "Você não pode seguir você mesmo!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is no longer being followed. The
+#. English sentence uses a placeholder to indicate the name of the person
+#. being followed, and the Portuguese version maintains this format while
+#. translating the text.
+#: views/views_followers.py:24
+#, python-format
+msgid "You are no longer following %(followed_name)s"
+msgstr "Já não está a seguir %(followed_name)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the action of following is still ongoing. The
+#. English sentence implies a change in the state of following, while the
+#. French and Portuguese translations convey the idea that the person is still
+#. following the specified individual.
+#: views/views_followers.py:27
+#, python-format
+msgid "You are now following %(followed_name)s"
+msgstr "Você está seguindo agora %(followed_name)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person has gained a new follower. The
+#. English phrase "You have a new follower!" is often used in social media and
+#. online communities to notify users of a new following relationship.
+#: views/views_followers.py:31
+msgid "You have a new follower!"
+msgstr "Você tem um novo seguidor!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person has started to follow the other
+#. person. The English phrase "%(follower_name)s is now following you!"
+#. suggests a notification or an action taken by the follower, while the
+#. French and Portuguese translations convey the idea of a new relationship
+#. established between the two parties.
+#: views/views_followers.py:32
+#, python-format
+msgid "%(follower_name)s is now following you!"
+msgstr "%(follower_name)s está agora seguindo você!"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that there is an unknown column in a CSV file. The
+#. English sentence uses placeholders to indicate the name of the field and
+#. all valid fields, but the French translation makes it clear that it's about
+#. a specific column with a given name.
+#: views/views_import_export.py:41
+#, python-format
+msgid ""
+"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are "
+"%(all_names)s"
+msgstr ""
+"Coluna desconhecida no arquivo CSV: '%(fieldname)s'. Campos válidos são "
+"%(all_names)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that there is a missing column in the CSV file and
+#. lists the mandatory fields. The English sentence "Missing column in CSV
+#. file: "%(fieldname)s". Mandatory fields are %(all_names)s" can be
+#. ambiguous, as it can mean both "missing column" and "mandatory fields", but
+#. the French translation makes it clear that it is about a missing column, so
+#. the Portuguese version follows this interpretation.
+#: views/views_import_export.py:45
+#, python-format
+msgid ""
+"Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
+"%(all_names)s"
+msgstr ""
+"Coluna faltante no arquivo CSV: '%(fieldname)s'. Campos obrigatórios são "
+"%(all_names)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the avatar was not found for a specific
+#. username. The English sentence is in the format of an error message, and
+#. the placeholders are used to indicate the missing information (avatar name
+#. and username).
+#: views/views_import_export.py:92
+#, python-format
+msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
+msgstr ""
+"Avatar não encontrado: %(avatar)s para o nome de usuário %(username)s. "
+"Ignorado..."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that there was an error saving the avatar and the
+#. username is being ignored. The English sentence uses placeholders for the
+#. error message, avatar name, and username, which are preserved in the
+#. translated version to maintain consistency with the original context.
+#: views/views_import_export.py:101
+#, python-format
+msgid ""
+"Error saving avatar (%(error)s): %(avatar)s for username %(username)s. "
+"Ignored..."
+msgstr ""
+"Erro ao salvar avatar (%(error)s): %(avatar)s para o usuário %(username)s. "
+"Ignorado..."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a CSV file has been uploaded and some lines
+#. have been read, as well as some members created or updated. The English
+#. phrase uses placeholders for the number of lines read and members created,
+#. which are preserved in the Portuguese translation to maintain consistency
+#. with the French context.
+#: views/views_import_export.py:200
+#, python-format
+msgid ""
+"CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
+"updated"
+msgstr ""
+"Arquivo CSV carregado: %(nbLines)i linhas lidas, %(nbMembers)i membros "
+"criados ou atualizados"
+
+#. Explanation: The English phrase "Warning: %(error)s" and the French phrase
+#. "Attention: %(error)s" both indicate a warning or an alert, but with
+#. slightly different connotations. In English, "warning" can imply a more
+#. formal or official notice, while in French, "attention" is often used to
+#. convey a sense of urgency or caution. The Portuguese translation maintains
+#. this nuance, using the word "alerta", which carries a similar sense of
+#. formality and importance as the original English phrase.
+#: views/views_import_export.py:203
+#, python-format
+msgid "Warning: %(error)s"
+msgstr "Alerta: %(error)s"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a specific method is not allowed. The English
+#. phrase "Method not allowed" is commonly used in HTTP responses to indicate
+#. that a particular method (e.g., GET, POST, PUT, DELETE) is not supported or
+#. permitted for a given resource.
+#: views/views_import_export.py:270
+msgid "Method not allowed"
+msgstr "Método não permitido"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person was disconnected from a system or
+#. network. The English phrase "You have been logged out" can be ambiguous,
+#. but in this context, it is clear that the user has been disconnected, so
+#. the Portuguese version follows this interpretation.
+#: views/views_member.py:36
+msgid "You have been logged out"
+msgstr "Você foi desconectado(a)."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that only superusers have the permission to create
+#. new members. The English sentence is clear about the restriction, and the
+#. French translation maintains this clarity.
+#: views/views_member.py:95
+msgid "Only superusers can create members"
+msgstr "Somente os superusuários podem criar membros."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the member was successfully created. The
+#. English phrase is straightforward and implies success, so the Portuguese
+#. version maintains this nuance.
+#: views/views_member.py:120
+msgid "Member successfully created"
+msgstr "O membro foi criado com sucesso."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates updating the details of a member. The English
+#. phrase "Update Member Details" is clear and concise, conveying the action
+#. of modifying information related to a member. The Portuguese version
+#. maintains this clarity and precision.
+#: views/views_member.py:128
+msgid "Update Member Details"
+msgstr "Atualizar Detalhes de Membro"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the update was successful. The English phrase
+#. "Member successfully updated" is clear and concise in its meaning, and the
+#. Portuguese version follows this interpretation.
+#: views/views_member.py:129
+msgid "Member successfully updated"
+msgstr "O membro foi atualizado com sucesso."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that an email verification was sent to validate the
+#. new email address. The English sentence is clear and concise, but the
+#. French translation provides a more formal tone, which is consistent with
+#. the original text.
+#: views/views_member.py:164
+msgid "A verification email has been sent to validate your new email address."
+msgstr ""
+"Um e-mail de verificação foi enviado para validar sua nova endereço "
+"eletrônico."
+
+#. Explanation: The English phrase "My Profile" can be interpreted as both a
+#. personal profile and an account, whereas the French translation "Mon
+#. Profil" is more specific to a personal profile. In Portuguese, we use
+#. "Minha Conta de Usuário" to convey that it's an account or profile of the
+#. user.
+#: views/views_member.py:178
+msgid "My Profile"
+msgstr "Minha Conta de Usuário"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the profile was successfully updated. The
+#. English phrase is straightforward and clear in its meaning, so the
+#. Portuguese version follows a similar structure to convey the same message.
+#: views/views_member.py:179
+msgid "Profile successfully updated"
+msgstr "Perfil atualizado com sucesso"
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the person is already connected or logged in.
+#. The English phrase and the French translation convey a similar idea, so the
+#. Portuguese version follows this interpretation.
+#: views/views_registration.py:32
+msgid "You are already logged in"
+msgstr "Você já está conectado."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that a member with the same email address is
+#. already active and should log in instead. The English sentence can be
+#. ambiguous, but the French translation makes it clear that it's about
+#. logging in, so the Portuguese version follows this interpretation.
+#: views/views_registration.py:42
+msgid ""
+"A member with the same email address is already active. Please sign in "
+"instead"
+msgstr ""
+"Um membro com o mesmo endereço de e-mail já está ativo. Por favor, insira "
+"sua senha."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that the user is already registered but not active.
+#. The English sentence "You are already registered but not active" can be
+#. ambiguous, as it can mean both "already registered" and "not active". The
+#. French translation makes it clear that it is a matter of activation, so the
+#. Portuguese version "Você já está registrado, mas não ativo" follows this
+#. interpretation.
+#: views/views_registration.py:49
+#, python-format
+msgid ""
+"You are already registered but not active. Please contact %(admin)s to "
+"activate your account"
+msgstr ""
+"Você já está registrado, mas não ativo. Por favor, entre em contato com "
+"%(admin)s para ativar sua conta."
+
+#. Explanation: This Portuguese translation reflects the meaning of the French
+#. phrase, which indicates that there is an issue with sending email and the
+#. user should contact their administrator for assistance. The English
+#. sentence can be ambiguous, as it could also mean "Unable to receive mail",
+#. but the context provided by the French translation makes it clear that it's
+#. about sending email.
+#: views/views_registration.py:214
+msgid "Unable to send mail, please contact your administrator"
+msgstr ""
+"Impossível enviar e-mail, por favor entre em contato com seu administrador."

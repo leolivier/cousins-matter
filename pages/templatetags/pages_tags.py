@@ -99,8 +99,9 @@ def include_page(url):
     count = pages.count()
     match count:
       case 0:
-        raise TemplateSyntaxError(_(f"Cannot load page from url {url}, it was not found in the "
-                                  "database. Please contact the administrator of the site"))
+        # page not found for the current language, try the default language (ie en-US)
+        url = url.replace(f'/{settings.LANGUAGE_CODE}/', '/en-US/')
+        return include_page(url)
       case 1:
         page = pages.first()
         logger.info(f'searched for page with url={url}, found {page.url}')

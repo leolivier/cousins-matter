@@ -4,8 +4,9 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import Http404, StreamingHttpResponse
-from django.utils.translation import gettext as _
-from django.views import generic
+from django.shortcuts import redirect
+from django.utils.translation import gettext as _, activate as activate_language
+from django.views import generic, View
 from wsgiref.util import FileWrapper
 
 
@@ -25,6 +26,16 @@ class OnlyAdminMixin(LoginRequiredMixin, PermissionRequiredMixin):
 class HomeView(generic.TemplateView):
   template_name = "cm_main/base.html"
 
+
+class ChangeLanguageView(View):
+    """A simple view to change the language of the site."""
+    def post(self, request):
+        lang = request.POST.get('lang')
+        activate_language(lang)
+        # request.session[settings.LANGUAGE_SESSION_KEY] = lang
+        response = redirect(request.META.get('HTTP_REFERER'))
+        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
+        return response
 
 @login_required
 def download_protected_media(request, media):

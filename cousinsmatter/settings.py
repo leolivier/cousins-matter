@@ -54,7 +54,7 @@ CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 
 LANGUAGES = [
     ("fr", "Français"),
-    ("en", "English"),
+    ("en-us", "English (US)"),
     ("es", "Español"),
     ("de", "Deutsch"),
     ("it", "Italiano"),
@@ -126,6 +126,7 @@ MIDDLEWARE = [
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
   'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+  'django.middleware.locale.LocaleMiddleware',
 ]
 # if DEBUG:
 #   MIDDLEWARE.append('cousinsmatter.htmlvalidator.HtmlValidatorMiddleware')

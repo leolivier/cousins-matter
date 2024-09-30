@@ -1,8 +1,8 @@
-# Italian Translations for Cousins-matter app.
+# Italian Translations for NO NAME FOUND app.
 # Copyright (C) 2024 Olivier LEVILLAIN
 # This file is distributed under the same license as the application.
-# This file was generated from cousins-matter/cm_main/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the claude-3-5-sonnet-20240620 model. Depending on the model, it may contain some errors and should be reviewed
+# This file was generated from ../cousins-matter/cm_main/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the gemma2:2b model. Depending on the model, it may contain some errors and should be reviewed
 # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
 # by the model.
 # Olivier LEVILLAIN <OWNER EMAIL>, 2024.
@@ -12,10 +12,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-07 20:09+0200\n"
-"PO-Revision-Date: 2024-09-21 19:10+00:00\n"
+"POT-Creation-Date: 2024-09-28 19:37+0200\n"
+"PO-Revision-Date: 2024-09-30 17:07+00:00\n"
 "\n"
-"Last-Translator: Auto-po-lyglot using claude-3-5-sonnet-20240620 (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using gemma2:2b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: IT\n"
 "MIME-Version: 1.0\n"
@@ -109,12 +109,6 @@ msgstr "Questa pagina mostra alcune statistiche su questo sito:"
 msgid "Statistics"
 msgstr "Statistiche"
 
-#. Explanation: In Italian, the word "Home" is often left untranslated,
-#. especially in digital contexts like websites or apps. It's commonly used
-#. as-is to indicate the main page or starting point. However, if a more
-#. Italian-specific term is preferred, "Pagina iniziale" or "Inizio" could be
-#. used, but "Home" is widely understood and accepted in Italian digital
-#. interfaces.
 #: cm_main/templates/cm_main/base.html:8
 msgid "Home"
 msgstr "Home"
@@ -132,7 +126,7 @@ msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright © 2024 Cousins Matter. Tutti i diritti riservati."
 
 #: cm_main/templates/cm_main/base.html:79
-#: cm_main/templates/cm_main/navbar.html:116
+#: cm_main/templates/cm_main/navbar.html:138
 msgid "Contact the site admin"
 msgstr "Contattare l'amministratore del sito"
 
@@ -243,11 +237,6 @@ msgstr ""
 msgid "Do not reply to this mail, it is machine generated."
 msgstr "Non rispondere a questa email, è generata automaticamente."
 
-#. Explanation: The translation maintains the placeholder "%(nfollowers)s" in
-#. its original form and position. The word "member" is translated to "membro"
-#. in Italian, which is the singular form. Note that both the English and
-#. French versions use the English word "member", but in Italian, we use the
-#. appropriate Italian term.
 #: cm_main/templates/cm_main/followers/followers-count-tag.html:4
 #, python-format
 msgid "%(nfollowers)s member"
@@ -255,11 +244,6 @@ msgid_plural "%(nfollowers)s members"
 msgstr[0] "%(nfollowers)s membre"
 msgstr[1] "%(nfollowers)s membres"
 
-#. Explanation: In this case, the Italian translation remains the same as the
-#. English and French versions. The word "follower" is commonly used in
-#. Italian social media contexts without translation. The placeholder
-#. "%(nfollowers)s" is kept in the same position to represent the number of
-#. followers.
 #: cm_main/templates/cm_main/followers/followers-count-tag.html:10
 #, python-format
 msgid "%(nfollowers)s follower"
@@ -327,21 +311,10 @@ msgstr "Caricamento di massa"
 msgid "Forum"
 msgstr "Forum"
 
-#. Explanation: The French translation "Nouvelle Discussion" suggests that the
-#. context is about creating a new discussion or forum post, rather than a
-#. generic "post". Therefore, the Italian translation "Crea discussione"
-#. (Create discussion) is more appropriate and consistent with the French
-#. version, rather than a literal translation of the English "Create Post".
 #: cm_main/templates/cm_main/navbar.html:59
 msgid "Create Post"
 msgstr "Crea discussione"
 
-#. Explanation: In this case, the word "Chat" remains the same in Italian as
-#. it does in English and French. It's a loanword that has been adopted into
-#. the Italian language to refer to online or digital chatting. The context
-#. provided by the French translation confirms that we're talking about the
-#. communication concept rather than the animal (which would be "gatto" in
-#. Italian).
 #: cm_main/templates/cm_main/navbar.html:64
 msgid "Chat"
 msgstr "Chat"
@@ -354,35 +327,42 @@ msgstr "Chat room pubbliche"
 msgid "Private Chat Rooms"
 msgstr "Stanze di chat private"
 
-#: cm_main/templates/cm_main/navbar.html:91
+#. Explanation: The Italian translation accurately reflects the meaning of the
+#. French phrase, which indicates a change in language.  The English phrase
+#. "Change language" is straightforward and easily translated into Italian.
+#: cm_main/templates/cm_main/navbar.html:93
+msgid "Change language"
+msgstr "Cambia lingua"
+
+#: cm_main/templates/cm_main/navbar.html:113
 msgid "Edit Pages"
 msgstr "Modifica Pagine"
 
-#: cm_main/templates/cm_main/navbar.html:93
+#: cm_main/templates/cm_main/navbar.html:115
 msgid "Import members from CSV"
 msgstr "Importa membri da CSV"
 
-#: cm_main/templates/cm_main/navbar.html:96
+#: cm_main/templates/cm_main/navbar.html:118
 msgid "Export Members as CSV"
 msgstr "Esporta membri come CSV"
 
-#: cm_main/templates/cm_main/navbar.html:114
+#: cm_main/templates/cm_main/navbar.html:136
 msgid "About the site"
 msgstr "Informazioni sul sito"
 
-#: cm_main/templates/cm_main/navbar.html:125
+#: cm_main/templates/cm_main/navbar.html:147
 msgid "Sign in"
 msgstr "Accedi"
 
-#: cm_main/templates/cm_main/navbar.html:129
+#: cm_main/templates/cm_main/navbar.html:151
 msgid "Request invitation link"
 msgstr "Richiedi link di invito"
 
-#: cm_main/templates/cm_main/navbar.html:138
+#: cm_main/templates/cm_main/navbar.html:160
 msgid "Profile"
 msgstr "Profilo"
 
-#: cm_main/templates/cm_main/navbar.html:140
+#: cm_main/templates/cm_main/navbar.html:162
 msgid "Log Out"
 msgstr "Esci"
 
@@ -427,7 +407,7 @@ msgstr ""
 msgid "This file type is not supported"
 msgstr "Questo tipo di file non è supportato"
 
-#: cm_main/views/views_general.py:33
+#: cm_main/views/views_general.py:44
 msgid "Media not found"
 msgstr "Media non trovata"
 
@@ -495,12 +475,6 @@ msgstr "Numero di gallerie"
 msgid "Number of photos"
 msgstr "Numero di foto"
 
-#. Explanation: In Italian, the plural of "forum" is typically "forum"
-#. (invariable) or sometimes "fora" in more formal contexts. However, given
-#. that both the English and French versions use "Forums," it's common in
-#. modern Italian to also use the anglicized plural "forum" (pronounced
-#. differently from the singular). This translation maintains consistency with
-#. the original while being natural in Italian usage.
 #: cm_main/views/views_stats.py:121
 msgid "Forums"
 msgstr "Forum"
@@ -517,12 +491,6 @@ msgstr "Numero di messaggi nei post"
 msgid "Number of message comments"
 msgstr "Numero di commenti ai messaggi"
 
-#. Explanation: In Italian, "chat" is commonly used as a loanword from English
-#. to refer to online chat rooms or discussion forums. While the French
-#. translation uses "Salons de discussion" (discussion rooms), the Italian
-#. term "chat" is more concise and widely understood in this context. The
-#. singular form is used here as it's more common in Italian when referring to
-#. the concept of online chatting or chat rooms in general.
 #: cm_main/views/views_stats.py:129
 msgid "Chats"
 msgstr "Chat"
@@ -543,22 +511,10 @@ msgstr "Numero di stanze di chat private"
 msgid "Number of chat messages"
 msgstr "Numero di messaggi nelle chat"
 
-#. Explanation: The Italian translation reflects the meaning of the French
-#. translation, which refers to "public chat rooms" (salons publics) rather
-#. than "private chat messages" as stated in the English sentence. This
-#. discrepancy between the English and French versions suggests that the
-#. French translation is providing the correct context, so the Italian
-#. translation follows suit.
 #: cm_main/views/views_stats.py:135
 msgid "Number of private chat messages"
 msgstr "Numero di messaggi nelle chat pubbliche"
 
-#. Explanation: The Italian translation reflects the meaning conveyed in the
-#. French translation, which specifies "salons privés" (private rooms) rather
-#. than "public chat" as mentioned in the English sentence. This discrepancy
-#. suggests that the French translation provides the correct context, so the
-#. Italian version follows suit by using "chat private" (private chats)
-#. instead of "chat pubbliche" (public chats).
 #: cm_main/views/views_stats.py:136
 msgid "Number of public chat messages"
 msgstr "Numero di messaggi nelle chat private"

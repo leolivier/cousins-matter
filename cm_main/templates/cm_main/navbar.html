@@ -85,7 +85,29 @@
 					{%icon "settings" %}
 				</button>
 				<div class="navbar-dropdown is-right">
-				{% if user.is_superuser %}
+					<div class="navbar-item">
+						<form action="{% url 'cm_main:change_language' %}" name="change_language" method="post">
+							{% csrf_token %}
+							<div class="control">
+								<label for="lang">{%trans "Change language" %}:</label>
+								<select name="lang" value="{%current_language_code%}">
+									{% for lang in settings.LANGUAGES %}
+										<option value="{{ lang.0 }}">{{ lang.1 }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</form>
+						{# Submit "change language" form automatically each time the language is changed in the select box #}
+						<script>
+							$(document).ready(function() {
+								$('select[name="lang"]').val('{%current_language_code%}');
+								$('select[name="lang"]').change(function() {
+									$('form[name="change_language"]').submit()
+								})
+							});
+						</script>
+					</div>
+						{% if user.is_superuser %}
 					{% url 'pages-edit:edit_list' as page_url%}
 					{%navbar_item page_url _("Edit Pages") "edit-page" %}
 					{% url 'members:csv_import' as import_url%}

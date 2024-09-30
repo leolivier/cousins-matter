@@ -31,4 +31,5 @@ urlpatterns = [
        last_modified(lambda req, **kw: last_modified_date)(  # JS Catalog will be reloaded only at server restart
           JavaScriptCatalog.as_view(packages=['cm_main'])),
        name='javascript-catalog'),
+  path("lang/", views_general.ChangeLanguageView.as_view(), name="change_language"),
 ]

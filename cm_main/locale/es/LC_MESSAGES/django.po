@@ -1,21 +1,21 @@
-# # Spanish Translations for Cousins-matter app.
-# # Copyright (C) 2024 <OWNER>
-# # This file is distributed under the same license as the application.
-# # This file was generated from /home/olivi/devt/cousins-matter/cm_main/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# # using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# # by the model.
-# # Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# Spanish Translations for NO NAME FOUND app.
+# Copyright (C) 2024 Olivier LEVILLAIN
+# This file is distributed under the same license as the application.
+# This file was generated from ../cousins-matter/cm_main/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the gemma2:2b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-07 20:09+0200\n"
-"PO-Revision-Date: 2024-09-21 16:04+00:00\n"
+"POT-Creation-Date: 2024-09-28 19:37+0200\n"
+"PO-Revision-Date: 2024-09-30 17:12+00:00\n"
 "\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using gemma2:2b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: ES\n"
 "MIME-Version: 1.0\n"
@@ -23,32 +23,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. Explanation: This translation maintains the meaning and tone of the
-#. original English phrase. The term "Cousins" is translated as "Cousinés,"
-#. which is a playful and colloquial way to refer to cousins, similar to how
-#. "Les Cousins Comptent!" conveys the idea that cousins are significant or
-#. important in French. The exclamation mark at the end of both sentences
-#. preserves their enthusiastic tone.
 #: cm_main/apps.py:8
 msgid "Cousins Matter!"
 msgstr "Los Cousinés Contan!"
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the original English sentence, including the use of placeholders. The
-#. context translation in French is "Nouveau %(followed_type)s
-#. "%(followed_object_name)s", which matches the format used in the English
-#. sentence. Therefore, the placeholders are kept intact in their respective
-#. positions: "%(followed_type)s" and "%(followed_object_name)s".
 #: cm_main/followers.py:61 cm_main/tests/tests_followers.py:80
 #, python-format
 msgid "New %(followed_type)s \"%(followed_object_name)s\""
 msgstr "Nuevo %(followed_type)s \"%(followed_object_name)s"
 
-#. Explanation: The placeholders in the original English sentence are kept
-#. intact in the Spanish translation. The French translation is also
-#. maintained, which specifies that the placeholders should remain unchanged
-#. and their positions should be preserved. Therefore, the same format is used
-#. for both the English and Spanish translations.
 #: cm_main/followers.py:65
 #, python-format
 msgid ""
@@ -58,236 +41,106 @@ msgstr ""
 "%(follower_name)s ha creado un nuevo %(followed_type)s "
 "\"%(followed_object_name)s\""
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the French sentence. The placeholders are kept in their original
-#. positions, ensuring that "obj_type", "followed_type", and
-#. "followed_object_name" remain unchanged as they refer to specific parts of
-#. the sentence. The rest of the text is translated accordingly to maintain
-#. the overall meaning: "Nuevo %(obj_type)s añadido al %(followed_type)s
-#. "%(followed_object_name)s".
 #: cm_main/followers.py:70 cm_main/tests/tests_followers.py:92
 #, python-format
 msgid "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
 msgstr ""
 "Nuevo %(obj_type)s añadido al %(followed_type)s \"%(followed_object_name)s\""
 
-#. Explanation: This Spanish translation maintains the structure and
-#. placeholders of the original English sentence, ensuring that the context
-#. translations are preserved. The placeholders %(follower_name}, %(obj_type},
-#. %(followed_type}, and %(followed_object_name} remain in their exact
-#. positions to maintain semantic integrity.
 #: cm_main/followers.py:75
 #, python-format
 msgid ""
 "%(follower_name)s has added a new %(obj_type)s in the %(followed_type)s "
 "\"%(followed_object_name)s\""
 msgstr ""
-"%(follower_name)s ha añadido un nuevo %(obj_type)s al "
-"%(followed_type)s \"%(followed_object_name)s\""
+"%(follower_name)s ha añadido un nuevo %(obj_type)s al %(followed_type)s "
+"\"%(followed_object_name)s\""
 
-#. Explanation: This Spanish translation reflects the meaning of the French
-#. phrase, which indicates that the person is no longer following something.
-#. The placeholder `{followed_type}` remains in its original position as it
-#. contains a specific type of content (e.g., user, post) and must be kept
-#. intact to maintain context consistency.
 #: cm_main/followers.py:108
 #, python-brace-format
 msgid "You are no longer following this {followed_type}"
 msgstr "¡No sigues más este {followed_type}"
 
-#. Explanation: This Spanish translation reflects the meaning of the French
-#. phrase, which indicates that the person is now following a certain type.
-#. The placeholder "{followed_type}" remains in its original position as it
-#. represents the specific type or category being followed (e.g., "user",
-#. "post", etc.).
 #: cm_main/followers.py:111
 #, python-brace-format
 msgid "You are now following this {followed_type}"
 msgstr "¡Estás ahora siguiendo este {followed_type}"
 
-#. Explanation: This Spanish translation reflects the meaning of the French
-#. phrase, which indicates that a new follower has been created for a specific
-#. type. The placeholders in both sentences are kept intact as they represent
-#. the same context and structure. In the original English sentence,
-#. "%(followed_type)s" is replaced with "tú" (you) to maintain the user-
-#. specific context, and similarly, "%(followed_object_name)s" is replaced
-#. with a placeholder for the specific type of followed object. The French
-#. translation uses "ton %(followed_type)s", which translates to "tú" in
-#. English, thus maintaining consistency.
 #: cm_main/followers.py:119 cm_main/tests/tests_followers.py:29
 #, python-format
 msgid "New follower to your %(followed_type)s \"%(followed_object_name)s\""
 msgstr "Nuevo seguidor a tu %(followed_type)s \"%(followed_object_name)s\""
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the original English sentence, including the use of placeholders. The
-#. French translation "Il suit maintenant ton %(followed_type)s
-#. %(followed_object_name)" is used to clarify that the person is following
-#. (suiting) something, not creating a new instance or object as in some
-#. contexts where "a créé un nouveau" might be interpreted. Therefore,
-#. "%({follower_name)s) ahora sigue tu %(followed_type)s
-#. %(followed_object_name)s" accurately reflects this context and preserves the
-#. original meaning while using the appropriate Spanish translation for the
-#. French phrase.
 #: cm_main/followers.py:121
 #, python-format
 msgid ""
 "%(follower_name)s is now following your %(followed_type)s "
 "\"%(followed_object_name)s\""
 msgstr ""
-"%(follower_name)s ahora sigue tu %(followed_type)s \"%(followed_object_name)s\""
+"%(follower_name)s ahora sigue tu %(followed_type)s "
+"\"%(followed_object_name)s\""
 
-#. Explanation: This translation maintains the meaning and tone of the
-#. original English phrase. The French translation "Ton message" directly
-#. corresponds to "Your message" in English, where "ton" is a possessive
-#. adjective used for informal singular second-person ("you"), equivalent to
-#. "your."
 #: cm_main/forms.py:8
 msgid "Your message"
 msgstr "Tu mensaje"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. provided French text. The key elements are preserved:
-#. - "Please keep it short" is translated as "Por favor, manténtelo breve,"
-#. which maintains the polite and instructive tone.
-#. - "Avoid images" is rendered as "evita las imágenes," keeping the same
-#. nuance of avoiding visual content.
-#. The structure and phrasing closely match those in the French original,
-#. ensuring a natural-sounding translation that aligns with the context
-#. provided.
 #: cm_main/forms.py:9
 msgid "Please keep it short and avoid images."
 msgstr "Por favor, manténlo breve y evita las imágenes."
 
-#. Explanation: The provided English and French sentences are quite
-#. straightforward. "Attach file" in English translates directly to "Attacher
-#. un fichier" in French, which means attaching a document or file. Therefore,
-#. the Spanish translation remains consistent with this meaning. There is no
-#. need for further explanation as the context translations align perfectly
-#. between all three languages.
 #: cm_main/forms.py:10
 msgid "Attach file"
 msgstr "Atachar archivo"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. English phrase, maintaining both the context and tone. The original
-#. sentence is about attaching a file when needed, which aligns perfectly with
-#. "Tu peux attacher un fichier ici si nécessaire" in French. The structure
-#. and vocabulary used are consistent across all three languages, ensuring
-#. that the message remains clear and precise.
 #: cm_main/forms.py:11
 msgid "You can attach a file here if needed"
 msgstr "Puedes adjuntar un archivo aquí si es necesario"
 
-#. Explanation: The provided English and French sentences are already quite
-#. similar, with the French phrase "Statistiques du site" being a direct
-#. translation of "Site Statistics". Therefore, no further adjustments or
-#. explanations are needed for this particular sentence.
 #: cm_main/templates/cm_main/about/site-stats.html:3
 #: cm_main/templates/cm_main/about/site-stats.html:6
 msgid "Site Statistics"
 msgstr "Estadísticas del sitio"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. provided English and French sentences. Both languages convey that a page is
-#. displaying or showing statistics related to a specific site, hence
-#. maintaining the original context and tone. The structure and vocabulary
-#. used in both translations are consistent with each other, ensuring clarity
-#. and accuracy in conveying the intended message.
 #: cm_main/templates/cm_main/about/site-stats.html:7
 msgid "This page displays some statistics about this site:"
 msgstr "Esta página muestra algunas estadísticas sobre este sitio :"
 
-#. Explanation: The English word "Statistics" is a plural noun referring to
-#. the collection, analysis, interpretation, and presentation of data. In
-#. Spanish, this term is also referred to as "estadísticas," which is its
-#. direct equivalent in French ("statistiques"). Therefore, no translation or
-#. adjustment is necessary for this simple term.
 #: cm_main/templates/cm_main/about/site-stats.html:9
 msgid "Statistics"
 msgstr "Estadísticas"
 
-#. Explanation: The provided English and French sentences are not from the
-#. same context. The English phrase "Home" is typically used as a placeholder
-#. for various contexts such as home page, house, or referring to one's
-#. dwelling. However, in this case, it appears to be a placeholder without any
-#. specific meaning attached to it. The French translation "Accueil" can mean
-#. "home," "greeting," or "welcome," but there is no clear context provided
-#. that would allow us to determine which of these meanings applies here.
-#. Therefore, the closest equivalent for a generic placeholder in Spanish
-#. remains "Aceptar."
 #: cm_main/templates/cm_main/base.html:8
 msgid "Home"
 msgstr "Aceptar"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase, which indicates that the site was created or developed with
-#. pride. The English sentence "This site proudly built using" can be
-#. interpreted in a similar way, suggesting that the site was constructed or
-#. developed with pride. Therefore, "is proudly powered by" is an appropriate
-#. and equivalent translation for both the original English and French
-#. sentences.
 #: cm_main/templates/cm_main/base.html:68
 msgid "This site proudly built using"
 msgstr "This site is proudly powered by"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase. Both English and French versions indicate that the source
-#. code (or code source in French) has a licensing agreement or is subject to
-#. certain terms and conditions, which is reflected in the Spanish version as
-#. "está bajo licencia." The term "código fuente" in Spanish corresponds
-#. directly to "code source" in French.
 #: cm_main/templates/cm_main/base.html:70
 msgid "The source code is licensed"
 msgstr "El código fuente está bajo licencia"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the provided French sentence, maintaining the same structure and legal
-#. terminology. The phrase "Tous droits réservés" in French is translated as
-#. "Todos los derechos reservados" in Spanish, which conveys the same sense of
-#. reserved rights.
 #: cm_main/templates/cm_main/base.html:76
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright © 2024 Cousins Matter. Todos los derechos reservados."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase. The term "site admin" in English is translated as
-#. "administrador del sitio" in Spanish, which directly corresponds to the
-#. French "l'administrateur du site." The structure and word order remain
-#. consistent with the original sentence, ensuring that the intended action
-#. (contacting) and the recipient (the site's administrator) are clearly
-#. communicated.
 #: cm_main/templates/cm_main/base.html:79
-#: cm_main/templates/cm_main/navbar.html:116
+#: cm_main/templates/cm_main/navbar.html:138
 msgid "Contact the site admin"
 msgstr "Contatar al administrador del sitio"
 
-#. Explanation: The English phrase "Confirm" is a verb that typically means to
-#. verify or make certain something is true. In the context provided, it
-#. aligns with the French word "Confirmer," which also denotes the act of
-#. verifying or confirming. Therefore, "Confirmar" in Spanish maintains the
-#. same meaning and function as its French counterpart.
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:28
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:54
 msgid "Confirm"
 msgstr "Confirmar"
 
-#. Explanation: This translation is straightforward as the English word
-#. "Cancel" and the French word "Annuler" both mean to cancel or to void an
-#. action, event, or agreement. The meaning remains consistent across both
-#. languages in this context.
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:32
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:58
 #: cm_main/templates/cm_main/contact/contact-form.html:16
 msgid "Cancel"
 msgstr "Anular"
 
-#. Explanation: This Spanish translation maintains the meaning and structure
-#. of the French sentence. The placeholders are kept in their original
-#. positions, ensuring that "expected_value" remains untranslated as it is a
-#. placeholder for dynamic content. The phrase "before pressing confirm" from
-#. the French version is translated to "antes de presionar confirmar," which
-#. accurately conveys the intended action sequence.
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:40
 #, python-format
 msgid ""
@@ -297,15 +150,6 @@ msgstr ""
 "Saisí \"<span class=\"has-text-danger\">%(expected_value)s</span>\" en el "
 "campo debajo antes de presionar confirmar."
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French sentence, maintaining the same structure and nuance. The term
-#. "Mandatory" in English is translated as "Obligatoire," which conveys the
-#. sense of something that must be done or cannot be avoided. The phrase
-#. "Deletion will not take place until the correct value is entered" is
-#. accurately rendered as "La eliminación no tendrá lugar hasta que se ingrese
-#. la valor correcta." This translation preserves the conditional nature of
-#. the statement, indicating that deletion can only proceed after a correct
-#. value has been provided.
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:48
 msgid ""
 "Mandatory. Deletion will not take place until the correct value is entered."
@@ -313,12 +157,6 @@ msgstr ""
 "Obligatorio. La eliminación no tendrá lugar hasta que se ingrese la valor "
 "correcta."
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the English phrase "Toggle Note Editor Toolbar," which implies a switch or
-#. toggle function for showing and hiding the toolbar in an editor. The French
-#. context "Afficher/Masquer" (Show/Hide) is used to convey this
-#. functionality, indicating that the user can choose whether they want to see
-#. or not see the toolbar.
 #: cm_main/templates/cm_main/common/include-summernote.html:6
 msgid "Toggle Note Editor Toolbar"
 msgstr "Affiché/Ocultar la barra de herramientas"
@@ -327,111 +165,54 @@ msgstr "Affiché/Ocultar la barra de herramientas"
 msgid "Remaining characters:"
 msgstr "Caracteres restantes:"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the English phrase, maintaining the same structure and terminology. The
-#. term "per" in English is translated as "por" in Spanish when used to
-#. indicate items or quantities per a unit (in this case, pages). The French
-#. translation "Items par page" uses the same structure, making it clear that
-#. the phrase refers to how many items are displayed on each page.
 #: cm_main/templates/cm_main/common/paginate_template.html:20
 msgid "Items per page:"
 msgstr "Items por página"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase, which instructs someone to go to or access the first page.
-#. The term "première" in French is equivalent to "primera" in Spanish when
-#. referring to the initial or first position.
 #: cm_main/templates/cm_main/common/paginate_template.html:40
 msgid "go to first page"
 msgstr "ir a la primera página"
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the original English sentence, including the use of placeholders. The
-#. phrase "go to" in English is translated as "a la página" (to the page) in
-#. Spanish, which accurately conveys the intended action of navigating to a
-#. specific page number. The placeholder #%(page_num)s remains unchanged to
-#. preserve its semantic location and purpose within the sentence.
 #: cm_main/templates/cm_main/common/paginate_template.html:52
 #, python-format
 msgid "go to page #%(page_num)s"
 msgstr "go a la página #%(page_num)s"
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the original English sentence, including the placeholder for page
-#. number. The format "#%(page_num)s" is kept as it represents a numerical
-#. identifier in both languages.
 #: cm_main/templates/cm_main/common/paginate_template.html:55
 #, python-format
 msgid "page #%(page_num)s"
 msgstr "página #%(page_num)s"
 
-#. Explanation: This translation directly corresponds to the French phrase,
-#. maintaining both the meaning and structure of the original. The term "page"
-#. in English is translated as "página" in Spanish, which accurately reflects
-#. the context of navigating through pages, such as on a document or web page.
 #: cm_main/templates/cm_main/common/paginate_template.html:68
 msgid "go to last page"
 msgstr "ir a la última página"
 
-#. Explanation: This translation is straightforward and maintains the meaning
-#. of the original English phrase. The term "Contact Form" in English refers
-#. to a form used for sending messages or inquiries, which aligns with the
-#. concept of a "Formulaire de contact" in French. Therefore, "Formulario de
-#. contacto" accurately conveys this idea without any ambiguity.
 #: cm_main/templates/cm_main/contact/contact-form.html:6
 #: cm_main/templates/cm_main/contact/contact-form.html:9
 msgid "Contact Form"
 msgstr "Formulario de contacto"
 
-#. Explanation: This Spanish translation accurately conveys the meaning and
-#. tone of the provided English sentence, including the formal request to fill
-#. out a form. The French context translation is used to ensure that the
-#. phrase "contact the admin of this site" is translated consistently as
-#. "contacter l'administrateur de ce site," which matches the English
-#. instruction for contacting the administrator of the site.
 #: cm_main/templates/cm_main/contact/contact-form.html:10
 msgid "Please fill out the form below to contact the admin of this site:"
 msgstr ""
 "Por favor complete el formulario debajo para contactar al administrador de "
 "este sitio :"
 
-#. Explanation: This translation is straightforward as the English word "Send"
-#. directly translates to "Enviar" in Spanish. There is no ambiguity or need
-#. for context interpretation here, so the meaning remains consistent across
-#. all languages provided.
 #: cm_main/templates/cm_main/contact/contact-form.html:15
 msgid "Send"
 msgstr "Enviar"
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the original English sentence, including the use of placeholders. The
-#. French translation is used to clarify that "sent" in this context means
-#. "envió," which corresponds to "t'a envoyé" (you sent) in the French
-#. version. Similarly, "from" translates to "desde."
 #: cm_main/templates/cm_main/contact/email-contact-form.html:19
 #: cm_main/tests/test_contactform.py:42
 #, python-format
 msgid "%(sender_name)s sent you the following message from %(site_name)s:"
 msgstr "%(sender_name)s te envió el siguiente mensaje desde %(site_name)s."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English sentence. The phrase "directly reply" is translated as
-#. "responder directamente," which maintains the sense of immediacy and
-#. brevity in communication. The French context translation, "pour lui
-#. répondre," indicates that the recipient should respond to someone
-#. (him/her), aligning with the idea of answering a person rather than
-#. replying to an email itself.
 #: cm_main/templates/cm_main/contact/email-contact-form.html:26
 msgid "You can directly reply to this email to answer him/her."
 msgstr ""
 "Puedes responder directamente a este correo electrónico para responderle."
 
-#. Explanation: This translation maintains the structure and placeholders of
-#. the original English sentence, ensuring that the context translations are
-#. preserved. The Spanish version uses curly braces to denote placeholders,
-#. which is consistent with the provided French translation format. The
-#. meaning remains intact as it accurately reflects both the content and the
-#. formatting from the original English sentence.
 #: cm_main/templates/cm_main/followers/email-followers-on-change.html:20
 #: cm_main/tests/tests_followers.py:84
 #, python-format
@@ -442,11 +223,6 @@ msgstr ""
 "%(author_name)s ha creado el siguiente %(followed_type)s <a "
 "href=\"%(followed_object_url)s\">%(followed_object_name)s</a>:"
 
-#. Explanation: This translation maintains the structure and placeholders of
-#. the original English sentence, ensuring that the context translations are
-#. preserved. The Spanish version follows the same format as the French one,
-#. with the appropriate use of curly braces to maintain the placeholders in
-#. their correct positions.
 #: cm_main/templates/cm_main/followers/email-followers-on-change.html:24
 #: cm_main/tests/tests_followers.py:97
 #, python-format
@@ -454,29 +230,14 @@ msgid ""
 "%(author_name)s added the following %(obj_type)s on %(followed_type)s <a "
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 msgstr ""
-"%(author_name)s ha añadido el %(obj_type)s siguiente en el "
-"%(followed_type)s <a "
-"href=\"%(followed_object_url)s\">%(followed_object_name)s</a>:"
+"%(author_name)s ha añadido el %(obj_type)s siguiente en el %(followed_type)s"
+" <a href=\"%(followed_object_url)s\">%(followed_object_name)s</a>:"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English sentence and its French context. The phrase "Do not reply
-#. to this mail" is translated as "No responder a este correo electrónico,"
-#. which maintains the imperative tone and directive nature of the
-#. instruction. Similarly, "it is machine generated" is rendered as "es
-#. generado por una máquina," preserving the implication that the email
-#. content was automatically created without human intervention. The structure
-#. and meaning are consistent between the English original and its Spanish
-#. translation.
 #: cm_main/templates/cm_main/followers/email-followers-on-change.html:32
 #: cm_main/templates/cm_main/followers/new_follower.html:27
 msgid "Do not reply to this mail, it is machine generated."
 msgstr "No responder a este correo electrónico, es generado por una máquina."
 
-#. Explanation: The placeholders in the original and context translations are
-#. identical, indicating that they should be kept as is in the Spanish
-#. version. Therefore, "%(nfollowers)s" remains unchanged to
-#. "%({nfollowers})s". The term "member" translates directly from French to
-#. Spanish without any ambiguity or change.
 #: cm_main/templates/cm_main/followers/followers-count-tag.html:4
 #, python-format
 msgid "%(nfollowers)s member"
@@ -484,11 +245,6 @@ msgid_plural "%(nfollowers)s members"
 msgstr[0] "%(nfollowers)s miembro"
 msgstr[1] "%(nfollowers)s miembros"
 
-#. Explanation: The placeholders in the original English and French sentences
-#. are identical, indicating that they should be kept as is in the Spanish
-#. translation. Therefore, "%%(nfollowers)s" becomes "%({nfollowers})s". The
-#. meaning of the sentence remains unchanged, preserving both the structure
-#. and the context.
 #: cm_main/templates/cm_main/followers/followers-count-tag.html:10
 #, python-format
 msgid "%(nfollowers)s follower"
@@ -496,27 +252,12 @@ msgid_plural "%(nfollowers)s followers"
 msgstr[0] "%(nfollowers)s follower"
 msgstr[1] "%(nfollowers)s followers"
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the original English sentence, including the use of placeholders. The
-#. placeholder names are kept in their same semantic locations as they were in
-#. the English version to ensure consistency with the French translation. The
-#. phrase "has a new follower" is translated as "ha creado un nuevo seguidor",
-#. which accurately reflects the context provided by the French translation.
 #: cm_main/templates/cm_main/followers/new_follower.html:14
 #, python-format
 msgid "Your %(followed_type)s '%(followed_object_name)s' has a new follower!"
-msgstr "¡Tu %(followed_type)s '%(followed_object_name)s' tiene un nuevo seguidor!"
+msgstr ""
+"¡Tu %(followed_type)s '%(followed_object_name)s' tiene un nuevo seguidor!"
 
-#. Explanation: This Spanish translation maintains the structure and
-#. placeholders of the original English sentence, ensuring that the context
-#. translations are accurately reflected. The placeholders %(follower_name},
-#. %(followed_type}, %(followed_object_name}, and %(site_name} are kept in
-#. their respective positions to preserve the meaning and format of the
-#. original text. The phrase "is now following" is translated as "sigue
-#. ahora," which conveys the same sense of current action and relationship
-#. between the follower, followed type, and site name. The HTML link structure
-#. remains unchanged to maintain the integrity of the original sentence's
-#. context translation.
 #: cm_main/templates/cm_main/followers/new_follower.html:22
 #: cm_main/tests/tests_followers.py:46
 #, python-format
@@ -527,280 +268,127 @@ msgstr ""
 "%(follower_name)s sigue ahora tu %(followed_type)s <a "
 "href=\"%(followed_url)s\">%(followed_object_name)s</a> en %(site_name)s"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French phrase, which indicates that the person should cease following
-#. someone or something. The English phrase "Stop Following" can be
-#. interpreted similarly in a context where one is instructed to halt the act
-#. of following. Therefore, "Detener de seguir," which means the same thing in
-#. Spanish, maintains the intended instruction and tone.
 #: cm_main/templates/cm_main/followers/toggle-follow-button.html:4
 msgid "Stop Following"
 msgstr "Detener de seguir"
 
-#. Explanation: The English word "Follow" is often used in contexts where a
-#. user subscribes to or follows another entity, such as an account on social
-#. media. In the context provided by the French translation "Suivre," which
-#. means "to follow" or "to subscribe," the most appropriate Spanish
-#. equivalent for this usage would be "Suscribirse."
 #: cm_main/templates/cm_main/followers/toggle-follow-button.html:11
 msgid "Follow"
 msgstr "Suscribirse"
 
-#. Explanation: This translation is straightforward as the English term
-#. "Members" directly translates to "Membres" in Spanish. There is no need for
-#. any interpretation or adjustment, as both terms refer to the same concept
-#. of individuals who are part of a group or organization.
 #: cm_main/templates/cm_main/navbar.html:26 cm_main/views/views_stats.py:106
 msgid "Members"
 msgstr "Miembros"
 
-#. Explanation: This translation is straightforward as both the English and
-#. French phrases directly translate to "anniversaries" in Spanish. There are
-#. no ambiguities or need for context-specific translations here, so the
-#. meaning remains consistent across all three languages.
 #: cm_main/templates/cm_main/navbar.html:29
 msgid "Birthdays"
 msgstr "Aniversarios"
 
-#. Explanation: The English phrase "Show directory" is ambiguous and can be
-#. interpreted in different ways. However, the French translation "Afficher
-#. l'annuaire" suggests that it refers to displaying a phone book or an
-#. address list rather than showing a directory of files on a computer system.
-#. Therefore, the most appropriate Spanish translation for this context would
-#. be "Abrir el directorio," which means opening a folder in a file management
-#. system, aligning with common usage and avoiding ambiguity.
 #: cm_main/templates/cm_main/navbar.html:31
 msgid "Show directory"
 msgstr "Abrir el directorio"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French phrase, which indicates creating a member. The English term
-#. "Create Member" is translated as "Criar un Miembro," maintaining the
-#. concept of creation and the specific role or category (member) in both
-#. languages.
 #: cm_main/templates/cm_main/navbar.html:34
 msgid "Create Member"
 msgstr "Criar un Miembro"
 
-#. Explanation: The English phrase "Invite Member" is translated to Spanish as
-#. "Invitar miembro." In the provided French context, "Inviter un Membre" is
-#. used. This maintains the meaning of inviting a member in both languages.
-#. The term "miembro" (member) is kept consistent with "Membre" in French,
-#. ensuring that the translation accurately reflects the original intent and
-#. context.
 #: cm_main/templates/cm_main/navbar.html:38
 msgid "Invite Member"
 msgstr "Invitar miembro"
 
-#. Explanation: This translation is straightforward as the English word
-#. "Galleries" directly translates to "Galeries" in French. There are no
-#. ambiguities or need for context interpretation here, so the meaning remains
-#. unchanged and consistent across all languages involved.
 #: cm_main/templates/cm_main/navbar.html:45 cm_main/views/views_stats.py:114
 msgid "Galleries"
 msgstr "Galerías"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. English phrase "Create Gallery." The French translation "Créer une Galérie"
-#. closely mirrors this, indicating that the action is creating a gallery. In
-#. both languages, the term "Galerie/Galery" refers to an exhibition space or
-#. collection of art works, and "Crear/Criar" means to create or establish.
-#. Therefore, "Criar uma Galeria" in Spanish maintains the same meaning as
-#. "Créer une Galérie" in French.
 #: cm_main/templates/cm_main/navbar.html:48
 msgid "Create Gallery"
 msgstr "Criar una Galería"
 
-#. Explanation: The English phrase "Bulk Upload" is typically used to describe
-#. a process where multiple files or items are uploaded at once. In the
-#. provided French context, which translates to "Chargement en masse," this
-#. term accurately captures the essence of uploading large quantities of data
-#. or files in one go. 
 #: cm_main/templates/cm_main/navbar.html:50
 msgid "Bulk Upload"
 msgstr "Carga masiva"
 
-#. Explanation: The English phrase "Forum" is a direct and identical term in
-#. both languages, so no translation or adjustment is necessary. The context
-#. translation provided as "Forum" in French remains the same in Spanish.
 #: cm_main/templates/cm_main/navbar.html:56
 msgid "Forum"
 msgstr "Forum"
 
-#. Explanation: The English phrase "Create Post" typically means to create a
-#. post or entry, which is often used in the context of social media
-#. platforms. However, given the French translation "Nouvelle Discussion," it
-#. seems more likely that this refers to creating a new discussion or thread
-#. rather than a post. Therefore, the Spanish translation "Nueva Publicación"
-#. aligns with the concept of creating a new discussion or thread, which is
-#. commonly used in forums and other collaborative platforms where discussions
-#. are initiated by posting messages.
 #: cm_main/templates/cm_main/navbar.html:59
 msgid "Create Post"
 msgstr "Nueva Publicación"
 
-#. Explanation: The English phrase "Chat" is a common noun that translates
-#. directly to the Spanish word "Chat," which also refers to a chat or
-#. conversation. Since there are no placeholders or ambiguous elements in this
-#. simple case, the direct translation preserves both meaning and tone without
-#. any adjustments.
 #: cm_main/templates/cm_main/navbar.html:64
 msgid "Chat"
 msgstr "Chat"
 
-#. Explanation: This translation maintains the meaning and tone of the
-#. original English phrase. The term "Public Chat Rooms" is translated as
-#. "Salon de discusión pública," which accurately conveys the idea of public
-#. chat rooms or forums where people can communicate with others in a shared
-#. space, typically for social interaction or information exchange.
 #: cm_main/templates/cm_main/navbar.html:67
 msgid "Public Chat Rooms"
 msgstr "Salones de discusión pública"
 
-#. Explanation: This translation directly corresponds to the French phrase
-#. "Salons de discussion privée." The term "Sala de chat" is a common and
-#. widely understood equivalent in Spanish for "Private Chat Rooms,"
-#. maintaining both the meaning and tone of the original English phrase.
 #: cm_main/templates/cm_main/navbar.html:69
 msgid "Private Chat Rooms"
 msgstr "Sala de chat privada"
 
-#. Explanation: This translation directly corresponds to the French phrase
-#. "Editer les Pages," which means "Editing pages." The English term "Edit
-#. Pages" is translated as "Editar las Páginas" in Spanish, maintaining both
-#. the meaning and structure of the original sentence.
-#: cm_main/templates/cm_main/navbar.html:91
+#. Explanation: The English phrase "Change language" is translated into
+#. Spanish as "Cambiar idioma". This accurately reflects the meaning of both
+#. phrases.  The word "cambiar" in Spanish means "to change," and "idioma"
+#. refers to language.
+#: cm_main/templates/cm_main/navbar.html:93
+msgid "Change language"
+msgstr "Cambiar idioma"
+
+#: cm_main/templates/cm_main/navbar.html:113
 msgid "Edit Pages"
 msgstr "Editar las Páginas"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. English phrase "Import members from CSV." The French translation "Importer
-#. des membres depuis un CSV" is used to provide context and ensure clarity.
-#. Both phrases maintain the same structure, with "members" translated as
-#. "miembros," which is a common term in both English and Spanish for
-#. individuals or entities that are part of a group or organization. The word
-#. "from" is translated as "desde" (from) in Spanish, maintaining the
-#. directional aspect implied by the original phrase. "CSV" remains unchanged
-#. as it is an acronym representing Comma-Separated Values, which is
-#. universally recognized and used across languages for file formats.
-#: cm_main/templates/cm_main/navbar.html:93
+#: cm_main/templates/cm_main/navbar.html:115
 msgid "Import members from CSV"
 msgstr "Importar miembros desde un CSV"
 
-#. Explanation: This translation maintains the meaning and structure of the
-#. original English phrase. The term "CSV" (Comma-Separated Values) is kept in
-#. its original form, as it is a standard abbreviation used across multiple
-#. languages for this file format. The French translation uses "en CSV," which
-#. directly corresponds to the English "as CSV."
-#: cm_main/templates/cm_main/navbar.html:96
+#: cm_main/templates/cm_main/navbar.html:118
 msgid "Export Members as CSV"
 msgstr "Exportar los miembros como CSV"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase "A propos du site." The term "site" in English is translated
-#. as "sitio" or "sitio web," but since it's used in a general context without
-#. specifying a particular type, "sitio" is chosen for its broad
-#. applicability. The Spanish translation maintains the same structure and
-#. meaning as the French phrase, ensuring clarity and consistency.
-#: cm_main/templates/cm_main/navbar.html:114
+#: cm_main/templates/cm_main/navbar.html:136
 msgid "About the site"
 msgstr "Apropos del sitio"
 
-#. Explanation: This translation is straightforward and maintains the meaning
-#. of the original English phrase. The term "Sign in" is commonly translated
-#. to "Conexión" or simply "Iniciar sesión" (to log in) in Spanish, but given
-#. the context provided by the French translation which uses "Connexion," this
-#. version accurately reflects that specific context.
-#: cm_main/templates/cm_main/navbar.html:125
+#: cm_main/templates/cm_main/navbar.html:147
 msgid "Sign in"
 msgstr "Conexión"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French phrase, which is to request or obtain a link used for inviting
-#. someone. The term "lien d'invitation" in French directly translates to
-#. "enlace de invitación" in Spanish, maintaining both the literal and
-#. colloquial meanings.
-#: cm_main/templates/cm_main/navbar.html:129
+#: cm_main/templates/cm_main/navbar.html:151
 msgid "Request invitation link"
 msgstr "Demandar un enlace de invitación"
 
-#. Explanation: The term "Profile" is a common English word that can have
-#. multiple meanings depending on the context. In this case, the French
-#. translation provided as "Profil" suggests it refers to a profile in a
-#. technical or digital sense, such as an online user profile or a
-#. professional profile. Therefore, the Spanish translation remains "Perfil,"
-#. which also commonly denotes a profile or profile page in various contexts
-#. like social media profiles or personal information profiles.
-#: cm_main/templates/cm_main/navbar.html:138
+#: cm_main/templates/cm_main/navbar.html:160
 msgid "Profile"
 msgstr "Perfil"
 
-#. Explanation: The English phrase "Log Out" is commonly translated to
-#. "Déconnexion" in French, which accurately conveys the meaning of logging
-#. out or disconnecting from a system. This term maintains the same context
-#. and usage as its English counterpart.
-#: cm_main/templates/cm_main/navbar.html:140
+#: cm_main/templates/cm_main/navbar.html:162
 msgid "Log Out"
 msgstr "Déconexion"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase, which indicates that a particular input or data field is
-#. mandatory. The term "obligatoire" in French directly corresponds to
-#. "obligatorio" in Spanish, both conveying the requirement for the user to
-#. provide information in this field.
 #: cm_main/tests/test_contactform.py:23
 msgid "This field is required."
 msgstr "Este campo es obligatorio."
 
-#. Explanation: This translation maintains the meaning and tone of the
-#. original English sentence. The French translation "Ton message a été
-#. envoyé" indicates that the message was successfully sent, which aligns with
-#. the English phrase "Your message has been sent." The Spanish version "Tu
-#. mensaje ha sido enviado" preserves this meaning by using the appropriate
-#. pronoun ("tu") for the informal context and maintaining the passive voice
-#. structure of the original sentence.
 #: cm_main/tests/test_contactform.py:29 cm_main/views/views_contact.py:65
 msgid "Your message has been sent"
 msgstr "Tu mensaje ha sido enviado"
 
-#. Explanation: This translation is straightforward and maintains the meaning
-#. of the original English phrase. The term "contact form" in English directly
-#. translates to "formulaire de contact" in French, which accurately
-#. represents a form used for sending messages or inquiries to a company or
-#. organization. No further explanation is needed as there are no ambiguous
-#. elements or placeholders present in this sentence.
 #: cm_main/tests/test_contactform.py:32 cm_main/views/views_contact.py:40
 msgid "Contact form"
 msgstr "Formulario de contacto"
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the original English sentence, including the use of placeholders. The
-#. French translation is used to clarify that it refers to receiving a message
-#. rather than sending one, as indicated by the context provided in the French
-#. version.
 #: cm_main/tests/test_contactform.py:39 cm_main/views/views_contact.py:37
 #, python-format
 msgid "You have a new message from %(name)s (%(email)s). "
 msgstr "Tienes un nuevo mensaje de %(name)s (%(email)s)."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase, which indicates that someone has become a new follower. The
-#. English phrase "You have a new follower!" also implies this situation where
-#. an individual is now following the speaker. Therefore, "¡Tienes un nuevo
-#. seguidor!" maintains the same context and meaning as "Tu as un nouveau
-#. follower!", ensuring consistency between the French and Spanish
-#. translations.
 #: cm_main/tests/tests_followers.py:27
 msgid "You have a new follower!"
 msgstr "¡Tienes un nuevo seguidor!"
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the French sentence. The placeholders are kept in their original
-#. positions to preserve the context and ensure that they refer to the correct
-#. elements within the sentence. The phrase "Bonjour" is used for "Hi," which
-#. is a common greeting when introducing someone on social media or similar
-#. contexts. The rest of the text follows directly from the French,
-#. maintaining the same structure and meaning.
 #: cm_main/tests/tests_followers.py:38
 #, python-format
 msgid ""
@@ -811,67 +399,26 @@ msgstr ""
 "href=\"%(follower_url)s\">%(follower_name)s</a> te sigue ahora en "
 "%(site_name)s!"
 
-#. Explanation: This Spanish translation reflects the meaning of the French
-#. phrase, which indicates that the user's email client is outdated and unable
-#. to display something. The English phrase "But your mailer tools is too old
-#. to show it" can be interpreted as either a statement about an outdated tool
-#. or a colloquial way of expressing disappointment or frustration when
-#. something cannot be displayed. Given the context provided by the French
-#. translation, which uses the same structure but with different words, we
-#. understand that the user's email client (mailer tools) is too old to show
-#. something, likely referring to an email or message not being visible due to
-#. outdated software. The explanation clarifies that in this context, "too
-#. old" refers to the email client rather than a tool specifically for mailer
-#. purposes.
 #: cm_main/views/views_contact.py:41
 msgid "But your mailer tools is too old to show it :'("
 msgstr "Más tu herramienta de correo es demasiado antigua para mostrarlo :'("
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English and French sentences. Both languages express that a
-#. particular file type is unsupported, maintaining the same nuance and
-#. context. The structure and vocabulary used in both translations are
-#. consistent with each other, ensuring clarity and precision in conveying
-#. this technical information.
 #: cm_main/views/views_contact.py:60
 msgid "This file type is not supported"
 msgstr "Este tipo de archivo no está soportado"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase, which indicates that a media item or resource could not be
-#. located. The term "non trouvé" in French directly translates to "no
-#. encontrado" in Spanish when referring to something being unavailable or
-#. missing. Therefore, "no encontrada" (found) is used as its antonym,
-#. maintaining the original meaning of the sentence.
-#: cm_main/views/views_general.py:33
+#: cm_main/views/views_general.py:44
 msgid "Media not found"
 msgstr "Média no encontrada"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase, which indicates that a specific version could not be located
-#. or accessed. The English phrase "Version not found" is also conveying this
-#. same idea in English. The structure and meaning remain consistent between
-#. both translations.
 #: cm_main/views/views_stats.py:41 cm_main/views/views_stats.py:81
 msgid "Version not found"
 msgstr "Versión no encontrada"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English and French sentences. Both indicate that a particular
-#. version or update is outdated, which is why "not up-to-date" in English
-#. matches "pas à jour" in French and "no actualizada" in Spanish. The
-#. structure and word choice are consistent across all three languages to
-#. maintain clarity and precision.
 #: cm_main/views/views_stats.py:55
 msgid "Your version is not up-to-date."
 msgstr "Tu versión no está actualizada."
 
-#. Explanation: This translation maintains the structure and meaning of both
-#. the English and French sentences. The placeholders are kept in their
-#. original positions to preserve context. "Please" is translated as "Por
-#. favor," which conveys a polite request, matching the tone of the original
-#. sentence. The command itself remains unchanged as it is specific software-
-#. related information that should be left untranslated for clarity.
 #: cm_main/views/views_stats.py:58
 msgid ""
 "Please update it by running the following command:<br><code>docker-start.sh "
@@ -880,255 +427,106 @@ msgstr ""
 "Por favor, actualícelo ejecutando el siguiente comando:<br><code>docker-"
 "start.sh -u</code>"
 
-#. Explanation: This translation maintains the meaning of the original English
-#. phrase, which indicates that the user's software or system version is
-#. current and does not need to be updated. The French sentence "La version
-#. est à jour" also conveys this idea, where "à jour" means up-to-date in a
-#. technical context.
 #: cm_main/views/views_stats.py:69
 msgid "Your version is up-to-date."
 msgstr "Tu versión está actualizada."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. provided French sentence. The phrase "(?!?)" is kept as-is because it
-#. appears to be a placeholder for an exclamation or question mark, likely
-#. used in a context where punctuation might vary between languages. The rest
-#. of the sentence follows closely with slight adjustments for proper Spanish
-#. grammar and spelling: "Tus versión" instead of "Ta version", "es más
-#. reciente que la versión más reciente" instead of "est plus récente que la
-#. version la plus récente".
 #: cm_main/views/views_stats.py:75
 msgid "Your version is newer than the latest release (?!?)"
 msgstr "Tus versión es más reciente que la versión más reciente (?!?)"
 
-#. Explanation: The English word "Site" is a common term that can refer to
-#. various contexts such as a website, place, or location. Without additional
-#. context, the French translation provided ("Site") indicates it is being
-#. used in a similar manner to its English counterpart. Therefore, the Spanish
-#. translation remains "Sitio," which is the equivalent term for "Site" in
-#. Spanish.
 #: cm_main/views/views_stats.py:97
 msgid "Site"
 msgstr "Sitio"
 
-#. Explanation: This translation directly corresponds to the French phrase
-#. "Nom du site." The English placeholder "Site name" is kept in its original
-#. form as it appears to be a title or label for a website, which typically
-#. remains unchanged across languages.
 #: cm_main/views/views_stats.py:99
 msgid "Site name"
 msgstr "Nombre del sitio"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase, which is to provide the Uniform Resource Locator (URL) for a
-#. website. The term "site URL" in English directly corresponds to "URL du
-#. site" in French, and thus remains unchanged in the Spanish version as well.
 #: cm_main/views/views_stats.py:100
 msgid "Site URL"
 msgstr "URL del sitio"
 
-#. Explanation: This translation directly corresponds to the French phrase
-#. "Version de l'application," which refers to the application's version. The
-#. term "Versión de la aplicación" accurately conveys this meaning in Spanish,
-#. maintaining the same structure and context as the original English phrase.
 #: cm_main/views/views_stats.py:101
 msgid "Application Version"
 msgstr "Versión de la aplicación"
 
-#. Explanation: This translation maintains the meaning and structure of the
-#. original English phrase. The term "release" in this context is often
-#. translated as "version" when referring to software or product updates,
-#. which aligns with the French translation "Dernière version." Therefore,
-#. "Latest release" becomes "Dernière versión" in Spanish.
 #: cm_main/views/views_stats.py:102
 msgid "Latest release"
 msgstr "Dernière versión"
 
-#. Explanation: This Spanish translation accurately reflects the meaning and
-#. structure of the French phrase. The term "membres" in French directly
-#. corresponds to "miembros" in Spanish, maintaining the same context of
-#. individuals who are members or part of a group. The word order is also
-#. preserved, ensuring that "Total number" (Nombre total) and "members" (de
-#. membres/miembros) remain in their respective positions within the phrase.
 #: cm_main/views/views_stats.py:108
 msgid "Total number of members"
 msgstr "Nombre total de miembros"
 
-#. Explanation: This translation directly corresponds to the meaning of the
-#. French phrase. The term "active" in English is translated as "actif," which
-#. accurately conveys the concept of being currently engaged or involved,
-#. aligning with the context of active members who are likely participating or
-#. engaging within a community or organization.
 #: cm_main/views/views_stats.py:109
 msgid "Number of active members"
 msgstr "Número de miembros activos"
 
-#. Explanation: This translation directly corresponds to the French phrase,
-#. which accurately conveys the meaning of the English term. The Spanish
-#. phrase "Nombre de miembros gestionados" maintains the same structure and
-#. meaning as "Nombre de membres gérés," ensuring that both translations are
-#. consistent with each other.
 #: cm_main/views/views_stats.py:110
 msgid "Number of managed members"
 msgstr "Nombre de miembros gestionados"
 
-#. Explanation: This translation directly corresponds to the French phrase,
-#. maintaining the same meaning and structure. The term "galleries" in English
-#. is translated as "galerías" in Spanish, which accurately reflects this
-#. context.
 #: cm_main/views/views_stats.py:116
 msgid "Number of galleries"
 msgstr "Número de galerías"
 
-#. Explanation: This translation is straightforward as both the English and
-#. French phrases are direct translations. The Spanish term "fotos"
-#. corresponds to "photos" in English, maintaining the same meaning and
-#. structure. There are no placeholders or ambiguities that require special
-#. handling in this case.
 #: cm_main/views/views_stats.py:117
 msgid "Number of photos"
 msgstr "Número de fotos"
 
-#. Explanation: The English phrase "Forums" is identical to the French phrase
-#. "Forums". There are no ambiguities or changes needed in meaning, tone, or
-#. nuance between the two languages for this simple term. Therefore, the
-#. Spanish translation directly mirrors the French version without any
-#. adjustments.
 #: cm_main/views/views_stats.py:121
 msgid "Forums"
 msgstr "Forums"
 
-#. Explanation: The English phrase "Number of posts" translates to "Número de
-#. publicaciones" in Spanish. This maintains the meaning and structure of the
-#. original phrase, which refers to a count or tally of posts (or
-#. publications). The French translation "Nombre de discussions" also
-#. indicates a count or tally but specifically relates to discussions, which
-#. is consistent with the general concept of posts or communications that
-#. could be considered as discussions within a context.
 #: cm_main/views/views_stats.py:123
 msgid "Number of posts"
 msgstr "Número de publicaciones"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. English phrase "Number of post messages." The French translation "Nombre de
-#. messages dans les discussions" directly corresponds to this, indicating a
-#. count of messages within discussion forums. Therefore, "Número de mensajes
-#. en las discusiones" in Spanish maintains the same context and meaning as
-#. the original English sentence.
 #: cm_main/views/views_stats.py:124
 msgid "Number of post messages"
 msgstr "Número de mensajes en las discusiones"
 
-#. Explanation: This Spanish translation accurately reflects the meaning and
-#. structure of the French phrase. Both phrases convey information about
-#. counting or tallying comments associated with messages, maintaining the
-#. same semantic content in both languages. The word order is also preserved,
-#. ensuring that "Nombre de" (Number of) directly precedes "commentaires"
-#. (comments), which then follows "de messages" (of messages).
 #: cm_main/views/views_stats.py:125
 msgid "Number of message comments"
 msgstr "Número de comentarios de mensajes"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. English phrase "Chats," which in this context refers to online chat rooms
-#. or forums. The French term "Salons de discussion" is a direct equivalent,
-#. indicating places where people can engage in discussions and communication
-#. over the internet.
 #: cm_main/views/views_stats.py:129
 msgid "Chats"
 msgstr "Salones de discusión"
 
-#. Explanation: This Spanish translation accurately reflects the meaning and
-#. structure of the French phrase. Both "Nombre de salons de discussion" in
-#. French and "Número de salones de discusión" in Spanish convey the concept
-#. of counting or specifying a quantity related to chat rooms or discussion
-#. forums. The term "salon de discussion" is commonly used in both languages
-#. to refer to online chat rooms or forums where people can engage in
-#. discussions.
 #: cm_main/views/views_stats.py:131
 msgid "Number of chat rooms"
 msgstr "Número de salones de discusión"
 
-#. Explanation: This Spanish translation accurately reflects the meaning and
-#. structure of the French phrase. The term "public chat rooms" in English is
-#. translated as "salon de discussion publique," which directly corresponds to
-#. "Nombre de salons de discussion publique" in French. Both phrases convey
-#. the idea of public online communication spaces, maintaining the same nuance
-#. and context.
 #: cm_main/views/views_stats.py:132
 msgid "Number of public chat rooms"
 msgstr "Número de salones de discusión pública"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase, which refers to a specific type of communication channel
-#. where only designated participants can communicate. The term "salon de
-#. discussion privée" in French directly translates to "salas de chat
-#. privadas" in Spanish, maintaining the concept of private chat rooms.
 #: cm_main/views/views_stats.py:133
 msgid "Number of private chat rooms"
 msgstr "Número de salas de chat privadas"
 
-#. Explanation: The English phrase "Number of chat messages" is translated to
-#. "Número de mensajes en los chats" in Spanish, which directly corresponds to
-#. the French phrase "Nombre de messages dans les salons." Both phrases convey
-#. the idea of counting or tallying up all the messages within a chat
-#. environment. In this context, "chat" and "salon" are colloquial terms for
-#. what might be more formally referred to as "chats" (plural) in English and
-#. "sala de chat" (literally "chat room") in French. The term "messages" is
-#. used interchangeably across all three languages to denote the content being
-#. counted or communicated within these chat environments.
 #: cm_main/views/views_stats.py:134
 msgid "Number of chat messages"
 msgstr "Número de mensajes en los chats"
 
-#. Explanation: The English phrase "Number of private chat messages" refers to
-#. the count of messages that are sent privately between users in a chat
-#. application. On the other hand, "Nombre de messages dans les salons
-#. publics" translates to "Number of messages in public rooms," which implies
-#. a different context where messages are shared publicly within groups or
-#. rooms.
-#. Given these translations and their contexts, it's clear that the correct
-#. Spanish translation for "Number of private chat messages" is "Número de
-#. mensajes privados."
 #: cm_main/views/views_stats.py:135
 msgid "Number of private chat messages"
 msgstr "Número de mensajes privados"
 
-#. Explanation: The English phrase "Number of public chat messages" refers to
-#. the count of messages in public chat rooms. In contrast, the French phrase
-#. "Nombre de messages dans les salons privés" translates to "Number of
-#. messages in private rooms," which is different from the intended meaning.
-#. Therefore, the Spanish translation "Número de mensajes en los chats
-#. públicos" accurately reflects that it refers to the number of messages in
-#. public chat rooms, maintaining the context and meaning as closely as
-#. possible to the original English phrase.
 #: cm_main/views/views_stats.py:136
 msgid "Number of public chat messages"
 msgstr "Número de mensajes en los chats públicos"
 
-#. Explanation: This translation is straightforward as the English term
-#. "Administrator" directly corresponds to the Spanish word "Administrador,"
-#. which maintains the same meaning and context. The French translation of
-#. "Administrateur" as "Administrateur" further confirms that this term refers
-#. to a person holding administrative duties or responsibilities, such as an
-#. administrator in various organizations or systems.
 #: cm_main/views/views_stats.py:140
 msgid "Administrator"
 msgstr "Administrador"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French phrase, which indicates that the site is being managed or
-#. handled by someone. The structure and meaning remain consistent between
-#. both languages.
 #: cm_main/views/views_stats.py:142
 msgid "This site is managed by"
 msgstr "Este sitio está gestionado por"
 
-#. Explanation: This translation directly corresponds to the French phrase,
-#. maintaining both the meaning and structure. The term "Administrator" is
-#. translated as "Administrador," which accurately represents this role in
-#. Spanish. Similarly, "email" becomes "correo electrónico," preserving its
-#. function as a communication tool for administrative purposes.
 #: cm_main/views/views_stats.py:143
 msgid "Administrator email"
 msgstr "Correo electrónico del administrador"

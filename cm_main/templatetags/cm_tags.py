@@ -6,8 +6,14 @@ from django.template import Library, Node, Variable, TemplateSyntaxError
 from django.conf import settings
 from django.urls import reverse, resolve, NoReverseMatch
 from django.utils.safestring import mark_safe
+from django.utils.translation import get_language
 
 register = Library()
+
+
+@register.simple_tag
+def current_language_code():
+    return get_language()
 
 
 class ViewNode(Node):
@@ -74,11 +80,6 @@ def get_view(parser, token):
 
 def get_title(title):
     return f"{settings.SITE_NAME} - {title}"
-
-
-# @register.simple_tag
-# def title(title_s):
-#     return get_title(title_s)
 
 
 class TitleNode(Node):

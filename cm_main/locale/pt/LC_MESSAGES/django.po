@@ -1,8 +1,8 @@
 # Portuguese Translations for NO NAME FOUND app.
 # Copyright (C) 2024 Olivier LEVILLAIN
 # This file is distributed under the same license as the application.
-# This file was generated from /home/olivi/devt/cousins-matter/cm_main/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the llama3.2:3b model. Depending on the model, it may contain some errors and should be reviewed
+# This file was generated from ../cousins-matter/cm_main/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the gemma2:2b model. Depending on the model, it may contain some errors and should be reviewed
 # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
 # by the model.
 # Olivier LEVILLAIN <OWNER EMAIL>, 2024.
@@ -12,10 +12,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-07 20:09+0200\n"
-"PO-Revision-Date: 2024-09-27 19:41+00:00\n"
+"POT-Creation-Date: 2024-09-28 19:37+0200\n"
+"PO-Revision-Date: 2024-09-30 17:14+00:00\n"
 "\n"
-"Last-Translator: Auto-po-lyglot using llama3.2:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using gemma2:2b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: PT\n"
 "MIME-Version: 1.0\n"
@@ -23,32 +23,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which emphasizes the importance of cousins. The exclamation mark at
-#. the end is preserved to maintain the same tone and emphasis as in the
-#. original English sentence.
 #: cm_main/apps.py:8
 msgid "Cousins Matter!"
 msgstr "Os Primos Importam!"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that a new object of a certain type has been
-#. created. The English phrase "New %(followed_type)s
-#. "%(followed_object_name)s"" can be ambiguous, as it can mean both "a new
-#. object of this type" and "an object of this type that is new". The French
-#. translation makes it clear that it is a new object, so the Portuguese
-#. version "Novo %(followed_type)s "%(followed_object_name)s"" follows this
-#. interpretation.
 #: cm_main/followers.py:61 cm_main/tests/tests_followers.py:80
 #, python-format
 msgid "New %(followed_type)s \"%(followed_object_name)s\""
 msgstr "Novo %(followed_type)s \"%(followed_object_name)s"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person created something new. The English
-#. phrase uses placeholders for the follower's name, followed type, and
-#. followed object, which are preserved in the Portuguese translation to
-#. maintain consistency with the original context.
 #: cm_main/followers.py:65
 #, python-format
 msgid ""
@@ -57,22 +40,13 @@ msgid ""
 msgstr ""
 "%(follower_name)s criou um novo %(followed_type)s: %(followed_object_name)s"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that a new object of type obj_type has been added
-#. to followed_type. The English sentence uses placeholders for the object
-#. type, followed type, and object name, which are preserved in the Portuguese
-#. translation to maintain consistency with the original context.
 #: cm_main/followers.py:70 cm_main/tests/tests_followers.py:92
 #, python-format
 msgid "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
-msgstr "Novo %(obj_type)s adicionado ao %(followed_type)s \"%(followed_object_name)s\""
+msgstr ""
+"Novo %(obj_type)s adicionado ao %(followed_type)s "
+"\"%(followed_object_name)s\""
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person added a new object to a category.
-#. The English phrase "has added a new [object type] in the [followed type]
-#. [followed object name]" can be ambiguous, as it can mean both adding an
-#. object and categorizing it. The French translation makes it clear that it
-#. is adding an object, so the Portuguese version follows this interpretation.
 #: cm_main/followers.py:75
 #, python-format
 msgid ""
@@ -82,43 +56,21 @@ msgstr ""
 "%(follower_name)s adicionou um novo %(obj_type)s no %(followed_type)s "
 "\"%(followed_object_name)s"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person is no longer following or tracking
-#. something. The English sentence uses a placeholder "{followed_type}" to
-#. indicate the type of thing being followed, and the Portuguese version "Você
-#. não está mais seguindo esse {followed_type}" maintains this same structure
-#. and clarity.
 #: cm_main/followers.py:108
 #, python-brace-format
 msgid "You are no longer following this {followed_type}"
 msgstr "Você não está mais seguindo esse {followed_type}."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person is currently following something.
-#. The English sentence uses a placeholder for the type of thing being
-#. followed, and the French translation makes it clear that it's about
-#. following something.
 #: cm_main/followers.py:111
 #, python-brace-format
 msgid "You are now following this {followed_type}"
 msgstr "Você agora está seguindo este {followed_type}."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that there is a new follower for the specified type
-#. (e.g. post, comment, etc.) with the given name. The English sentence uses
-#. placeholders to indicate the type and object being referred to, while the
-#. French translation makes it clear that it's about a new follower.
 #: cm_main/followers.py:119 cm_main/tests/tests_followers.py:29
 #, python-format
 msgid "New follower to your %(followed_type)s \"%(followed_object_name)s\""
 msgstr "Novo seguidor para o seu %(followed_type)s \"%(followed_object_name)s"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person is now following something. The
-#. English phrase "is now following your [something]" can be ambiguous, as it
-#. can mean both "following someone" and "following something". The French
-#. translation makes it clear that it is a thing being followed, so the
-#. Portuguese version follows this interpretation.
 #: cm_main/followers.py:121
 #, python-format
 msgid ""
@@ -128,143 +80,67 @@ msgstr ""
 "%(follower_name)s está agora seguindo seu %(followed_type)s "
 "\"%(followed_object_name)s"
 
-#. Explanation: The English phrase "Your message" is a common way to refer to
-#. an incoming message, while the French phrase "Ton message" also implies
-#. that it's from you. In Portuguese, we use "mensagem" instead of "message",
-#. and add the possessive suffix "-u" to indicate it belongs to you.
 #: cm_main/forms.py:8
 msgid "Your message"
 msgstr "Seu mensagem"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which emphasizes brevity and avoiding images. The English sentence
-#. is clear in its request to keep the content concise and image-free, so the
-#. Portuguese version maintains this same tone and clarity.
 #: cm_main/forms.py:9
 msgid "Please keep it short and avoid images."
 msgstr "Por favor, mantenha-o curto e evite imagens."
 
-#. Explanation: The English phrase "Attach file" can be interpreted in
-#. different ways, such as attaching a physical file or making an attachment
-#. in digital communication. The French translation "Attacher un fichier"
-#. makes it clear that the action is related to digital communication, where a
-#. file is attached to a message or document.
 #: cm_main/forms.py:10
 msgid "Attach file"
 msgstr "Colocar arquivo"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that attaching a file is optional and only
-#. necessary in certain situations. The English sentence's tone suggests a
-#. general instruction, while the French translation makes it clear that
-#. attachment is not mandatory.
 #: cm_main/forms.py:11
 msgid "You can attach a file here if needed"
 msgstr "Você pode anexar um arquivo aqui se necessário"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation. The English phrase "Site
-#. Statistics" can be slightly ambiguous, but in this context, it seems to
-#. refer to statistical data about a website, making the Portuguese version
-#. "Estatísticas do site" a fitting choice.
 #: cm_main/templates/cm_main/about/site-stats.html:3
 #: cm_main/templates/cm_main/about/site-stats.html:6
 msgid "Site Statistics"
 msgstr "Estatísticas do site"
 
-#. Explanation: The Portuguese translation maintains the same meaning and
-#. structure as the French original, indicating that the webpage is displaying
-#. statistical information about the current website.
 #: cm_main/templates/cm_main/about/site-stats.html:7
 msgid "This page displays some statistics about this site:"
 msgstr "Esta página exibe algumas estatísticas sobre este site :"
 
-#. Explanation: The English word "Statistics" and the French word
-#. "Statistiques" are cognates, meaning they share a common origin. Both words
-#. refer to the collection, analysis, interpretation, presentation, and
-#. organization of data. In Portuguese, the translation is "Estatísticas",
-#. which maintains the same meaning as the original English sentence.
 #: cm_main/templates/cm_main/about/site-stats.html:9
 msgid "Statistics"
 msgstr "Estatísticas"
 
-#. Explanation: The English word "Home" can refer to a physical house or
-#. dwelling, but in this context, it seems to be referring to the home page of
-#. a website. The French translation "Accueil" also implies a webpage, so the
-#. Portuguese translation "Casa" is used to maintain consistency with the
-#. contextual translation.
 #: cm_main/templates/cm_main/base.html:8
 msgid "Home"
 msgstr "Casa"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which emphasizes pride and ownership in building a website. The
-#. English phrase "This site proudly built using" suggests that the website
-#. was constructed with pride, while the French phrase "Ce site est fièrement
-#. propulsé par" makes it clear that the website is being propelled or driven
-#. by something ( likely a content management system or CMS), which is also
-#. reflected in the Portuguese translation.
 #: cm_main/templates/cm_main/base.html:68
 msgid "This site proudly built using"
 msgstr "Este site foi construído com orgulho"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the source code has a license attached to it.
-#. The English phrase "The source code is licensed" can be ambiguous, as it
-#. can mean both "the source code exists" and "the source code has a license".
-#. The French translation makes it clear that it is a license, so the
-#. Portuguese version "O código-fonte está licenciado." follows this
-#. interpretation.
 #: cm_main/templates/cm_main/base.html:70
 msgid "The source code is licensed"
 msgstr "O código-fonte está licenciado."
 
-#. Explanation: The original English phrase uses the symbol "© " to indicate
-#. copyright, which is not necessary in Portuguese. The French translation
-#. already omits this symbol, so the Portuguese version follows suit.
-#. Additionally, the word "reserved" is translated to "reservados", which is
-#. the correct Portuguese term for the same concept.
 #: cm_main/templates/cm_main/base.html:76
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright 2024 Cousins Matter. Todos os direitos reservados."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and formal way to ask someone to contact the site
-#. administrator. The English phrase "Contact the site admin" can be slightly
-#. more informal, but the Portuguese version "Contate o administrador do site"
-#. maintains the same level of formality as the French original.
 #: cm_main/templates/cm_main/base.html:79
-#: cm_main/templates/cm_main/navbar.html:116
+#: cm_main/templates/cm_main/navbar.html:138
 msgid "Contact the site admin"
 msgstr "Contate o administrador do site"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is to verify or validate something. The English word
-#. "Confirm" also carries this same meaning, so the Portuguese version
-#. "Confirmar" follows this interpretation.
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:28
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:54
 msgid "Confirm"
 msgstr "Confirmar"
 
-#. Explanation: The English word "Cancel" and the French word "Annuler" both
-#. convey the idea of stopping or reversing an action, but they have slightly
-#. different connotations. In English, "Cancel" can imply a more formal or
-#. official cancellation, whereas in French, "Annuler" has a broader meaning
-#. that includes not only cancellations but also negating or rejecting
-#. something. The Portuguese translation "Cancelar" maintains the same level
-#. of formality and universality as the original English word.
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:32
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:58
 #: cm_main/templates/cm_main/contact/contact-form.html:16
 msgid "Cancel"
 msgstr "Cancelar"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the user needs to enter a specific value into
-#. a field before confirming. The HTML class "has-text-danger" is preserved in
-#. the translation to maintain consistency with the original text's visual
-#. styling.
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:40
 #, python-format
 msgid ""
@@ -274,144 +150,68 @@ msgstr ""
 "Insira `<span class=\\\"has-text-danger\\\">%(expected_value)s</span>` no "
 "campo abaixo antes de pressionar confirmar."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that deletion will not occur until the correct
-#. value is entered. The English sentence "Mandatory. Deletion will not take
-#. place until the correct value is entered" can be ambiguous, as it can mean
-#. both "mandatory" and "deletion". The French translation makes it clear that
-#. it is a requirement for deletion to occur, so the Portuguese version
-#. "Obrigatório. A exclusão não ocorrerá até que o valor correto seja
-#. inserido." follows this interpretation.
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:48
 msgid ""
 "Mandatory. Deletion will not take place until the correct value is entered."
 msgstr ""
 "Obrigatório. A exclusão não ocorrerá até que a valor correto seja inserido."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the toggle action is for showing or hiding the
-#. toolbar. The English phrase "Toggle Note Editor Toolbar" suggests a switch
-#. between two states (showing and hiding), so the Portuguese version "Barra
-#. de ferramentas do Editor de Notas" follows this interpretation.
 #: cm_main/templates/cm_main/common/include-summernote.html:6
 msgid "Toggle Note Editor Toolbar"
 msgstr "Barra de ferramentas do Editor de Notas"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that there are remaining or unused characters. The
-#. English phrase "Remaining characters" is a common term used in programming
-#. and text editing contexts to refer to the characters that have not been
-#. used yet.
 #: cm_main/templates/cm_main/common/include-summernote.html:7
 msgid "Remaining characters:"
 msgstr "Caracteres restantes:"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a common way to express the concept of items per page in
-#. many languages. The English phrase "Items per page" is also widely used and
-#. understood, but the Portuguese version "Quantidade por página" follows the
-#. same semantic meaning as the French translation.
 #: cm_main/templates/cm_main/common/paginate_template.html:20
 msgid "Items per page:"
 msgstr "Quantidade por página"
 
-#. Explanation: The English phrase "go to first page" can be interpreted in
-#. different ways, such as navigating to the first page of a document or
-#. website. However, the French translation "aller à la 1ère page" makes it
-#. clear that the action is to go to the first page, which is a common
-#. idiomatic expression. The Portuguese translation "Ir para a primeira
-#. página" follows this interpretation and uses the verb "ir" (to go) in the
-#. correct context.
 #: cm_main/templates/cm_main/common/paginate_template.html:40
 msgid "go to first page"
 msgstr "Ir para a primeira página"
 
-#. Explanation: The English phrase "go to page #%(page_num)s" can be
-#. interpreted as both "going to a specific page" and "going to the next
-#. page". However, in this context, it seems that the intention is to refer to
-#. a specific page. The French translation "aller à la page #%(page_num)s"
-#. makes it clear that the speaker intends to go to a specific page, which is
-#. why the Portuguese translation uses the verb "ir para", meaning "to go to".
 #: cm_main/templates/cm_main/common/paginate_template.html:52
 #, python-format
 msgid "go to page #%(page_num)s"
 msgstr "ir para a página #%(page_num)s"
 
-#. Explanation: The English phrase contains a placeholder for the page number,
-#. which is preserved in the Portuguese translation.
 #: cm_main/templates/cm_main/common/paginate_template.html:55
 #, python-format
 msgid "page #%(page_num)s"
 msgstr "página #( %(page_num)s )"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates going to the last page. The English phrase "go to
-#. last page" can be ambiguous, as it can mean both "going to the last page"
-#. and "going back to the previous page". However, in this context, where the
-#. user is likely asking to navigate to the final page of a document or list,
-#. the translation "Ir para a última página" accurately conveys the intended
-#. meaning.
 #: cm_main/templates/cm_main/common/paginate_template.html:68
 msgid "go to last page"
 msgstr "Ir para a última página"
 
-#. Explanation: The Portuguese translation maintains the same meaning and tone
-#. as the French original, using the word "contato" to convey the idea of a
-#. contact form.
 #: cm_main/templates/cm_main/contact/contact-form.html:6
 #: cm_main/templates/cm_main/contact/contact-form.html:9
 msgid "Contact Form"
 msgstr "Formulário de contato"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is polite and formal. The English sentence is a request for
-#. the user to fill out a form, while the French translation adds a touch of
-#. politeness with "Merci" (thank you) at the beginning.
 #: cm_main/templates/cm_main/contact/contact-form.html:10
 msgid "Please fill out the form below to contact the admin of this site:"
 msgstr ""
 "Por favor, preencha o formulário abaixo para entrar em contato com o "
 "administrador deste site :"
 
-#. Explanation: This translation reflects the meaning of the French phrase,
-#. which is a direct and literal translation of the English word "Send". The
-#. verb "Enviar" in Portuguese means to send or transmit something.
 #: cm_main/templates/cm_main/contact/contact-form.html:15
 msgid "Send"
 msgstr "Enviar"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the sender sent a message from a specific
-#. website. The English phrase "%(sender_name)s sent you the following message
-#. from %(site_name)s:" can be ambiguous, as it can mean both "sent to you"
-#. and "from". The French translation makes it clear that it is from, so the
-#. Portuguese version "s enviou-lhe o seguinte mensagem do site %s:" follows
-#. this interpretation.
 #: cm_main/templates/cm_main/contact/email-contact-form.html:19
 #: cm_main/tests/test_contactform.py:42
 #, python-format
 msgid "%(sender_name)s sent you the following message from %(site_name)s:"
 msgstr "%(sender_name)s enviou-lhe a seguinte mensagem de %(site_name)s:"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person can respond directly to the email
-#. to answer him/her. The English sentence is slightly ambiguous, as it could
-#. mean both "responding directly to this email" and "answering someone who
-#. has sent an email". The French translation makes it clear that it is a
-#. response to the email, so the Portuguese version follows this
-#. interpretation.
 #: cm_main/templates/cm_main/contact/email-contact-form.html:26
 msgid "You can directly reply to this email to answer him/her."
 msgstr ""
 "Você pode responder diretamente a este e-mail para responder a ele(a)."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the author created a specific type of content
-#. (followed_type) with a link to its URL. The English sentence uses
-#. placeholders for the object name and URL, but the French translation omits
-#. these placeholders, suggesting that they are already included in the text.
-#. Therefore, the Portuguese version maintains this consistency by not
-#. translating the placeholders.
 #: cm_main/templates/cm_main/followers/email-followers-on-change.html:20
 #: cm_main/tests/tests_followers.py:84
 #, python-format
@@ -422,14 +222,6 @@ msgstr ""
 "%(author_name)s criou o seguinte %(followed_type)s <a "
 "href=\"%(followed_object_url)s'>\"%(followed_object_name)s\"</a>:"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the author added a specific object to a
-#. certain type. The English sentence uses placeholders for the object name
-#. and URL, but the French translation makes it clear that it is an addition
-#. to a specific type, so the Portuguese version "%(author_name)s adicionou o
-#. seguinte %(obj_type)s no %(followed_type)s <a
-#. href="%(followed_object_url)s">'%(followed_object_name)s'</a>:") follows
-#. this interpretation.
 #: cm_main/templates/cm_main/followers/email-followers-on-change.html:24
 #: cm_main/tests/tests_followers.py:97
 #, python-format
@@ -440,20 +232,11 @@ msgstr ""
 "%(author_name)s adicionou o seguinte %(obj_type)s no %(followed_type)s <a "
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the email is automated and should not be
-#. replied to. The English sentence "Do not reply to this mail, it is machine
-#. generated" makes it clear that the response is not expected from a human,
-#. so the Portuguese version "Não responda a este e-mail, ele foi gerado por
-#. uma máquina." follows this interpretation.
 #: cm_main/templates/cm_main/followers/email-followers-on-change.html:32
 #: cm_main/templates/cm_main/followers/new_follower.html:27
 msgid "Do not reply to this mail, it is machine generated."
 msgstr "Não responda a este e-mail, ele foi gerado por uma máquina."
 
-#. Explanation: The Portuguese translation maintains the same format as the
-#. French original, indicating that the placeholder refers to a person or
-#. entity being referred to as "membro".
 #: cm_main/templates/cm_main/followers/followers-count-tag.html:4
 #, python-format
 msgid "%(nfollowers)s member"
@@ -461,11 +244,6 @@ msgid_plural "%(nfollowers)s members"
 msgstr[0] "%(nfollowers)s membro"
 msgstr[1] "%(nfollowers)s membros"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a person who follows another. The English phrase
-#. "%(nfollowers)s follower" uses a placeholder to indicate the number of
-#. followers, and the Portuguese version "%(nfollowers)s seguidor" maintains
-#. this format while translating the word "follower".
 #: cm_main/templates/cm_main/followers/followers-count-tag.html:10
 #, python-format
 msgid "%(nfollowers)s follower"
@@ -473,26 +251,12 @@ msgid_plural "%(nfollowers)s followers"
 msgstr[0] "%(nfollowers)s seguidor"
 msgstr[1] "%(nfollowers)s seguidores"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person has gained a new follower. The
-#. English phrase "Your %(followed_type)s '%(followed_object_name)s' has a new
-#. follower!" can be ambiguous, as it can mean both "gaining a new follower"
-#. and "having a new follower". The French translation makes it clear that it
-#. is gaining a new follower, so the Portuguese version "Seu %(followed_type)s
-#. '%(followed_object_name)s' tem um novo seguidor!" follows this
-#. interpretation.
 #: cm_main/templates/cm_main/followers/new_follower.html:14
 #, python-format
 msgid "Your %(followed_type)s '%(followed_object_name)s' has a new follower!"
 msgstr ""
 "Seu %(followed_type)s '%(followed_object_name)s' tem um novo seguidor!"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person is now following the followed type
-#. on the followed object. The English sentence contains placeholders for the
-#. follower name, followed type, followed URL, followed object name, and site
-#. name, which are preserved in the Portuguese translation to maintain
-#. consistency with the original context.
 #: cm_main/templates/cm_main/followers/new_follower.html:22
 #: cm_main/tests/tests_followers.py:46
 #, python-format
@@ -503,254 +267,128 @@ msgstr ""
 "%(follower_name)s está agora a seguir o seu %(followed_type)s <a "
 "href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> em %(site_name)s"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the action of following should be stopped. The
-#. English phrase "Stop Following" is clear and direct in its intention to
-#. stop the act of following someone or something. The Portuguese version
-#. "Parar de seguir" conveys a similar sense of finality and completion,
-#. making it an accurate translation.
 #: cm_main/templates/cm_main/followers/toggle-follow-button.html:4
 msgid "Stop Following"
 msgstr "Parar de seguir"
 
-#. Explanation: The English phrase "Follow" can have different meanings, such
-#. as to track someone's movements or to accompany them. However, the French
-#. translation "Suivre" implies a more general meaning of following or
-#. tracking, which is consistent with the Portuguese translation "Seguir".
 #: cm_main/templates/cm_main/followers/toggle-follow-button.html:11
 msgid "Follow"
 msgstr "Seguir"
 
-#. Explanation: The English word "members" can refer to individuals who belong
-#. to a group or organization, but the French translation "membres" is more
-#. general and can also mean "members" in a broader sense, such as members of
-#. a committee or council. In this case, the Portuguese translation "membros"
-#. maintains the same level of generality.
 #: cm_main/templates/cm_main/navbar.html:26 cm_main/views/views_stats.py:106
 msgid "Members"
 msgstr "membros"
 
-#. Explanation: The English term "Birthdays" can refer to the anniversary of
-#. one's birth, but it can also be used more broadly to refer to any birthday.
-#. In this case, the French translation "Anniversaires" is a more general term
-#. that encompasses all types of birthdays, whereas "Data de nascimento" in
-#. Portuguese specifically refers to the date of birth.
 #: cm_main/templates/cm_main/navbar.html:29
 msgid "Birthdays"
 msgstr "Data de nascimento"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the action is to show or display the
-#. directory. The English phrase "Show directory" is a direct and clear
-#. instruction, and the Portuguese version "Mostrar diretório" conveys the
-#. same sense of purpose.
 #: cm_main/templates/cm_main/navbar.html:31
 msgid "Show directory"
 msgstr "Mostrar diretório"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation. The English phrase
-#. "Create Member" is clear and concise, and the Portuguese version follows
-#. this simplicity while maintaining the same tone and nuance as the original
-#. text.
 #: cm_main/templates/cm_main/navbar.html:34
 msgid "Create Member"
 msgstr "Criar Membro"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation. The English phrase
-#. "Invite Member" can be interpreted as inviting someone to join or
-#. participate in something, while the French phrase makes it clear that it's
-#. about inviting a specific member.
 #: cm_main/templates/cm_main/navbar.html:38
 msgid "Invite Member"
 msgstr "Convidar um Membro"
 
-#. Explanation: The French and Portuguese translations are identical, as the
-#. word "galleries" is a direct loan from English to both languages.
 #: cm_main/templates/cm_main/navbar.html:45 cm_main/views/views_stats.py:114
 msgid "Galleries"
 msgstr "Galérias"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation. The English phrase
-#. "Create Gallery" implies creating a new gallery, while the French phrase
-#. "Créer une Galerie" also means to create a new gallery.
 #: cm_main/templates/cm_main/navbar.html:48
 msgid "Create Gallery"
 msgstr "Criar uma Galeria"
 
-#. Explanation: The Portuguese translation maintains the same meaning and tone
-#. as the French phrase, conveying the idea of a large-scale upload.
 #: cm_main/templates/cm_main/navbar.html:50
 msgid "Bulk Upload"
 msgstr "Carregamento em massa"
 
-#. Explanation: The English and French translations are identical, indicating
-#. that the word "Forum" is a loanword with no changes in meaning or context.
 #: cm_main/templates/cm_main/navbar.html:56
 msgid "Forum"
 msgstr "Forum"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a new discussion or topic. The English phrase
-#. "Create Post" is more general and can refer to creating any type of post,
-#. whereas the French translation suggests a specific context where a new
-#. discussion is being created.
 #: cm_main/templates/cm_main/navbar.html:59
 msgid "Create Post"
 msgstr "Criar Post"
 
-#. Explanation: The English word "chat" can have multiple meanings, including
-#. a casual conversation or a type of fish. In this case, the French
-#. translation is identical to the English original, suggesting that the
-#. intended meaning is likely a simple reference to the animal, rather than a
-#. social interaction.
 #: cm_main/templates/cm_main/navbar.html:64
 msgid "Chat"
 msgstr "Chate"
 
-#. Explanation: The English phrase "Public Chat Rooms" can be ambiguous, as it
-#. could refer to both public spaces for chatting and online communities.
-#. However, the French translation "Salons de discussion publique" suggests a
-#. more specific meaning, implying a dedicated space for public discussions or
-#. meetings. This interpretation is consistent with the French translation,
-#. which uses the word "salon", typically referring to a meeting room or a
-#. gathering place.
 #: cm_main/templates/cm_main/navbar.html:67
 msgid "Public Chat Rooms"
 msgstr "Salas de chat público"
 
-#. Explanation: The English phrase "Private Chat Rooms" can be ambiguous, as
-#. it could refer to both private chat rooms and private conversation spaces.
-#. However, the French translation "Salons de discussion privée" makes it
-#. clear that it is a space for private discussions, which is more specific
-#. and accurate. Therefore, the Portuguese translation "Salas de privacidade
-#. para conversação" follows this interpretation, emphasizing the private
-#. nature of the space and its purpose for conversation.
 #: cm_main/templates/cm_main/navbar.html:69
 msgid "Private Chat Rooms"
 msgstr "Salas de privacidade para conversação"
 
-#. Explanation: The English phrase "Edit Pages" can be interpreted in
-#. different ways, but the context of the French translation "Editer les
-#. Pages" suggests that it refers to editing a specific set of pages, likely
-#. in a document or website. The Portuguese translation "Editar Páginas"
-#. follows this interpretation and maintains consistency with the French
-#. original.
-#: cm_main/templates/cm_main/navbar.html:91
+#.  
+#. Explanation: The English phrase "Change language" is translated into
+#. Portuguese as "Alterar idioma". This accurately reflects the meaning of the
+#. original text.  The word "alterar" means to change, and it fits the context
+#. of changing a language setting.
+#: cm_main/templates/cm_main/navbar.html:93
+msgid "Change language"
+msgstr "Alterar idioma"
+
+#: cm_main/templates/cm_main/navbar.html:113
 msgid "Edit Pages"
 msgstr "Editar Páginas"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates importing members from a CSV file. The English
-#. phrase "Import members from CSV" is clear and concise, so the Portuguese
-#. version follows this interpretation.
-#: cm_main/templates/cm_main/navbar.html:93
+#: cm_main/templates/cm_main/navbar.html:115
 msgid "Import members from CSV"
 msgstr "Importar membros de um CSV"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation. The English phrase
-#. "Export Members as CSV" indicates that the action of exporting members
-#. should be done in CSV format, which is consistent with the French
-#. translation.
-#: cm_main/templates/cm_main/navbar.html:96
+#: cm_main/templates/cm_main/navbar.html:118
 msgid "Export Members as CSV"
 msgstr "Exportar Membros como CSV"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a preface or introduction about the site. The
-#. English phrase "About the site" is commonly used to introduce information
-#. about a website, and the Portuguese version "Em respeito ao site" follows
-#. this interpretation.
-#: cm_main/templates/cm_main/navbar.html:114
+#: cm_main/templates/cm_main/navbar.html:136
 msgid "About the site"
 msgstr "Em respeito ao site"
 
-#. Explanation: The English phrase "Sign in" can be interpreted as both
-#. "signing up" and "logging in". However, the French translation "Connexion"
-#. clearly indicates that it is about logging in. Therefore, the Portuguese
-#. translation "Inscreva-se" follows this interpretation, suggesting to sign
-#. in or log in.
-#: cm_main/templates/cm_main/navbar.html:125
+#: cm_main/templates/cm_main/navbar.html:147
 msgid "Sign in"
 msgstr "Inscreva-se"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is to request an invitation link. The English phrase "Request
-#. invitation link" is clear and direct, so the Portuguese version follows
-#. this interpretation.
-#: cm_main/templates/cm_main/navbar.html:129
+#: cm_main/templates/cm_main/navbar.html:151
 msgid "Request invitation link"
 msgstr "Pedir um link de convite"
 
-#. Explanation: The English word "Profile" and the French word "Profil" share
-#. a similar meaning, referring to a person's or organization's public image
-#. or presentation. In Portuguese, the translation is "Perfil".
-#: cm_main/templates/cm_main/navbar.html:138
+#: cm_main/templates/cm_main/navbar.html:160
 msgid "Profile"
 msgstr "Perfil"
 
-#. Explanation: The English phrase "Log Out" is commonly used to indicate the
-#. act of disconnecting from a system or application. In Portuguese, this
-#. concept is translated as "desconectar", which accurately conveys the
-#. meaning of the original phrase.
-#: cm_main/templates/cm_main/navbar.html:140
+#: cm_main/templates/cm_main/navbar.html:162
 msgid "Log Out"
 msgstr "Desconectar"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the field is mandatory or compulsory. The
-#. English phrase "This field is required" conveys a similar idea, so the
-#. Portuguese version "Este campo é obrigatório" follows this interpretation.
 #: cm_main/tests/test_contactform.py:23
 msgid "This field is required."
 msgstr "Este campo é obrigatório."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the message was successfully sent. The English
-#. phrase is often used in automated systems to confirm that a message has
-#. been transmitted, and the French translation makes it clear that it's about
-#. sending a message.
 #: cm_main/tests/test_contactform.py:29 cm_main/views/views_contact.py:65
 msgid "Your message has been sent"
 msgstr "Seu mensagem foi enviada."
 
-#. Explanation: The Portuguese translation maintains the same meaning and tone
-#. as the French original, using the word "contato" to convey the idea of a
-#. contact or inquiry form.
 #: cm_main/tests/test_contactform.py:32 cm_main/views/views_contact.py:40
 msgid "Contact form"
 msgstr "Formulário de contato"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person received a new message. The English
-#. phrase "You have a new message from %(name)s (%(email)s)" can be ambiguous,
-#. as it can mean both "you have a new message" and "the sender is unknown".
-#. However, in this context, where the name and email are provided, it's clear
-#. that the message is being sent by someone specific. The French translation
-#. makes it explicit that the recipient has received a new message from a
-#. known sender, so the Portuguese version follows this interpretation.
 #: cm_main/tests/test_contactform.py:39 cm_main/views/views_contact.py:37
 #, python-format
 msgid "You have a new message from %(name)s (%(email)s). "
 msgstr "Você recebeu um novo mensagem de %(name)s (%(email)s)."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person has gained a new follower. The
-#. English phrase "You have a new follower!" is often used in social media
-#. platforms to notify users of a new following relationship, and the French
-#. translation follows this same interpretation.
 #: cm_main/tests/tests_followers.py:27
 msgid "You have a new follower!"
 msgstr "Você tem um novo seguidor!"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person is now following the other person
-#. on a specific site. The English sentence contains placeholders for the
-#. follower's name, URL, and site name, which are preserved in the translated
-#. version to maintain consistency with the original context.
 #: cm_main/tests/tests_followers.py:38
 #, python-format
 msgid ""
@@ -761,57 +399,27 @@ msgstr ""
 "href=\"%(follower_url)s\">%(follower_name)s</a> está agora seguindo você em "
 "%(site_name)s!"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the mailer tools are outdated and cannot
-#. display the information. The English sentence "But your mailer tools is too
-#. old to show it :'(" can be ambiguous, as it can mean both "but your mailer
-#. tools are outdated" and "but you're showing something that's too old". The
-#. French translation makes it clear that it is about the age of the tools, so
-#. the Portuguese version follows this interpretation.
 #: cm_main/views/views_contact.py:41
 msgid "But your mailer tools is too old to show it :'("
 msgstr ""
 "Mas seus ferramentas de e-mail estão muito antigas para exibir isso :'("
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that a specific file type is not compatible or
-#. supported. The English phrase and its context translation convey a sense of
-#. incompatibility or lack of support, so the Portuguese version "Esse tipo de
-#. arquivo não é suportado" follows this interpretation.
 #: cm_main/views/views_contact.py:60
 msgid "This file type is not supported"
 msgstr "Esse tipo de arquivo não é suportado"
 
-#. Explanation: The English phrase "Media not found" can be interpreted in
-#. different ways, but the most common meaning is that a media file or
-#. resource was not found. In Portuguese, the word "not found" is more
-#. commonly translated as "não encontrado", which implies that something was
-#. expected to exist but did not.
-#: cm_main/views/views_general.py:33
+#: cm_main/views/views_general.py:44
 msgid "Media not found"
 msgstr "Não encontrada"
 
-#. Explanation: The Portuguese translation maintains the same meaning and tone
-#. as the French original, using the word "versão" to refer to a version or
-#. update, and "não encontrado" to indicate that it was not found.
 #: cm_main/views/views_stats.py:41 cm_main/views/views_stats.py:81
 msgid "Version not found"
 msgstr "Versão não encontrada"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the current version is not updated. The
-#. English sentence can be ambiguous, as it could also mean that the user's
-#. version is outdated in general, but the context provided by the French
-#. translation makes it clear that it refers to the latest release.
 #: cm_main/views/views_stats.py:55
 msgid "Your version is not up-to-date."
 msgstr "Seu último lançamento não está atualizado."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a polite request to update something by running a specific
-#. command. The English sentence uses HTML formatting to indicate that the
-#. command should be run in a code block, and this formatting is preserved in
-#. the Portuguese translation.
 #: cm_main/views/views_stats.py:58
 msgid ""
 "Please update it by running the following command:<br><code>docker-start.sh "
@@ -820,225 +428,106 @@ msgstr ""
 "Por favor, atualize-o executando o seguinte comando:<br><code>docker-"
 "start.sh -u</code>"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the software or system has been updated to the
-#. latest version. The English phrase "Your version is up-to-date" conveys a
-#. similar idea, suggesting that the user's current version is current and not
-#. outdated.
 #: cm_main/views/views_stats.py:69
 msgid "Your version is up-to-date."
 msgstr "Versão sua está atualizada."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the speaker is comparing versions and stating
-#. that the current version is newer than the latest release. The English
-#. sentence contains an exclamation mark (!) at the end, which suggests strong
-#. emotions or emphasis, but in this context, it's likely being used to convey
-#. a sense of surprise or comparison.
 #: cm_main/views/views_stats.py:75
 msgid "Your version is newer than the latest release (?!?)"
 msgstr "Seu versão é mais nova do que a última versão lançada (?!?)"
 
-#. Explanation: The English and French translations are identical, suggesting
-#. that the word "site" is being used in a very general sense, possibly
-#. referring to a website. In this case, the Portuguese translation remains
-#. consistent with the original English sentence.
 #: cm_main/views/views_stats.py:97
 msgid "Site"
 msgstr "Site"
 
-#. Explanation: The English phrase "Site name" is a common way to refer to the
-#. title of a website, while the French phrase "Nom du site" also implies a
-#. specific or official name for the site. In Portuguese, we use "Nome do
-#. site" to convey this same meaning, emphasizing that it's a formal or
-#. official name.
 #: cm_main/views/views_stats.py:99
 msgid "Site name"
 msgstr "Nome do site"
 
-#. Explanation: This translation reflects the meaning of the French phrase,
-#. which is a direct and literal translation of the English phrase. The French
-#. translation makes it clear that it refers to the website's URL, so the
-#. Portuguese version follows this interpretation.
 #: cm_main/views/views_stats.py:100
 msgid "Site URL"
 msgstr "URL do site"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a version number for an application. The English
-#. phrase "Application Version" is straightforward and clearly conveys the
-#. idea of a specific version of an application. The Portuguese translation
-#. maintains this clarity and precision.
 #: cm_main/views/views_stats.py:101
 msgid "Application Version"
 msgstr "Versão da Aplicação"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a recent or most recent version of something. The
-#. English phrase "Latest release" can be ambiguous, as it can refer to any
-#. new release, not just the most recent one. The French translation makes it
-#. clear that it is the most recent version, so the Portuguese version "Última
-#. versão" follows this interpretation.
 #: cm_main/views/views_stats.py:102
 msgid "Latest release"
 msgstr "Última versão"
 
-#. Explanation: The English phrase "Total number of members" can be ambiguous,
-#. as it can refer to a count or an amount. However, in the context of the
-#. French translation "Nombre total de membres", which implies a quantity or a
-#. sum, the Portuguese translation "Número total de membros" follows this
-#. interpretation, suggesting that there is a total count of members.
 #: cm_main/views/views_stats.py:108
 msgid "Total number of members"
 msgstr "Número total de membros"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a count or quantity of active members. The English
-#. phrase is used to describe a specific category or group, and the Portuguese
-#. version maintains this same meaning.
 #: cm_main/views/views_stats.py:109
 msgid "Number of active members"
 msgstr "Número de membros ativos"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a specific count of managed members. The English
-#. phrase is clear and concise, so the Portuguese version follows this
-#. interpretation.
 #: cm_main/views/views_stats.py:110
 msgid "Number of managed members"
 msgstr "Número de membros geridos"
 
-#. Explanation: The French translation "Nombre de galeries" is used to
-#. describe a count or quantity, which is consistent with the Portuguese
-#. translation "Número de galerias".
 #: cm_main/views/views_stats.py:116
 msgid "Number of galleries"
 msgstr "Número de galerias"
 
-#. Explanation: The French translation "Nombre de photos" is used to indicate
-#. the quantity or amount of photos, which is consistent with the Portuguese
-#. translation "Número de fotos".
 #: cm_main/views/views_stats.py:117
 msgid "Number of photos"
 msgstr "Número de fotos"
 
-#. Explanation: The English and French translations are identical, so the
-#. Portuguese translation is also a direct copy.
 #: cm_main/views/views_stats.py:121
 msgid "Forums"
 msgstr "Forumos"
 
-#. Explanation: The English phrase "Number of posts" can be ambiguous, as it
-#. could refer to the number of posts in a blog or forum. However, the French
-#. translation "Nombre de discussions" makes it clear that it refers to the
-#. number of discussions or conversations. Therefore, the Portuguese
-#. translation "Número de publicações" follows this interpretation, assuming
-#. that the context is related to online discussions or forums.
 #: cm_main/views/views_stats.py:123
 msgid "Number of posts"
 msgstr "Número de publicações"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a count or quantity of messages in discussions. The
-#. English phrase "Number of post messages" is clear and concise, so the
-#. Portuguese version follows this interpretation.
 #: cm_main/views/views_stats.py:124
 msgid "Number of post messages"
 msgstr "Número de mensagens de posts"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation. The English phrase
-#. "Number of message comments" can be slightly ambiguous, but the Portuguese
-#. version "Número de comentários de mensagens" accurately conveys the same
-#. meaning as the French translation.
 #: cm_main/views/views_stats.py:125
 msgid "Number of message comments"
 msgstr "Número de comentários de mensagens"
 
-#. Explanation: This translation reflects the meaning of the French phrase,
-#. which refers to online chat rooms or forums for discussions. The English
-#. term "Chats" is often used informally to refer to these types of online
-#. spaces, so the Portuguese translation "Chatos" follows this interpretation.
 #: cm_main/views/views_stats.py:129
 msgid "Chats"
 msgstr "Chatos"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a count or quantity of chat rooms. The English
-#. phrase "Number of chat rooms" is clear and concise, so the Portuguese
-#. version follows this interpretation.
 #: cm_main/views/views_stats.py:131
 msgid "Number of chat rooms"
 msgstr "Número de salas de discussão"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation. The English phrase
-#. "Number of public chat rooms" can be slightly ambiguous, but in this
-#. context, it's clear that we're referring to a count of public chat rooms.
 #: cm_main/views/views_stats.py:132
 msgid "Number of public chat rooms"
 msgstr "Número de salas de discussão pública"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a specific count or quantity of private chat rooms.
-#. The English phrase is more general and could refer to any type of private
-#. space, whereas the French and Portuguese translations imply a numerical
-#. value.
 #: cm_main/views/views_stats.py:133
 msgid "Number of private chat rooms"
 msgstr "Número de salas de privacidade"
 
-#. Explanation: The English phrase "Number of chat messages" can be ambiguous,
-#. as it could refer to the number of messages in a specific chat or across
-#. all chats. However, based on the French translation "Nombre de messages
-#. dans les salons", which implies a specific group or room (salons), I
-#. translated it to "Número de mensagens do chat" to maintain consistency with
-#. the context.
 #: cm_main/views/views_stats.py:134
 msgid "Number of chat messages"
 msgstr "Número de mensagens do chat"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a count of private messages. The English phrase
-#. "Number of private chat messages" suggests a specific quantity of private
-#. messages, while the French and Portuguese translations provide a more
-#. general term for this concept.
 #: cm_main/views/views_stats.py:135
 msgid "Number of private chat messages"
 msgstr "Número de mensagens privadas"
 
-#. Explanation: The English phrase "Number of public chat messages" indicates
-#. the quantity of messages in a public chat, whereas the French phrase
-#. "Nombre de messages dans les salons privés" suggests private rooms. To
-#. maintain consistency with the French translation, which implies private
-#. rooms, the Portuguese translation "Número de mensagens do chat público"
-#. focuses on the public aspect, emphasizing that it's about public chat
-#. messages.
 #: cm_main/views/views_stats.py:136
 msgid "Number of public chat messages"
 msgstr "Número de mensagens do chat público"
 
-#. Explanation: The English term "Administrator" can refer to a person who
-#. manages or oversees an organization, system, or process. In Portuguese, the
-#. word "administração" is used to convey this meaning, emphasizing the
-#. management aspect of the role.
 #: cm_main/views/views_stats.py:140
 msgid "Administrator"
 msgstr "Administração"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the person or entity in charge of managing the
-#. site. The English phrase "This site is managed by" can be ambiguous, as it
-#. can mean both "this site belongs to" and "is taken care of" by someone. The
-#. French translation makes it clear that it is a management role, so the
-#. Portuguese version "Este site é gerido por" follows this interpretation.
 #: cm_main/views/views_stats.py:142
 msgid "This site is managed by"
 msgstr "Este site é gerido por"
 
-#. Explanation: The Portuguese translation maintains the same meaning and
-#. structure as the French original, indicating that it is an email address
-#. associated with an administrator.
 #: cm_main/views/views_stats.py:143
 msgid "Administrator email"
 msgstr "Email do administrador"

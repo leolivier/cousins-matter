@@ -1,15 +1,15 @@
 # util functions for member views
 
+from contextlib import contextmanager
 import math
 from pathlib import PosixPath
-from contextlib import contextmanager
 
+from django.core import paginator
+from django.db import connections
 from django.forms import ValidationError
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from django.core import paginator
-from django.db import connections
 
 
 # terrible hack to check if we are in testing mode!!!

@@ -1,9 +1,9 @@
 import logging
-from django.template import Library, TemplateSyntaxError
+from django.template import Library
 from django.contrib.flatpages.models import FlatPage
 from django.conf import settings
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext as _
+# from django.utils.translation import gettext as _
 # from cousinsmatter.utils import temporary_log_level
 
 register = Library()
@@ -99,8 +99,8 @@ def include_page(url):
     count = pages.count()
     match count:
       case 0:
-        # page not found for the current language, try the default language (ie en-US)
-        url = url.replace(f'/{settings.LANGUAGE_CODE}/', '/en-US/')
+        # page not found for the current language, try the default language (ie en-us)
+        url = url.replace(f'/{settings.LANGUAGE_CODE}/', '/en-us/')
         return include_page(url)
       case 1:
         page = pages.first()

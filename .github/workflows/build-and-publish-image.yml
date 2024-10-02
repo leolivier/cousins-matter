@@ -90,7 +90,7 @@ jobs:
           envkey_SECRET_KEY: 'django-insecure-this-is-just-for-test'
           envkey_SITE_NAME: 'My Beautiful Site'
           envkey_ALLOWED_HOSTS: '127.0.0.1,localhost'
-          envkey_LANGUAGE_CODE: 'fr-FR'
+          envkey_LANGUAGE_CODE: 'fr'
           envkey_EMAIL_HOST: 'smtp.gmail.com'
           envkey_EMAIL_PORT: 465
           envkey_EMAIL_HOST_USER: 'nobody@gmail.com'

@@ -37,6 +37,7 @@ class ChangeLanguageView(View):
         response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
         return response
 
+
 @login_required
 def download_protected_media(request, media):
   the_file = settings.MEDIA_ROOT / media

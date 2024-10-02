@@ -184,7 +184,7 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
         continue
       rsp_row = rsp_rows[username]
       # avatar not exported, so ignore it
-      wrong_columns = [key for key in exp_row.keys() if exp_row[key] != rsp_row[key] and key != "avatar"]  
+      wrong_columns = [key for key in exp_row.keys() if exp_row[key] != rsp_row[key] and key != "avatar"]
       self.assertSequenceEqual(wrong_columns, [],
                                "Wrong column %s for username %s" % (wrong_columns, username))
       # check that other columns are empty

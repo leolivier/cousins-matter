@@ -1,0 +1,497 @@
+# French Translations for Galleries app.
+# Copyright (C) 2024 Olivier LEVILLAIN
+# This file is distributed under the same license as the Members package.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"POT-Creation-Date: 2024-08-05 11:06+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Auto-po-lyglot using gemma2:2b model (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: German <LL@li.org>\n"
+"Language: DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Explanation:  The English term "Zip file" is directly translated into
+#. German as "ZIP-Datei". This accurately reflects the meaning and context of
+#. both terms.
+#: forms.py:15
+msgid "Zip file"
+msgstr "ZIP-Datei"
+
+#. Explanation: The French translation provides a clear and concise
+#. explanation of the English sentence, which is essential for accurate German
+#. translation.
+#: forms.py:16
+msgid ""
+"The zip file containing the photos to upload. All folders will be created as"
+" galleries and photos in these folders added to the galleries. All photos "
+"must be in folders."
+msgstr ""
+"Die Zip-Datei, die mit den Fotos zum Herunterladen enthält. Alle Ordner werden "
+"als Galerien angelegt und die Fotos in diesen Ordnern werden zu den Galerien "
+"hinzugefügt. Alle Fotos müssen in Ordnern sein."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the photo belongs to a gallery.  The
+#. English phrase "A photo must belong to a gallery" can be ambiguous as it
+#. could mean that the photo is part of a collection or exhibit in a gallery.
+#. The French translation clarifies this by using "une photographie appartient
+#. à une galerie," making it clear that the photo is a part of a gallery's
+#. collection.
+#: models.py:25 models.py:74
+msgid "A photo must belong to a gallery."
+msgstr "Eine Fotografie gehört einer Galerie an."
+
+#. Explanation: The English word "Photo" is a direct translation of the French
+#. word "Photo".  The meaning and context are clear, so no further explanation
+#. is needed.
+#: models.py:48 templates/galleries/photo_detail.html:3
+msgid "Photo"
+msgstr "Foto"
+
+#. Explanation:  The English word "Name" is directly translatable to the
+#. French word "Nom". The context provided by the French translation clarifies
+#. that this refers to a person's name.
+#: models.py:50 models.py:115
+msgid "Name"
+msgstr "Name"
+
+#. Explanation: The English word "Description" is directly translatable to the
+#. German word "Beschreibung".  The context provided in the prompt does not
+#. require any further explanation.
+#: models.py:51 models.py:116
+msgid "Description"
+msgstr "Beschreibung"
+
+#. Explanation: The English word "Date" is a common term for a specific day or
+#. time.  The French word "Date" directly translates this meaning, and it's
+#. the most accurate and appropriate choice in this context.
+#: models.py:53
+msgid "Date"
+msgstr "Datum"
+
+#. Explanation: The German translation accurately captures the meaning of the
+#. English sentence and French translation. It uses the appropriate word order
+#. and grammatical structure to convey the intended message.  The use of
+#. "Klicken Sie" (click) is a direct equivalent of "Cliquez" in French.
+#: models.py:53
+msgid "Click on the month name or the year to change them quickly"
+msgstr "Klicken Sie auf den Monat oder das Jahr, um sie schnell zu ändern"
+
+#. Explanation:  The English phrase "Cover Photo" is a general term for the
+#. image that appears on the top of a website or social media post. The French
+#. translation, "Photo de couverture," refers to the same concept.
+#: models.py:117
+msgid "Cover Photo"
+msgstr "Titelbild"
+
+#. Explanation: The English phrase "Parent gallery" is ambiguous as it could
+#. refer to a parent's photo album or a gallery that displays artwork from
+#. parents.  The French translation "Galerie parente" clarifies the meaning by
+#. explicitly stating that it refers to a family-related gallery, which aligns
+#. with the context of the original sentence.
+#: models.py:120
+msgid "Parent gallery"
+msgstr "Eltern Galerie"
+
+#. Explanation: The English word "galleries" is a plural noun referring to
+#. rooms or spaces where art, photographs, or other objects are displayed.
+#. The French word "galeries" also refers to these spaces but can be used in a
+#. more general sense, including museums and exhibition halls.
+#: models.py:125
+msgid "galleries"
+msgstr "Galerien"
+
+#. Explanation: The French translation, "Une galerie ne peut être son propre
+#. parent !", is a direct and clear translation of the English sentence. It
+#. accurately conveys the meaning that a gallery cannot be its own parent.
+#. The German translation uses the same structure as the French translation to
+#. maintain consistency with the original text's tone and meaning.
+#: models.py:144
+msgid "A gallery can't be its own parent!"
+msgstr "Eine Galerie kann nicht ihre eigene Mutter sein!"
+
+#. **Explanation:**  The German translation accurately reflects the meaning of
+#. the French phrase, while maintaining consistency with the placeholder
+#. format. The use of "eine weitere" and "mit dem gleichen Namen" ensures that
+#. the sentence conveys the same information as the original text.
+#: models.py:152
+#, python-format
+msgid "Another sub gallery of %(parent)s with the same name already exists"
+msgstr ""
+"Eine weitere Untergalerie von %(parent)s mit dem gleichen Namen existiert "
+"bereits"
+
+#. Explanation: The German translation accurately captures the meaning of the
+#. French phrase. It uses the correct grammatical structure and terminology to
+#. convey that there is already an existing gallery with the same name in the
+#. context of a "root gallery".  The use of "eine weitere" (another) and "mit
+#. dem gleichen Namen" (with the same name) clearly indicates the existence of
+#. another gallery with the same name.
+#: models.py:155
+msgid "Another root gallery with the same name already exists"
+msgstr "Eine andere Stammgalerie mit demselben Namen existiert bereits"
+
+#. Explanation: The English phrase "Bulk Upload Photos" translates to
+#. "Télécharger des photos en masse" in French.  The German translation
+#. accurately captures the meaning of both phrases, conveying the idea of
+#. uploading a large number of photos.
+#: templates/galleries/bulk_upload.html:3
+#: templates/galleries/bulk_upload.html:6
+msgid "Bulk Upload Photos"
+msgstr "Ladung von Fotos in Massen"
+
+#. Explanation:  The English word "upload" is generally understood to mean the
+#. act of transferring data or files from a computer to a server. The French
+#. word "télécharger" means "to download," which is often used in the context
+#. of uploading. Therefore, "Laden" is a suitable translation for "Upload."
+#: templates/galleries/bulk_upload.html:13
+msgid "Upload"
+msgstr "Laden"
+
+#. Explanation: The word "galeries" is the plural form of the French word for
+#. "gallery," which refers to a room or area where art, artifacts, or other
+#. objects are displayed.  The English word "galleries" is also used in this
+#. context.
+#: templates/galleries/galleries_tree.html:3
+#: templates/galleries/galleries_tree.html:5
+msgid "Galleries"
+msgstr "Galerien"
+
+#. Explanation: The English phrase "No galleries found" is translated directly
+#. into German as "Keine Galerien gefunden".  The French translation, "Aucune
+#. galerie trouvée," was provided for context. It's important to note that the
+#. meaning of the sentence remains consistent in both languages.
+#: templates/galleries/galleries_tree.html:7
+msgid "No galleries found"
+msgstr "Keine Galerien gefunden"
+
+#. Explanation: The French translation, "Supprimer une Galerie," is a direct
+#. and clear translation of the English phrase "Delete gallery."  It
+#. accurately conveys the meaning of removing or deleting the gallery.
+#. Let me know if you have any other sentences you'd like me to translate!
+#: templates/galleries/gallery_confirm_delete.html:6
+#: templates/galleries/gallery_detail.html:59
+msgid "Delete gallery"
+msgstr "Löschen Sie die Galerie"
+
+#. **Explanation:** The French translation accurately conveys the meaning of
+#. the English sentence.  The German translation maintains the same structure
+#. and phrasing as the French translation to ensure consistency in meaning and
+#. tone.  It also uses appropriate grammatical structures and punctuation for
+#. a natural-sounding German translation.
+#: templates/galleries/gallery_confirm_delete.html:10
+#, python-format
+msgid ""
+"Are you sure you want to delete \"%(object)s\" and all photos and sub "
+"galleries it contains?"
+msgstr ""
+"Sind Sie sicher, dass Sie \"%(object)s\" löschen und alle Fotos und "
+"Untergalerien, die es enthält, wollen?"
+
+#. Explanation:  The English word "Confirm" is a direct synonym for the French
+#. word "Confirmer". Both words mean to verify or agree with something. The
+#. German translation, "Bestätigen," accurately captures this meaning and
+#. reflects the context of the user's request.
+#: templates/galleries/gallery_confirm_delete.html:17
+#: templates/galleries/photo_confirm_delete.html:17
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#. Explanation:  Both "Cancel" and "Annuler" mean to cancel or stop something.
+#. While "Cancel" is a more general term, "Annuler" carries a stronger
+#. connotation of formally stopping an ongoing process. In the context of your
+#. request, both terms are accurate, but "Abbrechen" provides a more nuanced
+#. translation that captures the specific meaning of the English phrase in
+#. German.
+#: templates/galleries/gallery_confirm_delete.html:21
+#: templates/galleries/photo_confirm_delete.html:21
+#: templates/galleries/photo_form.html:29
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#. Explanation: The English phrase "Show Gallery" is translated directly into
+#. German as "Zeige Galerie". This accurately reflects the meaning of both
+#. phrases.  The French translation, "Afficher la Galerie," is a more literal
+#. translation that emphasizes the action of displaying the gallery.
+#: templates/galleries/gallery_detail.html:3
+msgid "Show Gallery"
+msgstr "Zeige Galerie"
+
+#. Explanation:  The English phrase "Children galleries" is a bit ambiguous.
+#. It could refer to spaces specifically designed for children, like play
+#. areas or art museums with child-friendly exhibits. The French translation
+#. "Sous Galeries" suggests that these are galleries located within larger
+#. spaces, perhaps in a shopping mall or a museum complex.
+#: templates/galleries/gallery_detail.html:20
+msgid "Children galleries"
+msgstr "Kindergalerien"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates a return to a specific location or entity.
+#. The use of "Zurück zu" and "%(gname)s" maintains the original sentence's
+#. structure and conveys the intended meaning in German.
+#: templates/galleries/gallery_detail.html:38
+#: templates/galleries/photo_detail.html:23
+#, python-format
+msgid "Back to %(gname)s"
+msgstr "Zurück zu %(gname)s"
+
+#. Explanation: The English phrase "Back to galleries list" is translated into
+#. German as "Zurück zur Galerie-Liste". This translates the meaning of the
+#. original sentence, which refers to returning to a list of galleries.  The
+#. French translation "Retour à la liste des gasleries" is used for context
+#. and helps clarify the meaning of the English phrase.
+#: templates/galleries/gallery_detail.html:43
+msgid "Back to galleries list"
+msgstr "Zurück zur Galerie-Liste"
+
+#. Explanation: The English phrase "Add Photo" is directly translated to
+#. "Ajouter une Photo" in French.  The German translation, "Foto hinzufügen,"
+#. accurately conveys the meaning of adding a photo.
+#: templates/galleries/gallery_detail.html:48
+#: templates/galleries/photo_form.html:7
+#: templates/galleries/photo_form.html:20
+msgid "Add Photo"
+msgstr "Foto hinzufügen"
+
+#. Explanation: The French translation, "Créer une Sous-Galerie," is a direct
+#. and accurate translation of the English phrase "Create Sub Gallery."  It
+#. conveys the same meaning in German.
+#: templates/galleries/gallery_detail.html:52
+msgid "Create Sub Gallery"
+msgstr "Erstellen Sie eine Untergalerie"
+
+#. Explanation: The English phrase "Edit Gallery" is translated directly into
+#. German as "Galerie bearbeiten". This translates to "Gallery edit" which
+#. accurately reflects the meaning of the original phrase.  The French
+#. translation, "Modification d'une Galerie", provides a more detailed and
+#. specific description of the action being performed.
+#: templates/galleries/gallery_detail.html:56
+#: templates/galleries/gallery_form.html:5
+#: templates/galleries/gallery_form.html:17
+msgid "Edit Gallery"
+msgstr "Galerie bearbeiten"
+
+#. Explanation: The English phrase "Create Gallery" is translated into German
+#. as "Erstelle Galerie". This translates the meaning of the English phrase to
+#. a more literal and direct form in German.  The use of "Erstelle" means
+#. "create" or "make", which aligns with the intended meaning of the English
+#. phrase.
+#: templates/galleries/gallery_form.html:7
+#: templates/galleries/gallery_form.html:19
+msgid "Create Gallery"
+msgstr "Erstelle Galerie"
+
+#. Explanation:  Both "Update" and "Mettre à jour" mean the same thing in
+#. English and French. The German word "Aktualisieren" is a direct equivalent
+#. of the French phrase "Mettre à jour." It accurately captures the meaning of
+#. updating something, whether it's software, information, or a document.
+#: templates/galleries/gallery_form.html:29
+#: templates/galleries/photo_form.html:28
+msgid "Update"
+msgstr "Aktualisieren"
+
+#. Explanation:  Both "create" and "créer" are verbs that mean to make
+#. something new. The German word "Erstellen" is a more direct translation of
+#. the English verb "create" in this context. It emphasizes the act of
+#. bringing something into existence.
+#: templates/galleries/gallery_form.html:32
+#: templates/galleries/photo_form.html:31
+msgid "Create"
+msgstr "Erstellen"
+
+#. Explanation: The English phrase "Delete photo" can be ambiguous, as it
+#. could refer to deleting a physical photograph or an image on a digital
+#. device.  The French translation "Supprimer la photo" clarifies that the
+#. action is to delete a photo from a digital source.
+#: templates/galleries/photo_confirm_delete.html:6
+#: templates/galleries/photo_detail.html:30
+msgid "Delete photo"
+msgstr "Löschen Sie die Foto"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase. It uses a formal tone and maintains the original phrasing
+#. for clarity.  The use of "Seest du sicher" is appropriate in this context
+#. as it conveys a sense of caution and certainty.
+#: templates/galleries/photo_confirm_delete.html:10
+#, python-format
+msgid "Are you sure you want to delete \"%(object)s\"?"
+msgstr "Seest du sicher, dass du \"%(object)s\" löschen willst?"
+
+#. Explanation: The English phrase "One photo" is already clear and
+#. unambiguous.  The French translation, "One photo," maintains the same
+#. meaning in German.
+#: templates/galleries/photo_counter.html:4
+#, python-format
+msgid "One photo"
+msgid_plural "%(counter)s photos"
+msgstr[0] "Eine Foto"
+msgstr[1] "%(counter)s Fotos"
+
+#. Explanation: The English phrase "No photo" is directly translated to German
+#. as "Keine Foto". This accurately reflects the meaning of the original text.
+#. The French translation, "Aucune photo," is a direct translation and
+#. maintains the same meaning in both languages.
+#: templates/galleries/photo_counter.html:6
+msgid "No photo"
+msgstr "Keine Foto"
+
+#. Explanation: The provided English and French translations are
+#. straightforward.  The German translation should be consistent with the
+#. French translation, using the same structure.
+#. Let me know if you have any other sentences to translate!
+#: templates/galleries/photo_detail.html:13
+#, python-format
+msgid "Gallery %(gname)s"
+msgstr "Galerie %(gname)s"
+
+#. Explanation: The French translation, "Editer la Photo," translates to "Edit
+#. the Photo" in German.  The word "Photo" is directly translated into "Foto"
+#. in German.
+#: templates/galleries/photo_detail.html:27
+#: templates/galleries/photo_form.html:5
+#: templates/galleries/photo_form.html:18
+msgid "Edit Photo"
+msgstr "Bearbeite die Foto"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. English phrase, capturing both the action of "creating" and the addition of
+#. a new element.  The use of "Erstelle" (create) and "füge" (add) conveys the
+#. intended meaning in a clear and concise manner.
+#: templates/galleries/photo_form.html:32
+msgid "Create and add another one"
+msgstr "Erstelle und füge eine weitere hinzu"
+
+#. Explanation: The French translation, "Galerie supprimée avec tout son
+#. contenu," indicates that the gallery was completely removed.  The German
+#. translation accurately reflects this meaning by using the verb "gelöscht"
+#. (deleted) and specifying that it included all of its content.
+#: tests/tests_gallery.py:223 views/views_gallery.py:61
+msgid "Gallery deleted"
+msgstr "Die Galerie wurde gelöscht"
+
+#. Explanation: The English phrase "Photo deleted" is translated directly into
+#. German as "Foto gelöscht". This accurately reflects the meaning of the
+#. original text.  The word "Foto" in German means "photo," and "gelöscht"
+#. means "deleted."
+#: tests/tests_photo.py:120 views/views_photo.py:98
+msgid "Photo deleted"
+msgstr "Foto gelöscht"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English and French sentences. It uses the correct word order and
+#. grammatical structure to translate the sentence's meaning while preserving
+#. the original tone and nuance.  The use of "Fotos" instead of "Photos" is a
+#. stylistic choice, but it maintains the intended meaning.
+#: views/views_bulk.py:53
+msgid "Photos can't be at the root of the zip file."
+msgstr "Fotos können nicht an der Wurzel des Zip-Datei sein."
+
+#. "Gefundener Pfadverschiebung-Versuch, '..' ist nicht in den Paketen
+#. erlaubt"
+#. ```
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase. It translates "Tentative de traversée de chemin détectée" to
+#. "Gefundener Pfadverschiebung-Versuch" and "n'est pas autorisé dans les
+#. chemins à l'intérieur du fichier zip" to " '..' ist nicht in den Paketen
+#. erlaubt".
+#: views/views_bulk.py:71
+msgid ""
+"Detected path traversal attempt, '..' is not allowed in paths inside the zip"
+" file"
+msgstr ""
+"Erkannter Pfadüberquerungsversuch, '..' ist in Pfaden innerhalb der "
+"Zip-Datei nicht erlaubt"
+
+#. Explanation: The English sentence is about importing something from a
+#. specific directory within a ZIP file.  The French translation, while
+#. accurate in meaning, could be improved for clarity and consistency with the
+#. German structure. "Aus dem Zip-Dateiverzeichnis" means "from the ZIP file
+#. directory," which is more direct than "Importé du répertoire {path} du
+#. fichier zip."
+#: views/views_bulk.py:80
+#, python-brace-format
+msgid "Imported from zipfile directory {path}"
+msgstr "Aus dem {path} Zip-Dateiverzeichnis importiert"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the file was imported from a zip file
+#. directory.  The use of "aus dem Zip-Dateiverzeichnis" means "from the zip
+#. file directory", and "importiert" means "imported".
+#: views/views_bulk.py:108
+#, python-brace-format
+msgid "Imported from zipfile directory {filename}"
+msgstr "Aus dem {filename} Zip-Dateiverzeichnis importiert"
+
+#. Explanation: The German translation attempts to capture the meaning of the
+#. English sentence, which is that an attempt to import a photo failed.  The
+#. phrase "Unbekannte Import-Foto" translates to "Unknown import photo," and
+#. "Ignoriert" means "ignored."
+#: views/views_bulk.py:177
+#, python-brace-format
+msgid "Unable to import photo '{path}', it was ignored"
+msgstr "Unbekannte Import-Foto '{path}' - Ignoriert"
+
+#. **Explanation:**  The translation aims to capture the meaning of the
+#. original sentence while maintaining its technical context. Here's a
+#. breakdown:
+#. * **"ZIP-Datei hochgeladen"**: This accurately translates "Zip file
+#. uploaded."
+#. * **"{lg} Galerien"**: The placeholder
+#. `{lg}` is replaced with the number of galleries in the
+#. object `self.galleries`.
+#. * **"{nbp} Fotos"**: The placeholder `{nbp}` represents
+#. the number of photos created.
+#. The translation uses a more formal and technical tone appropriate for the
+#. context, while still conveying the meaning accurately.
+#: views/views_bulk.py:191
+msgid ""
+"Zip file uploaded: {lg} galleries and {nbp} "
+"photos created"
+msgstr ""
+"ZIP-Datei hochgeladen: {lg} Galerien und {nbp} "
+"Fotos erstellt"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that either a photo ID or a gallery ID is
+#. missing.  The use of "Fehlender" means "missing" and "Foto-ID" and
+#. "Galerie-ID" are translated directly from the French terms.
+#: views/views_photo.py:30
+msgid "Missing either photo id or gallery id"
+msgstr "Fehlender Foto-ID oder Galerie-ID"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. English and French sentences. It uses the correct word order and
+#. grammatical structure to reflect the original meaning.  The use of "Foto"
+#. instead of "Photo" is a stylistic choice, but it's consistent with the
+#. context.
+#: views/views_photo.py:50
+msgid "Photo not found on that page"
+msgstr "Foto nicht gefunden auf dieser Seite"
+
+#. Explanation: The English phrase "Photo created" is a straightforward
+#. statement of fact.  The German translation accurately conveys the meaning
+#. and retains the same grammatical structure as the French translation.
+#: views/views_photo.py:71
+msgid "Photo created"
+msgstr "Foto erstellt"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. French translation while maintaining the original sentence structure and
+#. tone.  It uses a more formal style, which is appropriate for technical
+#. contexts like this.
+#: views/views_photo.py:78
+msgid ""
+"Error when creating this photo. Try to convert it in another format before "
+"retrying to upload it."
+msgstr ""
+"Fehler beim Erstellen dieser Foto. Versuchen Sie, es in einem anderen Format"
+" umzuwandeln, bevor Sie erneut versuchen, es hochzuladen."

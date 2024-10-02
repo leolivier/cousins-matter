@@ -30,7 +30,9 @@
 # Features
 
 ## Translations
-* Comes with English and French translations
+* Comes with manual English and French translations
+* **NEW**: Translated into Spanish, German and Italian using [auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot/) automated translations using AI LLMs (various LLMs were used depending on the language).
+  **WARNING**: Because these translations are automated, they may sometimes be incorrect or inaccurate. Please open issues on Github if you find errors.
 * Can be easily translated into any LTR language, see [documentation](https://github.com/leolivier/cousins-matter/wiki#translate-to-a-new-language). Not tested for RTL.
 
 ## Member Management

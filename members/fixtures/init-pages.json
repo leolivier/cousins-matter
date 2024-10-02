@@ -3,7 +3,7 @@
         "model": "flatpages.FlatPage",
         "pk": 1,
         "fields": {
-            "url": "/en-US/about/privacy-policy/",
+            "url": "/en-us/about/privacy-policy/",
             "title": "a flatpage title",
 						"content": "a flatpage content"
         }
@@ -12,7 +12,7 @@
 			"model": "flatpages.FlatPage",
 			"pk": 2,
 			"fields": {
-					"url": "/fr-FR/about/privacy-policy/",
+					"url": "/fr/about/privacy-policy/",
 					"title": "a flatpage title",
 					"content": "a flatpage content"
 			}
@@ -21,7 +21,7 @@
 		"model": "flatpages.FlatPage",
 		"pk": 3,
 		"fields": {
-				"url": "/en-US/home/authenticated/",
+				"url": "/en-us/home/authenticated/",
 				"title": "a flatpage title",
 				"content": "a flatpage content"
 		}
@@ -30,7 +30,7 @@
 	"model": "flatpages.FlatPage",
 	"pk": 4,
 	"fields": {
-			"url": "/fr-FR/home/authenticated/",
+			"url": "/fr/home/authenticated/",
 			"title": "a flatpage title",
 			"content": "a flatpage content"
 	}
@@ -39,7 +39,7 @@
 	"model": "flatpages.FlatPage",
 	"pk": 5,
 	"fields": {
-			"url": "/en-US/home/unauthenticated/",
+			"url": "/en-us/home/unauthenticated/",
 			"title": "a flatpage title",
 			"content": "a flatpage content"
 	}
@@ -48,7 +48,7 @@
 	"model": "flatpages.FlatPage",
 	"pk": 6,
 	"fields": {
-			"url": "/fr-FR/home/unauthenticated/",
+			"url": "/fr/home/unauthenticated/",
 			"title": "a flatpage title",
 			"content": "a flatpage content"
 	}

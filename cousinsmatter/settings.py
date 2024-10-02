@@ -54,7 +54,11 @@ CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 
 LANGUAGES = [
     ("fr", "Français"),
-    ("en", "English"),
+    ("en-us", "English (US)"),
+    ("es", "Español"),
+    ("de", "Deutsch"),
+    ("it", "Italiano"),
+    ("pt", "Português"),
 ]
 LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-us')
 TIME_ZONE = env.str('TIME_ZONE', default='Europe/Paris')
@@ -122,6 +126,7 @@ MIDDLEWARE = [
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
   'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+  'django.middleware.locale.LocaleMiddleware',
 ]
 # if DEBUG:
 #   MIDDLEWARE.append('cousinsmatter.htmlvalidator.HtmlValidatorMiddleware')

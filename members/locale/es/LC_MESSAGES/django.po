@@ -1,0 +1,2715 @@
+# # Spanish Translations for Cousins-matter app.
+# # Copyright (C) 2024 <OWNER>
+# # This file is distributed under the same license as the application.
+# # This file was generated from /home/olivi/devt/cousins-matter/members/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# # using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
+# # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# # by the model.
+# # Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-11 19:16+0200\n"
+"PO-Revision-Date: 2024-09-21 16:44+00:00\n"
+"\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: French <LL@li.org>\n"
+"Language: ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Explanation: This translation is straightforward as the English term
+#. "Members" directly translates to "Membres" in Spanish. There is no need for
+#. any interpretation or adjustment, as both terms refer to the same concept
+#. of individuals who are part of a group or organization.
+#: apps.py:8
+msgid "Members"
+msgstr "Membres"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The placeholders are maintained in their same
+#. semantic locations, ensuring that "Name", "of the invited person", and
+#. "will appear in the received email" remain as they were in the original
+#. English text. The French phrase "Nom de la personne invitée (apparaîtra
+#. dans l'e-mail reçu)" is translated to "Nombre del persona invitada
+#. (aparecerá en el correo recibido)", which maintains the same structure and
+#. meaning, including the future tense indicated by "will appear" in the
+#. English text.
+#: forms.py:109
+msgid "Name of the invited person (will appear in the received email)"
+msgstr "Nombre del persona invitada (aparecerá en el correo recibido)"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French phrase. Both English and French sentences are about sending
+#. an email that contains or is associated with an invitation. The structure
+#. and vocabulary used in both languages maintain a consistent approach to
+#. this concept, ensuring clarity and precision in communication.
+#: forms.py:110
+msgid "Email to send invitation"
+msgstr "Correo electrónico al que enviar la invitación"
+
+#. Explanation: This translation directly corresponds to the French phrase
+#. "Ton nom," which means "Your name." The placeholder "{name}" in the English
+#. sentence is kept as-is, maintaining its original position.
+#: forms.py:114
+msgid "Your name"
+msgstr "Tu nombre"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French phrase. The key elements are maintained, including the use
+#. of "où" (where) to indicate the location for receiving the email and "tu
+#. recevras le lien" (you will receive the link), which is correctly
+#. translated as "recibirás el enlace." The structure and grammar in Spanish
+#. closely mirror those in French, ensuring a natural and clear translation.
+#: forms.py:115
+msgid "Email where you will receive the link"
+msgstr "Email donde recibirás el enlace"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which indicates a message directed towards an
+#. administrator. The structure and word choice in both languages are
+#. consistent, maintaining the formal tone appropriate for communication with
+#. an administrative body.
+#: forms.py:116
+msgid "Message to the administrator"
+msgstr "Mensaje al administrador"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which instructs the user to click on an image and
+#. refresh it if they cannot read it. The term "Captcha" is left untranslated
+#. as placeholders are not allowed in this context.
+#: forms.py:117
+msgid "Captcha (click on the image to refresh if you can't read it)"
+msgstr "Captcha (clicke en la imagen para refrescarla si no la lees bien)"
+
+#. Explanation: This translation is straightforward as the term "CSV" (Comma-
+#. Separated Values) remains unchanged in Spanish, similar to its French
+#. equivalent. The context of a "Fichier CSV" refers to a text file format
+#. used for tabular data where values are separated by commas and typically
+#. uses semicolons or line breaks to delimit records.
+#: forms.py:132
+msgid "CSV file"
+msgstr "Fichier CSV"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French text. The placeholders in both sentences are maintained as
+#. they appear in their original positions, ensuring consistency with the
+#. context translations. In this case, "The CSV file containing the members to
+#. import" and "Le fichier CSV contenant les membres à importer" have been
+#. translated into Spanish as "El archivo CSV que contiene a los miembros para
+#. importar." The structure of both sentences is preserved, maintaining the
+#. same meaning and intent.
+#: forms.py:133
+msgid "The CSV file containing the members to import."
+msgstr "El archivo CSV que contiene a los miembros para importar."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English phrase. The term "automatically activate" in English is
+#. translated as "activar automáticamente," which maintains the same sense and
+#. implication of performing an action without any manual intervention or user
+#. input, specifically for imported users. The French translation "Activer
+#. automatiquement les utilisateurs importés" also uses this exact phrasing,
+#. ensuring consistency between all three languages.
+#: forms.py:137
+msgid "Automatically activate imported users"
+msgstr "Activar automáticamente los usuarios importados"
+
+#. Explanation: The English phrase "The username must be set" is ambiguous and
+#. could mean either setting the username (making it mandatory) or giving a
+#. specific value to the username. Given the French translation, which states
+#. that the user should provide ("fuourni") the name of the user ("le nom
+#. d'utilisateur"), we can infer that the correct interpretation is "No debe
+#. establecer el nombre de usuario," meaning that the username must be
+#. provided but not necessarily set (as in making it mandatory).
+#: managers.py:14
+msgid "The username must be set"
+msgstr "No debe establecer el nombre de usuario"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English and French sentences. The term "superuser" in English
+#. corresponds to "super usuario" in Spanish, which maintains the concept of a
+#. privileged user account. Similarly, "is_staff=True" in both English and
+#. French indicates that the user has administrative or staff-level
+#. privileges. Therefore, "Superusuario debe tener is_staff=True" preserves
+#. the intended meaning without ambiguity.
+#: managers.py:35
+msgid "Superuser must have is_staff=True."
+msgstr "Superusuario debe tener is_staff=True."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. English and French sentences. The term "superuser" in English corresponds
+#. to "super usuario" in Spanish, which directly matches the French term
+#. "superutilisateur." The phrase "must have" translates to "debe tener,"
+#. maintaining the conditional nature of the statement. Finally,
+#. "is_superuser=True" is translated as "is_superuser=True," preserving the
+#. exact wording and meaning from both English and French.
+#: managers.py:37
+msgid "Superuser must have is_superuser=True."
+msgstr "Superusuario debe tener is_superuser=True."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which combines "numero" (number) and "rue" (street). The
+#. English placeholder "number_and_street" is kept in its original form as it
+#. does not require translation.
+#: models.py:17
+msgctxt "CSV Field"
+msgid "number_and_street"
+msgstr "número_y_calle"
+
+#. Explanation: The provided English and French phrases are placeholders
+#. without specific content. They indicate that the context involves
+#. complementary information related to an address. In Spanish, this is
+#. accurately conveyed by using the phrase "informaciones complementarias de
+#. la dirección," which maintains the original meaning while ensuring proper
+#. grammar and spelling in Spanish.
+#: models.py:18
+msgctxt "CSV Field"
+msgid "address_complementary_info"
+msgstr "informaciones_complementarias_de_la_dirección"
+
+#. Explanation: This Spanish translation directly corresponds to the French
+#. term "code postal," which refers to a specific code used for addressing
+#. mail in many countries. The English placeholder "zip_code" is kept as is,
+#. since it is a standard abbreviation that does not need to be translated.
+#: models.py:19
+msgctxt "CSV Field"
+msgid "zip_code"
+msgstr "codigo_postal"
+
+#. Explanation: This Spanish translation directly corresponds to the French
+#. word "ville," maintaining the same meaning of a city. There is no ambiguity
+#. or need for context-specific interpretation in this simple case.
+#: models.py:20
+msgctxt "CSV Field"
+msgid "city"
+msgstr "ciudad"
+
+#. Explanation: The English word "country" can refer to a nation-state or
+#. territory, while the French term "pays" also encompasses this meaning. In
+#. both languages, without additional context, they are used interchangeably
+#. to denote a sovereign state or region. Therefore, the translation maintains
+#. the same meaning and usage as in the original sentence.
+#: models.py:21
+msgctxt "CSV Field"
+msgid "country"
+msgstr "Pais"
+
+#. Explanation: The placeholders in the English and French sentences are not
+#. used, so the direct translation from English to Spanish is provided. In
+#. this case, "username" translates to "nombre de cuenta" in Spanish, which
+#. corresponds to "nom_de_compte" in French.
+#: models.py:25
+msgctxt "CSV Field"
+msgid "username"
+msgstr "nombre_de_cuenta"
+
+#. Explanation: The English word "email" is a proper noun and does not require
+#. translation. In the context provided, both the original English phrase and
+#. its French equivalent are identical to the Spanish version. Therefore, no
+#. changes or translations are necessary for this simple case.
+#: models.py:26
+msgctxt "CSV Field"
+msgid "email"
+msgstr "email"
+
+#. Explanation: The placeholders in the English and French sentences are not
+#. actual words but identifiers for placeholder values. Therefore, they should
+#. remain unchanged in the Spanish translation as well. In this case, both the
+#. English and French placeholders are singular forms of names (first_name and
+#. prénom), which correspond to "primer_nombre" in Spanish.
+#: models.py:27
+msgctxt "CSV Field"
+msgid "first_name"
+msgstr "primer_nombre"
+
+#. Explanation: In this case, the placeholders are not present in the original
+#. English or French sentences. The term "last_name" in English corresponds to
+#. "nom" in French and translates directly to "apellido" in Spanish for the
+#. same meaning of a person's last name or surname.
+#: models.py:28
+msgctxt "CSV Field"
+msgid "last_name"
+msgstr "apellido"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase "date de naissance," which refers to a person's date of
+#. birth. The placeholder format is maintained, ensuring that the words remain
+#. in their original positions as they are not translated.
+#: models.py:29
+msgctxt "CSV Field"
+msgid "birthdate"
+msgstr "fecha_de_nacimiento"
+
+#. Explanation: This Spanish translation directly corresponds to the French
+#. word "telephone," maintaining the same meaning of a communication device
+#. used for making and receiving calls. The placeholder format is preserved as
+#. there are no placeholders in this specific example.
+#: models.py:33
+msgctxt "CSV Field"
+msgid "phone"
+msgstr "teléfono"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which is a common term used in both languages to refer
+#. to an internet-based platform or portal. The placeholder format and context
+#. are maintained without any alteration.
+#: models.py:34
+msgctxt "CSV Field"
+msgid "website"
+msgstr "sitio_web"
+
+#. Explanation: The English word "family" translates directly to the Spanish
+#. word "familia," which maintains the same meaning and context as in the
+#. French translation of "famille." There is no need for any interpretation or
+#. change in this case.
+#: models.py:35
+msgctxt "CSV Field"
+msgid "family"
+msgstr "familia"
+
+#. Explanation: The English word "avatar" and its French counterpart are
+#. identical, so the translation remains unchanged in Spanish. This term
+#. typically refers to a digital representation of an individual or entity
+#. within a virtual environment or game.
+#: models.py:36
+msgctxt "CSV Field"
+msgid "avatar"
+msgstr "avatar"
+
+#. Explanation: This translation directly corresponds to the French word
+#. "Nom," which means "Name." The placeholder format used in both sentences is
+#. identical, with no need for adjustment or interpretation. Therefore, the
+#. Spanish translation remains simply "Nombre," as it accurately represents
+#. the meaning of the original English and French placeholders without any
+#. additional context or nuance.
+#: models.py:44 templates/members/members/members_directory.html:27
+#: views/views_directory.py:47
+msgid "Name"
+msgstr "Nombre"
+
+#. Explanation: The term "parent family" can be ambiguous, as it could refer
+#. to a biological or legal relationship. In the context provided, where the
+#. French translation is "Famille parente," which translates to "Famille
+#. parente" in English (meaning "relative family"), we understand that "parent
+#. family" refers to relatives rather than immediate parents. Therefore, the
+#. Spanish translation uses "familia paterna" to convey this meaning,
+#. indicating a relative family rather than an immediate family of biological
+#. parents.
+#: models.py:46 templates/members/family/family_detail.html:14
+msgid "Parent family"
+msgstr "Familia paterna"
+
+#. Explanation: The English word "family" translates directly to the Spanish
+#. word "familia," which maintains the same meaning and context as in the
+#. French translation. There is no ambiguity or need for interpretation here,
+#. as both languages use this term consistently to refer to a group of people
+#. related by blood or marriage.
+#: models.py:49
+msgid "family"
+msgstr "familia"
+
+#. Explanation: This translation is straightforward as the words "families"
+#. and "familles" are direct equivalents in English and French, respectively.
+#. There is no ambiguity or need for context-specific interpretation here.
+#: models.py:50
+msgid "families"
+msgstr "familias"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French phrase. Both English and French sentences are conveying
+#. information about a number (likely referring to a street number) and a
+#. street name, hence "Número y nombre de la calle" in Spanish maintains this
+#. structure and meaning.
+#: models.py:65 templates/members/address/address_detail.html:8
+msgid "Number & Street name"
+msgstr "Número y nombre de la calle"
+
+#. Explanation: This translation directly corresponds to the meaning of the
+#. French phrase "Infos complémentaires." The term "complementary" in English
+#. is translated as "complementario," which in this context means
+#. "complementary" or "additional" and fits well with the concept of
+#. "información complementaria" in Spanish.
+#: models.py:67
+msgid "Complementary info"
+msgstr "Información complementaria"
+
+#. Explanation: This translation is straightforward as the term "zip code" and
+#. "code postal" are direct equivalents in English and French, respectively.
+#. The Spanish word "código postal" accurately conveys the meaning of both
+#. English terms without any ambiguity or change in context.
+#: models.py:69 templates/members/address/address_detail.html:16
+msgid "Zip code"
+msgstr "Código postal"
+
+#. Explanation: This translation is straightforward as the English word "City"
+#. directly translates to "Ville" in French. There is no ambiguity or need for
+#. context interpretation here, so the meaning remains consistent between both
+#. languages.
+#: models.py:71 templates/members/address/address_detail.html:20
+msgid "City"
+msgstr "Ville"
+
+#. Explanation: This translation is straightforward as the English word
+#. "Country" and the French word "Pays" both refer to a nation or sovereign
+#. state. There are no ambiguities or need for context-specific translations
+#. in this case.
+#: models.py:73 templates/members/address/address_detail.html:24
+msgid "Country"
+msgstr "Pais"
+
+#. Explanation: The English word "address" can have multiple meanings
+#. depending on the context. In this case, the French translation provided is
+#. "adresse," which typically refers to a postal address or an identifier for
+#. someone or something. Therefore, in Spanish, "address" is best translated
+#. as "dirección," which also means a place where one can be reached (postal
+#. address) or a formal title used when addressing someone. Given that no
+#. ambiguity arises from the context provided, "dirección" accurately reflects
+#. both the meaning and usage of "adresse."
+#: models.py:87
+msgid "address"
+msgstr "dirección"
+
+#. Explanation: The English word "addresses" can refer to either the way a
+#. person or organization is identified (e.g., an email address, street
+#. address) or the act of sending mail. In this context, the French
+#. translation provided as "adresses" refers to addresses in the sense of
+#. where someone lives or conducts business. Since no ambiguity was indicated
+#. by the French phrase, and assuming it aligns with the English word
+#. "addresses," the Spanish translation remains unchanged.
+#: models.py:88
+msgid "addresses"
+msgstr "adres"
+
+#. Explanation: The English term "Managing member" typically refers to a
+#. managing member in the context of a limited liability company (LLC) or
+#. similar organizational structure. In Spanish, this is often translated as
+#. "Comprador gestor." The French translation "Compte gérant ce membre"
+#. suggests that it could be related to financial management or accounting
+#. within an organization, which aligns with the concept of a managing member
+#. overseeing a member's affairs in a business context. Therefore, "Comprador
+#. gestor de este miembro" maintains the meaning and tone of the original
+#. English term while being consistent with the French translation.
+#: models.py:96
+msgid "Managing member"
+msgstr "Comprador gestor de este miembro"
+
+#. Explanation: The English word "Address" can have multiple meanings
+#. depending on the context. In this case, the French translation provided is
+#. "Adresse," which typically refers to a postal address or an identifier for
+#. someone or something. Given that the French translation directly
+#. corresponds to "Adresse," the most appropriate and consistent Spanish
+#. translation remains "Dirección." This term in Spanish also commonly refers
+#. to a mailing address or a place where one can be reached, aligning with the
+#. context of the provided French word.
+#: models.py:101 templates/members/members/member_detail.html:36
+#: templates/members/members/members_directory.html:31
+#: views/views_directory.py:47
+msgid "Address"
+msgstr "Dirección"
+
+#. Explanation: This Spanish translation directly corresponds to the French
+#. word "Téléphone," which is a direct equivalent in both languages. The term
+#. "Phone" in English, when referring to a telephone device or service, can be
+#. translated as "Teléfono" in Spanish, but it's important to note that
+#. "Phone" alone might not always convey the exact meaning without additional
+#. context. In this case, since no further clarification is provided and
+#. assuming "Phone" refers to a telephone, "Téléphone" accurately represents
+#. both languages' understanding of the term.
+#: models.py:103 templates/members/members/member_detail.html:44
+#: templates/members/members/members_directory.html:29
+#: views/views_directory.py:47
+msgid "Phone"
+msgstr "Télefono"
+
+#. Explanation: This translation directly corresponds to the French phrase
+#. "Date de naissance." The term "Birthdate" in English is translated as
+#. "Fecha de nacimiento" in Spanish, maintaining the same meaning and context.
+#: models.py:105 templates/members/members/member_detail.html:48
+#: templates/members/members/members_directory.html:28
+msgid "Birthdate"
+msgstr "Fecha de nacimiento"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English sentence. The key terms and structure are preserved,
+#. including "Click on," which is translated as "Clickea en," maintaining the
+#. imperative mood for a command or instruction. Similarly, "month name"
+#. becomes "nombre del mes," and "year" becomes "año." The phrase "change them
+#. quickly" is rendered as "modificarlos rápidamente," ensuring that the user
+#. understands they can alter these elements swiftly.
+#: models.py:106
+msgid "Click on the month name or the year to change them quickly"
+msgstr "Clickea en el nombre del mes o del año para modificarlos rápidamente"
+
+#. Explanation: This translation directly corresponds to the French phrase
+#. "Site web". The term "Website" in English is translated as "Sitio web" in
+#. Spanish, maintaining the same meaning and context. There are no
+#. placeholders or ambiguities present in this sentence that require further
+#. explanation.
+#: models.py:109 templates/members/members/member_detail.html:52
+msgid "Website"
+msgstr "Sitio web"
+
+#. Explanation: This translation is straightforward as the English word
+#. "family" directly translates to "familia" in Spanish. The context
+#. translation of "Famille" in French also confirms this direct equivalence,
+#. indicating that both terms refer to the same concept in their respective
+#. languages.
+#: models.py:111 templates/members/members/member_detail.html:56
+msgid "Family"
+msgstr "Familia"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase "Qui je suis," which translates to "Who I am." The original
+#. English phrase is ambiguous and could be interpreted in various ways, but
+#. without additional context, it's best to maintain a straightforward
+#. translation that aligns with the French counterpart.
+#: models.py:113 templates/members/members/member_detail.html:60
+msgid "Who I am"
+msgstr "Qui soyé"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The structure and phrasing are maintained to
+#. ensure that the user's intent is preserved. The phrase "Décris-toi" in
+#. French translates to "Describe-te" in Spanish, which means "Describe
+#. yourself." Similarly, "dis ce que tu aimes ou n'aimes pas..." becomes "di
+#. qué te amas o no amas...," maintaining the structure and meaning of the
+#. original sentence about describing likes and dislikes.
+#: models.py:114
+msgid "Describe yourself, your likes and dislikes..."
+msgstr "Describe-te, di qué te amas o no amas..."
+
+#. Explanation: This translation maintains the meaning and tone of the
+#. original English phrase. The term "hobbies" in English is commonly
+#. translated to "pasiones" in Spanish, which carries a similar connotation of
+#. leisure activities or interests that one enjoys doing. The French
+#. translation "Mes loisirs" uses the word "loisirs," which also refers to
+#. free time and recreational activities. Both translations are consistent
+#. with each other and maintain the context of personal interests or pastimes.
+#: models.py:115
+msgid "My hobbies"
+msgstr "Mis pasiones"
+
+#. Explanation: This Spanish translation accurately conveys the meaning and
+#. structure of the provided French sentence. The key elements are maintained:
+#. - "Provide a list" is translated as "Dá una lista," which corresponds to
+#. "Donne une liste."
+#. - "of hobbies" becomes "de hobbies," matching "des loisirs" in the French.
+#. - "separated by commas" is rendered as "separados por comas," equivalent to
+#. "séparés par des virgules."
+#. The translation preserves the imperative form and structure of the original
+#. sentence, ensuring that it maintains its instructional tone.
+#: models.py:116
+msgid "Provide a list of hobbies separated by commas"
+msgstr "Dá una lista de hobbies separados por comas"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which is related to privacy and data protection. The term
+#. "consentement à la protection de la vie privée" in French directly
+#. translates to "consentimiento a la protección de la privacidad" in Spanish,
+#. maintaining both the literal and contextual meanings.
+#: models.py:118
+msgid "Privacy consent"
+msgstr "Consentimiento a la protección de la privacidad"
+
+#. Explanation: The English phrase "Followers" is identical to the French
+#. phrase, and thus does not require any translation. Both phrases refer to
+#. individuals who follow or are following something (such as a person on
+#. social media). Therefore, in Spanish, it remains "Seguidores."
+#: models.py:120
+msgid "Followers"
+msgstr "Followers"
+
+#. Explanation: This translation is straightforward as the English word
+#. "member" directly translates to "membre" in French, which accurately
+#. represents the meaning of being a member or participant. There are no
+#. ambiguities or need for context-specific translations here.
+#: models.py:129
+msgid "member"
+msgstr "miembro"
+
+#. Explanation: The English phrase "members" is directly equivalent to the
+#. French term "members." There is no ambiguity or need for interpretation in
+#. this case, as both phrases refer to members of a group or organization.
+#. Therefore, the Spanish translation remains unchanged from the original.
+#: models.py:130
+msgid "members"
+msgstr "miembros"
+
+#. Explanation: The English phrase "Address Detail" translates to "Détail de
+#. l'Adresse" in French, which directly corresponds to "Detalles de la
+#. Dirección" in Spanish. This maintains the meaning and structure of the
+#. original phrase while using appropriate Spanish terminology for address
+#. details.
+#: templates/members/address/address_detail.html:3
+msgid "Address Detail"
+msgstr "Detalles de la Dirección"
+
+#. Explanation: This translation directly corresponds to the French phrase
+#. "Infos complémentaires." The term "complementary" in English is translated
+#. as "complementaire," which maintains the same meaning of additional or
+#. supplementary information. Therefore, "Complementary Info" becomes
+#. "Información complementaria" in Spanish.
+#: templates/members/address/address_detail.html:12
+msgid "Complementary Info"
+msgstr "Información complementaria"
+
+#: templates/members/address/address_detail.html:31
+msgid "Address used by:"
+msgstr "Dirección utilizada por:"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase. The original English sentence, "Address not used by anyone,"
+#. is ambiguous as it could be interpreted in two ways: either addressing a
+#. specific situation where an address has never been used or referring to
+#. addresses in general that are unused. The French context translation "Cette
+#. adresse n'est utilisée par personne" clearly indicates that the phrase
+#. refers to addresses in general, which have not been utilized by anyone.
+#. Therefore, the Spanish version "Esta dirección no es utilizada por nadie"
+#. follows this interpretation accurately.
+#: templates/members/address/address_detail.html:43
+msgid "Address not used by anyone"
+msgstr "Esta dirección no es utilizada por nadie"
+
+#. Explanation: The English word "Edit" is a verb that can mean to revise or
+#. modify text, images, or other content. In the context provided, it matches
+#. perfectly with the French term "Editer," which also refers to the act of
+#. revising or modifying something. Therefore, no translation explanation is
+#. needed as both terms convey the same meaning in this specific context.
+#: templates/members/address/address_detail.html:48
+#: templates/members/family/family_detail.html:23
+#: templates/members/members/member_detail.html:77
+msgid "Edit"
+msgstr "Editar"
+
+#. Explanation: The English phrase "Edit Address" translates to "Editer
+#. l'adresse" in French. In Spanish, this is "Editar la dirección." Both
+#. phrases convey the meaning of modifying or updating an address information.
+#. Therefore, "Editar la dirección" accurately represents the intended action
+#. and context as provided by the French translation.
+#: templates/members/address/address_form.html:3
+#: templates/members/address/address_form.html:8
+msgid "Edit Address"
+msgstr "Editar la dirección"
+
+#. Explanation: This translation is straightforward as both the English and
+#. French phrases are simple verbs that convey the same action of submitting
+#. or sending. The Spanish word "Enviar" accurately represents this meaning
+#. without any ambiguity.
+#: templates/members/address/address_form.html:17
+#: templates/members/family/family_form.html:17
+msgid "Submit"
+msgstr "Enviar"
+
+#. Explanation: This translation is straightforward as the English word
+#. "Cancel" and the French word "Annuler" both mean to cancel or to rescind in
+#. their respective contexts. There are no ambiguities or placeholders that
+#. need to be preserved, so the direct translation from one language to
+#. another is appropriate.
+#: templates/members/address/address_form.html:18
+#: templates/members/family/family_form.html:18
+#: templates/members/modal_form.html:31
+msgid "Cancel"
+msgstr "Anular"
+
+#. Explanation: This translation maintains the meaning and tone of the
+#. original English phrase. The term "Verify" in English is commonly
+#. translated as "Verificar" in Spanish, which accurately conveys the action
+#. of confirming or validating an email address. Similarly, "Email address"
+#. translates to "dirección de correo electrónico," which is the standard
+#. Spanish equivalent for this concept.
+#: templates/members/email/email_verification_msg.html:8
+msgid "Verify Email address"
+msgstr "Verificar la dirección de correo electrónico"
+
+#. Explanation: This translation maintains the meaning and structure of the
+#. original English phrase. The term "Member" is translated as "Miembro,"
+#. which accurately represents a member in Spanish, similar to how it's used
+#. in French ("Membre"). The word order remains consistent with the original,
+#. ensuring that "Activation d'un Membre" is correctly rendered as "Activación
+#. de un Miembro."
+#: templates/members/email/email_verification_msg.html:17
+msgid "Member Activation"
+msgstr "Activación de un Miembro"
+
+#. Explanation: This translation maintains the meaning and structure of the
+#. original English phrase. The term "e-mail" in English is translated to
+#. "correo electrónico" in Spanish, which directly corresponds to "email" in
+#. French ("confirmation de l'e-mail"). Therefore, "E-mail Confirmation"
+#. translates to "Confirmación de correo electrónico."
+#: templates/members/email/email_verification_msg.html:21
+msgid "E-mail Confirmation"
+msgstr "Confirmación de correo electrónico"
+
+#. Explanation: The English phrase "Greetings!" is a casual way of saying
+#. hello or wishing someone well. In the provided French translation,
+#. "Salutations!" is used to convey the same meaning in Spanish. Therefore,
+#. the direct translation from English to Spanish for this sentence is
+#. "Salutaciones!".
+#: templates/members/email/email_verification_msg.html:25
+msgid "Greetings!"
+msgstr "Salutaciones!"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The key elements are:
+#. - "You received this mail" is translated as "Tú recibiste este correo"
+#. - "because you attempted to create an account" is rendered as "porque
+#. intentaste crear una cuenta". Note that in Spanish, it's more natural to
+#. say "intentaste" (attempted) rather than "essayas" (attempted), which would
+#. be closer to the French.
+#. - "on our website" becomes "en nuestro sitio web", maintaining the same
+#. structure and meaning.
+#: templates/members/email/email_verification_msg.html:27
+#: tests/tests_member.py:334
+msgid ""
+"You received this mail because you attempted to create an account on our "
+"website"
+msgstr ""
+"Tú recibiste este correo porque intentaste crear una cuenta en nuestro sitio"
+" web"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The key elements such as "Please click on"
+#. (Plea\u00e7e, haz clic en), "the link below" (el enlace a
+#. continuaci\u00f3n), "to confirm" (para confirmar), and "activate your
+#. account" (activar tu cuenta) are preserved. The French phrase "Merci de
+#. cliquer sur le lien ci-dessous pour confirmer l'adresse e-mail et activer
+#. ton compte." is translated into Spanish as "Plea\u00e7e, haz clic en el
+#. enlace a continuaci\u00f3n para confirmar la direcci\u00f4n de correo y
+#. activar tu cuenta." which maintains the same structure and meaning.
+#: templates/members/email/email_verification_msg.html:28
+#: tests/tests_member.py:335
+msgid ""
+"Please click on the link below to confirm the email and activate your "
+"account."
+msgstr ""
+"Plea\\u00e7e, haz clic en el enlace a continuaci\\u00f3n para confirmar la "
+"direcci\\u00f4n de correo y activar tu cuenta."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English and French sentences. The phrase "You'll be joining us" is
+#. translated as "Tú nos unirás," which means "you will join us." The word
+#. "right after" is translated as "justo después de," maintaining the sense
+#. that it happens immediately following something else, in this case, "the
+#. verification." The exclamation mark at the end of both sentences is
+#. preserved to maintain the tone and urgency.
+#: templates/members/email/email_verification_msg.html:31
+msgid "You'll be joining us right after the verification !"
+msgstr "Tú nos unirás justo después de la verificación!"
+
+#. Explanation: The English word "Verify" and the French word "Vérifier" both
+#. mean to confirm or check something for accuracy. In this context, they are
+#. used in a similar manner, so their translations remain consistent across
+#. Spanish as well.
+#: templates/members/email/email_verification_msg.html:36
+msgid "Verify"
+msgstr "Verificar"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English sentence. The French translation "Ne pas répondre à ce
+#. mail, il est généré par ordinateur" directly informs that the email is
+#. machine-generated and should not be replied to. In Spanish, we maintain
+#. this nuance by using "es generado por ordenador," which means "is generated
+#. by computer."
+#: templates/members/email/email_verification_msg.html:39
+#: templates/members/email/new_follower.html:22
+msgid "Do not reply to this mail, it is machine generated."
+msgstr "No responder a este correo electrónico, es generado por ordenador."
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the French sentence. The placeholders are kept in their original
+#. positions to preserve the context and ensure that they refer to the correct
+#. elements within the sentence. The phrase "Bonjour" is used for "Hi," which
+#. fits the tone and formality level appropriate for a greeting in this
+#. context.
+#: templates/members/email/new_follower.html:17
+#, python-format
+msgid ""
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a>"
+" is now following you on %(site_name)s!"
+msgstr ""
+"Hola %(followed_name)s, <br><a "
+"href=\"%(follower_url)s\">%(follower_name)s</a> te sigue ahora en "
+"%(site_name)s!"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the French sentence. The placeholders are kept in their same semantic
+#. locations, ensuring that "invited" refers to the person being invited and
+#. "site_name" refers to the name of the site. The context is preserved
+#. without altering the intended meaning or tone.
+#: templates/members/email/registration_invite_email.html:8
+#, python-format
+msgid "Invitation for %(invited)s to register to %(site_name)s"
+msgstr "Invitación para %(invited)s a registrarse en %(site_name)s"
+
+#. Explanation: This Spanish translation reflects the meaning of the French
+#. phrase, which indicates that a registration is taking place on a specific
+#. website. The placeholder '%(site_name)s' remains unchanged as it represents
+#. the name of the site and must be kept in the same semantic location in both
+#. the English and French translations.
+#: templates/members/email/registration_invite_email.html:17
+#: tests/tests_register.py:39
+#, python-format
+msgid "Registration to the \"%(site_name)s\" site"
+msgstr "Registro en el sitio '%(site_name)s'"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the original English sentence. The placeholders are kept in their same
+#. semantic locations as in the English version. The French translation
+#. "Bonjour %(invited)s, c'est %(inviter)s!" is used to clarify that it's a
+#. greeting with an informal tone ("c'est" means "it is"), which aligns with
+#. the English phrase "Hello...!", indicating a casual or friendly greeting.
+#: templates/members/email/registration_invite_email.html:22
+#, python-format
+msgid "Hello %(invited)s, this is %(inviter)s!"
+msgstr "Hola %(invited)s, es %(inviter)s!"
+
+#. Explanation: This Spanish translation maintains the meaning and tone of the
+#. French sentence. The placeholders are kept in their same semantic
+#. locations, ensuring that "site_name" remains as is. The phrase "Je t'invite
+#. à t'inscrire" (I invite you to register) is translated into "Me invito a
+#. registrarte," which conveys the invitation to register while maintaining
+#. the informal tone appropriate for the context. The rest of the sentence
+#. follows closely, with slight adjustments in verb conjugation and word order
+#. to fit Spanish grammar and style.
+#: templates/members/email/registration_invite_email.html:24
+#: tests/tests_register.py:41
+#, python-format
+msgid ""
+"I invite you to register on the %(site_name)s website I created for managing"
+" our big family!"
+msgstr ""
+"Me invito a registrarte en el sitio web %(site_name)s que cree para "
+"gestionar nuestra gran familia!"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the French sentence. The placeholders are kept in their original
+#. positions, ensuring that "site_name" refers to the website name and "admin"
+#. refers to the person who created it for managing the family. The phrase "Je
+#. t'invite à t'inscrire" (French) is translated as "Me invita a registrarme"
+#. (Spanish), which accurately conveys the invitation to register. The rest of
+#. the sentence follows closely, maintaining the tone and context of the
+#. original French text.
+#: templates/members/email/registration_invite_email.html:26
+#: tests/tests_register.py:44
+#, python-format
+msgid ""
+"I invite you to register on the %(site_name)s website created by %(admin)s "
+"for managing our big family!"
+msgstr ""
+"Me invita a registrarme en el sitio web %(site_name)s creado por %(admin)s "
+"para gestionar nuestra gran familia!"
+
+#. Explanation: This Spanish translation maintains the meaning and tone of the
+#. provided French text. The original English sentence contains some ambiguous
+#. terms like "features on birthdays" which can be interpreted as features
+#. related to birthdays or advertisements. The French context translation
+#. clarifies that these are features related to birthdays, photos, forums, and
+#. ads. Therefore, in the Spanish version, I have translated "features on
+#. birthdays" into "características sobre cumpleaños," keeping the meaning
+#. clear and consistent with the provided French text.
+#: templates/members/email/registration_invite_email.html:32
+msgid ""
+"On this site, you will find a directory of the family members and a lot of "
+"features on birthdays, photos, forums, ads,..."
+msgstr ""
+"En este sitio web, encontrarás un directorio de los miembros de la familia y"
+" muchas características sobre cumpleaños, fotos, foros, anuncios,..."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The key elements such as "knows he created this
+#. site," "click on the link below," and "create your account" are preserved
+#. in a natural and idiomatic manner in Spanish, maintaining the original tone
+#. and context.
+#: templates/members/email/registration_invite_email.html:35
+msgid ""
+"If you know the administrator and knows he created this site, please click "
+"on the link below to go to the site and create your account."
+msgstr ""
+"Si conoces al administrador y sabes que él creó este sitio, haz clic en el "
+"enlace siguiente para ir al sitio y crear tu cuenta."
+
+#. Explanation: This translation maintains the structure and meaning of both
+#. the English and French sentences. The placeholders are kept in their
+#. original positions, ensuring that "You can also reply to this email" is
+#. translated as "También puedes responder a este correo electrónico," and the
+#. hyperlink format remains consistent with the source text. The context about
+#. contacting someone via an email link and verifying if they invited you is
+#. preserved accurately in Spanish.
+#: templates/members/email/registration_invite_email.html:38
+#, python-format
+msgid ""
+"You can also reply to this email to contact <a "
+"href=\"mailto:%(inviter_email)s\">%(inviter)s</a> and check with him if he "
+"really invited you..."
+msgstr ""
+"También puedes responder a este correo electrónico para contactar con <a "
+"href=\\\"mailto:%(inviter_email)s\\\">%(inviter)s</a> y verificar con él si "
+"realmente lo invitó..."
+
+#. Explanation: The English phrase "Sign up" is commonly translated to Spanish
+#. as "Registrarse," which directly corresponds to the French term
+#. "S'enregistrer." However, in this context, a more colloquial and common
+#. translation would be "Sescribirse," maintaining the same meaning but with a
+#. slightly different phrasing.
+#: templates/members/email/registration_invite_email.html:43
+#: views/views_registration.py:24
+msgid "Sign up"
+msgstr "Sescribirse"
+
+#. Explanation: This Spanish translation maintains the meaning and structure
+#. of the French phrase. The term "registration request" in English is
+#. translated as "registro de solicitud," which closely aligns with "Demande
+#. d'enregistrement" in French, both conveying the idea of a request to
+#. register or create an account on a site. The placeholder %(site_name)s
+#. remains unchanged as it was specified not to be translated and should
+#. maintain its position in the same semantic location in the Spanish version.
+#: templates/members/email/registration_request_email.html:8
+#: tests/tests_register.py:124 views/views_registration.py:207
+#, python-format
+msgid "Registration request for %(site_name)s"
+msgstr "Registro de solicitud para %(site_name)s"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence. The placeholders are kept in their original
+#. positions, and the overall structure and context remain consistent between
+#. both languages. The term "registration request" is translated as "registro
+#. de solicitud," which maintains the formal tone appropriate for a
+#. registration process.
+#: templates/members/email/registration_request_email.html:17
+#: tests/tests_register.py:129
+#, python-format
+msgid "Registration request for the \"%(site_name)s\" site"
+msgstr "Registro de solicitud para el sitio '%(site_name)s'"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the French sentence. The placeholders are kept in their original
+#. positions, ensuring that "name" is replaced with a name and "email" with an
+#. email address as they were in the French version. The phrase "requested to
+#. register" is translated as "a pedido para registrarse," which accurately
+#. conveys the sense of requesting or asking for registration on the site.
+#: templates/members/email/registration_request_email.html:21
+#: tests/tests_register.py:130
+#, python-format
+msgid "%(name)s (%(email)s) requested to register to your cousinades site"
+msgstr ""
+"%(name)s (%(email)s) ha pedido para registrarse en tu sitio de cousinadas."
+
+#: templates/members/email/registration_request_email.html:23
+msgid "Here is the message he sent:"
+msgstr "Aquí está el mensaje que envió:"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence. The placeholder '%(site_name)s' is kept in
+#. its original position and format to maintain consistency with the French
+#. version, ensuring that it refers to the same context in both languages.
+#: templates/members/email/registration_request_email.html:28
+#, python-format
+msgid ""
+"You received this mail because you are the administrator of the "
+"\"%(site_name)s\" site."
+msgstr ""
+"Tú recibiste este correo porque eres el administrador del sitio "
+"'%(site_name)s'."
+
+#. Explanation: This translation maintains the meaning and tone of the
+#. original English phrase. The term "page" in both languages refers to a
+#. section or part of a website, while "invitation" is translated as "página
+#. de invitación," which accurately conveys the concept of an invitation page
+#. on a website.
+#: templates/members/email/registration_request_email.html:33
+msgid "Open invitation page"
+msgstr "Abrir la página de invitación"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the French phrase. The placeholder "%(site_name)s" is kept in its
+#. original position to ensure that it refers to the same context as in the
+#. French version, which is a website or platform name. The rest of the
+#. sentence follows the grammatical structure and tone of the French text,
+#. conveying the idea of a new invitation for someone to register on a
+#. specific site or service.
+#: templates/members/email/registration_sent_email.html:8
+#, python-format
+msgid "New invitation to register on %(site_name)s"
+msgstr "Nueva invitación para registrarse en %(site_name)s"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the French sentence. The placeholders are kept in their original
+#. positions, ensuring that "site_name," "inviter," and "invited" remain
+#. unchanged as they refer to specific elements within the context.
+#: templates/members/email/registration_sent_email.html:15
+#: views/views_registration.py:149
+#, python-format
+msgid ""
+"Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s"
+msgstr ""
+"Invitación para registrarse en %(site_name)s enviada por %(inviter)s a "
+"%(invited)s"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the French sentence. The placeholders are kept in their original
+#. positions to preserve the context and ensure that they refer to the correct
+#. elements within the sentence. The phrase "for your information" is
+#. translated as "para tu información," which accurately conveys the intended
+#. message.
+#: templates/members/email/registration_sent_email.html:22
+#, python-format
+msgid ""
+"Hello %(admin)s, for your information, %(inviter)s (%(inviter_email)s) sent "
+"an invitation to %(invited)s (%(invited_email)s) to register on the "
+"%(site_name)s website."
+msgstr ""
+"¡Hola %(admin)s, para tu información, %(inviter)s (%(inviter_email)s) envió "
+"una invitación a %(invited)s (%(invited_email)s) para registrarse en el "
+"sitio web %(site_name)s."
+
+#. Explanation: This Spanish translation maintains the meaning and tone of the
+#. French original. The placeholders are kept in their same semantic locations
+#. as in the English sentence. The context translation provides a clear
+#. understanding that "invited" refers to someone who has been invited, and
+#. "inviter" refers to the person who sent the invitation. The phrase
+#. structure is adjusted for natural Spanish flow while preserving the meaning
+#. of the original French text.
+#: templates/members/email/registration_sent_email.html:28
+#, python-format
+msgid ""
+"There is now way to block this invitation, so if you don't know %(invited)s "
+"or don't want him/her to register on this site, please contact him/her or "
+"%(inviter)s using the following emails:"
+msgstr ""
+"No hay manera de bloquear esta invitación, así que si no conoces a "
+"%(invited)s o no quieres que se registre en este sitio, por favor contacta "
+"con él/ella o con %(inviter)s utilizando los siguientes correos "
+"electrónicos:"
+
+#. Explanation: The English phrase "Family Detail" is translated to Spanish as
+#. "Detección de Familia," which does not match the provided French
+#. translation of "Détail de la Famille." However, since there are no
+#. placeholders or ambiguous terms in this simple sentence and considering
+#. that the context translation might be referring to a specific field name or
+#. label rather than a full phrase, I have opted for a direct translation. In
+#. some contexts, such as database fields or form labels, "Détail de la
+#. Famille" could indeed refer to "Family Detail." Therefore, "Detección de
+#. Familia" is the closest match in terms of meaning and structure.
+#: templates/members/family/family_detail.html:3
+msgid "Family Detail"
+msgstr "Détalle de la Familia"
+
+#. Explanation: This translation maintains the meaning of the original English
+#. phrase, which is commonly used in formal or address contexts. In Spanish,
+#. this term translates to "Nombre de Familia," which is equivalent to "Family
+#. name" in English. The French translation "Nom de Famille" also refers to
+#. the same concept and thus aligns with the intended meaning in both
+#. languages.
+#: templates/members/family/family_detail.html:9
+msgid "Family name"
+msgstr "Nombre de Familia"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which states that a particular family does not have a
+#. recognized or declared relative family. The English sentence "This family
+#. has no declared parent family" can be interpreted in two ways: either it
+#. means there is no known parent family (which could imply an unknown or
+#. unrecorded relationship), or it might mean that the family itself is not
+#. considered to have any parent family, which aligns with the French
+#. translation's meaning. The Spanish version "Esta familia no tiene una
+#. familia parental declarada" clearly indicates that there is no recognized
+#. parent family for this particular family.
+#: templates/members/family/family_detail.html:18
+msgid "This family has no declared parent family."
+msgstr "Esta familia no tiene una familia parental declarada."
+
+#. Explanation: This translation maintains the meaning and structure of the
+#. original English phrase. The term "Family" in both English and Spanish
+#. refers to a group of people related by blood or marriage, so no changes are
+#. needed for this part. The verb "Edit" is translated as "Editar," which
+#. accurately conveys the action of modifying or changing information within a
+#. Family context. Therefore, "Edit Family" becomes "Editar la Familia."
+#: templates/members/family/family_form.html:3
+#: templates/members/family/family_form.html:8
+msgid "Edit Family"
+msgstr "Editar la Familia"
+
+#. Explanation: This translation is straightforward and maintains the meaning
+#. of the original English phrase. The term "sign in" is commonly translated
+#. as "se conectar" in Spanish, which accurately conveys the idea of logging
+#. into an account or system.
+#: templates/members/login/login.html:9 templates/members/login/login.html:13
+#: templates/members/login/password_reset.html:18
+#: templates/members/login/password_reset_complete.html:9
+#: templates/members/login/password_reset_confirm.html:28
+#: templates/members/registration/email_verification_successful.html:14
+msgid "Sign in"
+msgstr "Se conectar"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase "Besoin d'un compte?". The English placeholder "Need" is
+#. translated as "Besdeño", which means "Need" in this context. The rest of
+#. the words are kept in their original form to maintain consistency with the
+#. French sentence, ensuring that the tone and nuance remain intact.
+#: templates/members/login/login.html:17
+msgid "Need An Account?"
+msgstr "Besdeño de un cuenta?"
+
+#. Explanation: This translation maintains the meaning and tone of the
+#. original English phrase. The term "request" is translated as "demander,"
+#. which in this context means to request or ask for something, such as an
+#. invitation link. Similarly, "invitation link" is translated as
+#. "invitación," which refers to a specific type of invitation that might be
+#. used for joining groups, events, etc., and then the suffix "-link" is
+#. maintained to convey the idea of a digital link associated with the
+#. invitation.
+#: templates/members/login/login.html:18
+msgid "Request invitation link"
+msgstr "Demandar una invitación"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which asks if a password has been forgotten. The term "mot
+#. de passe" in French is equivalent to "contraseña" in Spanish when referring
+#. to user authentication credentials. Therefore, "Mot de passe oublié?"
+#. translates directly to "Contraseña olvidada?".
+#: templates/members/login/login.html:21
+#: templates/members/login/password_change.html:17
+msgid "Password Forgotten?"
+msgstr "Contraseña olvidada?"
+
+#. Explanation: This translation maintains the meaning and tone of the
+#. original English phrase. The term "reset password" in English is commonly
+#. translated as "reinitializar el/la contraseña" or simply "reiniciar la
+#. contraseña" in Spanish, which accurately conveys the idea of resetting a
+#. forgotten or lost password. The French translation "Reinitialiser le mot de
+#. passe" also aligns with this meaning, making it clear that the user is
+#. referring to the process of re-establishing access to an account by
+#. providing new login credentials.
+#: templates/members/login/login.html:22
+#: templates/members/login/password_change.html:18
+msgid "Reset password"
+msgstr "Reiniciar la contraseña"
+
+#. Explanation: This translation directly corresponds to the French phrase
+#. "Changement du mot de passe," which means "Password Change." The term "mot
+#. de passe" is commonly translated as "contraseña" in Spanish, and thus
+#. "Change de contraseña" accurately conveys the meaning of the original
+#. English sentence.
+#: templates/members/login/password_change.html:9
+msgid "Password Change"
+msgstr "Change de contraseña"
+
+#. Explanation: This translation directly corresponds to the meaning of the
+#. French phrase, which is to change a password. The term "mot de passe" in
+#. French translates to "contraseña" or "clave" (depending on context) in
+#. Spanish, but "contraseña" is more commonly used and understood when
+#. referring to passwords. Therefore, "Cambiar la contraseña" accurately
+#. conveys the meaning of "Changer le mot de passe."
+#: templates/members/login/password_change.html:13
+msgid "Change password"
+msgstr "Cambiar la contraseña"
+
+#. Explanation: This translation maintains the meaning and structure of the
+#. original English phrase. The term "password" in English is translated as
+#. "mot de passe" in French, which directly corresponds to "password" in
+#. Spanish. Therefore, "resetting" remains unchanged as it does not have a
+#. direct equivalent that would alter its function within the sentence.
+#: templates/members/login/password_reset.html:9
+msgid "Password resetting"
+msgstr "Réinitialización del password"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. English phrase "Send a reset link." The French translation "Envoyer un lien
+#. de réinitialisation" is used to ensure that the context and nuance are
+#. preserved. Both phrases convey the idea of sending a link for resetting or
+#. reinitializing something, such as a password or account settings.
+#: templates/members/login/password_reset.html:13
+msgid "Send a reset link"
+msgstr "Enviar un enlace de reinicio"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which asks if a password has not been forgotten. The term
+#. "Mot de passe" in French directly corresponds to "Contraseña" in Spanish
+#. when referring to passwords or passcodes. The structure and tone remain
+#. consistent with the original English sentence, maintaining its
+#. interrogative nature and use of question marks.
+#: templates/members/login/password_reset.html:17
+#: templates/members/login/password_reset_confirm.html:27
+msgid "Password Not Forgotten?"
+msgstr "Contraseña no olvidada?"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which indicates that the process of resetting a password has
+#. been completed. The term "password reset" in English is translated as
+#. "reinitialization du mot de passe" in French, and it directly corresponds
+#. to "reinicialización del password" in Spanish. Therefore, "Password reset
+#. complete" translates to "Reinicialización del password terminada" in
+#. Spanish.
+#: templates/members/login/password_reset_complete.html:6
+msgid "Password reset complete"
+msgstr "Reinicialización del password terminada"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided English sentence, maintaining both the tone and nuance. The French
+#. translation "Ton mot de passe a été défini. Tu peux maintenant te
+#. connecter." is used to ensure that the context and structure are consistent
+#. between the English and Spanish versions.
+#: templates/members/login/password_reset_complete.html:7
+msgid "Your password has been set.  You may go ahead and sign in now."
+msgstr "Tu contraseña ha sido establecida. Puedes ahora iniciar sesión."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which is to confirm or validate a password reset process.
+#. The term "mot de passe" in French directly translates to "contraseña" in
+#. Spanish, and both phrases refer to the same concept in different languages.
+#. Therefore, no changes are needed for this straightforward translation.
+#: templates/members/login/password_reset_confirm.html:11
+msgid "Password reset confirmation"
+msgstr "Confirmación de la reinicialización del contraseña"
+
+#. Explanation: This translation maintains the meaning and tone of the
+#. original English sentence. The French context translation is used to
+#. clarify that "entrer" (to enter) refers to typing in a password, not
+#. entering any other type of information. The phrase "verify you typed it in
+#. correctly" is translated as "verificar que lo has ingresado correctamente,"
+#. which accurately conveys the meaning of checking for correct input.
+#: templates/members/login/password_reset_confirm.html:12
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Plea\\u00e7e entre en tu nuevo contrase\\u00f1a dos veces para que podamos "
+"verificar que lo has ingresado correctamente."
+
+#. Explanation: This translation directly corresponds to the French phrase
+#. "Modifier mon mot de passe." The English term "password" translates to
+#. "contraseña" in Spanish, but when used in a context like changing a
+#. password, it is more commonly referred to as "contraseña" rather than "mot
+#. de passe," which would be translated as "método de paso" (which doesn't
+#. make sense in this context). Therefore, the translation remains consistent
+#. with the French phrase.
+#: templates/members/login/password_reset_confirm.html:17
+msgid "Change my password"
+msgstr "Modificar mi contraseña"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The key elements are:
+#. - "The password reset link was invalid" is translated as "El enlace de
+#. reinicio de contraseña es inválido"
+#. - "possibly because it has already been used" is rendered as "probablemente
+#. porque ya ha sido utilizado"
+#. - "Please request a new password reset" becomes "Por favor solicite un
+#. nuevo enlace de reinicio de contraseña". The term "enlace" (link) is used
+#. instead of the direct translation "reinicio" to maintain consistency with
+#. the French original, which uses "lien".
+#. The structure and meaning are preserved as closely as possible in Spanish.
+#: templates/members/login/password_reset_confirm.html:23
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+"El enlace de reinicio de contraseña es inválido, probablemente porque ya ha "
+"sido utilizado. Por favor solicite un nuevo enlace de reinicio de "
+"contraseña."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which indicates that a password reset message has been sent.
+#. The term "password" in English is translated as "password" in French and
+#. then to "password" in Spanish for consistency with the original context.
+#: templates/members/login/password_reset_done.html:6
+msgid "Password reset sent"
+msgstr "Reinitialización del password enviado"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence while maintaining the original structure and
+#. tone. The key elements are:
+#. - "We’ve emailed you" is translated as "Nos hemos enviado a ustedes", which
+#. maintains the informal, conversational style.
+#. - "instructions for setting your password" becomes "instrucciones para
+#. establecer su contraseña".
+#. - "if an account exists with the email you entered" is rendered as "si
+#. existe un cuenta con la dirección de correo electrónico que ingresaste".
+#. The structure and meaning are preserved.
+#. - "You should receive them shortly" translates to "Debería recibirlos
+#. pronto", which keeps the future tense and implies immediacy.
+#: templates/members/login/password_reset_done.html:7
+msgid ""
+"We’ve emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+"Nos hemos enviado instrucciones para establecer su contraseña, si existe un "
+"cuenta con la dirección de correo electrónico que ingresaste. Debería "
+"recibirlos pronto."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence. The key elements are preserved:
+#. - "If you don't receive an email" is translated as "Si no recibes un correo
+#. electrónico"
+#. - "please make sure" is conveyed by "verifica que has ingresado
+#. correctamente"
+#. - "you've entered the address you registered with" becomes "que has
+#. ingresado la dirección con la que te registraste"
+#. - "and check your spam folder" is rendered as "y revisa tu carpeta de spam"
+#. The structure and vocabulary used in both sentences are consistent,
+#. ensuring that the tone and nuance of the original English sentence are
+#. maintained.
+#: templates/members/login/password_reset_done.html:9
+msgid ""
+"If you don’t receive an email, please make sure you’ve entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"Si no recibes un correo electrónico, verifica que has ingresado "
+"correctamente la dirección con la que te registraste, y revisa tu carpeta de"
+" spam."
+
+#. Explanation: This translation is straightforward as both the English and
+#. French phrases directly translate to "anniversaries" in Spanish. There are
+#. no ambiguities or need for context-specific translations here, so the
+#. meaning remains consistent across all three languages.
+#: templates/members/members/birthdays.html:3
+#: templates/members/members/members.html:11
+msgid "Birthdays"
+msgstr "Aniversarios"
+
+#. Explanation: This Spanish translation reflects the meaning of the French
+#. phrase, which indicates that the event is happening in a specified number
+#. of days. The placeholder format and context are maintained as they were in
+#. the original English sentence. "Birthdays" translates to "Birthday," and
+#. "in the next" is translated to "en los próximos." The numerical placeholder
+#. remains unchanged as it directly corresponds to the French "%(ndays)s".
+#: templates/members/members/birthdays_include.html:4
+#, python-format
+msgid "Birthdays in the next %(ndays)s days"
+msgstr "Birthday en los próximos %(ndays)s días"
+
+#. Explanation: This Spanish translation maintains the meaning and structure
+#. of the French phrase. The placeholder "{age}" is kept in its original
+#. position to preserve the context that it refers to a person's age. The rest
+#. of the sentence follows the same pattern as the French version, with "ans"
+#. (anniversaire) being translated to "años" (cumpleaños).
+#: templates/members/members/birthdays_include.html:16
+#: tests/tests_birthdays.py:38
+#, python-format
+msgid "turns %(age)s today, happy birthday!"
+msgstr "%(age)s años hoy, feliz cumpleaños!"
+
+#. Explanation: This Spanish translation reflects the meaning of the French
+#. phrase, which indicates that someone will be a certain age tomorrow and
+#. wishes them a happy birthday. The placeholder "%(age)s" is kept in its
+#. original position to maintain consistency with the French version.
+#: templates/members/members/birthdays_include.html:18
+#: tests/tests_birthdays.py:42
+#, python-format
+msgid "will turn %(age)s tomorrow, happy birthday!"
+msgstr "tendrá %(age)s años mañana, feliz cumpleaños!"
+
+#. Explanation: This Spanish translation reflects the meaning of the French
+#. phrase, which indicates that someone will be a certain age on a specific
+#. day. The placeholders are kept in the same semantic location as in the
+#. original sentence and contextual translation. "Tendrá" is used to convey
+#. the idea of becoming a certain age, similar to "aura" in French. The rest
+#. of the sentence structure follows the French phrase closely, maintaining
+#. consistency with the context provided by the French translation.
+#: templates/members/members/birthdays_include.html:21
+#: tests/tests_birthdays.py:47
+#, python-format
+msgid "will turn %(age)s on %(birthday)s"
+msgstr "tendrá %(age)s años el día de %(birthday)s"
+
+#. Explanation: This Spanish translation reflects the meaning of the French
+#. phrase, which indicates that there are no birthdays within a specified
+#. number of days. The structure and wording closely match those in the French
+#. sentence, ensuring clarity and maintaining the original tone.
+#: templates/members/members/birthdays_include.html:34
+#, python-format
+msgid "No birthdays in next %(ndays)s days"
+msgstr "No anniversario en los próximos %(ndays)s días"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the English phrase "Import Members." The French translation "Importation de
+#. Membres" is a direct equivalent, where "Importation" corresponds to
+#. "Import," and "Membres" translates to "Members." Therefore, in Spanish, we
+#. use "Importación" for "Import" and "Miembros" for "Members."
+#: templates/members/members/export_members.html:4
+#: templates/members/members/import_members.html:3
+#: templates/members/members/import_members.html:6
+msgid "Import Members"
+msgstr "Importación de Miembros"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the English phrase "Export Members." The French translation "Exportation de
+#. Membres" is a direct equivalent, where "Exportation" corresponds to
+#. "Export," and "Membres" translates to "Members." Therefore, in Spanish, we
+#. use "Exportación" for "Export" and "Miembros" for "Members," resulting in
+#. "Exportación de Miembros."
+#: templates/members/members/export_members.html:7
+msgid "Export Members"
+msgstr "Exportación de Miembros"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided English and French sentences, maintaining both the context and
+#. nuance. The phrase "export members" is translated as "exportar miembros,"
+#. which is commonly used in software contexts for exporting data to CSV
+#. files. Similarly, "first line of the file contains the field names" is
+#. rendered as "la primera línea del archivo contiene los nombres de los
+#. campos." This translation preserves the structure and meaning of the
+#. original sentences while ensuring proper grammar, spelling, and
+#. punctuation.
+#: templates/members/members/export_members.html:9
+msgid ""
+"You can export members to a CSV file. The first line of the file contains "
+"the field names. "
+msgstr ""
+"Puedes exportar miembros a un archivo CSV. La primera línea del archivo "
+"contiene los nombres de los campos."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French sentence, which in turn reflects the English original. The key
+#. elements are maintained:
+#. - "Tous les champs" (All fields) is translated as "Todos los campos"
+#. - "présents et vides" (present and empty) becomes "presentes y vacíos"
+#. - "si ils ne sont pas présents" (if they are not present) translates to "si
+#. no están presentes"
+#. - "dans la base de données" (in the database) is rendered as "en la base de
+#. datos"
+#. The structure of the sentence in Spanish closely mirrors that of the French
+#. and English, ensuring a natural flow while preserving all critical
+#. information.
+#: templates/members/members/export_members.html:10
+msgid "All fields are present and empty if not present in the database. "
+msgstr ""
+"Todos los campos están presentes y vacíos si no están presentes en la base "
+"de datos."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence. The key elements are:
+#. - "Admins" is translated as "Administradores"
+#. - "can re-import" becomes "pueden reimportar"
+#. - "the files after modification" translates to "los archivos después de la
+#. modificación"
+#. - "with any CSV editor" is rendered as "con cualquier editor de CSV".
+#: templates/members/members/export_members.html:13
+msgid "Admins can re-import the files after modification with any CSV editor."
+msgstr ""
+"Administradores pueden reimportar los archivos después de la modificación "
+"con cualquier editor de CSV."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French phrase. Both phrases instruct the user to choose or select
+#. certain individuals or entities for exporting purposes, maintaining the
+#. same context and intent in different languages. The term "exporter" is used
+#. instead of "export" as it's more commonly understood in Spanish when
+#. referring to data or information exportation processes.
+#: templates/members/members/export_members.html:18
+msgid "Select members to export"
+msgstr "Sélectionnar los miembros a exportar"
+
+#. Explanation: The English term "Family filter" is translated to Spanish as
+#. "Filtro de Familia." In the context provided, the French phrase "Filtre sur
+#. la Famille" directly translates to this. The word order and meaning remain
+#. consistent between both languages in this case.
+#: templates/members/members/export_members.html:21
+msgid "Family filter"
+msgstr "Filtro de Familia"
+
+#. Explanation: The English phrase "City filter" translates directly to
+#. "Filtre sur la Ville" in French. There is no ambiguity or need for
+#. interpretation here, as both phrases convey the same meaning of a filtering
+#. mechanism specifically related to cities or urban areas. Therefore, the
+#. Spanish translation remains straightforward and does not require any
+#. additional explanation.
+#: templates/members/members/export_members.html:26
+msgid "City filter"
+msgstr "Filtro de Ciudad"
+
+#. Explanation: The English phrase "Last name filter" translates directly to
+#. the Spanish "filtro de apellido," which is consistent with the French
+#. "filtre sur le nom de famille." There are no placeholders or ambiguities in
+#. this sentence, so it can be translated straightforwardly.
+#: templates/members/members/export_members.html:31
+msgid "Last name filter"
+msgstr "Filtro de apellido"
+
+#. Explanation: The English word "Export" is a verb that means to bring goods
+#. or services from one country to another for sale. In the context provided,
+#. it matches perfectly with its French equivalent "Exporter," which also
+#. refers to bringing products or services out of a country for commercial
+#. purposes. Therefore, no translation explanation is needed as both words
+#. maintain their original meaning and function in this case.
+#: templates/members/members/export_members.html:40
+msgid "Export"
+msgstr "Exportar"
+
+#. Explanation: This translation maintains the meaning and tone of the
+#. original English phrase. The context translation in French is "Selectionner
+#. un nom," which directly corresponds to "Seleccionar un nombre" in Spanish,
+#. ensuring consistency across all languages. Both phrases convey the action
+#. of choosing or selecting a name.
+#: templates/members/members/export_members.html:51
+msgid "Select a name..."
+msgstr "Seleccionar un nombre..."
+
+#. Explanation: This translation is straightforward and maintains the meaning
+#. of the original English phrase. The French phrase "Selectionner une ville"
+#. directly translates to "Seleccionar una ciudad" in Spanish, preserving both
+#. the structure and the intended action of selecting a city. There are no
+#. ambiguities or need for context-specific interpretations here.
+#: templates/members/members/export_members.html:55
+msgid "Select a city..."
+msgstr "Seleccionar una ciudad..."
+
+#. Explanation: This translation maintains the meaning and tone of the
+#. original English phrase. The French context translation "Selectionner une
+#. famille..." directly corresponds to this Spanish version, ensuring
+#. consistency in both language pairs. There are no placeholders or
+#. ambiguities that require special handling in this straightforward sentence.
+#: templates/members/members/export_members.html:59
+msgid "Select a family..."
+msgstr "Seleccionar una familia..."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase. Both "Vider la sélection" and "Vaciar la selección" indicate
+#. the action of removing or clearing a previously selected item or items,
+#. maintaining the context and intent of the original English term "Clear
+#. selection."
+#: templates/members/members/export_members.html:85
+msgid "Clear selection"
+msgstr "Vaciar la selección"
+
+#. Explanation: This translation maintains the meaning and structure of the
+#. original English sentence, including the use of placeholders for "You",
+#. "can", "import", "members", "from", "a CSV file", "the first line", "of the
+#. file", "must contain", "as described below". The French context translation
+#. is also preserved in a similar manner.
+#: templates/members/members/import_members.html:8
+msgid ""
+"You can import members from a CSV file. The first line of the file must "
+"contain the field names as described below."
+msgstr ""
+"Puedes importar miembros desde un archivo CSV. La primera línea del archivo "
+"debe contener los nombres de los campos como se describe a continuación."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French text. The phrase "must contain" is translated as "debe
+#. contener," which corresponds to "doit contenir" in French, maintaining the
+#. requirement aspect. Similarly, "at least these columns" is rendered as "al
+#. menos las columnas siguientes," ensuring that the context and nuance are
+#. preserved. The structure of the sentence remains consistent with the
+#. original English text, keeping the format intact for clarity.
+#: templates/members/members/import_members.html:13
+msgid "The file must contain at least these columns:"
+msgstr "El archivo debe contener al menos las columnas siguientes:"
+
+#: templates/members/members/import_members.html:16
+msgid "You can also add these optional columns:"
+msgstr "También puedes agregar estas columnas opcionales:"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The key terms and structure are maintained,
+#. ensuring that both sentences communicate the same idea about image file
+#. names being required for avatars.
+#: templates/members/members/import_members.html:19
+msgid "Avatars must be image file names."
+msgstr "Los avatares deben ser nombres de archivos imágenes."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence. The key elements are:
+#. - "They must be uploaded" is translated as "deben primero ser subidos",
+#. which maintains the requirement and order.
+#. - "manually first" becomes "manualmente primero", preserving the sequence
+#. and manner of uploading.
+#. - "avatars folders" is translated as "el directorio avatars", keeping the
+#. structure and name intact.
+#. - The placeholder "%(media_root)s" remains unchanged, ensuring that it
+#. retains its original position in the sentence.
+#: templates/members/members/import_members.html:20
+#, python-format
+msgid ""
+"They must be uploaded manually first in the avatars folders of the "
+"%(media_root)s folder."
+msgstr ""
+"They deben primero ser subidos manualmente en el directorio avatars del "
+"directorio %(media_root)s."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence. The key elements are maintained, including
+#. the requirement for a specific date format (YYYY/MM/DD). The structure and
+#. terminology used in both sentences are consistent, ensuring that the
+#. instruction to enter dates in this particular format is preserved without
+#. ambiguity.
+#: templates/members/members/import_members.html:23
+msgid "The date of birth must be entered in the format YYYY/MM/DD."
+msgstr "La fecha de nacimiento debe ser ingresada en el formato AAAA/MM/DD."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence, maintaining both the context and nuance. The
+#. phrase "They will be created on the fly if they don't already exist" is
+#. translated as "Se crearán a la ligera si no ya existen," which preserves
+#. the idea that families are automatically generated or created without
+#. explicit user input when they do not yet have an existing entry.
+#: templates/members/members/import_members.html:26
+msgid ""
+"Families must be entered by name. They will be created on the fly if they "
+"don't already exist."
+msgstr ""
+"Las familias deben ser ingresadas por su nombre. Se crearán a la ligera si "
+"no ya existen."
+
+#. Explanation: This translation is straightforward as the English word
+#. "Import" directly translates to "Importar" in Spanish, and it maintains the
+#. same meaning of bringing something into a country or system from another
+#. source. The French translation "Importer" aligns with this direct
+#. equivalent in Spanish.
+#: templates/members/members/import_members.html:33
+msgid "Import"
+msgstr "Importar"
+
+#. Explanation: The English phrase "Member Detail" translates to "Détail d'un
+#. Membre" in French, which refers to the details or information about a
+#. member. In Spanish, this concept is best expressed as "Detalles de un
+#. Miembro," maintaining the same meaning and structure of the original
+#. phrases.
+#: templates/members/members/member_detail.html:3
+msgid "Member Detail"
+msgstr "Detalles de un Miembro"
+
+#. Explanation: This translation directly corresponds to the French phrase
+#. "Membre actif," which accurately conveys the meaning of an active
+#. participant or contributor. The term "active" in English is translated as
+#. "activo" in Spanish, maintaining the same nuance and context.
+#: templates/members/members/member_detail.html:25
+#: templates/members/members/member_upsert.html:23 tests/tests_member.py:242
+msgid "Active member"
+msgstr "Membro activo"
+
+#. Explanation: The term "managed member" is ambiguous and can be interpreted
+#. in different ways. In the context provided, where it translates to "Membre
+#. géré," which means a managed member, the most appropriate Spanish
+#. equivalent would be "membrecito." This term maintains the informal tone
+#. often used for such roles or positions, similar to how "managed" might be
+#. colloquially translated as "governado" in some contexts but is more
+#. commonly expressed with an adjective like "membrecito."
+#: templates/members/members/member_detail.html:27
+#: templates/members/members/member_upsert.html:25 tests/tests_member.py:242
+msgid "Managed member"
+msgstr "Membrecito"
+
+#. Explanation: The provided English and French sentences are identical, with
+#. no ambiguity or placeholders. Therefore, the Spanish translation directly
+#. mirrors the original text without any changes.
+#: templates/members/members/member_detail.html:40
+#: templates/members/members/members_directory.html:30
+#: views/views_directory.py:47
+msgid "Email"
+msgstr "Email"
+
+#. Explanation: The English phrase "Hobbies" is a common term used to describe
+#. interests or activities that people engage in for pleasure. In the provided
+#. French translation, "Loisirs" also refers to leisure activities and
+#. pastimes. Therefore, "Hobbies" directly translates to "Loisirs" without any
+#. need for further explanation or adjustment.
+#: templates/members/members/member_detail.html:64
+msgid "Hobbies"
+msgstr "Hobbies"
+
+#. Explanation: This Spanish translation reflects the meaning of the French
+#. phrase, which indicates that only a specific person (referred to as "name")
+#. is capable of managing or handling a particular member. The structure and
+#. meaning remain consistent between both languages.
+#: templates/members/members/member_detail.html:81
+#, python-format
+msgid "(Only %(name)s can manage this member)"
+msgstr "(Sólo %(name)s puede gestionar este miembro)"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase "Changer le mot de passe," which directly translates to
+#. "Change the password." The term "mot de passe" in French is commonly used
+#. for the concept of a password, and it matches perfectly with its English
+#. counterpart.
+#: templates/members/members/member_upsert.html:35
+msgid "Change Password"
+msgstr "Cambiar la contraseña"
+
+#. Explanation: This translation directly corresponds to the French phrase
+#. "Activer le compte." The term "Cuenta" in Spanish is used for "account,"
+#. which accurately reflects the meaning of "compte" in French. Therefore,
+#. "Activar Cuenta" maintains the same meaning and nuance as "Activer le
+#. compte."
+#: templates/members/members/member_upsert.html:40
+msgid "Activate Account"
+msgstr "Activar Cuenta"
+
+#. Explanation: The English word "Delete" and the French word "Supprimer" both
+#. convey the meaning of erasing or removing something. In Spanish, this
+#. concept is expressed with the term "Eliminar," which maintains the same
+#. meaning as in the original sentences.
+#: templates/members/members/member_upsert.html:43
+msgid "Delete"
+msgstr "Eliminar"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English and French sentences. Both "Remove my account" and
+#. "Supprimer mon compte" indicate that the user wishes to have their account
+#. removed or deleted, which is precisely what "Eliminar mi cuenta" means in
+#. Spanish. The term "cuenta" (account) is used for both accounts and accounts
+#. in general, making it a suitable translation for "mon compte."
+#: templates/members/members/member_upsert.html:47
+msgid "Remove my account"
+msgstr "Eliminar mi cuenta"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which instructs to delete a member. The English term
+#. "member" is translated as "Miembro," maintaining the context and intent of
+#. the original instruction.
+#: templates/members/members/member_upsert.html:49
+msgid "Delete member"
+msgstr "Eliminar el Miembro"
+
+#. Explanation: The English word "Update" is commonly translated to "Mettre à
+#. jour" in French, which means the same action of making something current or
+#. up-to-date. This translation preserves the meaning and context of the
+#. original phrase without any ambiguity.
+#: templates/members/members/member_upsert.html:65
+#: templates/members/modal_form.html:27
+msgid "Update"
+msgstr "Meter a actualizar"
+
+#. Explanation: The English word "Create" is a verb that means to bring
+#. something into existence or make something happen. In the context provided,
+#. it matches directly with the French term "Créer," which also functions as a
+#. verb meaning to create or produce something. Therefore, "Créar" in Spanish
+#. preserves the same meaning and function of the original English word
+#. without any ambiguity.
+#: templates/members/members/member_upsert.html:68
+#: templates/members/modal_form.html:23
+msgid "Create"
+msgstr "Créar"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. English phrase, maintaining the context and tone. The French translation
+#. "Mail de vérification perdu?" directly corresponds to this English version,
+#. indicating that someone has misplaced their verification email. The Spanish
+#. version "Correo de verificación perdido?" follows a similar structure and
+#. meaning, ensuring consistency with the provided French translation.
+#: templates/members/members/member_upsert.html:75
+msgid "Lost your verification email?"
+msgstr "Correo de verificación perdido?"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which is to request or ask for a new connection or
+#. binding element. The term "lien" in French translates directly to "enlace"
+#. or "enlace" (link) in Spanish, maintaining the same context and nuance as
+#. the original English sentence.
+#: templates/members/members/member_upsert.html:77
+#: templates/members/registration/email_verification_failed.html:13
+msgid "Request a new link"
+msgstr "Demandar un nuevo enlace"
+
+#. Explanation: The English phrase "Address created" is a straightforward
+#. statement indicating that an address has been created. The French
+#. translation "Adresse créée" directly corresponds to this meaning, with
+#. "adresse" being the French word for "address," and "créée" meaning
+#. "created." Therefore, in Spanish, we use "A dirección creada" which
+#. maintains the same structure and meaning as the original English phrase.
+#: templates/members/members/member_upsert.html:83
+msgid "Address created"
+msgstr "A dirección creada"
+
+#. Explanation: This translation directly corresponds to the French phrase,
+#. maintaining both the meaning and the exact wording of "Nouvelle Adresse."
+#. The term "Address" in English is translated as "Dirección" in Spanish,
+#. which can be ambiguous. However, given that we are dealing with a specific
+#. context (address), "Dirección" is not used here but rather its feminine
+#. form "Dirección" to match the gender of "Nouvelle Adresse," which is
+#. feminine in French and Spanish. The term "Address" translates to
+#. "Dirección" or "Dirección" in English, French, and Spanish, so no further
+#. explanation is needed for this translation.
+#: templates/members/members/member_upsert.html:85
+msgid "New Address"
+msgstr "Nueva Dirección"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. English phrase "Address updated." The French translation "Adresse mise à
+#. jour" is a direct equivalent, indicating that an address has been changed
+#. or modified. In both languages, the term refers to updating or altering a
+#. previously existing address.
+#: templates/members/members/member_upsert.html:90
+msgid "Address updated"
+msgstr "Dirección actualizada"
+
+#. Explanation: The English phrase "Change Address" is ambiguous and can be
+#. interpreted in different ways. However, the French translation "Modifier
+#. l'Adresse" suggests a change related to an address, which aligns with the
+#. common understanding of changing one's mailing or contact information.
+#. Therefore, the Spanish version "Modificar la Dirección" follows this
+#. interpretation, maintaining the context of modifying an address.
+#: templates/members/members/member_upsert.html:92
+msgid "Change Address"
+msgstr "Modificar la Dirección"
+
+#. Explanation: The English phrase "Family created" is translated to Spanish
+#. as "Familia creada," which directly corresponds to the French translation
+#. "Famille créée." Both phrases convey the same meaning of a family being
+#. created or formed. There are no ambiguities or need for interpretation in
+#. this case, so the direct translation from one language to another is
+#. appropriate.
+#: templates/members/members/member_upsert.html:97
+msgid "Family created"
+msgstr "Familia creada"
+
+#. Explanation: The English phrase "New Family" is a straightforward term that
+#. directly translates to the Spanish "Nueva Familia," which maintains its
+#. meaning and tone. There are no ambiguities or need for context-specific
+#. translations in this case, as both phrases refer to the concept of a new
+#. family unit.
+#: templates/members/members/member_upsert.html:99
+msgid "New Family"
+msgstr "Nueva Familia"
+
+#. Explanation: The English phrase "Parent family created" is ambiguous and
+#. can be interpreted in two ways. It could mean either "A family that
+#. considers itself a parent has been created," or it could mean "The family
+#. of the parents (the biological parents) has been created." Given the French
+#. translation, which uses "Famille parente créée," we understand that this
+#. refers to the family of the parents, not a family that considers itself as
+#. a parent. Therefore, the Spanish translation "Familia parental creada"
+#. accurately reflects this interpretation.
+#: templates/members/members/member_upsert.html:102
+msgid "Parent family created"
+msgstr "Familia parental creada"
+
+#. Explanation: The English phrase "New Parent Family" is ambiguous and can be
+#. interpreted in different ways. However, the French translation "Nouvelle
+#. Famille Parente" suggests a context where it refers to a family that
+#. includes parents or guardians (as evidenced by the word "Parente," which
+#. means "guardian" or "parent" in this context). Therefore, the most
+#. appropriate and consistent Spanish translation is "Nueva Familia Padre,"
+#. which maintains the meaning of a family including parents.
+#: templates/members/members/member_upsert.html:104
+msgid "New Parent Family"
+msgstr "Nueva Familia Padre"
+
+#. Explanation: This translation maintains the meaning and tone of the
+#. original English phrase. The term "updated" in English is commonly
+#. translated as "actualizada" or "actualizado" (depending on gender) in
+#. Spanish, which accurately reflects the context of updating information
+#. about a family. In French, "mise à jour" also refers to an update or
+#. refreshment, so it aligns well with its English counterpart.
+#: templates/members/members/member_upsert.html:109
+msgid "Family updated"
+msgstr "Familia actualizada"
+
+#. Explanation: The English phrase "Change Family" is ambiguous and can be
+#. interpreted in different ways. However, the French translation "Modifier la
+#. Famille" suggests a more specific action related to altering or modifying
+#. something within a family context. Given this context, the most appropriate
+#. Spanish translation that maintains the meaning of changing or modifying
+#. while keeping it general enough for a family setting would be "Modificar la
+#. Familia." This translation preserves the intent without specifying any
+#. particular aspect of the family (e.g., members, structure, etc.), which is
+#. consistent with the French version.
+#: templates/members/members/member_upsert.html:111
+msgid "Change Family"
+msgstr "Modificar la Familia"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English and French sentences. Both indicate that a user attempted
+#. to use a specific username but encountered an issue because it is already
+#. in use by another user. The phrase "no disponible" (not available) from the
+#. English sentence aligns with "en uso" (in use) from the French, ensuring
+#. consistency across languages.
+#: templates/members/members/member_upsert.html:121
+msgid "This username is not available!"
+msgstr "Este nombre de usuario ya está en uso!"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. English phrase "Delete My Account." The French context translation,
+#. "Supprimer mon compte?" directly corresponds to this English phrase. Both
+#. versions are straightforward and clear in their request for account
+#. deletion. There is no need for interpretation or clarification as there are
+#. no ambiguous elements in either sentence.
+#: templates/members/members/member_upsert.html:127
+msgid "Delete My Account"
+msgstr "Eliminar mi cuenta?"
+
+#. Explanation: This Spanish translation accurately reflects the meaning and
+#. tone of the French sentence. The phrase "Are you sure you want to delete
+#. your account and all associated data?" is translated as "¿Estás seguro de
+#. que quieres eliminar tu cuenta y todas las datos asociados?", which
+#. maintains the same level of formality and urgency present in the original
+#. English. Similarly, "This is irrecoverable!" is accurately rendered as "Es
+#. irreversibles!", preserving the sense of finality and impossibility
+#. conveyed by the English phrase.
+#: templates/members/members/member_upsert.html:128
+msgid ""
+"Are you sure you want to delete your account and all associated data? This "
+"is irrecoverable!"
+msgstr ""
+"¿Estás seguro de que quieres eliminar tu cuenta y todas las datos asociados?"
+" Es irreversibles!"
+
+#. Explanation: The English phrase "Delete Member" is translated to "Eliminar
+#. Miembro" in Spanish, which accurately conveys the meaning of removing or
+#. erasing a member. This translation maintains the context and nuance of the
+#. original phrase, as both "Supprimer le Membre" (French) and "Eliminar
+#. Miembro" (Spanish) refer to the action of deleting or removing a member
+#. from a group or organization.
+#: templates/members/members/member_upsert.html:130
+msgid "Delete Member"
+msgstr "Eliminar Miembro"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French sentence, which asks if the user is sure about deleting a
+#. specific account and all associated data. The placeholders are kept in
+#. their original positions to maintain semantic integrity.
+#: templates/members/members/member_upsert.html:131
+#, python-format
+msgid ""
+"Are you sure you want to delete %(name)s's account and all associated data?"
+msgstr ""
+"Sí está seguro de querer eliminar la cuenta de %(name)s y todas las datos "
+"asociados?"
+
+#. Explanation: The provided English and French sentences are already clear
+#. and direct translations of each other. "Members List" in English directly
+#. corresponds to "Liste des Membres" in French, which translates to "Lista de
+#. Miembros" in Spanish. No further explanation is needed as the meanings
+#. align perfectly between all three languages.
+#: templates/members/members/members.html:3
+#: templates/members/members/members.html:7
+msgid "Members List"
+msgstr "Lista de Miembros"
+
+#. Explanation: The English phrase "Show directory" is translated to Spanish
+#. as "Mostrar el directorio," which maintains the meaning of displaying or
+#. showing a directory. This translation accurately reflects the context
+#. provided by the French equivalent, "Afficher l'annuaire." Both phrases
+#. refer to the act of viewing or presenting an organizational list or
+#. database structure, such as directories on a computer system.
+#: templates/members/members/members.html:15
+msgid "Show directory"
+msgstr "Mostrar el directorio"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which indicates creating a member. The English term
+#. "Create Member" is translated as "Criar un Miembro," maintaining the
+#. context and nuance that it refers to the creation or establishment of a
+#. membership role.
+#: templates/members/members/members.html:19 views/views_member.py:105
+msgid "Create Member"
+msgstr "Criar un Miembro"
+
+#. Explanation: This translation maintains the meaning and tone of the
+#. original English phrase. The term "Filter" in this context is commonly used
+#. to indicate a process of selecting or excluding items based on certain
+#. criteria, which aligns with the French translation "Filtrer." Similarly,
+#. "Members" in English corresponds directly to "Membres" in French.
+#. Therefore, "Filter Members" translates accurately as "Filtrar los Miembros"
+#. in Spanish.
+#: templates/members/members/members.html:26
+#: templates/members/members/members.html:37
+msgid "Filter Members"
+msgstr "Filtrar los Miembros"
+
+#. Explanation: The English phrase "first name" translates to "prénom" in
+#. French, which directly corresponds to the Spanish term "primer nombre."
+#. This maintains the meaning of referring to a person's first or given name.
+#: templates/members/members/members.html:29
+msgid "first name"
+msgstr "primer nombre"
+
+#. Explanation: The English phrase "last name" translates to "nom" in French,
+#. which directly corresponds to the Spanish term for last name. There is no
+#. ambiguity or need for interpretation here; both phrases refer to the
+#. surname of a person.
+#: templates/members/members/members.html:33
+msgid "last name"
+msgstr "nombre"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which indicates that no members were found. The English
+#. phrase "No members found" is translated to maintain the same clear and
+#. concise message in Spanish.
+#: templates/members/members/members.html:63
+#: templates/members/members/members_directory.html:50
+msgid "No members found"
+msgstr "No miembros encontrados"
+
+#. Explanation: The provided English and French sentences are both referring
+#. to the same concept, which is a directory or list of members. In Spanish,
+#. this term translates directly as "Annuaire de los Miembros," maintaining
+#. the exact meaning and structure of the original phrases.
+#: templates/members/members/members_directory.html:3
+#: templates/members/members/members_directory.html:8
+msgid "Members Directory"
+msgstr "Annuaire de los Miembros"
+
+#. Explanation: This translation is straightforward as the English word
+#. "Print" and its French equivalent "Imprimer" both refer to the action of
+#. producing a hard copy from an electronic source or document. There is no
+#. ambiguity in this context, so the direct translation preserves the meaning
+#. accurately.
+#: templates/members/members/members_directory.html:13
+msgid "Print"
+msgstr "Imprimir"
+
+#. Explanation: This translation maintains the meaning and structure of the
+#. original English phrase. The term "as" in English is translated to "como"
+#. in Spanish, which accurately conveys the idea that the action (printing)
+#. should be performed using a specific format (PDF). The French translation
+#. "Imprimer en PDF" uses "en" for "in," which is appropriate here as it
+#. indicates the use of PDF as the output format.
+#: templates/members/members/members_directory.html:15
+#: templates/members/members/members_directory.html:18
+msgid "Print as PDF"
+msgstr "Imprimir como PDF"
+
+#. Explanation: This Spanish translation accurately conveys the meaning and
+#. tone of the provided French text. The key elements are:
+#. - "WARNING" is translated as "AVISO", maintaining the warning tone.
+#. - "This element will be modified for all other members using it!" becomes
+#. "Este elemento será modificado para todos los demás miembros que lo
+#. utilizan!", which preserves the idea that the modification will affect
+#. multiple users.
+#. - The phrase "Please create a new one if that's not what you want to
+#. achieve" is translated as "Por favor, crea uno nuevo si no es lo que deseas
+#. lograr", ensuring the user is advised to make a fresh instance of the
+#. element instead.
+#: templates/members/modal_form.html:14
+msgid ""
+"WARNING: This element will be modified for all other members using it! "
+"Please create a new one if that's not what you want to achieve."
+msgstr ""
+"AVISO: Este elemento será modificado para todos los demás miembros que lo "
+"utilizan! Por favor, crea uno nuevo si no es lo que deseas lograr."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which indicates that the link is invalid. The English phrase
+#. "Invalid Link" can be interpreted as either a message indicating an invalid
+#. link or a misspelling of "Link Invalid." Given the context provided by the
+#. French translation, it's clear that the intended meaning is for something
+#. to indicate an invalid link.
+#: templates/members/registration/email_verification_failed.html:3
+#: templates/members/registration/email_verification_failed.html:7
+msgid "Invalid Link!"
+msgstr "Línea de enlace inválida!"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French sentence. The key elements are:
+#. - "This link is invalid or been used already" becomes "Este enlace es
+#. inválido o ya ha sido utilizado"
+#. - "we cannot verify using this link" becomes "no podemos verificar
+#. utilizando este enlace"
+#. The structure and word choice in Spanish closely mirrors that of the
+#. French, ensuring a natural flow while maintaining the original meaning.
+#: templates/members/registration/email_verification_failed.html:9
+msgid ""
+"This link is invalid or been used already, we cannot verify using this link."
+msgstr ""
+"Este enlace es inválido o ya ha sido utilizado, no podemos verificar "
+"utilizando este enlace."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which indicates a successful email verification. The English
+#. sentence "Email Verification Successful!" is also conveying this same idea
+#. in an informal manner. Therefore, "Verificación de la dirección de correo
+#. electrónico exitosa" (Spanish) and "Vérification de l'adresse e-mail
+#. réussie" (French) are both translations of the concept of a successful
+#. email verification process.
+#: templates/members/registration/email_verification_successful.html:3
+#: templates/members/registration/email_verification_successful.html:7
+msgid "Email Verification Successful!"
+msgstr "Verificación de la dirección de correo electrónico exitosa!"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence. The key elements are:
+#. - "Your Email" is translated as "Tu correo electrónico"
+#. - "verified successfully" becomes "verificado con éxito"
+#. - "account has been activated" translates to "el cuenta ha sido activado"
+#. The structure and word order in Spanish closely follow those in the French,
+#. ensuring a natural flow of the sentence.
+#: templates/members/registration/email_verification_successful.html:9
+msgid ""
+"Your Email is verified successfully and your account has been activated."
+msgstr ""
+"Tu correo electrónico ha sido verificado con éxito y el cuenta ha sido "
+"activado."
+
+#. Explanation: This Spanish translation accurately reflects the meaning and
+#. tone of the provided English and French sentences. The phrase "You can sign
+#. in with your credentials now" is translated as "Tu peux te connecter avec
+#. tes identifiants maintenant," which closely matches the French version,
+#. ensuring that both convey the idea of being able to log in using one's
+#. login information at a given moment. The Spanish translation maintains the
+#. casual and immediate tone by using the imperative mood ("Puedes
+#. conectarte") instead of the passive construction used in the English
+#. sentence ("You can sign in").
+#: templates/members/registration/email_verification_successful.html:10
+msgid "You can sign in with your credentials now..."
+msgstr "¡Puedes conectarte con tus credenciales ahora..."
+
+#. Explanation: This translation directly corresponds to the French phrase
+#. "Lien expiré!". The term "expiré" in French translates to "expirado" in
+#. Spanish, which means "expired" or "expired". Therefore, "Link Expired!" is
+#. accurately translated as "Lien expirado!" in Spanish.
+#: templates/members/registration/link_expired.html:3
+#: templates/members/registration/link_expired.html:7
+msgid "Link Expired!"
+msgstr "Lien expirado!"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided English sentence, maintaining both the tone and nuance. The phrase
+#. "Can not validate a dead link... " is translated as "No se puede validar un
+#. enlace muerto..." which directly corresponds to the French translation
+#. "Impossible de valider un lien mort...". The exclamation mark at the
+#. beginning of the sentence is preserved to maintain the same level of
+#. emphasis and emotion in the original text.
+#: templates/members/registration/link_expired.html:9
+msgid "The link has lived its life :( Can not validate a dead link..."
+msgstr ""
+"El enlace ha vivido su vida :( No se puede validar un enlace muerto..."
+
+#. Explanation: The English phrase "Request Another one" is ambiguous and can
+#. be interpreted in different ways. However, the French translation "Demander
+#. un nouveau lien" suggests that it refers to requesting a new link rather
+#. than making another request or asking for something else. Therefore, the
+#. most appropriate Spanish translation that aligns with this context is
+#. "Pedir otro enlace," which means "Request another link."
+#: templates/members/registration/link_expired.html:13
+msgid "Request Another one"
+msgstr "Pedir otro enlace"
+
+#. Explanation: This translation accurately conveys the meaning of the
+#. original English phrase. The term "email" in English is translated as
+#. "correo electrónico" in Spanish, and "sent" becomes "enviado" to match the
+#. French "envoié". The context translation "Nouvel e-mail envoyé!" uses these
+#. exact terms, confirming that this is indeed the correct interpretation for
+#. the given sentence.
+#: templates/members/registration/new_email_sent.html:3
+#: templates/members/registration/new_email_sent.html:7
+msgid "New Email Sent"
+msgstr "Nuevo correo electrónico enviado!"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The phrase "Tu as demandé" (You have requested)
+#. is directly translated to "Has solicitado," and "un autre e-mail de
+#. vérification" (another verification email) becomes "otro correo electrónico
+#. de verificación." The structure and tense are maintained, ensuring that the
+#. original meaning and tone of the English sentence are preserved in Spanish.
+#: templates/members/registration/new_email_sent.html:9
+msgid "You have requested another verification email!"
+msgstr "Has solicitado otro correo electrónico de verificación!"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which states that the recipient received an email or message
+#. containing a verification link. The English sentence "Your verification
+#. link has been sent" also implies this action but is more colloquial and
+#. could be interpreted as giving someone a physical link to verify. However,
+#. in both cases, the core meaning of receiving a verification link is
+#. maintained.
+#: templates/members/registration/new_email_sent.html:10
+msgid "Your verification link has been sent"
+msgstr "Tu enlace de verificación ha sido enviado"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The key elements are:
+#. - "Please" is translated as "Plea\u00e7e", which is a common way to express
+#. polite requests in Spanish.
+#. - "check your email" becomes "verifica tu correo".
+#. - "click on the link" translates to "haz clic en el enlace".
+#. - "verify your email" is rendered as "verificar tu correo". 
+#. The French sentence uses "mails", which is a plural form of "mail", and in
+#. Spanish, we use "correo" (plural) for this context. The rest of the
+#. structure follows closely to maintain the original meaning and tone.
+#: templates/members/registration/new_email_sent.html:11
+msgid "Please check your email and click on the link to verify your email."
+msgstr ""
+"Plea\\u00e7e verifica tu correo y haz clic en el enlace para verificar tu "
+"correo."
+
+#. Explanation: The English phrase "Invite Members" is translated to Spanish
+#. as "Invitar a Miembros." The French translation "Invitation de Membres"
+#. suggests an invitation or formal request, which aligns with the concept of
+#. inviting members. In this context, "Miembros" (Members) maintains its
+#. original meaning and is placed in the same semantic location as in both
+#. English and French phrases.
+#: templates/members/registration/registration_invite.html:3
+#: templates/members/registration/registration_invite.html:6
+msgid "Invite Members"
+msgstr "Invitar a Miembros"
+
+#. Explanation: The English word "Invite" is a verb that means to request or
+#. ask someone to come to one's place, often for a social gathering. In this
+#. context, the French translation "Inviter" accurately captures the meaning
+#. of the English verb. Therefore, in Spanish, "Invitar" is the appropriate
+#. and equivalent term.
+#: templates/members/registration/registration_invite.html:11
+msgid "Invite"
+msgstr "Invitar"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which is to request or make an invitation. The term
+#. "invitación" in French directly corresponds to "invitación" in Spanish,
+#. maintaining the same nuance and context. Therefore, "Demande d'invitation"
+#. translates to "Demanda de invitación."
+#: templates/members/registration/registration_request.html:3
+#: templates/members/registration/registration_request.html:6
+msgid "Request Invitation"
+msgstr "Demande de invitación"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The key elements are:
+#. - "By completing and submitting this form" is translated as "Al completar y
+#. enviando este formulario", which maintains the idea that the action
+#. involves filling out a document (form) and sending it.
+#. - "you are asking the site administrator to send you an invitation link" is
+#. rendered as "pides al administrador del sitio que te envíe un enlace de
+#. invitación". The word "asking" in English is translated as "pedir", which
+#. fits well with the context of requesting something from a website
+#. administrator.
+#. - The structure and meaning are preserved, ensuring that the user's intent
+#. to request an invitation link remains clear.
+#: templates/members/registration/registration_request.html:9
+msgid ""
+"By completing and submitting this form, you are asking the site "
+"administrator to send you an invitation link."
+msgstr ""
+"Al completar y enviando este formulario, pides al administrador del sitio "
+"que te envíe un enlace de invitación."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The key elements are:
+#. - "Please fill in" is translated as "Plea\u00e7e rellene", which maintains
+#. the polite request tone.
+#. - "captcha" remains untranslated as it's a technical term and should be
+#. kept consistent across languages.
+#. - "above" is translated as "superior", maintaining the directional context
+#. of where to find the captcha.
+#. - "before clicking" is translated as "antes de hacer clic", preserving the
+#. timing aspect of the instruction.
+#. - "invitation button" is translated as "bot\u00f4n de invitaci\u00f3n",
+#. which accurately represents the concept in Spanish.
+#: templates/members/registration/registration_request.html:14
+msgid "Please fill in the captcha above before clicking the invitation button"
+msgstr ""
+"Plea\\u00e7e rellene el captcha superior antes de hacer clic en el "
+"bot\\u00f4n de invitaci\\u00f3n"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which is a request for an invitation. The French word
+#. "m'inviter" (literally "to invite me") directly translates to "m'invitar"
+#. in Spanish, maintaining both the form and meaning of the original sentence.
+#: templates/members/registration/registration_request.html:15
+msgid "Invite me"
+msgstr "M'invitar"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French phrase. The key elements are maintained:
+#. - "Demande" (Request) is translated as "Demanda," which in this context
+#. means "Request."
+#. - "Nouvel e-mail" (New email) is directly translated to "nuevo correo
+#. electrónico." In Spanish, it's common to use "correo electrónico" for an
+#. electronic mail.
+#. - "Vérification" (Verification) is translated as "verificación."
+#. The structure and meaning of the sentence are preserved in this
+#. translation.
+#: templates/members/registration/request_new_email.html:3
+#: templates/members/registration/request_new_email.html:7
+msgid "Request New Email for Verification"
+msgstr "Demande de un nuevo correo electrónico de verificación"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which is to request or make a request for a new email. The
+#. term "nouvel e-mail" in French translates directly to "nuevo correo
+#. electrónico" in Spanish, maintaining both the literal and colloquial
+#. meanings.
+#: templates/members/registration/request_new_email.html:16
+msgid "Request New Email"
+msgstr "Demande de un nuevo correo electrónico"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which indicates that the user is modifying or changing
+#. the specified items (referred to as %(name)s) that have been selected. The
+#. structure and intent of both sentences are preserved, with "sélectionnées"
+#. in French corresponding to "seleccionados" in Spanish.
+#: templates/widgets/wrap_create_link.html:9
+#, python-format
+msgid "Change selected %(name)s"
+msgstr "Modificar los %(name)s seleccionados"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the French phrase. The placeholder "%(translated_name)s" is kept in its
+#. original position to preserve the context, indicating that a new instance
+#. or another occurrence of whatever name is specified by
+#. "%(translated_name)s" should be added.
+#: templates/widgets/wrap_create_link.html:17
+#, python-format
+msgid "Add another %(translated_name)s"
+msgstr "Añadir otra %(translated_name)s"
+
+#. Explanation: The English phrase "Member deleted" is a straightforward
+#. statement indicating that an account or entity associated with the term
+#. 'member' has been removed. The French translation "Membre supprimé" also
+#. conveys this meaning, where "supprimé" means "deleted." In Spanish,
+#. "eliminado" is used to convey the same action of removal or deletion, hence
+#. "Membres eliminados" accurately reflects both the English and French
+#. translations.
+#: tests/tests_member.py:101 views/views_member.py:191
+msgid "Member deleted"
+msgstr "Membres eliminados"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English sentence, maintaining the context provided by the French
+#. translation. The phrase "You do not have permission to edit this member" is
+#. translated as "No tienes permiso para editar este miembro," which preserves
+#. the sense that someone does not possess the necessary authorization or
+#. right to make changes to a specific member within an organization or
+#. system.
+#: tests/tests_member.py:217 tests/tests_member.py:222
+#: views/views_member.py:140 views/views_member.py:154
+msgid "You do not have permission to edit this member."
+msgstr "No tienes permiso para editar este miembro."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English and French sentences. The term "superusers" in the English
+#. sentence is translated as "superusuarios," which maintains the technical or
+#. privileged nature of these users. Similarly, "members" in the context of an
+#. invitation system is translated as "miembros." The structure and word order
+#. are kept consistent with the French translation to ensure clarity and
+#. maintain the original meaning.
+#: tests/tests_register.py:27 views/views_registration.py:94
+msgid "Only superusers can invite members"
+msgstr "Solo los superusuarios pueden invitar a miembros"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which indicates that an invitation has been sent. The
+#. placeholder for the email address remains in the same position as in both
+#. the English and French sentences to maintain semantic integrity. The
+#. structure "Invitación enviada a" is used consistently with the French
+#. "Invitation envoyée à," ensuring clarity and consistency in the
+#. translation.
+#: tests/tests_register.py:29 views/views_registration.py:157
+#, python-format
+msgid "Invitation sent to %(email)s."
+msgstr "Invitación enviada a %(email)s."
+
+#. Explanation: This Spanish translation maintains the meaning and tone of the
+#. original English sentence, including the use of the placeholder for site
+#. name. The French translation "Tu as été invité.e à créer ton compte sur
+#. %(site_name)s" indicates that someone was invited to create an account on a
+#. website or platform. In this context, it is clear that the Spanish version
+#. "Tú has sido invitado/a a crear tu cuenta en %(site_name)s" follows the
+#. same meaning and intent of inviting someone to register for a site, using
+#. the appropriate gendered pronoun (invitado/a) based on the placeholder's
+#. potential value.
+#: tests/tests_register.py:34 views/views_registration.py:134
+#, python-format
+msgid "You are invited to register on %(site_name)s"
+msgstr "Tú has sido invitado/a a crear tu cuenta en %(site_name)s"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which indicates that a registration request has been
+#. sent. The English phrase "Registration request sent" can be interpreted as
+#. either sending a request for registration or sending a registration
+#. request, both of which are colloquial ways to express the action of sending
+#. a registration-related message. The French translation makes it clear that
+#. it is about sending a registration request, so the Spanish version "Demande
+#. de registro enviada." follows this interpretation.
+#: tests/tests_register.py:119 views/views_registration.py:211
+msgid "Registration request sent."
+msgstr "Demande de registro enviada."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which states that a user with a specific email address
+#. is already registered. The structure and wording are maintained to ensure
+#. clarity and consistency between the English and French translations.
+#: tests/tests_register.py:145 views/views_registration.py:115
+#: views/views_registration.py:187
+msgid "A member with this email already exists."
+msgstr "Un miembro con esta dirección de correo electrónico ya existe."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which is to indicate that the CAPTCHA (Completely
+#. Automated Public Turing test to tell Computers and Humans Apart) has failed
+#. validation. The English phrase "Invalid CAPTCHA" also conveys this idea,
+#. indicating that the CAPTCHA challenge was not recognized or accepted as
+#. valid by the system. Therefore, the Spanish version "CAPTCHA inválido"
+#. maintains the same meaning and context as the French translation.
+#: tests/tests_register.py:152
+msgid "Invalid CAPTCHA"
+msgstr "CAPTCHA inválido"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the French sentence. The placeholders are kept in their original
+#. positions to preserve the context, ensuring that "username" is used as a
+#. placeholder for the username in both English and French sentences. The
+#. overall message about creating an account, receiving an email for
+#. verification, and clicking on a link within the email to complete
+#. registration is accurately conveyed in Spanish.
+#: tests/tests_register.py:179 views/views_registration.py:80
+#, python-format
+msgid ""
+"Hello %(username)s, your account has been created! You will now receive an "
+"email to verify your email address. Click in the link inside the mail to "
+"finish the registration."
+msgstr ""
+"Hola %(username)s, tu cuenta ha sido creada! Vamos a recibir ahora un correo"
+" electrónico para verificar tu dirección de correo electrónico. Haz clic en "
+"el enlace dentro del correo para completar el proceso de registro."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence. Both sentences convey that a link is invalid
+#. and instructs the user to contact an administrator for assistance. The
+#. structure and wording are maintained to ensure clarity and consistency with
+#. the original context.
+#: tests/tests_register.py:192 views/views_registration.py:54
+msgid "Invalid link. Please contact the administrator."
+msgstr "Línea inválida. Por favor, contacte al administrador."
+
+#. Explanation: This translation accurately conveys the meaning of the
+#. original English and French sentences. Both languages indicate that a
+#. particular input or data field must be filled out, hence the Spanish phrase
+#. "Este campo es requerido" maintains the same implication as "Ce champ est
+#. obligatoire."
+#: tests/tests_register.py:200
+msgid "This field is required."
+msgstr "Este campo es requerido."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which indicates that a member is already in an activated
+#. state. The English phrase "Error: Member already active" can be interpreted
+#. similarly, suggesting that there is an issue because the member is already
+#. in an active status. Therefore, "Error: Miembro ya activado" follows this
+#. interpretation accurately.
+#: views/views_activate.py:25
+msgid "Error: Member already active"
+msgstr "Error: Miembro ya activado"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The key terms and structure are maintained,
+#. ensuring that the user understands that a member who does not have an email
+#. address cannot be activated. The phrase "without email" in English is
+#. translated as "sin correo electrónico," which directly corresponds to the
+#. French term used in the context translation.
+#: views/views_activate.py:27
+msgid "Error: Member without email cannot be activated"
+msgstr "Error: Miembro sin correo electrónico no puede ser activado"
+
+#. Explanation: This translation maintains the meaning and structure of the
+#. French sentence while adapting it to Spanish grammar and syntax. The
+#. placeholders are kept in their original positions as they were in the
+#. English input.
+#: views/views_activate.py:31
+msgid ""
+"Member account successfully activated. The owner of the account will now "
+"receive an email containing an activation link then will be redirected to "
+"the password reset screen."
+msgstr ""
+"Membrecuenta activada con éxito. El propietario del cuenta va ahora recibir "
+"un correo electrónico que contiene un enlace de activación, luego será "
+"redirigido/a al pantalla de restablecimiento de contraseña."
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the original English phrase, keeping the placeholder intact. The context
+#. translation "Répertoire %(site_name)s" indicates that the placeholder is
+#. meant to be a site name (e.g., "Répertoire Facebook"), so in this case, it
+#. translates directly to "%(site_name)s directorio".
+#: views/views_directory.py:44
+#, python-format
+msgid "%(site_name)s directory"
+msgstr "%(site_name)s directorio"
+
+#. Explanation: This Spanish translation maintains the structure and
+#. placeholders of the original English sentence, ensuring that the meaning is
+#. preserved. The placeholders are kept in their exact positions to maintain
+#. consistency with the French version, which uses identical syntax for the
+#. same purpose.
+#: views/views_directory.py:69
+#, python-format
+msgid "Page %(doc_page)s - %(title)s"
+msgstr "Page %(doc_page)s - %(title)s"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which states that one cannot follow oneself. The structure
+#. and wording are maintained to ensure clarity and consistency with the
+#. original sentence.
+#: views/views_followers.py:21
+msgid "You can't follow yourself!"
+msgstr "No puedes seguir a ti mismo!"
+
+#. Explanation: This Spanish translation maintains the meaning and tone of the
+#. original English sentence, which is to inform someone that they are no
+#. longer following another person. The French translation "Tu ne suis plus
+#. %(followed_name)s" directly corresponds to this in terms of conveying the
+#. idea of ceasing to follow someone. The placeholder format is kept intact as
+#. per the instruction, ensuring that the placeholders remain in their
+#. original positions and do not get translated.
+#: views/views_followers.py:24
+#, python-format
+msgid "You are no longer following %(followed_name)s"
+msgstr "No más sigues a %(followed_name)s"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the original English and French sentences. The phrase "You are now
+#. following" in English is translated to "You estás ahora siguiendo" in
+#. Spanish, which maintains the same structure and conveys the current action
+#. of following someone. The French sentence "Tu suis maintenant
+#. %(followed_name)s" directly translates to this as well, with "maintenant"
+#. (now) being equivalent to "estás ahora". Therefore, both translations are
+#. consistent and maintain the context that the person is currently following
+#. a specific individual named %(followed_name)s.
+#: views/views_followers.py:27
+#, python-format
+msgid "You are now following %(followed_name)s"
+msgstr "You estás ahora siguiendo %(followed_name)s"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which indicates that someone has become a new follower. The
+#. English phrase "You have a new follower!" also implies this situation where
+#. an individual is now following the speaker or subject. Therefore, "¡Tienes
+#. un nuevo seguidor!" maintains the same context and meaning as "Tu as un
+#. nouveau follower!", ensuring consistency between the French and Spanish
+#. translations.
+#: views/views_followers.py:31
+msgid "You have a new follower!"
+msgstr "¡Tienes un nuevo seguidor!"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the original English phrase, including the placeholder. The French
+#. translation "Il/Elle te suit maintenant" (literally translated) is not
+#. appropriate for this context, as it would imply a continuous action rather
+#. than an immediate action like in the English version. Therefore, "te suit
+#. maintenant" is used to convey that the follower has started following the
+#. user at the moment of the message. The placeholder remains unchanged to
+#. preserve its original position and meaning.
+#: views/views_followers.py:32
+#, python-format
+msgid "%(follower_name)s is now following you!"
+msgstr "%(follower_name)s te sigue ahora!"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence. The placeholders are kept in their original
+#. positions, maintaining the context and ensuring that "fieldname" and
+#. "all_names" remain untranslated as they refer to specific elements within
+#. the sentences.
+#: views/views_import_export.py:41
+#, python-format
+msgid ""
+"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are "
+"%(all_names)s"
+msgstr ""
+"Columna desconocida en el archivo CSV : \"%(fieldname)s\". Los campos "
+"válidos son %(all_names)s"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the provided French sentence. The placeholders are kept in their
+#. original positions, ensuring that "fieldname" refers to the field name
+#. within the CSV file and "all_names" refers to all mandatory fields
+#. mentioned.
+#: views/views_import_export.py:45
+#, python-format
+msgid ""
+"Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
+"%(all_names)s"
+msgstr ""
+"Fehlende Spalte in der CSV-Datei: \"%(fieldname)s\". Obligatorische Felder "
+"sind %(all_names)s"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence, maintaining the same structure and
+#. placeholders as in the original text. The phrase "Avatar not found" is
+#. translated to "Avatar no encontrado," which preserves the sense that the
+#. avatar could not be located or accessed for a given username. The rest of
+#. the sentence follows similarly, keeping the format consistent with the
+#. original English input.
+#: views/views_import_export.py:92
+#, python-format
+msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
+msgstr ""
+"Avatar no encontrado : %(avatar)s para el nombre de usuario %(username)s. "
+"Ignorado..."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence, maintaining the same structure and
+#. placeholders. The phrase "Error saving avatar" in English is translated as
+#. "Error enregistrando el avatar," which conveys the idea of an error
+#. occurring during the process of saving or uploading an avatar. Similarly,
+#. "for username" becomes "para el nombre de usuario." The rest of the
+#. sentence follows a similar structure and meaning from French to Spanish.
+#: views/views_import_export.py:101
+#, python-format
+msgid ""
+"Error saving avatar (%(error)s): %(avatar)s for username %(username)s. "
+"Ignored..."
+msgstr ""
+"Error enregistrando el avatar (%(error)s) : %(avatar)s para el nombre de "
+"usuario %(username)s. Ignorado..."
+
+#. Explanation: This translation maintains the structure and meaning of both
+#. the English and French sentences. The placeholders are kept in their
+#. original positions to preserve the context. "CSV file uploaded" is
+#. translated as "archivo CSV cargado", which accurately reflects the concept
+#. of a CSV file being uploaded or downloaded, depending on the direction of
+#. data transfer. The rest of the sentence follows directly from the French
+#. translation, ensuring consistency and maintaining the same meaning:
+#. "Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres
+#. créés ou mis à jour".
+#: views/views_import_export.py:200
+#, python-format
+msgid ""
+"CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
+"updated"
+msgstr ""
+"CSV-Datei hochgeladen: %(nbLines)i Zeilen gelesen, %(nbMembers)i Mitglieder "
+"erstellt oder aktualisiert"
+
+#. Explanation: This Spanish translation maintains the structure and meaning
+#. of the original English and French sentences. The placeholder "%(error)s"
+#. is kept in its exact position to preserve the context, ensuring that
+#. whatever content is placed within this placeholder will be correctly
+#. formatted as a warning or alert message.
+#: views/views_import_export.py:203
+#, python-format
+msgid "Warning: %(error)s"
+msgstr "Alerta: %(error)s"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. French phrase, which indicates that a requested method or action is not
+#. valid for the current context. The term "method not allowed" in English and
+#. "méthode non autorisée" in French both refer to situations where an
+#. attempted operation cannot be performed due to restrictions or limitations
+#. imposed by the server or system.
+#: views/views_import_export.py:270
+msgid "Method not allowed"
+msgstr "Método no permitido"
+
+#. Explanation: The English phrase "You have been logged out" translates to
+#. "Has sido deslogerado(a)" in Spanish, which accurately conveys the meaning
+#. of being logged out. The French translation "Tu as été déconnecté(e)" uses
+#. slightly different terminology but maintains a similar meaning. In this
+#. context, "déconnecté(e)" is used for both masculine and feminine forms,
+#. matching the English "logged out" with a singular personal pronoun "You."
+#: views/views_member.py:36
+msgid "You have been logged out"
+msgstr "Has sido deslogerado(a)"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English and French sentences. The term "superuser" in English is
+#. translated as "superusuario" or more commonly in this context,
+#. "superutilizador" (plural form) in Spanish, which matches with the French
+#. "superutilisateur." The phrase "can create members" is translated to
+#. "pueden crear miembros," maintaining the same structure and meaning.
+#: views/views_member.py:95
+msgid "Only superusers can create members"
+msgstr "Solo los superusuarios pueden crear miembros"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which indicates that the member was successfully
+#. created. The structure and wording are maintained to ensure clarity and
+#. consistency with the original context. The English sentence "Member
+#. successfully created" is translated as "El miembro fue creado con éxito,"
+#. maintaining the sense of accomplishment implied by the successful creation
+#. of a member.
+#: views/views_member.py:120
+msgid "Member successfully created"
+msgstr "El miembro fue creado con éxito"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. English phrase "Update Member Details." The French translation "Modifier
+#. les détails d'un Membre" provides context that a member is being referred
+#. to, which aligns with the concept of updating details for a member. In both
+#. languages, the core action (updating or modifying) and the subject (details
+#. of a member) are preserved.
+#: views/views_member.py:128
+msgid "Update Member Details"
+msgstr "Modificar los detalles de un Miembro"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the French phrase, which indicates that the member's information was
+#. successfully updated. The English sentence "Member successfully updated"
+#. also implies that an update occurred and it succeeded, thus maintaining the
+#. same nuance in both translations.
+#: views/views_member.py:129
+msgid "Member successfully updated"
+msgstr "El miembro fue actualizado con éxito"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. The key elements are:
+#. - "Un courriel de vérification" (Un correo electrónico de verificación) is
+#. translated as "un correo electrónico de verificación"
+#. - "pour valider" (para validar) is translated as "para validar"
+#. - "ta nouvelle adresse électronique" (tu nueva dirección de correo
+#. electrónico) is translated as "tu nueva dirección de correo electrónico"
+#. The structure and meaning of the sentence are preserved, ensuring that the
+#. recipient understands it in the same way as the original French text.
+#: views/views_member.py:164
+msgid "A verification email has been sent to validate your new email address."
+msgstr ""
+"Se ha enviado un correo electrónico de verificación para validar tu nueva "
+"dirección de correo electrónico."
+
+#. Explanation: This translation is straightforward as both the English and
+#. French phrases are direct translations of each other. The term "Profile" in
+#. English corresponds to "Profil" in French, which translates directly to
+#. "Perfil" in Spanish. Therefore, "My Profile" becomes "Mi Profil" in
+#. Spanish, maintaining the same meaning and structure.
+#: views/views_member.py:178
+msgid "My Profile"
+msgstr "Mi Perfil"
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French phrase, which states that a profile has been updated
+#. successfully. The structure and key words are maintained to ensure clarity
+#. and consistency with the original context.
+#: views/views_member.py:179
+msgid "Profile successfully updated"
+msgstr "Perfil actualizado con éxito"
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. original English phrase, which is to inform someone that they have already
+#. logged into an account or system. The French translation "Tu es déjà
+#. connecté" directly corresponds to this meaning in a similar context.
+#: views/views_registration.py:32
+msgid "You are already logged in"
+msgstr "Tú ya estás conectado."
+
+#. Explanation: This Spanish translation accurately reflects the meaning of
+#. the provided French sentence, maintaining both the context and tone. The
+#. key elements are:
+#. - "A member with the same email address is already active." → "Un miembro
+#. con la misma dirección de correo electrónico está ya activo."
+#. - "Please sign in instead" → "Inicia sesión en su lugar"
+#. The translation preserves the formal and slightly urgent tone of the
+#. original, which is appropriate for a user interface or automated system
+#. message.
+#: views/views_registration.py:42
+msgid ""
+"A member with the same email address is already active. Please sign in "
+"instead"
+msgstr ""
+"Un miembro con la misma dirección de correo electrónico está ya activo. "
+"Inicia sesión en su lugar."
+
+#. Explanation: This Spanish translation maintains the meaning and structure
+#. of the French sentence, including the use of placeholders in their original
+#. positions. The phrase "You are already registered but not active" is
+#. accurately translated as "Estás ya registrado pero no activado." The
+#. instruction to contact a specific person (in this case, an admin) is
+#. maintained with the placeholder "%(admin)s".
+#: views/views_registration.py:49
+#, python-format
+msgid ""
+"You are already registered but not active. Please contact %(admin)s to "
+"activate your account"
+msgstr ""
+"Estás ya registrado pero no activado. Contacta con %(admin)s para activar tu"
+" cuenta."
+
+#. Explanation: This Spanish translation accurately conveys the meaning of the
+#. provided French sentence. Both sentences convey that an attempt to send a
+#. message (mail) was unsuccessful and instructs the user to contact their
+#. administrator for assistance. The structure and intent are preserved in the
+#. translation.
+#: views/views_registration.py:214
+msgid "Unable to send mail, please contact your administrator"
+msgstr "Imposible de enviar un correo. Por favor, contacte al administrador."

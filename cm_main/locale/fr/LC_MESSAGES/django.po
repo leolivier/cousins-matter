@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-07 20:09+0200\n"
+"POT-Creation-Date: 2024-09-28 19:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -123,7 +123,7 @@ msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 
 #: cm_main/templates/cm_main/base.html:79
-#: cm_main/templates/cm_main/navbar.html:116
+#: cm_main/templates/cm_main/navbar.html:138
 msgid "Contact the site admin"
 msgstr "Contacter l'administrateur du site"
 
@@ -324,35 +324,39 @@ msgstr "Salons de discussion publique"
 msgid "Private Chat Rooms"
 msgstr "Salons de discussion privée"
 
-#: cm_main/templates/cm_main/navbar.html:91
+#: cm_main/templates/cm_main/navbar.html:93
+msgid "Change language"
+msgstr "Changer de langue"
+
+#: cm_main/templates/cm_main/navbar.html:113
 msgid "Edit Pages"
 msgstr "Editer les Pages"
 
-#: cm_main/templates/cm_main/navbar.html:93
+#: cm_main/templates/cm_main/navbar.html:115
 msgid "Import members from CSV"
 msgstr "Importer des membres depuis un CSV"
 
-#: cm_main/templates/cm_main/navbar.html:96
+#: cm_main/templates/cm_main/navbar.html:118
 msgid "Export Members as CSV"
 msgstr "Exporter les membres en CSV"
 
-#: cm_main/templates/cm_main/navbar.html:114
+#: cm_main/templates/cm_main/navbar.html:136
 msgid "About the site"
 msgstr "A propos du site"
 
-#: cm_main/templates/cm_main/navbar.html:125
+#: cm_main/templates/cm_main/navbar.html:147
 msgid "Sign in"
 msgstr "Connexion"
 
-#: cm_main/templates/cm_main/navbar.html:129
+#: cm_main/templates/cm_main/navbar.html:151
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: cm_main/templates/cm_main/navbar.html:138
+#: cm_main/templates/cm_main/navbar.html:160
 msgid "Profile"
 msgstr "Profil"
 
-#: cm_main/templates/cm_main/navbar.html:140
+#: cm_main/templates/cm_main/navbar.html:162
 msgid "Log Out"
 msgstr "Déconnexion"
 
@@ -395,7 +399,7 @@ msgstr "Mais ton logiciel de messagerie est trop vieux pour l'afficher :'("
 msgid "This file type is not supported"
 msgstr "Ce type de fichier n'est pas supporté"
 
-#: cm_main/views/views_general.py:33
+#: cm_main/views/views_general.py:44
 msgid "Media not found"
 msgstr "Média non trouvé"
 

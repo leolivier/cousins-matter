@@ -19,7 +19,7 @@ class TestHomePageMixin(TestPageMixin):
     # create home pages in the database
     base_content = "<p class='content'>a wonderful content for an home page with an image: <img src='/data/my-image.png'></p>"
     self.home_pages = {}
-    for lang in ['fr-FR', 'en-US']:
+    for lang in ['fr', 'en-us']:
       self.home_pages[lang] = {}
       for kind in ['authenticated', 'unauthenticated']:
         url = f'/{lang}/home/{kind}/'
@@ -73,14 +73,14 @@ class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageT
 
   @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=False)
   def test_home_page_without_birthdays(self):
-    for lang in ['fr-FR', 'en-US']:
+    for lang in ['fr', 'en-us']:
       with lang_override(lang):
         response = self.check_home_page(lang, "authenticated")
         self.check_if_birthdays(response, reversed=True)
 
   @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=True)
   def test_home_page_with_birthdays(self):
-    for lang in ['fr-FR', 'en-US']:
+    for lang in ['fr', 'en-us']:
       with lang_override(lang):
         response = self.check_home_page(lang, "authenticated")
         self.check_if_birthdays(response)
@@ -89,5 +89,5 @@ class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageT
 class TestUnAuthenticatedHomePage(TestHomePageMixin, BasePageTestCase, TestCase):
 
   def test_unauthenticated_home_page(self):
-    for lang in ['fr-FR', 'en-US']:
+    for lang in ['fr', 'en-us']:
       self.check_home_page(lang, "unauthenticated")

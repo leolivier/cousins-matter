@@ -1,0 +1,371 @@
+# Italian Translations for Cousins-matter app.
+# Copyright (C) 2024 Olivier LEVILLAIN
+# This file is distributed under the same license as the application.
+# This file was generated from cousins-matter/chat/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the claude-3-5-sonnet-20240620 model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Cousins Matter 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-03 18:18+0200\n"
+"PO-Revision-Date: 2024-09-21 19:23+00:00\n"
+"\n"
+"Last-Translator: Auto-po-lyglot using claude-3-5-sonnet-20240620 (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: French <LL@li.org>\n"
+"Language: IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: chat/consumers.py:180
+msgid "You can only delete your own messages"
+msgstr "Puoi cancellare solo i tuoi messaggi"
+
+#. Explanation: In Italian, the English term "chat room" is commonly used as a
+#. loanword without translation. It's widely understood and accepted in
+#. Italian digital communication. However, if a more Italian-sounding
+#. alternative is preferred, one could use "sala di chat" or "stanza di
+#. discussione," but these are less common in everyday usage.
+#: chat/models.py:34
+msgid "chat room"
+msgstr "chat room"
+
+#. Explanation: In Italian, the term "chat room" is often used as a loanword
+#. from English. While there are Italian translations like "sala di
+#. discussione" or "stanza di chat", the English term "chat room" is widely
+#. understood and commonly used. I've kept it in the singular form as it's
+#. more natural in Italian when referring to the concept in general.
+#: chat/models.py:35
+msgid "chat rooms"
+msgstr "chat room"
+
+#: chat/models.py:77
+msgid "message"
+msgstr "messaggio"
+
+#: chat/models.py:97
+msgid "private chat room"
+msgstr "chat room privata"
+
+#. Explanation: There's a discrepancy between the English "private" and the
+#. French "publique" (public). I've chosen to follow the French translation,
+#. which indicates public chat rooms. If this wasn't intentional, and the chat
+#. rooms are meant to be private, the correct Italian translation would be
+#. "chat room private".
+#: chat/models.py:98
+msgid "private chat rooms"
+msgstr "chat room pubbliche"
+
+#: chat/templates/chat/chat_rooms.html:5
+#: chat/templates/chat/chat_rooms.html:14
+msgid "Private Chat Rooms"
+msgstr "Stanze di chat private"
+
+#. Explanation: In Italian, the term "chat room" is often used as a loanword
+#. from English. While there are Italian translations like "stanza di
+#. discussione" or "sala di chat", the most common and widely understood term
+#. is simply "chat room". I've kept it in the singular form as it's more
+#. commonly used this way in Italian, even when referring to multiple chat
+#. rooms.
+#: chat/templates/chat/chat_rooms.html:7
+#: chat/templates/chat/chat_rooms.html:16
+msgid "Chat Rooms"
+msgstr "Chat room"
+
+#: chat/templates/chat/chat_rooms.html:19
+msgid "Choose an existing room or create a new one."
+msgstr "Scegli una stanza esistente o creane una nuova."
+
+#: chat/templates/chat/chat_rooms.html:26
+#: chat/templates/chat/room_detail.html:27
+msgid "Room name"
+msgstr "Nome della stanza"
+
+#: chat/templates/chat/chat_rooms.html:31
+msgid "Create private room"
+msgstr "Crea una stanza privata"
+
+#: chat/templates/chat/chat_rooms.html:33
+msgid "Create room"
+msgstr "Crea una stanza"
+
+#: chat/templates/chat/chat_rooms.html:47 chat/tests/tests_private.py:46
+#: chat/tests/tests_public.py:64 chat/tests/tests_public.py:94
+#, python-format
+msgid "%(nmsgs)s message"
+msgid_plural "%(nmsgs)s messages"
+msgstr[0] "%(nmsgs)s message"
+msgstr[1] "%(nmsgs)s messages"
+
+#: chat/templates/chat/chat_rooms.html:59 chat/tests/tests_public.py:95
+msgid "No author yet"
+msgstr "Nessun autore ancora"
+
+#: chat/templates/chat/chat_rooms.html:76
+#: chat/templates/chat/chat_rooms.html:81
+#: chat/templates/chat/private/room_admins.html:42
+#: chat/templates/chat/private/room_members.html:42
+#: chat/templates/chat/room_detail.html:74 chat/tests/tests_private.py:43
+#: chat/tests/tests_public.py:67
+msgid "profile"
+msgstr "profilo"
+
+#: chat/templates/chat/chat_rooms.html:102
+#: chat/templates/chat/room_detail.html:53
+msgid "Room Members"
+msgstr "Membri della stanza"
+
+#: chat/templates/chat/chat_rooms.html:105
+#: chat/templates/chat/room_detail.html:56
+msgid "Room Admins"
+msgstr "Amministratori della stanza"
+
+#: chat/templates/chat/private/add-member.html:7
+msgid "Search a member..."
+msgstr "Cerca un membro..."
+
+#: chat/templates/chat/private/room_admins.html:4
+#: chat/templates/chat/private/room_admins.html:7
+msgid "Private Room Admins"
+msgstr "Amministratori della stanza privata"
+
+#: chat/templates/chat/private/room_admins.html:11
+#, python-format
+msgid "Administrators of \"%(room_name)s\" private room"
+msgstr "Amministratori della stanza privata \"%(room_name)s"
+
+#. Explanation: The French translation "Retour au salon" provides context that
+#. the "room" in the English sentence refers specifically to a "salon" or
+#. living room, rather than a generic room. Therefore, the Italian translation
+#. "Ritorno al salone" accurately conveys this specific meaning.
+#: chat/templates/chat/private/room_admins.html:15
+#: chat/templates/chat/private/room_members.html:15
+#: chat/tests/tests_private.py:170 chat/tests/tests_private.py:222
+msgid "Back to room"
+msgstr "Ritorno al salone"
+
+#: chat/templates/chat/private/room_admins.html:21
+msgid "Leave admins of this room"
+msgstr "Lasciare gli amministratori di questa stanza"
+
+#: chat/templates/chat/private/room_admins.html:30
+msgid "Add admin to the room"
+msgstr "Aggiungi un amministratore alla stanza"
+
+#: chat/templates/chat/private/room_admins.html:47
+msgid "Remove Admin from Room"
+msgstr "Rimuovere l'amministratore dalla stanza"
+
+#: chat/templates/chat/private/room_members.html:4
+#: chat/templates/chat/private/room_members.html:7
+msgid "Private Room Members"
+msgstr "Membri della stanza privata"
+
+#: chat/templates/chat/private/room_members.html:11
+#, python-format
+msgid "Members of \"%(room_name)s\" private room"
+msgstr "Membri della stanza privata \"%(room_name)s"
+
+#: chat/templates/chat/private/room_members.html:21
+#: chat/templates/chat/room_detail.html:47 chat/tests/tests_private.py:171
+#: chat/tests/tests_private.py:223 chat/tests/tests_private.py:352
+msgid "Leave this room"
+msgstr "Lascia questa stanza"
+
+#: chat/templates/chat/private/room_members.html:30
+msgid "Add member to the room"
+msgstr "Aggiungi un membro alla stanza"
+
+#: chat/templates/chat/private/room_members.html:47
+msgid "Remove Member from Room"
+msgstr "Rimuovere un membro dalla stanza"
+
+#: chat/templates/chat/room_detail.html:19
+msgid "Let's chat!"
+msgstr "Chiacchieriamo!"
+
+#: chat/templates/chat/room_detail.html:28
+msgid "hit return to submit, escape to give up"
+msgstr "invio per inviare, esc per annullare"
+
+#: chat/templates/chat/room_detail.html:38
+#: chat/templates/chat/room_detail.html:82
+msgid "Delete"
+msgstr "Elimina"
+
+#: chat/templates/chat/room_detail.html:41
+msgid "Edit"
+msgstr "Modifica"
+
+#: chat/templates/chat/room_detail.html:92
+msgid "Message"
+msgstr "Messaggio"
+
+#: chat/templates/chat/room_detail.html:97
+msgid "Submit"
+msgstr "Invia"
+
+#: chat/templates/chat/room_detail.html:106
+msgid "Room deletion"
+msgstr "Eliminazione della stanza"
+
+#: chat/templates/chat/room_detail.html:107
+#, python-format
+msgid ""
+"Are you sure you want to delete the room \"%(room_name)s\" and all its "
+"messages?"
+msgstr ""
+"Sei sicuro di voler eliminare la stanza \"%(room_name)s\" e tutti i suoi "
+"messaggi?"
+
+#. Explanation: The translation maintains the placeholder "%(nfollowers)s" in
+#. its original form and position. The word "member" is translated to "membro"
+#. in Italian, which is the singular form. Note that both the English and
+#. French versions use the English word "member", but in Italian, we use the
+#. appropriate Italian term.
+#: chat/tests/tests_private.py:47
+#, python-format
+msgid "%(nfollowers)s member"
+msgid_plural "%(nfollowers)s members"
+msgstr[0] "%(nfollowers)s membre"
+msgstr[1] "%(nfollowers)s membres"
+
+#: chat/tests/tests_private.py:129 chat/tests/tests_public.py:55
+#, python-brace-format
+msgid ""
+"Another room with a similar name already exists ('{room_name}'). Please "
+"choose a different name."
+msgstr ""
+"Un'altra stanza con un nome simile esiste già ('{room_name}'). Per favore, "
+"scegli un nome diverso."
+
+#: chat/tests/tests_private.py:207 chat/tests/tests_private.py:283
+#: chat/views/views_private_rooms.py:333
+#, python-format
+msgid "%s has been removed from the room"
+msgstr "%s è stato rimosso dalla stanza"
+
+#: chat/tests/tests_private.py:217 chat/views/views_private_rooms.py:450
+msgid "Only members of this private room can become admins"
+msgstr ""
+"Solo i membri di questa stanza privata possono diventare amministratori"
+
+#: chat/tests/tests_private.py:272 chat/views/views_private_rooms.py:326
+msgid ""
+"This member is the only one in this private room. Please add another one "
+"before removing this one."
+msgstr ""
+"Questo membro è l'unico in questa stanza privata. Per favore, aggiungi un "
+"altro membro prima di rimuovere questo."
+
+#: chat/tests/tests_private.py:300 chat/views/views_private_rooms.py:372
+msgid ""
+"You are the only member in this private room. Please add another one before "
+"removing yourself."
+msgstr ""
+"Sei l'unico membro in questa stanza privata. Per favore, aggiungi un altro "
+"membro prima di rimuoverti."
+
+#: chat/tests/tests_private.py:311 chat/views/views_private_rooms.py:375
+msgid ""
+"You are the only admin in this private room. If you leave the room, no one "
+"will be left. Please add another admin from the members before you remove "
+"yourself."
+msgstr ""
+"Sei l'unico amministratore in questa stanza privata. Se lasci la stanza, non"
+" rimarrà nessuno. Per favore, aggiungi un altro amministratore tra i membri "
+"prima di rimuoverti."
+
+#: chat/tests/tests_private.py:320 chat/views/views_private_rooms.py:383
+msgid "You have left the room"
+msgstr "Hai lasciato la stanza"
+
+#: chat/tests/tests_private.py:346 chat/views/views_private_rooms.py:205
+#: chat/views/views_private_rooms.py:242 chat/views/views_private_rooms.py:368
+#: chat/views/views_private_rooms.py:409
+msgid "You are not a member of this private room"
+msgstr "Non sei membro di questa stanza privata"
+
+#: chat/tests/tests_private.py:370 chat/views/views_private_rooms.py:278
+#: chat/views/views_private_rooms.py:321 chat/views/views_private_rooms.py:443
+#: chat/views/views_private_rooms.py:491 chat/views/views_private_rooms.py:532
+msgid "You are not an admin of this private room"
+msgstr "Non sei un amministratore di questa stanza privata"
+
+#: chat/tests/tests_public.py:23 chat/tests/tests_public.py:66
+msgid "Follow"
+msgstr "Segui"
+
+#. Explanation: In this case, the Italian translation remains the same as the
+#. English and French versions. The word "follower" is commonly used in
+#. Italian social media contexts without translation. The placeholder
+#. %(nfollowers)s is kept unchanged as required.
+#: chat/tests/tests_public.py:65
+#, python-format
+msgid "%(nfollowers)s follower"
+msgid_plural "%(nfollowers)s followers"
+msgstr[0] "%(nfollowers)s follower"
+msgstr[1] "%(nfollowers)s followers"
+
+#: chat/views/views_private_rooms.py:157 chat/views/views_public_rooms.py:80
+msgid ""
+"Another room with a similar name already exists ('{similar_room.name}'). "
+"Please choose a different name."
+msgstr ""
+"Un'altra stanza con un nome simile esiste già ('{similar_room.name}'). Per "
+"favore, scegli un nome diverso."
+
+#: chat/views/views_private_rooms.py:273 chat/views/views_private_rooms.py:439
+msgid "Method not allowed"
+msgstr "Metodo non consentito"
+
+#: chat/views/views_private_rooms.py:288 chat/views/views_private_rooms.py:455
+msgid "This user is already a member of this private room"
+msgstr "Questo utente è già membro di questa stanza privata"
+
+#: chat/views/views_private_rooms.py:335
+msgid "This user is not a member of this private room"
+msgstr "Questo utente non è membro di questa stanza privata"
+
+#: chat/views/views_private_rooms.py:497
+msgid ""
+"There must be at least one admin in a private room. Please add another one "
+"before removing this one."
+msgstr ""
+"Deve esserci almeno un amministratore in una stanza privata. Per favore, "
+"aggiungi un altro amministratore prima di rimuovere questo."
+
+#: chat/views/views_private_rooms.py:503
+msgid "This member is not an admin of this private room"
+msgstr "Questo membro non è un amministratore di questa stanza privata"
+
+#: chat/views/views_private_rooms.py:536
+msgid ""
+"There must be at least one admin in a private room. Please add another one "
+"before removing yourself."
+msgstr ""
+"Deve esserci almeno un amministratore in una stanza privata. Per favore, "
+"aggiungi un altro amministratore prima di rimuovere te stesso."
+
+#: chat/views/views_private_rooms.py:541
+msgid "You have been removed from the admins of this private room."
+msgstr "Sei stato rimosso dagli amministratori di questa stanza privata."
+
+#: chat/views/views_public_rooms.py:65
+#, python-format
+msgid "A private room with almost the same name already exists: %s"
+msgstr "Esiste già una stanza privata con un nome quasi identico: %s"
+
+#: chat/views/views_public_rooms.py:114
+msgid "Only the owner of a room can edit it"
+msgstr "Solo il proprietario della stanza può modificarla"
+
+#: chat/views/views_public_rooms.py:129
+msgid "Only the owner of a room can delete it"
+msgstr "Solo il proprietario della stanza può eliminarla"

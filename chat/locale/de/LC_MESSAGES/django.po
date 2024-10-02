@@ -1,0 +1,586 @@
+# French translation of cousins_matter.
+# Copyright (C) 2024 Olivier LEVILLAIN <olivier@levillain.eu>
+# This file is distributed under the same license as the Cousins Matter package.
+# <olivier@levillain.eu>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Cousins Matter 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-03 18:18+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Auto-po-lyglot (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: French <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that users can only delete their own
+#. messages.  The English sentence is ambiguous as it could refer to deleting
+#. messages in general or just deleting specific types of messages. The French
+#. translation clarifies this ambiguity by specifying "tes propres messages",
+#. which means "your own messages".
+#: chat/consumers.py:180
+msgid "You can only delete your own messages"
+msgstr "Du kannst nur deine eigenen Nachrichten löschen"
+
+#. Explanation: The English term "chat room" refers to a designated online
+#. space for real-time text communication, often associated with instant
+#. messaging platforms.  The French translation "salon de discussion"
+#. accurately captures the essence of this concept as it signifies a place for
+#. conversation and exchange of ideas in a structured environment.
+#: chat/models.py:34
+msgid "chat room"
+msgstr "Chat-Raum"
+
+#. Explanation:  The English phrase "chat rooms" refers to online spaces where
+#. people can communicate in real-time. The French translation, "salons de
+#. discussion," accurately captures this meaning, as it translates directly to
+#. "discussion halls." Both terms convey the idea of a space for communication
+#. and interaction between individuals.
+#: chat/models.py:35
+msgid "chat rooms"
+msgstr "Chat-Raüme"
+
+#. Explanation: The English word "message" is a general term for
+#. communication.  The French translation, "message," maintains this general
+#. meaning and does not require any further explanation.
+#: chat/models.py:77
+msgid "message"
+msgstr "Nachricht"
+
+#. Explanation: The English phrase "private chat room" is translated into
+#. German as "privater Chatraum".  This accurately reflects the meaning of
+#. both phrases, conveying the idea of a private conversation space.
+#: chat/models.py:97
+msgid "private chat room"
+msgstr "privater Chat-Raum"
+
+#. Explanation:  The English phrase "private chat rooms" refers to spaces
+#. where conversations are held between a limited number of people. The French
+#. translation, "salons de discussion publique," accurately conveys this
+#. meaning by using the term "salons de discussion publique" which translates
+#. to "public discussion halls."
+#: chat/models.py:98
+msgid "private chat rooms"
+msgstr "privater Chat-Raüme"
+
+#. Explanation: The English phrase "Private Chat Rooms" is translated into
+#. German as "Privat-Chat-Rooms". This translation accurately reflects the
+#. meaning of the original text.
+#: chat/templates/chat/chat_rooms.html:5
+#: chat/templates/chat/chat_rooms.html:14
+msgid "Private Chat Rooms"
+msgstr "Private Chat-Raüme"
+
+#. Explanation:  The English term "Chat Rooms" refers to online spaces where
+#. people can communicate in real-time. The French translation, "Salons de
+#. discussion," accurately captures this meaning. It translates directly to
+#. "discussion rooms" and conveys the same idea of a space for conversation.
+#: chat/templates/chat/chat_rooms.html:7
+#: chat/templates/chat/chat_rooms.html:16
+msgid "Chat Rooms"
+msgstr "Chat-Raüme"
+
+#. Explanation: The French translation provides context for the English
+#. sentence, making it clear that the user is choosing between an existing
+#. room or creating a new one.  The German translation maintains this meaning
+#. and uses similar phrasing to the French translation.
+#: chat/templates/chat/chat_rooms.html:19
+msgid "Choose an existing room or create a new one."
+msgstr "Wähle einen bestehenden Raum oder erstelle einen neuen."
+
+#. Explanation:  The English phrase "Room name" is translated directly to
+#. "Raumname" in German. This accurately reflects the meaning of the original
+#. English phrase and uses a standard German word for room names.
+#: chat/templates/chat/chat_rooms.html:26
+#: chat/templates/chat/room_detail.html:27
+msgid "Room name"
+msgstr "Raumname"
+
+#. Explanation: The English phrase "Create private room" can be translated
+#. into German as "Erstelle einen privaten Raum". This accurately reflects the
+#. meaning of the original sentence, taking into account the context provided
+#. in the French translation.
+#: chat/templates/chat/chat_rooms.html:31
+msgid "Create private room"
+msgstr "Erstelle einen privaten Raum"
+
+#. Explanation: The English phrase "Create room" can be interpreted in two
+#. ways. It could mean to create a physical space, like a room in a house, or
+#. it could mean to create an environment for something else.  The French
+#. translation "Créer un salon" is more specific and refers to creating a
+#. living room, which aligns with the meaning of "Create room".
+#: chat/templates/chat/chat_rooms.html:33
+msgid "Create room"
+msgstr "Erstelle einen Raum"
+
+#. Explanation: The provided text is a placeholder that needs to be kept in
+#. the same place in the German translation as it is in the original.  The
+#. French translation, "**(nmsgs)s message**, is a direct translation of the
+#. English sentence and should be translated into German with no changes.
+#: chat/templates/chat/chat_rooms.html:47 chat/tests/tests_private.py:46
+#: chat/tests/tests_public.py:64 chat/tests/tests_public.py:94
+#, python-format
+msgid "%(nmsgs)s message"
+msgid_plural "%(nmsgs)s messages"
+msgstr[0] "%(nmsgs)s Nachricht"
+msgstr[1] "%(nmsgs)s Nachrichten"
+
+#. Explanation: The French translation, "Pas encore d'auteur," means "No
+#. author yet."  The German translation maintains the same meaning and uses a
+#. similar structure.
+#: chat/templates/chat/chat_rooms.html:59 chat/tests/tests_public.py:95
+msgid "No author yet"
+msgstr "Noch kein Autor"
+
+#. Explanation: The English word "profile" is a noun that refers to a detailed
+#. description of someone or something. In German, the word "Profil" means
+#. "profile" and it accurately reflects this meaning in both the English and
+#. French translations.
+#: chat/templates/chat/chat_rooms.html:76
+#: chat/templates/chat/chat_rooms.html:81
+#: chat/templates/chat/private/room_admins.html:42
+#: chat/templates/chat/private/room_members.html:42
+#: chat/templates/chat/room_detail.html:74 chat/tests/tests_private.py:43
+#: chat/tests/tests_public.py:67
+msgid "profile"
+msgstr "Profil"
+
+#. Explanation: The English phrase "Room Members" is translated directly to
+#. "Membres du salon" in French.  The German word for "room" is "Raum," and
+#. the word for "members" is "Mitglieder." Therefore, the translation of "Room
+#. Members" into German is "Raummitglieder."
+#: chat/templates/chat/chat_rooms.html:102
+#: chat/templates/chat/room_detail.html:53
+msgid "Room Members"
+msgstr "Raum-Mitglieder"
+
+#. Explanation: The French translation "Administrateurs du salon" translates
+#. to "room administrators" in English.  The German translation "Raum-
+#. Administratoren" is a direct and accurate translation of the French phrase,
+#. preserving the meaning and context of the original sentence.
+#: chat/templates/chat/chat_rooms.html:105
+#: chat/templates/chat/room_detail.html:56
+msgid "Room Admins"
+msgstr "Raum-Verwalter"
+
+#. Explanation: The French translation, "Rechercher un membre...", is a clear
+#. and concise way to express the meaning of "Search a member...".  The German
+#. translation uses the same structure as the French translation.
+#: chat/templates/chat/private/add-member.html:7
+msgid "Search a member..."
+msgstr "Suche einen Mitglied..."
+
+#. Explanation:  The French translation, "Administrateurs du salon privé," is
+#. a clear and accurate representation of the English phrase "Private Room
+#. Admins." It directly translates to "Private room administrators" in German.
+#. The use of "Raum" (room) for "private room" maintains consistency with the
+#. context.
+#: chat/templates/chat/private/room_admins.html:4
+#: chat/templates/chat/private/room_admins.html:7
+msgid "Private Room Admins"
+msgstr "Privatraum-Verwalter"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase.  It uses the appropriate grammatical structure and
+#. terminology to convey the intended message.
+#. **Note:** The placeholder `%(room_name)s` is kept in its original position
+#. within the German translation, as per your instructions.
+#: chat/templates/chat/private/room_admins.html:11
+#, python-format
+msgid "Administrators of \"%(room_name)s\" private room"
+msgstr "Verwalter des privaten Räumlichkeiten „%(room_name)s“"
+
+#. Explanation: The English phrase "Back to room" can be interpreted in two
+#. ways, depending on the context.  The French translation "Retour au salon"
+#. is more specific and clearly indicates a return to the living room. This
+#. translation maintains the meaning of the original sentence while preserving
+#. the nuance of returning to a particular space.
+#: chat/templates/chat/private/room_admins.html:15
+#: chat/templates/chat/private/room_members.html:15
+#: chat/tests/tests_private.py:170 chat/tests/tests_private.py:222
+msgid "Back to room"
+msgstr "Zurück zum Raum"
+
+#. Explanation: The French translation, "Quitter les admins de ce salon,"
+#. suggests that the users should leave the administrators in the specific
+#. room.  The German translation maintains this meaning by using the phrase
+#. "Verlassen Sie die Admins dieses Raumes."
+#: chat/templates/chat/private/room_admins.html:21
+msgid "Leave admins of this room"
+msgstr "Verlassen Sie die Verwalter dieses Raums"
+
+#. Explanation: The French translation, "Ajouter un administrateur au salon,"
+#. indicates that an administrator is being added to a room.  The German
+#. translation maintains this meaning by using the phrase "Fügt Admin dem Raum
+#. hinzu." This translates directly from the French and conveys the same idea
+#. of adding an administrator to a specific space.
+#: chat/templates/chat/private/room_admins.html:30
+msgid "Add admin to the room"
+msgstr "Fügt Verwalter dem Raum hinzu"
+
+#. Explanation: The French translation, "Enlever l'administrateur du salon,"
+#. implies removing the administrator from a room. This is translated into
+#. German as "Entfernen Sie Administrator vom Raum." The meaning of the
+#. sentence is clear and consistent with the provided context.
+#: chat/templates/chat/private/room_admins.html:47
+msgid "Remove Admin from Room"
+msgstr "Entfernt Verwalter vom Raum"
+
+#. Explanation: The English phrase "Private Room Members" translates to
+#. "Membres du salon privé" in French.  The German translation accurately
+#. reflects the meaning of both the English and French phrases, while
+#. maintaining a consistent structure and tone.
+#: chat/templates/chat/private/room_members.html:4
+#: chat/templates/chat/private/room_members.html:7
+msgid "Private Room Members"
+msgstr "Privatraum Mitglieder"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, using a similar structure and word order.  The placeholder
+#. `%(room_name)` is kept in its original place to maintain consistency with
+#. the context.
+#: chat/templates/chat/private/room_members.html:11
+#, python-format
+msgid "Members of \"%(room_name)s\" private room"
+msgstr "Mitglieder des privaten Raumes '%(room_name)s'"
+
+#. Explanation: The French translation, "Quitter ce salon," means "leave this
+#. room."  The German translation, "Gehen Sie diesen Raum aus," uses the verb
+#. "gehen" (to go) and "Raum" (room). This accurately conveys the meaning of
+#. the original sentence.
+#: chat/templates/chat/private/room_members.html:21
+#: chat/templates/chat/room_detail.html:47 chat/tests/tests_private.py:171
+#: chat/tests/tests_private.py:223 chat/tests/tests_private.py:352
+msgid "Leave this room"
+msgstr "Verlasse diesen Raum"
+
+#. Explanation:  The French translation "Ajouter un membre au salon" means
+#. "Adding a member to the room". The German translation "Fügt Mitglied dem
+#. Raum hinzu" translates this meaning literally, using the same words and
+#. structure.
+#. Let me know if you have any other sentences you'd like me to translate!
+#: chat/templates/chat/private/room_members.html:30
+msgid "Add member to the room"
+msgstr "Fügt Mitglied dem Raum hinzu"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. English and French sentences.  The word "Raumlichkeiten" is a more formal
+#. way to say "room" in German, which makes sense given the context of
+#. removing a member from a room.
+#: chat/templates/chat/private/room_members.html:47
+msgid "Remove Member from Room"
+msgstr "Entfernt den Mitglied aus der Räum"
+
+#. Explanation: The English phrase "Let's chat!" translates to "Discutons!" in
+#. French. This is a direct and informal way of saying "Let's talk."  The
+#. German translation maintains the same casual tone as the French
+#. translation, conveying the intent to engage in conversation.
+#: chat/templates/chat/room_detail.html:19
+msgid "Let's chat!"
+msgstr "Lass uns reden!"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. English and French sentences. It uses a clear and concise language to
+#. convey the intended message.  The use of "Drücken Sie die Taste" for "hit
+#. return" and "Escape" for "escape" is consistent with the original
+#. sentence's context and avoids ambiguity.
+#: chat/templates/chat/room_detail.html:28
+msgid "hit return to submit, escape to give up"
+msgstr "Mit Return abschicken, mit Escape abbrechen"
+
+#. Explanation:  In the context of the provided sentences, both English and
+#. French translations are clear. The word "Delete" in English is a direct
+#. synonym for "Supprimer" in French. Therefore, the German translation
+#. "Löschen" accurately reflects the meaning of the original sentence.
+#: chat/templates/chat/room_detail.html:38
+#: chat/templates/chat/room_detail.html:82
+msgid "Delete"
+msgstr "Löschen"
+
+#. Explanation:  Both "Edit" and "Modifier" mean to make changes. While "Edit"
+#. is more common in the English language, "Modifier" is a direct and accurate
+#. translation for "Edit" in this context.
+#: chat/templates/chat/room_detail.html:41
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#. Explanation: The English word "message" is a direct translation of the
+#. French word "message".  Both words refer to a communication or piece of
+#. information conveyed.
+#: chat/templates/chat/room_detail.html:92
+msgid "Message"
+msgstr "Nachricht"
+
+#. Explanation: The English word "Submit" can have different meanings
+#. depending on the context.  In this case, it is most likely referring to
+#. submitting something electronically or formally. "Envoyer" in French
+#. translates to "to send" which aligns with the meaning of "submit".
+#: chat/templates/chat/room_detail.html:97
+msgid "Submit"
+msgstr "Absenden"
+
+#. Explanation: The English phrase "Room deletion" is a bit ambiguous.  The
+#. French translation, "Suppression du salon," directly translates to "Salon
+#. removal." This accurately reflects the meaning of the English phrase and
+#. avoids any potential ambiguity.
+#: chat/templates/chat/room_detail.html:106
+msgid "Room deletion"
+msgstr "Raum löschen"
+
+#. Explanation: The French translation is ambiguous and doesn't clearly convey
+#. the meaning of the English sentence.  The German translation aims to
+#. clarify the context by using "Weist du..." which means "Do you know...?" or
+#. "Are you sure...?" This phrase helps to emphasize the decision-making
+#. process involved in deleting a room and its messages.
+#: chat/templates/chat/room_detail.html:107
+#, python-format
+msgid ""
+"Are you sure you want to delete the room \"%(room_name)s\" and all its "
+"messages?"
+msgstr ""
+"Bist du sicher, dass du den Raum \"%(room_name)s\" und alle seine Nachrichten "
+"löschen willst?"
+#. Explanation: The provided placeholders are part of a specific format and
+#. should be kept in their original position.  The German translation
+#. maintains the same structure as the French translation, using the
+#. placeholder values to accurately reflect the meaning of the sentence.
+#: chat/tests/tests_private.py:47
+#, python-format
+msgid "%(nfollowers)s member"
+msgid_plural "%(nfollowers)s members"
+msgstr[0] "%(nfollowers)s Mitglied"
+msgstr[1] "%(nfollowers)s Mitglieder"
+
+#. **Explanation:** The German translation accurately captures the meaning of
+#. the French translation, including the use of "ein weiterer Raum" to
+#. indicate a different room. It also uses the placeholder "{room_name}" in
+#. the German translation as well.
+#: chat/tests/tests_private.py:129 chat/tests/tests_public.py:55
+#, python-brace-format
+msgid ""
+"Another room with a similar name already exists ('{room_name}'). Please "
+"choose a different name."
+msgstr ""
+"Es gibt bereits einen anderen Raum mit einem ähnlichen Namen "
+"('{room_name}'). Bitte wähle einen anderen Namen."
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that the person was removed from the room.
+#. The English phrase " %s has been removed from the room" can be ambiguous,
+#. as it can mean both "removing a person" and "removing something"
+#. colloquially. The French translation makes it clear that it is a removal of
+#. a person, so the German version "s wurde aus dem Raum entfernt" follows
+#. this interpretation.
+#: chat/tests/tests_private.py:207 chat/tests/tests_private.py:283
+#: chat/views/views_private_rooms.py:333
+#, python-format
+msgid "%s has been removed from the room"
+msgstr "%s wurde aus dem Raum entfernt"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, which indicates that only members of a private room can
+#. become administrators.  The English sentence is ambiguous as it could refer
+#. to either giving access or being an admin. The French translation clarifies
+#. this ambiguity by specifying "Admins" and "Mitglieder".
+#: chat/tests/tests_private.py:217 chat/views/views_private_rooms.py:450
+msgid "Only members of this private room can become admins"
+msgstr "Nur Mitglieder dieses privaten Raums können Admins werden"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French text while maintaining the original sentence structure and tone.
+#. The use of "Dieser Mitglied" (this member) is a direct translation of "Ce
+#. membre," and "im privaten Raum" translates to "in this private room."
+#: chat/tests/tests_private.py:272 chat/views/views_private_rooms.py:326
+msgid ""
+"This member is the only one in this private room. Please add another one "
+"before removing this one."
+msgstr ""
+"Dieser Mitglied ist der einzige im privaten Raum. Bitte füge einen anderen "
+"hinzu, bevor du diesen entfernt."
+
+#. Explanation: The French translation clarifies the meaning of the English
+#. sentence by specifying that "you are the only member" and then adding a
+#. further instruction to add another person before leaving the room.  The
+#. German translation maintains this nuance while using appropriate
+#. grammatical structures for clarity.
+#: chat/tests/tests_private.py:300 chat/views/views_private_rooms.py:372
+msgid ""
+"You are the only member in this private room. Please add another one before "
+"removing yourself."
+msgstr ""
+"Du bist der einzige Mitglied in diesem privaten Raum. Bitte füge noch eine "
+"weitere Person hinzu, bevor du dich verlässt."
+
+#. Explanation: The French translation clarifies the meaning of the English
+#. sentence by specifying that only one admin is allowed in the private room
+#. and that if they leave, no other members will be left behind.  The German
+#. translation maintains this clarity and uses a more formal tone to match the
+#. context.
+#: chat/tests/tests_private.py:311 chat/views/views_private_rooms.py:375
+msgid ""
+"You are the only admin in this private room. If you leave the room, no one "
+"will be left. Please add another admin from the members before you remove "
+"yourself."
+msgstr ""
+"Du bist der einzige Admin in diesem privaten Raum. Wenn du den Raum "
+"verlässt, werden keine anderen Mitglieder zurückgelassen. Bitte füge "
+"einen anderen Admin hinzu, bevor du den Raum verslässt."
+
+#. Explanation: The French translation, "Tu as quité le salon," implies that
+#. the person left a specific room.  The German translation, "Du hast die Raum
+#. verlassen," captures this meaning by using the correct grammatical
+#. structure and word choice to convey the same idea.
+#: chat/tests/tests_private.py:320 chat/views/views_private_rooms.py:383
+msgid "You have left the room"
+msgstr "Du hast die Raum verlassen."
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. French phrase, which states that the person is not a member of the
+#. specified private room.  The use of "du" for "you" and "kein Mitglied" for
+#. "not a member" maintains consistency with the original sentence's tone and
+#. structure.
+#: chat/tests/tests_private.py:346 chat/views/views_private_rooms.py:205
+#: chat/views/views_private_rooms.py:242 chat/views/views_private_rooms.py:368
+#: chat/views/views_private_rooms.py:409
+msgid "You are not a member of this private room"
+msgstr "Du bist kein Mitglied dieses privaten Raums"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. French phrase, maintaining the same tone and nuance.  The use of "du" for
+#. "you" in German is consistent with the context of the sentence.
+#: chat/tests/tests_private.py:370 chat/views/views_private_rooms.py:278
+#: chat/views/views_private_rooms.py:321 chat/views/views_private_rooms.py:443
+#: chat/views/views_private_rooms.py:491 chat/views/views_private_rooms.py:532
+msgid "You are not an admin of this private room"
+msgstr "Du bist kein Admin dieses privaten Raums"
+
+#. Explanation: The English word "follow" can have multiple meanings, but in
+#. this context it is likely referring to the act of pursuing or tracking
+#. something.  The French translation "Suivre" directly translates to "to
+#. follow" and captures the meaning of the original sentence.
+#: chat/tests/tests_public.py:23 chat/tests/tests_public.py:66
+msgid "Follow"
+msgstr "Folgen"
+
+#. Explanation: The provided English and French translations are both
+#. placeholder phrases.  The placeholders "**(nfollowers)**" represent a
+#. variable that will be replaced with the actual number of followers in the
+#. context of the sentence. In German, we would simply replace these
+#. placeholders with their corresponding values.
+#: chat/tests/tests_public.py:65
+#, python-format
+msgid "%(nfollowers)s follower"
+msgid_plural "%(nfollowers)s followers"
+msgstr[0] "%(nfollowers)s Follower"
+msgstr[1] "%(nfollowers)s Follower"
+
+#. Explanation: The French translation clarifies the ambiguity of the English
+#. sentence, which is "Another room with a similar name already exists
+#. ('{similar_room.name}')".  The German translation maintains this clarity
+#. and uses a more direct phrasing to convey the same meaning as the French
+#. translation.
+#: chat/views/views_private_rooms.py:157 chat/views/views_public_rooms.py:80
+msgid ""
+"Another room with a similar name already exists ('{similar_room.name}'). "
+"Please choose a different name."
+msgstr ""
+"Ein weiterer Raum mit einem ähnlichen Namen existiert bereits "
+"('{similar_room.name}'). Bitte wähle einen anderen Namen."
+
+#. Explanation: The French translation, "Méthode non autorisée,"  means
+#. "method not authorized." This is a direct translation of the English
+#. phrase. However, in German, we use "Methode" and "nicht gestattet" to
+#. express this meaning.
+#: chat/views/views_private_rooms.py:273 chat/views/views_private_rooms.py:439
+msgid "Method not allowed"
+msgstr "Methode nicht gestattet"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, conveying that the user is already a member of the specified
+#. private room.  The sentence structure and vocabulary are consistent with
+#. the original text, maintaining the intended tone and nuance.
+#: chat/views/views_private_rooms.py:288 chat/views/views_private_rooms.py:455
+msgid "This user is already a member of this private room"
+msgstr "Dieser Benutzer ist bereits Mitglied in diesem privaten Raum"
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. French phrase, maintaining the same tone and nuance. It uses the correct
+#. grammatical structure and vocabulary to express the idea that the user is
+#. not a member of the private room.  The use of "Dieser Benutzer" (this user)
+#. and "kein Mitglied" (not a member) are consistent with the original
+#. sentence's meaning.
+#: chat/views/views_private_rooms.py:335
+msgid "This user is not a member of this private room"
+msgstr "Dieser Benutzer ist kein Mitglied dieses privaten Raumes"
+
+#. Explanation: The translation aims to capture the meaning of the original
+#. French sentence while maintaining a similar tone and structure.  The German
+#. translation uses formal language appropriate for a request or instruction.
+#: chat/views/views_private_rooms.py:497
+msgid ""
+"There must be at least one admin in a private room. Please add another one "
+"before removing this one."
+msgstr ""
+"Es muss mindestens ein Administrator in einem privaten Raum sein. Bitte füge"
+" noch einen hinzu, bevor du diesen löschst."
+
+#. Explanation: The German translation accurately conveys the meaning of the
+#. French phrase, while maintaining a consistent tone and structure.  The use
+#. of "Dieser Mitglied" (this member) is appropriate for the context.
+#. Additionally, "kein Admin" translates directly to "not an admin," and "des
+#. privaten Raumes" means "of this private room."
+#: chat/views/views_private_rooms.py:503
+msgid "This member is not an admin of this private room"
+msgstr "Dieser Mitglied ist kein Admin dieses privaten Raumes"
+
+#. Explanation: The French translation accurately conveys the meaning of the
+#. English sentence, and I have translated it into German while preserving its
+#. original tone and nuance.  The German translation uses a similar structure
+#. to the French translation, using formal language and avoiding slang or
+#. colloquialisms.
+#: chat/views/views_private_rooms.py:536
+msgid ""
+"There must be at least one admin in a private room. Please add another one "
+"before removing yourself."
+msgstr ""
+"Es muss mindestens ein Administrator in einem privaten Raum sein. Bitte füge"
+" noch einen hinzu, bevor du dich verlässt."
+
+#. Explanation: The French translation accurately conveys the meaning of the
+#. English sentence. It uses the formal language appropriate for a statement
+#. about administrative removal, while also maintaining a neutral tone.  The
+#. German translation maintains the same level of formality and clarity as the
+#. French translation.
+#: chat/views/views_private_rooms.py:541
+msgid "You have been removed from the admins of this private room."
+msgstr "Du wurdest aus den Admins dieses privaten Raumes entfernt."
+
+#. Explanation: The German translation aims to maintain the meaning and tone
+#. of the original sentence.  The use of "ein" instead of "einen" is a
+#. stylistic choice, but it maintains the grammatical correctness of the
+#. sentence.
+#: chat/views/views_public_rooms.py:65
+#, python-format
+msgid "A private room with almost the same name already exists: %s"
+msgstr "Ein privater Raum mit fast dem gleichen Namen existiert bereits: %s"
+
+#. Explanation: The French translation accurately conveys the meaning of the
+#. English sentence.  The German translation uses the same structure as the
+#. French, with a slight change in word order to maintain the same meaning.
+#: chat/views/views_public_rooms.py:114
+msgid "Only the owner of a room can edit it"
+msgstr "Nur der Besitzer eines Raumes kann es bearbeiten"
+
+#. Explanation: The German translation accurately reflects the meaning of the
+#. French phrase, ensuring that only the owner of a room has the authority to
+#. delete it.  The sentence structure and word choices are consistent with
+#. both the English and French original.
+#: chat/views/views_public_rooms.py:129
+msgid "Only the owner of a room can delete it"
+msgstr "Nur der Besitzer eines Raumes kann es löschen"

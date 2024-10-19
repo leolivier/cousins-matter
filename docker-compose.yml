@@ -1,0 +1,13 @@
+services:
+  cousins-matter:
+    image: cousins-matter
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "$DOCKER_PORT:8000"
+      - "$EMAIL_PORT:$EMAIL_PORT"
+    volumes:
+      - ./data:/app/data
+      - ./media:/app/media
+      - ./.env:/app/.env

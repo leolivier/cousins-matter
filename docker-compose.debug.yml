@@ -1,0 +1,17 @@
+# run with: docker-compose -f docker-compose.debug.yml up
+# then attach in vscode using the "Python: Remote Attach" debug config
+services:
+  cousinsmatter:
+    image: cousinsmatter
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./data:/app/data
+      - ./media:/app/media
+      - ./.env:/app/.env
+    ports:
+      - "$DOCKER_PORT:8000"
+      - "$EMAIL_PORT:465"
+      - 5678:5678  # for debugpy
+    command: ["sh", "-c", "pip install debugpy -t /tmp && python -Xfrozen_modules=off /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:8000 --nothreading --noreload"]

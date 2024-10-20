@@ -1,12 +1,14 @@
 services:
   cousins-matter:
-    image: cousins-matter
+    image: ${COUSINS_MATTER_IMAGE:-cousins-matter}
+    container_name: cousins-matter
+    # the build works only in dev mode
     build:
       context: .
       dockerfile: ./Dockerfile
+    restart: unless-stopped
     ports:
-      - "$DOCKER_PORT:8000"
-      - "$EMAIL_PORT:$EMAIL_PORT"
+      - "${DOCKER_PORT:-8000}:8000"
     volumes:
       - ./data:/app/data
       - ./media:/app/media

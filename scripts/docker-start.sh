@@ -122,7 +122,7 @@ if [[ -s $current_tag && $current_tag == $tag && $update != true && $force == fa
 fi
 
 # Function for checking whether an item is in a list
-is_in_list() {
+function is_in_list() {
 	local item="$1"
 	shift
 	local list=("$@")
@@ -155,7 +155,7 @@ if [[ -d $directory ]]; then
 	done
 fi
 
-def get_download_url() {
+function get_download_url() {
 	last_realease=$(curl -s https://api.github.com/repos/${github_repo}/releases/latest | jq -r '.tag_name')
 	echo https://raw.githubusercontent.com/${github_repo}/refs/tags/${last_realease}
 }

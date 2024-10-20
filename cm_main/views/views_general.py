@@ -3,6 +3,7 @@ import logging
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.views import PasswordResetView
 from django.http import Http404, StreamingHttpResponse
 from django.shortcuts import redirect
 from django.utils.translation import gettext as _, activate as activate_language
@@ -15,7 +16,13 @@ import mimetypes
 import tempfile
 import zipfile
 
+from cm_main.forms import PasswordResetForm
+
 logger = logging.getLogger(__name__)
+
+
+class PasswordResetView(PasswordResetView):
+  form_class = PasswordResetForm
 
 
 class OnlyAdminMixin(LoginRequiredMixin, PermissionRequiredMixin):

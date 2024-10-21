@@ -161,8 +161,26 @@ function get_download_url() {
 }
 
 mkdir -p $directory $directory/data $directory/media && cd $directory
+
 git_url=$(get_download_url)
-# download docker-compose.yml from github if it doesn't exist
+
+# download docker-start.sh from github if it doesn't exist or if it has changed (auto-update)
+if [[ ! -f docker-start.sh ]]; then
+        verbose "downloading docker-start.sh from github latest release."
+        curl $git_url/docker-start.sh -o docker-start.sh
+        verbose "You should now use this script: $PWD/docker-start.sh"
+else
+        verbose "Updating docker-start.sh from github latest release if needed."
+        curl $git_url/docker-start.sh -o /tmp/docker-start.sh
+        if diff -q docker-start.sh /tmp/docker-start.sh; then
+          mv /tmp/docker-start.sh .
+          verbose "docker-start.sh updated"
+        else
+          rm /tmp/docker-start.sh
+        fi
+fi
+
+# download docker-compose.yml from github if it doesn't exist (no auto update)
 if [[ ! -f docker-compose.yml ]]; then
 	verbose "downloading docker-compose.yml from github latest release."
 	curl $git_url/docker-compose.yml -o docker-compose.yml

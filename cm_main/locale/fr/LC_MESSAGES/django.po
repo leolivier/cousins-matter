@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-28 19:37+0200\n"
+"POT-Creation-Date: 2024-10-21 08:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -77,19 +77,19 @@ msgstr ""
 "%(follower_name)s suit maintenant ton %(followed_type)s "
 "\"%(followed_object_name)s\""
 
-#: cm_main/forms.py:8
+#: cm_main/forms.py:11
 msgid "Your message"
 msgstr "Ton message"
 
-#: cm_main/forms.py:9
+#: cm_main/forms.py:12
 msgid "Please keep it short and avoid images."
 msgstr "Merci d'être bref et d'éviter les images."
 
-#: cm_main/forms.py:10
+#: cm_main/forms.py:13
 msgid "Attach file"
 msgstr "Attacher un fichier"
 
-#: cm_main/forms.py:11
+#: cm_main/forms.py:14
 msgid "You can attach a file here if needed"
 msgstr "Tu peux attacher un fichier ici si nécessaire"
 
@@ -399,7 +399,7 @@ msgstr "Mais ton logiciel de messagerie est trop vieux pour l'afficher :'("
 msgid "This file type is not supported"
 msgstr "Ce type de fichier n'est pas supporté"
 
-#: cm_main/views/views_general.py:44
+#: cm_main/views/views_general.py:52
 msgid "Media not found"
 msgstr "Média non trouvé"
 

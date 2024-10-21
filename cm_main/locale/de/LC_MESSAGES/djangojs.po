@@ -1,7 +1,11 @@
-# French translation of cousins_matter for javascript usage.
-# Copyright (C) 2024 Olivier LEVILLAIN <olivier@levillain.eu>
-# This file is distributed under the same license as the Cousins Matter package.
-# <olivier@levillain.eu>, 2024.
+# German Translations for NO NAME FOUND app.
+# Copyright (C) 2024 <OWNER>
+# This file is distributed under the same license as the application.
+# This file was generated from cm_main/locale/fr/LC_MESSAGES/djangojs.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
@@ -9,10 +13,11 @@ msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-28 16:06+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Auto-po-lyglot (https://github.com/leolivier/auto-po-lyglot)\n"
+"PO-Revision-Date: 2024-10-21 09:03+00:00\n"
+"\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
-"Language: \n"
+"Language: DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"

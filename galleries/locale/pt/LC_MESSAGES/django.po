@@ -1,21 +1,21 @@
 # Portuguese Translations for NO NAME FOUND app.
-# Copyright (C) 2024 Olivier LEVILLAIN
+# Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-# This file was generated from /home/olivi/devt/cousins-matter/galleries/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the llama3.2:3b model. Depending on the model, it may contain some errors and should be reviewed
+# This file was generated from galleries/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
 # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
 # by the model.
-# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-05 11:06+0200\n"
-"PO-Revision-Date: 2024-09-27 19:17+00:00\n"
+"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"PO-Revision-Date: 2024-10-21 10:35+00:00\n"
 "\n"
-"Last-Translator: Auto-po-lyglot using llama3.2:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: PT\n"
 "MIME-Version: 1.0\n"
@@ -23,20 +23,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. Explanation: The French translation "Fichier ZIP" is used to refer to a
-#. compressed archive, while the English phrase "Zip file" can be more
-#. general. In Portuguese, we use "arquivo ZIP" to maintain consistency with
-#. the French translation and indicate that it's a compressed archive.
-#: forms.py:15
+#: galleries/forms.py:15
 msgid "Zip file"
 msgstr "Arquivo ZIP"
 
-#. Explanation: This translation reflects the meaning of the French phrase,
-#. which indicates that all folders will be created as galleries and photos
-#. added to these galleries. The original English sentence is a bit ambiguous,
-#. but the French translation makes it clear that the goal is to organize
-#. photos into galleries within folders.
-#: forms.py:16
+#: galleries/forms.py:16
 msgid ""
 "The zip file containing the photos to upload. All folders will be created as"
 " galleries and photos in these folders added to the galleries. All photos "
@@ -46,158 +37,79 @@ msgstr ""
 "como galerias e as fotos dessas pastas serão adicionadas às galerias. Todas "
 "as fotos devem estar em pastas."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that a photo should be part of a collection or
-#. exhibition. The English sentence is clear and direct, while the French
-#. translation adds a nuance by using the word "doit", which implies a sense
-#. of obligation or necessity.
-#: models.py:25 models.py:74
+#: galleries/models.py:28 galleries/models.py:77
 msgid "A photo must belong to a gallery."
 msgstr "Uma foto deve pertencer a uma galeria."
 
-#. Explanation: The English and French translations are identical, so the
-#. Portuguese translation is also a direct copy.
-#: models.py:48 templates/galleries/photo_detail.html:3
+#: galleries/models.py:51 galleries/templates/galleries/photo_detail.html:3
 msgid "Photo"
 msgstr "Foto"
 
-#. Explanation: The English word "Name" and the French word "Nom" have a
-#. direct equivalent in Portuguese, which is also "Nome".
-#: models.py:50 models.py:115
+#: galleries/models.py:53 galleries/models.py:118
 msgid "Name"
 msgstr "Nome"
 
-#. Explanation: The English and French translations are identical, so the
-#. Portuguese translation is also a direct copy of the original.
-#: models.py:51 models.py:116
+#: galleries/models.py:54 galleries/models.py:119
 msgid "Description"
 msgstr "Descrição"
 
-#. Explanation: The English phrase "Date" can refer to a specific point in
-#. time, a calendar date, or even a social engagement. However, the French
-#. translation "Date" is likely referring to the latter meaning, as it is
-#. commonly used in the context of social events and appointments. Therefore,
-#. the Portuguese translation "Data" follows this interpretation, suggesting a
-#. scheduled event or appointment.
-#: models.py:53
+#: galleries/models.py:56
 msgid "Date"
 msgstr "Data"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that clicking on the month name or year will allow
-#. for quick changes. The original English sentence is clear and concise, but
-#. the French translation adds a touch of elegance with the use of "modifier
-#. rapidement", which conveys the same idea in a more formal tone.
-#: models.py:53
+#: galleries/models.py:56
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Clique em nome do mês ou do ano para mudá-los rapidamente"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a common term used in digital media and social networks to
-#. refer to the main image displayed on a user's profile or page. The English
-#. phrase "Cover Photo" is also widely used in this context, making the
-#. Portuguese version "Capa" a suitable equivalent.
-#: models.py:117
+#: galleries/models.py:120
 msgid "Cover Photo"
 msgstr "Capa"
 
-#. Explanation: The Portuguese translation maintains the same meaning and
-#. structure as the French original, using the word "galera" to refer to a
-#. collection or group of people (in this case, parents), and adding the
-#. definite article "de" before it. This is consistent with the French phrase
-#. "Galerie parente", which uses the word "galerie" to describe a collection
-#. of relatives.
-#: models.py:120
+#: galleries/models.py:123
 msgid "Parent gallery"
 msgstr "Galera de pais"
 
-#. Explanation: The French translation "galeries" is used to refer to
-#. exhibition spaces or rooms, whereas the English word "galleries" can also
-#. refer to a collection of artworks. In this case, the Portuguese translation
-#. "Galérias" follows the meaning of the French phrase, which suggests a space
-#. for exhibiting art.
-#: models.py:125
+#: galleries/models.py:128
 msgid "galleries"
 msgstr "Galérias"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which emphasizes that a gallery cannot have itself as its parent.
-#. The exclamation mark at the end is preserved to maintain the same tone and
-#. emphasis as in the original English sentence.
-#: models.py:144
+#: galleries/models.py:147
 msgid "A gallery can't be its own parent!"
 msgstr "Uma galeria não pode ser sua própria mãe!"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that there is already another gallery with the same
-#. name and parent. The English sentence uses a placeholder for the parent
-#. name, which is preserved in the Portuguese translation to maintain
-#. consistency with the original context.
-#: models.py:152
+#: galleries/models.py:155
 #, python-format
 msgid "Another sub gallery of %(parent)s with the same name already exists"
 msgstr "Outra subgaleria de %(parent)s com o mesmo nome já existe"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that there is another gallery with the same name
-#. already existing. The English sentence can be ambiguous, but the French
-#. translation makes it clear that it's about a new instance of a gallery with
-#. the same name, so the Portuguese version follows this interpretation.
-#: models.py:155
+#: galleries/models.py:158
 msgid "Another root gallery with the same name already exists"
 msgstr "Outra galeria de raiz com o mesmo nome já existe"
 
-#. Explanation: The English phrase "Bulk Upload Photos" can be interpreted as
-#. either "uploading a large quantity of photos" or "bulk uploading photos".
-#. The French translation "Télécharger des photos en masse" makes it clear
-#. that the action is to download or upload a large quantity of photos, which
-#. is consistent with the meaning of the original English phrase.
-#: templates/galleries/bulk_upload.html:3
-#: templates/galleries/bulk_upload.html:6
+#: galleries/templates/galleries/bulk_upload.html:3
+#: galleries/templates/galleries/bulk_upload.html:6
 msgid "Bulk Upload Photos"
 msgstr "Carregar Fotos em Bulk"
 
-#. Explanation: The English word "Upload" and the French word "Télécharger"
-#. both refer to the act of sending or transferring data from one place to
-#. another. In Portuguese, this action is commonly referred to as "carregar",
-#. which means "to load" or "to upload".
-#: templates/galleries/bulk_upload.html:13
+#: galleries/templates/galleries/bulk_upload.html:13
 msgid "Upload"
 msgstr "Carregar"
 
-#. Explanation: The French and Portuguese translations are identical, as the
-#. word "galleries" is a direct loan from English to both languages.
-#: templates/galleries/galleries_tree.html:3
-#: templates/galleries/galleries_tree.html:5
+#: galleries/templates/galleries/galleries_tree.html:3
+#: galleries/templates/galleries/galleries_tree.html:5
 msgid "Galleries"
 msgstr "Galérias"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that no galleries were found. The English phrase
-#. "No galleries found" is a common way to express this idea in an informal
-#. context, while the French phrase "Aucune galerie trouvée" is more formal
-#. and precise.
-#: templates/galleries/galleries_tree.html:7
+#: galleries/templates/galleries/galleries_tree.html:7
 msgid "No galleries found"
 msgstr "Não foram encontradas galerias"
 
-#. Explanation: The English phrase "Delete gallery" can be interpreted as
-#. deleting a physical gallery, but the French translation "Supprimer une
-#. Galerie" makes it clear that it's about removing or deleting a digital
-#. gallery. In Portuguese, we use "apagar" to indicate removal or deletion,
-#. and "galeria" is used to refer to a collection of images or files, making
-#. the translation consistent with the French original.
-#: templates/galleries/gallery_confirm_delete.html:6
-#: templates/galleries/gallery_detail.html:59
+#: galleries/templates/galleries/gallery_confirm_delete.html:6
+#: galleries/templates/galleries/gallery_detail.html:59
 msgid "Delete gallery"
 msgstr "Apagar galeria"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a confirmation question about deleting an object and its
-#. associated content. The English sentence uses a placeholder for the object
-#. name, while the French translation includes it in the question. The
-#. Portuguese version maintains this format to ensure clarity and consistency.
-#: templates/galleries/gallery_confirm_delete.html:10
+#: galleries/templates/galleries/gallery_confirm_delete.html:10
 #, python-format
 msgid ""
 "Are you sure you want to delete \"%(object)s\" and all photos and sub "
@@ -206,229 +118,115 @@ msgstr ""
 "Você está seguro de querer apagar '%(object)s' e todas as fotos e "
 "subgalerias que ela contém?"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is to verify or validate something. The English word
-#. "Confirm" also carries this same meaning, so the Portuguese version
-#. "Confirmar" follows this interpretation.
-#: templates/galleries/gallery_confirm_delete.html:17
-#: templates/galleries/photo_confirm_delete.html:17
+#: galleries/templates/galleries/gallery_confirm_delete.html:17
+#: galleries/templates/galleries/photo_confirm_delete.html:17
 msgid "Confirm"
 msgstr "Confirmar"
 
-#. Explanation: The English word "Cancel" can have different meanings, such as
-#. to stop or to void an action. However, in the context of the French
-#. translation "Annuler", it seems that the intended meaning is to cancel or
-#. void something, which is a common usage in both languages.
-#: templates/galleries/gallery_confirm_delete.html:21
-#: templates/galleries/photo_confirm_delete.html:21
-#: templates/galleries/photo_form.html:29
+#: galleries/templates/galleries/gallery_confirm_delete.html:21
+#: galleries/templates/galleries/photo_confirm_delete.html:21
+#: galleries/templates/galleries/photo_form.html:29
 msgid "Cancel"
 msgstr "Cancelar"
 
-#. Explanation: The English phrase "Show Gallery" can be interpreted in
-#. different ways, but the most common meaning is to display or exhibit a
-#. collection of images. The French translation "Afficher la Galerie" makes it
-#. clear that the action is to show or display the gallery, which aligns with
-#. this interpretation.
-#: templates/galleries/gallery_detail.html:3
+#: galleries/templates/galleries/gallery_detail.html:3
 msgid "Show Gallery"
 msgstr "Mostrar Galeria"
 
-#. Explanation: The English phrase "Children galleries" can be ambiguous, as
-#. it could refer to either a collection of artworks or exhibitions related to
-#. children. However, the context provided by the French translation "Sous-
-#. Galeries", which implies a sub-level or section within a larger gallery,
-#. suggests that the Portuguese translation should also imply a sub-level or
-#. section, hence "Galérias infantis".
-#: templates/galleries/gallery_detail.html:20
+#: galleries/templates/galleries/gallery_detail.html:20
 msgid "Children galleries"
 msgstr "Galérias infantis"
 
-#. Explanation: The English phrase "Back to %s" is a common idiomatic
-#. expression meaning returning to something or someone. In this context, the
-#. placeholder "%(gname)s" refers to the name of the person or entity being
-#. returned to. The French translation maintains the same idiomatic expression
-#. and placeholder, indicating that the speaker is returning to the specified
-#. person or entity.
-#: templates/galleries/gallery_detail.html:38
-#: templates/galleries/photo_detail.html:23
+#: galleries/templates/galleries/gallery_detail.html:38
+#: galleries/templates/galleries/photo_detail.html:23
 #, python-format
 msgid "Back to %(gname)s"
 msgstr "%s"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates returning to the gallery list. The English phrase
-#. "Back to galleries list" suggests going back to the main list of galleries,
-#. while the French and Portuguese translations maintain the same nuance.
-#: templates/galleries/gallery_detail.html:43
+#: galleries/templates/galleries/gallery_detail.html:43
 msgid "Back to galleries list"
 msgstr "Voltando para a lista de galerias"
 
-#. Explanation: The English phrase "Add Photo" can be interpreted in different
-#. ways, but the French translation "Ajouter une Photo" makes it clear that
-#. the action is to add a photo. In Portuguese, we use the verb "adicionar"
-#. which means to add or include, and the noun "foto" which refers
-#. specifically to a photograph.
-#: templates/galleries/gallery_detail.html:48
-#: templates/galleries/photo_form.html:7
-#: templates/galleries/photo_form.html:20
+#: galleries/templates/galleries/gallery_detail.html:48
+#: galleries/templates/galleries/photo_form.html:7
+#: galleries/templates/galleries/photo_form.html:20
 msgid "Add Photo"
 msgstr "Adicionar Foto"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation. The English phrase
-#. "Create Sub Gallery" implies creating a new gallery that is subordinate to
-#. another gallery, while the French phrase "Créer une Sous-Galerie" also
-#. conveys this idea.
-#: templates/galleries/gallery_detail.html:52
+#: galleries/templates/galleries/gallery_detail.html:52
 msgid "Create Sub Gallery"
 msgstr "Criar uma Galeria Subsidiária"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a modification or editing of a gallery. The English
-#. phrase "Edit Gallery" is straightforward and implies making changes to the
-#. gallery, so the Portuguese version "Edição de Galeria" follows this
-#. interpretation.
-#: templates/galleries/gallery_detail.html:56
-#: templates/galleries/gallery_form.html:5
-#: templates/galleries/gallery_form.html:17
+#: galleries/templates/galleries/gallery_detail.html:56
+#: galleries/templates/galleries/gallery_form.html:5
+#: galleries/templates/galleries/gallery_form.html:17
 msgid "Edit Gallery"
 msgstr "Edição de Galeria"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a creation or establishment of a gallery. The
-#. English phrase "Create Gallery" is straightforward and implies the act of
-#. creating a new gallery, so the Portuguese version "Criar Galeria" follows
-#. this interpretation.
-#: templates/galleries/gallery_form.html:7
-#: templates/galleries/gallery_form.html:19
+#: galleries/templates/galleries/gallery_form.html:7
+#: galleries/templates/galleries/gallery_form.html:19
 msgid "Create Gallery"
 msgstr "Criar Galeria"
 
-#. Explanation: The English word "Update" can have different meanings, such as
-#. to make something newer or more recent. In this context, the Portuguese
-#. translation "Atualizar" is used to convey the idea of updating or modifying
-#. something, which aligns with the French translation "Mettre à jour".
-#: templates/galleries/gallery_form.html:29
-#: templates/galleries/photo_form.html:28
+#: galleries/templates/galleries/gallery_form.html:29
+#: galleries/templates/galleries/photo_form.html:28
 msgid "Update"
 msgstr "Atualizar"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation of the English word. The
-#. verb "create" in English has a similar meaning to the verb "créer" in
-#. French, indicating the act of bringing something into existence or making
-#. something new.
-#: templates/galleries/gallery_form.html:32
-#: templates/galleries/photo_form.html:31
+#: galleries/templates/galleries/gallery_form.html:32
+#: galleries/templates/galleries/photo_form.html:31
 msgid "Create"
 msgstr "Crear"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation. The English phrase
-#. "Delete photo" can be interpreted in different ways, but the French
-#. translation makes it clear that the action is to remove or delete the
-#. photo.
-#: templates/galleries/photo_confirm_delete.html:6
-#: templates/galleries/photo_detail.html:30
+#: galleries/templates/galleries/photo_confirm_delete.html:6
+#: galleries/templates/galleries/photo_detail.html:30
 msgid "Delete photo"
 msgstr "Apagar a foto"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct question about the user's intention to delete an
-#. object. The English sentence uses a placeholder for the object name, and
-#. the French translation makes it clear that the question is about deleting a
-#. specific object.
-#: templates/galleries/photo_confirm_delete.html:10
+#: galleries/templates/galleries/photo_confirm_delete.html:10
 #, python-format
 msgid "Are you sure you want to delete \"%(object)s\"?"
 msgstr "Você está seguro de querer apagar '%(object)s'?"
 
-#. Explanation: The English phrase "One photo" can be ambiguous, as it could
-#. refer to a single photograph or a collection of photos. However, in the
-#. context of the French translation "Une photo", which implies a singular
-#. object, the Portuguese translation "Uma foto" follows this interpretation,
-#. suggesting a single photograph.
-#: templates/galleries/photo_counter.html:4
+#: galleries/templates/galleries/photo_counter.html:4
 #, python-format
 msgid "One photo"
 msgid_plural "%(counter)s photos"
 msgstr[0] "Uma foto"
 msgstr[1] "%s fotos"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that there is no photo. The English phrase "No
-#. photo" can be ambiguous, as it can also mean "no picture" or "no image",
-#. but in this context, it clearly means "no photo".
-#: templates/galleries/photo_counter.html:6
+#: galleries/templates/galleries/photo_counter.html:6
 msgid "No photo"
 msgstr "Não há foto"
 
-#. Explanation: The English phrase "Gallery" can be translated to Portuguese
-#. as "galera", which is a more informal and colloquial term for "gallery".
-#. This translation choice reflects the meaning of the French phrase, which
-#. uses the same term "Galerie" without any variation.
-#: templates/galleries/photo_detail.html:13
+#: galleries/templates/galleries/photo_detail.html:13
 #, python-format
 msgid "Gallery %(gname)s"
 msgstr "Galera %(gname)s"
 
-#. Explanation: The Portuguese translation maintains the same meaning and tone
-#. as the French original, using the verb "editar" to indicate editing or
-#. modifying the photo.
-#: templates/galleries/photo_detail.html:27
-#: templates/galleries/photo_form.html:5
-#: templates/galleries/photo_form.html:18
+#: galleries/templates/galleries/photo_detail.html:27
+#: galleries/templates/galleries/photo_form.html:5
+#: galleries/templates/galleries/photo_form.html:18
 msgid "Edit Photo"
 msgstr "Editar a Foto"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates creating something new and adding it to a
-#. collection or set. The English phrase "Create and add another one" can be
-#. interpreted as either creating something new and then adding another
-#. instance of it, or simply creating and adding one more item to an existing
-#. collection. The French translation makes it clear that it is about creating
-#. something new and then adding another one, so the Portuguese version
-#. follows this interpretation.
-#: templates/galleries/photo_form.html:32
+#: galleries/templates/galleries/photo_form.html:32
 msgid "Create and add another one"
 msgstr "Criar e adicionar outro"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the gallery was completely removed or deleted.
-#. The English phrase "Gallery deleted" can be ambiguous, as it may only refer
-#. to the removal of a specific item or content from the gallery, rather than
-#. the entire gallery itself. The French translation makes it clear that the
-#. gallery was entirely removed, so the Portuguese version "Galera excluída"
-#. follows this interpretation.
-#: tests/tests_gallery.py:223 views/views_gallery.py:61
+#: galleries/tests/tests_gallery.py:223 galleries/views/views_gallery.py:61
 msgid "Gallery deleted"
 msgstr "Galera excluída"
 
-#. Explanation: The English phrase "Photo deleted" can be interpreted in
-#. different ways, but the context of the French translation "Photo supprimée"
-#. suggests that it means the photo was removed or erased. In Portuguese, this
-#. is accurately conveyed by "Foto excluída", which implies a deletion or
-#. removal of the photo.
-#: tests/tests_photo.py:120 views/views_photo.py:98
+#: galleries/tests/tests_photo.py:120 galleries/views/views_photo.py:98
 msgid "Photo deleted"
 msgstr "Foto excluída"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the root of a zip file cannot contain photos.
-#. The English sentence is clear about excluding photos from the root, and the
-#. Portuguese version maintains this clarity.
-#: views/views_bulk.py:53
+#: galleries/views/views_bulk.py:53
 msgid "Photos can't be at the root of the zip file."
 msgstr "As fotos não podem estar na raiz do arquivo zip."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that a path traversal attempt has been detected and
-#. that the ".." character is not allowed in paths inside the zip file. The
-#. English sentence can be ambiguous, as it could refer to other types of
-#. files or situations, but the context provided by the French translation
-#. makes it clear that this is specifically related to zip files.
-#: views/views_bulk.py:71
+#: galleries/views/views_bulk.py:71
 msgid ""
 "Detected path traversal attempt, '..' is not allowed in paths inside the zip"
 " file"
@@ -436,82 +234,39 @@ msgstr ""
 "Traversão de caminho detectada, '..' não é permitida em caminhos dentro do "
 "arquivo zip"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the file was imported from a ZIP archive. The
-#. English phrase "Imported from zipfile directory {path}" suggests that the
-#. path to the ZIP archive is being provided, and this is preserved in the
-#. Portuguese translation.
-#: views/views_bulk.py:80
+#: galleries/views/views_bulk.py:80
 #, python-brace-format
 msgid "Imported from zipfile directory {path}"
 msgstr "Importado de diretório do arquivo zip {path}"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the file was imported from a ZIP archive. The
-#. English phrase "Imported from zipfile directory {filename}" suggests that
-#. the file is being imported from a specific directory within a ZIP archive,
-#. while the French translation makes it clear that it is a ZIP archive.
-#: views/views_bulk.py:108
+#: galleries/views/views_bulk.py:108
 #, python-brace-format
 msgid "Imported from zipfile directory {filename}"
 msgstr "Importado de diretório do arquivo {filename}"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the photo could not be imported and was
-#. therefore ignored. The English phrase "Unable to import photo '{path}', it
-#. was ignored" can be ambiguous, as it uses the word "was" instead of "was
-#. ignored", making it clear that the action of ignoring happened after the
-#. attempt to import the photo.
-#: views/views_bulk.py:177
+#: galleries/views/views_bulk.py:177
 #, python-brace-format
 msgid "Unable to import photo '{path}', it was ignored"
 msgstr "Impossível importar a foto '{path}' , ela foi ignorada"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the zip file was uploaded and some galleries
-#. were created, while some photos were also created. The placeholders `{lg}`
-#. and `{nbp}` are kept in the same place as in the original sentence to
-#. maintain consistency with the contextual translation.
-#: views/views_bulk.py:191
+#: galleries/views/views_bulk.py:193
+#, python-brace-format
 msgid "Zip file uploaded: {lg} galleries and {nbp} photos created"
 msgstr "Arquivo zip carregado: {lg} galerias e {nbp} fotos criadas"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that one of the photo or gallery identifiers is
-#. missing. The English sentence "Missing either photo id or gallery id" can
-#. be ambiguous, as it uses the word "either", which could imply an exclusive
-#. choice between the two options. The French translation makes it clear that
-#. only one identifier is required to be present, so the Portuguese version
-#. "Um identificador de foto ou de galeria está faltando." follows this
-#. interpretation.
-#: views/views_photo.py:30
+#: galleries/views/views_photo.py:30
 msgid "Missing either photo id or gallery id"
 msgstr "Um identificador de foto ou de galeria está faltando."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that a photo was not found on a specific page. The
-#. English sentence is clear and direct, while the French translation uses
-#. more formal language to convey the same idea. In Portuguese, "naquela
-#. página" is used to indicate a specific webpage or page number, making the
-#. translation consistent with the original meaning.
-#: views/views_photo.py:50
+#: galleries/views/views_photo.py:50
 msgid "Photo not found on that page"
 msgstr "Foto não encontrada naquela página"
 
-#. Explanation: The English phrase "Photo created" can be ambiguous, as it can
-#. mean both "taking a photo" and "creating an image". However, the context of
-#. the French translation "Photo créée" suggests that the action is more
-#. related to creating or producing an image, which aligns with the Portuguese
-#. translation "Foto criada".
-#: views/views_photo.py:71
+#: galleries/views/views_photo.py:71
 msgid "Photo created"
 msgstr "Foto criada"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a specific error occurred when creating the photo
-#. and provides guidance on how to resolve the issue by converting the format
-#. before retrying the upload process.
-#: views/views_photo.py:78
+#: galleries/views/views_photo.py:77
 msgid ""
 "Error when creating this photo. Try to convert it in another format before "
 "retrying to upload it."

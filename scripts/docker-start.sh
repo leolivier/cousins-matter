@@ -1,6 +1,7 @@
 #!/bin/bash
 container=cousins-matter
 image=ghcr.io/leolivier/$container
+github_repo=leolivier/cousins-matter
 
 function usage() {
 	cat << EOF
@@ -31,12 +32,15 @@ Then it will pull the image '$image:<tag>'.
 Afterwards, it will start the image with the proper mounted volumes,the right port and the right command.
 And finally, it will check if a superuser already exists in the database, other wise it will run the command to create it.
 
+Prerequisites:
+	- docker
+	- jq
+	- curl
 EOF
 	exit 0
 }
 
 function check_status() {
- # status=$1; shift
   status=$?;
   error=$@
   if [[ $status != 0 ]]; then
@@ -50,6 +54,9 @@ check_status "docker is not installed, please install it and restart the command
 
 which jq >/dev/null
 check_status "jq is not installed, please install it and restart the command"
+
+which curl >/dev/null
+check_status "curl is not installed, please install it and restart the command"
 
 tag=''
 directory=$PWD
@@ -115,7 +122,7 @@ if [[ -s $current_tag && $current_tag == $tag && $update != true && $force == fa
 fi
 
 # Function for checking whether an item is in a list
-is_in_list() {
+function is_in_list() {
 	local item="$1"
 	shift
 	local list=("$@")
@@ -134,8 +141,7 @@ if [[ -d $directory ]]; then
 	verbose "directory $directory exists, checking it does contain only allowed files and directories..."
 	for item in "$directory"/*; do
 		basename_item=$(basename "$item")
-		if [[ ( -f "$item" && ! $(is_in_list "$basename_item" "${allowed_files[@]}") ) ||
-					( -d "$item" && ! $(is_in_list "$basename_item" "${allowed_dirs[@]}") ) ]]; then
+		if { [[ -f "$item" ]] && ! is_in_list "$basename_item" "${allowed_files[@]}"; } || { [[ -d "$item" ]] && ! is_in_list "$basename_item" "${allowed_dirs[@]}"; }; then
 			echo "$directory seems to contains files that are not allowed (e.g. $item). Only $allowed_files and $allowed_dirs are allowed."
 			read -p "Do you want to continue anyway? [y/N] " -n 1 -r
 			echo	
@@ -149,43 +155,27 @@ if [[ -d $directory ]]; then
 	done
 fi
 
-mkdir -p $directory $directory/data $directory/media && cd $directory
+function get_download_url() {
+	last_realease=$(curl -s https://api.github.com/repos/${github_repo}/releases/latest | jq -r '.tag_name')
+	echo https://raw.githubusercontent.com/${github_repo}/refs/tags/${last_realease}
+}
 
+mkdir -p $directory $directory/data $directory/media && cd $directory
+git_url=$(get_download_url)
+# download docker-compose.yml from github if it doesn't exist
+if [[ ! -f docker-compose.yml ]]; then
+	verbose "downloading docker-compose.yml from github latest release."
+	curl $git_url/docker-compose.yml -o docker-compose.yml
+fi
 if [[ ! -f .env ]]; then
-	if [[ -s $(which curl) ]]; then
-		curl -o .env https://raw.githubusercontent.com/leolivier/cousins-matter/main/.env.example
-	elif [[ -s $(which wget) ]]; then
-		wget -O .env https://raw.githubusercontent.com/leolivier/cousins-matter/main/.env.example
-	else
-		echo "Neither curl nor wget seems to be installed on your system, cannot download .env.example"
-		echo "Either install curl or wget and restart the command"
-		echo "or download yourself https://raw.githubusercontent.com/leolivier/cousins-matter/main/.env.example,"
-		echo "rename it to .env, edit it and adapt it to your neeeds then restart the command"
-		exit 1
-	fi
-	echo ".env didn't exist, it was created by downloading .env.example from github."
+	curl -o .env $git_url/.env.example
+	echo ".env didn't exist, it was created by downloading .env.example from github latest release."
 	echo " Please edit .env and adapt it to your neeeds then restart the command"
 	exit 1
 fi
 
-verbose "pulling $tagged_image..."
-tmpf=$(mktemp docker_start.XXXX)
-check_status "Couldn't create temp file"
-docker pull $tagged_image 2>&1 | tee $tmpf
-check_status "Docker pull failed"
-
-if grep -q "Status: Downloaded newer image for $tagged_image" $tmpf; then
-	verbose "done"
-	pulled=true
-else
-	verbose "You already have the latest version of $tagged_image"
-	pulled=false
-fi
-rm $tmpf
-
-
-verbose "starting $container"
-docker compose up --pull always --wait -d
+verbose "starting $container using image $tagged_image"
+COUSINS_MATTER_IMAGE=$tagged_image docker compose up --pull always --wait -d
 check_status "Docker run failed"
 verbose "started"
 

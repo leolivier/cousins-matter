@@ -1,21 +1,21 @@
-# Italian Translations for Cousins-matter app.
-# Copyright (C) 2024 Olivier LEVILLAIN
+# Italian Translations for NO NAME FOUND app.
+# Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-# This file was generated from cousins-matter/pages/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the claude-3-5-sonnet-20240620 model. Depending on the model, it may contain some errors and should be reviewed
+# This file was generated from pages/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
 # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
 # by the model.
-# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-15 18:05+0200\n"
-"PO-Revision-Date: 2024-09-21 19:25+00:00\n"
+"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"PO-Revision-Date: 2024-10-21 10:22+00:00\n"
 "\n"
-"Last-Translator: Auto-po-lyglot using claude-3-5-sonnet-20240620 (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: IT\n"
 "MIME-Version: 1.0\n"
@@ -23,66 +23,63 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: apps.py:8 templates/pages/menu_pages.html:4
-#: templates/pages/pages_admin_list.html:3
-#: templates/pages/pages_admin_list.html:8
+#: pages/apps.py:8 pages/templates/pages/menu_pages.html:4
+#: pages/templates/pages/pages_admin_list.html:3
+#: pages/templates/pages/pages_admin_list.html:8
 msgid "Pages"
 msgstr "Pagine"
 
-#: forms.py:34 tests/tests_crud.py:31 tests/tests_crud.py:78
+#: pages/forms.py:34 pages/tests/tests_crud.py:46
+#: pages/tests/tests_crud.py:116
 #, python-format
 msgid "Flatpage with url %(url)s already exists"
 msgstr "Una pagina con l'url %(url)s esiste già"
 
-#: forms.py:38 tests/tests_crud.py:39
+#: pages/forms.py:38 pages/tests/tests_crud.py:55
 msgid "A flatpage cannot be a subpage of another flatpage, check your URLs"
 msgstr ""
 "Una flatpage non può essere una sottopagina di un'altra flatpage, controlla "
 "i tuoi URL."
 
-#: templates/pages/page_form.html:5 templates/pages/page_form.html:17
-#: templates/pages/page_form.html:27
+#: pages/templates/pages/page_form.html:5
+#: pages/templates/pages/page_form.html:17
+#: pages/templates/pages/page_form.html:27
 msgid "Update Page"
 msgstr "Aggiorna pagina"
 
-#: templates/pages/page_form.html:7 templates/pages/page_form.html:19
-#: templates/pages/page_form.html:29 templates/pages/pages_admin_list.html:9
-#: templates/pages/pages_admin_list.html:11
+#: pages/templates/pages/page_form.html:7
+#: pages/templates/pages/page_form.html:19
+#: pages/templates/pages/page_form.html:29
+#: pages/templates/pages/pages_admin_list.html:9
+#: pages/templates/pages/pages_admin_list.html:11
 msgid "Create Page"
 msgstr "Crea Pagina"
 
-#: templates/pages/page_form.html:33
+#: pages/templates/pages/page_form.html:33
 msgid "Save Page and Continue Editing"
 msgstr "Salva la pagina e continua la modifica"
 
-#: templates/pages/page_form.html:37 templates/pages/page_form.html:44
+#: pages/templates/pages/page_form.html:37
+#: pages/templates/pages/page_form.html:44
 msgid "Delete Page"
 msgstr "Elimina Pagina"
 
-#: templates/pages/page_form.html:45
+#: pages/templates/pages/page_form.html:45
 #, python-format
 msgid "Are you sure you want to delete the page \"%(title)s\"?"
 msgstr "Sei sicuro di voler eliminare la pagina \"%(title)s\"?"
 
-#: templates/pages/page_tree.html:3 templates/pages/page_tree.html:7
+#: pages/templates/pages/page_tree.html:3
+#: pages/templates/pages/page_tree.html:7
 msgid "Pages Tree"
 msgstr "Albero delle Pagine"
 
-#: templatetags/pages_tags.py:102
-#, python-brace-format
-msgid ""
-"Cannot load page from url {url}, it was not found in the database. Please "
-"contact the administrator of the site"
-msgstr ""
-"Impossibile caricare la pagina dall'url {url}, non è stata trovata nel "
-"database. Si prega di contattare l'amministratore del sito"
-
-#: views.py:28 views.py:47
+#: pages/tests/test_base.py:35 pages/views.py:28 pages/views.py:47
 #, python-format
 msgid "Page \"%(title)s\" saved"
 msgstr "Pagina \"%(title)s\" salvata"
 
-#: views.py:68
+#: pages/views.py:68
 #, python-format
 msgid "Page \"%(title)s\" deleted"
 msgstr "Pagina \"%(title)s\" eliminata"

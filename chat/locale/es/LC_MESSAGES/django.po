@@ -1,19 +1,19 @@
-# # Spanish Translations for Cousins-matter app.
-# # Copyright (C) 2024 <OWNER>
-# # This file is distributed under the same license as the application.
-# # This file was generated from /home/olivi/devt/cousins-matter/chat/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# # using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# # by the model.
-# # Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# Spanish Translations for NO NAME FOUND app.
+# Copyright (C) 2024 <OWNER>
+# This file is distributed under the same license as the application.
+# This file was generated from chat/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 18:18+0200\n"
-"PO-Revision-Date: 2024-09-21 18:34+00:00\n"
+"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"PO-Revision-Date: 2024-10-21 09:18+00:00\n"
 "\n"
 "Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
@@ -23,132 +23,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English and French sentences. The phrase "You can only delete your
-#. own messages" in English is translated to "Tú solo puedes eliminar tus
-#. propios mensajes" in Spanish, which directly corresponds to the French
-#. version "Tu peux seulement supprimer tes propios messages." Both
-#. translations maintain the same nuance that deletion of a message is limited
-#. to the sender themselves.
 #: chat/consumers.py:180
 msgid "You can only delete your own messages"
 msgstr "Tú solo puedes eliminar tus propios mensajes"
 
-#. Explanation: This translation directly corresponds to the French term
-#. provided, which is commonly used in English-speaking contexts to refer to a
-#. chat room. The term "sala de discusión" in French translates to "sala de
-#. discusión" in Spanish, maintaining the same meaning and context as the
-#. original English phrase.
 #: chat/models.py:34
 msgid "chat room"
 msgstr "sala de discusión"
 
-#. Explanation: This translation directly corresponds to the French phrase
-#. provided in the context. Both "chat rooms" and "salons de discussion" refer
-#. to online spaces where people can communicate through text, voice, or
-#. video. The term "discussions" is used in both languages to convey this
-#. meaning.
 #: chat/models.py:35
 msgid "chat rooms"
 msgstr "salones de discusión"
 
-#. Explanation: The English and French sentences provided are identical, both
-#. referring to the concept of a message. In Spanish, this term is also
-#. referred to as "mensaje." There is no need for any interpretation or
-#. adjustment since the meaning remains consistent across all three languages.
 #: chat/models.py:77
 msgid "message"
 msgstr "mensaje"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase "salon de discussion privée." The term "sala de discusión" is
-#. a common and appropriate way to translate "chat room," which in this
-#. context refers to a private communication space. The word "privada"
-#. directly corresponds to the French "privé," ensuring that the translation
-#. maintains the sense of privacy associated with the original phrase.
 #: chat/models.py:97
 msgid "private chat room"
 msgstr "sala de discusión privada"
 
-#. Explanation: The English phrase "private chat rooms" translates to "chat
-#. privado en salas" in Spanish. This maintains the meaning of private
-#. conversations taking place within a room or space, which is consistent with
-#. the French translation "salons de discussion publique," where "publique"
-#. means public and implies that these are not restricted to any specific
-#. group or individual but rather open for anyone who wishes to join. The term
-#. "chat privado" in Spanish directly corresponds to "discussion publique" in
-#. French, indicating a private conversation setting.
 #: chat/models.py:98
 msgid "private chat rooms"
 msgstr "chat privado en salas"
 
-#. Explanation: This translation maintains the meaning and tone of the
-#. original English phrase. The term "Private Chat Rooms" is accurately
-#. translated as "Salon de discusión privé," which in this context means
-#. "Salón de discusión privado." The French translation provided, "Salons de
-#. discussion privée," directly corresponds to this accurate rendering.
 #: chat/templates/chat/chat_rooms.html:5
 #: chat/templates/chat/chat_rooms.html:14
 msgid "Private Chat Rooms"
 msgstr "Salones de discusión privados"
 
-#. Explanation: This translation directly corresponds to the French phrase
-#. provided. Both "Chat Rooms" and "Salons de discussion" refer to online
-#. forums or chat rooms where people can communicate with others in real-time
-#. through text, voice, or video. The term "Salon de discussion" is commonly
-#. used in French for such digital communication spaces, maintaining the same
-#. meaning as "Chat Rooms."
 #: chat/templates/chat/chat_rooms.html:7
 #: chat/templates/chat/chat_rooms.html:16
 msgid "Chat Rooms"
 msgstr "Salones de discusión"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the provided French phrase. The original English sentence is ambiguous, as
-#. it could be interpreted in two ways: choosing an existing room or creating
-#. a new one. The French translation specifies that there are two options:
-#. "Choisis un salon existant" (Choose an existing room) and "crées-en un
-#. nouveau" (creates one new). Therefore, the Spanish version follows this
-#. interpretation by translating it as "Elige un salón existente o crea uno
-#. nuevo."
 #: chat/templates/chat/chat_rooms.html:19
 msgid "Choose an existing room or create a new one."
 msgstr "Elige un salón existente o crea uno nuevo."
 
-#. Explanation: This explanation clarifies the meaning of the placeholders and
-#. their placement in the Spanish translation. In the original English
-#. sentence, there are no placeholders to keep as they are simple words
-#. without any context-specific identifiers. The French translation uses "Nom
-#. du salon," which translates directly to "Nombres del salón" in Spanish,
-#. maintaining the structure and meaning of the phrase.
 #: chat/templates/chat/chat_rooms.html:26
 #: chat/templates/chat/room_detail.html:27
 msgid "Room name"
 msgstr "Nombres del salón"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French phrase, which indicates creating a private space. The term
-#. "salon privé" in French is translated as "salón privado" in Spanish,
-#. maintaining the concept of a private room or area.
 #: chat/templates/chat/chat_rooms.html:31
 msgid "Create private room"
 msgstr "Criar un salón privado"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English phrase. The term "room" in English is often translated as
-#. "sala" or "habitación" depending on the context, but in this case, "salon"
-#. (which can mean a living room or lounge) aligns well with the French
-#. translation "un salon." Therefore, "Criar una sala" maintains the essence
-#. of creating a space for socializing or relaxing.
 #: chat/templates/chat/chat_rooms.html:33
 msgid "Create room"
 msgstr "Criar una sala"
 
-#. Explanation: The placeholders in the English and French sentences are
-#. identical, indicating that they should be kept as is in the Spanish
-#. translation. Therefore, the number of messages (represented by %(nmsgs)s)
-#. remains unchanged, and it is translated to "mensajes." The structure and
-#. meaning remain consistent between all three languages.
 #: chat/templates/chat/chat_rooms.html:47 chat/tests/tests_private.py:46
 #: chat/tests/tests_public.py:64 chat/tests/tests_public.py:94
 #, python-format
@@ -157,256 +82,149 @@ msgid_plural "%(nmsgs)s messages"
 msgstr[0] "%(nmsgs)s message"
 msgstr[1] "%(nmsgs)s messages"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French phrase, which indicates that there is no author as of now. The
-#. English phrase "No author yet" can be interpreted similarly in both
-#. languages, conveying the idea that an author has not been established or
-#. appointed at this point.
 #: chat/templates/chat/chat_rooms.html:59 chat/tests/tests_public.py:95
 msgid "No author yet"
 msgstr "Pas encore de auteur"
 
-#. Explanation: This translation is straightforward as both the English and
-#. French terms are direct translations of each other. The term "profile" in
-#. English corresponds directly to "profil" in French, referring to a detailed
-#. description or summary of someone's characteristics, abilities, or
-#. activities.
 #: chat/templates/chat/chat_rooms.html:76
 #: chat/templates/chat/chat_rooms.html:81
-#: chat/templates/chat/private/room_admins.html:42
-#: chat/templates/chat/private/room_members.html:42
-#: chat/templates/chat/room_detail.html:74 chat/tests/tests_private.py:43
+#: chat/templates/chat/private/room_admins.html:44
+#: chat/templates/chat/private/room_members.html:44
+#: chat/templates/chat/room_detail.html:76 chat/tests/tests_private.py:43
 #: chat/tests/tests_public.py:67
 msgid "profile"
 msgstr "profile"
 
-#. Explanation: The English phrase "Room Members" typically refers to
-#. individuals who are members of a room or space, often in the context of a
-#. hotel or conference setting. The French translation "Membres du salon"
-#. suggests that these are people associated with a specific area or event,
-#. such as a salon or meeting room. Given this context, "salon" is used
-#. instead of "room," which better fits the idea of a designated space for
-#. gatherings or events. Therefore, "Membres del salón" accurately conveys the
-#. meaning and tone of "Room Members."
 #: chat/templates/chat/chat_rooms.html:102
-#: chat/templates/chat/room_detail.html:53
+#: chat/templates/chat/room_detail.html:55
 msgid "Room Members"
 msgstr "Membres del salón"
 
-#. Explanation: This translation maintains the meaning and structure of the
-#. original English phrase. The term "Room Admins" in English is translated to
-#. "Administradores del salón" in Spanish, which accurately reflects the
-#. context of managing or administering a room or space within a platform or
-#. application where users interact with different rooms or channels. The
-#. French translation "Administrateurs du salon" directly corresponds to this
-#. meaning, as it refers to administrators who manage a specific area or
-#. section (salon) on a platform.
 #: chat/templates/chat/chat_rooms.html:105
-#: chat/templates/chat/room_detail.html:56
+#: chat/templates/chat/room_detail.html:58
 msgid "Room Admins"
 msgstr "Administradores del salón"
 
-#. Explanation: This translation directly corresponds to the French phrase,
-#. maintaining both the meaning and tone of the original. The term "member" in
-#. English is translated as "miembro" in Spanish, which accurately reflects
-#. this context.
 #: chat/templates/chat/private/add-member.html:7
 msgid "Search a member..."
 msgstr "Buscar un miembro..."
 
-#. Explanation: This translation maintains the meaning and structure of the
-#. original English phrase. The term "Private Room" in English is translated
-#. as "salon privé," which directly corresponds to "privé" (private) and
-#. "room." In French, these terms are combined into "salle privée," but it's
-#. common to use a more general term like "salon" for rooms or spaces.
-#. Therefore, the Spanish translation uses "salón privado" to convey the same
-#. meaning as the original English phrase.
 #: chat/templates/chat/private/room_admins.html:4
 #: chat/templates/chat/private/room_admins.html:7
 msgid "Private Room Admins"
 msgstr "Administradores del salón privado"
 
-#. Explanation: This Spanish translation reflects the meaning of the French
-#. phrase, which indicates that the sentence is about administrators managing
-#. a private room. The placeholders are kept in the same semantic location as
-#. in the original English and French sentences. The name of the placeholders
-#. (room_name) remains untranslated to maintain consistency with the user's
-#. instructions.
 #: chat/templates/chat/private/room_admins.html:11
 #, python-format
 msgid "Administrators of \"%(room_name)s\" private room"
 msgstr "Administradores del salón privado \"%(room_name)s"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French phrase, which indicates returning to a specific room or space.
-#. The English phrase "Back to room" can be ambiguous as it could refer to
-#. going back to any room, but in this context, "Retour au salon" (which means
-#. "back to the salon") provides clarity by specifying that the room is likely
-#. a living area such as a salon. Therefore, "Volver al salón" follows this
-#. interpretation and maintains the intended meaning of returning to a
-#. specific room or space.
 #: chat/templates/chat/private/room_admins.html:15
 #: chat/templates/chat/private/room_members.html:15
-#: chat/tests/tests_private.py:170 chat/tests/tests_private.py:222
+#: chat/tests/tests_private.py:196 chat/tests/tests_private.py:244
 msgid "Back to room"
 msgstr "Volver al salón"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English phrase, maintaining the context and intent. The term
-#. "admins" is translated as "administradores," which is commonly used in
-#. Spanish for people who manage or control a group or system, such as an
-#. online room or chat. The French translation "Quitter les admins de ce
-#. salon" uses "quitter" (to leave) to indicate the action of departing from
-#. these administrators within the context of the room. In this case, "salon"
-#. is used for both English and Spanish contexts, referring to a room or space
-#. where people gather, such as an online chat room.
 #: chat/templates/chat/private/room_admins.html:21
 msgid "Leave admins of this room"
 msgstr "Salir a los administradores de este salón"
 
-#. Explanation: This translation maintains the meaning and structure of the
-#. original English phrase. The term "admin" is translated as "administrador,"
-#. which accurately represents a person with administrative privileges in a
-#. room or space, such as a room (salon). The word order remains consistent
-#. between the English and French phrases, ensuring that "to the room" is
-#. translated as "au salon."
-#: chat/templates/chat/private/room_admins.html:30
+#: chat/templates/chat/private/room_admins.html:23
+#, fuzzy
+#| msgid "You are not an admin of this private room"
+msgid "Are you sure you want to stop being admin of this room?"
+msgstr "Tu n'es pas admin de ce salon privé"
+
+#: chat/templates/chat/private/room_admins.html:32
 msgid "Add admin to the room"
 msgstr "Agregar administrador al salón"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. English phrase "Remove Admin from Room." The French translation "Enlever
-#. l'administrateur du salon" is used to clarify that it involves removing an
-#. administrator (l'administrateur) from a room (du salon). In the context
-#. provided, "Quitar administrador del salón" maintains this nuance and
-#. meaning.
-#: chat/templates/chat/private/room_admins.html:47
+#: chat/templates/chat/private/room_admins.html:48
+#: chat/tests/tests_private.py:85
 msgid "Remove Admin from Room"
 msgstr "Quitar administrador del salón"
 
-#. Explanation: This translation maintains the meaning and tone of the
-#. original English phrase. The term "Private Room Members" is translated as
-#. "Membres du salon privé" in French, which directly corresponds to "Membres
-#. del salón privé" in Spanish. The structure and meaning are preserved
-#. without any ambiguity or change in nuance.
+#: chat/templates/chat/private/room_admins.html:50
+#: chat/tests/tests_private.py:86
+#, fuzzy
+#| msgid ""
+#| "Are you sure you want to delete the room \"%(room_name)s\" and all its "
+#| "messages?"
+msgid "Are you sure you want to remove this admin from the room?"
+msgstr "Voulez-vous supprimer le salon \"%(room_name)s\" et tous ses messages ?"
+
 #: chat/templates/chat/private/room_members.html:4
 #: chat/templates/chat/private/room_members.html:7
 msgid "Private Room Members"
 msgstr "Membres del salón privado"
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the original English phrase, including the placeholder for the room
-#. name. The context translation in French is also maintained, ensuring
-#. consistency across all languages. The term "private room" is translated as
-#. "salon privé," which accurately conveys the idea of a private space. In
-#. Spanish, this translates to "salón privado," maintaining the same nuance
-#. and structure.
 #: chat/templates/chat/private/room_members.html:11
 #, python-format
 msgid "Members of \"%(room_name)s\" private room"
 msgstr "Membres del salón privado \"%(room_name)s"
 
-#. Explanation: This translation maintains the meaning and tone of the
-#. original English phrase. The term "room" in English is often translated as
-#. "salon" or "sala" depending on the context, which fits well with "Leave
-#. this room." being translated to "Quitter ce salon," where "quitter" means
-#. "to leave" and "ce salon" translates directly to "this room/salon."
 #: chat/templates/chat/private/room_members.html:21
-#: chat/templates/chat/room_detail.html:47 chat/tests/tests_private.py:171
-#: chat/tests/tests_private.py:223 chat/tests/tests_private.py:352
+#: chat/templates/chat/room_detail.html:47 chat/tests/tests_private.py:72
 msgid "Leave this room"
 msgstr "Salir de este salón"
 
-#. Explanation: This translation maintains the meaning and structure of the
-#. original English phrase. The term "member" is translated as "miembro,"
-#. which accurately represents a person or entity that can be added to a room,
-#. such as a chat room or virtual meeting space. The French translation
-#. "Ajouter un membre au salon" uses "membre" for "member" and "salon" for
-#. "room," so the Spanish version follows this structure closely while
-#. maintaining the same meaning.
-#: chat/templates/chat/private/room_members.html:30
+#: chat/templates/chat/private/room_members.html:23
+#: chat/templates/chat/room_detail.html:49 chat/tests/tests_private.py:73
+#, fuzzy
+#| msgid ""
+#| "Are you sure you want to delete the room \"%(room_name)s\" and all its "
+#| "messages?"
+msgid "Are you sure you want to leave this room?"
+msgstr "Voulez-vous supprimer le salon \"%(room_name)s\" et tous ses messages ?"
+
+#: chat/templates/chat/private/room_members.html:32
 msgid "Add member to the room"
 msgstr "Agregar miembro al salón"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. English phrase "Remove Member from Room." The French translation "Supprimer
-#. un membre du salon" directly supports this, indicating that an individual
-#. is being removed from a room or chat room. In both languages, the core
-#. action of removing someone (a member) from a specific space (a room) is
-#. preserved without ambiguity.
-#: chat/templates/chat/private/room_members.html:47
+#: chat/templates/chat/private/room_members.html:48
+#: chat/tests/tests_private.py:89
 msgid "Remove Member from Room"
 msgstr "Eliminar miembro del salón"
 
-#. Explanation: The English phrase "Let's chat!" is a casual way of inviting
-#. someone to start a conversation or engage in dialogue. In Spanish, the
-#. equivalent expression is "Discutamos!" which maintains the same casual and
-#. friendly tone as its English counterpart. The French translation
-#. "Discutons!" also conveys this sense of initiating a conversation, thus
-#. aligning with the meaning of "Let's chat!".
+#: chat/templates/chat/private/room_members.html:50
+#: chat/tests/tests_private.py:90
+#, fuzzy
+#| msgid ""
+#| "Are you sure you want to delete the room \"%(room_name)s\" and all its "
+#| "messages?"
+msgid "Are you sure you want to remove this member from the room?"
+msgstr "Voulez-vous supprimer le salon \"%(room_name)s\" et tous ses messages ?"
+
 #: chat/templates/chat/room_detail.html:19
 msgid "Let's chat!"
 msgstr "Discutamos!"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. provided French phrase. Both phrases instruct users to use the Enter key
-#. (or Return in some contexts) to submit their input and the Escape key to
-#. cancel or give up. The terms "retour" for Enter and "échap" for Escape are
-#. commonly used equivalents that maintain the instructional tone and clarity
-#. of the original French text.
 #: chat/templates/chat/room_detail.html:28
 msgid "hit return to submit, escape to give up"
 msgstr "enter para enviar, escape para rendirse"
 
-#. Explanation: The English word "Delete" and the French word "Supprimer" both
-#. convey the meaning of erasing or removing something. In Spanish, this
-#. concept is expressed with the term "Eliminar," which maintains the same
-#. meaning as in the original sentences.
 #: chat/templates/chat/room_detail.html:38
-#: chat/templates/chat/room_detail.html:82
+#: chat/templates/chat/room_detail.html:84
 msgid "Delete"
 msgstr "Eliminar"
 
-#. Explanation: This translation is straightforward as the English word "Edit"
-#. and the French word "Modifier" both refer to the action of making changes
-#. or corrections. There are no ambiguities in this case, so the direct
-#. translation preserves the meaning accurately.
 #: chat/templates/chat/room_detail.html:41
 msgid "Edit"
 msgstr "Modificar"
 
-#. Explanation: The English and French sentences provided are identical, both
-#. simply stating the word "Message." Since there is no ambiguity or need for
-#. context translation in this case, the Spanish translation remains the same
-#. as the original.
-#: chat/templates/chat/room_detail.html:92
+#: chat/templates/chat/room_detail.html:94
 msgid "Message"
 msgstr "Mensaje"
 
-#. Explanation: This translation is straightforward as both the English and
-#. French phrases are direct translations of each other. The term "Submit" in
-#. English typically means to send or present something, which aligns with the
-#. meaning of "Envoyer" in French. There is no ambiguity or need for context-
-#. specific interpretation here.
-#: chat/templates/chat/room_detail.html:97
+#: chat/templates/chat/room_detail.html:99
 msgid "Submit"
 msgstr "Enviar"
 
-#. Explanation: The term "Room deletion" in English is translated to
-#. "Suppression du salon" in French, which directly translates to "Sustanción
-#. del salón" in Spanish. However, the context of "room" and "salon" might not
-#. be perfectly aligned in all contexts, but given that both terms refer to a
-#. space or area, "sustanción" (deletion) is used as it closely matches the
-#. meaning of "Suppression".
-#: chat/templates/chat/room_detail.html:106
+#: chat/templates/chat/room_detail.html:108
 msgid "Room deletion"
 msgstr "Sustanción del salón"
 
-#. Explanation: This Spanish translation reflects the meaning of the French
-#. phrase, which indicates that the user is being asked if they want to delete
-#. a room and all its associated messages. The placeholders are kept in the
-#. same place as in the original sentence.
-#: chat/templates/chat/room_detail.html:107
+#: chat/templates/chat/room_detail.html:109
 #, python-format
 msgid ""
 "Are you sure you want to delete the room \"%(room_name)s\" and all its "
@@ -415,10 +233,6 @@ msgstr ""
 "Haz seguro de que quieres eliminar el salón \"%(room_name)s\" y todos sus "
 "mensajes?"
 
-#. Explanation: The placeholders in the English and French sentences are
-#. identical, indicating that they should be kept as is in the Spanish
-#. translation. Therefore, "member" remains "miembro" in Spanish, maintaining
-#. the same structure and meaning as in the original sentences.
 #: chat/tests/tests_private.py:47
 #, python-format
 msgid "%(nfollowers)s member"
@@ -426,14 +240,7 @@ msgid_plural "%(nfollowers)s members"
 msgstr[0] "%(nfollowers)s membre"
 msgstr[1] "%(nfollowers)s membres"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French sentence. The key elements are:
-#. - "Another room with a similar name already exists" is translated as "Otro
-#. salón con un nombre similar ya existe"
-#. - "{room_name}" remains unchanged and kept in the same place
-#. - "Please choose a different name" is translated as "Por favor, elige otro
-#. nombre", which maintains the polite request tone.
-#: chat/tests/tests_private.py:129 chat/tests/tests_public.py:55
+#: chat/tests/tests_private.py:155 chat/tests/tests_public.py:55
 #, python-brace-format
 msgid ""
 "Another room with a similar name already exists ('{room_name}'). Please "
@@ -442,41 +249,19 @@ msgstr ""
 "Otro salón con un nombre similar ya existe ('{room_name}'). Por favor, elige"
 " otro nombre."
 
-#. Explanation: This Spanish translation reflects the meaning of the French
-#. phrase, which indicates that the person or entity (referred to by the
-#. placeholder `%s`) has been removed from a room. The English sentence uses
-#. the placeholder format "%s", and in the French original, it is translated
-#. as "%s". Therefore, in the Spanish version, we maintain the same structure
-#. for consistency with the user's instruction.
-#: chat/tests/tests_private.py:207 chat/tests/tests_private.py:283
+#: chat/tests/tests_private.py:229 chat/tests/tests_private.py:302
 #: chat/views/views_private_rooms.py:333
 #, python-format
 msgid "%s has been removed from the room"
 msgstr "%s ha sido removido de este salón."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. provided French sentence. The key elements are preserved:
-#. - "Only members" is translated as "Sólo los miembros"
-#. - "of this private room" becomes "de este salón privado"
-#. - "can become admins" translates to "pueden convertirse en administradores"
-#. The structure and meaning of the original sentence remain intact in
-#. Spanish, ensuring that it accurately reflects the French version.
-#: chat/tests/tests_private.py:217 chat/views/views_private_rooms.py:450
+#: chat/tests/tests_private.py:239 chat/views/views_private_rooms.py:450
 msgid "Only members of this private room can become admins"
 msgstr ""
 "Sólo los miembros de este salón privado pueden convertirse en "
 "administradores"
 
-#. Explanation: This Spanish translation maintains the meaning and tone of the
-#. French sentence. The phrase "This member is the only one in this private
-#. room" is accurately translated as "Este miembro es el único miembro del
-#. salón privado," which conveys that there are no other members in the
-#. private room. The instruction to add another before removing one translates
-#. directly into "añade otro antes de eliminar este uno." This follows the
-#. context of maintaining a single member in a private room, as indicated by
-#. the French translation and the user's request for consistency with the
-#. original meaning.
-#: chat/tests/tests_private.py:272 chat/views/views_private_rooms.py:326
+#: chat/tests/tests_private.py:291 chat/views/views_private_rooms.py:326
 msgid ""
 "This member is the only one in this private room. Please add another one "
 "before removing this one."
@@ -484,13 +269,7 @@ msgstr ""
 "Este miembro es el único miembro del salón privado. Por favor, añade otro "
 "antes de eliminar este uno."
 
-#. Explanation: This Spanish translation maintains the meaning and tone of the
-#. original English sentence while adhering to the context provided by the
-#. French translation. The phrase "private room" is translated as "salon
-#. privé," which matches the French translation. The instruction to add
-#. another member before removing oneself is accurately conveyed with "añadir
-#. a otro antes de retirarse."
-#: chat/tests/tests_private.py:300 chat/views/views_private_rooms.py:372
+#: chat/tests/tests_private.py:319 chat/views/views_private_rooms.py:372
 msgid ""
 "You are the only member in this private room. Please add another one before "
 "removing yourself."
@@ -498,18 +277,7 @@ msgstr ""
 "Tú eres el único miembro de este salón privado. Por favor, añade a otro "
 "antes de retirarte."
 
-#. Explanation: This translation maintains the meaning and tone of the
-#. original English sentence while adhering to the context provided by the
-#. French translation. The key points are preserved:
-#. - "You are the only admin in this private room" is translated as "Tú eres
-#. el único administrador de este salón privado."
-#. - "If you leave the room, no one will be left" is translated as "Si sales
-#. del salón, no habrá nadie más." This accurately conveys that if someone
-#. leaves, there won't be anyone remaining.
-#. - "Please add another admin from the members before you remove yourself" is
-#. translated as "Por favor, añade a otro administrador antes de salir." This
-#. maintains the polite and instructive tone of the original sentence.
-#: chat/tests/tests_private.py:311 chat/views/views_private_rooms.py:375
+#: chat/tests/tests_private.py:330 chat/views/views_private_rooms.py:375
 msgid ""
 "You are the only admin in this private room. If you leave the room, no one "
 "will be left. Please add another admin from the members before you remove "
@@ -518,59 +286,26 @@ msgstr ""
 "Tú eres el único administrador de este salón privado. Si sales del salón, no"
 " habrá nadie más. Por favor, añade a otro administrador antes de salir."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English phrase, which is to indicate that someone has exited a
-#. room. The French translation "Tu as quité le salon" directly translates to
-#. "You have left the room," making it clear that the action taken was leaving
-#. or exiting a space (the room). In Spanish, we use "teienes abandonado el
-#. salón" to maintain this meaning and tone, where "abandonado" is used
-#. instead of "quité" as it better fits the context of someone leaving a
-#. place.
-#: chat/tests/tests_private.py:320 chat/views/views_private_rooms.py:383
+#: chat/tests/tests_private.py:339 chat/views/views_private_rooms.py:383
 msgid "You have left the room"
 msgstr "Tienes abandonado el salón."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. provided French phrase, which states that the person is not a member of a
-#. private room. The structure and wording are consistent with the original
-#. English sentence "You are not a member of this private room," ensuring
-#. clarity and maintaining the intended tone.
-#: chat/tests/tests_private.py:346 chat/views/views_private_rooms.py:205
+#: chat/tests/tests_private.py:365 chat/views/views_private_rooms.py:205
 #: chat/views/views_private_rooms.py:242 chat/views/views_private_rooms.py:368
 #: chat/views/views_private_rooms.py:409
 msgid "You are not a member of this private room"
 msgstr "No eres miembro de este salón privado."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. provided French phrase. The key elements are maintained:
-#. - "You are not an admin" is translated as "No eres administrador," which
-#. directly corresponds to "Tu n'es pas admin."
-#. - "of this private room" is translated as "de este sala privada." In
-#. Spanish, "sala" (room) is used instead of the English "room" for a more
-#. natural flow and understanding. The term "privado" is kept in its singular
-#. form "sala privada," which matches the French "salon privé."
-#. The translation preserves both the meaning and tone of the original
-#. sentence.
-#: chat/tests/tests_private.py:370 chat/views/views_private_rooms.py:278
+#: chat/tests/tests_private.py:386 chat/views/views_private_rooms.py:278
 #: chat/views/views_private_rooms.py:321 chat/views/views_private_rooms.py:443
 #: chat/views/views_private_rooms.py:491 chat/views/views_private_rooms.py:532
 msgid "You are not an admin of this private room"
 msgstr "No eres administrador de este sala privada"
 
-#. Explanation: The English word "Follow" is often used in the context of
-#. subscribing or liking something, such as a post on social media. In this
-#. context, it closely aligns with the Spanish term "Suscribirse," which means
-#. to subscribe or follow. The French translation "Suivre" also implies
-#. following or subscribing, making it consistent with both English and
-#. Spanish contexts.
 #: chat/tests/tests_public.py:23 chat/tests/tests_public.py:66
 msgid "Follow"
 msgstr "Suscribirse"
 
-#. Explanation: The placeholders in the original English and French sentences
-#. are identical, indicating that they should be kept as is in the Spanish
-#. translation. Therefore, "nfollowers" remains "nfollowers" in Spanish, and
-#. it translates to "seguidor."
 #: chat/tests/tests_public.py:65
 #, python-format
 msgid "%(nfollowers)s follower"
@@ -578,15 +313,8 @@ msgid_plural "%(nfollowers)s followers"
 msgstr[0] "%(nfollowers)s follower"
 msgstr[1] "%(nfollowers)s followers"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the provided French sentence. The key elements are maintained:
-#. - "Another room with a similar name already exists" is translated as "Otro
-#. salón con un nombre similar ya existe"
-#. - "{similar_room.name}" remains unchanged to preserve the placeholder
-#. - "Please choose a different name" translates to "Por favor, elige otro
-#. nombre", which maintains the polite and imperative tone of the original
-#. French.
 #: chat/views/views_private_rooms.py:157 chat/views/views_public_rooms.py:80
+#, python-brace-format
 msgid ""
 "Another room with a similar name already exists ('{similar_room.name}'). "
 "Please choose a different name."
@@ -594,24 +322,10 @@ msgstr ""
 "Otro salón con un nombre similar ya existe ('{similar_room.name}'). Por "
 "favor, elige otro nombre."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase, which indicates that a requested method or action is not
-#. permitted. The term "méthode non autorisée" in French directly corresponds
-#. to "método no permitido" in Spanish, maintaining the same nuance and
-#. context.
 #: chat/views/views_private_rooms.py:273 chat/views/views_private_rooms.py:439
 msgid "Method not allowed"
 msgstr "Método no permitido"
 
-#. Explanation: The provided English sentence is a straightforward statement
-#. about an individual being part of a private room. The French translation
-#. "Cet utilisateur est déjà membre de ce salon privé" accurately conveys this
-#. meaning, indicating that the user is already a member of a private chat or
-#. meeting space.
-#. The Spanish translation maintains the same structure and meaning: "Esta
-#. usuario ya es miembro de este salón privado." This preserves both the
-#. context (the user being part of a private room) and the implication of
-#. intimacy and responsibility associated with such membership.
 #: chat/views/views_private_rooms.py:288 chat/views/views_private_rooms.py:455
 msgid "This user is already a member of this private room"
 msgstr ""
@@ -619,33 +333,12 @@ msgstr ""
 "personas que no está formalizada pero que implica un nivel de intimidad y "
 "responsabilidad?"
 
-#. Explanation: The provided English sentence and its context translation both
-#. use the term "private room," which in Spanish is translated as "salon
-#. privé." In this case, a more appropriate term for describing the
-#. relationship between a user and a private room would be "privado" or
-#. "confidencial." Therefore, the most accurate translation of the given
-#. English sentence into Spanish would be:
-#. "Cuál es el mejor término para describir la relación entre un usuario y una
-#. sala privada en español?"
-#. This question allows us to consider whether we should translate "private
-#. room" as a single term that encompasses both the user and the room's
-#. relationship, or if it is better to use two terms: one for the user
-#. (usuario) and another for the private nature of the room
-#. (privado/confidencial).
 #: chat/views/views_private_rooms.py:335
 msgid "This user is not a member of this private room"
 msgstr ""
 "Cuál es el mejor término para describir la relación entre un usuario y una "
 "sala privada en español?"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. provided French sentence. The key elements are:
-#. - "There must be at least one admin in a private room." is translated as
-#. "Debe haber al menos uno de los administradores en un salón privado."
-#. - "Please add another one" becomes "Por favor, añada otro"
-#. - "before removing this one" translates to "antes de eliminar este"
-#. The structure and meaning of the original sentence are preserved in the
-#. Spanish version.
 #: chat/views/views_private_rooms.py:497
 msgid ""
 "There must be at least one admin in a private room. Please add another one "
@@ -654,24 +347,10 @@ msgstr ""
 "Debe haber al menos uno de los administradores en un salón privado. Por "
 "favor, añada otro antes de eliminar este."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase. The key terms and structure are preserved:
-#. - "This member" is translated as "Este miembro"
-#. - "is not an admin" becomes "no es administrador"
-#. - "of this private room" translates to "de este salón privado"
-#. The Spanish version maintains the same sentence structure and meaning as
-#. the French, ensuring clarity in communication.
 #: chat/views/views_private_rooms.py:503
 msgid "This member is not an admin of this private room"
 msgstr "Ce miembro no es administrador de este salón privado"
 
-#. Explanation: This translation maintains the meaning and tone of the
-#. original English sentence while adhering to the context provided by the
-#. French translation. The key elements are preserved:
-#. - "There must be at least one admin in a private room" is translated as
-#. "Debe haber al menos uno de los administradores en un salón privado."
-#. - "Please add another one before removing yourself" is translated as "Por
-#. favor, añada otro antes de retirarse del salón."
 #: chat/views/views_private_rooms.py:536
 msgid ""
 "There must be at least one admin in a private room. Please add another one "
@@ -680,48 +359,19 @@ msgstr ""
 "Debe haber al menos uno de los administradores en un salón privado. Por "
 "favor, añada otro antes de retirarse del salón."
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English sentence. The French translation "Tu as été retiré des
-#. admins de ce salon privé" directly corresponds to this, indicating that
-#. someone has been removed from a group or team (admins) within a private
-#. room (salon privé). In the provided context, "You have been removed from
-#. the admins of this private room" is translated into Spanish as "Has sido
-#. removido de los administradores del este salón privado," which maintains
-#. the same meaning and structure.
 #: chat/views/views_private_rooms.py:541
 msgid "You have been removed from the admins of this private room."
 msgstr "Has sido removido de los administradores del este salón privado."
 
-#. Explanation: This Spanish translation maintains the meaning and structure
-#. of the original English sentence, including the placeholder "%s". The
-#. French translation "Un autre salon privé portant presque le même nom existe
-#. déjà: %s" is used to ensure consistency in context. The phrase "private
-#. room with almost the same name already exists" is translated as "salón
-#. privado con casi el mismo nombre ya existe", which closely matches the
-#. structure and meaning of the French version. The placeholder "%s" is kept
-#. in the same position, ensuring that any subsequent text inserted there will
-#. be consistent across all languages.
 #: chat/views/views_public_rooms.py:65
 #, python-format
 msgid "A private room with almost the same name already exists: %s"
 msgstr "A otro salón privado con casi el mismo nombre ya existe: %s"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English sentence. The term "room" in English is translated to
-#. "salon" in French, which is used here as a synonym for "room." Therefore,
-#. "Seul le propriétaire du salon peut le modifier" directly translates to
-#. "Solo el propietario del salón puede modificarlo," maintaining both the
-#. meaning and context of the original sentence.
 #: chat/views/views_public_rooms.py:114
 msgid "Only the owner of a room can edit it"
 msgstr "Solo el propietario del salón puede modificarlo"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English sentence. The term "room" in the English version is
-#. translated as "salon," which aligns with the French translation's use of
-#. "salon." Both phrases refer to a room or space, ensuring that the context
-#. and nuance are preserved. The key elements—only the owner (or proprietor)
-#. can delete it—are maintained in both translations.
 #: chat/views/views_public_rooms.py:129
 msgid "Only the owner of a room can delete it"
 msgstr "Solo el propietario del salón puede borrarlo"

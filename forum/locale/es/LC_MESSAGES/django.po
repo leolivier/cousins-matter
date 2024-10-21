@@ -1,11 +1,11 @@
-# # Spanish Translations for Cousins-matter app.
-# # Copyright (C) 2024 <OWNER>
-# # This file is distributed under the same license as the application.
-# # This file was generated from /home/olivi/devt/cousins-matter/forum/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# # using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# # by the model.
-# # Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# Spanish Translations for NO NAME FOUND app.
+# Copyright (C) 2024 <OWNER>
+# This file is distributed under the same license as the application.
+# This file was generated from forum/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-03 18:18+0200\n"
-"PO-Revision-Date: 2024-09-21 18:24+00:00\n"
+"PO-Revision-Date: 2024-10-21 09:18+00:00\n"
 "\n"
 "Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
@@ -23,62 +23,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. Explanation: This translation is straightforward as the English word
-#. "Content" and its French equivalent "Contenu" both refer to the same
-#. concept in their respective languages. There are no ambiguities or need for
-#. context-specific translations here, so the meaning remains consistent
-#. across all three languages.
 #: forum/models.py:13
 msgid "Content"
 msgstr "Contenido"
 
-#. Explanation: The English phrase "Title" is a common term used to refer to
-#. headings, names, or identifiers in various contexts. In Spanish, this term
-#. is translated as "Título," which maintains the same meaning and usage as
-#. its English counterpart. The French translation "Titre" aligns with
-#. "Título" in this context, confirming that both languages use the same
-#. terminology for this concept.
 #: forum/models.py:28
 msgid "Title"
 msgstr "Título"
 
-#. Explanation: The term "posts" is often used interchangeably with "pages" in
-#. the context of social media platforms or forums.
-#. However, without additional context indicating whether we are referring to
-#. posts on a blog, forum, or another platform where "discussions" might be
-#. more specific, "Páginas" (Pages) is chosen as it's commonly understood and
-#. used in Spanish for this type of content.
 #: forum/models.py:34
 msgid "posts"
 msgstr "Páginas"
 
-#. Explanation: The English phrase "Comment" is an interrogative word meaning
-#. "how" or "what". In the context of comments, it refers to a comment as in a
-#. written response or remark. The French translation for this usage is
-#. "Commentaire", which also means "comment" when used in the context of a
-#. written response or remark. Therefore, "Comment" remains unchanged and is
-#. translated into Spanish as "Comentario".
 #: forum/models.py:51
 msgid "Comment"
 msgstr "Comentario"
 
-#. Explanation: The English word "comments" is a general term used to refer to
-#. remarks or observations made on something, such as a blog post, forum
-#. discussion, or social media update. In the context provided, where it is
-#. translated to "commentaires" in French, this suggests that "comments"
-#. refers to user-generated content related to a specific subject.
-#. In Spanish, "comentarios" serves the same function and meaning as
-#. "commentaires." Therefore, no translation explanation is necessary for this
-#. straightforward case.
 #: forum/models.py:54
 msgid "comments"
 msgstr "comentarios"
 
-#. Explanation: The placeholders are kept in the same place in the Spanish
-#. translation as they were in the original English and French sentences. In
-#. this case, "\%(\{ncomments\}\)" is translated to "\%\{\{ncomments\}\}"
-#. maintaining their structure and ensuring that "ncomments" remains a
-#. variable for comment count.
 #: forum/templates/forum/comment_list.html:5
 #, python-format
 msgid "%(ncomments)s comment"
@@ -86,41 +50,23 @@ msgid_plural "%(ncomments)s comments"
 msgstr[0] "%(ncomments)s commentaire"
 msgstr[1] "%(ncomments)s commentaires"
 
-#. Explanation: This translation is straightforward as the English word "Edit"
-#. and the French word "Modifier" both refer to the act of making changes or
-#. corrections, which can be translated into Spanish as "Modificar." There are
-#. no ambiguities or placeholders in this sentence that need to be preserved.
 #: forum/templates/forum/comment_list.html:33
 #: forum/templates/forum/post_detail.html:45
 #: forum/templates/forum/post_detail.html:91
 msgid "Edit"
 msgstr "Modificar"
 
-#. Explanation: The English word "Delete" and the French word "Supprimer" both
-#. convey the meaning of erasing or removing something. In Spanish, this
-#. concept is expressed with the term "Eliminar," which maintains the same
-#. meaning as in the original sentences.
 #: forum/templates/forum/comment_list.html:37
 #: forum/templates/forum/post_detail.html:48
 #: forum/templates/forum/post_detail.html:95
 msgid "Delete"
 msgstr "Eliminar"
 
-#. Explanation: The English word "Update" is commonly used to indicate the
-#. action of making changes or improvements, often referring to software
-#. updates. In this context, it aligns well with the French term "Mettre à
-#. jour," which also means to update or make something current by adding new
-#. information or features. Therefore, "Meter a actualizar" maintains the
-#. meaning and nuance of the original English phrase in Spanish.
 #: forum/templates/forum/comment_list.html:50
 #: forum/templates/forum/post_detail.html:109
 msgid "Update"
 msgstr "Meter a actualizar"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French word "Annuler," which is used to indicate cancellation or
-#. annulment. The term "Anular" in English maintains its original meaning and
-#. usage, thus no further explanation is needed.
 #: forum/templates/forum/comment_list.html:53
 #: forum/templates/forum/comment_list.html:78
 #: forum/templates/forum/post_detail.html:112
@@ -128,37 +74,18 @@ msgstr "Meter a actualizar"
 msgid "Cancel"
 msgstr "Anular"
 
-#. Explanation: This translation directly corresponds to the French phrase
-#. "Ajouter un commentaire," which means adding a comment. The English
-#. placeholder "%(comment_type)s" is not present in this sentence, so it
-#. remains unchanged.
 #: forum/templates/forum/comment_list.html:69
 msgid "Add comment"
 msgstr "Agregar comentario"
 
-#. Explanation: This translation is straightforward as the English word "Add"
-#. directly translates to "Agregar" in Spanish. The context translation
-#. "Ajouter" in French reinforces this meaning, indicating that the action
-#. involves adding something or a concept.
 #: forum/templates/forum/comment_list.html:77
 msgid "Add"
 msgstr "Agregar"
 
-#. Explanation: The English term "Post" is often used to refer to a message or
-#. entry made on a social media platform, blog, forum, etc. However, the
-#. French term "Discussion" can also be used in similar contexts, especially
-#. when referring to a conversation or exchange of ideas. Given that both
-#. terms are commonly used and understood in their respective contexts,
-#. "Discusión" is an accurate translation for "Post" in this context.
 #: forum/templates/forum/post_detail.html:7
 msgid "Post"
 msgstr "Discusión"
 
-#. Explanation: The placeholders in the English and French sentences are
-#. identical, indicating that "nreplies" refers to a number of replies. In
-#. Spanish, this is translated as "respuesta," which maintains the meaning of
-#. the original phrase. The structure of the sentence remains unchanged, with
-#. "nreplies" becoming "(nreplies)s."
 #: forum/templates/forum/post_detail.html:11
 #: forum/templates/forum/post_list.html:34
 #, python-format
@@ -167,46 +94,18 @@ msgid_plural "%(nreplies)s answers"
 msgstr[0] "%(nreplies)s réponse"
 msgstr[1] "%(nreplies)s réponses"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. French phrase "Pas de réponse," which directly translates to "No answer."
-#. The original English phrase "No answer" is ambiguous and could be
-#. interpreted in various contexts, such as a response to a question or an
-#. acknowledgment. However, given the context provided by the French
-#. translation, it is clear that this refers to a situation where there has
-#. been no response or reply.
 #: forum/templates/forum/post_detail.html:17
 msgid "No answer"
 msgstr "No respuesta"
 
-#. Explanation: This translation maintains the meaning and tone of the
-#. original English phrase. The French translation "Ta réponse" directly
-#. corresponds to "Tus respuesta" in Spanish, preserving the informal nature
-#. of the response being addressed.
 #: forum/templates/forum/post_detail.html:130
 msgid "Your answer"
 msgstr "Tus respuesta"
 
-#. Explanation: The English phrase "Delete post" translates to "Borrar
-#. publicación" in Spanish. However, the French context translation "Supprimer
-#. la conversation" suggests a different meaning, implying that the term might
-#. be used for deleting a message or thread within a discussion forum rather
-#. than a single post. Given this ambiguity and the need to maintain
-#. consistency with the French context, "Borrar publicación" is the most
-#. appropriate translation as it aligns with the general concept of deletion
-#. in Spanish-speaking environments.
 #: forum/templates/forum/post_detail.html:133
 msgid "Delete post"
 msgstr "Borrar publicación"
 
-#. Explanation: This Spanish translation maintains the meaning and tone of the
-#. French original. The phrase "Est tu sûr(e) de vouloir supprimer" in French
-#. is translated as "Sí estás seguro de querer eliminar" in Spanish, which
-#. conveys the same sense of certainty about deletion. The context translation
-#. "Est tu sûr(e) de vouloir supprimer "%(post)s" et toutes les réponses et
-#. commentaires associés?" provides clarity that the sentence is asking for
-#. confirmation regarding deleting a post and all related replies and
-#. comments. This ensures consistency between the English, French, and Spanish
-#. versions.
 #: forum/templates/forum/post_detail.html:134
 #, python-format
 msgid ""
@@ -216,68 +115,31 @@ msgstr ""
 "Sí estás seguro de querer eliminar \"%(post)s\" y todas las respuestas y "
 "comentarios asociados?"
 
-#. Explanation: The English phrase "Edit Post" translates to "Modifier le
-#. message" in French, which directly corresponds to the Spanish translation
-#. "Modificar el post." There is no ambiguity or need for interpretation here;
-#. both phrases convey the same meaning of making changes to a previously
-#. posted message.
 #: forum/templates/forum/post_form.html:8
 #: forum/templates/forum/post_form.html:16
 msgid "Edit Post"
 msgstr "Modificar el post"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the English phrase "Create Post." The French translation "Créer une
-#. discussion" is used to provide context and clarify that it refers to
-#. creating a forum post or discussion rather than simply posting content. In
-#. this case, both phrases convey similar meanings in their contexts, with
-#. "Crear una discusión" being more specific about the nature of the creation
-#. (a discussion).
 #: forum/templates/forum/post_form.html:10
 #: forum/templates/forum/post_form.html:18
 #: forum/templates/forum/post_list.html:9
 msgid "Create Post"
 msgstr "Criar una discusión"
 
-#. Explanation: This translation is straightforward as the English word "Send"
-#. directly translates to "Enviar" in Spanish. There is no ambiguity or need
-#. for context interpretation here, so the meaning remains consistent between
-#. the original and the provided French translation.
 #: forum/templates/forum/post_form_include.html:17
 msgid "Send"
 msgstr "Enviar"
 
-#. Explanation: The term "Latest Posts" is commonly used to refer to the most
-#. recent entries or updates on a blog, social media platform, or news site.
-#. In Spanish, this concept is best translated as "Derniers posts," which
-#. maintains the meaning and tone of the original English phrase. The French
-#. translation "Dernières discussions" refers to conversations or messages, so
-#. it does not accurately reflect the context of recent posts.
 #: forum/templates/forum/post_list.html:3
 #: forum/templates/forum/post_list.html:8
 msgid "Latest Posts"
 msgstr "Derniers posts"
 
-#. Explanation: This Spanish translation accurately conveys the meaning of the
-#. original English and French sentences. Both languages use similar
-#. terminology to express that the size or quantity of a message has exceeded
-#. an authorized limit. The term "tamaño" in Spanish corresponds to "taille"
-#. in French, both indicating the measurement aspect. Similarly, "excede" in
-#. Spanish mirrors "dépasse" in French, conveying the concept of surpassing or
-#. exceeding a limit.
 #: forum/views/views_comment.py:26 forum/views/views_comment.py:48
 #: forum/views/views_post.py:71 forum/views/views_post.py:114
 msgid "The size of the message exceeds the authorised limit."
 msgstr "La tamaño del mensaje excede la cantidad autorizada."
 
-#. Explanation: This Spanish translation accurately conveys the meaning and
-#. tone of the original English sentence. The phrase "Can't delete" is
-#. translated as "Imposible de borrar," which maintains the sense of being
-#. unable to perform an action. Similarly, "the first message of a thread"
-#. becomes "el primer mensaje de una discusión." The French translation
-#. "Impossible de supprimer le premier message d'une discussion!" provides
-#. clarity that it's referring to deleting a message within a conversation or
-#. thread context.
 #: forum/views/views_post.py:174
 msgid "Can't delete the first message of a thread!"
 msgstr "Imposible de borrar el primer mensaje de una discusión!"

@@ -1,21 +1,21 @@
 # Spanish Translations for NO NAME FOUND app.
-# Copyright (C) 2024 Olivier LEVILLAIN
+# Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-# This file was generated from ../cousins-matter/cm_main/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the gemma2:2b model. Depending on the model, it may contain some errors and should be reviewed
+# This file was generated from cm_main/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
 # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
 # by the model.
-# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-28 19:37+0200\n"
-"PO-Revision-Date: 2024-09-30 17:12+00:00\n"
+"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"PO-Revision-Date: 2024-10-21 09:13+00:00\n"
 "\n"
-"Last-Translator: Auto-po-lyglot using gemma2:2b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: ES\n"
 "MIME-Version: 1.0\n"
@@ -80,19 +80,19 @@ msgstr ""
 "%(follower_name)s ahora sigue tu %(followed_type)s "
 "\"%(followed_object_name)s\""
 
-#: cm_main/forms.py:8
+#: cm_main/forms.py:11
 msgid "Your message"
 msgstr "Tu mensaje"
 
-#: cm_main/forms.py:9
+#: cm_main/forms.py:12
 msgid "Please keep it short and avoid images."
 msgstr "Por favor, manténlo breve y evita las imágenes."
 
-#: cm_main/forms.py:10
+#: cm_main/forms.py:13
 msgid "Attach file"
 msgstr "Atachar archivo"
 
-#: cm_main/forms.py:11
+#: cm_main/forms.py:14
 msgid "You can attach a file here if needed"
 msgstr "Puedes adjuntar un archivo aquí si es necesario"
 
@@ -328,10 +328,6 @@ msgstr "Salones de discusión pública"
 msgid "Private Chat Rooms"
 msgstr "Sala de chat privada"
 
-#. Explanation: The English phrase "Change language" is translated into
-#. Spanish as "Cambiar idioma". This accurately reflects the meaning of both
-#. phrases.  The word "cambiar" in Spanish means "to change," and "idioma"
-#. refers to language.
 #: cm_main/templates/cm_main/navbar.html:93
 msgid "Change language"
 msgstr "Cambiar idioma"
@@ -407,7 +403,7 @@ msgstr "Más tu herramienta de correo es demasiado antigua para mostrarlo :'("
 msgid "This file type is not supported"
 msgstr "Este tipo de archivo no está soportado"
 
-#: cm_main/views/views_general.py:44
+#: cm_main/views/views_general.py:52
 msgid "Media not found"
 msgstr "Média no encontrada"
 

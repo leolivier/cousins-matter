@@ -1,11 +1,11 @@
-# Italian Translations for Cousins-matter app.
-# Copyright (C) 2024 Olivier LEVILLAIN
+# Italian Translations for NO NAME FOUND app.
+# Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-# This file was generated from cousins-matter/forum/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the claude-3-5-sonnet-20240620 model. Depending on the model, it may contain some errors and should be reviewed
+# This file was generated from forum/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
 # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
 # by the model.
-# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
@@ -13,9 +13,9 @@ msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-03 18:18+0200\n"
-"PO-Revision-Date: 2024-09-21 19:22+00:00\n"
+"PO-Revision-Date: 2024-10-21 10:21+00:00\n"
 "\n"
-"Last-Translator: Auto-po-lyglot using claude-3-5-sonnet-20240620 (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: IT\n"
 "MIME-Version: 1.0\n"
@@ -43,12 +43,6 @@ msgstr "Commento"
 msgid "comments"
 msgstr "commenti"
 
-#. Explanation: The translation maintains the placeholder "%(ncomments)s" in
-#. the same position as in the original English and French versions. The word
-#. "comment" is translated to "commento" in Italian, which is the singular
-#. form. Note that in Italian, unlike French, there's no need to distinguish
-#. between masculine and feminine forms for "comment" as "commento" is always
-#. masculine.
 #: forum/templates/forum/comment_list.html:5
 #, python-format
 msgid "%(ncomments)s comment"
@@ -92,12 +86,6 @@ msgstr "Aggiungi"
 msgid "Post"
 msgstr "Discussione"
 
-#. Explanation: The translation maintains the placeholder "%(nreplies)s" in
-#. its original form and position. The word "answer" is translated to
-#. "risposta" in Italian, which is the singular form. Note that both the
-#. English and French versions use "answer" (singular), so we keep it singular
-#. in Italian as well. If the context requires a plural form, it would be
-#. "risposte", but based on the given input, we use the singular form.
 #: forum/templates/forum/post_detail.html:11
 #: forum/templates/forum/post_list.html:34
 #, python-format
@@ -114,10 +102,6 @@ msgstr "Nessuna risposta"
 msgid "Your answer"
 msgstr "La tua risposta"
 
-#. Explanation: The Italian translation reflects the French context, which
-#. specifies "conversation" rather than "post". This indicates that the
-#. English "post" in this context refers to a conversation or thread, not a
-#. single post or message.
 #: forum/templates/forum/post_detail.html:133
 msgid "Delete post"
 msgstr "Elimina la conversazione"

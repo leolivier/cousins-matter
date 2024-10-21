@@ -1,11 +1,11 @@
 # Portuguese Translations for NO NAME FOUND app.
-# Copyright (C) 2024 Olivier LEVILLAIN
+# Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-# This file was generated from /home/olivi/devt/cousins-matter/forum/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the llama3.2:3b model. Depending on the model, it may contain some errors and should be reviewed
+# This file was generated from forum/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
 # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
 # by the model.
-# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
@@ -13,9 +13,9 @@ msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-03 18:18+0200\n"
-"PO-Revision-Date: 2024-09-27 22:02+00:00\n"
+"PO-Revision-Date: 2024-10-21 10:41+00:00\n"
 "\n"
-"Last-Translator: Auto-po-lyglot using llama3.2:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: PT\n"
 "MIME-Version: 1.0\n"
@@ -23,53 +23,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. Explanation: The English word "content" can have multiple meanings,
-#. including the noun referring to the substance or material of something. In
-#. this context, the French translation "Contenu" is used, which also refers
-#. to the content or substance of a thing. This translation choice reflects
-#. the meaning conveyed by the French phrase "Contenu", which is consistent
-#. with the intended meaning of the English original sentence.
 #: forum/models.py:13
 msgid "Content"
 msgstr "Conteúdo"
 
-#. Explanation: The English word "Title" and the French word "Titre" both
-#. refer to a name or heading, often used in academic, literary, or
-#. professional contexts. In Portuguese, the translation is also "Título".
 #: forum/models.py:28
 msgid "Title"
 msgstr "Título"
 
-#. Explanation: The English word "posts" can refer to a blog post or a social
-#. media update, while the French translation "discussions" implies a more
-#. formal and structured conversation. In this case, the Portuguese
-#. translation "postagens" maintains the general meaning of the original
-#. English term, which is often used in informal contexts to refer to written
-#. content shared on platforms like blogs or social media.
 #: forum/models.py:34
 msgid "posts"
 msgstr "postagens"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a question about how or in what way something was done.
-#. The English word "Comment" is often used to ask for explanations or
-#. comments, and its direct translation into Portuguese is "Como".
 #: forum/models.py:51
 msgid "Comment"
 msgstr "Como"
 
-#. Explanation: The English word "comments" and the French word "commentaires"
-#. both refer to written remarks or observations, so the Portuguese
-#. translation "Comentários" is a direct equivalent.
 #: forum/models.py:54
 msgid "comments"
 msgstr "Comentários"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a comment. The English phrase "%(ncomments)s
-#. comment" can be ambiguous, as it can mean both "number of comments" and
-#. "comment". The French translation makes it clear that it is a comment, so
-#. the Portuguese version "%s comentário" follows this interpretation.
 #: forum/templates/forum/comment_list.html:5
 #, python-format
 msgid "%(ncomments)s comment"
@@ -77,41 +50,23 @@ msgid_plural "%(ncomments)s comments"
 msgstr[0] "%(ncomments)s comentário"
 msgstr[1] "%(ncomments)s comentários"
 
-#. Explanation: This translation reflects the meaning of the French phrase,
-#. which is to modify or change something. The English word "Edit" can also
-#. refer to a process of reviewing and revising written content, but in this
-#. context, both translations convey the idea of modification.
 #: forum/templates/forum/comment_list.html:33
 #: forum/templates/forum/post_detail.html:45
 #: forum/templates/forum/post_detail.html:91
 msgid "Edit"
 msgstr "Editar"
 
-#. Explanation: The English word "Delete" can have different meanings
-#. depending on the context, such as deleting a file or deleting an account.
-#. However, in general, it means to remove or get rid of something. The
-#. Portuguese translation "Apagar" is more neutral and can be used in various
-#. contexts, including removing files, accounts, or even deleting a task.
 #: forum/templates/forum/comment_list.html:37
 #: forum/templates/forum/post_detail.html:48
 #: forum/templates/forum/post_detail.html:95
 msgid "Delete"
 msgstr "Apagar"
 
-#. Explanation: The English word "Update" can have different meanings, such as
-#. to make something newer or fresher, or to inform someone of a change. In
-#. this context, the Portuguese translation "Atualizar" is more literal and
-#. suggests updating or modifying something, which aligns with the French
-#. translation "Mettre à jour".
 #: forum/templates/forum/comment_list.html:50
 #: forum/templates/forum/post_detail.html:109
 msgid "Update"
 msgstr "Atualizar"
 
-#. Explanation: The English word "Cancel" can have different meanings, such as
-#. to stop or to void an action. However, in the context of the French
-#. translation "Annuler", which implies to cancel or void something, the
-#. Portuguese translation "Cancelar" follows this interpretation.
 #: forum/templates/forum/comment_list.html:53
 #: forum/templates/forum/comment_list.html:78
 #: forum/templates/forum/post_detail.html:112
@@ -119,33 +74,18 @@ msgstr "Atualizar"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#. Explanation: The English phrase "Add comment" is a common idiomatic
-#. expression that means to add a comment or remark. In Portuguese, the
-#. translation "Adicionar comentário" maintains this meaning and uses the word
-#. "comentário", which refers to an added comment or remark.
 #: forum/templates/forum/comment_list.html:69
 msgid "Add comment"
 msgstr "Adicionar comentário"
 
-#. Explanation: The English word "Add" can be translated to Portuguese as
-#. "Adicionar", which is a more formal and common way of expressing the idea
-#. of adding something.
 #: forum/templates/forum/comment_list.html:77
 msgid "Add"
 msgstr "Adicionar"
 
-#. Explanation: The English word "post" can refer to a written article or a
-#. message sent through social media, while the French translation
-#. "discussion" implies a conversation or exchange of ideas. In this case, the
-#. Portuguese translation "artigo" is more literal and refers specifically to
-#. an article or post, without implying a discussion.
 #: forum/templates/forum/post_detail.html:7
 msgid "Post"
 msgstr "Artigo"
 
-#. Explanation: The placeholder "%(nreplies)s" is kept in the same location as
-#. in the original English and French sentences, and the Portuguese
-#. translation "resposta" reflects the meaning of the French phrase.
 #: forum/templates/forum/post_detail.html:11
 #: forum/templates/forum/post_list.html:34
 #, python-format
@@ -154,42 +94,18 @@ msgid_plural "%(nreplies)s answers"
 msgstr[0] "%(nreplies)s resposta"
 msgstr[1] "%(nreplies)s responde"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a lack of response. The English phrase "No answer"
-#. can be ambiguous, as it can mean both "no response" and "no reply". The
-#. French translation makes it clear that it is a complete absence of
-#. response, so the Portuguese version "Não há resposta" follows this
-#. interpretation.
 #: forum/templates/forum/post_detail.html:17
 msgid "No answer"
 msgstr "Não há resposta"
 
-#. Explanation: The French translation "Ta réponse" is a colloquial and
-#. informal way of saying "Your answer". In Portuguese, the formal way to say
-#. "Your answer" would be "sua resposta". Since the French translation uses
-#. the informal form, the Portuguese translation should also use the informal
-#. form.
 #: forum/templates/forum/post_detail.html:130
 msgid "Your answer"
 msgstr "sua resposta"
 
-#. Explanation: The English phrase "Delete post" can be ambiguous, as it could
-#. refer to deleting a specific post or the entire post content. However, in
-#. this context, where the French translation is "Supprimer la conversation",
-#. it seems that the intention is to delete a post or a message within a
-#. conversation. Therefore, the Portuguese translation "Apagar publicação"
-#. follows this interpretation, suggesting the deletion of a published
-#. content.
 #: forum/templates/forum/post_detail.html:133
 msgid "Delete post"
 msgstr "Apagar publicação"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which asks if the user is sure to delete a specific post and its
-#. associated comments and replies. The English sentence uses a placeholder
-#. "%(post)s" for the post name, while the French translation includes the
-#. same placeholder. The Portuguese version maintains this placeholder in the
-#. same location, ensuring that the original context is preserved.
 #: forum/templates/forum/post_detail.html:134
 #, python-format
 msgid ""
@@ -199,60 +115,31 @@ msgstr ""
 "Você está seguro de querer apagar '%(post)s' e todos os comentários e "
 "respostas relacionados?"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which is a direct and literal translation of the English phrase.
-#. The word "Edit" in English means to make changes or modifications, and
-#. "Post" refers to an article or a publication. In this context, the
-#. translation "Editar Post" accurately conveys the idea of making changes to
-#. a post.
 #: forum/templates/forum/post_form.html:8
 #: forum/templates/forum/post_form.html:16
 msgid "Edit Post"
 msgstr "Editar Post"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates creating a new topic or discussion. The English
-#. phrase "Create Post" is more specific to social media platforms and blogs,
-#. where posts are created, but in other contexts, it can also mean creating a
-#. new topic or discussion.
 #: forum/templates/forum/post_form.html:10
 #: forum/templates/forum/post_form.html:18
 #: forum/templates/forum/post_list.html:9
 msgid "Create Post"
 msgstr "Criar post"
 
-#. Explanation: This translation reflects the meaning of the French phrase,
-#. which is a direct and literal translation of the English word "Send". The
-#. verb "Enviar" in Portuguese means to transmit or deliver something.
 #: forum/templates/forum/post_form_include.html:17
 msgid "Send"
 msgstr "Enviar"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that it refers to recent posts or updates. The
-#. English phrase "Latest Posts" is commonly used in blogs and online
-#. communities to indicate new content, so the Portuguese version "Últimas
-#. publicações" follows this interpretation.
 #: forum/templates/forum/post_list.html:3
 #: forum/templates/forum/post_list.html:8
 msgid "Latest Posts"
 msgstr "Últimas publicações"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that the message size is exceeding the authorized
-#. limit. The English phrase uses the word "exceeds", which can be ambiguous
-#. in this context, whereas the French and Portuguese translations use the
-#. verb "dépasser" to convey the same idea.
 #: forum/views/views_comment.py:26 forum/views/views_comment.py:48
 #: forum/views/views_post.py:71 forum/views/views_post.py:114
 msgid "The size of the message exceeds the authorised limit."
 msgstr "O tamanho do mensagem ultrapassa o limite autorizado."
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates that it is not possible to delete the first message
-#. in a conversation. The English phrase and its French equivalent convey a
-#. sense of impossibility or frustration, so the Portuguese version maintains
-#. this tone.
 #: forum/views/views_post.py:174
 msgid "Can't delete the first message of a thread!"
 msgstr "Não é possível apagar o primeiro mensagem de uma thread!"

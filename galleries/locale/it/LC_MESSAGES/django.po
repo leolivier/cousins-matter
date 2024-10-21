@@ -1,21 +1,21 @@
-# Italian Translations for Cousins-matter app.
-# Copyright (C) 2024 Olivier LEVILLAIN
+# Italian Translations for NO NAME FOUND app.
+# Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-# This file was generated from cousins-matter/galleries/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the claude-3-5-sonnet-20240620 model. Depending on the model, it may contain some errors and should be reviewed
+# This file was generated from galleries/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
 # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
 # by the model.
-# Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-05 11:06+0200\n"
-"PO-Revision-Date: 2024-09-21 19:08+00:00\n"
+"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"PO-Revision-Date: 2024-10-21 10:16+00:00\n"
 "\n"
-"Last-Translator: Auto-po-lyglot using claude-3-5-sonnet-20240620 (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: IT\n"
 "MIME-Version: 1.0\n"
@@ -23,11 +23,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: forms.py:15
+#: galleries/forms.py:15
 msgid "Zip file"
 msgstr "File ZIP"
 
-#: forms.py:16
+#: galleries/forms.py:16
 msgid ""
 "The zip file containing the photos to upload. All folders will be created as"
 " galleries and photos in these folders added to the galleries. All photos "
@@ -37,90 +37,79 @@ msgstr ""
 " come gallerie e le foto in queste cartelle saranno aggiunte alle gallerie. "
 "Tutte le foto devono essere all'interno di cartelle."
 
-#: models.py:25 models.py:74
+#: galleries/models.py:28 galleries/models.py:77
 msgid "A photo must belong to a gallery."
 msgstr "Una foto deve appartenere a una galleria."
 
-#: models.py:48 templates/galleries/photo_detail.html:3
+#: galleries/models.py:51 galleries/templates/galleries/photo_detail.html:3
 msgid "Photo"
 msgstr "Foto"
 
-#: models.py:50 models.py:115
+#: galleries/models.py:53 galleries/models.py:118
 msgid "Name"
 msgstr "Nome"
 
-#: models.py:51 models.py:116
+#: galleries/models.py:54 galleries/models.py:119
 msgid "Description"
 msgstr "Descrizione"
 
-#: models.py:53
+#: galleries/models.py:56
 msgid "Date"
 msgstr "Data"
 
-#: models.py:53
+#: galleries/models.py:56
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Clicca sul nome del mese o dell'anno per modificarli rapidamente"
 
-#: models.py:117
+#: galleries/models.py:120
 msgid "Cover Photo"
 msgstr "Foto di copertina"
 
-#. Explanation: The Italian translation "Galleria principale" captures the
-#. concept of a parent or main gallery. While "parente" in French can mean
-#. "parent" or "related," in this context, it's likely referring to a primary
-#. or main gallery rather than a familial relationship. The term "principale"
-#. in Italian conveys this idea of a main or primary gallery more clearly than
-#. a literal translation of "parent" would.
-#: models.py:120
+#: galleries/models.py:123
 msgid "Parent gallery"
 msgstr "Galleria principale"
 
-#: models.py:125
+#: galleries/models.py:128
 msgid "galleries"
 msgstr "gallerie"
 
-#: models.py:144
+#: galleries/models.py:147
 msgid "A gallery can't be its own parent!"
 msgstr "Una galleria non può essere il proprio genitore!"
 
-#: models.py:152
+#: galleries/models.py:155
 #, python-format
 msgid "Another sub gallery of %(parent)s with the same name already exists"
 msgstr "Un'altra sottogalleria di %(parent)s con lo stesso nome esiste già"
 
-#: models.py:155
+#: galleries/models.py:158
 msgid "Another root gallery with the same name already exists"
 msgstr "Un'altra galleria principale con lo stesso nome esiste già"
 
-#: templates/galleries/bulk_upload.html:3
-#: templates/galleries/bulk_upload.html:6
+#: galleries/templates/galleries/bulk_upload.html:3
+#: galleries/templates/galleries/bulk_upload.html:6
 msgid "Bulk Upload Photos"
 msgstr "Caricamento di foto in blocco"
 
-#. Explanation: In Italian, "caricare" is the most appropriate translation for
-#. "upload" in this context. While the French "télécharger" can mean both
-#. "upload" and "download" depending on the context, in Italian we use
-#. different words for these actions. "Caricare" specifically means to upload
-#. or load data onto a server or platform.
-#: templates/galleries/bulk_upload.html:13
+#: galleries/templates/galleries/bulk_upload.html:13
 msgid "Upload"
 msgstr "Caricare"
 
-#: templates/galleries/galleries_tree.html:3
-#: templates/galleries/galleries_tree.html:5
+#: galleries/templates/galleries/galleries_tree.html:3
+#: galleries/templates/galleries/galleries_tree.html:5
 msgid "Galleries"
 msgstr "Gallerie"
 
-#: templates/galleries/galleries_tree.html:7
+#: galleries/templates/galleries/galleries_tree.html:7
 msgid "No galleries found"
 msgstr "Nessuna galleria trovata"
 
-#: templates/galleries/gallery_confirm_delete.html:6
-#: templates/galleries/gallery_detail.html:59
+#: galleries/templates/galleries/gallery_confirm_delete.html:6
+#: galleries/templates/galleries/gallery_detail.html:59
 msgid "Delete gallery"
 msgstr "Elimina galleria"
 
-#: templates/galleries/gallery_confirm_delete.html:10
+#: galleries/templates/galleries/gallery_confirm_delete.html:10
 #, python-format
 msgid ""
 "Are you sure you want to delete \"%(object)s\" and all photos and sub "
@@ -129,129 +118,115 @@ msgstr ""
 "Sei sicuro di voler eliminare \"%(object)s\" e tutte le foto e le sotto-"
 "gallerie che contiene?"
 
-#: templates/galleries/gallery_confirm_delete.html:17
-#: templates/galleries/photo_confirm_delete.html:17
+#: galleries/templates/galleries/gallery_confirm_delete.html:17
+#: galleries/templates/galleries/photo_confirm_delete.html:17
 msgid "Confirm"
 msgstr "Conferma"
 
-#: templates/galleries/gallery_confirm_delete.html:21
-#: templates/galleries/photo_confirm_delete.html:21
-#: templates/galleries/photo_form.html:29
+#: galleries/templates/galleries/gallery_confirm_delete.html:21
+#: galleries/templates/galleries/photo_confirm_delete.html:21
+#: galleries/templates/galleries/photo_form.html:29
 msgid "Cancel"
 msgstr "Annulla"
 
-#: templates/galleries/gallery_detail.html:3
+#: galleries/templates/galleries/gallery_detail.html:3
 msgid "Show Gallery"
 msgstr "Mostra Galleria"
 
-#. Explanation: The English phrase "Children galleries" doesn't have a direct
-#. literal translation in this context. The French translation "Sous-Galeries"
-#. suggests that we're dealing with a hierarchical structure of galleries,
-#. where "Children galleries" refers to sub-galleries or secondary galleries
-#. within a main gallery. In Italian, the most appropriate translation that
-#. conveys this meaning is "Sottogallerie", which literally means "sub-
-#. galleries" and accurately represents the concept of subordinate or nested
-#. galleries.
-#: templates/galleries/gallery_detail.html:20
+#: galleries/templates/galleries/gallery_detail.html:20
 msgid "Children galleries"
 msgstr "Sottogallerie"
 
-#: templates/galleries/gallery_detail.html:38
-#: templates/galleries/photo_detail.html:23
+#: galleries/templates/galleries/gallery_detail.html:38
+#: galleries/templates/galleries/photo_detail.html:23
 #, python-format
 msgid "Back to %(gname)s"
 msgstr "Torna a %(gname)s"
 
-#: templates/galleries/gallery_detail.html:43
+#: galleries/templates/galleries/gallery_detail.html:43
 msgid "Back to galleries list"
 msgstr "Torna all'elenco delle gallerie"
 
-#: templates/galleries/gallery_detail.html:48
-#: templates/galleries/photo_form.html:7
-#: templates/galleries/photo_form.html:20
+#: galleries/templates/galleries/gallery_detail.html:48
+#: galleries/templates/galleries/photo_form.html:7
+#: galleries/templates/galleries/photo_form.html:20
 msgid "Add Photo"
 msgstr "Aggiungi foto"
 
-#: templates/galleries/gallery_detail.html:52
+#: galleries/templates/galleries/gallery_detail.html:52
 msgid "Create Sub Gallery"
 msgstr "Crea Sotto-Galleria"
 
-#: templates/galleries/gallery_detail.html:56
-#: templates/galleries/gallery_form.html:5
-#: templates/galleries/gallery_form.html:17
+#: galleries/templates/galleries/gallery_detail.html:56
+#: galleries/templates/galleries/gallery_form.html:5
+#: galleries/templates/galleries/gallery_form.html:17
 msgid "Edit Gallery"
 msgstr "Modifica Galleria"
 
-#: templates/galleries/gallery_form.html:7
-#: templates/galleries/gallery_form.html:19
+#: galleries/templates/galleries/gallery_form.html:7
+#: galleries/templates/galleries/gallery_form.html:19
 msgid "Create Gallery"
 msgstr "Crea Galleria"
 
-#: templates/galleries/gallery_form.html:29
-#: templates/galleries/photo_form.html:28
+#: galleries/templates/galleries/gallery_form.html:29
+#: galleries/templates/galleries/photo_form.html:28
 msgid "Update"
 msgstr "Aggiornare"
 
-#: templates/galleries/gallery_form.html:32
-#: templates/galleries/photo_form.html:31
+#: galleries/templates/galleries/gallery_form.html:32
+#: galleries/templates/galleries/photo_form.html:31
 msgid "Create"
 msgstr "Crea"
 
-#: templates/galleries/photo_confirm_delete.html:6
-#: templates/galleries/photo_detail.html:30
+#: galleries/templates/galleries/photo_confirm_delete.html:6
+#: galleries/templates/galleries/photo_detail.html:30
 msgid "Delete photo"
 msgstr "Elimina foto"
 
-#: templates/galleries/photo_confirm_delete.html:10
+#: galleries/templates/galleries/photo_confirm_delete.html:10
 #, python-format
 msgid "Are you sure you want to delete \"%(object)s\"?"
 msgstr "Sei sicuro di voler eliminare \"%(object)s\"?"
 
-#: templates/galleries/photo_counter.html:4
+#: galleries/templates/galleries/photo_counter.html:4
 #, python-format
 msgid "One photo"
 msgid_plural "%(counter)s photos"
 msgstr[0] "Une photo"
 msgstr[1] "%(counter)s photos"
 
-#: templates/galleries/photo_counter.html:6
+#: galleries/templates/galleries/photo_counter.html:6
 msgid "No photo"
 msgstr "Nessuna foto"
 
-#: templates/galleries/photo_detail.html:13
+#: galleries/templates/galleries/photo_detail.html:13
 #, python-format
 msgid "Gallery %(gname)s"
 msgstr "Galleria %(gname)s"
 
-#: templates/galleries/photo_detail.html:27
-#: templates/galleries/photo_form.html:5
-#: templates/galleries/photo_form.html:18
+#: galleries/templates/galleries/photo_detail.html:27
+#: galleries/templates/galleries/photo_form.html:5
+#: galleries/templates/galleries/photo_form.html:18
 msgid "Edit Photo"
 msgstr "Modifica Foto"
 
-#: templates/galleries/photo_form.html:32
+#: galleries/templates/galleries/photo_form.html:32
 msgid "Create and add another one"
 msgstr "Crea e aggiungi un'altra"
 
-#. Explanation: The Italian translation includes the additional context
-#. provided in the French version, which specifies that the gallery was
-#. deleted along with all its content. This detail was not explicitly stated
-#. in the English sentence but was included in the French translation, so it's
-#. appropriate to include it in the Italian version as well for clarity and
-#. completeness.
-#: tests/tests_gallery.py:223 views/views_gallery.py:61
+#: galleries/tests/tests_gallery.py:223 galleries/views/views_gallery.py:61
 msgid "Gallery deleted"
 msgstr "Galleria eliminata con tutto il suo contenuto"
 
-#: tests/tests_photo.py:120 views/views_photo.py:98
+#: galleries/tests/tests_photo.py:120 galleries/views/views_photo.py:98
 msgid "Photo deleted"
 msgstr "Foto eliminata"
 
-#: views/views_bulk.py:53
+#: galleries/views/views_bulk.py:53
 msgid "Photos can't be at the root of the zip file."
 msgstr "Le foto non possono essere nella radice del file zip."
 
-#: views/views_bulk.py:71
+#: galleries/views/views_bulk.py:71
 msgid ""
 "Detected path traversal attempt, '..' is not allowed in paths inside the zip"
 " file"
@@ -259,38 +234,39 @@ msgstr ""
 "Rilevato tentativo di attraversamento del percorso, '..' non è consentito "
 "nei percorsi all'interno del file zip"
 
-#: views/views_bulk.py:80
+#: galleries/views/views_bulk.py:80
 #, python-brace-format
 msgid "Imported from zipfile directory {path}"
 msgstr "Importato dalla directory {path} del file zip"
 
-#: views/views_bulk.py:108
+#: galleries/views/views_bulk.py:108
 #, python-brace-format
 msgid "Imported from zipfile directory {filename}"
 msgstr "Importato dalla directory del file zip {filename}"
 
-#: views/views_bulk.py:177
+#: galleries/views/views_bulk.py:177
 #, python-brace-format
 msgid "Unable to import photo '{path}', it was ignored"
 msgstr "Impossibile importare la foto '{path}', è stata ignorata"
 
-#: views/views_bulk.py:191
+#: galleries/views/views_bulk.py:193
+#, python-brace-format
 msgid "Zip file uploaded: {lg} galleries and {nbp} photos created"
 msgstr "{lg} gallerie e {nbp} foto create dal file zip caricato"
 
-#: views/views_photo.py:30
+#: galleries/views/views_photo.py:30
 msgid "Missing either photo id or gallery id"
 msgstr "Manca l'identificativo della foto o della galleria"
 
-#: views/views_photo.py:50
+#: galleries/views/views_photo.py:50
 msgid "Photo not found on that page"
 msgstr "Foto non trovata su questa pagina"
 
-#: views/views_photo.py:71
+#: galleries/views/views_photo.py:71
 msgid "Photo created"
 msgstr "Foto creata"
 
-#: views/views_photo.py:78
+#: galleries/views/views_photo.py:77
 msgid ""
 "Error when creating this photo. Try to convert it in another format before "
 "retrying to upload it."

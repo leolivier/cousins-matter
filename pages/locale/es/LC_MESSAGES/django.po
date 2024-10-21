@@ -1,19 +1,19 @@
-# # Spanish Translations for Cousins-matter app.
-# # Copyright (C) 2024 <OWNER>
-# # This file is distributed under the same license as the application.
-# # This file was generated from /home/olivi/devt/cousins-matter/pages/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# # using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# # by the model.
-# # Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# Spanish Translations for NO NAME FOUND app.
+# Copyright (C) 2024 <OWNER>
+# This file is distributed under the same license as the application.
+# This file was generated from pages/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-15 18:05+0200\n"
-"PO-Revision-Date: 2024-09-21 18:57+00:00\n"
+"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"PO-Revision-Date: 2024-10-21 09:18+00:00\n"
 "\n"
 "Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,142 +23,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. Explanation: The English word "Pages" is a common noun that can mean
-#. different things depending on the context. In this case, both the original
-#. and the contextual translations are identical to "Pages," which suggests it
-#. refers to pages in a document or book. Therefore, the Spanish translation
-#. remains as "Páginas." There is no need for further explanation as the words
-#. match directly between English and Spanish in this simple context.
-#: apps.py:8 templates/pages/menu_pages.html:4
-#: templates/pages/pages_admin_list.html:3
-#: templates/pages/pages_admin_list.html:8
+#: pages/apps.py:8 pages/templates/pages/menu_pages.html:4
+#: pages/templates/pages/pages_admin_list.html:3
+#: pages/templates/pages/pages_admin_list.html:8
 msgid "Pages"
 msgstr "Páginas"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the provided English and French sentences. The placeholders in both
-#. original texts are maintained as they appear, ensuring that the context is
-#. preserved. The structure "Flatpage with url %(url)s already exists" from
-#. the English sentence becomes "Flatpage con el url %(url)s ya existe" in
-#. Spanish, which maintains the same meaning as the French translation "Une
-#. page avec l'url %(url)s existe déjà."
-#: forms.py:34 tests/tests_crud.py:31 tests/tests_crud.py:78
+#: pages/forms.py:34 pages/tests/tests_crud.py:46
+#: pages/tests/tests_crud.py:116
 #, python-format
 msgid "Flatpage with url %(url)s already exists"
 msgstr "Flatpage con el url %(url)s ya existe"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the provided French sentence. The key terms and their meanings are
-#. preserved:
-#. - "flatpage" is translated as "flatpage"
-#. - "cannot be a subpage of another flatpage" becomes "no puede ser una
-#. subpágina de otra flatpage"
-#. - "check your URLs" translates to "verifica tus URL"
-#. The structure and grammar in Spanish maintain the original meaning and
-#. intent of the English sentence.
-#: forms.py:38 tests/tests_crud.py:39
+#: pages/forms.py:38 pages/tests/tests_crud.py:55
 msgid "A flatpage cannot be a subpage of another flatpage, check your URLs"
 msgstr ""
 "A flatpage no puede ser una subpágina de otra flatpage, verifica tus URL."
 
-#. Explanation: The English phrase "Update Page" can be interpreted in two
-#. ways. It could mean to update the content of a webpage, or it could imply
-#. making changes to the layout or design of a page. Given the French
-#. translation which uses "Mettre à jour," this suggests that the primary
-#. meaning is to make updates or adjustments rather than just updating the
-#. content. Therefore, the Spanish translation "Mantener la página
-#. actualizada" reflects this interpretation by emphasizing keeping the page
-#. up-to-date in terms of both content and design.
-#: templates/pages/page_form.html:5 templates/pages/page_form.html:17
-#: templates/pages/page_form.html:27
+#: pages/templates/pages/page_form.html:5
+#: pages/templates/pages/page_form.html:17
+#: pages/templates/pages/page_form.html:27
 msgid "Update Page"
 msgstr "Mantener la página actualizada"
 
-#. Explanation: This translation directly corresponds to the French phrase,
-#. maintaining both the meaning and structure of the original. The term "Page"
-#. in English is translated as "Página" in Spanish, which accurately reflects
-#. this context.
-#: templates/pages/page_form.html:7 templates/pages/page_form.html:19
-#: templates/pages/page_form.html:29 templates/pages/pages_admin_list.html:9
-#: templates/pages/pages_admin_list.html:11
+#: pages/templates/pages/page_form.html:7
+#: pages/templates/pages/page_form.html:19
+#: pages/templates/pages/page_form.html:29
+#: pages/templates/pages/pages_admin_list.html:9
+#: pages/templates/pages/pages_admin_list.html:11
 msgid "Create Page"
 msgstr "Criar una Página"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the English phrase "Save Page and Continue Editing." The French translation
-#. "Enregistrer la page et continuer l'édition" is a direct equivalent,
-#. indicating that the action involves saving a document or webpage
-#. (enregistrer) and then continuing to edit it (continuer avec l'édition).
-#. The Spanish version maintains this meaning by using similar verbs: guardar
-#. (to save) and continuar con la edición (to continue with the editing).
-#: templates/pages/page_form.html:33
+#: pages/templates/pages/page_form.html:33
 msgid "Save Page and Continue Editing"
 msgstr "Guardar la página y continuar con la edición"
 
-#. Explanation: This translation directly corresponds to the French phrase,
-#. which is "Supprimer la Page." The English term "Delete Page" can be
-#. interpreted as either deleting a page or making a deletion of a page. In
-#. this context, "Supprimer la Page" clearly indicates that the action
-#. involves removing or erasing a page, so "Eliminar la Página," which means
-#. "to delete the page," is the most accurate translation.
-#: templates/pages/page_form.html:37 templates/pages/page_form.html:44
+#: pages/templates/pages/page_form.html:37
+#: pages/templates/pages/page_form.html:44
 msgid "Delete Page"
 msgstr "Eliminar la Página"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the provided French sentence. The structure and phrasing are maintained,
-#. with "es-tu sûr" (Are you sure) translated to "eres seguro" in a more
-#. formal tone that matches the original's level of formality. The placeholder
-#. "%(title)s" is kept intact as it represents the title of the page being
-#. referred to.
-#: templates/pages/page_form.html:45
+#: pages/templates/pages/page_form.html:45
 #, python-format
 msgid "Are you sure you want to delete the page \"%(title)s\"?"
 msgstr "Eres seguro de querer eliminar la página '%(title)s'?"
 
-#. Explanation: The English term "Pages Tree" is ambiguous and could refer to
-#. a tree-like structure of pages or a directory structure. Given the French
-#. context translation "Arbre des Pages," which directly translates to "Arbre
-#. de las Páginas" in Spanish, it's clear that we are dealing with a directory
-#. structure or hierarchical system of files or web pages. Therefore, the most
-#. appropriate and consistent translation is "Arbres de las Páginas." However,
-#. since "Pages Tree" is commonly understood as referring to a directory
-#. structure, "Arbre des Pages" is more fitting in this context.
-#: templates/pages/page_tree.html:3 templates/pages/page_tree.html:7
+#: pages/templates/pages/page_tree.html:3
+#: pages/templates/pages/page_tree.html:7
 msgid "Pages Tree"
 msgstr "Arbre de las Páginas"
 
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the provided French sentence. The placeholders in both sentences are
-#. maintained as they were in the original text to ensure consistency and
-#. context preservation. The key elements such as "Cannot load page," "url
-#. {url}," "not found in the database," and "Please contact" are translated
-#. accordingly, maintaining the same structure and intent.
-#: templatetags/pages_tags.py:102
-#, python-brace-format
-msgid ""
-"Cannot load page from url {url}, it was not found in the database. Please "
-"contact the administrator of the site"
-msgstr ""
-"No se puede cargar la página desde el URL {url}, no fue encontrada en la "
-"base de datos. Por favor, contacte al administrador del sitio"
-
-#. Explanation: This Spanish translation accurately reflects the meaning of
-#. the French phrase, which indicates that a page has been registered or
-#. saved. The placeholder format is maintained as in the original sentence and
-#. translation, ensuring consistency with the user's instructions.
-#: views.py:28 views.py:47
+#: pages/tests/test_base.py:35 pages/views.py:28 pages/views.py:47
 #, python-format
 msgid "Page \"%(title)s\" saved"
 msgstr "Page '%(title)s' registrada"
 
-#. Explanation: This Spanish translation maintains the structure and meaning
-#. of the original English sentence, including the placeholder format. The
-#. French translation "Page '%(title)s' supprimée" directly corresponds to
-#. this structure, indicating that a page has been deleted. Therefore,
-#. "eliminada" is used in its place, which accurately reflects the action of
-#. deletion in Spanish.
-#: views.py:68
+#: pages/views.py:68
 #, python-format
 msgid "Page \"%(title)s\" deleted"
 msgstr "Page '%(title)s' eliminada"

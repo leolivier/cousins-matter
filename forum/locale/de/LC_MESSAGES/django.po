@@ -1,7 +1,11 @@
-# French translation of cousins_matter module for news.
-# Copyright (C) 2024 Olivier LEVILLAIN <olivier@levillain.eu>
-# This file is distributed under the same license as the Cousins Matter package.
-# <olivier@levillain.eu>, 2024.
+# German Translations for NO NAME FOUND app.
+# Copyright (C) 2024 <OWNER>
+# This file is distributed under the same license as the application.
+# This file was generated from forum/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
@@ -9,60 +13,36 @@ msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-03 18:18+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Auto-po-lyglot (https://github.com/leolivier/auto-po-lyglot)\n"
+"PO-Revision-Date: 2024-10-21 09:08+00:00\n"
+"\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
-"Language: \n"
+"Language: DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. Explanation:  The English word "content" is a general term for the material
-#. or information presented in a piece of writing, media, or other form. The
-#. French word "contenu" has a similar meaning and can be used interchangeably
-#. with "content" in many contexts.
 #: forum/models.py:13
 msgid "Content"
 msgstr "Inhalt"
 
-#. Explanation: The English word "Title" is directly translated to the German
-#. word "Titel".  This is a straightforward and accurate translation,
-#. preserving the meaning of both words.
 #: forum/models.py:28
 msgid "Title"
 msgstr "Titel"
 
-#. Explanation:  The English word "posts" can refer to both online content and
-#. physical posts. In the context of discussions, "Beiträge" (meaning
-#. "contributions" or "posts") is a more accurate translation for
-#. "discussions". It reflects the idea of sharing opinions and ideas within a
-#. particular topic.
 #: forum/models.py:34
 msgid "posts"
 msgstr "Beiträge"
 
-#. Explanation:  The English sentence "Comment" is a simple question asking
-#. how someone is doing. The French translation "Commentaire" means comment,
-#. which is a word that can mean "comment" or "opinion". It's important to
-#. note that the context of the conversation will determine if the meaning of
-#. "comment" is about a comment on something or just a general inquiry about
-#. someone's well-being.
 #: forum/models.py:51
 msgid "Comment"
 msgstr "Wie geht es dir?"
 
-#. Explanation:  The English word "comments" is directly translated to the
-#. German word "Kommentare". This maintains the meaning and context of the
-#. original sentence.
 #: forum/models.py:54
 msgid "comments"
 msgstr "Kommentare"
 
-#. Explanation: The provided text is a placeholder that needs to be translated
-#. into German.  The context of the sentence suggests it's about comments on a
-#. post or article. So, we translate the placeholder with "Kommentar" which
-#. means "comment" in German.
 #: forum/templates/forum/comment_list.html:5
 #, python-format
 msgid "%(ncomments)s comment"
@@ -70,39 +50,23 @@ msgid_plural "%(ncomments)s comments"
 msgstr[0] "%(ncomments)s commentaire"
 msgstr[1] "%(ncomments)s commentaires"
 
-#. Explanation:  Both "Edit" and "Modifier" mean to make changes or alter
-#. something. The German word "Bearbeiten" is a more direct translation of the
-#. English phrase, conveying a sense of making adjustments or alterations.
-#. It's a common term in various contexts like text editing, software
-#. programs, and even general language use.
 #: forum/templates/forum/comment_list.html:33
 #: forum/templates/forum/post_detail.html:45
 #: forum/templates/forum/post_detail.html:91
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#. Explanation:  Both "Delete" and "Supprimer" mean the same thing in English
-#. and French. The German word "löschen" is a direct synonym for "delete".
-#. It's often used to describe deleting data, files, or content from a system.
 #: forum/templates/forum/comment_list.html:37
 #: forum/templates/forum/post_detail.html:48
 #: forum/templates/forum/post_detail.html:95
 msgid "Delete"
 msgstr "Löschen"
 
-#. Explanation:  Both "Update" and "Mettre à jour" convey the same meaning of
-#. bringing something up to date or changing it. "Aktualisieren" is a direct
-#. German translation for "update". It accurately reflects the English word's
-#. meaning in the context provided.
 #: forum/templates/forum/comment_list.html:50
 #: forum/templates/forum/post_detail.html:109
 msgid "Update"
 msgstr "Aktualisieren"
 
-#. Explanation:  Both "Cancel" and "Annuler" mean to cancel or stop something.
-#. While "Cancel" is more common in English, "Annuler" is a direct equivalent
-#. in French. The German word "Abbrechen" also means to cancel, but it carries
-#. a slightly different nuance of stopping or interrupting something.
 #: forum/templates/forum/comment_list.html:53
 #: forum/templates/forum/comment_list.html:78
 #: forum/templates/forum/post_detail.html:112
@@ -110,35 +74,18 @@ msgstr "Aktualisieren"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#. Explanation: The English phrase "Add comment" is translated into German as
-#. "Fügt einen Kommentar hinzu". This accurately reflects the meaning of the
-#. original sentence.  The word "Fügt" means "adds" and "einen Kommentar"
-#. means "a comment."
 #: forum/templates/forum/comment_list.html:69
 msgid "Add comment"
 msgstr "Fügt einen Kommentar hinzu"
 
-#. Explanation:  Both "Add" and "Ajouter" mean the same thing in English and
-#. French. The German word "Addieren" is a direct translation of "add" and
-#. reflects the meaning of both words.
 #: forum/templates/forum/comment_list.html:77
 msgid "Add"
 msgstr "Addieren"
 
-#. Explanation: The English word "post" can refer to a variety of things,
-#. including online forums and social media posts. However, the provided
-#. context suggests that the user is referring to a discussion or debate.  The
-#. French translation "Discussion" accurately reflects this meaning.
 #: forum/templates/forum/post_detail.html:7
 msgid "Post"
 msgstr "Post"
 
-#. Explanation: This German translation reflects the meaning of the French
-#. phrase, which indicates that the person gave an answer. The English phrase
-#. "%(nreplies)s answer" can be ambiguous, as it can mean both "giving a
-#. response" and "making a statement" colloquially. The French translation
-#. makes it clear that it is a response, so the German version "**(nreplies)s
-#. Antwort**" follows this interpretation.
 #: forum/templates/forum/post_detail.html:11
 #: forum/templates/forum/post_list.html:34
 #, python-format
@@ -147,36 +94,18 @@ msgid_plural "%(nreplies)s answers"
 msgstr[0] "%(nreplies)s réponse"
 msgstr[1] "%(nreplies)s réponses"
 
-#. Explanation:  The English phrase "No answer" is a direct translation of the
-#. French phrase "Pas de réponse," which means "no response." The German word
-#. "Antwort" translates to "answer," so it's a suitable choice.
 #: forum/templates/forum/post_detail.html:17
 msgid "No answer"
 msgstr "Keine Antwort"
 
-#. Explanation: The German translation accurately reflects the meaning of the
-#. English phrase "Your answer," while using the appropriate grammatical
-#. structure and word choice.  The use of "Ihre" (your) is a direct
-#. translation of "Ta" in French, which emphasizes that the response belongs
-#. to the person asking the question.
 #: forum/templates/forum/post_detail.html:130
 msgid "Your answer"
 msgstr "Ihre Antwort"
 
-#. Explanation: The English phrase "Delete post" is ambiguous and can be
-#. interpreted as deleting a physical post or a digital one.  The French
-#. translation, "Supprimer la conversation," clarifies that the action is to
-#. delete a message from a conversation. This ensures the German translation
-#. accurately reflects the intended meaning of the original sentence.
 #: forum/templates/forum/post_detail.html:133
 msgid "Delete post"
 msgstr "Löschen Sie den Beitrag"
 
-#. Explanation: The German translation accurately reflects the meaning of the
-#. French phrase while preserving the original sentence structure and tone.
-#. The use of "Seid Sie sicher" (Are you sure) in the German translation
-#. conveys a similar level of caution as the French phrase "Est tu sûr(e) de
-#. vouloir".
 #: forum/templates/forum/post_detail.html:134
 #, python-format
 msgid ""
@@ -186,56 +115,31 @@ msgstr ""
 "Seid Sie sicher, dass Sie \"%(post)s\" löschen und alle zugehörigen "
 "Antworten und Kommentare entfernen möchten?"
 
-#. Explanation: The French translation "Modifier le message" means to edit the
-#. message.  The German translation "Bearbeiten Sie den Beitrag" translates
-#. this meaning into a more natural and idiomatic way in German, using the
-#. verb "bearbeiten" which means to edit or work on something.
 #: forum/templates/forum/post_form.html:8
 #: forum/templates/forum/post_form.html:16
 msgid "Edit Post"
 msgstr "Bearbeiten Sie den Beitrag"
 
-#. Explanation:  The English phrase "Create Post" is translated into German as
-#. "Erstelle einen Beitrag". This accurately reflects the meaning of both
-#. phrases. "Create Post" refers to creating a new post, and "Créer une
-#. discussion" means "Create a discussion", which implies a similar concept in
-#. French.
 #: forum/templates/forum/post_form.html:10
 #: forum/templates/forum/post_form.html:18
 #: forum/templates/forum/post_list.html:9
 msgid "Create Post"
 msgstr "Erstelle einen Beitrag"
 
-#. Explanation: The English word "send" is a verb that can be translated into
-#. German as "senden".  The context of the phrase, "Send," implies an action
-#. of transmitting something.
 #: forum/templates/forum/post_form_include.html:17
 msgid "Send"
 msgstr "Senden"
 
-#. Explanation: The English phrase "Latest Posts" is translated directly to
-#. "Dernières discussions" in French. This accurately reflects the meaning and
-#. intent of both phrases, as they refer to recent or most recently published
-#. content.
 #: forum/templates/forum/post_list.html:3
 #: forum/templates/forum/post_list.html:8
 msgid "Latest Posts"
 msgstr "Letzte Beiträge"
 
-#. Explanation: The German translation accurately conveys the meaning of the
-#. French phrase, while maintaining a consistent tone and structure.  The
-#. sentence is translated literally, with the use of appropriate grammatical
-#. structures to convey the same meaning as the original text.
 #: forum/views/views_comment.py:26 forum/views/views_comment.py:48
 #: forum/views/views_post.py:71 forum/views/views_post.py:114
 msgid "The size of the message exceeds the authorised limit."
 msgstr "Die Nachricht überschreitet die zulässige Größengröße."
 
-#. Explanation: The French translation, "Impossible de supprimer le premier
-#. message d'une discussion!", clearly conveys the meaning of the English
-#. sentence. It accurately reflects the impossibility of deleting the first
-#. message within a thread.  The German translation maintains this meaning and
-#. uses appropriate grammatical structures for clarity.
 #: forum/views/views_post.py:174
 msgid "Can't delete the first message of a thread!"
 msgstr "Kann die erste Nachricht einer Diskussion nicht löschen!"

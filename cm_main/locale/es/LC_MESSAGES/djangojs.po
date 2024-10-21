@@ -1,11 +1,11 @@
-# # Spanish Translations for Cousins-matter app.
-# # Copyright (C) 2024 <OWNER>
-# # This file is distributed under the same license as the application.
-# # This file was generated from /home/olivi/devt/cousins-matter/cm_main/locale/fr/LC_MESSAGES/djangojs.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# # using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# # by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# # by the model.
-# # Olivier LEVILLAIN <OWNER EMAIL>, 2024.
+# Spanish Translations for NO NAME FOUND app.
+# Copyright (C) 2024 <OWNER>
+# This file is distributed under the same license as the application.
+# This file was generated from cm_main/locale/fr/LC_MESSAGES/djangojs.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# <OWNER> <OWNER EMAIL>, 2024.
 #
 #, fuzzy
 msgid ""
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-28 16:06+0200\n"
-"PO-Revision-Date: 2024-09-21 15:59+00:00\n"
+"PO-Revision-Date: 2024-10-21 09:12+00:00\n"
 "\n"
 "Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"

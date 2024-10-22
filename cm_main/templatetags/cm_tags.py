@@ -190,3 +190,10 @@ def startswith(text, starts):
     if isinstance(text, str):
         return text.startswith(starts)
     return False
+
+
+@register.simple_tag(takes_context=True)
+def absolute_url(context, relative_url):
+  print(context)
+  request = context['request']
+  return request.get_absolute_uri(relative_url)

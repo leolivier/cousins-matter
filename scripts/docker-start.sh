@@ -61,13 +61,11 @@ check_status "curl is not installed, please install it and restart the command"
 tag=''
 directory=$PWD
 port=8000
-update=false
 force=false
 
 while getopts ":hufqlt:d:p:" opt; do
 	case $opt in
 		h) usage;;
-		u) update=true;;
 		l) tag='latest';;
 		t) tag=$OPTARG;;
 		d) directory=$OPTARG;;
@@ -116,8 +114,8 @@ fi
 
 tagged_image=$image:$tag
 
-if [[ -s $current_tag && $current_tag == $tag && $update != true && $force == false ]]; then
-	echo "Container already running with tag $current_tag, use update flag -u or another tag to update"
+if [[ -s $current_tag && $current_tag == $tag && $force == false ]]; then
+	echo "Container already running with tag $current_tag, use force flag -f or another tag to update"
 	exit 0
 fi
 

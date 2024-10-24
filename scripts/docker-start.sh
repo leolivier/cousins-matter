@@ -1,36 +1,28 @@
 #!/bin/bash
 container=cousins-matter
 image=ghcr.io/leolivier/$container
-github_repo=leolivier/cousins-matter
 
 function usage() {
 	cat << EOF
 
-usage: $0 [-h] [-q] [-u] [-f] [-t tag|-l] [-d directory] [-p port]
+usage: $0 [-h] [-q] [-f] [-t tag|-l] [-p port]
 
 Starts the cousins-matter docker container
 
 args:
 	-h: print this help and exit
 	-q: quiet mode, default is verbose
-	-u: if provided, $(basename $0) will first try to stop and remove an existing 'cousins-matter' container before starting a new one.
 	-t tag: the tag of the image
 	-l: short for '-t latest'
-	-f: force restart even if the container already runs the requested image (if -l or tag=latest, restart even if the latest image is already running)
-	-d directory: the directory where the data will be stored, will be created if it doesn't exist, defaults to current directory.
+	-f: force recreating the container even if the container already runs the requested image
 	-p port: the port where CousinsMatter app will be served, defaults to 8000.
-
 
 If none of '-t tag' and '-l' is provided, the script will try to see if the container is already running and reuse the same tag. 
 Otherwise, it will use the 'latest' tag.
 If both '-t tag' and '-l' are provided, the last provided takes precedence.
 
-It will first check if a .env file exist in the chosen directory.
-If not, it will download the .env.example from github, rename it to .env and invite the user to edit it, then exit.
-Otherwise, it will create the media and data sub directories if needed.
-Then it will pull the image '$image:<tag>'.
-Afterwards, it will start the image with the proper mounted volumes,the right port and the right command.
-And finally, it will check if a superuser already exists in the database, other wise it will run the command to create it.
+It will first check if a .env file exist in the chosen directory. If not, it will stop.
+Afterwards, using docker compose, it will start the selected image with the proper mounted volumes,the right port and the right command, forcing a pull at each start.
 
 Prerequisites:
 	- docker
@@ -49,29 +41,19 @@ function check_status() {
   fi
 }
 
-which docker >/dev/null
-check_status "docker is not installed, please install it and restart the command"
-
-which jq >/dev/null
-check_status "jq is not installed, please install it and restart the command"
-
-which curl >/dev/null
-check_status "curl is not installed, please install it and restart the command"
-
 tag=''
 directory=$PWD
 port=8000
 force=false
 
-while getopts ":hufqlt:d:p:" opt; do
+while getopts ":hfqlt:p:" opt; do
 	case $opt in
 		h) usage;;
 		l) tag='latest';;
 		t) tag=$OPTARG;;
-		d) directory=$OPTARG;;
 		p) port=$OPTARG;;
-		v) be_verbose=false;;
-		f) force=true;;
+		q) be_verbose=false;;
+		f) force_recreate='--force-recreate';;
 		\?) echo "Invalid option -$OPTARG" >&2
 				usage;;
 	esac
@@ -85,6 +67,12 @@ else
     verbose() {
         echo "$@"
     }
+fi
+
+if [[ ! -f .env ]] || diff -q .env .env.example; then
+	verbose "Either .env file doesn't exist or it has not been changed since created from .env.example."
+	verbose "Please edit .env according to your needs and restart the script."
+	exit 1
 fi
 
 current_tag=$(docker container ls 2>/dev/null | awk -v name="$container" '$NF == name {split($2, a, ":"); print (a[2] ? a[2] : "latest")}');
@@ -119,95 +107,14 @@ if [[ -s $current_tag && $current_tag == $tag && $force == false ]]; then
 	exit 0
 fi
 
-# Function for checking whether an item is in a list
-function is_in_list() {
-	local item="$1"
-	shift
-	local list=("$@")
-	for i in "${list[@]}"; do
-		if [[ "$i" == "$item" ]]; then
-			return 0
-		fi
-	done
-	return 1
-}
+last_realease=$(curl -s https://api.github.com/repos/${github_repo}/releases/latest | jq -r '.tag_name')
+git_url="https://raw.githubusercontent.com/${github_repo}/refs/tags/${last_realease}"
 
-if [[ -d $directory ]]; then
-	# Check first-level files and folders to avoid using an existing folder not dedicated to cousins-matter
-	allowed_files=(.env .env-example docker-start.sh docker-compose.yml)
-	allowed_dirs=(media data)
-	verbose "directory $directory exists, checking it does contain only allowed files and directories..."
-	for item in "$directory"/*; do
-		basename_item=$(basename "$item")
-		if { [[ -f "$item" ]] && ! is_in_list "$basename_item" "${allowed_files[@]}"; } || { [[ -d "$item" ]] && ! is_in_list "$basename_item" "${allowed_dirs[@]}"; }; then
-			echo "$directory seems to contains files that are not allowed (e.g. $item). Only $allowed_files and $allowed_dirs are allowed."
-			read -p "Do you want to continue anyway? [y/N] " -n 1 -r
-			echo	
-			if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-				echo "Please choose another directory or remove the unallowed files & folders."
-				exit 2
-			else
-				break
-			fi
-		fi
-	done
-fi
-
-function get_download_url() {
-	last_realease=$(curl -s https://api.github.com/repos/${github_repo}/releases/latest | jq -r '.tag_name')
-	echo https://raw.githubusercontent.com/${github_repo}/refs/tags/${last_realease}
-}
-
-mkdir -p $directory $directory/data $directory/media && cd $directory
-
-git_url=$(get_download_url)
-
-# download docker-start.sh from github if it doesn't exist or if it has changed (auto-update)
-if [[ ! -f docker-start.sh ]]; then
-        verbose "downloading docker-start.sh from github latest release."
-        curl $git_url/docker-start.sh -o docker-start.sh
-        verbose "You should now use this script: $PWD/docker-start.sh"
-else
-        verbose "Updating docker-start.sh from github latest release if needed."
-        curl $git_url/docker-start.sh -o /tmp/docker-start.sh
-        if diff -q docker-start.sh /tmp/docker-start.sh; then
-          mv /tmp/docker-start.sh .
-          verbose "docker-start.sh updated"
-        else
-          rm /tmp/docker-start.sh
-        fi
-fi
-
-# download docker-compose.yml from github if it doesn't exist (no auto update)
-if [[ ! -f docker-compose.yml ]]; then
-	verbose "downloading docker-compose.yml from github latest release."
-	curl $git_url/docker-compose.yml -o docker-compose.yml
-fi
-if [[ ! -f .env ]]; then
-	curl -o .env $git_url/.env.example
-	echo ".env didn't exist, it was created by downloading .env.example from github latest release."
-	echo " Please edit .env and adapt it to your neeeds then restart the command"
-	exit 1
-fi
+verbose "checking if install is ok..."
+[[ -f scripts/docker-start.sh && -f docker-compose.yml && -f .env && -f data/db.sqlite3 ]]
+check_status "install is not ok, please run 'curl ${git_url}/scripts/docker-install.sh | bash' before starting the site"
 
 verbose "starting $container using image $tagged_image"
-COUSINS_MATTER_IMAGE=$tagged_image docker compose up --pull always --wait -d
+COUSINS_MATTER_IMAGE=$tagged_image docker compose up $force_recreate --pull always --wait -d
 check_status "Docker run failed"
-verbose "started"
-
-verbose "checking if superuser exists..."
-su_exists=$(docker exec $container python manage.py shell -c "from members.models import Member; print(Member.objects.filter(is_superuser=True).exists())" 2>/dev/null)
-check_status "Can't get superuser status"
-
-# keep only last line to remove possible warnings
-su_exists=$(echo "$su_exists" | tail -1)
-
-if [[ $su_exists == 'True' ]]; then
-	verbose "superuser already exists"
-else
-	echo "creating superuser..."
-	docker exec -it $container python manage.py createsuperuser
-	check_status "Can't create super user"
-fi
-
-verbose "done"
+verbose "Started..."

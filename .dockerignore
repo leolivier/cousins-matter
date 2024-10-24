@@ -24,9 +24,12 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 LICENSE
-README.md
+*.md
 data/
 media/
 **/*.log
 **/.gitattributes
 **/*.rdb
+**/.env.example
+**/.github
+**/requirements.txt

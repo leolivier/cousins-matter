@@ -135,7 +135,7 @@ done
 chmod a+x scripts/docker-start.sh
 
 function generate_secret_key() {
-	echo $(tr -dc '[:graph:]' < /dev/urandom | head -c 32)
+	echo $(tr -dc '[:alnum:]!@#$%^&*()_\-+={}[]:;<>?,./' < /dev/urandom | head -c 64)
 }
 
 if [[ ! -f .env ]]; then
@@ -143,7 +143,7 @@ if [[ ! -f .env ]]; then
 	echo ".env didn't exist, it was created by downloading .env.example from github latest release."
 	verbose "Generating secret key..."
 	key=$(generate_secret_key)
-	sed -i "s/SECRET_KEY=.*/SECRET_KEY=$key/" .env
+	sed -i "s/SECRET_KEY=.*/SECRET_KEY='$key'  # generated automatically, don't change!/" .env
 	check_status "Can't generate secret key"
 	remind_dotenv=1
 	echo " Please edit .env and adapt it to your neeeds before starting the site (don't change the SECRET_KEY, it was generated automatically)."
@@ -173,4 +173,6 @@ if [[ $su_exists == 'False' ]]; then
 fi
 
 verbose "Installation of Cousins Matter done"
-[[ $remind_dotenv == 1 ]] && echo "DON'T FORGET to edit .env and adapt it to your needs before starting the site (and don't change the SECRET_KEY, it was generated automatically)."
+[[ $remind_dotenv == 1 ]] && echo "An editor will open in a few seconds to udpate .env file. Please adapt it to your needs before starting the site."
+sleep 5
+${EDITOR:-editor} .env

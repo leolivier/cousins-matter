@@ -32,4 +32,3 @@ media/
 **/*.rdb
 **/.env.example
 **/.github
-**/requirements.txt

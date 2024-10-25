@@ -143,7 +143,7 @@ if [[ ! -f .env ]]; then
 	echo ".env didn't exist, it was created by downloading .env.example from github latest release."
 	verbose "Generating secret key..."
 	key=$(generate_secret_key)
-	sed -i "s/SECRET_KEY=.*/SECRET_KEY='$key'  # generated automatically, don't change!/" .env
+	sed -i "s/SECRET_KEY=.*/SECRET_KEY='$key'  # generated automatically, do not change!/" .env
 	check_status "Can't generate secret key"
 	remind_dotenv=1
 	echo " Please edit .env and adapt it to your neeeds before starting the site (don't change the SECRET_KEY, it was generated automatically)."

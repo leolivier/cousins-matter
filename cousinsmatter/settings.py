@@ -50,7 +50,7 @@ SITE_DOMAIN = env.str('SITE_DOMAIN', None)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'])
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
-
+SESSION_COOKIE_DOMAIN = env.str('SESSION_COOKIE_DOMAIN', None)
 
 LANGUAGES = [
     ("fr", "Français"),

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 18:18+0200\n"
+"POT-Creation-Date: 2024-10-27 12:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: cousinsmatter/settings.py:349
+msgid "Email verification"
+msgstr "Vérification d'adresse mail"
 
 #: cousinsmatter/utils.py:50
 #, python-brace-format

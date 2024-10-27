@@ -12,54 +12,64 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"POT-Creation-Date: 2024-10-27 12:48+0100\n"
 "PO-Revision-Date: 2024-10-21 10:37+00:00\n"
-"\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
+"leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: members/apps.py:8
 msgid "Members"
 msgstr "membros"
 
-#: members/forms.py:114
+#: members/forms.py:75
+#, python-brace-format
+msgid ""
+"By checking this box, you consent to the <a target='blank' "
+"href='{privacy_url}'>privacy policy</a> of this site"
+msgstr ""
+"Ao assinalar esta caixa, o utilizador aceita a <a target='blank' "
+"href='{privacy_url}'>política de privacidade</a> deste sítio"
+
+#: members/forms.py:115
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Nome da pessoa convidada (aparecerá no e-mail recebido)"
 
-#: members/forms.py:115
+#: members/forms.py:116
 msgid "Email to send invitation"
 msgstr "Email para enviar uma convite"
 
-#: members/forms.py:119
+#: members/forms.py:120
 msgid "Your name"
 msgstr "Seu nome"
 
-#: members/forms.py:120
+#: members/forms.py:121
 msgid "Email where you will receive the link"
 msgstr "Email onde você receberá o link"
 
-#: members/forms.py:121
+#: members/forms.py:122
 msgid "Message to the administrator"
 msgstr "mensagem para o administrador"
 
-#: members/forms.py:122
+#: members/forms.py:123
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Capcha (clique na imagem para refrescar se você não consegue ler)"
 
-#: members/forms.py:137
+#: members/forms.py:138
 msgid "CSV file"
 msgstr "Arquivo CSV"
 
-#: members/forms.py:138
+#: members/forms.py:139
 msgid "The CSV file containing the members to import."
 msgstr "O arquivo CSV que contém os membros para importar."
 
-#: members/forms.py:142
+#: members/forms.py:143
 msgid "Automatically activate imported users"
 msgstr "Ativar automaticamente os usuários importados"
 
@@ -135,12 +145,8 @@ msgctxt "CSV Field"
 msgid "website"
 msgstr "site"
 
-#: members/models.py:51
+#: members/models.py:35
 msgctxt "CSV Field"
-msgid "family"
-msgstr "Família"
-
-#: members/models.py:49
 msgid "family"
 msgstr "Família"
 
@@ -159,13 +165,15 @@ msgstr "Nome"
 msgid "Parent family"
 msgstr "Familia parental"
 
+#: members/models.py:49
+msgid "family"
+msgstr "Família"
 
 #: members/models.py:50
 msgid "families"
 msgstr "Famílias"
 
-#: members/models.py:65
-#: members/templates/members/address/address_detail.html:8
+#: members/models.py:65 members/templates/members/address/address_detail.html:8
 msgid "Number & Street name"
 msgstr "Número e nome da rua"
 
@@ -354,12 +362,11 @@ msgstr "Não responda a este e-mail, ele foi gerado por máquina."
 #: members/templates/members/email/new_follower.html:17
 #, python-format
 msgid ""
-"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a>"
-" is now following you on %(site_name)s!"
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
+"is now following you on %(site_name)s!"
 msgstr ""
-"Olá %(followed_name)s, <br><a "
-"href=\"%(follower_url)s\">%(follower_name)s</a> está agora seguindo você em "
-"%(site_name)s!"
+"Olá %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</"
+"a> está agora seguindo você em %(site_name)s!"
 
 #: members/templates/members/email/password_reset_email.html:8
 #: members/templates/members/email/password_reset_email.html:17
@@ -367,10 +374,6 @@ msgstr ""
 msgid "Password reset request for %(sitename)s"
 msgstr "Solicitação de redefinível de senha para %(sitename)s"
 
-#. Explanation: This Portuguese translation reflects the meaning of the French
-#. phrase, which indicates a greeting. The placeholder "%(userfullname)s" is
-#. kept in the same place to maintain consistency with the original sentence
-#. and contextual translation.
 #: members/templates/members/email/password_reset_email.html:20
 #, python-format
 msgid "Hi %(userfullname)s,"
@@ -409,9 +412,10 @@ msgid ""
 "If you didn't request a password reset, please contact the administrator of "
 "\"%(sitename)s\" at %(domain)s and try to reset your password in case "
 "someone tried to hijack your account."
-msgstr "Se você não pediu para resetar a senha, entre em contato com o administrador "
-"do site \"%(sitename)s\" em %(domain)s e tente redefinir sua senha caso alguém tenha "
-"tentado roubar seu acesso."
+msgstr ""
+"Se você não pediu para resetar a senha, entre em contato com o administrador "
+"do site \"%(sitename)s\" em %(domain)s e tente redefinir sua senha caso "
+"alguém tenha tentado roubar seu acesso."
 
 #: members/templates/members/email/registration_invite_email.html:8
 #, python-format
@@ -433,8 +437,8 @@ msgstr "Olá %(invited)s, isso é %(inviter)s!"
 #: members/tests/tests_register.py:41
 #, python-format
 msgid ""
-"I invite you to register on the %(site_name)s website I created for managing"
-" our big family!"
+"I invite you to register on the %(site_name)s website I created for managing "
+"our big family!"
 msgstr ""
 "Eu convido você a se registrar no site web %(site_name)s que eu criei para "
 "gerenciar nossa grande família!"
@@ -468,13 +472,13 @@ msgstr ""
 #: members/templates/members/email/registration_invite_email.html:38
 #, python-format
 msgid ""
-"You can also reply to this email to contact <a "
-"href=\"mailto:%(inviter_email)s\">%(inviter)s</a> and check with him if he "
-"really invited you..."
+"You can also reply to this email to contact <a href=\"mailto:"
+"%(inviter_email)s\">%(inviter)s</a> and check with him if he really invited "
+"you..."
 msgstr ""
 "Você também pode responder a este e-mail para entrar em contato com <a "
-"href='mailto:%(inviter_email)s'>%(inviter)s</a> e verificar se ele realmente"
-" convidou você..."
+"href='mailto:%(inviter_email)s'>%(inviter)s</a> e verificar se ele realmente "
+"convidou você..."
 
 #: members/templates/members/email/registration_invite_email.html:43
 #: members/views/views_registration.py:24
@@ -497,8 +501,7 @@ msgstr "Pedido de registo para o sítio \"%(site_name)s\""
 #: members/tests/tests_register.py:130
 #, python-format
 msgid "%(name)s (%(email)s) requested to register to your cousinades site"
-msgstr ""
-"%(name)s (%(email)s) solicitou-se inscrever no seu site de parentesco."
+msgstr "%(name)s (%(email)s) solicitou-se inscrever no seu site de parentesco."
 
 #: members/templates/members/email/registration_request_email.html:23
 msgid "Here is the message he sent:"
@@ -647,8 +650,8 @@ msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
-"O link de resetar senha foi inválido, possivelmente porque já foi usado. Por"
-" favor, solicite uma nova resetar senha."
+"O link de resetar senha foi inválido, possivelmente porque já foi usado. Por "
+"favor, solicite uma nova resetar senha."
 
 #: members/templates/members/login/password_reset_done.html:6
 msgid "Password reset sent"
@@ -731,8 +734,8 @@ msgstr ""
 #: members/templates/members/members/export_members.html:13
 msgid "Admins can re-import the files after modification with any CSV editor."
 msgstr ""
-"Administradores podem reimportar os arquivos após a modificação com qualquer"
-" editor CSV."
+"Administradores podem reimportar os arquivos após a modificação com qualquer "
+"editor CSV."
 
 #: members/templates/members/members/export_members.html:18
 msgid "Select members to export"
@@ -808,8 +811,8 @@ msgid ""
 "Families must be entered by name. They will be created on the fly if they "
 "don't already exist."
 msgstr ""
-"Famílias devem ser inseridas pelo nome. Elas serão criadas à vista se não já"
-" existirem."
+"Famílias devem ser inseridas pelo nome. Elas serão criadas à vista se não já "
+"existirem."
 
 #: members/templates/members/members/import_members.html:33
 msgid "Import"
@@ -980,7 +983,7 @@ msgstr "Nome"
 msgid "last name"
 msgstr "Último nome"
 
-#: members/templates/members/members/members.html:63
+#: members/templates/members/members/members.html:64
 #: members/templates/members/members/members_directory.html:50
 msgid "No members found"
 msgstr "Não encontraram membros"
@@ -1062,8 +1065,8 @@ msgstr "Seu link de verificação foi enviado."
 #: members/templates/members/registration/new_email_sent.html:11
 msgid "Please check your email and click on the link to verify your email."
 msgstr ""
-"Por favor, verifique seu e-mail e clique no link para verificar seu endereço"
-" de e-mail."
+"Por favor, verifique seu e-mail e clique no link para verificar seu endereço "
+"de e-mail."
 
 #: members/templates/members/registration/registration_invite.html:3
 #: members/templates/members/registration/registration_invite.html:6
@@ -1223,8 +1226,7 @@ msgstr "%(follower_name)s está agora seguindo você!"
 #: members/views/views_import_export.py:41
 #, python-format
 msgid ""
-"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are "
-"%(all_names)s"
+"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
 msgstr ""
 "Coluna desconhecida no arquivo CSV: '%(fieldname)s'. Campos válidos são "
 "%(all_names)s"
@@ -1254,7 +1256,7 @@ msgstr ""
 "Erro ao salvar avatar (%(error)s): %(avatar)s para o usuário %(username)s. "
 "Ignorado..."
 
-#: members/views/views_import_export.py:204
+#: members/views/views_import_export.py:205
 #, python-format
 msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
@@ -1263,12 +1265,12 @@ msgstr ""
 "Arquivo CSV carregado: %(nbLines)i linhas lidas, %(nbMembers)i membros "
 "criados ou atualizados"
 
-#: members/views/views_import_export.py:207
+#: members/views/views_import_export.py:208
 #, python-format
 msgid "Warning: %(error)s"
 msgstr "Alerta: %(error)s"
 
-#: members/views/views_import_export.py:274
+#: members/views/views_import_export.py:275
 msgid "Method not allowed"
 msgstr "Método não permitido"
 

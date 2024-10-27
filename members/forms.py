@@ -70,8 +70,9 @@ class MemberRegistrationForm(MemberFormMixin, UserCreationForm):
     self.initialize_fields(*args, **kwargs)
     # force email to be required  # TODO: is this useful?
     self.fields['email'].required = True
-    self.fields['privacy_consent'].help_text = "By checking this box, you consent to the " + \
-      f"<a target='blank' href='{settings.PRIVACY_URL}'>privacy policy</a> of this site"
+    privacy_url = settings.PRIVACY_URL
+    self.fields['privacy_consent'].help_text = \
+      _(f"By checking this box, you consent to the <a target='blank' href='{privacy_url}'>privacy policy</a> of this site")
     self.fields['privacy_consent'].required = True
 
 

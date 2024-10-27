@@ -46,8 +46,9 @@
   {% if page.object_list.count > 0 %}
   <div class="grid mx-3 is-col-min-8">
     {% for member in page.object_list %}
-      <div class="cell has-text-centered">
-        <a class="button {% cycle 'is-dark' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
+      <div class="cell has-text-centered my-auto">
+        <a class="button {% cycle 'is-dark' 'is-primary' 'is-link' %} button-wrap"
+           href="{% url 'members:detail' member.id %}">
           {%if member.avatar%}
           <figure class="image mini-avatar mr-2">
             <img class="is-rounded" src="{{member.avatar_mini_url}}">

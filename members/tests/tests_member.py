@@ -327,7 +327,8 @@ class TestActivateManagedMember(MemberTestCase):
     for content, type in email.alternatives:
       if type == 'text/html':
         break
-    s1 = _("You received this mail because you attempted to create an account on our website")
+    s1 = _("You received this mail because you attempted to create an account on our website or "
+           "because a member created and activated your account")
     s2 = _("Please click on the link below to confirm the email and activate your account.")
     self.assertInHTML(f'''<p class="mt-2">{s1}<br>{s2}</p>''', content)
     url = reverse(verify_user_and_activate, args=['XXX_encoded_email__XXX', "XXX_token_XXX"])

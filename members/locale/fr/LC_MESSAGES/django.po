@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"POT-Creation-Date: 2024-10-27 12:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -22,39 +22,48 @@ msgstr ""
 msgid "Members"
 msgstr "Membres"
 
-#: members/forms.py:114
+#: members/forms.py:75
+#, python-brace-format
+msgid ""
+"By checking this box, you consent to the <a target='blank' "
+"href='{privacy_url}'>privacy policy</a> of this site"
+msgstr ""
+"En cochant cette case, tu consents à la <a target='blank' "
+"href='{privacy_url}'>politique de confidentialité</a> de ce site"
+
+#: members/forms.py:115
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Nom de la personne invitée (apparaîtra dans l'e-mail reçu)"
 
-#: members/forms.py:115
+#: members/forms.py:116
 msgid "Email to send invitation"
 msgstr "Email auquel envoyer l'invitation"
 
-#: members/forms.py:119
+#: members/forms.py:120
 msgid "Your name"
 msgstr "Ton nom"
 
-#: members/forms.py:120
+#: members/forms.py:121
 msgid "Email where you will receive the link"
 msgstr "Email où tu recevras le lien"
 
-#: members/forms.py:121
+#: members/forms.py:122
 msgid "Message to the administrator"
 msgstr "Message à l'administrateur"
 
-#: members/forms.py:122
+#: members/forms.py:123
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Captcha (cliquez sur l'image pour la rafraîchir si elle est illisible)"
 
-#: members/forms.py:137
+#: members/forms.py:138
 msgid "CSV file"
 msgstr "Fichier CSV"
 
-#: members/forms.py:138
+#: members/forms.py:139
 msgid "The CSV file containing the members to import."
 msgstr "Le fichier CSV contenant les membres à importer."
 
-#: members/forms.py:142
+#: members/forms.py:143
 msgid "Automatically activate imported users"
 msgstr "Activer automatiquement les utilisateurs importés"
 
@@ -312,14 +321,16 @@ msgstr "Confirmation de l'e-mail"
 
 #: members/templates/members/email/email_verification_msg.html:25
 msgid "Greetings!"
-msgstr "Salutations!"
+msgstr "Bonjour!"
 
 #: members/templates/members/email/email_verification_msg.html:27
 #: members/tests/tests_member.py:330
 msgid ""
 "You received this mail because you attempted to create an account on our "
-"website"
-msgstr "Tu reçois ce mail car tu essayes de créer un compte sur notre site web"
+"website or because a member created and activated your account"
+msgstr ""
+"Tu reçois ce mail car tu essayes de créer un compte sur notre site web ou "
+"bien parce qu'un membre a créé et activé ton compte"
 
 #: members/templates/members/email/email_verification_msg.html:28
 #: members/tests/tests_member.py:331
@@ -365,17 +376,18 @@ msgid "Hi %(userfullname)s,"
 msgstr "Salut %(userfullname)s,"
 
 #: members/templates/members/email/password_reset_email.html:21
-#,  python-format
+#, python-format
 msgid ""
 "You received this mail because you requested to reset your password to your "
 "\"%(sitename)s\" site at %(domain)s."
 msgstr ""
-"Tu as recu ce mail en réponse à ta demande de réinitialisation du "
-"mot de passe de ton compte sur ton site \"%(sitename)s\" sur %(domain)s."
+"Tu as recu ce mail en réponse à ta demande de réinitialisation du mot de "
+"passe de ton compte sur ton site \"%(sitename)s\" sur %(domain)s."
 
 #: members/templates/members/email/password_reset_email.html:26
 msgid "Please go to the following page and choose a new password"
-msgstr "Merci de te rendre sur cette page et de choisir un nouveau mot de passe"
+msgstr ""
+"Merci de te rendre sur cette page et de choisir un nouveau mot de passe"
 
 #: members/templates/members/email/password_reset_email.html:37
 msgid "Your username, in case you’ve forgotten"
@@ -399,8 +411,8 @@ msgid ""
 "someone tried to hijack your account."
 msgstr ""
 "Si tu n'avais pas demandé de réinitialisation de mot de passe, contacte "
-"l'administrateur du site \"%(sitename)s\" sur %(domain)s et essaie de définir un nouveau "
-"mot de passe, en cas de tentative de vol de ton compte."
+"l'administrateur du site \"%(sitename)s\" sur %(domain)s et essaie de "
+"définir un nouveau mot de passe, en cas de tentative de vol de ton compte."
 
 #: members/templates/members/email/registration_invite_email.html:8
 #, python-format
@@ -970,7 +982,7 @@ msgstr "prénom"
 msgid "last name"
 msgstr "nom"
 
-#: members/templates/members/members/members.html:63
+#: members/templates/members/members/members.html:64
 #: members/templates/members/members/members_directory.html:50
 msgid "No members found"
 msgstr "Pas de membre trouvé"
@@ -1247,7 +1259,7 @@ msgstr ""
 "Erreur lors de l'enregistrement de l'avatar (%(error)s) : %(avatar)s pour le "
 "nom d'utilisateur %(username)s. Ignoré..."
 
-#: members/views/views_import_export.py:204
+#: members/views/views_import_export.py:205
 #, python-format
 msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
@@ -1256,12 +1268,12 @@ msgstr ""
 "Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres "
 "créés ou mis à jour"
 
-#: members/views/views_import_export.py:207
+#: members/views/views_import_export.py:208
 #, python-format
 msgid "Warning: %(error)s"
 msgstr "Attention: %(error)s"
 
-#: members/views/views_import_export.py:274
+#: members/views/views_import_export.py:275
 msgid "Method not allowed"
 msgstr "Méthode non autorisée"
 

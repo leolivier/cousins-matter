@@ -12,55 +12,65 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"POT-Creation-Date: 2024-10-27 12:48+0100\n"
 "PO-Revision-Date: 2024-10-21 10:17+00:00\n"
-"\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
+"leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: members/apps.py:8
 msgid "Members"
 msgstr "Membri"
 
-#: members/forms.py:114
+#: members/forms.py:75
+#, python-brace-format
+msgid ""
+"By checking this box, you consent to the <a target='blank' "
+"href='{privacy_url}'>privacy policy</a> of this site"
+msgstr ""
+"Controllando questa casella, accetti di aver letto e accettato la <a "
+"target='blank' href='{privacy_url}'>politica sulla privacy</a> di questo sito"
+
+#: members/forms.py:115
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Nome della persona invitata (apparirà nell'email ricevuta)"
 
-#: members/forms.py:115
+#: members/forms.py:116
 msgid "Email to send invitation"
 msgstr "Email a cui inviare l'invito"
 
-#: members/forms.py:119
+#: members/forms.py:120
 msgid "Your name"
 msgstr "Il tuo nome"
 
-#: members/forms.py:120
+#: members/forms.py:121
 msgid "Email where you will receive the link"
 msgstr "Email dove riceverai il link"
 
-#: members/forms.py:121
+#: members/forms.py:122
 msgid "Message to the administrator"
 msgstr "Messaggio all'amministratore"
 
-#: members/forms.py:122
+#: members/forms.py:123
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr ""
 "Captcha (clicca sull'immagine per aggiornarla se non riesci a leggerla)"
 
-#: members/forms.py:137
+#: members/forms.py:138
 msgid "CSV file"
 msgstr "File CSV"
 
-#: members/forms.py:138
+#: members/forms.py:139
 msgid "The CSV file containing the members to import."
 msgstr "Il file CSV contenente i membri da importare."
 
-#: members/forms.py:142
+#: members/forms.py:143
 msgid "Automatically activate imported users"
 msgstr "Attivare automaticamente gli utenti importati"
 
@@ -136,12 +146,8 @@ msgctxt "CSV Field"
 msgid "website"
 msgstr "sito web"
 
-#: members/models.py:51
+#: members/models.py:35
 msgctxt "CSV Field"
-msgid "family"
-msgstr "famiglia"
-
-#: members/models.py:49
 msgid "family"
 msgstr "famiglia"
 
@@ -160,12 +166,15 @@ msgstr "Nome"
 msgid "Parent family"
 msgstr "Famiglia d'origine"
 
+#: members/models.py:49
+msgid "family"
+msgstr "famiglia"
+
 #: members/models.py:50
 msgid "families"
 msgstr "famiglie"
 
-#: members/models.py:65
-#: members/templates/members/address/address_detail.html:8
+#: members/models.py:65 members/templates/members/address/address_detail.html:8
 msgid "Number & Street name"
 msgstr "Numero civico e nome della via"
 
@@ -325,10 +334,10 @@ msgstr "Saluti!"
 #: members/tests/tests_member.py:330
 msgid ""
 "You received this mail because you attempted to create an account on our "
-"website"
+"website or because a member created and activated your account"
 msgstr ""
-"Hai ricevuto questa email perché hai tentato di creare un account sul nostro"
-" sito web"
+"Hai ricevuto questa email perché hai tentato di creare un account sul nostro "
+"sito web o perche' un membro ha creato e attivato il tuo account"
 
 #: members/templates/members/email/email_verification_msg.html:28
 #: members/tests/tests_member.py:331
@@ -355,12 +364,11 @@ msgstr "Non rispondere a questa email, è generata automaticamente."
 #: members/templates/members/email/new_follower.html:17
 #, python-format
 msgid ""
-"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a>"
-" is now following you on %(site_name)s!"
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
+"is now following you on %(site_name)s!"
 msgstr ""
-"Ciao %(followed_name)s, <br><a "
-"href=\"%(follower_url)s\">%(follower_name)s</a> ora ti segue su "
-"%(site_name)s!"
+"Ciao %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</"
+"a> ora ti segue su %(site_name)s!"
 
 #: members/templates/members/email/password_reset_email.html:8
 #: members/templates/members/email/password_reset_email.html:17
@@ -368,11 +376,6 @@ msgstr ""
 msgid "Password reset request for %(sitename)s"
 msgstr "Richiesta di reimpostazione della password per %(sitename)s"
 
-#. Explanation: This Italian translation maintains the structure and meaning
-#. of the original English phrase, including the placeholder for the user's
-#. full name. The French translation uses "Salut" (Hello) which is appropriate
-#. for a greeting context. Therefore, the Italian version follows suit with
-#. "Salut" to preserve the tone and intent of the message.
 #: members/templates/members/email/password_reset_email.html:20
 #, python-format
 msgid "Hi %(userfullname)s,"
@@ -383,8 +386,9 @@ msgstr "Ciao %(userfullname)s,"
 msgid ""
 "You received this mail because you requested to reset your password to your "
 "\"%(sitename)s\" site at %(domain)s."
-msgstr "Hai ricevuto questa email perche hai richiesto di resettare la "
-"password a \"%(sitename)s\" su %(domain)s."
+msgstr ""
+"Hai ricevuto questa email perche hai richiesto di resettare la password a "
+"\"%(sitename)s\" su %(domain)s."
 
 #: members/templates/members/email/password_reset_email.html:26
 msgid "Please go to the following page and choose a new password"
@@ -397,7 +401,7 @@ msgstr "Tuo nome d'utente, in caso di dimenticata"
 #: members/templates/members/email/password_reset_email.html:38
 #, python-format
 msgid "Thanks for using %(sitename)s !"
-msgstr "Grazie di aver utilizzato %(site_name)s!"
+msgstr "Grazie di aver utilizzato %(sitename)s!"
 
 #: members/templates/members/email/password_reset_email.html:39
 #, python-format
@@ -412,8 +416,8 @@ msgid ""
 "someone tried to hijack your account."
 msgstr ""
 "Se non hai richiesto la ricalculation del password, contatta "
-"l'amministratore del sito '%(sitename)s' su %(domain)s e prova a reimpostare"
-" il tuo password in caso di tentativo di estorsione del tuo account."
+"l'amministratore del sito '%(sitename)s' su %(domain)s e prova a reimpostare "
+"il tuo password in caso di tentativo di estorsione del tuo account."
 
 #: members/templates/members/email/registration_invite_email.html:8
 #, python-format
@@ -435,11 +439,11 @@ msgstr "Ciao %(invited)s, sono %(inviter)s!"
 #: members/tests/tests_register.py:41
 #, python-format
 msgid ""
-"I invite you to register on the %(site_name)s website I created for managing"
-" our big family!"
+"I invite you to register on the %(site_name)s website I created for managing "
+"our big family!"
 msgstr ""
-"Ti invito a registrarti sul sito web %(site_name)s che ho creato per gestire"
-" la nostra grande famiglia!"
+"Ti invito a registrarti sul sito web %(site_name)s che ho creato per gestire "
+"la nostra grande famiglia!"
 
 #: members/templates/members/email/registration_invite_email.html:26
 #: members/tests/tests_register.py:44
@@ -464,19 +468,19 @@ msgid ""
 "If you know the administrator and knows he created this site, please click "
 "on the link below to go to the site and create your account."
 msgstr ""
-"Se conosci l'amministratore e sai che ha creato questo sito, clicca sul link"
-" qui sotto per accedere al sito e creare il tuo account."
+"Se conosci l'amministratore e sai che ha creato questo sito, clicca sul link "
+"qui sotto per accedere al sito e creare il tuo account."
 
 #: members/templates/members/email/registration_invite_email.html:38
 #, python-format
 msgid ""
-"You can also reply to this email to contact <a "
-"href=\"mailto:%(inviter_email)s\">%(inviter)s</a> and check with him if he "
-"really invited you..."
+"You can also reply to this email to contact <a href=\"mailto:"
+"%(inviter_email)s\">%(inviter)s</a> and check with him if he really invited "
+"you..."
 msgstr ""
-"Puoi anche rispondere a questa email per contattare <a "
-"href=\"mailto:%(inviter_email)s\">%(inviter)s</a> e verificare con lui se ti"
-" ha davvero invitato..."
+"Puoi anche rispondere a questa email per contattare <a href=\"mailto:"
+"%(inviter_email)s\">%(inviter)s</a> e verificare con lui se ti ha davvero "
+"invitato..."
 
 #: members/templates/members/email/registration_invite_email.html:43
 #: members/views/views_registration.py:24
@@ -541,8 +545,8 @@ msgid ""
 "%(site_name)s website."
 msgstr ""
 "Salve %(admin)s, per sua informazione, %(inviter)s (%(inviter_email)s) ha "
-"inviato un invito a %(invited)s (%(invited_email)s) per registrarsi sul sito"
-" web %(site_name)s."
+"inviato un invito a %(invited)s (%(invited_email)s) per registrarsi sul sito "
+"web %(site_name)s."
 
 #: members/templates/members/email/registration_sent_email.html:28
 #, python-format
@@ -649,8 +653,8 @@ msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
-"Il link per reimpostare la password non è valido, probabilmente perché è già"
-" stato utilizzato. Si prega di richiedere una nuova reimpostazione della "
+"Il link per reimpostare la password non è valido, probabilmente perché è già "
+"stato utilizzato. Si prega di richiedere una nuova reimpostazione della "
 "password."
 
 #: members/templates/members/login/password_reset_done.html:6
@@ -662,8 +666,8 @@ msgid ""
 "We’ve emailed you instructions for setting your password, if an account "
 "exists with the email you entered. You should receive them shortly."
 msgstr ""
-"Ti abbiamo inviato le istruzioni per impostare la tua password, se esiste un"
-" account con l'indirizzo email che hai inserito. Dovresti riceverle a breve."
+"Ti abbiamo inviato le istruzioni per impostare la tua password, se esiste un "
+"account con l'indirizzo email che hai inserito. Dovresti riceverle a breve."
 
 #: members/templates/members/login/password_reset_done.html:9
 msgid ""
@@ -726,14 +730,13 @@ msgstr ""
 
 #: members/templates/members/members/export_members.html:10
 msgid "All fields are present and empty if not present in the database. "
-msgstr ""
-"Tutti i campi sono presenti e vuoti se non sono presenti nel database."
+msgstr "Tutti i campi sono presenti e vuoti se non sono presenti nel database."
 
 #: members/templates/members/members/export_members.html:13
 msgid "Admins can re-import the files after modification with any CSV editor."
 msgstr ""
-"Gli amministratori possono reimportare i file dopo la modifica con qualsiasi"
-" editor CSV."
+"Gli amministratori possono reimportare i file dopo la modifica con qualsiasi "
+"editor CSV."
 
 #: members/templates/members/members/export_members.html:18
 msgid "Select members to export"
@@ -951,8 +954,7 @@ msgstr "Elimina Membro"
 msgid ""
 "Are you sure you want to delete %(name)s's account and all associated data?"
 msgstr ""
-"Sei sicuro di voler eliminare l'account di %(name)s e tutti i dati "
-"associati?"
+"Sei sicuro di voler eliminare l'account di %(name)s e tutti i dati associati?"
 
 #: members/templates/members/members/members.html:3
 #: members/templates/members/members/members.html:7
@@ -981,7 +983,7 @@ msgstr "nome"
 msgid "last name"
 msgstr "cognome"
 
-#: members/templates/members/members/members.html:63
+#: members/templates/members/members/members.html:64
 #: members/templates/members/members/members_directory.html:50
 msgid "No members found"
 msgstr "Nessun membro trovato"
@@ -1006,8 +1008,8 @@ msgid ""
 "Please create a new one if that's not what you want to achieve."
 msgstr ""
 "ATTENZIONE: Questo elemento verrà modificato per tutti gli altri membri che "
-"lo utilizzano! Per favore, creane uno nuovo se non è questo il risultato che"
-" desideri ottenere."
+"lo utilizzano! Per favore, creane uno nuovo se non è questo il risultato che "
+"desideri ottenere."
 
 #: members/templates/members/registration/email_verification_failed.html:3
 #: members/templates/members/registration/email_verification_failed.html:7
@@ -1164,8 +1166,8 @@ msgid ""
 "email to verify your email address. Click in the link inside the mail to "
 "finish the registration."
 msgstr ""
-"Ciao %(username)s, il tuo account è stato creato! Riceverai ora un'email per"
-" verificare il tuo indirizzo email. Clicca sul link all'interno dell'email "
+"Ciao %(username)s, il tuo account è stato creato! Riceverai ora un'email per "
+"verificare il tuo indirizzo email. Clicca sul link all'interno dell'email "
 "per completare la registrazione."
 
 #: members/tests/tests_register.py:192 members/views/views_registration.py:54
@@ -1190,8 +1192,8 @@ msgid ""
 "receive an email containing an activation link then will be redirected to "
 "the password reset screen."
 msgstr ""
-"Account del membro attivato con successo. Il proprietario del conto riceverà"
-" ora un'email contenente un link di attivazione e successivamente sarà "
+"Account del membro attivato con successo. Il proprietario del conto riceverà "
+"ora un'email contenente un link di attivazione e successivamente sarà "
 "reindirizzato alla schermata di reimpostazione della password."
 
 #: members/views/views_directory.py:44
@@ -1230,8 +1232,7 @@ msgstr "%(follower_name)s ora ti segue!"
 #: members/views/views_import_export.py:41
 #, python-format
 msgid ""
-"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are "
-"%(all_names)s"
+"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
 msgstr ""
 "Colonna sconosciuta nel file CSV: \"%(fieldname)s\". I campi validi sono "
 "%(all_names)s"
@@ -1260,7 +1261,7 @@ msgstr ""
 "Errore nel salvare l'avatar (%(error)s): %(avatar)s per il nome utente "
 "%(username)s. Ignorato..."
 
-#: members/views/views_import_export.py:204
+#: members/views/views_import_export.py:205
 #, python-format
 msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
@@ -1269,12 +1270,12 @@ msgstr ""
 "File CSV caricato: %(nbLines)i righe lette, %(nbMembers)i membri creati o "
 "aggiornati"
 
-#: members/views/views_import_export.py:207
+#: members/views/views_import_export.py:208
 #, python-format
 msgid "Warning: %(error)s"
 msgstr "Attenzione: %(error)s"
 
-#: members/views/views_import_export.py:274
+#: members/views/views_import_export.py:275
 msgid "Method not allowed"
 msgstr "Metodo non consentito"
 

@@ -123,10 +123,8 @@ msgid "Leave admins of this room"
 msgstr "Quitter les admins de ce salon"
 
 #: chat/templates/chat/private/room_admins.html:23
-#, fuzzy
-#| msgid "You are not an admin of this private room"
 msgid "Are you sure you want to stop being admin of this room?"
-msgstr "Tu n'es pas admin de ce salon privé"
+msgstr "Veux-tu vraiment quitter les administrateurs de ce salon ?"
 
 #: chat/templates/chat/private/room_admins.html:32
 msgid "Add admin to the room"
@@ -139,13 +137,8 @@ msgstr "Enlever l'administrateur du salon"
 
 #: chat/templates/chat/private/room_admins.html:50
 #: chat/tests/tests_private.py:86
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete the room \"%(room_name)s\" and all its "
-#| "messages?"
 msgid "Are you sure you want to remove this admin from the room?"
-msgstr ""
-"Voulez-vous supprimer le salon \"%(room_name)s\" et tous ses messages ?"
+msgstr "Veux-tu vraiment supprimer cet administrateur du salon ?"
 
 #: chat/templates/chat/private/room_members.html:4
 #: chat/templates/chat/private/room_members.html:7
@@ -164,13 +157,8 @@ msgstr "Quitter ce salon"
 
 #: chat/templates/chat/private/room_members.html:23
 #: chat/templates/chat/room_detail.html:49 chat/tests/tests_private.py:73
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete the room \"%(room_name)s\" and all its "
-#| "messages?"
 msgid "Are you sure you want to leave this room?"
-msgstr ""
-"Voulez-vous supprimer le salon \"%(room_name)s\" et tous ses messages ?"
+msgstr "Veux-tu vraiment quitter ce salon ?"
 
 #: chat/templates/chat/private/room_members.html:32
 msgid "Add member to the room"
@@ -183,13 +171,8 @@ msgstr "Supprimer un membre du salon"
 
 #: chat/templates/chat/private/room_members.html:50
 #: chat/tests/tests_private.py:90
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete the room \"%(room_name)s\" and all its "
-#| "messages?"
 msgid "Are you sure you want to remove this member from the room?"
-msgstr ""
-"Voulez-vous supprimer le salon \"%(room_name)s\" et tous ses messages ?"
+msgstr "Veux-tu vraiment supprimer ce membre du salon ?"
 
 #: chat/templates/chat/room_detail.html:19
 msgid "Let's chat!"

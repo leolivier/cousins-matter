@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import environ
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,7 +51,7 @@ SITE_DOMAIN = env.str('SITE_DOMAIN', None)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'])
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
-
+SESSION_COOKIE_DOMAIN = env.str('SESSION_COOKIE_DOMAIN', None)
 
 LANGUAGES = [
     ("fr", "Français"),
@@ -340,10 +341,12 @@ AVATARS_MINI_SIZE = 64
 DEFAULT_AVATAR_URL = '/static/members/default-avatar.jpg'
 DEFAULT_MINI_AVATAR_URL = '/static/members/default-mini-avatar.jpg'
 
+# Email verification templates
 VERIFICATION_SUCCESS_TEMPLATE = "members/registration/email_verification_successful.html"
 VERIFICATION_FAILED_TEMPLATE = "members/registration/email_verification_failed.html"
 REQUEST_NEW_EMAIL_TEMPLATE = "members/registration/request_new_email.html"
 HTML_MESSAGE_TEMPLATE = "members/email/email_verification_msg.html"
+SUBJECT = _('Email verification')
 
 CAPTCHA_LENGTH = 6
 

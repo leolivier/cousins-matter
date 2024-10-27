@@ -152,7 +152,7 @@ elif [[ -f .env.example.backup ]] && diff -q .env.example .env.example.backup; t
 fi
 
 verbose "checking if the database and the superuser exists..."
-docker_cmd="docker run -it -v ./.env:/app/.env -v ./media:/app/media -v ./data:/app/data --name $container.tmp --rm $tagged_image"
+docker_cmd="docker run -it --entrypoint '' -v ./.env:/app/.env -v ./media:/app/media -v ./data:/app/data --name $container.tmp --rm $tagged_image"
 
 if [[ -f data/db.sqlite3 ]]; then
 	verbose "database already exists, checking if the superuser exists..."
@@ -173,6 +173,8 @@ if [[ $su_exists == 'False' ]]; then
 fi
 
 verbose "Installation of Cousins Matter done"
-[[ $remind_dotenv == 1 ]] && echo "An editor will open in a few seconds to udpate .env file. Please adapt it to your needs before starting the site."
-sleep 5
-${EDITOR:-editor} .env
+if [[ $remind_dotenv == 1 ]]; then
+	echo "An editor will open in a few seconds to udpate .env file. Please adapt it to your needs before starting the site."
+	sleep 5
+	${EDITOR:-editor} .env
+fi

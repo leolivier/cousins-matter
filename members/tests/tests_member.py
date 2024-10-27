@@ -252,8 +252,8 @@ class TestDisplayMembers(MemberTestCase):
                       <img class="is-rounded" src="{self.members[i].avatar_mini_url}">
                      </figure>'''
       self.assertInHTML(f'''
-  <div class="cell has-text-centered">
-    <a class="button" href="/members/{self.members[i].id}/">
+  <div class="cell has-text-centered my-auto">
+    <a class="button button-wrap" href="/members/{self.members[i].id}/">
       {avatar}
       <strong>{self.members[i].full_name}</strong>
     </a>
@@ -263,8 +263,8 @@ class TestDisplayMembers(MemberTestCase):
   def test_filter_members_display(self):
 
     def check_is_in(content, member):
-      self.assertInHTML(f'''<div class="cell has-text-centered">
-        <a class="button" href="{reverse("members:detail", kwargs={'pk': member.id})}">
+      self.assertInHTML(f'''<div class="cell has-text-centered my-auto">
+        <a class="button button-wrap" href="{reverse("members:detail", kwargs={'pk': member.id})}">
           <strong>{member.full_name}</strong></a></div>''', content)
 
     def check_is_not_in(content, member):
@@ -327,7 +327,8 @@ class TestActivateManagedMember(MemberTestCase):
     for content, type in email.alternatives:
       if type == 'text/html':
         break
-    s1 = _("You received this mail because you attempted to create an account on our website")
+    s1 = _("You received this mail because you attempted to create an account on our website or "
+           "because a member created and activated your account")
     s2 = _("Please click on the link below to confirm the email and activate your account.")
     self.assertInHTML(f'''<p class="mt-2">{s1}<br>{s2}</p>''', content)
     url = reverse(verify_user_and_activate, args=['XXX_encoded_email__XXX', "XXX_token_XXX"])

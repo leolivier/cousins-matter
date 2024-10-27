@@ -172,6 +172,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     for row in reader:
       # normalize username using slugify
       username = slugify(row[t('username')])
+      row[t('username')] = username
       # search for an existing member with this username
       member = Member.objects.filter(username=username).first()
       if member:  # found, use it

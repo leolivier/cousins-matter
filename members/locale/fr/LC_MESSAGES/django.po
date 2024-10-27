@@ -321,14 +321,16 @@ msgstr "Confirmation de l'e-mail"
 
 #: members/templates/members/email/email_verification_msg.html:25
 msgid "Greetings!"
-msgstr "Salutations!"
+msgstr "Bonjour!"
 
 #: members/templates/members/email/email_verification_msg.html:27
 #: members/tests/tests_member.py:330
 msgid ""
 "You received this mail because you attempted to create an account on our "
-"website"
-msgstr "Tu reçois ce mail car tu essayes de créer un compte sur notre site web"
+"website or because a member created and activated your account"
+msgstr ""
+"Tu reçois ce mail car tu essayes de créer un compte sur notre site web ou "
+"bien parce qu'un membre a créé et activé ton compte"
 
 #: members/templates/members/email/email_verification_msg.html:28
 #: members/tests/tests_member.py:331

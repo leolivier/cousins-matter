@@ -332,10 +332,10 @@ msgstr "Salutaciones!"
 #: members/tests/tests_member.py:330
 msgid ""
 "You received this mail because you attempted to create an account on our "
-"website"
+"website or because a member created and activated your account"
 msgstr ""
 "Tú recibiste este correo porque intentaste crear una cuenta en nuestro sitio "
-"web"
+"web o porque un miembro ha creado y activado tu cuenta"
 
 #: members/templates/members/email/email_verification_msg.html:28
 #: members/tests/tests_member.py:331

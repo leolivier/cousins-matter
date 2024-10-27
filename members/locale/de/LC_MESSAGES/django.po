@@ -35,7 +35,7 @@ msgid ""
 "href='{privacy_url}'>privacy policy</a> of this site"
 msgstr ""
 "Durch Anklicken dieses Kästchens erklärst du dich mit den <a target='blank' "
-"href='{privacy_url}'>Datenschutzrichtlinien</a> dieser Website einverstanden.
+"href='{privacy_url}'>Datenschutzrichtlinien</a> dieser Website einverstanden."
 
 #: members/forms.py:115
 msgid "Name of the invited person (will appear in the received email)"
@@ -335,10 +335,10 @@ msgstr "Hallo!"
 #: members/tests/tests_member.py:330
 msgid ""
 "You received this mail because you attempted to create an account on our "
-"website"
+"website or because a member created and activated your account"
 msgstr ""
 "Du hast diese E-Mail erhalten, weil du versucht hast, ein Konto auf unserer "
-"Website zu erstellen."
+"Website zu erstellen oder weil ein Mitglied dein Konto aktiviert hat."
 
 #: members/templates/members/email/email_verification_msg.html:28
 #: members/tests/tests_member.py:331
@@ -389,8 +389,8 @@ msgid ""
 "You received this mail because you requested to reset your password to your "
 "\"%(sitename)s\" site at %(domain)s."
 msgstr ""
-"Du hast dieses Mail erhalten, weil du die Passwörter für \"%(site_name)s\" "
-"festlegen wolltest."
+"Du hast diese E-Mail erhalten, weil du ein neues Passwort für deine \"%(sitename)s\" "
+"auf %(domain)s zurücksetzen möchten."
 
 #: members/templates/members/email/password_reset_email.html:26
 msgid "Please go to the following page and choose a new password"

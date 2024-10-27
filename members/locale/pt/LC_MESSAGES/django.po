@@ -333,9 +333,10 @@ msgstr "Ossé!"
 #: members/tests/tests_member.py:330
 msgid ""
 "You received this mail because you attempted to create an account on our "
-"website"
+"website or because a member created and activated your account"
 msgstr ""
-"Você recebeu este e-mail porque você tentou criar uma conta no nosso site."
+"Você recebeu este e-mail porque você tentou criar uma conta no nosso site "
+"ou porque um membro criou e ativou sua conta."
 
 #: members/templates/members/email/email_verification_msg.html:28
 #: members/tests/tests_member.py:331
@@ -399,7 +400,7 @@ msgstr "Seu nome de usuário, em caso de esquecimento"
 #: members/templates/members/email/password_reset_email.html:38
 #, python-format
 msgid "Thanks for using %(sitename)s !"
-msgstr "Obrigado por utilizar %(site_name)s!"
+msgstr "Obrigado por utilizar %(sitename)s!"
 
 #: members/templates/members/email/password_reset_email.html:39
 #, python-format

@@ -334,10 +334,10 @@ msgstr "Saluti!"
 #: members/tests/tests_member.py:330
 msgid ""
 "You received this mail because you attempted to create an account on our "
-"website"
+"website or because a member created and activated your account"
 msgstr ""
 "Hai ricevuto questa email perché hai tentato di creare un account sul nostro "
-"sito web"
+"sito web o perche' un membro ha creato e attivato il tuo account"
 
 #: members/templates/members/email/email_verification_msg.html:28
 #: members/tests/tests_member.py:331
@@ -401,7 +401,7 @@ msgstr "Tuo nome d'utente, in caso di dimenticata"
 #: members/templates/members/email/password_reset_email.html:38
 #, python-format
 msgid "Thanks for using %(sitename)s !"
-msgstr "Grazie di aver utilizzato %(site_name)s!"
+msgstr "Grazie di aver utilizzato %(sitename)s!"
 
 #: members/templates/members/email/password_reset_email.html:39
 #, python-format

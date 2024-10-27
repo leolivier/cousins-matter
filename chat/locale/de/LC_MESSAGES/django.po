@@ -12,15 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"POT-Creation-Date: 2024-10-27 12:06+0100\n"
 "PO-Revision-Date: 2024-10-21 09:08+00:00\n"
-"\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
+"leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: chat/consumers.py:180
@@ -47,13 +48,11 @@ msgstr "privater Chat-Raum"
 msgid "private chat rooms"
 msgstr "privater Chat-Raüme"
 
-#: chat/templates/chat/chat_rooms.html:5
-#: chat/templates/chat/chat_rooms.html:14
+#: chat/templates/chat/chat_rooms.html:5 chat/templates/chat/chat_rooms.html:14
 msgid "Private Chat Rooms"
 msgstr "Private Chat-Raüme"
 
-#: chat/templates/chat/chat_rooms.html:7
-#: chat/templates/chat/chat_rooms.html:16
+#: chat/templates/chat/chat_rooms.html:7 chat/templates/chat/chat_rooms.html:16
 msgid "Chat Rooms"
 msgstr "Chat-Raüme"
 
@@ -130,10 +129,8 @@ msgid "Leave admins of this room"
 msgstr "Verlassen Sie die Verwalter dieses Raums"
 
 #: chat/templates/chat/private/room_admins.html:23
-#, fuzzy
-#| msgid "You are not an admin of this private room"
 msgid "Are you sure you want to stop being admin of this room?"
-msgstr "Tu n'es pas admin de ce salon privé"
+msgstr "Bist du sicher, dass du den Admin-Status dieses Raums verlieren willst?"
 
 #: chat/templates/chat/private/room_admins.html:32
 msgid "Add admin to the room"
@@ -146,12 +143,9 @@ msgstr "Entfernt Verwalter vom Raum"
 
 #: chat/templates/chat/private/room_admins.html:50
 #: chat/tests/tests_private.py:86
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete the room \"%(room_name)s\" and all its "
-#| "messages?"
 msgid "Are you sure you want to remove this admin from the room?"
-msgstr "Voulez-vous supprimer le salon \"%(room_name)s\" et tous ses messages ?"
+msgstr ""
+"Willst du den Chat-Raum \"%(room_name)s\" und alle Nachrichten löschen ?"
 
 #: chat/templates/chat/private/room_members.html:4
 #: chat/templates/chat/private/room_members.html:7
@@ -170,12 +164,9 @@ msgstr "Verlasse diesen Raum"
 
 #: chat/templates/chat/private/room_members.html:23
 #: chat/templates/chat/room_detail.html:49 chat/tests/tests_private.py:73
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete the room \"%(room_name)s\" and all its "
-#| "messages?"
 msgid "Are you sure you want to leave this room?"
-msgstr "Voulez-vous supprimer le salon \"%(room_name)s\" et tous ses messages ?"
+msgstr ""
+"Bist du sicher, dass du diesen Chat-Raum verlassen willst ?"
 
 #: chat/templates/chat/private/room_members.html:32
 msgid "Add member to the room"
@@ -188,12 +179,9 @@ msgstr "Entfernt den Mitglied aus der Räum"
 
 #: chat/templates/chat/private/room_members.html:50
 #: chat/tests/tests_private.py:90
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete the room \"%(room_name)s\" and all its "
-#| "messages?"
 msgid "Are you sure you want to remove this member from the room?"
-msgstr "Voulez-vous supprimer le salon \"%(room_name)s\" et tous ses messages ?"
+msgstr ""
+"Bist du sicher, dass du dieses Mitglied aus dem Raum entfernen willst?"
 
 #: chat/templates/chat/room_detail.html:19
 msgid "Let's chat!"
@@ -338,8 +326,8 @@ msgid ""
 "There must be at least one admin in a private room. Please add another one "
 "before removing this one."
 msgstr ""
-"Es muss mindestens ein Administrator in einem privaten Raum sein. Bitte füge"
-" noch einen hinzu, bevor du diesen löschst."
+"Es muss mindestens ein Administrator in einem privaten Raum sein. Bitte füge "
+"noch einen hinzu, bevor du diesen löschst."
 
 #: chat/views/views_private_rooms.py:503
 msgid "This member is not an admin of this private room"
@@ -350,8 +338,8 @@ msgid ""
 "There must be at least one admin in a private room. Please add another one "
 "before removing yourself."
 msgstr ""
-"Es muss mindestens ein Administrator in einem privaten Raum sein. Bitte füge"
-" noch einen hinzu, bevor du dich verlässt."
+"Es muss mindestens ein Administrator in einem privaten Raum sein. Bitte füge "
+"noch einen hinzu, bevor du dich verlässt."
 
 #: chat/views/views_private_rooms.py:541
 msgid "You have been removed from the admins of this private room."

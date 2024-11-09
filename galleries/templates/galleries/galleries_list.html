@@ -14,7 +14,7 @@
           <strong>{{gallery.name}}</strong>
           {% include "galleries/photo_counter.html" %}
           <br/>
-          {{ gallery.description }}
+          {{ gallery.description|safe }}
         </p>
       </a>
       {% if recursive and gallery.children.count > 0 %}

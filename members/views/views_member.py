@@ -54,9 +54,10 @@ class MembersView(LoginRequiredMixin, generic.ListView):
     def get(self, request, page_num=1):
         filter = {}
         if 'first_name_filter' in request.GET and request.GET['first_name_filter']:
-            filter['first_name__icontains'] = request.GET['first_name_filter']
+            # issue #149: strip leading and trailing spaces on first and last name of filter
+            filter['first_name__icontains'] = request.GET['first_name_filter'].strip()
         if 'last_name_filter' in request.GET and request.GET['last_name_filter']:
-            filter['last_name__icontains'] = request.GET['last_name_filter']
+            filter['last_name__icontains'] = request.GET['last_name_filter'].strip()
         members = Member.objects.filter(**filter)
         page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_MEMBERS_PAGE_SIZE
         # print("page_size=", page_size)

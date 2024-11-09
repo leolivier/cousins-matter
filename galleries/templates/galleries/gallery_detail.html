@@ -11,7 +11,7 @@
 				</figure>
 				<span class="title is-4">{{gallery.name}}</span>
 				{% include "galleries/photo_counter.html" %}
-				<p>{{ gallery.description }}</p>
+				<p>{{ gallery.description|safe }}</p>
 			</div>
 		</div>
 		{% if gallery.children.count > 0 %}

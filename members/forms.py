@@ -42,6 +42,10 @@ class MemberFormMixin():
       # print("No change in avatar, skipping validation")
       return avatar
     try:
+      # issue #150: avatar can be a boolean when trying to delete it
+      if type(avatar) is bool and not avatar:
+        self.instance.delete_avatar()  # this will delete the avatar and the minified avatar:
+        return None
       # validate file size
       if len(avatar) > settings.AVATAR_MAX_SIZE:
           nMB = settings.AVATAR_MAX_SIZE / 1024 / 1024

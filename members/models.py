@@ -212,10 +212,14 @@ class Member(AbstractUser):
           self._resize_avatar(settings.AVATARS_MINI_SIZE, mini_path)
 
     def delete(self, *args, **kwargs):
+      self.delete_avatar()
       super().delete(*args, **kwargs)
+
+    def delete_avatar(self):
       if self.avatar:
         if os.path.isfile(self.avatar.path):
           os.remove(self.avatar.path)
         mini_path = self.avatar_mini_path
         if os.path.isfile(mini_path):
           os.remove(mini_path)
+        self.avatar = None

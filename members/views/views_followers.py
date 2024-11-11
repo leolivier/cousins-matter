@@ -22,6 +22,8 @@ def toggle_follow(request, pk):
   elif followed.followers.filter(id=follower.id).exists():
     followed.followers.remove(follower)
     messages.success(request, _("You are no longer following %(followed_name)s") % {'followed_name': followed_name})
+  elif followed.is_dead:
+    messages.error(request, _("Error: You can't follow dead people"))
   else:
     followed.followers.add(follower)
     messages.success(request, _("You are now following %(followed_name)s") % {'followed_name': followed_name})

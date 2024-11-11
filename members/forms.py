@@ -5,6 +5,7 @@ from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.utils.safestring import mark_safe
 
 from captcha.fields import CaptchaField
 
@@ -61,6 +62,14 @@ class MemberFormMixin():
 
     return avatar
 
+  def init_privacy_field(self):
+    "Initialize the privacy consent field with a link to the privacy policy and force it to be required"
+    privacy_url = settings.PRIVACY_URL
+    self.fields['privacy_consent'].label = \
+      mark_safe(_("By checking this box, you agree to this site's "
+                  f"<a target='blank' href='{privacy_url}'>privacy policy</a>"))
+    self.fields['privacy_consent'].required = True
+
 
 class MemberRegistrationForm(MemberFormMixin, UserCreationForm):
   class Meta:
@@ -74,10 +83,7 @@ class MemberRegistrationForm(MemberFormMixin, UserCreationForm):
     self.initialize_fields(*args, **kwargs)
     # force email to be required  # TODO: is this useful?
     self.fields['email'].required = True
-    privacy_url = settings.PRIVACY_URL
-    self.fields['privacy_consent'].help_text = \
-      _(f"By checking this box, you consent to the <a target='blank' href='{privacy_url}'>privacy policy</a> of this site")
-    self.fields['privacy_consent'].required = True
+    self.init_privacy_field()
 
 
 class MemberUpdateForm(MemberFormMixin, UserChangeForm):
@@ -85,12 +91,13 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
     model = Member
     localized_fields = "__all__"
     fields = ['username', 'email', 'first_name', 'last_name', 'avatar',
-              'birthdate', 'address', 'phone', 'description', 'hobbies', 'website', 'family']
+              'birthdate', 'address', 'phone', 'description', 'hobbies', 'website', 'family', 'deathdate', 'privacy_consent']
     exclude = ['password']
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     self.initialize_fields(*args, **kwargs)
+    self.init_privacy_field()
 
 
 class AddressUpdateForm(ModelForm):

@@ -186,31 +186,23 @@ class Member(AbstractUser):
     def get_manager(self):
       return self.managing_member if self.managing_member else self
 
-    def set_dead(self):
-      self.is_dead = True
-      self.deathdate = self.deathdate or datetime.date.today()
-      self.is_active = False
-      self.managing_member = None  # TODO: set managing member to admin
-
-    def unset_dead(self):
-      self.is_dead = False
-      self.deathdate = None
-
     def clean(self):
+      if self.deathdate:
+        if self.deathdate < self.birthdate:
+          raise ValueError(_(f"Death date {self.deathdate} is before birthdate {self.birthdate}"))
+        self.is_dead = True
+        self.deathdate = self.deathdate or datetime.date.today()
+        self.is_active = False
+      else:
+        self.is_dead = False
       # If member is active, set managing member to None
       if self.is_active and self.managing_member is not None:
-        logger.debug(f"Cleaning member {self.full_name}: changing managing member to himself")
+        logger.debug(f"Cleaning member {self.full_name}: removing managing member")
         self.managing_member = None
       elif not self.is_active and self.managing_member is None:
         # If no managing member and member is inactive, use admin member
         logger.debug(f"Cleaning member {self.full_name}: changing managing member to admin")
         self.managing_member = Member.objects.filter(is_superuser=True).first()
-      if self.deathdate:
-        if self.deathdate < self.birthdate:
-          raise ValueError(_(f"Death date {self.deathdate} is before birthdate {self.birthdate}"))
-        self.set_dead()
-      else:
-        self.unset_dead()
 
     def _resize_avatar(self, max_size, save_path):
       img = Image.open(self.avatar.path)
@@ -222,6 +214,7 @@ class Member(AbstractUser):
         logger.debug(f"Resized and saved avatar for {self.full_name} in {save_path}, size: {img.size}")
 
     def save(self, *args, **kwargs):
+      self.clean()  # clean before save
       super().save(*args, **kwargs)
       if self.avatar:
         # resize avatar

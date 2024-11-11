@@ -79,11 +79,6 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
             warnings.append(warning)
         elif member.__dict__[field] != row[trfield]:
           setattr(member, field, row[trfield])
-          if field == 'deathdate':
-            if row[trfield] == '':
-              member.unset_dead()
-            else:
-              member.set_dead()
 
     member.is_active = activate_users and not member.is_dead
     # set manager to people who imported the file if imported users are not activated
@@ -132,16 +127,6 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
           changed = changed or modified
           if warning:
             warnings.append(warning)
-        case 'deathdate':
-          if value:  # deathdate provided
-            if not member.is_dead or member.deathdate != value:  # deathdate changed
-              changed = True
-              setattr(member, 'deathdate', value)  # will do the type change
-              member.set_dead()
-          else:  # deathdate not provided
-            if member.is_dead:  # death removed
-              changed = True
-              member.unset_dead()
         case _:
           if member.__dict__[field] != value:
             setattr(member, field, value)

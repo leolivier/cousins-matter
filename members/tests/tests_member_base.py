@@ -130,7 +130,7 @@ class MemberTestCase(TestCase):
     counter = get_counter()
     return {'username': member.username, 'first_name': self._get_new(member.first_name, counter),
             'last_name': member.last_name, 'email': member.username+'@test.com',
-            'phone': '01 23 45 67 ' + counter, "birthdate": date.today()}
+            'phone': '01 23 45 67 ' + counter, "birthdate": date.today(), "privacy_consent": True}
 
   def create_member(self, member_data=None, is_active=False):
     """creates and returns a new member using provided member data.

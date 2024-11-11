@@ -12,15 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"POT-Creation-Date: 2024-11-11 19:57+0100\n"
 "PO-Revision-Date: 2024-10-21 10:35+00:00\n"
-"\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
+"leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: galleries/forms.py:15
@@ -29,8 +30,8 @@ msgstr "Arquivo ZIP"
 
 #: galleries/forms.py:16
 msgid ""
-"The zip file containing the photos to upload. All folders will be created as"
-" galleries and photos in these folders added to the galleries. All photos "
+"The zip file containing the photos to upload. All folders will be created as "
+"galleries and photos in these folders added to the galleries. All photos "
 "must be in folders."
 msgstr ""
 "O arquivo zip que contém as fotos para subir. Todas as pastas serão criadas "
@@ -141,7 +142,7 @@ msgstr "Galérias infantis"
 #: galleries/templates/galleries/photo_detail.html:23
 #, python-format
 msgid "Back to %(gname)s"
-msgstr "%s"
+msgstr "Voltar para %(gname)s"
 
 #: galleries/templates/galleries/gallery_detail.html:43
 msgid "Back to galleries list"
@@ -228,8 +229,8 @@ msgstr "As fotos não podem estar na raiz do arquivo zip."
 
 #: galleries/views/views_bulk.py:71
 msgid ""
-"Detected path traversal attempt, '..' is not allowed in paths inside the zip"
-" file"
+"Detected path traversal attempt, '..' is not allowed in paths inside the zip "
+"file"
 msgstr ""
 "Traversão de caminho detectada, '..' não é permitida em caminhos dentro do "
 "arquivo zip"

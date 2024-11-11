@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-27 12:06+0100\n"
+"POT-Creation-Date: 2024-11-11 19:57+0100\n"
 "PO-Revision-Date: 2024-10-21 10:41+00:00\n"
 "Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
 "leolivier/auto-po-lyglot)\n"
@@ -164,8 +164,7 @@ msgstr "Deixe este sala."
 #: chat/templates/chat/private/room_members.html:23
 #: chat/templates/chat/room_detail.html:49 chat/tests/tests_private.py:73
 msgid "Are you sure you want to leave this room?"
-msgstr ""
-"Você está seguro de querer sair deste sala?"
+msgstr "Você está seguro de querer sair deste sala?"
 
 #: chat/templates/chat/private/room_members.html:32
 msgid "Add member to the room"
@@ -236,17 +235,17 @@ msgstr ""
 "escolha um nome diferente."
 
 #: chat/tests/tests_private.py:229 chat/tests/tests_private.py:302
-#: chat/views/views_private_rooms.py:333
+#: chat/views/views_private_rooms.py:328
 #, python-format
 msgid "%s has been removed from the room"
 msgstr "%s foi removido do salão."
 
-#: chat/tests/tests_private.py:239 chat/views/views_private_rooms.py:450
+#: chat/tests/tests_private.py:239 chat/views/views_private_rooms.py:445
 msgid "Only members of this private room can become admins"
 msgstr ""
 "Somente os membros deste quarto privado podem se tornar administradores."
 
-#: chat/tests/tests_private.py:291 chat/views/views_private_rooms.py:326
+#: chat/tests/tests_private.py:291 chat/views/views_private_rooms.py:321
 msgid ""
 "This member is the only one in this private room. Please add another one "
 "before removing this one."
@@ -254,7 +253,7 @@ msgstr ""
 "Este membro é o único em este sala privada. Por favor, adicione outro antes "
 "de remover este."
 
-#: chat/tests/tests_private.py:319 chat/views/views_private_rooms.py:372
+#: chat/tests/tests_private.py:319 chat/views/views_private_rooms.py:367
 msgid ""
 "You are the only member in this private room. Please add another one before "
 "removing yourself."
@@ -262,7 +261,7 @@ msgstr ""
 "Você é o único membro nesse sala privada. Por favor, adicione outro antes de "
 "se retirar."
 
-#: chat/tests/tests_private.py:330 chat/views/views_private_rooms.py:375
+#: chat/tests/tests_private.py:330 chat/views/views_private_rooms.py:370
 msgid ""
 "You are the only admin in this private room. If you leave the room, no one "
 "will be left. Please add another admin from the members before you remove "
@@ -272,19 +271,19 @@ msgstr ""
 "ninguém ficará. Por favor, adicione outro administrador dos membros antes de "
 "se retirar."
 
-#: chat/tests/tests_private.py:339 chat/views/views_private_rooms.py:383
+#: chat/tests/tests_private.py:339 chat/views/views_private_rooms.py:378
 msgid "You have left the room"
 msgstr "Você saiu da sala."
 
-#: chat/tests/tests_private.py:365 chat/views/views_private_rooms.py:205
-#: chat/views/views_private_rooms.py:242 chat/views/views_private_rooms.py:368
-#: chat/views/views_private_rooms.py:409
+#: chat/tests/tests_private.py:365 chat/views/views_private_rooms.py:203
+#: chat/views/views_private_rooms.py:237 chat/views/views_private_rooms.py:363
+#: chat/views/views_private_rooms.py:404
 msgid "You are not a member of this private room"
 msgstr "Você não é um membro deste salão privado."
 
-#: chat/tests/tests_private.py:386 chat/views/views_private_rooms.py:278
-#: chat/views/views_private_rooms.py:321 chat/views/views_private_rooms.py:443
-#: chat/views/views_private_rooms.py:491 chat/views/views_private_rooms.py:532
+#: chat/tests/tests_private.py:386 chat/views/views_private_rooms.py:273
+#: chat/views/views_private_rooms.py:316 chat/views/views_private_rooms.py:438
+#: chat/views/views_private_rooms.py:486 chat/views/views_private_rooms.py:527
 msgid "You are not an admin of this private room"
 msgstr "Você não é administrador desse quarto privado."
 
@@ -299,7 +298,7 @@ msgid_plural "%(nfollowers)s followers"
 msgstr[0] "%(nfollowers)s seguidor"
 msgstr[1] "%(nfollowers)s seguidores"
 
-#: chat/views/views_private_rooms.py:157 chat/views/views_public_rooms.py:80
+#: chat/views/views_private_rooms.py:155 chat/views/views_public_rooms.py:80
 #, python-brace-format
 msgid ""
 "Another room with a similar name already exists ('{similar_room.name}'). "
@@ -308,19 +307,19 @@ msgstr ""
 "Outro quarto com um nome semelhante já existe ('{similar_room.name}'). Por "
 "favor, escolha um nome diferente."
 
-#: chat/views/views_private_rooms.py:273 chat/views/views_private_rooms.py:439
+#: chat/views/views_private_rooms.py:268 chat/views/views_private_rooms.py:434
 msgid "Method not allowed"
 msgstr "Método não permitido"
 
-#: chat/views/views_private_rooms.py:288 chat/views/views_private_rooms.py:455
+#: chat/views/views_private_rooms.py:283 chat/views/views_private_rooms.py:450
 msgid "This user is already a member of this private room"
 msgstr "Este usuário já é um membro deste quarto privado"
 
-#: chat/views/views_private_rooms.py:335
+#: chat/views/views_private_rooms.py:330
 msgid "This user is not a member of this private room"
 msgstr "Este usuário não é membro deste quarto privado"
 
-#: chat/views/views_private_rooms.py:497
+#: chat/views/views_private_rooms.py:492
 msgid ""
 "There must be at least one admin in a private room. Please add another one "
 "before removing this one."
@@ -328,11 +327,11 @@ msgstr ""
 "Existem pelo menos um administrador em uma sala privada. Por favor, adicione "
 "outro antes de remover esse outro."
 
-#: chat/views/views_private_rooms.py:503
+#: chat/views/views_private_rooms.py:498
 msgid "This member is not an admin of this private room"
 msgstr "Este membro não é administrador deste quarto privado"
 
-#: chat/views/views_private_rooms.py:536
+#: chat/views/views_private_rooms.py:531
 msgid ""
 "There must be at least one admin in a private room. Please add another one "
 "before removing yourself."
@@ -340,7 +339,7 @@ msgstr ""
 "Existem pelo menos um administrador em uma sala privada. Por favor, adicione "
 "outro antes de se retirar."
 
-#: chat/views/views_private_rooms.py:541
+#: chat/views/views_private_rooms.py:536
 msgid "You have been removed from the admins of this private room."
 msgstr "Você foi removido dos administradores deste quarto privado."
 
@@ -349,10 +348,10 @@ msgstr "Você foi removido dos administradores deste quarto privado."
 msgid "A private room with almost the same name already exists: %s"
 msgstr "Um quarto particular com quase o mesmo nome já existe: %s"
 
-#: chat/views/views_public_rooms.py:114
+#: chat/views/views_public_rooms.py:113
 msgid "Only the owner of a room can edit it"
 msgstr "Somente o proprietário de uma sala pode editar."
 
-#: chat/views/views_public_rooms.py:129
+#: chat/views/views_public_rooms.py:128
 msgid "Only the owner of a room can delete it"
 msgstr "Somente o proprietário de uma sala pode apagar-a."

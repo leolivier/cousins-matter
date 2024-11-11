@@ -12,15 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"POT-Creation-Date: 2024-11-11 19:57+0100\n"
 "PO-Revision-Date: 2024-10-21 10:16+00:00\n"
-"\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
+"leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: cm_main/apps.py:8
@@ -43,7 +44,8 @@ msgstr ""
 
 #: cm_main/followers.py:70 cm_main/tests/tests_followers.py:92
 #, python-format
-msgid "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
+msgid ""
+"New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
 msgstr ""
 "Nuovo %(obj_type)s aggiunto al %(followed_type)s \"%(followed_object_name)s"
 
@@ -154,8 +156,8 @@ msgstr ""
 msgid ""
 "Mandatory. Deletion will not take place until the correct value is entered."
 msgstr ""
-"Obbligatorio. L'eliminazione non avverrà finché non verrà inserito il valore"
-" corretto."
+"Obbligatorio. L'eliminazione non avverrà finché non verrà inserito il valore "
+"corretto."
 
 #: cm_main/templates/cm_main/common/include-summernote.html:6
 msgid "Toggle Note Editor Toolbar"
@@ -387,18 +389,17 @@ msgstr "Hai un nuovo follower!"
 #: cm_main/tests/tests_followers.py:38
 #, python-format
 msgid ""
-"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a>"
-" is now following you on %(site_name)s!"
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
+"is now following you on %(site_name)s!"
 msgstr ""
-"Ciao %(followed_name)s, <br><a "
-"href=\"%(follower_url)s\">%(follower_name)s</a> ora ti segue su "
-"%(site_name)s!"
+"Ciao %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</"
+"a> ora ti segue su %(site_name)s!"
 
 #: cm_main/views/views_contact.py:41
 msgid "But your mailer tools is too old to show it :'("
 msgstr ""
-"Ma il tuo programma di posta elettronica è troppo vecchio per visualizzarlo "
-":'("
+"Ma il tuo programma di posta elettronica è troppo vecchio per "
+"visualizzarlo :'("
 
 #: cm_main/views/views_contact.py:60
 msgid "This file type is not supported"
@@ -418,11 +419,11 @@ msgstr "La tua versione non è aggiornata."
 
 #: cm_main/views/views_stats.py:58
 msgid ""
-"Please update it by running the following command:<br><code>docker-start.sh "
-"-u</code>"
+"Please update it by running the following command:<br><code>docker-start.sh -"
+"u</code>"
 msgstr ""
-"Si prega di aggiornarlo eseguendo il seguente comando:<br><code>docker-"
-"start.sh -u</code>"
+"Si prega di aggiornarlo eseguendo il seguente comando:<br><code>docker-start."
+"sh -u</code>"
 
 #: cm_main/views/views_stats.py:69
 msgid "Your version is up-to-date."

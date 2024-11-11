@@ -137,7 +137,7 @@ class MemberTestCase(TestCase):
     return {'username': member.username, 'first_name': self._get_new(member.first_name, counter),
             'last_name': member.last_name, 'email': member.username+'@test.com',
             'phone': '01 23 45 67 ' + counter, "birthdate": yesterday(2000), "privacy_consent": True, 
-            "deathdate": member.deathdate}
+            "deathdate": member.deathdate or ''}
 
   def create_member(self, member_data=None, is_active=False):
     """creates and returns a new member using provided member data.

@@ -38,6 +38,8 @@ def logout_member(request):
 
 
 def editable(request, member):
+    if request.user.is_superuser:
+        return True
     manager = member.managing_member or member
     return manager.id == request.user.id
 
@@ -130,6 +132,8 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
     success_message = _("Member successfully updated")
 
     def _can_edit(self, request, member):
+        if request.user.is_superuser:
+            return True
         if member.managing_member is None:
             return (member.id == request.user.id)
         else:

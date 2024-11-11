@@ -3,6 +3,7 @@
 from contextlib import contextmanager
 import math
 from pathlib import PosixPath
+from urllib.parse import urlencode
 
 from django.core import paginator
 from django.db import connections
@@ -86,6 +87,15 @@ class Paginator(paginator.Paginator):
         page.possible_per_pages = self.possible_per_pages
         # pprint(vars(page))
         return page
+
+    @staticmethod
+    def get_page(request, object_list, page_num, reverse_link, default_page_size=100):
+      page_size = int(request.GET["page_size"]) if "page_size" in request.GET else default_page_size
+
+      ptor = Paginator(object_list, page_size, reverse_link=reverse_link)
+      if page_num > ptor.num_pages:
+          return redirect(reverse(reverse_link, args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
+      return ptor.get_page_data(page_num)
 
 
 @contextmanager

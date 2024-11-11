@@ -1,4 +1,6 @@
 # util functions for member views
+from typing import Any
+from django.shortcuts import render
 from django.utils.translation import gettext as _
 import io
 from reportlab.rl_config import defaultPageSize
@@ -11,6 +13,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.utils.text import slugify
 from django.conf import settings
+
+from cousinsmatter.utils import Paginator
 
 from ..models import Member
 
@@ -25,10 +29,14 @@ LIST_STYLE = TableStyle(
 )
 
 
-class MembersDirectoryView(LoginRequiredMixin, generic.ListView):
+class MembersDirectoryView(LoginRequiredMixin, generic.View):
     template_name = "members/members/members_directory.html"
-    paginate_by = 100
     model = Member
+
+    def get(self, request, page_num=1) -> dict[str, Any]:
+      members = Member.objects.alive()
+      page = Paginator.get_page(request, members, page_num, "members:directory_page", 100)
+      return render(request, self.template_name, {"page": page})
 
 
 class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):

@@ -59,8 +59,8 @@ class Paginator(paginator.Paginator):
         # example of compute_link=lambda page: reverse('members:members_page', args=[gallery_id, page]))
         if not reverse_link and not callable(compute_link):
             raise TypeError("reverse_link not provided and compute_link is not callable")
-        if reverse_link and callable(compute_link):
-            raise TypeError("reverse_link provided and compute_link is callable: which one to choose?")
+        # if reverse_link and callable(compute_link):  # see _get_link, choice is compute_link first
+        #     raise TypeError("reverse_link provided and compute_link is callable: which one to choose?")
         super().__init__(query_set, per_page)
         self.reverse_link = reverse_link
         self.compute_link = compute_link

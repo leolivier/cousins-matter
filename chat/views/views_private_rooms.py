@@ -99,7 +99,7 @@ def private_chat_rooms(request, page_num=1):
 
   page = Paginator.get_page(request, private_chat_rooms, page_num,
                             reverse_link="chat:private_chat_page",
-                            page_size=settings.DEFAULT_CHATROOMS_PER_PAGE)
+                            default_page_size=settings.DEFAULT_CHATROOMS_PER_PAGE)
   author_ids = [room.first_message_author for room in page.object_list if room.first_message_author is not None]
   # print("author ids", author_ids)
   authors = Member.objects.filter(id__in=author_ids)

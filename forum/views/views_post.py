@@ -1,4 +1,3 @@
-from urllib.parse import urlencode
 from django.conf import settings
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render

@@ -15,7 +15,7 @@ from ..models import ChatMessage, ChatRoom
 from cousinsmatter.utils import Paginator, is_ajax
 from cm_main import followers
 
-from urllib.parse import unquote, urlencode
+from urllib.parse import unquote
 
 logger = logging.getLogger(__name__)
 

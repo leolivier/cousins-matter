@@ -24,15 +24,12 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
     model = Post
 
     def get(self, request, page=1):
-      page_num = page
-      page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_POSTS_PER_PAGE
-
       posts = Post.objects.select_related('first_message').annotate(num_messages=Count("message")) \
                   .all().order_by('-first_message__date')
-      ptor = Paginator(posts, page_size, reverse_link='forum:page')
-      if page_num > ptor.num_pages:
-        return redirect(reverse('forum:page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
-      page = ptor.get_page_data(page_num)
+      page = Paginator.get_page(request, object_list=posts, 
+                                page_num=page, 
+                                reverse_link='forum:page',
+                                default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
       return render(request, "forum/post_list.html", {"page": page})
 
 
@@ -42,15 +39,13 @@ class PostDisplayView(LoginRequiredMixin, generic.DetailView):
     def get(self, request, pk, page_num=1):
       post_id = pk
       post = get_object_or_404(Post, pk=post_id)
-      page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_POSTS_PER_PAGE
-
       replies = Message.objects.filter(post=post_id, first_of_post=None).all()
-      ptor = Paginator(replies, page_size,
-                       compute_link=lambda page_num: reverse('forum:display_page', args=[post_id, page_num]))
-      if page_num > ptor.num_pages:
-        return redirect(reverse('forum:display_page',
-                                args=[post_id, ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
-      page = ptor.get_page_data(page_num)
+      page = Paginator.get_page(request,
+                                object_list=replies,
+                                page_num=page_num,
+                                reverse_link='forum:display_page',
+                                compute_link=lambda page_num: reverse('forum:display_page', args=[post_id, page_num]),
+                                default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
       return render(request, "forum/post_detail.html", {
          "page": page,
          "nreplies": replies.count(),

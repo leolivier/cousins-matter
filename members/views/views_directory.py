@@ -35,7 +35,11 @@ class MembersDirectoryView(LoginRequiredMixin, generic.View):
 
     def get(self, request, page_num=1) -> dict[str, Any]:
       members = Member.objects.alive()
-      page = Paginator.get_page(request, members, page_num, "members:directory_page", 100)
+      page = Paginator.get_page(request,
+                                object_list=members,
+                                page_num=page_num,
+                                reverse_link="members:directory_page",
+                                default_page_size=100)
       return render(request, self.template_name, {"page": page})
 
 

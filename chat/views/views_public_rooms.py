@@ -36,12 +36,12 @@ def chat_rooms(request, page_num=1):
     num_messages=Count("chatmessage"),
     first_message_author=Subquery(first_msg_auth_subquery)
     ).order_by('date_added')
-  page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_CHATROOMS_PER_PAGE
 
-  ptor = Paginator(chat_rooms, page_size, reverse_link="chat:chat_page")
-  if page_num > ptor.num_pages:
-      return redirect(reverse('chat:chat_page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
-  page = ptor.get_page_data(page_num)
+  page = Paginator.get_page(request,
+                            object_list=chat_rooms,
+                            page_num=page_num,
+                            reverse_link="chat:chat_page",
+                            default_page_size=settings.DEFAULT_CHATROOMS_PER_PAGE)
   author_ids = [room.first_message_author for room in page.object_list if room.first_message_author is not None]
   # print("author ids", author_ids)
   authors = Member.objects.filter(id__in=author_ids)
@@ -88,14 +88,13 @@ def new_room(request):
 def chat_room(request, room_slug, page_num=None):
   room = get_object_or_404(ChatRoom, slug=room_slug)
   messages = ChatMessage.objects.filter(room=room.id)
-  page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_CHATMESSAGES_PER_PAGE
 
-  ptor = Paginator(messages, page_size, compute_link=lambda page_num: reverse("chat:room_page", args=[room_slug, page_num]))
-  if page_num is None:
-    page_num = ptor.num_pages
-  elif page_num > ptor.num_pages:  # if page_num is out of range, redirect to last page
-      return redirect(reverse('chat:room_page', args=[room.slug, ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
-  page = ptor.get_page_data(page_num)
+  page = Paginator.get_page(request,
+                            object_list=messages,
+                            page_num=page_num,
+                            reverse_link="chat:room_page",
+                            compute_link=lambda page_num: reverse("chat:room_page", args=[room_slug, page_num]),
+                            default_page_size=settings.DEFAULT_CHATMESSAGES_PER_PAGE)
   return render(request, 'chat/room_detail.html', {'room': room, "page": page})
 
 

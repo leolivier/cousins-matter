@@ -267,7 +267,7 @@ msgstr "membre"
 
 #: members/models.py:130
 msgid "members"
-msgstr "members"
+msgstr "membres"
 
 #: members/templates/members/address/address_detail.html:3
 msgid "Address Detail"

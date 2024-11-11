@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime, timedelta
 import os
 from urllib.parse import urlencode
 from django.conf import settings
@@ -20,6 +20,12 @@ def get_counter():
 
 def get_fake_request():
     return RequestFactory().get('/dummy-path')
+
+
+def yesterday(ndays=1):
+    today = datetime.today()
+    yester_day = today - timedelta(days=ndays)
+    return yester_day.date()
 
 
 class MemberTestCase(TestCase):
@@ -123,14 +129,15 @@ class MemberTestCase(TestCase):
 
     return {'username': uname, 'password': new_password, 'email': uname+'@test.com',
             'first_name': self._get_new(self.first_name, counter), 'last_name': self._get_new(self.last_name, counter),
-            'phone': '01 23 45 67 ' + counter, "birthdate": date.today(), "privacy_consent": True}
+            'phone': '01 23 45 67 ' + counter, "birthdate": yesterday(3000), "privacy_consent": True}
 
   def get_changed_member_data(self, member):
-    """returns a modified member dataset (same username and last_name)"""
+    """returns a modified member dataset (same username and last_name, don't change deathdate)"""
     counter = get_counter()
     return {'username': member.username, 'first_name': self._get_new(member.first_name, counter),
             'last_name': member.last_name, 'email': member.username+'@test.com',
-            'phone': '01 23 45 67 ' + counter, "birthdate": date.today(), "privacy_consent": True}
+            'phone': '01 23 45 67 ' + counter, "birthdate": yesterday(2000), "privacy_consent": True, 
+            "deathdate": member.deathdate}
 
   def create_member(self, member_data=None, is_active=False):
     """creates and returns a new member using provided member data.

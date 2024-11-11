@@ -280,6 +280,7 @@ DJANGO_ICONS = {
     "birthday-variant": "cake-variant",
     "directory": "format-list-text",
     "directory-variant": "book-alphabet",
+    "deceased": "shield-cross-outline",  # or "coffin"?
     # gallery icons
     "galleries": "folder-multiple-image",
     "new-gallery": "file-image-plus-outline",

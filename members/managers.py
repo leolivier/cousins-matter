@@ -36,3 +36,6 @@ class MemberManager(BaseUserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError(_("Superuser must have is_superuser=True."))
         return self.create_member(username, email, password, first_name, last_name, **extra_fields)
+
+    def alive(self):
+        return self.get_queryset().filter(is_dead=False)

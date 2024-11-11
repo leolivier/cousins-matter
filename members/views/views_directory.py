@@ -45,7 +45,7 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
 
     def _get_directory_data(self):
       dir_data = [[_("Name"), _("Phone"), _('Email'), _("Address")]]
-      for member in Member.objects.all():
+      for member in Member.objects.alive():
           dir_data.append([member.full_name,
                           member.phone if member.phone else "",
                           member.email,
@@ -80,8 +80,6 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
 
       Story = []
       data = self._get_directory_data()
-      for i in range(10):
-          data += self._get_directory_data()
       dir_table = Table(data, style=LIST_STYLE, repeatRows=1)
       Story.append(dir_table)
 

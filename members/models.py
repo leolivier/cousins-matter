@@ -33,7 +33,8 @@ MEMBER_FIELD_NAMES = MANDATORY_MEMBER_FIELD_NAMES | {
   'phone': pgettext_lazy('CSV Field', 'phone'),
   'website': pgettext_lazy('CSV Field', 'website'),
   'family': pgettext_lazy('CSV Field', 'family'),
-  'avatar': pgettext_lazy('CSV Field', 'avatar')
+  'avatar': pgettext_lazy('CSV Field', 'avatar'),
+  'deathdate': pgettext_lazy('CSV Field', 'deathdate'),
   }
 
 
@@ -105,6 +106,9 @@ class Member(AbstractUser):
     birthdate = models.DateField(_('Birthdate'),
                                  help_text=_("Click on the month name or the year to change them quickly"),
                                  null=True, blank=False)
+    # issue 135: manage dead members
+    is_dead = models.BooleanField(_('Is dead'), default=False, blank=False, null=False)
+    deathdate = models.DateField(_('Death date'), null=True, blank=True)
 
     website = models.URLField(_('Website'), blank=True)
 
@@ -182,6 +186,16 @@ class Member(AbstractUser):
     def get_manager(self):
       return self.managing_member if self.managing_member else self
 
+    def set_dead(self):
+      self.is_dead = True
+      self.deathdate = self.deathdate or datetime.date.today()
+      self.is_active = False
+      self.managing_member = None  # TODO: set managing member to admin
+
+    def unset_dead(self):
+      self.is_dead = False
+      self.deathdate = None
+
     def clean(self):
       # If member is active, set managing member to None
       if self.is_active and self.managing_member is not None:
@@ -191,6 +205,12 @@ class Member(AbstractUser):
         # If no managing member and member is inactive, use admin member
         logger.debug(f"Cleaning member {self.full_name}: changing managing member to admin")
         self.managing_member = Member.objects.filter(is_superuser=True).first()
+      if self.deathdate:
+        if self.deathdate < self.birthdate:
+          raise ValueError(_(f"Death date {self.deathdate} is before birthdate {self.birthdate}"))
+        self.set_dead()
+      else:
+        self.unset_dead()
 
     def _resize_avatar(self, max_size, save_path):
       img = Image.open(self.avatar.path)

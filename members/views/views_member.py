@@ -2,7 +2,7 @@ import logging
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, F, Func
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import logout
@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
-from cousinsmatter.utils import Paginator
+from cousinsmatter.utils import Paginator, remove_accents
 from verify_email.email_handler import send_verification_email
 from cousinsmatter.utils import assert_request_is_ajax, redirect_to_referer
 from ..models import Member
@@ -46,6 +46,16 @@ def managing_member_name(member):
     return Member.objects.get(id=member.managing_member.id).full_name if member and member.managing_member else None
 
 
+def register_remove_accents():
+    # Execute this if database is SQLite only, and only once
+    if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
+      from django.db import connection
+      from cousinsmatter.utils import remove_accents
+      # Register custom function in the database
+      with connection.cursor() as cursor:
+        cursor.connection.create_function('REMOVE_ACCENTS', 1, remove_accents)
+
+
 class MembersView(LoginRequiredMixin, generic.ListView):
     template_name = "members/members/members.html"
     # paginate_by = 100
@@ -59,7 +69,7 @@ class MembersView(LoginRequiredMixin, generic.ListView):
         if 'last_name_filter' in request.GET and request.GET['last_name_filter']:
             filter['last_name__icontains'] = request.GET['last_name_filter'].strip()
         members = Member.objects.filter(**filter)
-        page = Paginator.get_page(request,
+page = Paginator.get_page(request,
                                   object_list=members,
                                   page_num=page_num,
                                   reverse_link='members:members_page',

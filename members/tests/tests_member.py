@@ -272,10 +272,14 @@ class TestDisplayMembers(MemberTestCase):
 
     def filter_member(member, first_name=False, last_name=False):
       filter = {}
-      if first_name:
-        filter['first_name_filter'] = member.first_name[-4:]
+      if first_name:  # remove first 4 chars
+        if type(first_name) is bool:
+          first_name = member.first_name
+        filter['first_name_filter'] = first_name[4:]
       if last_name:
-        filter['last_name_filter'] = member.last_name[-4:]
+        if type(last_name) is bool:
+          last_name = member.last_name
+        filter['last_name_filter'] = last_name[4:]
       response = self.client.get(reverse("members:members"), filter)
       # print(response.content)
       self.assertEqual(response.status_code, 200)
@@ -284,7 +288,11 @@ class TestDisplayMembers(MemberTestCase):
     member1 = self.create_member()
     member2 = self.create_member()
     member3 = self.create_member()
-    # can see all memebers when not filtered
+    accented_member = self.get_new_member_data()
+    accented_filter = accented_member['first_name'] + 'exxx '
+    accented_member['first_name'] += 'éxxx'
+    member4 = self.create_member(accented_member)
+    # can see all members when not filtered
     content = filter_member(None)
     # print(content)
     for member in [member1, member2, member3]:
@@ -295,17 +303,28 @@ class TestDisplayMembers(MemberTestCase):
     check_is_in(content, member1)
     check_is_not_in(content, member2)
     check_is_not_in(content, member3)
+    check_is_not_in(content, member4)
+
     # filter on member2 last name part
     content = filter_member(member2, last_name=True)
     check_is_not_in(content, member1)
     check_is_in(content, member2)
     check_is_not_in(content, member3)
+    check_is_not_in(content, member4)
 
     # filter on member3 first and last name part
     content = filter_member(member3, first_name=True, last_name=True)
     check_is_not_in(content, member1)
     check_is_not_in(content, member2)
     check_is_in(content, member3)
+    check_is_not_in(content, member4)
+
+    # check filters and striped spaces are ok
+    content = filter_member(member4, first_name=accented_filter)
+    check_is_not_in(content, member1)
+    check_is_not_in(content, member2)
+    check_is_not_in(content, member3)
+    check_is_in(content, member4)
 
 
 class TestActivateManagedMember(MemberTestCase):

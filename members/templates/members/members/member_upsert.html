@@ -88,8 +88,8 @@
 			{% include "members/modal_form.html" with modal_id="create-address-modal" title=_("New Address") action_url=create_address form=addr_form function=function %}
 		{% endwith %}
 
-		{% if form.address.value %}
-			{% url 'members:modal_update_address' m_form.address.value as change_address %}
+		{% if member.address_id %}
+			{% url 'members:modal_update_address' member.address_id as change_address %}
 			{% trans 'Address updated' as address_updated%}
 			{% with function="change_option('#id_address', response.address_id, response.address_str, '"|add:address_updated|add:"');" %}
 				{% include "members/modal_form.html" with modal_id="change-address-modal" title=_("Change Address") action_url=change_address form=addr_form function=function %}

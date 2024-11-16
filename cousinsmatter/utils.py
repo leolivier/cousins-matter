@@ -36,11 +36,14 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
+def assert_request_is_ajax(request):
+    if not is_ajax(request):
+        raise ValidationError("Forbidden non ajax request")
+
+
 def redirect_to_referer(request):
-    if request.META.get('HTTP_REFERER'):
-        return redirect(request.META.get('HTTP_REFERER'))
-    else:
-        return redirect(reverse("cm_main:Home"))
+    return redirect(request.META.get('HTTP_REFERER') if request.META.get('HTTP_REFERER') else
+                    reverse("cm_main:Home"))
 
 
 def check_file_size(file, limit):

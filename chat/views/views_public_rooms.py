@@ -12,7 +12,7 @@ from django.utils.text import slugify
 
 from members.models import Member
 from ..models import ChatMessage, ChatRoom
-from cousinsmatter.utils import Paginator, is_ajax
+from cousinsmatter.utils import Paginator, assert_request_is_ajax
 from cm_main import followers
 
 from urllib.parse import unquote
@@ -107,18 +107,16 @@ def toggle_follow(request, room_slug):
 
 @login_required
 def edit_room(request, room_slug):
-  if is_ajax(request):
-    room = get_object_or_404(ChatRoom, slug=room_slug)
-    if request.user != room.owner():
-      raise ValidationError(_("Only the owner of a room can edit it"))
-    # print(request.POST)
-    if 'room-name' not in request.POST:
-      raise ValidationError("No room name provided")
-    room.name = request.POST["room-name"]
-    room.save(update_fields=["name"])
-    return JsonResponse({"room_name": room.name})
-  else:
-    raise ValidationError("Forbidden non ajax request")
+  assert_request_is_ajax(request)
+  room = get_object_or_404(ChatRoom, slug=room_slug)
+  if request.user != room.owner():
+    raise ValidationError(_("Only the owner of a room can edit it"))
+  # print(request.POST)
+  if 'room-name' not in request.POST:
+    raise ValidationError("No room name provided")
+  room.name = request.POST["room-name"]
+  room.save(update_fields=["name"])
+  return JsonResponse({"room_name": room.name})
 
 
 @login_required

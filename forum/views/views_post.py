@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.exceptions import RequestDataTooBig
 
-from cousinsmatter.utils import Paginator, is_ajax
+from cousinsmatter.utils import Paginator, assert_request_is_ajax
 from forum.views.views_follow import check_followers_on_message, check_followers_on_new_post
 from ..models import Post, Message
 from ..forms import MessageForm, PostForm, CommentForm
@@ -147,26 +147,24 @@ def add_reply(request, pk):
 
 @login_required
 def edit_reply(request, reply):
-  if is_ajax(request):
-    instance = get_object_or_404(Message, pk=reply)
-    form = MessageForm(request.POST, instance=instance)
-    if form.is_valid():
-      replyobj = form.save()
-      return JsonResponse({"reply_id": replyobj.id, "reply_str": replyobj.content}, status=200)
-    else:
-      errors = form.errors.as_json()
-      return JsonResponse({"errors": errors}, status=400)
-  raise ValidationError("Forbidden non ajax request")
+  assert_request_is_ajax(request)
+  instance = get_object_or_404(Message, pk=reply)
+  form = MessageForm(request.POST, instance=instance)
+  if form.is_valid():
+    replyobj = form.save()
+    return JsonResponse({"reply_id": replyobj.id, "reply_str": replyobj.content}, status=200)
+  else:
+    errors = form.errors.as_json()
+    return JsonResponse({"errors": errors}, status=400)
 
 
 @csrf_exempt
 @login_required
 def delete_reply(request, reply):
-    if is_ajax(request):
-        reply = get_object_or_404(Message, pk=reply)
-        if (Post.objects.filter(first_message=reply).exists()):
-          raise ValidationError(_("Can't delete the first message of a thread!"))
-        id = reply.id
-        reply.delete()
-        return JsonResponse({"reply_id": id}, status=200)
-    raise ValidationError("Forbidden non ajax request")
+  assert_request_is_ajax(request)
+  reply = get_object_or_404(Message, pk=reply)
+  if (Post.objects.filter(first_message=reply).exists()):
+    raise ValidationError(_("Can't delete the first message of a thread!"))
+  id = reply.id
+  reply.delete()
+  return JsonResponse({"reply_id": id}, status=200)

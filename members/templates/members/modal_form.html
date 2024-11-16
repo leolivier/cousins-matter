@@ -33,9 +33,9 @@
 				</div>
 			</footer>
 		</form>
+		{# associate to each modal form created above an ajax processing function #}
 		<script>
 		$(document).ready(function () {
-			// associate to each modal form created above an ajax processing function
 			ajax_form_action('#{{modal_id}}-form', "{{action_url}}", function(response) {
 				{{function}}
 			});

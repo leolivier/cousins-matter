@@ -1,4 +1,3 @@
-from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect
 from django.views import generic
 from django.http import HttpResponseBadRequest, JsonResponse
@@ -8,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import RequestDataTooBig
 from django.utils.translation import gettext as _
 
-from cousinsmatter.utils import is_ajax
+from cousinsmatter.utils import assert_request_is_ajax
 from forum.views.views_follow import check_followers_on_comment
 from ..models import Message, Comment
 from ..forms import CommentForm
@@ -48,25 +47,23 @@ class CommentEditView(LoginRequiredMixin, generic.UpdateView):
             return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
 
     def post(self, request, pk):
-      if is_ajax(request):
-          comment = get_object_or_404(Comment, pk=pk)
-          # create a form instance from the request and save it
-          form = CommentForm(request.POST, instance=comment)
-          if form.is_valid():
+        assert_request_is_ajax(request)
+        comment = get_object_or_404(Comment, pk=pk)
+        # create a form instance from the request and save it
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
             comment = form.save()
             return JsonResponse({"comment_id": comment.id, "comment_str": comment.content}, status=200)
-          else:
+        else:
             errors = form.errors.as_json()
-            return JsonResponse({"errors": errors}, status=400)
-      raise ValidationError("Forbidden non ajax request")
+        return JsonResponse({"errors": errors}, status=400)
 
 
 @csrf_exempt
 @login_required
 def delete_comment(request, pk):
-    if is_ajax(request):
-        comment = get_object_or_404(Comment, pk=pk)
-        id = comment.id
-        comment.delete()
-        return JsonResponse({"comment_id": id}, status=200)
-    raise ValidationError("Forbidden non ajax request")
+    assert_request_is_ajax(request)
+    comment = get_object_or_404(Comment, pk=pk)
+    id = comment.id
+    comment.delete()
+    return JsonResponse({"comment_id": id}, status=200)

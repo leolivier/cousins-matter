@@ -17,7 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 
-from cousinsmatter.utils import is_ajax
+from cousinsmatter.utils import assert_request_is_ajax
 
 from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm
@@ -217,9 +217,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 
 @login_required
 def select_name(request):
-    if not is_ajax(request):
-      raise ValidationError("Forbidden non ajax request")
-
+    assert_request_is_ajax(request)
     query = request.GET.get('q', '')
     # List of matching names, case insensitive, limited to 12 results
     names = Member.objects.filter(last_name__icontains=query) \
@@ -233,9 +231,7 @@ def select_name(request):
 
 @login_required
 def select_family(request):
-    if not is_ajax(request):
-      raise ValidationError("Forbidden non ajax request")
-
+    assert_request_is_ajax(request)
     query = request.GET.get('q', '')
     # List of matching familynames, case insensitive, limited to 12 results
     families = Family.objects.filter(name__icontains=query) \
@@ -249,9 +245,7 @@ def select_family(request):
 
 @login_required
 def select_city(request):
-    if not is_ajax(request):
-      raise ValidationError("Forbidden non ajax request")
-
+    assert_request_is_ajax(request)
     query = request.GET.get('q', '')
     # List of matching city names, case insensitive, limited to 12 results
     cities = Address.objects.filter(city__icontains=query) \

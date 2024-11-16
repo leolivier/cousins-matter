@@ -14,7 +14,7 @@ from urllib.parse import unquote, urlencode
 
 from members.models import Member
 from ..models import ChatMessage, ChatRoom, PrivateChatRoom
-from cousinsmatter.utils import Paginator, is_ajax
+from cousinsmatter.utils import Paginator, assert_request_is_ajax
 
 
 logger = logging.getLogger(__name__)
@@ -45,9 +45,7 @@ def search_private_members(request, room_slug):
     - `ValidationError`: If the request is not an AJAX request.
 
     """
-    if not is_ajax(request):
-      raise ValidationError("Forbidden non ajax request")
-
+    assert_request_is_ajax(request)
     room = get_object_or_404(PrivateChatRoom, slug=room_slug)
     query = request.GET.get('q', '')
     members = Member.objects.filter(

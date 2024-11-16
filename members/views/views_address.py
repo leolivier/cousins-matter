@@ -51,8 +51,8 @@ class ModalAddressUpdateView(LoginRequiredMixin, generic.UpdateView):
     fields = "__all__"
 
     def post(self, request, *args, **kwargs):
-      address = get_object_or_404(Address, pk=kwargs['pk'])
       assert_request_is_ajax(request)
+      address = get_object_or_404(Address, pk=kwargs['pk'])
       # create a form instance and populate it with data from the request on existing member (or None):
       form = AddressUpdateForm(request.POST, instance=address)
       # form = self.get_form()

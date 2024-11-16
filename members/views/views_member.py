@@ -50,7 +50,6 @@ def register_remove_accents():
     # Execute this if database is SQLite only, and only once
     if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
       from django.db import connection
-      from cousinsmatter.utils import remove_accents
       # Register custom function in the database
       with connection.cursor() as cursor:
         cursor.connection.create_function('REMOVE_ACCENTS', 1, remove_accents)
@@ -62,13 +61,21 @@ class MembersView(LoginRequiredMixin, generic.ListView):
     model = Member
 
     def get(self, request, page_num=1):
-        filter = {}
-        if 'first_name_filter' in request.GET and request.GET['first_name_filter']:
-            # issue #149: strip leading and trailing spaces on first and last name of filter
-            filter['first_name__icontains'] = request.GET['first_name_filter'].strip()
-        if 'last_name_filter' in request.GET and request.GET['last_name_filter']:
-            filter['last_name__icontains'] = request.GET['last_name_filter'].strip()
-        members = Member.objects.filter(**filter)
+        register_remove_accents()
+        filtered = False
+        members = Member.objects
+        for name in ['first_name', 'last_name']:
+            name_filter = name + '_filter'
+            if name_filter in request.GET and request.GET[name_filter]:
+                # issue #149: strip leading and trailing spaces on first and last name of filter
+                normalized_name = remove_accents(request.GET[name_filter].strip())
+                members = members.annotate(
+                    normalized_name=Func(F(name), function='REMOVE_ACCENTS')).filter(
+                    normalized_name__icontains=normalized_name)
+                filtered = True
+        if not filtered:
+            members = members.all()
+        members = members.order_by('last_name', 'first_name')
         page = Paginator.get_page(request,
                                   object_list=members,
                                   page_num=page_num,

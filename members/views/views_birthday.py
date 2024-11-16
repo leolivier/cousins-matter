@@ -14,7 +14,7 @@ def _birthdays(request, template_name) -> HttpResponse:
   today = date.today()
   deltaNdays = timedelta(days=settings.BIRTHDAY_DAYS)
   bdays = []
-  for m in Member.objects.all():
+  for m in Member.objects.alive():
     nb = m.next_birthday
     delta = nb - today
     if delta < deltaNdays:

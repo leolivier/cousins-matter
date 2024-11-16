@@ -3,6 +3,7 @@
 from contextlib import contextmanager
 import math
 from pathlib import PosixPath
+from urllib.parse import urlencode
 
 from django.core import paginator
 from django.db import connections
@@ -58,14 +59,14 @@ class Paginator(paginator.Paginator):
         # example of compute_link=lambda page: reverse('members:members_page', args=[gallery_id, page]))
         if not reverse_link and not callable(compute_link):
             raise TypeError("reverse_link not provided and compute_link is not callable")
-        if reverse_link and callable(compute_link):
-            raise TypeError("reverse_link provided and compute_link is callable: which one to choose?")
+        # if reverse_link and callable(compute_link):  # see _get_link, choice is compute_link first
+        #     raise TypeError("reverse_link provided and compute_link is callable: which one to choose?")
         super().__init__(query_set, per_page)
         self.reverse_link = reverse_link
         self.compute_link = compute_link
 
     def _get_link(self, idx):
-        return reverse(self.reverse_link, args=[idx]) if self.reverse_link else self.compute_link(idx)
+        return self.compute_link(idx) if self.compute_link else reverse(self.reverse_link, args=[idx])
 
     def get_page_data(self, page_num):
         page_num = min(page_num, self.num_pages)
@@ -86,6 +87,16 @@ class Paginator(paginator.Paginator):
         page.possible_per_pages = self.possible_per_pages
         # pprint(vars(page))
         return page
+
+    @staticmethod
+    def get_page(request, object_list, page_num, reverse_link, compute_link=None, default_page_size=100):
+      page_size = int(request.GET["page_size"]) if "page_size" in request.GET else default_page_size
+
+      ptor = Paginator(object_list, page_size, reverse_link=reverse_link, compute_link=compute_link)
+      page_num = page_num or ptor.num_pages
+      if page_num > ptor.num_pages:
+          return redirect(ptor._get_link(ptor.num_pages) + '?' + urlencode({'page_size': page_size}))
+      return ptor.get_page_data(page_num)
 
 
 @contextmanager

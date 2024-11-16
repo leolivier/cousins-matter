@@ -5,7 +5,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Python Debugger: Django",
+			"name": "Django runserver Debugger",
 			"type": "debugpy",
 			"request": "launch",
 			"program": "${workspaceFolder}/manage.py",
@@ -17,7 +17,7 @@
 			"justMyCode": false
 		},
 		{
-			"name": "Debug Django Test",
+			"name": "Django Test Debugger",
 			"type": "debugpy",
 			"request": "launch",
 			"program": "${workspaceFolder}/manage.py",
@@ -26,14 +26,14 @@
 				"--failfast",
 				"-v",
 				"2",
-				"members.tests.tests_import"
+				"members.tests.tests_member.TestDeadMembers.test_update_dead_member"
 			],
 			"django": true,
 			"autoStartBrowser": false,
 			"justMyCode": false
 		},
 		{
-			"name": "Docker: Python - Django",
+			"name": "Docker Django Debug",
 			"type": "docker",
 			"request": "launch",
 			"preLaunchTask": "docker-run: debug",
@@ -62,6 +62,18 @@
         }
       ],
       "justMyCode": false
-    }
+    },
+		{
+			"name": "Django Migrate Debugger",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/manage.py",
+			"args": [
+				"migrate"
+			],
+			"django": true,
+			"autoStartBrowser": false,
+			"justMyCode": false
+		},
 	]
 }

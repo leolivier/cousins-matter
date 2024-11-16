@@ -1,5 +1,4 @@
 import logging
-from urllib.parse import urlencode
 from django.conf import settings
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, render, redirect
@@ -38,6 +37,8 @@ def logout_member(request):
 
 
 def editable(request, member):
+    if request.user.is_superuser:
+        return True
     manager = member.managing_member or member
     return manager.id == request.user.id
 
@@ -59,12 +60,11 @@ class MembersView(LoginRequiredMixin, generic.ListView):
         if 'last_name_filter' in request.GET and request.GET['last_name_filter']:
             filter['last_name__icontains'] = request.GET['last_name_filter'].strip()
         members = Member.objects.filter(**filter)
-        page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_MEMBERS_PAGE_SIZE
-        # print("page_size=", page_size)
-        ptor = Paginator(members, page_size, reverse_link='members:members_page')
-        if page_num > ptor.num_pages:
-            return redirect(reverse('members:members_page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
-        page = ptor.get_page_data(page_num)
+        page = Paginator.get_page(request,
+                                  object_list=members,
+                                  page_num=page_num,
+                                  reverse_link='members:members_page',
+                                  default_page_size=settings.DEFAULT_MEMBERS_PAGE_SIZE)
         return render(request, self.template_name, {"page": page})
 
 
@@ -130,6 +130,8 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
     success_message = _("Member successfully updated")
 
     def _can_edit(self, request, member):
+        if request.user.is_superuser:
+            return True
         if member.managing_member is None:
             return (member.id == request.user.id)
         else:

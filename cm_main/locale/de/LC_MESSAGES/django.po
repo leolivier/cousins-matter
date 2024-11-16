@@ -12,15 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 08:54+0200\n"
+"POT-Creation-Date: 2024-11-11 19:57+0100\n"
 "PO-Revision-Date: 2024-10-21 09:03+00:00\n"
-"\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
+"leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
 "Language: DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: cm_main/apps.py:8
@@ -43,7 +44,8 @@ msgstr ""
 
 #: cm_main/followers.py:70 cm_main/tests/tests_followers.py:92
 #, python-format
-msgid "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
+msgid ""
+"New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
 msgstr ""
 "Ein neues %(obj_type)s wurde zum %(followed_type)s hinzugefügt: "
 "%(followed_object_name)s"
@@ -148,9 +150,8 @@ msgid ""
 "Enter \"<span class=\"has-text-danger\">%(expected_value)s</span>\" in the "
 "field below before pressing confirm"
 msgstr ""
-"Bitte geben Sie \"<span class=\\\"has-text-"
-"danger\\\">%(expected_value)s</span>\" in das Feld unten ein, bevor Sie "
-"bestätigen\","
+"Bitte geben Sie \"<span class=\"has-text-danger\">%(expected_value)s</"
+"span>\" in das Feld unten ein, bevor Sie bestätigen"
 
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:48
 msgid ""
@@ -233,8 +234,8 @@ msgid ""
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 msgstr ""
 "%(author_name)s hat den folgenden %(obj_type)s auf %(followed_type)s "
-"hinzugefügt: <a "
-"href=\"%(followed_object_url)s\">%(followed_object_name)s</a>:"
+"hinzugefügt: <a href=\"%(followed_object_url)s\">%(followed_object_name)s</"
+"a>:"
 
 #: cm_main/templates/cm_main/followers/email-followers-on-change.html:32
 #: cm_main/templates/cm_main/followers/new_follower.html:27
@@ -393,12 +394,11 @@ msgstr "Du hast einen neuen Follower!"
 #: cm_main/tests/tests_followers.py:38
 #, python-format
 msgid ""
-"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a>"
-" is now following you on %(site_name)s!"
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
+"is now following you on %(site_name)s!"
 msgstr ""
-"Hallo %(followed_name)s, <br><a "
-"href=\"%(follower_url)s\">%(follower_name)s</a> ist jetzt auf %(site_name)s "
-"gefolgt!\","
+"Hallo %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</"
+"a> ist jetzt auf %(site_name)s gefolgt!"
 
 #: cm_main/views/views_contact.py:41
 msgid "But your mailer tools is too old to show it :'("
@@ -422,11 +422,11 @@ msgstr "Ihre Version ist nicht aktuell."
 
 #: cm_main/views/views_stats.py:58
 msgid ""
-"Please update it by running the following command:<br><code>docker-start.sh "
-"-u</code>"
+"Please update it by running the following command:<br><code>docker-start.sh -"
+"u</code>"
 msgstr ""
-"Bitte aktualisieren Sie es, indem Sie den folgenden Befehl "
-"ausführen:<br><code>docker-start.sh -u</code>"
+"Bitte aktualisieren Sie es, indem Sie den folgenden Befehl ausführen:"
+"<br><code>docker-start.sh -u</code>"
 
 #: cm_main/views/views_stats.py:69
 msgid "Your version is up-to-date."

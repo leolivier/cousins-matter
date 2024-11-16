@@ -19,8 +19,10 @@
 			</a>
 		</div>
 	</div>
-  {% if member_list %}
+	{%paginate page %}
+  {% if page.object_list.count > 0 %}
 	<hr/>
+
 	<section class="section printable">
 		<table class="table">
 			<tr>
@@ -30,7 +32,7 @@
 				<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Email" %}</th>
 				<th class="has-background-light-link has-text-primary is-size-4 has-text-centered">{% translate "Address" %}</th>
 			</tr>
-			{% for member in member_list %}
+			{% for member in page.object_list %}
 			<tr>
 				<td class="has-text-centered">
 					<a class="button is-link is-light" href="{% url 'members:detail' member.id %}">
@@ -45,10 +47,10 @@
 			{% endfor %}
 		</table>
 	</section>
-  {% else %}
+	{% else %}
 	<div>
-    <p>{% translate "No members found" %}.</p>
+		<p>{% translate "No members found" %}.</p>
 	</div>
-  {% endif %}
+	{% endif %}
 </div>
 {% endblock %}

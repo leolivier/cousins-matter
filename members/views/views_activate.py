@@ -17,8 +17,9 @@ logger = logging.getLogger(__name__)
 def activate_member(request, pk):
     """activate the member with id pk"""
     member = get_object_or_404(Member, pk=pk)
-    # TODO verify email
-    if member.is_active:
+    if member.is_dead:
+        messages.error(request, _("Error: Cannot activate a dead member"))
+    elif member.is_active:
       if member.managing_member is not None:
         member.managing_member = None
         member.save()

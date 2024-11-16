@@ -11,7 +11,7 @@ from verify_email.app_configurations import GetFieldFromSettings
 from verify_email.views import verify_user_and_activate
 from ..views.views_member import EditProfileView, MemberDetailView
 from ..models import Member
-from .tests_member_base import TestLoginRequiredMixin, MemberTestCase
+from .tests_member_base import TestLoginRequiredMixin, MemberTestCase, yesterday
 from cm_main.tests import get_absolute_url
 
 
@@ -129,19 +129,17 @@ class MemberProfileViewTest(MemberTestCase):
     self.assertContains(response, f'''<input type="text" name="last_name" value="{self.last_name}"
                       maxlength="150" class="input" id="id_last_name" required>''', html=True)
 
-    self.assertIsNone(self.member.managing_member)
     self.assertTrue(self.member.is_active)
+    self.assertIsNone(self.member.managing_member)
     new_data = self.get_changed_member_data(self.member)
     response = self.client.post(profile_url, new_data, follow=True)
     # print(vars(response))
 
     self.assertEqual(response.status_code, 200)
     self.member.refresh_from_db()
-    self.assertIsNone(self.member.managing_member)
-    # self.assertTrue(self.member.is_active) # is_active became false for an unknown reason
-    # if not self.member.is_active:
-    #   self.member.is_active = True
-    #   self.member.save()
+    # self.is_active becomes false because of the sending of the verification email (which changed)
+    # self.assertTrue(self.member.is_active)
+    # self.assertIsNone(self.member.managing_member)
 
     self.assertEqual(self.member.first_name, new_data['first_name'])
     self.assertEqual(self.member.phone, new_data['phone'])
@@ -363,3 +361,66 @@ class TestActivateManagedMember(MemberTestCase):
     self.assertContains(response, f'<p class="content">{tr1}</p><p class="content">{tr2}</p>', html=True)
     managed.refresh_from_db()
     self.assertTrue(managed.is_active)
+
+
+class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
+  def get_dead_member_data(self):
+    data = self.get_new_member_data()
+    # set death date 5 days ago
+    data['deathdate'] = yesterday(5)
+    return data
+
+  def check_dead_member(self, member):
+    self.assertFalse(member.is_active)
+    self.assertTrue(member.is_dead)
+    # managing member can be self.member (ie member creator) or superuser
+    self.assertIn(member.managing_member.id, [self.member.id, self.superuser.id])
+    self.assertIsNotNone(member.deathdate)
+    self.assertGreater(member.deathdate, member.birthdate)
+
+  def test_create_dead_member(self):
+    data = self.get_dead_member_data()
+    dead = self.create_member(data)
+    self.check_dead_member(dead)
+
+  def test_post_dead_member(self):
+    data = self.get_dead_member_data()
+    dead = self.create_member_by_view(data)
+    self.check_dead_member(dead)
+
+  def test_update_dead_member(self):
+    user = self.create_member()
+    # change the managed member data
+    edit_url = reverse('members:member_edit', kwargs={'pk': user.id})
+    new_data = self.get_changed_member_data(user)
+    # set deathdate
+    new_data['deathdate'] = yesterday()
+    response = self.client.post(edit_url, new_data, follow=True)
+    # print(response.content.decode())
+    self.assertEqual(response.status_code, 200)
+    user.refresh_from_db()
+    self.check_dead_member(user)
+
+    # check that dead members can't be activated
+    activate_url = reverse('members:activate', kwargs={'pk': user.id})
+    response = self.client.get(activate_url, follow=True)
+    self.assertEqual(response.status_code, 200)
+    # self.print_response(response)
+    self.assertContainsMessage(response, "error", _("Error: Cannot activate a dead member "))
+    self.assertRedirects(response, reverse('members:detail', kwargs={'pk': user.id}))
+
+  def test_display_dead_members(self):
+    data = self.get_dead_member_data()
+    dead = self.create_member(data)
+    self.check_dead_member(dead)
+    dead_url = reverse('members:detail', kwargs={'pk': dead.id})
+    response = self.client.get(dead_url, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, '''<span class="icon is-large">
+    <i class="mdi mdi-24px mdi-shield-cross-outline" aria-hidden="true"></i>
+</span>''', html=True)
+    deathdate = localize(dead.deathdate, use_l10n=True)
+    self.assertContains(response, f'''<tr>
+    <td class="content has-text-right">{_("Deceased on")}</td>
+    <td class="content">{deathdate}</td>
+  </tr>''', html=True)

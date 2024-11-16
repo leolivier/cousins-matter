@@ -15,7 +15,8 @@
 				<div class="media-content">
 					<p class="content">
 						<strong>{{ member.first_name }} {{ member.last_name }}</strong>
-						<small>&lt;{{ member.email }}&gt;</small>
+						{%if member.email %}<small>&lt;{{ member.email }}&gt;</small>{% endif %}
+						{%if member.is_dead %}{% icon "deceased" %}{% endif %}
 						{%include "cm_main/followers/followers-count-tag.html" with followed_object=object %}
 
 					</p>
@@ -64,6 +65,12 @@
 					<td class="content has-text-right">{% translate "Hobbies" %}</td>
 					<td class="tags">{%for hobby in hobbies_list%}<span class="tag">{{hobby}}</span>{%endfor%}</td>
 				</tr>
+				{%if member.deathdate %}
+				<tr>
+					<td class="content has-text-right">{% translate "Deceased on" %}</td>
+					<td class="content">{{ member.deathdate }}</td>
+				</tr>
+				{%endif%}
 				
 			</table>
 		</div>

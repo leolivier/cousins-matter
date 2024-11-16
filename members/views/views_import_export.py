@@ -17,7 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 
-from cousinsmatter.utils import is_ajax
+from cousinsmatter.utils import assert_request_is_ajax
 
 from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm
@@ -64,26 +64,28 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 
   def _create_member(self, row, activate_users):
     """create new member based on row content.
-       returns created member and errors if any
+       returns created member and warnings if any
     """
     member = Member()
-    error = None
+    warnings = []
     for field in MEMBER_FIELD_NAMES:
       trfield = t(field)
       if trfield in row and row[trfield]:
         if field == 'family':
           self._manage_family(member, row[trfield])
         elif field == 'avatar':
-          error = self._manage_avatar(member, row[trfield], row[t('username')])
+          warning = self._manage_avatar(member, row[trfield], row[t('username')])
+          if warning:
+            warnings.append(warning)
         elif member.__dict__[field] != row[trfield]:
           setattr(member, field, row[trfield])
 
-    member.is_active = activate_users
+    member.is_active = activate_users and not member.is_dead
     # set manager to people who imported the file if imported users are not activated
-    member.managing_member = None if activate_users else Member.objects.get(id=self.request.user.id)
+    member.managing_member = None if member.is_active else Member.objects.get(id=self.request.user.id)
     member.password = generate_random_string(16)
 
-    return member, error
+    return member, warnings
 
   def _manage_avatar(self, member, avatar_file, username):
     avatar = os.path.join(settings.MEDIA_REL, settings.AVATARS_DIR, avatar_file)
@@ -99,11 +101,11 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       try:
         with open(avatar, 'rb') as image_file:
           image = File(image_file)
-          member.avatar.save(avatar, image)
-          return (None, True)
+          member.avatar.save(avatar_file, image)
+          return (None, False)
       except Exception as e:
-        return (_("Error saving avatar (%(error)s): %(avatar)s for username %(username)s. Ignored...") %
-                {'error': e, 'avatar': avatar, 'username': username}, False)
+        return (_("Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. Ignored...") %
+                {'warning': e, 'avatar': avatar, 'username': username}, False)
 
   def _manage_family(self, member, family_name):
     if member.family and member.family.name == family_name:
@@ -111,34 +113,48 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     member.family, created = Family.objects.get_or_create(name=family_name)
     return True
 
+  def _update_member_field(self, member, field, value, username):
+      changed = False
+      warnings = []
+
+      match field:
+        case 'username':
+          pass
+        case 'family':
+          changed = self._manage_family(member, value)
+        case 'avatar':
+          warning, modified = self._manage_avatar(member, value, username)
+          changed = changed or modified
+          if warning:
+            warnings.append(warning)
+        case _:
+          if member.__dict__[field] != value:
+            setattr(member, field, value)
+            changed = True
+
+      return (changed, warnings)
+
   def _update_member(self, member, row, activate_users):
     "update an existing member based on row content"
     changed = False
     # for all member fields but username
     # if new value for this field, then override existing one
-    error = None
+    warnings = []
+    username = row[t('username')]
     for field in MEMBER_FIELD_NAMES:
-      if field == 'username':
-        continue
       trfield = t(field)
       if trfield in row and row[trfield]:
-        if field == 'family':
-          changed = changed or self._manage_family(member, row[trfield])
-        elif field == 'avatar':
-          error, modified = self._manage_avatar(member, row[trfield], row[t('username')])
-          changed = changed or modified
-        elif member.__dict__[field] != row[trfield]:
-          setattr(member, field, row[trfield])
-          changed = True
-
-    if activate_users:
+        modified, new_warnings = self._update_member_field(member, field, row[trfield], username)
+        changed = changed or modified
+        warnings.extend(new_warnings)
+    if activate_users and not member.is_dead:
       if member.managing_member is not None:
         member.managing_member = None
         changed = True
       if not member.is_active:
         member.is_active = changed = True
 
-    return changed, error
+    return changed, warnings
 
   def _update_address(self, member, row):
     changed = False
@@ -164,7 +180,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
   def _import_csv(self, csv_file, activate_users):
     nbMembers = 0
     nbLines = 0
-    errors = []
+    all_warnings = []
     csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")
     reader = csv.DictReader(csvf)
     check_fields(reader.fieldnames)
@@ -176,14 +192,13 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       # search for an existing member with this username
       member = Member.objects.filter(username=username).first()
       if member:  # found, use it
-        changed_member, error = self._update_member(member, row, activate_users)
+        changed_member, new_warnings = self._update_member(member, row, activate_users)
       else:  # not found, create it
-        member, error = self._create_member(row, activate_users)
+        member, new_warnings = self._create_member(row, activate_users)
         changed_member = True
 
       changed_address = self._update_address(member, row)
-      if error:
-        errors.append(error)
+      all_warnings.extend(new_warnings)
 
       nbLines += 1
 
@@ -191,7 +206,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         member.save()
         nbMembers += 1
 
-    return (nbLines, nbMembers, errors)
+    return (nbLines, nbMembers, all_warnings)
 
   def post(self, request, *args, **kwargs):
     self.request = request
@@ -201,11 +216,11 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       activate_users = form.cleaned_data["activate_users"]
 
       try:
-        nbLines, nbMembers, errors = self._import_csv(csv_file, activate_users)
+        nbLines, nbMembers, warnings = self._import_csv(csv_file, activate_users)
         messages.success(request, _("CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or updated") %
                          {'nbLines': nbLines, 'nbMembers': nbMembers})
-        for error in errors:
-          messages.warning(request, _("Warning: %(error)s") % {'error': error})
+        for warning in warnings:
+          messages.warning(request, _("Warning: %(warning)s") % {'warning': warning})
       except ValidationError as ve:
         messages.error(request, ve.message)
         return render(request, self.template_name, {'form': form})
@@ -217,9 +232,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 
 @login_required
 def select_name(request):
-    if not is_ajax(request):
-      raise ValidationError("Forbidden non ajax request")
-
+    assert_request_is_ajax(request)
     query = request.GET.get('q', '')
     # List of matching names, case insensitive, limited to 12 results
     names = Member.objects.filter(last_name__icontains=query) \
@@ -233,9 +246,7 @@ def select_name(request):
 
 @login_required
 def select_family(request):
-    if not is_ajax(request):
-      raise ValidationError("Forbidden non ajax request")
-
+    assert_request_is_ajax(request)
     query = request.GET.get('q', '')
     # List of matching familynames, case insensitive, limited to 12 results
     families = Family.objects.filter(name__icontains=query) \
@@ -249,9 +260,7 @@ def select_family(request):
 
 @login_required
 def select_city(request):
-    if not is_ajax(request):
-      raise ValidationError("Forbidden non ajax request")
-
+    assert_request_is_ajax(request)
     query = request.GET.get('q', '')
     # List of matching city names, case insensitive, limited to 12 results
     cities = Address.objects.filter(city__icontains=query) \

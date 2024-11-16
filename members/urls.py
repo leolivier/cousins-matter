@@ -35,6 +35,7 @@ urlpatterns = [
   path("family/create", views_family.FamilyCreateView.as_view(), name="create_family"),
   path("family/<int:pk>/update", views_family.FamilyUpdateView.as_view(), name="update_family"),
   path("directory", views_directory.MembersDirectoryView.as_view(), name="directory"),
+  path("directory/<int:page_num>", views_directory.MembersDirectoryView.as_view(), name="directory_page"),
   path("directory/print", views_directory.MembersPrintDirectoryView.as_view(), name="print_directory"),
   path("import", views_import_export.CSVImportView.as_view(), name="csv_import"),
   path('export', views_import_export.select_members_to_export, name='select_members_to_export'),

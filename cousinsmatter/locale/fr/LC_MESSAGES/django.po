@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-27 12:03+0100\n"
+"POT-Creation-Date: 2024-11-11 19:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cousinsmatter/settings.py:349
+#: cousinsmatter/settings.py:350
 msgid "Email verification"
 msgstr "Vérification d'adresse mail"
 
-#: cousinsmatter/utils.py:50
+#: cousinsmatter/utils.py:51
 #, python-brace-format
 msgid ""
 "Uploaded file {filename} is too big ({sizemb}MB), maximum is {limitmb}MB."

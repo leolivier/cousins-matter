@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 18:18+0200\n"
+"POT-Creation-Date: 2024-11-11 19:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -131,10 +131,10 @@ msgid "Latest Posts"
 msgstr "Dernières discussions"
 
 #: forum/views/views_comment.py:26 forum/views/views_comment.py:48
-#: forum/views/views_post.py:71 forum/views/views_post.py:114
+#: forum/views/views_post.py:65 forum/views/views_post.py:108
 msgid "The size of the message exceeds the authorised limit."
 msgstr "La taille du message dépasse la limite autorisée."
 
-#: forum/views/views_post.py:174
+#: forum/views/views_post.py:168
 msgid "Can't delete the first message of a thread!"
 msgstr "Impossible de supprimer le premier message d'une discussion!"

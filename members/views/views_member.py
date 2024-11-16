@@ -1,7 +1,5 @@
 import logging
-from urllib.parse import urlencode
 from django.conf import settings
-from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.db.models import Q, F, Func
@@ -14,7 +12,7 @@ from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
 from cousinsmatter.utils import Paginator, remove_accents
 from verify_email.email_handler import send_verification_email
-from cousinsmatter.utils import redirect_to_referer, is_ajax
+from cousinsmatter.utils import assert_request_is_ajax, redirect_to_referer
 from ..models import Member
 from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
 
@@ -38,6 +36,8 @@ def logout_member(request):
 
 
 def editable(request, member):
+    if request.user.is_superuser:
+        return True
     manager = member.managing_member or member
     return manager.id == request.user.id
 
@@ -62,27 +62,18 @@ class MembersView(LoginRequiredMixin, generic.ListView):
     model = Member
 
     def get(self, request, page_num=1):
-        register_remove_accents()
-        members = Member.objects
-        filtered = False
-        for name in ['first_name', 'last_name']:
-            name_filter = name + "_filter"
-            if name_filter in request.GET and request.GET[name_filter]:
-            # issue #149: strip leading and trailing spaces on first and last name of filter ==> added 'strip'
-            # issue #155: don't take accents into account for filtering
-            # Execute the query using the `REMOVE_ACCENTS` function to normalize names in the database
-                normalized_name = remove_accents(request.GET[name_filter].strip())
-                members = members.annotate(normalized_first_name=Func(F(name), function='REMOVE_ACCENTS')
-                                       ).filter(normalized_first_name__icontains=normalized_name)
-                filtered = True
-        if not filtered:
-            members = members.all()
-        page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_MEMBERS_PAGE_SIZE
-        # print("page_size=", page_size)
-        ptor = Paginator(members, page_size, reverse_link='members:members_page')
-        if page_num > ptor.num_pages:
-            return redirect(reverse('members:members_page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
-        page = ptor.get_page_data(page_num)
+        filter = {}
+        if 'first_name_filter' in request.GET and request.GET['first_name_filter']:
+            # issue #149: strip leading and trailing spaces on first and last name of filter
+            filter['first_name__icontains'] = request.GET['first_name_filter'].strip()
+        if 'last_name_filter' in request.GET and request.GET['last_name_filter']:
+            filter['last_name__icontains'] = request.GET['last_name_filter'].strip()
+        members = Member.objects.filter(**filter)
+page = Paginator.get_page(request,
+                                  object_list=members,
+                                  page_num=page_num,
+                                  reverse_link='members:members_page',
+                                  default_page_size=settings.DEFAULT_MEMBERS_PAGE_SIZE)
         return render(request, self.template_name, {"page": page})
 
 
@@ -148,6 +139,8 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
     success_message = _("Member successfully updated")
 
     def _can_edit(self, request, member):
+        if request.user.is_superuser:
+            return True
         if member.managing_member is None:
             return (member.id == request.user.id)
         else:
@@ -213,9 +206,7 @@ def delete_member(request, pk):
 
 @login_required
 def search_members(request):
-    if not is_ajax(request):
-      raise ValidationError("Forbidden non ajax request")
-
+    assert_request_is_ajax(request)
     query = request.GET.get('q', '')
     members = Member.objects.filter(
         Q(last_name__icontains=query) |

@@ -1,4 +1,6 @@
 # util functions for member views
+from typing import Any
+from django.shortcuts import render
 from django.utils.translation import gettext as _
 import io
 from reportlab.rl_config import defaultPageSize
@@ -11,6 +13,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.utils.text import slugify
 from django.conf import settings
+
+from cousinsmatter.utils import Paginator
 
 from ..models import Member
 
@@ -25,10 +29,18 @@ LIST_STYLE = TableStyle(
 )
 
 
-class MembersDirectoryView(LoginRequiredMixin, generic.ListView):
+class MembersDirectoryView(LoginRequiredMixin, generic.View):
     template_name = "members/members/members_directory.html"
-    paginate_by = 100
     model = Member
+
+    def get(self, request, page_num=1) -> dict[str, Any]:
+      members = Member.objects.alive()
+      page = Paginator.get_page(request,
+                                object_list=members,
+                                page_num=page_num,
+                                reverse_link="members:directory_page",
+                                default_page_size=100)
+      return render(request, self.template_name, {"page": page})
 
 
 class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
@@ -45,7 +57,7 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
 
     def _get_directory_data(self):
       dir_data = [[_("Name"), _("Phone"), _('Email'), _("Address")]]
-      for member in Member.objects.all():
+      for member in Member.objects.alive():
           dir_data.append([member.full_name,
                           member.phone if member.phone else "",
                           member.email,
@@ -80,8 +92,6 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
 
       Story = []
       data = self._get_directory_data()
-      for i in range(10):
-          data += self._get_directory_data()
       dir_table = Table(data, style=LIST_STYLE, repeatRows=1)
       Story.append(dir_table)
 

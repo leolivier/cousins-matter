@@ -1,4 +1,3 @@
-from urllib.parse import urlencode
 from django.conf import settings
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
@@ -13,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.exceptions import RequestDataTooBig
 
-from cousinsmatter.utils import Paginator, is_ajax
+from cousinsmatter.utils import Paginator, assert_request_is_ajax
 from forum.views.views_follow import check_followers_on_message, check_followers_on_new_post
 from ..models import Post, Message
 from ..forms import MessageForm, PostForm, CommentForm
@@ -24,15 +23,12 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
     model = Post
 
     def get(self, request, page=1):
-      page_num = page
-      page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_POSTS_PER_PAGE
-
       posts = Post.objects.select_related('first_message').annotate(num_messages=Count("message")) \
                   .all().order_by('-first_message__date')
-      ptor = Paginator(posts, page_size, reverse_link='forum:page')
-      if page_num > ptor.num_pages:
-        return redirect(reverse('forum:page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
-      page = ptor.get_page_data(page_num)
+      page = Paginator.get_page(request, object_list=posts, 
+                                page_num=page, 
+                                reverse_link='forum:page',
+                                default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
       return render(request, "forum/post_list.html", {"page": page})
 
 
@@ -42,15 +38,13 @@ class PostDisplayView(LoginRequiredMixin, generic.DetailView):
     def get(self, request, pk, page_num=1):
       post_id = pk
       post = get_object_or_404(Post, pk=post_id)
-      page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_POSTS_PER_PAGE
-
       replies = Message.objects.filter(post=post_id, first_of_post=None).all()
-      ptor = Paginator(replies, page_size,
-                       compute_link=lambda page_num: reverse('forum:display_page', args=[post_id, page_num]))
-      if page_num > ptor.num_pages:
-        return redirect(reverse('forum:display_page',
-                                args=[post_id, ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
-      page = ptor.get_page_data(page_num)
+      page = Paginator.get_page(request,
+                                object_list=replies,
+                                page_num=page_num,
+                                reverse_link='forum:display_page',
+                                compute_link=lambda page_num: reverse('forum:display_page', args=[post_id, page_num]),
+                                default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
       return render(request, "forum/post_detail.html", {
          "page": page,
          "nreplies": replies.count(),
@@ -153,26 +147,24 @@ def add_reply(request, pk):
 
 @login_required
 def edit_reply(request, reply):
-  if is_ajax(request):
-    instance = get_object_or_404(Message, pk=reply)
-    form = MessageForm(request.POST, instance=instance)
-    if form.is_valid():
-      replyobj = form.save()
-      return JsonResponse({"reply_id": replyobj.id, "reply_str": replyobj.content}, status=200)
-    else:
-      errors = form.errors.as_json()
-      return JsonResponse({"errors": errors}, status=400)
-  raise ValidationError("Forbidden non ajax request")
+  assert_request_is_ajax(request)
+  instance = get_object_or_404(Message, pk=reply)
+  form = MessageForm(request.POST, instance=instance)
+  if form.is_valid():
+    replyobj = form.save()
+    return JsonResponse({"reply_id": replyobj.id, "reply_str": replyobj.content}, status=200)
+  else:
+    errors = form.errors.as_json()
+    return JsonResponse({"errors": errors}, status=400)
 
 
 @csrf_exempt
 @login_required
 def delete_reply(request, reply):
-    if is_ajax(request):
-        reply = get_object_or_404(Message, pk=reply)
-        if (Post.objects.filter(first_message=reply).exists()):
-          raise ValidationError(_("Can't delete the first message of a thread!"))
-        id = reply.id
-        reply.delete()
-        return JsonResponse({"reply_id": id}, status=200)
-    raise ValidationError("Forbidden non ajax request")
+  assert_request_is_ajax(request)
+  reply = get_object_or_404(Message, pk=reply)
+  if (Post.objects.filter(first_message=reply).exists()):
+    raise ValidationError(_("Can't delete the first message of a thread!"))
+  id = reply.id
+  reply.delete()
+  return JsonResponse({"reply_id": id}, status=200)

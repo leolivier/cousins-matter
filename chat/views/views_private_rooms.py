@@ -10,11 +10,11 @@ from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 
-from urllib.parse import unquote, urlencode
+from urllib.parse import unquote
 
 from members.models import Member
 from ..models import ChatMessage, ChatRoom, PrivateChatRoom
-from cousinsmatter.utils import Paginator, is_ajax
+from cousinsmatter.utils import Paginator, assert_request_is_ajax
 
 
 logger = logging.getLogger(__name__)
@@ -45,9 +45,7 @@ def search_private_members(request, room_slug):
     - `ValidationError`: If the request is not an AJAX request.
 
     """
-    if not is_ajax(request):
-      raise ValidationError("Forbidden non ajax request")
-
+    assert_request_is_ajax(request)
     room = get_object_or_404(PrivateChatRoom, slug=room_slug)
     query = request.GET.get('q', '')
     members = Member.objects.filter(
@@ -96,12 +94,10 @@ def private_chat_rooms(request, page_num=1):
     num_messages=Count("chatmessage"),
     first_message_author=Subquery(first_msg_auth_subquery)
     ).order_by('date_added')
-  page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_CHATROOMS_PER_PAGE
 
-  ptor = Paginator(private_chat_rooms, page_size, reverse_link="chat:private_chat_page")
-  if page_num > ptor.num_pages:
-      return redirect(reverse('chat:private_chat_page', args=[ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
-  page = ptor.get_page_data(page_num)
+  page = Paginator.get_page(request, private_chat_rooms, page_num,
+                            reverse_link="chat:private_chat_page",
+                            default_page_size=settings.DEFAULT_CHATROOMS_PER_PAGE)
   author_ids = [room.first_message_author for room in page.object_list if room.first_message_author is not None]
   # print("author ids", author_ids)
   authors = Member.objects.filter(id__in=author_ids)
@@ -205,15 +201,12 @@ def private_chat_room(request, room_slug, page_num=None):
     messages.error(request, _("You are not a member of this private room"))
     return redirect(reverse('chat:private_chat_rooms'))
   message_list = ChatMessage.objects.filter(room=room.id)
-  page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_CHATMESSAGES_PER_PAGE
 
-  ptor = Paginator(message_list, page_size,
-                   compute_link=lambda page_num: reverse("chat:room_page", args=[room_slug, page_num]))
-  if page_num is None:
-    page_num = ptor.num_pages
-  elif page_num > ptor.num_pages:  # if page_num is out of range, redirect to last page
-      return redirect(reverse('chat:room_page', args=[room.slug, ptor.num_pages]) + '?' + urlencode({'page_size': page_size}))
-  page = ptor.get_page_data(page_num)
+  page = Paginator.get_page(request, message_list,
+                            page_num=page_num,
+                            reverse_link="chat:room_page",
+                            compute_link=lambda page_num: reverse("chat:room_page", args=[room_slug, page_num]),
+                            default_page_size=100)
   return render(request, 'chat/room_detail.html', {'room': room, "page": page, "private": True})
 
 

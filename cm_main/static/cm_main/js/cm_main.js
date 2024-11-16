@@ -153,7 +153,10 @@ function add_selected_option(id, value, text, message) {
 // function to change an option of a select
 function change_option(id, value, text, message) {
   if (message) add_success_message(message);
-  $(id+' option[value='+value+']').text(text);
+  option = $(id+' option[value='+value+']');
+  option.text(text);
+  // and reselect it
+  option.attr('selected','selected');
 }
 
 // function to display messages 

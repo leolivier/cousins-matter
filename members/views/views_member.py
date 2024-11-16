@@ -69,7 +69,7 @@ class MembersView(LoginRequiredMixin, generic.ListView):
         if 'last_name_filter' in request.GET and request.GET['last_name_filter']:
             filter['last_name__icontains'] = request.GET['last_name_filter'].strip()
         members = Member.objects.filter(**filter)
-page = Paginator.get_page(request,
+        page = Paginator.get_page(request,
                                   object_list=members,
                                   page_num=page_num,
                                   reverse_link='members:members_page',

@@ -65,7 +65,7 @@ class MemberViewTestMixin():
     new_member = Member.objects.filter(username=member_data['username']).first()
     self.assertIsNotNone(new_member)
     self.assertFalse(new_member.is_active)
-    self.assertEqual(new_member.managing_member, self.member)
+    self.assertEqual(new_member.member_manager, self.member)
     self.created_members.append(new_member)
     return new_member
 
@@ -83,7 +83,7 @@ class MemberCreateTest(MemberViewTestMixin, MemberTestCase):
     # a new member has been created
     self.assertEqual(new_number, prev_number+1)
     # managed is managed by the creating member
-    self.assertEqual(managed.managing_member, self.member)
+    self.assertEqual(managed.member_manager, self.member)
 
 
 class MemberDeleteTest(MemberViewTestMixin, MemberTestCase):
@@ -130,7 +130,7 @@ class MemberProfileViewTest(MemberTestCase):
                       maxlength="150" class="input" id="id_last_name" required>''', html=True)
 
     self.assertTrue(self.member.is_active)
-    self.assertIsNone(self.member.managing_member)
+    self.assertIsNone(self.member.member_manager)
     new_data = self.get_changed_member_data(self.member)
     response = self.client.post(profile_url, new_data, follow=True)
     # print(vars(response))
@@ -139,7 +139,7 @@ class MemberProfileViewTest(MemberTestCase):
     self.member.refresh_from_db()
     # self.is_active becomes false because of the sending of the verification email (which changed)
     # self.assertTrue(self.member.is_active)
-    # self.assertIsNone(self.member.managing_member)
+    # self.assertIsNone(self.member.member_manager)
 
     self.assertEqual(self.member.first_name, new_data['first_name'])
     self.assertEqual(self.member.phone, new_data['phone'])
@@ -332,7 +332,7 @@ class TestActivateManagedMember(MemberTestCase):
     managed = self.create_member()
     self.assertIsNotNone(managed)
     self.assertFalse(managed.is_active)
-    self.assertEqual(managed.managing_member, self.member)
+    self.assertEqual(managed.member_manager, self.member)
     mail.outbox = []
     response = self.client.post(reverse("members:activate", args=[managed.id]), follow=True)
     self.assertEqual(response.status_code, 200)
@@ -373,8 +373,8 @@ class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
   def check_dead_member(self, member):
     self.assertFalse(member.is_active)
     self.assertTrue(member.is_dead)
-    # managing member can be self.member (ie member creator) or superuser
-    self.assertIn(member.managing_member.id, [self.member.id, self.superuser.id])
+    # member manager can be self.member (ie member creator) or superuser
+    self.assertIn(member.member_manager.id, [self.member.id, self.superuser.id])
     self.assertIsNotNone(member.deathdate)
     self.assertGreater(member.deathdate, member.birthdate)
 

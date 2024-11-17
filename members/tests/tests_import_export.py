@@ -36,7 +36,7 @@ class TestImportMixin():
 
   def do_test_import(self, file, lang, expected_num, activate_users=True, member_prefix='member'):
     prev_num = Member.objects.count()
-    response = self.do_upload_file(file, lang)
+    response = self.do_upload_file(file, lang, activate_users)
     self.assertEqual(response.status_code, 200)
     # Check that expected_num members were imported
     self.assertEqual(Member.objects.count(), prev_num+expected_num)
@@ -52,9 +52,9 @@ class TestImportMixin():
       m = Member.objects.get(username=name)
       if activate_users:
         self.assertEqual(m.is_active, activate_users)
-        self.assertIsNone(m.managing_member)
-      else:  # managing_member is None if and only if active
-        self.assertEqual(m.managing_member is None, m.is_active)
+        self.assertIsNone(m.member_manager)
+      else:  # member_manager is None if and only if active
+        self.assertEqual(m.member_manager is None, m.is_active)
 
 
 class TestMemberImport(TestImportMixin, MemberTestCase):
@@ -91,6 +91,23 @@ class TestMemberImport(TestImportMixin, MemberTestCase):
 
   def test_import_fr(self):
     self.do_test_import('import_members-fr.csv', 'fr', 4, member_prefix='member-fr')
+
+  def test_import_manager(self):
+    # first make sure the member for which we change the managing member either does not exist or is not active
+    m3 = Member.objects.filter(username="member-fr3").first()
+    if m3 is not None:
+      # print("setting {m3.full_name} to inactive")
+      m3.is_active = False
+      m3.member_manager = None
+      m3.save()
+    # else:
+      # print("Member {m3.full_name} does not exist")
+
+    self.do_test_import('import_members-fr.csv', 'fr', 4, member_prefix='member-fr', activate_users=False)
+    # check member manager import
+    m1 = Member.objects.get(username="member-fr1")
+    m3 = Member.objects.get(username="member-fr3")
+    self.assertEqual(m3.member_manager, m1)
 
   def test_wrong_field(self):
     response = self.do_upload_file('import_members-wrong-field.csv', 'en-us')

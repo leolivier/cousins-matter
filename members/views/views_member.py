@@ -38,12 +38,12 @@ def logout_member(request):
 def editable(request, member):
     if request.user.is_superuser:
         return True
-    manager = member.managing_member or member
+    manager = member.member_manager or member
     return manager.id == request.user.id
 
 
-def managing_member_name(member):
-    return Member.objects.get(id=member.managing_member.id).full_name if member and member.managing_member else None
+def member_manager_name(member):
+    return Member.objects.get(id=member.member_manager.id).full_name if member and member.member_manager else None
 
 
 def register_remove_accents():
@@ -93,7 +93,7 @@ class MemberDetailView(LoginRequiredMixin, generic.DetailView):
         return super().get_context_data(**kwargs) | \
           {
             "can_edit": editable(self.request, member),
-            "managing_member_name": member.managing_member.username if member.managing_member else None,
+            "member_manager_name": member.member_manager.username if member.member_manager else None,
             "hobbies_list": [s.strip() for s in member.hobbies.split(',')] if member.hobbies else [],
           }
 
@@ -131,9 +131,9 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
             member = form.save()
             # if new managed member is created, it must be inactivated
             member.is_active = False
-            # force managing_member to the logged in user
-            member.managing_member = Member.objects.get(id=request.user.id)
-            member.save(update_fields=['is_active', 'managing_member'])
+            # force member_manager to the logged in user
+            member.member_manager = Member.objects.get(id=request.user.id)
+            member.save(update_fields=['is_active', 'member_manager'])
             messages.success(request, _('Member successfully created'))
             return redirect("members:detail", member.id)
 
@@ -144,14 +144,15 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
     template_name = "members/members/member_upsert.html"
     title = _("Update Member Details")
     success_message = _("Member successfully updated")
+    is_profile_view = False
 
     def _can_edit(self, request, member):
         if request.user.is_superuser:
             return True
-        if member.managing_member is None:
+        if member.member_manager is None:
             return (member.id == request.user.id)
         else:
-            return (member.managing_member.id == request.user.id)
+            return (member.member_manager.id == request.user.id)
 
     def get(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
@@ -160,12 +161,12 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
             return redirect("members:detail", member.id)
 
         return render(request, self.template_name, {
-            "form": MemberUpdateForm(instance=member),
+            "form": MemberUpdateForm(instance=member, is_profile=self.is_profile_view),
             "addr_form": AddressUpdateForm(instance=member.address),
             "family_form": FamilyUpdateForm(instance=member.family),
             "pk": pk,
             "title": self.title,
-            "managing_member_name": managing_member_name(member)})
+            "member_manager_name": member_manager_name(member)})
 
     def post(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
@@ -174,7 +175,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
             return redirect("members:detail", member.id)
 
         # create a form instance and populate it with data from the request on existing member
-        form = MemberUpdateForm(request.POST, request.FILES, instance=member)
+        form = MemberUpdateForm(request.POST, request.FILES, instance=member, is_profile=self.is_profile_view)
 
         if form.is_valid():
             if member.id == request.user.id and 'email' in form.changed_data and form.cleaned_data['email']:
@@ -196,6 +197,7 @@ class EditProfileView(EditMemberView):
     template_name = "members/members/member_upsert.html"
     title = _("My Profile")
     success_message = _("Profile successfully updated")
+    is_profile_view = True
 
     def get(self, request):
         return super().get(request, request.user.id)

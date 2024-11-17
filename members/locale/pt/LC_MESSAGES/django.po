@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-17 12:15+0100\n"
+"POT-Creation-Date: 2024-11-17 18:09+0100\n"
 "PO-Revision-Date: 2024-10-21 10:37+00:00\n"
 "Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
 "leolivier/auto-po-lyglot)\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Members"
 msgstr "membri"
 
-#: members/forms.py:69
+#: members/forms.py:72
 #, python-brace-format
 msgid ""
 "By checking this box, you agree to this site's <a target='blank' "
@@ -37,39 +37,39 @@ msgstr ""
 "Ao assinalar esta caixa, o utilizador aceita a <a target='blank' "
 "href='{privacy_url}'>política de privacidade</a> deste sítio"
 
-#: members/forms.py:125
+#: members/forms.py:132
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Nome da pessoa convidada (aparecerá no e-mail recebido)"
 
-#: members/forms.py:126
+#: members/forms.py:133
 msgid "Email to send invitation"
 msgstr "Email para enviar uma convite"
 
-#: members/forms.py:130
+#: members/forms.py:137
 msgid "Your name"
 msgstr "Seu nome"
 
-#: members/forms.py:131
+#: members/forms.py:138
 msgid "Email where you will receive the link"
 msgstr "Email onde você receberá o link"
 
-#: members/forms.py:132
+#: members/forms.py:139
 msgid "Message to the administrator"
 msgstr "mensagem para o administrador"
 
-#: members/forms.py:133
+#: members/forms.py:140
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Capcha (clique na imagem para refrescar se você não consegue ler)"
 
-#: members/forms.py:148
+#: members/forms.py:155
 msgid "CSV file"
 msgstr "Arquivo CSV"
 
-#: members/forms.py:149
+#: members/forms.py:156
 msgid "The CSV file containing the members to import."
 msgstr "O arquivo CSV que contém os membros para importar."
 
-#: members/forms.py:153
+#: members/forms.py:160
 msgid "Automatically activate imported users"
 msgstr "Ativar automaticamente os usuários importados"
 
@@ -234,6 +234,7 @@ msgstr "Telefone"
 
 #: members/models.py:107
 #: members/templates/members/members/member_detail.html:49
+#: members/templates/members/members/members.html:54
 #: members/templates/members/members/members_directory.html:30
 msgid "Birthdate"
 msgstr "Data do nascimento"
@@ -247,8 +248,6 @@ msgid "Is dead"
 msgstr "Está morto"
 
 #: members/models.py:112
-#, fuzzy
-#| msgid "Birthdate"
 msgid "Death date"
 msgstr "Data de morte"
 
@@ -430,7 +429,7 @@ msgstr "Obrigado por utilizar %(sitename)s!"
 #: members/templates/members/email/password_reset_email.html:39
 #, python-format
 msgid "The %(sitename)s administrator"
-msgstr "%(site_name)s administrador"
+msgstr "%(sitename)s administrador"
 
 #: members/templates/members/email/password_reset_email.html:43
 #, python-format
@@ -1013,7 +1012,19 @@ msgstr "Nome"
 msgid "last name"
 msgstr "Último nome"
 
-#: members/templates/members/members/members.html:64
+#: members/templates/members/members/members.html:45
+msgid "Sort by"
+msgstr "Ordenar por"
+
+#: members/templates/members/members/members.html:48
+msgid "First name"
+msgstr "Nome"
+
+#: members/templates/members/members/members.html:51
+msgid "Last name"
+msgstr "Último nome"
+
+#: members/templates/members/members/members.html:78
 #: members/templates/members/members/members_directory.html:52
 msgid "No members found"
 msgstr "Não encontraram membros"
@@ -1148,12 +1159,12 @@ msgstr "Alterar os %(name)s selecionados"
 msgid "Add another %(translated_name)s"
 msgstr "Adicionar mais %(translated_name)s"
 
-#: members/tests/tests_member.py:100 members/views/views_member.py:210
+#: members/tests/tests_member.py:100 members/views/views_member.py:212
 msgid "Member deleted"
 msgstr "Membro excluído"
 
 #: members/tests/tests_member.py:211 members/tests/tests_member.py:216
-#: members/views/views_member.py:159 members/views/views_member.py:173
+#: members/views/views_member.py:160 members/views/views_member.py:174
 msgid "You do not have permission to edit this member."
 msgstr "Você não tem permissão para editar esse membro."
 
@@ -1282,14 +1293,14 @@ msgstr ""
 "Coluna faltante no arquivo CSV: '%(fieldname)s'. Campos obrigatórios são "
 "%(all_names)s"
 
-#: members/views/views_import_export.py:104
+#: members/views/views_import_export.py:113
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar não encontrado: %(avatar)s para o nome de usuário %(username)s. "
 "Ignorado..."
 
-#: members/views/views_import_export.py:113
+#: members/views/views_import_export.py:122
 #, python-format
 msgid ""
 "Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. "
@@ -1298,51 +1309,56 @@ msgstr ""
 "Erro ao salvar avatar (%(warning)s): %(avatar)s para o usuário %(username)s. "
 "Ignorado..."
 
-#: members/views/views_import_export.py:126
+#: members/views/views_import_export.py:138
 msgid ""
 "You requested to activate imported members. All managers will be ignored."
 msgstr ""
 "Pediu para ativar membros importados. Todos os gestores serão ignorados."
 
-#: members/views/views_import_export.py:129
+#: members/views/views_import_export.py:140
 #, python-format
 msgid "Manager %(manager)s not found for member %(member)s. Ignoring..."
 msgstr "Gestor %(manager)s não encontrado para membro %(member)s. Ignorando..."
 
-#: members/views/views_import_export.py:136
+#: members/views/views_import_export.py:147
 #, python-format
 msgid "Member %(member)s is active. Ignoring manager %(manager)s"
 msgstr "O membro %(member)s está ativo. Ignorar o gestor %(manager)s."
 
-#: members/views/views_import_export.py:145
+#: members/views/views_import_export.py:156
 #, python-format
 msgid ""
 "No manager provided for member %(member)s although inactive. Keeping "
 "existing one (%(manager)s)..."
 msgstr ""
-"Não é atribuído nenhum gestor aos %(member)s membros, embora estejam inativos. "
-"Manter o atual (%(manager)s)."
+"Não é atribuído nenhum gestor aos %(member)s membros, embora estejam "
+"inativos. Manter o atual (%(manager)s)."
 
-#: members/views/views_import_export.py:148
+#: members/views/views_import_export.py:160
 #, python-format
 msgid "Inactive member %(member)s has no manager. Please provide one!"
 msgstr "O membro inativo %(member)s não tem gestor. Por favor, indique um!"
 
-#: members/views/views_import_export.py:258
+#: members/views/views_import_export.py:252
 #, python-format
 msgid ""
-"CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
-"updated"
+"CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
+"and %(updated_num)i updated."
 msgstr ""
-"Arquivo CSV carregado: %(nbLines)i linhas lidas, %(nbMembers)i membros "
-"criados ou atualizados"
+"Arquivo CSV carregado: %(rows_num)i linhas lidas, %(created_num)i membros "
+"criados e %(updated_num)i atualizados"
 
-#: members/views/views_import_export.py:261
+#: members/views/views_import_export.py:256
+#, python-format
+msgid "Error: %(error)s"
+msgstr "Erro: %(error)s"
+
+#: members/views/views_import_export.py:258
 #, python-format
 msgid "Warning: %(warning)s"
 msgstr "Alerta: %(warning)s"
 
-#: members/views/views_import_export.py:322
+#: members/views/views_import_export.py:319
 msgid "Method not allowed"
 msgstr "Método não permitido"
 
@@ -1366,17 +1382,17 @@ msgstr "Atualizar Detalhes de Membro"
 msgid "Member successfully updated"
 msgstr "O membro foi atualizado com sucesso."
 
-#: members/views/views_member.py:183
+#: members/views/views_member.py:184
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Um e-mail de verificação foi enviado para validar sua nova endereço "
 "eletrônico."
 
-#: members/views/views_member.py:197
+#: members/views/views_member.py:198
 msgid "My Profile"
 msgstr "Minha Conta de Usuário"
 
-#: members/views/views_member.py:198
+#: members/views/views_member.py:199
 msgid "Profile successfully updated"
 msgstr "Perfil atualizado com sucesso"
 

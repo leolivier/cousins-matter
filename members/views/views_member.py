@@ -144,6 +144,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
     template_name = "members/members/member_upsert.html"
     title = _("Update Member Details")
     success_message = _("Member successfully updated")
+    is_profile_view = False
 
     def _can_edit(self, request, member):
         if request.user.is_superuser:
@@ -160,7 +161,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
             return redirect("members:detail", member.id)
 
         return render(request, self.template_name, {
-            "form": MemberUpdateForm(instance=member),
+            "form": MemberUpdateForm(instance=member, is_profile=self.is_profile_view),
             "addr_form": AddressUpdateForm(instance=member.address),
             "family_form": FamilyUpdateForm(instance=member.family),
             "pk": pk,
@@ -174,7 +175,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
             return redirect("members:detail", member.id)
 
         # create a form instance and populate it with data from the request on existing member
-        form = MemberUpdateForm(request.POST, request.FILES, instance=member)
+        form = MemberUpdateForm(request.POST, request.FILES, instance=member, is_profile=self.is_profile_view)
 
         if form.is_valid():
             if member.id == request.user.id and 'email' in form.changed_data and form.cleaned_data['email']:
@@ -196,6 +197,7 @@ class EditProfileView(EditMemberView):
     template_name = "members/members/member_upsert.html"
     title = _("My Profile")
     success_message = _("Profile successfully updated")
+    is_profile_view = True
 
     def get(self, request):
         return super().get(request, request.user.id)

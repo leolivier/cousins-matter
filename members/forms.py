@@ -35,6 +35,9 @@ class MemberFormMixin():
     # description is a rich text field
     if 'description' in self.fields:
       self.fields['description'].widget = RichTextarea()
+    # remove death date field from profile page
+    if isinstance(self, MemberUpdateForm) and self.is_profile_form:
+      del self.fields['deathdate']
 
   def clean_avatar(self):
     avatar = self.cleaned_data['avatar']
@@ -94,6 +97,10 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
     exclude = ['password']
 
   def __init__(self, *args, **kwargs):
+    self.is_profile_form = False
+    if 'is_profile' in kwargs:
+      self.is_profile_form = kwargs['is_profile']
+      del kwargs['is_profile']
     super().__init__(*args, **kwargs)
     self.initialize_fields(*args, **kwargs)
     self.init_privacy_field()

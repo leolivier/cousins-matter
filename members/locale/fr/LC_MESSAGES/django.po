@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-11 22:23+0100\n"
+"POT-Creation-Date: 2024-11-17 11:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -23,6 +23,7 @@ msgid "Members"
 msgstr "Membres"
 
 #: members/forms.py:69
+#, python-brace-format
 msgid ""
 "By checking this box, you agree to this site's <a target='blank' "
 "href='{privacy_url}'>privacy policy</a>"
@@ -153,135 +154,140 @@ msgctxt "CSV Field"
 msgid "deathdate"
 msgstr "date_de_deces"
 
-#: members/models.py:45
+#: members/models.py:38
+msgctxt "CSV Field"
+msgid "managed_by"
+msgstr "gere_par"
+
+#: members/models.py:46
 #: members/templates/members/members/members_directory.html:29
 #: members/views/views_directory.py:59
 msgid "Name"
 msgstr "Nom"
 
-#: members/models.py:47 members/templates/members/family/family_detail.html:14
+#: members/models.py:48 members/templates/members/family/family_detail.html:14
 msgid "Parent family"
 msgstr "Famille parente"
 
-#: members/models.py:50
+#: members/models.py:51
 msgid "family"
 msgstr "famille"
 
-#: members/models.py:51
+#: members/models.py:52
 msgid "families"
 msgstr "familles"
 
-#: members/models.py:66 members/templates/members/address/address_detail.html:8
+#: members/models.py:67 members/templates/members/address/address_detail.html:8
 msgid "Number & Street name"
 msgstr "N° et nom de la voie"
 
-#: members/models.py:68
+#: members/models.py:69
 msgid "Complementary info"
 msgstr "Infos complémentaires"
 
-#: members/models.py:70
+#: members/models.py:71
 #: members/templates/members/address/address_detail.html:16
 msgid "Zip code"
 msgstr "Code postal"
 
-#: members/models.py:72
+#: members/models.py:73
 #: members/templates/members/address/address_detail.html:20
 msgid "City"
 msgstr "Ville"
 
-#: members/models.py:74
+#: members/models.py:75
 #: members/templates/members/address/address_detail.html:24
 msgid "Country"
 msgstr "Pays"
 
-#: members/models.py:88
+#: members/models.py:89
 msgid "address"
 msgstr "adresse"
 
-#: members/models.py:89
+#: members/models.py:90
 msgid "addresses"
 msgstr "adresses"
 
-#: members/models.py:97
-msgid "Managing member"
-msgstr "Compte gérant ce membre"
+#: members/models.py:98
+msgid "Member manager"
+msgstr "Gestionnaire de ce membre"
 
-#: members/models.py:102
+#: members/models.py:103
 #: members/templates/members/members/member_detail.html:37
 #: members/templates/members/members/members_directory.html:33
 #: members/views/views_directory.py:59
 msgid "Address"
 msgstr "Adresse"
 
-#: members/models.py:104
+#: members/models.py:105
 #: members/templates/members/members/member_detail.html:45
 #: members/templates/members/members/members_directory.html:31
 #: members/views/views_directory.py:59
 msgid "Phone"
 msgstr "Téléphone"
 
-#: members/models.py:106
+#: members/models.py:107
 #: members/templates/members/members/member_detail.html:49
 #: members/templates/members/members/members_directory.html:30
 msgid "Birthdate"
 msgstr "Date de naissance"
 
-#: members/models.py:107
+#: members/models.py:108
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
 
-#: members/models.py:110
+#: members/models.py:111
 msgid "Is dead"
 msgstr "Est décédé(e)"
 
-#: members/models.py:111
+#: members/models.py:112
 msgid "Death date"
 msgstr "Date de décès"
 
-#: members/models.py:113
+#: members/models.py:114
 #: members/templates/members/members/member_detail.html:53
 msgid "Website"
 msgstr "Site web"
 
-#: members/models.py:115
+#: members/models.py:116
 #: members/templates/members/members/member_detail.html:57
 msgid "Family"
 msgstr "Famille"
 
-#: members/models.py:117
+#: members/models.py:118
 #: members/templates/members/members/member_detail.html:61
 msgid "Who I am"
 msgstr "Qui je suis"
 
-#: members/models.py:118
+#: members/models.py:119
 msgid "Describe yourself, your likes and dislikes..."
 msgstr "Décris-toi, dis ce que tu aimes ou n'aimes pas..."
 
-#: members/models.py:119
+#: members/models.py:120
 msgid "My hobbies"
 msgstr "Mes loisirs"
 
-#: members/models.py:120
+#: members/models.py:121
 msgid "Provide a list of hobbies separated by commas"
 msgstr "Donne un liste de loisirs séparés par des virgules"
 
-#: members/models.py:122
+#: members/models.py:123
 msgid "Privacy consent"
 msgstr "Consentement à la protection de la vie privée"
 
-#: members/models.py:124
+#: members/models.py:125
 msgid "Followers"
 msgstr "Followers"
 
-#: members/models.py:133
+#: members/models.py:134
 msgid "member"
 msgstr "membre"
 
-#: members/models.py:134
+#: members/models.py:135
 msgid "members"
 msgstr "membres"
 
-#: members/models.py:192
+#: members/models.py:195
 #, python-brace-format
 msgid "Death date {dd} is before birthdate {bd}"
 msgstr "La date de décès {dd} est avant la date de naissance {bd}"
@@ -341,7 +347,7 @@ msgid "Greetings!"
 msgstr "Bonjour!"
 
 #: members/templates/members/email/email_verification_msg.html:27
-#: members/tests/tests_member.py:330
+#: members/tests/tests_member.py:347
 msgid ""
 "You received this mail because you attempted to create an account on our "
 "website or because a member created and activated your account"
@@ -350,7 +356,7 @@ msgstr ""
 "bien parce qu'un membre a créé et activé ton compte"
 
 #: members/templates/members/email/email_verification_msg.html:28
-#: members/tests/tests_member.py:332
+#: members/tests/tests_member.py:349
 msgid ""
 "Please click on the link below to confirm the email and activate your "
 "account."
@@ -840,13 +846,13 @@ msgstr "Détail d'un Membre"
 
 #: members/templates/members/members/member_detail.html:26
 #: members/templates/members/members/member_upsert.html:26
-#: members/tests/tests_member.py:238
+#: members/tests/tests_member.py:236
 msgid "Active member"
 msgstr "Membre actif"
 
 #: members/templates/members/members/member_detail.html:28
 #: members/templates/members/members/member_upsert.html:28
-#: members/tests/tests_member.py:238
+#: members/tests/tests_member.py:236
 msgid "Managed member"
 msgstr "Membre géré"
 
@@ -986,7 +992,7 @@ msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
 #: members/templates/members/members/members.html:19
-#: members/views/views_member.py:106
+#: members/views/views_member.py:122
 msgid "Create Member"
 msgstr "Créer un Membre"
 
@@ -1141,16 +1147,16 @@ msgstr "Modifier les %(name)s sélectionnées"
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
 
-#: members/tests/tests_member.py:100 members/views/views_member.py:194
+#: members/tests/tests_member.py:100 members/views/views_member.py:210
 msgid "Member deleted"
 msgstr "Membre supprimé"
 
-#: members/tests/tests_member.py:213 members/tests/tests_member.py:218
-#: members/views/views_member.py:143 members/views/views_member.py:157
+#: members/tests/tests_member.py:211 members/tests/tests_member.py:216
+#: members/views/views_member.py:159 members/views/views_member.py:173
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
 
-#: members/tests/tests_member.py:392
+#: members/tests/tests_member.py:409
 msgid "Error: Cannot activate a dead member "
 msgstr "Erreur: Impossible d'activer un membre mort "
 
@@ -1276,22 +1282,53 @@ msgstr ""
 "Colonne manquante dans le fichier CSV: \"%(fieldname)s\". Les champs "
 "obligatoires sont %(all_names)s"
 
-#: members/views/views_import_export.py:98
+#: members/views/views_import_export.py:104
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar introuvable : %(avatar)s pour le nom d'utilisateur %(username)s. "
 "Ignoré..."
 
-#: members/views/views_import_export.py:107
+#: members/views/views_import_export.py:113
+#, python-format
 msgid ""
 "Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. "
 "Ignored..."
 msgstr ""
-"Erreur lors de l'enregistrement de l'avatar (%(warning)s) : %(avatar)s pour le "
-"nom d'utilisateur %(username)s. Ignoré..."
+"Erreur lors de l'enregistrement de l'avatar (%(warning)s) : %(avatar)s pour "
+"le nom d'utilisateur %(username)s. Ignoré..."
 
-#: members/views/views_import_export.py:220
+#: members/views/views_import_export.py:126
+msgid ""
+"You requested to activate imported members. All managers will be ignored."
+msgstr ""
+"Tu as demandé à activer les membres importés. Tous les gestionnaires de membres seront ignorés..."
+
+#: members/views/views_import_export.py:129
+#, python-format
+msgid "Manager %(manager)s not found for member %(member)s. Ignoring..."
+msgstr "Gestionnaire %(manager)s non trouvé pour le membre %(member)s. Ignoré..."
+
+#: members/views/views_import_export.py:136
+#, python-format
+msgid "Member %(member)s is active. Ignoring manager %(manager)s"
+msgstr "Le membre %(member)s est actif. Gestionnaire %(manager)s ignoré."
+
+#: members/views/views_import_export.py:145
+#, python-format
+msgid ""
+"No manager provided for member %(member)s although inactive. Keeping existing "
+"one (%(manager)s)..."
+msgstr ""
+"Pas de gestionnaire fourni pour le membre %(member)s bien qu'il soit inactif. "
+"Le gestionnaire existant (%(manager)s) est conservé."
+
+#: members/views/views_import_export.py:148
+#, python-format
+msgid "Inactive member %(member)s has no manager. Please provide one!"
+msgstr "Le membre inactif %(member)s n'a pas de gestionnaire. Merci d'en fournir un!"
+
+#: members/views/views_import_export.py:258
 #, python-format
 msgid ""
 "CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or "
@@ -1300,45 +1337,46 @@ msgstr ""
 "Fichier CSV téléchargé : %(nbLines)i lignes lues, %(nbMembers)i membres "
 "créés ou mis à jour"
 
-#: members/views/views_import_export.py:223
+#: members/views/views_import_export.py:261
+#, python-format
 msgid "Warning: %(warning)s"
 msgstr "Attention: %(warning)s"
 
-#: members/views/views_import_export.py:290
+#: members/views/views_import_export.py:322
 msgid "Method not allowed"
 msgstr "Méthode non autorisée"
 
-#: members/views/views_member.py:35
+#: members/views/views_member.py:34
 msgid "You have been logged out"
 msgstr "Tu as été déconnecté(e)"
 
-#: members/views/views_member.py:96
+#: members/views/views_member.py:112
 msgid "Only superusers can create members"
 msgstr "Seuls les superutilisateurs peuvent créer des membres"
 
-#: members/views/views_member.py:121
+#: members/views/views_member.py:137
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: members/views/views_member.py:129
+#: members/views/views_member.py:145
 msgid "Update Member Details"
 msgstr "Modifier les détails d'un Membre"
 
-#: members/views/views_member.py:130
+#: members/views/views_member.py:146
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
-#: members/views/views_member.py:167
+#: members/views/views_member.py:183
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Un courriel de vérification a été envoyé pour valider ta nouvelle adresse "
 "électronique."
 
-#: members/views/views_member.py:181
+#: members/views/views_member.py:197
 msgid "My Profile"
 msgstr "Mon Profil"
 
-#: members/views/views_member.py:182
+#: members/views/views_member.py:198
 msgid "Profile successfully updated"
 msgstr "Profil mis à jour avec succès"
 

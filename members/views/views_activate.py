@@ -20,8 +20,8 @@ def activate_member(request, pk):
     if member.is_dead:
         messages.error(request, _("Error: Cannot activate a dead member"))
     elif member.is_active:
-      if member.managing_member is not None:
-        member.managing_member = None
+      if member.member_manager is not None:
+        member.member_manager = None
         member.save()
       messages.error(request, _("Error: Member already active"))
     elif not member.email:

@@ -53,6 +53,15 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
   template_name = "members/members/import_members.html"
   form_class = CSVImportMembersForm
   success_url = reverse_lazy("members:members")
+  warned_on_activate_users = False
+  warnings = []
+  errors = []
+  row = None
+  created_num = 0
+  updated_num = 0
+  rows_num = 0
+  changed = False
+  current_member = None
 
   def get_context_data(self, *args, **kwargs):
     optional_fields = {str(s) for s in ALL_FIELD_NAMES.values()} - {str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()}
@@ -62,164 +71,190 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       'media_root': settings.MEDIA_ROOT,
       }
 
-  def _create_member(self, row, activate_users):
-    """create new member based on row content.
+  def _create_member(self):
+    """create new member based on current row content.
        returns created member and warnings if any
     """
-    member = Member()
-    warnings = []
+    self.current_member = Member(is_active=False)
+    self.changed = True
+    # print(f"newly created member is active:{member.is_active}")
     for field in MEMBER_FIELD_NAMES:
       trfield = t(field)
-      if trfield in row and row[trfield]:
-        if field == 'family':
-          self._manage_family(member, row[trfield])
-        elif field == 'avatar':
-          warning = self._manage_avatar(member, row[trfield], row[t('username')])
-          if warning:
-            warnings.append(warning)
-        elif member.__dict__[field] != row[trfield]:
-          setattr(member, field, row[trfield])
+      if trfield in self.row and self.row[trfield]:
+        match field:
+          case 'family':
+            self._manage_family(self.row[trfield])
+          case 'managed_by':
+            self._manage_managed_by(self.row[trfield])
+          case 'avatar':
+            self._manage_avatar(self.row[trfield], self.row[t('username')])
+          case _:
+            if self.current_member.__dict__[field] != self.row[trfield]:
+              setattr(self.current_member, field, self.row[trfield])
 
-    member.is_active = activate_users and not member.is_dead
-    # set manager to people who imported the file if imported users are not activated
-    member.managing_member = None if member.is_active else Member.objects.get(id=self.request.user.id)
-    member.password = generate_random_string(16)
+    self.current_member.is_active = self.activate_users and not self.current_member.is_dead
+    # set manager to people who imported the file if imported users are not activated and not yet mmanaged
+    if self.current_member.is_active:
+      self.current_member.member_manager = None
+    else:
+      self.current_member.member_manager = self.current_member.member_manager or Member.objects.get(id=self.request.user.id) 
+    self.current_member.password = generate_random_string(16)
+    if self.changed:
+      self.created_num += 1
 
-    return member, warnings
-
-  def _manage_avatar(self, member, avatar_file, username):
+  def _manage_avatar(self, avatar_file, username):
     avatar = os.path.join(settings.MEDIA_REL, settings.AVATARS_DIR, avatar_file)
     # avatar not changed
-    if member.avatar and member.avatar.path == avatar:
-      return (None, False)
+    if self.current_member.avatar and self.current_member.avatar.path == avatar:
+      return
 
     # avatar image must already exist
     if not os.path.exists(avatar):
-      return (_("Avatar not found: %(avatar)s for username %(username)s. Ignored...") %
-              {'avatar': avatar, 'username': username}, False)
+      self.warnings.append(_("Avatar not found: %(avatar)s for username %(username)s. Ignored...") %
+                           {'avatar': avatar, 'username': username})
     else:
       try:
         with open(avatar, 'rb') as image_file:
           image = File(image_file)
-          member.avatar.save(avatar_file, image)
-          return (None, False)
+          self.current_member.avatar.save(avatar_file, image)
+          self.changed = True
       except Exception as e:
-        return (_("Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. Ignored...") %
-                {'warning': e, 'avatar': avatar, 'username': username}, False)
+        self.warnings.append(_("Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. Ignored...") %
+                             {'warning': e, 'avatar': avatar, 'username': username})
 
-  def _manage_family(self, member, family_name):
-    if member.family and member.family.name == family_name:
-      return False
-    member.family, created = Family.objects.get_or_create(name=family_name)
-    return True
+  def _manage_family(self, family_name):
+    if not self.current_member.family or self.current_member.family.name != family_name:
+      self.current_member.family, _ = Family.objects.get_or_create(name=family_name)
+      self.changed = True
 
-  def _update_member_field(self, member, field, value, username):
-      changed = False
-      warnings = []
+  def _manage_managed_by(self, manager_username):
+    # print(f"in manage_manage_by, member {self.current_member.username}, manager {manager_username}. "
+    #       f"Member is {'active' if self.current_member.is_active else 'inactive'}. "
+    #       f"Activate during Import is {self.activate_users}")
+    if manager_username:
+      new_member_manager = Member.objects.filter(username=manager_username).first()
+      if self.activate_users and not self.warned_on_activate_users:
+        self.warned_on_activate_users = True
+        self.warnings.append(_("You requested to activate imported members. All managers will be ignored."))
+      elif not new_member_manager:
+        self.warnings.append(_("Manager %(manager)s not found for member %(member)s. Ignoring...") % {
+          'manager': manager_username,
+          'member': self.current_member.full_name})
+      elif self.current_member.member_manager == new_member_manager:
+        # no change
+        pass
+      elif self.current_member.is_active:
+        self.warnings.append(_("Member %(member)s is active. Ignoring manager %(manager)s") % 
+                             {'member': self.current_member.full_name, 'manager': manager_username})
+      else:
+        self.current_member.member_manager = new_member_manager
+        self.changed = True
+    else:  # no manager provided
+      if not self.current_member.is_active:  # we need one
+        if self.current_member.member_manager:
+          # just ignore with a warning
+          self.warnings.append(_("No manager provided for member %(member)s although inactive. "
+                                 "Keeping existing one (%(manager)s)...") % {
+                    'member': self.current_member.full_name, 'manager': self.current_member.member_manager.full_name})
+        else:  # member is not active and has no manager, and none provided ==> error but continue
+          self.errors.append(_("Inactive member %(member)s has no manager. Please provide one!") % {
+            'member': self.current_member.full_name
+            })
+    # print(f"member {self.current_member.username} manager is "
+    #       f"{self.current_member.member_manager.username if self.current_member.member_manager else 'None'}")
 
-      match field:
-        case 'username':
-          pass
-        case 'family':
-          changed = self._manage_family(member, value)
-        case 'avatar':
-          warning, modified = self._manage_avatar(member, value, username)
-          changed = changed or modified
-          if warning:
-            warnings.append(warning)
-        case _:
-          if member.__dict__[field] != value:
-            setattr(member, field, value)
-            changed = True
+  def _update_member_field(self, field, value, username):
+    match field:
+      case 'username':
+        pass
+      case 'family':
+        self._manage_family(value)
+      case 'avatar':
+        self._manage_avatar(value, username)
+      case 'managed_by':
+        self._manage_managed_by(value)
+      case _:
+        if self.current_member.__dict__[field] != value:
+          setattr(self.current_member, field, value)
+          self.changed = True
 
-      return (changed, warnings)
-
-  def _update_member(self, member, row, activate_users):
-    "update an existing member based on row content"
-    changed = False
+  def _update_member(self):
+    "update an existing member based on current row content"
     # for all member fields but username
     # if new value for this field, then override existing one
-    warnings = []
-    username = row[t('username')]
+    username = self.row[t('username')]
     for field in MEMBER_FIELD_NAMES:
       trfield = t(field)
-      if trfield in row and row[trfield]:
-        modified, new_warnings = self._update_member_field(member, field, row[trfield], username)
-        changed = changed or modified
-        warnings.extend(new_warnings)
-    if activate_users and not member.is_dead:
-      if member.managing_member is not None:
-        member.managing_member = None
-        changed = True
-      if not member.is_active:
-        member.is_active = changed = True
+      if trfield in self.row and self.row[trfield]:
+        self._update_member_field(field, self.row[trfield], username)
+    if self.activate_users and not self.current_member.is_active:
+      self.current_member.member_manager = None
+      self.current_member.is_active = True
+      self.changed = True
+    if self.changed:
+      self.updated_num += 1
 
-    return changed, warnings
-
-  def _update_address(self, member, row):
-    changed = False
+  def _update_address(self):
     address = {}
     for field in ADDRESS_FIELD_NAMES:
       trfield = t(field)
-      if trfield in row:
-        address[field] = row[trfield]
+      if trfield in self.row:
+        address[field] = self.row[trfield]
     # if len(address) == 5:   #we don't care if the address is incomplete
     if len(address) > 0:
       found = Address.objects.filter(**address).first()
       if found:
-        if member.address != found:
-          member.address = found
-          changed = True
+        if self.current_member.address != found:
+          self.current_member.address = found
+          self.changed = True
       else:
         address = Address.objects.create(**address)
         address.save()
-        member.address = address
-        changed = True
-    return changed
+        self.current_member.address = address
+        self.changed = True
 
-  def _import_csv(self, csv_file, activate_users):
-    nbMembers = 0
-    nbLines = 0
-    all_warnings = []
+  def _import_csv(self, csv_file):
     csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")
     reader = csv.DictReader(csvf)
     check_fields(reader.fieldnames)
     random.seed()
-    for row in reader:
+    for self.row in reader:
+      # reset all row variables
+      self.warnings = []
+      self.errors = []
+      self.current_member = None
+      self.changed = False
       # normalize username using slugify
-      username = slugify(row[t('username')])
-      row[t('username')] = username
+      self.row[t('username')] = slugify(self.row[t('username')])
       # search for an existing member with this username
-      member = Member.objects.filter(username=username).first()
-      if member:  # found, use it
-        changed_member, new_warnings = self._update_member(member, row, activate_users)
+      self.current_member = Member.objects.filter(username=self.row[t('username')]).first()
+      if self.current_member:  # found, update it
+        self._update_member()
       else:  # not found, create it
-        member, new_warnings = self._create_member(row, activate_users)
-        changed_member = True
+        self._create_member()
 
-      changed_address = self._update_address(member, row)
-      all_warnings.extend(new_warnings)
+      self._update_address()
+      self.rows_num += 1
 
-      nbLines += 1
-
-      if changed_address or changed_member:
-        member.save()
-        nbMembers += 1
-
-    return (nbLines, nbMembers, all_warnings)
+      if self.changed:
+        self.current_member.save()
 
   def post(self, request, *args, **kwargs):
     self.request = request
     form = CSVImportMembersForm(request.POST, request.FILES)
     if form.is_valid():
       csv_file = request.FILES["csv_file"]
-      activate_users = form.cleaned_data["activate_users"]
+      self.activate_users = form.cleaned_data["activate_users"]
 
       try:
-        nbLines, nbMembers, warnings = self._import_csv(csv_file, activate_users)
-        messages.success(request, _("CSV file uploaded: %(nbLines)i lines read, %(nbMembers)i members created or updated") %
-                         {'nbLines': nbLines, 'nbMembers': nbMembers})
-        for warning in warnings:
+        self._import_csv(csv_file)
+        messages.success(request,
+                         _("CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
+                           "and %(updated_num)i updated.") %
+                         {'rows_num': self.rows_num, 'created_num': self.created_num, 'updated_num': self.updated_num})
+        for error in self.errors:
+          messages.error(request, _("Error: %(error)s") % {'warning': error})
+        for warning in self.warnings:
           messages.warning(request, _("Warning: %(warning)s") % {'warning': warning})
       except ValidationError as ve:
         messages.error(request, ve.message)

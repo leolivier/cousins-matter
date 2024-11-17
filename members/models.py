@@ -35,6 +35,7 @@ MEMBER_FIELD_NAMES = MANDATORY_MEMBER_FIELD_NAMES | {
   'family': pgettext_lazy('CSV Field', 'family'),
   'avatar': pgettext_lazy('CSV Field', 'avatar'),
   'deathdate': pgettext_lazy('CSV Field', 'deathdate'),
+  'managed_by': pgettext_lazy('CSV Field', 'managed_by')
   }
 
 
@@ -94,8 +95,8 @@ class Address(models.Model):
 
 
 class Member(AbstractUser):
-    managing_member = models.ForeignKey('self', verbose_name=_('Managing member'), on_delete=models.CASCADE,
-                                        related_name='managed_members', null=True, blank=True, default=None)
+    member_manager = models.ForeignKey('self', verbose_name=_('Member manager'), on_delete=models.CASCADE,
+                                       related_name='managed_members', null=True, blank=True, default=None)
 
     avatar = models.ImageField(upload_to=settings.AVATARS_DIR, blank=True, null=True)
 
@@ -184,7 +185,7 @@ class Member(AbstractUser):
       return years if (today >= self.next_birthday) else years-1
 
     def get_manager(self):
-      return self.managing_member if self.managing_member else self
+      return self.member_manager if self.member_manager else self
 
     def clean(self):
       if self.deathdate:
@@ -197,14 +198,14 @@ class Member(AbstractUser):
         self.is_active = False
       else:
         self.is_dead = False
-      # If member is active, set managing member to None
-      if self.is_active and self.managing_member is not None:
-        logger.debug(f"Cleaning member {self.full_name}: removing managing member")
-        self.managing_member = None
-      elif not self.is_active and self.managing_member is None:
-        # If no managing member and member is inactive, use admin member
-        logger.debug(f"Cleaning member {self.full_name}: changing managing member to admin")
-        self.managing_member = Member.objects.filter(is_superuser=True).first()
+      # If member is active, set member manager to None
+      if self.is_active and self.member_manager is not None:
+        logger.debug(f"Cleaning member {self.full_name}: removing member manager")
+        self.member_manager = None
+      elif not self.is_active and self.member_manager is None:
+        # If no member manager and member is inactive, use admin member
+        logger.debug(f"Cleaning member {self.full_name}: changing member manager to admin")
+        self.member_manager = Member.objects.filter(is_superuser=True).first()
 
     def _resize_avatar(self, max_size, save_path):
       img = Image.open(self.avatar.path)

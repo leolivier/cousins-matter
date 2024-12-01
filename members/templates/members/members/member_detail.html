@@ -83,9 +83,9 @@
 			{%icon "edit" %}
 			<span>{% translate "Edit" %}</span>
 			</a>
-			{% if not can_edit and managing_member_name %}
+			{% if not can_edit and member_manager_name %}
 			<p class="content px-4">
-				{% blocktranslate with name=managing_member_name %}(Only {{name}} can manage this member){% endblocktranslate %}
+				{% blocktranslate with name=member_manager_name %}(Only {{name}} can manage this member){% endblocktranslate %}
 			</p>
 			{%else%}
 				{%url 'members:toggle_follow' member.id as toggle_follow_url %}

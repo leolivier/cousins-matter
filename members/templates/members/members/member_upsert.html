@@ -37,7 +37,7 @@
 					{%icon "change-password" %}
 					<span>{% translate "Change Password" %}</span>
 				</a>
-				{%elif member.managing_member and member.managing_member.id == request.user.id %} {# update managed member #}
+				{%elif member.member_manager and member.member_manager.id == request.user.id %} {# update managed member #}
 				<a class="button" href="{% url 'members:activate' pk %}">
 					{%icon "activate-member" %}
 					<span>{% translate "Activate Account" %}</span>

@@ -33,20 +33,28 @@ class TestPageMixin():
     if 'save-and-continue' in page_data:
       self.assertTemplateUsed(response, "pages/page_form.html")  # remain on edit page
       self.assertContainsMessage(response, 'success', _("Page \"%(title)s\" saved") % {"title": page_data['title']})
+      content = f'''<div class="control">
+  <textarea name="content" cols="40" rows="10" class="richtextarea" id="id_content">
+    {page_data['content']}
+  </textarea>
+</div>'''
+      self.assertContains(response, content, html=True)
     elif 'save' in page_data:
       self.assertRedirects(response, flatpage_url(page_data['url']), 302, 200)
       self.assertTemplateUsed(response, 'flatpages/default.html')
+      content = f'''<div class="container px-2">
+  <div class="content">
+    {page_data['content']}
+  </div>
+</div>'''
+      self.assertContains(response, content, html=True)
     else:
       raise ValidationError('no save or save-and-continue in page_data')
+
+    # check that page was created correctly
     page = FlatPage.objects.get(url=page_data['url'])
     self.assertIsNotNone(page)
     self.assertEqual(page_data['url'], page.url)
-    content = f'''<div class="control">
-    <textarea name="content" cols="40" rows="10" class="richtextarea" id="id_content">
-{page_data['content']}
-    </textarea>
-  </div>''' if 'save-and-continue' in page_data else f'''<div class="container px-2">
-{page_data['content']}
-</div>''' if 'save' in page_data else 'ERROR! no save or save-and-continue in page_data'
-    self.assertContains(response, content, html=True)
+    self.assertEqual(page_data['title'], page.title)
+    self.assertHTMLEqual(page_data['content'], page.content)
     return page

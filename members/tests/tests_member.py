@@ -326,6 +326,43 @@ class TestDisplayMembers(MemberTestCase):
     check_is_not_in(content, member3)
     check_is_in(content, member4)
 
+  def _check_member_order(self, response, members):
+    html = response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '').replace('is-dark', '')
+    content = ''
+    for m in members:
+      url = reverse('members:detail', kwargs={'pk': m.id})
+      name = m.full_name
+      content += f'''<div class="cell has-text-centered my-auto">
+        <a class="button button-wrap" href="{url}">
+          <strong>{name}</strong>
+        </a>
+      </div>'''
+    self.assertInHTML(content, html)
+
+  def test_sort_members(self):
+    """
+    Test that the members list page is sorted by last name, then first name by default
+    or by the given sort criteria and order
+    """
+    self.create_member()
+    self.create_member()
+    self.create_member()
+    # check default sort
+    response = self.client.get(reverse('members:members'))
+    self.assertEqual(response.status_code, 200)
+    ms = Member.objects.all().order_by('last_name', 'first_name')
+    self._check_member_order(response, ms)
+    # check sort by birthdate
+    response = self.client.get(reverse('members:members'), {'member_sort': 'birthdate'})
+    self.assertEqual(response.status_code, 200)
+    ms = Member.objects.all().order_by('birthdate')
+    self._check_member_order(response, ms)
+    # check reverse order
+    response = self.client.get(reverse('members:members'), {'member_sort': 'birthdate', 'member_order': 'option2'})
+    self.assertEqual(response.status_code, 200)
+    ms = Member.objects.all().order_by('-birthdate')
+    self._check_member_order(response, ms)
+
 
 class TestActivateManagedMember(MemberTestCase):
   def test_activate(self):

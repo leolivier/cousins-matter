@@ -23,7 +23,7 @@
     </div>
     <div class="level-item ml-3">
       <form method="get">
-        <span class="content is-size-6">{%trans "Filter Members"%}:</span>
+        <label class="content is-size-6">{%trans "Filter Members"%}:</label>
         <div class="field has-addons">
           <div class="control">
             <input class="input" type="text" size="12" name="first_name_filter" placeholder="{% trans 'first name' %}"
@@ -38,6 +38,26 @@
               {%icon "search" %}
             </button>
           </div>
+        </div>
+      </form>
+    </div>
+    <div class="level-item">
+      <form method="get">
+        <label class="content is-size-6">{%trans "Sort by"%}:</label>
+        <div class="field has-addons">
+          <div class="control mt-2">
+            <div class="select is-small">
+              {%with member_sort=request.GET.member_sort|default:"last_name" %}
+              <select name="member_sort" onchange="this.form.submit()">
+                <option value="first_name" {%if member_sort == 'first_name' %}selected{%endif%}>{% translate "First name" %}</option>
+                <option value="last_name" {%if member_sort == 'last_name' %}selected{%endif%}>{% translate "Last name" %}</option>
+                <option value="birthdate" {%if member_sort == 'birthdate' %}selected{%endif%}>{% translate "Birthdate" %}</option>
+                <option value="is_active" {%if member_sort == 'is_active' %}selected{%endif%}>{% translate "Active/Managed" %}</option>
+              </select>
+              {%endwith%}
+            </div>
+          </div>
+          {%include "cm_main/common/toggle-slider.html" with choice_name="member_order" icon1="arrow-down" icon2="arrow-up" selected=request.GET.member_order on_change="this.form.submit()" %}
         </div>
       </form>
     </div>

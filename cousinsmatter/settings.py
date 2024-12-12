@@ -299,6 +299,10 @@ DJANGO_ICONS = {
     "page-level": "page-next-outline",
     "new-page": "book-open-page-variant-outline",
     "edit-page": "note-edit-outline",
+    # arrows
+    "arrow-down": "arrow-down-thin",
+    "arrow-up": "arrow-up-thin",
+    "arrow-up-down": "swap-vertical"
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

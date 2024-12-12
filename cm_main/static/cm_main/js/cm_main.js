@@ -99,6 +99,22 @@ $(document).ready(function() {
     }
   });
 
+  $('.icon-radio-group input[type="radio"]').change(function() {
+      var $container = $(this).closest('.toggle-container');
+      if ($(this).val() === 'option2') {
+          $container.css('--toggle-translate', 'translateX(100%)');
+      } else {
+          $container.css('--toggle-translate', 'translateX(0)');
+      }
+      $container.css('--toggle-transition', 'transform 0.3s ease');
+      console.log('toggle changed to ' + $(this).val());
+  });
+
+  // Set initial state
+  checked = $('.icon-radio-group input[type="radio"]:checked');
+  $container = checked.closest('.toggle-container');
+  $translation = (checked.val() === 'option2') ? 'translateX(100%)' : 'translateX(0)';
+  $container.css('--toggle-translate', $translation);
 });
 
 // Functions to open and close a modal

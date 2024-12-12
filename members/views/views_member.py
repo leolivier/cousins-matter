@@ -75,7 +75,12 @@ class MembersView(LoginRequiredMixin, generic.ListView):
                 filtered = True
         if not filtered:
             members = members.all()
-        members = members.order_by('last_name', 'first_name')
+        sort_by = request.GET.get('member_sort')
+        order = '-' if request.GET.get('member_order') == 'option2' else ''  # default is ascending
+        sort_by = [sort_by] if sort_by else ['last_name', 'first_name']  # default order
+        sort_by = [order + s for s in sort_by]
+        members = members.order_by(*sort_by)
+        # print('sort by: ', sort_by, ' order: "', order, '" members query: ', members.query)
         page = Paginator.get_page(request,
                                   object_list=members,
                                   page_num=page_num,

@@ -259,11 +259,10 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 	top: 5px;
 	left: 5px;
 	width: calc(50% - 5px);
-	height: calc(100% - 10px);
-	background-color: var(--bulma-black);
-	border-radius: var(--bulma-radius);
-	transition: transform 0.3s ease;
+	height: calc(100% - 10px); 
 	transform: var(--toggle-translate, translateX(0));
+	background-color: var(--bulma-link);
+	border-radius: var(--bulma-radius);
 	transition: var(--toggle-transition, transform 0.3s ease);
 }
 

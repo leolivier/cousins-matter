@@ -48,7 +48,10 @@ def check_image_size(image):
 
 
 class Photo(models.Model):
-  image = models.ImageField(_("Photo"), upload_to=photo_path, validators=[check_image_size])
+  image = models.ImageField(_("Photo"), upload_to=photo_path, validators=[check_image_size], 
+                            height_field='image_height', width_field='image_width', max_length=1000, null=False)
+  image_height = models.IntegerField(default=0)
+  image_width = models.IntegerField(default=0)
   thumbnail = models.ImageField(upload_to=thumbnail_path, blank=True)
   name = models.CharField(_("Name"), max_length=70, blank=True)
   description = models.TextField(_("Description"), max_length=3000, blank=True)
@@ -57,7 +60,7 @@ class Photo(models.Model):
   gallery = models.ForeignKey('Gallery', verbose_name="Gallery", on_delete=models.CASCADE, blank=True)
 
   class Meta:
-    ordering = ['gallery', 'date', 'name']
+    ordering = ['id']
     indexes = [
       models.Index(fields=["gallery", "date", "name"]),
     ]

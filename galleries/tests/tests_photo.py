@@ -1,4 +1,5 @@
 from datetime import date
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -92,16 +93,37 @@ class CreatePhotoViewTests(PhotoTestsBase):
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, 'galleries/photos_gallery.html')
+    previous_photo = None
+    photo_dicts = []
     for p in photos:
+      photo_dict = p.__dict__
+      photo_dicts.append(photo_dict)
+      if previous_photo:
+        previous_photo['next_url'] = p.image.url
+        photo_dict['previous_url'] = previous_photo['image'].url
+      previous_photo = photo_dict
+    for p in photo_dicts:
       self.assertContains(response, f'''
   <div class="cell has-text-centered">
-    <a href="{reverse('galleries:photo', args=[p.id])}">
-      <figure class="image thumbnail mx-auto">
-        <img src="{p.thumbnail.url}">
-      </figure>
-      <p>{p.name}</p>
-    </a>
+    <figure class="image thumbnail mx-auto">
+      <img src="{settings.MEDIA_URL}{p['thumbnail']}"
+        class="gallery-image"
+        {"data-next=" + p['next_url'] if 'next_url' in p else ""}
+        data-fullscreen="{p['image'].url}"
+        {"data-prev=" +  p['previous_url'] if 'previous_url' in p else ""}
+      >
+    </figure>
+    <p>{p['name']}</p>
   </div>
+    ''', html=True)
+
+    self.assertContains(response, f'''
+<div id="fullscreen-overlay">
+  <button id="close-fullscreen">{_("Close")}</button>
+  <button id="prev-image" class="navigation-arrow">❮</button>
+  <button id="next-image" class="navigation-arrow">❯</button>
+  <img id="fullscreen-image" src="" alt="full screen image">
+</div>
 ''', html=True)
 
 

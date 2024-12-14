@@ -1,6 +1,134 @@
 {% extends "cm_main/base.html" %}
 {% load i18n galleries_tags static cm_tags %}
 {% block title %}{% title _("Show Gallery") %} {% endblock %}
+{%block header %}
+<style>
+	#fullscreen-overlay {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: var(--bulma-black);
+		z-index: 1000;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	#fullscreen-overlay img {
+		max-width: 95%;
+		max-height: 95%;
+		object-fit: contain;
+	}
+	
+	#close-fullscreen {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		color: var(--bulma-link-invert);
+		background-color: var(--bulma-link);
+		border: none;
+		padding: 10px 20px;
+		cursor: pointer;
+	}
+
+	.navigation-arrow {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		background-color: var(--bulma-dark);
+		color: var(--bulma-dark-invert);
+		border: none;
+		font-size: 2rem;
+		padding: 10px 15px;
+		cursor: pointer;
+		z-index: 1001;
+		transition: background 0.3s;
+	}
+
+	.navigation-arrow:hover {
+		background-color: var(--bulma-light);
+		color: var(--bulma-light-invert);
+	}
+	
+	#prev-image {
+		left: 20px;
+	}
+	
+	#next-image {
+		right: 20px;
+	}
+	</style>
+<script>
+	// Function to open image in full screen
+	function openFullscreen(imageElement) {
+		var imageSrc = imageElement.data('fullscreen');
+		
+		$('#fullscreen-image').attr('src', imageSrc);
+		
+		$('#fullscreen-overlay')
+			.css('display', 'flex')
+			.hide()
+			.fadeIn(300);
+	}
+
+	$(document).ready(function() {
+		let currentImage = null;
+
+		// Open image in full screen
+		$('.gallery-image').click(function() {
+			currentImage = $(this);
+			openFullscreen(currentImage);
+		});
+
+
+		// Navigate to previous image
+		$('#prev-image').click(function() {
+			if (currentImage) {
+				let prevImageSrc = currentImage.data('prev');
+				if (prevImageSrc) {
+					currentImage = $(`.gallery-image[data-fullscreen="${prevImageSrc}"]`);
+					$('#fullscreen-image').attr('src', prevImageSrc);
+				} else { // Navigate to previous page
+					let prevPageUrl = get_prev_page_url();
+					if (prevPageUrl) {
+						window.location.href = prevPageUrl;
+					}
+				}
+			}
+		});
+
+		// Navigate to next image
+		$('#next-image').click(function() {
+			if (currentImage) {
+				let nextImageSrc = currentImage.data('next');
+				if (nextImageSrc) {
+					currentImage = $(`.gallery-image[data-fullscreen="${nextImageSrc}"]`);
+					$('#fullscreen-image').attr('src', nextImageSrc);
+				} else { // Navigate to next page
+					let nextPageUrl = get_next_page_url();
+					if (nextPageUrl) {
+						window.location.href = nextPageUrl;
+					}
+				}
+			}
+		});
+
+		// Close full screen
+		$('#close-fullscreen').click(function() {
+			$('#fullscreen-overlay').fadeOut(300);
+		});
+
+		// Close full screen if clicked outside image
+		$('#fullscreen-overlay').click(function(e) {
+			if (e.target === this) {
+				$(this).fadeOut(300);
+			}
+		});
+	});
+	</script>
+{% endblock header %}
 {% block content %}
 <div class="container px-3">
 	<div class="level">

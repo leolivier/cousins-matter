@@ -1,4 +1,5 @@
 from datetime import date
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -78,31 +79,91 @@ class CreatePhotoViewTests(PhotoTestsBase):
     print(form.errors)  # doesn't print anything if there are no errors
     self.assertTrue(form.is_valid())
 
-  def test_display_several_photos(self):
-    # create some photos
-    photos = []
-    for i in range(4):
-      image = create_image(f"test-image-{i+1}.jpg")
-      p = Photo(name=get_photo_name(), gallery=self.root_gallery, date=date.today(), image=image)
-      p.save()
-      photos.append(p)
+  def get_several_photos(self, nb_photos, page_num, first, last, gallery):
+    """
+    Create nb_photos photos in this gallery if first page and return them in a list
+    If not first page, the photos were created in first page, return a list containing only the page photos
+    + the one just before and just after.
+    """
+    if page_num == 1:
+      for i in range(nb_photos):
+        image = create_image(f"test-image-{i+1}.jpg")
+        p = Photo(name=get_photo_name(), gallery=gallery, date=date.today(), image=image)
+        p.save()
+    photos = Photo.objects.filter(gallery=gallery)[first:last]
+    return photos
 
-    url = reverse('galleries:detail', kwargs={'pk': self.root_gallery.id})
+  def get_photo_dicts(self, photos, nb_photos, page_num, first, last):
+    photo_dicts = [p.__dict__ for p in photos]
+    nb_dicts = len(photo_dicts)
+    for idx, p in enumerate(photo_dicts):
+      if idx > 0:
+        photo_dicts[idx-1]['next_url'] = p['image'].url
+      if idx < nb_dicts - 1:
+        photo_dicts[idx+1]['previous_url'] = p['image'].url
+
+    # print('first, last, nb_photos:', first, last, nb_photos)
+
+    if page_num > 1:
+      del photo_dicts[0]  # remove the first photo of the page which is indeed the last of the previous page
+    if last < nb_photos:  # not last page
+      del photo_dicts[-1]  # remove the last photo of the page which is indeed the first of the next page
+    return photo_dicts
+
+  def check_display_several_photos(self, page_size, nb_photos, page_num=1, gallery=None):
+    # create a sub gallery if not provided
+    if gallery is None:
+      gallery = Gallery(name=get_gallery_name(), description="a multi photo test sub gallery", parent=self.root_gallery)
+      gallery.save()
+    first = max(0, (page_size * (page_num - 1)) - 1)
+    last = min((page_size * page_num) + 1, nb_photos)
+    photos = self.get_several_photos(nb_photos, page_num, first, last, gallery)
+    if page_num > 1:
+      url = reverse('galleries:detail_page', kwargs={'pk': gallery.id, 'page': page_num}) + f"?page_size={page_size}"
+    else:
+      url = reverse('galleries:detail', kwargs={'pk': gallery.id}) + f"?page_size={page_size}"
     response = self.client.get(url)
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, 'galleries/photos_gallery.html')
-    for p in photos:
-      self.assertContains(response, f'''
+    photo_dicts = self.get_photo_dicts(photos, nb_photos, page_num, first, last)
+
+    for idx, p in enumerate(photo_dicts):
+      content = f'''
   <div class="cell has-text-centered">
-    <a href="{reverse('galleries:photo', args=[p.id])}">
-      <figure class="image thumbnail mx-auto">
-        <img src="{p.thumbnail.url}">
-      </figure>
-      <p>{p.name}</p>
-    </a>
+    <figure class="image thumbnail mx-auto">
+      <img src="{settings.MEDIA_URL}{p['thumbnail']}"
+        class="gallery-image"
+        {"data-next=" + p['next_url'] if 'next_url' in p else ""}
+        data-fullscreen="{p['image'].url}"
+        {"data-prev=" +  p['previous_url'] if 'previous_url' in p else ""}
+      >
+    </figure>
+    <p>{p['name']}</p>
   </div>
+    '''
+      if idx < page_size:
+        self.assertContains(response, content, html=True)
+      else:
+        self.assertNotContains(response, content, html=True)
+
+    self.assertContains(response, f'''
+<div id="fullscreen-overlay">
+  <button id="close-fullscreen">{_("Close")}</button>
+  <button id="prev-image" class="navigation-arrow">❮</button>
+  <button id="next-image" class="navigation-arrow">❯</button>
+  <img id="fullscreen-image" src="" alt="full screen image">
+</div>
 ''', html=True)
+
+    if nb_photos > (page_size * page_num):  # test next page
+      self.check_display_several_photos(page_size, nb_photos, page_num + 1, gallery)
+
+  def test_display_several_photos(self):
+    self.check_display_several_photos(10, 9)
+    self.check_display_several_photos(10, 12)
+
+    self.check_display_several_photos(10, 11)
 
 
 class DeletePhotoViewTest(PhotoTestsBase):

@@ -1,6 +1,147 @@
 {% extends "cm_main/base.html" %}
 {% load i18n galleries_tags static cm_tags %}
 {% block title %}{% title _("Show Gallery") %} {% endblock %}
+{%block header %}
+<style>
+	#fullscreen-overlay {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: var(--bulma-black);
+		z-index: 1000;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	#fullscreen-overlay img {
+		max-width: 95%;
+		max-height: 95%;
+		object-fit: contain;
+	}
+	
+	#close-fullscreen {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		color: var(--bulma-link-invert);
+		background-color: var(--bulma-link);
+		border: none;
+		padding: 10px 20px;
+		cursor: pointer;
+	}
+
+	.navigation-arrow {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		background-color: var(--bulma-dark);
+		color: var(--bulma-dark-invert);
+		border: none;
+		font-size: 2rem;
+		padding: 10px 15px;
+		cursor: pointer;
+		z-index: 1001;
+		transition: background 0.3s;
+	}
+
+	.navigation-arrow:hover {
+		background-color: var(--bulma-light);
+		color: var(--bulma-light-invert);
+	}
+	
+	#prev-image {
+		left: 20px;
+	}
+	
+	#next-image {
+		right: 20px;
+	}
+	</style>
+<script>
+	// Function to open image in full screen
+	function openFullscreen(imageElement) {
+		var imageSrc = imageElement.data('fullscreen');
+		
+		$('#fullscreen-image').attr('src', imageSrc);
+		
+		$('#fullscreen-overlay')
+			.css('display', 'flex')
+			.hide()
+			.fadeIn(300);
+	}
+
+
+	$(document).ready(function() {
+		let currentImage = null;
+
+		// Navigate to given page if any and in full screen mode
+		function open_fullscreen_page(pageUrl, imageSrc) {
+			if (pageUrl) {
+				$('#fullscreen-image').attr('src', imageSrc);
+				window.location.href = pageUrl + '?openFullscreen=true&firstImage=' + imageSrc;
+			}
+		}
+
+		function goto_image(direction, pageUrl) {
+			if (currentImage) {
+				let imageSrc = currentImage.data(direction);
+				if (imageSrc) {
+					nextImage = $(`.gallery-image[data-fullscreen="${imageSrc}"]`);
+					if (nextImage.length === 0) {  // must go to next/prev page
+						open_fullscreen_page(pageUrl, imageSrc);
+					} else {
+						currentImage = nextImage;
+						$('#fullscreen-image').attr('src', imageSrc);
+					}
+				} else {
+					console.log('At end of gallery: No ' + direction + ' image');
+				}
+			} else {
+				console.log('Error: No current image');
+			}
+		}
+
+		// Open image in full screen
+		$('.gallery-image').click(function() {
+			currentImage = $(this);
+			openFullscreen(currentImage);
+		});
+
+
+		// Navigate to previous image
+		$('#prev-image').click(function() {
+			goto_image('prev', get_prev_page_url());
+		});
+
+		// Navigate to next image
+		$('#next-image').click(function() {
+			goto_image('next', get_next_page_url());
+		});
+
+		// Close full screen
+		$('#close-fullscreen').click(function() {
+			$('#fullscreen-overlay').fadeOut(300);
+		});
+
+		// Close full screen if clicked outside image
+		$('#fullscreen-overlay').click(function(e) {
+			if (e.target === this) {
+				$(this).fadeOut(300);
+			}
+		});
+
+		// Open image in full screen if URL parameter is present
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.get('openFullscreen') === 'true') {
+			currentImage = $(`.gallery-image[data-fullscreen="${urlParams.get('firstImage')}"]`);
+			openFullscreen(currentImage);
+		}
+	});
+	</script>
+{% endblock header %}
 {% block content %}
 <div class="container px-3">
 	<div class="level">

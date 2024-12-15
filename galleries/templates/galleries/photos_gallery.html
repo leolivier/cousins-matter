@@ -1,16 +1,24 @@
 {% load i18n cm_tags %}
 <div class="container px-2">
-  {%paginate page%}
-	<div class="grid">
+	{%paginate page%}
+	<div class="grid image-gallery">
 		{% for photo in page.object_list %}
 		<div class="cell has-text-centered">
-			<a href="{% url 'galleries:photo' photo.id %}">
-				<figure class="image thumbnail mx-auto">
-					<img src="{{photo.thumbnail.url}}">
-				</figure>
+			<figure class="image thumbnail mx-auto">
+				<img src="{{photo.thumbnail.url}}" 
+					class="gallery-image"
+					{%if photo.next_url%}data-next="{{photo.next_url}}"{%endif%}
+					data-fullscreen="{{photo.image.url}}"
+					{%if photo.previous_url%}data-prev="{{photo.previous_url}}"{%endif%}>
+			</figure>
 			<p>{{photo.name}}</p>
-			</a>
 		</div>
 		{% endfor %}
 	</div>
+</div>
+<div id="fullscreen-overlay">
+	<button id="close-fullscreen">{%trans "Close"%}</button>
+	<button id="prev-image" class="navigation-arrow">❮</button>
+	<button id="next-image" class="navigation-arrow">❯</button>
+	<img id="fullscreen-image" src="" alt="full screen image">
 </div>

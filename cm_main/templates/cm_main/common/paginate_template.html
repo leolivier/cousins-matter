@@ -7,7 +7,7 @@
 			new_location += '?fullscreen=true'
 			next_par = '&'
 		}
-		{%if no_per_page%}
+		{%if not no_per_page%}
 		new_location += next_par + 'page_size=' + $('#page_size').val()
 		{%endif%}
 		window.location = new_location
@@ -36,8 +36,8 @@
 		</form>
 	</div>
 	{%endif%}
-	<a class="pagination-previous 
-		{% if prev_page_url %}" onclick="goto_page_url('{{prev_page_url}}')"{% else %}is-disabled"{%endif%}>
+	<a class="pagination-previous" 
+		{% if prev_page_url %} onclick="goto_page_url('{{prev_page_url}}')"{% else %}is-disabled{%endif%}>
 		{%icon "pagination-previous" %}
 	</a>
 	
@@ -77,8 +77,8 @@
 			{%endwith%}
 		{%endif%}
 	</ul>
-	<a class="pagination-next 
-		{% if next_page_url %}" onclick="goto_page_url('{{next_page_url}}')"{% else %}is-disabled"{%endif%}>
+	<a class="pagination-next" 
+		{% if next_page_url %} onclick="goto_page_url('{{next_page_url}}')"{% else %}is-disabled{%endif%}>
 		{%icon "pagination-next" %}
 	</a>
 {%endwith%}	

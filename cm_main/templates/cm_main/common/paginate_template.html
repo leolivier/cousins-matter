@@ -1,17 +1,24 @@
 {% load i18n cm_tags %}
-{%if no_per_page%}
 <script>
-	function goto_page_url(url) {
-		window.location = url
+	function goto_page_url(url, fullscreen=false) {
+		new_location = url
+		next_par = '?'
+		if (fullscreen) {
+			new_location += '?fullscreen=true'
+			next_par = '&'
+		}
+		{%if not no_per_page%}
+		new_location += next_par + 'page_size=' + $('#page_size').val()
+		{%endif%}
+		window.location = new_location
+	}
+	function get_prev_page_url() {
+		return '{%if prev_page_url%}{{prev_page_url}}{%endif%}'
+	}
+	function get_next_page_url() {
+		return '{%if next_page_url%}{{next_page_url}}{%endif%}'
 	}
 </script>
-{%else%}
-<script>
-	function goto_page_url(url) {
-		window.location = url + '?page_size=' + $('#page_size').val()
-	}
-</script>
-{%endif%}
 {%with page_first=page_range|first page_last=page_range|last%}
 <nav class="pagination mx-3 is-flex-grow-1" aria-label="pagination" role="pagination">
 	
@@ -29,8 +36,8 @@
 		</form>
 	</div>
 	{%endif%}
-	<a class="pagination-previous 
-		{% if prev_page_url %}" onclick="goto_page_url('{{prev_page_url}}')"{% else %}is-disabled"{%endif%}>
+	<a class="pagination-previous" 
+		{% if prev_page_url %} onclick="goto_page_url('{{prev_page_url}}')"{% else %}is-disabled{%endif%}>
 		{%icon "pagination-previous" %}
 	</a>
 	
@@ -70,8 +77,8 @@
 			{%endwith%}
 		{%endif%}
 	</ul>
-	<a class="pagination-next 
-		{% if next_page_url %}" onclick="goto_page_url('{{next_page_url}}')"{% else %}is-disabled"{%endif%}>
+	<a class="pagination-next" 
+		{% if next_page_url %} onclick="goto_page_url('{{next_page_url}}')"{% else %}is-disabled{%endif%}>
 		{%icon "pagination-next" %}
 	</a>
 {%endwith%}	

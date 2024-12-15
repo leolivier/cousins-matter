@@ -224,3 +224,48 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 .button-wrap {
 	white-space: normal !important;
 }
+
+/* toggle-slider button */
+.toggle-container {
+	background-color: var(--bulma-light);
+	border-radius: var(--bulma-radius-large);
+	padding: 5px;
+	display: inline-flex;
+	position: relative;
+	box-shadow: var(--bulma-shadow);
+	--toggle-translate: translateX(0);
+}
+
+.toggle-container label {
+	z-index: 1;
+	position: relative;
+	padding: 4px 8px;
+	cursor: pointer;
+}
+
+.icon-radio-group input[type="radio"] {
+	display: none;
+}
+
+.icon-radio-group .icon i {
+	font-size: 1rem;
+	color: var(--bulma-primary);
+	transition: color 0.3s ease;
+}
+
+.toggle-container::before {
+	content: '';
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: calc(50% - 5px);
+	height: calc(100% - 10px); 
+	transform: var(--toggle-translate, translateX(0));
+	background-color: var(--bulma-link);
+	border-radius: var(--bulma-radius);
+	transition: var(--toggle-transition, transform 0.3s ease);
+}
+
+.icon-radio-group input[type="radio"]:checked + .icon i {
+	color: var(--bulma-light);
+}

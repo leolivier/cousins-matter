@@ -73,8 +73,36 @@
 			.fadeIn(300);
 	}
 
+
 	$(document).ready(function() {
 		let currentImage = null;
+
+		// Navigate to given page if any and in full screen mode
+		function open_fullscreen_page(pageUrl, imageSrc) {
+			if (pageUrl) {
+				$('#fullscreen-image').attr('src', imageSrc);
+				window.location.href = pageUrl + '?openFullscreen=true&firstImage=' + imageSrc;
+			}
+		}
+
+		function goto_image(direction, pageUrl) {
+			if (currentImage) {
+				let imageSrc = currentImage.data(direction);
+				if (imageSrc) {
+					nextImage = $(`.gallery-image[data-fullscreen="${imageSrc}"]`);
+					if (nextImage.length === 0) {  // must go to next/prev page
+						open_fullscreen_page(pageUrl, imageSrc);
+					} else {
+						currentImage = nextImage;
+						$('#fullscreen-image').attr('src', imageSrc);
+					}
+				} else {
+					console.log('At end of gallery: No ' + direction + ' image');
+				}
+			} else {
+				console.log('Error: No current image');
+			}
+		}
 
 		// Open image in full screen
 		$('.gallery-image').click(function() {
@@ -85,34 +113,12 @@
 
 		// Navigate to previous image
 		$('#prev-image').click(function() {
-			if (currentImage) {
-				let prevImageSrc = currentImage.data('prev');
-				if (prevImageSrc) {
-					currentImage = $(`.gallery-image[data-fullscreen="${prevImageSrc}"]`);
-					$('#fullscreen-image').attr('src', prevImageSrc);
-				} else { // Navigate to previous page
-					let prevPageUrl = get_prev_page_url();
-					if (prevPageUrl) {
-						window.location.href = prevPageUrl;
-					}
-				}
-			}
+			goto_image('prev', get_prev_page_url());
 		});
 
 		// Navigate to next image
 		$('#next-image').click(function() {
-			if (currentImage) {
-				let nextImageSrc = currentImage.data('next');
-				if (nextImageSrc) {
-					currentImage = $(`.gallery-image[data-fullscreen="${nextImageSrc}"]`);
-					$('#fullscreen-image').attr('src', nextImageSrc);
-				} else { // Navigate to next page
-					let nextPageUrl = get_next_page_url();
-					if (nextPageUrl) {
-						window.location.href = nextPageUrl;
-					}
-				}
-			}
+			goto_image('next', get_next_page_url());
 		});
 
 		// Close full screen
@@ -126,6 +132,13 @@
 				$(this).fadeOut(300);
 			}
 		});
+
+		// Open image in full screen if URL parameter is present
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.get('openFullscreen') === 'true') {
+			currentImage = $(`.gallery-image[data-fullscreen="${urlParams.get('firstImage')}"]`);
+			openFullscreen(currentImage);
+		}
 	});
 	</script>
 {% endblock header %}

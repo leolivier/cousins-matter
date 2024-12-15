@@ -26,7 +26,7 @@
 				"--failfast",
 				"-v",
 				"2",
-				"members.tests.tests_member.TestDeadMembers.test_update_dead_member"
+				"galleries.tests.tests_photo"
 			],
 			"django": true,
 			"autoStartBrowser": false,

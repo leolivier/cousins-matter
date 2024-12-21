@@ -61,73 +61,121 @@
 	}
 	</style>
 <script>
-	// Function to open image in full screen
+	let currentImage = null;
+	// Variables to store touch start and end positions for swiping
+	let touchStartX = 0;
+	let touchEndX = 0;
+	const minSwipeDistance = 50; // Minimum distance to detect a swipe
+
+		// Function to open image in full screen
 	function openFullscreen(imageElement) {
-		var imageSrc = imageElement.data('fullscreen');
-		
-		$('#fullscreen-image').attr('src', imageSrc);
-		
-		$('#fullscreen-overlay')
+		currentImage = imageElement;
+		let imageSrc = imageElement.data('fullscreen');
+		$('#fullscreen-image').attr('src', imageSrc);  // set the image
+		$('#fullscreen-overlay')  // display the overlay
 			.css('display', 'flex')
 			.hide()
 			.fadeIn(300);
 	}
 
-
-	$(document).ready(function() {
-		let currentImage = null;
-
-		// Navigate to given page if any and in full screen mode
-		function open_fullscreen_page(pageUrl, imageSrc) {
-			if (pageUrl) {
-				$('#fullscreen-image').attr('src', imageSrc);
-				window.location.href = pageUrl + '?openFullscreen=true&firstImage=' + imageSrc;
-			}
+	function open_fullscreen_page(pageUrl, imageSrc) {
+		if (pageUrl) {
+			$('#fullscreen-image').attr('src', imageSrc);
+			window.location.href = pageUrl + '?openFullscreen=true&firstImage=' + imageSrc;
 		}
+	}
 
-		function goto_image(direction, pageUrl) {
-			if (currentImage) {
-				let imageSrc = currentImage.data(direction);
-				if (imageSrc) {
-					nextImage = $(`.gallery-image[data-fullscreen="${imageSrc}"]`);
-					if (nextImage.length === 0) {  // must go to next/prev page
-						open_fullscreen_page(pageUrl, imageSrc);
-					} else {
-						currentImage = nextImage;
-						$('#fullscreen-image').attr('src', imageSrc);
-					}
+	// Navigate to given page if any and in full screen mode
+	function goto_image(direction, pageUrl) {
+		if (currentImage) {
+			let imageSrc = currentImage.data(direction);
+			if (imageSrc) {
+				nextImage = $(`.gallery-image[data-fullscreen="${imageSrc}"]`);
+				if (nextImage.length === 0) {  // must go to next/prev page
+					open_fullscreen_page(pageUrl, imageSrc);
 				} else {
-					console.log('At end of gallery: No ' + direction + ' image');
+					currentImage = nextImage;
+					$('#fullscreen-image').attr('src', imageSrc);
 				}
 			} else {
-				console.log('Error: No current image');
+				console.log('At end of gallery: No ' + direction + ' image');
 			}
+		} else {
+			console.log('Error: No current image');
 		}
+	}
+	// Fonctions de navigation
+	function navigateToNext() {
+		goto_image('next', get_next_page_url());
+	}
+
+	function navigateToPrevious() {
+		goto_image('prev', get_prev_page_url());
+	}
+
+	$(document).ready(function() {
+		const fullscreenContainer = $('#fullscreen-overlay'); // Full-screen image container
+
+		// Touch event manager functions
+		fullscreenContainer.on('touchstart', function(e) {
+			touchStartX = e.originalEvent.touches[0].clientX;
+		});
+
+		fullscreenContainer.on('touchmove', function(e) {
+			// Prevent page scrolling by default
+			e.preventDefault();
+			// Calculate displacement in real time
+			const currentX = e.originalEvent.touches[0].clientX;
+			const deltaX = currentX - touchStartX;
+			// Apply translation to the image during the swipe
+			$(this).find('img').css({
+				'transform': `translateX(${deltaX}px)`,
+				'transition': 'none'
+			});
+		});
+
+		fullscreenContainer.on('touchend', function(e) {
+			touchEndX = e.originalEvent.changedTouches[0].clientX;
+			const deltaX = touchEndX - touchStartX;
+			// Reset image position
+			$(this).find('img').css({
+				'transform': 'translateX(0)',
+				'transition': 'transform 0.3s ease-out'
+			});
+			// Detect swipe direction and navigate
+			if (Math.abs(deltaX) > minSwipeDistance) {
+				if (deltaX > 0) {
+					// Swipe right -> previous image
+					navigateToPrevious();
+				} else {
+					// Swipe left -> next image
+					navigateToNext();
+				}
+			}
+		});
 
 		// Open image in full screen
 		$('.gallery-image').click(function() {
-			currentImage = $(this);
-			openFullscreen(currentImage);
+			openFullscreen($(this));
 		});
-
 
 		// Navigate to previous image
 		$('#prev-image').click(function() {
-			goto_image('prev', get_prev_page_url());
+			navigateToPrevious();
 		});
 
 		// Navigate to next image
 		$('#next-image').click(function() {
-			goto_image('next', get_next_page_url());
+			navigateToNext();
 		});
 
 		// Close full screen
 		$('#close-fullscreen').click(function() {
-			$('#fullscreen-overlay').fadeOut(300);
+			fullscreenContainer.fadeOut(300);
 		});
 
 		// Close full screen if clicked outside image
-		$('#fullscreen-overlay').click(function(e) {
+		fullscreenContainer.click(function(e) {
 			if (e.target === this) {
 				$(this).fadeOut(300);
 			}
@@ -136,8 +184,7 @@
 		// Open image in full screen if URL parameter is present
 		const urlParams = new URLSearchParams(window.location.search);
 		if (urlParams.get('openFullscreen') === 'true') {
-			currentImage = $(`.gallery-image[data-fullscreen="${urlParams.get('firstImage')}"]`);
-			openFullscreen(currentImage);
+			openFullscreen($(`.gallery-image[data-fullscreen="${urlParams.get('firstImage')}"]`));
 		}
 	});
 	</script>

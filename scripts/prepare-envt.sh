@@ -7,19 +7,17 @@ then echo "Must be run from the cousins-matter directory!"
 fi
 
 for file in lighttpd.conf supervisord.conf
-do cat template.$file | sed -e "s,{%APP_DIR%},$APP_DIR,g" > $file
+do cat template.$file | sed -e "s,{%APP_DIR%},$APP_DIR,g;s,{%USER%},$USER,g" > $file
 done
 
 echo "collecting statics..."
-python manage.py collectstatic --no-input
+sudo -u $USER python manage.py collectstatic --no-input
 echo "migrating the database..."
-python manage.py migrate
-python manage.py check
+sudo -u $USER python manage.py migrate
+sudo -u $USER python manage.py check
 
+echo "importing predefined pages"
 ./scripts/import-flatpages.sh
+echo "import done..."
 
-sudo=''
-if [[ -n "$EUID" && $EUID -ne 0 ]];
-then sudo='sudo'
-fi
-$sudo mkdir -p "/var/log/supervisord" "/var/run/supervisord"
+echo "environment is ready..."

@@ -1,122 +1,16 @@
 {% extends "cm_main/base.html" %}
-{% load i18n cm_tags %}
+{% load i18n cm_tags static %}
 {% block title %}{% title _("Photo") %} {% endblock %}
 {%block header %}
-<style>
-	#fullscreen-overlay {
-		display: none;
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: var(--bulma-black);
-		z-index: 1000;
-		justify-content: center;
-		align-items: center;
-	}
-	
-	#fullscreen-overlay img {
-		max-width: 95%;
-		max-height: 95%;
-		object-fit: contain;
-	}
-	
-	#close-fullscreen {
-		position: absolute;
-		top: 20px;
-		right: 20px;
-		color: var(--bulma-link-invert);
-		background-color: var(--bulma-link);
-		border: none;
-		padding: 10px 20px;
-		cursor: pointer;
-	}
-
-	.navigation-arrow {
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		background-color: var(--bulma-dark);
-		color: var(--bulma-dark-invert);
-		border: none;
-		font-size: 2rem;
-		padding: 10px 15px;
-		cursor: pointer;
-		z-index: 1001;
-		transition: background 0.3s;
-	}
-
-	.navigation-arrow:hover {
-		background-color: var(--bulma-light);
-		color: var(--bulma-light-invert);
-	}
-	
-	#prev-image {
-		left: 20px;
-	}
-	
-	#next-image {
-		right: 20px;
-	}
-	</style>
-	<script>
-	// Function to open image in full screen
-	function openFullscreen(imageElement) {
-		var imageSrc = imageElement.attr('src');
-		
-		$('#fullscreen-image').attr('src', imageSrc);
-		
-		$('#fullscreen-overlay')
-			.css('display', 'flex')
-			.hide()
-			.fadeIn(300);
-	}
-
-	$(document).ready(function() {
-		// let currentImage = null;
-
-		// Open image in full screen
-		$('#image-to-fullscreen').click(function() {
-			openFullscreen($(this));
-		});
-
-		// Navigation to previous image
-		if (get_prev_page_url()) {
-			$('#prev-image').click(function() {
-				goto_page_url(get_prev_page_url(), fullscreen=true);
-			});
-		} else {
-			$('#prev-image').hide();
-		}
-		// Navigation to next image
-		if (get_next_page_url()) {
-			$('#next-image').click(function() {
-				goto_page_url(get_next_page_url(), fullscreen=true);
-			});
-		} else {
-			$('#next-image').hide();
-		};
-
-		// Close overlay
-		$('#close-fullscreen').click(function() {
-				$('#fullscreen-overlay').fadeOut(300);
-		});
-
-		// Close overlay if clicked outside image
-		$('#fullscreen-overlay').click(function(e) {
-				if (e.target === this) {
-						$(this).fadeOut(300);
-				}
-		});
-
-		var params = new URLSearchParams(window.location.search);
-		var fullscreen = params.get('fullscreen');
-		if (fullscreen) {
-			openFullscreen($('#image-to-fullscreen'));
-		}
-	});
+{%url 'galleries:gallery_photo_url' gallery_id '1234567890' as image_url %}
+{%url 'galleries:photo' '1234567890' as photo_url%}
+<link rel="stylesheet" href="{% static 'galleries/css/galleries.css' %}"/>
+<script>
+$image_url = '{{ image_url }}';
+$photo_url =	'{{ photo_url }}';
+$photos_count = {{ photos_count }}
 </script>
+<script src="{% static 'galleries/js/galleries.js' %}"></script>
 {% endblock %}
 {% block content %}
 {%with photo=page.object_list|first%}
@@ -153,17 +47,20 @@
 	</div>
 	<div class="container">
 		<figure class="photo">
-			<img src="{{photo.image.url}}" id="image-to-fullscreen">
+			<img src="{{photo.image.url}}"
+				class="gallery-image"
+				{%if photo.next_url%}data-next="{{photo.next_url}}"{%endif%}
+				data-fullscreen="{{photo.image.url}}"
+				{%if photo.previous_url%}data-prev="{{photo.previous_url}}"{%endif%}
+				data-idx="{{page.number}}"
+				data-pk="{{photo.id}}"
+			>
+			<caption>num={{page.number}}</caption>
 		</figure>
 		<div class="rich-text">{% autoescape off %}{{photo.description}}{% endautoescape %}</div>
 	</div>
-	<div id="fullscreen-overlay">
-		<button id="close-fullscreen">{%trans "Close"%}</button>
-		<button id="prev-image" class="navigation-arrow">❮</button>
-		<button id="next-image" class="navigation-arrow">❯</button>
-		<img id="fullscreen-image" src="" alt="{{photo.name}} full screen image">
-	</div>
 </div>
-{% include "galleries/photo_confirm_delete.html" %}
+{%include "galleries/photo_fullscreen.html"%}
+{%include "galleries/photo_confirm_delete.html" %}
 {%endwith%}
 {% endblock %}

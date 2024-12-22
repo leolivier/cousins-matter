@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.paginator import Paginator as BasePaginator
 from cousinsmatter.utils import Paginator, assert_request_is_ajax
+from galleries.templatetags.galleries_tags import get_gallery_photos
 from ..models import Photo
 from ..forms import PhotoForm
 
@@ -37,6 +38,7 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
       photo = page.object_list[0]
     else:
       # we have the pk in the args, now compute the gallery and photo num
+      # Quite inneficient !!!
       pk = kwargs['pk']
       photo = Photo.objects.get(pk=pk)
       gallery_id = photo.gallery.id
@@ -51,11 +53,13 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
         raise ValueError(_("Photo not found on that page"))
 
     # Now, we have everything, we can repaginate
-
-    ptor = Paginator(Photo.objects.filter(gallery=gallery_id), 1,
+    photos = get_gallery_photos(gallery_id)
+    # Photo.objects.filter(gallery=gallery_id)
+    photos_count = photos.count()
+    ptor = Paginator(photos, 1,
                      compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num]))
     page = ptor.get_page_data(photo_num)
-    return render(request, self.template_name, {'page': page})
+    return render(request, self.template_name, {'page': page, 'gallery_id': gallery_id, 'photos_count': photos_count})
 
 
 @login_required
@@ -67,7 +71,7 @@ def get_photo_url(request, gallery, photo_idx=1):
   if photo_idx > nb_photos:
     return JsonResponse({'results': []})
   photo = Photo.objects.filter(gallery=gallery)[photo_idx-1]
-  return JsonResponse({'image_url': photo.image.url})
+  return JsonResponse({'pk': photo.id, 'image_url': photo.image.url})
 
 
 class PhotoAddView(LoginRequiredMixin, generic.CreateView):

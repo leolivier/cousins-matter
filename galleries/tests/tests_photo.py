@@ -138,6 +138,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
         data-fullscreen="{p['image'].url}"
         {"data-prev=" +  p['previous_url'] if 'previous_url' in p else ""}
         data-idx="{(page_num - 1) * page_size + idx + 1}"
+        data-pk="{p['id']}"
       >
     </figure>
     <p>{p['name']}</p>

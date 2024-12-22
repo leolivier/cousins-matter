@@ -47,5 +47,8 @@ class GalleryForm(forms.ModelForm):
             self.fields["parent"].queryset = Gallery.objects.exclude(pk__in=children)
             # covers must be in the gallery
             self.fields["cover"].queryset = Photo.objects.filter(gallery=self.instance)
+            # ... or in sub galleries if the gallery is empty
+            if not self.fields["cover"].queryset.exists():
+                self.fields["cover"].queryset = Photo.objects.filter(gallery__in=children)
         else:  # new gallery, so no photo in the gallery
             self.fields["cover"].queryset = Photo.objects.none()

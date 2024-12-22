@@ -88,7 +88,18 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
                         '''<div class="control"> <textarea name="description" cols="40" rows="10"
                            maxlength="3000" class="richtextarea" id="id_description"> </textarea> </div>''',
                         html=True)
-
+    # check cover field is empty
+    self.assertContains(response, f'''
+<div id="div_id_cover" class="field">
+  <label for="id_cover" class="label">{_("Cover Photo")}</label>
+  <div class="control">
+    <div class="select">
+      <select name="cover" id="id_cover">
+        <option value="" selected="">---------</option>
+      </select>
+    </div>
+  </div>
+</div>''', html=True)
     gal_name = get_gallery_name()
     response = self.client.post(url, {'name': gal_name, 'description': "a test root gallery"}, follow=True)
     rg = Gallery.objects.filter(name=gal_name).first()
@@ -112,7 +123,6 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     # check redirects to the newly created gallery detail
     self.assertRedirects(response, reverse("galleries:detail", args=[sg.id]), 302, 200)
     # check the response contains the sub gallery details (name, photo count)
-    # weird behavior of assertContains which requires to add blank lines around 'no photo'
     self.assertContains(response, f'''
 <div class="container">
   <figure class="image gallery-cover is-pulled-left mr-3 mb-3 is-flex is-align-items-center is-justify-content-center">
@@ -146,13 +156,32 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
 </div>''', html=True)
 
   def test_modify_gallery(self):
+    # create a gallery
     gal_name = get_gallery_name()
     rg = Gallery(name=gal_name)
     rg.save()
+    # add 3 photos in it
+    photos = [Photo(name=f'Photo#{i+1}', image=create_image(f'test-image-{i+1}.jpg'), date=date.today(), gallery=rg)
+              for i in range(3)]
+    for p in photos:
+      p.save()
     url = reverse("galleries:edit", args=[rg.id])
     response = self.client.get(url, follow=True)
     self.assertTrue(response.status_code, 200)
     self.assertIs(response.resolver_match.func.view_class, GalleryUpdateView)
+    # check cover field contains the gallery photos
+    self.assertContains(response, f'''
+<div id="div_id_cover" class="field">
+  <label for="id_cover" class="label">{_("Cover Photo")}</label>
+  <div class="control">
+    <div class="select">
+      <select name="cover" id="id_cover">
+        <option value="" selected="">---------</option>
+        {"".join([f'<option value="{p.id}">{p}</option>' for p in photos])}
+      </select>
+    </div>
+  </div>
+</div>''', html=True)
     gal_name = get_gallery_name()
     response = self.client.post(url, {'name': gal_name, 'description': rg.description}, follow=True)
     self.assertTrue(response.status_code, 200)

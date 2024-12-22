@@ -196,3 +196,10 @@ def startswith(text, starts):
 def absolute_url(context, relative_url):
   request = context['request']
   return request.get_absolute_uri(relative_url)
+
+
+@register.simple_tag
+def get_absolute_idx_from_page(page, idx):
+  page_num = page.number
+  page_size = page.paginator.per_page
+  return (page_num - 1) * page_size + idx

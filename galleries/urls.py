@@ -14,6 +14,7 @@ urlpatterns = [
     path("<int:parent_gallery>/createsub", views_gallery.GalleryCreateView.as_view(), name="create_sub"),
     path("<int:gallery>/photos", views_photo.PhotoAddView.as_view(), name="add_photo"),
     path("<int:gallery>/photos/<int:photo_num>", views_photo.PhotoDetailView.as_view(), name="photo_list"),
+    path("<int:gallery>/photo/<int:photo_idx>", views_photo.get_photo_url, name="gallery_photo_url"),
     path("photo/<int:pk>", views_photo.PhotoDetailView.as_view(), name="photo"),
     path("photo/<int:pk>/edit", views_photo.PhotoEditView.as_view(), name="edit_photo"),
     path("photo/<int:pk>/delete", views_photo.delete_photo, name="delete_photo"),

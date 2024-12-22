@@ -1,6 +1,7 @@
 from datetime import date
 import logging
 from django.forms import ValidationError
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
@@ -9,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.paginator import Paginator as BasePaginator
-from cousinsmatter.utils import Paginator
+from cousinsmatter.utils import Paginator, assert_request_is_ajax
 from ..models import Photo
 from ..forms import PhotoForm
 
@@ -55,6 +56,18 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
                      compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num]))
     page = ptor.get_page_data(photo_num)
     return render(request, self.template_name, {'page': page})
+
+
+@login_required
+def get_photo_url(request, gallery, photo_idx=1):
+  assert_request_is_ajax(request)
+  if photo_idx < 1:
+    return JsonResponse({'results': []})
+  nb_photos = Photo.objects.filter(gallery=gallery).count()
+  if photo_idx > nb_photos:
+    return JsonResponse({'results': []})
+  photo = Photo.objects.filter(gallery=gallery)[photo_idx-1]
+  return JsonResponse({'image_url': photo.image.url})
 
 
 class PhotoAddView(LoginRequiredMixin, generic.CreateView):

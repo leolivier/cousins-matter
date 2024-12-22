@@ -137,6 +137,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
         {"data-next=" + p['next_url'] if 'next_url' in p else ""}
         data-fullscreen="{p['image'].url}"
         {"data-prev=" +  p['previous_url'] if 'previous_url' in p else ""}
+        data-idx="{(page_num - 1) * page_size + idx + 1}"
       >
     </figure>
     <p>{p['name']}</p>
@@ -152,7 +153,21 @@ class CreatePhotoViewTests(PhotoTestsBase):
   <button id="close-fullscreen">{_("Close")}</button>
   <button id="prev-image" class="navigation-arrow">❮</button>
   <button id="next-image" class="navigation-arrow">❯</button>
-  <img id="fullscreen-image" src="" alt="full screen image">
+  <div class="image-wrapper prev" style="transform: translateX(-100%);">
+    <div class="image-container">
+        <img src="">
+    </div>
+  </div>
+  <div class="image-wrapper current">
+    <div class="image-container">
+        <img src="">
+    </div>
+  </div>
+  <div class="image-wrapper next" style="transform: translateX(100%);">
+    <div class="image-container">
+        <img src="">
+    </div>
+  </div>
 </div>
 ''', html=True)
 

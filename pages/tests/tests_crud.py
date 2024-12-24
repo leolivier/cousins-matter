@@ -1,10 +1,10 @@
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from django.contrib.flatpages.models import FlatPage
 
 from cm_main.templatetags.cm_tags import icon
 from members.tests.tests_member_base import MemberTestCase
 from ..forms import PageForm
+from ..models import FlatPage
 from .test_base import BasePageTestCase, TestPageMixin
 
 

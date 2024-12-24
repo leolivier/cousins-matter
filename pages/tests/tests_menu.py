@@ -1,10 +1,10 @@
 from django.conf import settings
 from django.urls import reverse
-from django.contrib.flatpages.models import FlatPage
 
 from cm_main.templatetags.cm_tags import icon
 
 from members.tests.tests_member_base import MemberTestCase
+from ..models import FlatPage
 from .test_base import BasePageTestCase, TestPageMixin
 
 

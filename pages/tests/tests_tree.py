@@ -40,6 +40,32 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
       print(data['url'], 'vs', page.url)
 
     response = self.client.get(reverse('pages-edit:tree'), follow=True)
+    self.assertEqual(response.status_code, 200)
+    page_icon = icon('page')
+    level_icon = icon('page-level')
+    for page in pages:
+      self.assertContains(response, f'''
+<li class="tree-item">
+  {page_icon}
+  <span class="tag is-success is-light">
+    <a href="{reverse('pages-edit:update', kwargs={'pk': page.id})}">
+      {page.title}
+    </a>
+  </span>
+</li>''', html=True)
+      levels = list(filter(lambda x: x is not None and x != '', page.url.split('/')))
+      nbl = len(levels)
+      for idx, level in enumerate(levels):
+        if idx == nbl - 1:
+          break
+        self.assertContains(response, f'''
+<span class="tree-level">
+  {level_icon}
+  <span class="tag is-primary is-light">{level}</span>
+</span>''', html=True)
+
+    self.login()  # relog as simple user to check tree
+    response = self.client.get(reverse('pages-edit:tree'), follow=True)
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     page_icon = icon('page')

@@ -2,10 +2,11 @@ from django.conf import settings
 from django.urls import reverse
 from members.tests.tests_member_base import MemberTestCase
 from ..models import create_page
-from .test_base import BasePageTestCase, TestPageMixin
+from .test_base import BasePageTestCase
+from .tests_homepage import TestHomePageMixin
 
 
-class TestAdminMessage(TestPageMixin, BasePageTestCase, MemberTestCase):
+class TestAdminMessage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
   def setUp(self):
     super().setUp()
     create_page(

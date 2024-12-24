@@ -1,8 +1,8 @@
 from django.forms import ValidationError
 from django.urls import reverse
-from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import gettext as _
 
+from ..models import FlatPage
 from pages.utils import flatpage_url
 
 

@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
-from django.contrib.flatpages.models import FlatPage
-from django.contrib.sites.models import Site
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.models import Site
 from django.utils.translation import gettext as _
 
 from cm_main.views.views_general import OnlyAdminMixin
+from .models import FlatPage
 from .utils import flatpage_url
 from .forms import PageForm
 
@@ -21,6 +22,7 @@ class PageCreateView(OnlyAdminMixin, generic.CreateView):
     if form.is_valid():
       page = form.save()
       page.sites.set([Site.objects.get(pk=settings.SITE_ID)])
+      page.updated = True
       page.save()
       if 'save' in request.POST:
         return redirect(flatpage_url(page.url))
@@ -41,6 +43,8 @@ class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
     form = PageForm(request.POST, instance=page)
     if form.is_valid():
       page = form.save()
+      page.updated = True
+      page.save(update_fields=['updated'])
       if 'save' in request.POST:
         return redirect(flatpage_url(page.url))
       elif 'save-and-continue' in request.POST:
@@ -55,7 +59,7 @@ class PageAdminListView(OnlyAdminMixin, generic.ListView):
   template_name = "pages/pages_admin_list.html"
 
 
-class PageTreeView(OnlyAdminMixin, generic.ListView):
+class PageTreeView(LoginRequiredMixin, generic.ListView):
   model = FlatPage
   template_name = "pages/page_tree.html"
 

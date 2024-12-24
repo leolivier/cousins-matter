@@ -1,6 +1,14 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.contrib.flatpages.models import FlatPage
+from django.contrib.flatpages.models import FlatPage as _FlatPage
+from django.db.models import BooleanField
+
+
+class FlatPage(_FlatPage):
+  # predefined means imported from predefined pages
+  predefined = BooleanField(default=False)
+  # updated means that the page has been created in the UI or modified since last import
+  updated = BooleanField(default=True)
 
 
 def create_page(url, title, content):

@@ -13,27 +13,25 @@ msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-11 19:57+0100\n"
-"PO-Revision-Date: 2024-10-21 10:36+00:00\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
-"leolivier/auto-po-lyglot)\n"
-"Language-Team: French <LL@li.org>\n"
-"Language: PT\n"
+"PO-Revision-Date: 2024-12-24 12:10+0100\n"
+"Last-Translator: Olivier LEVILLAIN\n"
+"Language-Team: Portuguese <LL@li.org>\n"
+"Language: Portuguese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cm_main/apps.py:8
+#: apps.py:8
 msgid "Cousins Matter!"
 msgstr "Os Primos Importam!"
 
-#: cm_main/followers.py:61 cm_main/tests/tests_followers.py:80
+#: followers.py:61 tests/tests_followers.py:80
 #, python-format
 msgid "New %(followed_type)s \"%(followed_object_name)s\""
 msgstr "Novo %(followed_type)s \"%(followed_object_name)s"
 
-#: cm_main/followers.py:65
+#: followers.py:65
 #, python-format
 msgid ""
 "%(follower_name)s has created a new %(followed_type)s "
@@ -41,7 +39,7 @@ msgid ""
 msgstr ""
 "%(follower_name)s criou um novo %(followed_type)s: %(followed_object_name)s"
 
-#: cm_main/followers.py:70 cm_main/tests/tests_followers.py:92
+#: followers.py:70 tests/tests_followers.py:92
 #, python-format
 msgid ""
 "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
@@ -49,7 +47,7 @@ msgstr ""
 "Novo %(obj_type)s adicionado ao %(followed_type)s "
 "\"%(followed_object_name)s\""
 
-#: cm_main/followers.py:75
+#: followers.py:75
 #, python-format
 msgid ""
 "%(follower_name)s has added a new %(obj_type)s in the %(followed_type)s "
@@ -58,22 +56,22 @@ msgstr ""
 "%(follower_name)s adicionou um novo %(obj_type)s no %(followed_type)s "
 "\"%(followed_object_name)s"
 
-#: cm_main/followers.py:108
+#: followers.py:108
 #, python-brace-format
 msgid "You are no longer following this {followed_type}"
 msgstr "Você não está mais seguindo esse {followed_type}."
 
-#: cm_main/followers.py:111
+#: followers.py:111
 #, python-brace-format
 msgid "You are now following this {followed_type}"
 msgstr "Você agora está seguindo este {followed_type}."
 
-#: cm_main/followers.py:119 cm_main/tests/tests_followers.py:29
+#: followers.py:119 tests/tests_followers.py:29
 #, python-format
 msgid "New follower to your %(followed_type)s \"%(followed_object_name)s\""
 msgstr "Novo seguidor para o seu %(followed_type)s \"%(followed_object_name)s"
 
-#: cm_main/followers.py:121
+#: followers.py:121
 #, python-format
 msgid ""
 "%(follower_name)s is now following your %(followed_type)s "
@@ -82,68 +80,67 @@ msgstr ""
 "%(follower_name)s está agora seguindo seu %(followed_type)s "
 "\"%(followed_object_name)s"
 
-#: cm_main/forms.py:11
+#: forms.py:11
 msgid "Your message"
 msgstr "Seu mensagem"
 
-#: cm_main/forms.py:12
+#: forms.py:12
 msgid "Please keep it short and avoid images."
 msgstr "Por favor, mantenha-o curto e evite imagens."
 
-#: cm_main/forms.py:13
+#: forms.py:13
 msgid "Attach file"
 msgstr "Colocar arquivo"
 
-#: cm_main/forms.py:14
+#: forms.py:14
 msgid "You can attach a file here if needed"
 msgstr "Você pode anexar um arquivo aqui se necessário"
 
-#: cm_main/templates/cm_main/about/site-stats.html:3
-#: cm_main/templates/cm_main/about/site-stats.html:6
+#: templates/cm_main/about/site-stats.html:3
+#: templates/cm_main/about/site-stats.html:6
 msgid "Site Statistics"
 msgstr "Estatísticas do site"
 
-#: cm_main/templates/cm_main/about/site-stats.html:7
+#: templates/cm_main/about/site-stats.html:7
 msgid "This page displays some statistics about this site:"
 msgstr "Esta página exibe algumas estatísticas sobre este site :"
 
-#: cm_main/templates/cm_main/about/site-stats.html:9
+#: templates/cm_main/about/site-stats.html:9
 msgid "Statistics"
 msgstr "Estatísticas"
 
-#: cm_main/templates/cm_main/base.html:8
+#: templates/cm_main/base.html:8
 msgid "Home"
 msgstr "Casa"
 
-#: cm_main/templates/cm_main/base.html:68
+#: templates/cm_main/base.html:68
 msgid "This site proudly built using"
 msgstr "Este site foi construído com orgulho"
 
-#: cm_main/templates/cm_main/base.html:70
+#: templates/cm_main/base.html:70
 msgid "The source code is licensed"
 msgstr "O código-fonte está licenciado."
 
-#: cm_main/templates/cm_main/base.html:76
+#: templates/cm_main/base.html:76
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright 2024 Cousins Matter. Todos os direitos reservados."
 
-#: cm_main/templates/cm_main/base.html:79
-#: cm_main/templates/cm_main/navbar.html:138
+#: templates/cm_main/base.html:79 templates/cm_main/navbar.html:138
 msgid "Contact the site admin"
 msgstr "Contate o administrador do site"
 
-#: cm_main/templates/cm_main/common/confirm-delete-modal.html:28
-#: cm_main/templates/cm_main/common/confirm-delete-modal.html:54
+#: templates/cm_main/common/confirm-delete-modal.html:28
+#: templates/cm_main/common/confirm-delete-modal.html:54
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: cm_main/templates/cm_main/common/confirm-delete-modal.html:32
-#: cm_main/templates/cm_main/common/confirm-delete-modal.html:58
-#: cm_main/templates/cm_main/contact/contact-form.html:16
+#: templates/cm_main/common/confirm-delete-modal.html:32
+#: templates/cm_main/common/confirm-delete-modal.html:58
+#: templates/cm_main/contact/contact-form.html:16
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: cm_main/templates/cm_main/common/confirm-delete-modal.html:40
+#: templates/cm_main/common/confirm-delete-modal.html:40
 #, python-format
 msgid ""
 "Enter \"<span class=\"has-text-danger\">%(expected_value)s</span>\" in the "
@@ -152,69 +149,69 @@ msgstr ""
 "Insira `<span class=\\\"has-text-danger\\\">%(expected_value)s</span>` no "
 "campo abaixo antes de pressionar confirmar."
 
-#: cm_main/templates/cm_main/common/confirm-delete-modal.html:48
+#: templates/cm_main/common/confirm-delete-modal.html:48
 msgid ""
 "Mandatory. Deletion will not take place until the correct value is entered."
 msgstr ""
 "Obrigatório. A exclusão não ocorrerá até que a valor correto seja inserido."
 
-#: cm_main/templates/cm_main/common/include-summernote.html:6
+#: templates/cm_main/common/include-summernote.html:6
 msgid "Toggle Note Editor Toolbar"
 msgstr "Barra de ferramentas do Editor de Notas"
 
-#: cm_main/templates/cm_main/common/include-summernote.html:7
+#: templates/cm_main/common/include-summernote.html:7
 msgid "Remaining characters:"
 msgstr "Caracteres restantes:"
 
-#: cm_main/templates/cm_main/common/paginate_template.html:20
+#: templates/cm_main/common/paginate_template.html:27
 msgid "Items per page:"
 msgstr "Quantidade por página"
 
-#: cm_main/templates/cm_main/common/paginate_template.html:40
+#: templates/cm_main/common/paginate_template.html:47
 msgid "go to first page"
 msgstr "Ir para a primeira página"
 
-#: cm_main/templates/cm_main/common/paginate_template.html:52
+#: templates/cm_main/common/paginate_template.html:59
 #, python-format
 msgid "go to page #%(page_num)s"
 msgstr "ir para a página #%(page_num)s"
 
-#: cm_main/templates/cm_main/common/paginate_template.html:55
+#: templates/cm_main/common/paginate_template.html:62
 #, python-format
 msgid "page #%(page_num)s"
 msgstr "página #( %(page_num)s )"
 
-#: cm_main/templates/cm_main/common/paginate_template.html:68
+#: templates/cm_main/common/paginate_template.html:75
 msgid "go to last page"
 msgstr "Ir para a última página"
 
-#: cm_main/templates/cm_main/contact/contact-form.html:6
-#: cm_main/templates/cm_main/contact/contact-form.html:9
+#: templates/cm_main/contact/contact-form.html:6
+#: templates/cm_main/contact/contact-form.html:9
 msgid "Contact Form"
 msgstr "Formulário de contato"
 
-#: cm_main/templates/cm_main/contact/contact-form.html:10
+#: templates/cm_main/contact/contact-form.html:10
 msgid "Please fill out the form below to contact the admin of this site:"
 msgstr ""
 "Por favor, preencha o formulário abaixo para entrar em contato com o "
 "administrador deste site :"
 
-#: cm_main/templates/cm_main/contact/contact-form.html:15
+#: templates/cm_main/contact/contact-form.html:15
 msgid "Send"
 msgstr "Enviar"
 
-#: cm_main/templates/cm_main/contact/email-contact-form.html:19
-#: cm_main/tests/test_contactform.py:42
+#: templates/cm_main/contact/email-contact-form.html:19
+#: tests/test_contactform.py:42
 #, python-format
 msgid "%(sender_name)s sent you the following message from %(site_name)s:"
 msgstr "%(sender_name)s enviou-lhe a seguinte mensagem de %(site_name)s:"
 
-#: cm_main/templates/cm_main/contact/email-contact-form.html:26
+#: templates/cm_main/contact/email-contact-form.html:26
 msgid "You can directly reply to this email to answer him/her."
 msgstr "Você pode responder diretamente a este e-mail para responder a ele(a)."
 
-#: cm_main/templates/cm_main/followers/email-followers-on-change.html:20
-#: cm_main/tests/tests_followers.py:84
+#: templates/cm_main/followers/email-followers-on-change.html:20
+#: tests/tests_followers.py:84
 #, python-format
 msgid ""
 "%(author_name)s created the following %(followed_type)s <a "
@@ -223,8 +220,8 @@ msgstr ""
 "%(author_name)s criou o seguinte %(followed_type)s <a "
 "href=\"%(followed_object_url)s'>\"%(followed_object_name)s\"</a>:"
 
-#: cm_main/templates/cm_main/followers/email-followers-on-change.html:24
-#: cm_main/tests/tests_followers.py:97
+#: templates/cm_main/followers/email-followers-on-change.html:24
+#: tests/tests_followers.py:97
 #, python-format
 msgid ""
 "%(author_name)s added the following %(obj_type)s on %(followed_type)s <a "
@@ -233,32 +230,31 @@ msgstr ""
 "%(author_name)s adicionou o seguinte %(obj_type)s no %(followed_type)s <a "
 "href=\"%(followed_object_url)s\">'%(followed_object_name)s'</a>:"
 
-#: cm_main/templates/cm_main/followers/email-followers-on-change.html:32
-#: cm_main/templates/cm_main/followers/new_follower.html:27
+#: templates/cm_main/followers/email-followers-on-change.html:32
+#: templates/cm_main/followers/new_follower.html:27
 msgid "Do not reply to this mail, it is machine generated."
 msgstr "Não responda a este e-mail, ele foi gerado por uma máquina."
 
-#: cm_main/templates/cm_main/followers/followers-count-tag.html:4
+#: templates/cm_main/followers/followers-count-tag.html:4
 #, python-format
 msgid "%(nfollowers)s member"
 msgid_plural "%(nfollowers)s members"
 msgstr[0] "%(nfollowers)s membro"
 msgstr[1] "%(nfollowers)s membros"
 
-#: cm_main/templates/cm_main/followers/followers-count-tag.html:10
+#: templates/cm_main/followers/followers-count-tag.html:10
 #, python-format
 msgid "%(nfollowers)s follower"
 msgid_plural "%(nfollowers)s followers"
 msgstr[0] "%(nfollowers)s seguidor"
 msgstr[1] "%(nfollowers)s seguidores"
 
-#: cm_main/templates/cm_main/followers/new_follower.html:14
+#: templates/cm_main/followers/new_follower.html:14
 #, python-format
 msgid "Your %(followed_type)s '%(followed_object_name)s' has a new follower!"
 msgstr "Seu %(followed_type)s '%(followed_object_name)s' tem um novo seguidor!"
 
-#: cm_main/templates/cm_main/followers/new_follower.html:22
-#: cm_main/tests/tests_followers.py:46
+#: templates/cm_main/followers/new_follower.html:22 tests/tests_followers.py:46
 #, python-format
 msgid ""
 "%(follower_name)s is now following your %(followed_type)s <a "
@@ -267,124 +263,128 @@ msgstr ""
 "%(follower_name)s está agora a seguir o seu %(followed_type)s <a "
 "href=\"%(followed_url)s\">\"%(followed_object_name)s\"</a> em %(site_name)s"
 
-#: cm_main/templates/cm_main/followers/toggle-follow-button.html:4
+#: templates/cm_main/followers/toggle-follow-button.html:4
 msgid "Stop Following"
 msgstr "Parar de seguir"
 
-#: cm_main/templates/cm_main/followers/toggle-follow-button.html:11
+#: templates/cm_main/followers/toggle-follow-button.html:11
 msgid "Follow"
 msgstr "Seguir"
 
-#: cm_main/templates/cm_main/navbar.html:26 cm_main/views/views_stats.py:106
+#: templates/cm_main/navbar.html:26 views/views_stats.py:106
 msgid "Members"
 msgstr "membros"
 
-#: cm_main/templates/cm_main/navbar.html:29
+#: templates/cm_main/navbar.html:29
 msgid "Birthdays"
 msgstr "Data de nascimento"
 
-#: cm_main/templates/cm_main/navbar.html:31
+#: templates/cm_main/navbar.html:31
 msgid "Show directory"
 msgstr "Mostrar diretório"
 
-#: cm_main/templates/cm_main/navbar.html:34
+#: templates/cm_main/navbar.html:34
 msgid "Create Member"
 msgstr "Criar Membro"
 
-#: cm_main/templates/cm_main/navbar.html:38
+#: templates/cm_main/navbar.html:38
 msgid "Invite Member"
 msgstr "Convidar um Membro"
 
-#: cm_main/templates/cm_main/navbar.html:45 cm_main/views/views_stats.py:114
+#: templates/cm_main/navbar.html:45 views/views_stats.py:114
 msgid "Galleries"
 msgstr "Galérias"
 
-#: cm_main/templates/cm_main/navbar.html:48
+#: templates/cm_main/navbar.html:48
 msgid "Create Gallery"
 msgstr "Criar uma Galeria"
 
-#: cm_main/templates/cm_main/navbar.html:50
+#: templates/cm_main/navbar.html:50
 msgid "Bulk Upload"
 msgstr "Carregamento em massa"
 
-#: cm_main/templates/cm_main/navbar.html:56
+#: templates/cm_main/navbar.html:56
 msgid "Forum"
 msgstr "Forum"
 
-#: cm_main/templates/cm_main/navbar.html:59
+#: templates/cm_main/navbar.html:59
 msgid "Create Post"
 msgstr "Criar Post"
 
-#: cm_main/templates/cm_main/navbar.html:64
+#: templates/cm_main/navbar.html:64
 msgid "Chat"
 msgstr "Chate"
 
-#: cm_main/templates/cm_main/navbar.html:67
+#: templates/cm_main/navbar.html:67
 msgid "Public Chat Rooms"
 msgstr "Salas de chat público"
 
-#: cm_main/templates/cm_main/navbar.html:69
+#: templates/cm_main/navbar.html:69
 msgid "Private Chat Rooms"
 msgstr "Salas de privacidade para conversação"
 
-#: cm_main/templates/cm_main/navbar.html:93
+#: templates/cm_main/navbar.html:92
 msgid "Change language"
 msgstr "Alterar idioma"
 
-#: cm_main/templates/cm_main/navbar.html:113
+#: templates/cm_main/navbar.html:112
 msgid "Edit Pages"
 msgstr "Editar Páginas"
 
-#: cm_main/templates/cm_main/navbar.html:115
+#: templates/cm_main/navbar.html:114
 msgid "Import members from CSV"
 msgstr "Importar membros de um CSV"
 
-#: cm_main/templates/cm_main/navbar.html:118
+#: templates/cm_main/navbar.html:115
+msgid "Admin site"
+msgstr "Sito amministratore"
+
+#: templates/cm_main/navbar.html:118
 msgid "Export Members as CSV"
 msgstr "Exportar Membros como CSV"
 
-#: cm_main/templates/cm_main/navbar.html:136
+#: templates/cm_main/navbar.html:136
 msgid "About the site"
 msgstr "Em respeito ao site"
 
-#: cm_main/templates/cm_main/navbar.html:147
+#: templates/cm_main/navbar.html:147
 msgid "Sign in"
 msgstr "Inscreva-se"
 
-#: cm_main/templates/cm_main/navbar.html:151
+#: templates/cm_main/navbar.html:151
 msgid "Request invitation link"
 msgstr "Pedir um link de convite"
 
-#: cm_main/templates/cm_main/navbar.html:160
+#: templates/cm_main/navbar.html:160
 msgid "Profile"
 msgstr "Perfil"
 
-#: cm_main/templates/cm_main/navbar.html:162
+#: templates/cm_main/navbar.html:162
 msgid "Log Out"
 msgstr "Desconectar"
 
-#: cm_main/tests/test_contactform.py:23
+#: tests/test_contactform.py:23
 msgid "This field is required."
 msgstr "Este campo é obrigatório."
 
-#: cm_main/tests/test_contactform.py:29 cm_main/views/views_contact.py:65
+#: tests/test_contactform.py:29 views/views_contact.py:65
 msgid "Your message has been sent"
 msgstr "Seu mensagem foi enviada."
 
-#: cm_main/tests/test_contactform.py:32 cm_main/views/views_contact.py:40
+#: tests/test_contactform.py:32 views/views_contact.py:40
 msgid "Contact form"
 msgstr "Formulário de contato"
 
-#: cm_main/tests/test_contactform.py:39 cm_main/views/views_contact.py:37
+#: tests/test_contactform.py:39 views/views_contact.py:37
 #, python-format
 msgid "You have a new message from %(name)s (%(email)s). "
 msgstr "Você recebeu um novo mensagem de %(name)s (%(email)s)."
 
-#: cm_main/tests/tests_followers.py:27
+#: tests/tests_followers.py:27
 msgid "You have a new follower!"
 msgstr "Você tem um novo seguidor!"
 
-#: cm_main/tests/tests_followers.py:38
+#: tests/tests_followers.py:38
 #, python-format
 msgid ""
 "Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
@@ -393,28 +393,28 @@ msgstr ""
 "Olá %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</"
 "a> está agora seguindo você em %(site_name)s!"
 
-#: cm_main/views/views_contact.py:41
+#: views/views_contact.py:41
 msgid "But your mailer tools is too old to show it :'("
 msgstr ""
 "Mas seus ferramentas de e-mail estão muito antigas para exibir isso :'("
 
-#: cm_main/views/views_contact.py:60
+#: views/views_contact.py:60
 msgid "This file type is not supported"
 msgstr "Esse tipo de arquivo não é suportado"
 
-#: cm_main/views/views_general.py:52
+#: views/views_general.py:52
 msgid "Media not found"
 msgstr "Não encontrada"
 
-#: cm_main/views/views_stats.py:41 cm_main/views/views_stats.py:81
+#: views/views_stats.py:41 views/views_stats.py:81
 msgid "Version not found"
 msgstr "Versão não encontrada"
 
-#: cm_main/views/views_stats.py:55
+#: views/views_stats.py:55
 msgid "Your version is not up-to-date."
 msgstr "Seu último lançamento não está atualizado."
 
-#: cm_main/views/views_stats.py:58
+#: views/views_stats.py:58
 msgid ""
 "Please update it by running the following command:<br><code>docker-start.sh -"
 "u</code>"
@@ -422,106 +422,106 @@ msgstr ""
 "Por favor, atualize-o executando o seguinte comando:<br><code>docker-start."
 "sh -u</code>"
 
-#: cm_main/views/views_stats.py:69
+#: views/views_stats.py:69
 msgid "Your version is up-to-date."
 msgstr "Versão sua está atualizada."
 
-#: cm_main/views/views_stats.py:75
+#: views/views_stats.py:75
 msgid "Your version is newer than the latest release (?!?)"
 msgstr "Seu versão é mais nova do que a última versão lançada (?!?)"
 
-#: cm_main/views/views_stats.py:97
+#: views/views_stats.py:97
 msgid "Site"
 msgstr "Site"
 
-#: cm_main/views/views_stats.py:99
+#: views/views_stats.py:99
 msgid "Site name"
 msgstr "Nome do site"
 
-#: cm_main/views/views_stats.py:100
+#: views/views_stats.py:100
 msgid "Site URL"
 msgstr "URL do site"
 
-#: cm_main/views/views_stats.py:101
+#: views/views_stats.py:101
 msgid "Application Version"
 msgstr "Versão da Aplicação"
 
-#: cm_main/views/views_stats.py:102
+#: views/views_stats.py:102
 msgid "Latest release"
 msgstr "Última versão"
 
-#: cm_main/views/views_stats.py:108
+#: views/views_stats.py:108
 msgid "Total number of members"
 msgstr "Número total de membros"
 
-#: cm_main/views/views_stats.py:109
+#: views/views_stats.py:109
 msgid "Number of active members"
 msgstr "Número de membros ativos"
 
-#: cm_main/views/views_stats.py:110
+#: views/views_stats.py:110
 msgid "Number of managed members"
 msgstr "Número de membros geridos"
 
-#: cm_main/views/views_stats.py:116
+#: views/views_stats.py:116
 msgid "Number of galleries"
 msgstr "Número de galerias"
 
-#: cm_main/views/views_stats.py:117
+#: views/views_stats.py:117
 msgid "Number of photos"
 msgstr "Número de fotos"
 
-#: cm_main/views/views_stats.py:121
+#: views/views_stats.py:121
 msgid "Forums"
 msgstr "Forumos"
 
-#: cm_main/views/views_stats.py:123
+#: views/views_stats.py:123
 msgid "Number of posts"
 msgstr "Número de publicações"
 
-#: cm_main/views/views_stats.py:124
+#: views/views_stats.py:124
 msgid "Number of post messages"
 msgstr "Número de mensagens de posts"
 
-#: cm_main/views/views_stats.py:125
+#: views/views_stats.py:125
 msgid "Number of message comments"
 msgstr "Número de comentários de mensagens"
 
-#: cm_main/views/views_stats.py:129
+#: views/views_stats.py:129
 msgid "Chats"
 msgstr "Chatos"
 
-#: cm_main/views/views_stats.py:131
+#: views/views_stats.py:131
 msgid "Number of chat rooms"
 msgstr "Número de salas de discussão"
 
-#: cm_main/views/views_stats.py:132
+#: views/views_stats.py:132
 msgid "Number of public chat rooms"
 msgstr "Número de salas de discussão pública"
 
-#: cm_main/views/views_stats.py:133
+#: views/views_stats.py:133
 msgid "Number of private chat rooms"
 msgstr "Número de salas de privacidade"
 
-#: cm_main/views/views_stats.py:134
+#: views/views_stats.py:134
 msgid "Number of chat messages"
 msgstr "Número de mensagens do chat"
 
-#: cm_main/views/views_stats.py:135
+#: views/views_stats.py:135
 msgid "Number of private chat messages"
 msgstr "Número de mensagens privadas"
 
-#: cm_main/views/views_stats.py:136
+#: views/views_stats.py:136
 msgid "Number of public chat messages"
 msgstr "Número de mensagens do chat público"
 
-#: cm_main/views/views_stats.py:140
+#: views/views_stats.py:140
 msgid "Administrator"
 msgstr "Administração"
 
-#: cm_main/views/views_stats.py:142
+#: views/views_stats.py:142
 msgid "This site is managed by"
 msgstr "Este site é gerido por"
 
-#: cm_main/views/views_stats.py:143
+#: views/views_stats.py:143
 msgid "Administrator email"
 msgstr "Email do administrador"

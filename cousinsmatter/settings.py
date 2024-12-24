@@ -246,6 +246,7 @@ DJANGO_ICONS = {
     "private": "eye-lock-outline",
     "upload": "upload-box-outline",
     "about": "information-variant",
+    "admin": "application-cog-outline",
     "stats": "chart-box-outline",
     "leave-group": "account-multiple-minus-outline",
     # emoticons

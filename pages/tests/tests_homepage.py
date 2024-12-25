@@ -16,16 +16,16 @@ class TestHomePageMixin(TestPageMixin):
 
   def check_home_page(self, lang, auth):
     home_url = '/' + lang + '/home/' + auth + '/'
-    print("home_url", home_url)
+    # print("home_url", home_url)
     # print("urls home page", {page.url for page in FlatPage.objects.filter(predefined=True)})
-    home_content = FlatPage.objects.get(url=home_url).content
+    home_content = FlatPage.objects.get(url__iexact=home_url).content
     with lang_override(lang):
       with override_settings(LANGUAGE_CODE=lang):
         response = self.client.get(reverse('cm_main:Home'), follow=True)
         # self.print_response(response)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, home_content, html=True)
-        print("ok")
+        # print("home ok")
         return response
 
 

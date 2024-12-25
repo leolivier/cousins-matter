@@ -16,8 +16,4 @@ echo "migrating the database..."
 sudo -u $USER python manage.py migrate
 sudo -u $USER python manage.py check
 
-echo "importing predefined pages"
-./scripts/import-flatpages.sh
-echo "import done..."
-
 echo "environment is ready..."

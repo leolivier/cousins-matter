@@ -78,7 +78,6 @@
 
 		</div>
 
-
 		<div class="navbar-end">
 			<div class="navbar-item has-dropdown is-hoverable">
 				<button class="button navbar-link is-light">
@@ -107,11 +106,12 @@
 							});
 						</script>
 					</div>
-						{% if user.is_superuser %}
+				{% if user.is_superuser %}
 					{% url 'pages-edit:edit_list' as page_url%}
 					{%navbar_item page_url _("Edit Pages") "edit-page" %}
 					{% url 'members:csv_import' as import_url%}
 					{%navbar_item import_url _("Import members from CSV") "import-members" %}
+					{%navbar_item "/admin" _("Admin site") "admin" %}
 				{% endif %}
 					{% url 'members:select_members_to_export' as export_url%}
 					{%navbar_item export_url _("Export Members as CSV") "import-members" %}

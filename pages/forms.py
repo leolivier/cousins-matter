@@ -1,10 +1,11 @@
 from cm_main.widgets import RichTextarea
-from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.forms import FlatpageForm
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.db.models import Value, F, Q
 from django.db.models.functions import Substr, Length
+
+from .models import FlatPage
 
 
 class PageForm(FlatpageForm):

@@ -3,43 +3,29 @@ from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import override as lang_override
-from django.contrib.flatpages.models import FlatPage
 
 from cousinsmatter.context_processors import override_settings
 from members.models import Member
 from members.tests.tests_member_base import MemberTestCase
 from members.tests.tests_birthdays import TestBirthdaysMixin
-from pages.models import create_page
+from ..models import FlatPage
 from .test_base import BasePageTestCase, TestPageMixin
 
 
 class TestHomePageMixin(TestPageMixin):
-  def setUp(self):
-    super().setUp()
-    # create home pages in the database
-    base_content = "<p class='content'>a wonderful content for an home page with an image: <img src='/data/my-image.png'></p>"
-    self.home_pages = {}
-    for lang in ['fr', 'en-us']:
-      self.home_pages[lang] = {}
-      for kind in ['authenticated', 'unauthenticated']:
-        url = f'/{lang}/home/{kind}/'
-        # first, remove the one created by the fixture in other classes
-        FlatPage.objects.filter(url=url).delete()
-        # then create the new one
-        content = f'{base_content} <p>language code={lang} and auth={kind}</p>'
-        self.home_pages[lang][kind] = create_page(
-          url=url,
-          title='a home page',
-          content=content
-        )
 
   def check_home_page(self, lang, auth):
+    home_url = '/' + lang + '/home/' + auth + '/'
+    # print("home_url", home_url)
+    # print("urls home page", {page.url for page in FlatPage.objects.filter(predefined=True)})
+    home_content = FlatPage.objects.get(url__iexact=home_url).content
     with lang_override(lang):
       with override_settings(LANGUAGE_CODE=lang):
         response = self.client.get(reverse('cm_main:Home'), follow=True)
         # self.print_response(response)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.home_pages[lang][auth].content, html=True)
+        self.assertContains(response, home_content, html=True)
+        # print("home ok")
         return response
 
 
@@ -73,14 +59,14 @@ class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageT
 
   @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=False)
   def test_home_page_without_birthdays(self):
-    for lang in ['fr', 'en-us']:
+    for lang in ['fr', 'en-US']:
       with lang_override(lang):
         response = self.check_home_page(lang, "authenticated")
         self.check_if_birthdays(response, reversed=True)
 
   @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=True)
   def test_home_page_with_birthdays(self):
-    for lang in ['fr', 'en-us']:
+    for lang in ['fr', 'en-US']:
       with lang_override(lang):
         response = self.check_home_page(lang, "authenticated")
         self.check_if_birthdays(response)
@@ -89,5 +75,5 @@ class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageT
 class TestUnAuthenticatedHomePage(TestHomePageMixin, BasePageTestCase, TestCase):
 
   def test_unauthenticated_home_page(self):
-    for lang in ['fr', 'en-us']:
+    for lang in ['fr', 'en-US']:
       self.check_home_page(lang, "unauthenticated")

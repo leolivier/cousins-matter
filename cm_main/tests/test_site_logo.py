@@ -9,7 +9,6 @@ from cousinsmatter.context_processors import override_settings
 
 
 class TestSiteLogo(TestCase):
-  fixtures = ['init-pages.json']
 
   def test_custom_logo(self):
     """test the site logo"""

@@ -1,0 +1,416 @@
+[
+	{
+		"model": "flatpages.flatpage",
+		"pk": 123,
+		"fields": {
+			"url": "/fr/home/authenticated/",
+			"title": "Les Cousins Comptent!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Les Cousins Comptent!</h1>\n\t<p>Tu es sur la page d&#39;accueil par défaut pour les membres connectés sur ton site.</p>\n\t<p>Merci d&#39;utiliser le menu <a href=\"/pages-edit/admin\">Editer les pages</a> \n\tpour mettre à jour le contenu de cette page.</p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 124,
+		"fields": {
+			"url": "/fr/home/unauthenticated/",
+			"title": "Les Cousins Comptent!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Les Cousins Comptent!</h1>\n\t<p>Tu es sur la page d&#39;accueil publique par défaut de ton site (c&#39;est-à-dire la page vue par les personnes non connectées).</p>\n\t<p>Merci d&#39;utiliser le menu <a href=\"/pages-edit/admin\">Editer les pages</a> \n\t\tpour mettre à jour le contenu de cette page.</p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 125,
+		"fields": {
+			"url": "/fr/about/privacy-policy/",
+			"title": "Politique de Confidentialité de Cousins Matter",
+			"content": "<div class=\"content\">\n\t<h1 class=\"title\">Politique de Confidentialité de Cousins Matter</h1>\n\n\t<ul class=\"bullet\">\n\t<li>En utilisant un site créé avec l&#39;application Cousins Matter, toute personne peut demander à l&#39;administrateur de l&#39;inviter à créer son propre compte sur ce site.</li>\n\t<li>L&#39;administrateur dudit site est responsable d&#39;envoyer ou non une invitation pour ce faire et doit s&#39;assurer que le demandeur fait bien partie de la communauté (en général une famille) qui est gérée sur le site.</li>\n\t<li>Une fois son compte créé, tout utilisateur actif peut également créer des comptes \"gérés\" pour les membres de sa famille qui ne peuvent pas le faire eux-même (par exemple les jeunes enfants ou les personnes âgées qui ne maitrisent pas l&#39;Internet. Le membre actif est entièrement responsable des données des membres qu&#39;il gère et doit s&#39;assurer du consentement des personnes pour lesquelles il gère un membre à voir leurs données partagées aux autres membres actifs du site.</li>\n\t<li>Tous les sites créés avec l&#39;application Cousins Matter enregistrent les données personnelles des membres qui y créent leur compte ainsi que celles des membres gérés par les membres actifs.</li>\n\t<li>Ces données ne sont <strong>jamais</strong> partagées par l&#39;application Cousins Matter à l&#39;extérieur du site et ne sont visibles <strong>que</strong> des membres actifs du site.</li>\n\t<li>Tout membre actif peut détruire son compte à tout moment en éditant son profil et en cliquant dans le bouton rouge symbolisant une poubelle. Dans ce cas, toutes les données du membre sont supprimées.</li>\n\t<li>Le(s) développeurs de l&#39;application Cousins Matter ne saurai(en)t être tenus pour responsable d&#39;aucune fuite de données dans la mesure où le site est géré par son administrateur et les mesures de sécurité doivent être assurées par lui.</li>\n\t<li>L&#39;administrateur du site est chargé de traduire la politique dans les langues appropriées à son audience.</li>\n\t</ul>\n\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 129,
+		"fields": {
+			"url": "/it/home/authenticated/",
+			"title": "Cousins Matter!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Cousins Matter!</h1>\n\t<p>Questa è la pagina iniziale predefinita del sito per i membri connessi.</p>\n\t<p>Per aggiornare il contenuto di questa pagina, utilizzare il menu <a href=\"/pages-edit/admin\">Modifica pagine</a>.</p>\n\t<p><strong>Nota: </strong>Questa pagina è stata tradotta automaticamente con DeepL. </p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 130,
+		"fields": {
+			"url": "/it/home/unauthenticated/",
+			"title": "Cousins Matter!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Cousins Matter!</h1>\n\t<p>Questa è la home page pubblica predefinita del vostro sito (cioè la pagina vista dalle persone non connesse).</p>\n\t<p>Per aggiornare il contenuto di questa pagina, utilizzate il menu <a href=\"/pages-edit/admin\">Modifica pagine</a>.</p>\n\t<p><strong>Nota: </strong>Questa pagina è stata tradotta automaticamente con DeepL. </p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 131,
+		"fields": {
+			"url": "/it/about/privacy-policy/",
+			"title": "Informativa sulla privacy di Cousins Matter",
+			"content": "<div class=\"content\">\n\t<h1 class=\"title\">Informativa sulla privacy di Cousins Matter</h1>\n\n\t<ul class=\"bullet\">\n\t\t<li>Utilizzando un sito creato con l&#39;applicazione Cousins Matter, chiunque può chiedere all&#39;amministratore\n\t\t\tdi essere invitato a creare il proprio account su questo sito.</li>\n\t\t<li>L&#39;amministratore di tale sito è responsabile dell&#39;invio o meno dell&#39;invito e deve assicurarsi che il \n\t\t\trichiedente faccia parte della comunità (di solito una famiglia) che viene gestita sul sito.</li>\n\t\t<li>Una volta creato il proprio account, ogni utente attivo può anche creare degli account \"gestiti\" per i\n\t\t\tmembri della propria famiglia che non possono farlo da soli (ad esempio bambini piccoli o anziani che non \n\t\t\tpadroneggiano Internet). \n\t\t\tIl membro attivo è interamente responsabile dei dati dei membri che gestisce e deve assicurarsi che le persone \n\t\t\tper le quali gestisce un membro acconsentano alla condivisione dei loro dati con altri membri attivi del sito.</li>\n\t\t<li>Tutti i siti creati con l&#39;applicazione Cousins Matter registrano i dati personali dei membri che vi creano il\n\t\t\tloro account e quelli dei membri gestiti dai membri attivi.</li>\n\t\t<li>Questi dati non sono <strong>mai</strong> condivisi dall&#39;applicazione Cousins Matter al di fuori del sito e \n\t\t\tsono visibili <strong>solo</strong> ai membri attivi del sito.</li>\n\t\t<li>Ogni membro attivo può cancellare il proprio account in qualsiasi momento modificando il proprio profilo e \n\t\t\tcliccando sul pulsante rosso che simboleggia un cestino. In questo caso, tutti i dati dei membri vengono cancellati.</li>\n\t\t<li>Lo sviluppatore o gli sviluppatori dell&#39;applicazione Cousins Matter non possono essere ritenuti responsabili di \n\t\t\teventuali fughe di dati, poiché il sito è gestito dall&#39;amministratore e le misure di sicurezza devono \n\t\t\tessere garantite da quest&#39;ultimo.</li> <li>L&#39;amministratore del sito è responsabile della traduzione dell&#39;informativa \n\t\t\tnelle lingue adatte al suo pubblico.</li>\n\t</ul>\n\n\t<p><strong>Nota:</strong> Questa pagina è stata tradotta automaticamente utilizzando DeepL.</p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 132,
+		"fields": {
+			"url": "/pt/home/authenticated/",
+			"title": "Os primos são importantes!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Os primos são importantes!</h1>\n\t<p>Esta é a página inicial padrão do seu site para os membros conectados.</p>\n\t<p>Por favor, use o menu <a href=\"/pages-edit/admin\">Editar Páginas</a> para atualizar o conteúdo desta página.</p>\n\t<p><strong>Nota:</strong>Esta página foi traduzida automaticamente por DeepL. </p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 133,
+		"fields": {
+			"url": "/pt/home/unauthenticated/",
+			"title": "Os primos são importantes!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Os primos são importantes!</h1>\n\t<p>Esta é a página inicial pública padrão do seu site (ou seja, a página vista por pessoas não conectadas).</p>\n\t<p>Por favor, use o menu <a href=\"/pages-edit/admin\">Editar Páginas</a> para atualizar o conteúdo desta página.</p>\n\t<p><strong>Nota:</strong>Esta página foi traduzida automaticamente por DeepL. </p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 134,
+		"fields": {
+			"url": "/pt/about/privacy-policy/",
+			"title": "Cousins Matter Privacy Policy",
+			"content": "<div class=\"content\">\n\t<h1 class=\"title\">Cousins Matter Privacy Policy</h1>\n\n\t<ul class=\"bullet\">\n\t<li>Using a site created with the Cousins Matter application, anyone can ask the administrator to invite them to create their own account on this site.</li>\n\t<li>The administrator of said site is responsible for sending or not an invitation to do so and must ensure that the requester is part of the community (usually a family) which is managed on the site.</li >\n\t<li>Once their account is created, any active user can also create \"managed\" accounts for members of their family who cannot do it themselves (for example young children or elderly people who do not master the Internet. \n\t\tThe active member is entirely responsible for the data of the members he manages and must ensure the consent of the people for whom he manages a member to see their data shared with other active members of the site.</li>\n\t<li>All sites created with the Cousins Matter application record the personal data of members who create their account there as well as those of members managed by active members.</li>\n\t<li>This data is <strong>never</strong> shared by the Cousins Matter application outside the site and is visible <strong>only to</strong> active members of the site.</li>\n\t<li>Any active member can delete their account at any time by editing their profile and clicking on the red button symbolizing a trash can. In this case, all member data is deleted.</li>\n\t<li>The developer(s) of the Cousins Matter application cannot be held responsible for any data leak as the site is managed by its administrator and security measures must be ensured by him.</li>\n\t<li>The site administrator is responsible for translating the policy into the languages appropriate to its audience.</li>\n\t</ul>\n\t<p><strong>Note:</strong>This page has been automatically translated by DeepL. </p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 135,
+		"fields": {
+			"url": "/sp/home/authenticated/",
+			"title": "¡Cuentan los primos!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">¡Cuentan los primos!</h1>\n\t<p>Estás en la página de inicio predeterminada para los miembros que han iniciado sesión en tu sitio.</p>\n\t<p>Gracias por utilizar el menú <a href=\"/pages-edit/admin\">Editar páginas</a> para actualizar el contenido\n\t\tde esta página.</p>\n\t<p><strong>Nota: </strong>Esta página fue traducida automáticamente con DeepL. </p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 136,
+		"fields": {
+			"url": "/sp/home/unauthenticated/",
+			"title": "¡Los primos cuentan!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">¡Los primos cuentan!</h1>\n\t<p>Estás en la página de inicio pública predeterminada de tu sitio (es decir, la página que ven \n\t\tlas personas que no han iniciado sesión).</p>\n\t<p>Gracias por utilizar el menú <a href=\"/pages-edit/admin\">Editar páginas</a> para actualizar el contenido de esta página.</p>\n\t<p><strong>Nota: </strong>Esteba pagina fue traducida automäticamente con DeepL. </p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 137,
+		"fields": {
+			"url": "/sp/about/privacy-policy/",
+			"title": "Política de privacidad de Cousins Matter",
+			"content": "<div class=\"content\">\n\t<h1 class=\"title\">Política de privacidad de Cousins Matter</h1>\n\n\t<ul class=\"bullet\">\n\t\t<li>Usando un sitio creado con la aplicación Cousins Matter, cualquier persona puede pedir al administrador\n\t\t\tque le invite a crear su propia cuenta en ese sitio.</li>\n\t\t<li>El administrador de dicho sitio es el responsable de enviar o no una invitación para hacerlo y debe asegurarse\n\t\t\tde que el solicitante forma parte realmente de la comunidad (normalmente una familia) que se gestiona en el sitio.</li>\n\t\t<li>Una vez creada su cuenta, cualquier usuario activo también puede crear cuentas \"gestionadas\" para los miembros\n\t\t\tde su familia que no puedan hacerlo por sí mismos (por ejemplo, niños pequeños o personas mayores que no sepan\n\t\t\tutilizar Internet. El miembro activo es el único responsable de los datos de los miembros que gestiona y debe\n\t\t\tasegurarse del consentimiento de las personas para las que gestiona un miembro para ver sus datos compartidos\n\t\t\tcon los demás miembros activos del sitio.</li>\n\t\t<li>Todos los sitios creados con la aplicación Cousins Matter registran los datos personales de los miembros que\n\t\t\tcrean su cuenta en ellos, así como los de los miembros gestionados por los miembros activos.</li>\n\t\t<li>Estos datos <strong>nunca</strong> son compartidos por la aplicación Cousins Matter fuera del sitio y son visibles\n\t\t\t<strong>únicamente</strong> para los miembros activos del sitio.</li>\n\t\t<li>Cualquier miembro activo puede eliminar su cuenta en cualquier momento editando su perfil y haciendo clic en el\n\t\t\tbotón rojo que simboliza un cubo de basura. En este caso, se eliminarán todos los datos del miembro.</li>\n\t\t<li>El desarrollador o desarrolladores de la aplicación Cousins Matter no se hacen responsables de ninguna fuga de datos\n\t\t\ten la medida en que el sitio está gestionado por su administrador y las medidas de seguridad deben ser garantizadas por él.</li>\n\t\t\t<li>El administrador del sitio es responsable de traducir la política a los idiomas apropiados para su audiencia.</li>\n\t</ul>\n\t<p><strong>Nota:</strong>Esta página ha sido traducida automáticamente con DeepL.</p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 138,
+		"fields": {
+			"url": "/de/home/authenticated/",
+			"title": "Die Cousins zählen!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Die Cousins zählen!</h1>\n\t<p>Du bist auf der Standard-Startseite für angemeldete Mitglieder deiner Website.</p>\n\t<p>Danke, dass du das Menü <a href=\"/pages-edit/admin\">Seiten bearbeiten</a> benutzt, \n\t\tum den Inhalt dieser Seite zu aktualisieren.</p>\n\t<p><strong>Hinweis:</strong>Diese Seite wurde automatisch übersetzt mit DeepL. </p>\n</div>.",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 139,
+		"fields": {
+			"url": "/de/home/unauthenticated/",
+			"title": "Die Cousins zählen!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Die Cousins zählen!</h1>\n\t<p>Du bist auf der standardmäßigen öffentlichen Startseite deiner Website (d. h. der Seite, \n\t\tdie von nicht eingeloggten Personen gesehen wird).</p> \n\t<p>Bitte benutze das Menü <a href=\"/pages-edit/admin\">Seiten bearbeiten</a>, um den Inhalt \n\t\tdieser Seite zu aktualisieren.</p> \n\t<p><strong>Hinweis:</strong>Diese Seite wurde automatisch übersetzt mit DeepL. </p>\n</div>.",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 140,
+		"fields": {
+			"url": "/de/about/privacy-policy/",
+			"title": "Datenschutzrichtlinie von Cousins Matter</h1>.",
+			"content": "<div class=\"content\">\n\t<h1 class=\"title\">Datenschutzrichtlinie von Cousins Matter</h1>.\n\n\t<ul class=\"bullet\">\n\t\t<li>Bei der Nutzung einer Seite, die mit der Anwendung Cousins Matter erstellt wurde, \n\t\t\tkann jede Person den Administrator bitten, sie einzuladen, ein eigenes Konto auf dieser Seite zu erstellen.</li>\n\t\t<li> Der Administrator dieser Seite ist dafür verantwortlich, eine Einladung zu diesem \n\t\t\tZweck zu versenden oder nicht und muss sicherstellen, dass der Antragsteller Teil der \n\t\t\tGemeinschaft (in der Regel eine Familie) ist, die auf der Seite verwaltet wird.</li>\n\t\t<li> Sobald sein Konto eingerichtet ist, kann jeder aktive Nutzer auch \"verwaltete\" Konten \n\t\t\tfür Familienmitglieder einrichten, die dies nicht selbst tun können (z. B. kleine Kinder \n\t\t\toder ältere Menschen, die das Internet nicht beherrschen. Das aktive Mitglied ist voll \n\t\t\tverantwortlich für die Daten der von ihm verwalteten Mitglieder und muss sicherstellen, \n\t\t\tdass die Personen, für die es ein Mitglied verwaltet, ihr Einverständnis dazu geben, \n\t\t\tdass ihre Daten an andere aktive Mitglieder der Seite weitergegeben werden.</li>\n\t\t<li>Alle Seiten, die mit der Anwendung Cousins Matter erstellt wurden, speichern die persönlichen \n\t\t\tDaten der Mitglieder, die dort ein Konto erstellen, sowie die Daten der Mitglieder, die von aktiven \n\t\t\tMitgliedern verwaltet werden.</li> <li> Diese Daten werden <strong>nie</strong> von der Cousins Matter \n\t\t\tAnwendung außerhalb der Seite geteilt und sind <strong>nur</strong> für aktive Mitglieder der Seite \n\t\t\tsichtbar.</li>\n\t\t<li> Jedes aktive Mitglied kann sein Konto jederzeit löschen, indem es sein Profil bearbeitet und auf die rote \n\t\t\tSchaltfläche klickt, die einen Mülleimer symbolisiert. In diesem Fall werden alle Daten des Mitglieds gelöscht.</li> \n\t\t<li>Die Entwickler der Anwendung Cousins Matter können nicht für Datenlecks verantwortlich gemacht werden, da die \n\t\t\tSeite von ihrem Administrator verwaltet wird und die Sicherheitsmaßnahmen von ihm gewährleistet werden müssen.</li> \n\t\t<li>Der Administrator der Seite ist dafür verantwortlich, die Richtlinie in die Sprachen zu übersetzen, die für ihr \n\t\t\tPublikum geeignet sind.</li> \n\t</ul>.\n\n\t<p><strong>Hinweis:</strong>Diese Seite wurde automatisch übersetzt mit DeepL. </p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 145,
+		"fields": {
+			"url": "/en-US/about/privacy-policy/",
+			"title": "Cousins Matter Privacy Policy",
+			"content": "<h1 class=\"title\">Cousins Matter Privacy Policy</h1>\r\n\r\n<ul class=\"bullet\">\r\n<li>Using a site created with the Cousins Matter application, anyone can ask the administrator to invite them to create their own account on this site.</li>\r\n<li>The administrator of said site is responsible for sending or not an invitation to do so and must ensure that the requester is part of the community (usually a family) which is managed on the site.</li>\r\n<li>Once their account is created, any active user can also create \"managed\" accounts for members of their family who cannot do it themselves (for example young children or elderly people who do not master the Internet. \r\n\tThe active member is entirely responsible for the data of the members he manages and must ensure the consent of the people for whom he manages a member to see their data shared with other active members of the site.</li>\r\n<li>All sites created with the Cousins Matter application record the personal data of members who create their account there as well as those of members managed by active members.</li>\r\n<li>This data is <strong>never</strong> shared by the Cousins Matter application outside the site and is visible <strong>only to</strong> active members of the site.</li>\r\n<li>Any active member can delete their account at any time by editing their profile and clicking on the red button symbolizing a trash can. In this case, all member data is deleted.</li>\r\n<li>The developer(s) of the Cousins Matter application cannot be held responsible for any data leak as the site is managed by its administrator and security measures must be ensured by him.</li>\r\n<li>The site administrator is responsible for translating the policy into the languages appropriate to its audience.</li><li>eee<br></li>\r\n</ul>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 146,
+		"fields": {
+			"url": "/en-US/home/authenticated/",
+			"title": "Cousins Matter!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Cousins Matter!</h1>\n\t<p>This is the default home page of your site for the connected members.</p>\n\t\t\t<p>Please use the <a href=\"/pages-edit/admin\">Edit Pages</a> \n\t\t\t\tmenu to update the content of this page.</p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "flatpages.flatpage",
+		"pk": 147,
+		"fields": {
+			"url": "/en-US/home/unauthenticated/",
+			"title": "Cousins Matter!",
+			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Cousins Matter!</h1>\n\t<p>This is the default public home page of your site (i.e. the page seen by non connected people).</p>\n\t\t\t<p>Please use the <a href=\"/pages-edit/admin\">Edit Pages</a> \n\t\t\t\tmenu to update the content of this page.</p>\n</div>",
+			"enable_comments": false,
+			"template_name": "",
+			"registration_required": false,
+			"sites": [
+				1
+			]
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 140,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 138,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 139,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 145,
+		"fields": {
+			"predefined": true,
+			"updated": true
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 146,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 147,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 125,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 123,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 124,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 131,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 129,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 130,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 134,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 132,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 133,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 137,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 135,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 136,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	}
+]

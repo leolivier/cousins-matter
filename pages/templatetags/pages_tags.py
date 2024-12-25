@@ -1,26 +1,32 @@
 import logging
 from django.template import Library
-from django.contrib.flatpages.models import FlatPage
 from django.conf import settings
 from django.utils.safestring import mark_safe
-# from django.utils.translation import gettext as _
-# from cousinsmatter.utils import temporary_log_level
+
+from ..models import FlatPage
 
 register = Library()
 logger = logging.getLogger(__name__)
 
 
-def build_pages_tree(prefix=None):
+def build_pages_tree(include_predefined=False, prefix=None):
   """
-  Based on given flat pages list filters by "url starting with prefix" if prefix provided, creates a nested tree structure
+  Based on given flat pages list filters by:
+   * "url starting with prefix" if prefix provided, creates a nested tree structure
+   * include_predefined flag to filter or not predefined pages
   based on their URLs.
 
   Returns:
     dict: A dictionary containing the nested tree structure of the flat pages. The dictionary leaves are
     the urls of the flat pages.
   """
-  fps = FlatPage.objects
-  pages = fps.filter(url__istartswith=prefix) if prefix else fps.all()
+  filter = {}
+  if not include_predefined:
+    filter['predefined'] = False
+  if prefix:
+    filter['url__istartswith'] = prefix
+  # print('filter:', filter)
+  pages = FlatPage.objects.filter(**filter) if filter else FlatPage.objects.all()
 
   page_tree = {}
   last_tree = None
@@ -55,17 +61,17 @@ def pages_menu():
   Creates a nested tree structure from all flat pages that start with the menu page URL prefix
   and pass it to the "pages/menu_pages.html" template for rendering.
   """
-  return {'page_tree': build_pages_tree(settings.MENU_PAGE_URL_PREFIX)}
+  return {'page_tree': build_pages_tree()}
 
 
 @register.inclusion_tag("pages/page_subtree.html")
-def pages_tree():
+def pages_tree(is_superuser=False):
   """
   Creates a nested tree structure from all flat pages and pass it to
   the "pages/page_tree.html" template for rendering.
   """
   # with temporary_log_level(logger, logging.WARNING):
-  return {'page_tree': build_pages_tree()}
+  return {'page_tree': build_pages_tree(include_predefined=is_superuser), 'superuser': is_superuser}
 
 
 @register.filter
@@ -99,9 +105,12 @@ def include_page(url):
     count = pages.count()
     match count:
       case 0:
-        # page not found for the current language, try the default language (ie en-us)
-        url = url.replace(f'/{settings.LANGUAGE_CODE}/', '/en-us/')
-        return include_page(url)
+        # page not found for the current language, try the default language (ie en-US)
+        new_url = url.replace(f'/{settings.LANGUAGE_CODE}/', '/en-US/')
+        if new_url != url:
+          return include_page(new_url)
+        else:
+          raise Exception(f'page not found for url={url}')
       case 1:
         page = pages.first()
         logger.info(f'searched for page with url={url}, found {page.url}')

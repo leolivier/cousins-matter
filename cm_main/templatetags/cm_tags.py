@@ -16,6 +16,15 @@ def current_language_code():
     return get_language()
 
 
+@register.simple_tag
+def normalized_language_code():
+  "if language is en-us, return en-US, if lang is en, return en-EN"
+  lang = get_language().split('-')
+  base_lang = lang[0].lower()
+  spec_lang = (lang[1] if len(lang) > 1 else lang[0]).upper()
+  return base_lang + '-' + spec_lang
+
+
 class ViewNode(Node):
     def __init__(self, url_or_view, args, kwargs):
         self.url_or_view = url_or_view

@@ -11,6 +11,7 @@
 					data-fullscreen="{{photo.image.url}}"
 					{%if photo.previous_url%}data-prev="{{photo.previous_url}}"{%endif%}
 					data-idx="{%get_absolute_idx_from_page page forloop.counter%}"
+					data-pk="{{photo.id}}"
 				>
 			</figure>
 			<p>{{photo.name}}</p>
@@ -18,23 +19,5 @@
 		{% endfor %}
 	</div>
 </div>
-<div id="fullscreen-overlay">
-	<button id="close-fullscreen">{%trans "Close"%}</button>
-	<button id="prev-image" class="navigation-arrow">❮</button>
-	<button id="next-image" class="navigation-arrow">❯</button>
-	<div class="image-wrapper prev" style="transform: translateX(-100%);">
-		<div class="image-container">
-				<img src="">
-		</div>
-	</div>
-	<div class="image-wrapper current">
-		<div class="image-container">
-				<img src="">
-		</div>
-	</div>
-	<div class="image-wrapper next" style="transform: translateX(100%);">
-		<div class="image-container">
-				<img src="">
-		</div>
-	</div>
-</div>
+{%include "galleries/photo_fullscreen.html"%}
+

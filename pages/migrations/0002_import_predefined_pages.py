@@ -10,10 +10,11 @@ def create_child_pages(apps, child_pages):
   CustomFlatPage = apps.get_model("pages", "FlatPage")
 
   for page in child_pages:
-    pk, parent, child = page['pk'], page['parent'], page['child']
-    db_parent = BaseFlatPage.objects.filter(pk=pk)
+    parent, child = page['parent'], page['child']
+    db_parent = BaseFlatPage.objects.filter(url__iexact=parent.url)
     if db_parent.exists():
       db_parent = db_parent.first()
+      pk = db_parent.pk
       db_child = CustomFlatPage.objects.filter(pk=pk)
       if db_child.exists():  # child already exists, check if it was updated
         db_child = db_child.first()
@@ -55,7 +56,7 @@ def load_fixture(apps, schema_editor):
         # this is a child page, link it to the parent
         parents = [page for page in parent_pages if page.pk == obj.pk]
         if parents:
-          child_pages.append({'pk': obj.pk, 'child': obj, 'parent': parents[0]})
+          child_pages.append({'child': obj, 'parent': parents[0]})
         else:
           raise ValueError(f"Parent page not found for page {obj.pk}")
       else:

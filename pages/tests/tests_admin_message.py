@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.urls import reverse
 from members.tests.tests_member_base import MemberTestCase
 from ..models import create_page
@@ -7,12 +6,6 @@ from .tests_homepage import TestHomePageMixin
 
 
 class TestAdminMessage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
-  def setUp(self):
-    super().setUp()
-    create_page(
-      url=f'/pages/{settings.LANGUAGE_CODE}/home/authenticated/',
-      title='a home page',
-      content="a home page content we don't care")
 
   def test_admin_message(self):
     admin_message = {

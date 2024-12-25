@@ -29,8 +29,6 @@ def yesterday(ndays=1):
 
 
 class MemberTestCase(TestCase):
-  fixtures = ['init-pages.json']
-
   member = None
   username = 'foobar'
   password = 'vWx12/gtV"'

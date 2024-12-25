@@ -37,7 +37,7 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
       }
       page = self._test_create_page(data)
       pages.append(page)
-      print(data['url'], 'vs', page.url)
+      # print(data['url'], 'vs', page.url)
 
     response = self.client.get(reverse('pages-edit:tree'), follow=True)
     self.assertEqual(response.status_code, 200)

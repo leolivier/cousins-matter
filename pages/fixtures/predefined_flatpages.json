@@ -1,7 +1,7 @@
 [
 	{
 		"model": "flatpages.flatpage",
-		"pk": 123,
+		"pk": 1,
 		"fields": {
 			"url": "/fr/home/authenticated/",
 			"title": "Les Cousins Comptent!",
@@ -16,7 +16,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 124,
+		"pk": 2,
 		"fields": {
 			"url": "/fr/home/unauthenticated/",
 			"title": "Les Cousins Comptent!",
@@ -31,7 +31,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 125,
+		"pk": 3,
 		"fields": {
 			"url": "/fr/about/privacy-policy/",
 			"title": "Politique de Confidentialité de Cousins Matter",
@@ -46,7 +46,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 129,
+		"pk": 4,
 		"fields": {
 			"url": "/it/home/authenticated/",
 			"title": "Cousins Matter!",
@@ -61,7 +61,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 130,
+		"pk": 5,
 		"fields": {
 			"url": "/it/home/unauthenticated/",
 			"title": "Cousins Matter!",
@@ -76,7 +76,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 131,
+		"pk": 6,
 		"fields": {
 			"url": "/it/about/privacy-policy/",
 			"title": "Informativa sulla privacy di Cousins Matter",
@@ -91,7 +91,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 132,
+		"pk": 7,
 		"fields": {
 			"url": "/pt/home/authenticated/",
 			"title": "Os primos são importantes!",
@@ -106,7 +106,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 133,
+		"pk": 8,
 		"fields": {
 			"url": "/pt/home/unauthenticated/",
 			"title": "Os primos são importantes!",
@@ -121,7 +121,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 134,
+		"pk": 9,
 		"fields": {
 			"url": "/pt/about/privacy-policy/",
 			"title": "Cousins Matter Privacy Policy",
@@ -136,7 +136,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 135,
+		"pk": 10,
 		"fields": {
 			"url": "/sp/home/authenticated/",
 			"title": "¡Cuentan los primos!",
@@ -151,7 +151,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 136,
+		"pk": 11,
 		"fields": {
 			"url": "/sp/home/unauthenticated/",
 			"title": "¡Los primos cuentan!",
@@ -166,7 +166,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 137,
+		"pk": 12,
 		"fields": {
 			"url": "/sp/about/privacy-policy/",
 			"title": "Política de privacidad de Cousins Matter",
@@ -181,7 +181,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 138,
+		"pk": 13,
 		"fields": {
 			"url": "/de/home/authenticated/",
 			"title": "Die Cousins zählen!",
@@ -196,7 +196,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 139,
+		"pk": 14,
 		"fields": {
 			"url": "/de/home/unauthenticated/",
 			"title": "Die Cousins zählen!",
@@ -211,7 +211,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 140,
+		"pk": 15,
 		"fields": {
 			"url": "/de/about/privacy-policy/",
 			"title": "Datenschutzrichtlinie von Cousins Matter</h1>.",
@@ -226,7 +226,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 145,
+		"pk": 16,
 		"fields": {
 			"url": "/en-US/about/privacy-policy/",
 			"title": "Cousins Matter Privacy Policy",
@@ -241,7 +241,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 146,
+		"pk": 17,
 		"fields": {
 			"url": "/en-US/home/authenticated/",
 			"title": "Cousins Matter!",
@@ -256,7 +256,7 @@
 	},
 	{
 		"model": "flatpages.flatpage",
-		"pk": 147,
+		"pk": 18,
 		"fields": {
 			"url": "/en-US/home/unauthenticated/",
 			"title": "Cousins Matter!",
@@ -271,7 +271,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 140,
+		"pk": 1,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -279,7 +279,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 138,
+		"pk": 2,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -287,7 +287,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 139,
+		"pk": 3,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -295,15 +295,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 145,
-		"fields": {
-			"predefined": true,
-			"updated": true
-		}
-	},
-	{
-		"model": "pages.flatpage",
-		"pk": 146,
+		"pk": 4,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -311,7 +303,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 147,
+		"pk": 5,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -319,7 +311,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 125,
+		"pk": 6,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -327,7 +319,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 123,
+		"pk": 7,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -335,7 +327,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 124,
+		"pk": 8,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -343,7 +335,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 131,
+		"pk": 9,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -351,7 +343,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 129,
+		"pk": 10,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -359,7 +351,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 130,
+		"pk": 11,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -367,7 +359,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 134,
+		"pk": 12,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -375,7 +367,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 132,
+		"pk": 13,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -383,7 +375,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 133,
+		"pk": 14,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -391,7 +383,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 137,
+		"pk": 15,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -399,7 +391,7 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 135,
+		"pk": 16,
 		"fields": {
 			"predefined": true,
 			"updated": false
@@ -407,7 +399,15 @@
 	},
 	{
 		"model": "pages.flatpage",
-		"pk": 136,
+		"pk": 17,
+		"fields": {
+			"predefined": true,
+			"updated": false
+		}
+	},
+	{
+		"model": "pages.flatpage",
+		"pk": 18,
 		"fields": {
 			"predefined": true,
 			"updated": false

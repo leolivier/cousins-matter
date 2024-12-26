@@ -47,8 +47,9 @@ def build_pages_tree(include_predefined=False, prefix=None):
         tree_level[level] = {}
       tree_level = tree_level[level]
       logger.debug(trc, "tree for level:", level, "is", last_tree, '\n', trc, 'full tree', page_tree)
-    del last_tree[level]
-    last_tree[page.title] = page
+    if last_tree is not None:
+      del last_tree[level]
+      last_tree[page.title] = page
 
     logger.debug('tree for url:', page.url, 'is', page_tree)
   logger.debug("final tree:", page_tree)

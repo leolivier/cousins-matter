@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.core import serializers
-from django.contrib.sites.models import Site
 from django.db import migrations, transaction
 import logging
 logger = logging.getLogger(__name__)
@@ -33,18 +32,21 @@ def createCustomFlatPage(apps, baseFlatPage, predefined, updated, pk=None):
     }
     if pk:
       fields['pk'] = pk
-      print(f"creating custom and updating its base with fields={fields}")
+      logger.info(f"creating custom and updating its base with fields={fields}")
     else:
-      print(f"creating custom and base with fields={fields}")
+      logger.info(f"creating custom and base with fields={fields}")
     customFlatPage = CustomFlatPage(**fields)
     customFlatPage.save()
 
 
 def createSitesRelationship(apps):
   CustomFlatPage = apps.get_model("pages", "FlatPage")
+  Site = apps.get_model("sites", "Site")
   global current_site
-  if current_site is None:
-    current_site = Site.objects.get(pk=settings.SITE_ID)
+  site_qs = Site.objects.filter(pk=settings.SITE_ID)
+  # site creation is only for tests normally
+  current_site = current_site or site_qs.first() if site_qs.exists() else Site.objects.create(
+    pk=settings.SITE_ID, domain=settings.SITE_DOMAIN or "example.com", name=settings.SITE_NAME)
   # Use bulk_create for the M2M intermediate table
   ThroughModel = CustomFlatPage.sites.through
   sites_relations = []
@@ -56,7 +58,7 @@ def createSitesRelationship(apps):
         )
     )
   # Create all relationships at once
-  print(f"creating {len(sites_relations)} sites relationships")
+  logger.info(f"creating {len(sites_relations)} sites relationships")
   ThroughModel.objects.bulk_create(sites_relations)
 
 
@@ -66,24 +68,24 @@ def createPredefinedCustomFlatPages(apps, deserialized_pages):
 
   for deserialized_page in deserialized_pages:
     base, custom = deserialized_page['base'], deserialized_page['custom']
-    print(f"looking at  page url={base.url}")
+    logger.info(f"looking at  page url={base.url}")
     db_base = BaseFlatPage.objects.filter(url__iexact=base.url)
     if db_base.exists():
       pk = db_base.first().pk
-      print(f"found base with pk={pk}")
+      logger.info(f"found base with pk={pk}")
       db_custom = CustomFlatPage.objects.filter(pk=pk)
       if db_custom.exists():  # custom already exists, check if it was updated
         db_custom = db_custom.first()
-        print(f"found custom with pk={pk}")
+        logger.info(f"found custom with pk={pk}")
         if db_custom.updated:  # updated since last import, we can't safely update it
-          print("updated since last import, we can't safely update it")
+          logger.info("updated since last import, we can't safely update it")
           continue
         if db_custom.title != custom.title or db_custom.content != custom.content or db_custom.url != custom.url:
           db_custom.title = custom.title
           db_custom.content = custom.content
           db_custom.url = custom.url
           db_custom.predefined = True
-          print(f"updating custom with info {db_custom.title} {db_custom.content} {db_custom.url} as predefined")
+          logger.info(f"updating custom with info {db_custom.title} {db_custom.content} {db_custom.url} as predefined")
           db_custom.save()
       else:  # custom doesn't exist, create it as predefined and use the base pk, updating db_base with base data
         createCustomFlatPage(apps, base, predefined=custom.predefined, updated=custom.updated, pk=pk)

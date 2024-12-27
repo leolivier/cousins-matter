@@ -10,7 +10,7 @@ class TestAdminMessage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
 
   def test_admin_message(self):
     admin_message = {
-      'url': settings.ADMIN_MESSAGE_URL_PREFIX + "/",
+      'url': settings.ADMIN_MESSAGE_PAGE_URL_PREFIX + "/",
       'title': "unused",
       'content': "a wonderful message from the administrator"
     }
@@ -26,12 +26,12 @@ class TestAdminMessage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
   def test_admin_messages(self):
     admin_messages = [
       {
-        'url': settings.ADMIN_MESSAGE_URL_PREFIX + "/1rst/",
+        'url': settings.ADMIN_MESSAGE_PAGE_URL_PREFIX + "/1rst/",
         'title': "unused1",
         'content': "a 1rst wonderful message from the administrator"
       },
       {
-        'url': settings.ADMIN_MESSAGE_URL_PREFIX + "/2nd/",
+        'url': settings.ADMIN_MESSAGE_PAGE_URL_PREFIX + "/2nd/",
         'title': "unused2",
         'content': "a 2nd wonderful message from the administrator"
       },

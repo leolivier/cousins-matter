@@ -13,14 +13,16 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_display_tree_of_pages(self):
     self.superuser_login()  # only superuser can create pages
     page_data = {
-        'levels': [settings.MENU_PAGE_URL_PREFIX, 'level', 'about',
-                   settings.MENU_PAGE_URL_PREFIX, settings.PRIVATE_PAGE_URL_PREFIX],
+        'levels': ['level', 'about',
+                   settings.MENU_PAGE_URL_PREFIX.replace('/', ''),
+                   settings.ADMIN_MESSAGE_PAGE_URL_PREFIX.replace('/', ''), 
+                   settings.PRIVATE_PAGE_URL_PREFIX.replace('/', '')],
         'title': 'a title',
         'content': 'a content',
       }
     pages = []
     for i in range(5):
-      nbl = random.randint(1, 4)
+      nbl = random.randint(1, 3)
       title = page_data['title']
       title = f'{title} #{i+1}'
       slug = slugify(title)

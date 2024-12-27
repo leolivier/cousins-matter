@@ -1,4 +1,6 @@
-{% load i18n flatpages pages_tags cm_tags static %}
+{% load i18n flatpages pages_tags cm_tags static cache %}
+{% get_current_language as LANGUAGE_CODE %}
+{%cache 3600 "cm_main:navbar" user.is_superuser user.is_authenticated LANGUAGE_CODE%}
 <nav class="navbar is-primary has-shadow" role="navigation" aria-label="main navigation">
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
@@ -88,8 +90,8 @@
 						<form action="{% url 'cm_main:change_language' %}" name="change_language" method="post">
 							{% csrf_token %}
 							<div class="control">
-								<label for="lang">{%trans "Change language" %}:</label>
-								<select name="lang" value="{%current_language_code%}">
+								<label for="lang">{%trans "Change language" %}:</label>>
+								<select name="lang" value="{{LANGUAGE_CODE}}">
 									{% for lang in settings.LANGUAGES %}
 										<option value="{{ lang.0 }}">{{ lang.1 }}</option>
 									{% endfor %}
@@ -99,7 +101,7 @@
 						{# Submit "change language" form automatically each time the language is changed in the select box #}
 						<script>
 							$(document).ready(function() {
-								$('select[name="lang"]').val('{%current_language_code%}');
+								$('select[name="lang"]').val('{{LANGUAGE_CODE}}');
 								$('select[name="lang"]').change(function() {
 									$('form[name="change_language"]').submit()
 								})
@@ -127,7 +129,7 @@
 					{%icon "help" %}
 				</button>
 				
-				{%with about_prefix='/'|add:settings.LANGUAGE_CODE|add:'/about/' private_prefix=settings.PRIVATE_PAGE_URL_PREFIX%}
+				{%with about_prefix='/'|add:LANGUAGE_CODE|add:'/about/' private_prefix=settings.PRIVATE_PAGE_URL_PREFIX%}
 				<div class="navbar-dropdown is-right">
 					{% link_pages_starting_with about_prefix "information" %}
 					{% link_pages_starting_with private_prefix "private" %}
@@ -165,3 +167,4 @@
 		</div>
 	</div>
 </nav>
+{%endcache%}

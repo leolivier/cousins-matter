@@ -50,20 +50,24 @@ EXPOSED_SETTINGS = [
 ]
 
 
-def _compute_settings_in_templates():
-  """
-  Computes and returns a dictionary containing the settings which can be exposed to the templates.
-  """
-  return {attr: getattr(django_settings, attr) for attr in EXPOSED_SETTINGS if (hasattr(django_settings, attr))}
+_settings_in_templates = {}
 
 
-# initialize the settings in templates only once to optimize performance
-_settings_in_templates = _compute_settings_in_templates()
+def recompute_settings_in_templates():
+  """
+  Computes and store a global dictionary containing the settings which can be exposed to the templates.
+  """
+  global _settings_in_templates
+  _settings_in_templates = \
+    {attr: getattr(django_settings, attr) for attr in EXPOSED_SETTINGS if (hasattr(django_settings, attr))}
 
 
 def settings(request):
     """expose settings to templates"""
     # settings are pre computed in global variable
+    global _settings_in_templates
+    if not _settings_in_templates:
+      recompute_settings_in_templates()
     return {'settings': _settings_in_templates}
 
 
@@ -71,10 +75,8 @@ class override_settings(django_override_settings):
   """override settings as usual for tests but also expose them in templates"""
   def enable(self) -> Any | None:
     super().enable()
-    global _settings_in_templates
-    _settings_in_templates = _compute_settings_in_templates()
+    recompute_settings_in_templates()
 
   def disable(self) -> Any | None:
     super().disable()
-    global _settings_in_templates
-    _settings_in_templates = _compute_settings_in_templates()
+    recompute_settings_in_templates()

@@ -7,7 +7,7 @@ from asgiref.sync import sync_to_async
 from urllib.parse import unquote
 from django.conf import settings
 from django.urls import reverse
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, get_language
 
 from cm_main.followers import check_followers
 from cm_main.tests import get_absolute_url
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
-  locale = settings.LANGUAGE_CODE.replace('-', '_')
+  locale = get_language().replace('-', '_')
 
   async def connect(self):
     self.room_slug = self.scope['url_route']['kwargs']['room_slug']

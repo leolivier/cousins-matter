@@ -1,6 +1,7 @@
 import logging
-from django.template import Library
 from django.conf import settings
+from django.template import Library
+from django.utils.translation import get_language
 from django.utils.safestring import mark_safe
 
 from ..models import FlatPage
@@ -77,7 +78,6 @@ def pages_tree(is_superuser=False):
   Creates a nested tree structure from all flat pages and pass it to
   the "pages/page_tree.html" template for rendering.
   """
-  # with temporary_log_level(logger, logging.WARNING):
   return {'page_tree': build_pages_tree(include_predefined=is_superuser), 'superuser': is_superuser}
 
 
@@ -113,7 +113,7 @@ def include_page(url):
     match count:
       case 0:
         # page not found for the current language, try the default language (ie en-US)
-        new_url = url.replace(f'/{settings.LANGUAGE_CODE}/', '/en-US/')
+        new_url = url.replace(f'/{get_language()}/', '/en-US/')
         if new_url != url:
           return include_page(new_url)
         else:

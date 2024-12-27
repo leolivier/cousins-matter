@@ -7,13 +7,8 @@ from django.conf import settings
 from django.urls import reverse, resolve, NoReverseMatch
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
-
+from functools import lru_cache
 register = Library()
-
-
-@register.simple_tag
-def current_language_code():
-    return get_language()
 
 
 @register.simple_tag
@@ -145,6 +140,7 @@ def paginate(page, no_per_page=False):
     }
 
 
+@lru_cache()
 def find_static_file(url):
     # Extract the path of the static file from its URL
     static_path = url.replace(settings.STATIC_URL, '')
@@ -173,6 +169,7 @@ def inline_css(css_url):
     return {'css': css}
 
 
+@lru_cache()
 @register.simple_tag
 def icon(name, clazz="icon", aria_hidden=False):
     name = name.lower()
@@ -189,6 +186,7 @@ def icon(name, clazz="icon", aria_hidden=False):
 </span>''')
 
 
+@lru_cache()
 @register.inclusion_tag("cm_main/navbar_item.html")
 def navbar_item(url, name, icon):
     return {'url': url, 'name': name, 'icon': icon}

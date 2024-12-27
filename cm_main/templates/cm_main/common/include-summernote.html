@@ -5,12 +5,12 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-{%normalized_language_code%}.min.js"></script>
 {%trans "Toggle Note Editor Toolbar" as trtoggle%}
 {%trans "Remaining characters:" as trchar%}
-
+{% get_current_language as LANGUAGE_CODE %}
 <script>
 	maxsize=('{{maxsize}}' == '' ? '{{settings.DATA_UPLOAD_MAX_MEMORY_SIZE}}' : '{{maxsize}}');
 	summernoteMaxSize = parseInt(maxsize);
 	// alert('summernoteMaxSize='+summernoteMaxSize);
-	var summernoteLang = '{{settings.LANGUAGE_CODE}}';
+	var summernoteLang = '{{LANGUAGE_CODE}}';
 	$(document).ready(function() {
 	  $('.richtextarea').summernote(
 			{

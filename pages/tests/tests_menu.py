@@ -13,7 +13,7 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
     response = self.client.get(reverse('pages-edit:edit_list'))
     self.assertEqual(response.status_code, 403)
     page_data = {
-        'url': '/publish/1rst-title33333/',
+        'url': settings.MENU_PAGE_URL_PREFIX + '/1rst-title33333/',
         'title': 'first title',
         'content': 'first content',
         'save': 'true',
@@ -27,7 +27,7 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
     self.assertIsNotNone(page)
     self.login()  # now log back as a normal user
     page_data = {
-        'url': '/publish/another-title33333/',
+        'url': settings.MENU_PAGE_URL_PREFIX + '/another-title33333/',
         'title': 'another title',
         'content': 'another content',
       }
@@ -40,19 +40,19 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
     self.superuser_login()  # only superuser can create pages
     page_list_data = [
       {
-        'url': '/publish/1rst-title/',
+        'url': settings.MENU_PAGE_URL_PREFIX + '/1rst-title/',
         'title': 'first title',
         'content': 'first content',
         'save': 'true',
       },
       {
-        'url': '/publish/level/2nd-title/',
+        'url': settings.MENU_PAGE_URL_PREFIX + '/level/2nd-title/',
         'title': '2nd title',
         'content': '2nd content',
         'save': 'true',
       },
       {
-        'url': '/publish/level/3rd-title/',
+        'url': settings.MENU_PAGE_URL_PREFIX + '/level/3rd-title/',
         'title': '3rd title',
         'content': '3rd content',
         'save': 'true',
@@ -90,7 +90,8 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_display_bad_page_menu(self):
     self.superuser_login()  # only superuser can create pages
     bad_page_data = {
-        'url': '/foo/1rst-title/',  # doesn't start with /publish=>won't appear in the navbar
+        # url doesn't start with settings.MENU_PAGE_URL_PREFIX=>won't appear in the navbar
+        'url': '/foo/1rst-title/',
         'title': 'first title',
         'content': 'first content',
         'save': 'true',

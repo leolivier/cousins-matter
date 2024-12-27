@@ -117,7 +117,7 @@
 					{%navbar_item export_url _("Export Members as CSV") "import-members" %}
 {%comment%}
 					<hr class='navbar-divider'>
-					{% link_pages_starting_with '/admin/' "admin" %}
+					{% link_pages_starting_with '/administration/' "admin" %}
 					{%navbar_item "#" _("No user settings yet") "account-cog" %}
 {%endcomment%}
 				</div>
@@ -127,7 +127,7 @@
 					{%icon "help" %}
 				</button>
 				
-				{%with about_prefix='/'|add:settings.LANGUAGE_CODE|add:'/about/' private_prefix='/private/'%}
+				{%with about_prefix='/'|add:settings.LANGUAGE_CODE|add:'/about/' private_prefix=settings.PRIVATE_PAGE_URL_PREFIX%}
 				<div class="navbar-dropdown is-right">
 					{% link_pages_starting_with about_prefix "information" %}
 					{% link_pages_starting_with private_prefix "private" %}

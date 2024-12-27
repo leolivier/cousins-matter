@@ -37,7 +37,7 @@
     <div class="columns">
       <div class="column">
         <div class="block">
-          {%get_flatpages "/pages/admin-message/" as admin_messages%}
+          {%get_flatpages settings.ADMIN_MESSAGE_PAGE_URL_PREFIX as admin_messages%}
           {%for admin_message in admin_messages %}
           <div class="notification is-info">
             <button class="delete"></button>

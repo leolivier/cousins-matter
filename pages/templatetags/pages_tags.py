@@ -4,17 +4,21 @@ from django.conf import settings
 from django.utils.safestring import mark_safe
 
 from ..models import FlatPage
+from typing import Literal
 
 register = Library()
 logger = logging.getLogger(__name__)
 
 
-def build_pages_tree(include_predefined=False, prefix=None):
+def build_pages_tree(include_predefined=False,
+                     prefix=None,
+                     include_or_exclude_prefix: Literal['include', 'exclude'] = 'include'):
   """
   Based on given flat pages list filters by:
-   * "url starting with prefix" if prefix provided, creates a nested tree structure
    * include_predefined flag to filter or not predefined pages
-  based on their URLs.
+   * "url starting with prefix" if prefix provided and include_or_exclude_prefix is "include",
+   * "url not starting with prefix" if prefix provided and include_or_exclude_prefix is "exclude",
+  creates a nested tree structure based on their URLs.
 
   Returns:
     dict: A dictionary containing the nested tree structure of the flat pages. The dictionary leaves are
@@ -23,10 +27,12 @@ def build_pages_tree(include_predefined=False, prefix=None):
   filter = {}
   if not include_predefined:
     filter['predefined'] = False
-  if prefix:
-    filter['url__istartswith'] = prefix
+  if prefix and include_or_exclude_prefix == 'include':
+      filter['url__istartswith'] = prefix
   # print('filter:', filter)
   pages = FlatPage.objects.filter(**filter) if filter else FlatPage.objects.all()
+  if prefix and include_or_exclude_prefix == 'exclude':
+      pages = pages.exclude(url__istartswith=prefix)
 
   page_tree = {}
   last_tree = None
@@ -62,7 +68,7 @@ def pages_menu():
   Creates a nested tree structure from all flat pages that start with the menu page URL prefix
   and pass it to the "pages/menu_pages.html" template for rendering.
   """
-  return {'page_tree': build_pages_tree()}
+  return {'page_tree': build_pages_tree(prefix=settings.MENU_PAGE_URL_PREFIX)}
 
 
 @register.inclusion_tag("pages/page_subtree.html")

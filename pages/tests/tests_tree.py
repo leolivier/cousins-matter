@@ -13,7 +13,8 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_display_tree_of_pages(self):
     self.superuser_login()  # only superuser can create pages
     page_data = {
-        'levels': ['publish', 'level', 'about', 'public', 'private'],
+        'levels': [settings.MENU_PAGE_URL_PREFIX, 'level', 'about',
+                   settings.MENU_PAGE_URL_PREFIX, settings.PRIVATE_PAGE_URL_PREFIX],
         'title': 'a title',
         'content': 'a content',
       }

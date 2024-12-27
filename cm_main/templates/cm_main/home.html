@@ -1,13 +1,11 @@
 {% load cm_tags pages_tags %}
 <div class="column">
-	{%with page_prefix="/"|add:settings.LANGUAGE_CODE|add:"/home/"%}
 	{%if user.is_authenticated%}
-		{%include_page page_prefix|add:"authenticated/"%}
+		{%include_page settings.AUTHENTICATED_HOME_PAGE%}
 		{% if settings.INCLUDE_BIRTHDAYS_IN_HOMEPAGE%}
 			{% get_view "members:include_birthdays" %}
 		{% endif %}
 	{%else%}
-		{%include_page page_prefix|add:"unauthenticated/"%}
+		{%include_page settings.UNAUTHENTICATED_HOME_PAGE%}
 	{%endif%}
-	{%endwith%}
 </div>

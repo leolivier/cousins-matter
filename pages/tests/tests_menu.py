@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from cm_main.templatetags.cm_tags import icon
 
+from cousinsmatter.context_processors import override_settings
 from members.tests.tests_member_base import MemberTestCase
 from ..models import FlatPage
 from .test_base import BasePageTestCase, TestPageMixin
@@ -36,6 +37,8 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
     self.assertEqual(response.status_code, 403)
     page.delete()
 
+  # disable navbar cache for this test
+  @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}})
   def test_display_page_menu(self):
     self.superuser_login()  # only superuser can create pages
     page_list_data = [

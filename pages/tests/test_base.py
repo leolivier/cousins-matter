@@ -3,7 +3,6 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from ..models import FlatPage
-from pages.utils import flatpage_url
 
 
 class BasePageTestCase():
@@ -40,8 +39,8 @@ class TestPageMixin():
 </div>'''
       self.assertContains(response, content, html=True)
     elif 'save' in page_data:
-      self.assertRedirects(response, flatpage_url(page_data['url']), 302, 200)
       self.assertTemplateUsed(response, 'flatpages/default.html')
+      self.assertRedirects(response, page_data['url'], 302, 200)
       content = f'''<div class="container px-2">
   <div class="content">
     {page_data['content']}

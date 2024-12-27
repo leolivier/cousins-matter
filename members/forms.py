@@ -67,7 +67,7 @@ class MemberFormMixin():
 
   def init_privacy_field(self):
     "Initialize the privacy consent field with a link to the privacy policy and force it to be required"
-    privacy_url = settings.PRIVACY_URL
+    privacy_url = '/' + settings.LANGUAGE_CODE + settings.PRIVACY_URL
     self.fields['privacy_consent'].label = \
       mark_safe(_(f"By checking this box, you agree to this site's <a target='blank' href='{privacy_url}'>privacy policy</a>"))
     self.fields['privacy_consent'].required = True

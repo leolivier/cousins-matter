@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import reverse
 from members.tests.tests_member_base import MemberTestCase
 from ..models import create_page
@@ -9,7 +10,7 @@ class TestAdminMessage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
 
   def test_admin_message(self):
     admin_message = {
-      'url': "/pages/admin-message/",
+      'url': settings.ADMIN_MESSAGE_PAGE_URL_PREFIX + "/",
       'title': "unused",
       'content': "a wonderful message from the administrator"
     }
@@ -25,12 +26,12 @@ class TestAdminMessage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
   def test_admin_messages(self):
     admin_messages = [
       {
-        'url': "/pages/admin-message/1rst/",
+        'url': settings.ADMIN_MESSAGE_PAGE_URL_PREFIX + "/1rst/",
         'title': "unused1",
         'content': "a 1rst wonderful message from the administrator"
       },
       {
-        'url': "/pages/admin-message/2nd/",
+        'url': settings.ADMIN_MESSAGE_PAGE_URL_PREFIX + "/2nd/",
         'title': "unused2",
         'content': "a 2nd wonderful message from the administrator"
       },

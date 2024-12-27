@@ -8,7 +8,6 @@ from django.utils.translation import gettext as _
 
 from cm_main.views.views_general import OnlyAdminMixin
 from .models import FlatPage
-from .utils import flatpage_url
 from .forms import PageForm
 
 
@@ -25,7 +24,7 @@ class PageCreateView(OnlyAdminMixin, generic.CreateView):
       page.updated = True
       page.save()
       if 'save' in request.POST:
-        return redirect(flatpage_url(page.url))
+        return redirect(page.url)
       elif 'save-and-continue' in request.POST:
         messages.success(request, _("Page \"%(title)s\" saved") % {"title": page.title})
       else:
@@ -46,7 +45,7 @@ class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
       page.updated = True
       page.save(update_fields=['updated'])
       if 'save' in request.POST:
-        return redirect(flatpage_url(page.url))
+        return redirect(page.url)
       elif 'save-and-continue' in request.POST:
         messages.success(request, _("Page \"%(title)s\" saved") % {"title": page.title})
       else:

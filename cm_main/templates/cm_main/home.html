@@ -1,6 +1,7 @@
-{% load cm_tags pages_tags %}
+{% load i18n cm_tags pages_tags %}
+{% get_current_language as LANGUAGE_CODE %}
 <div class="column">
-	{%with page_prefix="/"|add:settings.LANGUAGE_CODE%}
+	{%with page_prefix="/"|add:LANGUAGE_CODE%}
 	{%if user.is_authenticated%}
 		{%include_page page_prefix|add:settings.AUTHENTICATED_HOME_PAGE%}
 		{% if settings.INCLUDE_BIRTHDAYS_IN_HOMEPAGE%}

@@ -1,6 +1,7 @@
 {% load i18n static flatpages cm_tags %}
 <!DOCTYPE html>
-<html lang="{{settings.LANGUAGE_CODE}}" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{LANGUAGE_CODE}}" {%if settings.DARK_MODE%}data-theme="dark"{%endif%}>
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -77,7 +78,7 @@
           {%endif%}
           <br/>
           <a href="{%url 'cm_main:contact'%}">{%trans "Contact the site admin"%}</a> | 
-          {%with about_prefix='/'|add:settings.LANGUAGE_CODE|add:'/about/' %}
+          {%with about_prefix='/'|add:LANGUAGE_CODE|add:'/about/' %}
             {% get_flatpages about_prefix as about_pages %}
             {% for page in about_pages %}
               <a href="{{ page.url }}">{{ page.title }}</a> 

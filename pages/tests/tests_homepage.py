@@ -35,7 +35,7 @@ class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageT
     tomorrow = today + timedelta(days=1)
     members = Member.objects.filter(birthdate__isnull=False)
     # print(f"\nchecking birthdays with include={settings.INCLUDE_BIRTHDAYS_IN_HOMEPAGE} "
-    #       f"reversed={reversed} and lang={settings.LANGUAGE_CODE} "
+    #       f"reversed={reversed} and lang={get_language()} "
     #       "for response:")
     # self.print_response(response)
     if members.count() > 0:

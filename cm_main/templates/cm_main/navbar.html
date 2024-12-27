@@ -1,5 +1,6 @@
 {% load i18n flatpages pages_tags cm_tags static cache %}
 {% get_current_language as LANGUAGE_CODE %}
+{%cache 3600 "cm_main:navbar" user.is_superuser user.is_authenticated LANGUAGE_CODE%}
 <nav class="navbar is-primary has-shadow" role="navigation" aria-label="main navigation">
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
@@ -166,3 +167,4 @@
 		</div>
 	</div>
 </nav>
+{%endcache%}

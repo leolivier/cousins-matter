@@ -115,6 +115,28 @@ $(document).ready(function() {
   $container = checked.closest('.toggle-container');
   $translation = (checked.val() === 'option2') ? 'translateX(100%)' : 'translateX(0)';
   $container.css('--toggle-translate', $translation);
+
+  // Manage hidden notifications
+  
+  // Restore hidden notifications
+  const hiddenMessages = JSON.parse(sessionStorage.getItem('hiddenMessages') || '[]');
+
+  hiddenMessages.forEach(id => {
+    $(`.admin-message[data-id="${id}"]`).hide();
+  });
+
+  // Managing the click on the delete button
+  $('.admin-message .delete').click(function() {
+    const $message = $(this).closest('.admin-message');
+    const messageId = $message.data('id');
+    
+    $message.hide();
+    
+    // Save in sessionStorage
+    const hidden = JSON.parse(sessionStorage.getItem('hiddenMessages') || '[]');
+    hidden.push(messageId);
+    sessionStorage.setItem('hiddenMessages', JSON.stringify(hidden));
+  });
 });
 
 // Functions to open and close a modal

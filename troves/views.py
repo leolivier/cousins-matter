@@ -1,3 +1,4 @@
+from urllib.parse import urlencode
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -12,14 +13,20 @@ from .forms import TreasureForm
 
 @login_required
 def trove_cave(request, page=1):
-    treasures = Trove.objects.all().order_by('category', 'id')
+    category = request.GET.get('category')
+    if category and category in dict(Trove.CATEGORY_CHOICES).keys():
+        treasures = Trove.objects.filter(category=category).order_by('id')
+        def compute_link(idx): return reverse('troves:page', args=[idx]) + '?' + urlencode({'category': category})
+    else:
+        treasures = Trove.objects.all().order_by('category', 'id')
+        def compute_link(idx): return reverse('troves:page', args=[idx])
     try:
         trove_page = Paginator.get_page(request, object_list=treasures,
                                         page_num=page,
-                                        reverse_link='troves:page',
+                                        compute_link=compute_link,
                                         default_page_size=settings.DEFAULT_TROVE_PAGE_SIZE,
                                         group_by='category')
-        return render(request, "troves/trove_cave.html", {"page": trove_page})
+        return render(request, "troves/trove_cave.html", {"page": trove_page, 'trove_categories': Trove.CATEGORY_CHOICES})
     except PageOutOfBounds as exc:
         return redirect(exc.redirect_to)
 

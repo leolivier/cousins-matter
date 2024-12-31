@@ -102,7 +102,7 @@ jobs:
 
       - name: Test django (skip redis needing tests)
         run: |
-          python ./manage.py test --parallel --exclude-tag needs-redis
+          python ./manage.py test --exclude-tag needs-redis
     
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3

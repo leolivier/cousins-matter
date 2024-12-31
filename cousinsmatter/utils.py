@@ -118,13 +118,15 @@ class Paginator(paginator.Paginator):
         return page
 
     @staticmethod
-    def get_page(request, object_list, page_num, reverse_link, compute_link=None, default_page_size=100, group_by=None):
+    def get_page(request, object_list, page_num, reverse_link=None, compute_link=None, default_page_size=100, group_by=None):
       page_size = int(request.GET["page_size"]) if "page_size" in request.GET else default_page_size
 
       ptor = Paginator(object_list, page_size, reverse_link=reverse_link, compute_link=compute_link)
       page_num = page_num or ptor.num_pages
       if page_num > ptor.num_pages:
-          raise PageOutOfBounds(ptor._get_link(ptor.num_pages) + '?' + urlencode({'page_size': page_size}))
+          url = ptor._get_link(ptor.num_pages)
+          url += ('&' if '?' in url else '?') + urlencode({'page_size': page_size})
+          raise PageOutOfBounds(url)
       return ptor.get_page_data(page_num, group_by=group_by)
 
 

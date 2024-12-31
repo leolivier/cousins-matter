@@ -9,7 +9,7 @@ fi
 for file in lighttpd.conf supervisord.conf
 do cat template.$file | sed -e "s,{%APP_DIR%},$APP_DIR,g;s,{%USER%},$USER,g" > $file
 done
-
+chown -R $USER:$USER media  # make sure the media directory is owned by the cm_user
 echo "collecting statics..."
 sudo -u $USER python manage.py collectstatic --no-input
 echo "migrating the database..."

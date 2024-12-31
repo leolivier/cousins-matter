@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.paginator import Paginator as BasePaginator
-from cousinsmatter.utils import Paginator, assert_request_is_ajax
+from cousinsmatter.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
 from galleries.templatetags.galleries_tags import get_gallery_photos
 from ..models import Photo
 from ..forms import PhotoForm
@@ -56,10 +56,13 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
     photos = get_gallery_photos(gallery_id)
     # Photo.objects.filter(gallery=gallery_id)
     photos_count = photos.count()
-    ptor = Paginator(photos, 1,
-                     compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num]))
-    page = ptor.get_page_data(photo_num)
-    return render(request, self.template_name, {'page': page, 'gallery_id': gallery_id, 'photos_count': photos_count})
+    try:
+      ptor = Paginator(photos, 1,
+                       compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num]))
+      page = ptor.get_page_data(photo_num)
+      return render(request, self.template_name, {'page': page, 'gallery_id': gallery_id, 'photos_count': photos_count})
+    except PageOutOfBounds as exc:
+        return redirect(exc.redirect_to)
 
 
 @login_required

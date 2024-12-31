@@ -7,9 +7,7 @@
 			new_location += '?fullscreen=true'
 			next_par = '&'
 		}
-		{%if not no_per_page%}
-		new_location += next_par + 'page_size=' + $('#page_size').val()
-		{%endif%}
+		new_location += `{%if not no_per_page%}${next_par}page_size=${$('#page_size').val()}{%endif%}`
 		window.location = new_location
 	}
 	function get_prev_page_url() {
@@ -37,7 +35,7 @@
 	</div>
 	{%endif%}
 	<a class="pagination-previous" 
-		{% if prev_page_url %} onclick="goto_page_url('{{prev_page_url}}')"{% else %}is-disabled{%endif%}>
+		{% if prev_page_url %} onclick="goto_page_url('{{prev_page_url}}')"{% else %}disabled{%endif%}>
 		{%icon "pagination-previous" %}
 	</a>
 	
@@ -78,7 +76,7 @@
 		{%endif%}
 	</ul>
 	<a class="pagination-next" 
-		{% if next_page_url %} onclick="goto_page_url('{{next_page_url}}')"{% else %}is-disabled{%endif%}>
+		{% if next_page_url %} onclick="goto_page_url('{{next_page_url}}')"{% else %}disabled{%endif%}>
 		{%icon "pagination-next" %}
 	</a>
 {%endwith%}	

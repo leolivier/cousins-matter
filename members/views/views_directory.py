@@ -1,6 +1,6 @@
 # util functions for member views
 from typing import Any
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
 import io
 from reportlab.rl_config import defaultPageSize
@@ -14,7 +14,7 @@ from django.views import generic
 from django.utils.text import slugify
 from django.conf import settings
 
-from cousinsmatter.utils import Paginator
+from cousinsmatter.utils import PageOutOfBounds, Paginator
 
 from ..models import Member
 
@@ -35,12 +35,15 @@ class MembersDirectoryView(LoginRequiredMixin, generic.View):
 
     def get(self, request, page_num=1) -> dict[str, Any]:
       members = Member.objects.alive()
-      page = Paginator.get_page(request,
-                                object_list=members,
-                                page_num=page_num,
-                                reverse_link="members:directory_page",
-                                default_page_size=100)
-      return render(request, self.template_name, {"page": page})
+      try:
+        page = Paginator.get_page(request,
+                                  object_list=members,
+                                  page_num=page_num,
+                                  reverse_link="members:directory_page",
+                                  default_page_size=100)
+        return render(request, self.template_name, {"page": page})
+      except PageOutOfBounds as exc:
+        return redirect(exc.redirect_to)
 
 
 class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):

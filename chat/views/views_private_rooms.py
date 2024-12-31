@@ -14,7 +14,7 @@ from urllib.parse import unquote
 
 from members.models import Member
 from ..models import ChatMessage, ChatRoom, PrivateChatRoom
-from cousinsmatter.utils import Paginator, assert_request_is_ajax
+from cousinsmatter.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
 
 
 logger = logging.getLogger(__name__)
@@ -95,21 +95,24 @@ def private_chat_rooms(request, page_num=1):
     first_message_author=Subquery(first_msg_auth_subquery)
     ).order_by('date_added')
 
-  page = Paginator.get_page(request, private_chat_rooms, page_num,
-                            reverse_link="chat:private_chat_page",
-                            default_page_size=settings.DEFAULT_CHATROOMS_PER_PAGE)
-  author_ids = [room.first_message_author for room in page.object_list if room.first_message_author is not None]
-  # print("author ids", author_ids)
-  authors = Member.objects.filter(id__in=author_ids)
-  for room in page.object_list:
-    if room.first_message_author:
-      # print("first msg auth=", room.first_message_author)
-      for author in authors:
-        # print("author name:", author.username)
-        if room.first_message_author == author.id:
-          room.first_message_author = author
-      # print("final author:", room.first_message_author)
-  return render(request, 'chat/chat_rooms.html', {"page": page, 'private': True})
+  try:
+    page = Paginator.get_page(request, private_chat_rooms, page_num,
+                              reverse_link="chat:private_chat_page",
+                              default_page_size=settings.DEFAULT_CHATROOMS_PER_PAGE)
+    author_ids = [room.first_message_author for room in page.object_list if room.first_message_author is not None]
+    # print("author ids", author_ids)
+    authors = Member.objects.filter(id__in=author_ids)
+    for room in page.object_list:
+      if room.first_message_author:
+        # print("first msg auth=", room.first_message_author)
+        for author in authors:
+          # print("author name:", author.username)
+          if room.first_message_author == author.id:
+            room.first_message_author = author
+        # print("final author:", room.first_message_author)
+    return render(request, 'chat/chat_rooms.html', {"page": page, 'private': True})
+  except PageOutOfBounds as exc:
+      return redirect(exc.redirect_to)
 
 
 @login_required
@@ -201,13 +204,15 @@ def private_chat_room(request, room_slug, page_num=None):
     messages.error(request, _("You are not a member of this private room"))
     return redirect(reverse('chat:private_chat_rooms'))
   message_list = ChatMessage.objects.filter(room=room.id)
-
-  page = Paginator.get_page(request, message_list,
-                            page_num=page_num,
-                            reverse_link="chat:room_page",
-                            compute_link=lambda page_num: reverse("chat:room_page", args=[room_slug, page_num]),
-                            default_page_size=100)
-  return render(request, 'chat/room_detail.html', {'room': room, "page": page, "private": True})
+  try:
+    page = Paginator.get_page(request, message_list,
+                              page_num=page_num,
+                              reverse_link="chat:room_page",
+                              compute_link=lambda page_num: reverse("chat:room_page", args=[room_slug, page_num]),
+                              default_page_size=100)
+    return render(request, 'chat/room_detail.html', {'room': room, "page": page, "private": True})
+  except PageOutOfBounds as exc:
+      return redirect(exc.redirect_to)
 
 
 @login_required

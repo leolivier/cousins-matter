@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.exceptions import RequestDataTooBig
 
-from cousinsmatter.utils import Paginator, assert_request_is_ajax
+from cousinsmatter.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
 from forum.views.views_follow import check_followers_on_message, check_followers_on_new_post
 from ..models import Post, Message
 from ..forms import MessageForm, PostForm, CommentForm
@@ -25,11 +25,14 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
     def get(self, request, page=1):
       posts = Post.objects.select_related('first_message').annotate(num_messages=Count("message")) \
                   .all().order_by('-first_message__date')
-      page = Paginator.get_page(request, object_list=posts, 
-                                page_num=page, 
-                                reverse_link='forum:page',
-                                default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
-      return render(request, "forum/post_list.html", {"page": page})
+      try:
+        page = Paginator.get_page(request, object_list=posts,
+                                  page_num=page, 
+                                  reverse_link='forum:page',
+                                  default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
+        return render(request, "forum/post_list.html", {"page": page})
+      except PageOutOfBounds as exc:
+          return redirect(exc.redirect_to)
 
 
 class PostDisplayView(LoginRequiredMixin, generic.DetailView):
@@ -39,19 +42,22 @@ class PostDisplayView(LoginRequiredMixin, generic.DetailView):
       post_id = pk
       post = get_object_or_404(Post, pk=post_id)
       replies = Message.objects.filter(post=post_id, first_of_post=None).all()
-      page = Paginator.get_page(request,
-                                object_list=replies,
-                                page_num=page_num,
-                                reverse_link='forum:display_page',
-                                compute_link=lambda page_num: reverse('forum:display_page', args=[post_id, page_num]),
-                                default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
-      return render(request, "forum/post_detail.html", {
-         "page": page,
-         "nreplies": replies.count(),
-         'post': post,
-         'comment_form': CommentForm(),
-         'reply_form': MessageForm(),
-      })
+      try:
+        page = Paginator.get_page(request,
+                                  object_list=replies,
+                                  page_num=page_num,
+                                  reverse_link='forum:display_page',
+                                  compute_link=lambda page_num: reverse('forum:display_page', args=[post_id, page_num]),
+                                  default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
+        return render(request, "forum/post_detail.html", {
+          "page": page,
+          "nreplies": replies.count(),
+          'post': post,
+          'comment_form': CommentForm(),
+          'reply_form': MessageForm(),
+        })
+      except PageOutOfBounds as exc:
+          return redirect(exc.redirect_to)
 
 
 class PostCreateView(LoginRequiredMixin, generic.CreateView):

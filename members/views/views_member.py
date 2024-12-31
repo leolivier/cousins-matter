@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
-from cousinsmatter.utils import Paginator, remove_accents
+from cousinsmatter.utils import PageOutOfBounds, Paginator, remove_accents
 from verify_email.email_handler import send_verification_email
 from cousinsmatter.utils import assert_request_is_ajax, redirect_to_referer
 from ..models import Member
@@ -81,12 +81,15 @@ class MembersView(LoginRequiredMixin, generic.ListView):
         sort_by = [order + s for s in sort_by]
         members = members.order_by(*sort_by)
         # print('sort by: ', sort_by, ' order: "', order, '" members query: ', members.query)
-        page = Paginator.get_page(request,
-                                  object_list=members,
-                                  page_num=page_num,
-                                  reverse_link='members:members_page',
-                                  default_page_size=settings.DEFAULT_MEMBERS_PAGE_SIZE)
-        return render(request, self.template_name, {"page": page})
+        try:
+            page = Paginator.get_page(request,
+                                      object_list=members,
+                                      page_num=page_num,
+                                      reverse_link='members:members_page',
+                                      default_page_size=settings.DEFAULT_MEMBERS_PAGE_SIZE)
+            return render(request, self.template_name, {"page": page})
+        except PageOutOfBounds as exc:
+            return redirect(exc.redirect_to)
 
 
 class MemberDetailView(LoginRequiredMixin, generic.DetailView):

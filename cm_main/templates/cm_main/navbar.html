@@ -72,6 +72,11 @@
 					</div>
 			</div>
 
+			<div class="navbar-item has-dropdown is-hoverable">
+				{% url 'troves:list' as trove_url%}
+				{%navbar_item trove_url _("Troves") "troves" %}
+			</div>
+
 			{% comment %}
 				<li><a href="{% url 'polls:polls' %}">{%trans "Polls" %}</a></li>
 				<li><a href="{% url 'admin:admin' %}">{%trans "Admin" %}</a></li>

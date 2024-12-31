@@ -101,6 +101,7 @@ INSTALLED_APPS = [
   'forum',
   'chat',
   'pages',
+  'troves',
   'crispy_forms',
   'crispy_bulma',
   'verify_email',
@@ -249,6 +250,10 @@ DJANGO_ICONS = {
     "admin": "application-cog-outline",
     "stats": "chart-box-outline",
     "leave-group": "account-multiple-minus-outline",
+    # arrows
+    "arrow-down": "arrow-down-thin",
+    "arrow-up": "arrow-up-thin",
+    "arrow-up-down": "swap-vertical",
     # emoticons
     "thumb-up": "thumb-up-outline",
     "thumb-down": "thumb-down-outline",
@@ -300,10 +305,10 @@ DJANGO_ICONS = {
     "page-level": "page-next-outline",
     "new-page": "book-open-page-variant-outline",
     "edit-page": "note-edit-outline",
-    # arrows
-    "arrow-down": "arrow-down-thin",
-    "arrow-up": "arrow-up-thin",
-    "arrow-up-down": "swap-vertical"
+    # troves icons
+    "new-treasure": "book-plus-outline",
+    "edit-treasure": "note-edit-outline",
+    "troves": "treasure-chest",
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -368,10 +373,15 @@ MAX_CSV_FILE_SIZE = env.int('MAX_CSV_FILE_SIZE', 2*1024*1024)  # 2MB
 
 DARK_MODE = env.bool('DARK_MODE', False)
 
+# members settings
 AUTH_USER_MODEL = 'members.Member'
-
 DEFAULT_MEMBERS_PAGE_SIZE = env.int('DEFAULT_MEMBERS_PAGE_SIZE', 25)
+ALLOW_MEMBERS_TO_CREATE_MEMBERS = env.bool('ALLOW_MEMBERS_TO_CREATE_MEMBERS', True)
+ALLOW_MEMBERS_TO_INVITE_MEMBERS = env.bool('ALLOW_MEMBERS_TO_INVITE_MEMBERS', True)
+
+# forum settings
 DEFAULT_POSTS_PER_PAGE = env.int('DEFAULT_POSTS_PER_PAGE', 25)
+# chat settings
 DEFAULT_CHATMESSAGES_PER_PAGE = env.int('DEFAULT_CHATMESSAGES_PER_PAGE', 25)
 DEFAULT_CHATROOMS_PER_PAGE = env.int('DEFAULT_CHATROOMS_PER_PAGE', 25)
 MESSAGE_MAX_SIZE = env.int('MESSAGE_MAX_SIZE', DATA_UPLOAD_MAX_MEMORY_SIZE)
@@ -379,6 +389,7 @@ MESSAGE_COMMENTS_MAX_SIZE = env.int('MESSAGE_COMMENTS_MAX_SIZE', 400)
 
 CONTACT_MAX_SIZE = env.int('CONTACT_MAX_SIZE', 1024*1024)  # 1MB
 
+# page settings
 PAGES_URL_PREFIX = 'pages/'
 PRIVACY_URL = '/about/privacy-policy/'
 MENU_PAGE_URL_PREFIX = '/publish'
@@ -390,9 +401,25 @@ PAGE_MAX_SIZE = env.int('PAGE_MAX_SIZE', 10*1024*1024)  # 10MB
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = max(DATA_UPLOAD_MAX_MEMORY_SIZE, MESSAGE_MAX_SIZE, PAGE_MAX_SIZE)
 
-ALLOW_MEMBERS_TO_CREATE_MEMBERS = env.bool('ALLOW_MEMBERS_TO_CREATE_MEMBERS', True)
-ALLOW_MEMBERS_TO_INVITE_MEMBERS = env.bool('ALLOW_MEMBERS_TO_INVITE_MEMBERS', True)
-
 # read version from release.txt
 with open(BASE_DIR / 'release.txt', 'r') as f:
   APP_VERSION = f.read().strip()
+
+# Troves settings
+TROVE_DIRECTORY_REL = 'troves'
+TROVE_DIRECTORY = Path(TROVE_DIRECTORY_REL)
+TROVE_PICTURE_DIRECTORY_REL = 'pictures'
+TROVE_THUMBNAIL_DIRECTORY_REL = 'thumbnails'
+TROVE_FILES_DIRECTORY_REL = 'files'
+TROVE_PICTURE_DIRECTORY = TROVE_DIRECTORY / TROVE_PICTURE_DIRECTORY_REL
+TROVE_THUMBNAIL_DIRECTORY = TROVE_PICTURE_DIRECTORY / TROVE_THUMBNAIL_DIRECTORY_REL
+TROVE_FILES_DIRECTORY = TROVE_DIRECTORY / TROVE_FILES_DIRECTORY_REL
+TROVE_URL_PREFIX = f'{TROVE_DIRECTORY}/'
+TROVE_PICTURE_URL_PREFIX = f'{TROVE_URL_PREFIX}{TROVE_PICTURE_DIRECTORY_REL}/'
+TROVE_THUMBNAIL_URL_PREFIX = f'{TROVE_PICTURE_URL_PREFIX}{TROVE_THUMBNAIL_DIRECTORY_REL}/'
+TROVE_FILE_URL_PREFIX = f'{TROVE_URL_PREFIX}{TROVE_FILES_DIRECTORY_REL}/'
+TROVE_FILE_MAX_SIZE = env.int('TROVE_FILE_MAX_SIZE', 20*1024*1024)  # 20MB
+TROVE_PICTURE_FILE_MAX_SIZE = env.int('TROVE_PICTURE_FILE_MAX_SIZE', MAX_PHOTO_FILE_SIZE)
+TROVE_THUMBNAIL_SIZE = env.int('TROVE_THUMBNAIL_SIZE', GALLERIES_THUMBNAIL_SIZE)
+DEFAULT_TROVE_PAGE_SIZE = env.int('DEFAULT_TROVE_PAGE_SIZE', 10)
+TROVE_DESCRIPTION_MAX_SIZE = MESSAGE_MAX_SIZE

@@ -1,0 +1,93 @@
+# Spanish Translations for Troves app.
+# Copyright (C) 2024 Olivier LEVILLAIN
+# This file is distributed under the same license as the Troves package.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"POT-Creation-Date: 2024-12-30 12:56+0100\n"
+"PO-Revision-Date: 2024-12-30 12:56+0100\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: Spanish <LL@li.org>\n"
+"Language: ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+
+#: models.py:19
+msgid "History & Stories"
+msgstr "Historia y anécdotas"
+
+#: models.py:20
+msgid "Recipes"
+msgstr "Recetas"
+
+#: models.py:21
+msgid "Family meetings"
+msgstr "Reuniones familiares"
+
+#: models.py:22
+msgid "Recollections"
+msgstr "Recuerdos"
+
+#: models.py:23
+msgid "Arts"
+msgstr "Artes"
+
+#: models.py:24
+msgid "Miscellaneous"
+msgstr "Varios"
+
+#: models.py:27
+msgid "Description of the treasure"
+msgstr "Descripción del tesoro"
+
+#: models.py:28
+msgid "Treasure photo"
+msgstr "Foto del tesoro"
+
+#: models.py:31
+msgid "Treasure file"
+msgstr "Archivo del tesoro"
+
+#: models.py:33
+msgid "Category"
+msgstr "Categoría"
+
+#: models.py:37
+msgid "trove"
+msgstr "tesoro"
+
+#: models.py:38
+msgid "troves"
+msgstr "tesoros"
+
+#: models.py:52
+msgid "A treasure must have an owner."
+msgstr "Un tesoro debe tener dueño."
+
+#: templates/troves/treasure_form.html:8 templates/troves/treasure_form.html:20
+msgid "Modify treasure"
+msgstr "Modificar tesoro"
+
+#: templates/troves/treasure_form.html:10
+#: templates/troves/treasure_form.html:22 templates/troves/trove_cave.html:17
+msgid "Add a treasure"
+msgstr "Añade un tesoro"
+
+#: templates/troves/treasure_form.html:34
+msgid "Submit"
+msgstr "Enviar"
+
+#: templates/troves/treasure_form.html:38
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/troves/trove_cave.html:15 templates/troves/trove_cave.html:21
+msgid "The treasure trove"
+msgstr "la cueva del tesoro"

@@ -1,0 +1,62 @@
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from cousinsmatter.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
+from members.models import Member
+from .models import Trove
+from .forms import TreasureForm
+
+
+@login_required
+def trove_cave(request, page=1):
+    treasures = Trove.objects.all().order_by('category', 'id')
+    try:
+        trove_page = Paginator.get_page(request, object_list=treasures,
+                                        page_num=page,
+                                        reverse_link='troves:page',
+                                        default_page_size=settings.DEFAULT_TROVE_PAGE_SIZE,
+                                        group_by='category')
+        return render(request, "troves/trove_cave.html", {"page": trove_page})
+    except PageOutOfBounds as exc:
+        return redirect(exc.redirect_to)
+
+
+@login_required
+def create_treasure(request):
+    if request.method == 'POST':
+        form = TreasureForm(request.POST, request.FILES)
+        owner = Member.objects.only('id').get(id=request.user.id)
+        form.instance.owner_id = owner.id
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('troves:list'))  # try to go to last page
+    else:
+        form = TreasureForm()
+    return render(request, 'troves/treasure_form.html', {'form': form})
+
+
+@login_required
+def update_treasure(request, pk):
+    treasure = get_object_or_404(Trove, pk=pk)
+    if request.method == 'POST':
+        form = TreasureForm(request.POST, request.FILES, instance=treasure)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('troves:list'))  # try to go to last page
+    else:
+        form = TreasureForm(instance=treasure)
+    return render(request, 'troves/treasure_form.html', {'form': form})
+
+
+@csrf_exempt
+@login_required
+def delete_treasure(request, pk):
+    assert_request_is_ajax(request)
+    try:
+        get_object_or_404(Trove, pk=pk).delete()
+        return JsonResponse({'deleted': True})
+    except Exception:
+        return JsonResponse({'deleted': False})

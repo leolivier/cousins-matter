@@ -1,0 +1,54 @@
+{% extends "cm_main/base.html" %}
+{%load i18n cm_tags troves_tags%}
+{%block header%}
+<script>
+function delete_treasure(url) {
+	if (confirm(gettext("Are you sure you want to delete this treasure?"))) {
+		ajax_action(url, (response)=>{
+      window.location.reload(true)  // force page to reload
+		})                
+	}
+}
+
+</script>
+{%endblock%}
+{% block title %}{% title _("The treasure trove") %}{% endblock %}
+{% block content %}
+{% trans 'Add a treasure' as create_label %}
+<div class="container">
+	<div class="panel">
+		<div class="panel-heading is-flex is-align-items-center is-justify-content-center">
+			<span class="is-flex-grow-1 has-text-centered">{% title _("The treasure trove") %}</span>
+			<a class="button ml-6" href="{%url 'troves:create'%}" aria-label="{{create_label}}" title="{{create_label}}">
+				{%icon "new-treasure" %} <span class="is-hidden-mobile ml-3">{{create_label}}</span>
+			</a>
+		</div>
+		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
+			{%paginate page%}
+		</div>
+		<div>
+      {% for category, troves in page.object_list.items %}
+        <h2 class="title is-4">{{ category|translate_category }}</h2>
+        <div class="grid">
+          {% for trove in troves %}
+          <div class="cell  has-text-centered">
+            <figure class="image thumbnail mx-auto">
+              <a href="{%if trove.file%}{{ trove.file.url }}{%else%}{{ trove.picture.url }}{%endif%}"
+              target="_blank">
+                <img src="{{ trove.thumbnail.url }}" alt="{{ trove.description }}"/>
+              </a>
+            </figure>
+            <p>{% autoescape off %}{{ trove.description }}{% endautoescape %}</p>
+            {%if trove.owner.id == user.id %}
+            <p>
+              <a class="button" href='{%url "troves:update" trove.id%}'>{%icon "edit"%}</a>
+              {%url "troves:delete" trove.id as delete_url%}
+              <a class="button" onclick="delete_treasure('{{delete_url}}')">{%icon "delete"%}</a>
+            </p>
+            {%endif%}
+          </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+{% endblock %}

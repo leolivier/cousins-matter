@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(verbose_name='Description of the treasure')),
                 ('picture', models.ImageField(upload_to=pathlib.PurePosixPath('troves/pictures'),
                                               verbose_name='Treasure photo')),
-                ('thumbnail', models.ImageField(upload_to=pathlib.PurePosixPath('troves/pictures/thumbnails'))),
+                ('thumbnail', models.ImageField(blank=True, upload_to=pathlib.PurePosixPath('troves/pictures/thumbnails'))),
                 ('file', models.FileField(blank=True, null=True, upload_to=pathlib.PurePosixPath('troves/files'),
                                           verbose_name='Treasure file')),
                 ('category', models.CharField(choices=[('history', 'History & Stories'),

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-11 19:57+0100\n"
+"POT-Creation-Date: 2024-12-30 16:46+0100\n"
 "PO-Revision-Date: 2024-10-21 09:03+00:00\n"
 "Last-Translator: Olivier LEVILLAIN\n"
 "Language-Team: German <LL@li.org>\n"
@@ -111,23 +111,23 @@ msgstr "Diese Seite zeigt einige Statistiken über diese Website an:"
 msgid "Statistics"
 msgstr "Statistiken"
 
-#: templates/cm_main/base.html:8
+#: templates/cm_main/base.html:9
 msgid "Home"
 msgstr "Heim"
 
-#: templates/cm_main/base.html:68
+#: templates/cm_main/base.html:69
 msgid "This site proudly built using"
 msgstr "Diese Website stolz gebaut mit"
 
-#: templates/cm_main/base.html:70
+#: templates/cm_main/base.html:71
 msgid "The source code is licensed"
 msgstr "Die Quellcode ist lizenziert"
 
-#: templates/cm_main/base.html:76
+#: templates/cm_main/base.html:77
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Urheberrecht © 2024 Cousins Matter. Alle Rechte vorbehalten."
 
-#: templates/cm_main/base.html:79 templates/cm_main/navbar.html:138
+#: templates/cm_main/base.html:80 templates/cm_main/navbar.html:145
 msgid "Contact the site admin"
 msgstr "Kontaktiere den Site-Administrator"
 
@@ -166,25 +166,25 @@ msgstr "Schalten Sie die Notizbearbeitungs-Werkzeugleiste ein"
 msgid "Remaining characters:"
 msgstr "Verbleibende Zeichen:"
 
-#: templates/cm_main/common/paginate_template.html:27
+#: templates/cm_main/common/paginate_template.html:25
 msgid "Items per page:"
 msgstr "Items pro Seite:"
 
-#: templates/cm_main/common/paginate_template.html:47
+#: templates/cm_main/common/paginate_template.html:45
 msgid "go to first page"
 msgstr "Gehe zur ersten Seite"
 
-#: templates/cm_main/common/paginate_template.html:59
+#: templates/cm_main/common/paginate_template.html:57
 #, python-format
 msgid "go to page #%(page_num)s"
 msgstr "Gehe zur Seite #%(page_num)s"
 
-#: templates/cm_main/common/paginate_template.html:62
+#: templates/cm_main/common/paginate_template.html:60
 #, python-format
 msgid "page #%(page_num)s"
 msgstr "Seite #%(page_num)s"
 
-#: templates/cm_main/common/paginate_template.html:75
+#: templates/cm_main/common/paginate_template.html:73
 msgid "go to last page"
 msgstr "Gehe zur letzten Seite"
 
@@ -279,95 +279,99 @@ msgstr "Stopp Folgen"
 msgid "Follow"
 msgstr "Folgen"
 
-#: templates/cm_main/navbar.html:26 views/views_stats.py:106
+#: templates/cm_main/navbar.html:28 views/views_stats.py:106
 msgid "Members"
 msgstr "Mitglieder"
 
-#: templates/cm_main/navbar.html:29
+#: templates/cm_main/navbar.html:31
 msgid "Birthdays"
 msgstr "Geburtstag"
 
-#: templates/cm_main/navbar.html:31
+#: templates/cm_main/navbar.html:33
 msgid "Show directory"
 msgstr "Zeige Verzeichnis"
 
-#: templates/cm_main/navbar.html:34
+#: templates/cm_main/navbar.html:36
 msgid "Create Member"
 msgstr "Erstellen Sie Mitglied"
 
-#: templates/cm_main/navbar.html:38
+#: templates/cm_main/navbar.html:40
 msgid "Invite Member"
 msgstr "Einladung zum Mitglied werden"
 
-#: templates/cm_main/navbar.html:45 views/views_stats.py:114
+#: templates/cm_main/navbar.html:47 views/views_stats.py:114
 msgid "Galleries"
 msgstr "Gallerie"
 
-#: templates/cm_main/navbar.html:48
+#: templates/cm_main/navbar.html:50
 msgid "Create Gallery"
 msgstr "Erstelle Galerie"
 
-#: templates/cm_main/navbar.html:50
+#: templates/cm_main/navbar.html:52
 msgid "Bulk Upload"
 msgstr "Maschinelle Datenübertragung"
 
-#: templates/cm_main/navbar.html:56
+#: templates/cm_main/navbar.html:58
 msgid "Forum"
 msgstr "Forum"
 
-#: templates/cm_main/navbar.html:59
+#: templates/cm_main/navbar.html:61
 msgid "Create Post"
 msgstr "Erstelle einen Beitrag"
 
-#: templates/cm_main/navbar.html:64
+#: templates/cm_main/navbar.html:66
 msgid "Chat"
 msgstr "Chat"
 
-#: templates/cm_main/navbar.html:67
+#: templates/cm_main/navbar.html:69
 msgid "Public Chat Rooms"
 msgstr "Öffentliche Chaträume"
 
-#: templates/cm_main/navbar.html:69
+#: templates/cm_main/navbar.html:71
 msgid "Private Chat Rooms"
 msgstr "Privat-Chat-Rooms"
 
-#: templates/cm_main/navbar.html:92
+#: templates/cm_main/navbar.html:77
+msgid "Troves"
+msgstr "Schätze"
+
+#: templates/cm_main/navbar.html:99
 msgid "Change language"
 msgstr "Sprache ändern"
 
-#: templates/cm_main/navbar.html:112
+#: templates/cm_main/navbar.html:119
 msgid "Edit Pages"
 msgstr "Bearbeiten Sie Seiten"
 
-#: templates/cm_main/navbar.html:114
+#: templates/cm_main/navbar.html:121
 msgid "Import members from CSV"
 msgstr "Importiere Mitglieder aus CSV"
 
-#: templates/cm_main/navbar.html:115
+#: templates/cm_main/navbar.html:122
 msgid "Admin site"
 msgstr "Verwaltungsseite"
 
-#: templates/cm_main/navbar.html:118
+#: templates/cm_main/navbar.html:125
 msgid "Export Members as CSV"
 msgstr "Exportiere Mitglieder als CSV"
 
-#: templates/cm_main/navbar.html:136
+#: templates/cm_main/navbar.html:143
 msgid "About the site"
 msgstr "Über den Site"
 
-#: templates/cm_main/navbar.html:147
+#: templates/cm_main/navbar.html:154
 msgid "Sign in"
 msgstr "Anmelden"
 
-#: templates/cm_main/navbar.html:151
+#: templates/cm_main/navbar.html:158
 msgid "Request invitation link"
 msgstr "Bitte um Einladungslink"
 
-#: templates/cm_main/navbar.html:160
+#: templates/cm_main/navbar.html:167
 msgid "Profile"
 msgstr "Profil"
 
-#: templates/cm_main/navbar.html:162
+#: templates/cm_main/navbar.html:169
 msgid "Log Out"
 msgstr "Ausloggen"
 

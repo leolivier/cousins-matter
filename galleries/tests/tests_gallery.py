@@ -7,10 +7,11 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from cm_main.templatetags.cm_tags import icon
+from cousinsmatter.utils import create_test_image
+from galleries.models import Gallery, Photo
+from galleries.views.views_gallery import GalleryCreateView, GalleryDetailView, GalleryUpdateView
 from members.tests.tests_member_base import TestLoginRequiredMixin
-from ..models import Gallery, Photo
-from .tests_utils import create_image, GalleryBaseTestCase
-from ..views.views_gallery import GalleryCreateView, GalleryDetailView, GalleryUpdateView
+from .tests_utils import GalleryBaseTestCase
 
 COUNTER = 0
 
@@ -54,7 +55,7 @@ class CreateGalleryTest(GalleryBaseTestCase):
     gal = Gallery(name=get_gallery_name(), description="a gallery with a cover")
     gal.save()
     cover_file = "test-image-1.jpg"
-    cover_image = create_image(cover_file)
+    cover_image = create_test_image(__file__, cover_file)
     cover = Photo(name="a cover", image=cover_image, date=date.today(), gallery=gal)
     cover.save()
     gal.cover = cover
@@ -161,7 +162,9 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     rg = Gallery(name=gal_name)
     rg.save()
     # add 3 photos in it
-    photos = [Photo(name=f'Photo#{i+1}', image=create_image(f'test-image-{i+1}.jpg'), date=date.today(), gallery=rg)
+    photos = [Photo(name=f'Photo#{i+1}',
+                    image=create_test_image(__file__, f'test-image-{i+1}.jpg'),
+                    date=date.today(), gallery=rg)
               for i in range(3)]
     for p in photos:
       p.save()
@@ -239,7 +242,7 @@ class DeleteGalleryViewTest(GalleryBaseTestCase):
     return [(gal.id, p.id)] + res
 
   def test_delete_gallery(self):
-    image = create_image("test-image-1.jpg")
+    image = create_test_image(__file__, "test-image-1.jpg")
     lst = self.rec_build_tree(3, None, image)
     # find the 1rst gallery below root
     gal = lst[1][0]

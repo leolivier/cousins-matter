@@ -4,10 +4,11 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
+from cousinsmatter.utils import create_test_image
+from galleries.models import Photo, Gallery
+from galleries.views.views_photo import PhotoAddView
 from members.tests.tests_member import TestLoginRequiredMixin
-from ..models import Photo, Gallery
-from ..views.views_photo import PhotoAddView
-from .tests_utils import create_image, GalleryBaseTestCase
+from .tests_utils import GalleryBaseTestCase
 from .tests_gallery import get_gallery_name
 
 COUNTER = 0
@@ -32,7 +33,7 @@ class PhotoTestsBase(GalleryBaseTestCase):
     self.root_gallery.save()
     self.sub_gallery = Gallery(name=get_gallery_name(), description="a test sub gallery", parent=self.root_gallery)
     self.sub_gallery.save()
-    self.image = create_image("test-image-1.jpg")
+    self.image = create_test_image(__file__, "test-image-1.jpg")
 
 
 class CreatePhotoTests(PhotoTestsBase):
@@ -87,7 +88,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
     """
     if page_num == 1:
       for i in range(nb_photos):
-        image = create_image(f"test-image-{i+1}.jpg")
+        image = create_test_image(__file__, f"test-image-{i+1}.jpg")
         p = Photo(name=get_photo_name(), gallery=gallery, date=date.today(), image=image)
         p.save()
     photos = Photo.objects.filter(gallery=gallery)[first:last]

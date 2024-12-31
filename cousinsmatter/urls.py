@@ -61,4 +61,5 @@ urlpatterns = [
     path('protected_media/<path:media>', download_protected_media, name="get_protected_media"),
     path(settings.PAGES_URL_PREFIX, include("django.contrib.flatpages.urls")),
     path("pages-edit/", include("pages.urls")),
+    path('troves/', include('troves.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

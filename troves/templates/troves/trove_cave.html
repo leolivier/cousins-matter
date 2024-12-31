@@ -22,6 +22,29 @@ function delete_treasure(url) {
 			<a class="button ml-6" href="{%url 'troves:create'%}" aria-label="{{create_label}}" title="{{create_label}}">
 				{%icon "new-treasure" %} <span class="is-hidden-mobile ml-3">{{create_label}}</span>
 			</a>
+      <div class="ml-5">
+        <form method="get" name="select_category">
+          <div class="control">
+            <label for="category">{%trans "Filter Treasures" %}:</label>
+            <select name="category"
+                    value="{{request.GET.category|default:'all'}}">
+              <option value="all">{%trans "All" %}</option>
+              {% for category in trove_categories %}
+                <option value="{{ category.0 }}">{{ category.1 }}</option>
+              {% endfor %}
+            </select>
+            {# Submit "select category" form automatically #}
+            <script>
+              $(document).ready(function() {
+                $('select[name="category"]').val('{{request.GET.category|default:"all"}}');
+                $('select[name="category"]').change(function() {
+                  $('form[name="select_category"]').submit()
+                })
+              });
+            </script>
+          </div>
+        </form>
+      </div>
 		</div>
 		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
 			{%paginate page%}

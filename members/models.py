@@ -208,13 +208,18 @@ class Member(AbstractUser):
         self.member_manager = Member.objects.filter(is_superuser=True).first()
 
     def _resize_avatar(self, max_size, save_path):
-      img = Image.open(self.avatar.path)
-      if img.height > max_size or img.width > max_size:
-        output_size = (max_size, max_size)
-        img.thumbnail(output_size)
-        img = ImageOps.exif_transpose(img)  # avoid image rotating
-        img.save(save_path)
-        logger.debug(f"Resized and saved avatar for {self.full_name} in {save_path}, size: {img.size}")
+      try:
+        img = Image.open(self.avatar.path)
+        if img.height > max_size or img.width > max_size:
+          output_size = (max_size, max_size)
+          img.thumbnail(output_size)
+          img = ImageOps.exif_transpose(img)  # avoid image rotating
+          img.save(save_path)
+          logger.debug(f"Resized and saved avatar for {self.full_name} in {save_path}, size: {img.size}")
+      except FileNotFoundError:
+        raise ValueError(f"Avatar file not found: {self.avatar.path}")
+      except Exception as e:
+        raise e
 
     def save(self, *args, **kwargs):
       self.clean()  # clean before save

@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 13:27+0100\n"
-"PO-Revision-Date: 2024-10-21 10:17+00:00\n"
+"POT-Creation-Date: 2024-10-21 10:17+00:00\n"
+"PO-Revision-Date: 2025-02-09 10:33+0100\n"
 "Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
 "leolivier/auto-po-lyglot)\n"
 "Language-Team: French <LL@li.org>\n"
@@ -167,7 +167,7 @@ msgid "managed_by"
 msgstr "gestito_da"
 
 #: models.py:46 templates/members/members/members_directory.html:29
-#: views/views_directory.py:59
+#: views/views_directory.py:62
 msgid "Name"
 msgstr "Nome"
 
@@ -217,13 +217,13 @@ msgstr "Membro manager"
 
 #: models.py:103 templates/members/members/member_detail.html:37
 #: templates/members/members/members_directory.html:33
-#: views/views_directory.py:59
+#: views/views_directory.py:62
 msgid "Address"
 msgstr "Indirizzo"
 
 #: models.py:105 templates/members/members/member_detail.html:45
 #: templates/members/members/members_directory.html:31
-#: views/views_directory.py:59
+#: views/views_directory.py:62
 msgid "Phone"
 msgstr "Telefono"
 
@@ -345,7 +345,7 @@ msgid "Greetings!"
 msgstr "Saluti!"
 
 #: templates/members/email/email_verification_msg.html:27
-#: tests/tests_member.py:347
+#: tests/tests_member.py:384
 msgid ""
 "You received this mail because you attempted to create an account on our "
 "website or because a member created and activated your account"
@@ -354,7 +354,7 @@ msgstr ""
 "sito web o perche' un membro ha creato e attivato il tuo account"
 
 #: templates/members/email/email_verification_msg.html:28
-#: tests/tests_member.py:349
+#: tests/tests_member.py:386
 msgid ""
 "Please click on the link below to confirm the email and activate your "
 "account."
@@ -594,7 +594,7 @@ msgstr "Modifica Famiglia"
 #: templates/members/login/password_reset.html:18
 #: templates/members/login/password_reset_complete.html:9
 #: templates/members/login/password_reset_confirm.html:28
-#: templates/members/registration/email_verification_successful.html:14
+#: templates/members/registration/email_verification_successful.html:15
 msgid "Sign in"
 msgstr "Accedi"
 
@@ -841,14 +841,13 @@ msgstr "Dettaglio del Membro"
 msgid "Active member"
 msgstr "Membro attivo"
 
-#: templates/members/members/member_detail.html:28
-#: templates/members/members/member_upsert.html:28 tests/tests_member.py:236
-msgid "Managed member"
-msgstr "Membro gestito"
+#: templates/members/members/member_detail.html:28 tests/tests_member.py:236
+msgid "Member managed by"
+msgstr "Membro gestito da"
 
 #: templates/members/members/member_detail.html:41
 #: templates/members/members/members_directory.html:32
-#: views/views_directory.py:59
+#: views/views_directory.py:62
 msgid "Email"
 msgstr "Email"
 
@@ -980,7 +979,7 @@ msgstr "Elenco dei Membri"
 msgid "Show directory"
 msgstr "Mostra l'elenco"
 
-#: templates/members/members/members.html:19 views/views_member.py:127
+#: templates/members/members/members.html:19 views/views_member.py:130
 msgid "Create Member"
 msgstr "Crea Membro"
 
@@ -1041,18 +1040,6 @@ msgstr ""
 "lo utilizzano! Per favore, creane uno nuovo se non è questo il risultato che "
 "desideri ottenere."
 
-#: templates/members/registration/email_verification_failed.html:3
-#: templates/members/registration/email_verification_failed.html:7
-msgid "Invalid Link!"
-msgstr "Link non valido!"
-
-#: templates/members/registration/email_verification_failed.html:9
-msgid ""
-"This link is invalid or been used already, we cannot verify using this link."
-msgstr ""
-"Questo link non è valido o è già stato utilizzato, non possiamo verificare "
-"nulla usando questo link."
-
 #: templates/members/registration/email_verification_successful.html:3
 #: templates/members/registration/email_verification_successful.html:7
 msgid "Email Verification Successful!"
@@ -1068,6 +1055,16 @@ msgstr ""
 #: templates/members/registration/email_verification_successful.html:10
 msgid "You can sign in with your credentials now..."
 msgstr "Ora puoi accedere con le tue credenziali..."
+
+#: templates/members/registration/email_verification_successful.html:11
+msgid ""
+"In case you forgot your credentials or your account was activated by another "
+"member and this is your first connection, please, click in 'reset password' "
+"to request a new password."
+msgstr ""
+"Se avete dimenticato le vostre credenziali o il vostro account è stato attivato "
+"da un altro membro e questa è la vostra prima connessione, vi preghiamo di cliccare "
+"su \"Reset password\" per richiedere una nuova password."
 
 #: templates/members/registration/link_expired.html:3
 #: templates/members/registration/link_expired.html:7
@@ -1153,16 +1150,16 @@ msgstr "Modifica %(name)s selezionati"
 msgid "Add another %(translated_name)s"
 msgstr "Aggiungi un'altra %(translated_name)s"
 
-#: tests/tests_member.py:100 views/views_member.py:217
+#: tests/tests_member.py:100 views/views_member.py:220
 msgid "Member deleted"
 msgstr "Membro eliminato"
 
 #: tests/tests_member.py:211 tests/tests_member.py:216
-#: views/views_member.py:165 views/views_member.py:179
+#: views/views_member.py:168 views/views_member.py:182
 msgid "You do not have permission to edit this member."
 msgstr "Non hai il permesso di modificare questo membro."
 
-#: tests/tests_member.py:409
+#: tests/tests_member.py:446
 msgid "Error: Cannot activate a dead member "
 msgstr "Errore: Impossibile attivare un membro morto "
 
@@ -1234,12 +1231,12 @@ msgstr ""
 "ora un'email contenente un link di attivazione e successivamente sarà "
 "reindirizzato alla schermata di reimpostazione della password."
 
-#: views/views_directory.py:56
+#: views/views_directory.py:59
 #, python-format
 msgid "%(site_name)s directory"
 msgstr "Directory %(site_name)s"
 
-#: views/views_directory.py:81
+#: views/views_directory.py:84
 #, python-format
 msgid "Page %(doc_page)s - %(title)s"
 msgstr "Pagina %(doc_page)s - %(title)s"
@@ -1288,13 +1285,13 @@ msgstr ""
 "Colonna mancante nel file CSV: \"%(fieldname)s\". I campi obbligatori sono "
 "%(all_names)s"
 
-#: views/views_import_export.py:113
+#: views/views_import_export.py:96
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar non trovato: %(avatar)s per il nome utente %(username)s. Ignorato..."
 
-#: views/views_import_export.py:122
+#: views/views_import_export.py:105
 #, python-format
 msgid ""
 "Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. "
@@ -1303,26 +1300,29 @@ msgstr ""
 "Errore nel salvare l'avatar (%(warning)s): %(avatar)s per il nome utente "
 "%(username)s. Ignorato..."
 
-#: views/views_import_export.py:138
-msgid ""
-"You requested to activate imported members. All managers will be ignored."
-msgstr ""
-"È stato richiesto di attivare i membri importati. Tutti i gestori verranno "
-"ignorati."
+#: views/views_import_export.py:120
+msgid "Keeping current manager."
+msgstr "Mantenere l'attuale manager."
 
-#: views/views_import_export.py:140
-#, python-format
-msgid "Manager %(manager)s not found for member %(member)s. Ignoring..."
+#: views/views_import_export.py:123
+msgid "Using your id..."
+msgstr "Utilizzando l'id..."
+
+#: views/views_import_export.py:126
+msgid "Manager %(manager)s not found for member %(member)s."
 msgstr ""
 "Il manager %(manager)s non è stato trovato per il membro %(member)s. "
-"Ignorare..."
 
-#: views/views_import_export.py:147
+#: views/views_import_export.py:130
 #, python-format
-msgid "Member %(member)s is active. Ignoring manager %(manager)s"
-msgstr "Il membro %(member)s è attivo. Ignorare il manager %(manager)s."
+msgid ""
+"%(manager)s is inactive and cannot be used as manager for %(member)s. "
+"Activate it manually or change the order in the file and put it first."
+msgstr ""
+"%(manager)s è inattivo e non può essere utilizzato come manager per %(member)s. "
+"Attivarlo manualmente o cambiare l'ordine nel file e metterlo per primo."
 
-#: views/views_import_export.py:156
+#: views/views_import_export.py:145
 #, python-format
 msgid ""
 "No manager provided for member %(member)s although inactive. Keeping "
@@ -1331,13 +1331,30 @@ msgstr ""
 "Non è previsto nessun gestore per i membri %(member)s, anche se inattivi. "
 "Mantenere quello esistente (%(manager)s)..."
 
-#: views/views_import_export.py:160
-#, python-format
-msgid "Inactive member %(member)s has no manager. Please provide one!"
+#: views/views_import_export.py:150
+msgid ""
+"Inactive member %(member)s has no manager. Please provide one! Meanwhile, "
+"the admin will be used as manager"
 msgstr ""
-"Il membro inattivo %(member)s non ha un manager. Si prega di fornirne uno!"
+"Il membro inattivo %(member)s non ha un manager. Si prega di fornirne uno! "
+"Nel frattempo, l'amministratore sarà usato come manager"
 
-#: views/views_import_export.py:252
+#: views/views_import_export.py:166
+msgid ""
+"Member %(member)s was active. Adding %(manager)s as manager inactivated him/"
+"her."
+msgstr "Il membro %(member)s era attivo. L'aggiunta di %(manager)s come manager "
+"lo ha reso inattivo."
+
+#: views/views_import_export.py:174
+msgid ""
+"You requested to activate imported members. All members with a manager in "
+"the file will be ignored and won't be activated."
+msgstr ""
+"È stato richiesto di attivare i membri importati. Tutti i membri con un "
+"manager nel file verranno ignorati e non verranno attivati."
+
+#: views/views_import_export.py:296
 #, python-format
 msgid ""
 "CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
@@ -1346,17 +1363,17 @@ msgstr ""
 "File CSV caricato: %(rows_num)i righe lette, %(created_num)i membri creati e "
 "%(updated_num)i aggiornati"
 
-#: views/views_import_export.py:256
+#: views/views_import_export.py:300
 #, python-format
 msgid "Error: %(error)s"
 msgstr "Errore: %(error)s"
 
-#: views/views_import_export.py:258
+#: views/views_import_export.py:302
 #, python-format
 msgid "Warning: %(warning)s"
 msgstr "Attenzione: %(warning)s"
 
-#: views/views_import_export.py:319
+#: views/views_import_export.py:363
 msgid "Method not allowed"
 msgstr "Metodo non consentito"
 
@@ -1364,33 +1381,33 @@ msgstr "Metodo non consentito"
 msgid "You have been logged out"
 msgstr "Sei stato disconnesso"
 
-#: views/views_member.py:117
+#: views/views_member.py:120
 msgid "Only superusers can create members"
 msgstr "Solo i superutenti possono creare membri"
 
-#: views/views_member.py:142
+#: views/views_member.py:145
 msgid "Member successfully created"
 msgstr "Il membro è stato creato con successo"
 
-#: views/views_member.py:150
+#: views/views_member.py:153
 msgid "Update Member Details"
 msgstr "Aggiorna i dettagli del membro"
 
-#: views/views_member.py:151
+#: views/views_member.py:154
 msgid "Member successfully updated"
 msgstr "Il membro è stato aggiornato con successo"
 
-#: views/views_member.py:189
+#: views/views_member.py:192
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Un'email di verifica è stata inviata per convalidare il tuo nuovo indirizzo "
 "email."
 
-#: views/views_member.py:203
+#: views/views_member.py:206
 msgid "My Profile"
 msgstr "Il mio profilo"
 
-#: views/views_member.py:204
+#: views/views_member.py:207
 msgid "Profile successfully updated"
 msgstr "Profilo aggiornato con successo"
 

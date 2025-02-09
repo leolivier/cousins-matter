@@ -53,15 +53,29 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
   template_name = "members/members/import_members.html"
   form_class = CSVImportMembersForm
   success_url = reverse_lazy("members:members")
+  # indicates if we have warned the user that even if user activation is requested,
+  # members with a manager in the file won't be activated
   warned_on_activate_users = False
+  # list of warnings and errors collected during the import
   warnings = []
   errors = []
+  # current row
   row = None
+  # number of created members
   created_num = 0
+  # number of updated members
   updated_num = 0
+  # number of rows processed
   rows_num = 0
-  changed = False
+  # the member linked to the current row
   current_member = None
+  # current member has been changed
+  changed = False
+  # default manager used when a user is inactive, has no manager defined in the file and has no 
+  # current manager. Set to connected user (the one who is importing the file).
+  default_manager = None
+  # indicates if the activation was managed for the current member
+  activation_managed = False
 
   def get_context_data(self, *args, **kwargs):
     optional_fields = {str(s) for s in ALL_FIELD_NAMES.values()} - {str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()}
@@ -70,37 +84,6 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       'optional_fields': optional_fields,
       'media_root': settings.MEDIA_ROOT,
       }
-
-  def _create_member(self):
-    """create new member based on current row content.
-       returns created member and warnings if any
-    """
-    self.current_member = Member(is_active=False)
-    self.changed = True
-    # print(f"newly created member is active:{member.is_active}")
-    for field in MEMBER_FIELD_NAMES:
-      trfield = t(field)
-      if trfield in self.row and self.row[trfield]:
-        match field:
-          case 'family':
-            self._manage_family(self.row[trfield])
-          case 'managed_by':
-            self._manage_managed_by(self.row[trfield])
-          case 'avatar':
-            self._manage_avatar(self.row[trfield], self.row[t('username')])
-          case _:
-            if self.current_member.__dict__[field] != self.row[trfield]:
-              setattr(self.current_member, field, self.row[trfield])
-
-    self.current_member.is_active = self.activate_users and not self.current_member.is_dead
-    # set manager to people who imported the file if imported users are not activated and not yet mmanaged
-    if self.current_member.is_active:
-      self.current_member.member_manager = None
-    else:
-      self.current_member.member_manager = self.current_member.member_manager or Member.objects.get(id=self.request.user.id) 
-    self.current_member.password = generate_random_string(16)
-    if self.changed:
-      self.created_num += 1
 
   def _manage_avatar(self, avatar_file, username):
     avatar = os.path.join(settings.MEDIA_REL, settings.AVATARS_DIR, avatar_file)
@@ -127,41 +110,73 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       self.current_member.family, _ = Family.objects.get_or_create(name=family_name)
       self.changed = True
 
-  def _manage_managed_by(self, manager_username):
-    # print(f"in manage_manage_by, member {self.current_member.username}, manager {manager_username}. "
-    #       f"Member is {'active' if self.current_member.is_active else 'inactive'}. "
-    #       f"Activate during Import is {self.activate_users}")
-    if manager_username:
-      new_member_manager = Member.objects.filter(username=manager_username).first()
-      if self.activate_users and not self.warned_on_activate_users:
-        self.warned_on_activate_users = True
-        self.warnings.append(_("You requested to activate imported members. All managers will be ignored."))
-      elif not new_member_manager:
-        self.warnings.append(_("Manager %(manager)s not found for member %(member)s. Ignoring...") % {
-          'manager': manager_username,
-          'member': self.current_member.full_name})
-      elif self.current_member.member_manager == new_member_manager:
-        # no change
-        pass
-      elif self.current_member.is_active:
-        self.warnings.append(_("Member %(member)s is active. Ignoring manager %(manager)s") % 
-                             {'member': self.current_member.full_name, 'manager': manager_username})
+  def _get_valid_manager(self, manager_username):
+    new_member_manager = Member.objects.filter(username=manager_username).first()
+    warning = ''
+
+    if not new_member_manager or not new_member_manager.is_active:
+      if self.current_member.member_manager:
+        new_member_manager = self.current_member.member_manager
+        warning = _('Keeping current manager.')
       else:
+        new_member_manager = self.default_manager
+        warning = _('Using your id...')
+
+    if not new_member_manager:
+      self.warnings.append(_("Manager %(manager)s not found for member %(member)s.") % {
+        'manager': manager_username,
+        'member': self.current_member.full_name} + ' ' + warning)
+    elif not new_member_manager.is_active:
+      self.error.append(_("%(manager)s is inactive and cannot be used as manager for %(member)s. "
+                          "Activate it manually or change the order in the file and put it first.") % {
+          'manager': manager_username,
+          'member': self.current_member.full_name} + ' ' + warning)
+    # print(f'new member manager for {self.current_member.username} = {new_member_manager.username}')
+    return new_member_manager
+
+  def _handle_no_manager_case(self):
+    if self.activate_users:
+      if not self.current_member.is_active:
+        self.current_member.is_active = True
+        self.current_member.member_manager = None
+        self.changed = True
+    elif not self.current_member.is_active:
+      if self.current_member.member_manager:
+        self.warnings.append(_("No manager provided for member %(member)s although inactive. "
+                             "Keeping existing one (%(manager)s)...") % {
+                'member': self.current_member.full_name,
+                'manager': self.current_member.member_manager.full_name})
+      else:
+        self.errors.append(_("Inactive member %(member)s has no manager. Please provide one! "
+                           "Meanwhile, the admin will be used as manager") % {
+          'member': self.current_member.full_name
+        })
+        self.current_member.member_manager = self.default_manager
+        self.changed = True
+
+  def _manage_managed_by(self, manager_username):
+    if manager_username:
+      new_member_manager = self._get_valid_manager(manager_username)
+
+      if self.current_member.member_manager != new_member_manager:
         self.current_member.member_manager = new_member_manager
         self.changed = True
-    else:  # no manager provided
-      if not self.current_member.is_active:  # we need one
-        if self.current_member.member_manager:
-          # just ignore with a warning
-          self.warnings.append(_("No manager provided for member %(member)s although inactive. "
-                                 "Keeping existing one (%(manager)s)...") % {
-                    'member': self.current_member.full_name, 'manager': self.current_member.member_manager.full_name})
-        else:  # member is not active and has no manager, and none provided ==> error but continue
-          self.errors.append(_("Inactive member %(member)s has no manager. Please provide one!") % {
-            'member': self.current_member.full_name
-            })
-    # print(f"member {self.current_member.username} manager is "
-    #       f"{self.current_member.member_manager.username if self.current_member.member_manager else 'None'}")
+
+      if self.current_member.is_active:
+        self.warnings.append(_("Member %(member)s was active. Adding %(manager)s as manager inactivated him/her.") % 
+                             {'member': self.current_member.full_name, 'manager': manager_username})
+        self.current_member.is_active = False
+        self.changed = True
+
+      if self.activate_users and not self.warned_on_activate_users:
+        self.warned_on_activate_users = True
+        self.warnings.append(
+          _("You requested to activate imported members. All members with a manager in the file "
+            "will be ignored and won't be activated."))
+    else:
+      self._handle_no_manager_case()
+
+    self.activation_managed = True
 
   def _update_member_field(self, field, value, username):
     match field:
@@ -187,10 +202,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       trfield = t(field)
       if trfield in self.row and self.row[trfield]:
         self._update_member_field(field, self.row[trfield], username)
-    if self.activate_users and not self.current_member.is_active:
-      self.current_member.member_manager = None
-      self.current_member.is_active = True
-      self.changed = True
+
     if self.changed:
       self.updated_num += 1
 
@@ -213,17 +225,46 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         self.current_member.address = address
         self.changed = True
 
+  def _create_member(self):
+    """create new member based on current row content.
+       returns created member and warnings if any
+    """
+    self.current_member = Member(is_active=False)
+    self.changed = True
+    # print(f"newly created member is active:{member.is_active}")
+    for field in MEMBER_FIELD_NAMES:
+      trfield = t(field)
+      if trfield in self.row and self.row[trfield]:
+        match field:
+          case 'family':
+            self._manage_family(self.row[trfield])
+          case 'managed_by':
+            self._manage_managed_by(self.row[trfield])
+          case 'avatar':
+            self._manage_avatar(self.row[trfield], self.row[t('username')])
+          case _:
+            if self.current_member.__dict__[field] != self.row[trfield]:
+              setattr(self.current_member, field, self.row[trfield])
+
+    self.current_member.password = generate_random_string(16)
+    if self.changed:
+      self.created_num += 1
+
   def _import_csv(self, csv_file):
+
+    self.default_manager = Member.objects.get(id=self.request.user.id)
+
     csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")
     reader = csv.DictReader(csvf)
     check_fields(reader.fieldnames)
     random.seed()
+    self.warnings = []
+    self.errors = []
     for self.row in reader:
       # reset all row variables
-      self.warnings = []
-      self.errors = []
       self.current_member = None
       self.changed = False
+      self.activation_managed = False
       # normalize username using slugify
       self.row[t('username')] = slugify(self.row[t('username')])
       # search for an existing member with this username
@@ -232,6 +273,9 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         self._update_member()
       else:  # not found, create it
         self._create_member()
+
+      if not self.activation_managed:  # no "managed_by" column in the file
+        self._manage_managed_by(None)
 
       self._update_address()
       self.rows_num += 1
@@ -253,7 +297,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
                            "and %(updated_num)i updated.") %
                          {'rows_num': self.rows_num, 'created_num': self.created_num, 'updated_num': self.updated_num})
         for error in self.errors:
-          messages.error(request, _("Error: %(error)s") % {'warning': error})
+          messages.error(request, _("Error: %(error)s") % {'error': error})
         for warning in self.warnings:
           messages.warning(request, _("Warning: %(warning)s") % {'warning': warning})
       except ValidationError as ve:
@@ -343,7 +387,7 @@ def export_members_to_csv(request):
   writer.writerow(ALL_FIELD_NAMES.values())
 
   # Retrieve member data
-  members = members.select_related('address').select_related('family').order_by('username')
+  members = members.select_related('address').select_related('family').select_related('member_manager').order_by('username')
 
   # Write member data to CSV file
   for member in members:
@@ -351,6 +395,8 @@ def export_members_to_csv(request):
     for field in MEMBER_FIELD_NAMES.keys():
       if field == 'family':
         row.append(member.family.name if member.family else '')
+      elif field == 'managed_by':
+        row.append(member.member_manager.username if member.member_manager else '')
       else:
         row.append(getattr(member, field, ''))
     for field in ADDRESS_FIELD_NAMES.keys():

@@ -34,7 +34,7 @@ class TestImportMixin():
     # print(response.content)
     return response
 
-  def do_test_import(self, file, lang, expected_num, activate_users=True, member_prefix='member'):
+  def do_test_import(self, file, lang, expected_num, activate_users=True, member_prefix='member', check_active=True):
     prev_num = Member.objects.count()
     response = self.do_upload_file(file, lang, activate_users)
     self.assertEqual(response.status_code, 200)
@@ -46,13 +46,15 @@ class TestImportMixin():
     self.assertTrue(Member.objects.filter(birthdate=date(2000, 1, 3)).exists())
     self.assertTrue(Address.objects.filter(city='Blackpool').exists())
     self.assertTrue(Member.objects.filter(address__city='Blackpool').exists())
+    if not check_active:
+      return
     for i in range(4):
       name = member_prefix + str(i+1)
       # print("name=", name)
       m = Member.objects.get(username=name)
       if activate_users:
-        self.assertEqual(m.is_active, activate_users)
         self.assertIsNone(m.member_manager)
+        self.assertTrue(m.is_active)
       else:  # member_manager is None if and only if active
         self.assertEqual(m.member_manager is None, m.is_active)
 
@@ -90,24 +92,109 @@ class TestMemberImport(TestImportMixin, MemberTestCase):
     self.assertEqual(member1.phone, "+45 01 02 03")
 
   def test_import_fr(self):
-    self.do_test_import('import_members-fr.csv', 'fr', 4, member_prefix='member-fr')
+    "test the import in French"
+    self.do_test_import('import_members-fr.csv', 'fr', 4, member_prefix='member-fr', check_active=False)
 
-  def test_import_manager(self):
-    # first make sure the member for which we change the managing member either does not exist or is not active
-    m3 = Member.objects.filter(username="member-fr3").first()
-    if m3 is not None:
-      # print("setting {m3.full_name} to inactive")
-      m3.is_active = False
-      m3.member_manager = None
-      m3.save()
-    # else:
-      # print("Member {m3.full_name} does not exist")
+  def _reset_manager(self, username):
+    # make sure the member for which we change the managing member either does not exist or is not active
+    m = Member.objects.filter(username=username).first()
+    if m is not None:
+      # print("setting {m.full_name} to inactive")
+      m.is_active = False
+      m.member_manager = None
+      m.save()
 
-    self.do_test_import('import_members-fr.csv', 'fr', 4, member_prefix='member-fr', activate_users=False)
-    # check member manager import
-    m1 = Member.objects.get(username="member-fr1")
-    m3 = Member.objects.get(username="member-fr3")
-    self.assertEqual(m3.member_manager, m1)
+  def _test_import_managers(self, activate_users, expected_result, update=False):
+    # self._reset_manager('member-mngd3')
+    # self._reset_manager('member-mngd4')
+    self.do_test_import('import_members-managers.csv', 'en-us', expected_num=0 if update else 4, member_prefix='member-mngd',
+                        activate_users=activate_users, check_active=False)
+    for i in range(4):
+      name = f'member-mngd{str(i+1)}'
+      m = Member.objects.get(username=name)
+      if expected_result[name]['manager'] is None:
+        self.assertIsNone(m.member_manager)
+      else:
+        mngr = Member.objects.get(username=expected_result[name]['manager'])
+        # print(f"checking that {m.username}'s manager {m.member_manager.username} is {mngr.username}")
+        self.assertEqual(m.member_manager, mngr)
+      self.assertEqual(m.is_active, expected_result[name]['active'])
+
+  def test_create_import_manager_activation(self):
+    self._test_import_managers(activate_users=True, expected_result={
+      'member-mngd1': {'manager': None, 'active': True},
+      'member-mngd2': {'manager': None, 'active': True},
+      'member-mngd3': {'manager': 'member-mngd1', 'active': False},
+      'member-mngd4': {'manager': 'superuser', 'active': False},
+    })
+
+  def test_create_import_manager_no_activation(self):
+    self._test_import_managers(activate_users=False, expected_result={
+      'member-mngd1': {'manager': self.member.username, 'active': False},
+      'member-mngd2': {'manager': self.member.username, 'active': False},
+      # in the file, member-mngd1 should be used as manager but, as it is not active,
+      # so the current user is used
+      'member-mngd3': {'manager': self.member.username, 'active': False},
+      'member-mngd4': {'manager': 'superuser', 'active': False},
+    })
+
+  def test_update_import_manager_activation1(self):
+    # first create the members, so the import updates them
+    for i in range(4):
+      member_data = self.get_new_member_data()
+      member_data['username'] = f'member-mngd{str(i+1)}'
+      self.create_member(member_data=member_data, is_active=False)
+
+    self._test_import_managers(activate_users=True, expected_result={
+      'member-mngd1': {'manager': None, 'active': True},
+      'member-mngd2': {'manager': None, 'active': True},
+      'member-mngd3': {'manager': 'member-mngd1', 'active': False},
+      'member-mngd4': {'manager': 'superuser', 'active': False},
+    }, update=True)
+
+  def test_update_import_manager_activation2(self):
+    # first create the members, so the import updates them
+    for i in range(4):
+      member_data = self.get_new_member_data()
+      member_data['username'] = f'member-mngd{str(i+1)}'
+      self.create_member(member_data=member_data, is_active=True)
+
+    self._test_import_managers(activate_users=True, expected_result={
+      'member-mngd1': {'manager': None, 'active': True},
+      'member-mngd2': {'manager': None, 'active': True},
+      'member-mngd3': {'manager': 'member-mngd1', 'active': False},
+      'member-mngd4': {'manager': 'superuser', 'active': False},
+    }, update=True)
+
+  def test_update_import_manager_no_activation1(self):
+    # first create the members, so the import updates them
+    for i in range(4):
+      member_data = self.get_new_member_data()
+      member_data['username'] = f'member-mngd{str(i+1)}'
+      self.create_member(member_data=member_data, is_active=False)
+
+    self._test_import_managers(activate_users=False, expected_result={
+      'member-mngd1': {'manager': self.member.username, 'active': False},
+      'member-mngd2': {'manager': self.member.username, 'active': False},
+      # in the file, member-mngd1 should be used as manager but, as it is not active,
+      # so the current user is used
+      'member-mngd3': {'manager': self.member.username, 'active': False},
+      'member-mngd4': {'manager': 'superuser', 'active': False},
+    }, update=True)
+
+  def test_update_import_manager_no_activation2(self):
+    # first create the members, so the import updates them
+    for i in range(4):
+      member_data = self.get_new_member_data()
+      member_data['username'] = f'member-mngd{str(i+1)}'
+      self.create_member(member_data=member_data, is_active=True)
+
+    self._test_import_managers(activate_users=False, expected_result={
+      'member-mngd1': {'manager': None, 'active': True},
+      'member-mngd2': {'manager': None, 'active': True},
+      'member-mngd3': {'manager': 'member-mngd1', 'active': False},
+      'member-mngd4': {'manager': 'superuser', 'active': False},
+    }, update=True)
 
   def test_wrong_field(self):
     response = self.do_upload_file('import_members-wrong-field.csv', 'en-us')

@@ -1,0 +1,5 @@
+"username","email","first_name","last_name","birthdate","phone","city","family","managed_by"
+"member-mngd1","member1@test.com","John","Doe",2000-01-01,"+45 01 02 03","Manchester","The Does",""
+"member-mngd2","member2@test.com","Jane","Doe",2000-01-02,"+45 01 02 04","Liverpool","The Does",""
+"member-mngd3","member3@test.com","John","Smith",2000-01-03,"+45 01 02 05","London","The Smiths","member-mngd1"
+"member-mngd4","member4@test.com","Jane","Smith",2000-01-04,"+45 01 02 06","Blackpool","The Smiths","superuser"

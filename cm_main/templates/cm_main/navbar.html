@@ -160,7 +160,7 @@
 			</div>
 			{% else %}
 			<div class="navbar-item has-dropdown is-hoverable">
-				{%navbar_item "#" user.username "member" %}
+				{%uncached_navbar_item "#" user.username "member" %}
 				<div class="navbar-dropdown is-right">
 					{% url 'members:profile' as profile_url%}
 					{%navbar_item profile_url _("Profile") "profile" %}

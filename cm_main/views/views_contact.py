@@ -37,10 +37,11 @@ class ContactView(LoginRequiredMixin, generic.FormView):
       title = _("You have a new message from %(name)s (%(email)s). ") % {
            "name": sender.full_name, "email": sender.email}
       email = EmailMultiAlternatives(
-        _("Contact form"),
-        title + _("But your mailer tools is too old to show it :'("),
-        sender.email,
-        [self.admin().email],
+        subject=_("Contact form"),
+        body=title + _("But your mailer tools is too old to show it :'("),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[self.admin().email],
+        reply_to=[sender.email],
       )
       # attach an HTML version of the message
       html_message = render_to_string('cm_main/contact/email-contact-form.html', {

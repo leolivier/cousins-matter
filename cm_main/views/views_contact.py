@@ -6,7 +6,7 @@ from django.contrib.auth import get_user, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 from django.core.mail import EmailMultiAlternatives
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
 from django.views import generic
@@ -63,5 +63,6 @@ class ContactView(LoginRequiredMixin, generic.FormView):
       email.send(fail_silently=False)
 
       messages.success(request, _("Your message has been sent"))
+      return redirect(self.success_url)
 
     return render(request, self.template_name, {'form': form})

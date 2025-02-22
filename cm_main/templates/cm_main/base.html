@@ -37,7 +37,8 @@
     {% block navbar %}
       {% include "cm_main/navbar.html" %}
     {% endblock %}
-   
+
+    <div>username: {{request.user.username}}</div>
 
     <div class="columns">
       <div class="column">

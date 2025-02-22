@@ -191,7 +191,6 @@ def icon(name, clazz="icon", aria_hidden=False):
 @lru_cache()
 @register.inclusion_tag("cm_main/navbar_item.html")
 def navbar_item(url, name, icon):
-    logger.debug(f'url: {url}, name: {name}, icon: {icon}')
     return {'url': url, 'name': name, 'icon': icon}
 
 

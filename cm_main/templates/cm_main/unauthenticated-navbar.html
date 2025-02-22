@@ -1,0 +1,67 @@
+{% load i18n cm_tags static cache %}
+{% get_current_language as LANGUAGE_CODE %}
+<nav class="navbar is-primary has-shadow" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand">
+		<a class="navbar-item" href="/">
+			<img src=
+			{%if settings.SITE_LOGO|startswith:"/media/public" %}
+				"{{settings.SITE_LOGO}}"
+			{%else%}
+				"{% static settings.SITE_LOGO %}"
+			{%endif%}
+			width="112" height="28">
+		</a>
+
+		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+		</a>
+	</div>
+
+	<div id="navMenu" class="navbar-menu">
+		<div class="navbar-end">
+			<div class="navbar-item has-dropdown is-hoverable">
+				<button class="button navbar-link is-light">
+					{%icon "settings" %}
+				</button>
+				<div class="navbar-dropdown is-right">
+					<div class="navbar-item">
+						<form action="{% url 'cm_main:change_language' %}" name="change_language" method="post">
+							{% csrf_token %}
+							<div class="control">
+								<label for="lang">{%trans "Change language" %}:</label>>
+								<select name="lang" value="{{LANGUAGE_CODE}}">
+									{% for lang in settings.LANGUAGES %}
+										<option value="{{ lang.0 }}">{{ lang.1 }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</form>
+						{# Submit "change language" form automatically each time the language is changed in the select box #}
+						<script>
+							$(document).ready(function() {
+								$('select[name="lang"]').val('{{LANGUAGE_CODE}}');
+								$('select[name="lang"]').change(function() {
+									$('form[name="change_language"]').submit()
+								})
+							});
+						</script>
+					</div>
+				</div>
+			</div>
+			<div class="navbar-item">
+				<div class="buttons">
+					<a class="button is-link" href="{% url 'members:login' %}">
+						{%icon "login" %}
+						<span>{%trans "Sign in" %}</span>
+					</a>
+					<a class="button has-background-link-light has-text-link" href="{% url 'members:register_request' %}">
+						{%icon "invite-request" %}
+						<span><strong>{%trans "Request invitation link" %}</strong></span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</nav>

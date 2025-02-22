@@ -35,22 +35,27 @@
   <body>
     
     {% block navbar %}
+    {%if user.is_authenticated %}
       {% include "cm_main/navbar.html" %}
+    {% else %}
+      {% include "cm_main/unauthenticated-navbar.html" %}
+    {% endif %}
     {% endblock %}
-   
 
     <div class="columns">
       <div class="column">
         <div class="block">
-          {%get_flatpages settings.ADMIN_MESSAGE_PAGE_URL_PREFIX as admin_messages%}
-          {%for admin_message in admin_messages %}
-          <div class="notification is-info admin-message" data-id="{{admin_message.id}}">
-            <button class="delete"></button>
-            {%autoescape off%}
-            {{admin_message.content}}
-            {%endautoescape%}
-          </div>
-          {%endfor%}
+          {%if user.is_authenticated %}
+            {%get_flatpages settings.ADMIN_MESSAGE_PAGE_URL_PREFIX as admin_messages%}
+            {%for admin_message in admin_messages %}
+            <div class="notification is-info admin-message" data-id="{{admin_message.id}}">
+              <button class="delete"></button>
+              {%autoescape off%}
+              {{admin_message.content}}
+              {%endautoescape%}
+            </div>
+            {%endfor%}
+          {% endif %}
           <ul class="messages">
           {% for message in messages %}
             <li{% if message.tags %} class="message is-{{ message.tags }}"{% endif %}>

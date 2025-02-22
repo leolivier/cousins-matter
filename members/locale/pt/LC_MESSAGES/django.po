@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-21 10:37+00:00\n"
-"PO-Revision-Date: 2025-02-09 10:33+0100\n"
+"PO-Revision-Date: 2025-02-22 11:28+0100\n"
 "Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
 "leolivier/auto-po-lyglot)\n"
-"Language-Team: French <LL@li.org>\n"
+"Language-Team: Português <LL@li.org>\n"
 "Language: PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -841,7 +841,8 @@ msgstr "Detalhe do Membro"
 msgid "Active member"
 msgstr "Membro ativo"
 
-#: templates/members/members/member_detail.html:28 tests/tests_member.py:236
+#: templates/members/members/member_detail.html:28
+#: templates/members/members/member_upsert.html:28 tests/tests_member.py:236
 msgid "Member managed by"
 msgstr "Membro gerido por"
 
@@ -1060,8 +1061,8 @@ msgid ""
 "member and this is your first connection, please, click in 'reset password' "
 "to request a new password."
 msgstr ""
-"Se se tiver esquecido das suas credenciais ou se a sua conta tiver sido ativada "
-"por outro utilizador e esta for a sua primeira ligação, clique em "
+"Se se tiver esquecido das suas credenciais ou se a sua conta tiver sido "
+"ativada por outro utilizador e esta for a sua primeira ligação, clique em "
 "\"redefinir palavra-passe\" para solicitar uma nova palavra-passe."
 
 #: templates/members/registration/link_expired.html:3
@@ -1145,6 +1146,14 @@ msgstr "Alterar os %(name)s selecionados"
 #, python-format
 msgid "Add another %(translated_name)s"
 msgstr "Adicionar mais %(translated_name)s"
+
+#: templates/widgets/wrap_create_link.html:22
+msgid ""
+"Warning: don't forget to click the save button at the bottom of the page, "
+"otherwise the changes won't be saved"
+msgstr ""
+"Atenção: não se esqueça de clicar no botão “Atualizar” na parte inferior da página, "
+"caso contrário as alterações não serão guardadas"
 
 #: tests/tests_member.py:100 views/views_member.py:220
 msgid "Member deleted"
@@ -1305,6 +1314,7 @@ msgid "Using your id..."
 msgstr "Utilizando a sua identificação..."
 
 #: views/views_import_export.py:126
+#, python-format
 msgid "Manager %(manager)s not found for member %(member)s."
 msgstr "Gestor %(manager)s não encontrado para membro %(member)s."
 
@@ -1314,8 +1324,9 @@ msgid ""
 "%(manager)s is inactive and cannot be used as manager for %(member)s. "
 "Activate it manually or change the order in the file and put it first."
 msgstr ""
-"%(manager)s está inativo e não pode ser utilizado como gestor para %(member)s. "
-"Active-o manualmente ou altere a ordem no ficheiro e coloque-o em primeiro lugar."
+"%(manager)s está inativo e não pode ser utilizado como gestor para "
+"%(member)s. Active-o manualmente ou altere a ordem no ficheiro e coloque-o "
+"em primeiro lugar."
 
 #: views/views_import_export.py:145
 #, python-format
@@ -1327,14 +1338,16 @@ msgstr ""
 "inativos. Manter o atual (%(manager)s)."
 
 #: views/views_import_export.py:150
+#, python-format
 msgid ""
 "Inactive member %(member)s has no manager. Please provide one! Meanwhile, "
 "the admin will be used as manager"
 msgstr ""
-"O membro inativo %(member)s não tem gestor. Por favor, indique um! Entretanto, "
-"o administrador será utilizado como gestor"
+"O membro inativo %(member)s não tem gestor. Por favor, indique um! "
+"Entretanto, o administrador será utilizado como gestor"
 
 #: views/views_import_export.py:166
+#, python-format
 msgid ""
 "Member %(member)s was active. Adding %(manager)s as manager inactivated him/"
 "her."

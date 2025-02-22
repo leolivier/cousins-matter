@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-07 13:27+0100\n"
-"PO-Revision-Date: 2025-02-09 10:33+0100\n"
+"PO-Revision-Date: 2025-02-22 11:28+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
-"Language-Team: French <LL@li.org>\n"
+"Language-Team: Français <LL@li.org>\n"
 "Language: FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -839,7 +839,8 @@ msgstr "Détail d'un Membre"
 msgid "Active member"
 msgstr "Membre actif"
 
-#: templates/members/members/member_detail.html:28 tests/tests_member.py:236
+#: templates/members/members/member_detail.html:28
+#: templates/members/members/member_upsert.html:28 tests/tests_member.py:236
 msgid "Member managed by"
 msgstr "Membre géré par"
 
@@ -1060,9 +1061,10 @@ msgid ""
 "member and this is your first connection, please, click in 'reset password' "
 "to request a new password."
 msgstr ""
-"Si tu as oublié tes informations d'identification ou si ton compte a été activé "
-"par un autre membre et qu'il s'agit de ta première connexion, merci de cliquer "
-"sur « réinitialiser le mot de passe » pour demander un nouveau mot de passe."
+"Si tu as oublié tes informations d'identification ou si ton compte a été "
+"activé par un autre membre et qu'il s'agit de ta première connexion, merci "
+"de cliquer sur « réinitialiser le mot de passe » pour demander un nouveau "
+"mot de passe."
 
 #: templates/members/registration/link_expired.html:3
 #: templates/members/registration/link_expired.html:7
@@ -1146,6 +1148,14 @@ msgstr "Modifier les %(name)s sélectionnées"
 #, python-format
 msgid "Add another %(translated_name)s"
 msgstr "Ajouter une autre %(translated_name)s"
+
+#: templates/widgets/wrap_create_link.html:22
+msgid ""
+"Warning: don't forget to click the save button at the bottom of the page, "
+"otherwise the changes won't be saved"
+msgstr ""
+"Attention: n'oublie pas de cliquer sur le bouton « Mettre à jour » en bas de "
+"la page, sinon les modifications ne seront pas sauvegardées."
 
 #: tests/tests_member.py:100 views/views_member.py:220
 msgid "Member deleted"
@@ -1307,9 +1317,9 @@ msgid "Using your id..."
 msgstr "Ton compte sera utilisé..."
 
 #: views/views_import_export.py:126
+#, python-format
 msgid "Manager %(manager)s not found for member %(member)s."
-msgstr ""
-"Gestionnaire %(manager)s non trouvé pour le membre %(member)s."
+msgstr "Gestionnaire %(manager)s non trouvé pour le membre %(member)s."
 
 #: views/views_import_export.py:130
 #, python-format
@@ -1317,8 +1327,9 @@ msgid ""
 "%(manager)s is inactive and cannot be used as manager for %(member)s. "
 "Activate it manually or change the order in the file and put it first."
 msgstr ""
-"%(manager)s est inactif et ne peut donc pas être utilisé comme gestionnaire pour %(member)s. "
-"Active-le manuellement ou modifie l'ordre dans le fichier afin de le placer en premier."
+"%(manager)s est inactif et ne peut donc pas être utilisé comme gestionnaire "
+"pour %(member)s. Active-le manuellement ou modifie l'ordre dans le fichier "
+"afin de le placer en premier."
 
 #: views/views_import_export.py:145
 #, python-format
@@ -1330,18 +1341,21 @@ msgstr ""
 "inactif. Le gestionnaire existant (%(manager)s) est conservé."
 
 #: views/views_import_export.py:150
+#, python-format
 msgid ""
 "Inactive member %(member)s has no manager. Please provide one! Meanwhile, "
 "the admin will be used as manager"
 msgstr ""
-"Le membre inactif %(member)s n'a pas de gestionnaire. Merci d'en fournir un! Entre temps, "
-"le compte administrateur sera utilisé comme gestionnaire"
+"Le membre inactif %(member)s n'a pas de gestionnaire. Merci d'en fournir un! "
+"Entre temps, le compte administrateur sera utilisé comme gestionnaire"
 
 #: views/views_import_export.py:166
+#, python-format
 msgid ""
 "Member %(member)s was active. Adding %(manager)s as manager inactivated him/"
 "her."
-msgstr "Le membre %(member)s était actif. L'ajout de %(manager)s comme gestionnaire "
+msgstr ""
+"Le membre %(member)s était actif. L'ajout de %(manager)s comme gestionnaire "
 "l'a désactivé."
 
 #: views/views_import_export.py:174
@@ -1349,8 +1363,8 @@ msgid ""
 "You requested to activate imported members. All members with a manager in "
 "the file will be ignored and won't be activated."
 msgstr ""
-"Tu as demandé à activer les membres importés. Tous les membres ayant un gestionnaires "
-"dans le fichier seront ignorés et ne seraont pas activés."
+"Tu as demandé à activer les membres importés. Tous les membres ayant un "
+"gestionnaires dans le fichier seront ignorés et ne seraont pas activés."
 
 #: views/views_import_export.py:296
 #, python-format

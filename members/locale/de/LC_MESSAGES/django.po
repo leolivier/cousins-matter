@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-21 09:04+00:00\n"
-"PO-Revision-Date: 2025-02-09 10:33+0100\n"
+"PO-Revision-Date: 2025-02-22 11:28+0100\n"
 "Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
 "leolivier/auto-po-lyglot)\n"
-"Language-Team: French <LL@li.org>\n"
+"Language-Team: Deutsch <LL@li.org>\n"
 "Language: DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -847,7 +847,8 @@ msgstr "Mitglied Details"
 msgid "Active member"
 msgstr "Aktive Mitglied"
 
-#: templates/members/members/member_detail.html:28 tests/tests_member.py:236
+#: templates/members/members/member_detail.html:28
+#: templates/members/members/member_upsert.html:28 tests/tests_member.py:236
 msgid "Member managed by"
 msgstr "Mitglied verwaltet von"
 
@@ -1156,6 +1157,13 @@ msgstr "Ändern Sie die ausgewählten %(name)s"
 msgid "Add another %(translated_name)s"
 msgstr "Fügt eine weitere %(translated_name)s hinzu"
 
+#: templates/widgets/wrap_create_link.html:22
+msgid ""
+"Warning: don't forget to click the save button at the bottom of the page, "
+"otherwise the changes won't be saved"
+msgstr ""
+"Achtung: Vergessen Sie nicht, auf die Schaltfläche „Aktualisieren“ unten auf der "
+"Seite zu klicken, sonst werden die Änderungen nicht gespeichert."
 #: tests/tests_member.py:100 views/views_member.py:220
 msgid "Member deleted"
 msgstr "Mitglied gelöscht"
@@ -1315,9 +1323,9 @@ msgid "Using your id..."
 msgstr "Verwendung deines Kontos..."
 
 #: views/views_import_export.py:126
+#, python-format
 msgid "Manager %(manager)s not found for member %(member)s."
-msgstr ""
-"Manager %(manager)s nicht gefunden für Mitglied %(member)s."
+msgstr "Manager %(manager)s nicht gefunden für Mitglied %(member)s."
 
 #: views/views_import_export.py:130
 #, python-format
@@ -1326,9 +1334,9 @@ msgid ""
 "Activate it manually or change the order in the file and put it first."
 msgstr ""
 "Bitte beachte, dass %(manager)s inaktiv ist und nicht als Manager für "
-"%(member)s verwendet werden kann. "
-"Wenn du ihn manuell aktivieren möchtest, kannst du das gerne tun. "
-"Du kannst ihn auch an die erste Stelle in der Datei setzen, um ihn zu aktivieren."
+"%(member)s verwendet werden kann. Wenn du ihn manuell aktivieren möchtest, "
+"kannst du das gerne tun. Du kannst ihn auch an die erste Stelle in der Datei "
+"setzen, um ihn zu aktivieren."
 
 #: views/views_import_export.py:145
 #, python-format
@@ -1340,6 +1348,7 @@ msgstr ""
 "Mitglied Manager beibehalten (%(manager)s)..."
 
 #: views/views_import_export.py:150
+#, python-format
 msgid ""
 "Inactive member %(member)s has no manager. Please provide one! Meanwhile, "
 "the admin will be used as manager"
@@ -1348,6 +1357,7 @@ msgstr ""
 "einen! In der Zwischenzeit, wird der Admin als Manager eingesetzt"
 
 #: views/views_import_export.py:166
+#, python-format
 msgid ""
 "Member %(member)s was active. Adding %(manager)s as manager inactivated him/"
 "her."

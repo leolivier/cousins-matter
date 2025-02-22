@@ -13,3 +13,4 @@ channels_redis~=4.2.1
 babel~=2.17.0
 django-cors-headers~=4.7.0
 packaging~=24.2
+django-login-history2~=0.0.6

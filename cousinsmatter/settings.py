@@ -116,6 +116,7 @@ INSTALLED_APPS = [
   'django.contrib.flatpages',
   'captcha',
   'channels',
+  'django_login_history2'
 ]
 
 MIDDLEWARE = [
@@ -425,3 +426,5 @@ DEFAULT_TROVE_PAGE_SIZE = env.int('DEFAULT_TROVE_PAGE_SIZE', 10)
 TROVE_DESCRIPTION_MAX_SIZE = MESSAGE_MAX_SIZE
 
 EMAIL_FIELD_NAME = 'email'  # force name to bypass translation
+
+IP_PLACEHOLDER = env.str('IP_PLACEHOLDER', default='0.0.0.0')

@@ -40,7 +40,10 @@ def post_login(sender, user, request, **kwargs):
 
 @receiver(user_logged_out)
 def post_logout(sender, user, **kwargs):
-    LoginTrace.objects.filter(user=user).update(logout_at=timezone.now())
+    last_login = LoginTrace.objects.filter(user=user).order_by('-login_at').first()
+    if last_login and not last_login.logout_at:
+        last_login.logout_at = timezone.now()
+        last_login.save()
 
 
 def get_geolocation_data(ip: str):

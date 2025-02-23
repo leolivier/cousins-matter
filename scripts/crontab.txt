@@ -1,0 +1,2 @@
+# run every sunday at 3AM
+0 * * 3 * /app/manage.py purge_login_traces >> /dev/stdout 2>/dev/stderr

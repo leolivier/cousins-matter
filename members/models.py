@@ -1,14 +1,16 @@
-import os
-from django.db import models
 import datetime
+import logging
+import os
 from PIL import Image, ImageOps
+
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
-from django.contrib.auth.models import AbstractUser
+
 from .managers import MemberManager
-from django.urls import reverse
-import logging
-from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -244,3 +246,16 @@ class Member(AbstractUser):
         if os.path.isfile(mini_path):
           os.remove(mini_path)
         self.avatar = None
+
+
+class LoginTrace(models.Model):
+    user = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
+    ip = models.GenericIPAddressField(db_index=True)
+    ip_info = models.JSONField(default=dict)
+    country_code = models.CharField(max_length=2, blank=True)
+    user_agent = models.TextField()
+    login_at = models.DateTimeField(auto_now_add=True)
+    logout_at = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username + " (" + self.ip + ") at " + str(self.login_at)

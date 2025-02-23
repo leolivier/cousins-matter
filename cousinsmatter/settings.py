@@ -116,7 +116,6 @@ INSTALLED_APPS = [
   'django.contrib.flatpages',
   'captcha',
   'channels',
-  'django_login_history2'
 ]
 
 MIDDLEWARE = [
@@ -427,4 +426,4 @@ TROVE_DESCRIPTION_MAX_SIZE = MESSAGE_MAX_SIZE
 
 EMAIL_FIELD_NAME = 'email'  # force name to bypass translation
 
-IP_PLACEHOLDER = env.str('IP_PLACEHOLDER', default='0.0.0.0')
+LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP = env.str('LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP', default='8.8.8.8')

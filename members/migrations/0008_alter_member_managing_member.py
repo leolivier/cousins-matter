@@ -15,7 +15,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='member',
             name='managing_member',
-            field=models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='managed_members', to=settings.AUTH_USER_MODEL, verbose_name='Member manager'),
+            field=models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='managed_members', to=settings.AUTH_USER_MODEL,
+                                    verbose_name='Member manager'),
         ),
         migrations.RenameField(
             model_name='member',

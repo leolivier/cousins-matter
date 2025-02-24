@@ -18,16 +18,16 @@ class Command(BaseCommand):
     deleted, _ = LoginTrace.objects.filter(login_at__lt=a_while_ago).delete()
     logfile = self.get_clean_logfile()
     with logfile.open("a") as f:
-      f.write(f"LoginTrace purge complete: {deleted} logs older than "
+      f.write(f"{timezone.now()}: LoginTrace purge complete: {deleted} logs older than "
               f"{settings.LOGIN_HISTORY_PURGE_DAYS} days deleted.\n")
 
   def get_clean_logfile(self):
     db_file = Path(settings.DATABASES['default']['NAME'])
-    logfile = db_file.parent() / "cron.log"
+    logfile = db_file.parent / "cron.log"
 
     if logfile.exists() and logfile.stat().st_size > 1*1024*1024:  # 1MB
       self.stdout.write("Logfile too large, compressing...")
-      zipped_logfile = logfile.parent() / f"{logfile.name}.zip"
+      zipped_logfile = logfile.parent / f"{logfile.name}.zip"
       with zipfile.ZipFile(zipped_logfile, "w", zipfile.ZIP_DEFLATED) as z:
         z.write(logfile)
       logfile.unlink(missing_ok=True)

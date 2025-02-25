@@ -4,9 +4,9 @@ import logging
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from urllib.parse import unquote
-#from django.conf import settings
+# from django.conf import settings
 from django.urls import reverse
-from django.utils.formats import localize  #, date_format
+from django.utils.formats import localize  # , date_format
 from django.utils import timezone
 from django.utils.translation import gettext as _, get_language
 

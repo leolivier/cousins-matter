@@ -1,12 +1,13 @@
 import json
 import random
 import logging
-from babel.dates import format_datetime
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from urllib.parse import unquote
-from django.conf import settings
+#from django.conf import settings
 from django.urls import reverse
+from django.utils.formats import localize  #, date_format
+from django.utils import timezone
 from django.utils.translation import gettext as _, get_language
 
 from cm_main.followers import check_followers
@@ -145,7 +146,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         'type': 'create_chat_message',
         'message': message,
         'username': username,
-        'date_added': format_datetime(msg.date_added, tzinfo=settings.TIME_ZONE, locale=self.locale),
+        'date_added': localize(timezone.localtime(msg.date_added)),
+        # format_datetime(msg.date_added, tzinfo=settings.TIME_ZONE, locale=self.locale),
         'msgid': msg.id,
       }
     )

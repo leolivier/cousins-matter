@@ -23,7 +23,7 @@ WORKDIR ${APP_DIR}
 # install lighttpd for serving static and media files, redis for chat, sqlite3 for installing database
 # We must update twice as we need first to install gpg before installing redis
 RUN apt-get update &&\
-		apt-get install -y lighttpd lsb-release curl gpg sqlite3 sudo supervisor && \
+		apt-get install -y lighttpd lsb-release curl gpg sqlite3 sudo supervisor cron && \
 		curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg &&\
 		echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" > /etc/apt/sources.list.d/redis.list &&\
 		apt-get update &&\
@@ -43,6 +43,9 @@ RUN adduser --uid ${UID} --disabled-password --gecos "" ${USER} && \
 
 # now copy all (but .dockerignore rules) with $USER as proprietary
 COPY --chown=${USER}:${USER} . .
+# manage crontab
+COPY scripts/crontab.txt /etc/cron.d/cm_crontab
+RUN chmod 0644 /etc/cron.d/cm_crontab && crontab /etc/cron.d/cm_crontab
 
 ENV USER=${USER}
 ENV APP_DIR=${APP_DIR}

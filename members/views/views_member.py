@@ -170,8 +170,10 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
 
         return render(request, self.template_name, {
             "form": MemberUpdateForm(instance=member, is_profile=self.is_profile_view),
-            "addr_form": AddressUpdateForm(instance=member.address),
-            "family_form": FamilyUpdateForm(instance=member.family),
+            "new_addr_form": AddressUpdateForm(),
+            "new_family_form": FamilyUpdateForm(),
+            "addr_form": AddressUpdateForm(instance=member.address, auto_id='updt_id_%s'),
+            "family_form": FamilyUpdateForm(instance=member.family, auto_id='updt_id_%s'),
             "pk": pk,
             "title": self.title,
             "member_manager_name": member_manager_name(member)})

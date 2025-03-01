@@ -30,6 +30,7 @@ class AddressUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 def _json_address_response(address):
   res = {}
+  res['address_id'] = address.id
   res["number_and_street"] = address.number_and_street
   res["complementary_info"] = address.complementary_info
   res["zip_code"] = address.zip_code

@@ -80,7 +80,11 @@ class TestModalFamilyView(MemberTestCase):
     self.assertEqual(response.headers['Content-Type'], 'application/json')
     family = Family.objects.filter(name=test_family['name']).first()
     self.assertIsNotNone(family)
-    self.assertJSONEqual(response.content.decode(), {"family_id": family.id, "family_name": family.name})
+    self.assertJSONEqual(response.content.decode(), {
+      "family_id": family.id,
+      "family_name": str(family),
+      "parent_family_id": family.parent.id if family.parent else '',
+      })
     # pprint(vars(response))
 
   def test_modify_modal_family_view(self):
@@ -101,5 +105,9 @@ class TestModalFamilyView(MemberTestCase):
     self.assertIs(response.resolver_match.func.view_class, ModalFamilyUpdateView)
     self.assertEqual(response.headers['Content-Type'], 'application/json')
     family.refresh_from_db()
-    self.assertJSONEqual(response.content.decode(), {"family_id": family.id, "family_name": family.name})
+    self.assertJSONEqual(response.content.decode(), {
+      "family_id": family.id,
+      "family_name": str(family),
+      "parent_family_id": family.parent.id if family.parent else '',
+      })
     # pprint(vars(response))

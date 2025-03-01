@@ -345,10 +345,8 @@ msgid "Import members from CSV"
 msgstr "Importar miembros desde un CSV"
 
 #: templates/cm_main/navbar.html:122
-#, fuzzy
-#| msgid "Administrator"
 msgid "Admin site"
-msgstr "Administrador"
+msgstr "Administración"
 
 #: templates/cm_main/navbar.html:125
 msgid "Export Members as CSV"

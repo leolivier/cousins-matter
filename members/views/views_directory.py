@@ -1,4 +1,5 @@
 # util functions for member views
+import re
 from typing import Any
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
@@ -149,5 +150,5 @@ class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
       yield [member.full_name,
              member.phone if member.phone else "",
              member.email,
-             member.address.__str__().strip(' \n') if member.address else ""
+             re.sub(r'\n\n+', '\n', member.address.__str__().strip(' \n')) if member.address else ""
              ]

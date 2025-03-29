@@ -210,7 +210,7 @@ function change_option(id, value, text, message) {
 // function to display messages 
 function add_message(kind, message) {
   // add the message
-  $(".messages").append('\n\
+  $(".message-wrapper").append('\n\
   <li class="message is-'+kind+'">\
     <div class="message-header">\
       <p>Success</p>\

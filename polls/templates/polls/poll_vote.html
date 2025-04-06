@@ -1,0 +1,56 @@
+{% extends "cm_main/base.html" %}
+{%load i18n crispy_forms_tags cm_tags%}
+{% block header %}
+	{%include "cm_main/common/include-summernote.html"%}
+	<style>
+	.helptext {
+		font-size: 0.8em;
+		font-style: italic;
+		display: inline-block;
+		order: 3;
+	}
+	</style>
+{%endblock%}
+{% block title %}
+	{%with title=_("Vote on poll: ")|add:poll.title%}{% title title %}{%endwith%}
+{% endblock %}
+{% block content %}
+<div class="container">
+	<div class="card">
+		<header class="card-header">
+			<p class="card-header-title has-text-centered is-centered">
+			{%with title=_("Vote on poll: ")|add:poll.title%}
+			{% title title %}
+			{%endwith%}
+			</p>
+		</header>
+		<section class="card-content">
+			{%include "polls/poll_info.html" with poll=poll%}
+		</section>
+		<form action="{% url 'polls:vote' poll.id %}" method="post">
+			{% csrf_token %}
+			<section class="card-content">
+				<h2 class="title is-size-4">Questions</h2>
+				{% for question in questions %}
+				<fieldset>
+					<input type="hidden" name="question_id" value="{{ question.question.id }}">
+					{{ question.form.as_p }}
+				</fieldset>
+				<hr>
+				{%endfor%}
+			</section>
+			<footer class="card-footer">
+				<div class="buttons mx-auto">
+					<button type="submit" class="button is-dark">
+						{%icon "vote" %} <span>{%translate "Submit" %}</span>
+					</button>
+					<a type="reset" class="button" aria-label="close" 
+						href="{%url 'polls:list_polls'%}">
+						{%icon "cancel" %} <span>{%translate "Cancel" %}</span>
+					</a>
+				</div>
+			</footer>
+		</form>
+	</div>
+</div>
+{% endblock %}

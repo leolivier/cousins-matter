@@ -1,0 +1,135 @@
+{% extends "cm_main/base.html" %}
+{%load i18n crispy_forms_tags cm_tags polls_tags static %}
+{% block title %}
+	{%if form.instance.pk%}
+		{% title _("Update Poll") %}
+	{%else%}
+		{% title _("Create Poll") %}
+	{%endif%}
+{% endblock %}
+{%block header%}
+{%include "cm_main/common/include-bulma-calendar.html" %}
+<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
+<script>
+	var $upsert_question_modal = null;
+
+	function showHideClosedList() {
+		if ($('#id_open_to').val() == 'lst') {
+			$('#div_id_closed_list').show();
+		} else {
+			$('#div_id_closed_list').hide();
+		}
+	}
+
+	function fillQuestion(response) {
+		if (response == null) {
+			response = { question_text: '', question_type: 'YN', question_choices: '' };
+		}
+		$upsert_question_modal.find('#id_question_text').val(response.question_text);
+		question_type = $upsert_question_modal.find('#id_question_type')
+		question_type.val(response.question_type);
+		question_type.change(function() {
+			if ($(this).val() == 'MC') {
+				$upsert_question_modal.find('#div_id_possible_choices').show();
+			} else {
+				$upsert_question_modal.find('#div_id_possible_choices').hide();
+			}
+		})
+		if (response.question_type == 'MC') {
+			$upsert_question_modal.find('#id_possible_choices').val(response.possible_choices);
+			$upsert_question_modal.find('#div_id_possible_choices').show();
+		} else {
+			$upsert_question_modal.find('#div_id_possible_choices').hide();
+		}
+	}
+
+	$(document).ready(function() {
+		$upsert_question_modal = $('#upsert-question-modal');
+		showHideClosedList();
+		$('#id_open_to').change(function() {
+			showHideClosedList();
+		});
+	})
+</script>
+{%endblock%}
+{% block content %}
+<div class="container mt-5 px-2">
+	<h1 class="title has-text-centered">
+	{%if form.instance.pk%}
+		{% title _("Update Poll") %}
+	{%else%}
+		{% title _("Create Poll") %}
+	{%endif%}
+	</h1>
+	<form method="post">
+		{% csrf_token %}
+		{{ form|crispy }}
+		<div class="buttons is-centered">
+			<button type="submit" class="button is-dark">
+				{%if form.instance.pk %}
+					{%icon "update"%} <span>{%trans "Update Poll"%}</span>
+				{%else%}
+					{%icon "create"%} <span>{%trans "Create Poll"%}</span>
+				{%endif%}
+			</button>
+			{%if form.instance.pk%}
+			{% autoescape off %}
+				{%trans "Delete Poll" as delete_title %}
+				{%blocktranslate asvar delete_msg with title=form.instance.title|escape%}Are you sure you want to delete the poll "{{title}}"?{%endblocktranslate%}
+				{%url "polls:delete_poll" form.instance.pk as delete_url%}
+				{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title button_text=delete_title ays_msg=delete_msg|force_escape delete_url=delete_url expected_value=form.instance.title|escape %}
+				{% endautoescape %}
+			{%endif%}
+		</div>
+	</form>
+	<nav class="panel mt-5" id="poll-questions">
+		<p class="panel-heading">{%trans "Poll Questions" %}</p>
+		{%if form.instance.pk%}
+		{% for question in form.instance.questions.all %}
+		<div class="panel-block" id="question-{{question.id}}">
+			{%icon question.question_type|question_icon %}
+			{{question.question_text}}
+			<button class="button ml-auto	is-small js-modal-trigger"
+				type="button"
+				id="js-modal-update-question-{{question.id}}"
+				data-target="upsert-question-modal"
+				data-id="{{question.id}}"
+				data-action="{% url 'polls:update_question' form.instance.pk question.id%}" 
+				data-title='{%trans "Update Question"%}'
+				data-form='{{question_form|crispy}}'
+				data-get-url="{% url 'polls:question_detail' question.id %}"
+				data-init-function='fillQuestion'
+				data-kind="update"
+				data-no-warning="true"
+			>
+				{%icon "edit"%}
+			</button>
+		</div>
+		{% empty %}
+		<div id="no-question-for-this-poll" class="panel-block">No questions linked to this poll.</div>
+		{% endfor %}
+		{%endif%}
+		{%if form.instance.pk%}
+		<div class="panel-block" id="add-question-button">
+			<button class="button is-link is-outlined is-fullwidth js-modal-trigger"
+						type="button"
+						id="js-modal-add-question"
+						data-target="upsert-question-modal"
+						data-action="{% url 'polls:add_question' form.instance.pk%}"
+						data-title='{%trans "New Question"%}'
+						data-form='{{question_form|crispy}}'
+						data-init-function='fillQuestion'
+						data-kind="create"
+						>
+				{%icon "edit" %}
+				<span class="ml-2">{%trans "Add Question" %}</span>
+			</button>
+		</div>
+		{% include "cm_main/common/modal_form.html" with modal_id="upsert-question-modal"%}
+		{% include "cm_main/common/modal_form.html" with modal_id="delete-item-modal"%}
+		{%else%}
+		<p>{%trans "Save the poll to add questions."%}</p>
+		{%endif%}
+	</nav>
+</div>
+{% endblock %}

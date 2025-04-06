@@ -1,22 +1,17 @@
-# Italian Translations for NO NAME FOUND app.
-# Copyright (C) 2024 <OWNER>
-# This file is distributed under the same license as the application.
-# This file was generated from polls/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# by the model.
-# <OWNER> <OWNER EMAIL>, 2024.
+# Italian Translations for Polls app.
+# Copyright (C) 2025 Olivier LEVILLAIN
+# This file is distributed under the same license as the Polls package.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-11 19:57+0100\n"
-"PO-Revision-Date: 2024-10-21 10:22+00:00\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
-"leolivier/auto-po-lyglot)\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: Polls 1.0\n"
+"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"POT-Creation-Date: 2025-03-01 16:00+0100\n"
+"PO-Revision-Date: 2025-03-01 16:00+0100\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: Italian <LL@li.org>\n"
 "Language: IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,6 +19,176 @@ msgstr ""
 "\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: polls/apps.py:8
+#: apps.py:8
 msgid "Polls"
 msgstr "Sondaggi"
+
+#: forms/upsert_forms.py:11
+msgid "Title"
+msgstr "Titolo"
+
+#: forms/upsert_forms.py:11
+msgid "To be published on"
+msgstr "Pubblicato il"
+
+#: forms/upsert_forms.py:11
+msgid "To be closed on"
+msgstr "Chiuso il"
+
+#: forms/upsert_forms.py:12
+msgid "Open to all"
+msgstr "Aperto a tutti"
+
+#: forms/upsert_forms.py:12
+msgid "Open to active members"
+msgstr "Aperto ai membri attivi"
+
+#: forms/upsert_forms.py:13 models.py:16
+msgid "Closed list"
+msgstr "Lista chiusa"
+
+#: forms/upsert_forms.py:25
+msgid "Add a new choice"
+msgstr "Aggiungi un nuovo scelta"
+
+#: forms/upsert_forms.py:32
+msgid "Question"
+msgstr "Domanda"
+
+#: forms/upsert_forms.py:33
+msgid "Type"
+msgstr "Tipo"
+
+#: forms/upsert_forms.py:34
+msgid "Choices"
+msgstr "Scelte"
+
+#: forms/upsert_forms.py:35
+msgid "Add a choice and press Enter"
+msgstr "Aggiungi una scelta e premi Invio"
+
+#: models.py:14
+msgid "All members"
+msgstr "Tutti i membri"
+
+#: models.py:15
+msgid "Active members only"
+msgstr "Solo membri attivi"
+
+#: models.py:48
+msgid "Yes/No"
+msgstr "Si/No"
+
+#: models.py:49
+msgid "Multiple Choice"
+msgstr "Scelta multipla"
+
+#: models.py:50
+msgid "Open Text"
+msgstr "Testo aperto"
+
+#: models.py:51
+msgid "Date"
+msgstr "Data"
+
+#: templates/polls/poll_detail.html:9
+msgid "Back to Polls"
+msgstr "Torna ai Sondaggi"
+
+#: templates/polls/poll_detail.html:18
+msgid "Owner"
+msgstr "Proprietario"
+
+#: templates/polls/poll_detail.html:21 templates/polls/poll_vote.html:41
+#: templates/polls/polls_list.html:25 templates/polls/polls_list.html:27
+#: templates/polls/polls_list.html:28
+msgid "Vote"
+msgstr "Vota"
+
+#: templates/polls/poll_detail.html:27
+#: templates/polls/poll_upsert_form.html:5
+#: templates/polls/poll_upsert_form.html:116
+#: templates/polls/poll_upsert_form.html:127
+msgid "Update Poll"
+msgstr "Aggiorna Sondaggio"
+
+#: templates/polls/poll_upsert_form.html:7
+#: templates/polls/poll_upsert_form.html:118
+#: templates/polls/poll_upsert_form.html:129
+msgid "Create Poll"
+msgstr "Crea Sondaggio"
+
+#: templates/polls/poll_upsert_form.html:134
+#: templates/polls/poll_upsert_form.html:170
+msgid "Delete Poll"
+msgstr "Cancella Sondaggio"
+
+#: templates/polls/poll_upsert_form.html:140
+msgid "Poll Questions"
+msgstr "Domande del Sondaggio"
+
+#: templates/polls/poll_upsert_form.html:146
+msgid "Add Question"
+msgstr "Aggiungi Domanda"
+
+#: templates/polls/poll_upsert_form.html:150
+msgid "New Question"
+msgstr "Nuova Domanda"
+
+#: templates/polls/poll_upsert_form.html:154
+msgid "Update Question"
+msgstr "Aggiorna Domanda"
+
+#: templates/polls/poll_upsert_form.html:157
+msgid "Save the poll to add questions."
+msgstr "Salva il sondaggio per aggiungere domande."
+
+#: templates/polls/poll_upsert_form.html:171
+#, python-format
+msgid "Are you sure you want to delete the poll \"%(title)s\"?"
+msgstr "Sei sicuro di voler eliminare il sondaggio \"%(title)s\"?"
+
+#: templates/polls/poll_vote.html:6 templates/polls/poll_vote.html:13
+msgid "Vote on poll: "
+msgstr "Vota su sondaggio: "
+
+#: templates/polls/poll_vote.html:45
+msgid "Cancel"
+msgstr "Annulla"
+
+#: templates/polls/polls_list.html:4 templates/polls/polls_list.html:10
+msgid "Latest Polls"
+msgstr "Ultimi Sondaggi"
+
+#: templates/polls/polls_list.html:6
+msgid "Add a new poll"
+msgstr "Aggiungi un nuovo sondaggio"
+
+#: templates/polls/polls_list.html:21
+msgid "Created at"
+msgstr "Creato il"
+
+#: templates/polls/polls_list.html:22
+msgid "Published at"
+msgstr "Pubblicato il"
+
+#: templates/polls/polls_list.html:23
+msgid "Closed at"
+msgstr "Chiuso il"
+
+#: templates/polls/polls_list.html:31 templates/polls/polls_list.html:33
+#: templates/polls/polls_list.html:34
+msgid "Update"
+msgstr "Aggiorna"
+
+#: templates/polls/polls_list.html:40
+msgid "Sorry, there are currently no polls available."
+msgstr "Spiacenti, non ci sono sondaggi disponibili per ora."
+
+#: views/answer_views.py:42
+msgid "You didn't select a choice."
+msgstr "Non hai selezionato una scelta."
+
+#: views/upsert_views.py:101
+msgid "Poll created successfully. You can now add questions."
+msgstr "Sondaggio creato con successo. Ora puoi aggiungere domande."

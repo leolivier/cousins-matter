@@ -1,0 +1,51 @@
+{% extends 'cm_main/base.html' %}
+{% load i18n cm_tags polls_tags %}
+{% block title %}{%title _("Poll Detail") %}{% endblock %}
+{% block content %}
+<div class="container">
+	<div class="card">
+		<div class="card-header has-background-light is-flex is-align-items-center is-justify-content-center">
+			<span class="is-flex-grow-1 has-text-centered title mt-5">{%title _("Poll Detail") %}</span>
+			{%with _("Back to Polls") as back_label%}
+			<a class="button is-link" href="{%url 'polls:list_polls'%}" aria-label="{{back_label}}" title="{{back_label}}">
+				{%icon "back"%} <span class="is-hidden-mobile">{{back_label}}</span>
+			</a>
+			{%endwith%}
+		</div>
+		<div class="card-content">
+			<div class="columns">
+				<div class="column">
+					{%include "polls/poll_info.html" with poll=poll%}
+				</div>
+				<div class="column">
+					<div class="panel">
+						<div class="panel-heading is-flex is-align-items-center is-justify-content-center">
+							<span class="has-text-centered">{%trans "Questions"%}</span>
+						</div>
+						{% for question in poll.questions.all %}
+						<div class="panel-block">
+							{%icon question.question_type|question_icon %} {{question.question_text}}
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card-footer is-flex is-align-items-center is-justify-content-center">
+			{%with _("Vote") as vote_label%}
+			<a class="button is-primary" href="{%url 'polls:vote' poll.id%}" aria-label="{{ vote_label}}" title="{{ vote_label}}">
+				{%icon "vote"%} <span class="is-hidden-mobile">{{ vote_label}}</span>
+			</a>
+			{%endwith%}
+			{%if poll.owner == request.user%}
+			{%with _("Update Poll") as update_label%}
+			<a class="button is-link ml-2" href="{%url 'polls:update_poll' poll.id%}" aria-label="{{update_label}}" title="{{update_label}}">
+				{%icon "update-poll" %} <span class="is-hidden-mobile ml-3">{{update_label}}</span>
+			</a>
+			{%endwith%}
+			{%endif%}
+		</div>
+	</div>
+</div>
+{% endblock %}
+

@@ -77,11 +77,14 @@
 				{%navbar_item trove_url _("Troves") "troves" %}
 			</div>
 
-			{% comment %}
-				<li><a href="{% url 'polls:polls' %}">{%trans "Polls" %}</a></li>
-				<li><a href="{% url 'admin:admin' %}">{%trans "Admin" %}</a></li>
-			</ul>
-			{% endcomment %}
+			<div class="navbar-item has-dropdown is-hoverable">
+				{% url 'polls:list_polls' as polls_url%}
+				{%navbar_item polls_url _("Polls") "vote" %}
+				<div class="navbar-dropdown">
+					{% url 'polls:create_poll' as poll_url%}
+					{%navbar_item poll_url _("Create Poll") "new-poll" %}
+				</div>
+			</div>
 
 		</div>
 

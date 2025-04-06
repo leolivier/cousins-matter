@@ -249,6 +249,7 @@ DJANGO_ICONS = {
     "about": "information-variant",
     "admin": "application-cog-outline",
     "stats": "chart-box-outline",
+    "question": "help-box-multiple-outline",
     "leave-group": "account-multiple-minus-outline",
     # arrows
     "arrow-down": "arrow-down-thin",
@@ -309,6 +310,15 @@ DJANGO_ICONS = {
     "new-treasure": "book-plus-outline",
     "edit-treasure": "note-edit-outline",
     "troves": "treasure-chest",
+    # polls icons
+    "vote": "vote",
+    "new-poll": "vote-outline",
+    "update-poll": "ballot-recount-outline",
+    "poll-choice-question": "checkbox-multiple-marked-circle-outline",
+    "poll-yesno-question": "checkbox-marked-circle-outline",
+    "poll-open-text-question": "text-box-outline",
+    "poll-date-time-question": "calendar-clock",
+    "poll-multiple-choice-question": "checkbox-multiple-outline",
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

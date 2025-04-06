@@ -124,8 +124,16 @@ class FamilyUpdateForm(ModelForm):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     can_change_parent = self.instance and self.instance.parent
-    self.fields['parent'].widget = FieldLinkWrapper(self.fields['parent'].widget, True, can_change_parent,
+    self.fields['parent'].widget = FieldLinkWrapper(self.fields['parent'].widget,
+                                                    can_add_related=True,
+                                                    can_change_related=can_change_parent,
                                                     name="parent-family")
+
+  def clean_name(self):
+    name = self.cleaned_data['name'].strip()
+    if not name:
+      raise ValidationError(_("Family name cannot be empty"), code='empty')
+    return name
 
 
 class MemberInvitationForm(Form):

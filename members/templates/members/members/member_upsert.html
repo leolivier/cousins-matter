@@ -44,16 +44,17 @@
 					<span>{% translate "Activate Account" %}</span>
 				</a>
 				{% endif %}
-				<button class="button js-modal-trigger" data-target="delete-item-modal" title="{%trans 'Delete' %}">
-					{%icon "delete" %}
-					<span>
-						{% if member.id == request.user.id %}{# profile update #}
-						{%trans "Remove my account" %}
-						{% else %}
-						{%trans "Delete member" %}
-						{% endif %}
-					</span>
-				</button>
+				{% autoescape off %}
+				{% if member.id == request.user.id %}{# profile update #}
+					{%trans "Delete my account" as delete_title%}
+					{% trans "Are you sure you want to delete your account and all associated data? This is irrecoverable!" as delete_msg %}
+				{% else %}
+					{%trans "Delete member" as delete_title%}
+					{% blocktranslate asvar delete_msg with name=member.full_name|force_escape trimmed %}Are you sure you want to delete {{ name }}'s account and all associated data?{% endblocktranslate %}
+				{% endif %}
+				{% url 'members:delete' member.id as delete_url %}
+				{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title button_text=_("Delete") ays_msg=delete_msg|force_escape delete_url=delete_url  expected_value=member.full_name|escape %}
+				{% endautoescape %}
 			</div>
 		</div>
   </div>
@@ -83,113 +84,136 @@
 	</div>
 </div>
 	{% block modals %}
-	{% with template="cm_main/common/modal_form.html" %}
+	{% include "cm_main/common/modal_form.html" with modal_id="upsert-address-modal"%}
+	{% include "cm_main/common/modal_form.html" with modal_id="upsert-family-modal"%}
+	{% include "cm_main/common/modal_form.html" with modal_id="create-parent-family-modal" %}
 
-		{% url 'members:modal_create_address' as create_address_url %}
-		{% include template with modal_id="create-address-modal" title=_("New Address") action_url=create_address_url form=new_addr_form success_function='add_address_to_options' %}
-
-		{% if member.address %}
-			{% url 'members:modal_update_address' settings.OBJECT_ID_PLACEHOLDER as change_address_url %}
-			{% url 'members:get_address' settings.OBJECT_ID_PLACEHOLDER as get_address_url %}
-			{% with modal_id="change-address-modal" title=_("Change Address") action_url=change_address_url %}
-			{% with form=addr_form success_function='change_address_option' opener_element='#id_change_address_link' %}
-			{% with init_function='update_change_address_form' get_url=get_address_url %}
-			{% include template with modal_id=modal_id title=title action_url=action_url form=form success_function=success_function opener_element=opener_element init_function=init_function get_url=get_url %} 
-			{%endwith%}{%endwith%}{%endwith%}
-
-		{% endif %}
-
-		{% url 'members:modal_create_family' as create_family_url %}
-		{% with modal_id="create-family-modal" title=_("New Family") action_url=create_family_url %}
-		{% with form=new_family_form success_function='add_family_to_options' opener_element='#id_create_family_link' %}
-		{% with init_function=update_change_family_form get_url=get_family_url %}
-		{% include template with modal_id=modal_id title=title action_url=action_url form=form success_function=success_function %} 
-		{% with modal_id="create-parent-family-modal" title=_("New Parent Family") success_function='add_parent_family_option' above="#create-family-modal"%}
-		{% include template with modal_id=modal_id title=title action_url=action_url form=form success_function=success_function opener_element=opener_element init_function=init_function get_url=get_url %} 
-		{%endwith%}{%endwith%}{%endwith%}{%endwith%}
-
-		{% if member.family %}
-			{% url "members:modal_update_family" settings.OBJECT_ID_PLACEHOLDER as change_family_url %}
-			{% url 'members:get_family' settings.OBJECT_ID_PLACEHOLDER as get_family_url %}
-			{% with modal_id="change-family-modal" title=_("Change Family") action_url=change_family_url %}
-			{% with form=family_form success_function='change_family_option' opener_element='#id_change_family_link' %}
-			{% with init_function='update_change_family_form' get_url=get_family_url %}
-			{% include template with modal_id=modal_id title=title action_url=action_url form=form success_function=success_function opener_element=opener_element init_function=init_function get_url=get_url %} 
-			{%endwith%}{%endwith%}{%endwith%}
-		{% endif %}
-
-	{%endwith%}
+	{%if member and member.id %}
+		{%include "cm_main/common/modal_form.html" with modal_id="delete-item-modal" %}
+	{%endif%}
 	{% endblock modals %}
 
 	{% block javascript %}
-		<script>
-			function add_address_to_options(response) {
-				add_selected_option('#id_address', response.id, response.address_str, '{%trans "Address created" %}');
-			}
-			function change_address_option(response) {
-				change_option('#id_address', response.id, response.address_str, '{%trans "Address updated" %}');
-			}
-			function update_change_address_form(response) {
-				form = $('#change-address-modal-form')
-				form.find('#updt_id_number_and_street').val(response.number_and_street)
-				form.find('#updt_id_complementary_info').val(response.complementary_info)
-				form.find('#updt_id_zip_code').val(response.zip_code)
-				form.find('#updt_id_city').val(response.city)
-				form.find('#updt_id_country').val(response.country)
-			}
-			function update_change_family_form(response) {
-				form = $('#change-family-modal-form')
-				form.find('#').val(response.family_name)
-				form.find('select').val(response.parent_family_id)
-			}
-			function add_family_to_options(response) {
-				add_selected_option('#id_family', response.family_id, response.family_name, '{%trans "Family created" %}');
-			}
-			function add_parent_family_option(response) {
-				add_selected_option('#updt_id_parent', response.family_id, response.family_name, '{%trans "Parent family created" %}');
-			}
-			function change_family_option(response) {
-				change_option('#id_family', response.family_id, response.family_name, '{%trans "Family updated" %}');
-			}
-			$(document).ready(function() {
-				// check user name is not taken for self registration
-				add_ajax_checker('id_username', "{% url 'members:validate_username' %}", "is_taken", "{% translate 'This username is not available!' %}")
-				{%if member.address.id%}
-				// set id on address update opener
-				$('#div_id_address a.change-related').data('id', '{{member.address.id}}')
-				// update change address form id when new address selected
-				$('#div_id_address select').change(function() {
-					new_id = $(this).val()
-					$('#div_id_address a.change-related').data('id', new_id)
-				});
-				{%endif%}
-				{%if member.family.id%}
-				// set id on family update opener
-				$('#div_id_family a.change-related').data('id', '{{member.family.id}}')
-				// update change family form id when new family selected
-				$('#div_id_family select').change(function() {
-					new_id = $(this).val()
-					$('#div_id_family a.change-related').data('id', new_id)
-				});
-				// same but for parent family update in change family dialog
-				$('#div_updt_id_parent select').change(function() {
-					new_id = $(this).val()
-					$('#div_updt_id_parent a.change-related').data('id', new_id)
-				});
-				{%endif%}
-			});
+	<script>
+		$(document).ready(function() {
+			create_addr = $('#id_create_address_link')
+			create_addr.data('target', "upsert-address-modal")
+			create_addr.data('action', "{% url 'members:modal_create_address' %}")
+			create_addr.data('title', '{{ _("New Address")|escapejs }}')
+			create_addr.data('form', `{{addr_form|crispy}}`)
+			create_addr.data('init-function', 'init_change_address_form')
+			create_addr.data('kind', "create")
+			create_addr.data('onsuccess', 'add_address_to_options')
+
+			create_family = $('#id_create_family_link')
+			create_family.data('target', "upsert-family-modal")
+			create_family.data('action', "{% url 'members:modal_create_family' %}")
+			create_family.data('title', '{{ _("New Family")|escapejs }}')
+			create_family.data('form', `{{family_form|crispy}}`)
+			create_family.data('init-function', 'init_change_family_form')
+			create_family.data('kind', "create")
+			create_family.data('onsuccess', 'add_family_to_options')
+		})
+
+	</script>
+	{% if member.address %}
+	<script>
+		$(document).ready(function() {
+			chg_addr = $('#id_change_address_link')
+			chg_addr.data('target', "upsert-address-modal")
+			chg_addr.data('id', "{{member.address.id}}")
+			chg_addr.data('action', "{% url 'members:modal_update_address' member.address.id %}")
+			chg_addr.data('title', '{{ _("Change Address")|escapejs }}')
+			chg_addr.data('form', `{{addr_form|crispy}}`)
+			chg_addr.data('get-url', "{% url 'members:get_address' member.address.id %}")
+			chg_addr.data('init-function', 'init_change_address_form')
+			chg_addr.data('kind', "update")
+			chg_addr.data('onsuccess', 'change_address_option')
+		})
 		</script>
+	{% endif %}
+	{% if member.family %}
+	<script>
+		$(document).ready(function() {
+			chg_family = $('#id_change_family_link')
+			chg_family.data('target', "upsert-family-modal")
+			chg_family.data('id', "{{member.family.id}}")
+			chg_family.data('action', "{% url 'members:modal_update_family' member.family.id %}")
+			chg_family.data('title', '{{ _("Change Family")|escapejs }}')
+			chg_family.data('form', `{{family_form|crispy}}`)
+			chg_family.data('get-url', "{% url 'members:get_family' member.family.id %}")
+			chg_family.data('init-function', 'init_change_family_form')
+			chg_family.data('kind', "update")
+			chg_family.data('onsuccess', 'change_family_option')
+		})
+	</script>
+	{% endif %}
+	<script>
+		function add_address_to_options(response) {
+			add_selected_option('#id_address', response.address_id, response.address_str, `{{ _("Address created<br>Warning, it won't be assigned to the member until you save him/her")|escapejs }}`);
+		}
+		function change_address_option(response) {
+			change_option('#id_address', response.address_id, response.address_str, '{{ _("Address updated<br>Warning, all other members with the same address have been updated too")|escapejs }}');
+		}
+		function init_change_address_form(response) {
+			if (response == null) {
+				response = {
+					number_and_street: '',
+					complementary_info: '',
+					zip_code: '',
+					city: '',
+					country: ''
+				}
+			}
+			form = $('#upsert-address-modal').find('form')
+			form.find('#id_number_and_street').val(response.number_and_street)
+			form.find('#id_complementary_info').val(response.complementary_info)
+			form.find('#id_zip_code').val(response.zip_code)
+			form.find('#id_city').val(response.city)
+			form.find('#id_country').val(response.country)
+		}
+		function init_change_family_form(response) {
+			if (response == null) {
+				response = {
+					family_name: '',
+					parent_family_id: ''
+				}
+			}
+			form = $('#upsert-family-modal').find('form')
+			form.find('#id_name').val(response.family_name)
+			form.find('#id_parent').val(response.parent_family_id)
+			create_parent_family = $('#id_create_parent-family_link')
+			create_parent_family.data('target', "create-parent-family-modal")
+			create_parent_family.data('action', "{% url 'members:modal_create_family' %}")
+			create_parent_family.data('title', '{{ _("New Parent Family")|escapejs }}')
+			create_parent_family.data('form', `{{family_form|crispy}}`)
+			create_parent_family.data('init-function', 'init_create_parent_family_form')
+			create_parent_family.data('kind', "create")
+			create_parent_family.data('onsuccess', 'add_parent_family_option')
+			create_parent_family.data('above', '#create-family-modal')
+			create_parent_family.click(function() { setupAndOpenModal($(this).attr('id')) })
+			// check family name does not already exists
+			add_ajax_checker('#upsert-family-modal input[id="id_name"]', "{% url 'members:validate_familyname' %}", "is_taken", "{{_('A family with this name already exists!')|escapejs}}")
+		}
+		function init_create_parent_family_form(response) {
+			form = $('#create-parent-family-modal').find('form')
+			form.find('#id_name').val('')
+			form.find('#id_parent').val('')
+		}
+		function add_family_to_options(response) {
+			add_selected_option('#id_family', response.family_id, response.family_name, `{{ _("Family created<br>Warning, it won't be assigned to the member until you save him/her")|escapejs }}`);
+		}
+		function add_parent_family_option(response) {
+			add_selected_option('#id_parent', response.family_id, response.family_name, '{%trans "Parent family created" %}');
+		}
+		function change_family_option(response) {
+			change_option('#id_family', response.family_id, response.family_name, '{{ _("Family updated<br>Warning, all other members with the same address have been updated too")|escapejs }}');
+		}
+		$(document).ready(function() {
+			// check user name is not taken for self registration
+			add_ajax_checker('#id_username', "{% url 'members:validate_username' %}", "is_taken", "{{_('This username is not available!')|escapejs}}")
+		});
+	</script>
 	{% endblock javascript %}
-	{%if member and member.id %}
-		{% if form.instance.id == request.user.id %}{# profile removal #}
-			{% trans "Delete My Account" as delete_title %}
-			{% trans "Are you sure you want to delete your account and all associated data? This is irrecoverable!" as delete_msg %}
-		{%else%}{# managed member removal #}
-			{% trans "Delete Member" as delete_title %}
-			{% blocktranslate asvar delete_msg with name=member.get_full_name trimmed %}Are you sure you want to delete {{ name }}'s account and all associated data?{% endblocktranslate %}
-		{%endif%}
-		{% url 'members:delete' member.id as delete_url %}
-		{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title ays_msg=delete_msg action_url=delete_url expected_value=member.username %}
-	{%endif%}
 {%endwith%}
 {% endblock content %}

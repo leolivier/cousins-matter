@@ -2,87 +2,97 @@
 {%comment%}
 This template is used to create a modal form that can be used to create or update an object.
 The form is displayed inside a modal dialog and the form is submitted using ajax.
-The form is submitted to the action_url and the response is processed by the success_function.
-The success_function is a javascript function that is called when the ajax call is successful.
+The form is linked to a submission button which carries out all the form data. 
+
+The form is submitted to the button data-action and the response is processed by the button data-onsuccess function.
+The onsuccess function is a javascript function that is called when the ajax call is successful.
 The function is used to process the response and update the page accordingly.
 All functions are taking the ajax response as parameter.
-* common params:
-- modal_id is the id of the modal dialog. The form id is {modal_id}-form
-- title is the title of the modal form
-- action_url is the ajax url to call when submitting the form
-- form is the form to display inside the modal dialog (coming from the view)
-- success_function is the function to call when the action_url is successful. Otherwize, the on_ajax_error function is called
+* common data of the button:
+- data-target is the id of the modal dialog. The form id is {modal_id}-form
+- data-title is the title of the modal form
+- data-action is the ajax url to call when submitting the form
+- data-form is the form to display inside the modal dialog (coming from the view)
+- data-onsuccess is the function to call when the action_url is successful. Otherwise, the on_ajax_error function is called
+- data-init-function is the function to call when the modal form is opened to initialize the form.
+- data-no-warning is a flag used to avoid the warning message in the modal form saying that the element will be modified for all other members using it
+- id must be set
+- data-kind is set to "update", "create" or "delete"
 
 Example of usage:
 
 Creation mode:
+<button class="button is-link is-outlined is-fullwidth js-modal-trigger js-modal-add-init"
+							data-target="upsert-question-modal"
+							data-action="{% url 'polls:add_question' form.instance.pk%}" 
+							data-title='{%trans "New Question"%}'
+							data-form="{{question_form}}"
+							data-onsuccess='addQuestionFromResponse'
+							data-init-function='fillQuestion'
+							data-warning-msg="Please check you don't already have a question with this name"
+							>
+					{%icon "edit" %}
+					<span class="ml-2">{%trans "Add Question" %}</span>
+				</button>
 
-{% url 'members:modal_create_address' as create_address_url %}
-{% include "cm_main/common/modal_form.html" with modal_id="create-address-modal" title=_("New Address") action_url=create_address_url form=addr_form success_function=add_address_to_options %}
+{% include "cm_main/common/modal_form.html" with modal_id="upsert-question-modal"%}
 
 Modification mode:
-* Specific params:
-- The get_url is the ajax url to call to get the data to fill the form fields with their actual value.
-- The init_function is a javascript function that is called whith the response of the ajax call to fill the fields.
+* Specific button data:
+- data-get-url is the ajax url to call to get the data to fill the form fields with their actual value.
+- data-init-function is a javascript function that is called whith the response of the ajax call to fill the fields.
 - The opener_element is the selector of the button(s) that open(s) the modal form. This is used to add a click event that will call the get_url to init the form
-- no_warning is a flag used to avoid the warning message in the modal form saying that the element will be modified for all other members using it
 
-{% url 'polls:update_question' form.instance.pk settings.OBJECT_ID_PLACEHOLDER as update_question_url %}
-{% url 'polls:get_question' settings.OBJECT_ID_PLACEHOLDER as get_question_url %}
-{% include "cm_main/common/modal_form.html" with modal_id="update-question-modal" title=_("Update Question") action_url=update_question_url form=question_update_form success_function=updateQuestion  opener_element='.js-modal-init' get_question='get_question_url' init_function='fillQuestion' no_warning=true %}
-
+example:
+<button class="button ml-auto	is-small js-modal-trigger js-modal-init"
+		type="button"
+		id="js-modal-add-question"
+		data-target="upsert-question-modal"
+		data-id="${id}"
+		data-action="{% url 'polls:update_question' form.instance.pk question.id%}" 
+		data-title='{%trans "Update Question"%}'
+		data-form="{{question_form}}"
+		data-onsuccess='updateQuestionFromResponse'
+		data-get-url="{% url 'polls:question_detail' question.id%}"
+		data-init-function='fillQuestion'
+		data-no-warning='true'
+>
+{%icon "edit"%}
+</button>
 
 {%endcomment%}
 
-<div class="modal" id="{{ modal_id }}">
+<div class="modal" id="{{modal_id}}">
 	<div class="modal-background"></div>
 	<div class="modal-card">
 		<header class="modal-card-head">
-			<p class="modal-card-title">{%translate title %}</p>
+			<p class="modal-card-title"></p>
 			<button class="delete" aria-label="close"></button>
 		</header>
-		<form id="{{modal_id}}-form" method="post">
+		<form method="post">
 			{% csrf_token %}
 			<section class="modal-card-body">
-				{%if no_warning is None and not modal_id|startswith:'create' %}
-				<div class="notification is-warning">
+				<div class="notification is-warning is-user-warning" hidden="true"></div>
+				<div class="notification is-warning is-update-warning" hidden="true">
 					{%trans "WARNING: This item will be modified for all other members using it! Please create a new one if that's not what you want to achieve." %}
 				</div>
-				{%elif modal_id|startswith:'create' %}
-				<div class="notification is-warning">
+				<div class="notification is-warning is-create-warning" hidden="true">
 					{%trans "Before creating a new item, please make sure it doesn't already exist!" %}
 				</div>
-				{%endif%}
-							{{ form | crispy}}
+				<div class="notification is-warning is-delete-warning" hidden="true">
+					{%trans "Warning, this will delete the item!" %}
+				</div>
+				<div class="form-placeholder"></div>
 			</section>
 			<footer class="modal-card-foot">
 				<div class="buttons mx-auto">
-				{%if modal_id|startswith:'create' %}
-					<button type="submit" class="button is-dark" name="create">
-						{%icon "create"%} <span>{%translate "Create" %}</span>
+					<button type="submit" class="button is-dark">
 					</button>
-				{%else%}
-					<button type="submit" class="button is-dark" name="update">
-						{%icon "update"%} <span>{%translate "Update" %}</span>
-					</button>
-				{%endif%}
 					<button class="button is-light" type="button" name="cancel" aria-label="close">
 						{%icon "cancel"%} <span class="ml-2">{%translate "Cancel" %}</span>
 					</button>
 				</div>
 			</footer>
 		</form>
-		{# associate to each modal form created above an ajax processing function #}
-		<script>
-		$(document).ready(function () {
-			ajax_modal_form_action('#{{modal_id}}-form', "{{action_url}}", "{{success_function}}",
-					on_ajax_error, '{{get_url}}', '{{opener_element}}', '{{init_function}}');
-			{%if above%}
-			// make sure #{{modal_id}} is above {{above}}
-			var zIndexBelow = $('{{above}}').css('z-index');
-			$('#{{modal_id}}').css('z-index', parseInt(zIndexBelow) + 1);
-			{%endif%}
-		});
-		</script>
 	</div>
 </div>

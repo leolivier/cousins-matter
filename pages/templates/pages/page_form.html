@@ -1,5 +1,5 @@
 {% extends "cm_main/base.html" %}
-{% load i18n crispy_forms_tags cm_tags %}
+{% load i18n crispy_forms_tags cm_tags static %}
 {% block title %}
 	{%if form.instance.pk%}
 		{% title _("Update Page") %}
@@ -9,11 +9,13 @@
 {% endblock %}
 {% block header %}
 	{%include "cm_main/common/include-summernote.html" with maxsize=settings.PAGE_MAX_SIZE %}
+	<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 {%endblock%}
 {% block content %}
+{%with page=form.instance has_page=form.instance.pk%}
 <div class="container mt-5 px-2">
 	<h1 class="title has-text-centered">
-		{%if form.instance.pk%}
+		{%if has_page%}
 			{% title _("Update Page") %}
 		{%else%}
 			{% title _("Create Page") %}
@@ -23,7 +25,7 @@
 		{{ form | crispy}}
 		<div class="buttons is-centered">
 			<button type="submit" name="save"class="button is-dark">
-				{%if form.instance.pk %}
+				{%if has_page %}
 					{%icon "update"%} <span>{%trans "Update Page"%}</span>
 				{%else%}
 					{%icon "create"%} <span>{%trans "Create Page"%}</span>
@@ -32,18 +34,19 @@
 			<button type="submit" name="save-and-continue" class="button is-primary">
 				{%icon "update"%} <span>{%trans "Save Page and Continue Editing"%}</span>
 			</button>
-			{%if form.instance.pk%}
-			<button class="button js-modal-trigger" data-target="delete-item-modal">
-				{%icon "delete"%} <span>{%trans "Delete Page"%}</span>
-			</button>
+			{%if has_page%}
+				{%trans "Delete Page" as delete_title %}
+				{%blocktranslate asvar delete_msg with title=page.title trimmed%}
+					Are you sure you want to delete the page "{{title}}"?
+				{%endblocktranslate%}
+				{%url "pages-edit:delete" page.pk as delete_url%}
+				{%include "cm_main/common/confirm-delete-modal.html" with button_text=delete_title ays_title=delete_title ays_msg=delete_msg|force_escape delete_url=delete_url expected_value=page.title %}
 			{%endif%}
 		</div>
 	</form>
 </div>
-{%if form.instance.pk%}
-	{%trans "Delete Page" as delete_title %}
-	{%blocktranslate asvar delete_msg with title=form.instance.title%}Are you sure you want to delete the page "{{title}}"?{%endblocktranslate%}
-	{%url "pages-edit:delete" form.instance.pk as delete_url%}
-	{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title ays_msg=delete_msg action_url=delete_url expected_value=page.title %}
+{%if has_page%}
+	{% include "cm_main/common/modal_form.html" with modal_id="delete-item-modal"%}
 {%endif%}
+{%endwith%}
 {% endblock %}

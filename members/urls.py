@@ -9,6 +9,7 @@ urlpatterns = [
   path('login/', auth_views.LoginView.as_view(template_name='members/login/login.html'), name='login'),
   path('logout/', views_member.logout_member, name='logout'),
   path('validate_username', views_member.validate_username, name='validate_username'),
+  path('validate_familyname', views_member.validate_family_name, name='validate_familyname'),
   path("", views_member.MembersView.as_view(), name="members"),
   path("page/<int:page_num>", views_member.MembersView.as_view(), name="members_page"),
   path("<int:pk>/", views_member.MemberDetailView.as_view(), name="detail"),

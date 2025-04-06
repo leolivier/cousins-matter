@@ -1,21 +1,17 @@
 # Spanish Translations for NO NAME FOUND app.
 # Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-# This file was generated from members/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# by the model.
-# <OWNER> <OWNER EMAIL>, 2024.
+
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "POT-Creation-Date: 2024-10-21 09:13+00:00\n"
-"PO-Revision-Date: 2025-03-01 15:49+0100\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
-"leolivier/auto-po-lyglot)\n"
+"PO-Revision-Date: 2025-04-06 13:05+0200\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Spanish <LL@li.org>\n"
 "Language: ES\n"
 "MIME-Version: 1.0\n"
@@ -37,39 +33,43 @@ msgstr ""
 "Al marcar esta casilla, acepta que este sitio <a target='blank' "
 "href='{privacy_url}'>política de privacidad</a>"
 
-#: forms.py:132
+#: forms.py:135
+msgid "Family name cannot be empty"
+msgstr "El apellido no puede estar vacio"
+
+#: forms.py:140
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Nombre del persona invitada (aparecerá en el correo recibido)"
 
-#: forms.py:133
+#: forms.py:141
 msgid "Email to send invitation"
 msgstr "Correo electrónico al que enviar la invitación"
 
-#: forms.py:137
+#: forms.py:145
 msgid "Your name"
 msgstr "Tu nombre"
 
-#: forms.py:138
+#: forms.py:146
 msgid "Email where you will receive the link"
 msgstr "Email donde recibirás el enlace"
 
-#: forms.py:139
+#: forms.py:147
 msgid "Message to the administrator"
 msgstr "Mensaje al administrador"
 
-#: forms.py:140
+#: forms.py:148
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Captcha (clicke en la imagen para refrescarla si no la lees bien)"
 
-#: forms.py:155
+#: forms.py:163
 msgid "CSV file"
 msgstr "Fichier CSV"
 
-#: forms.py:156
+#: forms.py:164
 msgid "The CSV file containing the members to import."
 msgstr "El archivo CSV que contiene a los miembros para importar."
 
-#: forms.py:160
+#: forms.py:168
 msgid "Automatically activate imported users"
 msgstr "Activar automáticamente los usuarios importados"
 
@@ -874,84 +874,11 @@ msgstr "Cambiar la contraseña"
 msgid "Activate Account"
 msgstr "Activar Cuenta"
 
-#: templates/members/members/member_upsert.html:47
-msgid "Delete"
-msgstr "Eliminar"
-
-#: templates/members/members/member_upsert.html:51
-msgid "Remove my account"
-msgstr "Eliminar mi cuenta"
-
-#: templates/members/members/member_upsert.html:53
-msgid "Delete member"
-msgstr "Eliminar el Miembro"
-
-#: templates/members/members/member_upsert.html:69
-msgid "Update"
-msgstr "Meter a actualizar"
-
-#: templates/members/members/member_upsert.html:72
-msgid "Create"
-msgstr "Créar"
-
-#: templates/members/members/member_upsert.html:79
-msgid "Lost your verification email?"
-msgstr "Correo de verificación perdido?"
-
-#: templates/members/members/member_upsert.html:81
-#: templates/members/registration/email_verification_failed.html:13
-msgid "Request a new link"
-msgstr "Demandar un nuevo enlace"
-
-#: templates/members/members/member_upsert.html:89
-msgid "New Address"
-msgstr "Nueva Dirección"
-
-#: templates/members/members/member_upsert.html:94
-msgid "Change Address"
-msgstr "Modificar la Dirección"
-
-#: templates/members/members/member_upsert.html:103
-msgid "New Family"
-msgstr "Nueva Familia"
-
-#: templates/members/members/member_upsert.html:107
-msgid "New Parent Family"
-msgstr "Nueva Familia Padre"
-
-#: templates/members/members/member_upsert.html:114
-msgid "Change Family"
-msgstr "Modificar la Familia"
-
-#: templates/members/members/member_upsert.html:127
-msgid "Address created"
-msgstr "A dirección creada"
-
-#: templates/members/members/member_upsert.html:130
-msgid "Address updated"
-msgstr "Dirección actualizada"
-
-#: templates/members/members/member_upsert.html:146
-msgid "Family created"
-msgstr "Familia creada"
-
-#: templates/members/members/member_upsert.html:149
-msgid "Parent family created"
-msgstr "Familia parental creada"
-
-#: templates/members/members/member_upsert.html:152
-msgid "Family updated"
-msgstr "Familia actualizada"
-
-#: templates/members/members/member_upsert.html:156
-msgid "This username is not available!"
-msgstr "Este nombre de usuario ya está en uso!"
-
-#: templates/members/members/member_upsert.html:185
-msgid "Delete My Account"
+#: templates/members/members/member_upsert.html:49
+msgid "Delete my account"
 msgstr "Eliminar mi cuenta?"
 
-#: templates/members/members/member_upsert.html:186
+#: templates/members/members/member_upsert.html:50
 msgid ""
 "Are you sure you want to delete your account and all associated data? This "
 "is irrecoverable!"
@@ -959,17 +886,102 @@ msgstr ""
 "¿Estás seguro de que quieres eliminar tu cuenta y todas las datos asociados? "
 "Es irreversibles!"
 
-#: templates/members/members/member_upsert.html:188
-msgid "Delete Member"
-msgstr "Eliminar Miembro"
+#: templates/members/members/member_upsert.html:52
+msgid "Delete member"
+msgstr "Eliminar el Miembro"
 
-#: templates/members/members/member_upsert.html:189
+#: templates/members/members/member_upsert.html:53
 #, python-format
 msgid ""
 "Are you sure you want to delete %(name)s's account and all associated data?"
 msgstr ""
 "Sí está seguro de querer eliminar la cuenta de %(name)s y todas las datos "
 "asociados?"
+
+#: templates/members/members/member_upsert.html:56
+msgid "Delete"
+msgstr "Eliminar"
+
+#: templates/members/members/member_upsert.html:70
+msgid "Update"
+msgstr "Meter a actualizar"
+
+#: templates/members/members/member_upsert.html:73
+msgid "Create"
+msgstr "Créar"
+
+#: templates/members/members/member_upsert.html:80
+msgid "Lost your verification email?"
+msgstr "Correo de verificación perdido?"
+
+#: templates/members/members/member_upsert.html:82
+#: templates/members/registration/email_verification_failed.html:13
+msgid "Request a new link"
+msgstr "Demandar un nuevo enlace"
+
+#: templates/members/members/member_upsert.html:102
+msgid "New Address"
+msgstr "Nueva Dirección"
+
+#: templates/members/members/member_upsert.html:111
+msgid "New Family"
+msgstr "Nueva Familia"
+
+#: templates/members/members/member_upsert.html:126
+msgid "Change Address"
+msgstr "Modificar la Dirección"
+
+#: templates/members/members/member_upsert.html:142
+msgid "Change Family"
+msgstr "Modificar la Familia"
+
+#: templates/members/members/member_upsert.html:153
+msgid ""
+"Address created<br>Warning, it won't be assigned to the member until you "
+"save him/her"
+msgstr ""
+"Dirección creada<br>Advertencia, no se le asignará al miembro hasta que lo "
+"guarde"
+
+#: templates/members/members/member_upsert.html:156
+msgid ""
+"Address updated<br>Warning, all other members with the same address have "
+"been updated too"
+msgstr ""
+"Dirección actualizada<br>Advertencia, todos los otros miembros con la misma "
+"dirección han sido actualizados"
+
+#: templates/members/members/member_upsert.html:188
+msgid "New Parent Family"
+msgstr "Nueva Familia Padre"
+
+#: templates/members/members/member_upsert.html:196
+msgid "A family with this name already exists!"
+msgstr "Ya existe una familia con este nombre!"
+
+#: templates/members/members/member_upsert.html:204
+msgid ""
+"Family created<br>Warning, it won't be assigned to the member until you save "
+"him/her"
+msgstr ""
+"Familia creada<br>Advertencia, no se le asignará al miembro hasta que lo "
+"guarde"
+
+#: templates/members/members/member_upsert.html:207
+msgid "Parent family created"
+msgstr "Familia parental creada"
+
+#: templates/members/members/member_upsert.html:210
+msgid ""
+"Family updated<br>Warning, all other members of this family have been "
+"updated too"
+msgstr ""
+"Familia actualizada<br>Advertencia, todos los demás miembros de esta familia "
+"también han sido actualizados"
+
+#: templates/members/members/member_upsert.html:214
+msgid "This username is not available!"
+msgstr "Este nombre de usuario ya está en uso!"
 
 #: templates/members/members/members.html:3
 #: templates/members/members/members.html:7
@@ -980,7 +992,7 @@ msgstr "Lista de Miembros"
 msgid "Show directory"
 msgstr "Mostrar el directorio"
 
-#: templates/members/members/members.html:19 views/views_member.py:130
+#: templates/members/members/members.html:19 views/views_member.py:141
 msgid "Create Member"
 msgstr "Criar un Miembro"
 
@@ -1138,17 +1150,17 @@ msgstr "Demande de un nuevo correo electrónico"
 msgid "Change selected %(name)s"
 msgstr "Modificar los %(name)s seleccionados"
 
-#: templates/widgets/wrap_create_link.html:17
+#: templates/widgets/wrap_create_link.html:18
 #, python-format
 msgid "Add another %(translated_name)s"
 msgstr "Añadir otra %(translated_name)s"
 
-#: tests/tests_member.py:100 views/views_member.py:222
+#: tests/tests_member.py:100 views/views_member.py:231
 msgid "Member deleted"
 msgstr "Membres eliminados"
 
 #: tests/tests_member.py:211 tests/tests_member.py:216
-#: views/views_member.py:168 views/views_member.py:184
+#: views/views_member.py:179 views/views_member.py:193
 msgid "You do not have permission to edit this member."
 msgstr "No tienes permiso para editar este miembro."
 
@@ -1352,37 +1364,37 @@ msgstr "Alerta: %(warning)s"
 msgid "Method not allowed"
 msgstr "Método no permitido"
 
-#: views/views_member.py:34
+#: views/views_member.py:45
 msgid "You have been logged out"
 msgstr "Has sido deslogerado(a)"
 
-#: views/views_member.py:120
+#: views/views_member.py:131
 msgid "Only superusers can create members"
 msgstr "Solo los superusuarios pueden crear miembros"
 
-#: views/views_member.py:145
+#: views/views_member.py:156
 msgid "Member successfully created"
 msgstr "El miembro fue creado con éxito"
 
-#: views/views_member.py:153
+#: views/views_member.py:164
 msgid "Update Member Details"
 msgstr "Modificar los detalles de un Miembro"
 
-#: views/views_member.py:154
+#: views/views_member.py:165
 msgid "Member successfully updated"
 msgstr "El miembro fue actualizado con éxito"
 
-#: views/views_member.py:194
+#: views/views_member.py:203
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Se ha enviado un correo electrónico de verificación para validar tu nueva "
 "dirección de correo electrónico."
 
-#: views/views_member.py:208
+#: views/views_member.py:217
 msgid "My Profile"
 msgstr "Mi Perfil"
 
-#: views/views_member.py:209
+#: views/views_member.py:218
 msgid "Profile successfully updated"
 msgstr "Perfil actualizado con éxito"
 

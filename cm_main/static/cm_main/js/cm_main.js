@@ -157,31 +157,32 @@ function on_ajax_error(response) {
 
 // function to add an ajax checker to a field
 // if response[response_field] is true, then error triggered
-function add_ajax_checker(id, validator_url, response_field, error_message) {
-  $('#'+id).keyup(function () {
+function add_ajax_checker(selector, validator_url, response_field, error_message) {
+  // console.log(selector, validator_url, response_field, error_message, $(selector));
+  const $selector = $(selector);
+  $selector.keyup(function () {
     // create an AJAX call
     $.ajax({
         data: $(this).serialize(), // get the form data
         url: validator_url,
       // on success
       success: function (response) {
-        // alert the error if any error occured
-          error_id=id+'_error';
-          if (response[response_field] == true) {
-              $('#'+id).removeClass('is-success').addClass('is-danger');
-              $('#'+id).after('<div class="has-text-danger has-background-danger-light has-text-weight-semibold" id="'+error_id+'">'
-                              +error_message+'</div>')
+        const check_error = $selector.next('.ajax-checker-error');
+        // pop an alert if any error occured
+        if (response[response_field] == true) {
+          $selector.removeClass('is-success').addClass('is-danger');
+          if (!check_error.length) {
+            $selector.after(`
+              <div class="has-text-danger has-background-danger-light has-text-weight-semibold ajax-checker-error">
+                ${error_message}
+              </div>`)
           }
-          else {
-              $('#'+id).removeClass('is-danger').addClass('is-success');
-              $('#'+error_id).remove();
-          }
+        } else {
+          $selector.removeClass('is-danger').addClass('is-success');
+          $(check_error).remove();
+        }
       },
-      // on error
-      error: function (response) {
-          // alert the error if any error occured
-          console.log(response.responseJSON.errors)
-      }
+      error: on_ajax_error
     });
     return false;
   })

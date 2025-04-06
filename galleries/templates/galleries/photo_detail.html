@@ -5,6 +5,7 @@
 {%url 'galleries:gallery_photo_url' gallery_id '1234567890' as image_url %}
 {%url 'galleries:photo' '1234567890' as photo_url%}
 <link rel="stylesheet" href="{% static 'galleries/css/galleries.css' %}"/>
+<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 <script>
 $image_url = '{{ image_url }}';
 $photo_url =	'{{ photo_url }}';
@@ -38,9 +39,14 @@ $photos_count = {{ photos_count }}
 						title="{% trans 'Edit Photo' %}">
 						{%icon "edit-photo" %}
 					</a>
-					<button class="button js-modal-trigger" data-target="delete-photo-modal" title="{% trans 'Delete photo' %}">
-						{%icon "delete" %}
-					</button>
+					{% autoescape off %}
+						{%trans "Delete photo" as delete_title %}
+						{% blocktranslate asvar delete_msg with object=photo.name|escape trimmed%}
+							Are you sure you want to delete "{{ object }}"?
+						{% endblocktranslate %}
+						{% url 'galleries:delete_photo' photo.id as delete_url %}
+						{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title button_text='' ays_msg=delete_msg|force_escape delete_url=delete_url expected_value=photo.name|escape %}
+					{% endautoescape %}
 				</p>
 			</div>
 		</div>
@@ -55,12 +61,11 @@ $photos_count = {{ photos_count }}
 				data-idx="{{page.number}}"
 				data-pk="{{photo.id}}"
 			>
-			<caption>num={{page.number}}</caption>
 		</figure>
 		<div class="rich-text">{% autoescape off %}{{photo.description}}{% endautoescape %}</div>
 	</div>
 </div>
 {%include "galleries/photo_fullscreen.html"%}
-{%include "galleries/photo_confirm_delete.html" %}
+{% include "cm_main/common/modal_form.html" with modal_id="delete-item-modal"%}
 {%endwith%}
 {% endblock %}

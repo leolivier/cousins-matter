@@ -65,7 +65,6 @@ def recompute_settings_in_templates():
 def settings(request):
     """expose settings to templates"""
     # settings are pre computed in global variable
-    global _settings_in_templates
     if not _settings_in_templates:
       recompute_settings_in_templates()
     return {'settings': _settings_in_templates}

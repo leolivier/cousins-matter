@@ -35,7 +35,7 @@ Example:
 	{%trans 'Mandatory. Deletion will not be possible until the correct value is entered.' as deletion_confirmation_helptext%}
 	{%with red_expected_value='<span class="has-text-danger">'|add:expected_value|add:'</span>' %}
 		{%blocktranslate with expected_value=red_expected_value asvar warning_expected_value trimmed%}
-		Enter {{expected_value}}</span> in the field below before pressing confirm
+		Enter {{expected_value}} in the field below before pressing confirm
 		{%endblocktranslate%}
 	data-action="{{delete_url}}"
 	data-init-function="init_delete_form"

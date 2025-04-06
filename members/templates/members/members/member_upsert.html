@@ -207,7 +207,7 @@
 			add_selected_option('#id_parent', response.family_id, response.family_name, '{%trans "Parent family created" %}');
 		}
 		function change_family_option(response) {
-			change_option('#id_family', response.family_id, response.family_name, '{{ _("Family updated<br>Warning, all other members with the same address have been updated too")|escapejs }}');
+			change_option('#id_family', response.family_id, response.family_name, '{{ _("Family updated<br>Warning, all other members of this family have been updated too")|escapejs }}');
 		}
 		$(document).ready(function() {
 			// check user name is not taken for self registration

@@ -167,7 +167,7 @@ msgstr ""
 
 #: templates/cm_main/common/modal_form.html:80
 msgid "Before creating a new item, please make sure it doesn't already exist!"
-msgstr "Avant de créer un nouvel élément, merci de t'e 'assurer qu'il n'existe pas déjà!"
+msgstr "Avant de créer un nouvel élément, merci de t'assurer qu'il n'existe pas déjà!"
 
 #: templates/cm_main/common/modal_form.html:83
 msgid "Warning, this will delete the item!"

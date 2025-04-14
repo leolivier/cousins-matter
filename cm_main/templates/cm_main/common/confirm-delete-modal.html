@@ -14,32 +14,26 @@ Example:
 
 {% load i18n cm_tags%}
 <button class="button js-modal-trigger {{button_class}}"
-	id="js-modal-delete-item"
+	type="button"
+	{%with id=button_id|default:'js-modal-delete-item' %}
+	id="{{id}}"
+	{%endwith%}
 	data-target="delete-item-modal"
 	data-title="{{ays_title}}"
 	data-warning-msg="{{ays_msg}}"
 	data-kind="delete"
-	{%if not expected_value %} {# soft confirmation: no field to be filled by the user #}
-	data-form='<div class="field is-grouped is-grouped-centered">
-		<p class="control">
-			<a class="control button is-danger" href="{{delete_url}}">
-			{%translate "Confirm" %}
-			</a>
-		</p>
-		<p class="control">
-			<a type="reset" class="control button is-light" aria-label="close">{%trans "Cancel" %}</a>
-		</p>
-	</div>'
-	data-action=""
-	{%else%} {# hard confirmation: add a field to be filled by the user to confirm #}
+	data-action='{{delete_url}}'
+{%if not expected_value %} {# soft confirmation: no field to be filled by the user #}
+	data-form=''
+	data-init-function="do_nothing"
+{%else%} {# hard confirmation: add a field to be filled by the user to confirm #}
 	{%trans 'Mandatory. Deletion will not be possible until the correct value is entered.' as deletion_confirmation_helptext%}
 	{%with red_expected_value='<span class="has-text-danger">'|add:expected_value|add:'</span>' %}
 		{%blocktranslate with expected_value=red_expected_value asvar warning_expected_value trimmed%}
 		Enter {{expected_value}} in the field below before pressing confirm
 		{%endblocktranslate%}
-	data-action="{{delete_url}}"
-	data-init-function="init_delete_form"
 	data-warning-msg="{%autoescape off%}{{ays_msg|force_escape}}{%endautoescape%}"
+	data-init-function="init_delete_form"
 	data-form='<div class="field">
 		{%autoescape off%}
 		<label class="label">{{warning_expected_value|escape}}:</label>
@@ -53,7 +47,7 @@ Example:
 		<p id="deletion_confirmation_helptext" class="help">{{deletion_confirmation_helptext|escape}}</p>
 	</div>'
 	{%endwith%}
-	{%endif%}
+{%endif%}
 	>
 	{%icon "delete" %}{%if button_text %}<span class="ml-2">{{button_text}}</span>{%endif%}
 </button>
@@ -84,5 +78,6 @@ Example:
 		$modal_input.on('keyup', enableDeletion);
 		$submit_button.prop('disabled', true);
 	}
+	function do_nothing() {}
 </script>
 {%endif%}

@@ -3,9 +3,11 @@
 	<h1 class="title">{{ poll.title }}</h1>
 	<p class="field"><label>{%trans "Owner"%} : </label>{{poll.owner}}</p>
 	<p class="content ml-auto">
-		{%trans "Created at"%}:<span class="tag">{{ poll.created_at|date:"SHORT_DATETIME_FORMAT" }}</span><br>
-		{%trans "Published at"%}:<span class="tag">{{ poll.pub_date|date:"SHORT_DATETIME_FORMAT" }}</span><br>
+	{%with dir=direction|default:"vertical" %}
+		{%trans "Created at"%}:<span class="tag">{{ poll.created_at|date:"SHORT_DATETIME_FORMAT" }}</span>{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
+		{%trans "Published at"%}:<span class="tag">{{ poll.pub_date|date:"SHORT_DATETIME_FORMAT" }}</span>{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
 		{%trans "Closed at"%}:<span class="tag">{{ poll.close_date|date:"SHORT_DATETIME_FORMAT" }}</span>
+	{%endwith%}
 	</p>
 	<p class="content">{{ poll.description }}</p>
 </div>

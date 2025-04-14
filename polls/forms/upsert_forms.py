@@ -30,6 +30,10 @@ class QuestionUpsertForm(forms.ModelForm):
         self.fields['possible_choices'].initial = '\n'.join(kwargs['instance'].possible_choices)
 
   def clean_possible_choices(self):
+    if self.cleaned_data['question_type'] != Question.MULTICHOICES_QUESTION:
+        return []
     data = self.cleaned_data['possible_choices']
     possible_choices = [choice.strip() for choice in data.split("\n") if choice.strip()]
+    if len(possible_choices) < 2:
+        raise forms.ValidationError(_("You must provide at least two possible choices!"))
     return possible_choices

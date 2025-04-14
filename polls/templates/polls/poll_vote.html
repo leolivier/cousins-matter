@@ -34,7 +34,7 @@
 				{% for question in questions %}
 				<fieldset>
 					<input type="hidden" name="question_id" value="{{ question.question.id }}">
-					{{ question.form.as_p }}
+					{{ question.form | crispy }}
 				</fieldset>
 				<hr>
 				{%endfor%}

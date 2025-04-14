@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Polls 1.0\n"
 "Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "POT-Creation-Date: 2025-03-01 16:00+0100\n"
-"PO-Revision-Date: 2025-03-01 16:00+0100\n"
+"PO-Revision-Date: 2025-04-14 11:49+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
 "Language: DE\n"
@@ -23,6 +23,18 @@ msgstr ""
 #: apps.py:8
 msgid "Polls"
 msgstr "Umfragen"
+
+#: forms/answer_forms.py:33
+msgid "Check the box if Yes"
+msgstr "Kreuzen Sie das Kästchen an, wenn Ja"
+
+#: forms/answer_forms.py:37 models.py:138
+msgid "choice"
+msgstr "Auswahl"
+
+#: forms/answer_forms.py:37
+msgid "Select one choice"
+msgstr "Wählt eine Auswahl aus"
 
 #: forms/upsert_forms.py:11
 msgid "Title"
@@ -48,25 +60,13 @@ msgstr "Aktive Mitglieder"
 msgid "Closed list"
 msgstr "Geschlossene Liste"
 
-#: forms/upsert_forms.py:25
-msgid "Add a new choice"
-msgstr "Neue Auswahl hinzufügen"
+#: forms/upsert_forms.py:19
+msgid "Provide the possible choices, one per line"
+msgstr "Zeigt die Auswahlmöglichkeiten, eine pro Zeile"
 
-#: forms/upsert_forms.py:32
-msgid "Question"
-msgstr "Frage"
-
-#: forms/upsert_forms.py:33
-msgid "Type"
-msgstr "Typ"
-
-#: forms/upsert_forms.py:34
-msgid "Choices"
-msgstr "Auswahlen"
-
-#: forms/upsert_forms.py:35
-msgid "Add a choice and press Enter"
-msgstr "Eine Auswahl hinzufügen und Enter drückst"
+#: forms/upsert_forms.py:38
+msgid "You must provide at least two possible choices!"
+msgstr "Du musst mindestens zwei Auswahlmöglichkeiten angeben!"
 
 #: models.py:14
 msgid "All members"
@@ -76,84 +76,217 @@ msgstr "Alle Mitglieder"
 msgid "Active members only"
 msgstr "Nur aktive Mitglieder"
 
-#: models.py:48
+#: models.py:29
+msgid "poll"
+msgstr "Umfrage"
+
+#: models.py:30
+msgid "polls"
+msgstr "Umfragen"
+
+#: models.py:73
 msgid "Yes/No"
 msgstr "Ja/Nein"
 
-#: models.py:49
+#: models.py:74
 msgid "Multiple Choice"
 msgstr "Mehrfachauswahl"
 
-#: models.py:50
+#: models.py:75
 msgid "Open Text"
 msgstr "Offenes Textfeld"
 
-#: models.py:51
+#: models.py:76
 msgid "Date"
 msgstr "Datum"
+
+#: models.py:79 templates/polls/poll_detail.html:40
+msgid "Question"
+msgstr "Frage"
+
+#: models.py:80
+msgid "Question Type"
+msgstr "Frage Typ"
+
+#: models.py:82
+msgid "Possible choices"
+msgstr "Möglichkeiten"
+
+#: models.py:85
+msgid "question"
+msgstr "Frage"
+
+#: models.py:86
+msgid "questions"
+msgstr "Fragen"
+
+#: models.py:99
+msgid "poll answer"
+msgstr "Umfrage Antwort"
+
+#: models.py:100
+msgid "poll answers"
+msgstr "Umfrage Antworten"
+
+#: models.py:112 models.py:161 models.py:179 models.py:197
+msgid "answer"
+msgstr "Antwort"
+
+#: models.py:113
+msgid "answers"
+msgstr "Antworten"
+
+#: models.py:141
+msgid "choice answer"
+msgstr "Auswahl Antwort"
+
+#: models.py:142
+msgid "choice answers"
+msgstr "Auswahl Antworten"
+
+#: models.py:164
+msgid "yes/no answer"
+msgstr "Ja/Nein Antwort"
+
+#: models.py:165
+msgid "yes/no answers"
+msgstr "Ja/Nein Antworten"
+
+#: models.py:168
+msgid "Yes"
+msgstr "Ja"
+
+#: models.py:168
+msgid "No"
+msgstr "Nein"
+
+#: models.py:182
+msgid "text answer"
+msgstr "Text Antwort"
+
+#: models.py:183
+msgid "text answers"
+msgstr "Text Antworten"
+
+#: models.py:200
+msgid "date answer"
+msgstr "Datum Antwort"
+
+#: models.py:201
+msgid "date answers"
+msgstr "Datum Antworten"
+
+#: templates/polls/poll_detail.html:3 templates/polls/poll_detail.html:8
+msgid "Poll Detail"
+msgstr "Umfrage Details"
 
 #: templates/polls/poll_detail.html:9
 msgid "Back to Polls"
 msgstr "Zurück zu den Umfragen"
 
-#: templates/polls/poll_detail.html:18
-msgid "Owner"
-msgstr "Eigentümer"
+#: templates/polls/poll_detail.html:22
+msgid "Questions"
+msgstr "Fragen"
 
-#: templates/polls/poll_detail.html:21 templates/polls/poll_vote.html:41
-#: templates/polls/polls_list.html:25 templates/polls/polls_list.html:27
-#: templates/polls/polls_list.html:28
+#: templates/polls/poll_detail.html:33
+msgid "Final results"
+msgstr "Endgültige Ergebnisse"
+
+#: templates/polls/poll_detail.html:35
+msgid "Temporary results"
+msgstr "Vorläufige Ergebnisse"
+
+#: templates/polls/poll_detail.html:41
+msgid "Total answers"
+msgstr "Antworten insgesamt"
+
+#: templates/polls/poll_detail.html:42
+msgid "My vote"
+msgstr "Meine Stimme"
+
+#: templates/polls/poll_detail.html:43
+msgid "Results"
+msgstr "Ergebnisse"
+
+#: templates/polls/poll_detail.html:66 templates/polls/polls_list.html:25
+#: templates/polls/polls_list.html:27 templates/polls/polls_list.html:28
 msgid "Vote"
 msgstr "Stimme abgeben"
 
-#: templates/polls/poll_detail.html:27
-#: templates/polls/poll_upsert_form.html:5
-#: templates/polls/poll_upsert_form.html:116
-#: templates/polls/poll_upsert_form.html:127
+#: templates/polls/poll_detail.html:72 templates/polls/poll_upsert_form.html:5
+#: templates/polls/poll_upsert_form.html:74
+#: templates/polls/poll_upsert_form.html:85
 msgid "Update Poll"
 msgstr "Umfrage aktualisieren"
 
+#: templates/polls/poll_info.html:4
+msgid "Owner"
+msgstr "Eigentümer"
+
+#: templates/polls/poll_info.html:7 templates/polls/polls_list.html:21
+msgid "Created at"
+msgstr "Erstellt am"
+
+#: templates/polls/poll_info.html:8 templates/polls/polls_list.html:22
+msgid "Published at"
+msgstr "Veröffentlicht am"
+
+#: templates/polls/poll_info.html:9 templates/polls/polls_list.html:23
+msgid "Closed at"
+msgstr "Geschlossen am"
+
 #: templates/polls/poll_upsert_form.html:7
-#: templates/polls/poll_upsert_form.html:118
-#: templates/polls/poll_upsert_form.html:129
+#: templates/polls/poll_upsert_form.html:76
+#: templates/polls/poll_upsert_form.html:87
 msgid "Create Poll"
 msgstr "Umfrage erstellen"
 
-#: templates/polls/poll_upsert_form.html:134
-#: templates/polls/poll_upsert_form.html:170
+#: templates/polls/poll_upsert_form.html:92
 msgid "Delete Poll"
 msgstr "Umfrage löschen"
 
-#: templates/polls/poll_upsert_form.html:140
-msgid "Poll Questions"
-msgstr "Umfrage Fragen"
-
-#: templates/polls/poll_upsert_form.html:146
-msgid "Add Question"
-msgstr "Frage hinzufügen"
-
-#: templates/polls/poll_upsert_form.html:150
-msgid "New Question"
-msgstr "Neue Frage"
-
-#: templates/polls/poll_upsert_form.html:154
-msgid "Update Question"
-msgstr "Frage aktualisieren"
-
-#: templates/polls/poll_upsert_form.html:157
-msgid "Save the poll to add questions."
-msgstr "Speichern, um Fragen hinzuzufügen."
-
-#: templates/polls/poll_upsert_form.html:171
+#: templates/polls/poll_upsert_form.html:93
 #, python-format
 msgid "Are you sure you want to delete the poll \"%(title)s\"?"
 msgstr "Bist du sicher, dass du die Umfrage \"%(title)s\" löschen willst?"
 
-#: templates/polls/poll_vote.html:6 templates/polls/poll_vote.html:13
+#: templates/polls/poll_upsert_form.html:101
+msgid "Poll Questions"
+msgstr "Umfrage Fragen"
+
+#: templates/polls/poll_upsert_form.html:113
+msgid "Update Question"
+msgstr "Frage aktualisieren"
+
+#: templates/polls/poll_upsert_form.html:124
+msgid "Delete Question"
+msgstr "Frage löschen"
+
+#: templates/polls/poll_upsert_form.html:125
+msgid "Are you sure you want to delete the question \"%(title)s\"?"
+msgstr "Bist du sicher, dass du die Frage \"%(title)s\" löschen willst?"
+
+#: templates/polls/poll_upsert_form.html:144
+msgid "New Question"
+msgstr "Neue Frage"
+
+#: templates/polls/poll_upsert_form.html:150
+msgid "Add Question"
+msgstr "Frage hinzufügen"
+
+#: templates/polls/poll_upsert_form.html:156
+msgid "Save the poll to add questions."
+msgstr "Speichern, um Fragen hinzuzufügen."
+
+#: templates/polls/poll_vote.html:15 templates/polls/poll_vote.html:22
 msgid "Vote on poll: "
 msgstr "Stimme abgeben auf die Umfrage: "
 
 #: templates/polls/poll_vote.html:45
+msgid "Submit"
+msgstr "Absenden"
+
+#: templates/polls/poll_vote.html:49
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -165,18 +298,6 @@ msgstr "Neueste Umfragen"
 msgid "Add a new poll"
 msgstr "Neue Umfrage hinzufügen"
 
-#: templates/polls/polls_list.html:21
-msgid "Created at"
-msgstr "Erstellt am"
-
-#: templates/polls/polls_list.html:22
-msgid "Published at"
-msgstr "Veröffentlicht am"
-
-#: templates/polls/polls_list.html:23
-msgid "Closed at"
-msgstr "Geschlossen am"
-
 #: templates/polls/polls_list.html:31 templates/polls/polls_list.html:33
 #: templates/polls/polls_list.html:34
 msgid "Update"
@@ -186,10 +307,15 @@ msgstr "Aktualisieren"
 msgid "Sorry, there are currently no polls available."
 msgstr "Leider sind derzeit keine Umfragen verfügbar."
 
-#: views/answer_views.py:42
-msgid "You didn't select a choice."
-msgstr "Du hast keine Auswahl getroffen."
+#: views/answer_views.py:73
+msgid "Your answers have been saved"
+msgstr ""
 
-#: views/upsert_views.py:101
+#: views/upsert_views.py:36
 msgid "Poll created successfully. You can now add questions."
 msgstr "Umfrage erfolgreich erstellt. Du kannst jetzt Fragen hinzufügen."
+
+#: views/upsert_views.py:90 views/upsert_views.py:107
+#, python-format
+msgid "Error creating question:%s"
+msgstr "Fehler beim Erstellen der Frage:%s"

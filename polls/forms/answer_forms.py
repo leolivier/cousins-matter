@@ -7,10 +7,10 @@ from ..models import YesNoAnswer, ChoiceAnswer, TextAnswer, DateTimeAnswer, Answ
 class AnswerFormMixin:
   def __init__(self, *args, **kwargs):
     instance = kwargs.get('instance')
-    if instance:
-      self.question = instance.question
-    elif kwargs.get('question'):
+    if kwargs.get('question'):
       self.question = kwargs.pop('question')  # Remove the question from kwargs
+    elif instance:
+      self.question = instance.question
     super().__init__(*args, **kwargs)
     self.fields['answer'].label = self.question.question_text
     # print(self.fields['answer'].__dict__)
@@ -34,6 +34,8 @@ class YesNoAnswerForm(AnswerFormMixin, forms.ModelForm):
 
 
 class ChoiceAnswerForm(AnswerFormMixin, forms.ModelForm):
+  answer = forms.ChoiceField(required=True, label=_('choice'), help_text=_('Select one choice'))
+
   class Meta:
     model = ChoiceAnswer
     fields = ['answer']
@@ -42,7 +44,7 @@ class ChoiceAnswerForm(AnswerFormMixin, forms.ModelForm):
     super().__init__(*args, **kwargs)
     if self.question.question_type != 'MC':
       raise ValueError('question must be for a Multiple Choice question')
-    self.fields['answer'].choices = self.question.possible_choices
+    self.fields['answer'].choices = [(choice, choice) for choice in self.question.possible_choices]
 
 
 class TextAnswerForm(AnswerFormMixin, forms.ModelForm):

@@ -31,15 +31,30 @@
 		question_type.change(function() {
 			if ($(this).val() == 'MC') {
 				$upsert_question_modal.find('#div_id_possible_choices').show();
+				enableMCSave();
 			} else {
 				$upsert_question_modal.find('#div_id_possible_choices').hide();
+				$upsert_question_modal.find('.modal-card-foot button[type="submit"]').prop('disabled', false);
 			}
 		})
 		if (response.question_type == 'MC') {
 			$upsert_question_modal.find('#id_possible_choices').val(response.possible_choices);
+			$upsert_question_modal.find('#id_possible_choices').on('keyup', enableMCSave);
+			enableMCSave();
 			$upsert_question_modal.find('#div_id_possible_choices').show();
 		} else {
 			$upsert_question_modal.find('#div_id_possible_choices').hide();
+		}
+	}
+
+	function enableMCSave() {
+		possible_choices = $upsert_question_modal.find('#id_possible_choices').val();
+		possible_choices = possible_choices.trim().split('\n');
+		$submit_button = $upsert_question_modal.find('.modal-card-foot button[type="submit"]');
+		if (possible_choices.length > 1) {
+			$submit_button.prop('disabled', false);
+		} else {
+			$submit_button.prop('disabled', true);
 		}
 	}
 
@@ -94,7 +109,7 @@
 				id="js-modal-update-question-{{question.id}}"
 				data-target="upsert-question-modal"
 				data-id="{{question.id}}"
-				data-action="{% url 'polls:update_question' form.instance.pk question.id%}" 
+				data-action="{% url 'polls:update_question' form.instance.pk question.id%}"
 				data-title='{%trans "Update Question"%}'
 				data-form='{{question_form|crispy}}'
 				data-get-url="{% url 'polls:question_detail' question.id %}"
@@ -104,6 +119,16 @@
 			>
 				{%icon "edit"%}
 			</button>
+			{%with qid=question.id|stringformat:"s"%}{%with bid='js-modal-delete-question-'|add:qid%}
+			{% autoescape off %}
+				{%trans "Delete Question" as delete_question_title %}
+				{%blocktranslate asvar delete_question_msg with title=question.question_text|escape trimmed%}
+					Are you sure you want to delete the question "{{title}}"?
+				{%endblocktranslate%}
+				{%url "polls:delete_question" question.id as delete_question_url%}
+				{%include "cm_main/common/confirm-delete-modal.html" with button_id=bid ays_title=delete_question_title button_text='' button_class='is-small' ays_msg=delete_question_msg|force_escape delete_url=delete_question_url %}
+			{% endautoescape %}
+			{% endwith %}{% endwith %}
 		</div>
 		{% empty %}
 		<div id="no-question-for-this-poll" class="panel-block">No questions linked to this poll.</div>

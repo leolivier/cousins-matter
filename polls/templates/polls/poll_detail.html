@@ -13,23 +13,54 @@
 			{%endwith%}
 		</div>
 		<div class="card-content">
-			<div class="columns">
-				<div class="column">
-					{%include "polls/poll_info.html" with poll=poll%}
+			{%include "polls/poll_info.html" with direction="horizontal"%}
+			{% now "YmdHi" as now_str %}
+			{%with pub_date_str=poll.pub_date|date:"YmdHi" close_date_str=poll.close_date|date:"YmdHi" %}
+			{%if pub_date_str > now_str %} {# future poll #}
+			<div class="panel">
+				<div class="panel-heading is-flex is-align-items-center is-justify-content-center">
+					<span class="has-text-centered">{%trans "Questions"%}</span>
 				</div>
-				<div class="column">
-					<div class="panel">
-						<div class="panel-heading is-flex is-align-items-center is-justify-content-center">
-							<span class="has-text-centered">{%trans "Questions"%}</span>
-						</div>
-						{% for question in poll.questions.all %}
-						<div class="panel-block">
-							{%icon question.question_type|question_icon %} {{question.question_text}}
-						</div>
-						{% endfor %}
+				{% for qa in questions %}
+				<div class="panel-block">
+					{%icon qa.question.question_type|question_icon %} {{qa.question.question_text}}
+				</div>
+				{% endfor %}
+			</div>
+			{%else %}
+			<h2 class="title is-size-4 has-text-centered">
+				{%if close_date_str < now_str %}
+					{%trans "Final results"%}
+				{%else %}
+					{%trans "Temporary results"%}
+				{%endif%}
+			</h2>
+			<div class="fixed-grid has-8-cols">
+				<div class="grid">
+					<div class="cell has-text-centered my-auto has-background-primary is-col-span-3">{%trans "Question"%}</div>
+					<div class="cell has-text-centered my-auto has-background-primary">{%trans "Total answers"%}</div>
+					<div class="cell has-text-centered my-auto has-background-primary is-col-span-2">{%trans "My vote"%}</div>
+					<div class="cell has-text-centered my-auto has-background-primary is-col-span-2">{%trans "Results"%}</div>
+					{% for qa in questions %}
+					<div class="cell has-text-centered my-auto has-background-link has-text-light is-col-span-3">
+						{%icon qa.question.question_type|question_icon %} {{qa.question.question_text}}
 					</div>
+					<div class="cell has-text-centered my-auto">
+						{{qa.total_answers}}
+					</div>
+					<div class="cell has-text-centered my-auto is-col-span-2">
+						{{qa.user_answer}}
+					</div>
+					<div class="cell has-text-centered my-auto is-col-span-2">
+						{%for result in qa.result%}
+							{{result}}<br>
+						{%endfor%}
+					</div>
+					{% endfor %}
 				</div>
 			</div>
+			{%endif%}
+			{%endwith%}
 		</div>
 		<div class="card-footer is-flex is-align-items-center is-justify-content-center">
 			{%with _("Vote") as vote_label%}

@@ -193,36 +193,36 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     rg.refresh_from_db()
     self.assertEqual(rg.name, gal_name)
 
-  def rec_build_tree(self, n, parent):
+  def rec_build_tree(self, n, N=0, parent=None):
     if n == 0:
       return ''
     name = get_gallery_name()
     gal = Gallery(name=name, parent=parent, description=f'a test gallery named {name}')
     gal.save()
     url = reverse("galleries:detail", args=[gal.id])
+    left_margin = ''.join(['<div class="ml-6">&nbsp;</div>' for i in range(N-1)]) + \
+      f'<div class="ml-6">{icon("menu-right")}</div>' if N else ''
+
     html = f'''
-<div class="container">
-  <div class="section">
-    <figure class="image gallery-cover is-pulled-left mr-3 mb-3">
-      <a href="{url}">
-        <img src="{gal.cover_url()}">
-      </a>
-    </figure>
-    <a class="content has-text-primary-dark" href="{url}">
-      <p>
-        <strong>{gal.name}</strong>
-        <span class="tag">{_("No photo")}</span>
-        <br/>
-        {gal.description}
-      </p>
+<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
+  {left_margin}
+  <figure class="image gallery-cover is-pulled-left mr-3">
+    <a href="{url}">
+      <img src="{gal.cover_url()}">
     </a>
-    {self.rec_build_tree(n-1, gal)}
-  </div>
-</div>'''
+  </figure>
+  <a class="content has-text-primary-dark" href="{url}">
+    <p><strong>{gal.name}</strong><span class="tag">{_("No photo")}</span>
+      <br>{gal.description}
+    </p>
+  </a>
+</div>
+{self.rec_build_tree(n-1, N+1, gal)}
+'''
     return html
 
   def test_tree_view(self):
-    htmls = self.rec_build_tree(4, None)
+    htmls = self.rec_build_tree(4)
     url = reverse("galleries:galleries")
     response = self.client.get(url)
     # self.print_response(response)

@@ -249,11 +249,13 @@ DJANGO_ICONS = {
     "about": "information-variant",
     "admin": "application-cog-outline",
     "stats": "chart-box-outline",
+    "question": "help-box-multiple-outline",
     "leave-group": "account-multiple-minus-outline",
     # arrows
     "arrow-down": "arrow-down-thin",
     "arrow-up": "arrow-up-thin",
     "arrow-up-down": "swap-vertical",
+    "menu-right": "menu-right",
     # emoticons
     "thumb-up": "thumb-up-outline",
     "thumb-down": "thumb-down-outline",
@@ -287,6 +289,7 @@ DJANGO_ICONS = {
     "directory": "format-list-text",
     "directory-variant": "book-alphabet",
     "deceased": "shield-cross-outline",  # or "coffin"?
+    "invite": "card-account-mail-outline",
     # gallery icons
     "galleries": "folder-multiple-image",
     "new-gallery": "file-image-plus-outline",
@@ -309,6 +312,15 @@ DJANGO_ICONS = {
     "new-treasure": "book-plus-outline",
     "edit-treasure": "note-edit-outline",
     "troves": "treasure-chest",
+    # polls icons
+    "vote": "vote",
+    "new-poll": "vote-outline",
+    "update-poll": "ballot-recount-outline",
+    "poll-choice-question": "checkbox-multiple-marked-circle-outline",
+    "poll-yesno-question": "checkbox-marked-circle-outline",
+    "poll-open-text-question": "text-box-outline",
+    "poll-date-time-question": "calendar-clock",
+    "poll-multiple-choice-question": "checkbox-multiple-outline",
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

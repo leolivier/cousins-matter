@@ -1,22 +1,17 @@
 # Italian Translations for NO NAME FOUND app.
 # Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-# This file was generated from cousinsmatter/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# by the model.
-# <OWNER> <OWNER EMAIL>, 2024.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "POT-Creation-Date: 2024-11-11 19:57+0100\n"
 "PO-Revision-Date: 2024-10-21 10:16+00:00\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
-"leolivier/auto-po-lyglot)\n"
-"Language-Team: French <LL@li.org>\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: Italian <LL@li.org>\n"
 "Language: IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

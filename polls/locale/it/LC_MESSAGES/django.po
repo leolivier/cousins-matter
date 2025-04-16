@@ -1,22 +1,17 @@
-# Italian Translations for NO NAME FOUND app.
-# Copyright (C) 2024 <OWNER>
-# This file is distributed under the same license as the application.
-# This file was generated from polls/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# by the model.
-# <OWNER> <OWNER EMAIL>, 2024.
+# Italian Translations for Polls app.
+# Copyright (C) 2025 Olivier LEVILLAIN
+# This file is distributed under the same license as the Polls package.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-11 19:57+0100\n"
-"PO-Revision-Date: 2024-10-21 10:22+00:00\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
-"leolivier/auto-po-lyglot)\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: Polls 1.0\n"
+"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"POT-Creation-Date: 2025-03-01 16:00+0100\n"
+"PO-Revision-Date: 2025-04-16 13:29+0200\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: Italian <LL@li.org>\n"
 "Language: IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,6 +19,327 @@ msgstr ""
 "\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: polls/apps.py:8
+#: apps.py:8
 msgid "Polls"
 msgstr "Sondaggi"
+
+#: forms/answer_forms.py:35
+msgid "Check the box if Yes"
+msgstr "Seleziona la casella se si"
+
+#: forms/answer_forms.py:39 models.py:145
+msgid "choice"
+msgstr "scelte"
+
+#: forms/answer_forms.py:39
+msgid "Select one choice"
+msgstr "Selezionare una scelta"
+
+#: forms/upsert_forms.py:11
+msgid "Title"
+msgstr "Titolo"
+
+#: forms/upsert_forms.py:11
+msgid "To be published on"
+msgstr "Pubblicato il"
+
+#: forms/upsert_forms.py:11
+msgid "To be closed on"
+msgstr "Chiuso il"
+
+#: forms/upsert_forms.py:12
+msgid "Open to all"
+msgstr "Aperto a tutti"
+
+#: forms/upsert_forms.py:12
+msgid "Open to active members"
+msgstr "Aperto ai membri attivi"
+
+#: forms/upsert_forms.py:13 models.py:16
+msgid "Closed list"
+msgstr "Lista chiusa"
+
+#: forms/upsert_forms.py:19
+msgid "Provide the possible choices, one per line"
+msgstr "Proporcione le scelte possibili, una per riga"
+
+#: forms/upsert_forms.py:38
+msgid "You must provide at least two possible choices!"
+msgstr "Devi fornire almeno due scelte possibili!"
+
+#: models.py:14
+msgid "All members"
+msgstr "Tutti i membri"
+
+#: models.py:15
+msgid "Active members only"
+msgstr "Solo membri attivi"
+
+#: models.py:29
+msgid "poll"
+msgstr "sondaggio"
+
+#: models.py:30
+msgid "polls"
+msgstr "sondaggi"
+
+#: models.py:73
+msgid "Yes/No"
+msgstr "Si/No"
+
+#: models.py:74
+msgid "Multiple Choice"
+msgstr "Scelta multipla"
+
+#: models.py:75
+msgid "Open Text"
+msgstr "Testo aperto"
+
+#: models.py:76
+msgid "Date"
+msgstr "Data"
+
+#: models.py:79 templates/polls/poll_detail.html:40
+msgid "Question"
+msgstr "Domanda"
+
+#: models.py:80
+msgid "Question Type"
+msgstr "Tipo di domanda"
+
+#: models.py:82
+msgid "Possible choices"
+msgstr "Scelte possibili"
+
+#: models.py:85
+msgid "question"
+msgstr "domanda"
+
+#: models.py:86
+msgid "questions"
+msgstr "domande"
+
+#: models.py:99
+msgid "poll answer"
+msgstr "risposta al sondaggio"
+
+#: models.py:100
+msgid "poll answers"
+msgstr "risposte al sondaggio"
+
+#: models.py:112 models.py:168 models.py:186 models.py:204
+msgid "answer"
+msgstr "risposta"
+
+#: models.py:113
+msgid "answers"
+msgstr "risposte"
+
+#: models.py:148
+msgid "choice answer"
+msgstr "risposta a scelta"
+
+#: models.py:149
+msgid "choice answers"
+msgstr "risposte a scelta"
+
+#: models.py:171
+msgid "yes/no answer"
+msgstr "risposta sì/no"
+
+#: models.py:172
+msgid "yes/no answers"
+msgstr "risposte sì/no"
+
+#: models.py:175
+msgid "Yes"
+msgstr "Si"
+
+#: models.py:175
+msgid "No"
+msgstr "No"
+
+#: models.py:189
+msgid "text answer"
+msgstr "risposta al testo"
+
+#: models.py:190
+msgid "text answers"
+msgstr "risposte al testo"
+
+#: models.py:207
+msgid "date answer"
+msgstr "data risposta"
+
+#: models.py:208
+msgid "date answers"
+msgstr "data risposte"
+
+#: templates/polls/poll_detail.html:3 templates/polls/poll_detail.html:8
+msgid "Poll Detail"
+msgstr "Dettaglio sondaggio"
+
+#: templates/polls/poll_detail.html:9
+msgid "Back to Polls"
+msgstr "Torna ai Sondaggi"
+
+#: templates/polls/poll_detail.html:22
+msgid "Questions"
+msgstr "Domande"
+
+#: templates/polls/poll_detail.html:33
+msgid "Final results"
+msgstr "Risultati finali"
+
+#: templates/polls/poll_detail.html:35
+msgid "Temporary results"
+msgstr "Risultati temporanei"
+
+#: templates/polls/poll_detail.html:41
+msgid "Total answers"
+msgstr "Risposte totali"
+
+#: templates/polls/poll_detail.html:42
+msgid "My vote"
+msgstr "La mia votazione"
+
+#: templates/polls/poll_detail.html:43
+msgid "Results"
+msgstr "Risultati"
+
+#: templates/polls/poll_detail.html:66 templates/polls/polls_list.html:28
+#: templates/polls/polls_list.html:30 templates/polls/polls_list.html:31
+msgid "Vote"
+msgstr "Vota"
+
+#: templates/polls/poll_detail.html:72 templates/polls/poll_upsert_form.html:5
+#: templates/polls/poll_upsert_form.html:74
+#: templates/polls/poll_upsert_form.html:85
+msgid "Update Poll"
+msgstr "Aggiorna Sondaggio"
+
+#: templates/polls/poll_info.html:4
+msgid "Owner"
+msgstr "Proprietario"
+
+#: templates/polls/poll_info.html:7 templates/polls/polls_list.html:24
+msgid "Created at"
+msgstr "Creato il"
+
+#: templates/polls/poll_info.html:8 templates/polls/polls_list.html:25
+msgid "Published at"
+msgstr "Pubblicato il"
+
+#: templates/polls/poll_info.html:9 templates/polls/polls_list.html:26
+msgid "Closed at"
+msgstr "Chiuso il"
+
+#: templates/polls/poll_info.html:10
+msgid "Open to"
+msgstr "Aperto a"
+
+#: templates/polls/poll_upsert_form.html:7
+#: templates/polls/poll_upsert_form.html:76
+#: templates/polls/poll_upsert_form.html:87
+msgid "Create Poll"
+msgstr "Crea Sondaggio"
+
+#: templates/polls/poll_upsert_form.html:92
+msgid "Delete Poll"
+msgstr "Cancella Sondaggio"
+
+#: templates/polls/poll_upsert_form.html:93
+#, python-format
+msgid "Are you sure you want to delete the poll \"%(title)s\"?"
+msgstr "Sei sicuro di voler eliminare il sondaggio \"%(title)s\"?"
+
+#: templates/polls/poll_upsert_form.html:101
+msgid "Poll Questions"
+msgstr "Domande del Sondaggio"
+
+#: templates/polls/poll_upsert_form.html:113
+msgid "Update Question"
+msgstr "Aggiorna Domanda"
+
+#: templates/polls/poll_upsert_form.html:124
+msgid "Delete Question"
+msgstr "Cancella Domanda"
+
+#: templates/polls/poll_upsert_form.html:125
+#, python-format
+msgid "Are you sure you want to delete the question \"%(title)s\"?"
+msgstr "Sei sicuro di voler eliminare il domanda \"%(title)s\"?"
+
+#: templates/polls/poll_upsert_form.html:144
+msgid "New Question"
+msgstr "Nuova Domanda"
+
+#: templates/polls/poll_upsert_form.html:150
+msgid "Add Question"
+msgstr "Aggiungi Domanda"
+
+#: templates/polls/poll_upsert_form.html:156
+msgid "Save the poll to add questions."
+msgstr "Salva il sondaggio per aggiungere domande."
+
+#: templates/polls/poll_vote.html:16 templates/polls/poll_vote.html:23
+msgid "Vote on poll: "
+msgstr "Vota su sondaggio: "
+
+#: templates/polls/poll_vote.html:45
+msgid "Submit"
+msgstr "Invia"
+
+#: templates/polls/poll_vote.html:49
+msgid "Cancel"
+msgstr "Annulla"
+
+#: templates/polls/polls_list.html:6
+msgid "Create poll"
+msgstr "Crea sondaggio"
+
+#: templates/polls/polls_list.html:16
+msgid "Open"
+msgstr "Aperto"
+
+#: templates/polls/polls_list.html:17
+msgid "All"
+msgstr "Tutti"
+
+#: templates/polls/polls_list.html:18
+msgid "Closed"
+msgstr "Chiuso"
+
+#: templates/polls/polls_list.html:34 templates/polls/polls_list.html:36
+#: templates/polls/polls_list.html:37
+msgid "Update"
+msgstr "Aggiorna"
+
+#: templates/polls/polls_list.html:43
+msgid "Sorry, there are currently no polls available."
+msgstr "Spiacenti, non ci sono sondaggi disponibili per ora."
+
+#: views/answer_views.py:73
+msgid "Your answers have been saved"
+msgstr ""
+
+#: views/display_views.py:23
+msgid "Open Polls"
+msgstr "Sondaggi aperti"
+
+#: views/display_views.py:57
+msgid "All Polls"
+msgstr "Tutti i sondaggi"
+
+#: views/display_views.py:68
+msgid "Closed Polls"
+msgstr "Sondaggi chiusi"
+
+#: views/upsert_views.py:36
+msgid "Poll created successfully. You can now add questions."
+msgstr "Sondaggio creato con successo. Ora puoi aggiungere domande."
+
+#: views/upsert_views.py:90 views/upsert_views.py:107
+#, python-format
+msgid "Error creating question:%s"
+msgstr "Errore nella creazione della domanda:%s"

@@ -2,6 +2,7 @@
 {% load i18n cm_tags crispy_forms_tags static %}
 {% block header %}
 	{%include "cm_main/common/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
+	<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 	<script src="{% static 'forum/js/forum.js' %}"></script>
 {%endblock%}
 {% block title %}{% title _("Post") %}{% endblock %}
@@ -45,9 +46,13 @@
 				<a class="button" href="{% url 'forum:edit' post.id %}" title="{%trans 'Edit' %}">
 					{%icon "edit" %}
 				</a>
-				<button class="button js-modal-trigger" data-target="delete-item-modal" title="{%trans 'Delete' %}">
-					{%icon "delete" %}
-				</button>
+
+				{% trans 'Delete post' as delete_title%}
+				{% blocktranslate asvar delete_msg trimmed %}
+						Are you sure you want to delete "{{ post }}" and all associated replies and comments?
+				{% endblocktranslate %}
+				{% url 'forum:delete' post.id as delete_url %}
+				{%include "cm_main/common/confirm-delete-modal.html" with button_text='' ays_title=delete_title ays_msg=delete_msg|force_escape action_url=delete_url expected_value=post.title|escape %}
 			</div>
 			{%else%}
 				{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
@@ -129,11 +134,7 @@
 {%url "forum:reply" post.id as url%}
 {%include "forum/post_form_include.html" with title=_('Your answer') message_form=reply_form action=url post=post %}
 {%endwith%}
-
-{% trans 'Delete post' as delete_title%}
-{% blocktranslate asvar delete_msg with object=post.title trimmed %}
-	Are you sure you want to delete "{{ post }}" and all associated replies and comments?
-{% endblocktranslate %}
-{% url 'forum:delete' post.id as delete_url %}
-{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title ays_msg=delete_msg action_url=delete_url expected_value=post.title %}
+{% if post.first_message.author.username == user.username %}
+	{% include "cm_main/common/modal_form.html" with modal_id="delete-item-modal"%}
+{% endif %}
 {% endblock %}

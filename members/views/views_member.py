@@ -13,17 +13,28 @@ from django.http import HttpResponseForbidden, JsonResponse
 from cousinsmatter.utils import PageOutOfBounds, Paginator, remove_accents
 from verify_email.email_handler import send_verification_email
 from cousinsmatter.utils import assert_request_is_ajax, redirect_to_referer
-from ..models import Member
+from ..models import Family, Member
 from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
 
 logger = logging.getLogger(__name__)
 
 
+@login_required
 def validate_username(request):
     """Check username availability"""
     username = request.GET.get('username', None)
     response = {
         'is_taken': username != request.user.username and Member.objects.filter(username__iexact=username).exists()
+    }
+    return JsonResponse(response)
+
+
+@login_required
+def validate_family_name(request):
+    """Check family name availability"""
+    family_name = request.GET.get('name', None)
+    response = {
+        'is_taken': Family.objects.filter(name__iexact=family_name).exists()
     }
     return JsonResponse(response)
 
@@ -170,8 +181,8 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
 
         return render(request, self.template_name, {
             "form": MemberUpdateForm(instance=member, is_profile=self.is_profile_view),
-            "addr_form": AddressUpdateForm(instance=member.address),
-            "family_form": FamilyUpdateForm(instance=member.family),
+            "addr_form": AddressUpdateForm(),
+            "family_form": FamilyUpdateForm(),
             "pk": pk,
             "title": self.title,
             "member_manager_name": member_manager_name(member)})

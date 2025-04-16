@@ -33,6 +33,30 @@
 	}
 }
 
+/* placement of message top right */
+.message-wrapper {
+	position: fixed;
+	top: 1rem;
+	right: 1rem;
+	z-index: 9999; /* pour s'assurer que le message est au-dessus des autres éléments */
+	/* Optionnel : ajuster la largeur si besoin */
+	width: 300px;
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+/* message fading out after 10s, 1s animation duration */
+.message-wrapper .message {
+  /* Animation: durée de 1s, début après 10s, et conserver l'état (opacity 0) après l'animation */
+  animation: fadeOut 1s 10s forwards;
+}
+
+
 	/* RELATED WIDGET WRAPPER */
 .related-widget-wrapper {
   display: flex;

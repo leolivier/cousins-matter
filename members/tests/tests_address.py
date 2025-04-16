@@ -66,8 +66,6 @@ class TestModalAddressView(MemberTestCase):
     cr_addr_url = reverse("members:modal_create_address")
     response = self.client.get(cr_addr_url)
     self.assertEqual(response.status_code, 200)
-    # actually does not used this form directmy as it is included in a master one
-    # self.assertTemplateUsed(response, 'members/modal_form.html')
     self.assertIs(response.resolver_match.func.view_class, ModalAddressCreateView)
     test_addr = get_test_address()
     response = self.client.post(cr_addr_url, test_addr, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
@@ -76,7 +74,15 @@ class TestModalAddressView(MemberTestCase):
     self.assertEqual(response.headers['Content-Type'], 'application/json')
     addr = Address.objects.filter(zip_code=test_addr['zip_code']).first()
     self.assertIsNotNone(addr)
-    self.assertJSONEqual(response.content.decode(), {"address_id": addr.id, "address_str": str(addr)})
+    self.assertJSONEqual(response.content.decode(), {
+      "address_id": addr.id,
+      "number_and_street": addr.number_and_street,
+      "complementary_info": addr.complementary_info,
+      "zip_code": addr.zip_code,
+      "city": addr.city,
+      "country": addr.country,
+      "address_str": str(addr),
+      })
     # pprint(vars(response))
 
   def test_modify_modal_address_view(self):
@@ -87,8 +93,6 @@ class TestModalAddressView(MemberTestCase):
     ud_addr_url = reverse("members:modal_update_address", kwargs={'pk': addr.id})
     response = self.client.get(ud_addr_url)
     self.assertEqual(response.status_code, 200)
-    # actually does not used this form directmy as it is included in a master one
-    # self.assertTemplateUsed(response, 'members/modal_form.html')
     self.assertIs(response.resolver_match.func.view_class, ModalAddressUpdateView)
     # test post update
     test_addr = get_test_address()  # just modifies the zip code
@@ -97,5 +101,13 @@ class TestModalAddressView(MemberTestCase):
     self.assertIs(response.resolver_match.func.view_class, ModalAddressUpdateView)
     self.assertEqual(response.headers['Content-Type'], 'application/json')
     addr.refresh_from_db()
-    self.assertJSONEqual(response.content.decode(), {"address_id": addr.id, "address_str": str(addr)})
-    # pprint(vars(response))
+    self.assertJSONEqual(response.content.decode(), {
+      "address_id": addr.id,
+      "number_and_street": addr.number_and_street,
+      "complementary_info": addr.complementary_info,
+      "zip_code": addr.zip_code,
+      "city": addr.city,
+      "country": addr.country,
+      "address_str": str(addr),
+      })
+    # print(response.content.decode())

@@ -65,7 +65,7 @@ class PageTreeView(LoginRequiredMixin, generic.ListView):
 
 class PageDeleteView(OnlyAdminMixin, generic.View):
 
-  def get(self, request, pk):
+  def post(self, request, pk):
     page = get_object_or_404(FlatPage, pk=pk)
     page.delete()
     messages.success(request, _("Page \"%(title)s\" deleted") % {"title": page.title})

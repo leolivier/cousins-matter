@@ -5,16 +5,18 @@
 		{% spaceless %}
 		{% if can_change_related %}
 		<a class="change-related button js-modal-trigger" 
-			id="id_change_{{ name }}_link" data-target="change-{{ name }}-modal"
-			title="{% blocktranslate %}Change selected {{ name }}{% endblocktranslate %}">
+			id="id_change_{{ name }}_link"
+			title="{% blocktranslate %}Change selected {{ name }}{% endblocktranslate %}"
+			>
 			{%icon "edit" %}
 		</a>
 		{% endif %}
 		{% if can_add_related %}
 		<a class="add-related button js-modal-trigger"
-			id="id_create_{{ name }}_link" data-target="create-{{ name }}-modal"
+			id="id_create_{{ name }}_link"
 			{% translate name as translated_name %}
-			title="{% blocktranslate %}Add another {{ translated_name }}{% endblocktranslate %}">
+			title="{% blocktranslate %}Add another {{ translated_name }}{% endblocktranslate %}"
+			>
 			{%icon "new" %}
 		</a>
 		{% endif %}

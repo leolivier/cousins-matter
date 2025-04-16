@@ -56,7 +56,7 @@
             </div>
             {%endfor%}
           {% endif %}
-          <ul class="messages">
+          <ul class="message-wrapper">
           {% for message in messages %}
             <li{% if message.tags %} class="message is-{{ message.tags }}"{% endif %}>
               <div class="message-body">

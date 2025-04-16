@@ -10,6 +10,7 @@ const $numPages = parseInt('{{page.num_pages}}');
 const $lastPageLink = '{{page.last_page_link}}';
 const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 </script>
+<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 <script src="{% static 'chat/js/chat.js' %}"></script>
 {%endblock%}
 {% block title %}{% title room.name %}{% endblock %}
@@ -35,12 +36,17 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 					{%include "cm_main/followers/followers-count-tag.html" with followed_object=room extra_class="ml-auto mr-5"%}
 				{%endif%}
 				{%if room.owner == request.user %}
-				<a class="button is-responsive is-pulled-right js-modal-trigger" data-target="delete-item-modal" title="{%trans 'Delete' %}">
-					{%icon "delete" %}
-				</a>
-				<a class="button is-responsive is-pulled-right" onclick="toggle_edit_room_form();" title="{%trans 'Edit' %}">
+					{% autoescape off %}
+					{%blocktranslate asvar delete_msg with room_name=room.name|force_escape trimmed %}
+						Are you sure you want to delete the room "{{room_name}}" and all its messages?
+					{%endblocktranslate%}
+					{%url 'chat:room-delete' room.slug as delete_url%}
+					{%trans 'Room deletion' as delete_title%}
+					{%include "cm_main/common/confirm-delete-modal.html" with button_text="" button_class="is-responsive is-pulled-right" ays_title=delete_title ays_msg=delete_msg|force_escape action_url=delete_url expected_value=room.name|escape %}
+					{% endautoescape %}
+					<a class="button is-responsive is-pulled-right" onclick="toggle_edit_room_form();" title="{%trans 'Edit' %}">
 						{%icon "edit" %}
-				</a>
+					</a>
 				{%else%}
 					{%if private%}
 					<div class="mr-1 buttons has-addons is-rounded">
@@ -102,15 +108,10 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 				</div>
 		</div>
 	</div>
+	{%if room.owner == request.user %}
+		{%include "cm_main/common/modal_form.html" with modal_id="delete-item-modal" %}
+	{%endif%}
 </div>
-{%if room.owner == request.user %}
-	{%url 'chat:room-delete' room.slug as delete_url%}
-	{%trans 'Room deletion' as delete_title%}
-	{%blocktranslate asvar delete_msg with room_name=room.name trimmed %}
-		Are you sure you want to delete the room "{{room_name}}" and all its messages?
-	{%endblocktranslate%}
-	{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title ays_msg=delete_msg action_url=delete_url expected_value=room.name %}
-{%endif%}
 
 {%endwith%}
 {% endblock %}

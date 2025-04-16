@@ -1,18 +1,18 @@
 # French translation of cousins_matter.
 # Copyright (C) 2024 Olivier LEVILLAIN <olivier@levillain.eu>
 # This file is distributed under the same license as the Cousins Matter package.
-# <olivier@levillain.eu>, 2024.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 16:46+0100\n"
+"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"POT-Creation-Date: 2025-04-06 13:04+0200\n"
 "PO-Revision-Date: 2024-12-24 12:09+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
-"Language: French\n"
+"Language: FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -122,36 +122,32 @@ msgstr "Le code source est sous licence"
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright © 2024 Cousins Matter. Tous droits réservés."
 
-#: templates/cm_main/base.html:80 templates/cm_main/navbar.html:145
+#: templates/cm_main/base.html:80 templates/cm_main/navbar.html:147
 msgid "Contact the site admin"
 msgstr "Contacter l'administrateur du site"
 
-#: templates/cm_main/common/confirm-delete-modal.html:28
-#: templates/cm_main/common/confirm-delete-modal.html:54
+#: templates/cm_main/common/confirm-delete-modal.html:26
 msgid "Confirm"
 msgstr "Confirmer"
 
-#: templates/cm_main/common/confirm-delete-modal.html:32
-#: templates/cm_main/common/confirm-delete-modal.html:58
+#: templates/cm_main/common/confirm-delete-modal.html:30
+#: templates/cm_main/common/modal_form.html:92
 #: templates/cm_main/contact/contact-form.html:16
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/cm_main/common/confirm-delete-modal.html:40
-#, python-format
+#: templates/cm_main/common/confirm-delete-modal.html:35
 msgid ""
-"Enter \"<span class=\"has-text-danger\">%(expected_value)s</span>\" in the "
-"field below before pressing confirm"
+"Mandatory. Deletion will not be possible until the correct value is entered."
 msgstr ""
-"Saisis \"<span class=\"has-text-danger\">%(expected_value)s</span>\" dans le "
-"champ ci-dessous avant d'appuyer sur confirmer."
-
-#: templates/cm_main/common/confirm-delete-modal.html:48
-msgid ""
-"Mandatory. Deletion will not take place until the correct value is entered."
-msgstr ""
-"Obligatoire. La suppression n'aura pas lieu tant que la valeur correcte ne "
+"Obligatoire. La suppression sera impossible tant que la valeur correcte ne "
 "sera pas saisie."
+
+#: templates/cm_main/common/confirm-delete-modal.html:37
+msgid ""
+"Enter %(expected_value)s in the field below before pressing confirm"
+msgstr ""
+"Saisis %(expected_value)s dans le champ ci-dessous avant de confirmer."
 
 #: templates/cm_main/common/include-summernote.html:6
 msgid "Toggle Note Editor Toolbar"
@@ -160,6 +156,22 @@ msgstr "Afficher/Masquer la barre d'outils"
 #: templates/cm_main/common/include-summernote.html:7
 msgid "Remaining characters:"
 msgstr "Caractères restants:"
+
+#: templates/cm_main/common/modal_form.html:77
+msgid ""
+"WARNING: This item will be modified for all other members using it! Please "
+"create a new one if that's not what you want to achieve."
+msgstr ""
+"ATTENTION: Cet élément sera modifié pour tous les autres membres qui l'utilisent! "
+"Merci de créer un nouvel élément si ce n'est pas ce que tu veux."
+
+#: templates/cm_main/common/modal_form.html:80
+msgid "Before creating a new item, please make sure it doesn't already exist!"
+msgstr "Avant de créer un nouvel élément, merci de t'assurer qu'il n'existe pas déjà!"
+
+#: templates/cm_main/common/modal_form.html:83
+msgid "Warning, this will delete the item!"
+msgstr "Attention, cela supprimera l'élément!"
 
 #: templates/cm_main/common/paginate_template.html:25
 msgid "Items per page:"
@@ -326,43 +338,51 @@ msgstr "Salons de discussion privée"
 msgid "Troves"
 msgstr "Trésors"
 
-#: templates/cm_main/navbar.html:99
+#: templates/cm_main/navbar.html:82
+msgid "Polls"
+msgstr "Sondages"
+
+#: templates/cm_main/navbar.html:85
+msgid "Create Poll"
+msgstr "Nouveau sondage"
+
+#: templates/cm_main/navbar.html:101
 msgid "Change language"
 msgstr "Changer de langue"
 
-#: templates/cm_main/navbar.html:119
+#: templates/cm_main/navbar.html:121
 msgid "Edit Pages"
 msgstr "Editer les Pages"
 
-#: templates/cm_main/navbar.html:121
+#: templates/cm_main/navbar.html:123
 msgid "Import members from CSV"
 msgstr "Importer des membres depuis un CSV"
 
-#: templates/cm_main/navbar.html:122
+#: templates/cm_main/navbar.html:124
 msgid "Admin site"
 msgstr "Site d'Administration"
 
-#: templates/cm_main/navbar.html:125
+#: templates/cm_main/navbar.html:127
 msgid "Export Members as CSV"
 msgstr "Exporter les membres en CSV"
 
-#: templates/cm_main/navbar.html:143
+#: templates/cm_main/navbar.html:145
 msgid "About the site"
 msgstr "A propos du site"
 
-#: templates/cm_main/navbar.html:154
+#: templates/cm_main/navbar.html:156
 msgid "Sign in"
 msgstr "Connexion"
 
-#: templates/cm_main/navbar.html:158
+#: templates/cm_main/navbar.html:160
 msgid "Request invitation link"
 msgstr "Demander un lien d'invitation"
 
-#: templates/cm_main/navbar.html:167
+#: templates/cm_main/navbar.html:169
 msgid "Profile"
 msgstr "Profil"
 
-#: templates/cm_main/navbar.html:169
+#: templates/cm_main/navbar.html:171
 msgid "Log Out"
 msgstr "Déconnexion"
 

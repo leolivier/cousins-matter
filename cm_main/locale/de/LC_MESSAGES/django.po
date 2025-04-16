@@ -1,20 +1,17 @@
 # German Translations for NO NAME FOUND app.
 # Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-# This file was generated from cm_main/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# by the model.
-# <OWNER> <OWNER EMAIL>, 2024.
+
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "POT-Creation-Date: 2024-12-30 16:46+0100\n"
-"PO-Revision-Date: 2024-10-21 09:03+00:00\n"
-"Last-Translator: Olivier LEVILLAIN\n"
+"PO-Revision-Date: 2025-04-06 13:04+0200\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
 "Language: DE\n"
 "MIME-Version: 1.0\n"
@@ -127,36 +124,31 @@ msgstr "Die Quellcode ist lizenziert"
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Urheberrecht © 2024 Cousins Matter. Alle Rechte vorbehalten."
 
-#: templates/cm_main/base.html:80 templates/cm_main/navbar.html:145
+#: templates/cm_main/base.html:80 templates/cm_main/navbar.html:147
 msgid "Contact the site admin"
 msgstr "Kontaktiere den Site-Administrator"
 
-#: templates/cm_main/common/confirm-delete-modal.html:28
-#: templates/cm_main/common/confirm-delete-modal.html:54
+#: templates/cm_main/common/confirm-delete-modal.html:26
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: templates/cm_main/common/confirm-delete-modal.html:32
-#: templates/cm_main/common/confirm-delete-modal.html:58
+#: templates/cm_main/common/confirm-delete-modal.html:30
+#: templates/cm_main/common/modal_form.html:92
 #: templates/cm_main/contact/contact-form.html:16
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: templates/cm_main/common/confirm-delete-modal.html:40
-#, python-format
+#: templates/cm_main/common/confirm-delete-modal.html:35
 msgid ""
-"Enter \"<span class=\"has-text-danger\">%(expected_value)s</span>\" in the "
-"field below before pressing confirm"
+"Mandatory. Deletion will not be possible until the correct value is entered."
 msgstr ""
-"Bitte geben Sie \"<span class=\"has-text-danger\">%(expected_value)s</"
-"span>\" in das Feld unten ein, bevor Sie bestätigen"
+"Pflichtfeld. Löschung ist nicht möglich, bis der richtige Wert eingegeben ist."
 
-#: templates/cm_main/common/confirm-delete-modal.html:48
+#: templates/cm_main/common/confirm-delete-modal.html:37
 msgid ""
-"Mandatory. Deletion will not take place until the correct value is entered."
+"Enter %(expected_value)s in the field below before pressing confirm"
 msgstr ""
-"Pflicht. Die Löschung findet erst statt, wenn die korrekte Wert eingegeben "
-"wird."
+"Bitte geben Sie %(expected_value)s in das Feld unten ein, bevor Sie bestätigen"
 
 #: templates/cm_main/common/include-summernote.html:6
 msgid "Toggle Note Editor Toolbar"
@@ -165,6 +157,24 @@ msgstr "Schalten Sie die Notizbearbeitungs-Werkzeugleiste ein"
 #: templates/cm_main/common/include-summernote.html:7
 msgid "Remaining characters:"
 msgstr "Verbleibende Zeichen:"
+
+#: templates/cm_main/common/modal_form.html:77
+msgid ""
+"WARNING: This item will be modified for all other members using it! Please "
+"create a new one if that's not what you want to achieve."
+msgstr ""
+"WARNUNG: Dieses Element wird bei allen anderen Mitgliedern verwendet! Bitte "
+"erstellen Sie ein neues, wenn Sie dies nicht wollen."
+
+#: templates/cm_main/common/modal_form.html:80
+msgid "Before creating a new item, please make sure it doesn't already exist!"
+msgstr ""
+"Bevor Sie einen neuen Artikel erstellen, vergewissern Sie sich bitte, "
+"dass er nicht bereits existiert!"
+
+#: templates/cm_main/common/modal_form.html:83
+msgid "Warning, this will delete the item!"
+msgstr "Warnung, dies wird das Element löschen!"
 
 #: templates/cm_main/common/paginate_template.html:25
 msgid "Items per page:"
@@ -335,43 +345,51 @@ msgstr "Privat-Chat-Rooms"
 msgid "Troves"
 msgstr "Schätze"
 
-#: templates/cm_main/navbar.html:99
+#: templates/cm_main/navbar.html:82
+msgid "Polls"
+msgstr "Umfragen"
+
+#: templates/cm_main/navbar.html:85
+msgid "Create Poll"
+msgstr "Erstelle einen Umfrage"
+
+#: templates/cm_main/navbar.html:101
 msgid "Change language"
 msgstr "Sprache ändern"
 
-#: templates/cm_main/navbar.html:119
+#: templates/cm_main/navbar.html:121
 msgid "Edit Pages"
 msgstr "Bearbeiten Sie Seiten"
 
-#: templates/cm_main/navbar.html:121
+#: templates/cm_main/navbar.html:123
 msgid "Import members from CSV"
 msgstr "Importiere Mitglieder aus CSV"
 
-#: templates/cm_main/navbar.html:122
+#: templates/cm_main/navbar.html:124
 msgid "Admin site"
 msgstr "Verwaltungsseite"
 
-#: templates/cm_main/navbar.html:125
+#: templates/cm_main/navbar.html:127
 msgid "Export Members as CSV"
 msgstr "Exportiere Mitglieder als CSV"
 
-#: templates/cm_main/navbar.html:143
+#: templates/cm_main/navbar.html:145
 msgid "About the site"
 msgstr "Über den Site"
 
-#: templates/cm_main/navbar.html:154
+#: templates/cm_main/navbar.html:156
 msgid "Sign in"
 msgstr "Anmelden"
 
-#: templates/cm_main/navbar.html:158
+#: templates/cm_main/navbar.html:160
 msgid "Request invitation link"
 msgstr "Bitte um Einladungslink"
 
-#: templates/cm_main/navbar.html:167
+#: templates/cm_main/navbar.html:169
 msgid "Profile"
 msgstr "Profil"
 
-#: templates/cm_main/navbar.html:169
+#: templates/cm_main/navbar.html:171
 msgid "Log Out"
 msgstr "Ausloggen"
 

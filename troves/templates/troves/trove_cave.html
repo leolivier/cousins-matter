@@ -49,7 +49,7 @@ function delete_treasure(url) {
 		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
 			{%paginate page%}
 		</div>
-		<div>
+		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
       {% for category, troves in page.object_list.items %}
         <h2 class="title is-4">{{ category|translate_category }}</h2>
         <div class="grid">

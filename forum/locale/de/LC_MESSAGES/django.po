@@ -1,22 +1,18 @@
 # German Translations for NO NAME FOUND app.
 # Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-# This file was generated from forum/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# by the model.
-# <OWNER> <OWNER EMAIL>, 2024.
+
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "POT-Creation-Date: 2024-11-11 19:57+0100\n"
-"PO-Revision-Date: 2024-10-21 09:08+00:00\n"
-"Last-Translator: Auto-po-lyglot using qwen2.5:3b (https://github.com/"
-"leolivier/auto-po-lyglot)\n"
-"Language-Team: French <LL@li.org>\n"
+"PO-Revision-Date: 2025-04-06 13:05+0200\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: German <LL@li.org>\n"
 "Language: DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,90 +20,80 @@ msgstr ""
 "\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: forum/models.py:13
+#: models.py:13
 msgid "Content"
 msgstr "Inhalt"
 
-#: forum/models.py:28
+#: models.py:28
 msgid "Title"
 msgstr "Titel"
 
-#: forum/models.py:34
+#: models.py:34
 msgid "posts"
 msgstr "Beiträge"
 
-#: forum/models.py:51
+#: models.py:51
 msgid "Comment"
 msgstr "Wie geht es dir?"
 
-#: forum/models.py:54
+#: models.py:54
 msgid "comments"
 msgstr "Kommentare"
 
-#: forum/templates/forum/comment_list.html:5
+#: templates/forum/comment_list.html:5
 #, python-format
 msgid "%(ncomments)s comment"
 msgid_plural "%(ncomments)s comments"
 msgstr[0] "%(ncomments)s commentaire"
 msgstr[1] "%(ncomments)s commentaires"
 
-#: forum/templates/forum/comment_list.html:33
-#: forum/templates/forum/post_detail.html:45
-#: forum/templates/forum/post_detail.html:91
+#: templates/forum/comment_list.html:33 templates/forum/post_detail.html:46
+#: templates/forum/post_detail.html:96
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: forum/templates/forum/comment_list.html:37
-#: forum/templates/forum/post_detail.html:48
-#: forum/templates/forum/post_detail.html:95
+#: templates/forum/comment_list.html:37 templates/forum/post_detail.html:100
 msgid "Delete"
 msgstr "Löschen"
 
-#: forum/templates/forum/comment_list.html:50
-#: forum/templates/forum/post_detail.html:109
+#: templates/forum/comment_list.html:50 templates/forum/post_detail.html:114
 msgid "Update"
 msgstr "Aktualisieren"
 
-#: forum/templates/forum/comment_list.html:53
-#: forum/templates/forum/comment_list.html:78
-#: forum/templates/forum/post_detail.html:112
-#: forum/templates/forum/post_form_include.html:21
+#: templates/forum/comment_list.html:53 templates/forum/comment_list.html:78
+#: templates/forum/post_detail.html:117
+#: templates/forum/post_form_include.html:21
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: forum/templates/forum/comment_list.html:69
+#: templates/forum/comment_list.html:69
 msgid "Add comment"
 msgstr "Fügt einen Kommentar hinzu"
 
-#: forum/templates/forum/comment_list.html:77
+#: templates/forum/comment_list.html:77
 msgid "Add"
 msgstr "Addieren"
 
-#: forum/templates/forum/post_detail.html:7
+#: templates/forum/post_detail.html:8
 msgid "Post"
 msgstr "Post"
 
-#: forum/templates/forum/post_detail.html:11
-#: forum/templates/forum/post_list.html:34
+#: templates/forum/post_detail.html:12 templates/forum/post_list.html:34
 #, python-format
 msgid "%(nreplies)s answer"
 msgid_plural "%(nreplies)s answers"
 msgstr[0] "%(nreplies)s réponse"
 msgstr[1] "%(nreplies)s réponses"
 
-#: forum/templates/forum/post_detail.html:17
+#: templates/forum/post_detail.html:18
 msgid "No answer"
 msgstr "Keine Antwort"
 
-#: forum/templates/forum/post_detail.html:130
-msgid "Your answer"
-msgstr "Ihre Antwort"
-
-#: forum/templates/forum/post_detail.html:133
+#: templates/forum/post_detail.html:50
 msgid "Delete post"
 msgstr "Löschen Sie den Beitrag"
 
-#: forum/templates/forum/post_detail.html:134
+#: templates/forum/post_detail.html:51
 #, python-format
 msgid ""
 "Are you sure you want to delete \"%(post)s\" and all associated replies and "
@@ -116,31 +102,32 @@ msgstr ""
 "Seid Sie sicher, dass Sie \"%(post)s\" löschen und alle zugehörigen "
 "Antworten und Kommentare entfernen möchten?"
 
-#: forum/templates/forum/post_form.html:8
-#: forum/templates/forum/post_form.html:16
-msgid "Edit Post"
-msgstr "Bearbeiten Sie den Beitrag"
+#: templates/forum/post_detail.html:135
+msgid "Your answer"
+msgstr "Deine Antwort"
 
-#: forum/templates/forum/post_form.html:10
-#: forum/templates/forum/post_form.html:18
-#: forum/templates/forum/post_list.html:9
+#: templates/forum/post_form.html:8 templates/forum/post_form.html:16
+msgid "Edit Post"
+msgstr "Bearbeits Du den Beitrag"
+
+#: templates/forum/post_form.html:10 templates/forum/post_form.html:18
+#: templates/forum/post_list.html:9
 msgid "Create Post"
 msgstr "Erstelle einen Beitrag"
 
-#: forum/templates/forum/post_form_include.html:17
+#: templates/forum/post_form_include.html:17
 msgid "Send"
 msgstr "Senden"
 
-#: forum/templates/forum/post_list.html:3
-#: forum/templates/forum/post_list.html:8
+#: templates/forum/post_list.html:3 templates/forum/post_list.html:8
 msgid "Latest Posts"
 msgstr "Letzte Beiträge"
 
-#: forum/views/views_comment.py:26 forum/views/views_comment.py:48
-#: forum/views/views_post.py:65 forum/views/views_post.py:108
+#: views/views_comment.py:25 views/views_comment.py:47 views/views_post.py:71
+#: views/views_post.py:114
 msgid "The size of the message exceeds the authorised limit."
 msgstr "Die Nachricht überschreitet die zulässige Größengröße."
 
-#: forum/views/views_post.py:168
+#: views/views_post.py:173
 msgid "Can't delete the first message of a thread!"
 msgstr "Kann die erste Nachricht einer Diskussion nicht löschen!"

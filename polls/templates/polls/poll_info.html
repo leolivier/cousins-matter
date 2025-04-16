@@ -1,0 +1,19 @@
+{% load i18n cm_tags polls_tags %}
+<div class="content">
+	<h1 class="title">{{ poll.title }}</h1>
+	<p class="field"><label>{%trans "Owner"%} : </label>{{poll.owner}}</p>
+	<p class="content ml-auto">
+	{%with dir=direction|default:"vertical" %}
+		{%trans "Created at"%}:<span class="tag">{{ poll.created_at|date:"SHORT_DATETIME_FORMAT" }}</span>{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
+		{%trans "Published at"%}:<span class="tag">{{ poll.pub_date|date:"SHORT_DATETIME_FORMAT" }}</span>{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
+		{%trans "Closed at"%}:<span class="tag">{{ poll.close_date|date:"SHORT_DATETIME_FORMAT" }}</span>{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
+		{%trans "Open to"%}:<span class="tag">{{ poll.get_open_to_display}}</span>
+		{%if poll.open_to == "lst"%}(
+			{%for m in poll.closed_list.all%}
+				<span class="content is-size-7">{{ m }}{%if not forloop.last%}, {%endif%}</span>
+			{%endfor%}
+		){%endif%}
+	{%endwith%}
+	</p>
+	<p class="content">{{ poll.description }}</p>
+</div>

@@ -2,9 +2,25 @@
 {% load i18n galleries_tags cm_tags %}
 {% block title %}{% title _("Galleries") %}{% endblock %}
 {% block content %}
-  <h1 class="title has-text-centered">{% title _("Galleries") %}</h1>
-  {% if galleries.count == 0 %}
-  <div class="container has-text-centered has-text-warning has-background-warning-light">{% translate "No galleries found" %}</div>
-  {% endif %}
-  {% include_galleries galleries recursive=True %}
+<div class="container">
+  <div class="panel">
+    <div class="panel-heading is-flex is-align-items-center is-justify-content-center">
+			<span class="is-flex-grow-1 has-text-centered">{% title _("Galleries") %}</span>
+			{% trans 'Create Gallery' as create_label %}
+			<a class="button ml-6" href="{%url 'galleries:create'%}" aria-label="{{create_label}}" title="{{create_label}}">
+				{%icon "new-gallery" %} <span class="is-hidden-mobile ml-3">{{create_label}}</span>
+			</a>
+      {% trans "Bulk Upload" as bulk_upload_label %}
+      <a class="button ml-6" href="{%url 'galleries:bulk_upload'%}" aria-label="{{bulk_upload_label}}" title="{{bulk_upload_label}}">
+				{%icon "import-galleries" %} <span class="is-hidden-mobile ml-3">{{bulk_upload_label}}</span>
+			</a>
+		</div>
+
+		{% if galleries.count == 0 %}
+		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start has-text-centered has-text-warning has-background-warning-light">{% translate "No galleries found" %}</div>
+		{% else %}
+		  {% include_galleries galleries recursive=True level=0 %}
+		{% endif %}
+	</div>
+</div>
 {% endblock %}

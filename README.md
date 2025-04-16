@@ -47,6 +47,18 @@ An application for managing large families, listing all your cousins and allowin
 Basic CMS features: admins can create static HTML pages and publish them on the site. 
 The home page can also be configured this way as well as the privcay policy, the about pages... 
 
+## Troves
+This is a place where you can put the focus on numeric family treasures, be it texts, music, videos
+
+## Polls
+Any active member can create a poll and any active member can answer an active poll.
+Polls have publication and closure dates. They can contains multiple questions and questions can be either
+* simple yes/no questions: tick the check box
+* open text: enter whatever rich text you want
+* date: pick a date
+* choices: pick a choice in a list
+
+
 ## Theming
 Admin can easily define their own theme (colors, font, ...). See [Themes](https://github.com/leolivier/cousins-matter/wiki/customization#themes)
 

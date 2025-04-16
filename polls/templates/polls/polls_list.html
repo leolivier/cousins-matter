@@ -1,20 +1,23 @@
 {% extends "cm_main/base.html" %}
 {%load i18n cm_tags%}
 
-{% block title %}{% title _("Latest Polls") %}{% endblock %}
+{% block title %}{% title title %}{% endblock %}
 {% block content %}
-{% trans 'Add a new poll' as create_label %}
+{% trans 'Create poll' as create_label %}
 <div class="container">
   <div class="panel">
     <div class="panel-heading is-flex is-align-items-center is-justify-content-center">
-      <span class="is-flex-grow-1 has-text-centered">{% title _("Latest Polls") %}</span>
+      <span class="is-flex-grow-1 has-text-centered">{% title title %}</span>
       <a class="button ml-6" href="{%url 'polls:create_poll'%}" aria-label="{{create_label}}" title="{{create_label}}">
         {%icon "new-poll" %} <span class="is-hidden-mobile ml-3">{{create_label}}</span>
       </a>
     </div>
-    <!-- <div class="panel-block is-flex is-align-items-center is-justify-content-center">
-      {#paginate page#}
-    </div> -->
+    <div class="panel-tabs">
+      <a {%if kind == "open"%}class="is-active"{%endif%} href="{% url 'polls:list_polls' %}">{%trans "Open"%}</a>
+      <a {%if kind == "all"%}class="is-active"{%endif%} href="{% url 'polls:all_polls' %}">{%trans "All"%}</a>
+      <a {%if kind == "closed"%}class="is-active"{%endif%} href="{% url 'polls:closed_polls' %}">{%trans "Closed"%}</a>
+    </div>
+    {# <div class="panel-block is-flex is-align-items-center is-justify-content-center">{%paginate page%}</div> #}
     {% for poll in polls_list %}
     <div class="panel-block">
       <a class="subtitle is-size-5" href="{% url 'polls:poll_detail' poll.id %}">{%icon "vote"%} {{ poll.title }}</a> 

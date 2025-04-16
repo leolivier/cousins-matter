@@ -1,26 +1,27 @@
-{% load i18n galleries_tags static %}
+{% load i18n cm_tags galleries_tags static %}
 {% block content %}
   {% for gallery in galleries %}
-  <div class="container">
+  <div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
+    {%for i in level|to_range%}
+      <div class="ml-6">{%if forloop.last %}{%icon "menu-right"%}{%else%}&nbsp;{%endif%}</div>
+    {%endfor%}
     {% url 'galleries:detail' gallery.id as gallery_url %}
-    <div class="section">
-      <figure class="image gallery-cover is-pulled-left mr-3 mb-3">
-        <a href="{{gallery_url}}">
-          <img src="{{gallery.cover_url}}">
-        </a>
-      </figure>
-      <a class="content has-text-primary-dark" href="{{gallery_url}}">
-        <p>
-          <strong>{{gallery.name}}</strong>
-          {% include "galleries/photo_counter.html" %}
-          <br/>
-          {{ gallery.description|safe }}
-        </p>
+    <figure class="image gallery-cover is-pulled-left mr-3">
+      <a href="{{gallery_url}}">
+        <img src="{{gallery.cover_url}}">
       </a>
-      {% if recursive and gallery.children.count > 0 %}
-        {% include_galleries gallery.children.all recursive=recursive %}
-      {% endif %}
-    </div>
+    </figure>
+    <a class="content has-text-primary-dark" href="{{gallery_url}}">
+      <p>
+        <strong>{{gallery.name}}</strong>
+        {% include "galleries/photo_counter.html" %}
+        <br/>
+        {{ gallery.description|safe }}
+      </p>
+    </a>
   </div>
-  {% endfor %}
+  {% if recursive and gallery.children.count > 0 %}
+    {% include_galleries gallery.children.all recursive=recursive level=level|add:1 %}
+  {% endif %}
+{% endfor %}
 {% endblock %}

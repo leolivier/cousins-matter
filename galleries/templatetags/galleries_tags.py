@@ -60,8 +60,9 @@ def include_photos(gallery, page_num, page_size):
 
 
 @register.inclusion_tag("galleries/galleries_list.html")
-def include_galleries(galleries, recursive=False):
+def include_galleries(galleries, recursive=False, level=0):
   return {
     "galleries": galleries if hasattr(galleries, '__iter__') else [galleries],
     "recursive": recursive,
+    "level": level
   }

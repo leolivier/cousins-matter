@@ -255,6 +255,7 @@ DJANGO_ICONS = {
     "arrow-down": "arrow-down-thin",
     "arrow-up": "arrow-up-thin",
     "arrow-up-down": "swap-vertical",
+    "menu-right": "menu-right",
     # emoticons
     "thumb-up": "thumb-up-outline",
     "thumb-down": "thumb-down-outline",
@@ -288,6 +289,7 @@ DJANGO_ICONS = {
     "directory": "format-list-text",
     "directory-variant": "book-alphabet",
     "deceased": "shield-cross-outline",  # or "coffin"?
+    "invite": "card-account-mail-outline",
     # gallery icons
     "galleries": "folder-multiple-image",
     "new-gallery": "file-image-plus-outline",

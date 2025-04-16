@@ -210,3 +210,11 @@ def get_absolute_idx_from_page(page, idx):
   page_num = page.number
   page_size = page.paginator.per_page
   return (page_num - 1) * page_size + idx
+
+
+@register.filter
+def to_range(value: int) -> range:
+    """
+    Converts a given integer value to a range object.
+    """
+    return range(value)

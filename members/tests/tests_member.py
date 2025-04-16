@@ -233,7 +233,7 @@ class TestDisplayMembers(MemberTestCase):
     # pprint(vars(response))
     self.assertTemplateUsed(response, 'members/members/member_detail.html')
     self.assertIs(response.resolver_match.func.view_class, MemberDetailView)
-    active = _("Active member") if member.is_active else _("Managed member")
+    active = _("Active member") if member.is_active else _("Member managed by") + ' ' + member.member_manager.full_name
     self.assertContains(response, f'''<p class="content small">{member.username}<br>( {active} )</p>''', html=True)
     bdate = localize(member.birthdate, use_l10n=True)
     self.assertContains(response, f'''<tr>

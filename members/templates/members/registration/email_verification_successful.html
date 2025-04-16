@@ -6,8 +6,9 @@
 <div class="container">
     <h1 class="title">{% title _("Email Verification Successful!") %}</h1>
     <hr/>
-    <p class="content">{% translate "Your Email is verified successfully and your account has been activated." %}</p>
-    <p class="content">{% translate "You can sign in with your credentials now..." %}</p>
+    <p class="content">{%trans "Your Email is verified successfully and your account has been activated." %}</p>
+    <p class="content">{%trans "You can sign in with your credentials now..." %}</p>
+    <p class="content">{%trans "In case you forgot your credentials or your account was activated by another member and this is your first connection, please, click in 'reset password' to request a new password." %}</p>
 </div>
 <div class="container mt-4">
     <a href="{% url 'members:login' %}" class="button is-primary">

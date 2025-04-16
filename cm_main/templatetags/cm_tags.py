@@ -2,6 +2,7 @@
 # this view and tag allows including a view into another view. see template/cm_main/base.html as an example
 # TODO: deliver this as a reusable piece of code
 import os
+import logging
 from django.template import Library, Node, Variable, TemplateSyntaxError
 from django.conf import settings
 from django.urls import reverse, resolve, NoReverseMatch
@@ -9,6 +10,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
 from functools import lru_cache
 register = Library()
+logger = logging.getLogger(__name__)
 
 
 @register.simple_tag
@@ -189,6 +191,11 @@ def icon(name, clazz="icon", aria_hidden=False):
 @lru_cache()
 @register.inclusion_tag("cm_main/navbar_item.html")
 def navbar_item(url, name, icon):
+    return {'url': url, 'name': name, 'icon': icon}
+
+
+@register.inclusion_tag("cm_main/navbar_item.html")
+def uncached_navbar_item(url, name, icon):
     return {'url': url, 'name': name, 'icon': icon}
 
 

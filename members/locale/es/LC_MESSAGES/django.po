@@ -592,7 +592,7 @@ msgstr "Editar la Familia"
 #: templates/members/login/password_reset.html:18
 #: templates/members/login/password_reset_complete.html:9
 #: templates/members/login/password_reset_confirm.html:28
-#: templates/members/registration/email_verification_successful.html:14
+#: templates/members/registration/email_verification_successful.html:15
 msgid "Sign in"
 msgstr "Se conectar"
 
@@ -843,9 +843,9 @@ msgid "Active member"
 msgstr "Membro activo"
 
 #: templates/members/members/member_detail.html:28
-#: templates/members/members/member_upsert.html:29 tests/tests_member.py:236
-msgid "Managed member"
-msgstr "Miembro gestionado"
+#: templates/members/members/member_upsert.html:28 tests/tests_member.py:236
+msgid "Member managed by"
+msgstr "Miembro gestionado por"
 
 #: templates/members/members/member_detail.html:41
 #: templates/members/members/members_directory.html:32
@@ -1072,6 +1072,16 @@ msgstr ""
 msgid "You can sign in with your credentials now..."
 msgstr "¡Puedes conectarte con tus credenciales ahora..."
 
+#: templates/members/registration/email_verification_successful.html:11
+msgid ""
+"In case you forgot your credentials or your account was activated by another "
+"member and this is your first connection, please, click in 'reset password' "
+"to request a new password."
+msgstr ""
+"Si ha olvidado sus credenciales o su cuenta ha sido activada por otro "
+"miembro y esta es su primera conexión, haga clic en «restablecer contraseña» "
+"para solicitar una nueva."
+
 #: templates/members/registration/link_expired.html:3
 #: templates/members/registration/link_expired.html:7
 msgid "Link Expired!"
@@ -1164,6 +1174,7 @@ msgstr "Membres eliminados"
 msgid "You do not have permission to edit this member."
 msgstr "No tienes permiso para editar este miembro."
 
+#: tests/tests_member.py:446
 #: tests/tests_member.py:446
 msgid "Error: Cannot activate a dead member "
 msgstr "Error: No se puede activar un miembro muerto "
@@ -1290,14 +1301,14 @@ msgstr ""
 "Fehlende Spalte in der CSV-Datei: \"%(fieldname)s\". Obligatorische Felder "
 "sind %(all_names)s"
 
-#: views/views_import_export.py:113
+#: views/views_import_export.py:96
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar no encontrado : %(avatar)s para el nombre de usuario %(username)s. "
 "Ignorado..."
 
-#: views/views_import_export.py:122
+#: views/views_import_export.py:105
 #, python-format
 msgid ""
 "Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. "
@@ -1306,26 +1317,30 @@ msgstr ""
 "Error enregistrando el avatar (%(warning)s) : %(avatar)s para el nombre de "
 "usuario %(username)s. Ignorado..."
 
-#: views/views_import_export.py:138
+#: views/views_import_export.py:120
+msgid "Keeping current manager."
+msgstr "Mantener al gerente actual."
+
+#: views/views_import_export.py:123
+msgid "Using your id..."
+msgstr "Usando tu id..."
+
+#: views/views_import_export.py:126
+#, python-format
+msgid "Manager %(manager)s not found for member %(member)s."
+msgstr "No se ha encontrado el gestor %(manager)s para el miembro %(member)s."
+
+#: views/views_import_export.py:130
+#, python-format
 msgid ""
-"You requested to activate imported members. All managers will be ignored."
+"%(manager)s is inactive and cannot be used as manager for %(member)s. "
+"Activate it manually or change the order in the file and put it first."
 msgstr ""
-"Ha solicitado la activación de miembros importados. Se ignorarán todos los "
-"gestores."
+"El gestor %(manager)s está inactivo y no puede utilizarse como gestor de "
+"%(member)s. Actívalo manualmente o cambia el orden del archivo y ponlo en "
+"primer lugar."
 
-#: views/views_import_export.py:140
-#, python-format
-msgid "Manager %(manager)s not found for member %(member)s. Ignoring..."
-msgstr ""
-"No se ha encontrado el gestor %(manager)s para el miembro %(member)s. "
-"Ignorado..."
-
-#: views/views_import_export.py:147
-#, python-format
-msgid "Member %(member)s is active. Ignoring manager %(manager)s"
-msgstr "El miembro %(member)s está activo. Ignorar gestor %(manager)s "
-
-#: views/views_import_export.py:156
+#: views/views_import_export.py:145
 #, python-format
 msgid ""
 "No manager provided for member %(member)s although inactive. Keeping "
@@ -1334,14 +1349,33 @@ msgstr ""
 "No se ha proporcionado ningún gestor para los %(member)s aunque estén "
 "inactivos. Mantener uno existente (%(manager)s)..."
 
-#: views/views_import_export.py:160
+#: views/views_import_export.py:150
 #, python-format
-msgid "Inactive member %(member)s has no manager. Please provide one!"
+msgid ""
+"Inactive member %(member)s has no manager. Please provide one! Meanwhile, "
+"the admin will be used as manager"
 msgstr ""
 "El miembro inactivo %(member)s no tiene administrador. Por favor, "
-"¡proporcione uno!"
+"¡proporcione uno! Mientras tanto, el administrador se utilizará como gestor"
 
-#: views/views_import_export.py:252
+#: views/views_import_export.py:166
+#, python-format
+msgid ""
+"Member %(member)s was active. Adding %(manager)s as manager inactivated him/"
+"her."
+msgstr ""
+"El miembro %(member)s estaba activo. Al añadir %(manager)s como gestor se ha "
+"desactivado."
+
+#: views/views_import_export.py:174
+msgid ""
+"You requested to activate imported members. All members with a manager in "
+"the file will be ignored and won't be activated."
+msgstr ""
+"Ha solicitado activar los miembros importados. Todos los miembros con un "
+"administrador en el archivo serán ignorados y no se activarán."
+
+#: views/views_import_export.py:296
 #, python-format
 msgid ""
 "CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
@@ -1350,17 +1384,17 @@ msgstr ""
 "Archivo CSV cargado: %(rows_num)i líneas leídas, %(created_num)i miembros "
 "creados y %(updated_num)i actualizados."
 
-#: views/views_import_export.py:256
+#: views/views_import_export.py:300
 #, python-format
 msgid "Error: %(error)s"
 msgstr "Error: %(error)s"
 
-#: views/views_import_export.py:258
+#: views/views_import_export.py:302
 #, python-format
 msgid "Warning: %(warning)s"
 msgstr "Alerta: %(warning)s"
 
-#: views/views_import_export.py:319
+#: views/views_import_export.py:363
 msgid "Method not allowed"
 msgstr "Método no permitido"
 

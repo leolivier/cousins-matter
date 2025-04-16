@@ -1,6 +1,5 @@
-{% load i18n flatpages pages_tags cm_tags static cache %}
+{% load i18n flatpages pages_tags cm_tags static %}
 {% get_current_language as LANGUAGE_CODE %}
-{%cache 3600 "cm_main:navbar" user.is_superuser user.is_authenticated LANGUAGE_CODE%}
 <nav class="navbar is-primary has-shadow" role="navigation" aria-label="main navigation">
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
@@ -120,22 +119,8 @@
 				</div>
 				{%endwith%}
 			</div>
-			{% if not user.is_authenticated %}
-			<div class="navbar-item">
-				<div class="buttons">
-					<a class="button is-link" href="{% url 'members:login' %}">
-						{%icon "login" %}
-						<span>{%trans "Sign in" %}</span>
-					</a>
-					<a class="button has-background-link-light has-text-link" href="{% url 'members:register_request' %}">
-						{%icon "invite-request" %}
-						<span><strong>{%trans "Request invitation link" %}</strong></span>
-					</a>
-				</div>
-			</div>
-			{% else %}
 			<div class="navbar-item has-dropdown is-hoverable">
-				{%navbar_item "#" user.username "member" %}
+				{%uncached_navbar_item "#" user.username "member" %}
 				<div class="navbar-dropdown is-right">
 					{% url 'members:profile' as profile_url%}
 					{%navbar_item profile_url _("Profile") "profile" %}
@@ -143,8 +128,6 @@
 					{%navbar_item logout_url _("Log Out") "logout" %}
 				</div>
 			</div>
-			{% endif %}
 		</div>
 	</div>
 </nav>
-{%endcache%}

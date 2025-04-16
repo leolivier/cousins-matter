@@ -6,7 +6,7 @@ from django.contrib.auth import get_user, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 from django.core.mail import EmailMultiAlternatives
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
 from django.views import generic
@@ -37,10 +37,11 @@ class ContactView(LoginRequiredMixin, generic.FormView):
       title = _("You have a new message from %(name)s (%(email)s). ") % {
            "name": sender.full_name, "email": sender.email}
       email = EmailMultiAlternatives(
-        _("Contact form"),
-        title + _("But your mailer tools is too old to show it :'("),
-        sender.email,
-        [self.admin().email],
+        subject=_("Contact form"),
+        body=title + _("But your mailer tools is too old to show it :'("),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[self.admin().email],
+        reply_to=[sender.email],
       )
       # attach an HTML version of the message
       html_message = render_to_string('cm_main/contact/email-contact-form.html', {
@@ -63,5 +64,6 @@ class ContactView(LoginRequiredMixin, generic.FormView):
       email.send(fail_silently=False)
 
       messages.success(request, _("Your message has been sent"))
+      return redirect(self.success_url)
 
     return render(request, self.template_name, {'form': form})

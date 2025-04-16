@@ -593,7 +593,7 @@ msgstr "Modifica Famiglia"
 #: templates/members/login/password_reset.html:18
 #: templates/members/login/password_reset_complete.html:9
 #: templates/members/login/password_reset_confirm.html:28
-#: templates/members/registration/email_verification_successful.html:14
+#: templates/members/registration/email_verification_successful.html:15
 msgid "Sign in"
 msgstr "Accedi"
 
@@ -841,9 +841,9 @@ msgid "Active member"
 msgstr "Membro attivo"
 
 #: templates/members/members/member_detail.html:28
-#: templates/members/members/member_upsert.html:29 tests/tests_member.py:236
-msgid "Managed member"
-msgstr "Membro gestito"
+#: templates/members/members/member_upsert.html:28 tests/tests_member.py:236
+msgid "Member managed by"
+msgstr "Membro gestito da"
 
 #: templates/members/members/member_detail.html:41
 #: templates/members/members/members_directory.html:32
@@ -1069,6 +1069,17 @@ msgstr ""
 msgid "You can sign in with your credentials now..."
 msgstr "Ora puoi accedere con le tue credenziali..."
 
+#: templates/members/registration/email_verification_successful.html:11
+msgid ""
+"In case you forgot your credentials or your account was activated by another "
+"member and this is your first connection, please, click in 'reset password' "
+"to request a new password."
+msgstr ""
+"Se avete dimenticato le vostre credenziali o il vostro account è stato "
+"attivato da un altro membro e questa è la vostra prima connessione, vi "
+"preghiamo di cliccare su \"Reset password\" per richiedere una nuova "
+"password."
+
 #: templates/members/registration/link_expired.html:3
 #: templates/members/registration/link_expired.html:7
 msgid "Link Expired!"
@@ -1288,13 +1299,13 @@ msgstr ""
 "Colonna mancante nel file CSV: \"%(fieldname)s\". I campi obbligatori sono "
 "%(all_names)s"
 
-#: views/views_import_export.py:113
+#: views/views_import_export.py:96
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar non trovato: %(avatar)s per il nome utente %(username)s. Ignorato..."
 
-#: views/views_import_export.py:122
+#: views/views_import_export.py:105
 #, python-format
 msgid ""
 "Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. "
@@ -1303,26 +1314,30 @@ msgstr ""
 "Errore nel salvare l'avatar (%(warning)s): %(avatar)s per il nome utente "
 "%(username)s. Ignorato..."
 
-#: views/views_import_export.py:138
+#: views/views_import_export.py:120
+msgid "Keeping current manager."
+msgstr "Mantenere l'attuale manager."
+
+#: views/views_import_export.py:123
+msgid "Using your id..."
+msgstr "Utilizzando l'id..."
+
+#: views/views_import_export.py:126
+#, python-format
+msgid "Manager %(manager)s not found for member %(member)s."
+msgstr "Il manager %(manager)s non è stato trovato per il membro %(member)s. "
+
+#: views/views_import_export.py:130
+#, python-format
 msgid ""
-"You requested to activate imported members. All managers will be ignored."
+"%(manager)s is inactive and cannot be used as manager for %(member)s. "
+"Activate it manually or change the order in the file and put it first."
 msgstr ""
-"È stato richiesto di attivare i membri importati. Tutti i gestori verranno "
-"ignorati."
+"%(manager)s è inattivo e non può essere utilizzato come manager per "
+"%(member)s. Attivarlo manualmente o cambiare l'ordine nel file e metterlo "
+"per primo."
 
-#: views/views_import_export.py:140
-#, python-format
-msgid "Manager %(manager)s not found for member %(member)s. Ignoring..."
-msgstr ""
-"Il manager %(manager)s non è stato trovato per il membro %(member)s. "
-"Ignorare..."
-
-#: views/views_import_export.py:147
-#, python-format
-msgid "Member %(member)s is active. Ignoring manager %(manager)s"
-msgstr "Il membro %(member)s è attivo. Ignorare il manager %(manager)s."
-
-#: views/views_import_export.py:156
+#: views/views_import_export.py:145
 #, python-format
 msgid ""
 "No manager provided for member %(member)s although inactive. Keeping "
@@ -1331,13 +1346,33 @@ msgstr ""
 "Non è previsto nessun gestore per i membri %(member)s, anche se inattivi. "
 "Mantenere quello esistente (%(manager)s)..."
 
-#: views/views_import_export.py:160
+#: views/views_import_export.py:150
 #, python-format
-msgid "Inactive member %(member)s has no manager. Please provide one!"
+msgid ""
+"Inactive member %(member)s has no manager. Please provide one! Meanwhile, "
+"the admin will be used as manager"
 msgstr ""
-"Il membro inattivo %(member)s non ha un manager. Si prega di fornirne uno!"
+"Il membro inattivo %(member)s non ha un manager. Si prega di fornirne uno! "
+"Nel frattempo, l'amministratore sarà usato come manager"
 
-#: views/views_import_export.py:252
+#: views/views_import_export.py:166
+#, python-format
+msgid ""
+"Member %(member)s was active. Adding %(manager)s as manager inactivated him/"
+"her."
+msgstr ""
+"Il membro %(member)s era attivo. L'aggiunta di %(manager)s come manager lo "
+"ha reso inattivo."
+
+#: views/views_import_export.py:174
+msgid ""
+"You requested to activate imported members. All members with a manager in "
+"the file will be ignored and won't be activated."
+msgstr ""
+"È stato richiesto di attivare i membri importati. Tutti i membri con un "
+"manager nel file verranno ignorati e non verranno attivati."
+
+#: views/views_import_export.py:296
 #, python-format
 msgid ""
 "CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
@@ -1346,17 +1381,17 @@ msgstr ""
 "File CSV caricato: %(rows_num)i righe lette, %(created_num)i membri creati e "
 "%(updated_num)i aggiornati"
 
-#: views/views_import_export.py:256
+#: views/views_import_export.py:300
 #, python-format
 msgid "Error: %(error)s"
 msgstr "Errore: %(error)s"
 
-#: views/views_import_export.py:258
+#: views/views_import_export.py:302
 #, python-format
 msgid "Warning: %(warning)s"
 msgstr "Attenzione: %(warning)s"
 
-#: views/views_import_export.py:319
+#: views/views_import_export.py:363
 msgid "Method not allowed"
 msgstr "Metodo non consentito"
 

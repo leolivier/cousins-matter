@@ -1,14 +1,16 @@
-import os
-from django.db import models
 import datetime
+import logging
+import os
 from PIL import Image, ImageOps
+
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
-from django.contrib.auth.models import AbstractUser
+
 from .managers import MemberManager
-from django.urls import reverse
-import logging
-from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -208,13 +210,18 @@ class Member(AbstractUser):
         self.member_manager = Member.objects.filter(is_superuser=True).first()
 
     def _resize_avatar(self, max_size, save_path):
-      img = Image.open(self.avatar.path)
-      if img.height > max_size or img.width > max_size:
-        output_size = (max_size, max_size)
-        img.thumbnail(output_size)
-        img = ImageOps.exif_transpose(img)  # avoid image rotating
-        img.save(save_path)
-        logger.debug(f"Resized and saved avatar for {self.full_name} in {save_path}, size: {img.size}")
+      try:
+        img = Image.open(self.avatar.path)
+        if img.height > max_size or img.width > max_size:
+          output_size = (max_size, max_size)
+          img.thumbnail(output_size)
+          img = ImageOps.exif_transpose(img)  # avoid image rotating
+          img.save(save_path)
+          logger.debug(f"Resized and saved avatar for {self.full_name} in {save_path}, size: {img.size}")
+      except FileNotFoundError:
+        raise ValueError(f"Avatar file not found: {self.avatar.path}")
+      except Exception as e:
+        raise e
 
     def save(self, *args, **kwargs):
       self.clean()  # clean before save
@@ -239,3 +246,16 @@ class Member(AbstractUser):
         if os.path.isfile(mini_path):
           os.remove(mini_path)
         self.avatar = None
+
+
+class LoginTrace(models.Model):
+    user = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
+    ip = models.GenericIPAddressField(db_index=True)
+    ip_info = models.JSONField(default=dict)
+    country_code = models.CharField(max_length=2, blank=True)
+    user_agent = models.TextField()
+    login_at = models.DateTimeField(auto_now_add=True)
+    logout_at = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username + " (" + self.ip + ") at " + str(self.login_at)

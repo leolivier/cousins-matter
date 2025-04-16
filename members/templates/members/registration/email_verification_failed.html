@@ -1,12 +1,12 @@
 {% extends "cm_main/base.html" %}
 {% load i18n cm_tags %}
-{% block title %}{% title _("Invalid Link!") %}{% endblock %}
+{% block title %}{% title status %}{% endblock %}
 {%block content%}
 
 <div class="container">
-    <h1 class="title">{% title _("Invalid Link!") %}</h1>
+    <h1 class="title">{% title status %}</h1>
     <hr/>
-    <p class="content">{% translate "This link is invalid or been used already, we cannot verify using this link." %}</p>
+    <p class="content">{{msg}}</p>
 </div>
 <div class="container mt-4">
     <a href="{% url 'request-new-link-from-email' %}" class="button is-primary">

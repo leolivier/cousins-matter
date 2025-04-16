@@ -89,6 +89,9 @@ class MemberTestCase(TestCase):
     self.assertEqual(current_member.username, member.username)
     self.assertTrue(current_member.is_authenticated)
 
+  def current_member(self):
+    return get_user(self.client)
+
   def assertMemberExists(self):
     self.assertTrue(Member.objects.filter(username=self.username).exists())
 

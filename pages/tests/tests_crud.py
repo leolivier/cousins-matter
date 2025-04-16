@@ -157,7 +157,7 @@ class TestDeletePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     self.assertEqual(FlatPage.objects.filter(url=page.url).count(), 1)
     self.assertEqual(FlatPage.objects.count(), npages + 1)
     # now, delete it
-    response = self.client.get(reverse("pages-edit:delete", args=[page.id]), follow=True)
+    response = self.client.post(reverse("pages-edit:delete", args=[page.id]), follow=True)
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(FlatPage.objects.count(), npages)

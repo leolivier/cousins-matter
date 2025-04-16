@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Polls 1.0\n"
 "Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "POT-Creation-Date: 2025-03-01 16:00+0100\n"
-"PO-Revision-Date: 2025-04-14 11:49+0200\n"
+"PO-Revision-Date: 2025-04-16 13:29+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Portuguese <LL@li.org>\n"
 "Language: PT\n"
@@ -23,17 +23,15 @@ msgstr ""
 msgid "Polls"
 msgstr "Pesquisas"
 
-#: forms/answer_forms.py:33
+#: forms/answer_forms.py:35
 msgid "Check the box if Yes"
 msgstr "Marque a caixa se Sim"
 
-#: forms/answer_forms.py:37 models.py:138
-#, fuzzy
-#| msgid "Choices"
+#: forms/answer_forms.py:39 models.py:145
 msgid "choice"
 msgstr "opções"
 
-#: forms/answer_forms.py:37
+#: forms/answer_forms.py:39
 msgid "Select one choice"
 msgstr "Selecionar uma opção"
 
@@ -106,8 +104,6 @@ msgid "Question"
 msgstr "Questão"
 
 #: models.py:80
-#, fuzzy
-#| msgid "Question"
 msgid "Question Type"
 msgstr "Tipo de Questão"
 
@@ -131,7 +127,7 @@ msgstr "resposta à sondagem"
 msgid "poll answers"
 msgstr "respostas à sondagem"
 
-#: models.py:112 models.py:161 models.py:179 models.py:197
+#: models.py:112 models.py:168 models.py:186 models.py:204
 msgid "answer"
 msgstr "resposta"
 
@@ -139,43 +135,43 @@ msgstr "resposta"
 msgid "answers"
 msgstr "respostas"
 
-#: models.py:141
+#: models.py:148
 msgid "choice answer"
 msgstr "resposta de opções"
 
-#: models.py:142
+#: models.py:149
 msgid "choice answers"
 msgstr "respostas de opções"
 
-#: models.py:164
+#: models.py:171
 msgid "yes/no answer"
 msgstr "resposta sim/não"
 
-#: models.py:165
+#: models.py:172
 msgid "yes/no answers"
 msgstr "respostas sim/não"
 
-#: models.py:168
+#: models.py:175
 msgid "Yes"
 msgstr "Sim"
 
-#: models.py:168
+#: models.py:175
 msgid "No"
 msgstr "Não"
 
-#: models.py:182
+#: models.py:189
 msgid "text answer"
 msgstr "resposta de texto"
 
-#: models.py:183
+#: models.py:190
 msgid "text answers"
 msgstr "respostas de texto"
 
-#: models.py:200
+#: models.py:207
 msgid "date answer"
 msgstr "data resposta"
 
-#: models.py:201
+#: models.py:208
 msgid "date answers"
 msgstr "data respostas"
 
@@ -211,8 +207,8 @@ msgstr "Minha votação"
 msgid "Results"
 msgstr "Resultados"
 
-#: templates/polls/poll_detail.html:66 templates/polls/polls_list.html:25
-#: templates/polls/polls_list.html:27 templates/polls/polls_list.html:28
+#: templates/polls/poll_detail.html:66 templates/polls/polls_list.html:28
+#: templates/polls/polls_list.html:30 templates/polls/polls_list.html:31
 msgid "Vote"
 msgstr "Votar"
 
@@ -226,17 +222,21 @@ msgstr "Atualizar Pesquisa"
 msgid "Owner"
 msgstr "Proprietário"
 
-#: templates/polls/poll_info.html:7 templates/polls/polls_list.html:21
+#: templates/polls/poll_info.html:7 templates/polls/polls_list.html:24
 msgid "Created at"
 msgstr "Criada em"
 
-#: templates/polls/poll_info.html:8 templates/polls/polls_list.html:22
+#: templates/polls/poll_info.html:8 templates/polls/polls_list.html:25
 msgid "Published at"
 msgstr "Publicada em"
 
-#: templates/polls/poll_info.html:9 templates/polls/polls_list.html:23
+#: templates/polls/poll_info.html:9 templates/polls/polls_list.html:26
 msgid "Closed at"
 msgstr "Fechada em"
+
+#: templates/polls/poll_info.html:10
+msgid "Open to"
+msgstr "Aberto a"
 
 #: templates/polls/poll_upsert_form.html:7
 #: templates/polls/poll_upsert_form.html:76
@@ -266,6 +266,7 @@ msgid "Delete Question"
 msgstr "Eliminar Questão"
 
 #: templates/polls/poll_upsert_form.html:125
+#, python-format
 msgid "Are you sure you want to delete the question \"%(title)s\"?"
 msgstr "Você tem certeza que deseja excluir a questão \"%(title)s\"?"
 
@@ -281,7 +282,7 @@ msgstr "Adicionar Questão"
 msgid "Save the poll to add questions."
 msgstr "Salve a pesquisa para adicionar questões."
 
-#: templates/polls/poll_vote.html:15 templates/polls/poll_vote.html:22
+#: templates/polls/poll_vote.html:16 templates/polls/poll_vote.html:23
 msgid "Vote on poll: "
 msgstr "Votar na pesquisa: "
 
@@ -293,26 +294,46 @@ msgstr "Enviar"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/polls/polls_list.html:4 templates/polls/polls_list.html:10
-msgid "Latest Polls"
-msgstr "Pesquisas mais recentes"
-
 #: templates/polls/polls_list.html:6
-msgid "Add a new poll"
-msgstr "Adicionar uma nova pesquisa"
+msgid "Create poll"
+msgstr "Criar pesquisa"
 
-#: templates/polls/polls_list.html:31 templates/polls/polls_list.html:33
-#: templates/polls/polls_list.html:34
+#: templates/polls/polls_list.html:16
+msgid "Open"
+msgstr "Aberto"
+
+#: templates/polls/polls_list.html:17
+msgid "All"
+msgstr "Todos"
+
+#: templates/polls/polls_list.html:18
+msgid "Closed"
+msgstr "Fechada"
+
+#: templates/polls/polls_list.html:34 templates/polls/polls_list.html:36
+#: templates/polls/polls_list.html:37
 msgid "Update"
 msgstr "Atualizar"
 
-#: templates/polls/polls_list.html:40
+#: templates/polls/polls_list.html:43
 msgid "Sorry, there are currently no polls available."
 msgstr "Desculpe, não há pesquisas disponíveis no momento."
 
 #: views/answer_views.py:73
 msgid "Your answers have been saved"
 msgstr "Suas respostas foram salvas"
+
+#: views/display_views.py:23
+msgid "Open Polls"
+msgstr "Pesquisas abertas"
+
+#: views/display_views.py:57
+msgid "All Polls"
+msgstr "Todas as pesquisas"
+
+#: views/display_views.py:68
+msgid "Closed Polls"
+msgstr "Pesquisas fechadas"
 
 #: views/upsert_views.py:36
 msgid "Poll created successfully. You can now add questions."

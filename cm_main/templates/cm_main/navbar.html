@@ -26,40 +26,16 @@
 			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'members:members' as members_url%}
 				{%navbar_item members_url _("Members") "members" %}
-				<div class="navbar-dropdown is-right">
-					{% url 'members:birthdays' as birthday_url %}
-					{%navbar_item birthday_url _("Birthdays") "birthday" %}
-					{% url 'members:directory' as dir_url %}
-					{%navbar_item dir_url _("Show directory") "directory" %}
-					{%if user.is_superuser or settings.ALLOW_MEMBERS_TO_CREATE_MEMBERS%}
-						{% url 'members:create' as create_url%}
-						{%navbar_item  create_url _("Create Member") "new-member" %}
-					{%endif%}
-					{%if user.is_superuser or settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS%}
-						{% url 'members:invite' as invite_url%}
-						{%navbar_item invite_url _("Invite Member") "invite-member" %}
-					{%endif%}
-					</div>
 			</div>
 
 			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'galleries:galleries' as galleries_url%}
 				{%navbar_item galleries_url _("Galleries") "galleries" %}
-				<div class="navbar-dropdown">
-					{% url 'galleries:create' as galleries_url%}
-					{%navbar_item galleries_url _("Create Gallery") "new-gallery" %}
-					{% url 'galleries:bulk_upload' as galleries_url%}
-					{%navbar_item galleries_url _("Bulk Upload") "import-galleries" %}
-				</div>
 			</div>
 
 			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'forum:list' as forum_url%}
 				{%navbar_item forum_url _("Forum") "forum" %}
-				<div class="navbar-dropdown">
-					{% url 'forum:create' as forum_url%}
-					{%navbar_item forum_url _("Create Post") "new-forum" %}
-				</div>
 			</div>
 
 			<div class="navbar-item has-dropdown is-hoverable">
@@ -80,10 +56,6 @@
 			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'polls:list_polls' as polls_url%}
 				{%navbar_item polls_url _("Polls") "vote" %}
-				<div class="navbar-dropdown">
-					{% url 'polls:create_poll' as poll_url%}
-					{%navbar_item poll_url _("Create Poll") "new-poll" %}
-				</div>
 			</div>
 
 		</div>

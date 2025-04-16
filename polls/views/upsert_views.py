@@ -82,7 +82,7 @@ class QuestionCreateView(QuestionUpsertViewMixin, generic.CreateView):
   def post(self, request, poll_id):
     # create a form instance from the request and save it
     form = self.form_class(request.POST)
-    poll = get_object_or_404(self.model, pk=poll_id)
+    poll = get_object_or_404(Poll, pk=poll_id)
     if form.is_valid():
       form.instance.poll = poll
       form.save()

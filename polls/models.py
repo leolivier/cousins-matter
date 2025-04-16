@@ -119,6 +119,13 @@ class Answer(models.Model):
             results.extend(list(subclass.objects.filter(**kwargs)))
         return results
 
+    @staticmethod
+    def all_answers():
+        results = []
+        for subclass in Answer.__subclasses__():
+            results.extend(list(subclass.objects.all()))
+        return results
+
     @property
     def text(self):
         return str(self)

@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from cousinsmatter.utils import assert_request_is_ajax
@@ -18,7 +19,9 @@ class PollsListView(LoginRequiredMixin, generic.ListView):
   ordering = "-pub_date"
   show_closed = False
   only_closed = False
-  show_last = 5
+  show_last = 25
+  title = _("Open Polls")
+  kind = "open"
 
   def get_queryset(self):
     """
@@ -39,12 +42,20 @@ class PollsListView(LoginRequiredMixin, generic.ListView):
     # print(filter, result, self.__dict__)
     return result
 
+  def get_context_data(self, **kwargs):
+      context = super().get_context_data(**kwargs)
+      context['title'] = self.title
+      context['kind'] = self.kind
+      return context
+
 
 class AllPollsListView(PollsListView):
   "View for listing all Polls."
   only_published = False
   show_closed = True
   show_last = None
+  title = _("All Polls")
+  kind = "all"
 
 
 class ClosedPollsListView(PollsListView):
@@ -54,6 +65,8 @@ class ClosedPollsListView(PollsListView):
   only_closed = True
   show_last = None
   ordering = "-close_date"
+  title = _("Closed Polls")
+  kind = "closed"
 
 
 class PollDetailView(LoginRequiredMixin, generic.DetailView):

@@ -7,18 +7,26 @@
     <h1 class="level-left title mx-5 has-text-centered">{% title _("Members List") %}</h1>
     <div class="level-item">
       <div class="buttons has-addons mt-5">
-        <a class="button is-large" href="{% url 'members:birthdays' %}"
+        <a class="button" href="{% url 'members:birthdays' %}"
           title='{% translate "Birthdays" %}'>
           {%icon "birthday" %}
         </a>
-        <a class="button is-large" href="{% url 'members:directory' %}"
+        <a class="button" href="{% url 'members:directory' %}"
           title="{% translate 'Show directory' %}">
           {%icon "directory" %}
         </a>
-        <a class="button is-large" href="{% url 'members:create' %}"
+        {%if user.is_superuser or settings.ALLOW_MEMBERS_TO_CREATE_MEMBERS%}
+        <a class="button" href="{% url 'members:create' %}"
           title="{% translate 'Create Member' %}">
-          {%icon "new" %}
+          {%icon "new-member" %}
         </a>
+        {%endif%}
+        {%if user.is_superuser or settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS%}
+        <a class="button" href="{% url 'members:invite' %}"
+          title="{% translate 'Invite Member' %}">
+          {%icon "invite" %}
+        </a>
+        {%endif%}
       </div>
     </div>
     <div class="level-item ml-3">

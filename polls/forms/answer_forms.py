@@ -1,6 +1,8 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from cm_main.widgets import RichTextarea
+
 from ..models import YesNoAnswer, ChoiceAnswer, TextAnswer, DateTimeAnswer, Answer
 
 
@@ -51,6 +53,10 @@ class TextAnswerForm(AnswerFormMixin, forms.ModelForm):
   class Meta:
     model = TextAnswer
     fields = ['answer']
+
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    self.fields['answer'].widget = RichTextarea()
 
 
 class DateAnswerForm(AnswerFormMixin, forms.ModelForm):

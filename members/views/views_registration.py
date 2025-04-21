@@ -14,7 +14,7 @@ from ..registration_link_manager import RegistrationLinkManager
 from ..forms import (MemberInvitationForm, RegistrationRequestForm,
                      MemberRegistrationForm, AddressUpdateForm,
                      FamilyUpdateForm)
-from cousinsmatter.utils import redirect_to_referer
+from cm_main.utils import redirect_to_referer
 from ..models import Member
 from verify_email.email_handler import send_verification_email
 from django.conf import settings

@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 
 from ..models import Family
 from ..forms import FamilyUpdateForm
-from cousinsmatter.utils import assert_request_is_ajax
+from cm_main.utils import assert_request_is_ajax
 
 logger = logging.getLogger(__name__)
 

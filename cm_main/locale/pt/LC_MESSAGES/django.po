@@ -1,15 +1,14 @@
 # Portuguese Translations for NO NAME FOUND app.
 # Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-
 # Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
-"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
-"POT-Creation-Date: 2025-04-06 13:04+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-18 16:42+0200\n"
 "PO-Revision-Date: 2024-12-24 12:10+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: PT <LL@li.org>\n"
@@ -110,51 +109,40 @@ msgstr "Estatísticas"
 msgid "Home"
 msgstr "Casa"
 
-#: templates/cm_main/base.html:69
+#: templates/cm_main/base.html:78
 msgid "This site proudly built using"
 msgstr "Este site foi construído com orgulho"
 
-#: templates/cm_main/base.html:71
+#: templates/cm_main/base.html:80
 msgid "The source code is licensed"
 msgstr "O código-fonte está licenciado."
 
-#: templates/cm_main/base.html:77
+#: templates/cm_main/base.html:86
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Copyright 2024 Cousins Matter. Todos os direitos reservados."
 
-#: templates/cm_main/base.html:80 templates/cm_main/navbar.html:147
+#: templates/cm_main/base.html:89 templates/cm_main/navbar.html:118
 msgid "Contact the site admin"
 msgstr "Contate o administrador do site"
 
-#: templates/cm_main/common/confirm-delete-modal.html:26
-msgid "Confirm"
-msgstr "Confirmar"
-
 #: templates/cm_main/common/confirm-delete-modal.html:30
-#: templates/cm_main/common/modal_form.html:92
-#: templates/cm_main/contact/contact-form.html:16
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: templates/cm_main/common/confirm-delete-modal.html:35
-
 msgid ""
 "Mandatory. Deletion will not be possible until the correct value is entered."
 msgstr ""
 "Obrigatório. A exclusão não será possivel enquanto o valor correto não for "
 "informado."
 
-#: templates/cm_main/common/confirm-delete-modal.html:37
-msgid ""
-"Enter %(expected_value)s in the field below before pressing confirm"
+#: templates/cm_main/common/confirm-delete-modal.html:32
+#, python-format
+msgid "Enter %(expected_value)s in the field below before pressing confirm"
 msgstr ""
 "Insira %(expected_value)s no campo abaixo antes de pressionar confirmar."
 
-#: templates/cm_main/common/include-summernote.html:6
+#: templates/cm_main/common/include-summernote.html:12
 msgid "Toggle Note Editor Toolbar"
 msgstr "Barra de ferramentas do Editor de Notas"
 
-#: templates/cm_main/common/include-summernote.html:7
+#: templates/cm_main/common/include-summernote.html:13
 msgid "Remaining characters:"
 msgstr "Caracteres restantes:"
 
@@ -168,12 +156,18 @@ msgstr ""
 
 #: templates/cm_main/common/modal_form.html:80
 msgid "Before creating a new item, please make sure it doesn't already exist!"
-msgstr "Antes de criar um novo item, por favor, certifique-se de que ele ainda "
-"não existe!"
+msgstr ""
+"Antes de criar um novo item, por favor, certifique-se de que ele ainda não "
+"existe!"
 
 #: templates/cm_main/common/modal_form.html:83
 msgid "Warning, this will delete the item!"
 msgstr "Aviso, isso irá excluir o item!"
+
+#: templates/cm_main/common/modal_form.html:92
+#: templates/cm_main/contact/contact-form.html:16
+msgid "Cancel"
+msgstr "Cancelar"
 
 #: templates/cm_main/common/paginate_template.html:25
 msgid "Items per page:"
@@ -283,115 +277,84 @@ msgstr "Parar de seguir"
 msgid "Follow"
 msgstr "Seguir"
 
-#: templates/cm_main/navbar.html:28 views/views_stats.py:106
+#: templates/cm_main/navbar.html:27 views/views_stats.py:106
 msgid "Members"
 msgstr "membros"
 
-#: templates/cm_main/navbar.html:31
-msgid "Birthdays"
-msgstr "Data de nascimento"
-
-#: templates/cm_main/navbar.html:33
-msgid "Show directory"
-msgstr "Mostrar diretório"
-
-#: templates/cm_main/navbar.html:36
-msgid "Create Member"
-msgstr "Criar Membro"
-
-#: templates/cm_main/navbar.html:40
-msgid "Invite Member"
-msgstr "Convidar um Membro"
-
-#: templates/cm_main/navbar.html:47 views/views_stats.py:114
+#: templates/cm_main/navbar.html:32 views/views_stats.py:114
 msgid "Galleries"
 msgstr "Galérias"
 
-#: templates/cm_main/navbar.html:50
-msgid "Create Gallery"
-msgstr "Criar uma Galeria"
-
-#: templates/cm_main/navbar.html:52
-msgid "Bulk Upload"
-msgstr "Carregamento em massa"
-
-#: templates/cm_main/navbar.html:58
+#: templates/cm_main/navbar.html:37
 msgid "Forum"
 msgstr "Forum"
 
-#: templates/cm_main/navbar.html:61
-msgid "Create Post"
-msgstr "Criar Post"
-
-#: templates/cm_main/navbar.html:66
+#: templates/cm_main/navbar.html:41
 msgid "Chat"
 msgstr "Chate"
 
-#: templates/cm_main/navbar.html:69
+#: templates/cm_main/navbar.html:44
 msgid "Public Chat Rooms"
 msgstr "Salas de chat público"
 
-#: templates/cm_main/navbar.html:71
+#: templates/cm_main/navbar.html:46
 msgid "Private Chat Rooms"
 msgstr "Salas de privacidade para conversação"
 
-#: templates/cm_main/navbar.html:77
+#: templates/cm_main/navbar.html:52
 msgid "Troves"
 msgstr "Tesouros"
 
-#: templates/cm_main/navbar.html:82
+#: templates/cm_main/navbar.html:57
 msgid "Polls"
 msgstr "Enquetes"
 
-#: templates/cm_main/navbar.html:85
-msgid "Create Poll"
-msgstr "Criar enquete"
-
-#: templates/cm_main/navbar.html:101
+#: templates/cm_main/navbar.html:72
+#: templates/cm_main/unauthenticated-navbar.html:33
 msgid "Change language"
 msgstr "Alterar idioma"
 
-#: templates/cm_main/navbar.html:121
+#: templates/cm_main/navbar.html:92
 msgid "Edit Pages"
 msgstr "Editar Páginas"
 
-#: templates/cm_main/navbar.html:123
+#: templates/cm_main/navbar.html:94
 msgid "Import members from CSV"
 msgstr "Importar membros de um CSV"
 
-#: templates/cm_main/navbar.html:124
+#: templates/cm_main/navbar.html:95
 msgid "Admin site"
 msgstr "Sito amministratore"
 
-#: templates/cm_main/navbar.html:127
+#: templates/cm_main/navbar.html:98
 msgid "Export Members as CSV"
 msgstr "Exportar Membros como CSV"
 
-#: templates/cm_main/navbar.html:145
+#: templates/cm_main/navbar.html:116
 msgid "About the site"
 msgstr "Em respeito ao site"
 
-#: templates/cm_main/navbar.html:156
-msgid "Sign in"
-msgstr "Inscreva-se"
-
-#: templates/cm_main/navbar.html:160
-msgid "Request invitation link"
-msgstr "Pedir um link de convite"
-
-#: templates/cm_main/navbar.html:169
+#: templates/cm_main/navbar.html:126
 msgid "Profile"
 msgstr "Perfil"
 
-#: templates/cm_main/navbar.html:171
+#: templates/cm_main/navbar.html:128
 msgid "Log Out"
 msgstr "Desconectar"
+
+#: templates/cm_main/unauthenticated-navbar.html:57
+msgid "Sign in"
+msgstr "Inscreva-se"
+
+#: templates/cm_main/unauthenticated-navbar.html:61
+msgid "Request invitation link"
+msgstr "Pedir um link de convite"
 
 #: tests/test_contactform.py:23
 msgid "This field is required."
 msgstr "Este campo é obrigatório."
 
-#: tests/test_contactform.py:29 views/views_contact.py:65
+#: tests/test_contactform.py:29 views/views_contact.py:66
 msgid "Your message has been sent"
 msgstr "Seu mensagem foi enviada."
 
@@ -417,12 +380,65 @@ msgstr ""
 "Olá %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</"
 "a> está agora seguindo você em %(site_name)s!"
 
+#: utils.py:65
+#, python-brace-format
+msgid ""
+"Uploaded file {filename} is too big ({sizemb}MB), maximum is {limitmb}MB."
+msgstr ""
+"Arquivo carregado {filename} é muito grande ({sizemb}MB), o máximo é "
+"{limitmb}MB."
+
+#: utils.py:226
+msgid ""
+"Date '%(date_string_to_parse)s' does not match any expected format: "
+"%(translated_date_formats)s."
+msgstr ""
+"A data '%(date_string_to_parse)s' não corresponde a nenhum formato esperado: "
+"%(translated_date_formats)s."
+
+#: utils.py:232
+#, python-format
+msgid "%%d"
+msgstr "DD"
+
+#: utils.py:232
+msgid "%m"
+msgstr "MM"
+
+#: utils.py:232
+msgid "%Y"
+msgstr "AAAA"
+
+#: utils.py:232
+msgid "%y"
+msgstr "AA"
+
+#: utils.py:233
+msgid "%H"
+msgstr "HH"
+
+#: utils.py:233
+msgid "%h"
+msgstr "hh"
+
+#: utils.py:233
+msgid "%p"
+msgstr ""
+
+#: utils.py:233
+msgid "%M"
+msgstr "MM"
+
+#: utils.py:234
+msgid "%S"
+msgstr "SS"
+
 #: views/views_contact.py:41
 msgid "But your mailer tools is too old to show it :'("
 msgstr ""
 "Mas seus ferramentas de e-mail estão muito antigas para exibir isso :'("
 
-#: views/views_contact.py:60
+#: views/views_contact.py:61
 msgid "This file type is not supported"
 msgstr "Esse tipo de arquivo não é suportado"
 

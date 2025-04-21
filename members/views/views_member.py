@@ -10,9 +10,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
-from cousinsmatter.utils import PageOutOfBounds, Paginator, remove_accents
+from cm_main.utils import PageOutOfBounds, Paginator, remove_accents, assert_request_is_ajax, redirect_to_referer
 from verify_email.email_handler import send_verification_email
-from cousinsmatter.utils import assert_request_is_ajax, redirect_to_referer
 from ..models import Family, Member
 from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
 

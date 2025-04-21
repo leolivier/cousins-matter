@@ -17,7 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 
-from cousinsmatter.utils import assert_request_is_ajax
+from cm_main.utils import assert_request_is_ajax
 
 from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm

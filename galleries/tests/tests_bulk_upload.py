@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from cousinsmatter.utils import test_resource_full_path
+from cm_main.utils import test_resource_full_path
 from ..models import Gallery, Photo
 from ..views import views_bulk
 from .tests_utils import GalleryBaseTestCase

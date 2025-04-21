@@ -4,7 +4,7 @@ from django.utils.translation import gettext as _
 from .validators import validate_zipfile_extension
 from .models import Photo, Gallery
 from cm_main.widgets import RichTextarea
-from cousinsmatter.utils import check_file_size
+from cm_main.utils import check_file_size
 
 
 def check_zip_size(file):

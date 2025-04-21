@@ -12,7 +12,7 @@ from django.utils.text import slugify
 
 from members.models import Member
 from ..models import ChatMessage, ChatRoom
-from cousinsmatter.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
+from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
 from cm_main import followers
 
 from urllib.parse import unquote

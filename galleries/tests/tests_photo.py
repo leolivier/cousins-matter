@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
-from cousinsmatter.utils import create_test_image
+from cm_main.utils import create_test_image
 from galleries.models import Photo, Gallery
 from galleries.views.views_photo import PhotoAddView
 from members.tests.tests_member import TestLoginRequiredMixin

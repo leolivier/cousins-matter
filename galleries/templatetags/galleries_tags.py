@@ -4,7 +4,7 @@ from django.db.models.expressions import OuterRef, Subquery
 from django.db.models.functions import Concat
 from django.template import Library
 from django.urls import reverse
-from cousinsmatter.utils import Paginator
+from cm_main.utils import Paginator
 from ..models import Photo
 
 register = Library()

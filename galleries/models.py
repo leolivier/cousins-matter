@@ -10,8 +10,7 @@ from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.urls import reverse
-
-from cousinsmatter.utils import check_file_size
+from cm_main.utils import check_file_size
 
 logger = logging.getLogger(__name__)
 

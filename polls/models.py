@@ -1,8 +1,9 @@
 import datetime
-
+from django.apps import apps
 from django.db import models
-from django.utils.translation import gettext_lazy as _, gettext
 from django.utils import timezone, formats
+from django.utils.translation import gettext_lazy as _, gettext
+
 from members.models import Member
 
 
@@ -66,15 +67,26 @@ class Question(models.Model):
     linked to it which are the possible answers.
     '''
     YESNO_QUESTION = 'YN'
+    SINGLECHOICE_QUESTION = 'SC'
     MULTICHOICES_QUESTION = 'MC'
     OPENTEXT_QUESTION = 'OT'
     DATE_QUESTION = 'DT'
+    MULTIEVENTPLANNING_QUESTION = 'ME'
+    SINGLEEVENTPLANNING_QUESTION = 'SE'
     QUESTION_TYPES = (
         (YESNO_QUESTION, _('Yes/No')),
-        (MULTICHOICES_QUESTION, _('Multiple Choice')),
+        (SINGLECHOICE_QUESTION, _('Single Choice')),
+        (MULTICHOICES_QUESTION, _('Multiple Choices')),
         (OPENTEXT_QUESTION, _('Open Text')),
         (DATE_QUESTION, _('Date')),
+        # (MULTIEVENTPLANNING_QUESTION, _('Multiple Choices Event')),
+        # (SINGLEEVENTPLANNING_QUESTION, _('Single Choice Event'))
     )
+    MULTICHOICES_TYPES = [MULTICHOICES_QUESTION, MULTIEVENTPLANNING_QUESTION]
+    SINGLECHOICE_TYPES = [SINGLECHOICE_QUESTION, SINGLEEVENTPLANNING_QUESTION]
+    EVENT_TYPES = [MULTIEVENTPLANNING_QUESTION, SINGLEEVENTPLANNING_QUESTION]
+    CHOICE_TYPES = SINGLECHOICE_TYPES + MULTICHOICES_TYPES
+
     poll = models.ForeignKey(Poll, related_name='questions', on_delete=models.CASCADE)
     question_text = models.CharField(_('Question'), max_length=200)
     question_type = models.CharField(_('Question Type'), max_length=2, choices=QUESTION_TYPES, default=YESNO_QUESTION)
@@ -106,6 +118,8 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, related_name='answers_%(class)s', on_delete=models.CASCADE)
     question_type = None
     answer = None
+    subclasses = None
+    question_dict = {}
 
     class Meta:
         abstract = True
@@ -113,18 +127,58 @@ class Answer(models.Model):
         verbose_name_plural = _('answers')
 
     @staticmethod
+    def set_subclasses():
+        if not Answer.subclasses:
+            Answer.subclasses = []
+            for model in apps.get_models():
+                if issubclass(model, Answer) and not model._meta.abstract and not model._meta.proxy:
+                    Answer.subclasses.append(model)
+                    Answer.question_dict[model.question_type] = model
+
+    @staticmethod
     def filter_answers(**kwargs):
-        results = []
-        for subclass in Answer.__subclasses__():
-            results.extend(list(subclass.objects.filter(**kwargs)))
+        '''
+        Returns a list of answers that match the given kwargs. Includes all matching instances,
+        but removes parent instances if a child instance with the same ID is also matched.
+        '''
+
+        Answer.set_subclasses()
+        results = []  # List of matching instances
+
+        # 1. Collect *all* matching instances across all subclasses, and group them by their numeric ID.
+        grouped_instances_by_id = {}  # Key: instance.id, Value: list of instances with that ID
+
+        for subclass in Answer.subclasses:
+            # Apply the kwargs filter to each subclass
+            queryset = subclass.objects.filter(**kwargs) if kwargs else subclass.objects.all()
+            for instance in queryset:
+                if instance.id not in grouped_instances_by_id:
+                    grouped_instances_by_id[instance.id] = []
+                grouped_instances_by_id[instance.id].append(instance)
+                results.append(instance)  # add them all at the start, we'll remove unwanted afterwards
+
+        # 2. Identify instances to exclude: any instance that is a parent
+        # of another instance with the exact same ID present in the group.
+        # Iterate through each group of instances sharing the same ID
+        for numeric_id, instances_with_same_id in grouped_instances_by_id.items():
+            # If a group has more than one instance, there may be parent/child or sister relationships.
+            if len(instances_with_same_id) == 1:
+                continue
+            # Browse the instances of this group as parent candidates to exclude
+            for parent_candidate in instances_with_same_id:
+                # Browse this group's instances as child candidates
+                for child_candidate in instances_with_same_id:
+                    # If they are not the same instance and the child candidate is a subclass of the parent candidate
+                    if parent_candidate is not child_candidate and \
+                        issubclass(child_candidate.__class__, parent_candidate.__class__):
+                        results.remove(parent_candidate)  # remove the parent candidate from the results
+                        break
+
         return results
 
     @staticmethod
     def all_answers():
-        results = []
-        for subclass in Answer.__subclasses__():
-            results.extend(list(subclass.objects.all()))
-        return results
+        return Answer.filter_answers()
 
     @property
     def text(self):
@@ -133,33 +187,31 @@ class Answer(models.Model):
     @staticmethod
     def get_answer_class_for_question_type(question_type):
         'Returns the Answer class corresponding to the question type.'
-        for subclass in Answer.__subclasses__():
-            if subclass.question_type == question_type:
-                return subclass
-        raise ValueError(f"No Answer subclass found for question type {question_type}")
+        try:
+            Answer.set_subclasses()
+            return Answer.question_dict[question_type]
+        except KeyError:
+            raise ValueError(f"No Answer subclass found for question type {question_type}")
 
 
-class ChoiceAnswer(Answer):
-    question_type = Question.MULTICHOICES_QUESTION
-    'Answer provided by a member to a multiple choice question.'
-    answer = models.CharField(_('choice'), max_length=100, default="", blank=True)
+class QuestionResult:
+    question: Question
+    result: list = []
+    total_answers: int = 0
+    user_answer: str = "-"
 
-    class Meta:
-        verbose_name = _('choice answer')
-        verbose_name_plural = _('choice answers')
+    def __init__(self, question):
+        self.question = question
 
-    def __str__(self):
-      "Return the text of the selected choice as a string representation of the ChoiceAnswer."
-      return self.answer
-
-    @staticmethod
-    def compute_result(answers, result):
-        'Compute the result for a list of ChoiceAnswers.'
-        choice_results = {}
-        for choice in result.question.possible_choices:
-            choice_answers = answers.filter(answer=choice).count()
-            choice_results[choice] = (choice_answers / result.total_answers) * 100 if result.total_answers > 0 else 0
-        return [f"{key}: {value}%" for key, value in choice_results.items()] if choice_results else ["-"]
+    def build_result(self, user=None):
+        answer_class = Answer.get_answer_class_for_question_type(self.question.question_type)
+        answers = answer_class.objects.filter(question=self.question)
+        self.total_answers = answers.count()
+        self.result = answer_class.compute_result(answers, self)
+        if user:
+            user_answer = answers.filter(poll_answer__member=user).first()
+            if user_answer:
+                self.user_answer = str(user_answer)
 
 
 class YesNoAnswer(Answer):
@@ -199,8 +251,8 @@ class TextAnswer(Answer):
 
 
 class DateTimeAnswer(Answer):
-    question_type = Question.DATE_QUESTION
     'Answer provided by a member to an date/time question.'
+    question_type = Question.DATE_QUESTION
     answer = models.DateTimeField(_('answer'), default=timezone.now)
 
     class Meta:
@@ -216,21 +268,86 @@ class DateTimeAnswer(Answer):
         return ["-"] if result.total_answers == 0 else list(answers.values_list('answer', flat=True))
 
 
-class QuestionResult:
-    question: Question
-    result: list = []
-    total_answers: int = 0
-    user_answer: str = "-"
+class ChoiceAnswer(Answer):
+    question_type = Question.SINGLECHOICE_QUESTION
+    'Answer provided by a member to a single choice question.'
+    answer = models.CharField(_('choice'), max_length=100, default="", blank=True)
 
-    def __init__(self, question):
-        self.question = question
+    class Meta:
+        verbose_name = _('choice answer')
+        verbose_name_plural = _('choice answers')
 
-    def build_result(self, user=None):
-        answer_class = Answer.get_answer_class_for_question_type(self.question.question_type)
-        answers = answer_class.objects.filter(question=self.question)
-        self.total_answers = answers.count()
-        self.result = answer_class.compute_result(answers, self)
-        if user:
-            user_answer = answers.filter(poll_answer__member=user).first()
-            if user_answer:
-                self.user_answer = str(user_answer)
+    def __str__(self):
+      "Return the text of the selected choice as a string representation of the ChoiceAnswer."
+      return self.answer
+
+    @staticmethod
+    def compute_result(answers, result):
+        'Compute the result for a list of ChoiceAnswers.'
+        choice_results = {}
+        for choice in result.question.possible_choices:
+            choice_answers = answers.filter(answer=choice).count()
+            choice_results[choice] = (choice_answers / result.total_answers) * 100 if result.total_answers > 0 else 0
+        return [f"{key}: {value}%" for key, value in choice_results.items()] if choice_results else ["-"]
+
+
+class SingleEventAnswer(ChoiceAnswer):
+    '''
+    Answer provided by a member to an single choice event planner question.
+    Event planner answers are a combination of date/time with single choice.
+    '''
+    question_type = Question.SINGLEEVENTPLANNING_QUESTION
+
+    class Meta:
+        verbose_name = _('single event answer')
+        verbose_name_plural = _('single event answers')
+
+
+class MultiChoiceAnswer(Answer):
+    question_type = Question.MULTICHOICES_QUESTION
+    'Answer provided by a member to a multiple choice question.'
+    answer = models.JSONField(_('choices'), default=list, blank=True)
+
+    class Meta:
+        verbose_name = _('multiple choice answer')
+        verbose_name_plural = _('multiple choice answers')
+
+    def __str__(self):
+      "Return the text of the selected choices as a string representation of the MultiChoiceAnswer."
+      return ', '.join(self.answer) if self.answer else '-'
+
+    @staticmethod
+    def compute_result(answers, result):
+        'Compute the result for a list of MultipleChoiceAnswers.'
+        choice_results = {}
+        for choice in result.question.possible_choices:
+            # __contains not supported by sqlite3
+            # choice_answers = answers.filter(answer__contains=choice).count()
+            choice_answers = sum(1 for answer in answers if choice in answer.answer)
+            choice_results[choice] = (choice_answers / result.total_answers) * 100 if result.total_answers > 0 else 0
+        return [f"{key}: {value}%" for key, value in choice_results.items()] if choice_results else ["-"]
+
+
+class MultiEventAnswer(MultiChoiceAnswer):
+    '''
+    Answer provided by a member to an multiple choice event planner question.
+    Event planner answers are a combination of date/time with multiple choices.
+    '''
+    question_type = Question.MULTIEVENTPLANNING_QUESTION
+
+    class Meta:
+        verbose_name = _('multiple event answer')
+        verbose_name_plural = _('multiple event answers')
+
+
+class EventPlanner(Poll):
+    # where the event will take place
+    location = models.CharField(_('location'), max_length=250, default="", blank=True)
+    # when the event will take place
+    chosen_date = models.DateTimeField(blank=True, null=True)
+    # single or multiple choices
+    multiple_choices = False
+
+    class Meta:
+        verbose_name = _('event planner')
+        verbose_name_plural = _('event planners')

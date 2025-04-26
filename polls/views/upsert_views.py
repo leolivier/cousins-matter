@@ -21,6 +21,8 @@ class PollCreateView(LoginRequiredMixin, generic.CreateView):
   model = Poll
   form_class = PollUpsertForm
   template_name = "polls/poll_upsert_form.html"
+  success_message = _("Poll created successfully. You can now add questions.")
+  redirect_to = "polls:update_poll"
 
   def get(self, request):
     form = self.form_class()
@@ -33,17 +35,18 @@ class PollCreateView(LoginRequiredMixin, generic.CreateView):
     if form.is_valid():
       poll = form.save()
       managed_closed_list(poll, form)
-      messages.success(request, _("Poll created successfully. You can now add questions."))
-      return redirect(reverse("polls:update_poll", args=(poll.pk,)))
+      messages.success(request, self.success_message)
+      return redirect(reverse(self.redirect_to, args=(poll.pk,)))
     else:
-      return render(request, self.template_name, {"form": form, "question_form": QuestionUpsertForm(),
-                                                  "question_update_form": QuestionUpsertForm(auto_id="updt_id")})
+      return render(request, self.template_name, {"form": form, "question_form": QuestionUpsertForm()})
 
 
 class PollUpdateView(LoginRequiredMixin, generic.UpdateView):
   model = Poll
   form_class = PollUpsertForm
   template_name = "polls/poll_upsert_form.html"
+  redirect_to = "polls:poll_detail"
+  success_message = _("Poll updated successfully.")
 
   def form_valid(self, form):
     if form.instance.owner != self.request.user:
@@ -62,7 +65,8 @@ class PollUpdateView(LoginRequiredMixin, generic.UpdateView):
     if form.is_valid():
       form.save()
       managed_closed_list(poll, form)
-      return redirect(reverse("polls:poll_detail", args=(poll.pk,)))
+      messages.success(request, self.success_message)
+      return redirect(reverse(self.redirect_to, args=(poll.pk,)))
     else:
       return render(request, self.template_name, {"form": form})
 

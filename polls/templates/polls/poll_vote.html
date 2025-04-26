@@ -13,22 +13,25 @@
 	</style>
 {%endblock%}
 {% block title %}
-	{%with title=_("Vote on poll: ")|add:poll.title%}{% title title %}{%endwith%}
+	{%with title=_("Vote on : ")|add:poll.title%}{% title title %}{%endwith%}
 {% endblock %}
 {% block content %}
 <div class="container">
 	<div class="card">
 		<header class="card-header">
 			<p class="card-header-title has-text-centered is-centered">
-			{%with title=_("Vote on poll: ")|add:poll.title%}
-			{% title title %}
-			{%endwith%}
+				{%with title=_("Vote on : ")|add:poll.title%}{% title title %}{%endwith%}
 			</p>
 		</header>
 		<section class="card-content">
 			{%include "polls/poll_info.html" with poll=poll%}
 		</section>
-		<form action="{% url 'polls:vote' poll.id %}" method="post">
+		{%if type == "poll"%}
+			{% url 'polls:vote' poll.id as vote_url%}
+		{%else%}
+			{% url 'polls:event_planner_vote' poll.id as vote_url%}
+		{%endif%}
+		<form action="{{vote_url}}" method="post">
 			{% csrf_token %}
 			<section class="card-content">
 				<h2 class="title is-size-4">Questions</h2>

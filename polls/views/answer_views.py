@@ -5,13 +5,15 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import generic
 
-from ..models import Answer, PollAnswer, Poll
+from ..models import Answer, EventPlanner, PollAnswer, Poll
 from ..forms.answer_forms import get_answerform_class_for_question_type
 
 
 class PollsVoteView(LoginRequiredMixin, generic.View):
     model = PollAnswer
     template_name = "polls/poll_vote.html"
+    poll_model = Poll
+    redirect_to = "polls:poll_detail"
 
     def get_question_form(self, poll_answer, question):
       form_class = get_answerform_class_for_question_type(question.question_type)
@@ -24,9 +26,7 @@ class PollsVoteView(LoginRequiredMixin, generic.View):
 
     def get_question_forms(self, poll):
       # is there an existing answer for that poll and that user?
-      poll_answer = PollAnswer.objects.filter(poll=poll, member=self.request.user)
-      if poll_answer.exists():
-        poll_answer = poll_answer.first()
+      poll_answer = PollAnswer.objects.filter(poll=poll, member=self.request.user).first()
       return [{"question": question, "form": self.get_question_form(poll_answer, question)}
               for question in poll.questions.all()]
 
@@ -35,12 +35,14 @@ class PollsVoteView(LoginRequiredMixin, generic.View):
               for question in poll.questions.all()]
 
     def get(self, request, poll_id):
-      poll = get_object_or_404(Poll, pk=poll_id)
+      poll = get_object_or_404(self.poll_model, pk=poll_id)
       question_forms = self.get_question_forms(poll)
-      return render(request, self.template_name, {"poll": poll, 'questions': question_forms})
+      return render(request, self.template_name, {"poll": poll,
+                                                  'questions': question_forms,
+                                                  'type': self.poll_model.__name__.lower()})
 
     def post(self, request, poll_id):
-      poll = get_object_or_404(Poll, pk=poll_id)
+      poll = get_object_or_404(self.poll_model, pk=poll_id)
       question_form_classes = self.get_question_form_classes(poll)
       # are we modifyning an existing answer for that poll and that user?
       poll_answer = PollAnswer.objects.filter(poll=poll, member=request.user)
@@ -71,4 +73,9 @@ class PollsVoteView(LoginRequiredMixin, generic.View):
       if has_errors:
         return render(request, self.template_name, {"poll": poll, 'questions': question_forms})
       messages.success(request, _("Your answers have been saved"))
-      return redirect(reverse("polls:poll_detail", args=(poll.id, )))
+      return redirect(reverse(self.redirect_to, args=(poll.id, )))
+
+
+class EventPlannersVoteView(PollsVoteView):
+    poll_model = EventPlanner
+    redirect_to = "polls:event_planner_detail"

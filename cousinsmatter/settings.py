@@ -317,10 +317,10 @@ DJANGO_ICONS = {
     "new-poll": "vote-outline",
     "update-poll": "ballot-recount-outline",
     "poll-choice-question": "checkbox-multiple-marked-circle-outline",
+    "poll-multiple-choice-question": "checkbox-multiple-marked-outline",
     "poll-yesno-question": "checkbox-marked-circle-outline",
     "poll-open-text-question": "text-box-outline",
     "poll-date-time-question": "calendar-clock",
-    "poll-multiple-choice-question": "checkbox-multiple-outline",
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

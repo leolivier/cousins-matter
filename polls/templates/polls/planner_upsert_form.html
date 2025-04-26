@@ -2,9 +2,9 @@
 {%load i18n crispy_forms_tags cm_tags polls_tags static %}
 {% block title %}
 	{%if form.instance.pk%}
-		{% title _("Update Poll") %}
+		{% title _("Update Event Planner") %}
 	{%else%}
-		{% title _("Create Poll") %}
+		{% title _("Create Event Planner") %}
 	{%endif%}
 {% endblock %}
 {%block header%}
@@ -16,9 +16,9 @@
 <div class="container mt-5 px-2">
 	<h1 class="title has-text-centered">
 	{%if form.instance.pk%}
-		{% title _("Update Poll") %}
+		{% title _("Update Event Planner") %}
 	{%else%}
-		{% title _("Create Poll") %}
+		{% title _("Create Event Planner") %}
 	{%endif%}
 	</h1>
 	<form method="post">
@@ -27,23 +27,23 @@
 		<div class="buttons is-centered">
 			<button type="submit" class="button is-dark">
 				{%if form.instance.pk %}
-					{%icon "update"%} <span>{%trans "Update Poll"%}</span>
+					{%icon "update"%} <span>{%trans "Update Event Planner"%}</span>
 				{%else%}
-					{%icon "create"%} <span>{%trans "Create Poll"%}</span>
+					{%icon "create"%} <span>{%trans "Create Event Planner"%}</span>
 				{%endif%}
 			</button>
 			{%if form.instance.pk%}
 			{% autoescape off %}
-				{%trans "Delete Poll" as delete_title %}
-				{%blocktranslate asvar delete_msg with title=form.instance.title|escape%}Are you sure you want to delete the poll "{{title}}"?{%endblocktranslate%}
-				{%url "polls:delete_poll" form.instance.pk as delete_url%}
+				{%trans "Delete Event Planner" as delete_title %}
+				{%blocktranslate asvar delete_msg with title=form.instance.title|escape%}Are you sure you want to delete the event planner "{{title}}"?{%endblocktranslate%}
+				{%url "polls:delete_event_planner" form.instance.pk as delete_url%}
 				{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title button_text=delete_title ays_msg=delete_msg|force_escape delete_url=delete_url expected_value=form.instance.title|escape %}
 				{% endautoescape %}
 			{%endif%}
 		</div>
 	</form>
-	<nav class="panel mt-5" id="poll-questions">
-		<p class="panel-heading">{%trans "Poll Questions" %}</p>
+	<nav class="panel mt-5" id="event-planner-questions">
+		<p class="panel-heading">{%trans "Event Planner Questions" %}</p>
 		{%if form.instance.pk%}
 		{% for question in form.instance.questions.all %}
 		<div class="panel-block" id="question-{{question.id}}">
@@ -98,7 +98,7 @@
 		{% include "cm_main/common/modal_form.html" with modal_id="upsert-question-modal"%}
 		{% include "cm_main/common/modal_form.html" with modal_id="delete-item-modal"%}
 		{%else%}
-		<p>{%trans "Save the poll to add questions."%}</p>
+		<p>{%trans "Save the event planner to add questions."%}</p>
 		{%endif%}
 	</nav>
 </div>

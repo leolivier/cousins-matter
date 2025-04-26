@@ -44,8 +44,14 @@ class EventPlannerUpsertTest(EventPlannerTestMixin):
 
     def test_update_event_planner_view(self):
         event_planner, question = self.create_event_planner("Test event planner", "Event planner description")
+        # add a yes no question
+        self.create_question(question_text="Test question 1", question_type=Question.YESNO_QUESTION, poll=event_planner)
         response = self.client.get(reverse("polls:update_event_planner", args=(event_planner.id,)))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Test question 1")
+        # the planner base question is not shown in the questions list
+        self.assertNotContains(response, question.question_text)
+
         pub_date = self.pub_date + datetime.timedelta(days=1)
         close_date = self.close_date + datetime.timedelta(days=1)
         possible_dates = self.get_possible_dates()

@@ -58,6 +58,9 @@ class Poll(models.Model):
             results.append(question_result)
         return results
 
+    def get_questions(self):
+        return Question.objects.filter(poll=self)
+
 
 class Question(models.Model):
     '''
@@ -351,3 +354,6 @@ class EventPlanner(Poll):
     class Meta:
         verbose_name = _('event planner')
         verbose_name_plural = _('event planners')
+
+    def get_questions(self):
+        return Question.objects.filter(poll=self).exclude(question_type__in=Question.EVENT_TYPES)

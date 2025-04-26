@@ -45,7 +45,7 @@
 	<nav class="panel mt-5" id="event-planner-questions">
 		<p class="panel-heading">{%trans "Event Planner Questions" %}</p>
 		{%if form.instance.pk%}
-		{% for question in form.instance.questions.all %}
+		{% for question in form.instance.get_questions %}
 		<div class="panel-block" id="question-{{question.id}}">
 			{%icon question.question_type|question_icon %}
 			{{question.question_text}}

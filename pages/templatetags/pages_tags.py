@@ -1,7 +1,7 @@
 import logging
 from django.conf import settings
 from django.template import Library
-from django.utils.translation import get_language
+from django.utils.translation import get_language, gettext as _
 from django.utils.safestring import mark_safe
 
 from ..models import FlatPage
@@ -78,7 +78,10 @@ def pages_tree(is_superuser=False):
   Creates a nested tree structure from all flat pages and pass it to
   the "pages/page_tree.html" template for rendering.
   """
-  return {'page_tree': build_pages_tree(include_predefined=is_superuser), 'superuser': is_superuser}
+  publish_tree = build_pages_tree(include_predefined=is_superuser, prefix=settings.MENU_PAGE_URL_PREFIX)
+  private_tree = build_pages_tree(include_predefined=is_superuser, prefix=settings.PRIVATE_PAGE_URL_PREFIX)
+  tree = {_('Public'): publish_tree, _('Private'): private_tree}
+  return {'page_tree': tree, 'superuser': is_superuser}
 
 
 @register.filter

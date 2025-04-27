@@ -1,15 +1,14 @@
 # Portuguese Translations for NO NAME FOUND app.
 # Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-
 # Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
-"POT-Creation-Date: 2024-11-11 19:57+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-27 12:19+0200\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Portuguese <LL@li.org>\n"
@@ -64,6 +63,14 @@ msgstr "Você está seguro de querer apagar a página '%(title)s'?"
 #: templates/pages/page_tree.html:3 templates/pages/page_tree.html:7
 msgid "Pages Tree"
 msgstr "Árvore das Páginas"
+
+#: templatetags/pages_tags.py:83
+msgid "Public"
+msgstr "Público"
+
+#: templatetags/pages_tags.py:83
+msgid "Private"
+msgstr "Privado"
 
 #: tests/test_base.py:34 views.py:29 views.py:50
 #, python-format

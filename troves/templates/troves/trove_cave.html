@@ -49,29 +49,33 @@ function delete_treasure(url) {
 		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
 			{%paginate page%}
 		</div>
-		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
-      {% for category, troves in page.object_list.items %}
-        <h2 class="title is-4">{{ category|translate_category }}</h2>
-        <div class="grid">
-          {% for trove in troves %}
-          <div class="cell  has-text-centered">
-            <figure class="image thumbnail mx-auto">
-              <a href="{%if trove.file%}{{ trove.file.url }}{%else%}{{ trove.picture.url }}{%endif%}"
-              target="_blank">
-                <img src="{{ trove.thumbnail.url }}" alt="{{ trove.description }}"/>
-              </a>
-            </figure>
-            <p>{% autoescape off %}{{ trove.description }}{% endautoescape %}</p>
-            {%if trove.owner.id == user.id %}
-            <p>
-              <a class="button" href='{%url "troves:update" trove.id%}'>{%icon "edit"%}</a>
-              {%url "troves:delete" trove.id as delete_url%}
-              <a class="button" onclick="delete_treasure('{{delete_url}}')">{%icon "delete"%}</a>
-            </p>
-            {%endif%}
-          </div>
-          {% endfor %}
-        </div>
-      {% endfor %}
+    {% for category, troves in page.object_list.items %}
+    <div class="panel-block is-flex is-align-items-center is-justify-content-center">
+      <h2 class="title is-4">{{ category|translate_category }}</h2>
     </div>
+    <div class="panel-block">
+      <div class="grid is-flex is-flex-direction-row">
+        {% for trove in troves %}
+        <div class="cell has-text-centered">
+          <figure class="image thumbnail mx-auto">
+            <a href="{%if trove.file%}{{ trove.file.url }}{%else%}{{ trove.picture.url }}{%endif%}"
+            target="_blank">
+              <img src="{{ trove.thumbnail.url }}" alt="{{ trove.description }}"/>
+            </a>
+          </figure>
+          <p>{% autoescape off %}{{ trove.description }}{% endautoescape %}</p>
+          {%if trove.owner.id == user.id %}
+          <p>
+            <a class="button" href='{%url "troves:update" trove.id%}'>{%icon "edit"%}</a>
+            {%url "troves:delete" trove.id as delete_url%}
+            <a class="button" onclick="delete_treasure('{{delete_url}}')">{%icon "delete"%}</a>
+          </p>
+          {%endif%}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

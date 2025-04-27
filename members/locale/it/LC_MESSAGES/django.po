@@ -1,15 +1,14 @@
 # Italian Translations for NO NAME FOUND app.
 # Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-
 # Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
-"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
-"POT-Creation-Date: 2024-10-21 10:17+00:00\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-17 10:56+0200\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Italian <LL@li.org>\n"
@@ -86,206 +85,206 @@ msgstr "Il superutente deve avere is_staff=True."
 msgid "Superuser must have is_superuser=True."
 msgstr "Il superutente deve avere is_superuser=True."
 
-#: models.py:17
+#: models.py:19
 msgctxt "CSV Field"
 msgid "number_and_street"
 msgstr "numero_e_via"
 
-#: models.py:18
+#: models.py:20
 msgctxt "CSV Field"
 msgid "address_complementary_info"
 msgstr "informazioni_complementari_indirizzo"
 
-#: models.py:19
+#: models.py:21
 msgctxt "CSV Field"
 msgid "zip_code"
 msgstr "codice_postale"
 
-#: models.py:20
+#: models.py:22
 msgctxt "CSV Field"
 msgid "city"
 msgstr "città"
 
-#: models.py:21
+#: models.py:23
 msgctxt "CSV Field"
 msgid "country"
 msgstr "paese"
 
-#: models.py:25
+#: models.py:27
 msgctxt "CSV Field"
 msgid "username"
 msgstr "nome_utente"
 
-#: models.py:26
+#: models.py:28
 msgctxt "CSV Field"
 msgid "email"
 msgstr "email"
 
-#: models.py:27
+#: models.py:29
 msgctxt "CSV Field"
 msgid "first_name"
 msgstr "nome"
 
-#: models.py:28
+#: models.py:30
 msgctxt "CSV Field"
 msgid "last_name"
 msgstr "cognome"
 
-#: models.py:29
+#: models.py:31
 msgctxt "CSV Field"
 msgid "birthdate"
 msgstr "data_di_nascita"
 
-#: models.py:33
+#: models.py:35
 msgctxt "CSV Field"
 msgid "phone"
 msgstr "telefono"
 
-#: models.py:34
+#: models.py:36
 msgctxt "CSV Field"
 msgid "website"
 msgstr "sito_web"
 
-#: models.py:35
+#: models.py:37
 msgctxt "CSV Field"
 msgid "family"
 msgstr "famiglia"
 
-#: models.py:36
+#: models.py:38
 msgctxt "CSV Field"
 msgid "avatar"
 msgstr "avatar"
 
-#: models.py:37
+#: models.py:39
 msgctxt "CSV Field"
 msgid "deathdate"
 msgstr "data_di_morte"
 
-#: models.py:38
+#: models.py:40
 msgctxt "CSV Field"
 msgid "managed_by"
 msgstr "gestito_da"
 
-#: models.py:46 templates/members/members/members_directory.html:29
-#: views/views_directory.py:62
+#: models.py:48 templates/members/members/members_directory.html:29
+#: views/views_directory.py:86
 msgid "Name"
 msgstr "Nome"
 
-#: models.py:48 templates/members/family/family_detail.html:14
+#: models.py:50 templates/members/family/family_detail.html:14
 msgid "Parent family"
 msgstr "Famiglia d'origine"
 
-#: models.py:51
+#: models.py:53
 msgid "family"
 msgstr "famiglia"
 
-#: models.py:52
+#: models.py:54
 msgid "families"
 msgstr "famiglie"
 
-#: models.py:67 templates/members/address/address_detail.html:8
+#: models.py:69 templates/members/address/address_detail.html:8
 msgid "Number & Street name"
 msgstr "Numero civico e nome della via"
 
-#: models.py:69
+#: models.py:71
 msgid "Complementary info"
 msgstr "Informazioni complementari"
 
-#: models.py:71 templates/members/address/address_detail.html:16
+#: models.py:73 templates/members/address/address_detail.html:16
 msgid "Zip code"
 msgstr "Codice postale"
 
-#: models.py:73 templates/members/address/address_detail.html:20
+#: models.py:75 templates/members/address/address_detail.html:20
 msgid "City"
 msgstr "Città"
 
-#: models.py:75 templates/members/address/address_detail.html:24
+#: models.py:77 templates/members/address/address_detail.html:24
 msgid "Country"
 msgstr "Paese"
 
-#: models.py:89
+#: models.py:91
 msgid "address"
 msgstr "indirizzo"
 
-#: models.py:90
+#: models.py:92
 msgid "addresses"
 msgstr "indirizzi"
 
-#: models.py:98
+#: models.py:100
 msgid "Member manager"
 msgstr "Membro manager"
 
-#: models.py:103 templates/members/members/member_detail.html:37
+#: models.py:105 templates/members/members/member_detail.html:37
 #: templates/members/members/members_directory.html:33
-#: views/views_directory.py:62
+#: views/views_directory.py:86
 msgid "Address"
 msgstr "Indirizzo"
 
-#: models.py:105 templates/members/members/member_detail.html:45
+#: models.py:107 templates/members/members/member_detail.html:45
 #: templates/members/members/members_directory.html:31
-#: views/views_directory.py:62
+#: views/views_directory.py:86
 msgid "Phone"
 msgstr "Telefono"
 
-#: models.py:107 templates/members/members/member_detail.html:49
-#: templates/members/members/members.html:54
+#: models.py:109 templates/members/members/member_detail.html:49
+#: templates/members/members/members.html:62
 #: templates/members/members/members_directory.html:30
 msgid "Birthdate"
 msgstr "Data di nascita"
 
-#: models.py:108
+#: models.py:110
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Clicca sul nome del mese o dell'anno per modificarli rapidamente"
 
-#: models.py:111
+#: models.py:113
 msgid "Is dead"
 msgstr "E' morto"
 
-#: models.py:112
+#: models.py:114
 msgid "Death date"
 msgstr "Data di morte"
 
-#: models.py:114 templates/members/members/member_detail.html:53
+#: models.py:116 templates/members/members/member_detail.html:53
 msgid "Website"
 msgstr "Sito web"
 
-#: models.py:116 templates/members/members/member_detail.html:57
+#: models.py:118 templates/members/members/member_detail.html:57
 msgid "Family"
 msgstr "Famiglia"
 
-#: models.py:118 templates/members/members/member_detail.html:61
+#: models.py:120 templates/members/members/member_detail.html:61
 msgid "Who I am"
 msgstr "Chi sono"
 
-#: models.py:119
+#: models.py:121
 msgid "Describe yourself, your likes and dislikes..."
 msgstr "Descriviti, parla di ciò che ti piace e non ti piace..."
 
-#: models.py:120
+#: models.py:122
 msgid "My hobbies"
 msgstr "I miei passatempi"
 
-#: models.py:121
+#: models.py:123
 msgid "Provide a list of hobbies separated by commas"
 msgstr "Fornisci un elenco di hobby separati da virgole"
 
-#: models.py:123
+#: models.py:125
 msgid "Privacy consent"
 msgstr "Consenso sulla privacy"
 
-#: models.py:125
+#: models.py:127
 msgid "Followers"
 msgstr "Followers"
 
-#: models.py:134
+#: models.py:136
 msgid "member"
 msgstr "membro"
 
-#: models.py:135
+#: models.py:137
 msgid "members"
 msgstr "membri"
 
-#: models.py:195
+#: models.py:197
 #, python-brace-format
 msgid "Death date {dd} is before birthdate {bd}"
 msgstr "Data di morte {dd} precede la data di nascita {bd}"
@@ -841,13 +840,13 @@ msgid "Active member"
 msgstr "Membro attivo"
 
 #: templates/members/members/member_detail.html:28
-#: templates/members/members/member_upsert.html:28 tests/tests_member.py:236
+#: templates/members/members/member_upsert.html:29 tests/tests_member.py:236
 msgid "Member managed by"
 msgstr "Membro gestito da"
 
 #: templates/members/members/member_detail.html:41
 #: templates/members/members/members_directory.html:32
-#: views/views_directory.py:62
+#: views/views_directory.py:86
 msgid "Email"
 msgstr "Email"
 
@@ -989,40 +988,44 @@ msgstr "Elenco dei Membri"
 msgid "Show directory"
 msgstr "Mostra l'elenco"
 
-#: templates/members/members/members.html:19 views/views_member.py:141
+#: templates/members/members/members.html:20 views/views_member.py:141
 msgid "Create Member"
 msgstr "Crea Membro"
 
 #: templates/members/members/members.html:26
-#: templates/members/members/members.html:37
+msgid "Invite Member"
+msgstr "Invita Membro"
+
+#: templates/members/members/members.html:34
+#: templates/members/members/members.html:45
 msgid "Filter Members"
 msgstr "Filtra i Membri"
 
-#: templates/members/members/members.html:29
+#: templates/members/members/members.html:37
 msgid "first name"
 msgstr "nome"
 
-#: templates/members/members/members.html:33
+#: templates/members/members/members.html:41
 msgid "last name"
 msgstr "cognome"
 
-#: templates/members/members/members.html:46
+#: templates/members/members/members.html:54
 msgid "Sort by"
 msgstr "Ordina per"
 
-#: templates/members/members/members.html:52
+#: templates/members/members/members.html:60
 msgid "First name"
 msgstr "Nome"
 
-#: templates/members/members/members.html:53
+#: templates/members/members/members.html:61
 msgid "Last name"
 msgstr "Cognome"
 
-#: templates/members/members/members.html:55
+#: templates/members/members/members.html:63
 msgid "Active/Managed"
 msgstr "Attivo/Gestito"
 
-#: templates/members/members/members.html:84
+#: templates/members/members/members.html:92
 #: templates/members/members/members_directory.html:52
 msgid "No members found"
 msgstr "Nessun membro trovato"
@@ -1040,18 +1043,6 @@ msgstr "Stampa"
 #: templates/members/members/members_directory.html:18
 msgid "Print as PDF"
 msgstr "Stampa come PDF"
-
-#: templates/members/registration/email_verification_failed.html:3
-#: templates/members/registration/email_verification_failed.html:7
-msgid "Invalid Link!"
-msgstr "Link non valido!"
-
-#: templates/members/registration/email_verification_failed.html:9
-msgid ""
-"This link is invalid or been used already, we cannot verify using this link."
-msgstr ""
-"Questo link non è valido o è già stato utilizzato, non possiamo verificare "
-"nulla usando questo link."
 
 #: templates/members/registration/email_verification_successful.html:3
 #: templates/members/registration/email_verification_successful.html:7
@@ -1164,6 +1155,14 @@ msgstr "Modifica %(name)s selezionati"
 msgid "Add another %(translated_name)s"
 msgstr "Aggiungi un'altra %(translated_name)s"
 
+#: templates/widgets/wrap_create_link.html:24
+msgid ""
+"Warning: don't forget to click the save button at the bottom of the page, "
+"otherwise the changes won't be saved"
+msgstr ""
+"Attenzione: non dimenticare di premere il pulsante di salvataggio al fondo "
+"del sito, altrimenti le modifiche non saranno salvate"
+
 #: tests/tests_member.py:100 views/views_member.py:231
 msgid "Member deleted"
 msgstr "Membro eliminato"
@@ -1245,12 +1244,12 @@ msgstr ""
 "ora un'email contenente un link di attivazione e successivamente sarà "
 "reindirizzato alla schermata di reimpostazione della password."
 
-#: views/views_directory.py:59
+#: views/views_directory.py:55
 #, python-format
 msgid "%(site_name)s directory"
 msgstr "Directory %(site_name)s"
 
-#: views/views_directory.py:84
+#: views/views_directory.py:81
 #, python-format
 msgid "Page %(doc_page)s - %(title)s"
 msgstr "Pagina %(doc_page)s - %(title)s"
@@ -1453,3 +1452,13 @@ msgstr ""
 #: views/views_registration.py:214
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossibile inviare l'email. Si prega di contattare l'amministratore."
+
+#~ msgid "Invalid Link!"
+#~ msgstr "Link non valido!"
+
+#~ msgid ""
+#~ "This link is invalid or been used already, we cannot verify using this "
+#~ "link."
+#~ msgstr ""
+#~ "Questo link non è valido o è già stato utilizzato, non possiamo "
+#~ "verificare nulla usando questo link."

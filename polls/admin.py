@@ -1,8 +1,10 @@
 from django.contrib import admin
 
-from .models import Poll, Question, PollAnswer, YesNoAnswer, ChoiceAnswer, TextAnswer, DateTimeAnswer
+from .models import EventPlanner, Poll, Question, PollAnswer, YesNoAnswer, \
+  ChoiceAnswer, TextAnswer, DateTimeAnswer
 
 admin.site.register(Poll)
+admin.site.register(EventPlanner)
 admin.site.register(Question)
 admin.site.register(PollAnswer)
 admin.site.register(YesNoAnswer)

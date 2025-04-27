@@ -4,6 +4,7 @@
 {% block title %}{% title title %}{% endblock %}
 {% block content %}
 {% trans 'Create poll' as create_label %}
+{% trans 'Create Event Planner' as create_planner_label %}
 <div class="container">
   <div class="panel">
     <div class="panel-heading is-flex is-align-items-center is-justify-content-center">
@@ -11,28 +12,55 @@
       <a class="button ml-6" href="{%url 'polls:create_poll'%}" aria-label="{{create_label}}" title="{{create_label}}">
         {%icon "new-poll" %} <span class="is-hidden-mobile ml-3">{{create_label}}</span>
       </a>
+      <a class="button ml-6" href="{%url 'polls:create_event_planner'%}" aria-label="{{create_planner_label}}" title="{{create_planner_label}}">
+        {%icon "new-poll" %} <span class="is-hidden-mobile ml-3">{{create_planner_label}}</span>
+      </a>
     </div>
     <div class="panel-tabs">
+      <a {%if tab == "polls"%}class="is-active"{%endif%} href="{% url 'polls:list_polls' %}">{%trans "Polls"%}</a>
+      <a {%if tab == "event"%}class="is-active"{%endif%} href="{% url 'polls:list_event_planners' %}">{%trans "Event planners"%}</a>
+    </div>
+    <div class="panel-tabs">
+    {%if tab == "polls"%}
       <a {%if kind == "open"%}class="is-active"{%endif%} href="{% url 'polls:list_polls' %}">{%trans "Open"%}</a>
       <a {%if kind == "all"%}class="is-active"{%endif%} href="{% url 'polls:all_polls' %}">{%trans "All"%}</a>
       <a {%if kind == "closed"%}class="is-active"{%endif%} href="{% url 'polls:closed_polls' %}">{%trans "Closed"%}</a>
+    {%else%}
+      <a {%if kind == "open"%}class="is-active"{%endif%} href="{% url 'polls:list_event_planners' %}">{%trans "Open"%}</a>
+      <a {%if kind == "all"%}class="is-active"{%endif%} href="{% url 'polls:all_event_planners' %}">{%trans "All"%}</a>
+      <a {%if kind == "closed"%}class="is-active"{%endif%} href="{% url 'polls:closed_event_planners' %}">{%trans "Closed"%}</a>
+    {%endif%}
     </div>
     {# <div class="panel-block is-flex is-align-items-center is-justify-content-center">{%paginate page%}</div> #}
     {% for poll in polls_list %}
     <div class="panel-block">
-      <a class="subtitle is-size-5" href="{% url 'polls:poll_detail' poll.id %}">{%icon "vote"%} {{ poll.title }}</a> 
+      {%if tab == "polls"%}
+        {%url 'polls:poll_detail' poll.id as detail_url %}
+      {%else%}
+        {%url 'polls:event_planner_detail' poll.id as detail_url%}
+      {%endif%}
+      <a class="subtitle is-size-5" href="{{detail_url}}">{%icon "vote"%} {{ poll.title }}</a> 
       <span class="ml-auto is-size-7">({%trans "Created at"%}:<span class="tag">{{ poll.created_at|date:"SHORT_DATE_FORMAT" }}</span> 
         {%trans "Published at"%}: <span class="tag">{{ poll.pub_date|date:"SHORT_DATE_FORMAT" }}</span>, 
         {%trans "Closed at"%}: <span class="tag">{{ poll.close_date|date:"SHORT_DATE_FORMAT" }}</span>)</span>
       <div class="is-grouped ml-auto">
+        {%if tab == "polls"%}
+          {%url 'polls:vote' poll.id as vote_url%}
+        {%else%}
+          {%url 'polls:event_planner_vote' poll.id as vote_url%}
+        {%endif%}
         <a class="button is-primary is-responsive" aria-label="{%trans 'Vote'%}"
-          href="{%url 'polls:vote' poll.id%}" 
-          title="{%trans 'Vote'%}">
+           href="{{vote_url}}" title="{%trans 'Vote'%}">
           {%icon "vote"%} <span class="is-hidden-mobile">{%trans "Vote"%}</span>
         </a>
         {%if request.user == poll.owner%}
+        {%if tab == "polls"%}
+          {%url 'polls:update_poll' poll.id as update_url%}
+        {%else%}
+          {%url 'polls:update_event_planner' poll.id as update_url%}
+        {%endif%}
         <a class="button is-link is-responsive" aria-label="{%trans 'Update'%}"
-          href="{%url 'polls:update_poll' poll.id%}" 
+          href="{{update_url}}" 
           title="{%trans 'Update'%}">
           {%icon "update-poll"%} <span class="is-hidden-mobile">{%trans "Update"%}</span>
         </a>

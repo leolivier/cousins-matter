@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from cousinsmatter.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
+from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
 from members.models import Member
 from .models import Trove
 from .forms import TreasureForm

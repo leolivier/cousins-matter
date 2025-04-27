@@ -12,7 +12,7 @@ from captcha.fields import CaptchaField
 from cm_main.widgets import RichTextarea
 from .models import Member, Address, Family
 from .widgets import FieldLinkWrapper
-from cousinsmatter.utils import check_file_size
+from cm_main.utils import check_file_size
 
 
 class MemberFormMixin():

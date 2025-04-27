@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import RequestDataTooBig
 from django.utils.translation import gettext as _
 
-from cousinsmatter.utils import assert_request_is_ajax
+from cm_main.utils import assert_request_is_ajax
 from forum.views.views_follow import check_followers_on_comment
 from ..models import Message, Comment
 from ..forms import CommentForm

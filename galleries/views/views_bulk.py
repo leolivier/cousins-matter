@@ -19,7 +19,7 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
 
-from cousinsmatter.utils import redirect_to_referer
+from cm_main.utils import redirect_to_referer
 
 from ..models import Gallery, Photo
 from ..forms import BulkUploadPhotosForm

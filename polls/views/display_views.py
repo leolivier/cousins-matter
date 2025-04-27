@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from cousinsmatter.utils import assert_request_is_ajax
-from ..models import Poll, Question
+from cm_main.utils import assert_request_is_ajax
+from ..models import EventPlanner, Poll, Question
 
 
 class PollsListView(LoginRequiredMixin, generic.ListView):
@@ -21,24 +22,28 @@ class PollsListView(LoginRequiredMixin, generic.ListView):
   only_closed = False
   show_last = 25
   title = _("Open Polls")
+  type = "polls"
   kind = "open"
 
   def get_queryset(self):
     """
-    Return the last five published polls (not including those set to be
-    published in the future).
+    Returns the list of polls that will be displayed in the list view.
+
+    The filter depends on the class attributes only_published, show_closed and only_closed.
+    If only_published is True, only polls with close_date greater than or equal to the current time are included.
+    If show_closed is False, only polls with close_date not set or greater than or equal to the current time are included.
+    If only_closed is True, only polls with close_date less than or equal to the current time are included.
+    The list is ordered by the ordering class attribute, and only the first show_last items are returned.
     """
-    filter = {}
+    filter = Q()
     if self.only_published:
-      filter["pub_date__lte"] = timezone.now()
+      filter &= Q(pub_date__lte=timezone.now())
     if not self.show_closed:
-      filter["close_date__gte"] = timezone.now()
+      filter &= (Q(close_date__gte=timezone.now()) | Q(close_date__isnull=True))
     if self.only_closed:
-      filter["close_date__lte"] = timezone.now()
-    query_set = Poll.objects.filter(**filter).order_by(self.ordering)
-    result = query_set[:self.show_last] if self.show_last else query_set
-    # for poll in result:
-    #   print(",".join(m.__str__() for m in poll.closed_list.all()))
+      filter &= Q(close_date__lte=timezone.now())
+    query_set = self.model.objects.filter(filter).order_by(self.ordering)
+    result = query_set[:(self.show_last or 250)]
     # print(filter, result, self.__dict__)
     return result
 
@@ -46,7 +51,15 @@ class PollsListView(LoginRequiredMixin, generic.ListView):
       context = super().get_context_data(**kwargs)
       context['title'] = self.title
       context['kind'] = self.kind
+      context['tab'] = self.type
       return context
+
+
+class EventPlannersListView(PollsListView):
+  "View for listing published EventPlanners."
+  model = EventPlanner
+  title = _("Open Event Planners")
+  type = "event"
 
 
 class AllPollsListView(PollsListView):
@@ -56,6 +69,13 @@ class AllPollsListView(PollsListView):
   show_last = None
   title = _("All Polls")
   kind = "all"
+
+
+class AllEventPlannersListView(AllPollsListView):
+  "View for listing all EventPlanners."
+  model = EventPlanner
+  title = _("All Event Planners")
+  type = "event"
 
 
 class ClosedPollsListView(PollsListView):
@@ -69,6 +89,13 @@ class ClosedPollsListView(PollsListView):
   kind = "closed"
 
 
+class ClosedEventPlannersListView(ClosedPollsListView):
+  "View for listing closed EventPlanners."
+  model = EventPlanner
+  title = _("Closed Event Planners")
+  type = "event"
+
+
 class PollDetailView(LoginRequiredMixin, generic.DetailView):
     "View for displaying a Poll, its Questions and the already given Answers."
     model = Poll
@@ -79,7 +106,13 @@ class PollDetailView(LoginRequiredMixin, generic.DetailView):
         poll = self.object
         context['poll'] = poll
         context['questions'] = poll.get_results(self.request.user)
+        context['type'] = self.model.__name__.lower()
         return context
+
+
+class EventPlannerDetailView(PollDetailView):
+    "View for displaying an EventPlanner, its Questions and the already given Answers."
+    model = EventPlanner
 
 
 @login_required

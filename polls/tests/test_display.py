@@ -36,13 +36,18 @@ class TestDisplayPollInfo(PollTestMixin):
                 case Question.DATE_QUESTION:
                     result = "<br>".join([formats.date_format(timezone.localtime(a.answer), "DATETIME_FORMAT")
                                           for a in answers])
-                case Question.MULTICHOICES_QUESTION:
+                case Question.OPENTEXT_QUESTION:
+                    result = "<br>".join((a.answer for a in answers))
+                case Question.SINGLECHOICE_QUESTION:
                     choice_results = {}
                     for choice in question.possible_choices:
                         choice_results[choice] = sum(1 for a in answers if a.answer == choice)/len(answers)
                     result = '<br>'.join([f"{choice}: {choice_results[choice]:.1%}" for choice in question.possible_choices])
-                case Question.OPENTEXT_QUESTION:
-                    result = "<br>".join((a.answer for a in answers))
+                case Question.MULTICHOICES_QUESTION:
+                    choice_results = {}
+                    for choice in question.possible_choices:
+                        choice_results[choice] = sum(1 for a in answers if choice in a.answer)/len(answers)
+                    result = '<br>'.join([f"{choice}: {choice_results[choice]:.1%}" for choice in question.possible_choices])
 
             line = f"""
 <div class="cell has-text-centered my-auto has-background-link has-text-light is-col-span-3">
@@ -82,10 +87,12 @@ class TestDisplayPollInfo(PollTestMixin):
                     result = "0%"
                 case Question.DATE_QUESTION:
                     result = "-"
-                case Question.MULTICHOICES_QUESTION:
-                    result = '<br>'.join([f"{choice}: 0%" for choice in question.possible_choices])
                 case Question.OPENTEXT_QUESTION:
                     result = '-'
+                case Question.SINGLECHOICE_QUESTION:
+                    result = '<br>'.join([f"{choice}: 0%" for choice in question.possible_choices])
+                case Question.MULTICHOICES_QUESTION:
+                    result = '<br>'.join([f"{choice}: 0%" for choice in question.possible_choices])
             line = f"""
 <div class="cell has-text-centered my-auto has-background-link has-text-light is-col-span-3">
   {icon(question_icon(question.question_type))}
@@ -105,7 +112,7 @@ class TestPollListsView(PollTestMixin):
                          pub_days=-1, duration=2)
         self.create_poll("published today, not yet closed", "Test poll 2",
                          pub_days=0, duration=2)
-        self.create_poll("not published, not yet closed", "Test poll 3",
+        self.create_poll("not published yet, not yet closed", "Test poll 3",
                          pub_days=1, duration=2)
         self.create_poll("published and closed", "Test poll 4",
                          pub_days=-5, duration=2)
@@ -115,31 +122,28 @@ class TestPollListsView(PollTestMixin):
         return super().tearDown()
 
     def test_display_polls_list(self):
-
         response = self.client.get(reverse("polls:list_polls"), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "polls/polls_list.html")
-        self.assertNotContains(response, "not published, not yet closed")
+        self.assertNotContains(response, "not published yet, not yet closed")
         self.assertContains(response, "published, not yet closed")
         self.assertContains(response, "published today, not yet closed")
         self.assertNotContains(response, "published and closed")
 
     def test_display_all_polls(self):
-
         response = self.client.get(reverse("polls:all_polls"), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "polls/polls_list.html")
-        self.assertContains(response, "not published, not yet closed")
+        self.assertContains(response, "not published yet, not yet closed")
         self.assertContains(response, "published, not yet closed")
         self.assertContains(response, "published today, not yet closed")
         self.assertContains(response, "published and closed")
 
     def test_display_closed_polls(self):
-
         response = self.client.get(reverse("polls:closed_polls"), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "polls/polls_list.html")
-        self.assertNotContains(response, "not published, not yet closed")
+        self.assertNotContains(response, "not published yet, not yet closed")
         self.assertNotContains(response, "published, not yet closed")
         self.assertNotContains(response, "published today, not yet closed")
         self.assertContains(response, "published and closed")

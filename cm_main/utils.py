@@ -1,8 +1,8 @@
 # util functions for cousinsmatter app
-
 import math
 import os
 from contextlib import contextmanager
+from datetime import datetime
 from io import BytesIO
 import shutil
 from PIL import Image
@@ -18,7 +18,8 @@ from django.db import connections
 from django.forms import ValidationError
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import gettext as _
+from django.utils import formats
+from django.utils.translation import gettext as _, get_language, gettext_lazy
 
 from cousinsmatter.context_processors import override_settings
 
@@ -195,3 +196,85 @@ def test_media_root_decorator(test_file):
         cls.tearDown = tearDown
         return cls
     return decorator
+
+
+def allowed_date_formats():
+    """
+    Returns a list of date formats that are expected to be valid for the current language.
+    The formats are those that are expected for DATETIME_INPUT_FORMATS in the current locale.
+    Formats that include seconds or microseconds are removed from the list.
+    """
+    current_language = get_language()  # Retrieves the active locale, e.g. 'fr'.
+    # Retrieves the list of expected date formats for the current locale
+    # Ex for 'fr': ['%d/%m/%Y', '%d.%m.%Y', '%d-%m-%Y', ...]
+    date_formats = formats.get_format('DATETIME_INPUT_FORMATS', lang=current_language)
+    # remove formats with seconds and microseconds
+    date_formats = [date_format for date_format in date_formats 
+                    if not date_format.endswith('%f') and not date_format.endswith('%S')]
+
+    return date_formats
+
+
+def parse_locale_date(date_string_to_parse):
+
+    parsed_datetime = None
+    date_formats = allowed_date_formats()
+
+    for date_format in date_formats:
+        try:
+            # Try parsing the string with the current format
+            parsed_datetime = datetime.strptime(date_string_to_parse, date_format)
+            # If we succeed, we have our date and stop the loop.
+            break
+        except (ValueError, TypeError):
+            # If the format doesn't match, continue with the next one
+            continue
+
+    if parsed_datetime:
+        return parsed_datetime
+    else:
+        translated_date_formats = [translate_date_format(date_format) for date_format in date_formats]
+        raise ValidationError(
+            _("Date '%(date_string_to_parse)s' does not match any expected format: %(translated_date_formats)s.")
+            % {'date_string_to_parse': date_string_to_parse, 'translated_date_formats': translated_date_formats})
+
+
+# Listing strftime format codes for makemessages
+FORMAT_CODE_DESCRIPTIONS = {
+    "%d": gettext_lazy("%%d"), "%m": gettext_lazy("%m"), "%Y": gettext_lazy("%Y"), "%y": gettext_lazy("%y"),
+    "%H": gettext_lazy("%H"), "%h": gettext_lazy("%h"), "%p": gettext_lazy("%p"), "%M": gettext_lazy("%M"),
+    "%S": gettext_lazy("%S"),
+}
+
+
+def translate_date_format(format_string):
+    """
+    Translates a date/time format string (strftime) into a description
+    in the current locale.
+    """
+    translated_parts = []
+    i = 0
+    while i < len(format_string):
+        if format_string[i] == '%':
+            if i + 1 < len(format_string):
+                code = format_string[i:i+2]
+                # Handle the double percentage '%%' which means a literal '%'.
+                if code == '%%':
+                    translated_parts.append('%')
+                elif code in FORMAT_CODE_DESCRIPTIONS:
+                    # Add translated description
+                    translated_parts.append(str(FORMAT_CODE_DESCRIPTIONS[code]))
+                else:
+                    # If the code is not in our dictionary, add it as is
+                    translated_parts.append(code)
+                i += 2
+            else:
+                # A single '%' at the end of the string
+                translated_parts.append('%')
+                i += 1
+        else:
+            # Add literal characters as is
+            translated_parts.append(format_string[i])
+            i += 1
+
+    return "".join(translated_parts)

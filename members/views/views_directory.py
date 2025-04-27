@@ -18,7 +18,7 @@ from django.views import generic
 from django.utils.text import slugify
 from django.conf import settings
 
-from cousinsmatter.utils import PageOutOfBounds, Paginator
+from cm_main.utils import PageOutOfBounds, Paginator
 
 from ..models import Member
 

@@ -1,11 +1,23 @@
 {% extends 'cm_main/base.html' %}
 {% load i18n cm_tags polls_tags %}
-{% block title %}{%title _("Poll Detail") %}{% endblock %}
+{% block title %}
+	{%if type == "poll"%}
+		{%title _("Poll Detail") %}
+	{%else%}
+		{%title _("Event Planner Detail") %}
+	{%endif%}
+{% endblock %}
 {% block content %}
 <div class="container">
 	<div class="card">
 		<div class="card-header has-background-light is-flex is-align-items-center is-justify-content-center">
-			<span class="is-flex-grow-1 has-text-centered title mt-5">{%title _("Poll Detail") %}</span>
+			<span class="is-flex-grow-1 has-text-centered title mt-5">
+			{%if type == "poll"%}
+				{%title _("Poll Detail") %}
+			{%else%}
+				{%title _("Event Planner Detail") %}
+			{%endif%}
+			</span>
 			{%with _("Back to Polls") as back_label%}
 			<a class="button is-link" href="{%url 'polls:list_polls'%}" aria-label="{{back_label}}" title="{{back_label}}">
 				{%icon "back"%} <span class="is-hidden-mobile">{{back_label}}</span>
@@ -64,13 +76,23 @@
 		</div>
 		<div class="card-footer is-flex is-align-items-center is-justify-content-center">
 			{%with _("Vote") as vote_label%}
-			<a class="button is-primary" href="{%url 'polls:vote' poll.id%}" aria-label="{{ vote_label}}" title="{{ vote_label}}">
+			{%if type == "poll"%}
+				{%url 'polls:vote_poll' poll.id as vote_url%}
+			{%else%}
+				{%url 'polls:event_planner_vote' poll.id as vote_url%}
+			{%endif%}
+			<a class="button is-primary" href="{{vote_url}}" aria-label="{{ vote_label}}" title="{{ vote_label}}">
 				{%icon "vote"%} <span class="is-hidden-mobile">{{ vote_label}}</span>
 			</a>
 			{%endwith%}
 			{%if poll.owner == request.user%}
-			{%with _("Update Poll") as update_label%}
-			<a class="button is-link ml-2" href="{%url 'polls:update_poll' poll.id%}" aria-label="{{update_label}}" title="{{update_label}}">
+			{%with _("Update") as update_label%}
+			{%if type == "poll"%}
+				{%url 'polls:update_poll' poll.id as update_url%}
+			{%else%}
+				{%url 'polls:update_event_planner' poll.id as update_url%}
+			{%endif%}
+			<a class="button is-link ml-2" href="{{update_url}}" aria-label="{{update_label}}" title="{{update_label}}">
 				{%icon "update-poll" %} <span class="is-hidden-mobile ml-3">{{update_label}}</span>
 			</a>
 			{%endwith%}

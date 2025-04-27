@@ -1,5 +1,5 @@
 from django.urls import reverse
-from cousinsmatter.utils import create_test_image, test_media_root_decorator
+from cm_main.utils import create_test_image, test_media_root_decorator
 from members.tests.tests_member_base import MemberTestCase
 from ..models import Trove
 

@@ -12,7 +12,7 @@ from django.utils.translation import gettext as _, get_language
 
 from cm_main.followers import check_followers
 from cm_main.tests import get_absolute_url
-from cousinsmatter.utils import is_testing
+from cm_main.utils import is_testing
 from .models import ChatMessage, ChatRoom
 from members.models import Member
 

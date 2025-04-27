@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from cm_main.templatetags.cm_tags import icon
-from cousinsmatter.utils import create_test_image
+from cm_main.utils import create_test_image
 from galleries.models import Gallery, Photo
 from galleries.views.views_gallery import GalleryCreateView, GalleryDetailView, GalleryUpdateView
 from members.tests.tests_member_base import TestLoginRequiredMixin

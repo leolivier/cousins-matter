@@ -14,7 +14,7 @@ from urllib.parse import unquote
 
 from members.models import Member
 from ..models import ChatMessage, ChatRoom, PrivateChatRoom
-from cousinsmatter.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
+from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
 
 
 logger = logging.getLogger(__name__)

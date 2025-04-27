@@ -4,10 +4,14 @@
 	<p class="field"><label>{%trans "Owner"%} : </label>{{poll.owner}}</p>
 	<p class="content ml-auto">
 	{%with dir=direction|default:"vertical" %}
-		{%trans "Created at"%}:<span class="tag">{{ poll.created_at|date:"SHORT_DATETIME_FORMAT" }}</span>{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
-		{%trans "Published at"%}:<span class="tag">{{ poll.pub_date|date:"SHORT_DATETIME_FORMAT" }}</span>{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
-		{%trans "Closed at"%}:<span class="tag">{{ poll.close_date|date:"SHORT_DATETIME_FORMAT" }}</span>{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
-		{%trans "Open to"%}:<span class="tag">{{ poll.get_open_to_display}}</span>
+		{%trans "Created at"%}: <span class="tag">{{ poll.created_at|date:"SHORT_DATETIME_FORMAT" }}</span>{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
+		{%trans "Published at"%}: <span class="tag">{{ poll.pub_date|date:"SHORT_DATETIME_FORMAT" }}</span>{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
+		{%trans "Closed at"%}:
+		{%if poll.close_date%}<span class="tag">{{ poll.close_date|date:"SHORT_DATETIME_FORMAT" }}</span>
+		{%else%}-
+		{%endif%}
+		{%if dir == "vertical"%}<br>{%else%}&nbsp;{%endif%}
+		{%trans "Open to"%}: <span class="tag">{{ poll.get_open_to_display}}</span>
 		{%if poll.open_to == "lst"%}(
 			{%for m in poll.closed_list.all%}
 				<span class="content is-size-7">{{ m }}{%if not forloop.last%}, {%endif%}</span>
@@ -15,5 +19,10 @@
 		){%endif%}
 	{%endwith%}
 	</p>
-	<p class="content">{{ poll.description }}</p>
+	<p class="content">
+		{%if poll.location%} {%trans "Location"%}:<span class="tag">{{ poll.location }}</span><br>{%endif%}
+		{%trans "Chosen date"%}: {%if poll.chosen_date%}<span class="tag">{{ poll.chosen_date }}</span>{%else%}-{%endif%}
+		<hr>
+		{{ poll.description }}
+	</p>
 </div>

@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
-"POT-Creation-Date: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-27 12:19+0200\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -62,6 +62,14 @@ msgstr "Es-tu sûr de vouloir supprimer la page \"%(title)s\" ?"
 #: templates/pages/page_tree.html:3 templates/pages/page_tree.html:7
 msgid "Pages Tree"
 msgstr "Arbre des Pages"
+
+#: templatetags/pages_tags.py:83
+msgid "Public"
+msgstr "Public"
+
+#: templatetags/pages_tags.py:83
+msgid "Private"
+msgstr "Privé"
 
 #: tests/test_base.py:34 views.py:29 views.py:50
 #, python-format

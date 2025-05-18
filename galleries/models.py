@@ -1,21 +1,14 @@
 import logging
 import os
-import sys
-from io import BytesIO
-from PIL import Image, ImageOps, ImageFile
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.template.defaultfilters import slugify
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.urls import reverse
-from cm_main.utils import check_file_size
+from cm_main.utils import check_file_size, create_thumbnail
 
 logger = logging.getLogger(__name__)
-
-# issue #120 try to avoid error about truncated images when creating thumbnails
-ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 def get_path(instance, filename, subdir=None):
@@ -90,30 +83,21 @@ class Photo(models.Model):
     super().save(*args, **kwargs)
 
     try:
-      # create thumbnail
-      tns = settings.GALLERIES_THUMBNAIL_SIZE
-      output_thumb = BytesIO()
-      filename = os.path.basename(self.image.path)
-      file, ext = os.path.splitext(filename)
-      with Image.open(self.image.path) as img:
-        if img.height > tns or img.width > tns:
-          size = tns, tns
-          img.thumbnail(size)
-          img = ImageOps.exif_transpose(img)  # avoid image rotating
-          img.save(output_thumb, format='JPEG', quality=90)
-          size = sys.getsizeof(output_thumb)
-          self.thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.jpg",
-                                                'image/jpeg', size, None)
-          logger.debug(f"Resized and saved thumbnail for {self.image.path} to {self.thumbnail.path}, size={size}")
-        else:  # small photos are used directly as thumbnails
-          self.thumbnail = self.image
-
+      self.thumbnail = create_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
       super().save(force_update=True, update_fields=['thumbnail'])
 
     except Exception as e:
       # issue #120: if any exception during the thumbnail creation process, remove the photo from the database
       self.delete()
       raise ValidationError(f"Error during saving photo: {e}")
+
+  def delete(self, *args, **kwargs):
+      # delete the image and the thumbnail if they exist
+      if self.image:
+          self.image.delete(False)
+      if self.thumbnail:
+        self.thumbnail.delete(False)
+      super().delete(*args, **kwargs)
 
 
 class Gallery(models.Model):

@@ -1,11 +1,12 @@
 # util functions for cousinsmatter app
+import logging
 import math
 import os
 from contextlib import contextmanager
 from datetime import datetime
 from io import BytesIO
 import shutil
-from PIL import Image
+from PIL import Image, ImageOps, ImageFile
 from pathlib import PosixPath
 # import pprint
 import sys
@@ -14,7 +15,7 @@ from urllib.parse import urlencode
 
 from django.core import paginator
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.db import connections
+from django.db import connections, models
 from django.forms import ValidationError
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -23,6 +24,11 @@ from django.utils.translation import gettext as _, get_language, gettext_lazy
 
 from cousinsmatter.context_processors import override_settings
 
+
+# issue #120 try to avoid error about truncated images when creating thumbnails
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+logger = logging.getLogger(__name__)
 
 # terrible hack to check if we are in testing mode!!!
 IS_TESTING = None
@@ -148,6 +154,16 @@ def remove_accents(input_str):
 
 
 def create_image(image_file, content_type='image/jpeg'):
+    """
+    Create a Django InMemoryUploadedFile object from a local image file.
+
+    Args:
+        image_file: local image file
+        content_type: MIME type of the image file (default: 'image/jpeg')
+
+    Returns:
+        InMemoryUploadedFile ready to be processed by Django
+    """
     membuf = BytesIO()
     with Image.open(image_file) as img:
       img.save(membuf, format='JPEG', quality=90)
@@ -278,3 +294,34 @@ def translate_date_format(format_string):
             i += 1
 
     return "".join(translated_parts)
+
+
+def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFile:
+    """
+    Creates a thumbnail for a photo.
+
+    If the photo is larger than settings.GALLERIES_THUMBNAIL_SIZE, it is resized
+    to that size and saved as a new file. Otherwise, the original photo is used
+    as the thumbnail.
+
+    :param image: The image to create a thumbnail for.
+    :param size: The requested size of the thumbnail. If the image is larger
+        than this, it is resized.
+    :return: An InMemoryUploadedFile representing the thumbnail.
+    """
+    output_thumb = BytesIO()
+    filename = os.path.basename(image.path)
+    file, ext = os.path.splitext(filename)
+    with Image.open(image.path) as img:
+        if img.height > size or img.width > size:
+            img.thumbnail((size, size))
+            img = ImageOps.exif_transpose(img)  # avoid image rotating
+            # use WEBP format for thumbnails instead of JPEG to avoid loss of transparency
+            img.save(output_thumb, format='WEBP', quality=90)
+            size = sys.getsizeof(output_thumb)
+            thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.webp",
+                                             'image/webp', size, None)
+            logger.debug(f"Resized and saved thumbnail for {image.path}, size={size}")
+        else:  # small photos are used directly as thumbnails
+            thumbnail = image
+    return thumbnail

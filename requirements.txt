@@ -1,7 +1,7 @@
 django~=5.2
 pillow~=11.2.1
 django-crispy-forms~=2.4
-crispy-bulma~=0.11.0
+crispy-bulma~=0.12.0
 django-environ~=0.12.0
 django-email-validation~=2.1.1
 django-simple-captcha~=0.6.2

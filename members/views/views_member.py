@@ -158,23 +158,24 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
         return redirect_to_referer(request)
 
 
+def _can_edit_member(request, member):
+    if request.user.is_superuser:
+        return True
+    if member.member_manager is None:
+        return (member.id == request.user.id)
+    else:
+        return (member.member_manager.id == request.user.id)
+
+
 class EditMemberView(LoginRequiredMixin, generic.UpdateView):
     template_name = "members/members/member_upsert.html"
     title = _("Update Member Details")
     success_message = _("Member successfully updated")
     is_profile_view = False
 
-    def _can_edit(self, request, member):
-        if request.user.is_superuser:
-            return True
-        if member.member_manager is None:
-            return (member.id == request.user.id)
-        else:
-            return (member.member_manager.id == request.user.id)
-
     def get(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
-        if not self._can_edit(request, member):
+        if not _can_edit_member(request, member):
             messages.error(request, _('You do not have permission to edit this member.'))
             return redirect("members:detail", member.id)
 
@@ -188,7 +189,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
 
     def post(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
-        if not self._can_edit(request, member):
+        if not _can_edit_member(request, member):
             messages.error(request, _('You do not have permission to edit this member.'))
             return redirect("members:detail", member.id)
 
@@ -226,6 +227,9 @@ class EditProfileView(EditMemberView):
 
 def delete_member(request, pk):
     member = get_object_or_404(Member, pk=pk)
+    if not _can_edit_member(request, member):
+        messages.error(request, _('You do not have permission to delete this member.'))
+        return redirect("members:detail", member.id)
     member.delete()
     messages.info(request, _("Member deleted"))
     return redirect(reverse("members:members"))

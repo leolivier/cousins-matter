@@ -44,6 +44,8 @@ class GalleryDetailView(LoginRequiredMixin, generic.DetailView):
                                                         "page_num": page,
                                                         "page_size": page_size})
 
+  # TODO: every member can edit any gallery ???
+
 
 class GalleryTreeView(LoginRequiredMixin, generic.ListView):
   template_name = "galleries/galleries_tree.html"
@@ -57,6 +59,7 @@ class GalleryTreeView(LoginRequiredMixin, generic.ListView):
 @login_required
 def delete_gallery(request, pk):
   gallery = get_object_or_404(Gallery, pk=pk)
+  # TODO: every member can delete any gallery ???
   gallery.delete()
   messages.success(request, _("Gallery deleted"))
   return redirect("galleries:galleries")

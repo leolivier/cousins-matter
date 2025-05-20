@@ -69,7 +69,7 @@ example:
 			<p class="modal-card-title"></p>
 			<button class="delete" aria-label="close"></button>
 		</header>
-		<form method="post">
+		<form method="post" {%if multipart%}enctype="multipart/form-data"{%endif%}>
 			{% csrf_token %}
 			<section class="modal-card-body">
 				<div class="notification is-warning is-user-warning" hidden="true"></div>

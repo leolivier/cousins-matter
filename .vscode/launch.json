@@ -26,7 +26,7 @@
 				"--failfast",
 				"-v",
 				"2",
-				"galleries.tests.tests_photo"
+				"classified_ads.tests.ClassifiedAdCreateTestCase.test_create_ad"
 			],
 			"django": true,
 			"autoStartBrowser": false,

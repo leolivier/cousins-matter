@@ -1,0 +1,69 @@
+{% extends 'cm_main/base.html' %}
+{% load i18n cm_tags static%}
+{% block title %}{% title _("Classified Ad Detail") %}{% endblock %}
+{% block header %}
+<link rel="stylesheet" href="{% static 'galleries/css/galleries.css' %}">
+<script src="{% static 'classified_ads/js/classified_ads.js' %}"></script>
+<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
+{% endblock%}
+{% block content %}
+{%with ad=object%}
+<div class="container">
+  <div class="panel">
+    <div class="panel-heading is-flex">
+			{%icon "classified-ad" "is-medium mr-1"%}
+			<span class="is-flex-grow-1">{{ ad.title }}</span>
+			<span>
+        {% blocktranslate with owner=ad.owner date_created=ad.date_created|date:"SHORT_DATETIME_FORMAT" trimmed %}
+        Added by {{ owner }} on {{ date_created }}
+        {% endblocktranslate %}
+      </span>
+		</div>
+    <div class="panel-block is-flex">
+			<div class="fixed-grid has-3-cols is-flex-grow-1">
+				<div class="grid">
+					<div class="cell"><strong>{% trans "Category" %}:</strong> {{ ad.display_category }}</div>
+					<div class="cell"><strong>{% trans "Subcategory" %}:</strong> {{ ad.display_subcategory }}</div>
+					<div class="cell"><strong>{% trans "State" %}:</strong> {{ ad.display_item_status|ljust:20 }}</div>
+				</div>
+			</div>
+    </div>
+    <div class="panel-block">
+      {{ ad.description|safe }}
+    </div>
+		<div class="panel-block is-flex">
+			<div class="fixed-grid has-3-cols is-flex-grow-1">
+				<div class="grid">
+					<div class="cell"><strong>{% trans "Price" %}:</strong> {{ ad.price }}</div>
+					<div class="cell"><strong>{% trans "Location" %}:</strong> {{ ad.location }}</div>
+					<div class="cell"><strong>{% trans "Shipping" %}:</strong> {{ ad.display_shipping_method }}</div>
+				</div>
+			</div>
+		</div>
+		{%include "classified_ads/gallery.html" with edit_gallery=false %}
+		{% if user == ad.owner %}
+		<div class="panel-block">
+			<div class="buttons is-centered mx-auto">
+				<a class="button" href="{% url 'classified_ads:update' ad.id %}">{%icon "edit" "mr-1" %}{% trans "Update Ad" %}</a>
+				{% autoescape off %}
+				{%blocktranslate asvar delete_msg with ad_name=ad.title|force_escape trimmed %}
+					Are you sure you want to delete the classified ads "{{ad_name}}"
+				{%endblocktranslate%}
+				{% trans "Delete Ad" as button_text %}
+				{%url 'classified_ads:delete' ad.pk as delete_url%}
+				{%trans 'Classified ads deletion' as delete_title%}
+				{%include "cm_main/common/confirm-delete-modal.html" with button_text=button_text button_class="is-warning" ays_title=delete_title ays_msg=delete_msg|force_escape action_url=delete_url expected_value=ad.title|escape %}
+				{% endautoescape %}
+			</div>
+		</div>
+		{% endif %}
+  </div>
+</div>
+
+{%if ad.owner == user %}
+	{%include "cm_main/common/modal_form.html" with modal_id="delete-item-modal" %}
+{%endif%}
+
+{%endwith%}
+{% endblock content %}
+

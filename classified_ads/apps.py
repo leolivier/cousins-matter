@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ClassifiedConfig(AppConfig):
+class ClassifiedAdsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'classified'
+    name = 'classified_ads'

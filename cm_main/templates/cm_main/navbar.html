@@ -8,8 +8,7 @@
 				"{{settings.SITE_LOGO}}"
 			{%else%}
 				"{% static settings.SITE_LOGO %}"
-			{%endif%}
-			width="112" height="28">
+			{%endif%}>
 		</a>
 
 		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
@@ -57,6 +56,10 @@
 				{%navbar_item polls_url _("Polls") "vote" %}
 			</div>
 
+			<div class="navbar-item has-dropdown is-hoverable">
+				{% url 'classified_ads:list' as ads_url%}
+				{%navbar_item ads_url _("Classified Ads") "classified-ads" %}
+			</div>
 		</div>
 
 		<div class="navbar-end">

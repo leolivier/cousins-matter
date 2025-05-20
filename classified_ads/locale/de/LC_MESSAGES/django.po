@@ -1,0 +1,498 @@
+# German Translations for Classified Ads app.
+# Copyright (C) 2025 Olivier LEVILLAIN
+# This file is distributed under the same license as the application.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Cousins Matter 1.7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-20 11:37+0200\n"
+"PO-Revision-Date: 2025-05-20 11:37+0200\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: German <LL@li.org>\n"
+"Language: DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: categories.py:5
+msgid "Real estate"
+msgstr "Immobilien"
+
+#: categories.py:7
+msgid "Rental"
+msgstr "Miete"
+
+#: categories.py:8
+msgid "Sale"
+msgstr "Verkauf"
+
+#: categories.py:9
+msgid "House"
+msgstr "Haus"
+
+#: categories.py:10
+msgid "Apartment"
+msgstr "Wohnung"
+
+#: categories.py:11
+msgid "Land"
+msgstr "Garten"
+
+#: categories.py:12
+msgid "Commercial"
+msgstr "Geschäft"
+
+#: categories.py:13
+msgid "Collective Housing"
+msgstr "Mietwohnungen"
+
+#: categories.py:14 categories.py:27 categories.py:34 categories.py:47
+#: categories.py:55 categories.py:65 categories.py:78 categories.py:93
+#: categories.py:108 categories.py:124 categories.py:128 categories.py:133
+msgid "Other"
+msgstr "Sonstiges"
+
+#: categories.py:18
+msgid "Vehicles"
+msgstr "Fahrzeuge"
+
+#: categories.py:20
+msgid "Cars"
+msgstr "Auto"
+
+#: categories.py:21
+msgid "Motorcycles"
+msgstr "Motorrad"
+
+#: categories.py:22
+msgid "Bicycles"
+msgstr "Fahrrad"
+
+#: categories.py:23
+msgid "Boats"
+msgstr "Boot"
+
+#: categories.py:24
+msgid "Trucks"
+msgstr "LKW"
+
+#: categories.py:25
+msgid "Scooters"
+msgstr "Scooter"
+
+#: categories.py:26
+msgid "Caravan"
+msgstr "Wohnmobile"
+
+#: categories.py:31
+msgid "Holidays"
+msgstr "Urlaub"
+
+#: categories.py:33
+msgid "Seasonal Rental"
+msgstr " saisonliche Miete"
+
+#: categories.py:38
+msgid "Job offers"
+msgstr "Jobangebote"
+
+#: categories.py:40
+msgid "Temporary Job"
+msgstr "Temporaerer Job"
+
+#: categories.py:41
+msgid "Open Ended Job"
+msgstr "Unendlicher Job"
+
+#: categories.py:42
+msgid "Fixed-term contract job offers"
+msgstr "Vertragsjobangebote"
+
+#: categories.py:43
+msgid "Internship"
+msgstr "Praktikum"
+
+#: categories.py:44
+msgid "Freelance"
+msgstr "Freelance"
+
+#: categories.py:45
+msgid "Professional Training"
+msgstr "Berufsausbildung"
+
+#: categories.py:46
+msgid "Volunteering"
+msgstr "Freiwilligung"
+
+#: categories.py:51
+msgid "Services"
+msgstr "Dienstleistungen"
+
+#: categories.py:53
+msgid "Home Services"
+msgstr "Hausdienstleistungen"
+
+#: categories.py:54
+msgid "Professional Services"
+msgstr "Berufsdienstleistungen"
+
+#: categories.py:59
+msgid "Mode"
+msgstr "Mode"
+
+#: categories.py:61
+msgid "Clothes"
+msgstr "Kleidung"
+
+#: categories.py:62
+msgid "Shoes"
+msgstr "Schuhe"
+
+#: categories.py:63 categories.py:105
+msgid "Accessories"
+msgstr "Accessoires"
+
+#: categories.py:64
+msgid "Jewelry"
+msgstr "Schmuck"
+
+#: categories.py:69
+msgid "Home"
+msgstr "Haus"
+
+#: categories.py:71
+msgid "Furniture"
+msgstr "Möbel"
+
+#: categories.py:72
+msgid "Decor"
+msgstr "Erzierung"
+
+#: categories.py:73
+msgid "Household Appliances"
+msgstr "Haushaltsgeräte"
+
+#: categories.py:74
+msgid "Tableware"
+msgstr "Teller"
+
+#: categories.py:75
+msgid "Household linen"
+msgstr "Haushaltswäsche"
+
+#: categories.py:76
+msgid "DIY tools and equipment"
+msgstr "Handwerkszeuge"
+
+#: categories.py:77
+msgid "Garden tools and equipment, plants and seeds"
+msgstr "Gartenzeuge und Pflanzen"
+
+#: categories.py:82
+msgid "Family"
+msgstr "Familie"
+
+#: categories.py:84
+msgid "Baby equipment"
+msgstr "Babyzeuge"
+
+#: categories.py:85
+msgid "Baby clothes"
+msgstr "Babykleidung"
+
+#: categories.py:86
+msgid "Children's furniture"
+msgstr "Kindermöbel"
+
+#: categories.py:87
+msgid "Children's clothes"
+msgstr "Kinderkleidung"
+
+#: categories.py:88
+msgid "Maternity clothes"
+msgstr "Mutterkleidung"
+
+#: categories.py:89
+msgid "Children's shoes"
+msgstr "Kinderstiefel"
+
+#: categories.py:90
+msgid "Children's accessories"
+msgstr "Kinderaccessoires"
+
+#: categories.py:91
+msgid "Toys"
+msgstr "Spiele"
+
+#: categories.py:92
+msgid "Baby sitting"
+msgstr "Sitter"
+
+#: categories.py:97
+msgid "Electronics"
+msgstr "Elektronik"
+
+#: categories.py:99
+msgid "Computers"
+msgstr "Computer"
+
+#: categories.py:100
+msgid "Cameras"
+msgstr "Kameras"
+
+#: categories.py:101
+msgid "Televisions"
+msgstr "TVs"
+
+#: categories.py:102
+msgid "Audio"
+msgstr "Audio"
+
+#: categories.py:103
+msgid "Phones"
+msgstr "Telefonen"
+
+#: categories.py:104
+msgid "Game Consoles"
+msgstr "Spielkonsole"
+
+#: categories.py:106
+msgid "eBook Readers & Tablets"
+msgstr "eBook Leser & Tablets"
+
+#: categories.py:107
+msgid "Video Games"
+msgstr "Video Spiele"
+
+#: categories.py:112
+msgid "Leisure"
+msgstr "Freizeit"
+
+#: categories.py:114
+msgid "Books"
+msgstr "Bücher"
+
+#: categories.py:115
+msgid "Movies"
+msgstr "Filme"
+
+#: categories.py:116
+msgid "Music"
+msgstr "Musik"
+
+#: categories.py:117
+msgid "Sport"
+msgstr "Sport"
+
+#: categories.py:118
+msgid "Games"
+msgstr "Spiele"
+
+#: categories.py:119
+msgid "Collectibles"
+msgstr "Sammelobjekte"
+
+#: categories.py:120
+msgid "Tickets"
+msgstr "Tickets"
+
+#: categories.py:121
+msgid "Musical Instruments"
+msgstr "Musikinstrumente"
+
+#: categories.py:122
+msgid "Models"
+msgstr "Modelle"
+
+#: categories.py:123
+msgid "Antiques"
+msgstr "Antiken"
+
+#: categories.py:130
+msgid "Professional equipment"
+msgstr "Berufsausrüstung"
+
+#: categories.py:131
+msgid "Pets"
+msgstr "Tiere"
+
+#: categories.py:132
+msgid "Donations"
+msgstr "Spenden"
+
+#: models.py:50
+msgid "New"
+msgstr "Neu"
+
+#: models.py:51
+msgid "Like New"
+msgstr "Als neu"
+
+#: models.py:52
+msgid "Very Good"
+msgstr "Sehr gut"
+
+#: models.py:53
+msgid "Good"
+msgstr "Gut"
+
+#: models.py:54
+msgid "Fair"
+msgstr "Gering"
+
+#: models.py:55
+msgid "Poor"
+msgstr "Schlecht"
+
+#: models.py:56
+msgid "For Parts/Not Working"
+msgstr "Teile/Nicht funktioniert"
+
+#: models.py:62
+msgid "For Sale"
+msgstr "Verkauf"
+
+#: models.py:63
+msgid "Sold"
+msgstr "Verkauft"
+
+#: models.py:64
+msgid "Closed"
+msgstr "Geschlossen"
+
+#: models.py:67
+msgid "Pickup only"
+msgstr "Nur abholen"
+
+#: models.py:68
+msgid "Shipping only"
+msgstr "Nur versandt"
+
+#: models.py:69
+msgid "Pickup or Shipping"
+msgstr "Abholen oder versandt"
+
+#: models.py:86
+msgid "Classified Ad"
+msgstr "Gesuchte Anzeige"
+
+#: models.py:87 templates/classified_ads/list.html:3
+#: templates/classified_ads/list.html:7
+msgid "Classified Ads"
+msgstr "Gesuchte Anzeigen"
+
+#: models.py:134
+msgid "Ad Photo"
+msgstr "Foto der Anzeige"
+
+#: models.py:135
+msgid "Ad Photos"
+msgstr "Fotos der Anzeige"
+
+#: templates/classified_ads/detail.html:3
+msgid "Classified Ad Detail"
+msgstr "Gesuchte Anzeige Detail"
+
+#: templates/classified_ads/detail.html:17
+#: templates/classified_ads/list.html:18
+#, python-format
+msgid "Added by %(owner)s on %(date_created)s"
+msgstr "Geschrieben von %(owner)s am %(date_created)s"
+
+#: templates/classified_ads/detail.html:25
+msgid "Category"
+msgstr "Kategorie"
+
+#: templates/classified_ads/detail.html:26
+msgid "Subcategory"
+msgstr "Unterkategorie"
+
+#: templates/classified_ads/detail.html:27
+msgid "State"
+msgstr "Zustand"
+
+#: templates/classified_ads/detail.html:37
+msgid "Price"
+msgstr "Preis"
+
+#: templates/classified_ads/detail.html:38
+msgid "Location"
+msgstr "Ort"
+
+#: templates/classified_ads/detail.html:39
+msgid "Shipping"
+msgstr "Versand"
+
+#: templates/classified_ads/detail.html:47
+#: templates/classified_ads/form.html:66
+msgid "Update Ad"
+msgstr "Aktualisiere Anzeige"
+
+#: templates/classified_ads/detail.html:49
+#: templates/classified_ads/form.html:70
+#, python-format
+msgid "Are you sure you want to delete the classified ads \"%(ad_name)s\""
+msgstr "Bist du sicher, dass du die Anzeige \"%(ad_name)s\" löschen möchtest?"
+
+#: templates/classified_ads/detail.html:52
+#: templates/classified_ads/form.html:73
+msgid "Delete Ad"
+msgstr "Lösche Anzeige"
+
+#: templates/classified_ads/detail.html:54
+#: templates/classified_ads/form.html:75
+msgid "Classified ads deletion"
+msgstr "Lösche Gesuchte Anzeige"
+
+#: templates/classified_ads/form.html:3 templates/classified_ads/form.html:57
+msgid "Create Classified Ad"
+msgstr "Erstelle Gesuchte Anzeige"
+
+#: templates/classified_ads/form.html:55
+msgid "Edit Classified Ad"
+msgstr "Aktualisiere Gesuchte Anzeige"
+
+#: templates/classified_ads/form.html:81
+msgid "Create Ad"
+msgstr "Erstelle Gesuchte Anzeige"
+
+#: templates/classified_ads/gallery.html:6
+msgid "Photos"
+msgstr "Fotos"
+
+#: templates/classified_ads/gallery.html:11
+msgid "Maximum number of photos reached"
+msgstr "Maximale Anzahl der Fotos erreicht"
+
+#: templates/classified_ads/gallery.html:13
+msgid "Add photo"
+msgstr "Foto hinzufügen"
+
+#: templates/classified_ads/gallery.html:18
+msgid "New photo"
+msgstr "Neues Foto"
+
+#: templates/classified_ads/gallery.html:53
+msgid "You will be able to add photos after creating the ad"
+msgstr "Du kannst Fotos hinzufügen nachdem die Anzeige erstellt wurde"
+
+#: views.py:25
+msgid "Classified ad created successfully"
+msgstr "Gesuchte Anzeige erstellt"
+
+#: views.py:56
+msgid "Classified ad updated successfully"
+msgstr "Gesuchte Anzeige aktualisiert"
+
+#: views.py:69
+#, python-format
+msgid "Ad \"%(title)s\" deleted"
+msgstr "Gesuchte Anzeige \"%(title)s\" gelöscht"
+
+#: views.py:92
+msgid "Photo added successfully"
+msgstr "Foto hinzugefügt"

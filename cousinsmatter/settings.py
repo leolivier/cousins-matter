@@ -102,6 +102,7 @@ INSTALLED_APPS = [
   'chat',
   'pages',
   'troves',
+  'classified_ads',
   'crispy_forms',
   'crispy_bulma',
   'verify_email',
@@ -210,8 +211,9 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+CRISPY_FAIL_SILENTLY = not DEBUG
 CRISPY_TEMPLATE_PACK = 'bulma'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bulma'
 
 LOGIN_REDIRECT_URL = '/'
 # LOGIN_URL = '/members/login'
@@ -321,6 +323,14 @@ DJANGO_ICONS = {
     "poll-yesno-question": "checkbox-marked-circle-outline",
     "poll-open-text-question": "text-box-outline",
     "poll-date-time-question": "calendar-clock",
+    # events icons
+    "new-event": "calendar-plus",
+    # classified ads icons
+    "new-classified-ad": "file-plus-outline",
+    "edit-classified-ad": "file-edit-outline",
+    "classified-ads": "file-document-multiple",
+    "classified-ad": "file-document",
+    "camera": "camera",
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -440,3 +450,5 @@ EMAIL_FIELD_NAME = 'email'  # force name to bypass translation
 
 LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP = env.str('LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP', default='8.8.8.8')
 LOGIN_HISTORY_PURGE_DAYS = env.int('LOGIN_HISTORY_PURGE_DAYS', 365)
+
+MAX_PHOTO_PER_AD = env.int('MAX_PHOTO_PER_AD', 10)

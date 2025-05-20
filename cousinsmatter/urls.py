@@ -62,4 +62,5 @@ urlpatterns = [
     path(settings.PAGES_URL_PREFIX, include("django.contrib.flatpages.urls")),
     path("pages-edit/", include("pages.urls")),
     path('troves/', include('troves.urls')),
+    path('classified-ads/', include('classified_ads.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,26 @@
+{% extends 'cm_main/base.html' %}
+{%load i18n crispy_forms_tags cm_tags%}
+{% block title %}{% title _("Classified Ads") %}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="panel">
+    <div class="panel-heading">{% title _("Classified Ads") %}</div>
+    <div class="panel-tabs"></div>
+    {% for ad in object_list %}
+    <div class="panel-block is-flex">
+      <span class="is-flex-grow-1">
+        {%icon "classified-ad" "panel-icon"%}
+        {%trans ad.item_status as item_status%}
+        <span class="mx-1">{{ ad.display_category }}</span>/<span class="mx-1">{{ ad.display_subcategory }}</span>/<span class="mx-1 has-background-primary has-text-white">{{ ad.display_item_status|ljust:20 }}</span>
+        <a href="{% url 'classified_ads:detail' ad.id %}">{{ ad.title }}</a> ({{ ad.price }})
+      </span>
+      <span>
+        {% blocktranslate with owner=ad.owner date_created=ad.date_created|date:"SHORT_DATE_FORMAT" trimmed %}
+        Added by {{ owner }} on {{ date_created }}
+        {% endblocktranslate %}
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{%endblock content%}

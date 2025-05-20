@@ -1,0 +1,58 @@
+{# need variables edit_gallery, ad #}
+{%load i18n cm_tags crispy_forms_tags%}
+<nav class="panel mt-5" id="ad-photos">
+	<div class="panel-heading is-flex">
+		{%icon "camera" "is-medium"%} 
+		<span class="ml-2 is-flex-grow-1">{%trans "Photos"%}</span>
+		{%if ad.pk and edit_gallery%}
+		<button class="button js-modal-trigger"
+			type="button"
+			{%if ad.pk and ad.photos.count >= settings.MAX_PHOTO_PER_AD %}
+				title='{%trans "Maximum number of photos reached"%}'
+			{%else%}
+				title="{%trans 'Add photo'%}"
+			{%endif%}
+			id="js-modal-add-photo"
+			data-target="upsert-photo-modal"
+			data-action="{% url 'classified_ads:add_photo' ad.pk%}"
+			data-title='{%trans "New photo"%}'
+			data-form='{{photo_form|crispy}}'
+			data-init-function='fillPhoto'
+			data-kind="create"
+			{%if not ad.pk or ad.photos.count >= settings.MAX_PHOTO_PER_AD %}disabled="true"{%endif%}
+		>{%icon "new-photo" %}</button>
+		{%endif%}
+	</div>
+	<div class="panel-block">
+		<div class="container px-2">
+			<div class="grid image-gallery">
+				{%if ad.pk%}
+				{% for photo in ad.photos.all %}
+				<div class="cell has-text-centered photo-item"
+					id="photo-{{photo.id}}"
+					data-pk="{{photo.id}}"
+					data-fullscreen="{{photo.image.url}}"
+				>
+					<figure class="image thumbnail mx-auto">
+						<img src="{{photo.thumbnail.url}}" alt="Photo">
+						{%if edit_gallery%}
+						<button class="delete delete-photo" type="button" data-action="{% url 'classified_ads:delete_photo' photo.id %}"></button>
+						{%endif%}
+					</figure>
+				</div>
+				{% empty %}
+				<div id="no-photo-for-this-ad" class="panel-block">No photos linked to this ad.</div>
+				{% endfor %}
+				{%endif%}
+			</div>
+		</div>
+	</div>
+	{%if ad.pk%}
+		{% include "cm_main/common/modal_form.html" with modal_id="upsert-photo-modal" multipart=True %}
+	{%else%}
+		<div class="content has-text-centered">({%trans "You will be able to add photos after creating the ad"%})</div>
+	{%endif%}
+</nav>
+
+
+{%include "galleries/photo_fullscreen.html"%}

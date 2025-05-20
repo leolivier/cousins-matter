@@ -1,22 +1,26 @@
 # Italian Translations for NO NAME FOUND app.
-# Copyright (C) 2024 <OWNER>
+# Copyright (C) 2025 Olivier LEVILLAIN
 # This file is distributed under the same license as the application.
-# Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
+# This file was generated from /home/olivi/devt/cousins-matter/members/locale/fr/LC_MESSAGES/django.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
+# using the qwen3:8b model. Depending on the model, it may contain some errors and should be reviewed
+# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
+# by the model.
+# Olivier LEVILLAIN <OWNER EMAIL>, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.1\n"
+"Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-17 10:56+0200\n"
-"PO-Revision-Date: 2025-04-06 13:05+0200\n"
-"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
-"Language-Team: Italian <LL@li.org>\n"
+"PO-Revision-Date: 2025-05-20 12:46+00:00\n"
+"\n"
+"Last-Translator: Auto-po-lyglot using qwen3:8b (https://github.com/leolivier/auto-po-lyglot)\n"
+"Language-Team: Français <LL@li.org>\n"
 "Language: IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: apps.py:8
@@ -30,7 +34,8 @@ msgid ""
 "href='{privacy_url}'>privacy policy</a>"
 msgstr ""
 "Controllando questa casella, accetti di aver letto e accettato la <a "
-"target='blank' href='{privacy_url}'>politica sulla privacy</a> di questo sito"
+"target='blank' href='{privacy_url}'>politica sulla privacy</a> di questo "
+"sito"
 
 #: forms.py:135
 msgid "Family name cannot be empty"
@@ -348,8 +353,8 @@ msgid ""
 "You received this mail because you attempted to create an account on our "
 "website or because a member created and activated your account"
 msgstr ""
-"Hai ricevuto questa email perché hai tentato di creare un account sul nostro "
-"sito web o perche' un membro ha creato e attivato il tuo account"
+"Hai ricevuto questa email perché hai tentato di creare un account sul nostro"
+" sito web o perche' un membro ha creato e attivato il tuo account"
 
 #: templates/members/email/email_verification_msg.html:28
 #: tests/tests_member.py:386
@@ -376,11 +381,12 @@ msgstr "Non rispondere a questa email, è generata automaticamente."
 #: templates/members/email/new_follower.html:17
 #, python-format
 msgid ""
-"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a> "
-"is now following you on %(site_name)s!"
+"Hi %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</a>"
+" is now following you on %(site_name)s!"
 msgstr ""
-"Ciao %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</"
-"a> ora ti segue su %(site_name)s!"
+"Ciao %(followed_name)s, <br><a "
+"href=\"%(follower_url)s\">%(follower_name)s</a> ora ti segue su "
+"%(site_name)s!"
 
 #: templates/members/email/password_reset_email.html:8
 #: templates/members/email/password_reset_email.html:17
@@ -428,8 +434,8 @@ msgid ""
 "someone tried to hijack your account."
 msgstr ""
 "Se non hai richiesto la ricalculation del password, contatta "
-"l'amministratore del sito '%(sitename)s' su %(domain)s e prova a reimpostare "
-"il tuo password in caso di tentativo di estorsione del tuo account."
+"l'amministratore del sito '%(sitename)s' su %(domain)s e prova a reimpostare"
+" il tuo password in caso di tentativo di estorsione del tuo account."
 
 #: templates/members/email/registration_invite_email.html:8
 #, python-format
@@ -451,11 +457,11 @@ msgstr "Ciao %(invited)s, sono %(inviter)s!"
 #: tests/tests_register.py:41
 #, python-format
 msgid ""
-"I invite you to register on the %(site_name)s website I created for managing "
-"our big family!"
+"I invite you to register on the %(site_name)s website I created for managing"
+" our big family!"
 msgstr ""
-"Ti invito a registrarti sul sito web %(site_name)s che ho creato per gestire "
-"la nostra grande famiglia!"
+"Ti invito a registrarti sul sito web %(site_name)s che ho creato per gestire"
+" la nostra grande famiglia!"
 
 #: templates/members/email/registration_invite_email.html:26
 #: tests/tests_register.py:44
@@ -480,19 +486,19 @@ msgid ""
 "If you know the administrator and knows he created this site, please click "
 "on the link below to go to the site and create your account."
 msgstr ""
-"Se conosci l'amministratore e sai che ha creato questo sito, clicca sul link "
-"qui sotto per accedere al sito e creare il tuo account."
+"Se conosci l'amministratore e sai che ha creato questo sito, clicca sul link"
+" qui sotto per accedere al sito e creare il tuo account."
 
 #: templates/members/email/registration_invite_email.html:38
 #, python-format
 msgid ""
-"You can also reply to this email to contact <a href=\"mailto:"
-"%(inviter_email)s\">%(inviter)s</a> and check with him if he really invited "
-"you..."
+"You can also reply to this email to contact <a "
+"href=\"mailto:%(inviter_email)s\">%(inviter)s</a> and check with him if he "
+"really invited you..."
 msgstr ""
-"Puoi anche rispondere a questa email per contattare <a href=\"mailto:"
-"%(inviter_email)s\">%(inviter)s</a> e verificare con lui se ti ha davvero "
-"invitato..."
+"Puoi anche rispondere a questa email per contattare <a "
+"href=\"mailto:%(inviter_email)s\">%(inviter)s</a> e verificare con lui se ti"
+" ha davvero invitato..."
 
 #: templates/members/email/registration_invite_email.html:43
 #: views/views_registration.py:24
@@ -557,8 +563,8 @@ msgid ""
 "%(site_name)s website."
 msgstr ""
 "Salve %(admin)s, per sua informazione, %(inviter)s (%(inviter_email)s) ha "
-"inviato un invito a %(invited)s (%(invited_email)s) per registrarsi sul sito "
-"web %(site_name)s."
+"inviato un invito a %(invited)s (%(invited_email)s) per registrarsi sul sito"
+" web %(site_name)s."
 
 #: templates/members/email/registration_sent_email.html:28
 #, python-format
@@ -664,8 +670,8 @@ msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
-"Il link per reimpostare la password non è valido, probabilmente perché è già "
-"stato utilizzato. Si prega di richiedere una nuova reimpostazione della "
+"Il link per reimpostare la password non è valido, probabilmente perché è già"
+" stato utilizzato. Si prega di richiedere una nuova reimpostazione della "
 "password."
 
 #: templates/members/login/password_reset_done.html:6
@@ -677,8 +683,8 @@ msgid ""
 "We’ve emailed you instructions for setting your password, if an account "
 "exists with the email you entered. You should receive them shortly."
 msgstr ""
-"Ti abbiamo inviato le istruzioni per impostare la tua password, se esiste un "
-"account con l'indirizzo email che hai inserito. Dovresti riceverle a breve."
+"Ti abbiamo inviato le istruzioni per impostare la tua password, se esiste un"
+" account con l'indirizzo email che hai inserito. Dovresti riceverle a breve."
 
 #: templates/members/login/password_reset_done.html:9
 msgid ""
@@ -741,13 +747,14 @@ msgstr ""
 
 #: templates/members/members/export_members.html:10
 msgid "All fields are present and empty if not present in the database. "
-msgstr "Tutti i campi sono presenti e vuoti se non sono presenti nel database."
+msgstr ""
+"Tutti i campi sono presenti e vuoti se non sono presenti nel database."
 
 #: templates/members/members/export_members.html:13
 msgid "Admins can re-import the files after modification with any CSV editor."
 msgstr ""
-"Gli amministratori possono reimportare i file dopo la modifica con qualsiasi "
-"editor CSV."
+"Gli amministratori possono reimportare i file dopo la modifica con qualsiasi"
+" editor CSV."
 
 #: templates/members/members/export_members.html:18
 msgid "Select members to export"
@@ -892,7 +899,8 @@ msgstr "Elimina membro"
 msgid ""
 "Are you sure you want to delete %(name)s's account and all associated data?"
 msgstr ""
-"Sei sicuro di voler eliminare l'account di %(name)s e tutti i dati associati?"
+"Sei sicuro di voler eliminare l'account di %(name)s e tutti i dati "
+"associati?"
 
 #: templates/members/members/member_upsert.html:56
 msgid "Delete"
@@ -957,8 +965,8 @@ msgstr "Una famiglia con questo nome esiste già!"
 
 #: templates/members/members/member_upsert.html:204
 msgid ""
-"Family created<br>Warning, it won't be assigned to the member until you save "
-"him/her"
+"Family created<br>Warning, it won't be assigned to the member until you save"
+" him/her"
 msgstr ""
 "Famiglia creata<br>Attenzione, non sarà assegnata al membro fino a quando "
 "non lo salverai"
@@ -1062,9 +1070,9 @@ msgstr "Ora puoi accedere con le tue credenziali..."
 
 #: templates/members/registration/email_verification_successful.html:11
 msgid ""
-"In case you forgot your credentials or your account was activated by another "
-"member and this is your first connection, please, click in 'reset password' "
-"to request a new password."
+"In case you forgot your credentials or your account was activated by another"
+" member and this is your first connection, please, click in 'reset password'"
+" to request a new password."
 msgstr ""
 "Se avete dimenticato le vostre credenziali o il vostro account è stato "
 "attivato da un altro membro e questa è la vostra prima connessione, vi "
@@ -1210,8 +1218,8 @@ msgid ""
 "email to verify your email address. Click in the link inside the mail to "
 "finish the registration."
 msgstr ""
-"Ciao %(username)s, il tuo account è stato creato! Riceverai ora un'email per "
-"verificare il tuo indirizzo email. Clicca sul link all'interno dell'email "
+"Ciao %(username)s, il tuo account è stato creato! Riceverai ora un'email per"
+" verificare il tuo indirizzo email. Clicca sul link all'interno dell'email "
 "per completare la registrazione."
 
 #: tests/tests_register.py:192 views/views_registration.py:54
@@ -1240,8 +1248,8 @@ msgid ""
 "receive an email containing an activation link then will be redirected to "
 "the password reset screen."
 msgstr ""
-"Account del membro attivato con successo. Il proprietario del conto riceverà "
-"ora un'email contenente un link di attivazione e successivamente sarà "
+"Account del membro attivato con successo. Il proprietario del conto riceverà"
+" ora un'email contenente un link di attivazione e successivamente sarà "
 "reindirizzato alla schermata di reimpostazione della password."
 
 #: views/views_directory.py:55
@@ -1284,7 +1292,8 @@ msgstr "%(follower_name)s ora ti segue!"
 #: views/views_import_export.py:41
 #, python-format
 msgid ""
-"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
+"Unknown column in CSV file: \"%(fieldname)s\". Valid fields are "
+"%(all_names)s"
 msgstr ""
 "Colonna sconosciuta nel file CSV: \"%(fieldname)s\". I campi validi sono "
 "%(all_names)s"
@@ -1357,8 +1366,8 @@ msgstr ""
 #: views/views_import_export.py:166
 #, python-format
 msgid ""
-"Member %(member)s was active. Adding %(manager)s as manager inactivated him/"
-"her."
+"Member %(member)s was active. Adding %(manager)s as manager inactivated "
+"him/her."
 msgstr ""
 "Il membro %(member)s era attivo. L'aggiunta di %(manager)s come manager lo "
 "ha reso inattivo."
@@ -1377,8 +1386,8 @@ msgid ""
 "CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
 "and %(updated_num)i updated."
 msgstr ""
-"File CSV caricato: %(rows_num)i righe lette, %(created_num)i membri creati e "
-"%(updated_num)i aggiornati"
+"File CSV caricato: %(rows_num)i righe lette, %(created_num)i membri creati e"
+" %(updated_num)i aggiornati"
 
 #: views/views_import_export.py:300
 #, python-format
@@ -1452,13 +1461,3 @@ msgstr ""
 #: views/views_registration.py:214
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossibile inviare l'email. Si prega di contattare l'amministratore."
-
-#~ msgid "Invalid Link!"
-#~ msgstr "Link non valido!"
-
-#~ msgid ""
-#~ "This link is invalid or been used already, we cannot verify using this "
-#~ "link."
-#~ msgstr ""
-#~ "Questo link non è valido o è già stato utilizzato, non possiamo "
-#~ "verificare nulla usando questo link."

@@ -4,6 +4,7 @@ from django.views import generic
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.models import Site
+from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext as _
 
 from cm_main.views.views_general import OnlyAdminMixin
@@ -17,6 +18,8 @@ class PageCreateView(OnlyAdminMixin, generic.CreateView):
   form_class = PageForm
 
   def post(self, request, *args, **kwargs):
+    if not request.user.is_superuser:
+      raise PermissionDenied
     form = PageForm(request.POST)
     if form.is_valid():
       page = form.save()
@@ -38,6 +41,8 @@ class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
   form_class = PageForm
 
   def post(self, request, pk, *args, **kwargs):
+    if not request.user.is_superuser:
+      raise PermissionDenied
     page = get_object_or_404(FlatPage, pk=pk)
     form = PageForm(request.POST, instance=page)
     if form.is_valid():
@@ -66,6 +71,8 @@ class PageTreeView(LoginRequiredMixin, generic.ListView):
 class PageDeleteView(OnlyAdminMixin, generic.View):
 
   def post(self, request, pk):
+    if not request.user.is_superuser:
+      raise PermissionDenied
     page = get_object_or_404(FlatPage, pk=pk)
     page.delete()
     messages.success(request, _("Page \"%(title)s\" deleted") % {"title": page.title})

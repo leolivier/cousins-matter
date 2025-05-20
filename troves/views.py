@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
 from members.models import Member
+from cm_main.utils import check_edit_permission
 from .models import Trove
 from .forms import TreasureForm
 
@@ -48,6 +49,7 @@ def create_treasure(request):
 @login_required
 def update_treasure(request, pk):
     treasure = get_object_or_404(Trove, pk=pk)
+    check_edit_permission(request, treasure.owner)
     if request.method == 'POST':
         form = TreasureForm(request.POST, request.FILES, instance=treasure)
         if form.is_valid():
@@ -63,7 +65,9 @@ def update_treasure(request, pk):
 def delete_treasure(request, pk):
     assert_request_is_ajax(request)
     try:
-        get_object_or_404(Trove, pk=pk).delete()
+        treasure = get_object_or_404(Trove, pk=pk)
+        check_edit_permission(request, treasure.owner())
+        treasure.delete()
         return JsonResponse({'deleted': True})
     except Exception:
         return JsonResponse({'deleted': False})

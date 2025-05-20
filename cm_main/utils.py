@@ -14,6 +14,7 @@ import unicodedata
 from urllib.parse import urlencode
 
 from django.core import paginator
+from django.core.exceptions import PermissionDenied
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import connections, models
 from django.forms import ValidationError
@@ -325,3 +326,9 @@ def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFil
         else:  # small photos are used directly as thumbnails
             thumbnail = image
     return thumbnail
+
+
+def check_edit_permission(request, owner):
+    if request.user.is_superuser or owner.id == request.user.id:
+      return True
+    raise PermissionDenied(_("You do not have permission to edit/delete this object."))

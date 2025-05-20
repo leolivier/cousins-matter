@@ -11,8 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.exceptions import RequestDataTooBig
-
-from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
+from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax, check_edit_permission
 from forum.views.views_follow import check_followers_on_message, check_followers_on_new_post
 from ..models import Post, Message
 from ..forms import MessageForm, PostForm, CommentForm
@@ -122,8 +121,7 @@ class PostEditView(LoginRequiredMixin, generic.UpdateView):
 
     def post(self, request, pk):
       instance = get_object_or_404(Post, pk=pk)
-      if instance.first_message.author.id != request.user.id:
-        raise PermissionError("Only authors can edit their posts")
+      check_edit_permission(request, instance.first_message.author)
       post_form = PostForm(request.POST, instance=instance)
       message_form = MessageForm(request.POST, instance=instance.first_message)
       if post_form.is_valid() and message_form.is_valid():
@@ -137,6 +135,7 @@ class PostEditView(LoginRequiredMixin, generic.UpdateView):
 @login_required
 def delete_post(request, pk):
   post = get_object_or_404(Post, pk=pk)
+  check_edit_permission(request, post.first_message.author)
   post.delete()
   return redirect('forum:list')
 
@@ -154,8 +153,9 @@ def add_reply(request, pk):
 @login_required
 def edit_reply(request, reply):
   assert_request_is_ajax(request)
-  instance = get_object_or_404(Message, pk=reply)
-  form = MessageForm(request.POST, instance=instance)
+  reply = get_object_or_404(Message, pk=reply)
+  check_edit_permission(request, reply.author)
+  form = MessageForm(request.POST, instance=reply)
   if form.is_valid():
     replyobj = form.save()
     return JsonResponse({"reply_id": replyobj.id, "reply_str": replyobj.content}, status=200)
@@ -169,6 +169,7 @@ def edit_reply(request, reply):
 def delete_reply(request, reply):
   assert_request_is_ajax(request)
   reply = get_object_or_404(Message, pk=reply)
+  check_edit_permission(request, reply.author)
   if (Post.objects.filter(first_message=reply).exists()):
     raise ValidationError(_("Can't delete the first message of a thread!"))
   id = reply.id

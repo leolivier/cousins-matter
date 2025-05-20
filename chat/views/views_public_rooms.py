@@ -12,7 +12,7 @@ from django.utils.text import slugify
 
 from members.models import Member
 from ..models import ChatMessage, ChatRoom
-from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
+from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax, check_edit_permission
 from cm_main import followers
 
 from urllib.parse import unquote
@@ -113,8 +113,7 @@ def toggle_follow(request, room_slug):
 def edit_room(request, room_slug):
   assert_request_is_ajax(request)
   room = get_object_or_404(ChatRoom, slug=room_slug)
-  if request.user != room.owner():
-    raise ValidationError(_("Only the owner of a room can edit it"))
+  check_edit_permission(request, room.owner())
   # print(request.POST)
   if 'room-name' not in request.POST:
     raise ValidationError("No room name provided")
@@ -126,9 +125,7 @@ def edit_room(request, room_slug):
 @login_required
 def delete_room(request, room_slug):
   room = get_object_or_404(ChatRoom, slug=room_slug)
-  if request.user != room.owner():
-    messages.error(request, _("Only the owner of a room can delete it"))
-    return redirect(reverse('chat:chat_rooms'))
+  check_edit_permission(request, room.owner())
   room.delete()
   messages.success(request, f"Chat room {room.name} deleted")
   return redirect('chat:chat_rooms')

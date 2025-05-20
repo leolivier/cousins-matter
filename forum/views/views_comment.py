@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import RequestDataTooBig
 from django.utils.translation import gettext as _
 
-from cm_main.utils import assert_request_is_ajax
+from cm_main.utils import assert_request_is_ajax, check_edit_permission
 from forum.views.views_follow import check_followers_on_comment
 from ..models import Message, Comment
 from ..forms import CommentForm
@@ -49,6 +49,7 @@ class CommentEditView(LoginRequiredMixin, generic.UpdateView):
     def post(self, request, pk):
         assert_request_is_ajax(request)
         comment = get_object_or_404(Comment, pk=pk)
+        check_edit_permission(request, comment.author)
         # create a form instance from the request and save it
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
@@ -64,6 +65,7 @@ class CommentEditView(LoginRequiredMixin, generic.UpdateView):
 def delete_comment(request, pk):
     assert_request_is_ajax(request)
     comment = get_object_or_404(Comment, pk=pk)
+    check_edit_permission(request, comment.author)
     id = comment.id
     comment.delete()
     return JsonResponse({"comment_id": id}, status=200)

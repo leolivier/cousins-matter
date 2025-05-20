@@ -109,10 +109,13 @@ class PhotoEditView(LoginRequiredMixin, generic.UpdateView):
   model = Photo
   form_class = PhotoForm
 
+  # TODO: every member can edit any photo ???
+
 
 @login_required
 def delete_photo(request, pk):
   photo = get_object_or_404(Photo, pk=pk)
+  # TODO: every member can delete any photo ???
   gallery = photo.gallery.id
   photo.delete()
   messages.success(request, _("Photo deleted"))

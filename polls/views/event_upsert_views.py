@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
-
+from cm_main.utils import check_edit_permission
 from polls.views.upsert_views import PollCreateView, PollDeleteView, PollUpdateView, managed_closed_list
 from ..models import Answer, EventPlanner, Question
 from ..forms.upsert_forms import QuestionUpsertForm, EventPlannerUpsertForm  # , MultipleEventUpsertForm, PollUpsertForm
@@ -48,6 +48,7 @@ class EventPlannerUpdateView(PollUpdateView):
 
   def post(self, request, pk):
     planner = get_object_or_404(self.model, pk=pk)
+    check_edit_permission(request, planner.owner)
     # create a form instance from the request and save it
     form = self.form_class(request.POST, instance=planner)
     if form.is_valid():
@@ -92,3 +93,8 @@ class EventPlannerUpdateView(PollUpdateView):
 class EventPlannerDeleteView(PollDeleteView):
   model = EventPlanner
   success_url = "/polls/event-planners/all/"
+
+  def post(self, request, pk):
+    planner = get_object_or_404(self.model, pk=pk)
+    check_edit_permission(request, planner.owner)
+    return super().post(request, pk)

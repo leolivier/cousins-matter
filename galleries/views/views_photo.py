@@ -4,6 +4,7 @@ from django.forms import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -114,6 +115,8 @@ class PhotoEditView(LoginRequiredMixin, generic.UpdateView):
   def form_valid(self, form):
     if self.object.uploaded_by:
       check_edit_permission(self.request, self.object.uploaded_by)
+    elif self.object.gallery.owner:
+      check_edit_permission(self.request, self.object.gallery.owner)
     messages.success(self.request, _("Photo updated successfully"))
     return super().form_valid(form)
 
@@ -122,10 +125,9 @@ class PhotoEditView(LoginRequiredMixin, generic.UpdateView):
 def delete_photo(request, pk):
   photo = get_object_or_404(Photo, pk=pk)
   gallery = photo.gallery.id
-  if photo.uploaded_by:
-    check_edit_permission(request, photo.uploaded_by)
-  elif photo.gallery.owner:
-    check_edit_permission(request, photo.gallery.owner)
+  if not request.user.is_superuser:
+    if request.user != photo.uploaded_by and request.user != photo.gallery.owner:
+      raise PermissionDenied
   photo.delete()
   messages.success(request, _("Photo deleted"))
   return redirect("galleries:detail", gallery)

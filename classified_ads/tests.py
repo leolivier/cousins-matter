@@ -1,6 +1,8 @@
 import random
 import os
+from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core import mail
 from django.urls import reverse
 from django.utils import formats, timezone
 from django.utils.translation import gettext as _
@@ -207,6 +209,9 @@ class ListAdTestCase(ClassifiedAdBaseTestCase):
 class DetailAdTestCase(ClassifiedAdBaseTestCase):
 
   def test_detail_ad(self):
+    """
+    Test that the detail view of an ad displays the ad's information and photos.
+    """
     self.ad["owner"] = self.member
     ad = ClassifiedAd.objects.create(**self.ad)
     # add photos
@@ -262,3 +267,51 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
             <img src="{photo.thumbnail.url}" alt="{_('Photo')}">
           </figure>
         </div>""", html=True)
+
+
+class SendMessageTestCase(ClassifiedAdBaseTestCase):
+
+  def test_send_message(self):
+    """
+    Test that when a user sends a message to another user (the owner of an ad),
+    the owner receives an email with the message.
+    """
+    self.ad["owner"] = self.member
+    ad = ClassifiedAd.objects.create(**self.ad)
+    # create a sender and login
+    sender = self.create_member(is_active=True)
+    self.login_as(sender)
+    # send a message
+    url = reverse("classified_ads:send_message", kwargs={"pk": ad.id})
+    self.client.post(url, {"message": "Hello, how are you?"}, follow=True)
+    # check the email to the owner to inform about the new message
+    self.assertEqual(len(mail.outbox), 1)
+    self.assertSequenceEqual(mail.outbox[0].recipients(), [ad.owner.email])
+    subject = _("Message from %(username)s about ad %(title)s") % \
+      {
+        "username": sender.full_name,
+        "title": ad.title
+      }
+    message = _("""Hello %(recipient)s,
+%(username)s sent you the following message about ad %(title)s:
+==========
+%(message)s
+==========
+You can reply to him/her directly at this address: %(email)s.
+Best,
+The %(site_name)s admin team
+
+%(site_url)s
+""") % \
+      {
+        "recipient": ad.owner.full_name,
+        "username": sender.full_name,
+        "title": ad.title,
+        "message": "Hello, how are you?",
+        "site_name": settings.SITE_NAME,
+        "site_url": settings.SITE_DOMAIN,
+        "email": sender.email,
+      }
+
+    self.assertEqual(mail.outbox[0].subject, subject)
+    self.assertEqual(mail.outbox[0].body, message)

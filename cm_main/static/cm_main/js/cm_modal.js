@@ -79,7 +79,23 @@ function setupAndOpenModal(opener_element_id) {
   form.find('.form-placeholder').html(form_fields);
   button = form.find('.modal-card-foot button[type="submit"]');
   button.attr('name', gettext(kind));
-  icon = kind == 'update' ? 'check-underline-circle-outline' : 'checkbox-marked-circle-auto-outline';
+  icon = opener_element.data('button-icon');
+  if (!icon) {
+    switch (kind) {
+      case 'create':
+        icon = 'plus-circle-outline';
+        break;
+      case 'update':
+        icon = 'check-underline-circle-outline';
+        break;
+      case 'delete':
+        icon = 'trash-can-outline';
+        break;
+      default:
+        icon = 'checkbox-marked-circle-auto-outline';
+        break;
+    }
+  }
   button_text = kind.charAt(0).toUpperCase() + kind.slice(1);  // capitalize
   button.html(`
     <span class="icon">

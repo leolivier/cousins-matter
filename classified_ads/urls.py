@@ -11,4 +11,5 @@ urlpatterns = [
     path("<int:pk>/delete", views.DeleteAdView.as_view(), name="delete"),
     path("<int:pk>/photo", views.AdPhotoAddView.as_view(), name="add_photo"),
     path("photo/<int:pk>/delete", views.delete_photo, name="delete_photo"),
+    path("<int:pk>/send-message", views.send_message, name="send_message"),
 ]

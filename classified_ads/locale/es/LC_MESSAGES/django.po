@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 1.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 11:37+0200\n"
+"POT-Creation-Date: 2025-05-21 11:08+0200\n"
 "PO-Revision-Date: 2025-05-20 11:37+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Spanish <LL@li.org>\n"
@@ -18,6 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
+
 #: categories.py:5
 msgid "Real estate"
 msgstr "Inmobiliaria"
@@ -397,56 +398,60 @@ msgstr "Fotos del anuncio"
 msgid "Classified Ad Detail"
 msgstr "Detalle del anuncio"
 
-#: templates/classified_ads/detail.html:17
+#: templates/classified_ads/detail.html:20
 #: templates/classified_ads/list.html:18
 #, python-format
 msgid "Added by %(owner)s on %(date_created)s"
 msgstr "Añadido por %(owner)s el %(date_created)s"
 
-#: templates/classified_ads/detail.html:25
+#: templates/classified_ads/detail.html:28
 msgid "Category"
 msgstr "Categoría"
 
-#: templates/classified_ads/detail.html:26
+#: templates/classified_ads/detail.html:29
 msgid "Subcategory"
 msgstr "Subcategoría"
 
-#: templates/classified_ads/detail.html:27
+#: templates/classified_ads/detail.html:30
 msgid "State"
 msgstr "Estado"
 
-#: templates/classified_ads/detail.html:37
+#: templates/classified_ads/detail.html:40
 msgid "Price"
 msgstr "Precio"
 
-#: templates/classified_ads/detail.html:38
+#: templates/classified_ads/detail.html:41
 msgid "Location"
 msgstr "Ubicación"
 
-#: templates/classified_ads/detail.html:39
+#: templates/classified_ads/detail.html:42
 msgid "Shipping"
 msgstr "Envio"
 
-#: templates/classified_ads/detail.html:47
+#: templates/classified_ads/detail.html:50
 #: templates/classified_ads/form.html:66
 msgid "Update Ad"
 msgstr "Actualizar anuncio"
 
-#: templates/classified_ads/detail.html:49
+#: templates/classified_ads/detail.html:52
 #: templates/classified_ads/form.html:70
 #, python-format
 msgid "Are you sure you want to delete the classified ads \"%(ad_name)s\""
 msgstr "¿Estás seguro de que quieres eliminar el anuncio \"%(ad_name)s\"?"
 
-#: templates/classified_ads/detail.html:52
+#: templates/classified_ads/detail.html:55
 #: templates/classified_ads/form.html:73
 msgid "Delete Ad"
 msgstr "Eliminar anuncio"
 
-#: templates/classified_ads/detail.html:54
+#: templates/classified_ads/detail.html:57
 #: templates/classified_ads/form.html:75
 msgid "Classified ads deletion"
 msgstr "Eliminar anuncio"
+
+#: templates/classified_ads/detail.html:62
+msgid "Send a message to the owner of this ad"
+msgstr "Enviar un mensaje al propietario de esta anuncio"
 
 #: templates/classified_ads/form.html:3 templates/classified_ads/form.html:57
 msgid "Create Classified Ad"
@@ -480,7 +485,7 @@ msgstr "Nueva foto"
 msgid "You will be able to add photos after creating the ad"
 msgstr "Podrás añadir fotos después de crear el anuncio"
 
-#: views.py:25
+#: views.py:26
 msgid "Classified ad created successfully"
 msgstr "Anuncio creado correctamente"
 
@@ -488,11 +493,45 @@ msgstr "Anuncio creado correctamente"
 msgid "Classified ad updated successfully"
 msgstr "Anuncio actualizado correctamente"
 
-#: views.py:69
+#: views.py:68
 #, python-format
 msgid "Ad \"%(title)s\" deleted"
 msgstr "Anuncio \"%(title)s\" eliminado"
 
-#: views.py:92
+#: views.py:97
 msgid "Photo added successfully"
 msgstr "Foto añadida correctamente"
+
+#: views.py:116
+#, python-format
+msgid "Message from %(username)s about ad %(title)s"
+msgstr "Mensaje de %(username)s sobre el anuncio %(title)s"
+
+#: views.py:121
+#, python-format
+msgid ""
+"Hello %(recipient)s,\n"
+"%(username)s sent you the following message about ad %(title)s:\n"
+"==========\n"
+"%(message)s\n"
+"==========\n"
+"You can reply to him/her directly at this address: %(email)s.\n"
+"Best,\n"
+"The %(site_name)s admin team\n"
+"\n"
+"%(site_url)s\n"
+msgstr ""
+"Hola %(recipient)s,\n"
+"%(username)s ha enviado el siguiente mensaje sobre el anuncio %(title)s:\n"
+"==========\n"
+"%(message)s\n"
+"==========\n"
+"Puedes responderle directamente a esta dirección: %(email)s.\n"
+"Mejor,\n"
+"El equipo de administración del %(site_name)s\n"
+"\n"
+"%(site_url)s\n"
+
+#: views.py:142
+msgid "Message sent successfully"
+msgstr "Mensaje enviado correctamente"

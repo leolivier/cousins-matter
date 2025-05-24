@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 1.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 11:37+0200\n"
-"PO-Revision-Date: 2025-05-20 11:37+0200\n"
+"POT-Creation-Date: 2025-05-21 11:08+0200\n"
+"PO-Revision-Date: 2025-05-21 11:08+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
 "Language: DE\n"
@@ -18,6 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
 #: categories.py:5
 msgid "Real estate"
 msgstr "Immobilien"
@@ -94,7 +95,7 @@ msgstr "Urlaub"
 
 #: categories.py:33
 msgid "Seasonal Rental"
-msgstr " saisonliche Miete"
+msgstr "Saisonliche Miete"
 
 #: categories.py:38
 msgid "Job offers"
@@ -397,56 +398,60 @@ msgstr "Fotos der Anzeige"
 msgid "Classified Ad Detail"
 msgstr "Gesuchte Anzeige Detail"
 
-#: templates/classified_ads/detail.html:17
+#: templates/classified_ads/detail.html:20
 #: templates/classified_ads/list.html:18
 #, python-format
 msgid "Added by %(owner)s on %(date_created)s"
 msgstr "Geschrieben von %(owner)s am %(date_created)s"
 
-#: templates/classified_ads/detail.html:25
+#: templates/classified_ads/detail.html:28
 msgid "Category"
 msgstr "Kategorie"
 
-#: templates/classified_ads/detail.html:26
+#: templates/classified_ads/detail.html:29
 msgid "Subcategory"
 msgstr "Unterkategorie"
 
-#: templates/classified_ads/detail.html:27
+#: templates/classified_ads/detail.html:30
 msgid "State"
 msgstr "Zustand"
 
-#: templates/classified_ads/detail.html:37
+#: templates/classified_ads/detail.html:40
 msgid "Price"
 msgstr "Preis"
 
-#: templates/classified_ads/detail.html:38
+#: templates/classified_ads/detail.html:41
 msgid "Location"
 msgstr "Ort"
 
-#: templates/classified_ads/detail.html:39
+#: templates/classified_ads/detail.html:42
 msgid "Shipping"
 msgstr "Versand"
 
-#: templates/classified_ads/detail.html:47
+#: templates/classified_ads/detail.html:50
 #: templates/classified_ads/form.html:66
 msgid "Update Ad"
 msgstr "Aktualisiere Anzeige"
 
-#: templates/classified_ads/detail.html:49
+#: templates/classified_ads/detail.html:52
 #: templates/classified_ads/form.html:70
 #, python-format
 msgid "Are you sure you want to delete the classified ads \"%(ad_name)s\""
 msgstr "Bist du sicher, dass du die Anzeige \"%(ad_name)s\" löschen möchtest?"
 
-#: templates/classified_ads/detail.html:52
+#: templates/classified_ads/detail.html:55
 #: templates/classified_ads/form.html:73
 msgid "Delete Ad"
 msgstr "Lösche Anzeige"
 
-#: templates/classified_ads/detail.html:54
+#: templates/classified_ads/detail.html:57
 #: templates/classified_ads/form.html:75
 msgid "Classified ads deletion"
 msgstr "Lösche Gesuchte Anzeige"
+
+#: templates/classified_ads/detail.html:62
+msgid "Send a message to the owner of this ad"
+msgstr "Sende eine Nachricht an den Besitzer dieser Anzeige"
 
 #: templates/classified_ads/form.html:3 templates/classified_ads/form.html:57
 msgid "Create Classified Ad"
@@ -480,7 +485,7 @@ msgstr "Neues Foto"
 msgid "You will be able to add photos after creating the ad"
 msgstr "Du kannst Fotos hinzufügen nachdem die Anzeige erstellt wurde"
 
-#: views.py:25
+#: views.py:26
 msgid "Classified ad created successfully"
 msgstr "Gesuchte Anzeige erstellt"
 
@@ -488,11 +493,45 @@ msgstr "Gesuchte Anzeige erstellt"
 msgid "Classified ad updated successfully"
 msgstr "Gesuchte Anzeige aktualisiert"
 
-#: views.py:69
+#: views.py:68
 #, python-format
 msgid "Ad \"%(title)s\" deleted"
 msgstr "Gesuchte Anzeige \"%(title)s\" gelöscht"
 
-#: views.py:92
+#: views.py:97
 msgid "Photo added successfully"
 msgstr "Foto hinzugefügt"
+
+#: views.py:116
+#, python-format
+msgid "Message from %(username)s about ad %(title)s"
+msgstr "Nachricht von %(username)s über Anzeige %(title)s"
+
+#: views.py:121
+#, python-format
+msgid ""
+"Hello %(recipient)s,\n"
+"%(username)s sent you the following message about ad %(title)s:\n"
+"==========\n"
+"%(message)s\n"
+"==========\n"
+"You can reply to him/her directly at this address: %(email)s.\n"
+"Best,\n"
+"The %(site_name)s admin team\n"
+"\n"
+"%(site_url)s\n"
+msgstr ""
+"Hallo %(recipient)s,\n"
+"%(username)s hat dir die folgende Nachricht über die Anzeige %(title)s:\n"
+"==========\n"
+"%(message)s\n"
+"==========\n"
+"Du kannst dir direkt an diese Adresse antworten: %(email)s.\n"
+"Best,\n"
+"Das %(site_name)s Admin Team\n"
+"\n"
+"%(site_url)s\n"
+
+#: views.py:142
+msgid "Message sent successfully"
+msgstr "Nachricht gesendet"

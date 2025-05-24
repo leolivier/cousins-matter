@@ -73,3 +73,12 @@ class AdPhotoForm(forms.ModelForm):
   class Meta:
     model = AdPhoto
     fields = ['image']
+
+
+class MessageForm(forms.Form):
+  message = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'cols': 50}))
+
+  class Meta:
+    widgets = {
+      'message': RichTextarea(),
+    }

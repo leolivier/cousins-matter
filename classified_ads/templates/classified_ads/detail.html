@@ -1,10 +1,13 @@
 {% extends 'cm_main/base.html' %}
-{% load i18n cm_tags static%}
+{% load i18n cm_tags static crispy_forms_tags%}
 {% block title %}{% title _("Classified Ad Detail") %}{% endblock %}
 {% block header %}
 <link rel="stylesheet" href="{% static 'galleries/css/galleries.css' %}">
 <script src="{% static 'classified_ads/js/classified_ads.js' %}"></script>
 <script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
+<script>
+function do_nothing() {}
+</script>
 {% endblock%}
 {% block content %}
 {%with ad=object%}
@@ -41,9 +44,9 @@
 			</div>
 		</div>
 		{%include "classified_ads/gallery.html" with edit_gallery=false %}
-		{% if user == ad.owner %}
 		<div class="panel-block">
 			<div class="buttons is-centered mx-auto">
+			{% if user == ad.owner %}
 				<a class="button" href="{% url 'classified_ads:update' ad.id %}">{%icon "edit" "mr-1" %}{% trans "Update Ad" %}</a>
 				{% autoescape off %}
 				{%blocktranslate asvar delete_msg with ad_name=ad.title|force_escape trimmed %}
@@ -54,15 +57,35 @@
 				{%trans 'Classified ads deletion' as delete_title%}
 				{%include "cm_main/common/confirm-delete-modal.html" with button_text=button_text button_class="is-warning" ays_title=delete_title ays_msg=delete_msg|force_escape action_url=delete_url expected_value=ad.title|escape %}
 				{% endautoescape %}
+		{% else %}
+		{% autoescape off %}
+		{%trans "Send a message to the owner of this ad" as button_text%}
+				<button type="button" id="js-modal-send-message"
+					class="button is-fullwidth js-modal-trigger"
+					title="{{button_text}}"
+					data-target="send-message-modal"
+					data-action="{% url 'classified_ads:send_message' ad.pk%}" 
+					data-title="{{button_text}}"
+					data-form='{{message_form|crispy}}'
+					data-warning-msg="{{ad.title}}"
+					data-kind="send"
+					data-button-icon="send-variant-outline"
+					data-init-function="do_nothing"
+				>
+					{%icon "send-message" %}
+					<span class="ml-2">{{button_text}}</span>
+				</button>
+			{% endautoescape %}
+			{% endif %}
 			</div>
 		</div>
-		{% endif %}
-  </div>
+	</div>
 </div>
 
 {%if ad.owner == user %}
 	{%include "cm_main/common/modal_form.html" with modal_id="delete-item-modal" %}
 {%endif%}
+{%include "cm_main/common/modal_form.html" with modal_id="send-message-modal" %}
 
 {%endwith%}
 {% endblock content %}

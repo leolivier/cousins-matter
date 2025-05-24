@@ -184,15 +184,101 @@ class CreatePhotoViewTests(PhotoTestsBase):
 
 
 class DeletePhotoViewTest(PhotoTestsBase):
-  def test_delete_photo(self):
-    # Create a photo
-    name = get_photo_name()
-    p = Photo(name=name, gallery=self.root_gallery, date=date.today(), image=self.image)
-    p.save()
+    def setUp(self):
+        super().setUp()
+        self.name = get_photo_name()
+        self.photo = Photo(name=self.name, gallery=self.root_gallery, date=date.today(), image=self.image)
+        self.photo.save()
+        self.url = reverse('galleries:delete_photo', args=[self.photo.id])
 
-    # Delete the photo
-    url = reverse('galleries:delete_photo', args=[p.id])
-    response = self.client.post(url, follow=True)
-    self.assertRedirects(response, reverse('galleries:detail', kwargs={'pk': self.root_gallery.id}), 302, 200)
-    self.assertFalse(Photo.objects.filter(pk=p.id).exists())
-    self.assertContainsMessage(response, "success", _('Photo deleted'))
+    def test_delete_photo_no_owner(self):
+        """Test deleting a photo with no owner (should succeed)"""
+        response = self.client.post(self.url, follow=True)
+        self.assertRedirects(response, reverse('galleries:photo', kwargs={'pk': self.photo.id}), 302, 200)
+        self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
+        self.assertContainsMessage(response, "success", _('Photo deleted'))
+
+    def test_delete_photo_as_owner(self):
+        """Test deleting a photo as the photo owner"""
+        self.photo.uploaded_by = self.member
+        self.photo.save()
+        response = self.client.post(self.url, follow=True)
+        self.assertRedirects(response, reverse('galleries:photo', kwargs={'pk': self.photo.id}), 302, 200)
+        self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
+        self.assertContainsMessage(response, "success", _('Photo deleted'))
+
+    def test_delete_photo_as_gallery_owner(self):
+        """Test deleting a photo as the gallery owner"""
+        other_member = self.create_member()
+        self.photo.uploaded_by = other_member
+        self.photo.save()
+        self.root_gallery.owner = self.member
+        self.root_gallery.save()
+        response = self.client.post(self.url, follow=True)
+        self.assertRedirects(response, reverse('galleries:detail', kwargs={'pk': self.root_gallery.id}), 302, 200)
+        self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
+        self.assertContainsMessage(response, "success", _('Photo deleted'))
+
+    def test_delete_photo_unauthorized(self):
+        """Test deleting a photo without proper permissions"""
+        other_member = self.create_member()
+        self.photo.uploaded_by = other_member
+        self.photo.save()
+        response = self.client.post(self.url, follow=True)
+        self.assertEqual(response.status_code, 403)  # Forbidden
+        self.assertTrue(Photo.objects.filter(pk=self.photo.id).exists())
+
+    def test_delete_nonexistent_photo(self):
+        """Test deleting a photo that doesn't exist"""
+        url = reverse('galleries:delete_photo', args=[99999])
+        response = self.client.post(url, follow=True)
+        self.assertEqual(response.status_code, 404)
+
+
+class PhotoEditViewTest(PhotoTestsBase):
+    def setUp(self):
+        super().setUp()
+        self.name = get_photo_name()
+        self.photo = Photo(name=self.name, gallery=self.root_gallery, date=date.today(), image=self.image)
+        self.photo.save()
+        self.url = reverse('galleries:edit_photo', args=[self.photo.id])
+        self.update_data = {
+            'name': 'Updated photo name',
+            'description': 'Updated description',
+            'gallery': self.root_gallery.id,
+            'date': date.today()
+        }
+
+    def test_edit_photo_no_owner(self):
+        """Test editing a photo with no owner (should succeed)"""
+        response = self.client.post(self.url, self.update_data, follow=True)
+        self.assertRedirects(response, reverse('galleries:photo', kwargs={'pk': self.photo.id}), 302, 200)
+        updated_photo = Photo.objects.get(pk=self.photo.id)
+        self.assertEqual(updated_photo.name, 'Updated photo name')
+        self.assertContainsMessage(response, "success", _("Photo updated successfully"))
+
+    def test_edit_photo_as_owner(self):
+        """Test editing a photo as the photo owner"""
+        self.photo.uploaded_by = self.member
+        self.photo.save()
+        response = self.client.post(self.url, self.update_data, follow=True)
+        self.assertRedirects(response, reverse('galleries:photo', kwargs={'pk': self.photo.id}), 302, 200)
+        updated_photo = Photo.objects.get(pk=self.photo.id)
+        self.assertEqual(updated_photo.name, 'Updated photo name')
+        self.assertContainsMessage(response, "success", _("Photo updated successfully"))
+
+    def test_edit_photo_unauthorized(self):
+        """Test editing a photo without proper permissions"""
+        other_member = self.create_member()
+        self.photo.uploaded_by = other_member
+        self.photo.save()
+        response = self.client.post(self.url, self.update_data, follow=True)
+        self.assertEqual(response.status_code, 403)  # Forbidden
+        unchanged_photo = Photo.objects.get(pk=self.photo.id)
+        self.assertEqual(unchanged_photo.name, self.name)
+
+    def test_edit_nonexistent_photo(self):
+        """Test editing a photo that doesn't exist"""
+        url = reverse('galleries:edit_photo', args=[99999])
+        response = self.client.post(url, self.update_data, follow=True)
+        self.assertEqual(response.status_code, 404)

@@ -1,7 +1,6 @@
 # Portuguese Translations for NO NAME FOUND app.
 # Copyright (C) 2024 <OWNER>
 # This file is distributed under the same license as the application.
-
 # Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
@@ -9,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
-"POT-Creation-Date: 2024-11-11 19:57+0100\n"
-"PO-Revision-Date: 2025-04-06 13:05+0200\n"
+"POT-Creation-Date: 2025-05-24 19:23+0200\n"
+"PO-Revision-Date: 2025-05-24 19:36+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Portuguese <LL@li.org>\n"
 "Language: PT\n"
@@ -34,70 +33,88 @@ msgstr ""
 "como galerias e as fotos dessas pastas serão adicionadas às galerias. Todas "
 "as fotos devem estar em pastas."
 
-#: models.py:28 models.py:80
+#: models.py:20 models.py:74
 msgid "A photo must belong to a gallery."
 msgstr "Uma foto deve pertencer a uma galeria."
 
-#: models.py:51 templates/galleries/photo_detail.html:3
+#: models.py:43 templates/galleries/photo_detail.html:3
 msgid "Photo"
 msgstr "Foto"
 
-#: models.py:56 models.py:121
+#: models.py:48 models.py:106
 msgid "Name"
 msgstr "Nome"
 
-#: models.py:57 models.py:122
+#: models.py:49 models.py:107
 msgid "Description"
 msgstr "Descrição"
 
-#: models.py:59
+#: models.py:51
 msgid "Date"
 msgstr "Data"
 
-#: models.py:59
+#: models.py:51
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Clique em nome do mês ou do ano para mudá-los rapidamente"
 
-#: models.py:123
+#: models.py:53
+msgid "Uploaded by"
+msgstr "Carregado por"
+
+#: models.py:108
 msgid "Cover Photo"
 msgstr "Capa"
 
-#: models.py:126
+#: models.py:111
 msgid "Parent gallery"
 msgstr "Galera de pais"
 
-#: models.py:131
+#: models.py:114
+msgid "Owner"
+msgstr "Proprietário"
+
+#: models.py:117
 msgid "galleries"
 msgstr "Galérias"
 
-#: models.py:150
+#: models.py:136
 msgid "A gallery can't be its own parent!"
 msgstr "Uma galeria não pode ser sua própria mãe!"
 
-#: models.py:158
+#: models.py:144
 #, python-format
 msgid "Another sub gallery of %(parent)s with the same name already exists"
 msgstr "Outra subgaleria de %(parent)s com o mesmo nome já existe"
 
-#: models.py:161
+#: models.py:147
 msgid "Another root gallery with the same name already exists"
 msgstr "Outra galeria de raiz com o mesmo nome já existe"
 
 #: templates/galleries/bulk_upload.html:3
 #: templates/galleries/bulk_upload.html:6
 msgid "Bulk Upload Photos"
-msgstr "Carregar Fotos em Bulk"
+msgstr "Carregar Fotos em Lote"
 
 #: templates/galleries/bulk_upload.html:13
 msgid "Upload"
 msgstr "Carregar"
 
 #: templates/galleries/galleries_tree.html:3
-#: templates/galleries/galleries_tree.html:5
+#: templates/galleries/galleries_tree.html:8
 msgid "Galleries"
 msgstr "Galérias"
 
-#: templates/galleries/galleries_tree.html:7
+#: templates/galleries/galleries_tree.html:9
+#: templates/galleries/gallery_form.html:7
+#: templates/galleries/gallery_form.html:19
+msgid "Create Gallery"
+msgstr "Criar Galeria"
+
+#: templates/galleries/galleries_tree.html:13
+msgid "Bulk Upload"
+msgstr "Carregar em Lote"
+
+#: templates/galleries/galleries_tree.html:20
 msgid "No galleries found"
 msgstr "Não foram encontradas galerias"
 
@@ -160,11 +177,6 @@ msgstr "Criar uma Galeria Subsidiária"
 msgid "Edit Gallery"
 msgstr "Edição de Galeria"
 
-#: templates/galleries/gallery_form.html:7
-#: templates/galleries/gallery_form.html:19
-msgid "Create Gallery"
-msgstr "Criar Galeria"
-
 #: templates/galleries/gallery_form.html:29
 #: templates/galleries/photo_form.html:28
 msgid "Update"
@@ -215,11 +227,11 @@ msgstr "Criar e adicionar outro"
 msgid "Close"
 msgstr "Fechar"
 
-#: tests/tests_gallery.py:255 views/views_gallery.py:61
-msgid "Gallery deleted"
-msgstr "Galera excluída"
+#: tests/tests_gallery.py:255 views/views_gallery.py:76
+msgid "Gallery deleted successfully"
+msgstr "Galera excluída com sucesso"
 
-#: tests/tests_photo.py:198 views/views_photo.py:118
+#: tests/tests_photo.py:198 views/views_photo.py:130
 msgid "Photo deleted"
 msgstr "Foto excluída"
 
@@ -245,32 +257,40 @@ msgstr "Importado de diretório do arquivo zip {path}"
 msgid "Imported from zipfile directory {filename}"
 msgstr "Importado de diretório do arquivo {filename}"
 
-#: views/views_bulk.py:177
+#: views/views_bulk.py:178
 #, python-brace-format
 msgid "Unable to import photo '{path}', it was ignored"
 msgstr "Impossível importar a foto '{path}' , ela foi ignorada"
 
-#: views/views_bulk.py:193
+#: views/views_bulk.py:194
 #, python-brace-format
 msgid "Zip file uploaded: {lg} galleries and {nbp} photos created"
 msgstr "Arquivo zip carregado: {lg} galerias e {nbp} fotos criadas"
 
-#: views/views_photo.py:32
+#: views/views_gallery.py:29
+msgid "Gallery created successfully"
+msgstr "Galeria criada com sucesso"
+
+#: views/views_photo.py:33
 msgid "Missing either photo id or gallery id"
 msgstr "Um identificador de foto ou de galeria está faltando."
 
-#: views/views_photo.py:53
+#: views/views_photo.py:54
 msgid "Photo not found on that page"
 msgstr "Foto não encontrada naquela página"
 
-#: views/views_photo.py:91
+#: views/views_photo.py:93
 msgid "Photo created"
 msgstr "Foto criada"
 
-#: views/views_photo.py:97
+#: views/views_photo.py:99
 msgid ""
 "Error when creating this photo. Try to convert it in another format before "
 "retrying to upload it."
 msgstr ""
 "Erro ao criar essa foto. Tente converter para outro formato antes de tentar "
 "carregar novamente."
+
+#: views/views_photo.py:117
+msgid "Photo updated successfully"
+msgstr ""

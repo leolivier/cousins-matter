@@ -84,7 +84,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
       # Don't update it otherwise as we might overwrite handwritten description.
       gallery = Gallery.objects.filter(name=name, parent=parent)
       if not gallery.exists():
-        gallery = Gallery.objects.create(name=name, parent=parent, description=description)
+        gallery = Gallery.objects.create(name=name, parent=parent, description=description, owner=self.request.user)
       else:
         gallery = gallery.first()
       # store gallery in the cache
@@ -140,7 +140,8 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
         photo.date = date
         photo.save()
       else:
-        photo = Photo.objects.create(name=name, description=description, image=image, date=date, gallery=gallery)
+        photo = Photo.objects.create(name=name, description=description, image=image, date=date,
+                                     gallery=gallery, uploaded_by=self.request.user)
 
       self.nbPhotos += 1
       return photo

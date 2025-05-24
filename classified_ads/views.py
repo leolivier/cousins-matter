@@ -42,7 +42,6 @@ class UpdateAdView(LoginRequiredMixin, generic.UpdateView):
     form_class = ClassifiedAdForm
 
     def get_success_url(self):
-        # Par exemple, rediriger vers la page de détail de l'objet nouvellement créé.
         return reverse('classified_ads:detail', args=[self.object.pk])
 
     def get_context_data(self, **kwargs):

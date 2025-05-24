@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.translation import gettext as _
-
+from cm_main.utils import check_edit_permission
 from ..models import Gallery
 from ..forms import GalleryForm
 
@@ -24,12 +24,23 @@ class GalleryCreateView(LoginRequiredMixin, generic.CreateView):
       self.initial.update({'parent': parent_gallery})
     return super().get(request)
 
+  def form_valid(self, form):
+    form.instance.owner = self.request.user
+    messages.success(self.request, _("Gallery created successfully"))
+    return super().form_valid(form)
+
 
 class GalleryUpdateView(LoginRequiredMixin, generic.UpdateView):
 
   template_name = "galleries/gallery_form.html"
   model = Gallery
   form_class = GalleryForm
+
+  def get_object(self, **kwargs):
+    gallery = super().get_object(**kwargs)
+    if gallery.owner:
+      check_edit_permission(self.request, gallery.owner)
+    return gallery
 
 
 class GalleryDetailView(LoginRequiredMixin, generic.DetailView):
@@ -59,7 +70,8 @@ class GalleryTreeView(LoginRequiredMixin, generic.ListView):
 @login_required
 def delete_gallery(request, pk):
   gallery = get_object_or_404(Gallery, pk=pk)
-  # TODO: every member can delete any gallery ???
+  if gallery.owner:
+    check_edit_permission(request, gallery.owner)
   gallery.delete()
-  messages.success(request, _("Gallery deleted"))
+  messages.success(request, _("Gallery deleted successfully"))
   return redirect("galleries:galleries")

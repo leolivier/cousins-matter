@@ -50,6 +50,8 @@ class Photo(models.Model):
   slug = models.SlugField(max_length=70, blank=True, null=False)
   date = models.DateField(_("Date"), help_text=_("Click on the month name or the year to change them quickly"))
   gallery = models.ForeignKey('Gallery', verbose_name="Gallery", on_delete=models.CASCADE, blank=True)
+  uploaded_by = models.ForeignKey('members.Member', verbose_name=_("Uploaded by"), on_delete=models.CASCADE,
+                                  blank=True, null=True)
 
   class Meta:
     ordering = ['id']
@@ -109,6 +111,8 @@ class Gallery(models.Model):
   parent = models.ForeignKey('self', verbose_name=_("Parent gallery"), null=True, blank=True,
                              on_delete=models.CASCADE, related_name='children')
   slug = models.SlugField(max_length=70, blank=True, null=False)
+  owner = models.ForeignKey('members.Member', verbose_name=_("Owner"), on_delete=models.CASCADE,
+                            blank=True, null=True)
 
   class Meta:
     verbose_name_plural = _('galleries')

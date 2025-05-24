@@ -252,7 +252,7 @@ class DeleteGalleryViewTest(GalleryBaseTestCase):
     response = self.client.get(url, follow=True)
 
     self.assertRedirects(response, reverse('galleries:galleries'), 302, 200)
-    self.assertContainsMessage(response, "success", _('Gallery deleted'))
+    self.assertContainsMessage(response, "success", _('Gallery deleted successfully'))
     # check root not removed
     gid, pid = lst[0]
     # print("gid/pid:", gid, pid)

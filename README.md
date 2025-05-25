@@ -58,6 +58,13 @@ Polls have publication and closure dates. They can contains multiple questions a
 * date: pick a date
 * choices: pick a choice in a list
 
+### Event planning
+As a sub module of the Poll module, any active member can create an event planning survey to define when an avent should take place. This adds to the Poll module the following kinds of choices:
+* choose one date in a provided list
+* choose several dates in a provided list
+
+## Classified ads
+Any active member can publish a classified ad that can be seen by all other members. If a memeber is interested in an ad, s.he can send a message to the ad publisher who will receive an email.
 
 ## Theming
 Admin can easily define their own theme (colors, font, ...). See [Themes](https://github.com/leolivier/cousins-matter/wiki/customization#themes)

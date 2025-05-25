@@ -126,7 +126,8 @@ def delete_photo(request, pk):
   photo = get_object_or_404(Photo, pk=pk)
   gallery = photo.gallery.id
   if not request.user.is_superuser:
-    if request.user != photo.uploaded_by and request.user != photo.gallery.owner:
+    if (photo.uploaded_by or photo.gallery.owner) and \
+       request.user != photo.uploaded_by and request.user != photo.gallery.owner:
       raise PermissionDenied
   photo.delete()
   messages.success(request, _("Photo deleted"))

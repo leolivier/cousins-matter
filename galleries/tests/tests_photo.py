@@ -194,7 +194,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
     def test_delete_photo_no_owner(self):
         """Test deleting a photo with no owner (should succeed)"""
         response = self.client.post(self.url, follow=True)
-        self.assertRedirects(response, reverse('galleries:photo', kwargs={'pk': self.photo.id}), 302, 200)
+        self.assertRedirects(response, reverse('galleries:detail', kwargs={'pk': self.photo.gallery.id}), 302, 200)
         self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
         self.assertContainsMessage(response, "success", _('Photo deleted'))
 
@@ -203,7 +203,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
         self.photo.uploaded_by = self.member
         self.photo.save()
         response = self.client.post(self.url, follow=True)
-        self.assertRedirects(response, reverse('galleries:photo', kwargs={'pk': self.photo.id}), 302, 200)
+        self.assertRedirects(response, reverse('galleries:detail', kwargs={'pk': self.photo.gallery.id}), 302, 200)
         self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
         self.assertContainsMessage(response, "success", _('Photo deleted'))
 

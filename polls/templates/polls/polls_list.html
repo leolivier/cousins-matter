@@ -3,23 +3,29 @@
 
 {% block title %}{% title title %}{% endblock %}
 {% block content %}
-{% trans 'Create poll' as create_label %}
+{% trans 'Create poll' as create_poll_label %}
 {% trans 'Create Event Planner' as create_planner_label %}
 <div class="container">
   <div class="panel">
     <div class="panel-heading is-flex is-align-items-center is-justify-content-center">
       <span class="is-flex-grow-1 has-text-centered">{% title title %}</span>
-      <a class="button ml-6" href="{%url 'polls:create_poll'%}" aria-label="{{create_label}}" title="{{create_label}}">
-        {%icon "new-poll" %} <span class="is-hidden-mobile ml-3">{{create_label}}</span>
+      {%if 'show_polls'|featured%}
+      <a class="button ml-6" href="{%url 'polls:create_poll'%}" aria-label="{{create_poll_label}}" title="{{create_poll_label}}">
+        {%icon "new-poll" %} <span class="is-hidden-mobile ml-3">{{create_poll_label}}</span>
       </a>
+      {%endif%}
+      {%if 'show_event_planners'|featured%}
       <a class="button ml-6" href="{%url 'polls:create_event_planner'%}" aria-label="{{create_planner_label}}" title="{{create_planner_label}}">
         {%icon "new-poll" %} <span class="is-hidden-mobile ml-3">{{create_planner_label}}</span>
       </a>
+      {%endif%}
     </div>
+    {%if 'show_polls'|featured and 'show_event_planners'|featured%}
     <div class="panel-tabs">
       <a {%if tab == "polls"%}class="is-active"{%endif%} href="{% url 'polls:list_polls' %}">{%trans "Polls"%}</a>
       <a {%if tab == "event"%}class="is-active"{%endif%} href="{% url 'polls:list_event_planners' %}">{%trans "Event planners"%}</a>
     </div>
+    {%endif%}
     <div class="panel-tabs">
     {%if tab == "polls"%}
       <a {%if kind == "open"%}class="is-active"{%endif%} href="{% url 'polls:list_polls' %}">{%trans "Open"%}</a>

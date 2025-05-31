@@ -225,3 +225,11 @@ def to_range(value: int) -> range:
     Converts a given integer value to a range object.
     """
     return range(value)
+
+
+@register.filter
+def featured(value: str) -> bool:
+    """
+    Returns the value of a feature flag.
+    """
+    return settings.FEATURES_FLAGS.get(value, False)

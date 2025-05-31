@@ -3,7 +3,6 @@ from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import override as lang_override
-
 from cousinsmatter.context_processors import override_settings
 from members.models import Member
 from members.tests.tests_member_base import MemberTestCase
@@ -34,10 +33,6 @@ class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageT
     today = date.today()
     tomorrow = today + timedelta(days=1)
     members = Member.objects.filter(birthdate__isnull=False)
-    # print(f"\nchecking birthdays with include={settings.INCLUDE_BIRTHDAYS_IN_HOMEPAGE} "
-    #       f"reversed={reversed} and lang={get_language()} "
-    #       "for response:")
-    # self.print_response(response)
     if members.count() > 0:
       for member in members:
         next_birthday = member.next_birthday
@@ -57,14 +52,14 @@ class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageT
     else:
       self.check_no_birthdays(response, reversed)
 
-  @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=False)
+  @override_settings(FEATURES_FLAGS={'show_birthdays_in_homepage': False})
   def test_home_page_without_birthdays(self):
     for lang in ['fr', 'en-US']:
       with lang_override(lang):
         response = self.check_home_page(lang, "authenticated")
         self.check_if_birthdays(response, reversed=True)
 
-  @override_settings(INCLUDE_BIRTHDAYS_IN_HOMEPAGE=True)
+  @override_settings(FEATURES_FLAGS={'show_birthdays_in_homepage': True})
   def test_home_page_with_birthdays(self):
     for lang in ['fr', 'en-US']:
       with lang_override(lang):

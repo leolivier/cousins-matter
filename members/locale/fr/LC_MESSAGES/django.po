@@ -998,7 +998,7 @@ msgstr "Créer un Membre"
 
 #: templates/members/members/members.html:26
 msgid "Invite Member"
-msgstr "Invitater un Membre"
+msgstr "Inviter un Membre"
 
 #: templates/members/members/members.html:34
 #: templates/members/members/members.html:45

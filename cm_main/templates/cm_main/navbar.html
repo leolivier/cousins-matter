@@ -20,46 +20,71 @@
 
 	<div id="navMenu" class="navbar-menu">
 		<div class="navbar-start">
+			{%if 'show_pages'|featured%}
 			{%pages_menu%}
+			{%endif%}
 			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'members:members' as members_url%}
 				{%navbar_item members_url _("Members") "members" %}
 			</div>
 
+			{%if 'show_galleries'|featured%}
 			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'galleries:galleries' as galleries_url%}
 				{%navbar_item galleries_url _("Galleries") "galleries" %}
 			</div>
+			{%endif%}
 
+			{%if 'show_forums'|featured%}
 			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'forum:list' as forum_url%}
 				{%navbar_item forum_url _("Forum") "forum" %}
 			</div>
+			{%endif%}
 
+			{%if 'show_public_chats'|featured or 'show_private_chats'|featured%}
 			<div class="navbar-item has-dropdown is-hoverable">
-				{%navbar_item "#" _("Chat") "chat" %}
-				<div class="navbar-dropdown">
-					{% url 'chat:chat_rooms' as chat_url%}
-					{%navbar_item chat_url _("Public Chat Rooms") "chat" %}
-					{% url 'chat:private_chat_rooms' as chat_url%}
-					{%navbar_item chat_url _("Private Chat Rooms") "chat" %}
+				{% url 'chat:chat_rooms' as public_chat_url%}
+				{% url 'chat:private_chat_rooms' as private_chat_url%}
+				{%if 'show_public_chats'|featured and 'show_private_chats'|featured%}
+					{%navbar_item "#" _("Chat") "chat" %}
+					<div class="navbar-dropdown">
+						{%navbar_item public_chat_url _("Public Chat Rooms") "chat" %}
+						{%navbar_item private_chat_url _("Private Chat Rooms") "chat" %}
 					</div>
-			</div>
+			{% elif 'show_public_chats'|featured %}
+				{%navbar_item public_chat_url _("Chat") "chat" %}
+			{% elif 'show_private_chats'|featured %}
+				{%navbar_item private_chat_url _("Chat") "chat" %}
+			{% endif %}
+		</div>
+		{%endif%}
 
+			{%if 'show_treasures'|featured%}
 			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'troves:list' as trove_url%}
 				{%navbar_item trove_url _("Troves") "troves" %}
 			</div>
+			{%endif%}
 
+			{%if 'show_polls'|featured%}
 			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'polls:list_polls' as polls_url%}
 				{%navbar_item polls_url _("Polls") "vote" %}
 			</div>
+			{% elif 'show_event_planners'|featured %}
+			<div class="navbar-item has-dropdown is-hoverable">
+				{% url 'polls:list_event_planners' as event_planners_url%}
+				{%navbar_item event_planners_url _("Event Planners") "vote" %}
+			</div>
+			{%endif%}
 
+			{%if 'show_classified_ads'|featured%}
 			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'classified_ads:list' as ads_url%}
 				{%navbar_item ads_url _("Classified Ads") "classified-ads" %}
 			</div>
+			{%endif%}
 		</div>
 
 		<div class="navbar-end">
@@ -68,6 +93,7 @@
 					{%icon "settings" %}
 				</button>
 				<div class="navbar-dropdown is-right">
+					{%if 'show_change_language'|featured%}
 					<div class="navbar-item">
 						<form action="{% url 'cm_main:change_language' %}" name="change_language" method="post">
 							{% csrf_token %}
@@ -90,15 +116,20 @@
 							});
 						</script>
 					</div>
+				{% endif %}
 				{% if user.is_superuser %}
 					{% url 'pages-edit:edit_list' as page_url%}
 					{%navbar_item page_url _("Edit Pages") "edit-page" %}
+		
 					{% url 'members:csv_import' as import_url%}
 					{%navbar_item import_url _("Import members from CSV") "import-members" %}
+
 					{%navbar_item "/admin" _("Admin site") "admin" %}
 				{% endif %}
+				{%if 'show_export_members'|featured%}
 					{% url 'members:select_members_to_export' as export_url%}
 					{%navbar_item export_url _("Export Members as CSV") "import-members" %}
+				{%endif%}
 {%comment%}
 					<hr class='navbar-divider'>
 					{% link_pages_starting_with '/administration/' "admin" %}
@@ -115,8 +146,10 @@
 				<div class="navbar-dropdown is-right">
 					{% link_pages_starting_with about_prefix "information" %}
 					{% link_pages_starting_with private_prefix "private" %}
-					{%url 'cm_main:about' as about_url%}
-					{%navbar_item about_url _("About the site") "about" %}
+					{%if 'show_site_stats'|featured%}
+						{% url 'cm_main:about' as about_url%}
+						{%navbar_item about_url _("About the site") "about" %}
+					{% endif %}
 					{% url 'cm_main:contact' as contact_url%}
 					{%navbar_item contact_url _("Contact the site admin") "contact" %}
 				</div>

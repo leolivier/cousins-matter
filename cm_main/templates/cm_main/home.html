@@ -4,7 +4,7 @@
 	{%with page_prefix="/"|add:LANGUAGE_CODE%}
 	{%if user.is_authenticated%}
 		{%include_page page_prefix|add:settings.AUTHENTICATED_HOME_PAGE%}
-		{% if settings.INCLUDE_BIRTHDAYS_IN_HOMEPAGE%}
+		{% if 'show_birthdays_in_homepage'|featured %}
 			{% get_view "members:include_birthdays" %}
 		{% endif %}
 	{%else%}

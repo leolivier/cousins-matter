@@ -64,8 +64,6 @@ LANGUAGES = [
 LANGUAGE_CODE = env.str('LANGUAGE_CODE', default='en-us')
 TIME_ZONE = env.str('TIME_ZONE', default='Europe/Paris')
 
-INCLUDE_BIRTHDAYS_IN_HOMEPAGE = env.bool('INCLUDE_BIRTHDAYS_IN_HOMEPAGE', True)
-
 SITE_COPYRIGHT = env.str('SITE_COPYRIGHT', default=None)
 SITE_FOOTER = env.str('SITE_FOOTER', default=None)
 SITE_LOGO = env.str('SITE_LOGO', default='cm_main/images/cousinades.jpg')
@@ -452,3 +450,25 @@ LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP = env.str('LOGIN_HISTORY_GEOLOCATION_PL
 LOGIN_HISTORY_PURGE_DAYS = env.int('LOGIN_HISTORY_PURGE_DAYS', 365)
 
 MAX_PHOTO_PER_AD = env.int('MAX_PHOTO_PER_AD', 10)
+
+FEATURES_FLAGS = env.dict(
+  'FEATURES_FLAGS',
+  cast={'value': bool},
+  default={
+    "show_birthdays_in_homepage": True,
+    "show_galleries": True,
+    "show_forums": True,
+    "show_public_chats": True,
+    "show_private_chats": True,
+    "show_classified_ads": True,
+    "show_polls": True,
+    "show_event_planners": True,
+    "show_pages": True,
+    "show_treasures": True,
+    "show_site_stats": True,
+    "show_export_members": True,
+    "show_change_language": True
+  })
+
+if DEBUG:
+  print("FEATURES_FLAGS", FEATURES_FLAGS)

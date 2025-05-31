@@ -5,7 +5,7 @@ from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.core.exceptions import FieldDoesNotExist
 from django.dispatch import receiver
 from django.utils import timezone
-
+from functools import lru_cache
 from members.models import LoginTrace
 default_geolocation_data = None
 
@@ -46,6 +46,7 @@ def post_logout(sender, user, **kwargs):
         last_login.save()
 
 
+@lru_cache(maxsize=128)
 def get_geolocation_data(ip: str):
     try:
         response = requests.get(f'https://ipapi.co/{ip}/json/')

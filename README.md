@@ -15,7 +15,6 @@ An application for managing large families, listing all your cousins and allowin
 
 ### Development status
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/leolivier/cousins-matter) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-raw/leolivier/cousins-matter) [![GitHub CI devt build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/build-and-publish-image.yml/badge.svg?branch=main)](https://github.com/leolivier/cousins-matter/actions?query=workflow%3APush+build)
-![Commits since last release]https://img.shields.io/github/commits-since/leolivier/cousins-matter/latest
 
 ## Features
 

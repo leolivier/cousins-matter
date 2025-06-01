@@ -9,10 +9,14 @@ An application for managing large families, listing all your cousins and allowin
 ## Badges
 ### Releases status
 ![GitHub Release](https://img.shields.io/github/v/release/leolivier/cousins-matter) ![GitHub Release Date](https://img.shields.io/github/release-date/leolivier/cousins-matter) [![GitHub CI release build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/build-and-publish-image.yml/badge.svg)](https://github.com/leolivier/cousins-matter/actions?query=workflow%Release+build) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/leolivier/cousins-matter/latest)
+
 ### Facts
  ![GitHub License](https://img.shields.io/github/license/leolivier/cousins-matter) ![GitHub top language](https://img.shields.io/github/languages/top/leolivier/cousins-matter) [![Django](https://img.shields.io/badge/Django-5.2-green)](https://www.djangoproject.com/) 
+
 ### Development status
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/leolivier/cousins-matter) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-raw/leolivier/cousins-matter) [![GitHub CI devt build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/build-and-publish-image.yml/badge.svg?branch=main)](https://github.com/leolivier/cousins-matter/actions?query=workflow%3APush+build) 
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/leolivier/cousins-matter) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-raw/leolivier/cousins-matter) [![GitHub CI devt build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/build-and-publish-image.yml/badge.svg?branch=main)](https://github.com/leolivier/cousins-matter/actions?query=workflow%3APush+build)
+![Commits since last release]https://img.shields.io/github/commits-since/leolivier/cousins-matter/latest
+
 ## Features
 
 ### Member Management
@@ -70,15 +74,16 @@ Any active member can publish a classified ad that can be seen by all other memb
 Admin can easily define their own theme (colors, font, ...). See [Themes](https://github.com/leolivier/cousins-matter/wiki/customization#themes)
 
 ## Translations
-* Comes with manual English and French translations
-* **NEW**: Translated into Spanish, German, Portuguese and Italian using [auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot/) automated translations based on AI LLMs (various LLMs were used depending on the language).
-  **WARNING**: Because these translations are automated, they may sometimes be incorrect or inaccurate. Please open issues on Github if you find errors.
-* Can be easily translated into any LTR language, see [documentation](https://github.com/leolivier/cousins-matter/wiki#translate-to-a-new-language). Not tested for RTL.
+* Comes with English, French, Spanish, Italian , German and Italian translations
+
+  **WARNING**: Because these translations are mostly done using AI, they may sometimes be incorrect or inaccurate. Please open issues on Github if you find errors.
+* Can be easily translated into any latin LTR language, see [documentation](https://github.com/leolivier/cousins-matter/wiki#translate-to-a-new-language). Not tested for RTL or non latin languages.
 
 ## Documentation
 
 * The documentation for installing, upgrading and running the application in on the wiki [Home](https://github.com/leolivier/cousins-matter/wiki) page.
 * The settings are documented on the wiki [Settings](https://github.com/leolivier/cousins-matter/wiki/settings) page.
+Through settings, you can also manage the features offered to the members.
 * The customization (apart from the settings) is described at [Customization](https://github.com/leolivier/cousins-matter/wiki/customization)
 
 ## Authors

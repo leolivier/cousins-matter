@@ -1,7 +1,6 @@
-# German Translations for NO NAME FOUND app.
-# Copyright (C) 2024 <OWNER>
+# German Translations for forum app.
+# Copyright (C) 2024 Olivier LEVILLAIN <olivier@levillain.eu>
 # This file is distributed under the same license as the application.
-
 # Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
@@ -44,8 +43,8 @@ msgstr "Kommentare"
 #, python-format
 msgid "%(ncomments)s comment"
 msgid_plural "%(ncomments)s comments"
-msgstr[0] "%(ncomments)s commentaire"
-msgstr[1] "%(ncomments)s commentaires"
+msgstr[0] "%(ncomments)s Kommentar"
+msgstr[1] "%(ncomments)s Kommentare"
 
 #: templates/forum/comment_list.html:33 templates/forum/post_detail.html:46
 #: templates/forum/post_detail.html:96
@@ -82,8 +81,8 @@ msgstr "Post"
 #, python-format
 msgid "%(nreplies)s answer"
 msgid_plural "%(nreplies)s answers"
-msgstr[0] "%(nreplies)s réponse"
-msgstr[1] "%(nreplies)s réponses"
+msgstr[0] "%(nreplies)s Antwort"
+msgstr[1] "%(nreplies)s Antworten"
 
 #: templates/forum/post_detail.html:18
 msgid "No answer"

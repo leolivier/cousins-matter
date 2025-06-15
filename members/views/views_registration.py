@@ -120,7 +120,7 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
     inviter = request.user
     admin = Member.objects.filter(is_superuser=True).first()
     admin_name = admin.full_name
-    from_email = request.user.email
+    from_email = settings.DEFAULT_FROM_EMAIL  # always use the default from email
 
     msg = render_to_string(
       "members/email/registration_invite_email.html",

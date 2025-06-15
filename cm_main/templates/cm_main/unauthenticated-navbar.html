@@ -26,28 +26,28 @@
 					{%icon "settings" %}
 				</button>
 				<div class="navbar-dropdown is-right">
+					{%if 'show_change_language'|featured%}
 					<div class="navbar-item">
-						<form action="{% url 'cm_main:change_language' %}" name="change_language" method="post">
+						<form action="{% url 'set_language' %}" method="post">
 							{% csrf_token %}
+							<input name="next" type="hidden" value="{{ request.get_full_path|slice:":-1" }}"> {# Ou request.path si vous ne voulez pas les paramètres GET #}
 							<div class="control">
-								<label for="lang">{%trans "Change language" %}:</label>>
-								<select name="lang" value="{{LANGUAGE_CODE}}">
-									{% for lang in settings.LANGUAGES %}
-										<option value="{{ lang.0 }}">{{ lang.1 }}</option>
-									{% endfor %}
+								<label for="lang">{%trans "Change language" %}:</label>
+								<select name="language" onchange="this.form.submit()">
+								{% get_current_language as LANGUAGE_CODE %}
+								{% get_available_languages as LANGUAGES %}
+								{% get_language_info_list for LANGUAGES as languages %}
+								{% for language in languages %}
+									<option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
+										{{ language.name_local }} ({{ language.code }})
+									</option>
+								{% endfor %}
 								</select>
 							</div>
 						</form>
-						{# Submit "change language" form automatically each time the language is changed in the select box #}
-						<script>
-							$(document).ready(function() {
-								$('select[name="lang"]').val('{{LANGUAGE_CODE}}');
-								$('select[name="lang"]').change(function() {
-									$('form[name="change_language"]').submit()
-								})
-							});
-						</script>
 					</div>
+
+				{% endif %}
 				</div>
 			</div>
 			<div class="navbar-item">

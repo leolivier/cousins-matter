@@ -87,11 +87,12 @@ class RegistrationCheckingView(generic.CreateView):
 
 
 class MemberInvitationView(LoginRequiredMixin, generic.View):
+  template_name = "members/registration/registration_invite.html"
 
   def check_before_invitation(self, request):
       if not request.user.is_superuser and not settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS:
         raise PermissionDenied(_("Only superusers can invite members"))
-  
+
   def post(self, request):
     """
     Sends an email with a registration link to the user's email address.
@@ -165,7 +166,7 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
       form = MemberInvitationForm(initial={'email': email})
     else:
       form = MemberInvitationForm()
-    return render(request, "members/registration/registration_invite.html", {"form": form})
+    return render(request, self.template_name, {"form": form})
 
 
 class RegistrationRequestView(generic.View):

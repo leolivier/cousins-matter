@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
-from cm_main.utils import PageOutOfBounds, Paginator, remove_accents, assert_request_is_ajax, redirect_to_referer
+from cm_main.utils import PageOutOfBounds, Paginator, remove_accents, assert_request_is_ajax
 from verify_email.email_handler import send_verification_email
 from ..models import Family, Member
 from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
@@ -155,7 +155,12 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
             messages.success(request, _('Member successfully created'))
             return redirect("members:detail", member.id)
 
-        return redirect_to_referer(request)
+        return render(request, self.template_name, {
+            "form": form,
+            "addr_form": AddressUpdateForm(),
+            "family_form": FamilyUpdateForm(),
+            "title": _("Create Member"),
+        })
 
 
 def _can_edit_member(request, member):
@@ -208,7 +213,13 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
 
         else:
             logger.error(f"u_form error: {form.errors}")
-            return redirect_to_referer(request)
+            return render(request, self.template_name, {
+                "form": form,
+                "addr_form": AddressUpdateForm(),
+                "family_form": FamilyUpdateForm(),
+                "pk": pk,
+                "title": self.title,
+                "member_manager_name": member_manager_name(member)})
 
 
 class EditProfileView(EditMemberView):

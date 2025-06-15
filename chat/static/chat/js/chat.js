@@ -59,16 +59,16 @@ function append_message_data($data) {
 		$messages = $('#chat-messages')
 		div_id = 'message-div-' + $data.msgid
 		$messages.append(
-			'<div class="panel-block has-text-right is-flex is-flex-wrap-wrap is-align-items-flex-start" id="' + div_id + '">' +
-			'	<p class="has-text-primary has-text-weight-bold mr-5">' + $data.username +
-			'		<a href="' + $data.member_url +'" aria-label="' + gettext('profile') +'">' +
+			'<div class="panel-block has-text-right is-flex is-flex-wrap-wrap is-align-items-flex-start" id="' + escapeHtml(div_id) + '">' +
+			'	<p class="has-text-primary has-text-weight-bold mr-5">' + escapeHtml($data.username) +
+			'		<a href="' + escapeHtml($data.member_url) +'" aria-label="' + gettext('profile') +'">' +
 			'			<span class="icon is-large"><i class="mdi mdi-24px mdi-open-in-new" aria-hidden="true"></i></span>' +
 			'		</a>' +
 			'		<br>' +
-			'		<span class="is-size-7">' + $data.date_added + '</span>' +
+			'		<span class="is-size-7">' + escapeHtml($data.date_added) + '</span>' +
 			'	</p>' +
-			'	<p class="content is-flex-grow-1 has-text-left">' + $data.message + '</p>' +
-			'	<div class="button is-pulled-right delete-chat-message" title="' + gettext('Delete') + '" data-msgid="' + $data.msgid + '">' +
+			'	<p class="content is-flex-grow-1 has-text-left">' + escapeHtml($data.message) + '</p>' +
+			'	<div class="button is-pulled-right delete-chat-message" title="' + gettext('Delete') + '" data-msgid="' + escapeHtml($data.msgid) + '">' +
 			'		<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline" aria-hidden="true"></i></span>' +
 			'	</div>' +
 			'</div>');

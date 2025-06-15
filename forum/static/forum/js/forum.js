@@ -28,6 +28,9 @@ function delete_comment(url, id) {
 
 function show_edit_reply_form(id) {
 	content = $('#reply-content-'+id).html()
+	// Sanitize the content to prevent XSS
+	// DOMPurify is included in the summernote library, which is included in the reply form template.
+	content = DOMPurify.sanitize(content);
 	$('#edit-reply-'+id+' div.note-editable').html(content); 
 	$('#reply-level-'+id).hide()
 	$('#edit-reply-'+id).show()

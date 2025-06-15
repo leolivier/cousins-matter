@@ -1,7 +1,6 @@
-# Portuguese Translations for NO NAME FOUND app.
-# Copyright (C) 2024 <OWNER>
+# Portuguese Translations for forum app.
+# Copyright (C) 2024 Olivier LEVILLAIN <olivier@levillain.eu>
 # This file is distributed under the same license as the application.
-
 # Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
@@ -83,7 +82,7 @@ msgstr "Artigo"
 msgid "%(nreplies)s answer"
 msgid_plural "%(nreplies)s answers"
 msgstr[0] "%(nreplies)s resposta"
-msgstr[1] "%(nreplies)s responde"
+msgstr[1] "%(nreplies)s respostas"
 
 #: templates/forum/post_detail.html:18
 msgid "No answer"
@@ -104,7 +103,7 @@ msgstr ""
 
 #: templates/forum/post_detail.html:135
 msgid "Your answer"
-msgstr "sua resposta"
+msgstr "Sua resposta"
 
 #: templates/forum/post_form.html:8 templates/forum/post_form.html:16
 msgid "Edit Post"

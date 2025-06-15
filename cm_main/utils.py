@@ -18,7 +18,6 @@ from django.core.exceptions import PermissionDenied
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import connections, models
 from django.forms import ValidationError
-from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import formats
 from django.utils.translation import gettext as _, get_language, gettext_lazy
@@ -57,11 +56,6 @@ def is_ajax(request):
 def assert_request_is_ajax(request):
     if not is_ajax(request):
         raise ValidationError("Forbidden non ajax request")
-
-
-def redirect_to_referer(request):
-    return redirect(request.META.get('HTTP_REFERER') if request.META.get('HTTP_REFERER') else
-                    reverse("cm_main:Home"))
 
 
 def check_file_size(file, limit):

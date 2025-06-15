@@ -1,7 +1,6 @@
-# Spanish Translations for NO NAME FOUND app.
-# Copyright (C) 2024 <OWNER>
+# Spanish Translations for forum app.
+# Copyright (C) 2024 Olivier LEVILLAIN <olivier@levillain.eu>
 # This file is distributed under the same license as the application.
-
 # Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
@@ -44,8 +43,8 @@ msgstr "comentarios"
 #, python-format
 msgid "%(ncomments)s comment"
 msgid_plural "%(ncomments)s comments"
-msgstr[0] "%(ncomments)s commentaire"
-msgstr[1] "%(ncomments)s commentaires"
+msgstr[0] "%(ncomments)s commentario"
+msgstr[1] "%(ncomments)s commentarios"
 
 #: templates/forum/comment_list.html:33 templates/forum/post_detail.html:46
 #: templates/forum/post_detail.html:96
@@ -82,8 +81,8 @@ msgstr "Discusión"
 #, python-format
 msgid "%(nreplies)s answer"
 msgid_plural "%(nreplies)s answers"
-msgstr[0] "%(nreplies)s réponse"
-msgstr[1] "%(nreplies)s réponses"
+msgstr[0] "%(nreplies)s respuesta"
+msgstr[1] "%(nreplies)s respuestas"
 
 #: templates/forum/post_detail.html:18
 msgid "No answer"
@@ -121,7 +120,7 @@ msgstr "Enviar"
 
 #: templates/forum/post_list.html:3 templates/forum/post_list.html:8
 msgid "Latest Posts"
-msgstr "Derniers posts"
+msgstr "Discusiones más recientes"
 
 #: views/views_comment.py:25 views/views_comment.py:47 views/views_post.py:71
 #: views/views_post.py:114

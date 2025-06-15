@@ -19,8 +19,6 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
 
-from cm_main.utils import redirect_to_referer
-
 from ..models import Gallery, Photo
 from ..forms import BulkUploadPhotosForm
 
@@ -196,9 +194,9 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
         except ValidationError as e:
           for err in e.messages:
             messages.error(request, err)
-          return redirect_to_referer(request)
+          return render(request, self.template_name, {'form': form})
         except Exception as e:
           messages.error(request, e.__str__())
-          return redirect_to_referer(request)
+          return render(request, self.template_name, {'form': form})
       else:
         return render(request, self.template_name, {'form': form})

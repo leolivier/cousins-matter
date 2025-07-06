@@ -4,7 +4,14 @@
 {% block content %}
 <div class="container">
   <div class="panel">
-    <div class="panel-heading">{% title _("Classified Ads") %}</div>
+    <div class="panel-heading is-flex is-align-items-center is-justify-content-center">
+			<span class="is-flex-grow-1 has-text-centered">{% title _("Classified Ads") %}</span>
+			{% trans 'Create ad' as create_label %}
+			<a class="button ml-6" href="{%url 'classified_ads:create'%}" aria-label="{{create_label}}" title="{{create_label}}">
+				{%icon "new-classified-ad" %} <span class="is-hidden-mobile ml-3">{{create_label}}</span>
+			</a>
+		</div>
+
     <div class="panel-tabs"></div>
     {% for ad in object_list %}
     <div class="panel-block is-flex">

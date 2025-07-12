@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 11:08+0200\n"
+"POT-Creation-Date: 2025-07-12 10:18+0200\n"
 "PO-Revision-Date: 2025-05-20 11:37+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Italian <LL@li.org>\n"
@@ -381,7 +381,7 @@ msgid "Classified Ad"
 msgstr "Anuncio clasificado"
 
 #: models.py:87 templates/classified_ads/list.html:3
-#: templates/classified_ads/list.html:7
+#: templates/classified_ads/list.html:8
 msgid "Classified Ads"
 msgstr "Anuncios clasificados"
 
@@ -398,7 +398,7 @@ msgid "Classified Ad Detail"
 msgstr "Detalle del anuncio clasificado"
 
 #: templates/classified_ads/detail.html:20
-#: templates/classified_ads/list.html:18
+#: templates/classified_ads/list.html:25
 #, python-format
 msgid "Added by %(owner)s on %(date_created)s"
 msgstr "Aggiunto da %(owner)s il %(date_created)s"
@@ -460,7 +460,7 @@ msgstr "Crea un annuncio clasificato"
 msgid "Edit Classified Ad"
 msgstr "Modifica un annuncio clasificato"
 
-#: templates/classified_ads/form.html:81
+#: templates/classified_ads/form.html:81 templates/classified_ads/list.html:9
 msgid "Create Ad"
 msgstr "Crea un annuncio"
 
@@ -484,29 +484,12 @@ msgstr "Nuova foto"
 msgid "You will be able to add photos after creating the ad"
 msgstr "Dopo aver creato l'annuncio, potrai aggiungere le foto"
 
-#: views.py:26
-msgid "Classified ad created successfully"
-msgstr "Anuncio creato con successo"
-
-#: views.py:56
-msgid "Classified ad updated successfully"
-msgstr "Anuncio aggiornato con successo"
-
-#: views.py:68
-#, python-format
-msgid "Ad \"%(title)s\" deleted"
-msgstr "Anuncio \"%(title)s\" eliminato"
-
-#: views.py:97
-msgid "Photo added successfully"
-msgstr "Foto aggiunta con successo"
-
-#: views.py:116
+#: tests.py:290 views.py:115
 #, python-format
 msgid "Message from %(username)s about ad %(title)s"
 msgstr "Messaggio di %(username)s riguardo all'annuncio %(title)s"
 
-#: views.py:121
+#: tests.py:295 views.py:120
 #, python-format
 msgid ""
 "Hello %(recipient)s,\n"
@@ -521,7 +504,8 @@ msgid ""
 "%(site_url)s\n"
 msgstr ""
 "Ciao %(recipient)s,\n"
-"%(username)s ha inviato il seguente messaggio riguardo all'annuncio %(title)s:\n"
+"%(username)s ha inviato il seguente messaggio riguardo all'annuncio "
+"%(title)s:\n"
 "==========\n"
 "%(message)s\n"
 "==========\n"
@@ -531,6 +515,23 @@ msgstr ""
 "\n"
 "%(site_url)s\n"
 
-#: views.py:142
+#: views.py:26
+msgid "Classified ad created successfully"
+msgstr "Anuncio creato con successo"
+
+#: views.py:55
+msgid "Classified ad updated successfully"
+msgstr "Anuncio aggiornato con successo"
+
+#: views.py:67
+#, python-format
+msgid "Ad \"%(title)s\" deleted"
+msgstr "Anuncio \"%(title)s\" eliminato"
+
+#: views.py:96
+msgid "Photo added successfully"
+msgstr "Foto aggiunta con successo"
+
+#: views.py:141
 msgid "Message sent successfully"
 msgstr "Messaggio inviato con successo"

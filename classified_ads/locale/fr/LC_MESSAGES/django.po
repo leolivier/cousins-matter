@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 11:08+0200\n"
+"POT-Creation-Date: 2025-07-12 10:18+0200\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -381,7 +381,7 @@ msgid "Classified Ad"
 msgstr "Petite annonce"
 
 #: models.py:87 templates/classified_ads/list.html:3
-#: templates/classified_ads/list.html:7
+#: templates/classified_ads/list.html:8
 msgid "Classified Ads"
 msgstr "Petites annonces"
 
@@ -398,7 +398,7 @@ msgid "Classified Ad Detail"
 msgstr "Détails de la petite annonce"
 
 #: templates/classified_ads/detail.html:20
-#: templates/classified_ads/list.html:18
+#: templates/classified_ads/list.html:25
 #, python-format
 msgid "Added by %(owner)s on %(date_created)s"
 msgstr "Ajouté par %(owner)s le %(date_created)s"
@@ -460,9 +460,9 @@ msgstr "Créer une petite annonce"
 msgid "Edit Classified Ad"
 msgstr "Modifier une petite annonce"
 
-#: templates/classified_ads/form.html:81
+#: templates/classified_ads/form.html:81 templates/classified_ads/list.html:9
 msgid "Create Ad"
-msgstr "Créer l'annonce"
+msgstr "Créer une annonce"
 
 #: templates/classified_ads/gallery.html:6
 msgid "Photos"
@@ -484,29 +484,12 @@ msgstr "Nouvelle photo"
 msgid "You will be able to add photos after creating the ad"
 msgstr "Tu pourras d'ajouter des photos aprés la création de l'annonce"
 
-#: views.py:26
-msgid "Classified ad created successfully"
-msgstr "Petite annonce créee avec succés"
-
-#: views.py:56
-msgid "Classified ad updated successfully"
-msgstr "Petite annonce mise à jour avec succés"
-
-#: views.py:68
-#, python-format
-msgid "Ad \"%(title)s\" deleted"
-msgstr "Annonce \"%(title)s\" supprimée"
-
-#: views.py:97
-msgid "Photo added successfully"
-msgstr "Photo ajoutée avec succés"
-
-#: views.py:116
+#: tests.py:290 views.py:115
 #, python-format
 msgid "Message from %(username)s about ad %(title)s"
 msgstr "Message de %(username)s sur l'annonce %(title)s"
 
-#: views.py:121
+#: tests.py:295 views.py:120
 #, python-format
 msgid ""
 "Hello %(recipient)s,\n"
@@ -531,6 +514,23 @@ msgstr ""
 "\n"
 "%(site_url)s\n"
 
-#: views.py:142
+#: views.py:26
+msgid "Classified ad created successfully"
+msgstr "Petite annonce créee avec succés"
+
+#: views.py:55
+msgid "Classified ad updated successfully"
+msgstr "Petite annonce mise à jour avec succés"
+
+#: views.py:67
+#, python-format
+msgid "Ad \"%(title)s\" deleted"
+msgstr "Annonce \"%(title)s\" supprimée"
+
+#: views.py:96
+msgid "Photo added successfully"
+msgstr "Photo ajoutée avec succés"
+
+#: views.py:141
 msgid "Message sent successfully"
 msgstr "Petite annonce créee avec succés"

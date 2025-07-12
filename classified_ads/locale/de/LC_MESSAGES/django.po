@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 1.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 11:08+0200\n"
+"POT-Creation-Date: 2025-07-12 10:18+0200\n"
 "PO-Revision-Date: 2025-05-21 11:08+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
@@ -382,7 +382,7 @@ msgid "Classified Ad"
 msgstr "Gesuchte Anzeige"
 
 #: models.py:87 templates/classified_ads/list.html:3
-#: templates/classified_ads/list.html:7
+#: templates/classified_ads/list.html:8
 msgid "Classified Ads"
 msgstr "Gesuchte Anzeigen"
 
@@ -399,7 +399,7 @@ msgid "Classified Ad Detail"
 msgstr "Gesuchte Anzeige Detail"
 
 #: templates/classified_ads/detail.html:20
-#: templates/classified_ads/list.html:18
+#: templates/classified_ads/list.html:25
 #, python-format
 msgid "Added by %(owner)s on %(date_created)s"
 msgstr "Geschrieben von %(owner)s am %(date_created)s"
@@ -461,9 +461,9 @@ msgstr "Erstelle Gesuchte Anzeige"
 msgid "Edit Classified Ad"
 msgstr "Aktualisiere Gesuchte Anzeige"
 
-#: templates/classified_ads/form.html:81
+#: templates/classified_ads/form.html:81 templates/classified_ads/list.html:9
 msgid "Create Ad"
-msgstr "Erstelle Gesuchte Anzeige"
+msgstr "Erstelle Anzeige"
 
 #: templates/classified_ads/gallery.html:6
 msgid "Photos"
@@ -485,29 +485,12 @@ msgstr "Neues Foto"
 msgid "You will be able to add photos after creating the ad"
 msgstr "Du kannst Fotos hinzufügen nachdem die Anzeige erstellt wurde"
 
-#: views.py:26
-msgid "Classified ad created successfully"
-msgstr "Gesuchte Anzeige erstellt"
-
-#: views.py:56
-msgid "Classified ad updated successfully"
-msgstr "Gesuchte Anzeige aktualisiert"
-
-#: views.py:68
-#, python-format
-msgid "Ad \"%(title)s\" deleted"
-msgstr "Gesuchte Anzeige \"%(title)s\" gelöscht"
-
-#: views.py:97
-msgid "Photo added successfully"
-msgstr "Foto hinzugefügt"
-
-#: views.py:116
+#: tests.py:290 views.py:115
 #, python-format
 msgid "Message from %(username)s about ad %(title)s"
 msgstr "Nachricht von %(username)s über Anzeige %(title)s"
 
-#: views.py:121
+#: tests.py:295 views.py:120
 #, python-format
 msgid ""
 "Hello %(recipient)s,\n"
@@ -532,6 +515,23 @@ msgstr ""
 "\n"
 "%(site_url)s\n"
 
-#: views.py:142
+#: views.py:26
+msgid "Classified ad created successfully"
+msgstr "Gesuchte Anzeige erstellt"
+
+#: views.py:55
+msgid "Classified ad updated successfully"
+msgstr "Gesuchte Anzeige aktualisiert"
+
+#: views.py:67
+#, python-format
+msgid "Ad \"%(title)s\" deleted"
+msgstr "Gesuchte Anzeige \"%(title)s\" gelöscht"
+
+#: views.py:96
+msgid "Photo added successfully"
+msgstr "Foto hinzugefügt"
+
+#: views.py:141
 msgid "Message sent successfully"
 msgstr "Nachricht gesendet"

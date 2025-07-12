@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 1.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 11:08+0200\n"
+"POT-Creation-Date: 2025-07-12 10:18+0200\n"
 "PO-Revision-Date: 2025-05-20 11:37+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Spanish <LL@li.org>\n"
@@ -382,7 +382,7 @@ msgid "Classified Ad"
 msgstr "Anuncio"
 
 #: models.py:87 templates/classified_ads/list.html:3
-#: templates/classified_ads/list.html:7
+#: templates/classified_ads/list.html:8
 msgid "Classified Ads"
 msgstr "Anuncios"
 
@@ -399,7 +399,7 @@ msgid "Classified Ad Detail"
 msgstr "Detalle del anuncio"
 
 #: templates/classified_ads/detail.html:20
-#: templates/classified_ads/list.html:18
+#: templates/classified_ads/list.html:25
 #, python-format
 msgid "Added by %(owner)s on %(date_created)s"
 msgstr "Añadido por %(owner)s el %(date_created)s"
@@ -461,7 +461,7 @@ msgstr "Crear anuncio"
 msgid "Edit Classified Ad"
 msgstr "Editar anuncio"
 
-#: templates/classified_ads/form.html:81
+#: templates/classified_ads/form.html:81 templates/classified_ads/list.html:9
 msgid "Create Ad"
 msgstr "Crear anuncio"
 
@@ -485,29 +485,12 @@ msgstr "Nueva foto"
 msgid "You will be able to add photos after creating the ad"
 msgstr "Podrás añadir fotos después de crear el anuncio"
 
-#: views.py:26
-msgid "Classified ad created successfully"
-msgstr "Anuncio creado correctamente"
-
-#: views.py:56
-msgid "Classified ad updated successfully"
-msgstr "Anuncio actualizado correctamente"
-
-#: views.py:68
-#, python-format
-msgid "Ad \"%(title)s\" deleted"
-msgstr "Anuncio \"%(title)s\" eliminado"
-
-#: views.py:97
-msgid "Photo added successfully"
-msgstr "Foto añadida correctamente"
-
-#: views.py:116
+#: tests.py:290 views.py:115
 #, python-format
 msgid "Message from %(username)s about ad %(title)s"
 msgstr "Mensaje de %(username)s sobre el anuncio %(title)s"
 
-#: views.py:121
+#: tests.py:295 views.py:120
 #, python-format
 msgid ""
 "Hello %(recipient)s,\n"
@@ -532,6 +515,23 @@ msgstr ""
 "\n"
 "%(site_url)s\n"
 
-#: views.py:142
+#: views.py:26
+msgid "Classified ad created successfully"
+msgstr "Anuncio creado correctamente"
+
+#: views.py:55
+msgid "Classified ad updated successfully"
+msgstr "Anuncio actualizado correctamente"
+
+#: views.py:67
+#, python-format
+msgid "Ad \"%(title)s\" deleted"
+msgstr "Anuncio \"%(title)s\" eliminado"
+
+#: views.py:96
+msgid "Photo added successfully"
+msgstr "Foto añadida correctamente"
+
+#: views.py:141
 msgid "Message sent successfully"
 msgstr "Mensaje enviado correctamente"

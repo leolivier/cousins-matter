@@ -67,10 +67,17 @@
 					<div class="cell has-text-centered my-auto is-col-span-2">
 						{%for result in qa.result%}
 							{{result}}<br>
+							<hr>
 						{%endfor%}
 					</div>
 					{% endautoescape %}
-					{% endfor %}
+					{% if not forloop.last %}
+					<div class="cell is-col-span-8"> 
+						<hr style='border: 1px dashed hsl(var(--bulma-link-h),var(--bulma-link-s),var(--bulma-link-l));
+  border-radius: 5px;'>
+					</div>
+					{% endif %}
+				{% endfor %}
 				</div>
 			</div>
 			{%endif%}

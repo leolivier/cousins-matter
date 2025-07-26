@@ -131,7 +131,7 @@ class ChatMessageTests(ChatMessageSenderMixin, MemberTestCase):
     self.assertEqual(response['args']['message'], msg)
     self.assertEqual(response['args']['username'], self.member.username)
     message = await ChatMessage.objects.filter(room=self.room).afirst()
-    self.assertIsNotNone(msg)
+    self.assertIsNotNone(message)
     self.assertEqual(response['args']['message'], message.content)
     self.assertEqual(self.member.id, message.member_id)
     # Close communication
@@ -139,4 +139,5 @@ class ChatMessageTests(ChatMessageSenderMixin, MemberTestCase):
 
     # now, delete the message
     await self.send_delete_message(self.slug, message.id)
-    self.assertEqual(await ChatMessage.objects.acount(), 0)
+    await message.arefresh_from_db()
+    self.assertEqual(message.content, '**This message has been deleted**')

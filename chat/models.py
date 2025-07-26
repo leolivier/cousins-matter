@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Case, When, Value, BooleanField
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
+from enum import Enum
 
 from members.models import Member
 
@@ -71,11 +72,23 @@ class ChatRoom(models.Model):
       )).filter(filters)
 
 
+class MessageStatus(Enum):
+    UNREAD = 'unread'
+    PARTIALLY_READ = 'partially'
+    READ = 'read'
+
+
 class ChatMessage(models.Model):
   member = models.ForeignKey(Member, on_delete=models.CASCADE)
   room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
   content = models.TextField(_('message'), max_length=2*1024*1024)
   date_added = models.DateTimeField(auto_now_add=True)
+  date_modified = models.DateTimeField(null=True, blank=True)
+  read_status = models.CharField(
+    choices=[(status.value, status.name) for status in MessageStatus],
+    max_length=10,
+    default=MessageStatus.UNREAD
+  )
 
   class Meta:
     ordering = ('date_added',)

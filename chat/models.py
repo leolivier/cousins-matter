@@ -84,11 +84,6 @@ class ChatMessage(models.Model):
   content = models.TextField(_('message'), max_length=2*1024*1024)
   date_added = models.DateTimeField(auto_now_add=True)
   date_modified = models.DateTimeField(null=True, blank=True)
-  read_status = models.CharField(
-    choices=[(status.value, status.name) for status in MessageStatus],
-    max_length=10,
-    default=MessageStatus.UNREAD
-  )
 
   class Meta:
     ordering = ('date_added',)

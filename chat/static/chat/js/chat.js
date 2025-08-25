@@ -136,12 +136,6 @@ function update_message_data($data) {
 	}
 }
 
-function mark_message_read($data) {
-	if ($('#message-div-' + $data.msgid).length > 0) {
-		$('#message-div-' + $data.msgid).addClass('is-read')
-	}
-}
-
 $(document).ready(()=>{
 
 	const $chatSocket = new WebSocket(
@@ -165,9 +159,6 @@ $(document).ready(()=>{
 				break
 			case 'update_chat_message':
 				update_message_data($data.args)
-				break
-			case 'mark_message_read':
-				mark_message_read($data.args)
 				break
 			default:
 				console.error('Unknown action: ' + $data.action)

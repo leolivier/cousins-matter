@@ -6,6 +6,7 @@ import logging
 from django.template import Library, Node, Variable, TemplateSyntaxError
 from django.conf import settings
 from django.urls import reverse, resolve, NoReverseMatch
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
 from functools import lru_cache
@@ -233,3 +234,11 @@ def featured(value: str) -> bool:
     Returns the value of a feature flag.
     """
     return settings.FEATURES_FLAGS.get(value, False)
+
+
+@register.filter
+def boldify(value: str) -> str:
+    txt = escape(value)
+    if txt.startswith("**") and txt.endswith("**"):
+        txt = '<i>' + txt[2:-2] + '</i>'
+    return mark_safe(txt)

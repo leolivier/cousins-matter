@@ -17,7 +17,7 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
     Sends an email to the followers of a followed object (followed_object) to which a new element new_internal_object is added.
     new_internal_object is the just create object,
     author is the member who created the new object, and followed_object_url is an url to display the followed object.
-    If the request is not given (ie is None), then the followed_object_url ùust be an absolute URL, otherwise it has to be a
+    If the request is not given (ie is None), then the followed_object_url must be an absolute URL, otherwise it has to be a
     reative URL.
     Followers are the members who follow the followed object, and they are stored in the followed_object.followers attribute.
     It is assumed that str(followed_object) returns a string that can be used in the name of the followed object.
@@ -99,8 +99,23 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
   email.send()
 
 
-# Base view function to toggle follow for a given object
 def toggle_follow(request, followed_object, owner, followed_object_url):
+
+  """
+  Toggles the follow status of a user for a given object and sends notifications.
+
+  Parameters:
+      request (HttpRequest): The HTTP request object containing user information.
+      followed_object (Model): The object that the user is following or unfollowing.
+      owner (User): The owner of the followed object.
+      followed_object_url (str): The URL of the followed object.
+
+  Raises:
+      ValueError: If the followed object has no name.
+
+  Returns:
+      HttpResponseRedirect: Redirects to the followed object's URL.
+  """
 
   followed_type = followed_object._meta.verbose_name
   if followed_object.followers.filter(id=request.user.id).exists():

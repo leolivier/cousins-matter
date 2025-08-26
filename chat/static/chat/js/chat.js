@@ -205,7 +205,7 @@ $(document).ready(()=>{
 		const msgid = $(this).data('msgid');
 		const $block = $('#message-div-' + msgid)
 		if ($block.length > 0) {
-			content = $block.find('span.content').text()
+			content = escapeHtml($block.find('span.content').text())
 			$block.append('<input class="input" type="text" id="chat-message-edit" value="' + content + '">')
 			// if enter is pressed on the message input, submit the content
 			$('#chat-message-edit').on('keyup', (e) => {

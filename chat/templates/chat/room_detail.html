@@ -9,6 +9,9 @@ const $pageNumber = parseInt('{{page.number}}');
 const $numPages = parseInt('{{page.num_pages}}');
 const $lastPageLink = '{{page.last_page_link}}';
 const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
+var $lastDate = '{{last_date}}';
+var $lastSender = '{{last_sender}}';
+// console.log("input last date: ", $lastDate)
 </script>
 <script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 <script src="{% static 'chat/js/chat.js' %}"></script>
@@ -73,23 +76,58 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 			<div class="panel-block">
 				<span class="control">{%paginate page%}</span>
 			</div>
-			<div  id="chat-messages">
+			<div  id="chat-messages" class="has-background-light">
 			{%for msg in chat_messages %}
 			{# WARNING!!! The code of below <div> is duplicated in chat.js, function append_message_data #}
-			<div class="panel-block has-text-right is-flex is-flex-wrap-wrap is-align-items-flex-start" id="message-div-{{msg.id}}">
-				<p class="has-text-primary has-text-weight-bold mr-5">
-					{{msg.member.username}}
-					<a href="{%url 'members:detail' msg.member.id %}" aria-label="{%trans 'profile'%}">
+				{% ifchanged msg.date_added.date %}
+					<p class="has-text-centered is-size-7 has-text-link mx-auto my-3">
+						{{ msg.date_added|date:"DATE_FORMAT" }}
+					</p>
+				{% endifchanged %}
+				{%if request.user == msg.member %}
+				<div class="panel-block is-justify-content-flex-end" id="message-div-{{msg.id}}">
+				{%else%}
+				<div class="panel-block is-flex-wrap-wrap is-align-items-flex-start" id="message-div-{{msg.id}}">
+					<p class="has-background-white mx-5 br-2">
+				{%endif%}
+				{# The code below could be simplified but the %ifchanged must be traversed in every case #}
+				{% ifchanged msg.member.username %}{%if request.user != msg.member %}
+					<span class="has-text-primary has-text-weight-bold mx-5">{{msg.member.get_full_name}}</span>
+					<a href="{%url 'members:detail' msg.member.id %}" aria-label="{%trans 'profile'%}" class="my-auto">
 						{%icon "member-link" %}
 					</a>
 					<br>
-					<span class="is-size-7">{{msg.date_added|date:"DATETIME_FORMAT"}}</span>
-				</p>
-				<p class="content is-flex-grow-1 has-text-left">{{msg.content}}</p> 
+				{%endif%}{% endifchanged %}
 				{%if request.user == msg.member %}
-				<div class="button is-pulled-right delete-chat-message" title="{%trans 'Delete' %}" data-msgid="{{msg.id}}">
-					{%icon "delete" %}
-				</div>
+					<span class="content mr-1 my-auto px-2 py-1 has-background-primary-light br-2">{{msg.content|boldify}}</span> 
+				{%else%}
+					<span class="content has-text-left mx-5 my-auto">{{msg.content|boldify}}</span>
+				{%endif%}
+				{%if msg.date_modified %}
+					<span class="is-size-7 mx-2 my-auto has-text-right">(*) {{msg.date_modified|date:"DATETIME_FORMAT"}}</span>
+				{%else%}
+					<span class="is-size-7 mx-2 my-auto has-text-right">{{msg.date_added|date:"TIME_FORMAT"}}</span>
+				{%endif%}
+				{%if request.user == msg.member %}
+					<div class="dropdown is-hoverable">
+						<div class="dropdown-trigger">
+							<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+								<span>...</span>
+							</button>
+						</div>
+						<div class="dropdown-menu" id="dropdown-menu" role="menu">
+							<div class="dropdown-content">
+								<a class="dropdown-item delete-chat-message" title="{%trans 'Delete' %}" data-msgid="{{msg.id}}">
+									{%icon "delete" %} <span class="is-hidden-mobile my-auto">{%trans "Delete"%}</span>
+								</a>
+								<a class="dropdown-item edit-chat-message" title="{%trans 'Edit' %}" data-msgid="{{msg.id}}">
+									{%icon "edit" %} <span class="is-hidden-mobile my-auto">{%trans "Edit"%}</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				{%else%}
+				</p>
 				{%endif%}
 			</div>
 			{%endfor%}
@@ -107,6 +145,7 @@ const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
 					</div>
 				</div>
 		</div>
+		<div class="panel-block"><i>(*) {%trans "Modified message"%}</i></div>
 	</div>
 	{%if room.owner == request.user %}
 		{%include "cm_main/common/modal_form.html" with modal_id="delete-item-modal" %}

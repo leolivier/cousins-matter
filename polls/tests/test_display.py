@@ -42,12 +42,14 @@ class TestDisplayPollInfo(PollTestMixin):
                     choice_results = {}
                     for choice in question.possible_choices:
                         choice_results[choice] = sum(1 for a in answers if a.answer == choice)/len(answers)
-                    result = '<br><hr>'.join([f"{choice}: {choice_results[choice]:.1%}" for choice in question.possible_choices])
+                    result = '<br><hr>'.join([f"{choice}: {choice_results[choice]:.1%}"
+                                              for choice in question.possible_choices])
                 case Question.MULTICHOICES_QUESTION:
                     choice_results = {}
                     for choice in question.possible_choices:
                         choice_results[choice] = sum(1 for a in answers if choice in a.answer)/len(answers)
-                    result = '<br><hr>'.join([f"{choice}: {choice_results[choice]:.1%}" for choice in question.possible_choices])
+                    result = '<br><hr>'.join([f"{choice}: {choice_results[choice]:.1%}"
+                                              for choice in question.possible_choices])
 
             line = f"""
 <div class="cell has-text-centered my-auto has-background-link has-text-light is-col-span-3">

@@ -293,3 +293,19 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 .icon-radio-group input[type="radio"]:checked + .icon i {
 	color: var(--bulma-light);
 }
+
+.br-1 {
+	border-radius: var(--bulma-radius);
+}
+.br-2 {
+	border-radius: calc(var(--bulma-radius)*2);
+}
+.br-3 {
+	border-radius: calc(var(--bulma-radius)*3);
+}
+.br-4 {
+	border-radius: calc(var(--bulma-radius)*4);
+}
+.br-5 {
+	border-radius: calc(var(--bulma-radius)*5);
+}

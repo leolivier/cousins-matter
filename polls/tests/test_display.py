@@ -34,20 +34,22 @@ class TestDisplayPollInfo(PollTestMixin):
                     result = sum(1 for a in answers if a.answer)/len(answers)
                     result = f"{result:.1%}"
                 case Question.DATE_QUESTION:
-                    result = "<br>".join([formats.date_format(timezone.localtime(a.answer), "DATETIME_FORMAT")
-                                          for a in answers])
+                    result = "<br><hr>".join([formats.date_format(timezone.localtime(a.answer), "DATETIME_FORMAT")
+                                              for a in answers])
                 case Question.OPENTEXT_QUESTION:
-                    result = "<br>".join((a.answer for a in answers))
+                    result = "<br><hr>".join((a.answer for a in answers))
                 case Question.SINGLECHOICE_QUESTION:
                     choice_results = {}
                     for choice in question.possible_choices:
                         choice_results[choice] = sum(1 for a in answers if a.answer == choice)/len(answers)
-                    result = '<br>'.join([f"{choice}: {choice_results[choice]:.1%}" for choice in question.possible_choices])
+                    result = '<br><hr>'.join([f"{choice}: {choice_results[choice]:.1%}"
+                                              for choice in question.possible_choices])
                 case Question.MULTICHOICES_QUESTION:
                     choice_results = {}
                     for choice in question.possible_choices:
                         choice_results[choice] = sum(1 for a in answers if choice in a.answer)/len(answers)
-                    result = '<br>'.join([f"{choice}: {choice_results[choice]:.1%}" for choice in question.possible_choices])
+                    result = '<br><hr>'.join([f"{choice}: {choice_results[choice]:.1%}"
+                                              for choice in question.possible_choices])
 
             line = f"""
 <div class="cell has-text-centered my-auto has-background-link has-text-light is-col-span-3">
@@ -56,7 +58,7 @@ class TestDisplayPollInfo(PollTestMixin):
 </div>
 <div class="cell has-text-centered my-auto">{len(answers)}</div>
 <div class="cell has-text-centered my-auto is-col-span-2">{str(answer)}</div>
-<div class="cell has-text-centered my-auto is-col-span-2">{result}<br></div>
+<div class="cell has-text-centered my-auto is-col-span-2">{result}<br><hr></div>
 """
             self.assertContains(response, line, html=True)
 
@@ -90,9 +92,9 @@ class TestDisplayPollInfo(PollTestMixin):
                 case Question.OPENTEXT_QUESTION:
                     result = '-'
                 case Question.SINGLECHOICE_QUESTION:
-                    result = '<br>'.join([f"{choice}: 0%" for choice in question.possible_choices])
+                    result = '<br><hr>'.join([f"{choice}: 0%" for choice in question.possible_choices])
                 case Question.MULTICHOICES_QUESTION:
-                    result = '<br>'.join([f"{choice}: 0%" for choice in question.possible_choices])
+                    result = '<br><hr>'.join([f"{choice}: 0%" for choice in question.possible_choices])
             line = f"""
 <div class="cell has-text-centered my-auto has-background-link has-text-light is-col-span-3">
   {icon(question_icon(question.question_type))}
@@ -100,7 +102,7 @@ class TestDisplayPollInfo(PollTestMixin):
 </div>
 <div class="cell has-text-centered my-auto">0</div>
 <div class="cell has-text-centered my-auto is-col-span-2">-</div>
-<div class="cell has-text-centered my-auto is-col-span-2">{result}<br></div>
+<div class="cell has-text-centered my-auto is-col-span-2">{result}<br><hr></div>
 """
             self.assertContains(response, line, html=True)
 

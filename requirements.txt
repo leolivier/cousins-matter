@@ -14,3 +14,5 @@ packaging~=25.0
 django_ipware~=7.0.1
 requests~=2.32.4
 fpdf~=1.7.2
+django-q2~=1.8.0
+blessed~=1.20.0

@@ -1,5 +1,6 @@
-from ipware import get_client_ip
 import requests
+from datetime import timedelta
+from ipware import get_client_ip
 from django.conf import settings
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.core.exceptions import FieldDoesNotExist
@@ -7,6 +8,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from functools import lru_cache
 from members.models import LoginTrace
+
 default_geolocation_data = None
 
 
@@ -68,3 +70,19 @@ def get_default_geolocation_data():
   if default_geolocation_data is None:
     default_geolocation_data = get_geolocation_data(settings.LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP)
   return default_geolocation_data
+
+
+def purge_login_traces(days: int):
+    "Deletes login traces older than days."
+    a_while_ago = timezone.now() - timedelta(days=days)
+    # Deletion of logs with a login date prior to LOGIN_HISTORY_PURGE_DAYS days ago
+    deleted, _ = LoginTrace.objects.filter(login_at__lt=a_while_ago).delete()
+    return deleted
+
+# Use the schedule function of django q2 to schedule a weekly task to clean login traces
+from django_q.tasks import schedule  # noqa
+from django_q.models import Schedule  # noqa
+
+schedule('members.trace_login.purge_login_traces',
+         settings.LOGIN_HISTORY_PURGE_DAYS,
+         schedule_type=Schedule.WEEKLY)

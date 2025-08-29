@@ -1,3 +1,0 @@
-# run every day at 3AM
-0 3 * * sun /usr/local/bin/python /app/manage.py purge_login_traces
-

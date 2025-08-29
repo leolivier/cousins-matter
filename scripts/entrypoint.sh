@@ -78,8 +78,6 @@ sudo -u $USER python manage.py check
 
 echo "environment is ready..."
 
-echo "Starting cron..."
-cron
 
 echo "starting $@"   # as provided in the Dockerfile
 exec "$@"	

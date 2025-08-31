@@ -1,6 +1,6 @@
 services:
   cousins-matter:
-    image: ${COUSINS_MATTER_IMAGE:-cousins-matter}
+    image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
     container_name: cousins-matter
     # the build works only in dev mode
     build:

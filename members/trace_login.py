@@ -4,8 +4,12 @@ from ipware import get_client_ip
 from django.conf import settings
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.core.exceptions import FieldDoesNotExist
+from django.db.models.signals import post_migrate
+from django.db.utils import IntegrityError
 from django.dispatch import receiver
 from django.utils import timezone
+from django_q.tasks import schedule
+from django_q.models import Schedule
 from functools import lru_cache
 from members.models import LoginTrace
 
@@ -79,10 +83,22 @@ def purge_login_traces(days: int):
     deleted, _ = LoginTrace.objects.filter(login_at__lt=a_while_ago).delete()
     return deleted
 
-# Use the schedule function of django q2 to schedule a weekly task to clean login traces
-from django_q.tasks import schedule  # noqa
-from django_q.models import Schedule  # noqa
 
-schedule('members.trace_login.purge_login_traces',
-         settings.LOGIN_HISTORY_PURGE_DAYS,
-         schedule_type=Schedule.WEEKLY)
+_purge_scheduled = False
+# starts the scheduling after the migrations
+# TODO: make sure the post_migrate signals (1 per migration) are sent after all migrations are done
+@receiver(post_migrate)  # noqa E302
+def schedule_purge_login_traces(sender, **kwargs):
+    "Schedules the purge_login_traces function to run weekly."
+    global _purge_scheduled
+    if _purge_scheduled:
+        return
+    _purge_scheduled = True
+    try:
+      if not Schedule.objects.filter(name='purge_login_traces').exists():
+        schedule('members.trace_login.purge_login_traces',
+                 settings.LOGIN_HISTORY_PURGE_DAYS,
+                 schedule_type=Schedule.WEEKLY,
+                 name='purge_login_traces')
+    except IntegrityError as e:
+        print(f"Error scheduling purge_login_traces: {e}")

@@ -37,10 +37,10 @@ STATIC_URL = 'static/'
 
 MEDIA_REL = 'media'
 MEDIA_ROOT = BASE_DIR / MEDIA_REL
-if DEBUG:
-  MEDIA_URL = MEDIA_REL + '/'
-else:
-  MEDIA_URL = f'protected_{MEDIA_REL}/'
+# if DEBUG:
+#   MEDIA_URL = MEDIA_REL + '/'
+# else:
+MEDIA_URL = f'protected_{MEDIA_REL}/'
 
 PUBLIC_MEDIA_ROOT = MEDIA_ROOT / 'public'
 PUBLIC_MEDIA_URL = f'/{MEDIA_REL}/public/'
@@ -115,6 +115,7 @@ INSTALLED_APPS = [
   'django.contrib.flatpages',
   'captcha',
   'channels',
+  'django_q',
 ]
 
 MIDDLEWARE = [
@@ -472,3 +473,22 @@ FEATURES_FLAGS = env.dict(
 
 if DEBUG:
   print("FEATURES_FLAGS", FEATURES_FLAGS)
+
+# Django Q2 settings
+Q_CLUSTER = {
+    'name': SITE_NAME,
+    # 'workers': 4,
+    # 'recycle': 500,
+    'timeout': 60,
+    'max_attempts': 5,
+    # 'compress': False,
+    # 'cpu_affinity': 1,
+    # 'save_limit': 250,
+    # 'queue_limit': 500,
+    # 'label': 'Django Q2',
+    # 'redis': {
+    #     'host': 'redis',
+    #     'port': 6379,
+    #     'db': 0,
+    # }
+}

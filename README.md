@@ -19,15 +19,26 @@ An application for managing large families, listing all your cousins and allowin
 ## Features
 
 ### Member Management
+* Members can be listed, filtered by first and last name and sorted 
+  <img width="1543" height="675" alt="image" src="https://github.com/user-attachments/assets/4f4f9763-4096-46a3-b381-cc555ace8506" />
+
 * Site admin can invite their cousins by email
+  <img width="1351" height="318" alt="image" src="https://github.com/user-attachments/assets/1bee54d3-fe81-4a0d-a996-0f98088b2344" />
+
 * Anyone can request an invitation which will be emailed to the site admin who can then invite them. Invitation requests are protected by a captcha.
+  <img width="1392" height="845" alt="image" src="https://github.com/user-attachments/assets/f1ac6e24-bf02-4c53-ab2d-da1cc8f4305b" />
+
 * Members can create "managed" members, i.e. members who are not active on the site (e.g. for small children or elderly people)
 * Managed members can be activated by their managing members (e.g. when a child is old enough to be active on the site).
 * Members can be imported in bulk via CSV files
-* Member list can be filtered by first and last name
 * Members can update their own profile and the profile of the members they manage
+  <img width="1343" height="902" alt="image" src="https://github.com/user-attachments/assets/d86cf57c-64aa-4491-bfc8-38b37f1c12e6" />
+
 * A directory of members can be printed in PDF format
+  <img width="966" height="835" alt="image" src="https://github.com/user-attachments/assets/8e49483c-8574-4fa6-bbef-df32bfab457f" />
+
 * Birthdays in the next 50 days can be displayed (50 can be changed in settings)
+  <img width="1355" height="368" alt="image" src="https://github.com/user-attachments/assets/31f87783-f8bb-43b0-912c-551054d6ce4b" />
 
 ### Galleries
 * All active members can create galleries and add photos to them

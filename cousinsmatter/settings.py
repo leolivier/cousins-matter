@@ -37,10 +37,10 @@ STATIC_URL = 'static/'
 
 MEDIA_REL = 'media'
 MEDIA_ROOT = BASE_DIR / MEDIA_REL
-if DEBUG:
-  MEDIA_URL = MEDIA_REL + '/'
-else:
-  MEDIA_URL = f'protected_{MEDIA_REL}/'
+# if DEBUG:
+#   MEDIA_URL = MEDIA_REL + '/'
+# else:
+MEDIA_URL = f'protected_{MEDIA_REL}/'
 
 PUBLIC_MEDIA_ROOT = MEDIA_ROOT / 'public'
 PUBLIC_MEDIA_URL = f'/{MEDIA_REL}/public/'

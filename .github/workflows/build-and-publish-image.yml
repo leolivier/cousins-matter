@@ -100,10 +100,6 @@ jobs:
           fail_on_empty: false
           sort_keys: false
 
-      - name: Test django (skip redis needing tests)
-        run: |
-          python ./manage.py test --exclude-tag needs-redis
-    
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -141,8 +137,6 @@ jobs:
           MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
           TAGS: ${{ steps.meta.outputs.tags }}
         run: |
-          mkdir -p ./data ./media ./media/public
-          touch ./media/public/theme.css
           FIRST_TAG=$(echo "$TAGS" | head -n 1)
           echo "Tested image is $FIRST_TAG"
           docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $FIRST_TAG

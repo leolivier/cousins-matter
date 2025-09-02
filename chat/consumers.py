@@ -220,7 +220,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # print('create_chat_message', args)
 
   async def check_user_permission(self, msgid):
-    "checks if the user in the scope is the owner of the message geiven by msgid"
+    "checks if the user in the scope is the owner of the message given by msgid"
     message = await ChatMessage.objects.aget(pk=msgid)
 
     if 'asgi' not in self.scope:
@@ -228,7 +228,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
       raise ValidationError(f"_('Malformed message: no asgi'):{self.scope}")
     elif 'user' not in self.scope['asgi']:
       logger.info("no user in asgi:", self.scope['asgi'])
-      raise ValidationError(_('Malformed message: no user in asgi'))
+      raise ValidationError(f"_('Malformed message: no user in asgi'):{self.scope['asgi']}")
     else:
       user = self.scope['asgi']['user']
       if user.pk != message.member_id:

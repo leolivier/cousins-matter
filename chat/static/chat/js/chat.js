@@ -148,7 +148,7 @@ $(document).ready(()=>{
 
 	$chatSocket.onmessage = (e) => {
 		const $data = JSON.parse(e.data);
-		console.log($data)
+		// console.log($data)
 		switch ($data.action) {
 			case 'create_chat_message':
 				if ($pageNumber == $numPages) {

@@ -52,6 +52,16 @@ class ChatMessageSenderMixin():
     }
     return await self._send_msg(room_slug, data, disconnect)
 
+  async def send_updated_message(self, room_slug, msgid, msg):
+    data = {
+      'action': 'update_chat_message',
+      'args': {
+        'msgid': msgid,
+        'message': msg
+      }
+    }
+    return await self._send_msg(room_slug, data, disconnect=True)
+
   async def send_delete_message(self, room_slug, msgid):
     data = {
       'action': 'delete_chat_message',

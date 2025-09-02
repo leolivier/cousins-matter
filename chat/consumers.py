@@ -240,7 +240,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     """
     message = data['message']
     msgid = data['msgid']
-    self.check_user_permission(msgid)
+    await self.check_user_permission(msgid)
     # Save the message
     msg = await self.update_message(msgid, message)
     print("updated: ", message, ', now sends to ', self.room_group_name)
@@ -268,7 +268,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
   async def receive_delete_chat_message(self, data):
     msgid = data['msgid']
-    self.check_user_permission(msgid)
+    await self.check_user_permission(msgid)
     # delete the message (actually, replacing it by a deletion message)
     del_msg = f'**{_("This message has been deleted")}**'
     await self.update_message(msgid, del_msg)

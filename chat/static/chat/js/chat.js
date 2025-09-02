@@ -80,7 +80,7 @@ function append_message_data($data) {
 
 			$messages.append(
 				'<p class="has-text-centered is-size-7 has-text-link mx-auto my-3">' +
-					escapeHtml(formattedDate) +
+					formattedDate +
 				'</p>'
 			);
 		}

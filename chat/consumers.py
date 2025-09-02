@@ -225,7 +225,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     if 'asgi' not in self.scope:
       logger.info('no asgi in data:', self.scope)
-      raise ValidationError(_('Malformed message: no asgi'))
+      raise ValidationError(f"_('Malformed message: no asgi'):{self.scope}")
     elif 'user' not in self.scope['asgi']:
       logger.info("no user in asgi:", self.scope['asgi'])
       raise ValidationError(_('Malformed message: no user in asgi'))

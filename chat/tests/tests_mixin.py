@@ -3,7 +3,7 @@ from django.contrib.auth import aget_user
 from asgiref.sync import sync_to_async
 from channels.testing import WebsocketCommunicator
 from channels.routing import URLRouter
-
+from django.contrib.auth import get_user_model
 from ..models import ChatRoom
 from ..routing import websocket_urlpatterns
 
@@ -28,7 +28,15 @@ class ChatMessageSenderMixin():
 
   async def _send_msg(self, room_slug, data, disconnect):
     application = URLRouter(websocket_urlpatterns)
-    communicator = WebsocketCommunicator(application, f"/chat/{room_slug}")
+    # Get the currently logged-in user
+    user = await sync_to_async(lambda: self.client.session.get('_auth_user_id'))()
+    user_obj = await sync_to_async(get_user_model().objects.get)(pk=user)
+
+    communicator = WebsocketCommunicator(
+        application=application,
+        path=f"/chat/{room_slug}",
+    )
+    communicator.scope['user'] = user_obj
     connected, subprotocol = await communicator.connect()
     self.assertTrue(connected)
     # Test sending data as text
@@ -52,7 +60,7 @@ class ChatMessageSenderMixin():
     }
     return await self._send_msg(room_slug, data, disconnect)
 
-  async def send_updated_message(self, room_slug, msgid, msg):
+  async def send_updated_message(self, room_slug, msgid, msg, disconnect=True):
     data = {
       'action': 'update_chat_message',
       'args': {
@@ -60,16 +68,16 @@ class ChatMessageSenderMixin():
         'message': msg
       }
     }
-    return await self._send_msg(room_slug, data, disconnect=True)
+    return await self._send_msg(room_slug, data, disconnect)
 
-  async def send_delete_message(self, room_slug, msgid):
+  async def send_delete_message(self, room_slug, msgid, disconnect=True):
     data = {
       'action': 'delete_chat_message',
       'args': {
         'msgid': msgid
       }
     }
-    return await self._send_msg(room_slug, data, disconnect=True)
+    return await self._send_msg(room_slug, data, disconnect)
 
   def setUp(self):
     super().setUp()

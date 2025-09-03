@@ -138,8 +138,9 @@ function update_message_data($data) {
 
 $(document).ready(()=>{
 
+	const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 	const $chatSocket = new WebSocket(
-		'ws://' + window.location.host + '/chat/' + $roomSlug
+		wsProtocol + window.location.host + '/chat/' + $roomSlug
 	);
 
 	$chatSocket.onclose = (e) => {

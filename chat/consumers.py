@@ -4,7 +4,6 @@ import logging
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from urllib.parse import unquote
-from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.formats import localize  # , date_format
 from django.utils import timezone
@@ -220,40 +219,87 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # print('create_chat_message', args)
 
   async def check_user_permission(self, msgid):
-    "checks if the user in the scope is the owner of the message given by msgid"
-    message = await ChatMessage.objects.aget(pk=msgid)
+    """Checks whether the logged-in user is the owner of the message
 
-    if 'asgi' not in self.scope:
-      logger.info('no asgi in data:', self.scope)
-      raise ValidationError(f"_('Malformed message: no asgi'):{self.scope}")
-    elif 'user' not in self.scope['asgi']:
-      logger.info("no user in asgi:", self.scope['asgi'])
-      raise ValidationError(f"_('Malformed message: no user in asgi'):{self.scope['asgi']}")
-    else:
-      user = self.scope['asgi']['user']
-      if user.pk != message.member_id:
-        raise PermissionError(_("You can only update or delete your own messages"))
+    Args:
+        msgid: ID of the message to check
+
+    Returns:
+        bool: True if the user is the owner, False otherwise
+
+    """
+    try:
+      message = await ChatMessage.objects.aget(pk=msgid)
+      user = self.scope.get('user')
+
+      if not user or user.is_anonymous:
+        msg = _("User not authenticated")
+        logger.warning(f"Permission denied for message {msgid}: {msg}")
+        await self.send(text_data=json.dumps({
+          'action': 'error',
+          'error': msg
+        }))
+        return False
+
+      if message.member_id != user.id:
+        msg = _("You can only update or delete your own messages")
+        logger.warning(f"Permission denied for message {msgid}: {msg}")
+        await self.send(text_data=json.dumps({
+          'action': 'error',
+          'error': msg
+        }))
+        return False
+
+    except ChatMessage.DoesNotExist:
+      msg = _("Message does not exist")
+      logger.warning(f"Permission denied for message {msgid}: {msg}")
+      await self.send(text_data=json.dumps({
+        'action': 'error',
+        'error': msg
+      }))
+      return False
+    except Exception as e:
+        logger.error(f"Error checking permissions for message {msgid}: {str(e)}")
+        await self.send(text_data=json.dumps({
+          'action': 'error',
+          'error': _("An error occurred while checking permissions.")
+        }))
+        return
+
+    return True
 
   async def receive_update_chat_message(self, data):
     """
     Handles the update of a chat message.
+
+    Args:
+        data: dict containing 'message' (new message content) and 'msgid' (message ID)
     """
-    message = data['message']
-    msgid = data['msgid']
-    await self.check_user_permission(msgid)
-    # Save the message
-    msg = await self.update_message(msgid, message)
-    print("updated: ", message, ', now sends to ', self.room_group_name)
-    # Send it to room group
-    await self.channel_layer.group_send(
-      self.room_group_name,
-      {
-        'type': 'update_chat_message',
-        'msgid': msg.id,
-        'message': message,
-      }
-    )
-    # print("websocket send: ", message, ' to ', self.room_group_name)
+    try:
+      message = data['message']
+      msgid = data['msgid']
+
+      if not await self.check_user_permission(msgid):
+        return
+      msg = await self.update_message(msgid, message)
+      logger.info(f"Message {msgid} updated successfully")
+
+      # Send the update to all members of the group
+      await self.channel_layer.group_send(
+        self.room_group_name,
+        {
+          'type': 'update_chat_message',
+          'msgid': msg.id,
+          'message': message,
+        }
+      )
+
+    except Exception as e:
+      logger.error(f"Error updating message {msgid}: {str(e)}")
+      await self.send(text_data=json.dumps({
+        'action': 'error',
+        'error': f"{_('An error occurred while updating the message')}: {str(e)}"
+      }))
 
   async def update_chat_message(self, event):
     """
@@ -267,17 +313,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # print('update_chat_message', event)
 
   async def receive_delete_chat_message(self, data):
-    msgid = data['msgid']
-    await self.check_user_permission(msgid)
-    # delete the message (actually, replacing it by a deletion message)
-    del_msg = f'**{_("This message has been deleted")}**'
-    await self.update_message(msgid, del_msg)
-    # Send "delete" message to room group
-    await self.channel_layer.group_send(
-      self.room_group_name,
-      {
-        'type': 'update_chat_message',
-        'msgid': msgid,
-        'message': del_msg
-      }
-    )
+    """
+    Handles the deletion of a chat message by replacing it with a deletion notice.
+    
+    Args:
+        data: dict containing 'msgid' (message ID to delete)
+    """
+    try:
+      msgid = data['msgid']
+
+      # Check user permissions
+      if not await self.check_user_permission(msgid):
+        return
+      del_msg = f'**{_("This message has been deleted")}**'
+      await self.update_message(msgid, del_msg)
+      logger.info(f"Message {msgid} marked as deleted")
+
+      # Send the deletion notice to all members of the group
+      await self.channel_layer.group_send(
+        self.room_group_name,
+        {
+          'type': 'update_chat_message',
+          'msgid': msgid,
+          'message': del_msg
+        }
+      )
+
+    except Exception as e:
+      logger.error(f"Error marking message {msgid} as deleted: {str(e)}")
+      await self.send(text_data=json.dumps({
+        'action': 'error',
+        'error': f'_("An error occurred while deleting the message"): {str(e)}'
+      }))

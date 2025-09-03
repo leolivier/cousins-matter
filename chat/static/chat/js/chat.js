@@ -161,6 +161,9 @@ $(document).ready(()=>{
 			case 'update_chat_message':
 				update_message_data($data.args)
 				break
+			case 'error':
+				alert($data.error)
+				break
 			default:
 				console.error('Unknown action: ' + $data.action)
 		}

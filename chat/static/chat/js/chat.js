@@ -112,10 +112,24 @@ function append_message_data($data) {
 		$msg += get_message_content($data) + '</span>' +
 			'<span class="is-size-7 mx-2 my-auto has-text-right">' + escapeHtml($data.date_added) + '</span>'
 		if ($curUserMsg) {
-			$msg += '<div class="button delete-chat-message my-auto" title="' + gettext('Delete') + 
-							'" data-msgid="' + $data.msgid + '">'
-							'		<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline" aria-hidden="true"></i></span>' +
-							'	</div>'
+			$msg += '<div class="dropdown is-hoverable">' +
+						'<div class="dropdown-trigger">' +
+							'<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">' +
+								'<span>...</span>' +
+							'</button>' +
+						'</div>' +
+						'<div class="dropdown-menu" id="dropdown-menu" role="menu">' +
+								'<div class="dropdown-content">' +
+									'<a class="dropdown-item delete-chat-message" title="' + gettext('Delete') + '" data-msgid="' + $data.msgid + '">' +
+										'<span class="icon is-large"><i class="mdi mdi-24px mdi-trash-can-outline" aria-hidden="true"></i></span>' +
+										'<span class="is-hidden-mobile my-auto">' + gettext('Delete') + '</span>' +
+									'</a>' +
+									'<a class="dropdown-item edit-chat-message" title="' + gettext('Edit') + '" data-msgid="' + $data.msgid + '">' +
+										'<span class="icon is-large"><i class="mdi mdi-24px mdi-pencil-outline" aria-hidden="true"></i></span>' +
+										'<span class="is-hidden-mobile my-auto">' + gettext('Edit') + '</span>' +
+									'</a>' +
+								'</div>' +
+							'</div>'
 		} else {
 			$msg += '</p>'
 		}

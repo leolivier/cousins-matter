@@ -38,7 +38,7 @@ An application for managing large families, listing all your cousins and allowin
   <img width="966" height="835" alt="image" src="https://github.com/user-attachments/assets/8e49483c-8574-4fa6-bbef-df32bfab457f" />
 
 * Birthdays in the next 50 days can be displayed (50 can be changed in settings)
-  <img width="1355" height="368" alt="image" src="https://github.com/user-attachments/assets/31f87783-f8bb-43b0-912c-551054d6ce4b" />
+<img width="1357" height="366" alt="image" src="https://github.com/user-attachments/assets/11014f9b-f990-4565-b971-b33c1f06cc30" />
 
 ### Galleries
 * All active members can create galleries and add photos to them

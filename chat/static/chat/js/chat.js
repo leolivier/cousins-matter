@@ -80,7 +80,7 @@ function append_message_data($data) {
 
 			$messages.append(
 				'<p class="has-text-centered is-size-7 has-text-link mx-auto my-3">' +
-					escapeHtml(formattedDate) +
+					formattedDate +
 				'</p>'
 			);
 		}
@@ -138,8 +138,9 @@ function update_message_data($data) {
 
 $(document).ready(()=>{
 
+	const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 	const $chatSocket = new WebSocket(
-		'ws://' + window.location.host + '/chat/' + $roomSlug
+		wsProtocol + window.location.host + '/chat/' + $roomSlug
 	);
 
 	$chatSocket.onclose = (e) => {
@@ -148,7 +149,7 @@ $(document).ready(()=>{
 
 	$chatSocket.onmessage = (e) => {
 		const $data = JSON.parse(e.data);
-		console.log($data)
+		// console.log($data)
 		switch ($data.action) {
 			case 'create_chat_message':
 				if ($pageNumber == $numPages) {
@@ -159,6 +160,9 @@ $(document).ready(()=>{
 				break
 			case 'update_chat_message':
 				update_message_data($data.args)
+				break
+			case 'error':
+				alert($data.error)
 				break
 			default:
 				console.error('Unknown action: ' + $data.action)

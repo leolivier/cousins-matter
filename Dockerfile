@@ -24,8 +24,9 @@ WORKDIR ${APP_DIR}
 # We must update twice as we need first to install gpg before installing redis
 RUN apt-get update &&\
 		apt-get install -y lighttpd sqlite3 sudo supervisor redis &&\
+		apt-get clean && \
 		mkdir -p "/var/log/supervisord" "/var/run/supervisord" &&\
-		rm -rf /var/lib/apt/lists/*
+		rm -rf /var/lib/apt/lists/* /var/cache/apt/* /var/cache/debconf/*
 
 # Allows docker to cache installed dependencies between builds
 COPY requirements.txt .

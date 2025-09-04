@@ -137,7 +137,20 @@ class ChatMessageTests(ChatMessageSenderMixin, MemberTestCase):
     # Close communication
     await communicator.disconnect()
 
-    # now, delete the message
+    # now, update the message and check it is updated
+    new_msg = 'this is my updated message to the world!'
+    communicator = await self.send_updated_message(self.slug, message.id, new_msg, disconnect=False)
+    response = await communicator.receive_json_from()
+
+    self.assertTrue('args' in response)
+    self.assertEqual(response['args']['message'], new_msg)
+    self.assertEqual(response['args']['msgid'], message.id)
+    await message.arefresh_from_db()
+    self.assertEqual(message.content, new_msg)
+    # Close communication
+    await communicator.disconnect()
+
+    # now, delete the message and check it is deleted
     await self.send_delete_message(self.slug, message.id)
     await message.arefresh_from_db()
     self.assertEqual(message.content, '**This message has been deleted**')

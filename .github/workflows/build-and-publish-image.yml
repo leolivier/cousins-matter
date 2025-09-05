@@ -108,32 +108,24 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ${{ env.REGISTRY }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: ${{ env.TAGS_DEF }}
-
       - name: Build for test
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: ${{ env.PLATFORMS }}
           push: false
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          load: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-${{ github.sha }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
       - name: Test Docker Image
         env:
           MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
-          TAGS: ${{ steps.meta.outputs.tags }}
+          TAG: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-${{ github.sha }}
         run: |
-          FIRST_TAG=$(echo "$TAGS" | head -n 1)
-          echo "Tested image is $FIRST_TAG"
-          docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $FIRST_TAG
+          echo "Tested image is $TAG"
+          docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $TAG
           # let the server start before running tests
           sleep 10
           docker exec cousins-matter python manage.py test 
@@ -141,6 +133,13 @@ jobs:
       - name: remove tests resources from .dockerignore before real build
         run: |
           echo '**/tests/' >> .dockerignore
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: ${{ env.TAGS_DEF }}
 
       - name: Build and push
         uses: docker/build-push-action@v5

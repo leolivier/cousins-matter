@@ -30,7 +30,7 @@ RUN apt-get update &&\
 
 # Allows docker to cache installed dependencies between builds
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # This is the user that will run the application but through supervisord so 

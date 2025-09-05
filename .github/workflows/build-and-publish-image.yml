@@ -139,9 +139,9 @@ jobs:
           sleep 10
           docker exec cousins-matter  python manage.py test 
     
-      - name: remove test from .gitignore
+      - name: remove test from .dockerignore
         run: |
-          echo '**/tests/' >> .gitignore
+          echo '**/tests/' >> .dockerignore
 
       - name: Build and push
         uses: docker/build-push-action@v5

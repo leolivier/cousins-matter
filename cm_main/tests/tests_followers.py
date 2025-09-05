@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core import mail
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from .utils import get_test_absolute_url
+from cm_main.utils import get_test_absolute_url
 
 
 class TestFollowersMixin():

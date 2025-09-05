@@ -128,7 +128,6 @@ jobs:
 
       - name: Test Docker Image
         env:
-          SOCKS_MOUNT: -v "/var/run/docker.sock":"/var/run/docker.sock"
           MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
           TAGS: ${{ steps.meta.outputs.tags }}
         run: |

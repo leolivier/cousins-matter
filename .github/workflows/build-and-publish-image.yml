@@ -119,7 +119,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64
+          platforms: ${{ env.PLATFORMS }}
           push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -137,9 +137,9 @@ jobs:
           docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $FIRST_TAG
           # let the server start before running tests
           sleep 10
-          docker exec cousins-matter  python manage.py test 
+          docker exec cousins-matter python manage.py test 
     
-      - name: remove test from .dockerignore
+      - name: remove tests resources from .dockerignore before real build
         run: |
           echo '**/tests/' >> .dockerignore
 

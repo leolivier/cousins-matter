@@ -26,6 +26,7 @@ env:
   TAGS_DEF: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'push' && 'type=ref,event=branch' || 'type=sha' }}
   # version of the application 
   # VERSION: ${{ github.event.release.tag_name || github.ref_name }}
+  TEST_TAG: 'test-${{ github.sha }}'
 
 jobs:
   test-build-image-publish:
@@ -112,22 +113,26 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: ${{ env.PLATFORMS }}
+          platforms: linux/amd64
           push: false
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-${{ github.sha }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+          load: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-buildcache,mode=max
 
       - name: Test Docker Image
         env:
           MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
-          TAG: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-${{ github.sha }}
+          TAG: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
+          API_HEADERS: '-H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Token ${{ secrets.GITHUB_TOKEN }}"'
         run: |
           echo "Tested image is $TAG"
           docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $TAG
           # let the server start before running tests
           sleep 10
           docker exec cousins-matter python manage.py test 
+          # remove test image
+          curl -L -X DELETE $API_HEADERS https://api.github.com/orgs/leolivier/packages/container/cousins-matter/versions/${{ env.TEST_TAG }}
     
       - name: remove tests resources from .dockerignore before real build
         run: |

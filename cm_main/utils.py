@@ -49,6 +49,10 @@ def is_testing():
     return IS_TESTING
 
 
+def get_test_absolute_url(url):
+  return 'http://testserver%s' % (url)
+
+
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 

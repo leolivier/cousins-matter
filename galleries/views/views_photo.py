@@ -100,6 +100,8 @@ class PhotoAddView(LoginRequiredMixin, generic.CreateView):
         messages.error(request, _("Error when creating this photo. "
                                   "Try to convert it in another format before retrying to upload it."))
         return render(request, self.template_name, {'form': form})
+    else:
+      return render(request, self.template_name, {'form': form})
 
   def get(self, request, gallery):
     # initialize gallery to the value in the url and current date

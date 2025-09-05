@@ -58,6 +58,12 @@ class CreatePhotoTests(PhotoTestsBase):
     p.save()
     self.assertTrue(Photo.objects.filter(name=name).exists())
 
+  def test_create_photo_too_big(self):
+    image = create_test_image(__file__, "image-toobig.jpg")
+    with self.assertRaises(ValidationError):
+      p = Photo(name=get_photo_name(), gallery=self.root_gallery, date=date.today(), image=image, description="a too big photo")
+      p.save()
+
 
 class CreatePhotoViewTests(PhotoTestsBase):
   def test_create_photo_view(self):

@@ -4,7 +4,7 @@ from django.core import mail
 from asgiref.sync import sync_to_async
 from chat.models import ChatMessage, ChatRoom
 from chat.tests.tests_mixin import ChatMessageSenderMixin
-from cm_main.tests import get_absolute_url
+from cm_main.utils import get_test_absolute_url
 from cm_main.tests.tests_followers import TestFollowersMixin
 from forum.models import Message, Post
 from .tests_member_base import MemberTestCase
@@ -40,7 +40,7 @@ class TestMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, Membe
   def test_follow_member(self):
     follower = self.member
     followed = self.do_test_toggle_follow_member()
-    followed_url = get_absolute_url(reverse("members:detail", args=[followed.id]))
+    followed_url = get_test_absolute_url(reverse("members:detail", args=[followed.id]))
     # now check the email to the owner to inform about the new follower
     self.check_new_follower_email(
       follower=follower,
@@ -65,7 +65,7 @@ class TestMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, Membe
       follower=follower,
       sender=None,
       owner=followed,
-      followed_url=get_absolute_url(post_url),
+      followed_url=get_test_absolute_url(post_url),
       followed_object=post,
       created_object=post,
       created_content=post_title)
@@ -84,7 +84,7 @@ class TestMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, Membe
       follower=follower,
       sender=followed,
       owner=followed,
-      followed_url=get_absolute_url(post_url),
+      followed_url=get_test_absolute_url(post_url),
       followed_object=post,
       created_object=message,
       created_content=reply_msg_content)
@@ -132,7 +132,7 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
     response = await self.aget(reverse('chat:new_room'), {'name': room_name})
     self.assertEqual(response.status_code, 302)
     room = await ChatRoom.objects.aget(name=room_name)
-    room_url = get_absolute_url(reverse('chat:room', args=[room.slug]))
+    room_url = get_test_absolute_url(reverse('chat:room', args=[room.slug]))
     # now check the email to the follower to inform about the new room
     self.check_new_content_email(
       follower=follower,
@@ -167,7 +167,7 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
     response = await self.aget(reverse('chat:new_room'), {'name': room_name})
     self.assertEqual(response.status_code, 302)
     room = await ChatRoom.objects.aget(name=room_name)
-    room_url = get_absolute_url(reverse('chat:room', args=[room.slug]))
+    room_url = get_test_absolute_url(reverse('chat:room', args=[room.slug]))
     first_msg = "a 1rst msg in the followed's room"
     await self.send_chat_message(first_msg, room_slug=room.slug)
 

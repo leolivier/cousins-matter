@@ -115,6 +115,33 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: ${{ env.TAGS_DEF }}
 
+      - name: Build for test
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: ${{ env.PLATFORMS }}
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+      - name: Test Docker Image
+        env:
+          MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          FIRST_TAG=$(echo "$TAGS" | head -n 1)
+          echo "Tested image is $FIRST_TAG"
+          docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $FIRST_TAG
+          # let the server start before running tests
+          sleep 10
+          docker exec cousins-matter python manage.py test 
+    
+      - name: remove tests resources from .dockerignore before real build
+        run: |
+          echo '**/tests/' >> .dockerignore
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -125,16 +152,3 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
-
-      - name: Test Docker Image
-        env:
-          SOCKS_MOUNT: -v "/var/run/docker.sock":"/var/run/docker.sock"
-          MOUNTS: -v ./data:/app/data -v ./.env:/app/.env -v ./media:/app/media
-          TAGS: ${{ steps.meta.outputs.tags }}
-        run: |
-          FIRST_TAG=$(echo "$TAGS" | head -n 1)
-          echo "Tested image is $FIRST_TAG"
-          docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $FIRST_TAG
-          # let the server start before running tests
-          sleep 10
-          docker exec cousins-matter  python manage.py test 

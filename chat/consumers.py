@@ -10,8 +10,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _, get_language
 
 from cm_main.followers import check_followers
-from cm_main.tests import get_absolute_url
-from cm_main.utils import is_testing
+from cm_main.utils import is_testing, get_test_absolute_url
 from .models import ChatMessage, ChatRoom
 from members.models import Member
 
@@ -138,7 +137,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     origin = headers.get(b'origin', b'').decode()
     if origin == '':
       if is_testing():
-        return get_absolute_url(relative_url)
+        return get_test_absolute_url(relative_url)
       else:
         raise ValueError("Missing origin header")
     else:

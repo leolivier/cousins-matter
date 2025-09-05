@@ -115,12 +115,12 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: ${{ env.TAGS_DEF }}
 
-      - name: Build and push
+      - name: Build for test
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: ${{ env.PLATFORMS }}
-          push: ${{ env.PUSH }}
+          platforms: linux/amd64
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
@@ -138,3 +138,18 @@ jobs:
           # let the server start before running tests
           sleep 10
           docker exec cousins-matter  python manage.py test 
+    
+      - name: remove test from .gitignore
+        run: |
+          echo '**/tests/' >> .gitignore
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: ${{ env.PLATFORMS }}
+          push: ${{ env.PUSH }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max

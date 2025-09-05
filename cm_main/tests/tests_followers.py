@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core import mail
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from . import get_absolute_url
+from .utils import get_test_absolute_url
 
 
 class TestFollowersMixin():
@@ -38,7 +38,7 @@ class TestFollowersMixin():
       message = _('Hi %(followed_name)s, <br><a href="%(follower_url)s">%(follower_name)s</a> '
                   'is now following you on %(site_name)s!') % {
                   'followed_name': followed_object.full_name,
-                  'follower_url': get_absolute_url(reverse('members:detail', args=[follower.pk])),
+                  'follower_url': get_test_absolute_url(reverse('members:detail', args=[follower.pk])),
                   'follower_name': follower.full_name,
                   'site_name': settings.SITE_NAME
                   }
@@ -125,7 +125,7 @@ class TestFollowersMixin():
       object for which something new has been created by sender
     """
 
-    followed_url = get_absolute_url(url)
+    followed_url = get_test_absolute_url(url)
 
     # first email is for the author
     self.check_new_follower_email(follower, owner, followed_object, followed_url, expected_emails_count=2)

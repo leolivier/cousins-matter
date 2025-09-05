@@ -12,7 +12,7 @@ from verify_email.views import verify_user_and_activate
 from ..views.views_member import EditProfileView, MemberDetailView
 from ..models import Member
 from .tests_member_base import TestLoginRequiredMixin, MemberTestCase, yesterday
-from cm_main.tests import get_absolute_url
+from cm_main.utils import get_test_absolute_url
 
 
 class UsersManagersTests(TestCase):
@@ -386,7 +386,7 @@ class TestActivateManagedMember(MemberTestCase):
     s2 = _("Please click on the link below to confirm the email and activate your account.")
     self.assertInHTML(f'''<p class="mt-2">{s1}<br>{s2}</p>''', content)
     url = reverse(verify_user_and_activate, args=['XXX_encoded_email__XXX', "XXX_token_XXX"])
-    url = get_absolute_url(url.replace("/XXX_encoded_email__XXX/XXX_token_XXX", "")) + r'[^"]+'
+    url = get_test_absolute_url(url.replace("/XXX_encoded_email__XXX/XXX_token_XXX", "")) + r'[^"]+'
     # print('url:', url, 'content', content)
     match = re.search(url, content)
     self.assertIsNotNone(match)

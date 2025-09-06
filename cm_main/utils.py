@@ -224,7 +224,7 @@ def allowed_date_formats():
     # Ex for 'fr': ['%d/%m/%Y', '%d.%m.%Y', '%d-%m-%Y', ...]
     date_formats = formats.get_format('DATETIME_INPUT_FORMATS', lang=current_language)
     # remove formats with seconds and microseconds
-    date_formats = [date_format for date_format in date_formats 
+    date_formats = [date_format for date_format in date_formats
                     if not date_format.endswith('%f') and not date_format.endswith('%S')]
 
     return date_formats

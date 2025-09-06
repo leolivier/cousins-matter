@@ -26,7 +26,7 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
                   .all().order_by('-first_message__date')
       try:
         page = Paginator.get_page(request, object_list=posts,
-                                  page_num=page, 
+                                  page_num=page,
                                   reverse_link='forum:page',
                                   default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
         return render(request, "forum/post_list.html", {"page": page})

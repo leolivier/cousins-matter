@@ -15,7 +15,7 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     page_data = {
         'levels': ['about',
                    settings.MENU_PAGE_URL_PREFIX.replace('/', ''),
-                   settings.ADMIN_MESSAGE_PAGE_URL_PREFIX.replace('/', ''), 
+                   settings.ADMIN_MESSAGE_PAGE_URL_PREFIX.replace('/', ''),
                    settings.PRIVATE_PAGE_URL_PREFIX.replace('/', '')],
         'title': 'a title',
         'content': 'a content',

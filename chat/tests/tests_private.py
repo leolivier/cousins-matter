@@ -152,8 +152,8 @@ class PrivateChatRoomTests(PrivateChatRoomTestsMixin, MemberTestCase):
     response = self.client.get(url, follow=True)
     # self.print_response(response)
     self.assertContainsMessage(response, 'error',
-                               _(f"Another room with a similar name already exists ('{room_name}'). "
-                                 "Please choose a different name."))
+                               _("Another room with a similar name already exists ('%(similar_room_name)s'). "
+                                 "Please choose a different name.") % {'similar_room_name': room_name})
     PrivateChatRoom.objects.all().delete()
 
   def test_list_private_rooms(self):

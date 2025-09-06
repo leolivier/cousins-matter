@@ -120,10 +120,10 @@ def toggle_follow(request, followed_object, owner, followed_object_url):
   followed_type = followed_object._meta.verbose_name
   if followed_object.followers.filter(id=request.user.id).exists():
     followed_object.followers.remove(request.user)
-    messages.success(request, _(f"You are no longer following this {followed_type}"))
+    messages.success(request, _("You are no longer following this %(followed_type)s") % {'followed_type': followed_type})
   else:
     followed_object.followers.add(request.user)
-    messages.success(request, _(f"You are now following this {followed_type}"))
+    messages.success(request, _("You are now following this %(followed_type)s") % {'followed_type': followed_type})
     # send email to author of followed object to tell him someone is following his object
     if owner and owner.id != request.user.id:  # don't send email to yourself or to nobody
       followed_url = request.build_absolute_uri(followed_object_url)

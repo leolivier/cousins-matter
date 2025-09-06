@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-27 12:19+0200\n"
+"POT-Creation-Date: 2025-09-06 14:19+0200\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
@@ -19,65 +19,69 @@ msgstr ""
 "\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: apps.py:8 templates/pages/menu_pages.html:4
-#: templates/pages/pages_admin_list.html:3
-#: templates/pages/pages_admin_list.html:8
+#: pages/apps.py:8 pages/templates/pages/menu_pages.html:4
+#: pages/templates/pages/pages_admin_list.html:3
+#: pages/templates/pages/pages_admin_list.html:8
 msgid "Pages"
 msgstr "Seiten"
 
-#: forms.py:35 tests/tests_crud.py:46 tests/tests_crud.py:116
+#: pages/forms.py:35 pages/tests/tests_crud.py:46 pages/tests/tests_crud.py:116
 #, python-format
 msgid "Flatpage with url %(url)s already exists"
 msgstr "Eine Flatpage mit der URL %(url)s existiert bereits"
 
-#: forms.py:39 tests/tests_crud.py:55
+#: pages/forms.py:39 pages/tests/tests_crud.py:55
 msgid "A flatpage cannot be a subpage of another flatpage, check your URLs"
 msgstr ""
 "Eine Flatpage kann keine Unterseite einer anderen Flatpage sein; überprüfe "
 "deine URLs."
 
-#: templates/pages/page_form.html:5 templates/pages/page_form.html:19
-#: templates/pages/page_form.html:29
+#: pages/templates/pages/page_form.html:5
+#: pages/templates/pages/page_form.html:19
+#: pages/templates/pages/page_form.html:29
 msgid "Update Page"
 msgstr "Aktualisiere Seite"
 
-#: templates/pages/page_form.html:7 templates/pages/page_form.html:21
-#: templates/pages/page_form.html:31 templates/pages/pages_admin_list.html:9
-#: templates/pages/pages_admin_list.html:11
+#: pages/templates/pages/page_form.html:7
+#: pages/templates/pages/page_form.html:21
+#: pages/templates/pages/page_form.html:31
+#: pages/templates/pages/pages_admin_list.html:9
+#: pages/templates/pages/pages_admin_list.html:11
 msgid "Create Page"
 msgstr "Erstelle Seite"
 
-#: templates/pages/page_form.html:35
+#: pages/templates/pages/page_form.html:35
 msgid "Save Page and Continue Editing"
 msgstr "Speichern der Seite und Fortfahren mit Bearbeiten"
 
-#: templates/pages/page_form.html:38
+#: pages/templates/pages/page_form.html:38
 msgid "Delete Page"
 msgstr "Löschen Seite"
 
-#: templates/pages/page_form.html:39
+#: pages/templates/pages/page_form.html:39
 #, python-format
 msgid "Are you sure you want to delete the page \"%(title)s\"?"
 msgstr "Sind Sie sicher, dass Sie die Seite \"%(title)s\" löschen möchten?"
 
-#: templates/pages/page_tree.html:3 templates/pages/page_tree.html:7
+#: pages/templates/pages/page_tree.html:3
+#: pages/templates/pages/page_tree.html:7
 msgid "Pages Tree"
 msgstr "Seitenbaum"
 
-#: templatetags/pages_tags.py:83
+#: pages/templatetags/pages_tags.py:83 pages/tests/tests_tree.py:66
 msgid "Public"
 msgstr "Öffentlich"
 
-#: templatetags/pages_tags.py:83
+#: pages/templatetags/pages_tags.py:83 pages/tests/tests_tree.py:68
 msgid "Private"
 msgstr "Privat"
 
-#: tests/test_base.py:34 views.py:29 views.py:50
+#: pages/tests/test_base.py:34 pages/views.py:32 pages/views.py:55
 #, python-format
 msgid "Page \"%(title)s\" saved"
 msgstr "Seite \"%(title)s\" gespeichert"
 
-#: views.py:71
+#: pages/views.py:78
 #, python-format
 msgid "Page \"%(title)s\" deleted"
 msgstr "Seite \"%(title)s\" gelöscht"

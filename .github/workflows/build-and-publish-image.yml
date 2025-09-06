@@ -130,9 +130,7 @@ jobs:
           docker run --name cousins-matter -p 8000:8000 -d $MOUNTS $TAG
           # let the server start before running tests
           sleep 10
-          docker exec cousins-matter python manage.py test 
-          # remove test image
-          curl -L -X DELETE $API_HEADERS https://api.github.com/orgs/leolivier/packages/container/cousins-matter/versions/${{ env.TEST_TAG }}
+          docker exec cousins-matter python manage.py test
     
       - name: remove tests resources from .dockerignore before real build
         run: |

@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.mail import send_mail
+from django_q.tasks import async_task
 
 logger = logging.getLogger(__name__)
 
@@ -14,14 +15,30 @@ logger = logging.getLogger(__name__)
 def check_followers(request, followed_object, followed_object_owner, followed_object_url,
                     new_internal_object=None, author=None):
   """
-    Sends an email to the followers of a followed object (followed_object) to which a new element new_internal_object is added.
-    new_internal_object is the just create object,
-    author is the member who created the new object, and followed_object_url is an url to display the followed object.
-    If the request is not given (ie is None), then the followed_object_url must be an absolute URL, otherwise it has to be a
-    reative URL.
+    Sends an email to the followers of a followed object when a new element is added to it.
+    Parameters:
+    - request: the request object which triggered the change,
+    - followed_object: the object that is followed (e.g. a chat room),
+    - followed_object_owner: the member who owns the followed object,
+    - new_internal_object: the just created object added to the followed object,
+    - author is the member who created the new object,
+    - followed_object_url is an url to display the followed object. If the request is not given (ie is None),
+         then the followed_object_url must be an absolute URL, otherwise it has to be a relative URL.
     Followers are the members who follow the followed object, and they are stored in the followed_object.followers attribute.
-    It is assumed that str(followed_object) returns a string that can be used in the name of the followed object.
+    It is assumed that str(followed_object) returns a string that can be used as the name of the followed object.
+    This method creates a task to execute the actual check asynchronously.
   """
+  async_task('cm_main.followers.do_check_followers', request, followed_object, followed_object_owner, followed_object_url,
+             new_internal_object=new_internal_object, author=author, hook='cm_main.followers.post_check_followers')
+
+
+def post_check_followers(task):
+  print("post_check_followers:", task.result)
+
+
+def do_check_followers(request, followed_object, followed_object_owner, followed_object_url,
+                       new_internal_object=None, author=None):
+  "see check_followers. Really implement the check"
   if new_internal_object is None:
     new_internal_object = followed_object
   if author is None:
@@ -45,7 +62,7 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
 
   if len(follower_emails) == 0:
     logger.debug(f"{obj_type}:'{obj_str}' change is not interesting anyone")
-    return
+    return 0
   else:
     logger.debug(f"{obj_type}:'{obj_str}' change is interesting for {len(follower_emails)} people: {follower_emails}")
 
@@ -97,6 +114,7 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
     })
   email.attach_alternative(html_message, "text/html")
   email.send()
+  return follower_emails.count()
 
 
 def toggle_follow(request, followed_object, owner, followed_object_url):

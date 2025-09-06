@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Polls 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-26 18:33+0200\n"
+"POT-Creation-Date: 2025-09-06 14:19+0200\n"
 "PO-Revision-Date: 2025-04-16 13:29+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Italian <LL@li.org>\n"
@@ -19,495 +19,513 @@ msgstr ""
 "\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: apps.py:8 templates/polls/polls_list.html:20
+#: polls/apps.py:8 polls/templates/polls/polls_list.html:25
 msgid "Polls"
 msgstr "Sondaggi"
 
-#: forms/answer_forms.py:51
+#: polls/forms/answer_forms.py:51
 msgid "Check the box if Yes"
 msgstr "Seleziona la casella se si"
 
-#: forms/answer_forms.py:55 forms/answer_forms.py:94 models.py:274
+#: polls/forms/answer_forms.py:55 polls/forms/answer_forms.py:94
+#: polls/models.py:277
 msgid "choice"
 msgstr "scelte"
 
-#: forms/answer_forms.py:55
+#: polls/forms/answer_forms.py:55
 msgid "Select one choice"
 msgstr "Selezionare una scelta"
 
-#: forms/answer_forms.py:95
+#: polls/forms/answer_forms.py:95
 msgid "Select your choices"
 msgstr "Seleziona le tue scelte"
 
-#: forms/upsert_forms.py:14 forms/upsert_forms.py:31
+#: polls/forms/upsert_forms.py:14 polls/forms/upsert_forms.py:31
 msgid "Title"
 msgstr "Titolo"
 
-#: forms/upsert_forms.py:14 forms/upsert_forms.py:31
+#: polls/forms/upsert_forms.py:14 polls/forms/upsert_forms.py:31
 msgid "To be published on"
 msgstr "Pubblicato il"
 
-#: forms/upsert_forms.py:14 forms/upsert_forms.py:31
+#: polls/forms/upsert_forms.py:14 polls/forms/upsert_forms.py:31
 msgid "To be closed on"
 msgstr "Chiuso il"
 
-#: forms/upsert_forms.py:15 forms/upsert_forms.py:33
+#: polls/forms/upsert_forms.py:15 polls/forms/upsert_forms.py:33
 msgid "Open to all"
 msgstr "Aperto a tutti"
 
-#: forms/upsert_forms.py:15 forms/upsert_forms.py:33
+#: polls/forms/upsert_forms.py:15 polls/forms/upsert_forms.py:33
 msgid "Open to active members"
 msgstr "Aperto ai membri attivi"
 
-#: forms/upsert_forms.py:16 forms/upsert_forms.py:34 models.py:17
+#: polls/forms/upsert_forms.py:16 polls/forms/upsert_forms.py:34
+#: polls/models.py:17
 msgid "Closed list"
 msgstr "Lista chiusa"
 
-#: forms/upsert_forms.py:21
+#: polls/forms/upsert_forms.py:21
 msgid "Allow choosing multiple dates in the answer"
 msgstr "Scegliere diverse date nella risposta"
 
-#: forms/upsert_forms.py:32 templates/polls/poll_info.html:23
+#: polls/forms/upsert_forms.py:32 polls/templates/polls/poll_info.html:23
 msgid "Location"
 msgstr "Luogo"
 
-#: forms/upsert_forms.py:32 templates/polls/poll_info.html:24
+#: polls/forms/upsert_forms.py:32 polls/templates/polls/poll_info.html:24
 msgid "Chosen date"
 msgstr "Data scelta"
 
-#: forms/upsert_forms.py:39
+#: polls/forms/upsert_forms.py:39
 msgid ""
 "Provide the possible dates and times, one per line. Allowed formats are: "
 msgstr ""
-"Proporcione le date e le ore possibili, una per riga. I formati consentiti sono: "
+"Proporcione le date e le ore possibili, una per riga. I formati consentiti "
+"sono: "
 
-#: forms/upsert_forms.py:52
+#: polls/forms/upsert_forms.py:52
 msgid "You must provide at least two possible dates!"
 msgstr "Devi fornire almeno due date possibili!"
 
-#: forms/upsert_forms.py:57
+#: polls/forms/upsert_forms.py:57
 msgid "All dates must be in the future!"
 msgstr "Tutte le date devono essere nel futuro!"
 
-#: forms/upsert_forms.py:64
+#: polls/forms/upsert_forms.py:64
 msgid "Provide the possible choices, one per line"
 msgstr "Proporcione le scelte possibili, una per riga"
 
-#: forms/upsert_forms.py:84
+#: polls/forms/upsert_forms.py:84
 msgid "You must provide at least two possible choices!"
 msgstr "Devi fornire almeno due scelte possibili!"
 
-#: models.py:15
+#: polls/models.py:15
 msgid "All members"
 msgstr "Tutti i membri"
 
-#: models.py:16
+#: polls/models.py:16
 msgid "Active members only"
 msgstr "Solo membri attivi"
 
-#: models.py:30
+#: polls/models.py:30
 msgid "poll"
 msgstr "sondaggio"
 
-#: models.py:31
+#: polls/models.py:31
 msgid "polls"
 msgstr "sondaggi"
 
-#: models.py:77
+#: polls/models.py:80
 msgid "Yes/No"
 msgstr "Si/No"
 
-#: models.py:78
+#: polls/models.py:81
 msgid "Single Choice"
 msgstr "Scelta singola"
 
-#: models.py:79
+#: polls/models.py:82
 msgid "Multiple Choices"
 msgstr "Scelte multiple"
 
-#: models.py:80
+#: polls/models.py:83
 msgid "Open Text"
 msgstr "Testo aperto"
 
-#: models.py:81
+#: polls/models.py:84
 msgid "Date"
 msgstr "Data"
 
-#: models.py:91 templates/polls/poll_detail.html:52
+#: polls/models.py:94 polls/templates/polls/poll_detail.html:52
 msgid "Question"
 msgstr "Domanda"
 
-#: models.py:92
+#: polls/models.py:95
 msgid "Question Type"
 msgstr "Tipo di domanda"
 
-#: models.py:94
+#: polls/models.py:97
 msgid "Possible choices"
 msgstr "Scelte possibili"
 
-#: models.py:97
+#: polls/models.py:100
 msgid "question"
 msgstr "domanda"
 
-#: models.py:98
+#: polls/models.py:101
 msgid "questions"
 msgstr "domande"
 
-#: models.py:111
+#: polls/models.py:114
 msgid "poll answer"
 msgstr "risposta al sondaggio"
 
-#: models.py:112
+#: polls/models.py:115
 msgid "poll answers"
 msgstr "risposte al sondaggio"
 
-#: models.py:126 models.py:220 models.py:238 models.py:256
+#: polls/models.py:129 polls/models.py:223 polls/models.py:241
+#: polls/models.py:259
 msgid "answer"
 msgstr "risposta"
 
-#: models.py:127
+#: polls/models.py:130
 msgid "answers"
 msgstr "risposte"
 
-#: models.py:223
+#: polls/models.py:226
 msgid "yes/no answer"
 msgstr "risposta sì/no"
 
-#: models.py:224
+#: polls/models.py:227
 msgid "yes/no answers"
 msgstr "risposte sì/no"
 
-#: models.py:227
+#: polls/models.py:230
 msgid "Yes"
 msgstr "Si"
 
-#: models.py:227
+#: polls/models.py:230
 msgid "No"
 msgstr "No"
 
-#: models.py:241
+#: polls/models.py:244
 msgid "text answer"
 msgstr "risposta al testo"
 
-#: models.py:242
+#: polls/models.py:245
 msgid "text answers"
 msgstr "risposte al testo"
 
-#: models.py:259
+#: polls/models.py:262
 msgid "date answer"
 msgstr "data risposta"
 
-#: models.py:260
+#: polls/models.py:263
 msgid "date answers"
 msgstr "data risposte"
 
-#: models.py:277
+#: polls/models.py:280
 msgid "choice answer"
 msgstr "risposta a scelta"
 
-#: models.py:278
+#: polls/models.py:281
 msgid "choice answers"
 msgstr "risposte a scelta"
 
-#: models.py:302
+#: polls/models.py:305
 msgid "single event answer"
-msgstr "risposta a un singolo evento" 
+msgstr "risposta a un singolo evento"
 
-#: models.py:303
+#: polls/models.py:306
 msgid "single event answers"
 msgstr "risposte un singolo evento"
 
-#: models.py:309
+#: polls/models.py:312
 msgid "choices"
 msgstr "scelte"
 
-#: models.py:312
+#: polls/models.py:315
 msgid "multiple choice answer"
 msgstr "risposta a scelta multipla"
 
-#: models.py:313
+#: polls/models.py:316
 msgid "multiple choice answers"
 msgstr "risposte a scelta multipla"
 
-#: models.py:339
+#: polls/models.py:342
 msgid "multiple event answer"
 msgstr "risposta al multipli eventi"
 
-#: models.py:340
+#: polls/models.py:343
 msgid "multiple event answers"
 msgstr "risposte al multipli eventi"
 
-#: models.py:345
+#: polls/models.py:348
 msgid "location"
 msgstr "luogo"
 
-#: models.py:352
+#: polls/models.py:355
 msgid "event planner"
 msgstr "organizzatore di eventi"
 
-#: models.py:353
+#: polls/models.py:356
 msgid "event planners"
 msgstr "organizzatori di eventi"
 
-#: templates/polls/planner_upsert_form.html:5
-#: templates/polls/planner_upsert_form.html:19
-#: templates/polls/planner_upsert_form.html:30
+#: polls/templates/polls/planner_upsert_form.html:5
+#: polls/templates/polls/planner_upsert_form.html:19
+#: polls/templates/polls/planner_upsert_form.html:30
 msgid "Update Event Planner"
 msgstr "Aggiorna Organizzatore di Eventi"
 
-#: templates/polls/planner_upsert_form.html:7
-#: templates/polls/planner_upsert_form.html:21
-#: templates/polls/planner_upsert_form.html:32
-#: templates/polls/polls_list.html:7
+#: polls/templates/polls/planner_upsert_form.html:7
+#: polls/templates/polls/planner_upsert_form.html:21
+#: polls/templates/polls/planner_upsert_form.html:32
+#: polls/templates/polls/polls_list.html:7
 msgid "Create Event Planner"
 msgstr "Crea Organizzatore di Eventi"
 
-#: templates/polls/planner_upsert_form.html:37
+#: polls/templates/polls/planner_upsert_form.html:37
 msgid "Delete Event Planner"
 msgstr "Cancella Organizzatore di Eventi"
 
-#: templates/polls/planner_upsert_form.html:38
+#: polls/templates/polls/planner_upsert_form.html:38
 #, python-format
 msgid "Are you sure you want to delete the event planner \"%(title)s\"?"
-msgstr "Sei sicuro di voler eliminare il organizzatore di eventi \"%(title)s\"?"
+msgstr ""
+"Sei sicuro di voler eliminare il organizzatore di eventi \"%(title)s\"?"
 
-#: templates/polls/planner_upsert_form.html:46
+#: polls/templates/polls/planner_upsert_form.html:46
 msgid "Event Planner Questions"
 msgstr "Domande del Organizzatore di Eventi"
 
-#: templates/polls/planner_upsert_form.html:58
-#: templates/polls/poll_upsert_form.html:58
+#: polls/templates/polls/planner_upsert_form.html:58
+#: polls/templates/polls/poll_upsert_form.html:58
 msgid "Update Question"
 msgstr "Aggiorna Domanda"
 
-#: templates/polls/planner_upsert_form.html:69
-#: templates/polls/poll_upsert_form.html:69
+#: polls/templates/polls/planner_upsert_form.html:69
+#: polls/templates/polls/poll_upsert_form.html:69
 msgid "Delete Question"
 msgstr "Cancella Domanda"
 
-#: templates/polls/planner_upsert_form.html:70
-#: templates/polls/poll_upsert_form.html:70
+#: polls/templates/polls/planner_upsert_form.html:70
+#: polls/templates/polls/poll_upsert_form.html:70
 #, python-format
 msgid "Are you sure you want to delete the question \"%(title)s\"?"
 msgstr "Sei sicuro di voler eliminare il domanda \"%(title)s\"?"
 
-#: templates/polls/planner_upsert_form.html:89
-#: templates/polls/poll_upsert_form.html:89
+#: polls/templates/polls/planner_upsert_form.html:89
+#: polls/templates/polls/poll_upsert_form.html:89
 msgid "New Question"
 msgstr "Nuova Domanda"
 
-#: templates/polls/planner_upsert_form.html:95
-#: templates/polls/poll_upsert_form.html:95
+#: polls/templates/polls/planner_upsert_form.html:95
+#: polls/templates/polls/poll_upsert_form.html:95
 msgid "Add Question"
 msgstr "Aggiungi Domanda"
 
-#: templates/polls/planner_upsert_form.html:101
+#: polls/templates/polls/planner_upsert_form.html:101
 msgid "Save the event planner to add questions."
 msgstr "Salva il organizzatore di eventi per aggiungere domande."
 
-#: templates/polls/poll_detail.html:5 templates/polls/poll_detail.html:16
+#: polls/templates/polls/poll_detail.html:5
+#: polls/templates/polls/poll_detail.html:16
 msgid "Poll Detail"
 msgstr "Dettaglio sondaggio"
 
-#: templates/polls/poll_detail.html:7 templates/polls/poll_detail.html:18
+#: polls/templates/polls/poll_detail.html:7
+#: polls/templates/polls/poll_detail.html:18
 msgid "Event Planner Detail"
 msgstr "Dettaglio organizzatore di eventi"
 
-#: templates/polls/poll_detail.html:21
+#: polls/templates/polls/poll_detail.html:21
 msgid "Back to Polls"
 msgstr "Torna ai Sondaggi"
 
-#: templates/polls/poll_detail.html:34
+#: polls/templates/polls/poll_detail.html:34
 msgid "Questions"
 msgstr "Domande"
 
-#: templates/polls/poll_detail.html:45
+#: polls/templates/polls/poll_detail.html:45
 msgid "Final results"
 msgstr "Risultati finali"
 
-#: templates/polls/poll_detail.html:47
+#: polls/templates/polls/poll_detail.html:47
 msgid "Temporary results"
 msgstr "Risultati temporanei"
 
-#: templates/polls/poll_detail.html:53
+#: polls/templates/polls/poll_detail.html:53
 msgid "Total answers"
 msgstr "Risposte totali"
 
-#: templates/polls/poll_detail.html:54
+#: polls/templates/polls/poll_detail.html:54
 msgid "My vote"
 msgstr "La mia votazione"
 
-#: templates/polls/poll_detail.html:55
+#: polls/templates/polls/poll_detail.html:55
 msgid "Results"
 msgstr "Risultati"
 
-#: templates/polls/poll_detail.html:78 templates/polls/polls_list.html:52
-#: templates/polls/polls_list.html:53 templates/polls/polls_list.html:54
+#: polls/templates/polls/poll_detail.html:87
+#: polls/templates/polls/polls_list.html:58
+#: polls/templates/polls/polls_list.html:59
+#: polls/templates/polls/polls_list.html:60
 msgid "Vote"
 msgstr "Vota"
 
-#: templates/polls/poll_detail.html:89 templates/polls/polls_list.html:62
-#: templates/polls/polls_list.html:64 templates/polls/polls_list.html:65
+#: polls/templates/polls/poll_detail.html:98
+#: polls/templates/polls/polls_list.html:68
+#: polls/templates/polls/polls_list.html:70
+#: polls/templates/polls/polls_list.html:71
 msgid "Update"
 msgstr "Aggiorna"
 
-#: templates/polls/poll_info.html:4
+#: polls/templates/polls/poll_info.html:4
 msgid "Owner"
 msgstr "Proprietario"
 
-#: templates/polls/poll_info.html:7 templates/polls/polls_list.html:43
+#: polls/templates/polls/poll_info.html:7
+#: polls/templates/polls/polls_list.html:49
 msgid "Created at"
 msgstr "Creato il"
 
-#: templates/polls/poll_info.html:8 templates/polls/polls_list.html:44
+#: polls/templates/polls/poll_info.html:8
+#: polls/templates/polls/polls_list.html:50
 msgid "Published at"
 msgstr "Pubblicato il"
 
-#: templates/polls/poll_info.html:9 templates/polls/polls_list.html:45
+#: polls/templates/polls/poll_info.html:9
+#: polls/templates/polls/polls_list.html:51
 msgid "Closed at"
 msgstr "Chiuso il"
 
-#: templates/polls/poll_info.html:14
+#: polls/templates/polls/poll_info.html:14
 msgid "Open to"
 msgstr "Aperto a"
 
-#: templates/polls/poll_upsert_form.html:5
-#: templates/polls/poll_upsert_form.html:19
-#: templates/polls/poll_upsert_form.html:30
+#: polls/templates/polls/poll_upsert_form.html:5
+#: polls/templates/polls/poll_upsert_form.html:19
+#: polls/templates/polls/poll_upsert_form.html:30
 msgid "Update Poll"
 msgstr "Aggiorna Sondaggio"
 
-#: templates/polls/poll_upsert_form.html:7
-#: templates/polls/poll_upsert_form.html:21
-#: templates/polls/poll_upsert_form.html:32
+#: polls/templates/polls/poll_upsert_form.html:7
+#: polls/templates/polls/poll_upsert_form.html:21
+#: polls/templates/polls/poll_upsert_form.html:32
 msgid "Create Poll"
 msgstr "Crea Sondaggio"
 
-#: templates/polls/poll_upsert_form.html:37
+#: polls/templates/polls/poll_upsert_form.html:37
 msgid "Delete Poll"
 msgstr "Cancella Sondaggio"
 
-#: templates/polls/poll_upsert_form.html:38
+#: polls/templates/polls/poll_upsert_form.html:38
 #, python-format
 msgid "Are you sure you want to delete the poll \"%(title)s\"?"
 msgstr "Sei sicuro di voler eliminare il sondaggio \"%(title)s\"?"
 
-#: templates/polls/poll_upsert_form.html:46
+#: polls/templates/polls/poll_upsert_form.html:46
 msgid "Poll Questions"
 msgstr "Domande del Sondaggio"
 
-#: templates/polls/poll_upsert_form.html:101
+#: polls/templates/polls/poll_upsert_form.html:101
 msgid "Save the poll to add questions."
 msgstr "Salva il sondaggio per aggiungere domande."
 
-#: templates/polls/poll_vote.html:16 templates/polls/poll_vote.html:23
+#: polls/templates/polls/poll_vote.html:16
+#: polls/templates/polls/poll_vote.html:23
 msgid "Vote on : "
 msgstr "Vota su: "
 
-#: templates/polls/poll_vote.html:48
+#: polls/templates/polls/poll_vote.html:48
 msgid "Submit"
 msgstr "Invia"
 
-#: templates/polls/poll_vote.html:52
+#: polls/templates/polls/poll_vote.html:52
 msgid "Cancel"
 msgstr "Annulla"
 
-#: templates/polls/polls_list.html:6
+#: polls/templates/polls/polls_list.html:6
 msgid "Create poll"
 msgstr "Crea sondaggio"
 
-#: templates/polls/polls_list.html:21
+#: polls/templates/polls/polls_list.html:26
 msgid "Event planners"
 msgstr "Organizzatori di eventi"
 
-#: templates/polls/polls_list.html:25 templates/polls/polls_list.html:29
+#: polls/templates/polls/polls_list.html:31
+#: polls/templates/polls/polls_list.html:35
 msgid "Open"
 msgstr "Aperto"
 
-#: templates/polls/polls_list.html:26 templates/polls/polls_list.html:30
+#: polls/templates/polls/polls_list.html:32
+#: polls/templates/polls/polls_list.html:36
 msgid "All"
 msgstr "Tutti"
 
-#: templates/polls/polls_list.html:27 templates/polls/polls_list.html:31
+#: polls/templates/polls/polls_list.html:33
+#: polls/templates/polls/polls_list.html:37
 msgid "Closed"
 msgstr "Chiuso"
 
-#: templates/polls/polls_list.html:71
+#: polls/templates/polls/polls_list.html:77
 msgid "Sorry, there are currently no polls available."
 msgstr "Spiacenti, non ci sono sondaggi disponibili per ora."
 
-#: views/answer_views.py:75
+#: polls/views/answer_views.py:75
 msgid "Your answers have been saved"
 msgstr "Le tue risposte sono state salvate"
 
-#: views/display_views.py:24
+#: polls/views/display_views.py:24
 msgid "Open Polls"
 msgstr "Sondaggi aperti"
 
-#: views/display_views.py:61
+#: polls/views/display_views.py:61
 msgid "Open Event Planners"
 msgstr "Organizzatori di eventi aperti"
 
-#: views/display_views.py:70
+#: polls/views/display_views.py:70
 msgid "All Polls"
 msgstr "Tutti i sondaggi"
 
-#: views/display_views.py:77
+#: polls/views/display_views.py:77
 msgid "All Event Planners"
 msgstr "Tutti gli organizzatori di eventi"
 
-#: views/display_views.py:88
+#: polls/views/display_views.py:88
 msgid "Closed Polls"
 msgstr "Sondaggi chiusi"
 
-#: views/display_views.py:95
+#: polls/views/display_views.py:95
 msgid "Closed Event Planners"
 msgstr "Organizzatori di eventi chiusi"
 
-#: views/event_upsert_views.py:17
+#: polls/views/event_upsert_views.py:17
 msgid ""
 "Event planner created successfully. You can now add other questions if "
 "needed."
 msgstr ""
-"Organizzatore di eventi creato con successo. Ora puoi aggiungere domande "
-"se necessario."
+"Organizzatore di eventi creato con successo. Ora puoi aggiungere domande se "
+"necessario."
 
-#: views/event_upsert_views.py:29 views/event_upsert_views.py:73
-#: views/event_upsert_views.py:74 views/event_upsert_views.py:78
+#: polls/views/event_upsert_views.py:29 polls/views/event_upsert_views.py:74
+#: polls/views/event_upsert_views.py:75 polls/views/event_upsert_views.py:79
 msgid "Choose dates"
 msgstr "Scegli date"
 
-#: views/event_upsert_views.py:29 views/event_upsert_views.py:72
-#: views/event_upsert_views.py:75 views/event_upsert_views.py:78
+#: polls/views/event_upsert_views.py:29 polls/views/event_upsert_views.py:73
+#: polls/views/event_upsert_views.py:76 polls/views/event_upsert_views.py:79
 msgid "Choose one date"
 msgstr "Scegli una data"
 
-#: views/event_upsert_views.py:47
+#: polls/views/event_upsert_views.py:47
 msgid "Event planner updated successfully."
 msgstr "Organizzatore di eventi aggiornato con successo."
 
-#: views/event_upsert_views.py:65
+#: polls/views/event_upsert_views.py:66
 msgid ""
 "This question has already been answered. You can't change its type anymore."
 msgstr ""
 "Questa domanda è già stata risposta. Non puoi più cambiare il suo tipo."
 
-#: views/event_upsert_views.py:68
+#: polls/views/event_upsert_views.py:69
 msgid ""
 "This question has already been answered. Previous answers might be ignored."
 msgstr ""
 "Questa domanda è già stata risposta. Le risposte precedenti possono essere "
 "ignorate."
 
-#: views/upsert_views.py:24
+#: polls/views/upsert_views.py:24
 msgid "Poll created successfully. You can now add questions."
 msgstr "Sondaggio creato con successo. Ora puoi aggiungere domande."
 
-#: views/upsert_views.py:49
+#: polls/views/upsert_views.py:49
 msgid "Poll updated successfully."
 msgstr "Sondaggio aggiornato con successo."
 
-#: views/upsert_views.py:94 views/upsert_views.py:111
+#: polls/views/upsert_views.py:100 polls/views/upsert_views.py:118
 #, python-format
 msgid "Error creating question:%s"
 msgstr "Errore nella creazione della domanda:%s"

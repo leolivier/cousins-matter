@@ -194,7 +194,7 @@ class Member(AbstractUser):
         if self.deathdate < self.birthdate:
           dd = self.deathdate
           bd = self.birthdate
-          raise ValueError(_(f"Death date {dd} is before birthdate {bd}"))
+          raise ValueError(_("Death date %(dd)s is before birthdate %(bd)s") % {"dd": dd, "bd": bd})
         self.is_dead = True
         self.deathdate = self.deathdate or datetime.date.today()
         self.is_active = False

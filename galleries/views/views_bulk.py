@@ -75,7 +75,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
         return self.galleries[path]
 
       name = os.path.basename(os.path.normpath(path))
-      description = _(f'Imported from zipfile directory {path}')
+      description = _('Imported from zipfile directory %(path)s') % {'path': path}
       parent = self._get_parent_gallery(path)
 
       # Create gallery if it does not already exists.
@@ -103,7 +103,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
       filename = zipinfo.filename
       name = os.path.basename(os.path.normpath(filename))
       filename_wo_ext, ext = os.path.splitext(name)
-      description = _(f'Imported from zipfile directory {filename}')
+      description = _('Imported from zipfile directory %(path)s') % {'path': filename}
       gallery = self._get_photo_gallery(filename)
 
       # create photo using an in memory buffer (BytesIO)
@@ -173,7 +173,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
                   self._create_photo(info, filepath)
                 except OSError as oserror:
                   # print an error but continue with next photo
-                  error_msg = _(f"Unable to import photo '{path}', it was ignored")
+                  error_msg = _("Unable to import photo '%(path)s', it was ignored") % {'path': path}
                   messages.error(request, f'''{error_msg}: {oserror.strerror}''')
                 except ValidationError as verr:
                   for err in verr.messages:
@@ -189,7 +189,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
           lg = len(self.galleries)
           nbp = self.nbPhotos
           messages.success(request,
-                           _(f"Zip file uploaded: {lg} galleries and {nbp} photos created"))
+                           _("Zip file uploaded: %(lg)d galleries and %(nbp)d photos created") % {'lg': lg, 'nbp': nbp})
           return redirect(reverse("galleries:galleries"))
         except ValidationError as e:
           for err in e.messages:

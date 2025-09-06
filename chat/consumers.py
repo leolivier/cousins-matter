@@ -314,7 +314,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
   async def receive_delete_chat_message(self, data):
     """
     Handles the deletion of a chat message by replacing it with a deletion notice.
-    
+
     Args:
         data: dict containing 'msgid' (message ID to delete)
     """

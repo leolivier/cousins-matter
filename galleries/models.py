@@ -40,7 +40,7 @@ def check_image_size(image):
 
 
 class Photo(models.Model):
-  image = models.ImageField(_("Photo"), upload_to=photo_path, validators=[check_image_size], 
+  image = models.ImageField(_("Photo"), upload_to=photo_path, validators=[check_image_size],
                             height_field='image_height', width_field='image_width', max_length=1000, null=False)
   image_height = models.IntegerField(default=0)
   image_width = models.IntegerField(default=0)

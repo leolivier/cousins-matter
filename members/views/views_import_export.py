@@ -71,7 +71,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
   current_member = None
   # current member has been changed
   changed = False
-  # default manager used when a user is inactive, has no manager defined in the file and has no 
+  # default manager used when a user is inactive, has no manager defined in the file and has no
   # current manager. Set to connected user (the one who is importing the file).
   default_manager = None
   # indicates if the activation was managed for the current member
@@ -163,7 +163,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         self.changed = True
 
       if self.current_member.is_active:
-        self.warnings.append(_("Member %(member)s was active. Adding %(manager)s as manager inactivated him/her.") % 
+        self.warnings.append(_("Member %(member)s was active. Adding %(manager)s as manager inactivated him/her.") %
                              {'member': self.current_member.full_name, 'manager': manager_username})
         self.current_member.is_active = False
         self.changed = True

@@ -30,7 +30,7 @@ def get_gallery_photos(gallery):
         previous_photo.values('id')
     ),
     previous_url=Case(
-        When(previous_url_short__isnull=False, 
+        When(previous_url_short__isnull=False,
              then=Concat(Value(settings.MEDIA_URL), F('previous_url_short'), output_field=CharField())),
         default=Value(None)
     ),
@@ -41,7 +41,7 @@ def get_gallery_photos(gallery):
         next_photo.values('id')
     ),
     next_url=Case(
-        When(next_url_short__isnull=False, 
+        When(next_url_short__isnull=False,
              then=Concat(Value(settings.MEDIA_URL), F('next_url_short'), output_field=CharField())),
         default=Value(None)
     )

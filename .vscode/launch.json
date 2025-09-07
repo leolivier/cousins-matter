@@ -17,6 +17,18 @@
 			"justMyCode": false
 		},
 		{
+			"name": "Django qcluster Debugger",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/manage.py",
+			"args": [
+				"qcluster"
+			],
+			"django": true,
+			"autoStartBrowser": false,
+			"justMyCode": false
+		},
+		{
 			"name": "Django Test Debugger",
 			"type": "debugpy",
 			"request": "launch",

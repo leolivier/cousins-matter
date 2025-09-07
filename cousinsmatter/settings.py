@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import environ
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import slugify
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -476,7 +477,7 @@ if DEBUG:
 
 # Django Q2 settings
 Q_CLUSTER = {
-    'name': SITE_NAME,
+    'name': slugify(SITE_NAME),
     # 'workers': 4,
     # 'recycle': 500,
     'timeout': 60,

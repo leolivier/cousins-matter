@@ -35,7 +35,7 @@ class HomeView(generic.TemplateView):
 
 @login_required
 def download_protected_media(request, media):
-  print(f"Downloading protected media {media}")
+  logger.debug(f"Downloading protected media {media}")
   the_file = settings.MEDIA_ROOT / media
   if not os.path.isfile(the_file):
     raise Http404(_("Media not found"))

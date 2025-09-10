@@ -309,3 +309,7 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 .br-5 {
 	border-radius: calc(var(--bulma-radius)*5);
 }
+
+.progress-bar progress {
+	transition: width 1s ease;
+}

@@ -18,6 +18,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import connections, models
 from django.forms import ValidationError
+from django.shortcuts import render
 from django.urls import reverse
 from django.utils import formats
 from django.utils.translation import gettext as _, get_language, gettext_lazy
@@ -331,3 +332,7 @@ def check_edit_permission(request, owner):
     if request.user.is_superuser or owner.id == request.user.id:
       return True
     raise PermissionDenied(_("You do not have permission to edit/delete this object."))
+
+
+def ajax_redirect(request, url):
+  return render(request, "cm_main/common/ajax-redirect.html", {"url": url})

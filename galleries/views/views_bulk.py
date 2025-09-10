@@ -47,11 +47,9 @@ class ZipImport:
     errors: set[str] = field(default_factory=set)
 
     def register(self):
-      global ZIP_IMPORTS
       ZIP_IMPORTS[self.group] = self
 
     def unregister(self):
-      global ZIP_IMPORTS
       if self.group in ZIP_IMPORTS:
         del ZIP_IMPORTS[self.group]
 
@@ -281,5 +279,6 @@ def upload_progress(request, id):
     # remove zimport from the cache
     zimport.unregister()
     logger.debug(f"cleaned {zimport}")
-  logger.debug(f"upload progress bar value: {value}, max: {max}, processed objects: {zimport.photos}, errors: {zimport.errors}")
+  logger.debug(f"upload progress bar value: {value}, max: {max}, "
+               f"processed objects: {zimport.photos}, errors: {zimport.errors}")
   return render(request, "cm_main/common/progress-bar.html", context)

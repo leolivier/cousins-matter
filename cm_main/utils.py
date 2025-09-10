@@ -68,7 +68,7 @@ def check_file_size(file, limit):
         limitmb = math.floor(limit*100/(1024*1024))/100
         sizemb = math.floor(file.size*100/(1024*1024))/100
         filename = file.name
-        raise ValidationError(_("Uploaded file %(filename)s is too big (%(sizemb)sMB), maximum is %(limitmb)sMB.") % 
+        raise ValidationError(_("Uploaded file %(filename)s is too big (%(sizemb)sMB), maximum is %(limitmb)sMB.") %
                               {'filename': filename, 'sizemb': sizemb, 'limitmb': limitmb})
 
 

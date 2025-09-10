@@ -1,6 +1,6 @@
 import logging
 import shutil
-import time
+# import time
 import zipfile
 import os
 import mimetypes
@@ -165,7 +165,7 @@ def _handle_photo_file(zimport: ZipImport, dir: str, image: str, gallery_id: str
   filepath = os.path.join(dir, image)
   photo_path = None
   try:
-    time.sleep(4)  # artificially slow down fo testing
+    # time.sleep(4)  # artificially slow down fo testing
     photo_path = _create_photo(image, filepath, zimport, gallery_id)
   except OSError as oserror:
     # print an error but continue with next photo
@@ -180,7 +180,7 @@ def _handle_photo_file(zimport: ZipImport, dir: str, image: str, gallery_id: str
 
 
 def _post_create_photo(task: Task):
-  print("create photo ", task.args, "status:", task.success, "result:", task.result, "group:", task.group)
+  logger.info(f"create photo {task.args} status: {task.success} result: {task.result} group: {task.group}")
 
 
 def _handle_zip(zip_file, task_group, owner_id):
@@ -209,7 +209,7 @@ def _handle_zip(zip_file, task_group, owner_id):
       async_task(_handle_photo_file, zimport, dir, image, gallery.id,
                  group=task_group, cached=False, hook=_post_create_photo)
       zimport.nbPhotos += 1
-      # print("created task for ", image, "group:", task_group)
+      logger.debug(f"created task for {image} group: {task_group}")
 
   return zimport
 
@@ -228,7 +228,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
           task_group = request.POST.get("csrfmiddlewaretoken")
           zimport = _handle_zip(zip_file, task_group, request.user.id)
           hx_get_url = reverse("galleries:upload_progress", args=(task_group,))
-          # print("rendering first progress-bar url:", hx_get_url)
+          logger.debug(f"rendering first progress-bar url: {hx_get_url}")
           return render(request, "cm_main/common/progress-bar.html",
                         {"hx_get": hx_get_url, "frequency": "1s",
                          "value": 0, "max": zimport.nbPhotos, "text": "0%"},
@@ -251,7 +251,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
 @login_required
 def upload_progress(request, id):
   zimport = ZIP_IMPORTS.get(id, None)
-  # print("upload progress group:", id, "zimport:", zimport)
+  logger.debug(f"upload progress group: {id}, zimport: {zimport}")
   if not zimport:  # removed from the list when completed
     raise Http404(_("Upload not found"))
   value = count_group(id)
@@ -280,6 +280,6 @@ def upload_progress(request, id):
     shutil.rmtree(zimport.root)
     # remove zimport from the cache
     zimport.unregister()
-    # print("cleaned", zimport)
-  # print("upload progress bar value:", value, "max:", max, "status:", status)
+    logger.debug(f"cleaned {zimport}")
+  logger.debug(f"upload progress bar value: {value}, max: {max}, processed objects: {zimport.photos}, errors: {zimport.errors}")
   return render(request, "cm_main/common/progress-bar.html", context)

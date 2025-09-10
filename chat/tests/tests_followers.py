@@ -2,7 +2,6 @@ from django.urls import reverse
 from django.test import tag
 from django.core import mail
 
-from cm_main.tests.test_django_q import TestDjangoQMixin
 from cm_main.tests.tests_followers import TestFollowersMixin
 from members.tests.tests_member_base import MemberTestCase
 from ..models import ChatMessage
@@ -10,7 +9,7 @@ from .tests_mixin import ChatMessageSenderMixin, astr
 
 
 @tag("needs-redis")
-class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageSenderMixin, TestDjangoQMixin, MemberTestCase):
+class ChatRoomFollowerTests(TestFollowersMixin, ChatMessageSenderMixin, MemberTestCase):
 
   async def test_follow_room(self):
     # we should start with zéro followers

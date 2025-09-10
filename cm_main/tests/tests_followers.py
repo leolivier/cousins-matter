@@ -3,9 +3,10 @@ from django.core import mail
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from cm_main.utils import get_test_absolute_url
+from cm_main.tests.test_django_q import TestDjangoQMixin
 
 
-class TestFollowersMixin():
+class TestFollowersMixin(TestDjangoQMixin):
   def check_new_follower_email(self, follower, owner, followed_object, followed_url, expected_emails_count=1):
     """function to test the owner received an email to say he has a new folllower"""
 

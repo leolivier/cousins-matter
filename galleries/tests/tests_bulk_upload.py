@@ -1,28 +1,14 @@
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+from cm_main.tests.test_django_q import TestDjangoQMixin
 from cm_main.utils import test_resource_full_path
 from ..models import Gallery, Photo
 from ..views import views_bulk
 from .tests_utils import GalleryBaseTestCase
 
 
-class TestBulkUpload(GalleryBaseTestCase):
-  def setUp(self):
-    # override the django-q settings to make the tasks run synchronously
-    super().setUp()
-    from django_q.conf import Conf
-    self.old_sync = Conf.SYNC
-    self.old_testing = Conf.TESTING
-    Conf.SYNC = True
-    Conf.TESTING = True
-
-  def tearDown(self):
-    super().tearDown()
-    # restore the django-q settings
-    from django_q.conf import Conf
-    Conf.SYNC = self.old_sync
-    Conf.TESTING = self.old_testing
+class TestBulkUpload(TestDjangoQMixin, GalleryBaseTestCase):
 
   def test_bulk_upload(self):
     response = self.client.get(reverse('galleries:bulk_upload'))

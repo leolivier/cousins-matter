@@ -114,7 +114,7 @@ def do_check_followers(request, followed_object, followed_object_owner, followed
     })
   email.attach_alternative(html_message, "text/html")
   email.send()
-  return follower_emails.count()
+  return len(follower_emails)
 
 
 def toggle_follow(request, followed_object, owner, followed_object_url):

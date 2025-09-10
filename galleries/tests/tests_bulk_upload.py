@@ -1,13 +1,15 @@
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+from cm_main.tests.test_django_q import TestDjangoQMixin
 from cm_main.utils import test_resource_full_path
 from ..models import Gallery, Photo
 from ..views import views_bulk
 from .tests_utils import GalleryBaseTestCase
 
 
-class TestBulkUpload(GalleryBaseTestCase):
+class TestBulkUpload(TestDjangoQMixin, GalleryBaseTestCase):
+
   def test_bulk_upload(self):
     response = self.client.get(reverse('galleries:bulk_upload'))
     self.assertEqual(response.status_code, 200)
@@ -22,7 +24,11 @@ class TestBulkUpload(GalleryBaseTestCase):
                                 follow=True)
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
-    self.assertEqual(Gallery.objects.count(), 2)
-    self.assertEqual(Photo.objects.count(), 4)
-    for g in Gallery.objects.all():
-      self.assertEqual(g.photo_set.count(), 2)
+    self.assertEqual(Gallery.objects.count(), 3)
+    self.assertEqual(Photo.objects.count(), 16)
+    g = Gallery.objects.get(name='root-gallery')
+    self.assertEqual(g.photo_set.count(), 7)
+    g = Gallery.objects.get(name='sub gallery')
+    self.assertEqual(g.photo_set.count(), 6)
+    g = Gallery.objects.get(name='sub gallery #2')
+    self.assertEqual(g.photo_set.count(), 3)

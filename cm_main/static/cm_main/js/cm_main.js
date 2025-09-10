@@ -59,8 +59,11 @@ $(document).ready(function() {
   $('.is-error').addClass('is-danger');
 
   // add is-loading class on upload buttons when they are triggered
-  $('.upload-button').on('click', function(el) { 
-    $(this).addClass('is-loading'); 
+  // check first that the form is valid
+  $('.upload-button').on('click', function(el) {
+    if ($(this).closest('form')[0].checkValidity()) {
+      $(this).addClass('is-loading'); 
+    }
   });
 
   // close notification box on delete

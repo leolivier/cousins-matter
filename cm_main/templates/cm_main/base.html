@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% title _("Home") %}{% endblock %}</title>
     {# bulma stylesheet #}
-    <link rel="stylesheet" 
-          href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" 
-          integrity="sha384-tl5h4XuWmVzPeVWU0x8bx0j/5iMwCBduLEgZ+2lH4Wjda+4+q3mpCww74dgAB3OX"
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+          integrity="sha384-DCY3M8xLkMu6c9IKcKbe+jHKMjelnwC0p+SBaxfHxoBYZWdJF2X400UdBCgATtAB"
           crossorigin="anonymous">
      {# material design icons #}
      <link rel="stylesheet" 
@@ -21,6 +21,8 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
             integrity="sha384-1H217gwSVyLSIfaLxHbE7dRb3v4mYCKbpQvzx0cegeju1MVsGrX5xXxAvs/HgeFs" 
             crossorigin="anonymous"></script>
+    {# htmx #}
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" integrity="sha384-Akqfrbj/HpNVo8k11SXBb6TlBWmXXlYQrCSqEWmyKJe+hDm3Z/B2WVG4smwBkRVm" crossorigin="anonymous"></script>
     {% block header %}{%endblock%}
     {# cousins matter css and js#}
     <link rel="stylesheet" href="{% static 'cm_main/css/cm_main.css' %}">

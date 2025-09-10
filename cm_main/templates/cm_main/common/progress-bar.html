@@ -1,0 +1,46 @@
+{%load i18n cm_tags %}
+<div class="progress-bar"
+	{%if value != max %} {# otherwise stop polling #}
+		 hx-get="{{hx_get}}"
+		 hx-trigger="load delay:{{frequency|default:'1s'}}"
+		 hx-swap="outerHTML"
+	{%endif%}
+	>
+		<progress class="progress is-primary" value="{{value|default:0}}" max="{{max|default:100}}">{{text|default:"0%"}}</progress>
+		<p class="has-text-centered">{{value|default:0}}/{{max|default:100}} ({{text|default:"0%"}})</p>
+		<ul class="message-wrapper">
+			{%if success %}
+			<li class="message is-success">
+				<div class="message-body">
+					{% autoescape off %}{{ success }}{% endautoescape %}
+				</div>
+			</li>
+			{% endif %}
+			{% if errors %}
+			{%for error in errors%}
+			<li class="message is-danger">
+				<div class="message-body">
+					{% autoescape off %}{{ error }}{% endautoescape %}
+				</div>
+			</li>
+			{% endfor %}
+			{% endif %}
+			{% if processed_objects %}
+			{%for processed_object in processed_objects%}
+			<li class="message is-info">
+				<div class="message-body">
+					{% autoescape off %}{{ processed_object }}{% endautoescape %}
+				</div>
+			</li>
+			{% endfor %}
+			{% endif %}
+		</ul>
+	{%if value == max %}
+	<div class="buttons is-centered">
+		<a class="button" href="{{back_url}}" 
+			title="{{back_text}}">
+			<span>{{back_text}}</span> {%icon "back" %}
+		</a>
+	</div>
+	{%endif%}
+</div>

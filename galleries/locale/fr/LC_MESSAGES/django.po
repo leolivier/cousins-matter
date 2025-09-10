@@ -159,7 +159,7 @@ msgstr "Retour à %(gname)s"
 
 #: galleries/templates/galleries/gallery_detail.html:55
 msgid "Back to galleries list"
-msgstr "Retour à la liste des gasleries"
+msgstr "Retour à la liste des galeries"
 
 #: galleries/templates/galleries/gallery_detail.html:60
 #: galleries/templates/galleries/photo_form.html:7

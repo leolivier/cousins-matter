@@ -18,6 +18,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import connections, models
 from django.forms import ValidationError
+from django.shortcuts import render
 from django.urls import reverse
 from django.utils import formats
 from django.utils.translation import gettext as _, get_language, gettext_lazy
@@ -67,7 +68,7 @@ def check_file_size(file, limit):
         limitmb = math.floor(limit*100/(1024*1024))/100
         sizemb = math.floor(file.size*100/(1024*1024))/100
         filename = file.name
-        raise ValidationError(_("Uploaded file %(filename)s is too big (%(sizemb)sMB), maximum is %(limitmb)sMB.") % 
+        raise ValidationError(_("Uploaded file %(filename)s is too big (%(sizemb)sMB), maximum is %(limitmb)sMB.") %
                               {'filename': filename, 'sizemb': sizemb, 'limitmb': limitmb})
 
 
@@ -331,3 +332,7 @@ def check_edit_permission(request, owner):
     if request.user.is_superuser or owner.id == request.user.id:
       return True
     raise PermissionDenied(_("You do not have permission to edit/delete this object."))
+
+
+def ajax_redirect(request, url):
+  return render(request, "cm_main/common/ajax-redirect.html", {"url": url})

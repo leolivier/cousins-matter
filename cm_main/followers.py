@@ -28,7 +28,10 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
     It is assumed that str(followed_object) returns a string that can be used as the name of the followed object.
     This method creates a task to execute the actual check asynchronously.
   """
-  async_task('cm_main.followers.do_check_followers', request, followed_object, followed_object_owner, followed_object_url,
+  if request:  # otherwise, must be an absolute url!
+    followed_object_url = request.build_absolute_uri(followed_object_url)
+
+  async_task('cm_main.followers.do_check_followers', followed_object, followed_object_owner, followed_object_url,
              new_internal_object=new_internal_object, author=author, hook='cm_main.followers.post_check_followers')
 
 
@@ -36,7 +39,7 @@ def post_check_followers(task):
   print("post_check_followers:", task.result)
 
 
-def do_check_followers(request, followed_object, followed_object_owner, followed_object_url,
+def do_check_followers(followed_object, followed_object_owner, followed_object_url,
                        new_internal_object=None, author=None):
   "see check_followers. Really implement the check"
   if new_internal_object is None:
@@ -68,9 +71,6 @@ def do_check_followers(request, followed_object, followed_object_owner, followed
 
   author_name = author.full_name
   followed_object_name = str(followed_object)
-  if request:
-    followed_object_url = request.build_absolute_uri(followed_object_url)
-    # otherwise, must be an absolute url!
   if not followed_object_name:
     raise ValueError('followed object has no name')
   followed_type = followed_object._meta.verbose_name

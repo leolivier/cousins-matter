@@ -4,7 +4,9 @@
 {% block content %}
 <div class="container mt-5 px-2">
 	<h1 class="title has-text-centered">{% title _("Bulk Upload Photos") %}</h1>
-	<form method="post"  enctype="multipart/form-data">
+	<form hx-post="{{request.get_full_path}}"
+				hx-encoding="multipart/form-data"
+				hx-swap="outerHTML">
 		{% csrf_token %}
 		{{ form | crispy}}
 		<p class="buttons is-centered">

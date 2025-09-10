@@ -1,4 +1,6 @@
 import logging
+import shutil
+import time
 import zipfile
 import os
 import mimetypes
@@ -6,21 +8,25 @@ import sys
 import tempfile
 import pathlib
 from dataclasses import dataclass, field
+from datetime import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import SuspiciousFileOperation
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from PIL import Image, ImageOps
-from datetime import datetime
 from io import BytesIO
 from django.db.models import ObjectDoesNotExist
 from django.forms import ValidationError
-from django.shortcuts import redirect, render
+from django.http import Http404
+from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
-from django_q.tasks import async_task, result_group, Task
+from django_q.tasks import async_task, result_group, Task, count_group
+
+from cm_main.utils import ajax_redirect
 
 from ..models import Gallery, Photo
 from ..forms import BulkUploadPhotosForm
@@ -32,7 +38,26 @@ logger = logging.getLogger(__name__)
 class ZipImport:
     root: str = ""  # temp directory where the zip is extracted
     owner_id: str = ""  # member id of the member who imports the photos
-    galleries: dict[Gallery] = field(default_factory=dict)
+    galleries: dict[Gallery] = field(default_factory=dict)  # galleries cache, contains both created and pre-existing galleries
+    nbPhotos: int = 0  # number of tasks created for importing photos
+    nbGalleries: int = 0
+    group: str = ""  # group of tasks
+    # photos and errors are sets to avoid duplicates, they are filled in upload_progress (so, after tasks are finished)
+    photos: set[str] = field(default_factory=set)
+    errors: set[str] = field(default_factory=set)
+
+    def register(self):
+      global ZIP_IMPORTS
+      ZIP_IMPORTS[self.group] = self
+
+    def unregister(self):
+      global ZIP_IMPORTS
+      if self.group in ZIP_IMPORTS:
+        del ZIP_IMPORTS[self.group]
+
+
+# in memory cache of ZipImports
+ZIP_IMPORTS: dict[ZipImport] = {}
 
 
 def _get_parent_gallery(path: str, zimport: ZipImport):  # path should be directory
@@ -41,7 +66,7 @@ def _get_parent_gallery(path: str, zimport: ZipImport):  # path should be direct
     args: "path" should be one of a folder
     """
     parent_dir = os.path.dirname(os.path.normpath(path))
-    return _get_or_create_gallery(parent_dir, zimport) if parent_dir != '' else None, 0
+    return _get_or_create_gallery(parent_dir, zimport) if parent_dir != '' else None
 
 
 def _get_or_create_gallery(path: str, zimport: ZipImport):
@@ -69,19 +94,18 @@ def _get_or_create_gallery(path: str, zimport: ZipImport):
 
   name = os.path.basename(os.path.normpath(path))
   description = _('Imported from zipfile directory %(path)s') % {'path': path}
-  parent, parent_created = _get_parent_gallery(path, zimport)
+  parent = _get_parent_gallery(path, zimport)
 
   # Create gallery if it does not already exists.
   # Don't update it otherwise as we might overwrite handwritten description.
-  created = parent_created
   try:
     gallery = Gallery.objects.get(name=name, parent=parent)
   except ObjectDoesNotExist:
     gallery = Gallery.objects.create(name=name, parent=parent, description=description, owner_id=zimport.owner_id)
-    created += 1
+    zimport.nbGalleries += 1
   # store gallery in the cache
   zimport.galleries[path] = gallery
-  return gallery, created
+  return gallery
 
 
 def _create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
@@ -133,14 +157,16 @@ def _create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
     photo = Photo.objects.create(name=filename, description=description, image=image, date=date,
                                  gallery_id=gallery_id, uploaded_by_id=zimport.owner_id)
 
-  return photo
+  return os.path.relpath(filepath, zimport.root)
 
 
 def _handle_photo_file(zimport: ZipImport, dir: str, image: str, gallery_id: str):
   errors = []
   filepath = os.path.join(dir, image)
+  photo_path = None
   try:
-    _create_photo(image, filepath, zimport, gallery_id)
+    time.sleep(4)  # artificially slow down fo testing
+    photo_path = _create_photo(image, filepath, zimport, gallery_id)
   except OSError as oserror:
     # print an error but continue with next photo
     error_msg = _("Unable to import photo '%(path)s', it was ignored") % {
@@ -150,52 +176,42 @@ def _handle_photo_file(zimport: ZipImport, dir: str, image: str, gallery_id: str
   except ValidationError as verr:
     errors.extend(verr.messages)
 
-  return errors
+  return photo_path, errors
 
 
 def _post_create_photo(task: Task):
-  print("create photo ", task.args, "status:", task.success, "result:", task.result)
+  print("create photo ", task.args, "status:", task.success, "result:", task.result, "group:", task.group)
 
 
-def _handle_zip(request):
+def _handle_zip(zip_file, task_group, owner_id):
   """
   reads a zip file and creates galleries for each folder
-  and photos inside these galleries for each image in the folder.
+  and create tasks to create photos inside these galleries for each image in the folder.
   Galleries are named by the folder names and photos by the image file names.
   Files which are not photos are simply ignored.
   """
-  zip_file = request.FILES["zipfile"]
   if not zipfile.is_zipfile(zip_file):
     raise zipfile.BadZipFile(f"{zip_file} is not a zip file")
 
+  tmpdir = tempfile.mkdtemp()
+  zimport = ZipImport(owner_id=owner_id, root=tmpdir, group=task_group)
+  zimport.register()
+  # extract the zip file to a temporary directory
   with zipfile.ZipFile(zip_file, 'r') as zip_ref:
-    with tempfile.TemporaryDirectory() as temp:
-      zimport = ZipImport(owner_id=request.user.id, root=temp)
-      zip_ref.extractall(temp)
-      task_group = temp
-      nbTasks = 0
-      nbGalleries = 0
-      for dir, subdirs, files in os.walk(temp):
-        images = [file for file in files if mimetypes.guess_type(file)[0].startswith('image/')]
-        if len(images) == 0:  # create galleries only if there are photos inside
-          continue
-        gallery_path = os.path.relpath(dir, temp)  # get relative path from temp to see the galleries path
-        gallery, ncreated = _get_or_create_gallery(gallery_path, zimport)
-        nbGalleries += ncreated
-        for image in images:
-          async_task(_handle_photo_file, zimport, dir, image, gallery.id,
-                     group=task_group, cached=False, hook=_post_create_photo)
-          nbTasks += 1
-      results = result_group(task_group, failures=True, count=nbTasks, cached=False)
+    zip_ref.extractall(tmpdir)
+  for dir, subdirs, files in os.walk(tmpdir):
+    images = [file for file in files if mimetypes.guess_type(file)[0].startswith('image/')]
+    if len(images) == 0:  # create galleries only if there are photos inside
+      continue
+    gallery_path = os.path.relpath(dir, tmpdir)  # get relative path from temp to see the galleries path
+    gallery = _get_or_create_gallery(gallery_path, zimport)
+    for image in images:
+      async_task(_handle_photo_file, zimport, dir, image, gallery.id,
+                 group=task_group, cached=False, hook=_post_create_photo)
+      zimport.nbPhotos += 1
+      # print("created task for ", image, "group:", task_group)
 
-      nbPhotos = 0
-      if results:
-        for errors in results:
-          for err in errors:
-            messages.error(request, err)
-        nbPhotos = len(results)
-
-      return nbGalleries, nbPhotos
+  return zimport
 
 
 class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
@@ -204,20 +220,66 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
     success_url = reverse_lazy("galleries:galleries")
 
     def post(self, request, *args, **kwargs):
+      # print("post bulk upload")
       form = BulkUploadPhotosForm(request.POST, request.FILES)
       if form.is_valid():
         try:
-          nbGalleries, nbPhotos = _handle_zip(request)
-          messages.success(request,
-                           _("Zip file uploaded: %(lg)d galleries and %(nbp)d photos created") %
-                           {'lg': nbGalleries, 'nbp': nbPhotos})
-          return redirect(reverse("galleries:galleries"))
+          zip_file = request.FILES["zipfile"]
+          task_group = request.POST.get("csrfmiddlewaretoken")
+          zimport = _handle_zip(zip_file, task_group, request.user.id)
+          hx_get_url = reverse("galleries:upload_progress", args=(task_group,))
+          # print("rendering first progress-bar url:", hx_get_url)
+          return render(request, "cm_main/common/progress-bar.html",
+                        {"hx_get": hx_get_url, "frequency": "1s",
+                         "value": 0, "max": zimport.nbPhotos, "text": "0%"},
+                        status=200)
+          # print("post upload progress returns", r.content)
+          # return r
         except ValidationError as e:
           for err in e.messages:
             messages.error(request, err)
-          return render(request, self.template_name, {'form': form})
+          return ajax_redirect(request, reverse("galleries:bulk_upload"))
         except Exception as e:
           messages.error(request, e.__str__())
-          return render(request, self.template_name, {'form': form})
+          return ajax_redirect(request, reverse("galleries:bulk_upload"))
       else:
-        return render(request, self.template_name, {'form': form})
+        for code, error in form.errors.items():
+          messages.error(request, ": ".join(code, error))
+        return ajax_redirect(request, reverse("galleries:bulk_upload"))
+
+
+@login_required
+def upload_progress(request, id):
+  zimport = ZIP_IMPORTS.get(id, None)
+  # print("upload progress group:", id, "zimport:", zimport)
+  if not zimport:  # removed from the list when completed
+    raise Http404(_("Upload not found"))
+  value = count_group(id)
+  max = zimport.nbPhotos
+
+  # get already finished tasks
+  results = result_group(id, failures=True, count=value, cached=False)
+  # print error messages first then successful import
+  if results:
+    for photo_path, errors in results:
+      if photo_path:
+        zimport.photos.add(photo_path)
+      if errors:
+        for err in errors:
+          zimport.errors.add(err)
+  context = {"hx_get": request.get_full_path(), "frequency": "1s",
+             "value": value, "max": max, "text": str(int(value*100/max)) + "%",
+             "processed_objects": zimport.photos, "errors": zimport.errors}
+  if value == max:  # reached the end
+    context["back_url"] = reverse('galleries:galleries')
+    context["back_text"] = _('Back to galleries list')
+    context["success"] = _("Zip file uploaded: %(lg)d galleries and %(nbp)d photos created") % {
+                          'lg': zimport.nbGalleries, 'nbp': len(zimport.photos)
+                          }
+    # clean temp directory
+    shutil.rmtree(zimport.root)
+    # remove zimport from the cache
+    zimport.unregister()
+    # print("cleaned", zimport)
+  # print("upload progress bar value:", value, "max:", max, "status:", status)
+  return render(request, "cm_main/common/progress-bar.html", context)

@@ -19,4 +19,5 @@ urlpatterns = [
     path("photo/<int:pk>/edit", views_photo.PhotoEditView.as_view(), name="edit_photo"),
     path("photo/<int:pk>/delete", views_photo.delete_photo, name="delete_photo"),
     path("bulk_upload", views_bulk.BulkUploadPhotosView.as_view(), name="bulk_upload"),
+    path("upload_progress/<str:id>", views_bulk.upload_progress, name="upload_progress")
 ]

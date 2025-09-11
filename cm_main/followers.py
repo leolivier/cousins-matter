@@ -36,7 +36,7 @@ def check_followers(request, followed_object, followed_object_owner, followed_ob
 
 
 def post_check_followers(task):
-  print("post_check_followers:", task.result)
+  logger.debug("post_check_followers:", task.result)
 
 
 def do_check_followers(followed_object, followed_object_owner, followed_object_url,

@@ -14,6 +14,7 @@ services:
 
   pgloader:
     image: dimitri/pgloader:latest
+    container_name: cousins-matter-pgloader
     depends_on: ["postgres"]
     entrypoint: ["pgloader"]
     command: ["sqlite:///data/db.sqlite3", "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"]

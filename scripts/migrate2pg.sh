@@ -28,6 +28,7 @@ while true; do
 			sudo rm -rf ./data/postgres
 			exit 1
 		fi
+		docker container rm cousins-matter-pgloader
 		break
 	fi
 done

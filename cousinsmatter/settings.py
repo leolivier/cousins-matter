@@ -172,10 +172,15 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
   'default': {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': BASE_DIR / 'data' / 'db.sqlite3',
+    'ENGINE': 'django.db.backends.postgresql',
+    'USER': env.str('POSTGRES_USER', default='cousinsmatter'),
+    'PASSWORD': env.str('POSTGRES_PASSWORD'),
+    'HOST': 'localhost',
+    'PORT': 5432,
+    'NAME': env.str('POSTGRES_DB', default='cousinsmatter'),
   }
 }
+# print("databases:", DATABASES)
 
 
 # Password validation

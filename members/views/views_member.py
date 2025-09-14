@@ -2,7 +2,7 @@ import logging
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
-from django.db.models import Q, F, Func
+from django.db.models import Q
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import logout
@@ -56,35 +56,19 @@ def member_manager_name(member):
     return Member.objects.get(id=member.member_manager.id).full_name if member and member.member_manager else None
 
 
-def register_remove_accents():
-    # Execute this if database is SQLite only, and only once
-    if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
-      from django.db import connection
-      # Register custom function in the database
-      with connection.cursor() as cursor:
-        cursor.connection.create_function('REMOVE_ACCENTS', 1, remove_accents)
-
-
 class MembersView(LoginRequiredMixin, generic.ListView):
     template_name = "members/members/members.html"
     # paginate_by = 100
     model = Member
 
     def get(self, request, page_num=1):
-        register_remove_accents()
-        filtered = False
         members = Member.objects
-        for name in ['first_name', 'last_name']:
-            name_filter = name + '_filter'
-            if name_filter in request.GET and request.GET[name_filter]:
-                # issue #149: strip leading and trailing spaces on first and last name of filter
-                normalized_name = remove_accents(request.GET[name_filter].strip())
-                members = members.annotate(
-                    normalized_name=Func(F(name), function='REMOVE_ACCENTS')).filter(
-                    normalized_name__icontains=normalized_name)
-                filtered = True
-        if not filtered:
-            members = members.all()
+        filters = {
+            f'{name}_unaccent__icontains': remove_accents(request.GET[f'{name}_filter']).strip()
+            for name in ['first_name', 'last_name']
+            if request.GET.get(f'{name}_filter', '').strip()
+        }
+        members = members.filter(**filters) if filters else members.all()
         sort_by = request.GET.get('member_sort')
         order = '-' if request.GET.get('member_order') == 'option2' else ''  # default is ascending
         sort_by = [sort_by] if sort_by else ['last_name', 'first_name']  # default order

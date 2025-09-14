@@ -20,10 +20,10 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR ${APP_DIR}
 
-# install lighttpd for serving static and media files, redis for chat, sqlite3 for installing database
+# install lighttpd for serving static and media files, redis for chat for installing database
 # We must update twice as we need first to install gpg before installing redis
 RUN apt-get update &&\
-		apt-get install -y lighttpd sqlite3 sudo supervisor redis &&\
+		apt-get install -y lighttpd sudo supervisor redis &&\
 		apt-get clean && \
 		mkdir -p "/var/log/supervisord" "/var/run/supervisord" &&\
 		rm -rf /var/lib/apt/lists/* /var/cache/apt/* /var/cache/debconf/*

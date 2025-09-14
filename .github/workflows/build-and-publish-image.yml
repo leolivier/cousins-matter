@@ -92,6 +92,7 @@ jobs:
           envkey_EMAIL_HOST_USER: 'nobody@gmail.com'
           envkey_EMAIL_HOST_PASSWORD: 'no matter'
           envkey_POSTGRES_PASSWORD: '123456'
+          envkey_POSTGRES_USER: 'cousinsmatter'
           envkey_POSTGRES_DB: 'test_cousinsmatter'
           directory: .
           file_name: .env

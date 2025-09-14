@@ -175,7 +175,7 @@ DATABASES = {
     'ENGINE': 'django.db.backends.postgresql',
     'USER': env.str('POSTGRES_USER', default='cousinsmatter'),
     'PASSWORD': env.str('POSTGRES_PASSWORD'),
-    'HOST': 'localhost',
+    'HOST': env.str('POSTGRES_HOST', default='postgres'),
     'PORT': 5432,
     'NAME': env.str('POSTGRES_DB', default='cousinsmatter'),
   }

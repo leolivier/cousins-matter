@@ -179,7 +179,6 @@ DATABASES = {
     'PORT': 5432,
     'NAME': env.str('POSTGRES_DB', default='cousinsmatter'),
     'TEST': { 'NAME': 'test_cousinsmatter' },
-    }
   }
 }
 # print("databases:", DATABASES)

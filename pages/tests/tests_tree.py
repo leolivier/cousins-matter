@@ -75,13 +75,13 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
         self.assertNotContains(response, page.title)
 
   def test_display_tree_of_pages(self):
-    self.superuser_login()  # only superuser can create pages
+    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
     pages = self.create_pages()
     response = self.client.get(reverse('pages-edit:tree'), follow=True)
     self.assertEqual(response.status_code, 200)
     self.check_pages(response, pages, edit=True)
 
-    self.login()  # relog as simple user to check tree
+    self.client.login(username=self.member.username, password=self.member.password)  # relog as simple user to check tree
     response = self.client.get(reverse('pages-edit:tree'), follow=True)
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)

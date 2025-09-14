@@ -9,6 +9,7 @@ from django.test import tag
 
 from chat.tests.tests_mixin import ChatMessageSenderMixin
 from members.tests.tests_member_base import MemberTestCase
+from cm_main.tests.test_django_q import django_q_sync_class
 from ..models import ChatMessage, ChatRoom
 
 
@@ -34,6 +35,7 @@ class ChatRoomTests(MemberTestCase):
     return rooms.first()
 
   def test_create_chat_room(self):
+    """Tests creating a public chat room."""
     room_name = 'a clean room'
     slug = slugify(room_name)
     self.assertFalse(ChatRoom.objects.filter(slug=slug).exists())
@@ -57,6 +59,7 @@ class ChatRoomTests(MemberTestCase):
     ChatRoom.objects.all().delete()
 
   def test_list_rooms(self):
+    """Tests listing public chat rooms."""
     rooms = [ChatRoom.objects.create(name='Chat Room #%i' % i) for i in range(5)]
     ChatMessage.objects.create(room=rooms[0], content='a message', member=self.member)
     response = self.client.get(reverse('chat:chat_rooms'))
@@ -121,8 +124,10 @@ class ChatRoomTests(MemberTestCase):
 
 
 @tag("needs-redis")
+@django_q_sync_class
 class ChatMessageTests(ChatMessageSenderMixin, MemberTestCase):
   async def test_chat_consumer(self):
+    """Tests the chat consumer."""
     msg = 'this is my message to the world!'
     communicator = await self.send_chat_message(msg, self.slug, disconnect=False)
     response = await communicator.receive_json_from()

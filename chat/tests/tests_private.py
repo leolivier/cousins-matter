@@ -132,6 +132,7 @@ class PrivateChatRoomTestsMixin():
 class PrivateChatRoomTests(PrivateChatRoomTestsMixin, MemberTestCase):
 
   def test_create_chat_room(self):
+    """Tests creating a private chat room."""
     room_name = 'a clean private room'
     slug = slugify(room_name)
     self.assertFalse(ChatRoom.objects.filter(slug=slug).exists())
@@ -157,6 +158,7 @@ class PrivateChatRoomTests(PrivateChatRoomTestsMixin, MemberTestCase):
     PrivateChatRoom.objects.all().delete()
 
   def test_list_private_rooms(self):
+    """Tests listing private chat rooms."""
     rooms = []
     for i in range(5):
       name = 'Private Chat Room #%i' % i
@@ -175,7 +177,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
 
   def setUp(self):
     super().setUp()
-    # first create 5 members
+    # first create 5 active members
     for i in range(5):
       self.create_member(is_active=True)
     # then create a private room
@@ -186,6 +188,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     super().tearDown()
 
   def test_list_private_members(self):
+    """Tests listing private chat room members."""
     # check creator of the private room was automatically added in the room members and admins
     self.assertIn(self.member, self.room.followers.all())
     self.assertIn(self.member, self.room.admins.all())
@@ -232,6 +235,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     del self.created_members[0]
 
   def test_list_private_admins(self):
+    """Tests listing private chat room admins."""
     # try adding as an admin a user who is not a member of the room, should fail
     response = self.client.post(reverse('chat:add_admin_to_private_room', args=[self.room.slug]),
                                 {'member-id': self.created_members[0].id}, follow=True)
@@ -340,11 +344,12 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.assertEqual(PrivateChatRoom.objects.filter(name=self.room.name).count(), 1)
 
   def test_permissions(self):
+    """Tests permissions for private chat rooms."""
     # create a second room as self.member
     second_room = self.do_check_private_chat_room('a second room')
     # login as someone who didn't create the rooms
     member = random.choice(self.created_members)
-    self.login_as(member)
+    self.client.login(username=member.username, password=member.password)
     response = self.client.get(reverse('chat:private_chat_rooms'), follow=True)
     self.assertTemplateUsed(response, "chat/chat_rooms.html")
     # none of the rooms should be visible

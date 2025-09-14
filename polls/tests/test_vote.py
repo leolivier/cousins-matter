@@ -89,5 +89,6 @@ class TestVoteView(PollTestMixin):
         self.create_questions(poll)
         self.create_and_check_answers(poll)
         # rerun vote with the same questions and a different user with different answers
-        self.create_member_and_login()
+        member = self.create_member(is_active=True)
+        self.client.login(username=member.username, password=member.password)
         self.create_and_check_answers(poll, expected_poll_answers=2)

@@ -1,5 +1,6 @@
 import re
 import os
+from django.db import transaction
 from django.urls import reverse
 from django.db.utils import IntegrityError
 from django.utils.formats import localize
@@ -11,7 +12,10 @@ from verify_email.app_configurations import GetFieldFromSettings
 from verify_email.views import verify_user_and_activate
 from ..views.views_member import EditProfileView, MemberDetailView
 from ..models import Member
-from .tests_member_base import TestLoginRequiredMixin, MemberTestCase, yesterday
+from .tests_member_base import (
+  TestLoginRequiredMixin, MemberTestCase, modify_member_data,
+  get_new_member_data, today_minus
+)
 from cm_main.utils import get_test_absolute_url
 
 
@@ -58,8 +62,7 @@ class MemberViewTestMixin():
     """creates and returns a new member through the UI using provided member data.
     Compared to create_member directly to DB, created users are supposed to be managed
     """
-    if member_data is None:
-      member_data = self.get_new_member_data()
+    member_data = member_data or get_new_member_data()
     response = self.client.post(reverse("members:create"), member_data, follow=True)
     self.assertEqual(response.status_code, 200)
     new_member = Member.objects.filter(username=member_data['username']).first()
@@ -74,7 +77,8 @@ class MemberCreateTest(MemberViewTestMixin, MemberTestCase):
 
   def test_create_member_with_same_username(self):
     with self.assertRaises(IntegrityError):
-      Member.objects.create(username=self.username)
+      with transaction.atomic():
+        Member.objects.create(username=self.member.username)
 
   def test_create_managed_member_in_view(self):
     prev_number = Member.objects.count()
@@ -121,17 +125,17 @@ class MemberProfileViewTest(MemberTestCase):
     self.assertTemplateUsed(response, 'members/members/member_upsert.html')
     self.assertIs(response.resolver_match.func.view_class, EditProfileView)
 
-    self.assertContains(response, f'''<input type="text" name="username" value="{self.username}"
+    self.assertContains(response, f'''<input type="text" name="username" value="{self.member.username}"
                       maxlength="150" class="input" required aria-describedby="id_username_helptext"
                       id="id_username">''', html=True)
-    self.assertContains(response, f'''<input type="text" name="first_name" value="{self.first_name}"
+    self.assertContains(response, f'''<input type="text" name="first_name" value="{self.member.first_name}"
                       maxlength="150" class="input" id="id_first_name" required>''', html=True)
-    self.assertContains(response, f'''<input type="text" name="last_name" value="{self.last_name}"
+    self.assertContains(response, f'''<input type="text" name="last_name" value="{self.member.last_name}"
                       maxlength="150" class="input" id="id_last_name" required>''', html=True)
 
     self.assertTrue(self.member.is_active)
     self.assertIsNone(self.member.member_manager)
-    new_data = self.get_changed_member_data(self.member)
+    new_data = modify_member_data(self.member)
     response = self.client.post(profile_url, new_data, follow=True)
     # print(vars(response))
 
@@ -191,7 +195,7 @@ class ManagedMemberChangeTests(MemberViewTestMixin, MemberTestCase):
   def test_managed_change_view(self):
     # change the managed member data
     edit_url = reverse('members:member_edit', kwargs={'pk': self.managed.id})
-    new_data = self.get_changed_member_data(self.managed)
+    new_data = modify_member_data(self.managed)
     response = self.client.post(edit_url, new_data, follow=True)
     # print(response.content.decode())
     self.assertEqual(response.status_code, 200)
@@ -203,7 +207,7 @@ class ManagedMemberChangeTests(MemberViewTestMixin, MemberTestCase):
 
     # chack that active members can't be changed
     edit_url = reverse('members:member_edit', kwargs={'pk': self.active.id})
-    new_data = self.get_changed_member_data(self.active)
+    new_data = modify_member_data(self.active)
     # for get
     response = self.client.get(edit_url, new_data, follow=True)
     self.assertEqual(response.status_code, 200)
@@ -288,7 +292,7 @@ class TestDisplayMembers(MemberTestCase):
     member1 = self.create_member()
     member2 = self.create_member()
     member3 = self.create_member()
-    accented_member = self.get_new_member_data()
+    accented_member = get_new_member_data()
     accented_filter = accented_member['first_name'] + 'exxx '
     accented_member['first_name'] += 'éxxx'
     member4 = self.create_member(accented_member)
@@ -402,9 +406,9 @@ class TestActivateManagedMember(MemberTestCase):
 
 class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
   def get_dead_member_data(self):
-    data = self.get_new_member_data()
+    data = get_new_member_data()
     # set death date 5 days ago
-    data['deathdate'] = yesterday(5)
+    data['deathdate'] = today_minus('5d')
     return data
 
   def check_dead_member(self, member):
@@ -429,9 +433,9 @@ class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
     user = self.create_member()
     # change the managed member data
     edit_url = reverse('members:member_edit', kwargs={'pk': user.id})
-    new_data = self.get_changed_member_data(user)
+    new_data = modify_member_data(user)
     # set deathdate
-    new_data['deathdate'] = yesterday()
+    new_data['deathdate'] = today_minus('5d')
     response = self.client.post(edit_url, new_data, follow=True)
     # print(response.content.decode())
     self.assertEqual(response.status_code, 200)

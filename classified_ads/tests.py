@@ -32,7 +32,6 @@ class ClassifiedAdBaseTestCase(TestLoginRequiredMixin, MemberTestCase):
 
   def setUp(self):
     super().setUp()
-    self.login()
     self.ad = {
       "title": "My car",
       "category": "vehicles",
@@ -78,6 +77,7 @@ class ClassifiedAdBaseTestCase(TestLoginRequiredMixin, MemberTestCase):
 class ClassifiedAdCreateTestCase(ClassifiedAdBaseTestCase):
 
   def test_create_ad(self):
+    """Tests creating a classified ad."""
     url = reverse("classified_ads:create")
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
@@ -92,6 +92,7 @@ class ClassifiedAdCreateTestCase(ClassifiedAdBaseTestCase):
 class ClassifiedAdUpdateTestCase(ClassifiedAdBaseTestCase):
 
   def test_update_ad(self):
+    """Tests updating a classified ad."""
     self.ad["owner"] = self.member
     ad = ClassifiedAd.objects.create(**self.ad)
     url = reverse("classified_ads:update", kwargs={"pk": ad.id})
@@ -108,6 +109,7 @@ class ClassifiedAdUpdateTestCase(ClassifiedAdBaseTestCase):
     # self.assertEqual(ClassifiedAd.objects.count(), 1)
 
   def test_add_photos(self):
+    """Tests adding photos to a classified ad."""
     self.ad["owner"] = self.member
     ad = ClassifiedAd.objects.create(**self.ad)
     url = reverse("classified_ads:add_photo", kwargs={"pk": ad.id})
@@ -144,6 +146,7 @@ class ClassifiedAdUpdateTestCase(ClassifiedAdBaseTestCase):
 class DeleteAdTestCase(ClassifiedAdBaseTestCase):
 
   def test_delete_ad(self):
+    """Tests deleting a classified ad."""
     self.ad["owner"] = self.member
     ad = ClassifiedAd.objects.create(**self.ad)
     for i in range(2):
@@ -163,6 +166,7 @@ class DeleteAdTestCase(ClassifiedAdBaseTestCase):
 class ListAdTestCase(ClassifiedAdBaseTestCase):
 
   def test_list_ad(self):
+    """Tests listing classified ads."""
     self.ad["owner"] = self.member
     ad1 = ClassifiedAd.objects.create(**self.ad)
     self.ad2 = {
@@ -280,7 +284,7 @@ class SendMessageTestCase(ClassifiedAdBaseTestCase):
     ad = ClassifiedAd.objects.create(**self.ad)
     # create a sender and login
     sender = self.create_member(is_active=True)
-    self.login_as(sender)
+    self.client.login(username=sender.username, password=sender.password)
     # send a message
     url = reverse("classified_ads:send_message", kwargs={"pk": ad.id})
     self.client.post(url, {"message": "Hello, how are you?"}, follow=True)

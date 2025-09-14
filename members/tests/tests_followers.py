@@ -8,6 +8,7 @@ from cm_main.utils import get_test_absolute_url
 from cm_main.tests.tests_followers import TestFollowersMixin
 from forum.models import Message, Post
 from .tests_member_base import MemberTestCase
+from cm_main.tests.test_django_q import django_q_sync_class
 
 
 @sync_to_async
@@ -15,6 +16,7 @@ def astr(obj):
   return str(obj)
 
 
+@django_q_sync_class
 class TestMemberFollowersMixin(TestFollowersMixin):
   def do_test_toggle_follow_member(self):
     follower = self.member
@@ -28,16 +30,18 @@ class TestMemberFollowersMixin(TestFollowersMixin):
 
   def do_test_toggle_unfollow_member(self, followed):
     # test unfollow
-    self.login()  # login as follower (ie self.member)
+    self.client.login(username=self.member.username, password=self.member.password)  # login as follower (ie self.member)
     url = reverse("members:toggle_follow", args=[followed.id])
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(followed.followers.count(), 0)
 
 
+@django_q_sync_class
 class TestMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, MemberTestCase):
 
   def test_follow_member(self):
+    """Tests that the follow member view works correctly."""
     follower = self.member
     followed = self.do_test_toggle_follow_member()
     followed_url = get_test_absolute_url(reverse("members:detail", args=[followed.id]))
@@ -49,7 +53,7 @@ class TestMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, Membe
       followed_url=followed_url)
 
     # now, followed will create a post
-    self.login_as(followed)
+    self.client.login(username=followed.username, password=followed.password)
     url = reverse("forum:create")
     post_title = 'a post to be followed'
     post_content = 'a content of the new post'
@@ -94,42 +98,23 @@ class TestMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, Membe
 
 
 @tag("needs-redis")
+@django_q_sync_class
 class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, MemberTestCase):
   # def tearDown(self):
   #   ChatMessageSenderMixin.tearDown(self)
   #   super(MemberTestCase, self).tearDown()
 
-  @sync_to_async
-  def ado_test_toggle_follow_member(self):
-    return self.do_test_toggle_follow_member()
-
-  @sync_to_async
-  def ado_test_toggle_unfollow_member(self, followed):
-    return self.do_test_toggle_unfollow_member(followed)
-
-  @sync_to_async
-  def aget(self, url, *args, **kwargs):
-    return self.client.get(url, *args, **kwargs)
-
-  @sync_to_async
-  def alogin_as(self, member):
-    return self.login_as(member)
-
-  @sync_to_async
-  def alogin(self):
-    return self.login()
-
   async def test_follow_room(self):
     """test room follow in the context of member follow"""
     follower = self.member
-    followed = await self.ado_test_toggle_follow_member()
-    # reseet the mail outbox
+    followed = await sync_to_async(self.do_test_toggle_follow_member)()
+    # reset the mail outbox
     mail.outbox = []
 
     # first, followed creates a chat room
-    await self.alogin_as(followed)
+    await self.client.alogin(username=followed.username, password=followed.password)
     room_name = 'a room to be followed'
-    response = await self.aget(reverse('chat:new_room'), {'name': room_name})
+    response = await self.async_client.get(reverse('chat:new_room'), {'name': room_name})
     self.assertEqual(response.status_code, 302)
     room = await ChatRoom.objects.aget(name=room_name)
     room_url = get_test_absolute_url(reverse('chat:room', args=[room.slug]))
@@ -161,10 +146,10 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
 
     # now, let follower create a room and it's 1rst message and let the
     # followed reply to it, and check the email to the follower
-    await self.alogin()  # login as follower ie self.member
+    await self.client.alogin(username=follower.username, password=follower.password)
 
     room_name = 'a new room created by follower'
-    response = await self.aget(reverse('chat:new_room'), {'name': room_name})
+    response = await self.async_client.get(reverse('chat:new_room'), {'name': room_name})
     self.assertEqual(response.status_code, 302)
     room = await ChatRoom.objects.aget(name=room_name)
     room_url = get_test_absolute_url(reverse('chat:room', args=[room.slug]))
@@ -174,7 +159,7 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
     # force reset the mail outbox.
     mail.outbox = []
     # now, followed will reply to the follower's message
-    await self.alogin_as(followed)
+    await self.client.alogin(username=followed.username, password=followed.password)
     reply_msg = "a reply to be followed's room"
     await self.send_chat_message(reply_msg, room_slug=room.slug)
 
@@ -191,4 +176,4 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
     # await room.adelete()
 
     # test unfollow
-    await self.ado_test_toggle_unfollow_member(followed)
+    await sync_to_async(self.do_test_toggle_unfollow_member)(followed)

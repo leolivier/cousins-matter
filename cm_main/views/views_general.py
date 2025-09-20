@@ -37,6 +37,9 @@ class HomeView(generic.TemplateView):
 def download_protected_media(request, media):
   logger.debug(f"Downloading protected media {media}")
   the_file = settings.MEDIA_ROOT / media
+  # Security: Make sure the path does not go back up the tree using '..'
+  if not os.path.normpath(the_file).startswith(os.path.normpath(settings.MEDIA_ROOT)):
+    raise Http404(_("Path traversal detected"))
   if not os.path.isfile(the_file):
     raise Http404(_("Media not found"))
   # filename = os.path.basename(the_file)
@@ -47,7 +50,6 @@ def download_protected_media(request, media):
           chunk_size,
       ),
       content_type=mimetypes.guess_type(the_file)[0],
-
   )
   response["Content-Length"] = os.path.getsize(the_file)
   # response["Content-Disposition"] = f"inline; filename={filename}"

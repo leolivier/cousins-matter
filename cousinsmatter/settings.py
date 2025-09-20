@@ -28,6 +28,8 @@ DEBUG = env.bool('DEBUG', False)
 if DEBUG:
   print(f"WARNING! DEBUG={DEBUG}. This is not suited for production!")
 SECRET_KEY = env.str('SECRET_KEY')
+# when rotating the secret key, you can provide the old key here to avoid breaking the site
+SECRET_KEY_FALLBACKS = env.list("PREVIOUS_SECRET_KEYS", default=[])
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

@@ -33,12 +33,17 @@ function check_status() {
   fi
 }
 
+sudo test -d .
+check_status "You must have sudo right to run this script"
+
 command docker >/dev/null 2>&1  # check if docker is installed and desktop running for WSL2
 check_status "docker is not installed, please install it and restart the command"
 
-command -v curl >/dev/null || command -v wget >/dev/null
+curl_cmd=$(command -v curl)
+wget_cmd=$(command -v wget)
+[[ -n $curl_cmd && -n $wget_cmd ]]
 check_status "curl and wget are not installed, please install one of them and restart the command"
-
+[[ -n $curl_cmd ]] && download_cmd=curl || download_cmd=wget
 
 directory=$PWD/cousins-matter
 verbose() {
@@ -68,24 +73,53 @@ else
 	mkdir -p $directory
 fi
 
-last_realease=$(curl -s https://api.github.com/repos/${github_repo}/releases/latest | grep '"tag_name":' | sed -e 's/ *"tag_name": "\(.*\)",/\1/')
+download() {
+	url=$1
+	file=$2
+	[[ $download_cmd == "curl" ]] && silent="-s" || silent="-q"
+	[[ $download_cmd == "curl" ]] && out="-o" || out="-O"
+	if [[ -z $file ]]; then
+		$download_cmd $silent "$url"
+	else
+		$download_cmd $silent "$url" $out "$file"
+	fi
+	check_status "Downloading $file failed"
+}
+
+last_realease=$($download_cmd -s https://api.github.com/repos/${github_repo}/releases/latest | grep '"tag_name":' | sed -e 's/ *"tag_name": "\(.*\)",/\1/')
 git_url=https://raw.githubusercontent.com/${github_repo}/refs/tags/${last_realease}
 
 cd $directory
 
-verbose "downloading docker-compose.yml and .env.example from $git_url."
-for file in docker-compose.yml .env.example; do
-	curl -s $git_url/$file -o $file
-	check_status "Downloading $file failed"
+verbose "downloading docker-compose.yml, .env.example, nginx.conf and rotate-secrets.sh from $git_url."
+mkdir scripts
+for file in docker-compose.yml .env.example nginx.conf scripts/rotate-secrets.sh; do
+	download $git_url/$file $file
 done
+chmod a+x ./scripts/rotate-secrets.sh
+check_status "Failed to make rotate-secrets.sh executable"
 
-verbose "Creating .env from .env.example..."
-mv .env.example .env
+if [[ ! -f .env ]]; then
+	verbose "Creating .env from .env.example..."
+	mv .env.example .env
+else
+	echo "WARNING! Skipping .env creation, .env already exists but might not contain all required variables."
+	echo "Please check .env.example and .env to make sure all required variables are present."
+fi
 
 verbose "Generating secret key..."
-key=$(tr -dc '[:alnum:]!@#$%^&*()_\-+={}[]:;<>?,.' < /dev/urandom | head -c 64)
-sed -i "s/SECRET_KEY=.*/SECRET_KEY='$key'  # generated automatically, do not change!/" .env
+./scripts/rotate-secrets.sh
 check_status "Can't generate secret key"
+
+verbose "Generating postgres password..."
+key=$(tr -dc '[:alnum:]./_*' < /dev/urandom | head -c 16)
+sed -i "s@POSTGRES_PASSWORD=.*@POSTGRES_PASSWORD='$key'@" .env
+check_status "Can't generate postgres password"
+
+mkdir -p ./data/postgres
+sudo chmod a+w ./data
+sudo chown 70:70 ./data/postgres
+check_status "Unable to create postgres data directory"
 
 verbose "Installation of Cousins Matter done"
 echo "An editor will open in a few seconds to udpate .env file. Please adapt it to your needs before starting the site."

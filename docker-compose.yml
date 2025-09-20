@@ -2,24 +2,42 @@ services:
   cousins-matter:
     image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
     container_name: cousins-matter
-    # the build works only in dev mode
-    build:
-      context: .
-      dockerfile: ./Dockerfile
     restart: unless-stopped
     depends_on:
       - postgres
+      - redis
+      - django_qcluster
+    networks:
+      - cousins_matter_network
     ports:
-      - "${DOCKER_PORT:-8000}:8000"
+      - "9999:80"
+    user: "cm_user:cm_user"
+    volumes:
+      - ./data:/app/data
+      - ./media:/app/media
+      - ./.env:/app/.env
+
+  django_qcluster:
+    image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
+    container_name: cousins-matter-qcluster
+    entrypoint: ["./scripts/qcluster_entrypoint.sh"]
+    user: "cm_user:cm_user"
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - cousins_matter_network
     volumes:
       - ./data:/app/data
       - ./media:/app/media
       - ./.env:/app/.env
 
   postgres:
-    image: postgres:16-alpine
+    image: postgres:alpine
     container_name: cousins-matter-postgres
     restart: unless-stopped
+    user: "postgres:postgres"
     ports:
       - "5432:5432"
     volumes:
@@ -28,3 +46,48 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-cousinsmatter}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB:-cousinsmatter}
+    networks:
+      - cousins_matter_network
+
+  redis:
+    image: redis:alpine
+    container_name: cousins-matter-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - cousins_matter_network
+
+  # this service is only used for migrating the database from sqlite to postgres, it won't be started by default
+  migrate:
+    profiles: ["migrate"]
+    image: dimitri/pgloader:latest
+    container_name: cousins-matter-pgloader
+    depends_on: ["postgres"]
+    entrypoint: ["pgloader"]
+    command: ["sqlite:///data/db.sqlite3", "postgresql://${POSTGRES_USER:-cousinsmatter}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-cousinsmatter}"]
+    volumes:
+      - ./data:/data
+    env_file: .env
+    networks:
+      - cousins_matter_network
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: cousins-matter-nginx
+    ports:
+      - "${DOCKER_PORT:-8000}:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../static:/app/static:ro
+      - ../media:/app/media:ro
+    restart: unless-stopped
+    networks:
+      - cousins_matter_network
+
+networks:
+  cousins_matter_network:
+    name: cousins_matter_network
+    driver: bridge

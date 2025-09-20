@@ -6,7 +6,7 @@ github_repo=leolivier/cousins-matter
 function usage() {
 	cat << EOF
 
-usage: $0 [-h] [-q] [-f] [-d directory]
+usage: $0 [-h] [-q] [-f] [-d directory] [-b branch]
 
 Starts the cousins-matter docker container
 
@@ -14,7 +14,7 @@ args:
 	-h: print this help and exit
 	-q: quiet mode, default is verbose
 	-d directory: the directory where cousins-matter will be installed, defaults to ./cousins-matter. Directory must not exist or be empty.
-
+	-b branch: the branch to use, defaults to latest release.
 It will:
 	- check that docker and curl or wget are installed,
 	- download docker-compose.yml and .env.example from github
@@ -50,10 +50,11 @@ verbose() {
     echo "$@"
 }
 
-while getopts ":hfqd:" opt; do
+while getopts ":hfqd:b:" opt; do
 	case $opt in
 		h) usage;;
 		d) directory=$OPTARG;;
+		b) branch=$OPTARG;;
 		q) verbose() {
         :
     };;
@@ -86,8 +87,12 @@ download() {
 	check_status "Downloading $file failed"
 }
 
-last_realease=$($download_cmd -s https://api.github.com/repos/${github_repo}/releases/latest | grep '"tag_name":' | sed -e 's/ *"tag_name": "\(.*\)",/\1/')
-git_url=https://raw.githubusercontent.com/${github_repo}/refs/tags/${last_realease}
+if [[ -z $branch ]]; then
+	last_realease=$($download_cmd -s https://api.github.com/repos/${github_repo}/releases/latest | grep '"tag_name":' | sed -e 's/ *"tag_name": "\(.*\)",/\1/')
+	git_url=https://raw.githubusercontent.com/${github_repo}/refs/tags/${last_realease}
+else
+	git_url=https://raw.githubusercontent.com/${github_repo}/refs/heads/${branch}
+fi
 
 cd $directory
 

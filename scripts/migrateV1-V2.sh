@@ -13,12 +13,13 @@ NC="\e[0m"
 function usage() {
 	cat << EOF
 
-usage: $0 [-h] [-q] [-f] [-d directory]
+usage: $0 [-h] [-q] [-f] [-d directory] [-b branch]
 
 args:
 	-h: print this help and exit
 	-q: quiet mode, default is verbose
 	-d directory: the directory where cousins-matter is installed, defaults to current directory.
+	-b branch: the branch to use, defaults to latest release.
 It will:
 	- check that docker and curl or wget are installed,
 	- download the latest versions of docker-compose.yml, .env.example and some scripts from github
@@ -60,7 +61,7 @@ verbose() {
 	echo $parm "$@";
 }
 
-while getopts ":hfqd:" opt; do
+while getopts ":hfqd:b:" opt; do
 	case $opt in
 		h) usage;;
 		d) directory=$OPTARG
@@ -69,6 +70,7 @@ while getopts ":hfqd:" opt; do
 			else
 				error 1 "${ON_RED}Error: directory $directory does not exist${NC}"
 			fi;;
+		b) branch=$OPTARG;;
 		q) verbose() {
         :
     };;
@@ -144,8 +146,12 @@ download() {
 }
 
 download_v2_scripts() {
-	last_release=$($download_cmd -s https://api.github.com/repos/${github_repo}/releases/latest | grep '"tag_name":' | sed -e 's/ *"tag_name": "\(.*\)",/\1/')
-	git_url=https://raw.githubusercontent.com/${github_repo}/refs/tags/${last_release}
+	if [[ -z $branch ]]; then
+		last_release=$($download_cmd -s https://api.github.com/repos/${github_repo}/releases/latest | grep '"tag_name":' | sed -e 's/ *"tag_name": "\(.*\)",/\1/')
+		git_url=https://raw.githubusercontent.com/${github_repo}/refs/tags/${last_release}
+	else
+		git_url=https://raw.githubusercontent.com/${github_repo}/refs/heads/${branch}
+	fi
 	for file in docker-compose.yml .env.example scripts/rotate-secrets.sh; do
 		download $git_url/$file $file
 	done

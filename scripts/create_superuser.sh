@@ -1,8 +1,18 @@
 #!/bin/bash
 
 if [[ -z $USER ]]; then
-	USER=cm_user
+	export USER=cm_user
 fi
+
+get_env() {
+  local key="$1" val
+  val=$(grep -m1 -E "^${key}=" /app/.env | cut -d= -f2- || true)
+  # if the value begins and ends with the same quotation mark (single or double), it is removed
+  if [[ $val =~ ^\".*\"$ ]] || [[ $val =~ ^\'.*\'$ ]]; then
+    val=${val:1:-1}
+  fi
+  printf '%s' "$val"
+}
 
 ADMIN=$(get_env ADMIN)
 ADMIN_PASSWORD=$(get_env ADMIN_PASSWORD)
@@ -23,5 +33,5 @@ else
 	echo "creating superuser..."
 	cmd="from members.models import Member; Member.objects.create_superuser(username='$ADMIN', email='$ADMIN_EMAIL', password='$ADMIN_PASSWORD', first_name='$ADMIN_FIRSTNAME', last_name='$ADMIN_LASTNAME')"
 	echo $cmd
-	sudo -u $USER python manage.py shell -c "$cmd"
+	sudo -u cm_user python manage.py shell -c "$cmd"
 fi 

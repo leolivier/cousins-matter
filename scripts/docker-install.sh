@@ -121,10 +121,16 @@ key=$(tr -dc '[:alnum:]./_*' < /dev/urandom | head -c 16)
 sed -i "s@POSTGRES_PASSWORD=.*@POSTGRES_PASSWORD='$key'@" .env
 check_status "Can't generate postgres password"
 
-mkdir -p ./data/postgres
+# to allow the container to write in the data directory
 sudo chmod a+w ./data
+
+mkdir -p ./data/postgres
 sudo chown 70:70 ./data/postgres
 check_status "Unable to create postgres data directory"
+
+mkdir -p ./media ./static
+sudo chown 1000:1000 ./media ./static
+check_status "Unable to create media or static data directory"
 
 verbose "Installation of Cousins Matter done"
 echo "An editor will open in a few seconds to udpate .env file. Please adapt it to your needs before starting the site."

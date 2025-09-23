@@ -48,22 +48,22 @@ def signal_handler(signum, frame):
   try:
     sig_name = getattr(signal, 'Signals', None)
     if sig_name:
-      logger.info(f"\nReceived signal {signal.Signals(signum).name}, cleaning up...")
+      logger.warn(f"\nReceived signal {signal.Signals(signum).name}, cleaning up...")
     else:
-      logger.info(f"\nReceived signal {signum}, cleaning up...")
+      logger.warn(f"\nReceived signal {signum}, cleaning up...")
   except Exception:
-    logger.info(f"\nReceived signal {signum}, cleaning up...")
+    logger.warn(f"\nReceived signal {signum}, cleaning up...")
   cleanup()
   sys.exit(1)
 
 
 def wait_init_and_exec(wait_time=10):
   """Wait for initialization to complete or timeout and exec CMD if no timeout"""
-  logger.debug(f"Waiting (max {wait_time} seconds)...")
+  logger.info(f"Waiting (max {wait_time} seconds)...")
 
   for i in range(1, wait_time + 1):
     if not INIT_IN_PROGRESS_DIR.exists():
-      logger.debug("Initialization completed by another process.")
+      logger.info("Initialization completed by another process.")
       exec_docker_cmd()
     time.sleep(1)
 
@@ -78,9 +78,9 @@ def acquire_lock():
         """
   try:
     INIT_IN_PROGRESS_DIR.mkdir(parents=True, exist_ok=False)
-    logger.debug("Initialization lock acquired.")
+    logger.info("Initialization lock acquired.")
   except FileExistsError:
-    logger.debug("Failed to acquire lock: Another container is already initializing the environment.")
+    logger.info("Failed to acquire lock: Another container is already initializing the environment.")
     wait_init_and_exec(20)
 
 
@@ -100,7 +100,7 @@ def first_run_init():
       logger.info("Created media subdirectories and theme.css file.")
       return True
     except FileExistsError:
-      logger.debug("This is not the first run. Skipping first run init...")
+      logger.info("This is not the first run. Skipping first run init...")
       return False
 
 
@@ -124,7 +124,7 @@ def run_collectstatic():
     sys.exit(1)
 
 
-def run_check():
+def run_check_deploy():
   """Run check"""
   try:
     logger.info("Running checks...")
@@ -169,7 +169,7 @@ def initialize_environment(env: environ.Env):
     first_run = first_run_init()
     run_migrations()
     run_collectstatic()
-    run_check()
+    run_check_deploy()
     if first_run:
       run_create_superuser(env)
 
@@ -178,8 +178,6 @@ def initialize_environment(env: environ.Env):
   finally:
     # Cleanup is handled by signal handlers and this ensures cleanup on normal exit
     cleanup()
-
-  logger.info("Environment is ready...")
 
 
 def exec_docker_cmd():
@@ -197,33 +195,34 @@ def exec_docker_cmd():
     logger.error(f"Command not found: {args[0]}")
     sys.exit(127)
 
+def get_environment() -> environ.Env:
+  """Check environment variables"""
+  # Check current working directory
+  if os.getcwd() != '/app':
+    raise InitException("""The container is inconsistent: PWD is not set to /app.
+Please make sure you are in the project directory before running this script.""", 1)
+  env_file = Path("/app/.env")
+  if not env_file.exists() or not env_file.is_file():
+    raise InitException("""
+The .env file is missing or not readable.
+Please download .env.example from github latest release, rename it to .env, and fill it with the right data.
+Then use --force-recreate option with 'docker compose up' to recreate the container.""", 2)
+  # load keys from .env
+  env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+  )
+  env.read_env(env_file, overwrite=True)
+  return env
+
 
 def main():
     """Main entry point"""
     try:
-        env_file = Path("/app/.env")
-        # Check current working directory
-        if os.getcwd() != '/app':
-          raise InitException("""The container is inconsistent: PWD is not set to /app.
-Please make sure you are in the project directory before running this script.""", 1)
-
-        # Check .env file exists and is readable
-        if not env_file.exists() or not env_file.is_file():
-          raise InitException("""
-The .env file is missing or not readable.
-Please download .env.example from github latest release, rename it to .env, and fill it with the right data.
-Then use --force-recreate option with 'docker compose up' to recreate the container.""", 2)
-        # load keys from .env
-        env = environ.Env(
-            # set casting, default value
-            DEBUG=(bool, False)
-        )
-        env.read_env(env_file, overwrite=True)
-
-        # Enable debug output (equivalent to 'set -x' in bash)
+        env = get_environment()
+        # Enable debug output
         if env.bool('DEBUG', False):
             logging.basicConfig(level=logging.DEBUG)
-
         initialize_environment(env)
         exec_docker_cmd()
     except InitException as e:

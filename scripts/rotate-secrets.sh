@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -x 
 get_env() {
   local key="$1" val
 	val=$(grep -m1 -E "^${key}=" .env | cut -d= -f2- || cut -d' ' -f1)  # second cut in case there is a comment after the value

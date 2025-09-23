@@ -133,7 +133,11 @@ jobs:
           # let the server start before running tests
           sleep 10
           docker exec cousins-matter python manage.py test
-    
+
+      - name: Show docker-compose service logs on failure
+        if: failure()
+        run: docker-compose logs cousins-matter
+
       - name: remove tests resources from .dockerignore before real build
         run: |
           echo '**/tests/' >> .dockerignore

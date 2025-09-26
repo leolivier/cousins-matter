@@ -151,6 +151,7 @@ def initialize_environment(env: environ.Env):
   os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cousinsmatter.settings')
   django.setup()
 
+  print("effective logger level:", logger.getEffectiveLevel())
   # Check SECRET_KEY
   secret_key = env.str("SECRET_KEY", "")
   if not secret_key:
@@ -220,9 +221,8 @@ def main():
     """Main entry point"""
     try:
         env = get_environment()
-        # Enable debug output
-        if env.bool('DEBUG', False):
-            logging.basicConfig(level=logging.DEBUG)
+        # Enable debug or info logging level
+        logging.basicConfig(level=logging.DEBUG if env.bool('DEBUG', False) else logging.INFO)
         initialize_environment(env)
         exec_docker_cmd()
     except InitException as e:

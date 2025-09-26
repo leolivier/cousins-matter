@@ -127,7 +127,7 @@ jobs:
         run: |
           echo "Tested image is $TAG"
           export COUSINS_MATTER_IMAGE=$TAG
-          docker compose up -d -f docker-compose.yml
+          docker compose -f docker-compose.yml up -d
           # let the server start before running tests
           sleep 10
           docker exec cousins-matter python manage.py test

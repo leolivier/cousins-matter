@@ -11,24 +11,25 @@ import django
 import environ
 import os
 import sys
-from django.core.management import call_command
+from pathlib import Path
 
 
 def create_superuser(env):
     """Create a Django superuser based on environment variables stored in .env file."""
-    call_command("createsuperuser",
-                 interactive=False,
-                 password=env.str('ADMIN_PASSWORD'),
-                 username=env.str('ADMIN'),
-                 email=env.str('ADMIN_EMAIL'),
-                 first_name=env.str('ADMIN_FIRSTNAME', default="Cousins"),
-                 last_name=env.str('ADMIN_LASTNAME', default="Matter"))
-
+    from members.models import Member
+    Member.objects.create_superuser(
+      username=env.str('ADMIN'),
+      email=env.str('ADMIN_EMAIL'),
+      password=env.str('ADMIN_PASSWORD'),
+      first_name=env.str('ADMIN_FIRSTNAME', default="Cousins"),
+      last_name=env.str('ADMIN_LASTNAME', default="Matter"),
+      birthdate=env.str('ADMIN_BIRTHDATE', default="2000-01-01"))
 
 if __name__ == "__main__":
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cousinsmatter.settings')
+    # is it needed to read the env file or the setdefault above is enough?
     env = environ.Env()
-    env.read_env("/app/.env", overwrite=True)
+    env.read_env(BASE_DIR / ".env", overwrite=True)
     django.setup()
     create_superuser(env)
     sys.exit(0)

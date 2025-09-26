@@ -11,7 +11,6 @@ import django
 import environ
 import os
 import sys
-from pathlib import Path
 
 
 def create_superuser(env):
@@ -29,7 +28,7 @@ if __name__ == "__main__":
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cousinsmatter.settings')
     # is it needed to read the env file or the setdefault above is enough?
     env = environ.Env()
-    env.read_env(BASE_DIR / ".env", overwrite=True)
+    env.read_env("/app/.env", overwrite=True)
     django.setup()
     create_superuser(env)
     sys.exit(0)

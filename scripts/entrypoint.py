@@ -22,7 +22,7 @@ from pathlib import Path
 from django.core.management import call_command, CommandError
 from .create_superuser import create_superuser
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(f"{__name__}/{sys.argv[1]}")
 INIT_IN_PROGRESS_DIR = Path("/app/data/.init_in_progress")  # lock file (mkdir target)
 
 
@@ -144,14 +144,29 @@ def run_create_superuser(env: environ.Env):
     sys.exit(1)
 
 
+def set_logger_level(debug: bool):
+  """Set logger level based on DEBUG env var"""
+  level = logging.DEBUG if debug else logging.INFO
+  formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+  logger.setLevel(level)
+  if not logger.handlers:
+    ch = logging.StreamHandler()
+    ch.setLevel(level)
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+  else:
+    for h in logger.handlers:
+      h.setLevel(level)
+      h.setFormatter(formatter)
+  # print("effective logger level:", logger.getEffectiveLevel())
+
 def initialize_environment(env: environ.Env):
   """Main initialization logic"""
 
   # Initialize Django
   os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cousinsmatter.settings')
   django.setup()
-
-  print("effective logger level:", logger.getEffectiveLevel())
+  set_logger_level(env.bool('DEBUG', False))
   # Check SECRET_KEY
   secret_key = env.str("SECRET_KEY", "")
   if not secret_key:
@@ -188,7 +203,7 @@ def exec_docker_cmd():
     logger.error("No command provided to exec. Exiting.")
     sys.exit(2)
 
-  logger.info("starting:", " ".join(args))
+  logger.info(f"starting: {' '.join(args)}")
   # Replace current process with the target command
   try:
     os.execvp(args[0], args)
@@ -221,8 +236,6 @@ def main():
     """Main entry point"""
     try:
         env = get_environment()
-        # Enable debug or info logging level
-        logging.basicConfig(level=logging.DEBUG if env.bool('DEBUG', False) else logging.INFO)
         initialize_environment(env)
         exec_docker_cmd()
     except InitException as e:

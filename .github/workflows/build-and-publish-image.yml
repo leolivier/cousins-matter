@@ -126,9 +126,10 @@ jobs:
           # create the appropriate env before running
           ./scripts/docker-install.sh -e
           export COUSINS_MATTER_IMAGE=$TAG
-          echo "PWD=$PWD"
-          ls -al .
-          ls -al ./data
+          echo "Working directory is ${GITHUB_WORKSPACE}"
+          ls -ld .
+          ls -al ${GITHUB_WORKSPACE}
+          ls -al ${GITHUB_WORKSPACE}/data
           docker compose -f docker-compose.yml up -d
           # let the server start before running tests
           sleep 10

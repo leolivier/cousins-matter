@@ -22,7 +22,7 @@ It will:
 	- check that docker and curl or wget are installed,
 	- check that the directory is empty,
 	- download docker-compose.yml, .env.example, nginx.conf and rotate-secrets.sh from github
-	- Copy the .env.example to .env and invite the user to edit it, then exit.
+	- Copy the .env.example to .env
 	otherwise:
 	- just check that .env file exists and is not empty
 	then
@@ -30,6 +30,7 @@ It will:
 	- generates a postgres password if it does not exist (should exist only in -e case)
 	- create static, media and data directories and set the right permissions
 	- starts an editor to edit .env
+	and finally, if '-e' is specified, invite the user to edit .env by starting an editor.
 
 EOF
 	exit 0
@@ -176,17 +177,23 @@ mkdir -p ./media ./static
 sudo chown 1000:1000 ./media ./static
 check_status "Unable to create media or static data directory"
 
-echo "Installation of Cousins Matter done"
-echo "An editor will open in a few seconds to udpate .env file. Please adapt it to your needs before starting the site."
-echo "TAKE INTO ACCOUNT THE POSSIBLE WARNINGS ON .env above"
-echo "(don't change the SECRET_KEY and the POSTGRES_PASSWORD, they were generated automatically)."
-echo "You can hit Ctrl-C to skip the editor if you want to see more details about the warnings above and edit manually .env"
-for i in $(seq 10 -1 1); do echo -n -e "The editor will open in $i seconds...\r"; sleep 1; done
-${EDITOR:-editor} .env
-echo "#############################################################################################"
-echo "# If you did set your environment variables correctly, you can now cd to your directory     #"
-echo "# $PWD and start the container with 'docker compose up -d'                                  #"
-echo "# You can check the logs with 'docker compose logs -f'                                      #"
-echo "#############################################################################################"
+if [[ -z $create_env_only ]]; then
+	echo "Installation of Cousins Matter done"
+	echo "An editor will open in a few seconds to udpate .env file. Please adapt it to your needs before starting the site."
+	echo "TAKE INTO ACCOUNT THE POSSIBLE WARNINGS ON .env above"
+	echo "(don't change the SECRET_KEY and the POSTGRES_PASSWORD, they were generated automatically)."
+	echo "You can hit Ctrl-C to skip the editor if you want to see more details about the warnings above and edit manually .env"
+	for i in $(seq 10 -1 1); do echo -n -e "The editor will open in $i seconds...\r"; sleep 1; done
+	${EDITOR:-editor} .env
+	echo "#############################################################################################"
+	echo "# If you did set your environment variables correctly, you can now cd to your directory     #"
+	echo "# $PWD and start the container with 'docker compose up -d'                                  #"
+	echo "# You can check the logs with 'docker compose logs -f'                                      #"
+	echo "#############################################################################################"
+else
+  echo "####################################"
+	echo " Review of cousins-matter env done #"
+	echo "####################################"
+fi
 
 

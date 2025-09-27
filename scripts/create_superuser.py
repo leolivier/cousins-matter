@@ -11,11 +11,15 @@ import django
 import environ
 import os
 import sys
+from django.conf import settings
+# from cousinsmatter import settings as cousinsmatter_defaults
 
 
-def create_superuser(env):
+def create_superuser_from_env():
     """Create a Django superuser based on environment variables stored in .env file."""
     from members.models import Member
+    env = environ.Env()
+    env.read_env(settings.BASE_DIR / ".env", overwrite=True)
     Member.objects.create_superuser(
       username=env.str('ADMIN'),
       email=env.str('ADMIN_EMAIL'),
@@ -26,9 +30,7 @@ def create_superuser(env):
 
 if __name__ == "__main__":
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cousinsmatter.settings')
-    # is it needed to read the env file or the setdefault above is enough?
-    env = environ.Env()
-    env.read_env("/app/.env", overwrite=True)
+    # settings.configure(default_settings=cousinsmatter_defaults, DEBUG=True)
     django.setup()
-    create_superuser(env)
+    create_superuser_from_env()
     sys.exit(0)

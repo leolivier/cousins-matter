@@ -24,7 +24,8 @@ It will:
 	- download docker-compose.yml, .env.example, nginx.conf and rotate-secrets.sh from github
 	- Copy the .env.example to .env
 	otherwise:
-	- just check that .env file exists and is not empty
+	- checks that we are in a dev environment (ie this script is stored in the scripts directory)
+	- checks that .env file exists and is not empty
 	then
 	- generates a secret key or rotates it if it already exists (-e case normally)
 	- generates a postgres password if it does not exist (should exist only in -e case)
@@ -65,8 +66,15 @@ check_status "You must have sudo right to run this script"
 command docker >/dev/null 2>&1  # check if docker is installed and desktop running for WSL2
 check_status "docker is not installed, please install it and restart the command"
 
-directory=${directory:-$PWD}
-[[ -z $create_env_only ]] && directory=$directory/cousins-matter
+if [[ -z $create_env_only ]]; then
+	directory=${directory:-$PWD/cousins-matter}
+else
+	directory=${directory:-$PWD}
+	# check that this script is in the scripts directory
+	script_dir=$(basename $(cd $(dirname $0) && pwd))
+	[[ $script_dir == 'scripts' ]]
+	check_status "this script should be run from the scripts directory if -e selected. Are you in a devt environment?"
+fi
 
 verbose() {
     echo "$@"

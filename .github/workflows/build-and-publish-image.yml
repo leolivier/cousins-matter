@@ -93,7 +93,6 @@ jobs:
           POSTGRES_USER=cousinsmatter
           POSTGRES_DB=test_cousinsmatter
           EOF
-        
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -124,6 +123,8 @@ jobs:
           TAG: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
         run: |
           echo "Tested image is $TAG"
+          # create the appropriate env before running
+          ./scripts/docker-install.sh -e
           export COUSINS_MATTER_IMAGE=$TAG
           docker compose -f docker-compose.yml up -d
           # let the server start before running tests

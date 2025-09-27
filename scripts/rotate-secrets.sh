@@ -27,18 +27,19 @@ fi
 OLD_SECRET_KEY=$(get_env SECRET_KEY)
 
 new_key=$(get_key)
-sed -ie "s/SECRET_KEY=.*/SECRET_KEY='$new_key'/" .env
+sed -i -e "s/SECRET_KEY=.*/SECRET_KEY='$new_key'/" .env
 
 if grep -m1 -E -q "^PREVIOUS_SECRET_KEYS=" .env; then
 		PREVIOUS_SECRET_KEYS=$(get_env PREVIOUS_SECRET_KEYS)
 		if [[ -z $PREVIOUS_SECRET_KEYS ]]; then
-			sed -ie "s/PREVIOUS_SECRET_KEYS=.*/PREVIOUS_SECRET_KEYS='$OLD_SECRET_KEY'/" .env
+			sed -i -e "s/PREVIOUS_SECRET_KEYS=.*/PREVIOUS_SECRET_KEYS='$OLD_SECRET_KEY'/" .env
 		else
-	    sed -ie "s/PREVIOUS_SECRET_KEYS=.*/PREVIOUS_SECRET_KEYS='$PREVIOUS_SECRET_KEYS,$OLD_SECRET_KEY'/" .env
+	    sed -i -e "s/PREVIOUS_SECRET_KEYS=.*/PREVIOUS_SECRET_KEYS='$PREVIOUS_SECRET_KEYS,$OLD_SECRET_KEY'/" .env
 		fi
 else
     echo "PREVIOUS_SECRET_KEYS='$OLD_SECRET_KEY'" >> .env
 fi
+
 if [[ $? -ne 0 ]]; then
     echo "Error: Can't rotate SECRET_KEY"
 		exit 1

@@ -160,3 +160,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+      - name: 'Publish script zip and upload it to the release'
+        env:
+          VERSION: ${{ github.event.release.tag_name }}
+          SCRIPT_ZIP: cousins-matter-installer-${{ github.event.release.tag_name }}.zip
+        if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+        run: |
+          echo "Publishing script zip..."
+          zip -r $SCRIPT_ZIP ./scripts/install_cousins_matter.py ./scripts/rotate_secrets.py ./scripts/utils.py ./scripts/__init__.py
+          echo "Uploading scripts zip to the release..."
+          gh release upload --clobber "$VERSION" "$SCRIPT_ZIP" --clobber
+

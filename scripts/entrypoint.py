@@ -82,23 +82,19 @@ def acquire_lock():
         """
   global INIT_IN_PROGRESS_DIR
   try:
-    INIT_IN_PROGRESS_DIR = settings.BASE_DIR / "data/.init_in_progress"  # lock dir
+    INIT_IN_PROGRESS_DIR = settings.BASE_DIR / ".init_in_progress"  # lock dir
     INIT_IN_PROGRESS_DIR.mkdir()
     logger.info("Initialization lock acquired.")
   except FileExistsError:
     logger.info("Failed to acquire lock: Another container is already initializing the environment.")
     wait_init_and_exec(20)
-  except FileNotFoundError as e:
-    logger.exception(f"{settings.BASE_DIR}/data does not exist. It should have been created by docker_install.sh",
-                     exc_info=e)
-    sys.exit(1)
 
 
 def first_run_init():
     """Check if this is first run by trying to create avatars directory
     if first run, create other needed directories and files
     """
-    first_run_lock_dir = settings.BASE_DIR / "data/.first_run_done"  # lock dir
+    first_run_lock_dir = settings.BASE_DIR / ".first_run_done"  # lock dir
     try:
       # will raise FileExistsError if it already exists
       # and FileNotFoundError if MEDIA_ROOT does not exist
@@ -107,8 +103,8 @@ def first_run_init():
       # First run setup
       logger.debug("Setting up directories for first run...")
       avatars_dir = settings.MEDIA_ROOT / settings.AVATARS_DIR
-      avatars_dir.mkdir(exist_ok=True)
-      settings.PUBLIC_MEDIA_ROOT.mkdir(exist_ok=True)
+      avatars_dir.mkdir(parents=True, exist_ok=True)
+      settings.PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
       theme_css = settings.PUBLIC_MEDIA_ROOT / "theme.css"
       theme_css.touch()
       logger.info("Created media subdirectories and theme.css file.")
@@ -128,6 +124,7 @@ def check_db_connection():
   db_conn = connections['default']
   db_conn.cursor()
   return True
+
 
 def wait_for_db():
   MAX_RETRIES = 60
@@ -207,6 +204,7 @@ def set_logger_level(debug: bool):
       h.setFormatter(formatter)
   # print("effective logger level:", logger.getEffectiveLevel())
 
+
 def initialize_environment():
   """Main initialization logic"""
 
@@ -254,6 +252,7 @@ def exec_docker_cmd():
   except FileNotFoundError:
     logger.error(f"Command not found: {args[0]}")
     sys.exit(127)
+
 
 def check_environment() -> environ.Env:
   """Check environment variables"""

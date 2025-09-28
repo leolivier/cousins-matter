@@ -13,7 +13,6 @@ services:
       - "9005:9001"
     user: "cm_user:cm_user"
     volumes:
-      - ./data:/app/data
       - ./media:/app/media
       - ./static:/app/static
       - ./.env:/app/.env
@@ -32,7 +31,6 @@ services:
     ports:
       - "9002:9001"
     volumes:
-      - ./data:/app/data
       - ./media:/app/media
       - ./static:/app/static
       - ./.env:/app/.env
@@ -53,7 +51,7 @@ services:
     networks:
       - cousins_matter_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cousinsmatter}"]
       interval: 30s
       timeout: 10s
       retries: 3

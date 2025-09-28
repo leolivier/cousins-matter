@@ -10,9 +10,7 @@ Usage:
 import django
 import environ
 import os
-import sys
 from django.conf import settings
-# from cousinsmatter import settings as cousinsmatter_defaults
 
 
 def create_superuser_from_env():
@@ -28,9 +26,8 @@ def create_superuser_from_env():
       last_name=env.str('ADMIN_LASTNAME', default="Matter"),
       birthdate=env.str('ADMIN_BIRTHDATE', default="2000-01-01"))
 
+
 if __name__ == "__main__":
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cousinsmatter.settings')
-    # settings.configure(default_settings=cousinsmatter_defaults, DEBUG=True)
     django.setup()
     create_superuser_from_env()
-    sys.exit(0)

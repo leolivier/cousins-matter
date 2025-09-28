@@ -66,8 +66,9 @@ def get_directory(create_environment_only: bool, directory: str | None):
     except FileExistsError:
         verbose(f"directory {directory} already exists.")
 
-    os.chdir(directory)
+    directory.chdir()
 
+    Path("media").mkdir(parents=True, exist_ok=True, mode=0o777)
     if create_environment_only:
         # ensure .env exists; if not, print warning
         if not ENV_PATH.exists():

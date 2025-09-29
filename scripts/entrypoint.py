@@ -82,7 +82,7 @@ def acquire_lock():
         """
   global INIT_IN_PROGRESS_DIR
   try:
-    INIT_IN_PROGRESS_DIR = settings.BASE_DIR / ".init_in_progress"  # lock dir
+    INIT_IN_PROGRESS_DIR = settings.BASE_DIR / "config" / ".init_in_progress"  # lock dir
     INIT_IN_PROGRESS_DIR.mkdir()
     logger.info("Initialization lock acquired.")
   except FileExistsError:
@@ -94,7 +94,7 @@ def first_run_init():
     """Check if this is first run by trying to create avatars directory
     if first run, create other needed directories and files
     """
-    first_run_lock_dir = settings.BASE_DIR / ".first_run_done"  # lock dir
+    first_run_lock_dir = settings.BASE_DIR / "config" / ".first_run_done"  # lock dir
     try:
       # will raise FileExistsError if it already exists
       # and FileNotFoundError if MEDIA_ROOT does not exist

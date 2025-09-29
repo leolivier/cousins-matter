@@ -94,7 +94,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./static:/app/static:ro
       - ./media:/app/media:ro
     restart: unless-stopped

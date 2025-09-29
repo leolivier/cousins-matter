@@ -23,5 +23,5 @@ services:
           ignore:
             - .venv/
         - action: sync+restart
-          path: ./nginx.conf
+          path: ./config/nginx.conf
           target: /etc/nginx/conf.d/default.conf

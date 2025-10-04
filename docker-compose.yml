@@ -43,7 +43,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - cousins_matter_postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-cousinsmatter}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -64,7 +64,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redis_data:/data
+      - cousins_matter_redis_data:/data
     networks:
       - cousins_matter_network
     healthcheck:
@@ -75,13 +75,15 @@ services:
       start_period: 10s
 
   # this service is only used for migrating the database from sqlite to postgres, it won't be started by default
+  # Use `./srcipts/manage_cousins_matter.py migrate-v1-v2 -h` to know how to start it
+  # Once migrated to v2, you can remove this service
   migrate:
     profiles: ["migrate"]
     image: dimitri/pgloader:latest
     container_name: cousins-matter-pgloader
     depends_on: ["postgres"]
     entrypoint: ["pgloader"]
-    command: ["sqlite:///data/db.sqlite3", "postgresql://${POSTGRES_USER:-cousinsmatter}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-cousinsmatter}"]
+    command: ["--with", "data-only", "sqlite:///data/db.sqlite3", "postgresql://${POSTGRES_USER:-cousinsmatter}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-cousinsmatter}"]
     volumes:
       - ./data:/data
     env_file: .env
@@ -107,5 +109,7 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data:
-  redis_data:
+  cousins_matter_postgres_data:
+    name: cousins_matter_postgres_data
+  cousins_matter_redis_data:
+    name: cousins_matter_redis_data

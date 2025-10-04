@@ -44,26 +44,6 @@ jobs:
         with:
           fetch-depth: 0  # Required to get all tags
 
-      - name: Determine version
-        id: get_version
-        run: |
-            if [[ ${{ github.event_name }} == 'release' ]]; then
-              echo "VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
-            elif [[ ${{ github.ref }} == refs/tags/* ]]; then
-              echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-            else
-              echo "VERSION=$(git describe --tags --abbrev=0)+$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-            fi
-    
-      - name: Create release.txt
-        run: echo ${{ steps.get_version.outputs.VERSION }} > release.txt
-
-      - name: Upload release.txt
-        uses: actions/upload-artifact@v4
-        with:
-          name: release
-          path: release.txt
-
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
@@ -77,6 +57,32 @@ jobs:
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --indent-size 2 --exclude migrations
+
+      - name: Login to GHCR.io
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: ${{ env.TAGS_DEF }}
+
+      - name: Build for test
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-buildcache,mode=max
+
 
       - name: Write .env
         run: |
@@ -94,42 +100,14 @@ jobs:
           POSTGRES_DB=test_cousinsmatter
           EOF
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to GHCR.io
-        uses: docker/login-action@v3
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: ${{ env.REGISTRY }}
-
-      - name: Build for test
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          platforms: linux/amd64
-          push: false
-          load: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-buildcache,mode=max
-
       - name: Test Docker Image
         env:
           TAG: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
         run: |
           echo "Tested image is $TAG"
           # create the appropriate env before running
-          ./scripts/docker-install.sh -e
           export COUSINS_MATTER_IMAGE=$TAG
-          echo "Working directory is ${GITHUB_WORKSPACE}"
-          ls -ld .
-          ls -al ${GITHUB_WORKSPACE}
-          ls -al ${GITHUB_WORKSPACE}/data
+          python ./scripts/manage_cousins_matter.py install -e -n
           docker compose -f docker-compose.yml up -d
           # let the server start before running tests
           sleep 10
@@ -139,16 +117,47 @@ jobs:
         if: failure()
         run: docker compose logs cousins-matter
 
+      - name: test install script
+        run: |
+          python ./scripts/tests/test_install.sh
+
+      - name: test create superuser script
+        run: |
+          python ./scripts/tests/test_create_superuser.sh
+
+      - name: test migrate v1 to v2 script
+        run: |
+          python ./scripts/tests/test_migrate_v1_v2.sh
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: remove tests resources from .dockerignore before real build
         run: |
           echo '**/tests/' >> .dockerignore
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
+      - name: Determine version
+        id: get_version
+        run: |
+            if [[ ${{ github.event_name }} == 'release' ]]; then
+              echo "VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+            elif [[ ${{ github.ref }} == refs/tags/* ]]; then
+              echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            else
+              echo "VERSION=$(git describe --tags --abbrev=0)+$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+            fi
+      
+      - name: Create release.txt
+        run: echo ${{ steps.get_version.outputs.VERSION }} > release.txt
+
+      - name: Upload release.txt
+        uses: actions/upload-artifact@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: ${{ env.TAGS_DEF }}
+          name: release
+          path: release.txt
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -160,15 +169,3 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
-
-      - name: 'Publish script zip and upload it to the release'
-        env:
-          VERSION: ${{ github.event.release.tag_name }}
-          SCRIPT_ZIP: cousins-matter-installer-${{ github.event.release.tag_name }}.zip
-        if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
-        run: |
-          echo "Publishing script zip..."
-          zip -r $SCRIPT_ZIP ./scripts/install_cousins_matter.py ./scripts/rotate_secrets.py ./scripts/utils.py ./scripts/__init__.py
-          echo "Uploading scripts zip to the release..."
-          gh release upload --clobber "$VERSION" "$SCRIPT_ZIP" --clobber
-

@@ -24,7 +24,10 @@ class Trove(models.Model):
       ('miscellaneous', _('Miscellaneous')),
   ]
 
-  description = models.TextField(verbose_name=_("Description of the treasure"), null=False, blank=False)
+  title = models.CharField(verbose_name="Title of the treasure (this will appear in the list)",
+                           null=False, blank=False, max_length=110)
+  description = models.TextField(verbose_name=_("Description of the treasure (this will appear in the details)"),
+                                 null=True, blank=True)
   picture = models.ImageField(upload_to=settings.TROVE_PICTURE_DIRECTORY, verbose_name=_("Treasure photo"),
                               null=False, blank=False)
   thumbnail = models.ImageField(upload_to=settings.TROVE_THUMBNAIL_DIRECTORY, blank=True)
@@ -42,7 +45,7 @@ class Trove(models.Model):
     ]
 
   def __str__(self):
-      return self.description
+      return self.name
 
   @staticmethod
   def translate_category(category):

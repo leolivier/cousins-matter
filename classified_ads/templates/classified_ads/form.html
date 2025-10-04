@@ -51,7 +51,7 @@ function fillPhoto() {}
 {% block content %}
 <div class="container mx-auto">
 	<h1 class="title has-text-centered">
-		{%if form.instance%}
+		{%if form.instance.pk%}
 			{% title _("Edit Classified Ad") %}
 		{%else%}
 			{% title _("Create Classified Ad") %}
@@ -83,7 +83,7 @@ function fillPhoto() {}
 		{%endif%}
 		</div>
 	</form>
-	{%if form.instance and form.instance.owner == user %}
+	{%if form.instance.pk and form.instance.owner == user %}
 		{%include "cm_main/common/modal_form.html" with modal_id="delete-item-modal" %}
 	{%endif%}
 

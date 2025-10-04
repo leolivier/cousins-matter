@@ -1,5 +1,6 @@
 from urllib.parse import urlencode
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
@@ -71,3 +72,13 @@ def delete_treasure(request, pk):
         return JsonResponse({'deleted': True})
     except Exception:
         return JsonResponse({'deleted': False})
+
+
+@login_required
+def treasure_detail(request, pk):
+    try:
+        treasure = get_object_or_404(Trove, pk=pk)
+        return render(request, "troves/treasure_detail.html", {"treasure": treasure})
+    except Exception as e:
+        messages.error(request, f"Exception: {e}")
+        return redirect(reverse(('troves:list')))

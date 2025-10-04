@@ -23,7 +23,7 @@ ON_RED = "\x1b[41m"
 ON_GREEN = "\x1b[42m\x1b[1;37m"
 ON_WHITE = "\x1b[47m\x1b[1;30m"
 NC = "\x1b[0m"
-ENV_PATH = Path(".env")
+ENV_PATH = Path(".env")  # set correctly with directory in functions
 
 VERBOSE = True
 
@@ -41,6 +41,21 @@ def set_verbose(v: bool) -> None:
     """Will set the verbose flag"""
     global VERBOSE
     VERBOSE = v
+
+
+def error(code: int, *msg: str) -> None:
+    """Will print the given message to stderr and exit with the given code"""
+    print(f"{ON_RED}{' '.join(str(m) for m in msg)}{NC}", file=sys.stderr)
+    sys.exit(code)
+
+
+def framed(msg: str) -> str:
+    """Will return the given message framed with '#'"""
+    lines = msg.splitlines()
+    max_len = max(len(line) for line in lines) + 4  # add 4 for padding (2 spaces + 2#)
+    for i, line in enumerate(lines):
+        lines[i] = f"# {line}" + " " * (max_len - len(line) - 3) + "#"
+    return "\n".join(["#" * max_len] + lines + ["#" * max_len])
 
 
 def get_regex(key: str) -> re.Pattern[str]:
@@ -73,12 +88,6 @@ def require_docker():
         subprocess.run(["docker", "--version"], check=True, capture_output=True, text=True)
     except Exception:
         error(1, "docker is not installed, please install it and restart the command")
-
-
-def error(code: int, *msg: str) -> None:
-    """Will print the given message to stderr and exit with the given code"""
-    print(f"{ON_RED}{' '.join(str(m) for m in msg)}{NC}", file=sys.stderr)
-    sys.exit(code)
 
 
 def read_env() -> str:
@@ -162,31 +171,31 @@ def download_V2_needed_files(directory: Path, branch: str | None):
         download_github_file(rel, dest, base_url)
 
 
-def wait_for_postgres_ready():
-    """
-    Waits until the postgres logs contain the readiness message twice
-    (the first time is when the container starts, the second time is when the database is ready)
-    """
-    target = "database system is ready to accept connections"
-    err_marker = "initdb: error:"
+# def wait_for_postgres_ready():
+#     """
+#     Waits until the postgres logs contain the readiness message twice
+#     (the first time is when the container starts, the second time is when the database is ready)
+#     """
+#     target = "database system is ready to accept connections"
+#     err_marker = "initdb: error:"
 
-    verbose("Waiting for postgres to be ready", end="")
+#     verbose("Waiting for postgres to be ready", end="")
 
-    while True:
-        verbose("...", end="")
-        time.sleep(5)
-        logs = docker_logs("cousins-matter-postgres")
-        ready_count = logs.count(target)
-        if ready_count >= 2:
-            verbose("")  # newline
-            return
-        if err_marker in logs:
-            # Echo out the error lines to help users
-            for line in logs.splitlines():
-                if err_marker in line:
-                    print(line)
-            error(17, """Postgres failed to start, see error message above, try to fix it (usually it's a permission issue),
-then rerun this script""")
+#     while True:
+#         verbose("...", end="")
+#         time.sleep(5)
+#         logs = docker_logs("cousins-matter-postgres")
+#         ready_count = logs.count(target)
+#         if ready_count >= 2:
+#             verbose("")  # newline
+#             return
+#         if err_marker in logs:
+#             # Echo out the error lines to help users
+#             for line in logs.splitlines():
+#                 if err_marker in line:
+#                     print(line)
+#             error(17, """Postgres failed to start, see error message above, try to fix it (usually it's a permission issue),
+# then rerun this script""")
 
 
 def check_cousins_matter_is_down():
@@ -199,8 +208,6 @@ def check_cousins_matter_is_down():
       if result.returncode != 0:
         error(1, "Unable to check if cousins-matter is down")
       containers = json.loads(f'[{",".join(result.stdout.splitlines())}]')
-      if not containers:
-        return
       errors = []
       for container in containers:
         name = container.get("Names", "")
@@ -221,26 +228,47 @@ please remove the container before running this script""")
 
     result = run(["docker", "network", "ls", "--filter", "name=cousins_matter", "-q"],
                  check=True, capture_output=True, text=True)
+
     if result.returncode != 0:
       error(1, "Unable to check if cousins-matter networks are down")
-    if result.stdout:
+    if result.stdout != "":
       errors.append(f"""This cousins-matter network is still up: {result.stdout},
 please remove it before running this script""")
     if errors:
       error(1, "\n".join(errors))
 
 
+def create_pg_password():
+    """Ensure POSTGRES_PASSWORD exists in env file; otherwise create"""
+    pg_pwd_regex = get_regex("POSTGRES_PASSWORD")
+    env = read_env()
+    pg_password = pg_pwd_regex.search(env)
+    if not pg_password or strip_quotes(pg_password.group(1)) == "":
+        verbose("Generating postgres password...")
+        ALLOWED_PG_PASS_CHARS = string.ascii_letters + string.digits + "./_*"
+        new_pass = generate_key(ALLOWED_PG_PASS_CHARS, 16)
+        if not pg_password:
+            env += f"\nPOSTGRES_PASSWORD='{new_pass}'\n"
+        else:
+            env = env.replace(pg_password.group(0), f"POSTGRES_PASSWORD='{new_pass}'")
+        write_env(env)
+    else:
+        verbose("Postgres password already exists, skipping...")
+
+
 #######################################
 #  ROTATE SECRETS
 #######################################
-SEC_REGEX = get_regex("SECRET_KEY")
-PREV_REGEX = get_regex("PREVIOUS_SECRET_KEYS")
-# Allowed characters for SECRET_KEY
-SECRET_KEY_ALLOWED_CHARS = string.ascii_letters + string.digits + "!@#$%^*()_-+{}[]:;<>?."
 
 
 def rotate_secrets(args: argparse.Namespace | None = None) -> int:
     "Rotate SECRET_KEY in .env and maintain PREVIOUS_SECRET_KEYS"
+    # regex and allowed chars
+    SEC_REGEX = get_regex("SECRET_KEY")
+    PREV_REGEX = get_regex("PREVIOUS_SECRET_KEYS")
+    # Allowed characters for SECRET_KEY
+    SECRET_KEY_ALLOWED_CHARS = string.ascii_letters + string.digits + "!@#$%^*()_-+{}[]:;<>?."
+
     # Load .env
     env = read_env()
 
@@ -285,7 +313,9 @@ SECRET_KEY rotated successfully""")
 def check_if_cousins_matter_V1_directory(directory: Path):
     """Will check if the given directory is a Cousins Matter V1.x project directory"""
     make_sure = f"{ON_RED}Please make sure first you are in a cousins-matter V1.x directory before running this script{NC}"
-    if not (directory / ".env").is_file():
+    global ENV_PATH
+    ENV_PATH = directory / ".env"
+    if not ENV_PATH.is_file():
         error(10, "No .env file found in the directory.", make_sure)
     if not (directory / "docker-compose.yml").is_file():
         error(11, "No docker-compose.yml file found in the directory.", make_sure)
@@ -294,7 +324,9 @@ def check_if_cousins_matter_V1_directory(directory: Path):
         error(12, "No data directory found in the directory.", make_sure)
     if not (data_dir / "db.sqlite3").is_file():
         error(13, "No db.sqlite3 file found in the data directory.", make_sure)
-
+    media_dir = directory / "media"
+    if not media_dir.is_dir():
+        error(14, "No media directory found in the directory.", make_sure)
 
 # def fix_permissions():
 #   target_uid = 5678        # UID to search
@@ -322,9 +354,21 @@ def migrate_sqlite3_to_postgres():
     """Will run the database migration from sqlite3 to postgres"""
     # Start postgres and wait for readiness
     verbose("Starting postgres server...")
-    run(["docker", "compose", "up", "-d", "postgres"], check=True)
-    wait_for_postgres_ready()  # here, postgres should be ready and its named volume should be mounted
+    r = run(["docker", "compose", "up", "-d", "--wait", "--wait-timeout", "30", "postgres"], check=True)
+    # wait_for_postgres_ready()  # here, postgres should be ready and its named volume should be mounted
+    if r.returncode != 0:
+        run(["docker", "compose", "logs", "postgres"], check=False)
+        run(["docker", "compose", "down", "-v", "postgres"], check=False)
+        error(17, """Postgres failed to start, see error message above, try to fix it, then rerun this script""")
+
     verbose("Postgres is ready, starting migration...")
+    verbose("First, create the database and tables...")
+    # start Cousins Matter just to run the entrypoint and create the database
+    r = run(["docker", "run", "-v", "./media:/app/media", "-v", "./static:/app/static",
+             "-v", ".env:/app/.env", "-it", "--rm", "--env-file", ".env", "--network", "cousins_matter_network",
+             "cousins-matter:migrate-to-postgres", "echo", "leaving after database creation"], check=True)
+    if r.returncode != 0:
+        error(17, """Postgres failed to start, see error message above, try to fix it, then rerun this script""")
 
     try:
         # Run compose with migrate profile (will start pgloader)
@@ -343,7 +387,7 @@ initialized.{NC}
 Navigate in your site and check that all data is there.
 {ON_RED}TIP:{NC} You can also have a look at the migration log in the table above and check that the number of migrated
 rows is correct.
-Look specifically at 'members_memeber' (the number of members), 'galleries_gallery' (the number of galleries),
+Look specifically at 'members_member' (the number of members), 'galleries_gallery' (the number of galleries),
 'galleries_photo' (the number of photos), 'forum_post' (the number of forum posts), 'chat_chatroom' and 'chat_privatechatroom'
 (the number of public and private chat rooms), 'polls_poll' (the number of polls), 'classified_ads_classifiedad' (the number
 of classified ads), and 'troves_trove' (the number of \"treasures\") to make sure they are correct.
@@ -373,14 +417,21 @@ def migrate_v1_v2(args):
 
     check_cousins_matter_is_down()
 
+    # add the new needed postgres password to .env
+    create_pg_password()
+
+    verbose("Creating config and static directories...")
+    Path("config").mkdir(parents=True, exist_ok=True, mode=0o777)
+    Path("static").mkdir(parents=True, exist_ok=True, mode=0o777)
+
     # verbose(f"Fixing permissions...")
     # fix_permissions()
 
-    verbose("Migrating database...")
-    migrate_sqlite3_to_postgres()
-
     verbose("Downloading v2 scripts...")
     download_V2_needed_files(directory, branch=args.branch)
+
+    verbose("Migrating database...")
+    migrate_sqlite3_to_postgres()
 
     verbose("Rotating secrets...")
     rotate_secrets()
@@ -389,9 +440,6 @@ def migrate_v1_v2(args):
 ####################################
 # INSTALLATION FUNCTIONS
 ####################################
-ALLOWED_PG_PASS_CHARS = string.ascii_letters + string.digits + "./_*"
-
-
 def ensure_empty_directory(directory: Path):
     """Ensure the directory is empty, create it if it doesn't exist
     Check if it contains any entry which is not scripts, media or static directory
@@ -408,6 +456,8 @@ def check_envfile(directory: Path, review_environment: bool):
     If review_environment is True, ensure .env exists; if not, print warning
     Otherwise, ensure directory is empty and move .env to .env.old if it exists after printing warning
     """
+    global ENV_PATH
+    ENV_PATH = directory / ".env"
     if review_environment:
         if not ENV_PATH.exists():
             print("###########################################################################################")
@@ -437,7 +487,7 @@ def get_directory(review_environment: bool, directory: str | None):
     Creates media and config directories if they do not exist.
     """
     cwd = Path.cwd()
-    if review_environment:  # create environment only
+    if review_environment:  # review environment only
         directory = Path(directory or cwd).resolve()
         # Ensure we're running from scripts dir
         script_dir_name = Path(__file__).resolve().parent.name
@@ -452,6 +502,8 @@ def get_directory(review_environment: bool, directory: str | None):
     except FileExistsError:
         verbose(f"directory {directory} already exists.")
 
+    check_envfile(directory, review_environment)
+
     os.chdir(directory)
     try:
         directory.chmod(0o777)
@@ -462,26 +514,7 @@ def get_directory(review_environment: bool, directory: str | None):
     Path("config").mkdir(parents=True, exist_ok=True, mode=0o777)
     Path("static").mkdir(parents=True, exist_ok=True, mode=0o777)
 
-    check_envfile(directory, review_environment)
-
     return directory
-
-
-def create_pg_password():
-    # Ensure POSTGRES_PASSWORD exists in env file; otherwise create
-    pg_pwd_regex = get_regex("POSTGRES_PASSWORD")
-    env = read_env()
-    pg_password = pg_pwd_regex.search(env)
-    if not pg_password or strip_quotes(pg_password.group(1)) == "":
-        verbose("Generating postgres password...")
-        new_pass = generate_key(ALLOWED_PG_PASS_CHARS, 16)
-        if not pg_password:
-            env += f"POSTGRES_PASSWORD='{new_pass}'"
-        else:
-            env.replace(pg_password.group(0), f"POSTGRES_PASSWORD='{new_pass}'")
-        write_env(env)
-    else:
-        verbose("Postgres password already exists, skipping...")
 
 
 def install_cousins_matter(args):
@@ -491,7 +524,7 @@ def install_cousins_matter(args):
     """
 
     require_docker()
-
+    check_cousins_matter_is_down()  # just in case we have sevaral tests running at the same moment
     directory = get_directory(args.review_environment, args.directory)
 
     if not args.review_environment:
@@ -501,7 +534,7 @@ def install_cousins_matter(args):
         # Create .env from .env.example if .env is missing
         verbose("Creating .env from .env.example...")
         try:
-            (directory / ".env.example").replace(directory / ".env")
+            ENV_PATH.with_name(".env.example").replace(ENV_PATH)
         except Exception as ex:
             error(1, f"Failed to create .env from .env.example: {ex}")
 
@@ -511,44 +544,34 @@ def install_cousins_matter(args):
     create_pg_password()
 
     if args.review_environment:
-        print("""
-#####################################
-# Review of cousins-matter env done #
-#####################################
-""")
+        print(framed("Review of cousins-matter env done"))
     else:
-        print("""
-Installation of Cousins Matter done.
+        print(framed("         Installation of Cousins Matter done!         "))
+        if not args.no_editor:
+            print("""
 An editor will open in a few seconds to udpate .env file. Please adapt it to your needs before starting the site.
 TAKE INTO ACCOUNT THE POSSIBLE WARNINGS ON .env above
 (don't change the SECRET_KEY and the POSTGRES_PASSWORD, they were generated automatically).
 You can hit Ctrl-C to skip the editor if you want to see more details about the warnings above and edit manually .env
 """)
-        if not args.no_editor:
             for i in range(10, 0, -1):
                 print(f"The editor will open in {i} seconds...\r", end="", flush=True)
                 time.sleep(1)
             print()  # newline after countdown
             editor = os.environ.get("EDITOR", "editor")
             try:
-                run([editor, ".env"], check=False)
+                run([editor, ENV_PATH], check=False)
             except Exception:
                 pass
-            print(f"""
-    #############################################################################################
-    # If you did set your environment variables correctly, you can now cd to your directory     #
-    # {directory} and start the container with 'docker compose up -d'                           #
-    # You can check the logs with 'docker compose logs -f'                                      #
-    #############################################################################################
-    """)
+            print(framed(f"""
+If you did set your environment variables correctly, you can now cd to your directory
+{directory} and start the container with 'docker compose up -d'
+You can check the logs with 'docker compose logs -f'"""))
         else:
-            print("""
-    ######################################################################################
-    # You can now edit .env to set your environment variables, then cd to your directory #
-    # {directory} and start the container with 'docker compose up -d'                    #
-    # You can check the logs with 'docker compose logs -f'                               #
-    ######################################################################################
-    """)
+            print(framed(f"""
+You can now edit .env to set your environment variables, then cd to your directory
+{directory} and start the container with 'docker compose up -d'
+You can check the logs with 'docker compose logs -f'"""))
 
 
 ######################
@@ -574,7 +597,7 @@ Migrates Cousins Matter from v1.x to v2: after some checks, migrates the sqlite3
 from GitHub, and rotates the secret key.
     """)
     p_migrate.add_argument("-d", "--directory", dest="directory", default=os.getcwd(),
-                           help="installation directory (default: current directory)")
+                           help="cousins-matter directory (default: current directory)")
     p_migrate.add_argument("-b", "--branch", dest="branch", default=None, help="branch to use (default: latest release)")
     p_migrate.set_defaults(func=migrate_v1_v2)
 

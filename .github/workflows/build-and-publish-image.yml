@@ -111,14 +111,16 @@ jobs:
           # create the appropriate env before running
           export COUSINS_MATTER_IMAGE=$TAG
           python ./scripts/manage_cousins_matter.py install -e -n
+          ls -al
+          ls -al media static config 
           docker compose -f docker-compose.yml up -d
           # let the server start before running tests
           sleep 10
           docker exec cousins-matter python manage.py test
 
-      - name: Show docker-compose service logs on failure
+      - name: Show docker-compose services logs on failure
         if: failure()
-        run: docker compose logs cousins-matter
+        run: docker compose logs
 
       - name: test install script
         run: |

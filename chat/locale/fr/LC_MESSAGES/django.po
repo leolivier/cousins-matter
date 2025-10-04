@@ -174,12 +174,12 @@ msgstr "Veux-tu vraiment quitter ce salon ?"
 
 #: chat/templates/chat/private/room_members.html:32
 msgid "Add member to the room"
-msgstr "Ajouter un membre au salon"
+msgstr "Ajouter ce membre au salon"
 
 #: chat/templates/chat/private/room_members.html:48
 #: chat/tests/tests_private.py:89
 msgid "Remove Member from Room"
-msgstr "Supprimer un membre du salon"
+msgstr "Supprimer ce membre du salon"
 
 #: chat/templates/chat/private/room_members.html:50
 #: chat/tests/tests_private.py:90

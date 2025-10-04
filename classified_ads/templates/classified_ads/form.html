@@ -61,7 +61,7 @@ function fillPhoto() {}
 		{% csrf_token %}
 		{{ form|crispy }}
 		<div class="buttons is-centered">
-		{%if form.instance%}
+		{%if form.instance.pk%}
 			<button class="button is-primary" type="submit" {%if user != form.instance.owner%}disabled="true"{%endif%}>
 				{%icon "update" %} <span class="ml-2">{% trans "Update Ad" %}</span>
 			</button>

@@ -56,7 +56,7 @@ default_allowed_hosts = ['127.0.0.1', 'localhost']
 if SITE_DOMAIN:
   default_allowed_hosts.append(SITE_DOMAIN)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=default_allowed_hosts)
-default_cors_allowed_origins = [f'http://localhost{SITE_PORT}',f'http://127.0.0.1{SITE_PORT}']
+default_cors_allowed_origins = [f'http://localhost{SITE_PORT}', f'http://127.0.0.1{SITE_PORT}']
 if SITE_DOMAIN:
   default_cors_allowed_origins.append(f'https://{SITE_DOMAIN}{SITE_PORT}')
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=default_cors_allowed_origins)

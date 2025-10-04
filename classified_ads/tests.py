@@ -199,8 +199,8 @@ class ListAdTestCase(ClassifiedAdBaseTestCase):
   </span>
   <span>
     {_(f"Added by %(owner)s on %(date_created)s") %
-     {"owner": ad.owner.full_name,
-     "date_created": formats.date_format(ad.date_created, "SHORT_DATE_FORMAT")}}
+       {"owner": ad.owner.full_name,  # noqa
+        "date_created": formats.date_format(ad.date_created, "SHORT_DATE_FORMAT")}}
   </span>
 </div>
 """, html=True)
@@ -232,8 +232,8 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
   </span>
   <span class="is-flex-grow-1">{ad.title}</span>
   <span>{_(f"Added by %(owner)s on %(date_created)s") %
-  {"owner": ad.owner.full_name,
-  "date_created": formats.date_format(localtime, "SHORT_DATETIME_FORMAT")}}</span>
+         {"owner": ad.owner.full_name,
+          "date_created": formats.date_format(localtime, "SHORT_DATETIME_FORMAT")}}</span>
 </div>
 <div class="panel-block is-flex">
   <div class="fixed-grid has-3-cols is-flex-grow-1">
@@ -244,7 +244,11 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
     </div>
   </div>
 </div>
-<div class="panel-block">{ad.description}</div>
+<div class="panel-block">
+  <div class="content">
+    {ad.description}
+  </div>
+</div>
 <div class="panel-block is-flex">
   <div class="fixed-grid has-3-cols is-flex-grow-1">
     <div class="grid">

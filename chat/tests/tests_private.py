@@ -209,7 +209,9 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
       self.assertInHTML(f'''
 <form id="add-member-form" method="post" action="{reverse('chat:add_member_to_private_room', args=[self.room.slug])}">
   <select id="member-select" name="member-id" style="width: 300px;"></select>
-  <button class="button" type="submit">{icon("new-member")} {_("Add member to the room")}</button>
+  <button class="button" type="submit" disabled="true" id="add-member-button">
+    {icon("new-member")} {_("Add member to the room")}
+  </button>
 </form>''', cleaned_content)
     # then list the members
     response = self.client.get(reverse('chat:private_room_members', args=[self.room.slug]), follow=True)
@@ -257,7 +259,9 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
       self.assertInHTML(f'''
 <form id="add-member-form" method="post" action="{reverse('chat:add_member_to_private_room', args=[self.room.slug])}">
   <select id="member-select" name="member-id" style="width: 300px;"></select>
-  <button class="button" type="submit">{icon("new-member")} {_("Add member to the room")}</button>
+  <button class="button" type="submit" disabled="true" id="add-member-button">
+    {icon("new-member")}{_("Add member to the room")}
+  </button>
 </form>''', cleaned_content)
     # now, select a random member
     second_member = random.choice(self.created_members)

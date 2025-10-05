@@ -26,12 +26,11 @@ echo "tmpdir: $tmpdir"
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)
 unzip -q "$script_dir/tests/resources/cm-v1-tests.zip" -d "$tmpdir"
 cd $tmpdir
-# .env was existing before migration, add some needed new variables to it
+# .env was existing before migration
 [[ ! -f .env ]] && error 1 "No .env file found in $tmpdir"
 # no need to set the superuser variables as the superuser must already exist in tha database
-# add postgres password (other variables have default values)
-echo "POSTGRES_PASSWORD='postgres_password1'" >> .env  # we don't care, it's for testing only
-# use the local build
+# the postgres password is added by the migration tool
+# use the local build if not provided
 export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-"cousins-matter:$curbranch"}
 echo "COUSINS_MATTER_IMAGE: $COUSINS_MATTER_IMAGE"
 

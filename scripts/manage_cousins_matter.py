@@ -352,7 +352,7 @@ def migrate_sqlite3_to_postgres():
     """Will run the database migration from sqlite3 to postgres"""
     # Start postgres and wait for readiness
     verbose("Starting postgres server...")
-    r = run(["docker", "compose", "up", "-d", "--wait", "--wait-timeout", "30", "postgres"], check=True)
+    r = run(["docker", "compose", "up", "-d", "--wait", "--wait-timeout", "30", "postgres"], check=False)
     # wait_for_postgres_ready()  # here, postgres should be ready and its named volume should be mounted
     if r.returncode != 0:
         run(["docker", "compose", "logs", "postgres"], check=False)
@@ -365,15 +365,25 @@ def migrate_sqlite3_to_postgres():
     COUSINS_MATTER_IMAGE = os.getenv("COUSINS_MATTER_IMAGE") or "cousins-matter:local"
     verbose(f"COUSINS_MATTER_IMAGE: {COUSINS_MATTER_IMAGE}")
     r = run(["docker", "run", "-v", "./media:/app/media", "-v", "./static:/app/static",
-             "-v", ".env:/app/.env", "-it", "--rm", "--env-file", ".env", "--network", "cousins_matter_network",
-             COUSINS_MATTER_IMAGE, "echo", "leaving after database creation"], check=True)
+             "-v", ".env:/app/.env", "-it", "--env-file", ".env", "--network", "cousins_matter_network",
+             COUSINS_MATTER_IMAGE, "echo", "leaving after database creation"], check=False)
     if r.returncode != 0:
-        error(17, """Postgres failed to start, see error message above, try to fix it, then rerun this script""")
+        run(["docker", "compose", "logs", "postgres"], check=False)
+        run(["docker", "compose", "down", "-v", "postgres"], check=False)
+        run(["docker", "logs", COUSINS_MATTER_IMAGE], check=False)
+        run(["docker", "rm", "-v", COUSINS_MATTER_IMAGE], check=False)
+        error(17, """Database creation failed, see error message above, try to fix it, then rerun this script""")
+    else:
+        run(["docker", "rm", "-v", COUSINS_MATTER_IMAGE], check=False)
 
     try:
         # Run compose with migrate profile (will start pgloader)
         run(["docker", "compose", "--profile", "migrate", "up", "migrate"], check=True)
     except subprocess.CalledProcessError as e:
+        run(["docker", "compose", "logs", "postgres"], check=False)
+        run(["docker", "compose", "down", "-v", "postgres"], check=False)
+        run(["docker", "logs", COUSINS_MATTER_IMAGE], check=False)
+        run(["docker", "rm", "-v", COUSINS_MATTER_IMAGE], check=False)
         error(16, f"""Database migration failed, see error message, try to fix it, then rerun this script: {e}""")
 
     verbose("Database migration done, removing pgloader container...")

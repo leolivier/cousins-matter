@@ -362,9 +362,11 @@ def migrate_sqlite3_to_postgres():
     verbose("Postgres is ready, starting migration...")
     verbose("First, create the database and tables...")
     # start Cousins Matter just to run the entrypoint and create the database
+    COUSINS_MATTER_IMAGE = os.getenv("COUSINS_MATTER_IMAGE") or "cousins-matter:local"
+    verbose(f"COUSINS_MATTER_IMAGE: {COUSINS_MATTER_IMAGE}")
     r = run(["docker", "run", "-v", "./media:/app/media", "-v", "./static:/app/static",
              "-v", ".env:/app/.env", "-it", "--rm", "--env-file", ".env", "--network", "cousins_matter_network",
-             "$COUSINS_MATTER_IMAGE", "echo", "leaving after database creation"], check=True)
+             COUSINS_MATTER_IMAGE, "echo", "leaving after database creation"], check=True)
     if r.returncode != 0:
         error(17, """Postgres failed to start, see error message above, try to fix it, then rerun this script""")
 

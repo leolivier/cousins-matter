@@ -365,7 +365,7 @@ def migrate_sqlite3_to_postgres():
     COUSINS_MATTER_IMAGE = os.getenv("COUSINS_MATTER_IMAGE") or "cousins-matter:local"
     verbose(f"COUSINS_MATTER_IMAGE: {COUSINS_MATTER_IMAGE}")
     r = run(["docker", "run", "-v", "./media:/app/media", "-v", "./static:/app/static",
-             "-v", ".env:/app/.env", "--env-file", ".env", "--network", "cousins_matter_network",
+             "-v", f"{ENV_PATH}:/app/.env", "--env-file", ENV_PATH, "--network", "cousins_matter_network",
              COUSINS_MATTER_IMAGE, "echo", "leaving after database creation"], check=False)
     if r.returncode != 0:
         print(f"Database creation failed with messages: stderr: {r.stderr}, stdout: {r.stdout}")

@@ -95,7 +95,7 @@ jobs:
 
       - name: Write .env
         run: |
-          cat > .env <<'EOF'
+          cat > $GITHUB_WORKSPACE/.env <<'EOF'
           SECRET_KEY=
           SITE_NAME=My Beautiful Site
           ALLOWED_HOSTS=127.0.0.1,localhost
@@ -114,7 +114,7 @@ jobs:
       - name: Test Docker Image
         run: |
           echo "Tested image is ${{env.COUSINS_MATTER_IMAGE}}"
-          python ./scripts/manage_cousins_matter.py install -e -n
+          python ./scripts/manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"
           docker compose -f docker-compose.yml up -d
           # let the server start before running tests
           sleep 10

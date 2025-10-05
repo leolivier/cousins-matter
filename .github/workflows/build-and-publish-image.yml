@@ -115,8 +115,6 @@ jobs:
         run: |
           echo "Tested image is ${{env.COUSINS_MATTER_IMAGE}}"
           python ./scripts/manage_cousins_matter.py install -e -n
-          ls -al
-          ls -al media static config 
           docker compose -f docker-compose.yml up -d
           # let the server start before running tests
           sleep 10

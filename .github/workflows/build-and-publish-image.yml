@@ -128,15 +128,19 @@ jobs:
 
       - name: test install script
         run: |
+          # make sure no previous containers are running
+          docker compose down -v
           ./scripts/tests/test_install.sh
+
+      - name: test migrate v1 to v2 script
+        run: |
+          # make sure no previous containers are running
+          docker compose down -v
+          ./scripts/tests/test_migrate_v1_v2.sh
 
       - name: test create superuser script
         run: |
           ./scripts/tests/test_create_superuser.sh
-
-      - name: test migrate v1 to v2 script
-        run: |
-          ./scripts/tests/test_migrate_v1_v2.sh
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3

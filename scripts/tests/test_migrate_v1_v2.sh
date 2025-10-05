@@ -79,7 +79,7 @@ for i in $(seq 1 $max); do
 done
 # copy the sqlite database to a directory mounted in the container (data does not exist anymore in the container)
 cp data/db.sqlite3 media/public/db.sqlite3
-docker exec -it "cousins-matter" python -m scripts.tests.check_after_migration
+docker exec "cousins-matter" python -m scripts.tests.check_after_migration
 rm media/public/db.sqlite3
 docker compose down -v
 cd ..

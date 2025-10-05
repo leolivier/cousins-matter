@@ -128,15 +128,15 @@ jobs:
 
       - name: test install script
         run: |
-          python ./scripts/tests/test_install.sh
+          ./scripts/tests/test_install.sh
 
       - name: test create superuser script
         run: |
-          python ./scripts/tests/test_create_superuser.sh
+          ./scripts/tests/test_create_superuser.sh
 
       - name: test migrate v1 to v2 script
         run: |
-          python ./scripts/tests/test_migrate_v1_v2.sh
+          ./scripts/tests/test_migrate_v1_v2.sh
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3

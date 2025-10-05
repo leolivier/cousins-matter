@@ -147,8 +147,6 @@ def download_github_file(file: str, dest: Path, base_url: str):
         dest: destination path
         base_url: base URL to download from
     """
-    verbose(f"downloading {file} from GitHub...")
-
     url = f"{base_url}/{file}"
     verbose(f"Downloading {file} from {url}")
     try:

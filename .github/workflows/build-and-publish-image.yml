@@ -107,13 +107,13 @@ jobs:
           POSTGRES_PASSWORD=
           EOF
 
-      - name: Test Docker Image
-        env:
-          TAG: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
+      - name: export COUSINS_MATTER_IMAGE in environment
         run: |
-          echo "Tested image is $TAG"
-          # create the appropriate env before running
-          export COUSINS_MATTER_IMAGE=$TAG
+          echo "COUSINS_MATTER_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}" >> $GITHUB_ENV
+
+      - name: Test Docker Image
+        run: |
+          echo "Tested image is ${{env.COUSINS_MATTER_IMAGE}}"
           python ./scripts/manage_cousins_matter.py install -e -n
           ls -al
           ls -al media static config 

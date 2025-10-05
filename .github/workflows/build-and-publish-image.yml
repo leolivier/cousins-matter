@@ -120,10 +120,6 @@ jobs:
           sleep 10
           docker exec cousins-matter python manage.py test
 
-      - name: Show docker-compose services logs on failure
-        if: failure()
-        run: docker compose logs
-
       - name: test install script
         run: |
           # make sure no previous containers are running
@@ -140,6 +136,10 @@ jobs:
         run: |
           ./scripts/tests/test_create_superuser.sh
 
+      - name: Show docker-compose services logs on failure
+        if: failure()
+        run: docker compose logs
+  
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 

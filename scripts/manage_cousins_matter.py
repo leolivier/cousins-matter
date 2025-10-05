@@ -364,7 +364,7 @@ def migrate_sqlite3_to_postgres():
     # start Cousins Matter just to run the entrypoint and create the database
     r = run(["docker", "run", "-v", "./media:/app/media", "-v", "./static:/app/static",
              "-v", ".env:/app/.env", "-it", "--rm", "--env-file", ".env", "--network", "cousins_matter_network",
-             "cousins-matter:migrate-to-postgres", "echo", "leaving after database creation"], check=True)
+             "$COUSINS_MATTER_IMAGE", "echo", "leaving after database creation"], check=True)
     if r.returncode != 0:
         error(17, """Postgres failed to start, see error message above, try to fix it, then rerun this script""")
 
@@ -458,22 +458,16 @@ def check_envfile(directory: Path, review_environment: bool):
     ENV_PATH = directory / ".env"
     if review_environment:
         if not ENV_PATH.exists():
-            print("###########################################################################################")
-            print("# WARNING! '-e' param was provided and skipped dowloading .env.example. However, .env     #")
-            print("# does not exist in this directory. Please check .env.example, .env.old if it exists, and #")
-            print("# create a .env file to make sure all required variables are present.                     #")
-            print("###########################################################################################")
+            print(framed("""WARNING! '-e' param was provided and skipped dowloading .env.example. However, .env
+does not exist in this directory. Please check .env.example, .env.old if it exists, and
+create a .env file to make sure all required variables are present."""))
     else:
         # Normal install: ensure directory is empty and move .env to .env.old if it exists
         ensure_empty_directory(directory)
         if ENV_PATH.exists():
-            print("""
-#######################################################################################
-# WARNING! .env already existed and as been moved to .env.old                         #
-# WARNING! Recreating a new .env file from .env.example                               #
-# Please check .env and copy the variables from .env.old to .env when it makes sense. #
-#######################################################################################
-            """)
+            print(framed("""WARNING! .env already existed and as been moved to .env.old
+WARNING! Recreating a new .env file from .env.example
+WARNING! Please check .env and copy the variables from .env.old to .env when it makes sense."""))
             try:
                 ENV_PATH.replace(ENV_PATH.with_name(".env.old"))
             except Exception as ex:

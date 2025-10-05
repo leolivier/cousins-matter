@@ -365,16 +365,14 @@ def migrate_sqlite3_to_postgres():
     COUSINS_MATTER_IMAGE = os.getenv("COUSINS_MATTER_IMAGE") or "cousins-matter:local"
     verbose(f"COUSINS_MATTER_IMAGE: {COUSINS_MATTER_IMAGE}")
     r = run(["docker", "run", "-v", "./media:/app/media", "-v", "./static:/app/static",
-             "-v", ".env:/app/.env", "-it", "--env-file", ".env", "--network", "cousins_matter_network",
+             "-v", ".env:/app/.env", "--env-file", ".env", "--network", "cousins_matter_network",
              COUSINS_MATTER_IMAGE, "echo", "leaving after database creation"], check=False)
     if r.returncode != 0:
-        run(["docker", "compose", "logs", "postgres"], check=False)
+        print(f"Database creation failed with messages: stderr: {r.stderr}, stdout: {r.stdout}")
         run(["docker", "compose", "down", "-v", "postgres"], check=False)
         run(["docker", "logs", COUSINS_MATTER_IMAGE], check=False)
         run(["docker", "rm", "-v", COUSINS_MATTER_IMAGE], check=False)
-        error(17, """Database creation failed, see error message above, try to fix it, then rerun this script""")
-    else:
-        run(["docker", "rm", "-v", COUSINS_MATTER_IMAGE], check=False)
+        error(17, """See error message above, try to fix it, then rerun this script""")
 
     try:
         # Run compose with migrate profile (will start pgloader)

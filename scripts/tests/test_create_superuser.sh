@@ -9,8 +9,13 @@ if [[ -z "$curbranch" ]]; then
 fi
 tmpdir=$(mktemp -d)
 python -m scripts.install_cousins_matter -d "$tmpdir" -b "$curbranch"
-cd "$tmpdir"
+pushd "$tmpdir"
 docker compose up -d  # as we didn't fill the ADMIN_xxx variables in .env, the container will fail to create the superuser
 # wait for the containers to start
 sleep 20
 python -m scripts.create_superuser
+docker compose down -v
+popd
+rm -rf "$tmpdir"
+echo "test create superuser passed"
+

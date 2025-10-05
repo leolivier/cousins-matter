@@ -83,7 +83,7 @@ services:
     container_name: cousins-matter-pgloader
     depends_on: ["postgres"]
     entrypoint: ["pgloader"]
-    command: ["--with", "data-only", "sqlite:///data/db.sqlite3", "postgresql://${POSTGRES_USER:-cousinsmatter}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-cousinsmatter}"]
+    command: ["--with", "data only", "sqlite:///data/db.sqlite3", "postgresql://${POSTGRES_USER:-cousinsmatter}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-cousinsmatter}"]
     volumes:
       - ./data:/data
     env_file: .env

@@ -227,8 +227,10 @@ def create_pg_password():
         else:
             env = env.replace(pg_password.group(0), f"POSTGRES_PASSWORD='{new_pass}'")
         write_env(env)
+        return new_pass
     else:
         verbose("Postgres password already exists, skipping...")
+        return pg_password.group(1)
 
 
 #######################################
@@ -304,41 +306,27 @@ def check_if_cousins_matter_V1_directory(directory: Path):
         error(14, "No media directory found in the directory.", make_sure)
 
 
-def migrate_sqlite3_to_postgres():
+def migrate_sqlite3_to_postgres(pg_pwd: str):
     """Will run the database migration from sqlite3 to postgres"""
     # Start postgres and wait for readiness
     verbose("Starting postgres server...")
     r = run(["docker", "compose", "up", "-d", "--wait", "--wait-timeout", "30", "postgres"], check=False)
-    # wait_for_postgres_ready()  # here, postgres should be ready and its named volume should be mounted
     if r.returncode != 0:
         run(["docker", "compose", "logs", "postgres"], check=False)
         run(["docker", "compose", "down", "-v", "postgres"], check=False)
         error(17, """Postgres failed to start, see error message above, try to fix it, then rerun this script""")
-
     verbose("Postgres is ready, starting migration...")
-    verbose("First, create the database and tables...")
-    # start Cousins Matter just to run the entrypoint and create the database
-    COUSINS_MATTER_IMAGE = os.getenv("COUSINS_MATTER_IMAGE") or "cousins-matter:local"
-    verbose(f"COUSINS_MATTER_IMAGE: {COUSINS_MATTER_IMAGE}")
-    r = run(["docker", "run", "-v", "./media:/app/media", "-v", "./static:/app/static",
-             "-v", f"{ENV_PATH}:/app/.env", "--env-file", f"{ENV_PATH}", "--network", "cousins_matter_network",
-             COUSINS_MATTER_IMAGE, "echo", "leaving after database creation"], check=False)
-    if r.returncode != 0:
-        print(f"Database creation failed with messages: stderr: {r.stderr}, stdout: {r.stdout}")
-        run(["docker", "compose", "down", "-v", "postgres"], check=False)
-        run(["docker", "logs", COUSINS_MATTER_IMAGE], check=False)
-        run(["docker", "rm", "-v", COUSINS_MATTER_IMAGE], check=False)
-        error(17, """See error message above, try to fix it, then rerun this script""")
 
-    try:
-        # Run compose with migrate profile (will start pgloader)
-        run(["docker", "compose", "--profile", "migrate", "up", "migrate"], check=True)
-    except subprocess.CalledProcessError as e:
-        run(["docker", "compose", "logs", "postgres"], check=False)
-        run(["docker", "compose", "down", "-v", "postgres"], check=False)
-        run(["docker", "logs", COUSINS_MATTER_IMAGE], check=False)
-        run(["docker", "rm", "-v", COUSINS_MATTER_IMAGE], check=False)
-        error(16, f"""Database migration failed, see error message, try to fix it, then rerun this script: {e}""")
+    # Run pgloader
+    postgres_user = os.getenv("POSTGRES_USER") or "cousinsmatter"
+    postgres_db = os.getenv("POSTGRES_DB") or "cousinsmatter"
+    r = run(["docker", "run", "--entrypoint", "pgloader", "-v", "./data:/data", "--network", "cousins_matter_network",
+             "--name", "cousins-matter-pgloader", "dimitri/pgloader:latest", "sqlite:///data/db.sqlite3",
+             f"postgresql://{postgres_user}:{pg_pwd}@postgres:5432/{postgres_db}"], check=False)
+    if (r.returncode != 0):
+        run(["docker", "down", "-v", "postgres"], check=False)
+        run(["docker", "rm", "-v", "cousins-matter-pgloader"], check=False)
+        error(16, """Database migration failed, see error message, try to fix it, then rerun this script""")
 
     verbose("Database migration done, removing pgloader container...")
     subprocess.run(["docker", "container", "rm", "cousins-matter-pgloader"], check=False)
@@ -382,7 +370,7 @@ def migrate_v1_v2(args):
     check_cousins_matter_is_down()
 
     # add the new needed postgres password to .env
-    create_pg_password()
+    pg_pwd = create_pg_password()
 
     verbose("Creating config and static directories...")
     Path("config").mkdir(parents=True, exist_ok=True, mode=0o777)
@@ -398,7 +386,7 @@ def migrate_v1_v2(args):
     rotate_secrets()
 
     verbose("Migrating database...")
-    migrate_sqlite3_to_postgres()
+    migrate_sqlite3_to_postgres(pg_pwd)
 
 
 ####################################

@@ -48,11 +48,11 @@ let total_delay=$max*$delay
 nb_ok=0
 for i in $(seq 1 $max); do
   sleep $delay
-	ko=0
 	echo "check all containers are running (#$i/$max)..."
+	nb_ok=$(($nb_ok + 1))
 	docker ps -a --filter name=cousins-matter --format '{{.Names}} {{.State}} "{{.Status}}"' | while read -r name state status; do
 		if [[ $state != "running" ]]; then
-		  ko=1
+		  nb_ok=0
 	    echo "#########################################################################################"
   	  echo "# ERROR! $name $status"
     	echo "#########################################################################################"
@@ -65,16 +65,12 @@ for i in $(seq 1 $max); do
     	fi
   	fi
 	done
-	if [[ $ko == 0 ]]; then
-		nb_ok=$(($nb_ok + 1))
-		if [[ $nb_ok == $min_ok ]]; then
-			echo "#########################################################################################"
-			echo "# Cousins Matter containers has been running properly during $((nb_ok * delay)) seconds"
-			echo "#########################################################################################"
-			break
-		fi
-	else
-		nb_ok=0
+	echo "nb_ok: $nb_ok"
+	if [[ $nb_ok == $min_ok ]]; then
+		echo "#########################################################################################"
+		echo "# Cousins Matter containers has been running properly during $((nb_ok * delay)) seconds"
+		echo "#########################################################################################"
+		break
 	fi
 done
 # copy the sqlite database to a directory mounted in the container (data does not exist anymore in the container)
@@ -84,4 +80,4 @@ rm media/public/db.sqlite3
 docker compose down -v
 cd ..
 sudo rm -rf "$tmpdir"
-echo "test install passed"
+echo "test migrate v1 to v2 passed"

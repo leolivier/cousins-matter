@@ -45,7 +45,7 @@ class Trove(models.Model):
     ]
 
   def __str__(self):
-      return self.name
+      return self.title
 
   @staticmethod
   def translate_category(category):

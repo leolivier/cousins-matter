@@ -34,7 +34,7 @@ VERBOSE = True
 def verbose(*msg: str, **kwargs) -> None:
     """Will print the given message if verbose is enabled"""
     if VERBOSE:
-        print(" ".join(str(m) for m in msg), flush=True, **kwargs)
+        print(" ".join(hide_if_secret(m) for m in msg), flush=True, **kwargs)
 
 
 def set_verbose(v: bool) -> None:
@@ -74,6 +74,15 @@ def strip_quotes(s: str) -> str:
     if len(s) >= 2 and ((s[0] == s[-1]) and s[0] in ("'", '"')):
         return s[1:-1]
     return s
+
+
+def secret(str):
+    return f"#!{str}!#"
+
+
+def hide_if_secret(str):
+    pattern = re.compile(r'#!(.*?)!#', re.S)
+    return pattern.sub('[***]', str)    
 
 
 def run(cmd: list[str], check=True, capture_output=False, text=True, quiet=False, cwd: str | None = None):
@@ -322,7 +331,7 @@ def migrate_sqlite3_to_postgres(pg_pwd: str):
     postgres_db = os.getenv("POSTGRES_DB") or "cousinsmatter"
     r = run(["docker", "run", "--entrypoint", "pgloader", "-v", "./data:/data", "--network", "cousins_matter_network",
              "--name", "cousins-matter-pgloader", "dimitri/pgloader:latest", "sqlite:///data/db.sqlite3",
-             f"postgresql://{postgres_user}:{pg_pwd}@postgres:5432/{postgres_db}"], check=False)
+             f"postgresql://{postgres_user}:{secret(pg_pwd)}@postgres:5432/{postgres_db}"], check=False)
     if (r.returncode != 0):
         run(["docker", "down", "-v", "postgres"], check=False)
         run(["docker", "rm", "-v", "cousins-matter-pgloader"], check=False)

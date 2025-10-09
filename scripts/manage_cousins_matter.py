@@ -522,11 +522,12 @@ You can hit Ctrl-C to skip the editor if you want to see more details about the 
             print()  # newline after countdown
             editor = os.environ.get("EDITOR", "editor")
             try:
-                run([editor, ENV_PATH], check=False)
-            except Exception:
-                pass
+                run([editor, str(ENV_PATH)], check=True)
+            except Exception as e:
+                print(f"{ON_RED}Couldn't start the editor automatically ({e}), please start it manually and edit the {ENV_PATH} file.{NC}")
+
             print(framed(f"""
-If you did set your environment variables correctly, you can now cd to your directory
+Once your environment variables are set properly in {str(ENV_PATH)}, you can cd to your directory
 {directory} and start the container with 'docker compose up -d'
 You can check the logs with 'docker compose logs -f'"""))
         else:

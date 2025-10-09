@@ -39,40 +39,19 @@ python "$script_dir/manage_cousins_matter.py" migrate-v1-v2 -d "$tmpdir" -b "$cu
 
 (docker images --format "{{.Repository}}:{{.Tag}}" | grep $COUSINS_MATTER_IMAGE) || error 1 "Image $COUSINS_MATTER_IMAGE not found"
 
-docker compose up -d
-# wait for the containers to start
-let max=10
-let min_ok=5
-let delay=3
-let total_delay=$max*$delay
-nb_ok=0
-for i in $(seq 1 $max); do
-  sleep $delay
-	echo "check all containers are running (#$i/$max)..."
-	nb_ok=$(($nb_ok + 1))
-	docker ps -a --filter name=cousins-matter --format '{{.Names}} {{.State}} "{{.Status}}"' | while read -r name state status; do
-		if [[ $state != "running" ]]; then
-		  nb_ok=0
-	    echo "#########################################################################################"
-  	  echo "# ERROR! $name $status"
-    	echo "#########################################################################################"
-    	if [[ $i == $max ]]; then
-				echo "#########################################################################################"
-				echo "# ERROR! Cousins Matter containers are not running properly after $total_delay seconds"
-				echo "#########################################################################################"
-				docker ps -a --filter name=cousins-matter --format '{{.Names}} {{.State}} "{{.Status}}"'
-				exit 1
-    	fi
-  	fi
-	done
-	echo "nb_ok: $nb_ok"
-	if [[ $nb_ok == $min_ok ]]; then
+docker compose up -d --wait --wait-timeout 60
+sleep 5  # let the system stabilize
+
+docker ps -a --filter name=cousins-matter --format '{{.Names}} {{.State}} "{{.Status}}"' | while read -r name state status; do
+	if [[ $state != "running" ]]; then
 		echo "#########################################################################################"
-		echo "# Cousins Matter containers has been running properly during $((nb_ok * delay)) seconds"
+		echo "# ERROR! $name $status"
 		echo "#########################################################################################"
-		break
+		docker ps -a --filter name=cousins-matter --format '{{.Names}} {{.State}} "{{.Status}}"'
+		exit 1
 	fi
 done
+
 # copy the sqlite database to a directory mounted in the container (data does not exist anymore in the container)
 cp data/db.sqlite3 media/public/db.sqlite3
 docker exec "cousins-matter" python -m scripts.tests.check_after_migration

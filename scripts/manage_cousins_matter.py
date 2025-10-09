@@ -45,7 +45,7 @@ def set_verbose(v: bool) -> None:
 
 def error(code: int, *msg: str) -> None:
     """Will print the given message to stderr and exit with the given code"""
-    print(f"{ON_RED}{' '.join(str(m) for m in msg)}{NC}", file=sys.stderr)
+    print(f"{ON_RED}{' '.join(hide_if_secret(m) for m in msg)}{NC}", file=sys.stderr)
     sys.exit(code)
 
 
@@ -76,19 +76,26 @@ def strip_quotes(s: str) -> str:
     return s
 
 
-def secret(str):
-    return f"#!{str}!#"
+SECRET_MARK_PATTERN = re.compile(r'##!(.*?)!##', re.S)
 
 
-def hide_if_secret(str):
-    pattern = re.compile(r'#!(.*?)!#', re.S)
-    return pattern.sub('[***]', str)    
+def mark_as_secret(string: str) -> str:
+    return f"##!{string}!##"
+
+
+def hide_if_secret(string: str) -> str:
+    return SECRET_MARK_PATTERN.sub('[***]', string)    
+
+
+def clean_secret_mark(string: str) -> str:
+    return SECRET_MARK_PATTERN.sub(lambda m: m.group(1), string)
 
 
 def run(cmd: list[str], check=True, capture_output=False, text=True, quiet=False, cwd: str | None = None):
     """Will run the given shell command and return the result"""
     verbose("$", " ".join(cmd))
-    return subprocess.run(cmd, check=check, capture_output=capture_output, text=text, cwd=cwd)
+    return subprocess.run([clean_secret_mark(c) for c in cmd], check=check,
+                          capture_output=capture_output, text=text, cwd=cwd)
 
 
 def require_docker():
@@ -331,7 +338,7 @@ def migrate_sqlite3_to_postgres(pg_pwd: str):
     postgres_db = os.getenv("POSTGRES_DB") or "cousinsmatter"
     r = run(["docker", "run", "--entrypoint", "pgloader", "-v", "./data:/data", "--network", "cousins_matter_network",
              "--name", "cousins-matter-pgloader", "dimitri/pgloader:latest", "sqlite:///data/db.sqlite3",
-             f"postgresql://{postgres_user}:{secret(pg_pwd)}@postgres:5432/{postgres_db}"], check=False)
+             f"postgresql://{postgres_user}:{mark_as_secret(pg_pwd)}@postgres:5432/{postgres_db}"], check=False)
     if (r.returncode != 0):
         run(["docker", "down", "-v", "postgres"], check=False)
         run(["docker", "rm", "-v", "cousins-matter-pgloader"], check=False)

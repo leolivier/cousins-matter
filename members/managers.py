@@ -23,6 +23,23 @@ class MemberManager(BaseUserManager):
         user.save()
         return user
 
+    async def acreate_member(self, username, email, password, first_name, last_name, **extra_fields):
+        """
+        Async version of create_member
+        """
+        if not username:
+          raise ValueError(_("The username must be set"))
+
+        extra_fields.setdefault("is_active", False)
+
+        if email:
+          email = self.normalize_email(email)
+        user = self.model(username=username, email=email, first_name=first_name,
+                          last_name=last_name, **extra_fields)
+        user.set_password(password)
+        await user.asave()
+        return user
+
     def create_superuser(self, username, email, password, first_name, last_name, **extra_fields):
         """
         Create and save a SuperUser with the given email and password.

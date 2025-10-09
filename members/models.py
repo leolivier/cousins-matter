@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
+from cm_main.utils import remove_accents
 from .managers import MemberManager
 
 logger = logging.getLogger(__name__)
@@ -126,6 +127,9 @@ class Member(AbstractUser):
 
     followers = models.ManyToManyField('self', verbose_name=_('Followers'), related_name='following',
                                        symmetrical=False, blank=True)
+    # issue #149: manage unaccent indexes
+    first_name_unaccent = models.CharField(max_length=150, null=True, blank=True)
+    last_name_unaccent = models.CharField(max_length=150, null=True, blank=True)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["first_name", "last_name", "birthdate", "email"]
@@ -138,6 +142,8 @@ class Member(AbstractUser):
       ordering = ['last_name', 'first_name']
       indexes = [
         models.Index(fields=["birthdate"]),
+        models.Index(fields=["first_name_unaccent"]),
+        models.Index(fields=["last_name_unaccent"]),
       ]
 
     def get_absolute_url(self):
@@ -208,6 +214,8 @@ class Member(AbstractUser):
         # If no member manager and member is inactive, use admin member
         logger.debug(f"Cleaning member {self.full_name}: changing member manager to admin")
         self.member_manager = Member.objects.filter(is_superuser=True).first()
+      self.first_name_unaccent = remove_accents(self.first_name)
+      self.last_name_unaccent = remove_accents(self.last_name)
 
     def _resize_avatar(self, max_size, save_path):
       try:

@@ -28,6 +28,8 @@ DEBUG = env.bool('DEBUG', False)
 if DEBUG:
   print(f"WARNING! DEBUG={DEBUG}. This is not suited for production!")
 SECRET_KEY = env.str('SECRET_KEY')
+# when rotating the secret key, you can provide the old key here to avoid breaking the site
+SECRET_KEY_FALLBACKS = env.list("PREVIOUS_SECRET_KEYS", default=[])
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -48,11 +50,23 @@ PUBLIC_MEDIA_URL = f'/{MEDIA_REL}/public/'
 
 SITE_NAME = env.str('SITE_NAME', default='Cousins Matter')
 SITE_DOMAIN = env.str('SITE_DOMAIN', None)
-
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'])
-CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
+SITE_PORT = env.int('SITE_PORT', default=0 if SITE_DOMAIN else 8000)
+SITE_PORT = f":{SITE_PORT}" if SITE_PORT else ""
+default_allowed_hosts = ['127.0.0.1', 'localhost']
+if SITE_DOMAIN:
+  default_allowed_hosts.append(SITE_DOMAIN)
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=default_allowed_hosts)
+default_cors_allowed_origins = [f'http://localhost{SITE_PORT}', f'http://127.0.0.1{SITE_PORT}']
+if SITE_DOMAIN:
+  default_cors_allowed_origins.append(f'https://{SITE_DOMAIN}{SITE_PORT}')
+CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=default_cors_allowed_origins)
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 SESSION_COOKIE_DOMAIN = env.str('SESSION_COOKIE_DOMAIN', None)
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+# SECURE_HSTS_SECONDS= # TODO
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 LANGUAGES = [
     ("fr", "Français"),
@@ -172,10 +186,16 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
   'default': {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': BASE_DIR / 'data' / 'db.sqlite3',
+    'ENGINE': 'django.db.backends.postgresql',
+    'USER': env.str('POSTGRES_USER', default='cousinsmatter'),
+    'PASSWORD': env.str('POSTGRES_PASSWORD'),
+    'HOST': env.str('POSTGRES_HOST', default='postgres'),
+    'PORT': 5432,
+    'NAME': env.str('POSTGRES_DB', default='cousinsmatter'),
+    'TEST': {'NAME': 'test_cousinsmatter'},
   }
 }
+# print("databases:", DATABASES)
 
 
 # Password validation
@@ -487,9 +507,9 @@ Q_CLUSTER = {
     # 'save_limit': 250,
     # 'queue_limit': 500,
     # 'label': 'Django Q2',
-    # 'redis': {
-    #     'host': 'redis',
-    #     'port': 6379,
-    #     'db': 0,
-    # }
+    'redis': {
+        'host': 'redis',
+        'port': 6379,
+        # 'db': 0,
+    }
 }

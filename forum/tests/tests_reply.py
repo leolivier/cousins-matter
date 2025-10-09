@@ -2,11 +2,13 @@ from django.urls import reverse
 from django.core.exceptions import ValidationError
 from cm_main.tests.tests_followers import TestFollowersMixin
 from forum.tests.tests_post import ForumTestCase
+from cm_main.tests.test_django_q import django_q_sync_class
 from ..models import Message
 
 
 class PostReplyTestCase(ForumTestCase):
   def test_post_reply(self):
+    """Tests replying to a forum post."""
     url = reverse("forum:reply", args=[self.post.id])
     reply_msg_content = 'a reply'
     response = self.client.post(url, {'content': reply_msg_content}, follow=True)
@@ -19,6 +21,7 @@ class PostReplyTestCase(ForumTestCase):
                         "message contents not equal to what was created")
 
   def test_edit_reply(self):
+    """Tests editing a reply to a forum post."""
     msg = Message(content="a reply to be modified", post=self.post, author=self.member)
     msg.save()
     url = reverse("forum:edit_reply", args=[msg.id])
@@ -38,6 +41,7 @@ class PostReplyTestCase(ForumTestCase):
     # TODO: how to check the edit inside the page which is done in javascript?
 
   def test_delete_reply(self):
+    """Tests deleting a reply to a forum post."""
     msg = Message(content="a reply to be deleted", post=self.post, author=self.member)
     msg.save()
     url = reverse("forum:delete_reply", args=[msg.id])
@@ -56,13 +60,16 @@ class PostReplyTestCase(ForumTestCase):
     # TODO: how to check the removal inside the page which is done in javascript?
 
 
+@django_q_sync_class
 class TestFollower(TestFollowersMixin, ForumTestCase):
 
   def test_follow_post(self):
+    """Tests following a forum post."""
     original_poster = self.member
     self.assertEqual(self.post.first_message.author, original_poster)
 
-    follower = self.create_member_and_login()
+    follower = self.create_member(is_active=True)
+    self.client.login(username=follower.username, password=follower.password)
     # follower follows the post
     url = reverse("forum:toggle_follow", args=[self.post.id])
     response = self.client.post(url, follow=True)
@@ -71,7 +78,8 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
     # self.print_response(response)
 
     # create yet another member who will post a reply to the post
-    new_poster = self.create_member_and_login()
+    new_poster = self.create_member(is_active=True)
+    self.client.login(username=new_poster.username, password=new_poster.password)
     # poster posts a reply to the post
     url = reverse("forum:reply", args=[self.post.id])
     reply_msg_content = 'a reply'
@@ -92,5 +100,4 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
                                 )
 
     # login back as self.member
-    self.client.logout()
-    self.login()
+    self.client.login(username=self.member.username, password=self.member.password)

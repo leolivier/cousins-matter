@@ -175,12 +175,12 @@ msgstr "Sei sicuro di voler lasciare questa stanza ?"
 
 #: chat/templates/chat/private/room_members.html:32
 msgid "Add member to the room"
-msgstr "Aggiungi un membro alla stanza"
+msgstr "Aggiungi questo membro alla stanza"
 
 #: chat/templates/chat/private/room_members.html:48
 #: chat/tests/tests_private.py:89
 msgid "Remove Member from Room"
-msgstr "Rimuovere un membro dalla stanza"
+msgstr "Rimuovere questo membro dalla stanza"
 
 #: chat/templates/chat/private/room_members.html:50
 #: chat/tests/tests_private.py:90

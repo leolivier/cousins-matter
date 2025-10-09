@@ -8,38 +8,74 @@ from django.test import RequestFactory, TestCase
 
 from ..models import Member
 
-COUNTER = 0
+COUNTER: int = -1  # -1 for superuser and 0 for member
 
 
 def get_counter():
   global COUNTER
+  res = COUNTER
   COUNTER += 1
-  # print('count=', COUNTER)
-  return str(COUNTER)
+  return res
 
 
 def get_fake_request():
     return RequestFactory().get('/dummy-path')
 
 
-def yesterday(ndays=1):
-    today = datetime.today()
-    yester_day = today - timedelta(days=ndays)
-    return yester_day.date()
+def today_minus(delta: str):
+    unit = delta[-1]
+    value = int(delta[:-1])
+    units = {'d': 'days', 'w': 'weeks'}
+    try:
+      match unit:
+        case 'y':
+          unit = 'days'
+          value *= 365
+        case 'm':
+          unit = 'days'
+          value *= 30
+        case _:
+          unit = units[unit]
+    except KeyError:
+      raise ValueError("Invalid delta unit")
+    dt = datetime.today() - timedelta(**{unit: value})
+    return dt.date()
+
+
+def get_new_member_data(**kwargs):
+  """returns a brand new member data (new username)""" 
+  counter = get_counter()
+  prefix = kwargs.get('prefix', '')
+  return {
+    'username': kwargs.get('username', f'{prefix}foobar{counter}'),
+    'password': kwargs.get('password', f'{prefix}vWx12/gtV"{counter}'),
+    'email': kwargs.get('email', f'{prefix}foo{counter}@bar.com'),
+    'first_name': kwargs.get('first_name', f'{prefix}foo{counter}'),
+    'last_name': kwargs.get('last_name', f'{prefix}bar{counter}'),
+    'phone': kwargs.get('phone', f'01 23 45 67 {counter}'),
+    "birthdate": kwargs.get('birthdate', today_minus(f'{counter}y')),
+    "privacy_consent": kwargs.get('privacy_consent', True)
+  }
+
+
+def modify_member_data(member):
+  """returns a modified member dataset (same username and last_name, don't change deathdate)"""
+  counter = get_counter()
+  return {
+    'username': member.username,
+    'first_name': f'{member.first_name}{counter}',
+    'last_name': member.last_name,
+    'email': f'{member.username}{counter}@test.com',
+    'phone': f'01 23 45 67 {counter}',
+    "birthdate": today_minus(f'{counter}y'),  # counter has changed so birthdate changes
+    "privacy_consent": member.privacy_consent,
+    "deathdate": member.deathdate or ''
+  }
 
 
 class MemberTestCase(TestCase):
   member = None
-  username = 'foobar'
-  password = 'vWx12/gtV"'
-  email = "foo@bar.com"
-  first_name = "foo"
-  last_name = "bar"
-
   superuser = None
-  superuser_name = "superuser"
-  superuser_pwd = "SuPerUser1!"
-  superuser_email = "superuser@test.com"
 
   login_url = reverse('members:login')
   logout_url = reverse('members:logout')
@@ -51,66 +87,52 @@ class MemberTestCase(TestCase):
 
   @classmethod
   def setUpTestData(cls):
-    cls.superuser = Member.objects.create_superuser(cls.superuser_name, cls.superuser_email, cls.superuser_pwd,
-                                                    "Super", "Member", privacy_consent=True)
-    cls.member = Member.objects.create_member(cls.username, cls.email, cls.password,
-                                              cls.first_name, cls.last_name, is_active=True, privacy_consent=True)
+    "called once by the test framework before running the tests"
+    # create a superuser for testing
+    superuser_data = get_new_member_data(prefix="superuser-")
+    # force username
+    superuser_data['username'] = 'superuser'
+    pwd = superuser_data['password']
+    cls.superuser = Member.objects.create_superuser(**superuser_data)
+    cls.superuser.password = pwd  # keep unhashed password in memory for login
+
+    # create a member for testing
+    member_data = get_new_member_data()
+    pwd = member_data['password']
+    member_data['is_active'] = True
+    cls.member = Member.objects.create_member(**member_data)
+    cls.member.password = pwd  # keep unhashed password in memory for login
 
   def setUp(self):
     super().setUp()
     self.created_members = []
-    self.login()  # login as self.member
+    self.client.login(username=self.member.username, password=self.member.password)
 
   def tearDown(self):
     for m in self.created_members:
       if m.id is not None:
         m.delete()
     self.created_members = []
+    self.client.logout()
     return super().tearDown()
 
-  def print_response(self, response):
+  @staticmethod
+  def print_response(response):
     print('*'*80)
     print(response.content.decode().replace('\\t', '\t').replace('\\n', '\n'))
     print('*'*80)
 
-  def login(self):
-    self.client.logout()
-    self.assertMemberExists()
-    member = get_user(self.client)
-    logged = member.is_authenticated or self.client.login(username=self.username, password=self.password)
-    self.assertTrue(logged)
-
-  def login_as(self, member):
-    # 1rst logout then login as member
-    self.client.logout()
-    logged = self.client.login(username=member.username, password=member.password)
-    self.assertTrue(logged)
-    current_member = get_user(self.client)
-    self.assertEqual(current_member.username, member.username)
-    self.assertTrue(current_member.is_authenticated)
-
-  def current_member(self):
+  def current_user(self):
     return get_user(self.client)
 
-  def assertMemberExists(self):
-    self.assertTrue(Member.objects.filter(username=self.username).exists())
+  def assertMemberExists(self, member):
+    self.assertTrue(Member.objects.filter(username=member.username).exists())
 
-  def assertMemberIsLogged(self):
-    member = get_user(self.client)
-    self.assertTrue(member.is_authenticated)
+  def assertRequestUserIsLogged(self):
+    self.assertTrue(self.current_user().is_authenticated)
 
-  def assertMemberIsNotLogged(self):
-    member = get_user(self.client)
-    self.assertFalse(member.is_authenticated)
-
-  def superuser_login(self):
-    self.assertIsNotNone(self.superuser)
-    member = get_user(self.client)
-    if member.is_authenticated and not member.is_superuser:
-      self.client.logout()
-      member = get_user(self.client)  # is refresh needed?
-    logged = member.is_authenticated or self.client.login(username=self.superuser_name, password=self.superuser_pwd)
-    self.assertTrue(logged)
+  def assertRequestUserIsNotLogged(self):
+    self.assertFalse(self.current_user().is_authenticated)
 
   def assertContainsMessage(self, response, type, message):
     self.assertContains(response, f'''<li class="message is-{type}">
@@ -118,51 +140,28 @@ class MemberTestCase(TestCase):
       </div>
     </li>''', html=True)
 
-  def _get_new(self, input_str, counter):
-    """build a new string based on the passed one"""
-    return input_str + counter
-
-  def get_new_member_data(self):
-    """returns a brand new member data (new username)"""
-    counter = get_counter()
-    uname = self._get_new(self.username, counter)
-    new_password = self._get_new(self.password, counter)
-
-    return {'username': uname, 'password': new_password, 'email': uname+'@test.com',
-            'first_name': self._get_new(self.first_name, counter), 'last_name': self._get_new(self.last_name, counter),
-            'phone': '01 23 45 67 ' + counter, "birthdate": yesterday(3000), "privacy_consent": True}
-
-  def get_changed_member_data(self, member):
-    """returns a modified member dataset (same username and last_name, don't change deathdate)"""
-    counter = get_counter()
-    return {'username': member.username, 'first_name': self._get_new(member.first_name, counter),
-            'last_name': member.last_name, 'email': member.username+'@test.com',
-            'phone': '01 23 45 67 ' + counter, "birthdate": yesterday(2000), "privacy_consent": True,
-            "deathdate": member.deathdate or ''}
-
   def create_member(self, member_data=None, is_active=False):
     """creates and returns a new member using provided member data.
     If the member data is None, a new one is created.
     """
-    if member_data is None:
-      member_data = self.get_new_member_data()
-      # save password before hashing
-      passwd = member_data['password']
-    else:
-      passwd = member_data['password']
+    member_data = member_data or get_new_member_data()
+    pwd = member_data['password']
     new_member = Member.objects.create_member(**member_data, is_active=is_active,
                                               member_manager=None if is_active else self.member)
-    # store real password instead of hashed one so that we can login with it afterward
-    new_member.password = passwd
+    new_member.password = pwd  # keep unhashed password in memory for login
     self.created_members.append(new_member)
     return new_member
 
-  def create_member_and_login(self, member_data=None):
-    """creates and returns a new member using provided member data.
+  async def acreate_member(self, member_data=None, is_active=False):
+    """asynchronously creates and returns a new member using provided member data.
     If the member data is None, a new one is created.
-    The user is set as active and logged in by the method"""
-    new_member = self.create_member(member_data, is_active=True)
-    self.login_as(new_member)
+    """
+    member_data = member_data or get_new_member_data()
+    pwd = member_data.get('password')
+    new_member = Member.objects.acreate_member(**member_data, is_active=is_active,
+                                               member_manager=None if is_active else self.member)
+    new_member.password = pwd  # keep unhashed password in memory for login
+    self.created_members.append(new_member)
     return new_member
 
 

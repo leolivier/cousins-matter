@@ -12,7 +12,7 @@ class TestSiteLogo(TestCase):
   # disable navbar cache for this test
   @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}})
   def test_custom_logo(self):
-    """test the site logo"""
+    """test the custom site logo"""
     logo_basefilename = 'test-logo.jpg'
     logo_full_path = os.path.join(settings.MEDIA_ROOT, 'public', logo_basefilename)
     logo_testresources_file = os.path.join(os.path.dirname(__file__), 'resources', logo_basefilename)

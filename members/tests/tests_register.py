@@ -1,4 +1,3 @@
-from datetime import date
 from django.urls import reverse
 from django.core import mail
 from django.utils.translation import gettext as _
@@ -12,12 +11,13 @@ from cousinsmatter.context_processors import override_settings
 from ..forms import MemberRegistrationForm
 from ..models import Member
 from ..registration_link_manager import RegistrationLinkManager
-from .tests_member_base import MemberTestCase, TestLoginRequiredMixin, get_fake_request
+from .tests_member_base import MemberTestCase, TestLoginRequiredMixin, get_fake_request, today_minus
 
 
 class MemberInviteTests(MemberTestCase):
 
   def do_test_invite(self, should_fail=False):
+    "Executes test inviting a member."
     sender = get_user(self.client)
     test_invite = {'invited': "Mr Freeze", 'email': 'test-cousinsmatter@maildrop.cc'}
     response = self.client.post(reverse("members:invite"), test_invite, follow=True)
@@ -62,29 +62,33 @@ class MemberInviteTests(MemberTestCase):
     mail.outbox = []  # reset test mailbox
 
   def test_invite_member_not_staff(self):
+    "Tests inviting a member when not staff."
     # depending on settings,only superuser and staff cans send invites
-    self.login()
+    self.client.login(username=self.member.username, password=self.member.password)
     with override_settings(ALLOW_MEMBERS_TO_INVITE_MEMBERS=False):
       self.do_test_invite(should_fail=True)
 
   def test_invite_member_staff(self):
-    self.superuser_login()
+    "Tests inviting a member when staff."
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
     # should work anyway
     with override_settings(ALLOW_MEMBERS_TO_INVITE_MEMBERS=False):
       self.do_test_invite()
     # log back in again as normal member
-    self.login()
+    self.client.login(username=self.member.username, password=self.member.password)
 
   def test_invite_member(self):
-    self.login()
+    "Tests inviting a member by another member when allowed."
+    self.client.login(username=self.member.username, password=self.member.password)
     # default settings for ALLOW_MEMBERS_TO_INVITE_MEMBERS=True, so should work
     self.do_test_invite()
 
   def test_invite_member_superuser(self):
-    self.superuser_login()
+    "Tests inviting a member by superuser."
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
     self.do_test_invite()
     self.client.logout()
-    self.login()
+    self.client.login(username=self.member.username, password=self.member.password)
 
 
 class ignore_captcha_errors(TestContextDecorator):
@@ -139,7 +143,7 @@ class RequestRegistrationLinkTests(TestLoginRequiredMixin, MemberTestCase):
 
   @ignore_captcha_errors()
   def test_request_registration_email_already_exists(self):
-    test_requester = {'name': "Mr Freeze", 'email': self.superuser_email,
+    test_requester = {'name': "Mr Freeze", 'email': self.superuser.email,
                       'message': "Hi, it's me!", 'captcha_0': 'whatever', 'captcha_1': 'passed'}
     response = self.client.post(reverse("members:register_request"), test_requester, follow=True)
     self.assertContainsMessage(response, 'error', _("A member with this email already exists."))
@@ -165,10 +169,10 @@ class MemberRegisterTests(MemberTestCase):
     self.assertTemplateUsed(response, 'members/members/member_upsert.html')
     self.assertContains(response, f'''<h1 class="title has-text-centered is-2">{_("Sign up")}</h1>''', html=True)
 
-    user = {'username': 'test_register_view', 'password1': self.password, 'password2': self.password,
-            'first_name': self.first_name, 'last_name': self.last_name,
+    user = {'username': 'test_register_view', 'password1': self.member.password, 'password2': self.member.password,
+            'first_name': self.member.first_name, 'last_name': self.member.last_name,
             'email': 'test_register_view@test.com', 'phone': '01 23 45 67 78',
-            "birthdate": date.today(), "privacy_consent": True}
+            "birthdate": today_minus('30y'), "privacy_consent": True}
 
     mail.outbox = []  # reset mailbox
     form = MemberRegistrationForm(user)
@@ -192,9 +196,9 @@ class MemberRegisterTests(MemberTestCase):
     self.assertContains(response, _("Invalid link. Please contact the administrator."), status_code=200)
 
   def test_register_needs_consent(self):
-    user = {'username': 'test_register_view', 'password1': self.password, 'password2': self.password,
-            'first_name': self.first_name, 'last_name': self.last_name,
+    user = {'username': 'test_register_view', 'password1': self.member.password, 'password2': self.member.password,
+            'first_name': self.member.first_name, 'last_name': self.member.last_name,
             'email': 'test_register_view@test.com', 'phone': '01 23 45 67 78',
-            "birthdate": date.today()}
+            "birthdate": today_minus('40y')}
     form = MemberRegistrationForm(user)
     self.assertFormError(form, 'privacy_consent', [_("This field is required.")])

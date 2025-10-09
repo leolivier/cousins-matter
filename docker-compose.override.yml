@@ -1,0 +1,27 @@
+services:
+  cousins-matter:
+    build: .
+    image: cousins-matter:local
+    container_name: cousins-matter-dev
+    restart: "no"
+    ports:
+      - "9005:9001"
+    user: "${USER_UID:-1000}:${USER_GID:-1000}"
+    volumes:
+      - ./:/app:delegated
+      - ./data:/app/data
+      - ./media:/app/media
+      - ./static:/app/static
+      - ./.env:/app/.env:ro
+    environment:
+      - ENV=development
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - .venv/
+        - action: sync+restart
+          path: ./config/nginx.conf
+          target: /etc/nginx/conf.d/default.conf

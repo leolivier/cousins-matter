@@ -6,14 +6,13 @@ from django.utils.formats import date_format
 from django.utils.translation import gettext as _
 
 from cm_main.templatetags.cm_tags import icon
-from .tests_member_base import MemberTestCase
+from .tests_member_base import MemberTestCase, get_new_member_data
 
 
 class TestBirthdaysMixin():
   def get_member_with_bday(self, bday):
     # create a member with birthday = bday
-    new_data = self.get_new_member_data()
-    new_data['birthdate'] = bday
+    new_data = get_new_member_data(birthdate=bday)
     return self.create_member(new_data)
 
   def check_birthday(self, member, color, expected_chain, with_icons=False, response=None, reversed=False):
@@ -60,6 +59,7 @@ class TestBirthdaysMixin():
 
 class TestBirthdays(TestBirthdaysMixin, MemberTestCase):
   def test_birthday_today(self):
+    """Tests that the birthday today view works correctly."""
     # create a member with birthday = today
     today = date.today()
     b_today = date(2000, today.month, today.day)
@@ -67,6 +67,7 @@ class TestBirthdays(TestBirthdaysMixin, MemberTestCase):
     self.check_birthday_today(member)
 
   def test_birthdays_tomorrow(self):
+    """Tests that the birthdays tomorrow view works correctly."""
     today = date.today()
     # create a member with birthdate = tomorrow - 2 years
     b_tomorrow = date(1998, today.month, today.day) + timedelta(days=1)
@@ -74,6 +75,7 @@ class TestBirthdays(TestBirthdaysMixin, MemberTestCase):
     self.check_birthdays_tomorrow(member)
 
   def test_birthdays_after_tomorrow(self):
+    """Tests that the birthdays after tomorrow view works correctly."""
     today = date.today()
     # create a member with birthdate in 2 weeks
     b_2weeks = date(1990, today.month, today.day) + timedelta(weeks=2)

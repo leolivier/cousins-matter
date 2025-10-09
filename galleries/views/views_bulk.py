@@ -25,6 +25,7 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
 from django_q.tasks import async_task, result_group, Task, count_group
+from django_q.brokers import get_broker
 
 from cm_main.utils import ajax_redirect
 
@@ -194,6 +195,7 @@ def _handle_zip(zip_file, task_group, owner_id):
   tmpdir = tempfile.mkdtemp()
   zimport = ZipImport(owner_id=owner_id, root=tmpdir, group=task_group)
   zimport.register()
+  broker = get_broker()
   # extract the zip file to a temporary directory
   with zipfile.ZipFile(zip_file, 'r') as zip_ref:
     zip_ref.extractall(tmpdir)
@@ -205,7 +207,7 @@ def _handle_zip(zip_file, task_group, owner_id):
     gallery = _get_or_create_gallery(gallery_path, zimport)
     for image in images:
       async_task(_handle_photo_file, zimport, dir, image, gallery.id,
-                 group=task_group, cached=False, hook=_post_create_photo)
+                 group=task_group, cached=False, hook=_post_create_photo, broker=broker)
       zimport.nbPhotos += 1
       logger.debug(f"created task for {image} group: {task_group}")
 

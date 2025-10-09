@@ -2,14 +2,98 @@ services:
   cousins-matter:
     image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
     container_name: cousins-matter
-    # the build works only in dev mode
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+      - qcluster
+    networks:
+      - cousins_matter_network
+    ports:
+      - "9005:9001"
+    user: "cm_user:cm_user"
+    volumes:
+      - ./media:/app/media
+      - ./static:/app/static
+      - ./.env:/app/.env
+
+  qcluster:
+    image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
+    container_name: cousins-matter-qcluster
+    command: ["python", "manage.py", "qcluster"]
+    user: "cm_user:cm_user"
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - cousins_matter_network
+    ports:
+      - "9002:9001"
+    volumes:
+      - ./media:/app/media
+      - ./static:/app/static
+      - ./.env:/app/.env
+
+  postgres:
+    image: postgres:alpine
+    container_name: cousins-matter-postgres
+    restart: unless-stopped
+    user: "postgres:postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - cousins_matter_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cousinsmatter}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-cousinsmatter}
+    networks:
+      - cousins_matter_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cousinsmatter}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  redis:
+    image: redis:alpine
+    container_name: cousins-matter-redis
     restart: unless-stopped
     ports:
-      - "${DOCKER_PORT:-8000}:8000"
+      - "6379:6379"
     volumes:
-      - ./data:/app/data
-      - ./media:/app/media
-      - ./.env:/app/.env
+      - cousins_matter_redis_data:/data
+    networks:
+      - cousins_matter_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: cousins-matter-nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./static:/app/static:ro
+      - ./media:/app/media:ro
+    restart: unless-stopped
+    networks:
+      - cousins_matter_network
+
+networks:
+  cousins_matter_network:
+    name: cousins_matter_network
+    driver: bridge
+
+volumes:
+  cousins_matter_postgres_data:
+    name: cousins_matter_postgres_data
+  cousins_matter_redis_data:
+    name: cousins_matter_redis_data

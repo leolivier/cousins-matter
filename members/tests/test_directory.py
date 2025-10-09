@@ -6,24 +6,19 @@ from ..views.views_directory import MembersDirectoryView, MembersPrintDirectoryV
 
 class TestMemberDirectory(MemberTestCase):
   def setUp(self):
+    """Initializes test data for member directory."""
     super().setUp()
-    self.members = []
     for _ in range(4):
-      self.members.append(self.create_member())
-
-  def tearDown(self):
-    for member in self.members:
-      member.delete()
-    super().tearDown()
+      self.create_member()
 
   def test_member_directory(self):
-
-    response = self.client.get(reverse('members:directory'))
+    """Tests that the member directory displays correctly with all visible members."""
+    response = self.client.get(reverse('members:directory'), follow=True)
+    # self.print_response(response)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'members/members/members_directory.html')
     self.assertIs(response.resolver_match.func.view_class, MembersDirectoryView)
-    # print(response.content)
-    for member in self.members:
+    self.assertTemplateUsed(response, 'members/members/members_directory.html')
+    for member in self.created_members:
         member_link = f'''
         <a class="button is-link is-light" href="{reverse("members:detail", args=[member.id])}">
           <strong>{member.full_name}</strong>
@@ -32,8 +27,8 @@ class TestMemberDirectory(MemberTestCase):
         self.assertContains(response, member_link, html=True)
 
   def test_pdf_generation(self):
-
-    response = self.client.get(reverse('members:print_directory'))
+    """Tests that PDF generation for the member directory works correctly."""
+    response = self.client.get(reverse('members:print_directory'), follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertIs(response.resolver_match.func.view_class, MembersPrintDirectoryView)
     self.assertIs(response.__class__, FileResponse)

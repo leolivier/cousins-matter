@@ -19,13 +19,14 @@ class TestDisplayPollInfo(PollTestMixin):
         questions = self.create_questions(poll)
         # create answers by 2 users
         self.create_and_check_answers(poll)
-        self.create_member_and_login()
+        member = self.create_member(is_active=True)
+        self.client.login(username=member.username, password=member.password)
         self.create_and_check_answers(poll, expected_poll_answers=2)
 
         response = self.client.get(reverse("polls:poll_detail", args=(poll.id,)), follow=True)
         self.assertEqual(response.status_code, 200)
         self.check_display_info(poll, response)
-        poll_answer = PollAnswer.objects.filter(poll=poll, member=self.current_member()).first()
+        poll_answer = PollAnswer.objects.filter(poll=poll, member=self.current_user()).first()
         for question in questions:
             answers = Answer.filter_answers(question=question)
             answer = next((a for a in answers if a.poll_answer == poll_answer), None)

@@ -38,7 +38,7 @@
 				"--failfast",
 				"-v",
 				"2",
-				"classified_ads.tests.ClassifiedAdCreateTestCase.test_create_ad"
+				"members.tests.tests_import_export.TestMemberImport.test_create_import_manager_activation"
 			],
 			"django": true,
 			"autoStartBrowser": false,

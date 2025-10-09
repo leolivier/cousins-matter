@@ -10,15 +10,17 @@ from .test_base import BasePageTestCase, TestPageMixin
 
 class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_create_page(self):
-    self.superuser_login()  # only superuser can create pages
+    "Tests creating a page with valid data as superuser."
+    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
     response = self.client.get(reverse("pages-edit:create"))
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "pages/page_form.html")
     self._test_create_page()
-    self.login()  # now log back as a normal user
+    self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
   def test_create_and_continue_page(self):
-    self.superuser_login()  # only superuser can create pages
+    "Tests creating a page with valid data as superuser and continue editing."
+    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
     response = self.client.get(reverse("pages-edit:create"))
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "pages/page_form.html")
@@ -29,10 +31,11 @@ class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
       'save-and-continue': 'true'
     }
     self._test_create_page(new_page_data)
-    self.login()  # now log back as a normal user
+    self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
   def test_url_checks_with_other_pages(self):
-    self.superuser_login()  # only superuser can create pages
+    "Tests that we cannot create 2 pages with the same url or a sub url of another page."
+    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
     # first create one page
     self._test_create_page()
     # then try to create another one with the same url
@@ -53,12 +56,13 @@ class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
         'save': 'true'
       })
     self.assertFormError(form, 'url', [_("A flatpage cannot be a subpage of another flatpage, check your URLs")])
-    self.login()  # now log back as a normal user
+    self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
 
 class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_update_page(self):
-    self.superuser_login()  # only superuser can create pages
+    "Tests updating a page with valid data as superuser."
+    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
     # first create it
     page = self._test_create_page()
     # now try to update it
@@ -74,10 +78,11 @@ class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     self.assertEqual(page.url, new_page_data['url'])
     self.assertEqual(page.title, new_page_data['title'])
     self.assertEqual(page.content, new_page_data['content'])
-    self.login()  # now log back as a normal user
+    self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
   def test_update_and_continue_page(self):
-    self.superuser_login()  # only superuser can create pages
+    "Tests updating a page with valid data as superuser and continue editing."
+    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
     # first create it
     page = self._test_create_page()
     # now try to update it
@@ -94,10 +99,11 @@ class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     self.assertEqual(page.url, new_page_data['url'])
     self.assertEqual(page.title, new_page_data['title'])
     self.assertEqual(page.content, new_page_data['content'])
-    self.login()  # now log back as a normal user
+    self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
   def test_same_url(self):
-    self.superuser_login()  # only superuser can create pages
+    "Tests updating a page with the same url as another page."
+    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
     # first create 2 pages with different urls
     page1 = self._test_create_page()
     # 2nd page
@@ -114,12 +120,13 @@ class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     new_page_data['id'] = page2.id
     form = PageForm(new_page_data)
     self.assertFormError(form, 'url', [_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']}])
-    self.login()  # now log back as a normal user
+    self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
 
 class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_display_page(self):
-    self.superuser_login()  # only superuser can create pages
+    "Tests displaying a list of pages."    
+    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
     # first create 2 pages with different urls
     page1 = self._test_create_page()
     # 2nd page
@@ -144,14 +151,15 @@ class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
     &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<strong>{page.title}</strong>
   </div>''', html=True)
 
-    self.login()  # now log back as a normal user
+    self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
 
 class TestDeletePage(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_delete_page(self):
+    "Tests deleting a page."
     # get the # of pages at start
     npages = FlatPage.objects.count()
-    self.superuser_login()  # only superuser can create pages
+    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
     # first, create a page
     page = self._test_create_page()
     self.assertEqual(FlatPage.objects.filter(url=page.url).count(), 1)
@@ -161,4 +169,4 @@ class TestDeletePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(FlatPage.objects.count(), npages)
-    self.login()  # now log back as a normal user
+    self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user

@@ -1,0 +1,49 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags %}
+{% block title %}
+  {% title _("Treasure") %}
+{% endblock %}
+{% block content %}
+{%with owner=treasure.owner%}
+<div class="container">
+  <div class="card">
+		<div class="card-image">
+			<figure class="image is-4by3">
+				<img
+					src="{{treasure.picture.url}}"
+					alt="{{treasure.title}}"
+				/>
+			</figure>
+		</div>
+		<div class="card-content">
+			<div class="media">
+				<div class="media-left">
+					<figure class="image is-48x48">
+						<img
+							src="{{owner.avatar_url}}"
+							alt="{{owner.full_name}}"
+						/>
+					</figure>
+				</div>
+				<div class="media-content">
+					<p class="title is-4">{{treasure.title}}</p>
+					<p class="subtitle is-6">{{treasure.category}}</p>
+				</div>
+			</div>
+			{%if treasure.description%}
+			<div class="content">
+				{%autoescape off%}{{treasure.description}}{%endautoescape%}
+			</div>
+			{%endif%}
+			{%if treasure.file%}
+			<div class="card-footer">
+				<a href="{{ treasure.file.url }}" target="_blank">
+					{%trans 'Look at the file contents' %}
+				</a>
+			</div>
+			{%endif%}
+		</div>
+	</div>
+</div>
+{%endwith%}
+{%endblock%}

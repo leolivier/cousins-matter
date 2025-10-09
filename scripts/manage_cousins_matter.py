@@ -246,7 +246,7 @@ def create_pg_password():
         return new_pass
     else:
         verbose("Postgres password already exists, skipping...")
-        return pg_password.group(1)
+        return strip_quotes(pg_password.group(1))
 
 
 #######################################

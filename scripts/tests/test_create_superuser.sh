@@ -1,17 +1,12 @@
 #!/bin/bash
 
 # this script is expected to be run from the root of the dev environment project
-set -e
-error() {
-	code=$1
-	shift
-  echo "Error: $@" >&2
-  docker compose down -v
-  exit $code
-}
 
-curbranch=$(git branch --show-current)
-[[ -z "$curbranch" ]] && error 1 "git branch --show-current returned an empty string. Please run this script from the root of the dev environment project."
+# import utils functions and variables
+source $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/test_utils.sh
+
+get_args "Runs a Cousins Matter install test" $@
+set_variables
 
 tmpdir=$(mktemp -d)
 echo "tmpdir: $tmpdir"
@@ -26,11 +21,9 @@ pushd "$tmpdir"
 
 export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-"cousins-matter:$curbranch"}
 echo "COUSINS_MATTER_IMAGE: $COUSINS_MATTER_IMAGE"
-(docker images --format "{{.Repository}}:{{.Tag}}" | grep $COUSINS_MATTER_IMAGE) || error 1 "Image $COUSINS_MATTER_IMAGE not found"
 
  # as we didn't fill the ADMIN_xxx variables in .env, the container will fail to create the superuser
-docker compose up -d  --wait --wait-timeout 30
-sleep 5 # let the system stabilize
+docker_run_cousins_matter
 
 # Now, set the superuser variables in .env before calling create_superuser
 ADMIN=admin

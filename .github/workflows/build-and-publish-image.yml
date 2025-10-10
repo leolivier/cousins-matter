@@ -124,17 +124,17 @@ jobs:
         run: |
           # make sure no previous containers are running
           docker compose down -v
-          ./scripts/tests/test_install.sh
+          ./scripts/tests/test_install.sh -g
 
       - name: test migrate v1 to v2 script
         run: |
           # make sure no previous containers are running
           docker compose down -v
-          ./scripts/tests/test_migrate_v1_v2.sh
+          ./scripts/tests/test_migrate_v1_v2.sh -g
 
       - name: test create superuser script
         run: |
-          ./scripts/tests/test_create_superuser.sh
+          ./scripts/tests/test_create_superuser.sh -g
 
       - name: Show docker-compose services logs on failure
         if: failure()

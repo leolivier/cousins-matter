@@ -84,7 +84,7 @@ def mark_as_secret(string: str) -> str:
 
 
 def hide_if_secret(string: str) -> str:
-    return SECRET_MARK_PATTERN.sub('[***]', string)    
+    return SECRET_MARK_PATTERN.sub('[***]', string)
 
 
 def clean_secret_mark(string: str) -> str:
@@ -524,7 +524,8 @@ You can hit Ctrl-C to skip the editor if you want to see more details about the 
             try:
                 run([editor, str(ENV_PATH)], check=True)
             except Exception as e:
-                print(f"{ON_RED}Couldn't start the editor automatically ({e}), please start it manually and edit the {ENV_PATH} file.{NC}")
+                print(f"{ON_RED}Couldn't start the editor automatically ({e}), please start it manually and edit "
+                      f"the {ENV_PATH} file.{NC}")
 
             print(framed(f"""
 Once your environment variables are set properly in {str(ENV_PATH)}, you can cd to your directory

@@ -1,16 +1,18 @@
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from cm_main.tests.test_django_q import TestDjangoQMixin
+from cm_main.tests.test_django_q import django_q_sync_class
 from cm_main.utils import test_resource_full_path
 from ..models import Gallery, Photo
 from ..views import views_bulk
 from .tests_utils import GalleryBaseTestCase
 
 
-class TestBulkUpload(TestDjangoQMixin, GalleryBaseTestCase):
+@django_q_sync_class
+class TestBulkUpload(GalleryBaseTestCase):
 
   def test_bulk_upload(self):
+    """Tests bulk uploading photos."""
     response = self.client.get(reverse('galleries:bulk_upload'))
     self.assertEqual(response.status_code, 200)
     self.assertIs(response.resolver_match.func.view_class, views_bulk.BulkUploadPhotosView)

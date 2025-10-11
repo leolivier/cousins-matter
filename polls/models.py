@@ -325,8 +325,8 @@ class MultiChoiceAnswer(Answer):
         choice_results = {}
         for choice in result.question.possible_choices:
             # __contains not supported by sqlite3
-            # choice_answers = answers.filter(answer__contains=choice).count()
-            choice_answers = sum(1 for answer in answers if choice in answer.answer)
+            choice_answers = answers.filter(answer__contains=choice).count()
+            # choice_answers = sum(1 for answer in answers if choice in answer.answer)
             choice_results[choice] = (choice_answers / result.total_answers) * 100 if result.total_answers > 0 else 0
         return [f"{key}: {value}%" for key, value in choice_results.items()] if choice_results else ["-"]
 

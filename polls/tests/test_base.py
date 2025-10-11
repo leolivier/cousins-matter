@@ -132,7 +132,7 @@ class PollTestMixin(PollTestBase):
             follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(PollAnswer.objects.count(), expected_poll_answers)
-        poll_answer = PollAnswer.objects.filter(poll=poll, member=self.current_member()).first()
+        poll_answer = PollAnswer.objects.filter(poll=poll, member=self.current_user()).first()
 
         answers = Answer.filter_answers(poll_answer=poll_answer)
         self.assertEqual(len(answers), len(qnas))
@@ -208,7 +208,7 @@ class EventPlannerTestMixin(PollTestBase):
             follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(PollAnswer.objects.count(), expected_poll_answers)
-        poll_answer = PollAnswer.objects.filter(poll=event_planner, member=self.current_member()).first()
+        poll_answer = PollAnswer.objects.filter(poll=event_planner, member=self.current_user()).first()
 
         answers = Answer.filter_answers(poll_answer=poll_answer)
         self.assertEqual(len(answers), 1)

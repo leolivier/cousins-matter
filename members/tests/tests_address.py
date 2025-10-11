@@ -20,6 +20,7 @@ def get_test_address():
 
 class TestAddress(MemberTestCase):
   def test_create_and_modify_address(self):
+    """Tests that the address creation and modification views work correctly."""
     # test create
     addr = Address(**get_test_address())
     addr.save()
@@ -35,6 +36,7 @@ class TestAddress(MemberTestCase):
 class TestAddressView(MemberTestCase):
 
   def test_create_address_view(self):
+    """Tests that the address creation view works correctly."""
     cr_addr_url = reverse("members:create_address")
     response = self.client.get(cr_addr_url)
     self.assertEqual(response.status_code, 200)
@@ -46,6 +48,7 @@ class TestAddressView(MemberTestCase):
     self.assertTrue(Address.objects.filter(zip_code=test_addr["zip_code"]).exists())
 
   def test_modify_address_view(self):
+    """Tests that the address update view works correctly."""
     addr = Address(**get_test_address())
     addr.save()
     self.assertIsNotNone(addr.id)
@@ -63,6 +66,7 @@ class TestAddressView(MemberTestCase):
 
 class TestModalAddressView(MemberTestCase):
   def test_create_modal_address_view(self):
+    """Tests that the modal address creation view works correctly."""
     cr_addr_url = reverse("members:modal_create_address")
     response = self.client.get(cr_addr_url)
     self.assertEqual(response.status_code, 200)
@@ -86,6 +90,7 @@ class TestModalAddressView(MemberTestCase):
     # pprint(vars(response))
 
   def test_modify_modal_address_view(self):
+    """Tests that the modal address update view works correctly."""
     # test get update
     addr = Address(**get_test_address())
     addr.save()

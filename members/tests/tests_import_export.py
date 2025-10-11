@@ -11,7 +11,7 @@ from django.utils import translation
 # from django.utils.translation import gettext as _
 
 from ..models import ALL_FIELD_NAMES, MANDATORY_MEMBER_FIELD_NAMES, Member, Address
-from .tests_member_base import MemberTestCase
+from .tests_member_base import MemberTestCase, get_new_member_data
 from ..views.views_import_export import CSVImportView
 
 
@@ -81,7 +81,7 @@ class TestMemberImport(TestImportMixin, MemberTestCase):
   def test_import_en(self):
     """test the import in english (create and update)"""
     # more or less the same as 1rst line of import file with differences on first_name, birthdate and phone
-    data = {'username': "member1", 'email': "member1@test.com", 'password': self.password,
+    data = {'username': "member1", 'email': "member1@test.com", 'password': self.member.password,
             'first_name': "Johnny", 'last_name': "Doe", 'birthdate': date(2001, 1, 1), 'phone': "+45 01 02 30"}
     member1 = self.create_member(data)
     self.do_test_import('import_members.csv', 'en-us', 3)  # expected 3 and not 4 because we just created one above
@@ -138,26 +138,14 @@ class TestMemberImport(TestImportMixin, MemberTestCase):
       'member-mngd4': {'manager': 'superuser', 'active': False},
     })
 
-  def test_update_import_manager_activation1(self):
-    # first create the members, so the import updates them
-    for i in range(4):
-      member_data = self.get_new_member_data()
-      member_data['username'] = f'member-mngd{str(i+1)}'
-      self.create_member(member_data=member_data, is_active=False)
-
-    self._test_import_managers(activate_users=True, expected_result={
-      'member-mngd1': {'manager': None, 'active': True},
-      'member-mngd2': {'manager': None, 'active': True},
-      'member-mngd3': {'manager': 'member-mngd1', 'active': False},
-      'member-mngd4': {'manager': 'superuser', 'active': False},
-    }, update=True)
+  def create_members(self, nb_members=4, activate_users=False):
+    for i in range(nb_members):
+      member_data = get_new_member_data(username=f'member-mngd{str(i+1)}')
+      self.create_member(member_data=member_data, is_active=activate_users)
 
   def test_update_import_manager_activation2(self):
     # first create the members, so the import updates them
-    for i in range(4):
-      member_data = self.get_new_member_data()
-      member_data['username'] = f'member-mngd{str(i+1)}'
-      self.create_member(member_data=member_data, is_active=True)
+    self.create_members(activate_users=True)
 
     self._test_import_managers(activate_users=True, expected_result={
       'member-mngd1': {'manager': None, 'active': True},
@@ -168,10 +156,7 @@ class TestMemberImport(TestImportMixin, MemberTestCase):
 
   def test_update_import_manager_no_activation1(self):
     # first create the members, so the import updates them
-    for i in range(4):
-      member_data = self.get_new_member_data()
-      member_data['username'] = f'member-mngd{str(i+1)}'
-      self.create_member(member_data=member_data, is_active=False)
+    self.create_members(activate_users=False)
 
     self._test_import_managers(activate_users=False, expected_result={
       'member-mngd1': {'manager': self.member.username, 'active': False},
@@ -184,10 +169,7 @@ class TestMemberImport(TestImportMixin, MemberTestCase):
 
   def test_update_import_manager_no_activation2(self):
     # first create the members, so the import updates them
-    for i in range(4):
-      member_data = self.get_new_member_data()
-      member_data['username'] = f'member-mngd{str(i+1)}'
-      self.create_member(member_data=member_data, is_active=True)
+    self.create_members(activate_users=True)
 
     self._test_import_managers(activate_users=False, expected_result={
       'member-mngd1': {'manager': None, 'active': True},

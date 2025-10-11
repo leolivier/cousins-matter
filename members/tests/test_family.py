@@ -18,6 +18,7 @@ def get_test_family(parent=None):
 
 class TestFamily(MemberTestCase):
   def test_create_and_modify_family(self):
+    """Tests creating and modifying a family with its members."""
     # test create
     root_family = Family(**get_test_family())
     root_family.save()
@@ -37,6 +38,7 @@ class TestFamily(MemberTestCase):
 class TestFamilyView(MemberTestCase):
 
   def test_create_family_view(self):
+    """Tests that the family creation view works correctly."""
     cr_family_url = reverse("members:create_family")
     response = self.client.get(cr_family_url)
     self.assertEqual(response.status_code, 200)
@@ -48,6 +50,7 @@ class TestFamilyView(MemberTestCase):
     self.assertTrue(Family.objects.filter(name=test_family["name"]).exists())
 
   def test_modify_family_view(self):
+    """Tests that the family update view works correctly."""
     family = Family(**get_test_family())
     family.save()
     self.assertIsNotNone(family.id)
@@ -67,6 +70,7 @@ class TestFamilyView(MemberTestCase):
 class TestModalFamilyView(MemberTestCase):
 
   def test_modal_family_create_view(self):
+    """Tests family creation via modal view."""
     cr_family_url = reverse("members:modal_create_family")
     response = self.client.get(cr_family_url)
     self.assertEqual(response.status_code, 200)
@@ -88,6 +92,7 @@ class TestModalFamilyView(MemberTestCase):
     # pprint(vars(response))
 
   def test_modify_modal_family_view(self):
+    """Tests family update via modal view."""
     # test get update
     family = Family(**get_test_family())
     family.save()

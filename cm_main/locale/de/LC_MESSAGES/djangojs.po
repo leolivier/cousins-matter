@@ -1,10 +1,6 @@
-# German Translations for NO NAME FOUND app.
-# Copyright (C) 2024 <OWNER>
+# German Translations for javascript labels.
+# Copyright (C) 2024 Olivier LEVILLAIN
 # This file is distributed under the same license as the application.
-# This file was generated from cm_main/locale/fr/LC_MESSAGES/djangojs.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# by the model.
 # Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
@@ -12,127 +8,69 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: Olivier LEVILLAIN <olivier@levillain.eu>\n"
-"POT-Creation-Date: 2024-04-28 16:06+0200\n"
+"POT-Creation-Date: 2025-10-04 16:06+0200\n"
 "PO-Revision-Date: 2024-12-30 12:56+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
-"Language-Team: French <LL@li.org>\n"
+"Language-Team: German <LL@li.org>\n"
 "Language: DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. Explanation:  Both "Today" and "Aujourd'hui" are direct translations of the
-#. English phrase. The German word "heute" is a common way to express "today".
 msgid "Today"
 msgstr "Heute"
 
-#. Explanation:  Both "clear" and "effacer" convey the idea of removing or
-#. making something disappear. In this context, "Klar" is a more direct and
-#. concise way to express the meaning of "Clear".
 msgid "Clear"
 msgstr "Klar"
 
-#. Explanation:  Both "Cancel" and "Annuler" mean to cancel or stop something.
-#. While "Cancel" is more common in English, "Annuler" is a direct equivalent
-#. in French. The German word "Abbrechen" also means "cancel" but it carries a
-#. slightly different nuance of stopping something abruptly.
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#. Explanation:  "Jetzt" is the most accurate and natural translation of "now"
-#. in German. It conveys the same meaning as "Maintenant" in French,
-#. indicating a present moment or time.
 msgid "Now"
 msgstr "Jetzt"
 
-#. Explanation:  Both "validate" and "valider" mean to confirm or verify
-#. something. The German word "verifizieren" is a direct translation of the
-#. French phrase, conveying the same meaning as "validate".
 msgid "Validate"
 msgstr "Verifizieren"
 
-#. Explanation:  Both "Delete" and "Supprimer" mean to remove or erase
-#. something. The German word "löschen" is a direct translation of the English
-#. phrase "delete" in this context, conveying the same meaning as the French
-#. translation.
 msgid "Delete"
 msgstr "Löschen"
 
-#. **Explanation:**  The French translation is a bit more formal and direct.
-#. The German translation uses the imperative form of the verb "seht", which
-#. means "look" or "see". This reflects the tone of the original sentence,
-#. which is asking for confirmation before deleting something.
+msgid "Send"
+msgstr "Senden"
+
 msgid "Are you sure you want to delete this comment?"
 msgstr "Seht ihr sicher, dass ihr diesen Kommentar löschen wollt?"
 
-#. Explanation: The French translation accurately conveys the meaning of the
-#. English sentence.  The German translation uses a more formal and direct
-#. tone to match the French version. It also maintains the same structure and
-#. word order as the original.
 msgid "Are you sure you want to delete this reply and its comments?"
 msgstr ""
 "Sind Sie sicher, dass Sie diese Antwort und ihre Kommentare löschen möchten?"
 
-#. Explanation: The German translation accurately conveys the meaning of the
-#. French sentence, while maintaining a similar tone and structure.  The use
-#. of "der Text" for "the message content" is consistent with the original
-#. text's emphasis on the size of the message itself.
 msgid "The message content is too large. Please select smaller images."
 msgstr "Der Text ist zu groß. Bitte wählen Sie kleinere Bilder."
 
-#. Explanation: The French translation is a direct and clear translation of
-#. the English sentence.  The German translation uses the same structure as
-#. the French translation to maintain consistency in meaning. "Es-tu sicher"
-#. means "Are you sure" and "dass du dieses Nachricht löschen willst" means
-#. "that you want to delete this message".
 msgid "Are you sure you want to delete this message?"
 msgstr "Seest du sicher, dass du dieses Nachricht löschen willst?"
 
-#. Explanation: The English phrase "Deletion confirmed..." is translated into
-#. German as "Auslöschung bestätigt...". This accurately reflects the meaning
-#. of the French translation, which means "Deletion confirmed".  The use of
-#. "Auslöschung" (deletion) and "bestätigt" (confirmed) maintains the original
-#. meaning.
 msgid "Deletion confirmed..."
 msgstr "Auslöschung bestätigt..."
 
-#. Explanation: The French translation, "Le message est vide!", indicates that
-#. the message is devoid of content.  This translates directly to "Die
-#. Nachricht ist leer!" in German, conveying the same meaning.
 msgid "The message was empty!"
 msgstr "Die Nachricht ist leer!"
 
-#. Explanation: The French translation "Non valide !" is a clear and concise
-#. way to express that something is not valid.  The German translation, "Nicht
-#. gültig!", uses the same structure and meaning as the French translation. It
-#. accurately conveys the message of "Not valid!".
 msgid "Not valid!"
 msgstr "Nicht gültig!"
 
-#. Explanation: The provided text is a placeholder for a name and an answer.
-#. The German translation directly incorporates the placeholders into the
-#. sentence structure, maintaining the original meaning.
-#. Let me know if you have any other sentences to translate!
 msgid "%s answer"
 msgid_plural "%s answers"
 msgstr[0] "%s réponse"
 msgstr[1] "%s réponses"
 
-#. Explanation: The provided text is a placeholder for a user-specific
-#. comment.  The German translation should reflect this, using the same format
-#. and keeping the placeholder intact.
-#. Let me know if you have any other sentences to translate!
 msgid "%s comment"
 msgid_plural "%s comments"
 msgstr[0] "%s commentaire"
 msgstr[1] "%s commentaires"
 
-#. Explanation:  "Profile" and "profil" both refer to a specific description
-#. or representation of someone or something. The English word is often used
-#. in the context of social media, online platforms, or personal information.
-#. In German, "Profil" directly translates to "profile," conveying the same
-#. meaning.
 msgid "profile"
 msgstr "Profil"
 

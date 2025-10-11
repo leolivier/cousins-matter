@@ -32,3 +32,4 @@ media/
 **/*.rdb
 **/.env.example
 **/.github
+scripts/dev/

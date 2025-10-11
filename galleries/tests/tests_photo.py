@@ -22,6 +22,7 @@ def get_photo_name():
 
 class CheckLoginRequired(TestLoginRequiredMixin, TestCase):
   def test_login_required(self):
+    """Tests login required for photo views."""
     self.assertRedirectsToLogin('galleries:photo', args=[1])
 
 
@@ -38,27 +39,32 @@ class PhotoTestsBase(GalleryBaseTestCase):
 
 class CreatePhotoTests(PhotoTestsBase):
   def test_create_photo_no_gallery(self):
+    """Tests creating a photo with no gallery."""
     with self.assertRaises(ValidationError):
       p = Photo(name=get_photo_name(), date=date.today(), image=self.image, gallery=None)
       p.save()
 
   def test_create_photo_no_date(self):
+    """Tests creating a photo with no date."""
     with self.assertRaises(ValidationError):
       p = Photo(name=get_photo_name(), image=self.image, gallery=self.root_gallery)
       p.save()
 
   def test_create_photo_no_image(self):
+    """Tests creating a photo with no image."""
     with self.assertRaises(ValidationError):
       p = Photo(name=get_photo_name(), gallery=self.root_gallery, date=date.today(), description="a test photo")
       p.save()
 
   def test_create_photo(self):
+    """Tests creating a photo."""
     name = get_photo_name()
     p = Photo(name=name, gallery=self.root_gallery, date=date.today(), image=self.image, description="a test photo")
     p.save()
     self.assertTrue(Photo.objects.filter(name=name).exists())
 
   def test_create_photo_too_big(self):
+    """Tests creating a photo that is too big."""
     image = create_test_image(__file__, "image-toobig.jpg")
     with self.assertRaises(ValidationError):
       p = Photo(name=get_photo_name(), gallery=self.root_gallery, date=date.today(),
@@ -68,6 +74,7 @@ class CreatePhotoTests(PhotoTestsBase):
 
 class CreatePhotoViewTests(PhotoTestsBase):
   def test_create_photo_view(self):
+    """Tests creating a photo through the view."""
     ap_url = reverse('galleries:add_photo', kwargs={'gallery': self.root_gallery.id})
     response = self.client.get(ap_url, follow=True)
     # print("response:", response)
@@ -184,6 +191,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
       self.check_display_several_photos(page_size, nb_photos, page_num + 1, gallery)
 
   def test_display_several_photos(self):
+    """Tests displaying several photos."""
     self.check_display_several_photos(10, 9)
     self.check_display_several_photos(10, 12)
 
@@ -199,14 +207,14 @@ class DeletePhotoViewTest(PhotoTestsBase):
         self.url = reverse('galleries:delete_photo', args=[self.photo.id])
 
     def test_delete_photo_no_owner(self):
-        """Test deleting a photo with no owner (should succeed)"""
+        """Tests deleting a photo with no owner (should succeed)."""
         response = self.client.post(self.url, follow=True)
         self.assertRedirects(response, reverse('galleries:detail', kwargs={'pk': self.photo.gallery.id}), 302, 200)
         self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
         self.assertContainsMessage(response, "success", _('Photo deleted'))
 
     def test_delete_photo_as_owner(self):
-        """Test deleting a photo as the photo owner"""
+        """Tests deleting a photo as the photo owner."""
         self.photo.uploaded_by = self.member
         self.photo.save()
         response = self.client.post(self.url, follow=True)
@@ -215,7 +223,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
         self.assertContainsMessage(response, "success", _('Photo deleted'))
 
     def test_delete_photo_as_gallery_owner(self):
-        """Test deleting a photo as the gallery owner"""
+        """Tests deleting a photo as the gallery owner."""
         other_member = self.create_member()
         self.photo.uploaded_by = other_member
         self.photo.save()
@@ -227,7 +235,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
         self.assertContainsMessage(response, "success", _('Photo deleted'))
 
     def test_delete_photo_unauthorized(self):
-        """Test deleting a photo without proper permissions"""
+        """Tests deleting a photo without proper permissions."""
         other_member = self.create_member()
         self.photo.uploaded_by = other_member
         self.photo.save()
@@ -236,7 +244,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
         self.assertTrue(Photo.objects.filter(pk=self.photo.id).exists())
 
     def test_delete_nonexistent_photo(self):
-        """Test deleting a photo that doesn't exist"""
+        """Tests deleting a photo that doesn't exist."""
         url = reverse('galleries:delete_photo', args=[99999])
         response = self.client.post(url, follow=True)
         self.assertEqual(response.status_code, 404)
@@ -257,7 +265,7 @@ class PhotoEditViewTest(PhotoTestsBase):
         }
 
     def test_edit_photo_no_owner(self):
-        """Test editing a photo with no owner (should succeed)"""
+        """Tests editing a photo with no owner (should succeed)."""
         response = self.client.post(self.url, self.update_data, follow=True)
         self.assertRedirects(response, reverse('galleries:photo', kwargs={'pk': self.photo.id}), 302, 200)
         updated_photo = Photo.objects.get(pk=self.photo.id)
@@ -265,7 +273,7 @@ class PhotoEditViewTest(PhotoTestsBase):
         self.assertContainsMessage(response, "success", _("Photo updated successfully"))
 
     def test_edit_photo_as_owner(self):
-        """Test editing a photo as the photo owner"""
+        """Tests editing a photo as the photo owner."""
         self.photo.uploaded_by = self.member
         self.photo.save()
         response = self.client.post(self.url, self.update_data, follow=True)
@@ -275,7 +283,7 @@ class PhotoEditViewTest(PhotoTestsBase):
         self.assertContainsMessage(response, "success", _("Photo updated successfully"))
 
     def test_edit_photo_unauthorized(self):
-        """Test editing a photo without proper permissions"""
+        """Tests editing a photo without proper permissions."""
         other_member = self.create_member()
         self.photo.uploaded_by = other_member
         self.photo.save()
@@ -285,7 +293,7 @@ class PhotoEditViewTest(PhotoTestsBase):
         self.assertEqual(unchanged_photo.name, self.name)
 
     def test_edit_nonexistent_photo(self):
-        """Test editing a photo that doesn't exist"""
+        """Tests editing a photo that doesn't exist."""
         url = reverse('galleries:edit_photo', args=[99999])
         response = self.client.post(url, self.update_data, follow=True)
         self.assertEqual(response.status_code, 404)

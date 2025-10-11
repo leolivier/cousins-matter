@@ -36,6 +36,9 @@ msgstr "Valider"
 msgid "Delete"
 msgstr "Supprimer"
 
+msgid "Send"
+msgstr "Envoyer"
+
 msgid "Are you sure you want to delete this comment?"
 msgstr "Es-tu sûr(e) de vouloir supprimer ce commentaire?"
 

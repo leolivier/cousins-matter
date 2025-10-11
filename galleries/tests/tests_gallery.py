@@ -24,6 +24,7 @@ def get_gallery_name():
 
 class CheckLoginRequired(TestLoginRequiredMixin, TestCase):
   def test_login_required(self):
+    """Tests login required for galleries views."""
     for url in ['galleries:galleries', 'galleries:create']:
       self.assertRedirectsToLogin(url)
 
@@ -33,6 +34,7 @@ class CheckLoginRequired(TestLoginRequiredMixin, TestCase):
 
 class CreateGalleryTest(GalleryBaseTestCase):
   def test_create_root_gallery(self):
+    """Tests creating a root gallery."""
     gal_name = get_gallery_name()
     rg = Gallery(name=gal_name, description="a test root gallery")
     rg.save()
@@ -42,6 +44,7 @@ class CreateGalleryTest(GalleryBaseTestCase):
     self.assertTrue(rg.cover_url() == settings.DEFAULT_GALLERY_COVER_URL)
 
   def test_create_sub_gallery(self):
+    """Tests creating a sub gallery."""
     rgal_name = get_gallery_name()
     rg = Gallery(name=rgal_name)
     rg.save()
@@ -52,6 +55,7 @@ class CreateGalleryTest(GalleryBaseTestCase):
     self.assertTrue(Gallery.objects.get(name=rgal_name, parent=None).children.first().name == sgal_name)
 
   def test_create_gallery_with_cover(self):
+    """Tests creating a gallery with a cover."""
     gal = Gallery(name=get_gallery_name(), description="a gallery with a cover")
     gal.save()
     cover_file = "test-image-1.jpg"
@@ -64,6 +68,7 @@ class CreateGalleryTest(GalleryBaseTestCase):
     self.assertTrue(os.path.isfile(os.path.join(gal_dir, cover_file)))
 
   def test_create_galleries_with_same_name(self):
+    """Tests creating galleries with the same name."""
     rgal_name = get_gallery_name()
     rg = Gallery(name=rgal_name)
     rg.save()
@@ -78,6 +83,7 @@ class CreateGalleryTest(GalleryBaseTestCase):
 
 class CreateGalleryViewTest(GalleryBaseTestCase):
   def test_create_root_gallery(self):
+    """Tests creating a root gallery through the view."""
     url = reverse("galleries:create")
     response = self.client.get(url)
     # print(response.content)
@@ -108,6 +114,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     self.assertTrue(rg.cover_url() == settings.DEFAULT_GALLERY_COVER_URL)
 
   def test_create_sub_gallery(self):
+    """Tests creating a sub gallery through the view."""
     # create a root gallery directly
     rgal_name = get_gallery_name()
     rg = Gallery(name=rgal_name)
@@ -157,6 +164,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
 </div>''', html=True)
 
   def test_modify_gallery(self):
+    """Tests modifying a gallery through the view."""
     # create a gallery
     gal_name = get_gallery_name()
     rg = Gallery(name=gal_name)
@@ -222,6 +230,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     return html
 
   def test_tree_view(self):
+    """Tests the tree view of galleries."""
     htmls = self.rec_build_tree(4)
     url = reverse("galleries:galleries")
     response = self.client.get(url)
@@ -242,6 +251,7 @@ class DeleteGalleryViewTest(GalleryBaseTestCase):
     return [(gal.id, p.id)] + res
 
   def test_delete_gallery(self):
+    """Tests deleting a gallery through the view."""
     image = create_test_image(__file__, "test-image-1.jpg")
     lst = self.rec_build_tree(3, None, image)
     # find the 1rst gallery below root

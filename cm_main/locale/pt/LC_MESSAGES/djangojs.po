@@ -1,10 +1,6 @@
-# Portuguese Translations for NO NAME FOUND app.
-# Copyright (C) 2024 <OWNER>
+# Portuguese Translations for javascript labels.
+# Copyright (C) 2024 Olivier LEVILLAIN
 # This file is distributed under the same license as the application.
-# This file was generated from cm_main/locale/fr/LC_MESSAGES/djangojs.po by [Auto-po-lyglot](https://github.com/leolivier/auto-po-lyglot)
-# using the qwen2.5:3b model. Depending on the model, it may contain some errors and should be reviewed
-# by a human translator. Also depending on the model, each translation can be preceded by an explanation provided
-# by the model.
 # Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
 #, fuzzy
@@ -39,6 +35,9 @@ msgstr "Validar"
 
 msgid "Delete"
 msgstr "Apagar"
+
+msgid "Send"
+msgstr "Enviar"
 
 msgid "Are you sure you want to delete this comment?"
 msgstr "Você está seguro de querer apagar esse comentário?"

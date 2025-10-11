@@ -39,7 +39,7 @@ for var in ADMIN ADMIN_PASSWORD ADMIN_EMAIL ADMIN_FIRSTNAME ADMIN_LASTNAME
 do
     eval val="\${$var}"
     esc=$(printf '%s' "$val" | sed 's/[&\/]/\\&/g')
-    sed i -e "s/^$var=.*/$var=$esc/" "$tmpfile"
+    sed -i -e "s/^$var=.*/$var=$esc/" "$tmpfile"
 done
 cat "$tmpfile" > .env
 rm -f "$tmpfile"

@@ -11,7 +11,7 @@ set_variables
 tmpdir=$(mktemp -d)
 echo "tmpdir: $tmpdir"
 
-python ./scripts/manage_cousins_matter.py install -d "$tmpdir" -b "$curbranch" -n
+python ./scripts/manage_cousins_matter.py install -d "$tmpdir" "$release_or_branch" "$ref" -n
 [[ $? != 0 ]] && error 1 "manage_cousins_matter failed to install Cousins Matter"
 
 cd $tmpdir

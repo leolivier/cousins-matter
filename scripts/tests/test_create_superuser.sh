@@ -11,7 +11,7 @@ set_variables
 tmpdir=$(mktemp -d)
 echo "tmpdir: $tmpdir"
 
-python ./scripts/manage_cousins_matter.py install -d "$tmpdir" -b "$curbranch" -n
+python ./scripts/manage_cousins_matter.py install -d "$tmpdir" "$release_or_branch" "$ref" -n
 [[ $? != 0 ]] && error 1 "manage_cousins_matter failed to install Cousins Matter"
 
 pushd "$tmpdir"
@@ -19,7 +19,7 @@ pushd "$tmpdir"
 # .env must have been created by manage_cousins_matter install above
 [[ ! -f .env ]] && error 1 "No .env file found in $tmpdir"
 
-export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-"cousins-matter:$curbranch"}
+export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-"cousins-matter:$ref"}
 echo "COUSINS_MATTER_IMAGE: $COUSINS_MATTER_IMAGE"
 
  # as we didn't fill the ADMIN_xxx variables in .env, the container will fail to create the superuser

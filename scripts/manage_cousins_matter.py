@@ -144,16 +144,19 @@ def github_latest_release(repo: str) -> str:
     return tag
 
 
-def get_github_base_url(branch: str | None) -> str:
-    """Will return the base URL for the given branch or latest release if branch is None"""
-    if branch:
+def get_github_base_url(branch: str | None, release: str | None) -> str:
+    """Will return the base URL for the given branch or release if branch is None.
+       Default release is latest if branch is None"""
+    if branch and not release:
         return f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/{branch}"
     else:
-        try:
-            last_release = github_latest_release(GITHUB_REPO)
-            return f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/tags/{last_release}"
-        except Exception as ex:
-            error(1, f"Failed to obtain latest release from GitHub: {ex}")
+        release = release or "latest"
+        if release == "latest":
+            try:
+                release = github_latest_release(GITHUB_REPO)
+            except Exception as ex:
+                error(1, f"Failed to obtain latest release from GitHub: {ex}")
+        return f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/tags/{release}"
 
 
 def download_github_file(file: str, dest: Path, base_url: str):
@@ -174,13 +177,13 @@ def download_github_file(file: str, dest: Path, base_url: str):
         error(1, f"Downloading {file} failed: {ex}")
 
 
-def download_V2_needed_files(directory: Path, branch: str | None):
+def download_V2_needed_files(directory: Path, branch: str | None, release: str | None):
     files_to_download = [
             ("docker-compose.yml", directory / "docker-compose.yml"),
             (".env.example", directory / ".env.example"),
             ("config/nginx.conf", directory / "config" / "nginx.conf"),
         ]
-    base_url = get_github_base_url(branch)
+    base_url = get_github_base_url(branch, release)
     for rel, dest in files_to_download:
         download_github_file(rel, dest, base_url)
     # copy myself to scripts/ (already downloaded)
@@ -396,7 +399,7 @@ def migrate_v1_v2(args):
     # fix_permissions()
 
     verbose("Downloading v2 scripts...")
-    download_V2_needed_files(directory, branch=args.branch)
+    download_V2_needed_files(directory, branch=args.branch, release=args.release)
 
     verbose("Rotating secrets...")
     rotate_secrets()
@@ -491,7 +494,7 @@ def install_cousins_matter(args):
 
     if not args.review_environment:
         # Normal install: download files
-        download_V2_needed_files(directory, args.branch)
+        download_V2_needed_files(directory, args.branch, args.release)
 
         # Create .env from .env.example if .env is missing
         verbose("Creating .env from .env.example...")
@@ -562,7 +565,10 @@ from GitHub, and rotates the secret key.
     """)
     p_migrate.add_argument("-d", "--directory", dest="directory", default=os.getcwd(),
                            help="cousins-matter directory (default: current directory)")
-    p_migrate.add_argument("-b", "--branch", dest="branch", default=None, help="branch to use (default: latest release)")
+    p_migrate.add_argument("-b", "--branch", dest="branch", default=None, help="""
+branch to use (default: none, -r always takes precedence)""")
+    p_migrate.add_argument("-r", "--release", dest="release", default=None, help="""
+release to use (default: latest release, takes precedence over -b)""")
     p_migrate.set_defaults(func=migrate_v1_v2)
 
     # Install subcommand
@@ -578,7 +584,9 @@ ie in a CI/CD workflow""")
 the target directory where cousins-matter will be installed. Defaults is "." if -e is specified, otherwise
 ./cousins-matter. In this case, directory must either not exist or be empty.""")
     p_install.add_argument("-b", "--branch", dest="branch", default=None, help="""
-branch to use for downloading files from GitHub (default: latest release)""")
+branch to use for downloading files from GitHub (default: none, -r always takes precedence)""")
+    p_install.add_argument("-r", "--release", dest="release", default=None, help="""
+Release to use for downloading files from GitHub (default: latest release, always takes precedence over -b)""")
     p_install.add_argument("-n", "--no-editor", dest="no_editor", action="store_true", help="""
 do not start an editor to edit .env at the end of the process""")
     p_install.set_defaults(func=install_cousins_matter)

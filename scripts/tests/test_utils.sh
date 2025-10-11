@@ -52,26 +52,37 @@ get_args() {
 	done
 }
 
+get_github_branch_or_release() {
+	ref="${GITHUB_REF:-}"
+	if [[ $ref =~ refs/heads/* ]]; then
+		ref="${ref#refs/heads/}"
+		release_or_branch='-b'
+	elif [[ $ref =~ refs/tags/* ]]; then
+		ref="${ref#refs/tags/}"
+		release_or_branch='-r'
+	else
+		ref="latest"
+		release_or_branch='-r'
+	fi
+}
+
 set_variables() {
 	if [[ -n $github_action ]]; then
-		curbranch="${GITHUB_REF_NAME:-}"
-		ref="${GITHUB_REF:-}"
-		if [ -z "$curbranch" ]; then
-			# extraire depuis GITHUB_REF si nécessaire
-			curbranch="${ref#refs/heads/}"
-			curbranch="${curbranch#refs/tags/}"
-		fi
-		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-$curbranch}}
-	elif [[ -z $remote ]]; then  # if we are testing a local image, compute curbranch
-		curbranch=$(git rev-parse --abbrev-ref HEAD)
-		curbranch=${curbranch:-local}
-		tag=${COUSINS_MATTER_IMAGE:-$container:${tag:-$curbranch}}
+		get_github_branch_or_release
+		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-$ref}}
+	elif [[ -z $remote ]]; then  # if we are testing a local image, compute ref
+		ref=$(git rev-parse --abbrev-ref HEAD)
+		ref=${ref:-local}
+		release_or_branch='-b'
+		tag=${COUSINS_MATTER_IMAGE:-$container:${tag:-$ref}}
 	else  # if we are testing a remote image locally, use the tag provided
-		curbranch=$tag
+		ref=$tag
+		release_or_branch='-r'
 		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-latest}}
 	fi
-	echo "Branch: $curbranch"
+	echo "Ref: $ref"
 	echo "Tag: $tag"
+	echo "Release or branch: $release_or_branch"
 	if [[ $tag =~ ^$container: ]]; then  # if we are testing a local image, check git status
 		if [[ -n $(git status -s) || -n $(git log @{u}..) ]]; then
 			echo "###########################################################################################"

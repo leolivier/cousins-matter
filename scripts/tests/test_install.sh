@@ -29,8 +29,8 @@ do
     sed -i -e "s/^$var=.*/$var=${!var}/" .env
 done
 
-export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-"cousins-matter:$curbranch"}
-echo "COUSINS_MATTER_IMAGE: $COUSINS_MATTER_IMAGE"
+export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-$tag}
+echo "tested image: $COUSINS_MATTER_IMAGE"
 
 docker_run_cousins_matter
 

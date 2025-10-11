@@ -19,8 +19,9 @@ cd $tmpdir
 [[ ! -f .env ]] && error 1 "No .env file found in $tmpdir"
 # no need to set the superuser variables as the superuser must already exist in tha database
 # the postgres password is added by the migration tool
-export COUSINS_MATTER_IMAGE=$tag
+export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-$tag}
 echo "tested image: $COUSINS_MATTER_IMAGE"
+
 python "$script_dir/manage_cousins_matter.py" migrate-v1-v2 -d "$tmpdir" -b "$curbranch"
 [[ $? != 0 ]] && error 1 "manage_cousins_matter failed to migrate from v1 to v2"
 

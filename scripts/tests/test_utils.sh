@@ -31,6 +31,9 @@ args:
 								(can be a branch name or a release tag like v1.0.0). Defaults to 'latest'.
 								Otherwise (-r and -g not set), this is the tag of the local image.
 								Defaults to the current branch name if any else 'local'
+				IMPORTANT: if COUSINS_MATTER_IMAGE is set, it will be used instead of the image name computed using the other parameters
+				but the other parameters will still be used to compute the "current branch" to know from where to take the different files
+				to test (e.g. .env, manage_cousins_matter.py, etc)
 EOF
 }
 
@@ -53,14 +56,14 @@ set_variables() {
 	if [[ -n $github_action ]]; then
 		curbranch="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
 		echo "Branch: $curbranch"
-		tag=$image:${tag:-$curbranch}
+		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-$curbranch}}
 	elif [[ -z $remote ]]; then  # if we are testing a local image, compute curbranch
 		curbranch=$(git rev-parse --abbrev-ref HEAD)
 		curbranch=${curbranch:-local}
-		tag=$container:${tag:-$curbranch}
+		tag=${COUSINS_MATTER_IMAGE:-$container:${tag:-$curbranch}}
 	else  # if we are testing a remote image locally, use the tag provided
 		curbranch=$tag
-		tag=$image:${tag:-latest}
+		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-latest}}
 	fi
 
 	if [[ $tag =~ ^$container: ]]; then  # if we are testing a local image, check git status

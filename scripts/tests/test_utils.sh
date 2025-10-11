@@ -54,8 +54,13 @@ get_args() {
 
 set_variables() {
 	if [[ -n $github_action ]]; then
-		curbranch="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
-		echo "Branch: $curbranch"
+		curbranch="${GITHUB_REF_NAME:-}"
+		ref="${GITHUB_REF:-}"
+		if [ -z "$curbranch" ]; then
+			# extraire depuis GITHUB_REF si nécessaire
+			curbranch="${ref#refs/heads/}"
+			curbranch="${curbranch#refs/tags/}"
+		fi
 		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-$curbranch}}
 	elif [[ -z $remote ]]; then  # if we are testing a local image, compute curbranch
 		curbranch=$(git rev-parse --abbrev-ref HEAD)
@@ -65,7 +70,8 @@ set_variables() {
 		curbranch=$tag
 		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-latest}}
 	fi
-
+	echo "Branch: $curbranch"
+	echo "Tag: $tag"
 	if [[ $tag =~ ^$container: ]]; then  # if we are testing a local image, check git status
 		if [[ -n $(git status -s) || -n $(git log @{u}..) ]]; then
 			echo "###########################################################################################"

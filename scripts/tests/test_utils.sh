@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # utils functions and variables to be sourced in tests
 
@@ -54,23 +54,27 @@ get_args() {
 
 get_github_branch_or_release() {
 	ref="${GITHUB_REF:-}"
-	if [[ $ref =~ refs/heads/* ]]; then
-		ref="${ref#refs/heads/}"
-		release_or_branch='-b'
-	elif [[ $ref =~ refs/tags/* ]]; then
-		ref="${ref#refs/tags/}"
-		release_or_branch='-r'
-	else
-		ref="latest"
-		release_or_branch='-r'
-	fi
+	case "$ref" in
+		refs/heads/*)
+			ref="${ref#refs/heads/}"
+			release_or_branch='-b'
+			;;
+		refs/tags/*)
+			ref="${ref#refs/tags/}"
+			release_or_branch='-r'
+			;;
+		*)
+			ref="latest"
+			release_or_branch='-r'
+			;;
+	esac
 }
 
 set_variables() {
-	if [[ -n $github_action ]]; then
+	if [ -n "$github_action" ]; then
 		get_github_branch_or_release
 		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-$ref}}
-	elif [[ -z $remote ]]; then  # if we are testing a local image, compute ref
+	elif [ -z "$remote" ]; then  # if we are testing a local image, compute ref
 		ref=$(git rev-parse --abbrev-ref HEAD)
 		ref=${ref:-local}
 		release_or_branch='-b'
@@ -83,8 +87,10 @@ set_variables() {
 	echo "Ref: $ref"
 	echo "Tag: $tag"
 	echo "Release or branch: $release_or_branch"
-	if [[ $tag =~ ^$container: ]]; then  # if we are testing a local image, check git status
-		if [[ -n $(git status -s) || -n $(git log @{u}..) ]]; then
+	case "$tag" in
+		"$container":*)
+			# if we are testing a local image, check git status
+			if [ -n "$(git status -s)" ] || [ -n "$(git log @{u}.. 2>/dev/null)" ]; then
 			echo "###########################################################################################"
 			echo "# WARNING! Some files may have been modified and not pushed to github.                    #"
 			echo "# As some files are downloaded from github by manage_cousins_matter, the test might not   #"
@@ -92,19 +98,22 @@ set_variables() {
 			echo "###########################################################################################"
 			git status -s
 			git log @{u}..
-		fi
-	fi
+			fi
+			;;
+		*)
+			;;
+	esac
 }
 
 docker_run_cousins_matter() {
 
-	(docker images --format "{{.Repository}}:{{.Tag}}" | grep $COUSINS_MATTER_IMAGE) || error 1 "Image $COUSINS_MATTER_IMAGE not found"
+	(docker images --format "{{.Repository}}:{{.Tag}}" | grep -q -- "$COUSINS_MATTER_IMAGE") || error 1 "Image $COUSINS_MATTER_IMAGE not found"
 
 	docker compose up -d --wait --wait-timeout 45
 	sleep 5  # let the system stabilize
 
 	docker ps -a --filter name=cousins-matter --format '{{.Names}} {{.State}} "{{.Status}}"' | while read -r name state status; do
-		if [[ $state != "running" ]]; then
+		if [ "$state" != "running" ]; then
 			echo "#########################################################################################"
 			echo "# ERROR! $name $status"
 			echo "#########################################################################################"

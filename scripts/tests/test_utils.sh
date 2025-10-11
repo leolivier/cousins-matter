@@ -37,7 +37,7 @@ EOF
 get_args() {
 	cmd_desc=$1
 	shift
-	while getopts ":hrt:" opt; do
+	while getopts ":hrgt:" opt; do
 					case $opt in
 									h) usage "$cmd_desc"; exit 0;;
 									r) remote=true;;

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # this script is expected to be run from the root of the dev environment project
-set -x
+
 # import utils functions and variables
 source $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/test_utils.sh
 

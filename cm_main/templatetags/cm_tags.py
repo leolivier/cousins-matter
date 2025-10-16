@@ -10,6 +10,9 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
 from functools import lru_cache
+
+from cousinsmatter.icons import DJANGO_ICONS
+
 register = Library()
 logger = logging.getLogger(__name__)
 
@@ -176,8 +179,8 @@ def inline_css(css_url):
 @register.simple_tag
 def icon(name, clazz="icon", aria_hidden=False):
     name = name.lower()
-    if name in settings.DJANGO_ICONS:
-        name = settings.DJANGO_ICONS[name]
+    if name in DJANGO_ICONS:
+        name = DJANGO_ICONS[name]
     if clazz != "icon":
         if "icon" not in clazz:
             clazz = "icon " + clazz

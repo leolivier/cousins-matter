@@ -189,7 +189,10 @@ def download_V2_needed_files(directory: Path, branch: str | None, release: str |
     # copy myself to scripts/ (already downloaded)
     script_dir = directory / "scripts"
     script_dir.mkdir(parents=True, exist_ok=True)
-    shutil.copy(__file__, script_dir)
+    try:
+        shutil.copy(__file__, script_dir)
+    except shutil.SameFileError:
+        pass
 
 
 def check_cousins_matter_is_down():

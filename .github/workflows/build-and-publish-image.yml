@@ -95,6 +95,7 @@ jobs:
 
       - name: Write .env
         run: |
+          # Q_SYNC=True to make sure django-q tests are run synchronously
           cat > $GITHUB_WORKSPACE/.env <<'EOF'
           SECRET_KEY=
           SITE_NAME=My Beautiful Site
@@ -105,6 +106,7 @@ jobs:
           EMAIL_HOST_USER=nobody@gmail.com
           EMAIL_HOST_PASSWORD=no matter
           POSTGRES_PASSWORD=
+          Q_SYNC=True
           EOF
 
       - name: export COUSINS_MATTER_IMAGE in environment

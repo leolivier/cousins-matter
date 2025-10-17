@@ -1,71 +1,41 @@
 import logging
 import shutil
-# import time
 import zipfile
 import os
 import mimetypes
-import sys
 import tempfile
 import pathlib
-from dataclasses import dataclass, field
-from datetime import datetime
+import uuid
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import SuspiciousFileOperation
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from PIL import Image, ImageOps
-from io import BytesIO
 from django.db.models import ObjectDoesNotExist
 from django.forms import ValidationError
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
-from django_q.tasks import async_task, result_group, Task, count_group
+
+from django_q.tasks import async_task, result_group, count_group
 from django_q.brokers import get_broker
 
-from cm_main.utils import ajax_redirect
-
-from ..models import Gallery, Photo
+from ..models import Gallery
 from ..forms import BulkUploadPhotosForm
+from ..tasks import ZipImport, handle_photo_file, post_create_photo
 
 logger = logging.getLogger(__name__)
 
 
-@dataclass
-class ZipImport:
-    root: str = ""  # temp directory where the zip is extracted
-    owner_id: str = ""  # member id of the member who imports the photos
-    galleries: dict[Gallery] = field(default_factory=dict)  # galleries cache, contains both created and pre-existing galleries
-    nbPhotos: int = 0  # number of tasks created for importing photos
-    nbGalleries: int = 0
-    group: str = ""  # group of tasks
-    # photos and errors are sets to avoid duplicates, they are filled in upload_progress (so, after tasks are finished)
-    photos: set[str] = field(default_factory=set)
-    errors: set[str] = field(default_factory=set)
-
-    def register(self):
-      ZIP_IMPORTS[self.group] = self
-
-    def unregister(self):
-      if self.group in ZIP_IMPORTS:
-        del ZIP_IMPORTS[self.group]
-
-
-# in memory cache of ZipImports
-ZIP_IMPORTS: dict[ZipImport] = {}
-
-
 def _get_parent_gallery(path: str, zimport: ZipImport):  # path should be directory
-    """
-    Returns the gallery inside which the gallery denoted by path is to be created.
-    args: "path" should be one of a folder
-    """
-    parent_dir = os.path.dirname(os.path.normpath(path))
-    return _get_or_create_gallery(parent_dir, zimport) if parent_dir != '' else None
+  """
+  Returns the gallery inside which the gallery denoted by path is to be created.
+  args: "path" should be one of a folder
+  """
+  parent_dir = os.path.dirname(os.path.normpath(path))
+  return _get_or_create_gallery(parent_dir, zimport) if parent_dir != '' else None
 
 
 def _get_or_create_gallery(path: str, zimport: ZipImport):
@@ -107,82 +77,7 @@ def _get_or_create_gallery(path: str, zimport: ZipImport):
   return gallery
 
 
-def _create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
-  """
-  creates a photo object based on the filename and the content of the
-  temporary file given by filepath (so filename should describe an image)
-  Photos are named by the file name. All folders in the path are transformed
-  into embedded Galleries.
-  Photos date is computed from the exif data of the image.
-  WARNING: if a Photo with the same name already exist in the same gallery, we override it
-  with the new image and date.
-  """
-  # compute all needed fields
-  filename_wo_ext, ext = os.path.splitext(filename)
-  description = _('Imported from zipfile directory %(path)s') % {'path': filename}
-
-  # create photo using an in memory buffer (BytesIO)
-  membuffer = BytesIO()
-  with Image.open(filepath) as img:
-    img = ImageOps.exif_transpose(img)  # avoid image rotating
-    img.save(membuffer, format='JPEG', quality=90)  # save the img in mem buffer
-    exifdata = img.getexif()  # get exif data for the image date
-
-  # reset buffer to beginning
-  membuffer.seek(0)
-  size = sys.getsizeof(membuffer)
-
-  # TODO: save all exif data as a json buffer?
-  # or extract them when showing image detail?
-
-  # compute exif date
-  DateTimeOriginal = 36867
-  DateTime = 306
-  date = exifdata.get(DateTimeOriginal) or exifdata.get(DateTime)
-  date = datetime.today() if date is None or date.startswith("0000") else \
-    datetime.strptime(date, "%Y:%m:%d %H:%M:%S").date()
-  # create image from in memory buffer
-  image = InMemoryUploadedFile(membuffer, 'ImageField', f"{filename_wo_ext}.jpg",
-                               'image/jpeg', size, None)
-  # create or update photo object in database
-  # WARNING: if an image with the same name already exist in the gallery, we override it
-  photo = Photo.objects.filter(name=filename, gallery__id=gallery_id)
-  if photo.exists():
-    photo = photo.first()
-    photo.image = image
-    photo.date = date
-    photo.save()
-  else:
-    photo = Photo.objects.create(name=filename, description=description, image=image, date=date,
-                                 gallery_id=gallery_id, uploaded_by_id=zimport.owner_id)
-
-  return os.path.relpath(filepath, zimport.root)
-
-
-def _handle_photo_file(zimport: ZipImport, dir: str, image: str, gallery_id: str):
-  errors = []
-  filepath = os.path.join(dir, image)
-  photo_path = None
-  try:
-    # time.sleep(4)  # artificially slow down fo testing
-    photo_path = _create_photo(image, filepath, zimport, gallery_id)
-  except OSError as oserror:
-    # print an error but continue with next photo
-    error_msg = _("Unable to import photo '%(path)s', it was ignored") % {
-                  'path': os.path.relpath(filepath, zimport.root)
-                  }
-    errors.append(f'''{error_msg}: {oserror.strerror}''')
-  except ValidationError as verr:
-    errors.extend(verr.messages)
-
-  return photo_path, errors
-
-
-def _post_create_photo(task: Task):
-  logger.info(f"create photo {task.args} status: {task.success} result: {task.result} group: {task.group}")
-
-
-def _handle_zip(zip_file, task_group, owner_id):
+def handle_zip(zip_file, task_group, owner_id):
   """
   reads a zip file and creates galleries for each folder
   and create tasks to create photos inside these galleries for each image in the folder.
@@ -206,8 +101,8 @@ def _handle_zip(zip_file, task_group, owner_id):
     gallery_path = os.path.relpath(dir, tmpdir)  # get relative path from temp to see the galleries path
     gallery = _get_or_create_gallery(gallery_path, zimport)
     for image in images:
-      async_task(_handle_photo_file, zimport, dir, image, gallery.id,
-                 group=task_group, cached=False, hook=_post_create_photo, broker=broker)
+      async_task(handle_photo_file, zimport, dir, image, gallery.id,
+                 group=task_group, cached=False, hook=post_create_photo, broker=broker)
       zimport.nbPhotos += 1
       logger.debug(f"created task for {image} group: {task_group}")
 
@@ -215,42 +110,43 @@ def _handle_zip(zip_file, task_group, owner_id):
 
 
 class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
-    template_name = "galleries/bulk_upload.html"
-    form_class = BulkUploadPhotosForm
-    success_url = reverse_lazy("galleries:galleries")
+  template_name = "galleries/bulk_upload.html"
+  form_class = BulkUploadPhotosForm
+  success_url = reverse_lazy("galleries:galleries")
 
-    def post(self, request, *args, **kwargs):
-      # print("post bulk upload")
-      form = BulkUploadPhotosForm(request.POST, request.FILES)
-      if form.is_valid():
-        try:
-          zip_file = request.FILES["zipfile"]
-          task_group = request.POST.get("csrfmiddlewaretoken")
-          zimport = _handle_zip(zip_file, task_group, request.user.id)
-          hx_get_url = reverse("galleries:upload_progress", args=(task_group,))
-          logger.debug(f"rendering first progress-bar url: {hx_get_url}")
-          return render(request, "cm_main/common/progress-bar.html",
-                        {"hx_get": hx_get_url, "frequency": "1s",
-                         "value": 0, "max": zimport.nbPhotos, "text": "0%"},
-                        status=200)
-          # print("post upload progress returns", r.content)
-          # return r
-        except ValidationError as e:
-          for err in e.messages:
-            messages.error(request, err)
-          return ajax_redirect(request, reverse("galleries:bulk_upload"))
-        except Exception as e:
-          messages.error(request, e.__str__())
-          return ajax_redirect(request, reverse("galleries:bulk_upload"))
-      else:
-        for code, error in form.errors.items():
-          messages.error(request, ": ".join(code, error))
-        return ajax_redirect(request, reverse("galleries:bulk_upload"))
+  def post(self, request, *args, **kwargs):
+    # print("post bulk upload")
+    form = BulkUploadPhotosForm(request.POST, request.FILES)
+    if form.is_valid():
+      try:
+        zip_file = request.FILES["zipfile"]
+        # task_group = request.POST.get("csrfmiddlewaretoken")  # not generated in test context
+        task_group = uuid.uuid4().hex
+        zimport = handle_zip(zip_file, task_group, request.user.id)
+        hx_get_url = reverse("galleries:upload_progress", args=(task_group,))
+        logger.debug(f"rendering first progress-bar url: {hx_get_url}")
+        return render(request, "cm_main/common/progress-bar.html",
+                      {"hx_get": hx_get_url, "frequency": "1s",
+                        "value": 0, "max": zimport.nbPhotos, "text": "0%"},
+                      status=200)
+        # print("post upload progress returns", r.content)
+        # return r
+      except ValidationError as e:
+        for err in e.messages:
+          messages.error(request, err)
+        return redirect(reverse("galleries:bulk_upload"))
+      except Exception as e:
+        messages.error(request, e.__str__())
+        return redirect(reverse("galleries:bulk_upload"))
+    else:
+      for code, error in form.errors.items():
+        messages.error(request, ": ".join(code, error))
+      return redirect(reverse("galleries:bulk_upload"))
 
 
 @login_required
 def upload_progress(request, id):
-  zimport = ZIP_IMPORTS.get(id, None)
+  zimport = ZipImport.get(id)
   logger.debug(f"upload progress group: {id}, zimport: {zimport}")
   if not zimport:  # removed from the list when completed
     raise Http404(_("Upload not found"))

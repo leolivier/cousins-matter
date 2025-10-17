@@ -25,6 +25,15 @@
 			</li>
 			{% endfor %}
 			{% endif %}
+			{% if warnings %}
+			{%for warning in warnings%}
+			<li class="message is-warning">
+				<div class="message-body">
+					{% autoescape off %}{{ warning }}{% endautoescape %}
+				</div>
+			</li>
+			{% endfor %}
+			{% endif %}
 			{% if processed_objects %}
 			{%for processed_object in processed_objects%}
 			<li class="message is-info">

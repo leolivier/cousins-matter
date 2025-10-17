@@ -46,5 +46,5 @@ urlpatterns = [
   path('select-name/', views_import_export.select_name, name='select_name'),
   path('select-city/', views_import_export.select_city, name='select_city'),
   path('select-family/', views_import_export.select_family, name='select_family'),
-
+  path('import-progress/<str:id>/', views_import_export.import_progress, name='import_progress'),
 ]

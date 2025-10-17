@@ -41,6 +41,8 @@ class TestImportMixin():
     # Check that expected_num members were imported
     self.assertEqual(Member.objects.count(), prev_num+expected_num)
     # Check that specific members were created
+    for member in Member.objects.all():
+      print(member)
     self.assertTrue(Member.objects.filter(first_name='John', last_name='Doe').exists())
     self.assertTrue(Member.objects.filter(email='member2@test.com').exists())
     self.assertTrue(Member.objects.filter(birthdate=date(2000, 1, 3)).exists())
@@ -107,7 +109,8 @@ class TestMemberImport(TestImportMixin, MemberTestCase):
   def _test_import_managers(self, activate_users, expected_result, update=False):
     # self._reset_manager('member-mngd3')
     # self._reset_manager('member-mngd4')
-    self.do_test_import('import_members-managers.csv', 'en-us', expected_num=0 if update else 4, member_prefix='member-mngd',
+    self.do_test_import('import_members-managers.csv', 'en-us',
+                        expected_num=0 if update else 4, member_prefix='member-mngd',
                         activate_users=activate_users, check_active=False)
     for i in range(4):
       name = f'member-mngd{str(i+1)}'
@@ -181,6 +184,7 @@ class TestMemberImport(TestImportMixin, MemberTestCase):
   def test_wrong_field(self):
     response = self.do_upload_file('import_members-wrong-field.csv', 'en-us')
     self.assertEqual(response.status_code, 200)
+    # self.print_response(response)
     # force language to make sure the CSV fields are ok
     with translation.override('en-us'):
       self.assertContainsMessage(

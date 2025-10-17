@@ -1,23 +1,21 @@
 import logging
 import csv
-import random
-import os
 import io
-import string
-
+import uuid
 from django.contrib.auth.decorators import login_required
-from django.core.files import File
 from django.forms import ValidationError
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.http import Http404, HttpResponse, JsonResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils.translation import gettext_lazy as _
-from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _, get_language
+from django_q.tasks import async_task, count_group, result_group
+from django_q.brokers import get_broker
 
 from cm_main.utils import assert_request_is_ajax
+from members.tasks import ImportContext
 
 from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm
@@ -28,14 +26,10 @@ from ..models import ALL_FIELD_NAMES, MANDATORY_MEMBER_FIELD_NAMES, MEMBER_FIELD
 logger = logging.getLogger(__name__)
 
 
-def generate_random_string(length):
-  return ''.join(random.choice(string.printable) for _ in range(length))
+def t(field: str) -> str: return ALL_FIELD_NAMES[field]
 
 
-def t(field): return ALL_FIELD_NAMES[field]
-
-
-def check_fields(fieldnames):
+def check_fields(fieldnames: list[str]):
   for fieldname in fieldnames:
     if fieldname not in ALL_FIELD_NAMES.values():
       raise ValidationError(_('Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s') %
@@ -49,33 +43,28 @@ def check_fields(fieldnames):
   return True
 
 
+def import_csv(csv_file, task_group, user_id, activate_users):
+  default_manager = Member.objects.get(id=user_id)
+  import_context = ImportContext(default_manager=default_manager, activate_users=activate_users,
+                                 group=task_group, lang=get_language())
+  import_context.register()
+  csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")
+  reader = csv.DictReader(csvf)
+  check_fields(reader.fieldnames)
+  broker = get_broker()
+  for row in reader:
+    logger.debug(f"create task #{import_context.rows_num+1} for importing row: {row}")
+    async_task('members.tasks.import_row', import_context, row, broker=broker, group=task_group)
+    import_context.rows_num += 1
+  logger.info("importing %d rows", import_context.rows_num)
+
+  return import_context
+
+
 class CSVImportView(LoginRequiredMixin, generic.FormView):
   template_name = "members/members/import_members.html"
   form_class = CSVImportMembersForm
   success_url = reverse_lazy("members:members")
-  # indicates if we have warned the user that even if user activation is requested,
-  # members with a manager in the file won't be activated
-  warned_on_activate_users = False
-  # list of warnings and errors collected during the import
-  warnings = []
-  errors = []
-  # current row
-  row = None
-  # number of created members
-  created_num = 0
-  # number of updated members
-  updated_num = 0
-  # number of rows processed
-  rows_num = 0
-  # the member linked to the current row
-  current_member = None
-  # current member has been changed
-  changed = False
-  # default manager used when a user is inactive, has no manager defined in the file and has no
-  # current manager. Set to connected user (the one who is importing the file).
-  default_manager = None
-  # indicates if the activation was managed for the current member
-  activation_managed = False
 
   def get_context_data(self, *args, **kwargs):
     optional_fields = {str(s) for s in ALL_FIELD_NAMES.values()} - {str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()}
@@ -85,228 +74,74 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
       'media_root': settings.MEDIA_ROOT,
       }
 
-  def _manage_avatar(self, avatar_file, username):
-    avatar = os.path.join(settings.MEDIA_REL, settings.AVATARS_DIR, avatar_file)
-    # avatar not changed
-    if self.current_member.avatar and self.current_member.avatar.path == avatar:
-      return
-
-    # avatar image must already exist
-    if not os.path.exists(avatar):
-      self.warnings.append(_("Avatar not found: %(avatar)s for username %(username)s. Ignored...") %
-                           {'avatar': avatar, 'username': username})
-    else:
-      try:
-        with open(avatar, 'rb') as image_file:
-          image = File(image_file)
-          self.current_member.avatar.save(avatar_file, image)
-          self.changed = True
-      except Exception as e:
-        self.warnings.append(_("Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. Ignored...") %
-                             {'warning': e, 'avatar': avatar, 'username': username})
-
-  def _manage_family(self, family_name):
-    if not self.current_member.family or self.current_member.family.name != family_name:
-      self.current_member.family, _ = Family.objects.get_or_create(name=family_name)
-      self.changed = True
-
-  def _get_valid_manager(self, manager_username):
-    new_member_manager = Member.objects.filter(username=manager_username).first()
-    warning = ''
-
-    if not new_member_manager or not new_member_manager.is_active:
-      if self.current_member.member_manager:
-        new_member_manager = self.current_member.member_manager
-        warning = _('Keeping current manager.')
-      else:
-        new_member_manager = self.default_manager
-        warning = _('Using your id...')
-
-    if not new_member_manager:
-      self.warnings.append(_("Manager %(manager)s not found for member %(member)s.") % {
-        'manager': manager_username,
-        'member': self.current_member.full_name} + ' ' + warning)
-    elif not new_member_manager.is_active:
-      self.error.append(_("%(manager)s is inactive and cannot be used as manager for %(member)s. "
-                          "Activate it manually or change the order in the file and put it first.") % {
-          'manager': manager_username,
-          'member': self.current_member.full_name} + ' ' + warning)
-    # print(f'new member manager for {self.current_member.username} = {new_member_manager.username}')
-    return new_member_manager
-
-  def _handle_no_manager_case(self):
-    if self.activate_users:
-      if not self.current_member.is_active:
-        self.current_member.is_active = True
-        self.current_member.member_manager = None
-        self.changed = True
-    elif not self.current_member.is_active:
-      if self.current_member.member_manager:
-        self.warnings.append(_("No manager provided for member %(member)s although inactive. "
-                             "Keeping existing one (%(manager)s)...") % {
-                'member': self.current_member.full_name,
-                'manager': self.current_member.member_manager.full_name})
-      else:
-        self.errors.append(_("Inactive member %(member)s has no manager. Please provide one! "
-                           "Meanwhile, the admin will be used as manager") % {
-          'member': self.current_member.full_name
-        })
-        self.current_member.member_manager = self.default_manager
-        self.changed = True
-
-  def _manage_managed_by(self, manager_username):
-    if manager_username:
-      new_member_manager = self._get_valid_manager(manager_username)
-
-      if self.current_member.member_manager != new_member_manager:
-        self.current_member.member_manager = new_member_manager
-        self.changed = True
-
-      if self.current_member.is_active:
-        self.warnings.append(_("Member %(member)s was active. Adding %(manager)s as manager inactivated him/her.") %
-                             {'member': self.current_member.full_name, 'manager': manager_username})
-        self.current_member.is_active = False
-        self.changed = True
-
-      if self.activate_users and not self.warned_on_activate_users:
-        self.warned_on_activate_users = True
-        self.warnings.append(
-          _("You requested to activate imported members. All members with a manager in the file "
-            "will be ignored and won't be activated."))
-    else:
-      self._handle_no_manager_case()
-
-    self.activation_managed = True
-
-  def _update_member_field(self, field, value, username):
-    match field:
-      case 'username':
-        pass
-      case 'family':
-        self._manage_family(value)
-      case 'avatar':
-        self._manage_avatar(value, username)
-      case 'managed_by':
-        self._manage_managed_by(value)
-      case _:
-        if self.current_member.__dict__[field] != value:
-          setattr(self.current_member, field, value)
-          self.changed = True
-
-  def _update_member(self):
-    "update an existing member based on current row content"
-    # for all member fields but username
-    # if new value for this field, then override existing one
-    username = self.row[t('username')]
-    for field in MEMBER_FIELD_NAMES:
-      trfield = t(field)
-      if trfield in self.row and self.row[trfield]:
-        self._update_member_field(field, self.row[trfield], username)
-
-    if self.changed:
-      self.updated_num += 1
-
-  def _update_address(self):
-    address = {}
-    for field in ADDRESS_FIELD_NAMES:
-      trfield = t(field)
-      if trfield in self.row:
-        address[field] = self.row[trfield]
-    # if len(address) == 5:   #we don't care if the address is incomplete
-    if len(address) > 0:
-      found = Address.objects.filter(**address).first()
-      if found:
-        if self.current_member.address != found:
-          self.current_member.address = found
-          self.changed = True
-      else:
-        address = Address.objects.create(**address)
-        address.save()
-        self.current_member.address = address
-        self.changed = True
-
-  def _create_member(self):
-    """create new member based on current row content.
-       returns created member and warnings if any
-    """
-    self.current_member = Member(is_active=False)
-    self.changed = True
-    # print(f"newly created member is active:{member.is_active}")
-    for field in MEMBER_FIELD_NAMES:
-      trfield = t(field)
-      if trfield in self.row and self.row[trfield]:
-        match field:
-          case 'family':
-            self._manage_family(self.row[trfield])
-          case 'managed_by':
-            self._manage_managed_by(self.row[trfield])
-          case 'avatar':
-            self._manage_avatar(self.row[trfield], self.row[t('username')])
-          case _:
-            if self.current_member.__dict__[field] != self.row[trfield]:
-              setattr(self.current_member, field, self.row[trfield])
-
-    self.current_member.password = generate_random_string(16)
-    if self.changed:
-      self.created_num += 1
-
-  def _import_csv(self, csv_file):
-
-    self.default_manager = Member.objects.get(id=self.request.user.id)
-
-    csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")
-    reader = csv.DictReader(csvf)
-    check_fields(reader.fieldnames)
-    random.seed()
-    self.warnings = []
-    self.errors = []
-    for self.row in reader:
-      # reset all row variables
-      self.current_member = None
-      self.changed = False
-      self.activation_managed = False
-      # normalize username using slugify
-      self.row[t('username')] = slugify(self.row[t('username')])
-      # search for an existing member with this username
-      self.current_member = Member.objects.filter(username=self.row[t('username')]).first()
-      if self.current_member:  # found, update it
-        self._update_member()
-      else:  # not found, create it
-        self._create_member()
-
-      if not self.activation_managed:  # no "managed_by" column in the file
-        self._manage_managed_by(None)
-
-      self._update_address()
-      self.rows_num += 1
-
-      if self.changed:
-        self.current_member.save()
-
   def post(self, request, *args, **kwargs):
     self.request = request
     form = CSVImportMembersForm(request.POST, request.FILES)
     if form.is_valid():
-      csv_file = request.FILES["csv_file"]
-      self.activate_users = form.cleaned_data["activate_users"]
-
       try:
-        self._import_csv(csv_file)
-        messages.success(request,
-                         _("CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
-                           "and %(updated_num)i updated.") %
-                         {'rows_num': self.rows_num, 'created_num': self.created_num, 'updated_num': self.updated_num})
-        for error in self.errors:
-          messages.error(request, _("Error: %(error)s") % {'error': error})
-        for warning in self.warnings:
-          messages.warning(request, _("Warning: %(warning)s") % {'warning': warning})
+        csv_file = request.FILES["csv_file"]
+        activate_users = form.cleaned_data["activate_users"]
+        # task_group = request.POST.get("csrfmiddlewaretoken")  # not generated in test context
+        task_group = uuid.uuid4().hex
+
+        import_data = import_csv(csv_file, task_group, request.user.id, activate_users)
+
+        hx_get_url = reverse("members:import_progress", args=(task_group,))
+        logger.debug(f"rendering first progress-bar url: {hx_get_url} task group: {task_group}")
+        return render(request, "cm_main/common/progress-bar.html",
+                      {"hx_get": hx_get_url, "frequency": "1s",
+                       "value": 0, "max": import_data.rows_num, "text": "0%"})
       except ValidationError as ve:
+        logger.error(ve.message)
         messages.error(request, ve.message)
-        return render(request, self.template_name, {'form': form})
+        return redirect(reverse("members:csv_import"))
       except Exception as e:
+        logger.error(e.__str__())
         messages.error(request, e.__str__())
-        raise
-    return super().post(request, *args, **kwargs)
+        return redirect(reverse("members:csv_import"))
+    return redirect(reverse("members:csv_import"))
+
+
+@login_required
+def import_progress(request, id):
+  import_data = ImportContext.get(id)
+  if not import_data:  # removed from the list when completed
+    raise Http404(_("Import not found"))
+  value = count_group(id)
+  max = import_data.rows_num
+
+  # get already finished tasks
+  results = result_group(id, failures=True, count=value, cached=False)
+  # print error messages first then successful import
+  errors = []
+  warnings = []
+  users = []
+  if results:
+    for row_data in results:
+      if row_data.is_created():
+        import_data.created_num += 1
+      elif row_data.is_updated():
+        import_data.updated_num += 1
+      errors.append(row_data.errors)
+      warnings.append(row_data.warnings)
+      users.append(row_data.current_member.username)
+  context = {"hx_get": request.get_full_path(), "frequency": "1s",
+             "value": value, "max": max, "text": str(int(value*100/max)) + "%",
+             "processed_objects": users, "errors": errors, "warnings": warnings}
+  if value == max:  # reached the end
+    context["back_url"] = reverse('members:members')
+    context["back_text"] = _('Back to members list')
+    context["success"] = _("CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
+                           "and %(updated_num)i updated.") % {
+                          'rows_num': import_data.rows_num, 'created_num': import_data.created_num,
+                          'updated_num': import_data.updated_num
+                          }
+    # remove zimport from the cache
+    import_data.unregister()
+    logger.debug(f"cleaned {import_data}")
+  logger.debug(f"upload progress bar value: {value}, max: {max}, "
+               f"processed objects: {users}, errors: {errors}, warnings: {warnings}")
+  return render(request, "cm_main/common/progress-bar.html", context)
 
 
 @login_required

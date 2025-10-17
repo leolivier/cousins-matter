@@ -1,0 +1,74 @@
+site_name: "Cousins Matter"
+site_description: "Documentation of the CousinsMatter application"
+site_author: "Olivier LEVILLAIN"
+repo_url: "https://github.com/leolivier/cousins-matter"
+repo_name: "leolivier/cousins-matter"
+site_dir: "."
+docs_dir: "docs"
+use_directory_urls: true
+
+theme:
+  name: "material"
+  logo: "cm_main/static/cm_main/images/cousinsmatter.jpg"
+  favicon: "cm_main/static/cm_main/images/favicon.jpg"
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - toc.integrate
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Architecture: architecture.md
+  - Models: models.md
+  - Views: views.md
+  - Templates: templates.md
+  - Admin: admin.md
+  - Deployment: deployment.md
+  - Tests: tests.md
+  - FAQ: faq.md
+
+plugins:
+  - search
+  - redirects            # optional, if you want to manage redirections
+  - mkdocstrings:        # optional, integrates Python docstrings
+#    config:
+      handlers:
+        python:
+          setup_commands:
+            - "import os, sys; sys.path.insert(0, 'src')"
+  - git-revision-date-localized:
+      fallback_to_build_date: false
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+  - footnotes
+  - attr_list
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.details
+  - pymdownx.progressbar
+  - pymdownx.betterem:
+      smart_enable: all
+
+#extra_css:
+#  - "assets/css/extra.css"    # optionnel
+
+#extra_javascript:
+#  - "assets/js/extra.js"      # optionnel
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: "https://github.com/leolivier/cousins-matter"
+
+# Optional deployment settings for Netlify / GitHub Pages omitted

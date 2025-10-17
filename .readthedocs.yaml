@@ -22,9 +22,9 @@ python:
       path: .
     - requirements: docs/requirements.txt
 
-sphinx:
-  # Not used for MkDocs, but kept for completeness
-  configuration: docs/conf.py
+# sphinx:
+#   # Not used for MkDocs, but kept for completeness
+#   configuration: docs/conf.py
 
 formats:
   - htmlzip

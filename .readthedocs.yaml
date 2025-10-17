@@ -27,7 +27,7 @@ sphinx:
   configuration: docs/conf.py
 
 formats:
-  - html
+  - htmlzip
 
 # Build documentation with Mkdocs
 mkdocs:

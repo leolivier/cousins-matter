@@ -24,14 +24,17 @@ theme:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
-  - Architecture: architecture.md
-  - Models: models.md
-  - Views: views.md
-  - Templates: templates.md
-  - Admin: admin.md
-  - Deployment: deployment.md
-  - Tests: tests.md
-  - FAQ: faq.md
+  - Customization: customizing.md
+  - Reverse Proxying: reverse-proxying.md
+  - Settings: settings.md
+  # - Architecture: architecture.md
+  # - Models: models.md
+  # - Views: views.md
+  # - Templates: templates.md
+  # - Admin: admin.md
+  # - Deployment: deployment.md
+  # - Tests: tests.md
+  # - FAQ: faq.md
 
 plugins:
   - search

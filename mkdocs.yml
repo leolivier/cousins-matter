@@ -29,6 +29,7 @@ nav:
   - Customization: customizing.md
   - Reverse Proxying: reverse-proxying.md
   - Settings: settings.md
+  - Technical Status: app-technical-status.md
   # - Architecture: architecture.md
   # - Models: models.md
   # - Views: views.md

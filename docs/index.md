@@ -2,21 +2,20 @@
 ![Cousins Matter!](https://raw.githubusercontent.com/leolivier/cousins-matter/main/cm_main/static/cm_main/images/cousinades.jpg)
 
 
-# Cousins Matter project
+# What is Cousins Matter?
 
-An application for managing large families, listing all your cousins and allowing them to manage their own profiles. It also provide various features like photo galleries, forums, chat rooms, ...
+Cousins Matter is a web application for managing large families, listing all your cousins, aunts and uncles, sisters, brothers, ancestors... and allowing them to manage their own profiles. It also provides various features like:
+* photo galleries, 
+* forums, 
+* chat rooms,
+* polls
+* classified ads
+* ...
 
-On these pages, you'll find all the documentation related to the application.
+On these site, you will find all the documentation related to the installation and management of the application.
 
-## Badges
-### Releases status
-![GitHub Release](https://img.shields.io/github/v/release/leolivier/cousins-matter) ![GitHub Release Date](https://img.shields.io/github/release-date/leolivier/cousins-matter) [![GitHub CI release build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/build-and-publish-image.yml/badge.svg)](https://github.com/leolivier/cousins-matter/actions?query=workflow%Release+build) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/leolivier/cousins-matter/latest)
-
-### Facts
- ![GitHub License](https://img.shields.io/github/license/leolivier/cousins-matter) ![GitHub top language](https://img.shields.io/github/languages/top/leolivier/cousins-matter) [![Django](https://img.shields.io/badge/Django-5.2-green)](https://www.djangoproject.com/) 
-
-### Development status
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/leolivier/cousins-matter) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-raw/leolivier/cousins-matter) [![GitHub CI devt build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/build-and-publish-image.yml/badge.svg?branch=main)](https://github.com/leolivier/cousins-matter/actions?query=workflow%3APush+build)
+## Authors
+The main developer of Cousins Matter is [@leolivier](https://www.github.com/leolivier)
 
 ## Features
 
@@ -59,14 +58,14 @@ On these pages, you'll find all the documentation related to the application.
   The creator of the room becomes admin in this room and can add other members and elect admins in these members.
   Admins can invite other members and other admins
 
-## Pages / CMS
+### Pages / CMS
 Basic CMS features: admins can create static HTML pages and publish them on the site. 
 The home page can also be configured this way as well as the privcay policy, the about pages... 
 
-## Troves
+### Troves
 This is a place where you can put the focus on numeric family treasures, be it texts, music, videos
 
-## Polls
+### Polls
 Any active member can create a poll and any active member can answer an active poll.
 Polls have publication and closure dates. They can contains multiple questions and questions can be either
 * simple yes/no questions: tick the check box
@@ -79,7 +78,7 @@ As a sub module of the Poll module, any active member can create an event planni
 * choose one date in a provided list
 * choose several dates in a provided list
 
-## Classified ads
+### Classified ads
 Any active member can publish a classified ad that can be seen by all other members. If a memeber is interested in an ad, s.he can send a message to the ad publisher who will receive an email.
 
 ## Theming
@@ -90,15 +89,4 @@ Admin can easily define their own theme (colors, font, ...). See [Themes](https:
 
   **WARNING**: Because these translations are mostly done using AI, they may sometimes be incorrect or inaccurate. Please open issues on Github if you find errors.
 * Can be easily translated into any latin LTR language, see [documentation](https://github.com/leolivier/cousins-matter/wiki#translate-to-a-new-language). Not tested for RTL or non latin languages.
-
-## Documentation
-
-* The documentation for installing, upgrading and running the application in on the wiki [Home](https://github.com/leolivier/cousins-matter/wiki) page.
-* The settings are documented on the wiki [Settings](https://github.com/leolivier/cousins-matter/wiki/settings) page.
-Through settings, you can also manage the features offered to the members.
-* The customization (apart from the settings) is described at [Customization](https://github.com/leolivier/cousins-matter/wiki/customization)
-
-## Authors
-
-- [@leolivier](https://www.github.com/leolivier)
 

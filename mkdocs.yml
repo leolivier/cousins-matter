@@ -10,7 +10,7 @@ docs_dir: "docs"
 use_directory_urls: true
 
 theme:
-  name: "material"
+  name: "readthedocs"
   logo: "cm_main/static/cm_main/images/cousinsmatter.jpg"
   favicon: "cm_main/static/cm_main/images/favicon.jpg"
   palette:
@@ -40,30 +40,30 @@ nav:
 
 plugins:
   - search
-  - redirects            # optional, if you want to manage redirections
+  # - redirects            # optional, if you want to manage redirections
 #   - mkdocstrings:        # optional, integrates Python docstrings
 # #    config:
 #       handlers:
 #         python:
 #           setup_commands:
 #             - "import os, sys; sys.path.insert(0, 'src')"
-  - git-revision-date-localized:
-      fallback_to_build_date: false
+  # - git-revision-date-localized:
+  #     fallback_to_build_date: false
 
 markdown_extensions:
   - admonition
-  - codehilite
+  # - codehilite
   - toc:
       permalink: true
   - footnotes
   - attr_list
-  - pymdownx.superfences
-  - pymdownx.highlight
-  - pymdownx.inlinehilite
-  - pymdownx.details
-  - pymdownx.progressbar
-  - pymdownx.betterem:
-      smart_enable: all
+  # - pymdownx.superfences
+  # - pymdownx.highlight
+  # - pymdownx.inlinehilite
+  # - pymdownx.details
+  # - pymdownx.progressbar
+  # - pymdownx.betterem:
+  #     smart_enable: all
 
 #extra_css:
 #  - "assets/css/extra.css"    # optionnel

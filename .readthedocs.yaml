@@ -34,9 +34,9 @@ mkdocs:
   configuration: docs/mkdocs.yml
 
 # Optional: build environment variables
-env:
-  DJANGO_SETTINGS_MODULE: "cousinsmatter.settings"
-  PYTHONPATH: "{{ project_root }}"   # ajustez si votre code est dans src/
+# env:
+#   DJANGO_SETTINGS_MODULE: "cousinsmatter.settings"
+#   PYTHONPATH: "{{ project_root }}"   # ajustez si votre code est dans src/
 
 # If you want RTD to build docs in an isolated virtualenv
 use-system-site-packages: false

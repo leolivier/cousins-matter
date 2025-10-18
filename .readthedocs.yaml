@@ -34,7 +34,3 @@ mkdocs:
 #   DJANGO_SETTINGS_MODULE: "cousinsmatter.settings"
 #   PYTHONPATH: "{{ project_root }}"   # ajustez si votre code est dans src/
 
-# Optionally define supported versions and webhook behavior
-projects:
-  - name: Cousins Matter
-

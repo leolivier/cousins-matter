@@ -4,7 +4,7 @@ site_description: "Documentation of the CousinsMatter application"
 site_author: "Olivier LEVILLAIN"
 repo_url: "https://github.com/leolivier/cousins-matter"
 repo_name: "GitHub"
-edit_url: "/blob/main/docs/"
+edit_uri: "/blob/main/docs/"
 site_dir: "site"
 docs_dir: "docs"
 use_directory_urls: true

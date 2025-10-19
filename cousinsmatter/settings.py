@@ -396,7 +396,7 @@ Q_CLUSTER = {
     # 'queue_limit': 500,
     # 'label': 'Django Q2',
     'redis': {
-        'host': 'redis',
+        'host': env.str('REDIS_HOST', default='redis'),
         'port': 6379,
         # 'db': 0,
     },

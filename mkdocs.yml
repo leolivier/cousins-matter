@@ -11,8 +11,8 @@ use_directory_urls: true
 
 theme:
   name: "readthedocs"
-  logo: "cm_main/static/cm_main/images/cousinsmatter.jpg"
-  favicon: "cm_main/static/cm_main/images/favicon.jpg"
+  logo: "assets/cousinades.webp"
+  favicon: "assets/favicon.jpg"
   palette:
     - scheme: default
       primary: indigo
@@ -25,19 +25,15 @@ theme:
 
 nav:
   - Home: index.md
+  - Features: features.md
   - Getting Started: getting-started.md
   - Customization: customizing.md
   - Reverse Proxying: reverse-proxying.md
   - Settings: settings.md
-  - Technical Status: app-technical-status.md
-  # - Architecture: architecture.md
-  # - Models: models.md
-  # - Views: views.md
-  # - Templates: templates.md
-  # - Admin: admin.md
-  # - Deployment: deployment.md
-  # - Tests: tests.md
+  - Translations: translations.md
+  - Migrate from Version 1 to Version 2: migrate-from-v1-to-v2.md
   # - FAQ: faq.md
+  - Technical Status: app-technical-status.md
 
 plugins:
   - search

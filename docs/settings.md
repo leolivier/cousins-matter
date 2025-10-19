@@ -1,7 +1,7 @@
 ## Introduction
 The settings of Cousins Matter can be managed using a `.env` file in the main directory of the application.
 
-If you have used the docker-install.sh script to install cousins-matter as described in [Installing: the easiest way using Docker](https://github.com/leolivier/cousins-matter/wiki#the-easiest-way-to-run-cousins-matter-docker) , an example .env file has been downloaded for you automatically and the SECRET_KEY has been generated automatically (**don't overwrite it!**).
+If you have used the docker-install.sh script to install cousins-matter as described in [Getting Started](getting-started.md/#install-cousins-matter) , an example .env file has been downloaded for you automatically and the SECRET_KEY has been generated automatically (**don't overwrite it!**).
 
 If you are working from source, copy the `.env.example` file to `.env` 
 
@@ -9,7 +9,7 @@ In both cases, you now need to edit `.env` to set the properties according to yo
 
 There are many settings available to customize the technical part of your site... 
 
-Also, don't forget to check out [Customization](https://github.com/leolivier/cousins-matter/wiki/Customization) to customize the look and feel of your site.
+Also, don't forget to check out [Customization](customizing.md) to customize the look and feel of your site.
 
 **WARNING**: If the container is already running, the update of the settings in .env is currently not taken into account until you restart it. 
 To do that, it is very simple, just run the following command (in the site directory): `docker compose restart`

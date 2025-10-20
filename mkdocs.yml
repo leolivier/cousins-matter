@@ -26,12 +26,13 @@ theme:
 nav:
   - Home: index.md
   - Features: features.md
-  - Getting Started: getting-started.md
+  - Installation: installation.md
+  - Migrate from Version 1 to Version 2: migrate-from-v1-to-v2.md
   - Customization: customizing.md
   - Reverse Proxying: reverse-proxying.md
   - Settings: settings.md
   - Translations: translations.md
-  - Migrate from Version 1 to Version 2: migrate-from-v1-to-v2.md
+  - Other management operations: other-management-operations.md
   # - FAQ: faq.md
   - Technical Status: app-technical-status.md
 

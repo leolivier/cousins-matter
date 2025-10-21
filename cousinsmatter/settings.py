@@ -37,14 +37,6 @@ STATIC_REL = 'static'
 STATIC_ROOT = BASE_DIR / STATIC_REL
 STATIC_URL = 'static/'
 # STATICFILES_DIRS = []
-STORAGES = {
-    'default': {
-      'BACKEND': 'django.core.files.storage.FileSystemStorage'
-    },
-    'staticfiles': {
-        "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
 
 MEDIA_REL = 'media'
 MEDIA_ROOT = BASE_DIR / MEDIA_REL
@@ -55,6 +47,25 @@ MEDIA_URL = f'protected_{MEDIA_REL}/'
 
 PUBLIC_MEDIA_ROOT = MEDIA_ROOT / 'public'
 PUBLIC_MEDIA_URL = f'/{MEDIA_REL}/public/'
+
+STORAGES = {
+    'default': {
+      'BACKEND': 'django.core.files.storage.FileSystemStorage'
+    },
+    'staticfiles': {
+        "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+    'media': {
+      'BACKEND': 'django.core.files.storage.FileSystemStorage',
+      "OPTIONS": {
+            "location": MEDIA_ROOT,
+            "base_url": MEDIA_URL,
+        },
+    } if not env.str('MEDIA_STORAGE') else {
+      'BACKEND': env.str('MEDIA_STORAGE'),
+      "OPTIONS": env.json('MEDIA_STORAGE_OPTIONS', default={})
+    }
+}
 
 SITE_NAME = env.str('SITE_NAME', default='Cousins Matter')
 SITE_DOMAIN = env.str('SITE_DOMAIN', None)

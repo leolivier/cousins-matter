@@ -15,6 +15,7 @@ from urllib.parse import urlencode
 
 from django.core import paginator
 from django.core.exceptions import PermissionDenied
+from django.core.files.storage import storages, Storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import connections, models
 from django.forms import ValidationError
@@ -331,3 +332,16 @@ def check_edit_permission(request, owner):
     if request.user.is_superuser or owner.id == request.user.id:
       return True
     raise PermissionDenied(_("You do not have permission to edit/delete this object."))
+
+
+MEDIA_STORAGE: Storage = None
+
+
+def get_media_storage() -> Storage:
+    global MEDIA_STORAGE
+    if MEDIA_STORAGE is None:
+        backends = storages.backends()
+        media_backend = backends['media'] if 'media' in backends else backends['default']
+        MEDIA_STORAGE = storages.create_instance(media_backend)
+
+    return MEDIA_STORAGE

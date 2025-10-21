@@ -37,6 +37,12 @@ STATIC_REL = 'static'
 STATIC_ROOT = BASE_DIR / STATIC_REL
 STATIC_URL = 'static/'
 # STATICFILES_DIRS = []
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 MEDIA_REL = 'media'
 MEDIA_ROOT = BASE_DIR / MEDIA_REL
@@ -135,6 +141,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
   'django.middleware.security.SecurityMiddleware',
+  'whitenoise.middleware.WhiteNoiseMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
   'corsheaders.middleware.CorsMiddleware',
   'django.middleware.common.CommonMiddleware',

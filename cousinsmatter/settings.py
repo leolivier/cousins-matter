@@ -61,7 +61,7 @@ STORAGES = {
             "location": MEDIA_ROOT,
             "base_url": MEDIA_URL,
         },
-    } if not env.str('MEDIA_STORAGE') else {
+    } if env.str('MEDIA_STORAGE', default=None) is None else {
       'BACKEND': env.str('MEDIA_STORAGE'),
       "OPTIONS": env.json('MEDIA_STORAGE_OPTIONS', default={})
     }

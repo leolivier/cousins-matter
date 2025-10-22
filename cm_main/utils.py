@@ -340,8 +340,8 @@ MEDIA_STORAGE: Storage = None
 def get_media_storage() -> Storage:
     global MEDIA_STORAGE
     if MEDIA_STORAGE is None:
-        backends = storages.backends()
+        backends = storages.backends
         media_backend = backends['media'] if 'media' in backends else backends['default']
-        MEDIA_STORAGE = storages.create_instance(media_backend)
+        MEDIA_STORAGE = storages.create_storage(media_backend)
 
     return MEDIA_STORAGE

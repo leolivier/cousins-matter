@@ -33,6 +33,7 @@ nav:
   - Settings: settings.md
   - Translations: translations.md
   - Other management operations: other-management-operations.md
+  - Media Storage Management: media-storage.md
   # - FAQ: faq.md
   - Technical Status: app-technical-status.md
 

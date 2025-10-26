@@ -2,25 +2,25 @@
 
 ### Member Management
 * Members can be listed, filtered by first and last name and sorted 
-  <img width="1543" height="675" alt="image" src="/assets/members.webp" />
+  ![members](assets/members.webp)
 
 * Site admin or any member (depending on settings) can invite other members by email
-  <img width="1351" height="318" alt="image" src="/assets/invite.webp" />
+  ![invite](assets/invite.webp)
 
 * Anyone can request an invitation which will be emailed to the site admin who can then invite them. Invitation requests are protected by a captcha.
-  <img width="1392" height="845" alt="image" src="/assets/request-invite.webp" />
+  ![request-invite](assets/request-invite.webp)
 
 * Members can create "managed" members, i.e. members who are not active on the site (e.g. for small children or elderly people)
 * Managed members can be activated by their managing members (e.g. when a child is old enough to be active on the site).
 * Members can be imported in bulk via CSV files
 * Members can update their own profile and the profile of the members they manage
-  <img width="1343" height="902" alt="image" src="/assets/profile.webp" />
+  ![profile](assets/profile.webp)
 
 * A directory of members can be printed in PDF format
-  <img width="966" height="835" alt="image" src="/assets/directory.webp" />
+  ![directory](assets/directory.webp)
 
 * Birthdays in the next 50 days can be displayed (50 can be changed in settings)
-<img width="1357" height="366" alt="image" src="/assets/birthdays.webp" />
+![birthdays](assets/birthdays.webp)
 
 ### Galleries
 * All active members can create galleries and add photos to them

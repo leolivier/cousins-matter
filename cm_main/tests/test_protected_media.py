@@ -1,11 +1,13 @@
-import shutil
+# import shutil
 import urllib.parse
 from django.conf import settings
 from django.urls import reverse
 from django.http import StreamingHttpResponse
+from django.core.files.storage import FileSystemStorage
 
 from cm_main.utils import test_resource_full_path, get_test_absolute_url
 from members.tests.tests_member_base import MemberTestCase
+from cm_main.utils import get_media_storage, storage_rmtree
 
 
 class ProtectedMediaTestCase(MemberTestCase):
@@ -13,18 +15,28 @@ class ProtectedMediaTestCase(MemberTestCase):
     super().setUp()
     # use test logo from resources as an image file to test the protected media
     # so copy it to /media/testdir/testimage.png
-    self.test_file = settings.MEDIA_ROOT / 'test_protected_media' / 'test_image.jpg'
+    self.storage = get_media_storage()
+    absolute_name = isinstance(self.storage, FileSystemStorage)
+    self.test_file = settings.MEDIA_ROOT if absolute_name else settings.MEDIA_REL
+    self.test_file = self.test_file / 'test_protected_media' / 'test_image.jpg'
     logo_file = test_resource_full_path('test-logo.jpg', __file__)
     # Make sure the destination directory exists
-    self.test_file.parent.mkdir()
+    # useless with storage storage.mkdir(self.test_file.parent)
     # Copy the test resource
-    shutil.copy2(logo_file, self.test_file)
-    self.rel_path = str(self.test_file.relative_to(settings.MEDIA_ROOT))
+    # manage differently with storage  shutil.copy2(logo_file, self.test_file)
+    with open(logo_file, 'rb') as initial_file:
+      self.storage.save(self.test_file, initial_file)
+    with open(logo_file, 'rb') as initial_file:  # reopen as save above closes the file
+      self.uploaded_content = initial_file.read()
+
+    self.rel_path = str(self.test_file.relative_to(settings.MEDIA_ROOT) if absolute_name else self.test_file)
     self.rel_url = reverse('get_protected_media', args=[self.rel_path])
     self.abs_url = get_test_absolute_url(self.rel_url)
 
   def tearDown(self):
-    shutil.rmtree(self.test_file.parents[0])
+    # manage differently with storage shutil.rmtree(self.test_file.parents[0])
+    self.storage.delete(self.test_file)
+    storage_rmtree(self.storage, self.test_file.parents[0])
     super().tearDown()
 
   def test_authenticated_user_can_access_protected_media(self):
@@ -39,8 +51,7 @@ class ProtectedMediaTestCase(MemberTestCase):
       chunks.append(bytes(chunk))
     received = b"".join(chunks)
     # check the content of the response is the content of the file
-    expected = self.test_file.read_bytes()
-    self.assertEqual(received, expected)
+    self.assertEqual(received, self.uploaded_content)
     self.assertTrue(response["Content-Type"].startswith("image/"))
 
   def test_unauthenticated_user_cannot_access_protected_media(self):
@@ -50,7 +61,7 @@ class ProtectedMediaTestCase(MemberTestCase):
     response = self.client.get(self.rel_url, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, 'members/login/login.html')
-    print("request:", response.request)
+    # print("request:", response.request)
     self.assertEqual(response.request['PATH_INFO'], reverse('members:login'))
     quoted_url = urllib.parse.quote(self.rel_url, safe='')
     self.assertEqual(response.request['QUERY_STRING'], f'next={quoted_url}')

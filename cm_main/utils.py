@@ -15,7 +15,7 @@ from urllib.parse import urlencode
 
 from django.core import paginator
 from django.core.exceptions import PermissionDenied
-from django.core.files.storage import storages, Storage
+from django.core.files.storage import storages, Storage, FileSystemStorage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import connections, models
 from django.forms import ValidationError
@@ -345,3 +345,66 @@ def get_media_storage() -> Storage:
         MEDIA_STORAGE = storages.create_storage(media_backend)
 
     return MEDIA_STORAGE
+
+
+def _fs_rmtree(storage, prefix):
+    if isinstance(storage, FileSystemStorage):  # special case for FileSystemstorage
+        import shutil
+        shutil.rmtree(prefix)
+        return True
+    return False
+
+
+def _rm_emty_folders(storage, folder_stack):
+    # delete empty folders
+    while folder_stack:
+        path = folder_stack.pop()
+        try:
+            storage.delete(path)
+        except Exception:
+            pass
+
+
+def _recursive_rmtree(storage, prefix):
+    stack = [prefix]
+    dstack = [prefix]
+    while stack:
+        path = stack.pop()
+        try:
+            dirs, files = storage.listdir(path)
+        except NotImplementedError:
+            break
+        # delete files
+        for f in files:
+            name = f"{path}/{f}"
+            try:
+                storage.delete(name)
+            except Exception:
+                pass
+        # stack subfolders
+        for d in dirs:
+            stack.append(f"{path}/{d}")
+            dstack.append(f"{path}/{d}")
+
+    _rm_emty_folders(storage, dstack)
+    return
+
+
+def storage_rmtree(storage, prefix):
+    """
+    Tries to delete all objects under `prefix` as well as `prefix` itself for a given Storage. prefix is a posix path
+    - storage: an instance of Storage (or subclass)
+    - prefix: path without leading slash (e.g. "clients/client_42")
+    """
+    if _fs_rmtree(storage, prefix):
+        return
+
+    prefix = str(prefix).strip("/")
+    # Generic attempt: list recursively via listdir if available
+    if hasattr(storage, "listdir"):
+        _recursive_rmtree(storage, prefix)
+        return
+
+    # If listdir not available (e.g. some backends), try direct deletion of prefix
+    logger.warning(f"listdir not available for {storage} - trying to delete {prefix} directly")
+    storage.delete(f"{prefix}/")

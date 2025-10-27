@@ -3,6 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import PasswordResetView
+from django.core.files.storage import default_storage
 from django.http import Http404, StreamingHttpResponse, HttpResponseNotModified
 from django.utils.translation import gettext as _
 from django.views import generic
@@ -15,7 +16,6 @@ import tempfile
 import zipfile
 
 from cm_main.forms import PasswordResetForm
-from cm_main.utils import get_media_storage
 
 logger = logging.getLogger(__name__)
 
@@ -59,14 +59,11 @@ def download_protected_media(request, media):
   if request_etag and request_etag == media_etag:
       return HttpResponseNotModified()
 
-  media_storage = get_media_storage()
   chunk_size = 64*1024
+  media_file = default_storage.open(media, "rb")
   try:
     response = StreamingHttpResponse(
-        FileWrapper(
-            media_storage.open(media, "rb"),
-            chunk_size,
-        ),
+        FileWrapper(media_file, chunk_size),
         content_type=mimetypes.guess_type(media)[0],
     )
   except FileNotFoundError:
@@ -74,7 +71,7 @@ def download_protected_media(request, media):
   except Exception as e:
     raise Http404(_("Error when retrieving media: %s") % e)
 
-  response["Content-Length"] = media_storage.size(media)
+  response["Content-Length"] = media_file.size
   # response["Content-Disposition"] = f"inline; filename={filename}"
   response["Content-Disposition"] = "inline"
   response["ETag"] = media_etag

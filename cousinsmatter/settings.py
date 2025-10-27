@@ -49,13 +49,10 @@ PUBLIC_MEDIA_ROOT = MEDIA_ROOT / 'public'
 PUBLIC_MEDIA_URL = f'/{MEDIA_REL}/public/'
 
 STORAGES = {
-    'default': {
-      'BACKEND': 'django.core.files.storage.FileSystemStorage'
-    },
     'staticfiles': {
         "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
-    'media': {
+    'default': {
       'BACKEND': 'django.core.files.storage.FileSystemStorage',
       "OPTIONS": {
             "location": MEDIA_ROOT,

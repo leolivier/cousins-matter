@@ -13,9 +13,10 @@ import sys
 import unicodedata
 from urllib.parse import urlencode
 
+from django.conf import settings
 from django.core import paginator
 from django.core.exceptions import PermissionDenied
-from django.core.files.storage import storages, Storage, FileSystemStorage
+from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import connections, models
 from django.forms import ValidationError
@@ -334,23 +335,10 @@ def check_edit_permission(request, owner):
     raise PermissionDenied(_("You do not have permission to edit/delete this object."))
 
 
-MEDIA_STORAGE: Storage = None
-
-
-def get_media_storage() -> Storage:
-    global MEDIA_STORAGE
-    if MEDIA_STORAGE is None:
-        backends = storages.backends
-        media_backend = backends['media'] if 'media' in backends else backends['default']
-        MEDIA_STORAGE = storages.create_storage(media_backend)
-
-    return MEDIA_STORAGE
-
-
 def _fs_rmtree(storage, prefix):
     if isinstance(storage, FileSystemStorage):  # special case for FileSystemstorage
         import shutil
-        shutil.rmtree(prefix)
+        shutil.rmtree(settings.MEDIA_ROOT / prefix)
         return True
     return False
 

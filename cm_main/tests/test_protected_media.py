@@ -3,11 +3,12 @@ import urllib.parse
 from django.conf import settings
 from django.urls import reverse
 from django.http import StreamingHttpResponse
-from django.core.files.storage import FileSystemStorage
+# from django.core.files.storage import FileSystemStorage, default_storage
+from django.core.files.storage import default_storage
 
 from cm_main.utils import test_resource_full_path, get_test_absolute_url
 from members.tests.tests_member_base import MemberTestCase
-from cm_main.utils import get_media_storage, storage_rmtree
+from cm_main.utils import storage_rmtree
 
 
 class ProtectedMediaTestCase(MemberTestCase):
@@ -15,10 +16,11 @@ class ProtectedMediaTestCase(MemberTestCase):
     super().setUp()
     # use test logo from resources as an image file to test the protected media
     # so copy it to /media/testdir/testimage.png
-    self.storage = get_media_storage()
-    absolute_name = isinstance(self.storage, FileSystemStorage)
-    self.test_file = settings.MEDIA_ROOT if absolute_name else settings.MEDIA_REL
-    self.test_file = self.test_file / 'test_protected_media' / 'test_image.jpg'
+    self.storage = default_storage
+    # absolute_name = isinstance(self.storage, FileSystemStorage)
+    # self.test_file = settings.MEDIA_ROOT if absolute_name else settings.MEDIA_REL
+    # self.test_file = self.test_file / 'test_protected_media' / 'test_image.jpg'
+    self.test_file = settings.MEDIA_REL / 'test_protected_media' / 'test_image.jpg'
     logo_file = test_resource_full_path('test-logo.jpg', __file__)
     # Make sure the destination directory exists
     # useless with storage storage.mkdir(self.test_file.parent)
@@ -29,8 +31,9 @@ class ProtectedMediaTestCase(MemberTestCase):
     with open(logo_file, 'rb') as initial_file:  # reopen as save above closes the file
       self.uploaded_content = initial_file.read()
 
-    self.rel_path = str(self.test_file.relative_to(settings.MEDIA_ROOT) if absolute_name else self.test_file)
-    self.rel_url = reverse('get_protected_media', args=[self.rel_path])
+    # self.rel_path = str(self.test_file.relative_to(settings.MEDIA_ROOT) if absolute_name else self.test_file)
+    # self.rel_url = reverse('get_protected_media', args=[self.rel_path])
+    self.rel_url = reverse('get_protected_media', args=[urllib.parse.quote(str(self.test_file))])
     self.abs_url = get_test_absolute_url(self.rel_url)
 
   def tearDown(self):

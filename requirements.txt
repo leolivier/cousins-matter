@@ -18,3 +18,4 @@ django-q2~=1.8.0
 blessed~=1.22.0
 psycopg[binary]~=3.2.10
 whitenoise~=6.11.0
+django-storages[dropbox,s3]=~1.14.6

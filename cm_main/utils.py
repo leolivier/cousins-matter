@@ -16,7 +16,7 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.core import paginator
 from django.core.exceptions import PermissionDenied
-from django.core.files.storage import FileSystemStorage
+from django.core.files.storage import FileSystemStorage, default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import connections, models
 from django.forms import ValidationError
@@ -186,17 +186,40 @@ def create_test_image(file__, image_file_basename, content_type='image/jpeg'):
 
 @contextmanager
 def set_test_media_root(test_file):
+    """
+    Context manager to set the MEDIA_ROOT to a temporary directory
+    within the test file's directory. This is useful for tests that
+    need to write files to the media directory. The temporary
+    directory is automatically deleted after the test is complete.
+
+    Args:
+        test_file: The current test file.
+
+    Yields:
+        None
+    """
     test_media_root = os.path.join(os.path.dirname(test_file), "media")
     os.makedirs(test_media_root, exist_ok=True)
+    dst = default_storage
+    old_storage_location = dst.location
     try:
         with override_settings(MEDIA_ROOT=test_media_root):
+            dst.location = test_media_root
             yield
     finally:
+        dst.location = old_storage_location
         if os.path.isdir(test_media_root):
             shutil.rmtree(test_media_root)
 
 
 def test_media_root_decorator(test_file):
+    """
+    Decorator that sets the MEDIA_ROOT to a temporary directory
+    within the test file's directory during the test. This is useful
+    for tests that need to write files to the media directory. The
+    temporary directory is automatically deleted after the test is
+    complete.
+    """
     def decorator(cls):
         orig_setUp = cls.setUp
         orig_tearDown = cls.tearDown
@@ -207,8 +230,8 @@ def test_media_root_decorator(test_file):
             orig_setUp(self, *args, **kwargs)
 
         def tearDown(self, *args, **kwargs):
-            self.test_media_root_context.__exit__(None, None, None)
             orig_tearDown(self, *args, **kwargs)
+            self.test_media_root_context.__exit__(None, None, None)
 
         cls.setUp = setUp
         cls.tearDown = tearDown

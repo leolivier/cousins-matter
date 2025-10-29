@@ -73,9 +73,9 @@ def create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
   # or extract them when showing image detail?
 
   # compute exif date
-  DateTimeOriginal = 36867
-  DateTime = 306
-  date = exifdata.get(DateTimeOriginal) or exifdata.get(DateTime)
+  DateTimeOriginalKey = 36867
+  DateTimeKey = 306
+  date = exifdata.get(DateTimeOriginalKey) or exifdata.get(DateTimeKey)
   date = datetime.today() if date is None or date.startswith("0000") else \
     datetime.strptime(date, "%Y:%m:%d %H:%M:%S").date()
   # create image from in memory buffer

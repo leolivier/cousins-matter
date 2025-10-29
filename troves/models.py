@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 from django.conf import settings
+from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -92,9 +93,7 @@ class Trove(models.Model):
     super().delete(*args, **kwargs)
 
   def delete_picture(self):
-    if os.path.isfile(self.picture.path):
-      os.remove(self.picture.path)
+    default_storage.delete(self.picture.path)
     thumbnail_path = os.path.join(settings.TROVE_THUMBNAIL_DIRECTORY, os.path.basename(self.picture.path))
-    if os.path.isfile(thumbnail_path):
-      os.remove(thumbnail_path)
+    default_storage.delete(thumbnail_path)
     self.picture = None

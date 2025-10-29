@@ -1,20 +1,21 @@
 import os
-import shutil
+# import shutil
 from django.conf import settings
 from django.urls import reverse
 from django.test import TestCase
 from django.templatetags.static import static
 
 from cousinsmatter.context_processors import override_settings
+from cm_main.tests.test_protected_media import TestMediaResourceMixin
 
 
-class TestSiteLogo(TestCase):
+class TestSiteLogo(TestMediaResourceMixin, TestCase):
   # disable navbar cache for this test
   @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}})
   def test_custom_logo(self):
     """test the custom site logo"""
     logo_basefilename = 'test-logo.jpg'
-    logo_full_path = os.path.join(settings.MEDIA_ROOT, 'public', logo_basefilename)
+    logo_target_path = os.path.join('public', logo_basefilename)
     logo_testresources_file = os.path.join(os.path.dirname(__file__), 'resources', logo_basefilename)
     logo_url = f'{settings.PUBLIC_MEDIA_URL}{logo_basefilename}'
 
@@ -30,12 +31,7 @@ class TestSiteLogo(TestCase):
       response = self.client.get(reverse('cm_main:Home'), follow=True)
       self.assertContains(response, format % current_logo_url, html=True)
 
-    # if the file doesn't exist, copy it from resources
-    if (not os.path.isfile(logo_full_path)):
-      # Make sure the destination directory exists
-      os.makedirs(os.path.dirname(logo_full_path), exist_ok=True)
-      # Copy the test resource
-      shutil.copy2(logo_testresources_file, logo_full_path)
+    logo_target_path = self.copy_test_resource(logo_testresources_file, logo_target_path)
 
     # override the settings SITE_LOGO
     with override_settings(SITE_LOGO=logo_url):
@@ -43,5 +39,4 @@ class TestSiteLogo(TestCase):
       self.assertContains(response, format % logo_url, html=True)
 
     # clean up
-    if (os.path.isfile(logo_full_path)):
-      os.remove(logo_full_path)
+    self.clean_storage(logo_target_path)

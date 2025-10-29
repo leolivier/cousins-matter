@@ -18,11 +18,8 @@ def get_path(instance, filename, subdir=None):
   """
   if not instance.gallery_id:
     raise ValidationError(_("A photo must belong to a gallery."))
-  dir = os.path.join(settings.GALLERIES_DIR, instance.gallery.full_path())
-  if subdir:
-    dir = os.path.join(dir, subdir)
-  os.makedirs(os.path.join(settings.MEDIA_ROOT, dir), exist_ok=True)
-  path = os.path.join(dir, filename)
+  path = os.path.join(settings.GALLERIES_DIR, instance.gallery.full_path(), subdir, filename) if subdir \
+    else os.path.join(settings.GALLERIES_DIR, instance.gallery.full_path(), filename)
   logger.debug(f"photo is stored in {path}")
   return path
 
@@ -153,9 +150,7 @@ class Gallery(models.Model):
     return super().save(*args, **kwargs)
 
   def full_path(self):
-    if not self.parent:
-      return self.slug
-    return os.path.join(self.parent.full_path(), self.slug)
+    return os.path.join(self.parent.full_path(), self.slug) if self.parent else self.slug
 
   def cover_url(self):
     return self.cover.thumbnail.url if self.cover else settings.DEFAULT_GALLERY_COVER_URL

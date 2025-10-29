@@ -5,6 +5,7 @@ from PIL import Image, ImageOps
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import default_storage
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -239,8 +240,7 @@ class Member(AbstractUser):
         self._resize_avatar(settings.AVATARS_SIZE, self.avatar.path)
         # generate minified for post/ads/chat
         mini_path = self.avatar_mini_path
-        if not os.path.isfile(mini_path):
-          self._resize_avatar(settings.AVATARS_MINI_SIZE, mini_path)
+        self._resize_avatar(settings.AVATARS_MINI_SIZE, mini_path)
 
     def delete(self, *args, **kwargs):
       self.delete_avatar()
@@ -248,11 +248,9 @@ class Member(AbstractUser):
 
     def delete_avatar(self):
       if self.avatar:
-        if os.path.isfile(self.avatar.path):
-          os.remove(self.avatar.path)
+        default_storage.delete(self.avatar.path)
         mini_path = self.avatar_mini_path
-        if os.path.isfile(mini_path):
-          os.remove(mini_path)
+        default_storage.delete(mini_path)
         self.avatar = None
 
 

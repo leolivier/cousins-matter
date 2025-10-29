@@ -1,5 +1,6 @@
 import os
 from django.conf import settings
+from django.core.files.storage import default_storage
 from datetime import date
 from django.core.exceptions import ValidationError
 from django.test import TestCase
@@ -64,8 +65,9 @@ class CreateGalleryTest(GalleryBaseTestCase):
     cover.save()
     gal.cover = cover
     gal.save()
-    gal_dir = os.path.join(settings.MEDIA_ROOT, settings.GALLERIES_DIR, gal.full_path())
-    self.assertTrue(os.path.isfile(os.path.join(gal_dir, cover_file)))
+    cover_path = os.path.join(settings.MEDIA_REL, settings.GALLERIES_DIR, gal.full_path(), cover_file)
+    self.assertTrue(default_storage.exists(cover.image.path))
+    self.assertTrue(cover.image.path.endswith(cover_path))
 
   def test_create_galleries_with_same_name(self):
     """Tests creating galleries with the same name."""

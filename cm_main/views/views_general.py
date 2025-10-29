@@ -46,9 +46,6 @@ def download_protected_media(request, media):
   :raises Http404: If the file is not found, or if the path is invalid
   """
   logger.debug(f"Downloading protected media {media}")
-  # # Security: Make sure the path does not go back up the tree using '..'. Useless with any backend storage
-  # if not os.path.normpath(the_file).startswith(os.path.normpath(settings.MEDIA_ROOT)):
-  #   raise Http404(_("Path traversal detected"))
 
   hasher = blake2b()
   tbh = bytes(f'{request.user.username}@{media}', 'utf-8')

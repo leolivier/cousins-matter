@@ -5,6 +5,7 @@ import random
 import string
 from typing import Literal
 from django.conf import settings
+from django.core.files.storage import default_storage
 from django.utils.text import slugify
 from django.utils.translation import gettext as _, activate as translation_activate, deactivate as translation_deactivate
 from django.core.files import File
@@ -98,7 +99,7 @@ def manage_avatar(row_data: MemberImportData):
     return
 
   # avatar image must already exist
-  if not os.path.exists(avatar):
+  if not default_storage.exists(avatar):
     row_data.warnings.append(_("Avatar not found: %(avatar)s for username %(username)s. Ignored...") %
                              {'avatar': avatar, 'username': username})
   else:

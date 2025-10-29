@@ -114,10 +114,7 @@ def get_photo_path(photo, filename):
   """
   photos will be uploaded to MEDIA_ROOT/classified_ads/<ad_id>/<filename>.
   """
-  dir = os.path.join('classified_ads', str(photo.ad.id))
-  os.makedirs(os.path.join(settings.MEDIA_ROOT, dir), exist_ok=True)
-  path = os.path.join(dir, filename)
-  return path
+  return os.path.join('classified_ads', str(photo.ad.id), filename)
 
 
 def get_thumbnail_path(photo, filename):

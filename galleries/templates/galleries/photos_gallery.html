@@ -5,10 +5,10 @@
 		{% for photo in page.object_list %}
 		<div class="cell has-text-centered">
 			<figure class="image thumbnail mx-auto">
-				<img src="{{photo.thumbnail.url}}" 
+				<img src="{{photo.thumbnail_url}}" 
 					class="gallery-image"
 					{%if photo.next_url%}data-next="{{photo.next_url}}"{%endif%}
-					data-fullscreen="{{photo.image.url}}"
+					data-fullscreen="{{photo.image_url}}"
 					{%if photo.previous_url%}data-prev="{{photo.previous_url}}"{%endif%}
 					data-idx="{%get_absolute_idx_from_page page forloop.counter%}"
 					data-pk="{{photo.id}}"

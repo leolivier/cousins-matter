@@ -11,7 +11,7 @@ from pathlib import PosixPath
 # import pprint
 import sys
 import unicodedata
-from urllib.parse import urlencode
+from urllib.parse import urlencode, quote
 
 from django.conf import settings
 from django.core import paginator
@@ -334,22 +334,48 @@ def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFil
         than this, it is resized.
     :return: An InMemoryUploadedFile representing the thumbnail.
     """
+    if image.height <= size or image.width <= size:
+        return image
+
     output_thumb = BytesIO()
-    filename = os.path.basename(image.path)
+    filename = image.file.name.split('/')[-1]
     file, ext = os.path.splitext(filename)
-    with Image.open(image.path) as img:
-        if img.height > size or img.width > size:
-            img.thumbnail((size, size))
-            img = ImageOps.exif_transpose(img)  # avoid image rotating
-            # use WEBP format for thumbnails instead of JPEG to avoid loss of transparency
-            img.save(output_thumb, format='WEBP', quality=90)
-            size = sys.getsizeof(output_thumb)
-            thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.webp",
-                                             'image/webp', size, None)
-            logger.debug(f"Resized and saved thumbnail for {image.path}, size={size}")
-        else:  # small photos are used directly as thumbnails
-            thumbnail = image
-    return thumbnail
+    # ISSUE WITH Image.open() which raises "ValueError: seek on closed file" in some circumstances
+    # Solution by Gemini:
+    # 1. Get the standard Python file object
+    file_object = image.file
+    # 2. 🌟 SOLUTION: Make sure the cursor is at the beginning (position 0) 🌟
+    # If the cursor has already been moved to the end by a previous read,
+    # seek(0) is essential for Pillow to read the headers.
+    try:
+        file_object.seek(0)
+    except ValueError as e:
+        # Handles the case where the file is actually closed and seek(0) fails.
+        if 'closed file' in str(e):
+            # Tente de ré-ouvrir le fichier de Django si possible.
+            # (Peut varier selon le Storage Backend)
+            image.open() 
+            file_object = image.file
+            file_object.seek(0)
+        else:
+            raise e
+    # 3. Use file_object to open the image instead of image.file
+    with Image.open(image.file) as img:
+        img.thumbnail((size, size))
+        img = ImageOps.exif_transpose(img)  # avoid image rotating
+        # use WEBP format for thumbnails instead of JPEG to avoid loss of transparency
+        img.save(output_thumb, format='WEBP', quality=90)
+        size = sys.getsizeof(output_thumb)
+        thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.webp",
+                                         'image/webp', size, None)
+        logger.debug(f"Resized and saved thumbnail for {image.file.name}, size={size}")
+        return thumbnail
+
+
+def protected_media_url(media):
+    if media.startswith(settings.MEDIA_ROOT):
+        media = media[len(settings.MEDIA_ROOT)+1:]
+    return reverse('get_protected_media', args=[quote(str(media))])
 
 
 def check_edit_permission(request, owner):

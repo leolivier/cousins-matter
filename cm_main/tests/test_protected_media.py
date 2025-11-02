@@ -7,7 +7,7 @@ from django.http import StreamingHttpResponse
 # from django.core.files.storage import FileSystemStorage, default_storage
 from django.core.files.storage import default_storage
 
-from cm_main.utils import test_resource_full_path, get_test_absolute_url
+from cm_main.utils import test_resource_full_path, get_test_absolute_url, protected_media_url
 from members.tests.tests_member_base import MemberTestCase
 from cm_main.utils import storage_rmtree, test_media_root_decorator
 
@@ -39,7 +39,7 @@ class ProtectedMediaTestCase(TestMediaResourceMixin, MemberTestCase):
     self.test_file = Path('test_protected_media') / 'test_image.jpg'
     logo_file = test_resource_full_path('test-logo.jpg', __file__)
     (self.test_file, self.uploaded_content) = self.copy_test_resource(logo_file, self.test_file, return_content=True)
-    self.rel_url = reverse('get_protected_media', args=[urllib.parse.quote(str(self.test_file))])
+    self.rel_url = protected_media_url(self.test_file)
     self.abs_url = get_test_absolute_url(self.rel_url)
 
   def tearDown(self):

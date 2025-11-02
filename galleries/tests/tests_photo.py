@@ -1,10 +1,9 @@
 from datetime import date
-from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
-from cm_main.utils import create_test_image
+from cm_main.utils import create_test_image, protected_media_url
 from galleries.models import Photo, Gallery
 from galleries.views.views_photo import PhotoAddView
 from members.tests.tests_member import TestLoginRequiredMixin
@@ -108,14 +107,15 @@ class CreatePhotoViewTests(PhotoTestsBase):
     photos = Photo.objects.filter(gallery=gallery)[first:last]
     return photos
 
-  def get_photo_dicts(self, photos, nb_photos, page_num, first, last):
+  def get_photo_dicts(self, photos, nb_photos, page_num, last):
     photo_dicts = [p.__dict__ for p in photos]
     nb_dicts = len(photo_dicts)
     for idx, p in enumerate(photo_dicts):
+      pmu = protected_media_url(p['image'].file.name)
       if idx > 0:
-        photo_dicts[idx-1]['next_url'] = p['image'].url
+        photo_dicts[idx-1]['next_url'] = pmu
       if idx < nb_dicts - 1:
-        photo_dicts[idx+1]['previous_url'] = p['image'].url
+        photo_dicts[idx+1]['previous_url'] = pmu
 
     # print('first, last, nb_photos:', first, last, nb_photos)
 
@@ -141,17 +141,17 @@ class CreatePhotoViewTests(PhotoTestsBase):
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, 'galleries/photos_gallery.html')
-    photo_dicts = self.get_photo_dicts(photos, nb_photos, page_num, first, last)
+    photo_dicts = self.get_photo_dicts(photos, nb_photos, page_num, last)
 
     for idx, p in enumerate(photo_dicts):
       content = f'''
   <div class="cell has-text-centered">
     <figure class="image thumbnail mx-auto">
-      <img src="{settings.MEDIA_URL}{p['thumbnail']}"
+      <img src="{protected_media_url(p['thumbnail'])}"
         class="gallery-image"
-        {"data-next=" + p['next_url'] if 'next_url' in p else ""}
-        data-fullscreen="{p['image'].url}"
-        {"data-prev=" + p['previous_url'] if 'previous_url' in p else ""}
+        {f'data-next="{p['next_url']}"' if 'next_url' in p else ""}
+        data-fullscreen="{protected_media_url(p['image'].file.name)}"
+        {f'data-prev="{p['previous_url']}"' if 'previous_url' in p else ""}
         data-idx="{(page_num - 1) * page_size + idx + 1}"
         data-pk="{p['id']}"
       >
@@ -193,8 +193,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
   def test_display_several_photos(self):
     """Tests displaying several photos."""
     self.check_display_several_photos(10, 9)
-    self.check_display_several_photos(10, 12)
-
+    self.check_display_several_photos(10, 10)
     self.check_display_several_photos(10, 11)
 
 

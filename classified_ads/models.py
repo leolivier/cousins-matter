@@ -147,8 +147,8 @@ class AdPhoto(models.Model):
 
   def delete(self, *args, **kwargs):
       # delete the image and the thumbnail if they exist
+      if self.thumbnail and self.thumbnail != self.image:
+        self.thumbnail.delete(False)
       if self.image:
           self.image.delete(False)
-      if self.thumbnail:
-        self.thumbnail.delete(False)
       super().delete(*args, **kwargs)

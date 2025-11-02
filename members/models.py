@@ -256,7 +256,8 @@ class Member(AbstractUser):
 
 class LoginTrace(models.Model):
     user = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
-    ip = models.GenericIPAddressField(db_index=True)
+    # ip = models.GenericIPAddressField(db_index=True)  issue on postgres which stores 127.0.0.1/32 instead of 127.0.0.1
+    ip = models.CharField(max_length=39, unique=False, db_index=True)
     ip_info = models.JSONField(default=dict)
     country_code = models.CharField(max_length=2, blank=True)
     user_agent = models.TextField()

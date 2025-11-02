@@ -209,6 +209,10 @@ DATABASES = {
     'HOST': env.str('POSTGRES_HOST', default='postgres'),
     'PORT': 5432,
     'NAME': env.str('POSTGRES_DB', default='cousinsmatter'),
+    'CONN_MAX_AGE': 600,  # Keep connections open for 10 minutes
+    'OPTIONS': {
+      'connect_timeout': 10,
+    },
     'TEST': {'NAME': 'test_cousinsmatter'},
   }
 }

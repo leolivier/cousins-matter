@@ -53,10 +53,12 @@ class Photo(models.Model):
   class Meta:
     ordering = ['id']
     indexes = [
-      models.Index(fields=["gallery", "date", "name"]),
+      models.Index(fields=['gallery']),
+      models.Index(fields=['name']),
+      models.Index(fields=['gallery', 'id']),
     ]
     constraints = [
-      models.UniqueConstraint(fields=("slug", "gallery"), name="slugs must be unique inside their gallery"),
+      models.UniqueConstraint(fields=('slug', 'gallery'), name="slugs must be unique inside their gallery"),
     ]
 
   def __str__(self):

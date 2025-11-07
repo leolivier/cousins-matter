@@ -64,8 +64,8 @@ markdown_extensions:
   # - pymdownx.betterem:
   #     smart_enable: all
 
-#extra_css:
-#  - "assets/css/extra.css"    # optionnel
+extra_css:
+  - "assets/css/extra.css"
 
 #extra_javascript:
 #  - "assets/js/extra.js"      # optionnel

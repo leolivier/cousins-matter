@@ -1,18 +1,13 @@
 import logging
 import os
-import sys
 from django.conf import settings
 from django.core.files.storage import default_storage
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from io import BytesIO
-from PIL import Image, ImageOps, ImageFile
+from cm_main.utils import create_thumbnail
 
 logger = logging.getLogger(__name__)
-# issue #120 try to avoid error about truncated images when creating thumbnails
-ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 class Trove(models.Model):
@@ -53,7 +48,8 @@ class Trove(models.Model):
     return dict(Trove.CATEGORY_CHOICES)[category]
 
   def _thumbnail_path(self):
-    return os.path.join(settings.TROVE_THUMBNAIL_DIRECTORY, os.path.basename(self.picture.path))
+    base = self.picture.name.split('/')[-1]
+    return os.path.join(settings.TROVE_THUMBNAIL_DIRECTORY, base)
 
   def clean(self):
     if self.owner is None:
@@ -63,23 +59,7 @@ class Trove(models.Model):
     self.full_clean()  # clean before save
     super().save(*args, **kwargs)
     try:
-      # create thumbnail
-      tns = settings.TROVE_THUMBNAIL_SIZE
-      output_thumb = BytesIO()
-      filename = os.path.basename(self.picture.path)
-      file, ext = os.path.splitext(filename)
-      with Image.open(self.picture.path) as img:
-        if img.height > tns or img.width > tns:
-          size = tns, tns
-          img.thumbnail(size)
-          img = ImageOps.exif_transpose(img)  # avoid image rotating
-          img.save(output_thumb, format='JPEG', quality=90)
-          size = sys.getsizeof(output_thumb)
-          self.thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.jpg",
-                                                'image/jpeg', size, None)
-          logger.debug(f"Resized and saved thumbnail for {self.picture.path} to {self.thumbnail.path}, size={size}")
-        else:  # small photos are used directly as thumbnails
-          self.thumbnail = self.picture
+      self.thumbnail = create_thumbnail(self.picture, settings.TROVE_THUMBNAIL_SIZE)
 
       super().save(force_update=True, update_fields=['thumbnail'])
 
@@ -93,7 +73,7 @@ class Trove(models.Model):
     super().delete(*args, **kwargs)
 
   def delete_picture(self):
-    default_storage.delete(self.picture.path)
-    thumbnail_path = os.path.join(settings.TROVE_THUMBNAIL_DIRECTORY, os.path.basename(self.picture.path))
+    default_storage.delete(self.picture.name)
+    thumbnail_path = os.path.join(settings.TROVE_THUMBNAIL_DIRECTORY, self.picture.name.split('/')[-1])
     default_storage.delete(thumbnail_path)
     self.picture = None

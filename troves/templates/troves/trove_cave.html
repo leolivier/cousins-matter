@@ -58,11 +58,11 @@ function delete_treasure(url) {
         {% for trove in troves %}
         <div class="cell has-text-centered">
           <a 
-            {%if trove.file and not trove.description %}href="{{ trove.file.url }}" target="_blank"
+            {%if trove.file and not trove.description %}href="{% url 'get_protected_media' trove.file.name%}" target="_blank"
             {%else%}href="{%url 'troves:detail' trove.pk %}"
             {%endif%}>
             <figure class="image thumbnail mx-auto">
-              <img src="{{ trove.thumbnail.url }}" alt="{{ trove.title }}"/>
+              <img src="{% url 'get_protected_media' trove.thumbnail.name%}" alt="{{ trove.title }}"/>
             </figure>
             <p>{% autoescape off %}{{ trove.title }}{% endautoescape %}</p>
           </a>

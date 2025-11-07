@@ -38,7 +38,7 @@
 				"--failfast",
 				"-v",
 				"2",
-				"cm_main.tests.test_protected_media.ProtectedMediaTestCase.test_unauthenticated_user_cannot_access_protected_media"
+				"troves.tests.tests.TestTroveList.test_create_troves"
 			],
 			"django": true,
 			"autoStartBrowser": false,

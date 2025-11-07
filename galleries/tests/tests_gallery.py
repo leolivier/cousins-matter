@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from cm_main.templatetags.cm_tags import icon
-from cm_main.utils import create_test_image, protected_media_url
+from cm_main.utils import create_test_image
 from galleries.models import Gallery, Photo
 from galleries.views.views_gallery import GalleryCreateView, GalleryDetailView, GalleryUpdateView
 from members.tests.tests_member_base import TestLoginRequiredMixin
@@ -65,9 +65,10 @@ class CreateGalleryTest(GalleryBaseTestCase):
     cover.save()
     gal.cover = cover
     gal.save()
-    cover_url = os.path.join(settings.MEDIA_URL, settings.GALLERIES_DIR, gal.full_path(), cover_file)
-    self.assertTrue(default_storage.exists(cover.image.file.name))
-    self.assertEqual(protected_media_url(cover.image.file.name), cover_url)
+    cover_url = os.path.join(settings.MEDIA_URL, settings.GALLERIES_DIR, gal.full_path(), "thumbnails", "test-image-1")
+    self.assertTrue(default_storage.exists(cover.image.name))
+    # print("cover_url", cover_url, "gal.cover_url()", gal.cover_url())
+    self.assertTrue(gal.cover_url().startswith(cover_url))
 
   def test_create_galleries_with_same_name(self):
     """Tests creating galleries with the same name."""

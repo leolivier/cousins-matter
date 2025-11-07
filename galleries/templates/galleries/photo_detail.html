@@ -53,10 +53,11 @@ $photos_count = {{ photos_count }}
 	</div>
 	<div class="container">
 		<figure class="photo">
-			<img src="{{photo.image.url}}"
+			{% url 'get_protected_media' photo.image.name as photo_url%}
+			<img src="{{photo_url}}"
 				class="gallery-image"
 				{%if photo.next_url%}data-next="{{photo.next_url}}"{%endif%}
-				data-fullscreen="{{photo.image.url}}"
+				data-fullscreen="{{photo_url}}"
 				{%if photo.previous_url%}data-prev="{{photo.previous_url}}"{%endif%}
 				data-idx="{{page.number}}"
 				data-pk="{{photo.id}}"

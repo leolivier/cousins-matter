@@ -2,10 +2,10 @@
 import logging
 import math
 import os
+import shutil
 from contextlib import contextmanager
 from datetime import datetime
 from io import BytesIO
-import shutil
 from PIL import Image, ImageOps, ImageFile
 from pathlib import PosixPath
 # import pprint
@@ -198,16 +198,23 @@ def set_test_media_root(test_file):
     Yields:
         None
     """
-    test_media_root = os.path.join(os.path.dirname(test_file), "media")
-    os.makedirs(test_media_root, exist_ok=True)
+    test_file = os.path.relpath(test_file, settings.BASE_DIR)
+    # test_media_root = os.path.join(os.path.dirname(test_file), "media")
+    # os.makedirs(test_media_root, exist_ok=True)
+    submedia_reltestdir = "test_cfyguihjknmlnjbhg"
+    test_media_root = os.path.join(settings.MEDIA_REL, submedia_reltestdir)
     dst = default_storage
-    old_storage_location = dst.location
+    if 'location' in dst.__dict__:
+        old_storage_location = dst.location
     try:
         with override_settings(MEDIA_ROOT=test_media_root):
-            dst.location = test_media_root
+            if 'location' in dst.__dict__:
+                dst.location = test_media_root
             yield
     finally:
-        dst.location = old_storage_location
+        # storage_rmtree(dst, submedia_reltestdir)
+        if 'location' in dst.__dict__:
+            dst.location = old_storage_location
         if os.path.isdir(test_media_root):
             shutil.rmtree(test_media_root)
 
@@ -341,25 +348,8 @@ def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFil
     filename = image.file.name.split('/')[-1]
     file, ext = os.path.splitext(filename)
     # ISSUE WITH Image.open() which raises "ValueError: seek on closed file" in some circumstances
-    # Solution by Gemini:
-    # 1. Get the standard Python file object
-    file_object = image.file
-    # 2. 🌟 SOLUTION: Make sure the cursor is at the beginning (position 0) 🌟
-    # If the cursor has already been moved to the end by a previous read,
-    # seek(0) is essential for Pillow to read the headers.
-    try:
-        file_object.seek(0)
-    except ValueError as e:
-        # Handles the case where the file is actually closed and seek(0) fails.
-        if 'closed file' in str(e):
-            # Tente de ré-ouvrir le fichier de Django si possible.
-            # (Peut varier selon le Storage Backend)
-            image.open() 
-            file_object = image.file
-            file_object.seek(0)
-        else:
-            raise e
-    # 3. Use file_object to open the image instead of image.file
+    if image.file.closed:
+        image.file = default_storage.open(image.name, 'rb')
     with Image.open(image.file) as img:
         img.thumbnail((size, size))
         img = ImageOps.exif_transpose(img)  # avoid image rotating
@@ -373,9 +363,16 @@ def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFil
 
 
 def protected_media_url(media):
-    if media.startswith(settings.MEDIA_ROOT):
-        media = media[len(settings.MEDIA_ROOT)+1:]
-    return reverse('get_protected_media', args=[quote(str(media))])
+    media = str(media)
+    # print("media=", media, "settings.MEDIA_ROOT=", settings.MEDIA_ROOT)
+    if media.startswith(str(settings.MEDIA_ROOT)):
+        media = media[len(str(settings.MEDIA_ROOT))+1:]
+    else:
+        # for a file in base_dir/media when MEDIA_ROOT has been changed
+        p = str(settings.BASE_DIR / settings.MEDIA_REL)
+        if media.startswith(p):
+            media = media[len(p)+1:]
+    return reverse('get_protected_media', args=[quote(media)])
 
 
 def check_edit_permission(request, owner):
@@ -385,9 +382,10 @@ def check_edit_permission(request, owner):
 
 
 def _fs_rmtree(storage, prefix):
-    if isinstance(storage, FileSystemStorage):  # special case for FileSystemstorage
-        import shutil
-        shutil.rmtree(settings.MEDIA_ROOT / prefix)
+    if isinstance(storage, FileSystemStorage):  # special case for FileSystemstorage1
+        path = settings.MEDIA_ROOT / prefix
+        if os.path.isdir(path):
+            shutil.rmtree(path)
         return True
     return False
 
@@ -431,7 +429,7 @@ def storage_rmtree(storage, prefix):
     """
     Tries to delete all objects under `prefix` as well as `prefix` itself for a given Storage. prefix is a posix path
     - storage: an instance of Storage (or subclass)
-    - prefix: path without leading slash (e.g. "clients/client_42")
+    - prefix: path related to MEDIA_ROOT without leading slash (e.g. "clients/client_42")
     """
     if _fs_rmtree(storage, prefix):
         return

@@ -1,5 +1,5 @@
 from django.urls import reverse
-from cm_main.utils import create_test_image, test_media_root_decorator
+from cm_main.utils import create_test_image, test_media_root_decorator, protected_media_url
 from members.tests.tests_member_base import MemberTestCase
 from ..models import Trove
 
@@ -38,7 +38,7 @@ class TestTroveList(MemberTestCase):
     self.assertEqual(treasure.category, treasure_data['category'])
     self.assertEqual(treasure.owner, self.member)
     self.assertTrue(treasure.picture)
-    # self.assertEqual(treasure.picture.url, treasure_data['picture'].url)
+    # self.assertEqual(protected_media_url(treasure.picture.name), treasure_data['picture'].url)
     self.assertTrue(treasure.thumbnail)
     if 'file' in treasure_data:
       self.assertTrue(treasure.file)
@@ -56,17 +56,17 @@ class TestTroveList(MemberTestCase):
     self.assertContains(response, treasure.title)
     self.assertContains(response, Trove.translate_category(treasure.category))
     if treasure.file and not treasure.description:
-      self.assertContains(response, treasure.file.url)
+      self.assertContains(response, protected_media_url(treasure.file.name))
     if is_detail:
       self.assertContains(response, treasure.description)
-      self.assertContains(response, treasure.picture.url)
-      self.assertNotContains(response, treasure.thumbnail.url)
+      self.assertContains(response, protected_media_url(treasure.picture.name))
+      self.assertNotContains(response, protected_media_url(treasure.thumbnail.name))
       if treasure.file:
-        self.assertContains(response, treasure.file.url)
+        self.assertContains(response, protected_media_url(treasure.file.name))
     else:
-      self.assertContains(response, treasure.thumbnail.url)
+      self.assertContains(response, protected_media_url(treasure.thumbnail.name))
       if treasure.file and not treasure.description:
-        self.assertNotContains(response, treasure.file.url)
+        self.assertNotContains(response, protected_media_url(treasure.file.name))
       else:
         self.assertContains(response, reverse("troves:detail", args=[treasure.id]))
 

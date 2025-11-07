@@ -3,7 +3,6 @@ from datetime import date
 import io
 import os
 
-from django.conf import settings
 from django.core.files.storage import default_storage
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -68,7 +67,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
     super().setUp()
     # create several avatars based on test_avatar_jpg
     for i in range(5):
-      avatar = os.path.join(settings.MEDIA_REL, 'avatars', 'test_avatar_%d.jpg' % i)
+      avatar = os.path.join('avatars', 'test_avatar_%d.jpg' % i)
       if not default_storage.exists(avatar):
         avatar_from = os.path.join(os.path.dirname(__file__), 'resources', self.base_avatar)
         if not os.path.exists(avatar_from):

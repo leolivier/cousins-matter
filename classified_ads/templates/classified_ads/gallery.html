@@ -31,10 +31,10 @@
 				<div class="cell has-text-centered photo-item"
 					id="photo-{{photo.id}}"
 					data-pk="{{photo.id}}"
-					data-fullscreen="{{photo.image.url}}"
+					data-fullscreen="{% url 'get_protected_media' photo.image.name%}"
 				>
 					<figure class="image thumbnail mx-auto">
-						<img src="{{photo.thumbnail.url}}" alt="Photo">
+						<img src="{% url 'get_protected_media' photo.thumbnail.name%}" alt="Photo">
 						{%if edit_gallery%}
 						<button class="delete delete-photo" type="button" data-action="{% url 'classified_ads:delete_photo' photo.id %}"></button>
 						{%endif%}

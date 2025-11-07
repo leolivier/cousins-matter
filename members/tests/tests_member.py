@@ -167,19 +167,19 @@ class MemberProfileViewTest(MemberTestCase):
       self.member.avatar = InMemoryUploadedFile(membuf, 'ImageField', self.base_avatar,
                                                 'image/jpeg', size, None)
     self.member.save()
-    self.assertTrue(default_storage.exists(self.member.avatar.path))
+    self.assertTrue(default_storage.exists(self.member.avatar.name))
     # reusing several times the same image which is renamed each time with a suffix
     testbn_prefix, test_ext = os.path.splitext(self.test_avatar_jpg)
-    avatar_prefix, av_ext = os.path.splitext(self.member.avatar.path)
+    avatar_prefix, av_ext = os.path.splitext(self.member.avatar.name)
     avatar_prefix = os.path.relpath(avatar_prefix, settings.BASE_DIR)
     self.assertEqual(test_ext, test_ext)
     # print(avatar_prefix, testbn_prefix)
     self.assertTrue(avatar_prefix.startswith(testbn_prefix))
     # same for mini avatar
-    mini_path = self.member.avatar_mini_path
-    self.assertTrue(default_storage.exists(mini_path))
+    mini_name = self.member.avatar_mini_name
+    self.assertTrue(default_storage.exists(mini_name))
     testbn_prefix, test_ext = os.path.splitext(self.test_mini_avatar_jpg)
-    avatar_prefix, av_ext = os.path.splitext(mini_path)
+    avatar_prefix, av_ext = os.path.splitext(mini_name)
     avatar_prefix = os.path.relpath(avatar_prefix, settings.BASE_DIR)
     self.assertEqual(test_ext, test_ext)
     self.assertTrue(avatar_prefix.startswith(testbn_prefix))

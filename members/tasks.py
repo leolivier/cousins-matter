@@ -93,7 +93,7 @@ MEMBER_IMPORTS: dict[str, ImportContext] = {}
 def manage_avatar(row_data: MemberImportData):
   username = row_data.row[t('username')]
   avatar_file = row_data.row[t('avatar')]
-  avatar = os.path.join(settings.MEDIA_REL, settings.AVATARS_DIR, avatar_file)
+  avatar = os.path.join(settings.AVATARS_DIR, avatar_file)
   # avatar not changed
   if row_data.current_member.avatar and row_data.current_member.avatar.path == avatar:
     return

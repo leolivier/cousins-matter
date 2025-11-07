@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from cm_main.utils import check_file_size, create_thumbnail
+from cm_main.utils import check_file_size, create_thumbnail, protected_media_url
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +72,8 @@ class Photo(models.Model):
     if not self.gallery_id:
       raise ValidationError(_("A photo must belong to a gallery."))
     # name by default is the name of the file
-    self.name = self.name or os.path.basename(self.image.path)
+    if not self.name:
+      self.name = self.image.name.split('/')[-1]
     # compute slug
     self.slug = self.slug or slugify(self.name)
 
@@ -80,7 +81,7 @@ class Photo(models.Model):
 
     self.full_clean()
 
-    # need to save first to uplad the image
+    # need to save first to upload the image
     super().save(*args, **kwargs)
 
     try:
@@ -155,7 +156,7 @@ class Gallery(models.Model):
     return os.path.join(self.parent.full_path(), self.slug) if self.parent else self.slug
 
   def cover_url(self):
-    return self.cover.thumbnail.url if self.cover else settings.DEFAULT_GALLERY_COVER_URL
+    return protected_media_url(self.cover.thumbnail.name) if self.cover else settings.DEFAULT_GALLERY_COVER_URL
 
   def rec_children_list(self):
     result = [self.pk]

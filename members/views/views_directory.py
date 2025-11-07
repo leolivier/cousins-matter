@@ -61,7 +61,9 @@ class DirectoryPDF(FPDF):
 
   def header(self):
     # Logo
-    self.image(get_static_path(settings.SITE_LOGO), 10, 8, 33)
+    logo = settings.SITE_LOGO if settings.SITE_LOGO.startswith(settings.PUBLIC_MEDIA_URL) \
+      else get_static_path(settings.SITE_LOGO)
+    self.image(logo, 10, 8, 33)
     # Arial bold 15
     self.set_font('Arial', 'B', 8)
     # Move to the right

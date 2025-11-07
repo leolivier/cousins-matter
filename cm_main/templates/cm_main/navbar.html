@@ -4,7 +4,7 @@
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
 			<img src=
-			{%if settings.SITE_LOGO|startswith:"/media/public" %}
+			{% if settings.SITE_LOGO|startswith:settings.PUBLIC_MEDIA_URL %}
 				"{{settings.SITE_LOGO}}"
 			{%else%}
 				"{% static settings.SITE_LOGO %}"

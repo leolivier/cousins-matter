@@ -38,7 +38,7 @@
 				"--failfast",
 				"-v",
 				"2",
-				"members.tests.tests_import_export.TestMemberImport.test_create_import_manager_activation"
+				"troves.tests.tests.TestTroveList.test_create_troves"
 			],
 			"django": true,
 			"autoStartBrowser": false,

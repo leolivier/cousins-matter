@@ -1,15 +1,15 @@
 import logging
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import PasswordResetView
-from django.http import Http404, StreamingHttpResponse
+from django.core.files.storage import default_storage
+from django.http import Http404, StreamingHttpResponse, HttpResponseNotModified
 from django.utils.translation import gettext as _
 from django.views import generic
 from wsgiref.util import FileWrapper
 
-
+from hashlib import blake2b
 import os
 import mimetypes
 import tempfile
@@ -35,25 +35,44 @@ class HomeView(generic.TemplateView):
 
 @login_required
 def download_protected_media(request, media):
+  """
+  View to download a protected media file.
+
+  The file is streamed in chunks of 8KB to avoid loading the whole file into memory.
+  The file must be stored in the MEDIA_ROOT directory in the media backend storage as defined in the settings (e.g. S3).
+  :param request: The request object (unused)
+  :param media: The name of the media file to download
+  :return: A StreamingHttpResponse object containing the media file
+  :raises Http404: If the file is not found, or if the path is invalid
+  """
   logger.debug(f"Downloading protected media {media}")
-  the_file = settings.MEDIA_ROOT / media
-  # Security: Make sure the path does not go back up the tree using '..'
-  if not os.path.normpath(the_file).startswith(os.path.normpath(settings.MEDIA_ROOT)):
-    raise Http404(_("Path traversal detected"))
-  if not os.path.isfile(the_file):
+
+  hasher = blake2b()
+  tbh = bytes(f'{request.user.username}@{media}', 'utf-8')
+  hasher.update(tbh)
+  media_etag = hasher.hexdigest()
+
+  request_etag = request.headers.get('If-None-Match', None)
+  if request_etag and request_etag == media_etag:
+      return HttpResponseNotModified()
+
+  chunk_size = 64*1024
+  media_file = default_storage.open(media, "rb")
+  try:
+    response = StreamingHttpResponse(
+        FileWrapper(media_file, chunk_size),
+        content_type=mimetypes.guess_type(media)[0],
+    )
+  except FileNotFoundError:
     raise Http404(_("Media not found"))
-  # filename = os.path.basename(the_file)
-  chunk_size = 8192
-  response = StreamingHttpResponse(
-      FileWrapper(
-          open(the_file, "rb"),
-          chunk_size,
-      ),
-      content_type=mimetypes.guess_type(the_file)[0],
-  )
-  response["Content-Length"] = os.path.getsize(the_file)
+  except Exception as e:
+    raise Http404(_("Error when retrieving media: %s") % e)
+
+  response["Content-Length"] = media_file.size
   # response["Content-Disposition"] = f"inline; filename={filename}"
   response["Content-Disposition"] = "inline"
+  response["ETag"] = media_etag
+
   return response
 
 

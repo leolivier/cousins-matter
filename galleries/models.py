@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from cm_main.utils import check_file_size, create_thumbnail
+from cm_main.utils import check_file_size, create_thumbnail, protected_media_url
 
 logger = logging.getLogger(__name__)
 
@@ -18,11 +18,8 @@ def get_path(instance, filename, subdir=None):
   """
   if not instance.gallery_id:
     raise ValidationError(_("A photo must belong to a gallery."))
-  dir = os.path.join(settings.GALLERIES_DIR, instance.gallery.full_path())
-  if subdir:
-    dir = os.path.join(dir, subdir)
-  os.makedirs(os.path.join(settings.MEDIA_ROOT, dir), exist_ok=True)
-  path = os.path.join(dir, filename)
+  path = os.path.join(settings.GALLERIES_DIR, instance.gallery.full_path(), subdir, filename) if subdir \
+    else os.path.join(settings.GALLERIES_DIR, instance.gallery.full_path(), filename)
   logger.debug(f"photo is stored in {path}")
   return path
 
@@ -56,10 +53,12 @@ class Photo(models.Model):
   class Meta:
     ordering = ['id']
     indexes = [
-      models.Index(fields=["gallery", "date", "name"]),
+      models.Index(fields=['gallery']),
+      models.Index(fields=['name']),
+      models.Index(fields=['gallery', 'id']),
     ]
     constraints = [
-      models.UniqueConstraint(fields=("slug", "gallery"), name="slugs must be unique inside their gallery"),
+      models.UniqueConstraint(fields=('slug', 'gallery'), name="slugs must be unique inside their gallery"),
     ]
 
   def __str__(self):
@@ -73,7 +72,8 @@ class Photo(models.Model):
     if not self.gallery_id:
       raise ValidationError(_("A photo must belong to a gallery."))
     # name by default is the name of the file
-    self.name = self.name or os.path.basename(self.image.path)
+    if not self.name:
+      self.name = self.image.name.split('/')[-1]
     # compute slug
     self.slug = self.slug or slugify(self.name)
 
@@ -81,7 +81,7 @@ class Photo(models.Model):
 
     self.full_clean()
 
-    # need to save first to uplad the image
+    # need to save first to upload the image
     super().save(*args, **kwargs)
 
     try:
@@ -153,12 +153,10 @@ class Gallery(models.Model):
     return super().save(*args, **kwargs)
 
   def full_path(self):
-    if not self.parent:
-      return self.slug
-    return os.path.join(self.parent.full_path(), self.slug)
+    return os.path.join(self.parent.full_path(), self.slug) if self.parent else self.slug
 
   def cover_url(self):
-    return self.cover.thumbnail.url if self.cover else settings.DEFAULT_GALLERY_COVER_URL
+    return protected_media_url(self.cover.thumbnail.name) if self.cover else settings.DEFAULT_GALLERY_COVER_URL
 
   def rec_children_list(self):
     result = [self.pk]

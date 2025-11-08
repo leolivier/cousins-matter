@@ -19,7 +19,7 @@ services:
 
   qcluster:
     image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
-    container_name: cousins-matter-qcluster
+    container_name: cousins-matter.qcluster
     command: ["python", "manage.py", "qcluster"]
     user: "cm_user:cm_user"
     restart: unless-stopped
@@ -37,13 +37,14 @@ services:
 
   postgres:
     image: postgres:alpine
-    container_name: cousins-matter-postgres
+    container_name: cousins-matter.db
     restart: unless-stopped
     user: "postgres:postgres"
     ports:
       - "5432:5432"
     volumes:
       - cousins_matter_postgres_data:/var/lib/postgresql/data
+      - ./backup:/backup
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-cousinsmatter}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -59,7 +60,7 @@ services:
 
   redis:
     image: redis:alpine
-    container_name: cousins-matter-redis
+    container_name: cousins-matter.redis
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -76,7 +77,7 @@ services:
 
   nginx:
     image: nginx:stable-alpine
-    container_name: cousins-matter-nginx
+    container_name: cousins-matter.nginx
     ports:
       - "8000:80"
     volumes:

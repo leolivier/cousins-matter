@@ -1,16 +1,15 @@
 import datetime
 import logging
-import os
-from PIL import Image, ImageOps
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import default_storage
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from cm_main.utils import remove_accents
+from cm_main.utils import remove_accents, create_thumbnail
 from .managers import MemberManager
 
 logger = logging.getLogger(__name__)
@@ -163,10 +162,13 @@ class Member(AbstractUser):
         return settings.DEFAULT_MINI_AVATAR_URL
 
     @property
-    def avatar_mini_path(self):
-      base = os.path.basename(self.avatar.path)
-      dirname = os.path.dirname(self.avatar.path)
-      return os.path.join(dirname, 'mini_'+base)
+    def avatar_mini_name(self):
+      if self.avatar:
+        components = self.avatar.name.split('/')
+        components[-1] = 'mini_' + components[-1]
+        return '/'.join(components)
+      else:
+        return settings.DEFAULT_MINI_AVATAR_URL
 
     @property
     def full_name(self) -> str:
@@ -217,30 +219,23 @@ class Member(AbstractUser):
       self.first_name_unaccent = remove_accents(self.first_name)
       self.last_name_unaccent = remove_accents(self.last_name)
 
-    def _resize_avatar(self, max_size, save_path):
-      try:
-        img = Image.open(self.avatar.path)
-        if img.height > max_size or img.width > max_size:
-          output_size = (max_size, max_size)
-          img.thumbnail(output_size)
-          img = ImageOps.exif_transpose(img)  # avoid image rotating
-          img.save(save_path)
-          logger.debug(f"Resized and saved avatar for {self.full_name} in {save_path}, size: {img.size}")
-      except FileNotFoundError:
-        raise ValueError(f"Avatar file not found: {self.avatar.path}")
-      except Exception as e:
-        raise e
-
     def save(self, *args, **kwargs):
       self.clean()  # clean before save
-      super().save(*args, **kwargs)
       if self.avatar:
-        # resize avatar
-        self._resize_avatar(settings.AVATARS_SIZE, self.avatar.path)
+        # resize avatar itself
+        self.avatar = create_thumbnail(self.avatar, settings.AVATARS_SIZE)
+      super().save(*args, **kwargs)
+
+      if self.avatar:
         # generate minified for post/ads/chat
-        mini_path = self.avatar_mini_path
-        if not os.path.isfile(mini_path):
-          self._resize_avatar(settings.AVATARS_MINI_SIZE, mini_path)
+        mini = create_thumbnail(self.avatar, settings.AVATARS_MINI_SIZE)
+        mini.seek(0)
+        from django.core.files.base import ContentFile
+        content_file = ContentFile(mini.read())
+        saved_path = default_storage.save(self.avatar_mini_name, content_file)
+        if saved_path != self.avatar_mini_name:
+          logger.error(f"ERROR: saved_path != self.avatar_mini_name: {saved_path} != {self.avatar_mini_name}")
+        logger.debug(f"Resized and saved avatar for {self.full_name} in {saved_path}, size: {settings.AVATARS_MINI_SIZE}")
 
     def delete(self, *args, **kwargs):
       self.delete_avatar()
@@ -248,17 +243,15 @@ class Member(AbstractUser):
 
     def delete_avatar(self):
       if self.avatar:
-        if os.path.isfile(self.avatar.path):
-          os.remove(self.avatar.path)
-        mini_path = self.avatar_mini_path
-        if os.path.isfile(mini_path):
-          os.remove(mini_path)
+        default_storage.delete(self.avatar.file.name)
+        default_storage.delete(self.avatar_mini_name)
         self.avatar = None
 
 
 class LoginTrace(models.Model):
     user = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
-    ip = models.GenericIPAddressField(db_index=True)
+    # ip = models.GenericIPAddressField(db_index=True)  issue on postgres which stores 127.0.0.1/32 instead of 127.0.0.1
+    ip = models.CharField(max_length=39, unique=False, db_index=True)
     ip_info = models.JSONField(default=dict)
     country_code = models.CharField(max_length=2, blank=True)
     user_agent = models.TextField()

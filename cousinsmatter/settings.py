@@ -37,24 +37,32 @@ STATIC_REL = 'static'
 STATIC_ROOT = BASE_DIR / STATIC_REL
 STATIC_URL = 'static/'
 # STATICFILES_DIRS = []
-STORAGES = {
-    'default': {
-      'BACKEND': 'django.core.files.storage.FileSystemStorage'
-    },
-    'staticfiles': {
-        "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
 
-MEDIA_REL = 'media'
+MEDIA_REL = Path('media')
 MEDIA_ROOT = BASE_DIR / MEDIA_REL
 # if DEBUG:
 #   MEDIA_URL = MEDIA_REL + '/'
 # else:
-MEDIA_URL = f'protected_{MEDIA_REL}/'
+MEDIA_URL = f'/protected_{MEDIA_REL}/'
 
 PUBLIC_MEDIA_ROOT = MEDIA_ROOT / 'public'
 PUBLIC_MEDIA_URL = f'/{MEDIA_REL}/public/'
+
+STORAGES = {
+    'staticfiles': {
+        "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+    'default': {
+      'BACKEND': 'django.core.files.storage.FileSystemStorage',
+      "OPTIONS": {
+            "location": MEDIA_ROOT,
+            "base_url": MEDIA_URL,
+        },
+    } if env.str('MEDIA_STORAGE', default=None) is None else {
+      'BACKEND': env.str('MEDIA_STORAGE'),
+      "OPTIONS": env.json('MEDIA_STORAGE_OPTIONS', default={})
+    }
+}
 
 SITE_NAME = env.str('SITE_NAME', default='Cousins Matter')
 SITE_DOMAIN = env.str('SITE_DOMAIN', None)
@@ -201,6 +209,10 @@ DATABASES = {
     'HOST': env.str('POSTGRES_HOST', default='postgres'),
     'PORT': 5432,
     'NAME': env.str('POSTGRES_DB', default='cousinsmatter'),
+    'CONN_MAX_AGE': 600,  # Keep connections open for 10 minutes
+    'OPTIONS': {
+      'connect_timeout': 10,
+    },
     'TEST': {'NAME': 'test_cousinsmatter'},
   }
 }

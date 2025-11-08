@@ -6,6 +6,7 @@ from django.core import mail
 from django.urls import reverse
 from django.utils import formats, timezone
 from django.utils.translation import gettext as _
+from cm_main.utils import protected_media_url
 from members.tests.tests_member import TestLoginRequiredMixin, MemberTestCase
 from .forms import ClassifiedAdForm, AdPhotoForm
 from .models import Categories, ClassifiedAd, AdPhoto
@@ -269,10 +270,10 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
           class="cell has-text-centered photo-item"
           id="photo-{photo.id}"
           data-pk="{photo.id}"
-          data-fullscreen="{photo.image.url}"
+          data-fullscreen="{protected_media_url(photo.image.name)}"
         >
           <figure class="image thumbnail mx-auto">
-            <img src="{photo.thumbnail.url}" alt="{_('Photo')}">
+            <img src="{protected_media_url(photo.thumbnail.name)}" alt="{_('Photo')}">
           </figure>
         </div>""", html=True)
 

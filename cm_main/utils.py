@@ -2,19 +2,21 @@
 import logging
 import math
 import os
+import shutil
 from contextlib import contextmanager
 from datetime import datetime
 from io import BytesIO
-import shutil
 from PIL import Image, ImageOps, ImageFile
 from pathlib import PosixPath
 # import pprint
 import sys
 import unicodedata
-from urllib.parse import urlencode
+from urllib.parse import urlencode, quote
 
+from django.conf import settings
 from django.core import paginator
 from django.core.exceptions import PermissionDenied
+from django.core.files.storage import FileSystemStorage, default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import connections, models
 from django.forms import ValidationError
@@ -184,17 +186,47 @@ def create_test_image(file__, image_file_basename, content_type='image/jpeg'):
 
 @contextmanager
 def set_test_media_root(test_file):
-    test_media_root = os.path.join(os.path.dirname(test_file), "media")
-    os.makedirs(test_media_root, exist_ok=True)
+    """
+    Context manager to set the MEDIA_ROOT to a temporary directory
+    within the test file's directory. This is useful for tests that
+    need to write files to the media directory. The temporary
+    directory is automatically deleted after the test is complete.
+
+    Args:
+        test_file: The current test file.
+
+    Yields:
+        None
+    """
+    test_file = os.path.relpath(test_file, settings.BASE_DIR)
+    # test_media_root = os.path.join(os.path.dirname(test_file), "media")
+    # os.makedirs(test_media_root, exist_ok=True)
+    submedia_reltestdir = "test_cfyguihjknmlnjbhg"
+    test_media_root = os.path.join(settings.MEDIA_REL, submedia_reltestdir)
+    dst = default_storage
+    if 'location' in dst.__dict__:
+        old_storage_location = dst.location
     try:
         with override_settings(MEDIA_ROOT=test_media_root):
+            if 'location' in dst.__dict__:
+                dst.location = test_media_root
             yield
     finally:
+        # storage_rmtree(dst, submedia_reltestdir)
+        if 'location' in dst.__dict__:
+            dst.location = old_storage_location
         if os.path.isdir(test_media_root):
             shutil.rmtree(test_media_root)
 
 
 def test_media_root_decorator(test_file):
+    """
+    Decorator that sets the MEDIA_ROOT to a temporary directory
+    within the test file's directory during the test. This is useful
+    for tests that need to write files to the media directory. The
+    temporary directory is automatically deleted after the test is
+    complete.
+    """
     def decorator(cls):
         orig_setUp = cls.setUp
         orig_tearDown = cls.tearDown
@@ -205,8 +237,8 @@ def test_media_root_decorator(test_file):
             orig_setUp(self, *args, **kwargs)
 
         def tearDown(self, *args, **kwargs):
-            self.test_media_root_context.__exit__(None, None, None)
             orig_tearDown(self, *args, **kwargs)
+            self.test_media_root_context.__exit__(None, None, None)
 
         cls.setUp = setUp
         cls.tearDown = tearDown
@@ -309,25 +341,105 @@ def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFil
         than this, it is resized.
     :return: An InMemoryUploadedFile representing the thumbnail.
     """
+    if image.height <= size or image.width <= size:
+        return image
+
     output_thumb = BytesIO()
-    filename = os.path.basename(image.path)
+    filename = image.file.name.split('/')[-1]
     file, ext = os.path.splitext(filename)
-    with Image.open(image.path) as img:
-        if img.height > size or img.width > size:
-            img.thumbnail((size, size))
-            img = ImageOps.exif_transpose(img)  # avoid image rotating
-            # use WEBP format for thumbnails instead of JPEG to avoid loss of transparency
-            img.save(output_thumb, format='WEBP', quality=90)
-            size = sys.getsizeof(output_thumb)
-            thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.webp",
-                                             'image/webp', size, None)
-            logger.debug(f"Resized and saved thumbnail for {image.path}, size={size}")
-        else:  # small photos are used directly as thumbnails
-            thumbnail = image
-    return thumbnail
+    # ISSUE WITH Image.open() which raises "ValueError: seek on closed file" in some circumstances
+    if image.file.closed:
+        image.file = default_storage.open(image.name, 'rb')
+    with Image.open(image.file) as img:
+        img.thumbnail((size, size))
+        img = ImageOps.exif_transpose(img)  # avoid image rotating
+        # use WEBP format for thumbnails instead of JPEG to avoid loss of transparency
+        img.save(output_thumb, format='WEBP', quality=90)
+        size = sys.getsizeof(output_thumb)
+        thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.webp",
+                                         'image/webp', size, None)
+        logger.debug(f"Resized and saved thumbnail for {image.file.name}, size={size}")
+        return thumbnail
+
+
+def protected_media_url(media):
+    media = str(media)
+    # print("media=", media, "settings.MEDIA_ROOT=", settings.MEDIA_ROOT)
+    if media.startswith(str(settings.MEDIA_ROOT)):
+        media = media[len(str(settings.MEDIA_ROOT))+1:]
+    else:
+        # for a file in base_dir/media when MEDIA_ROOT has been changed
+        p = str(settings.BASE_DIR / settings.MEDIA_REL)
+        if media.startswith(p):
+            media = media[len(p)+1:]
+    return reverse('get_protected_media', args=[quote(media)])
 
 
 def check_edit_permission(request, owner):
     if request.user.is_superuser or owner.id == request.user.id:
       return True
     raise PermissionDenied(_("You do not have permission to edit/delete this object."))
+
+
+def _fs_rmtree(storage, prefix):
+    if isinstance(storage, FileSystemStorage):  # special case for FileSystemstorage1
+        path = settings.MEDIA_ROOT / prefix
+        if os.path.isdir(path):
+            shutil.rmtree(path)
+        return True
+    return False
+
+
+def _rm_emty_folders(storage, folder_stack):
+    # delete empty folders
+    while folder_stack:
+        path = folder_stack.pop()
+        try:
+            storage.delete(path)
+        except Exception:
+            pass
+
+
+def _recursive_rmtree(storage, prefix):
+    stack = [prefix]
+    dstack = [prefix]
+    while stack:
+        path = stack.pop()
+        try:
+            dirs, files = storage.listdir(path)
+        except NotImplementedError:
+            break
+        # delete files
+        for f in files:
+            name = f"{path}/{f}"
+            try:
+                storage.delete(name)
+            except Exception:
+                pass
+        # stack subfolders
+        for d in dirs:
+            stack.append(f"{path}/{d}")
+            dstack.append(f"{path}/{d}")
+
+    _rm_emty_folders(storage, dstack)
+    return
+
+
+def storage_rmtree(storage, prefix):
+    """
+    Tries to delete all objects under `prefix` as well as `prefix` itself for a given Storage. prefix is a posix path
+    - storage: an instance of Storage (or subclass)
+    - prefix: path related to MEDIA_ROOT without leading slash (e.g. "clients/client_42")
+    """
+    if _fs_rmtree(storage, prefix):
+        return
+
+    prefix = str(prefix).strip("/")
+    # Generic attempt: list recursively via listdir if available
+    if hasattr(storage, "listdir"):
+        _recursive_rmtree(storage, prefix)
+        return
+
+    # If listdir not available (e.g. some backends), try direct deletion of prefix
+    logger.warning(f"listdir not available for {storage} - trying to delete {prefix} directly")
+    storage.delete(f"{prefix}/")

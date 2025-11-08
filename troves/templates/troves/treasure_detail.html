@@ -10,7 +10,7 @@
 		<div class="card-image">
 			<figure class="image is-4by3">
 				<img
-					src="{{treasure.picture.url}}"
+					src="{% url 'get_protected_media' treasure.picture.name%}"
 					alt="{{treasure.title}}"
 				/>
 			</figure>
@@ -37,7 +37,7 @@
 			{%endif%}
 			{%if treasure.file%}
 			<div class="card-footer">
-				<a href="{{ treasure.file.url }}" target="_blank">
+				<a href="{% url 'get_protected_media' treasure.file.name%}" target="_blank">
 					{%trans 'Look at the file contents' %}
 				</a>
 			</div>

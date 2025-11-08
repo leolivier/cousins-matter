@@ -82,8 +82,8 @@ class MemberTestCase(TestCase):
   change_password_url = reverse('change_password')
 
   base_avatar = "test_avatar.jpg"
-  test_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "test_avatar.jpg")
-  test_mini_avatar_jpg = os.path.join(settings.MEDIA_ROOT, settings.AVATARS_DIR, "mini_test_avatar.jpg")
+  test_avatar_jpg = os.path.join(settings.AVATARS_DIR, "test_avatar.jpg")
+  test_mini_avatar_jpg = os.path.join(settings.AVATARS_DIR, "mini_test_avatar.jpg")
 
   @classmethod
   def setUpTestData(cls):

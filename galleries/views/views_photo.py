@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.paginator import Paginator as BasePaginator
 from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
-from galleries.templatetags.galleries_tags import get_gallery_photos
+from galleries.templatetags.galleries_tags import complete_photos_data, get_gallery_photos
 from cm_main.utils import check_edit_permission
 from ..models import Photo
 from ..forms import PhotoForm
@@ -40,28 +40,20 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
       photo = page.object_list[0]
     else:
       # we have the pk in the args, now compute the gallery and photo num
-      # Quite inneficient !!!
       pk = kwargs['pk']
-      photo = Photo.objects.get(pk=pk)
+      photo = get_object_or_404(Photo, pk=pk)
       gallery_id = photo.gallery.id
-      photo_num = 0
-      found = False
-      for id in Photo.objects.filter(gallery=gallery_id).values('id'):
-        photo_num += 1
-        if id['id'] == pk:
-          found = True
-          break
-      if not found:
-        raise ValueError(_("Photo not found on that page"))
+      photo_num = Photo.objects.filter(gallery=gallery_id).order_by('id').filter(id__lte=pk).count()
 
     # Now, we have everything, we can repaginate
     photos = get_gallery_photos(gallery_id)
-    # Photo.objects.filter(gallery=gallery_id)
     photos_count = photos.count()
     try:
-      ptor = Paginator(photos, 1,
+      # per_page=1 so page_num = photo_num
+      ptor = Paginator(photos, per_page=1,
                        compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num]))
       page = ptor.get_page_data(photo_num)
+      complete_photos_data(page, photo_num, ptor.num_pages)
       return render(request, self.template_name, {'page': page, 'gallery_id': gallery_id, 'photos_count': photos_count})
     except PageOutOfBounds as exc:
         return redirect(exc.redirect_to)

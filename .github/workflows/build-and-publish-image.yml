@@ -120,7 +120,7 @@ jobs:
           docker compose -f docker-compose.yml up -d
           # let the server start before running tests
           sleep 10
-          docker exec cousins-matter python manage.py test
+          docker exec cousins-matter python manage.py test --failfast
 
       - name: test install script
         run: |
@@ -137,6 +137,18 @@ jobs:
       - name: test create superuser script
         run: |
           ./scripts/tests/test_create_superuser.sh -g
+
+      - name: Test Docker Image using S3 backend
+        run: |
+          # make sure no previous containers are running
+          docker compose down -v
+          # restart with S3 variables in .env
+          echo 'MEDIA_STORAGE=storages.backends.s3.S3Storage' >> $GITHUB_WORKSPACE/.env
+          echo "MEDIA_STORAGE_OPTIONS='${{ secrets.S3_MEDIA_STORAGE_OPTIONS }}'" >> $GITHUB_WORKSPACE/.env
+          docker compose -f docker-compose.yml up -d
+          # let the server start before running tests
+          sleep 10
+          docker exec cousins-matter python manage.py test --failfast
 
       - name: Show docker-compose services logs on failure
         if: failure()

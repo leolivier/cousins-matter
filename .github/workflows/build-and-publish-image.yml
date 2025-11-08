@@ -144,7 +144,7 @@ jobs:
           docker compose down -v
           # restart with S3 variables in .env
           echo 'MEDIA_STORAGE=storages.backends.s3.S3Storage' >> $GITHUB_WORKSPACE/.env
-          echo "MEDIA_STORAGE_OPTIONS='${{ secrets.S3_MEDIA_STORAGE_OPTIONS }}'"" >> $GITHUB_WORKSPACE/.env
+          echo "MEDIA_STORAGE_OPTIONS='${{ secrets.S3_MEDIA_STORAGE_OPTIONS }}'" >> $GITHUB_WORKSPACE/.env
           docker compose -f docker-compose.yml up -d
           # let the server start before running tests
           sleep 10

@@ -193,7 +193,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('127.0.0.1', env.int('REDIS_PORT', default=6379))],
         },
     },
 }
@@ -207,7 +207,7 @@ DATABASES = {
     'USER': env.str('POSTGRES_USER', default='cousinsmatter'),
     'PASSWORD': env.str('POSTGRES_PASSWORD'),
     'HOST': env.str('POSTGRES_HOST', default='postgres'),
-    'PORT': 5432,
+    'PORT': env.int('POSTGRES_PORT', default=5432),
     'NAME': env.str('POSTGRES_DB', default='cousinsmatter'),
     'CONN_MAX_AGE': 600,  # Keep connections open for 10 minutes
     'OPTIONS': {
@@ -418,7 +418,7 @@ Q_CLUSTER = {
     # 'label': 'Django Q2',
     'redis': {
         'host': env.str('REDIS_HOST', default='redis'),
-        'port': 6379,
+        'port': env.int('REDIS_PORT', default=6379),
         # 'db': 0,
     },
     'sync': env.bool('Q_SYNC', False),  # set to True in development

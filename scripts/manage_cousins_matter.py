@@ -8,6 +8,7 @@ import secrets
 import shutil
 import string
 import subprocess
+import stat
 import sys
 import time
 from urllib.request import urlopen
@@ -43,9 +44,14 @@ def set_verbose(v: bool) -> None:
     VERBOSE = v
 
 
+def warning(*msg: str) -> None:
+    """Will print the given message in RED to stderr but won't exist"""
+    print(f"{ON_RED}{' '.join(hide_if_secret(m) for m in msg)}{NC}", file=sys.stderr)
+
+
 def error(code: int, *msg: str) -> None:
     """Will print the given message to stderr and exit with the given code"""
-    print(f"{ON_RED}{' '.join(hide_if_secret(m) for m in msg)}{NC}", file=sys.stderr)
+    warning(*msg)
     sys.exit(code)
 
 
@@ -328,6 +334,34 @@ def check_if_cousins_matter_V1_directory(directory: Path):
         error(14, "No media directory found in the directory.", make_sure)
 
 
+def check_permissions(directory: Path):
+    media_dir = directory / "media"
+    all_dirs = [media_dir] + [d for d in media_dir.rglob("*/")]
+    cur_uid = os.getuid()
+    warn = False
+    try:
+        for dir in all_dirs:
+            st = dir.stat()
+            if st.st_uid == 1000:
+                if (st.st_mode & stat.S_IWUSR) != stat.S_IWUSR:  # dir is not writable by user 1000
+                    if cur_uid == st.st_uid or cur_uid == 0:  # current user is also 1000 or root, let's chmod
+                        dir.chmod(st.st_mode | stat.S_IWUSR)
+                    else:
+                        warn = True
+                        break
+            else:
+                warn = True
+                break
+    except Exception as ex:
+        error(14, f"Error while checking permissions: {ex}")
+    finally:
+        if warn:
+            warning(f"media directory {media_dir} and ALL its subdirectories must be owned and writable by user 1000")
+            warning("Please, run the 2 following commands before tryning to start Cousins Matter:")
+            print(f'{ON_WHITE}sudo chown -R 1000:1000 {media_dir}{NC}')
+            print(f'{ON_WHITE}sudo chmod -R u+w {media_dir}{NC}')
+
+
 def migrate_sqlite3_to_postgres(pg_pwd: str):
     """Will run the database migration from sqlite3 to postgres"""
     # Start postgres and wait for readiness
@@ -340,11 +374,21 @@ def migrate_sqlite3_to_postgres(pg_pwd: str):
     verbose("Postgres is ready, starting migration...")
 
     # Run pgloader
+    arch = os.uname().machine
+    match arch:
+        case "aarch64":
+            pgloader_image = "ghcr.io/notagshen/pgloader-arm64:latest"
+        case "x86_64":
+            pgloader_image = "dimitri/pgloader:latest"
+        case _:
+            raise RuntimeError(f"Unsupported OS architecture: {arch}")
+
     postgres_user = os.getenv("POSTGRES_USER") or "cousinsmatter"
     postgres_db = os.getenv("POSTGRES_DB") or "cousinsmatter"
+    postgres_port = os.getenv("POSTGRES_PORT") or "5432"
     r = run(["docker", "run", "--entrypoint", "pgloader", "-v", "./data:/data", "--network", "cousins_matter_network",
-             "--name", "cousins-matter-pgloader", "dimitri/pgloader:latest", "sqlite:///data/db.sqlite3",
-             f"postgresql://{postgres_user}:{mark_as_secret(pg_pwd)}@postgres:5432/{postgres_db}"], check=False)
+             "--name", "cousins-matter-pgloader", pgloader_image, "sqlite:///data/db.sqlite3",
+             f"postgresql://{postgres_user}:{mark_as_secret(pg_pwd)}@postgres:{postgres_port}/{postgres_db}"], check=False)
     if (r.returncode != 0):
         run(["docker", "down", "-v", "postgres"], check=False)
         run(["docker", "rm", "-v", "cousins-matter-pgloader"], check=False)
@@ -390,6 +434,8 @@ def migrate_v1_v2(args):
     check_if_cousins_matter_V1_directory(directory)
 
     check_cousins_matter_is_down()
+
+    check_permissions(directory)
 
     # add the new needed postgres password to .env
     pg_pwd = create_pg_password()

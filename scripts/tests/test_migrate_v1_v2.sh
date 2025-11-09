@@ -15,6 +15,8 @@ script_dir=$(cd "$(dirname "$0")" && cd .. && pwd)
 echo "creating a copy of a test V1 instance of cousins-matter in $tmpdir"
 unzip -q "$script_dir/tests/resources/cm-v1-tests.zip" -d "$tmpdir"
 cd "$tmpdir"
+# to test the warning, see below
+sudo chown 5678:5678 media/public
 # .env was existing before migration
 [ ! -f .env ] && error 1 "No .env file found in $tmpdir"
 # no need to set the superuser variables as the superuser must already exist in tha database
@@ -22,7 +24,7 @@ cd "$tmpdir"
 export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-$tag}
 echo "tested image: $COUSINS_MATTER_IMAGE"
 
-python "$script_dir/manage_cousins_matter.py" migrate-v1-v2 -d "$tmpdir" "$release_or_branch" "$ref" || error 1 "manage_cousins_matter failed to migrate from v1 to v2"
+python "$script_dir/manage_cousins_matter.py" migrate-v1-v2 -d "$tmpdir" "$release_or_branch" "$ref" > migrate-v1-v2.log || error 1 "manage_cousins_matter failed to migrate from v1 to v2"
 
 docker_run_cousins_matter
 
@@ -31,6 +33,10 @@ cp data/db.sqlite3 media/public/db.sqlite3
 docker exec "cousins-matter" python -m scripts.tests.check_after_migration
 rm media/public/db.sqlite3
 docker compose down -v
+
+# check if a warning was printed if media and subdirs are not writable
+grep "sudo chown -R 1000:1000" migrate-v1-v2.log  || error 1 "Warning message about media directory permissions not found in migrate-v1-v2.log"
+
 cd ..
 sudo rm -rf "$tmpdir"
 echo "test migrate v1 to v2 passed"

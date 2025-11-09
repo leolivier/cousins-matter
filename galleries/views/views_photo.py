@@ -89,8 +89,7 @@ class PhotoAddView(LoginRequiredMixin, generic.CreateView):
           return redirect("galleries:photo", photo.id)
       except ValidationError as e:
         logger.error(e)
-        messages.error(request, _("Error when creating this photo. "
-                                  "Try to convert it in another format before retrying to upload it."))
+        messages.error(request, _("Error when creating this photo: %s.") % str(e))
         return render(request, self.template_name, {'form': form})
     else:
       return render(request, self.template_name, {'form': form})

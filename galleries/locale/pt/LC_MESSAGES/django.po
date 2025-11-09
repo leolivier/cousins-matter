@@ -288,8 +288,6 @@ msgstr "Foto criada"
 
 #: galleries/views/views_photo.py:100
 msgid ""
-"Error when creating this photo. Try to convert it in another format before "
-"retrying to upload it."
+"Error when creating this photo: %s."
 msgstr ""
-"Erro ao criar essa foto. Tente converter para outro formato antes de tentar "
-"carregar novamente."
+"Erro ao criar essa foto: %s."

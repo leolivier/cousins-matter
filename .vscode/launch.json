@@ -38,7 +38,7 @@
 				"--failfast",
 				"-v",
 				"2",
-				"troves.tests.tests.TestTroveList.test_create_troves"
+				"galleries.tests.tests_photo_detail"
 			],
 			"django": true,
 			"autoStartBrowser": false,

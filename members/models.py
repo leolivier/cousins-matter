@@ -74,6 +74,8 @@ class Address(models.Model):
 
   city = models.CharField(_('City'), max_length=120)
 
+  state = models.CharField(_('State'), max_length=32, blank=True)
+
   country = models.CharField(_('Country'), max_length=32)
 
   def __str__(self) -> str:
@@ -81,7 +83,7 @@ class Address(models.Model):
 {self.number_and_street}
 {self.complementary_info}
 {self.zip_code}, {self.city}
-{self.country}
+{self.state}, {self.country}
 """
 
   def get_absolute_url(self):
@@ -90,9 +92,12 @@ class Address(models.Model):
   class Meta:
     verbose_name = _('address')
     verbose_name_plural = _('addresses')
-    ordering = ['city', 'zip_code', 'number_and_street']
+    ordering = ['country', 'state', 'city', 'zip_code', 'number_and_street']
     indexes = [
-            models.Index(fields=["city", "zip_code"]),
+            models.Index(fields=["city"]),
+            models.Index(fields=["zip_code"]),
+            models.Index(fields=["country"]),
+            models.Index(fields=["state"]),
         ]
 
 

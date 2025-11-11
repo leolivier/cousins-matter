@@ -191,8 +191,21 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
                 send_verification_email(request, form)
                 messages.info(request, _("A verification email has been sent to validate your new email address."))
             else:
-                form.save()
-                messages.success(request, self.success_message)
+                try:
+                    form.save()
+                    messages.success(request, self.success_message)
+                except PermissionError as e:
+                    messages.error(request, str(e))
+                    return render(request, self.template_name,
+                                  {
+                                    "form": form,
+                                    "addr_form": AddressUpdateForm(),
+                                    "family_form": FamilyUpdateForm(),
+                                    "pk": pk,
+                                    "title": self.title,
+                                    "member_manager_name": member_manager_name(member)
+                                   })
+
             return redirect("members:detail", member.id)
 
         else:

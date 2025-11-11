@@ -16,11 +16,13 @@ Amongst other big changes:
 	and will thus require docker compose to run.
 
 ## Prerequisites
+
 You have to have Cousins Matter v1 installed and working on your system.
 
 You will also need a Python 3.12+ environment to run the migration script.
 
 ## Procedure
+
 1. Stop Cousins Matter v1
 
 	```

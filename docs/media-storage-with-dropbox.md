@@ -38,6 +38,7 @@ The media storages supported by django-storages at the time of writing this page
 If you manage to create a working setup for non tested storages, please create a Pull Request on GitHub on this file to explain how it works.
 
 ### Cloudflare R2
+
 To use Cloudflare R2, you obviously first need to [create an account on Cloudflare](https://developers.cloudflare.com/fundamentals/account/create-account/).
 
 Then, you must [create an S3 bucket on Cloudflare R2 - Dashbord tab](https://developers.cloudflare.com/r2/data-catalog/get-started/#1-create-an-r2-bucket). Remember the bucket name.
@@ -52,11 +53,13 @@ MEDIA_STORAGE_OPTIONS='{"access_key":"<your access key>","secret_key":"<your sec
 Then restart Cousins Matter: `docker compose restart cousins-matter`
 
 #### Other S3 compatible storages
+
 The setup for other S3 compatible storages (including AWS S3, the original one) should be close to the R2 one but has not yet been tested.
 As all these backend share the same implementation, you don't need to create your own image as described for [non tested storages](#non-tested-storages) below.
 Have a look at [django-storages documentation](https://django-storages.readthedocs.io/en/latest/index.html) to see which specific variables should be set in the options for your particular case.
 
 ### Dropbox
+
 You will need to have a Dropbox account to use this storage (see https://www.dropbox.com/register).
 Then, you will need to [create an application](https://www.dropbox.com/developers/apps). The Settings form should look like this:
 ![create dropbox app](assets/create_dropbox_app.webp). Remember the app key and the app secret.
@@ -67,12 +70,14 @@ Don't forget to click on Submit at the end...
 Then, as described on the [Django-storages Dropbox page](https://django-storages.readthedocs.io/en/latest/backends/dropbox.html), get your authorization code, then, using this code, obtain the access_token (starting with "sl.") and the refresh token.
 
 Once this is done, the setup in your .env file should look like this:
+
 ```
 MEDIA_STORAGE=storages.backends.dropbox.DropboxStorage
 MEDIA_STORAGE_OPTIONS='{"app_key":"<your app key>","app_secret":"<your app secret>","root_path":"/","oauth2_access_token":"<your access token>","oauth2_refresh_token":"<your refresh token>"}'
 ```
 
 ## Non tested storages
+
 ### Install needed Python package
 
 **Note:** This is not needed for all S3 compatible backends, see above [Other S3 compatible storages](#other-s3-compatible-storages)
@@ -118,6 +123,7 @@ There are to ways to install this package, use the method that suits you the bes
 __WARNING__: in some cases, there are more than one package to install. For instance, if you use Azure Storage with Managed Identity, you will need to install another package for Managed Identity. Proceed as described above and just add the other package names at the end of the `pip install` command line
 
 ### Create the setup
+
 Have a look at the setups above for [Dropbox](#dropbox) and [Cloudflare R2](#cloudflare-r2) to understand how the 2 variables MEDIA_STORAGE and MEDIA_STORAGE_OPTIONS work and see the [django-storages documentation](https://django-storages.readthedocs.io/en/latest/index.html) for your backend to adapt these setups to your case.
 
 MEDIA_STORAGE must be taken from the page of your backend. Use the value of BACKEND in the STORAGES block (e.g. storages.backends.azure_storage.AzureStorage for the Azure Storage backend).

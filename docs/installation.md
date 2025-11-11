@@ -104,7 +104,7 @@ __The first time__, go to http://127.0.0.1:8000/members/profile, log in using th
 	```
 	docker compose up -d
 	```
- 
+
 ### Run it outside Docker
 
 if you want to debug your installation, you can run it outside Docker.

@@ -57,8 +57,8 @@ def download_protected_media(request, media):
       return HttpResponseNotModified()
 
   chunk_size = 64*1024
-  media_file = default_storage.open(media, "rb")
   try:
+    media_file = default_storage.open(media, "rb")
     response = StreamingHttpResponse(
         FileWrapper(media_file, chunk_size),
         content_type=mimetypes.guess_type(media)[0],

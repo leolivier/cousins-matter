@@ -1,3 +1,5 @@
+# Settings
+
 ## Introduction
 The settings of Cousins Matter can be managed using a `.env` file in the main directory of the application.
 
@@ -65,28 +67,28 @@ FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=
 * `BIRTHDAY_DAYS`: Number of days in the future to display birthdays, default is 50
 * `INCLUDE_BIRTHDAYS_IN_HOMEPAGE`: Should birthdays be included in the homepage for authenticated members? Default is True
 * `PDF_SIZE`: PDF page size for printed directory. 'A4' or 'letter' size. Default is A4.
-* `MAX_CSV_FILE_SIZE`: Maximum size of CSV member import file, default is 2MB.
+* `MAX_CSV_FILE_SIZE`(*): Maximum size of CSV member import file, default is 2MB.
 * `LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP`: Enter here the external IP of your server. It is used for the login trace when the login comes from the internal network. Default is "8.8.8.8".
 * `LOGIN_HISTORY_PURGE_DAYS`: Number of days to keep login history, default is 365.
 ### Galleries
 * `DEFAULT_GALLERY_PAGE_SIZE`: Number of photos per gallery page (changeable on screen), default is 25
-* `MAX_PHOTO_FILE_SIZE`: Maximum size of each photo, default is 5MB
-* `MAX_GALLERY_BULK_UPLOAD_SIZE`: Maximum size of galleries zip bulk upload file, default is 20MB
+* `MAX_PHOTO_FILE_SIZE`(*): Maximum size of each photo, default is 5MB
+* `MAX_GALLERY_BULK_UPLOAD_SIZE`(*): Maximum size of galleries zip bulk upload file, default is 20MB
 ### Messages and chats
-* `MESSAGE_MAX_SIZE`: Maximum size of a message in the Forum or in the chats (note that it may contain a photo), default is 2.5MB.
-* `MESSAGE_COMMENTS_MAX_SIZE`: Maximum size of a comment associated with a message in the Forum or in the chats, default is 1000
-* `CONTACT_MAX_SIZE`: Maximum size of a contact message, default is 1MB
+* `MESSAGE_MAX_SIZE`(*): Maximum size of a message in the Forum or in the chats (note that it may contain a photo), default is 2.5MB.
+* `MESSAGE_COMMENTS_MAX_SIZE`(*): Maximum size of a comment associated with a message in the Forum or in the chats, default is 1000
+* `CONTACT_MAX_SIZE`(*): Maximum size of a contact message, default is 1MB
 ### Pages
-* `PAGE_MAX_SIZE`: Maximum size of a flat page, default is 10MB
+* `PAGE_MAX_SIZE`(*): Maximum size of a flat page, default is 10MB
 ### Polls
-* `POLL_MAX_SIZE`: Maximum size of a poll, default is 1MB
+* `POLL_MAX_SIZE`(*): Maximum size of a poll, default is 1MB
 ### Classified ads
-* `CLASSIFIED_AD_MAX_SIZE`: Maximum size of a classified ad, default is 1MB
+* `CLASSIFIED_AD_MAX_SIZE`(*): Maximum size of a classified ad, default is 1MB
 ### Troves
-* `TROVE_FILE_MAX_SIZE`: Maximum size of a trove file, default is 20MB
-* `TROVE_PICTURE_FILE_MAX_SIZE`: Maximum size of a trove picture, default is 5MB
-* `TROVE_THUMBNAIL_SIZE`: Maximum size of a trove thumbnail in pixels, default is 100
-* `DEFAULT_TROVE_PAGE_SIZE`: Default number of troves per page, default is 10
+* `TROVE_FILE_MAX_SIZE`(*): Maximum size of a trove file, default is 20MB
+* `TROVE_PICTURE_FILE_MAX_SIZE`(*): Maximum size of a trove picture, default is 5MB
+* `TROVE_THUMBNAIL_SIZE`(*): Maximum size of a trove thumbnail in pixels, default is 100
+* `DEFAULT_TROVE_PAGE_SIZE`(*): Default number of troves per page, default is 10
 ### Classified ads
 * `MAX_PHOTO_PER_AD`: Maximum number of photos per classified ad, default is 10
 
@@ -136,3 +138,9 @@ FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=
 * `POSTGRES_HOST`: The postgres host, default is 'postgres'
 
 * `REDIS_HOST`: The redis host, default is 'redis'
+
+## Other media storage
+* `MEDIA_STORAGE` and `MEDIA_STORAGE_OPTIONS`: See [Media Storage](/media-storage.md)
+
+## NOTES
+__(*) WARNING:__ If you want to change any of the variables controling the size of what can be uploaded and you are using the nginx reverse proxy, please check that the value of `client_max_body_size` in config/nginx.conf so that it remains higher than the size variables you change above. Otherwise you will receive a 413 error from Nginx. The default value provided is high (20MB) so it should be an issue except when videos is supported.

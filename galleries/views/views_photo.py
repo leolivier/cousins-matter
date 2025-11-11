@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.paginator import Paginator as BasePaginator
-from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax
+from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax, protected_media_url
 from galleries.templatetags.galleries_tags import complete_photos_data, get_gallery_photos
 from cm_main.utils import check_edit_permission
 from ..models import Photo
@@ -68,7 +68,7 @@ def get_photo_url(request, gallery, photo_idx=1):
   if photo_idx > nb_photos:
     return JsonResponse({'results': []})
   photo = Photo.objects.filter(gallery=gallery)[photo_idx-1]
-  return JsonResponse({'pk': photo.id, 'image_url': photo.image.url})
+  return JsonResponse({'pk': photo.id, 'image_url': protected_media_url(photo.image.name)})
 
 
 class PhotoAddView(LoginRequiredMixin, generic.CreateView):
@@ -87,10 +87,9 @@ class PhotoAddView(LoginRequiredMixin, generic.CreateView):
           return redirect("galleries:add_photo", gallery)
         else:
           return redirect("galleries:photo", photo.id)
-      except ValidationError as e:
+      except (ValidationError, PermissionDenied, PermissionError) as e:
         logger.error(e)
-        messages.error(request, _("Error when creating this photo. "
-                                  "Try to convert it in another format before retrying to upload it."))
+        messages.error(request, _("Error when creating this photo: %s.") % str(e))
         return render(request, self.template_name, {'form': form})
     else:
       return render(request, self.template_name, {'form': form})

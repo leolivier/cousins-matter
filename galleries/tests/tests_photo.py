@@ -111,7 +111,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
     photo_dicts = [p.__dict__ for p in photos]
     nb_dicts = len(photo_dicts)
     for idx, p in enumerate(photo_dicts):
-      pmu = protected_media_url(p['image'].file.name)
+      pmu = protected_media_url(p['image'].name)
       if idx > 0:
         photo_dicts[idx-1]['next_url'] = pmu
       if idx < nb_dicts - 1:
@@ -150,7 +150,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
       <img src="{protected_media_url(p['thumbnail'])}"
         class="gallery-image"
         {f'data-next="{p['next_url']}"' if 'next_url' in p else ""}
-        data-fullscreen="{protected_media_url(p['image'].file.name)}"
+        data-fullscreen="{protected_media_url(p['image'].name)}"
         {f'data-prev="{p['previous_url']}"' if 'previous_url' in p else ""}
         data-idx="{(page_num - 1) * page_size + idx + 1}"
         data-pk="{p['id']}"

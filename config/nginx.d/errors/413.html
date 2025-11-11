@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style>
+    body{font-family:system-ui,Arial,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0}
+    button{padding:10px 16px;font-size:16px;margin-top:12px}
+  </style>
+</head>
+<body>
+  <h1 id="title"></h1>
+  <p id="message"></p>
+  <p><a href="javascript:history.back()"><span id="back"></span></a></p>
+
+  <script>
+    const messages = {
+      en: { 
+        title: "File too large",
+        back: "Go back to the previous page",
+        message: "The file you are trying to upload exceeds the maximum allowed size. Please try again with a smaller file."
+      },
+      fr: {
+        title: "Fichier trop volumineux",
+        back: "Retour à la page précédente",
+        message: "Le fichier que tu tentes d'envoyer dépasse la taille maximale autorisée. Réessaye avec un fichier plus petit."
+      },
+      es: {
+        title: "Archivo demasiado grande",
+        back: "Volver a la página anterior",
+        message: "El archivo que está intentando cargar supera el tamaño máximo permitido. Vuelva a intentarlo con un archivo más pequeño."
+      },
+      pt: {
+        title: "Ficheiro demasiado grande",
+        back: "Voltar à página anterior",
+        message: "O ficheiro que está a tentar carregar excede o tamanho máximo permitido. Por favor, tente novamente com um ficheiro menor."
+      },
+      it: {
+        title: "File troppo grande",
+        back: "Torna alla pagina precedente",
+        message: "Il file che stai cercando di caricare supera la dimensione massima consentita. Riprova con un file più piccolo."
+      },
+      de: {
+        title: "Datei zu groß",
+        back: "Zur vorherigen Seite",
+        message: "Die Datei, die du hochladen möchtest, ist zu groß. Bitte versuche es erneut mit einer kleineren Datei."
+      }
+    };
+
+    // obtain the best browser language
+    const userLocales = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || navigator.userLanguage || 'en'];
+    function pickLocale(locales) {
+      for (const loc of locales) {
+        const code = loc.toLowerCase().split('-')[0];
+        if (messages[code]) return code;
+      }
+      return 'en';
+    }
+
+    const locale = pickLocale(userLocales);
+    const msg = messages[locale];
+
+    document.addEventListener('DOMContentLoaded',  function() {
+
+      // Try history.back(); if impossible, use fallback
+      document.getElementById('back').addEventListener('click', function(){
+        // If the history has at least one entry, go(-1) or back().
+        try {
+          if (history.length > 1) {
+            history.back();
+          } else {
+            // No useful history: redirect to referrer if present, otherwise to home page
+            if (document.referrer) {
+              window.location.href = document.referrer;
+            } else {
+              window.location.href = '/';
+            }
+          }
+        } catch (e) {
+          window.location.href = '/';
+        }
+      });
+      document.title = msg.title;
+      document.getElementById('title').textContent = msg.title;
+      document.getElementById('message').textContent = msg.message;
+      document.getElementById('back').textContent = msg.back;
+
+    });
+  </script>
+</body>
+</html>

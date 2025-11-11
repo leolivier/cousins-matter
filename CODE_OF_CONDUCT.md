@@ -51,7 +51,7 @@ not aligned to this Code of Conduct, and will communicate reasons for moderation
 decisions when appropriate.
 
 [Amendment]: In its current setup, the project has only one community leader and he will do
-what he cab to enforce these rules but he can't promise that anything will be administered.
+what he can to enforce these rules but he can't promise that anything will be administered.
 
 ## Scope
 

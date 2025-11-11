@@ -40,8 +40,12 @@ def create_treasure(request):
         owner = Member.objects.only('id').get(id=request.user.id)
         form.instance.owner_id = owner.id
         if form.is_valid():
-            form.save()
-            return redirect(reverse('troves:list'))  # try to go to last page
+            try:
+                form.save()
+                return redirect(reverse('troves:list'))  # try to go to last page
+            except Exception as e:
+                messages.error(request, str(e))
+                return render(request, 'troves/treasure_form.html', {'form': form})
     else:
         form = TreasureForm()
     return render(request, 'troves/treasure_form.html', {'form': form})

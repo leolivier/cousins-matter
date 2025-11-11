@@ -15,14 +15,14 @@ The Cousins Matter website can easily be translated into any Latin LTR language 
 
 * Clone the Cousins Matter repository:
 
-	```shell
+	```
 	git clone https://github.com/leolivier/cousins-matter.git
 	cd cousins-matter
 	```
 
 * Generate the translation files:
 
-	```shell
+	```
 	python manage.py makemessages -l <language_code>
 	```
 
@@ -30,19 +30,19 @@ The Cousins Matter website can easily be translated into any Latin LTR language 
 
 	To find them, use the following command:
 
-	```shell
+	```
 	ls */locale/<language_code>/LC_MESSAGES/*.po
 	```
 
 * Compile the translations:
 
-	```shell
+	```
 	python manage.py compilemessages
 	```
 
 * Build the docker image:
 
-	```shell
+	```
 	docker build -t cousins-matter:<your tag> .
 	```
 

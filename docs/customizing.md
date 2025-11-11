@@ -61,7 +61,7 @@ To create your own theme, you need to apply new values to Bulma variables in the
 
 The customization must have the following format:
 
-```css
+```
 :root {
 	--bulma-xxx: value;
 	--bulma-yyy: value;
@@ -71,7 +71,7 @@ The customization must have the following format:
 
 e.g.
 
-```css
+```
 :root {
 	--bulma-body-font-size: 16px;
 	--bulma-primary-h: 155deg !important;

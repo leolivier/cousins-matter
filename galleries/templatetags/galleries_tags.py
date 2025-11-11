@@ -32,15 +32,15 @@ def complete_photos_data(page, page_num, num_pages):
       if idx == len(page.object_list) - 1 and page_num != num_pages:
         # last photo of the page and not last page ==> take the next photo
         next_photo = Photo.objects.filter(gallery=p.gallery).order_by('id').filter(id__gt=p.id).first()
-        photos_dict[idx]['next_url'] = protected_media_url(next_photo.image.file.name)
+        photos_dict[idx]['next_url'] = protected_media_url(next_photo.image.name)
 
     else:  # first photo of the page
       if page_num > 1:  # not first page ==> take the previous photo
         prev_photo = Photo.objects.filter(gallery=p.gallery).order_by('-id').filter(id__lt=p.id).first()
-        photos_dict[idx]['previous_url'] = protected_media_url(prev_photo.image.file.name)
+        photos_dict[idx]['previous_url'] = protected_media_url(prev_photo.image.name)
       if len(page.object_list) == 1 and page_num != num_pages:  # only one photo per page and not last page
         next_photo = Photo.objects.filter(gallery=p.gallery).order_by('id').filter(id__gt=p.id).first()
-        photos_dict[idx]['next_url'] = protected_media_url(next_photo.image.file.name)
+        photos_dict[idx]['next_url'] = protected_media_url(next_photo.image.name)
   page.object_list = photos_dict
 
 

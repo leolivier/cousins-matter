@@ -345,7 +345,7 @@ def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFil
         return image
 
     output_thumb = BytesIO()
-    filename = image.file.name.split('/')[-1]
+    filename = image.name.split('/')[-1]
     file, ext = os.path.splitext(filename)
     # ISSUE WITH Image.open() which raises "ValueError: seek on closed file" in some circumstances
     if image.file.closed:
@@ -358,7 +358,7 @@ def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFil
         size = sys.getsizeof(output_thumb)
         thumbnail = InMemoryUploadedFile(output_thumb, 'ImageField', f"{file}.webp",
                                          'image/webp', size, None)
-        logger.debug(f"Resized and saved thumbnail for {image.file.name}, size={size}")
+        logger.debug(f"Resized and saved thumbnail for {image.name}, size={size}")
         return thumbnail
 
 

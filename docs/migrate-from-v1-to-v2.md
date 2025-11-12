@@ -76,6 +76,7 @@ You will also need a Python 3.12+ environment to run the migration script.
 1. Start Cousins Matter v2
 
 	```
+	docker compose pull  # get all the images
 	docker compose up -d
 	```
 

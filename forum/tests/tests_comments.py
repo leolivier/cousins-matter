@@ -81,7 +81,7 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertIsNotNone(self.post.followers.filter(username=follower.username).first())
-    # self.print_response(response) 
+    # self.print_response(response)
 
     # create yet another member who will post a comment to the first message of the post
     member = self.create_member(is_active=True)

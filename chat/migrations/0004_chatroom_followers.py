@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='chatroom',
             name='followers',
-            field=models.ManyToManyField(blank=True, limit_choices_to={'is_active': True}, 
+            field=models.ManyToManyField(blank=True, limit_choices_to={'is_active': True},
                                          related_name='followed_chat_rooms', to=settings.AUTH_USER_MODEL),
         ),
     ]

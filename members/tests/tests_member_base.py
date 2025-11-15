@@ -43,7 +43,7 @@ def today_minus(delta: str):
 
 
 def get_new_member_data(**kwargs):
-  """returns a brand new member data (new username)""" 
+  """returns a brand new member data (new username)"""
   counter = get_counter()
   prefix = kwargs.get('prefix', '')
   return {

@@ -125,7 +125,7 @@ class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
 
 class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
   def test_display_page(self):
-    "Tests displaying a list of pages."    
+    "Tests displaying a list of pages."
     self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
     # first create 2 pages with different urls
     page1 = self._test_create_page()

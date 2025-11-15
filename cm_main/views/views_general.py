@@ -4,14 +4,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import PasswordResetView
 from django.core.files.storage import default_storage
-from django.http import Http404, StreamingHttpResponse, HttpResponseNotModified
+from django.db import connections, DatabaseError
+from django.http import Http404, StreamingHttpResponse, HttpResponseNotModified, JsonResponse
 from django.utils.translation import gettext as _
 from django.views import generic
+from django_q.tasks import async_task, result
 from wsgiref.util import FileWrapper
 
 from hashlib import blake2b
 import os
 import mimetypes
+import redis
 import tempfile
 import zipfile
 
@@ -74,6 +77,54 @@ def download_protected_media(request, media):
   response["ETag"] = media_etag
 
   return response
+
+
+def health_check():
+    try:
+        with connections['default'].cursor() as cursor:
+            cursor.execute('SELECT 1')
+            cursor.fetchone()
+    except DatabaseError as e:
+        return {'status': 'db_error', 'msg': str(e)}
+    try:
+        r = redis.Redis(host=os.getenv('REDIS_HOST', 'redis'), port=os.getenv('REDIS_PORT', 6379), decode_responses=True)
+        r.ping()
+    except redis.exceptions.ConnectionError as e:
+        return {'status': 'redis_error', 'msg': str(e)}
+    return {'status': 'ok'}
+
+
+def health(request):
+    """
+    Health check view.
+
+    This view checks if the database connection and the redis connection are working.
+
+    :return: A JsonResponse object containing a single key-value pair with the key 'status' and the value 'ok'
+             if both connections are working, or 'db_error' if the database connection is not working , or
+             'redis_error' if the redis connection is not working.
+    :rtype: JsonResponse
+    :status: 200 (OK) or 503 (Service Unavailable)
+    """
+    check = health_check()
+    return JsonResponse(check, status=200 if check['status'] == 'ok' else 503)
+
+
+def qhealth(request):
+    """
+    Django Q Health check view.
+
+    This view checks through Django Q if the database connection and the redis connection are working.
+
+    :return: A JsonResponse object containing a single key-value pair with the key 'status' and the value 'ok'
+             if both connections are working, or 'db_error' if the database connection is not working , or
+             'redis_error' if the redis connection is not working.
+    :rtype: JsonResponse
+    :status: 200 (OK) or 503 (Service Unavailable)
+    """
+    task_id = async_task('cm_main.views.views_general.health_check')
+    check = result(task_id, 1000)
+    return JsonResponse(check, status=200 if check['status'] == 'ok' else 503)
 
 
 def send_zipfile(request):

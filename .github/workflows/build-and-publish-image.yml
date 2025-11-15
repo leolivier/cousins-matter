@@ -127,8 +127,8 @@ jobs:
         run: |
           # make sure no previous containers are running
           docker compose down -v
-          # and no volumes are remaining
-          docker volume ls -q | xargs -r docker volume rm
+          # and no unused volumes are remaining
+          docker volume prune -f
           # then run test
           ./scripts/tests/test_install.sh -g
 
@@ -136,8 +136,8 @@ jobs:
         run: |
           # make sure no previous containers are running
           docker compose down -v
-          # and no volumes are remaining
-          docker volume ls -q | xargs -r docker volume rm
+          # and no unused volumes are remaining
+          docker volume prune -f
           # then run test
           ./scripts/tests/test_migrate_v1_v2.sh -g
 
@@ -149,8 +149,8 @@ jobs:
         run: |
           # make sure no previous containers are running
           docker compose down -v
-          # and no volumes are remaining
-          docker volume ls -q | xargs -r docker volume rm
+          # and no unused volumes are remaining
+          docker volume prune -f
           # then restart with S3 variables in .env
           echo 'MEDIA_STORAGE=storages.backends.s3.S3Storage' >> $GITHUB_WORKSPACE/.env
           echo "MEDIA_STORAGE_OPTIONS='${{ secrets.S3_MEDIA_STORAGE_OPTIONS }}'" >> $GITHUB_WORKSPACE/.env

@@ -56,7 +56,8 @@ get_github_branch_or_release() {
 	ref="${GITHUB_REF:-}"
 	case "$ref" in
 		refs/heads/*)
-			ref="${ref#refs/heads/}"
+			ref=${ref#refs/heads/}
+			ref=${ref/\//-}
 			release_or_branch='-b'
 			;;
 		refs/tags/*)
@@ -92,7 +93,7 @@ set_variables() {
 			# if we are testing a local image, check git status
 			if [ -n "$(git status -s)" ] || [ -n "$(git log @{u}.. 2>/dev/null)" ]; then
 			echo "###########################################################################################"
-			echo "# WARNING! Some files may have been modified and not pushed to github.                    #"
+			echo "# WARNING! Some of the files may have been modified and not pushed to github.             #"
 			echo "# As some files are downloaded from github by manage_cousins_matter, the test might not   #"
 			echo "# use modified local files. Please commit your changes before running this script.        #"
 			echo "###########################################################################################"

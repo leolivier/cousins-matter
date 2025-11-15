@@ -33,6 +33,9 @@ exclude = [
 line-length = 127
 indent-width = 2
 
+fix = true
+force-exclude = true
+
 # Assume Python 3.12
 target-version = "py312"
 

@@ -203,7 +203,7 @@ class ListAdTestCase(ClassifiedAdBaseTestCase):
     <a href="{reverse("classified_ads:detail", kwargs={"pk": ad.id})}">{ad.title}</a> ({ad.price})
   </span>
   <span>
-    {_(f"Added by %(owner)s on %(date_created)s") %
+    {_("Added by %(owner)s on %(date_created)s") %
        {"owner": ad.owner.full_name,  # noqa
         "date_created": formats.date_format(ad.date_created, "SHORT_DATE_FORMAT")}}
   </span>
@@ -236,7 +236,7 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
     <i class="mdi mdi-24px mdi-file-document" aria-hidden="true"></i>
   </span>
   <span class="is-flex-grow-1">{ad.title}</span>
-  <span>{_(f"Added by %(owner)s on %(date_created)s") %
+  <span>{_("Added by %(owner)s on %(date_created)s") %
          {"owner": ad.owner.full_name,
           "date_created": formats.date_format(localtime, "SHORT_DATETIME_FORMAT")}}</span>
 </div>

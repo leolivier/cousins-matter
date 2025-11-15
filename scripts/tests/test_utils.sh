@@ -57,7 +57,6 @@ get_github_branch_or_release() {
 	case "$ref" in
 		refs/heads/*)
 			ref=${ref#refs/heads/}
-			ref=${ref/\//-}
 			release_or_branch='-b'
 			;;
 		refs/tags/*)
@@ -74,7 +73,8 @@ get_github_branch_or_release() {
 set_variables() {
 	if [ -n "$github_action" ]; then
 		get_github_branch_or_release
-		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-$ref}}
+		ref_tag=$(echo $ref | sed 's@/@-@g')
+		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-$ref_tag}}
 	elif [ -z "$remote" ]; then  # if we are testing a local image, compute ref
 		ref=$(git rev-parse --abbrev-ref HEAD)
 		ref=${ref:-local}

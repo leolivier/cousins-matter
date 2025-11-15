@@ -219,15 +219,9 @@ class ListAdTestCase(ClassifiedAdBaseTestCase):
                 })
   </span>
   <span>
-    {
-                    _("Added by %(owner)s on %(date_created)s")
-                    % {
-                        "owner": ad.owner.full_name,  # noqa
-                        "date_created": formats.date_format(
-                            ad.date_created, "SHORT_DATE_FORMAT"
-                        ),
-                    }
-                }
+    {_("Added by %(owner)s on %(date_created)s") %
+       {"owner": ad.owner.full_name,  # noqa
+        "date_created": formats.date_format(ad.date_created, "SHORT_DATE_FORMAT")}}
   </span>
 </div>
 """,
@@ -261,15 +255,9 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
     <i class="mdi mdi-24px mdi-file-document" aria-hidden="true"></i>
   </span>
   <span class="is-flex-grow-1">{ad.title}</span>
-  <span>{
-                _("Added by %(owner)s on %(date_created)s")
-                % {
-                    "owner": ad.owner.full_name,
-                    "date_created": formats.date_format(
-                        localtime, "SHORT_DATETIME_FORMAT"
-                    ),
-                }
-            }</span>
+  <span>{_("Added by %(owner)s on %(date_created)s") %
+         {"owner": ad.owner.full_name,
+          "date_created": formats.date_format(localtime, "SHORT_DATETIME_FORMAT")}}</span>
 </div>
 <div class="panel-block is-flex">
   <div class="fixed-grid has-3-cols is-flex-grow-1">

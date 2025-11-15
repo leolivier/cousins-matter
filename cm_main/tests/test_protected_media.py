@@ -50,12 +50,12 @@ class ProtectedMediaTestCase(TestMediaResourceMixin, MemberTestCase):
     """test authenticated user can access protected media. This runs as a MemberTestCase so the user is logged in."""
     response = self.client.get(self.rel_url, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertIsInstance(response, StreamingHttpResponse) 
+    self.assertIsInstance(response, StreamingHttpResponse)
     # get the content of the response
     chunks = []
     for chunk in response.streaming_content:
       # chunk peut être bytes ou memoryview
-      chunks.append(bytes(chunk) )
+      chunks.append(bytes(chunk))
     received = b"".join(chunks)
     # check the content of the response is the content of the file
     self.assertEqual(received, self.uploaded_content)

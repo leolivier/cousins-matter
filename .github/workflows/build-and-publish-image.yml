@@ -119,9 +119,7 @@ jobs:
       - name: Test Docker Image
         run: |
           python ./scripts/manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"
-          docker compose -f docker-compose.yml up -d
-          # let the server start before running tests
-          sleep 10
+          docker compose -f docker-compose.yml up --wait
           docker exec cousins-matter python manage.py test --failfast
 
       - name: test install script
@@ -164,8 +162,12 @@ jobs:
         if: failure()
         run: |
           docker ps
+          echo "====================cousins-matter.db============================="
           docker logs cousins-matter.db
+          echo "====================cousins-matter================================"
           docker logs cousins-matter
+          echo "====================cousins-matter.qcluster======================="
+          docker logs cousins-matter.qcluster
   
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3

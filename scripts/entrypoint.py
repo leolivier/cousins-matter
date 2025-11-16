@@ -27,8 +27,7 @@ from django.core.management import call_command, CommandError
 from .create_superuser import create_superuser_from_env
 
 logger = logging.getLogger(f"{__name__}/{sys.argv[1]}")
-
-INIT_IN_PROGRESS_DIR = settings.BASE_DIR / "config" / ".init_in_progress"  # lock dir
+INIT_IN_PROGRESS_DIR = None  # set in acquire_lock
 
 
 class InitException(Exception):
@@ -79,9 +78,11 @@ def wait_init_and_exec(wait_time=10):
 def acquire_lock():
   """
   Try to acquire initialization leadership via atomic mkdir creation.
-  If mkdir succeeds, we are the leader, otherwise, we wait for the lock to be released and exit.
-  """
+        If mkdir succeeds, we are the leader, otherwise, we wait for the lock to be released and exit.
+        """
+  global INIT_IN_PROGRESS_DIR
   try:
+    INIT_IN_PROGRESS_DIR = settings.BASE_DIR / "config" / ".init_in_progress"  # lock dir
     INIT_IN_PROGRESS_DIR.mkdir()
     logger.info("Initialization lock acquired.")
   except FileExistsError:
@@ -218,7 +219,7 @@ def initialize_environment():
   signal.signal(signal.SIGHUP, signal_handler)
   signal.signal(signal.SIGQUIT, signal_handler)
 
-  # Try to acquire lock
+  # Try to acquire lock using mkdir
   acquire_lock()
   # will never come here if the lock is not acquired
   try:

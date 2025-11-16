@@ -513,6 +513,9 @@ def migrate_v1_v2(args):
   verbose("Migrating database...")
   migrate_sqlite3_to_postgres(pg_pwd)
 
+  verbose("Pulling new docker images...")
+  run(["docker", "compose", "pull"])
+
 
 ####################################
 # INSTALLATION FUNCTIONS

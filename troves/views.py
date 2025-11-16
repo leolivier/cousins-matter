@@ -21,6 +21,7 @@ def trove_cave(request, page=1):
 
     def compute_link(idx):
       return reverse("troves:page", args=[idx]) + "?" + urlencode({"category": category})
+
   else:
     treasures = Trove.objects.all().order_by("category", "id")
 
@@ -36,11 +37,7 @@ def trove_cave(request, page=1):
       default_page_size=settings.DEFAULT_TROVE_PAGE_SIZE,
       group_by="category",
     )
-    return render(
-      request,
-      "troves/trove_cave.html",
-      {"page": trove_page, "trove_categories": Trove.CATEGORY_CHOICES},
-    )
+    return render(request, "troves/trove_cave.html", {"page": trove_page, "trove_categories": Trove.CATEGORY_CHOICES})
   except PageOutOfBounds as exc:
     return redirect(exc.redirect_to)
 

@@ -17,11 +17,7 @@ class PostReplyTestCase(ForumTestCase):
     msgs = Message.objects.filter(post=self.post)
     self.assertEqual(msgs.count(), 2)
     amsgs = {msg.content for msg in msgs}
-    self.assertSetEqual(
-      amsgs,
-      {self.message.content, reply_msg_content},
-      "message contents not equal to what was created",
-    )
+    self.assertSetEqual(amsgs, {self.message.content, reply_msg_content}, "message contents not equal to what was created")
 
   def test_edit_reply(self):
     """Tests editing a reply to a forum post."""
@@ -32,17 +28,10 @@ class PostReplyTestCase(ForumTestCase):
     with self.assertRaises(ValidationError):
       self.client.post(url, {"content": reply_msg_content})
 
-    response = self.client.post(
-      url,
-      {"content": reply_msg_content},
-      **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
-    )
+    response = self.client.post(url, {"content": reply_msg_content}, **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
     # pprint(vars(response))
     self.assertEqual(response.status_code, 200)
-    self.assertJSONEqual(
-      str(response.content, encoding="utf8"),
-      {"reply_id": msg.id, "reply_str": reply_msg_content},
-    )
+    self.assertJSONEqual(str(response.content, encoding="utf8"), {"reply_id": msg.id, "reply_str": reply_msg_content})
     msg.refresh_from_db()
     self.assertEqual(msg.content, reply_msg_content)
     # TODO: how to check the edit inside the page which is done in javascript?

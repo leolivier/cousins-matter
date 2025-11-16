@@ -137,13 +137,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
         return render(
           request,
           "cm_main/common/progress-bar.html",
-          {
-            "hx_get": hx_get_url,
-            "frequency": "1s",
-            "value": 0,
-            "max": zimport.nbPhotos,
-            "text": "0%",
-          },
+          {"hx_get": hx_get_url, "frequency": "1s", "value": 0, "max": zimport.nbPhotos, "text": "0%"},
           status=200,
         )
         # print("post upload progress returns", r.content)
@@ -202,6 +196,6 @@ def upload_progress(request, id):
     zimport.unregister()
     logger.debug(f"cleaned {zimport}")
   logger.debug(
-    f"upload progress bar value: {value}, max: {max}, " f"processed objects: {zimport.photos}, errors: {zimport.errors}"
+    f"upload progress bar value: {value}, max: {max}, processed objects: {zimport.photos}, errors: {zimport.errors}"
   )
   return render(request, "cm_main/common/progress-bar.html", context)

@@ -30,11 +30,7 @@ class PhotoTestsBase(GalleryBaseTestCase):
     super().setUp()
     self.root_gallery = Gallery(name=get_gallery_name(), description="a test root gallery")
     self.root_gallery.save()
-    self.sub_gallery = Gallery(
-      name=get_gallery_name(),
-      description="a test sub gallery",
-      parent=self.root_gallery,
-    )
+    self.sub_gallery = Gallery(name=get_gallery_name(), description="a test sub gallery", parent=self.root_gallery)
     self.sub_gallery.save()
     self.image = create_test_image(__file__, "test-image-1.jpg")
 
@@ -55,24 +51,13 @@ class CreatePhotoTests(PhotoTestsBase):
   def test_create_photo_no_image(self):
     """Tests creating a photo with no image."""
     with self.assertRaises(ValidationError):
-      p = Photo(
-        name=get_photo_name(),
-        gallery=self.root_gallery,
-        date=date.today(),
-        description="a test photo",
-      )
+      p = Photo(name=get_photo_name(), gallery=self.root_gallery, date=date.today(), description="a test photo")
       p.save()
 
   def test_create_photo(self):
     """Tests creating a photo."""
     name = get_photo_name()
-    p = Photo(
-      name=name,
-      gallery=self.root_gallery,
-      date=date.today(),
-      image=self.image,
-      description="a test photo",
-    )
+    p = Photo(name=name, gallery=self.root_gallery, date=date.today(), image=self.image, description="a test photo")
     p.save()
     self.assertTrue(Photo.objects.filter(name=name).exists())
 
@@ -81,11 +66,7 @@ class CreatePhotoTests(PhotoTestsBase):
     image = create_test_image(__file__, "image-toobig.jpg")
     with self.assertRaises(ValidationError):
       p = Photo(
-        name=get_photo_name(),
-        gallery=self.root_gallery,
-        date=date.today(),
-        image=image,
-        description="a too big photo",
+        name=get_photo_name(), gallery=self.root_gallery, date=date.today(), image=image, description="a too big photo"
       )
       p.save()
 
@@ -107,12 +88,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
       html=True,
     )
 
-    formdata = {
-      "name": "a photo",
-      "description": "a description",
-      "gallery": self.root_gallery.id,
-      "date": date.today(),
-    }
+    formdata = {"name": "a photo", "description": "a description", "gallery": self.root_gallery.id, "date": date.today()}
     formclass = PhotoAddView().get_form_class()
     form = formclass(data=formdata, files={"image": self.image})
     print(form.errors)  # doesn't print anything if there are no errors
@@ -127,12 +103,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
     if page_num == 1:
       for i in range(nb_photos):
         image = create_test_image(__file__, f"test-image-{i + 1}.jpg")
-        p = Photo(
-          name=get_photo_name(),
-          gallery=gallery,
-          date=date.today(),
-          image=image,
-        )
+        p = Photo(name=get_photo_name(), gallery=gallery, date=date.today(), image=image)
         p.save()
     photos = Photo.objects.filter(gallery=gallery)[first:last]
     return photos
@@ -158,11 +129,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
   def check_display_several_photos(self, page_size, nb_photos, page_num=1, gallery=None):
     # create a sub gallery if not provided
     if gallery is None:
-      gallery = Gallery(
-        name=get_gallery_name(),
-        description="a multi photo test sub gallery",
-        parent=self.root_gallery,
-      )
+      gallery = Gallery(name=get_gallery_name(), description="a multi photo test sub gallery", parent=self.root_gallery)
       gallery.save()
     first = max(0, (page_size * (page_num - 1)) - 1)
     last = min((page_size * page_num) + 1, nb_photos)
@@ -178,21 +145,21 @@ class CreatePhotoViewTests(PhotoTestsBase):
     photo_dicts = self.get_photo_dicts(photos, nb_photos, page_num, last)
 
     for idx, p in enumerate(photo_dicts):
-      content = f"""
+      content = f'''
   <div class="cell has-text-centered">
     <figure class="image thumbnail mx-auto">
       <img src="{protected_media_url(p["thumbnail"])}"
         class="gallery-image"
-        {f'data-next="{p['next_url']}"' if "next_url" in p else ""}
+        {f'data-next="{p["next_url"]}"' if "next_url" in p else ""}
         data-fullscreen="{protected_media_url(p["image"].name)}"
-        {f'data-prev="{p['previous_url']}"' if "previous_url" in p else ""}
+        {f'data-prev="{p["previous_url"]}"' if "previous_url" in p else ""}
         data-idx="{(page_num - 1) * page_size + idx + 1}"
         data-pk="{p["id"]}"
       >
     </figure>
     <p>{p["name"]}</p>
   </div>
-    """
+    '''
       if idx < page_size:
         self.assertContains(response, content, html=True)
       else:
@@ -239,24 +206,14 @@ class DeletePhotoViewTest(PhotoTestsBase):
   def setUp(self):
     super().setUp()
     self.name = get_photo_name()
-    self.photo = Photo(
-      name=self.name,
-      gallery=self.root_gallery,
-      date=date.today(),
-      image=self.image,
-    )
+    self.photo = Photo(name=self.name, gallery=self.root_gallery, date=date.today(), image=self.image)
     self.photo.save()
     self.url = reverse("galleries:delete_photo", args=[self.photo.id])
 
   def test_delete_photo_no_owner(self):
     """Tests deleting a photo with no owner (should succeed)."""
     response = self.client.post(self.url, follow=True)
-    self.assertRedirects(
-      response,
-      reverse("galleries:detail", kwargs={"pk": self.photo.gallery.id}),
-      302,
-      200,
-    )
+    self.assertRedirects(response, reverse("galleries:detail", kwargs={"pk": self.photo.gallery.id}), 302, 200)
     self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
     self.assertContainsMessage(response, "success", _("Photo deleted"))
 
@@ -265,12 +222,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
     self.photo.uploaded_by = self.member
     self.photo.save()
     response = self.client.post(self.url, follow=True)
-    self.assertRedirects(
-      response,
-      reverse("galleries:detail", kwargs={"pk": self.photo.gallery.id}),
-      302,
-      200,
-    )
+    self.assertRedirects(response, reverse("galleries:detail", kwargs={"pk": self.photo.gallery.id}), 302, 200)
     self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
     self.assertContainsMessage(response, "success", _("Photo deleted"))
 
@@ -282,12 +234,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
     self.root_gallery.owner = self.member
     self.root_gallery.save()
     response = self.client.post(self.url, follow=True)
-    self.assertRedirects(
-      response,
-      reverse("galleries:detail", kwargs={"pk": self.root_gallery.id}),
-      302,
-      200,
-    )
+    self.assertRedirects(response, reverse("galleries:detail", kwargs={"pk": self.root_gallery.id}), 302, 200)
     self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
     self.assertContainsMessage(response, "success", _("Photo deleted"))
 
@@ -311,12 +258,7 @@ class PhotoEditViewTest(PhotoTestsBase):
   def setUp(self):
     super().setUp()
     self.name = get_photo_name()
-    self.photo = Photo(
-      name=self.name,
-      gallery=self.root_gallery,
-      date=date.today(),
-      image=self.image,
-    )
+    self.photo = Photo(name=self.name, gallery=self.root_gallery, date=date.today(), image=self.image)
     self.photo.save()
     self.url = reverse("galleries:edit_photo", args=[self.photo.id])
     self.update_data = {

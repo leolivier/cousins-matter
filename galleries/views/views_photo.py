@@ -11,16 +11,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.paginator import Paginator as BasePaginator
-from cm_main.utils import (
-  PageOutOfBounds,
-  Paginator,
-  assert_request_is_ajax,
-  protected_media_url,
-)
-from galleries.templatetags.galleries_tags import (
-  complete_photos_data,
-  get_gallery_photos,
-)
+from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax, protected_media_url
+from galleries.templatetags.galleries_tags import complete_photos_data, get_gallery_photos
 from cm_main.utils import check_edit_permission
 from ..models import Photo
 from ..forms import PhotoForm
@@ -59,17 +51,11 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
     try:
       # per_page=1 so page_num = photo_num
       ptor = Paginator(
-        photos,
-        per_page=1,
-        compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num]),
+        photos, per_page=1, compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num])
       )
       page = ptor.get_page_data(photo_num)
       complete_photos_data(page, photo_num, ptor.num_pages)
-      return render(
-        request,
-        self.template_name,
-        {"page": page, "gallery_id": gallery_id, "photos_count": photos_count},
-      )
+      return render(request, self.template_name, {"page": page, "gallery_id": gallery_id, "photos_count": photos_count})
     except PageOutOfBounds as exc:
       return redirect(exc.redirect_to)
 

@@ -10,9 +10,7 @@ class LoginTests(MemberTestCase):
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "members/login/login.html")
     response = self.client.post(
-      self.login_url,
-      {"username": self.member.username, "password": self.member.password},
-      follow=True,
+      self.login_url, {"username": self.member.username, "password": self.member.password}, follow=True
     )
     self.assertEqual(response.status_code, 200)
     self.assertRequestUserIsLogged()
@@ -32,16 +30,10 @@ class PasswordTests(MemberTestCase):
     response = self.client.get(self.change_password_url)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "members/login/password_change.html")
-    newpass = self.member.password + "1"
-
     # check password change
     response = self.client.post(
       self.change_password_url,
-      {
-        "old_password": self.member.password,
-        "password1": newpass,
-        "password2": newpass,
-      },
+      {"old_password": self.member.password, "password1": f"{self.member.password}1", "password2": f"{self.member.password}1"},
       follow=True,
     )
 

@@ -52,7 +52,7 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
 
         self.assertContains(
           response,
-          f"""
+          f'''
 <li class="tree-item">
   {page_icon}
   <span class="tag is-success is-light">
@@ -60,7 +60,7 @@ class TestDisplayTreePage(TestPageMixin, BasePageTestCase, MemberTestCase):
       {page.title}
     </a>
   </span>
-</li>""",
+</li>''',
           html=True,
         )
         levels = list(filter(lambda x: x is not None and x != "", page.url.split("/")))

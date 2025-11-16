@@ -15,15 +15,7 @@ class TestBirthdaysMixin:
     new_data = get_new_member_data(birthdate=bday)
     return self.create_member(new_data)
 
-  def check_birthday(
-    self,
-    member,
-    color,
-    expected_chain,
-    with_icons=False,
-    response=None,
-    reversed=False,
-  ):
+  def check_birthday(self, member, color, expected_chain, with_icons=False, response=None, reversed=False):
     response = response or self.client.get(reverse("members:birthdays"))
     # self.print_response(response)
     common_chain = f"""<div class="cell has-background-{color}-light ml-2 pl-2 pr-1 is-flex
@@ -43,40 +35,16 @@ class TestBirthdaysMixin:
 
   def check_birthday_today(self, member, response=None, reversed=False):
     b_is_today = _("turns %(age)s today, happy birthday!") % {"age": member.age}
-    self.check_birthday(
-      member,
-      "danger",
-      b_is_today,
-      with_icons=True,
-      response=response,
-      reversed=reversed,
-    )
+    self.check_birthday(member, "danger", b_is_today, with_icons=True, response=response, reversed=reversed)
 
   def check_birthdays_tomorrow(self, member, response=None, reversed=False):
     b_is_tomorrow = _("will turn %(age)s tomorrow, happy birthday!") % {"age": member.age + 1}
-    self.check_birthday(
-      member,
-      "warning",
-      b_is_tomorrow,
-      with_icons=True,
-      response=response,
-      reversed=reversed,
-    )
+    self.check_birthday(member, "warning", b_is_tomorrow, with_icons=True, response=response, reversed=reversed)
 
   def check_birthdays_after_tomorrow(self, member, response=None, reversed=False):
     b_date = date_format(member.next_birthday, "l d F", use_l10n=True)
-    b_is_after = _("will turn %(age)s on %(birthday)s") % {
-      "age": member.age + 1,
-      "birthday": b_date,
-    }
-    self.check_birthday(
-      member,
-      "link",
-      b_is_after,
-      with_icons=False,
-      response=response,
-      reversed=reversed,
-    )
+    b_is_after = _("will turn %(age)s on %(birthday)s") % {"age": member.age + 1, "birthday": b_date}
+    self.check_birthday(member, "link", b_is_after, with_icons=False, response=response, reversed=reversed)
 
   def check_no_birthdays(self, response=None, reversed=False):
     no_bdays = f"""

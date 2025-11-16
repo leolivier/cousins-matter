@@ -21,12 +21,7 @@ from ..models import Address, Member, Family
 from ..forms import CSVImportMembersForm
 from django.conf import settings
 
-from ..models import (
-  ALL_FIELD_NAMES,
-  MANDATORY_MEMBER_FIELD_NAMES,
-  MEMBER_FIELD_NAMES,
-  ADDRESS_FIELD_NAMES,
-)
+from ..models import ALL_FIELD_NAMES, MANDATORY_MEMBER_FIELD_NAMES, MEMBER_FIELD_NAMES, ADDRESS_FIELD_NAMES
 
 logger = logging.getLogger(__name__)
 
@@ -40,19 +35,13 @@ def check_fields(fieldnames: list[str]):
     if fieldname not in ALL_FIELD_NAMES.values():
       raise ValidationError(
         _('Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s')
-        % {
-          "fieldname": fieldname,
-          "all_names": ", ".join([str(s) for s in ALL_FIELD_NAMES.values()]),
-        }
+        % {"fieldname": fieldname, "all_names": ", ".join([str(s) for s in ALL_FIELD_NAMES.values()])}
       )
   for fieldname in MANDATORY_MEMBER_FIELD_NAMES.values():
     if fieldname not in fieldnames:
       raise ValidationError(
         _('Missing column in CSV file: "%(fieldname)s". Mandatory fields are %(all_names)s')
-        % {
-          "fieldname": fieldname,
-          "all_names": ", ".join([str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()]),
-        }
+        % {"fieldname": fieldname, "all_names": ", ".join([str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()])}
       )
 
   return True
@@ -61,10 +50,7 @@ def check_fields(fieldnames: list[str]):
 def import_csv(csv_file, task_group, user_id, activate_users):
   default_manager = Member.objects.get(id=user_id)
   import_context = ImportContext(
-    default_manager=default_manager,
-    activate_users=activate_users,
-    group=task_group,
-    lang=get_language(),
+    default_manager=default_manager, activate_users=activate_users, group=task_group, lang=get_language()
   )
   import_context.register()
   csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")
@@ -73,13 +59,7 @@ def import_csv(csv_file, task_group, user_id, activate_users):
   broker = get_broker()
   for row in reader:
     logger.debug(f"create task #{import_context.rows_num + 1} for importing row: {row}")
-    async_task(
-      "members.tasks.import_row",
-      import_context,
-      row,
-      broker=broker,
-      group=task_group,
-    )
+    async_task("members.tasks.import_row", import_context, row, broker=broker, group=task_group)
     import_context.rows_num += 1
   logger.info("importing %d rows", import_context.rows_num)
 
@@ -116,13 +96,7 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
         return render(
           request,
           "cm_main/common/progress-bar.html",
-          {
-            "hx_get": hx_get_url,
-            "frequency": "1s",
-            "value": 0,
-            "max": import_data.rows_num,
-            "text": "0%",
-          },
+          {"hx_get": hx_get_url, "frequency": "1s", "value": 0, "max": import_data.rows_num, "text": "0%"},
         )
       except ValidationError as ve:
         logger.error(ve.message)
@@ -172,17 +146,13 @@ def import_progress(request, id):
     context["back_url"] = reverse("members:members")
     context["back_text"] = _("Back to members list")
     context["success"] = _(
-      "CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created " "and %(updated_num)i updated."
-    ) % {
-      "rows_num": import_data.rows_num,
-      "created_num": import_data.created_num,
-      "updated_num": import_data.updated_num,
-    }
+      "CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created and %(updated_num)i updated."
+    ) % {"rows_num": import_data.rows_num, "created_num": import_data.created_num, "updated_num": import_data.updated_num}
     # remove zimport from the cache
     import_data.unregister()
     logger.debug(f"cleaned {import_data}")
   logger.debug(
-    f"upload progress bar value: {value}, max: {max}, " f"processed objects: {users}, errors: {errors}, warnings: {warnings}"
+    f"upload progress bar value: {value}, max: {max}, processed objects: {users}, errors: {errors}, warnings: {warnings}"
   )
   return render(request, "cm_main/common/progress-bar.html", context)
 

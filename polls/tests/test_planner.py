@@ -45,11 +45,7 @@ class EventPlannerUpsertTest(EventPlannerTestMixin):
   def test_update_event_planner_view(self):
     event_planner, question = self.create_event_planner("Test event planner", "Event planner description")
     # add a yes no question
-    self.create_question(
-      question_text="Test question 1",
-      question_type=Question.YESNO_QUESTION,
-      poll=event_planner,
-    )
+    self.create_question(question_text="Test question 1", question_type=Question.YESNO_QUESTION, poll=event_planner)
     response = self.client.get(reverse("polls:update_event_planner", args=(event_planner.id,)))
     self.assertEqual(response.status_code, 200)
     self.assertContains(response, "Test question 1")
@@ -96,7 +92,7 @@ class EventPlannerUpsertTest(EventPlannerTestMixin):
 
 class EventPlannerDeleteViewTest(EventPlannerTestMixin):
   def test_delete_event_planner_view(self):
-    event_planner, question = self.create_event_planner("Test event planner", "Event planner description")
+    event_planner, _ = self.create_event_planner("Test event planner", "Event planner description")
     response = self.client.post(reverse("polls:delete_event_planner", args=(event_planner.id,)), follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(EventPlanner.objects.count(), 0)

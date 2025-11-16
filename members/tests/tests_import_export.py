@@ -37,15 +37,7 @@ class TestImportMixin:
     # print(response.content)
     return response
 
-  def do_test_import(
-    self,
-    file,
-    lang,
-    expected_num,
-    activate_users=True,
-    member_prefix="member",
-    check_active=True,
-  ):
+  def do_test_import(self, file, lang, expected_num, activate_users=True, member_prefix="member", check_active=True):
     prev_num = Member.objects.count()
     response = self.do_upload_file(file, lang, activate_users)
     self.assertEqual(response.status_code, 200)
@@ -103,7 +95,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
       "phone": "+45 01 02 30",
     }
     member1 = self.create_member(data)
-    self.do_test_import("import_members.csv", "en", 3)  # expected 3 and not 4 because we just created one above
+    self.do_test_import("import_members.csv", "en-us", 3)  # expected 3 and not 4 because we just created one above
     member1.refresh_from_db()
     # check the changes have been taken from the import file
     self.assertEqual(member1.first_name, "John")
@@ -112,13 +104,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
 
   def test_import_fr(self):
     "test the import in French"
-    self.do_test_import(
-      "import_members-fr.csv",
-      "fr",
-      4,
-      member_prefix="member-fr",
-      check_active=False,
-    )
+    self.do_test_import("import_members-fr.csv", "fr", 4, member_prefix="member-fr", check_active=False)
 
   def _reset_manager(self, username):
     # make sure the member for which we change the managing member either does not exist or is not active
@@ -134,7 +120,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
     # self._reset_manager('member-mngd4')
     self.do_test_import(
       "import_members-managers.csv",
-      "en",
+      "en-us",
       expected_num=0 if update else 4,
       member_prefix="member-mngd",
       activate_users=activate_users,
@@ -228,32 +214,26 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
     )
 
   def test_wrong_field(self):
-    response = self.do_upload_file("import_members-wrong-field.csv", "en")
+    response = self.do_upload_file("import_members-wrong-field.csv", "en-us")
     self.assertEqual(response.status_code, 200)
     # self.print_response(response)
     # force language to make sure the CSV fields are ok
-    with translation.override("en"):
+    with translation.override("en-us"):
       self.assertContainsMessage(
         response,
         "error",
         'Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s'
-        % {
-          "fieldname": "citi",
-          "all_names": ", ".join([str(s) for s in ALL_FIELD_NAMES.values()]),
-        },
+        % {"fieldname": "citi", "all_names": ", ".join([str(s) for s in ALL_FIELD_NAMES.values()])},
       )
 
   def test_missing_field(self):
-    response = self.do_upload_file("import_members-missing-field.csv", "en")
+    response = self.do_upload_file("import_members-missing-field.csv", "en-us")
     self.assertEqual(response.status_code, 200)
     self.assertContainsMessage(
       response,
       "error",
       'Missing column in CSV file: "%(fieldname)s". Mandatory fields are %(all_names)s'
-      % {
-        "fieldname": "first_name",
-        "all_names": ", ".join([str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.keys()]),
-      },
+      % {"fieldname": "first_name", "all_names": ", ".join([str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.keys()])},
     )
 
 
@@ -267,11 +247,7 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
     if not filter:  # can be None or {}
       return False
 
-    map = {
-      "city-id": ALL_FIELD_NAMES["city"],
-      "family-id": ALL_FIELD_NAMES["family"],
-      "name-id": ALL_FIELD_NAMES["last_name"],
-    }
+    map = {"city-id": ALL_FIELD_NAMES["city"], "family-id": ALL_FIELD_NAMES["family"], "name-id": ALL_FIELD_NAMES["last_name"]}
 
     # print("check filters for row=%s filter=%s" % (row, filter))
     for filter_key, filter_val in filter.items():
@@ -292,10 +268,7 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
     """
     # check that rsp_csv columns (received columns) contains all defined columns
     for column in [str(s) for s in ALL_FIELD_NAMES.values()]:
-      self.assertTrue(
-        column in rsp_csv.fieldnames,
-        msg="Column %s not in received CSV" % column,
-      )
+      self.assertTrue(column in rsp_csv.fieldnames, msg="Column %s not in received CSV" % column)
 
     username_key = ALL_FIELD_NAMES["username"]  # get the key for username
     # transform both csvs into dict of rows indexed by username and a list of usernames
@@ -318,11 +291,7 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
     if len(missing_usernames) > 0 and filter:
       # check if they have been filtered
       missing_usernames = [username for username in missing_usernames if self.matches_filter(exp_rows[username], filter)]
-    self.assertSequenceEqual(
-      missing_usernames,
-      [],
-      msg="Missing usernames %s in received CSV" % missing_usernames,
-    )
+    self.assertSequenceEqual(missing_usernames, [], msg="Missing usernames %s in received CSV" % missing_usernames)
 
     # All the usernames in exp_usernames should be in rsp_usernames except self.member and self.superuser
     for unkown_username in [username for username in rsp_usernames if username not in exp_usernames]:
@@ -339,17 +308,11 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
       rsp_row = rsp_rows[username]
       # avatar not exported, so ignore it
       wrong_columns = [key for key in exp_row.keys() if exp_row[key] != rsp_row[key] and key != "avatar"]
-      self.assertSequenceEqual(
-        wrong_columns,
-        [],
-        "Wrong column %s for username %s" % (wrong_columns, username),
-      )
+      self.assertSequenceEqual(wrong_columns, [], "Wrong column %s for username %s" % (wrong_columns, username))
       # check that other columns are empty
       non_empty_columns = [key for key in rsp_row.keys() if key not in exp_csv.fieldnames and rsp_row[key] != ""]
       self.assertSequenceEqual(
-        non_empty_columns,
-        [],
-        "Columns %s for username %s should be empty" % (non_empty_columns, username),
+        non_empty_columns, [], "Columns %s for username %s should be empty" % (non_empty_columns, username)
       )
 
   def do_test_export(self, expected_filename, lang, filter=None):
@@ -368,10 +331,10 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
       self.check_CSVs_are_equivalent(exp_csv, rsp_csv, filter)
 
   # force language to make sure the CSV fields are properly translated
-  @translation.override("en")
+  @translation.override("en-us")
   def test_export_en(self):
-    self.do_test_import("import_members.csv", "en", 4)
-    self.do_test_export("import_members.csv", "en")
+    self.do_test_import("import_members.csv", "en-us", 4)
+    self.do_test_export("import_members.csv", "en-us")
 
   # force language to make sure the CSV fields are properly translated
   @translation.override("fr")
@@ -379,9 +342,9 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
     self.do_test_import("import_members-fr.csv", "fr", 4, member_prefix="member-fr")
     self.do_test_export("import_members-fr.csv", "fr")
 
-  @translation.override("en")
+  @translation.override("en-us")
   def test_export_en_with_filter(self):
-    self.do_test_import("import_members.csv", "en", 4)
-    self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
-    self.do_test_export("import_members.csv", "en", {"city-id": "Liverpool"})
-    self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
+    self.do_test_import("import_members.csv", "en-us", 4)
+    self.do_test_export("import_members.csv", "en-us", {"name-id": "Doe"})
+    self.do_test_export("import_members.csv", "en-us", {"city-id": "Liverpool"})
+    self.do_test_export("import_members.csv", "en-us", {"name-id": "Doe"})

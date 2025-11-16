@@ -22,10 +22,7 @@ class PollTestBase(MemberTestCase):
     `choices` is a list of choices.
     """
     question = Question(
-      question_text=question_text,
-      question_type=question_type,
-      poll=poll,
-      possible_choices=possible_choices or [],
+      question_text=question_text, question_type=question_type, poll=poll, possible_choices=possible_choices or []
     )
     question.save()
     return question
@@ -82,36 +79,18 @@ class PollTestMixin(PollTestBase):
   def create_questions(self, poll):
     rnd_str = "".join(random.choice(string.ascii_letters) for _ in range(10))
     possible_single_choices = ["Choice #1", "Choice #2", "Choice #3"]
-    possible_multiple_choices = [
-      "Choice #10",
-      "Choice #20",
-      "Choice #30",
-      "Choice #40",
-      "Choice #50",
-    ]
+    possible_multiple_choices = ["Choice #10", "Choice #20", "Choice #30", "Choice #40", "Choice #50"]
 
     return [
-      self.create_question(
-        question_text=f"Test question 1 {rnd_str}",
-        question_type=Question.YESNO_QUESTION,
-        poll=poll,
-      ),
-      self.create_question(
-        question_text=f"Test question 2 {rnd_str}",
-        question_type=Question.DATE_QUESTION,
-        poll=poll,
-      ),
+      self.create_question(question_text=f"Test question 1 {rnd_str}", question_type=Question.YESNO_QUESTION, poll=poll),
+      self.create_question(question_text=f"Test question 2 {rnd_str}", question_type=Question.DATE_QUESTION, poll=poll),
       self.create_question(
         question_text=f"Test question 3 {rnd_str}",
         question_type=Question.SINGLECHOICE_QUESTION,
         poll=poll,
         possible_choices=possible_single_choices,
       ),
-      self.create_question(
-        question_text=f"Test question 4 {rnd_str}",
-        question_type=Question.OPENTEXT_QUESTION,
-        poll=poll,
-      ),
+      self.create_question(question_text=f"Test question 4 {rnd_str}", question_type=Question.OPENTEXT_QUESTION, poll=poll),
       self.create_question(
         question_text=f"Test question 5 {rnd_str}",
         question_type=Question.MULTICHOICES_QUESTION,
@@ -161,9 +140,7 @@ class PollTestMixin(PollTestBase):
     questions = poll.questions.all()
     qnas = self.create_qnas(questions)
     response = self.client.post(
-      reverse("polls:vote", args=(poll.id,)),
-      {f"q{qna['question'].id}-answer": qna["answer"] for qna in qnas},
-      follow=True,
+      reverse("polls:vote", args=(poll.id,)), {f"q{qna['question'].id}-answer": qna["answer"] for qna in qnas}, follow=True
     )
     self.assertEqual(response.status_code, 200)
     self.assertEqual(PollAnswer.objects.count(), expected_poll_answers)
@@ -196,13 +173,7 @@ class EventPlannerTestMixin(PollTestBase):
     return [datetime.datetime.strftime(date, "%Y-%m-%d %H:%M") for date in dates]
 
   def create_event_planner(
-    self,
-    title,
-    description,
-    open_to=Poll.OPEN_TO_ACTIVE,
-    multiple_choices=False,
-    pub_days=-1,
-    duration=2,
+    self, title, description, open_to=Poll.OPEN_TO_ACTIVE, multiple_choices=False, pub_days=-1, duration=2
   ):
     """
     Create an event planner with the given `title` and `description` and published the
@@ -265,6 +236,5 @@ class EventPlannerTestMixin(PollTestBase):
     answer = answers[0]
     self.assertEqual(answer.question, date_question)
     self.assertEqual(
-      answer.answer,
-      dates[0] if date_question.question_type == Question.SINGLEEVENTPLANNING_QUESTION else dates,
+      answer.answer, dates[0] if date_question.question_type == Question.SINGLEEVENTPLANNING_QUESTION else dates
     )

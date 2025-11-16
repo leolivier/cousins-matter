@@ -24,12 +24,7 @@ def complete_photos_data(page, page_num, num_pages):
     pmu = protected_media_url(p.image.name)
     tmu = protected_media_url(p.thumbnail.name)
 
-    photos_dict[idx] = {
-      "id": p.id,
-      "name": p.name,
-      "image_url": pmu,
-      "thumbnail_url": tmu,
-    }
+    photos_dict[idx] = {"id": p.id, "name": p.name, "image_url": pmu, "thumbnail_url": tmu}
     if idx > 0:
       photos_dict[idx - 1]["next_url"] = pmu
       photos_dict[idx]["previous_url"] = photos_dict[idx - 1]["image_url"]
@@ -52,11 +47,7 @@ def complete_photos_data(page, page_num, num_pages):
 @register.inclusion_tag("galleries/photos_gallery.html")
 def include_photos(gallery, page_num, page_size):
   photos = get_gallery_photos(gallery)
-  ptor = Paginator(
-    photos,
-    page_size,
-    compute_link=lambda page: reverse("galleries:detail_page", args=[gallery.id, page]),
-  )
+  ptor = Paginator(photos, page_size, compute_link=lambda page: reverse("galleries:detail_page", args=[gallery.id, page]))
   if page_num > ptor.num_pages:
     page_num = ptor.num_pages
   page = ptor.get_page_data(page_num)
@@ -66,8 +57,4 @@ def include_photos(gallery, page_num, page_size):
 
 @register.inclusion_tag("galleries/galleries_list.html")
 def include_galleries(galleries, recursive=False, level=0):
-  return {
-    "galleries": galleries if hasattr(galleries, "__iter__") else [galleries],
-    "recursive": recursive,
-    "level": level,
-  }
+  return {"galleries": galleries if hasattr(galleries, "__iter__") else [galleries], "recursive": recursive, "level": level}

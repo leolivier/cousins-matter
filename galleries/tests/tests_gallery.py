@@ -10,11 +10,7 @@ from django.utils.translation import gettext as _
 from cm_main.templatetags.cm_tags import icon
 from cm_main.utils import create_test_image
 from galleries.models import Gallery, Photo
-from galleries.views.views_gallery import (
-  GalleryCreateView,
-  GalleryDetailView,
-  GalleryUpdateView,
-)
+from galleries.views.views_gallery import GalleryCreateView, GalleryDetailView, GalleryUpdateView
 from members.tests.tests_member_base import TestLoginRequiredMixin
 from .tests_utils import GalleryBaseTestCase
 
@@ -69,13 +65,7 @@ class CreateGalleryTest(GalleryBaseTestCase):
     cover.save()
     gal.cover = cover
     gal.save()
-    cover_url = os.path.join(
-      settings.MEDIA_URL,
-      settings.GALLERIES_DIR,
-      gal.full_path(),
-      "thumbnails",
-      "test-image-1",
-    )
+    cover_url = os.path.join(settings.MEDIA_URL, settings.GALLERIES_DIR, gal.full_path(), "thumbnails", "test-image-1")
     self.assertTrue(default_storage.exists(cover.image.name))
     # print("cover_url", cover_url, "gal.cover_url()", gal.cover_url())
     self.assertTrue(gal.cover_url().startswith(cover_url))
@@ -141,11 +131,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     # create a sub gallery through view
     url = reverse("galleries:create")
     sgal_name = get_gallery_name()
-    response = self.client.post(
-      url,
-      {"name": sgal_name, "description": "a test sub gallery", "parent": rg.id},
-      follow=True,
-    )
+    response = self.client.post(url, {"name": sgal_name, "description": "a test sub gallery", "parent": rg.id}, follow=True)
     self.assertTrue(response.status_code, 200)
     # self.print_response(response)
     # get the sub gallery by name and parent
@@ -156,7 +142,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     # check the response contains the sub gallery details (name, photo count)
     self.assertContains(
       response,
-      f"""
+      f'''
 <div class="container">
   <figure class="image gallery-cover is-pulled-left mr-3 mb-3 is-flex is-align-items-center is-justify-content-center">
     <img src="{sg.cover_url()}">
@@ -164,7 +150,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
   <span class="title is-4">{sg.name}</span>
   <span class="tag">{_("No photo")}</span>
   <p>{sg.description}</p>
-</div>""",
+</div>''',
       html=True,
     )
     # check root gallery has the sub gallery for child
@@ -172,10 +158,10 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     # check the root gallery appears as the parent gallery in the details
     self.assertContains(
       response,
-      f"""<a class="button" href="{reverse("galleries:detail", args=[rg.id])}"
+      f'''<a class="button" href="{reverse("galleries:detail", args=[rg.id])}"
       title="{_("Back to %(gname)s") % {"gname": rg.name}}">
       {icon("back")}
-    </a>""",
+    </a>''',
       html=True,
     )
 
@@ -185,7 +171,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     url = reverse("galleries:detail", args=[sg.id])
     self.assertContains(
       response,
-      f"""
+      f'''
 <p class="content has-text-centered mr-3">{_("Children galleries")}</p>
 <div class="grid">
   <a class="cell mr-2" href="{url}">
@@ -194,7 +180,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     </figure>
     <p class="has-text-centered">{sg.name}</p>
   </a>
-</div>""",
+</div>''',
       html=True,
     )
 
@@ -206,12 +192,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     rg.save()
     # add 3 photos in it
     photos = [
-      Photo(
-        name=f"Photo#{i + 1}",
-        image=create_test_image(__file__, f"test-image-{i + 1}.jpg"),
-        date=date.today(),
-        gallery=rg,
-      )
+      Photo(name=f"Photo#{i + 1}", image=create_test_image(__file__, f"test-image-{i + 1}.jpg"), date=date.today(), gallery=rg)
       for i in range(3)
     ]
     for p in photos:
@@ -258,7 +239,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
       else ""
     )
 
-    html = f"""
+    html = f'''
 <div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
   {left_margin}
   <figure class="image gallery-cover is-pulled-left mr-3">
@@ -273,7 +254,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
   </a>
 </div>
 {self.rec_build_tree(n - 1, N + 1, gal)}
-"""
+'''
     return html
 
   def test_tree_view(self):

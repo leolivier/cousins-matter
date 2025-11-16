@@ -29,10 +29,7 @@ class ChatRoom(models.Model):
   slug = models.CharField(max_length=255, blank=True, unique=True)
   date_added = models.DateTimeField(auto_now_add=True)
   followers = models.ManyToManyField(
-    Member,
-    related_name="followed_chat_rooms",
-    blank=True,
-    limit_choices_to={"is_active": True},
+    Member, related_name="followed_chat_rooms", blank=True, limit_choices_to={"is_active": True}
   )
 
   class Meta:
@@ -69,11 +66,7 @@ class ChatRoom(models.Model):
   @classmethod
   def FlaggedRooms(cls, *filters):
     return cls.objects.annotate(
-      is_private=Case(
-        When(privatechatroom__isnull=False, then=Value(True)),
-        default=Value(False),
-        output_field=BooleanField(),
-      )
+      is_private=Case(When(privatechatroom__isnull=False, then=Value(True)), default=Value(False), output_field=BooleanField())
     ).filter(filters)
 
 

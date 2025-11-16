@@ -151,9 +151,7 @@ class MemberTestCase(TestCase):
     member_data = member_data or get_new_member_data()
     pwd = member_data["password"]
     new_member = Member.objects.create_member(
-      **member_data,
-      is_active=is_active,
-      member_manager=None if is_active else self.member,
+      **member_data, is_active=is_active, member_manager=None if is_active else self.member
     )
     new_member.password = pwd  # keep unhashed password in memory for login
     self.created_members.append(new_member)
@@ -166,9 +164,7 @@ class MemberTestCase(TestCase):
     member_data = member_data or get_new_member_data()
     pwd = member_data.get("password")
     new_member = Member.objects.acreate_member(
-      **member_data,
-      is_active=is_active,
-      member_manager=None if is_active else self.member,
+      **member_data, is_active=is_active, member_manager=None if is_active else self.member
     )
     new_member.password = pwd  # keep unhashed password in memory for login
     self.created_members.append(new_member)

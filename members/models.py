@@ -47,13 +47,7 @@ ALL_FIELD_NAMES = MEMBER_FIELD_NAMES | ADDRESS_FIELD_NAMES
 class Family(models.Model):
   name = models.CharField(_("Name"), max_length=72)
 
-  parent = models.ForeignKey(
-    "self",
-    verbose_name=_("Parent family"),
-    on_delete=models.CASCADE,
-    null=True,
-    blank=True,
-  )
+  parent = models.ForeignKey("self", verbose_name=_("Parent family"), on_delete=models.CASCADE, null=True, blank=True)
 
   class Meta:
     verbose_name = _("family")
@@ -119,21 +113,12 @@ class Member(AbstractUser):
 
   avatar = models.ImageField(upload_to=settings.AVATARS_DIR, blank=True, null=True)
 
-  address = models.ForeignKey(
-    Address,
-    verbose_name=_("Address"),
-    null=True,
-    blank=True,
-    on_delete=models.SET_NULL,
-  )
+  address = models.ForeignKey(Address, verbose_name=_("Address"), null=True, blank=True, on_delete=models.SET_NULL)
 
   phone = models.CharField(_("Phone"), max_length=32, blank=True)
 
   birthdate = models.DateField(
-    _("Birthdate"),
-    help_text=_("Click on the month name or the year to change them quickly"),
-    null=True,
-    blank=False,
+    _("Birthdate"), help_text=_("Click on the month name or the year to change them quickly"), null=True, blank=False
   )
   # issue 135: manage dead members
   is_dead = models.BooleanField(_("Is dead"), default=False, blank=False, null=False)
@@ -141,13 +126,7 @@ class Member(AbstractUser):
 
   website = models.URLField(_("Website"), blank=True)
 
-  family = models.ForeignKey(
-    Family,
-    verbose_name=_("Family"),
-    on_delete=models.CASCADE,
-    null=True,
-    blank=True,
-  )
+  family = models.ForeignKey(Family, verbose_name=_("Family"), on_delete=models.CASCADE, null=True, blank=True)
 
   description = models.TextField(
     _("Who I am"),
@@ -157,21 +136,13 @@ class Member(AbstractUser):
     help_text=_("Describe yourself, your likes and dislikes..."),
   )
   hobbies = models.CharField(
-    _("My hobbies"),
-    blank=True,
-    null=True,
-    max_length=256,
-    help_text=_("Provide a list of hobbies separated by commas"),
+    _("My hobbies"), blank=True, null=True, max_length=256, help_text=_("Provide a list of hobbies separated by commas")
   )
 
   privacy_consent = models.BooleanField(_("Privacy consent"), default=False, blank=False, null=False)
 
   followers = models.ManyToManyField(
-    "self",
-    verbose_name=_("Followers"),
-    related_name="following",
-    symmetrical=False,
-    blank=True,
+    "self", verbose_name=_("Followers"), related_name="following", symmetrical=False, blank=True
   )
   # issue #149: manage unaccent indexes
   first_name_unaccent = models.CharField(max_length=150, null=True, blank=True)

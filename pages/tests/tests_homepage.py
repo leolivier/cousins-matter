@@ -12,15 +12,14 @@ from .test_base import BasePageTestCase, TestPageMixin
 
 
 class TestHomePageMixin(TestPageMixin):
-
   def check_home_page(self, lang, auth):
-    home_url = '/' + lang + '/home/' + auth + '/'
+    home_url = "/" + lang + "/home/" + auth + "/"
     # print("home_url", home_url)
     # print("urls home page", {page.url for page in FlatPage.objects.filter(predefined=True)})
     home_content = FlatPage.objects.get(url__iexact=home_url).content
     with lang_override(lang):
       with override_settings(LANGUAGE_CODE=lang):
-        response = self.client.get(reverse('cm_main:Home'), follow=True)
+        response = self.client.get(reverse("cm_main:Home"), follow=True)
         # self.print_response(response)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, home_content, html=True)
@@ -52,23 +51,22 @@ class TestAuthenticatedHomePage(TestHomePageMixin, TestBirthdaysMixin, BasePageT
     else:
       self.check_no_birthdays(response, reversed)
 
-  @override_settings(FEATURES_FLAGS={'show_birthdays_in_homepage': False})
+  @override_settings(FEATURES_FLAGS={"show_birthdays_in_homepage": False})
   def test_home_page_without_birthdays(self):
-    for lang in ['fr', 'en-US']:
+    for lang in ["fr", "en-US"]:
       with lang_override(lang):
         response = self.check_home_page(lang, "authenticated")
         self.check_if_birthdays(response, reversed=True)
 
-  @override_settings(FEATURES_FLAGS={'show_birthdays_in_homepage': True})
+  @override_settings(FEATURES_FLAGS={"show_birthdays_in_homepage": True})
   def test_home_page_with_birthdays(self):
-    for lang in ['fr', 'en-US']:
+    for lang in ["fr", "en-US"]:
       with lang_override(lang):
         response = self.check_home_page(lang, "authenticated")
         self.check_if_birthdays(response)
 
 
 class TestUnAuthenticatedHomePage(TestHomePageMixin, BasePageTestCase, TestCase):
-
   def test_unauthenticated_home_page(self):
-    for lang in ['fr', 'en-US']:
+    for lang in ["fr", "en-US"]:
       self.check_home_page(lang, "unauthenticated")

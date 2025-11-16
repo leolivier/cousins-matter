@@ -11,10 +11,10 @@ from ..forms.upsert_forms import PollUpsertForm, QuestionUpsertForm
 
 def managed_closed_list(poll, form):
   if poll.open_to == Poll.OPEN_TO_CLOSED:
-    poll.closed_list.set(form.cleaned_data.get('closed_list'))
+    poll.closed_list.set(form.cleaned_data.get("closed_list"))
     poll.save()
   elif poll.closed_list.count() > 0:
-    raise ValueError('Closed list must be empty for this type of Poll')
+    raise ValueError("Closed list must be empty for this type of Poll")
 
 
 class PollCreateView(LoginRequiredMixin, generic.CreateView):
@@ -50,7 +50,7 @@ class PollUpdateView(LoginRequiredMixin, generic.UpdateView):
 
   def form_valid(self, form):
     if form.instance.owner != self.request.user:
-      raise ValueError('Only the owner can update this Poll')
+      raise ValueError("Only the owner can update this Poll")
     return super().form_valid(form)
 
   def get(self, request, pk):
@@ -108,7 +108,7 @@ class QuestionUpdateView(QuestionUpsertViewMixin, generic.UpdateView):
     check_edit_permission(request, question.poll.owner)
     # print("Before save", question.__dict__)
     if question.poll.id != poll_id:
-      raise ValueError('Question does not belong to this Poll')
+      raise ValueError("Question does not belong to this Poll")
     # create a form instance and populate it with data from the request on existing member (or None):
     form = self.form_class(request.POST, instance=question)
     if form.is_valid():

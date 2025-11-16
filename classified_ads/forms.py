@@ -1,6 +1,8 @@
 from django import forms
+
 # from django.utils.translation import gettext as _
 from .models import AdPhoto, ClassifiedAd, Categories
+
 # from crispy_forms.helper import FormHelper
 # from crispy_forms.layout import Layout, Fieldset
 from cm_main.widgets import RichTextarea
@@ -10,19 +12,19 @@ class ClassifiedAdForm(forms.ModelForm):
   category = forms.ChoiceField(
     choices=[],  # Will be populated in __init__.
     widget=forms.Select(),
-    required=True
+    required=True,
   )
   subcategory = forms.ChoiceField(
     choices=[],  # Will be populated either in __init__ or in the javascript based on the selected category.
     widget=forms.Select(),
-    required=False
+    required=False,
   )
 
   class Meta:
     model = ClassifiedAd
-    exclude = ['owner']
+    exclude = ["owner"]
     widgets = {
-      'description': RichTextarea(),
+      "description": RichTextarea(),
     }
 
   def __init__(self, *args, **kwargs):
@@ -38,8 +40,8 @@ class ClassifiedAdForm(forms.ModelForm):
       categories_choices = []
       subcategories_choices = []
 
-    self.fields['category'].choices = categories_choices
-    self.fields['subcategory'].choices = subcategories_choices
+    self.fields["category"].choices = categories_choices
+    self.fields["subcategory"].choices = subcategories_choices
 
     # crispy bulma does not implement layouts I need :/
     # # Initialize the crispy form helper
@@ -61,24 +63,23 @@ class ClassifiedAdForm(forms.ModelForm):
 
   def is_valid(self):
     # set the subcategory choices before checking validity
-    if 'category' in self.data:
-      if self.data['category'] not in Categories.list_category_keys():
+    if "category" in self.data:
+      if self.data["category"] not in Categories.list_category_keys():
         return False
-      self.fields['subcategory'].choices = Categories.list_subcategories(self.data['category'])
+      self.fields["subcategory"].choices = Categories.list_subcategories(self.data["category"])
     return super().is_valid()
 
 
 class AdPhotoForm(forms.ModelForm):
-
   class Meta:
     model = AdPhoto
-    fields = ['image']
+    fields = ["image"]
 
 
 class MessageForm(forms.Form):
-  message = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'cols': 50}))
+  message = forms.CharField(widget=forms.Textarea(attrs={"rows": 4, "cols": 50}))
 
   class Meta:
     widgets = {
-      'message': RichTextarea(),
+      "message": RichTextarea(),
     }

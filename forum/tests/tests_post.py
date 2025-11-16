@@ -6,7 +6,6 @@ from ..models import Post, Message, Comment
 
 
 class ForumTestCase(MemberTestCase):
-
   def setUp(self):
     super().setUp()
     with transaction.atomic():
@@ -38,7 +37,7 @@ class PostCreateTestCase(ForumTestCase):
     """Tests the get view for creating a new forum post."""
     url = reverse("forum:create")
     response = self.client.get(url)
-    self.assertTemplateUsed(response, 'forum/post_form.html')
+    self.assertTemplateUsed(response, "forum/post_form.html")
     self.assertIs(response.resolver_match.func.view_class, PostCreateView)
 
   def test_create_post_view_post(self):
@@ -46,14 +45,14 @@ class PostCreateTestCase(ForumTestCase):
     url = reverse("forum:create")
     title = "another title"
     content = "another test message"
-    response = self.client.post(url, {'title': title, 'content': content}, follow=True)
+    response = self.client.post(url, {"title": title, "content": content}, follow=True)
     self.assertEqual(response.status_code, 200)
     # pprint(vars(response))
     post = Post.objects.filter(title=title)
     self.assertEqual(post.count(), 1)
     post = post.first()
     self.assertEqual(post.first_message.content, content)
-    self.assertRedirects(response, reverse('forum:display', args=[post.id]))
+    self.assertRedirects(response, reverse("forum:display", args=[post.id]))
 
 
 class PostEditTestCase(ForumTestCase):
@@ -61,7 +60,7 @@ class PostEditTestCase(ForumTestCase):
     """Tests the get view for editing a forum post."""
     url = reverse("forum:edit", args=[self.post.id])
     response = self.client.get(url)
-    self.assertTemplateUsed(response, 'forum/post_form.html')
+    self.assertTemplateUsed(response, "forum/post_form.html")
     self.assertIs(response.resolver_match.func.view_class, PostEditView)
 
   def test_edit_post_view_post(self):
@@ -69,14 +68,14 @@ class PostEditTestCase(ForumTestCase):
     url = reverse("forum:edit", args=[self.post.id])
     title = "modified title"
     content = "modified test message"
-    response = self.client.post(url, {'title': title, 'content': content}, follow=True)
+    response = self.client.post(url, {"title": title, "content": content}, follow=True)
     self.assertEqual(response.status_code, 200)
     # pprint(vars(response))
     post = Post.objects.filter(title=title)
     self.assertEqual(post.count(), 1)
     post = post.first()
     self.assertEqual(post.first_message.content, content)
-    self.assertRedirects(response, reverse('forum:display', args=[post.id]))
+    self.assertRedirects(response, reverse("forum:display", args=[post.id]))
 
 
 class PostDeleteTestCase(ForumTestCase):
@@ -88,4 +87,4 @@ class PostDeleteTestCase(ForumTestCase):
     # pprint(vars(response))
     post = Post.objects.filter(id=self.post.id)
     self.assertFalse(post.exists())
-    self.assertRedirects(response, reverse('forum:list'))
+    self.assertRedirects(response, reverse("forum:list"))

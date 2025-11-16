@@ -13,6 +13,7 @@ from ..models import EventPlanner, Poll, Question
 
 class PollsListView(LoginRequiredMixin, generic.ListView):
   "View for listing published Polls."
+
   model = Poll
   template_name = "polls/polls_list.html"
   context_object_name = "polls_list"
@@ -39,24 +40,25 @@ class PollsListView(LoginRequiredMixin, generic.ListView):
     if self.only_published:
       filter &= Q(pub_date__lte=timezone.now())
     if not self.show_closed:
-      filter &= (Q(close_date__gte=timezone.now()) | Q(close_date__isnull=True))
+      filter &= Q(close_date__gte=timezone.now()) | Q(close_date__isnull=True)
     if self.only_closed:
       filter &= Q(close_date__lte=timezone.now())
     query_set = self.model.objects.filter(filter).order_by(self.ordering)
-    result = query_set[:(self.show_last or 250)]
+    result = query_set[: (self.show_last or 250)]
     # print(filter, result, self.__dict__)
     return result
 
   def get_context_data(self, **kwargs):
-      context = super().get_context_data(**kwargs)
-      context['title'] = self.title
-      context['kind'] = self.kind
-      context['tab'] = self.type
-      return context
+    context = super().get_context_data(**kwargs)
+    context["title"] = self.title
+    context["kind"] = self.kind
+    context["tab"] = self.type
+    return context
 
 
 class EventPlannersListView(PollsListView):
   "View for listing published EventPlanners."
+
   model = EventPlanner
   title = _("Open Event Planners")
   type = "event"
@@ -64,6 +66,7 @@ class EventPlannersListView(PollsListView):
 
 class AllPollsListView(PollsListView):
   "View for listing all Polls."
+
   only_published = False
   show_closed = True
   show_last = None
@@ -73,6 +76,7 @@ class AllPollsListView(PollsListView):
 
 class AllEventPlannersListView(AllPollsListView):
   "View for listing all EventPlanners."
+
   model = EventPlanner
   title = _("All Event Planners")
   type = "event"
@@ -80,6 +84,7 @@ class AllEventPlannersListView(AllPollsListView):
 
 class ClosedPollsListView(PollsListView):
   "View for listing closed Polls."
+
   only_published = False
   show_closed = True
   only_closed = True
@@ -91,40 +96,47 @@ class ClosedPollsListView(PollsListView):
 
 class ClosedEventPlannersListView(ClosedPollsListView):
   "View for listing closed EventPlanners."
+
   model = EventPlanner
   title = _("Closed Event Planners")
   type = "event"
 
 
 class PollDetailView(LoginRequiredMixin, generic.DetailView):
-    "View for displaying a Poll, its Questions and the already given Answers."
-    model = Poll
-    template_name = "polls/poll_detail.html"
+  "View for displaying a Poll, its Questions and the already given Answers."
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        poll = self.object
-        context['poll'] = poll
-        context['questions'] = poll.get_results(self.request.user)
-        context['type'] = self.model.__name__.lower()
-        return context
+  model = Poll
+  template_name = "polls/poll_detail.html"
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    poll = self.object
+    context["poll"] = poll
+    context["questions"] = poll.get_results(self.request.user)
+    context["type"] = self.model.__name__.lower()
+    return context
 
 
 class EventPlannerDetailView(PollDetailView):
-    "View for displaying an EventPlanner, its Questions and the already given Answers."
-    model = EventPlanner
+  "View for displaying an EventPlanner, its Questions and the already given Answers."
+
+  model = EventPlanner
 
 
 @login_required
 def get_question(request, pk):
   # print("get_question", pk)
   assert_request_is_ajax(request)
-  if request.method != 'GET':
+  if request.method != "GET":
     return JsonResponse({"error": "Only GET method is allowed"}, status=405)
   question = get_object_or_404(Question, pk=pk)
   # print("returning question", question.question_text)
-  return JsonResponse({'question_id': question.id,
-                       'question_text': question.question_text,
-                       'question_type': question.question_type,
-                       'possible_choices': '\n'.join(question.possible_choices)
-                       }, status=200)
+  return JsonResponse(
+    {
+      "question_id": question.id,
+      "question_text": question.question_text,
+      "question_type": question.question_type,
+      "possible_choices": "\n".join(question.possible_choices),
+    },
+    status=200,
+  )

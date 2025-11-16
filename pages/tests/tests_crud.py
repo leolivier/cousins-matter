@@ -25,10 +25,10 @@ class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "pages/page_form.html")
     new_page_data = {
-      'url': self.page_data['url'],
-      'title': self.page_data['title'],
-      'content': self.page_data['content'],
-      'save-and-continue': 'true'
+      "url": self.page_data["url"],
+      "title": self.page_data["title"],
+      "content": self.page_data["content"],
+      "save-and-continue": "true",
     }
     self._test_create_page(new_page_data)
     self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
@@ -39,23 +39,13 @@ class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     # first create one page
     self._test_create_page()
     # then try to create another one with the same url
-    new_page_data = {
-      'url': self.page_data['url'],
-      'title': 'another title',
-      'content': 'another content',
-      'save': 'true'
-    }
+    new_page_data = {"url": self.page_data["url"], "title": "another title", "content": "another content", "save": "true"}
     form = PageForm(new_page_data)
-    self.assertFormError(form, 'url', [_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']}])
+    self.assertFormError(form, "url", [_("Flatpage with url %(url)s already exists") % {"url": new_page_data["url"]}])
     # now, try to create with "sub url"
-    url = self.page_data['url']
-    form = PageForm({
-        'url': f'{url}/3rd-title/',
-        'title': '3rd title',
-        'content': '3rd content',
-        'save': 'true'
-      })
-    self.assertFormError(form, 'url', [_("A flatpage cannot be a subpage of another flatpage, check your URLs")])
+    url = self.page_data["url"]
+    form = PageForm({"url": f"{url}/3rd-title/", "title": "3rd title", "content": "3rd content", "save": "true"})
+    self.assertFormError(form, "url", [_("A flatpage cannot be a subpage of another flatpage, check your URLs")])
     self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
 
@@ -67,17 +57,17 @@ class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     page = self._test_create_page()
     # now try to update it
     new_page_data = {
-      'url': '/another-level/another-title/',
-      'title': 'another title',
-      'content': 'another content',
-      'save': 'true'
+      "url": "/another-level/another-title/",
+      "title": "another title",
+      "content": "another content",
+      "save": "true",
     }
     response = self.client.post(reverse("pages-edit:update", args=[page.id]), new_page_data, follow=True)
     self.assertEqual(response.status_code, 200)
     page.refresh_from_db()
-    self.assertEqual(page.url, new_page_data['url'])
-    self.assertEqual(page.title, new_page_data['title'])
-    self.assertEqual(page.content, new_page_data['content'])
+    self.assertEqual(page.url, new_page_data["url"])
+    self.assertEqual(page.title, new_page_data["title"])
+    self.assertEqual(page.content, new_page_data["content"])
     self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
   def test_update_and_continue_page(self):
@@ -87,18 +77,18 @@ class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     page = self._test_create_page()
     # now try to update it
     new_page_data = {
-      'url': '/another-level/another-title/',
-      'title': 'another title',
-      'content': 'another content',
-      'save-and-continue': 'true'
+      "url": "/another-level/another-title/",
+      "title": "another title",
+      "content": "another content",
+      "save-and-continue": "true",
     }
     response = self.client.post(reverse("pages-edit:update", args=[page.id]), new_page_data, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "pages/page_form.html")
     page.refresh_from_db()
-    self.assertEqual(page.url, new_page_data['url'])
-    self.assertEqual(page.title, new_page_data['title'])
-    self.assertEqual(page.content, new_page_data['content'])
+    self.assertEqual(page.url, new_page_data["url"])
+    self.assertEqual(page.title, new_page_data["title"])
+    self.assertEqual(page.content, new_page_data["content"])
     self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
   def test_same_url(self):
@@ -108,18 +98,18 @@ class TestUpdatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     page1 = self._test_create_page()
     # 2nd page
     new_page_data = {
-      'url': '/another-level/another-title/',
-      'title': 'another title',
-      'content': 'another content',
-      'save': 'true'
+      "url": "/another-level/another-title/",
+      "title": "another title",
+      "content": "another content",
+      "save": "true",
     }
     page2 = self._test_create_page(new_page_data)
 
     # Now try to update page 2 with the same url with the same URL as page1
-    new_page_data['url'] = page1.url
-    new_page_data['id'] = page2.id
+    new_page_data["url"] = page1.url
+    new_page_data["id"] = page2.id
     form = PageForm(new_page_data)
-    self.assertFormError(form, 'url', [_("Flatpage with url %(url)s already exists") % {'url': new_page_data['url']}])
+    self.assertFormError(form, "url", [_("Flatpage with url %(url)s already exists") % {"url": new_page_data["url"]}])
     self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 
 
@@ -131,10 +121,10 @@ class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
     page1 = self._test_create_page()
     # 2nd page
     new_page_data = {
-      'url': '/another-level/another-title/',
-      'title': 'another title',
-      'content': 'another content',
-      'save': 'true'
+      "url": "/another-level/another-title/",
+      "title": "another title",
+      "content": "another content",
+      "save": "true",
     }
     page2 = self._test_create_page(new_page_data)
     # now, display them
@@ -142,14 +132,18 @@ class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     for page in [page1, page2]:
-      self.assertContains(response, f'''
+      self.assertContains(
+        response,
+        f'''
   <div class="panel-block">
-    <a href="{reverse('pages-edit:update', args=[page.id])}">
-      {icon('edit-page', 'panel-icon')}
+    <a href="{reverse("pages-edit:update", args=[page.id])}">
+      {icon("edit-page", "panel-icon")}
       {page.url}
     </a>
     &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<strong>{page.title}</strong>
-  </div>''', html=True)
+  </div>''',
+        html=True,
+      )
 
     self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
 

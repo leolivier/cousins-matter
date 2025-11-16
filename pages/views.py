@@ -26,13 +26,13 @@ class PageCreateView(OnlyAdminMixin, generic.CreateView):
       page.sites.set([Site.objects.get(pk=settings.SITE_ID)])
       page.updated = True
       page.save()
-      if 'save' in request.POST:
+      if "save" in request.POST:
         return redirect(page.url)
-      elif 'save-and-continue' in request.POST:
-        messages.success(request, _("Page \"%(title)s\" saved") % {"title": page.title})
+      elif "save-and-continue" in request.POST:
+        messages.success(request, _('Page "%(title)s" saved') % {"title": page.title})
       else:
         raise ValueError("Unexpected button: {}".format(request.POST))
-    return render(request, self.template_name, {'form': form})
+    return render(request, self.template_name, {"form": form})
 
 
 class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
@@ -48,14 +48,14 @@ class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
     if form.is_valid():
       page = form.save()
       page.updated = True
-      page.save(update_fields=['updated'])
-      if 'save' in request.POST:
+      page.save(update_fields=["updated"])
+      if "save" in request.POST:
         return redirect(page.url)
-      elif 'save-and-continue' in request.POST:
-        messages.success(request, _("Page \"%(title)s\" saved") % {"title": page.title})
+      elif "save-and-continue" in request.POST:
+        messages.success(request, _('Page "%(title)s" saved') % {"title": page.title})
       else:
         raise ValueError("Unexpected button: {}".format(request.POST))
-    return render(request, self.template_name, {'form': form})
+    return render(request, self.template_name, {"form": form})
 
 
 class PageAdminListView(OnlyAdminMixin, generic.ListView):
@@ -69,11 +69,10 @@ class PageTreeView(LoginRequiredMixin, generic.ListView):
 
 
 class PageDeleteView(OnlyAdminMixin, generic.View):
-
   def post(self, request, pk):
     if not request.user.is_superuser:
       raise PermissionDenied
     page = get_object_or_404(FlatPage, pk=pk)
     page.delete()
-    messages.success(request, _("Page \"%(title)s\" deleted") % {"title": page.title})
+    messages.success(request, _('Page "%(title)s" deleted') % {"title": page.title})
     return redirect("pages-edit:edit_list")

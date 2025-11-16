@@ -18,12 +18,9 @@ def _birthdays(request, template_name) -> HttpResponse:
     nb = m.next_birthday
     delta = nb - today
     if delta < deltaNdays:
-        bdays.append((m, delta.days))
+      bdays.append((m, delta.days))
   ordered_bdays = sorted(bdays, key=lambda x: x[1])
-  context = {
-    "birthdays_list": ordered_bdays,
-    "ndays": settings.BIRTHDAY_DAYS
-  }
+  context = {"birthdays_list": ordered_bdays, "ndays": settings.BIRTHDAY_DAYS}
   # based on https://stackoverflow.com/questions/17178525/django-how-to-include-a-view-from-within-a-template#56476932
   #  Whitney's and Olivier's (me ;-) comments, replace the standard rendering by a TemplateResponse rendering to allow
   # including this view in the home view

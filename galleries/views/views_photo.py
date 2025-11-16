@@ -27,48 +27,49 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
   def get(self, request, **kwargs):
     """This method can be called either with a photo id, or with a gallery id and a photo number in the gallery
     (if photo num not given, it takes the first one)"""
-    if 'pk' not in kwargs:
+    if "pk" not in kwargs:
       # if we don't have the pk in args, let's find the proper photo based on the photo_num in the gallery
       # using the BasePaginator ==> we try to find which photo is contained in the page, and use its pk
-      if 'gallery' not in kwargs:
+      if "gallery" not in kwargs:
         raise ValidationError(_("Missing either photo id or gallery id"))
-      gallery_id = kwargs['gallery']
-      photo_num = kwargs['photo_num'] if 'photo_num' in kwargs else 1
+      gallery_id = kwargs["gallery"]
+      photo_num = kwargs["photo_num"] if "photo_num" in kwargs else 1
       ptor = BasePaginator(Photo.objects.filter(gallery=gallery_id), 1)
       page = ptor.page(photo_num)
       # only one photo in the page, take it
       photo = page.object_list[0]
     else:
       # we have the pk in the args, now compute the gallery and photo num
-      pk = kwargs['pk']
+      pk = kwargs["pk"]
       photo = get_object_or_404(Photo, pk=pk)
       gallery_id = photo.gallery.id
-      photo_num = Photo.objects.filter(gallery=gallery_id).order_by('id').filter(id__lte=pk).count()
+      photo_num = Photo.objects.filter(gallery=gallery_id).order_by("id").filter(id__lte=pk).count()
 
     # Now, we have everything, we can repaginate
     photos = get_gallery_photos(gallery_id)
     photos_count = photos.count()
     try:
       # per_page=1 so page_num = photo_num
-      ptor = Paginator(photos, per_page=1,
-                       compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num]))
+      ptor = Paginator(
+        photos, per_page=1, compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num])
+      )
       page = ptor.get_page_data(photo_num)
       complete_photos_data(page, photo_num, ptor.num_pages)
-      return render(request, self.template_name, {'page': page, 'gallery_id': gallery_id, 'photos_count': photos_count})
+      return render(request, self.template_name, {"page": page, "gallery_id": gallery_id, "photos_count": photos_count})
     except PageOutOfBounds as exc:
-        return redirect(exc.redirect_to)
+      return redirect(exc.redirect_to)
 
 
 @login_required
 def get_photo_url(request, gallery, photo_idx=1):
   assert_request_is_ajax(request)
   if photo_idx < 1:
-    return JsonResponse({'results': []})
+    return JsonResponse({"results": []})
   nb_photos = Photo.objects.filter(gallery=gallery).count()
   if photo_idx > nb_photos:
-    return JsonResponse({'results': []})
+    return JsonResponse({"results": []})
   photo = Photo.objects.filter(gallery=gallery)[photo_idx - 1]
-  return JsonResponse({'pk': photo.id, 'image_url': protected_media_url(photo.image.name)})
+  return JsonResponse({"pk": photo.id, "image_url": protected_media_url(photo.image.name)})
 
 
 class PhotoAddView(LoginRequiredMixin, generic.CreateView):
@@ -82,7 +83,7 @@ class PhotoAddView(LoginRequiredMixin, generic.CreateView):
       try:  # issue 120: if any exception during the thumbnail creation process, remove the photo from the database
         form.instance.uploaded_by = self.request.user
         photo = form.save()
-        if 'create-and-add' in request.POST:
+        if "create-and-add" in request.POST:
           messages.success(request, _("Photo created"))
           return redirect("galleries:add_photo", gallery)
         else:
@@ -90,14 +91,14 @@ class PhotoAddView(LoginRequiredMixin, generic.CreateView):
       except (ValidationError, PermissionDenied, PermissionError) as e:
         logger.error(e)
         messages.error(request, _("Error when creating this photo: %s.") % str(e))
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {"form": form})
     else:
-      return render(request, self.template_name, {'form': form})
+      return render(request, self.template_name, {"form": form})
 
   def get(self, request, gallery):
     # initialize gallery to the value in the url and current date
-    form = PhotoForm(initial={'gallery': gallery, 'date': date.today()})
-    return render(request, self.template_name, {'form': form})
+    form = PhotoForm(initial={"gallery": gallery, "date": date.today()})
+    return render(request, self.template_name, {"form": form})
 
 
 class PhotoEditView(LoginRequiredMixin, generic.UpdateView):
@@ -119,8 +120,9 @@ def delete_photo(request, pk):
   photo = get_object_or_404(Photo, pk=pk)
   gallery = photo.gallery.id
   if not request.user.is_superuser:
-    if (photo.uploaded_by or photo.gallery.owner) and \
-       request.user != photo.uploaded_by and request.user != photo.gallery.owner:
+    if (
+      (photo.uploaded_by or photo.gallery.owner) and request.user != photo.uploaded_by and request.user != photo.gallery.owner
+    ):
       raise PermissionDenied
   photo.delete()
   messages.success(request, _("Photo deleted"))

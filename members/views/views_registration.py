@@ -1,4 +1,3 @@
-
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
@@ -11,9 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 
 from ..registration_link_manager import RegistrationLinkManager
-from ..forms import (MemberInvitationForm, RegistrationRequestForm,
-                     MemberRegistrationForm, AddressUpdateForm,
-                     FamilyUpdateForm)
+from ..forms import MemberInvitationForm, RegistrationRequestForm, MemberRegistrationForm, AddressUpdateForm, FamilyUpdateForm
 from ..models import Member
 from verify_email.email_handler import send_verification_email
 from django.conf import settings
@@ -38,28 +35,31 @@ class RegistrationCheckingView(generic.CreateView):
       member = member.first()
       # if member is already active
       if member.is_active:
-        messages.error(
-          request,
-          _("A member with the same email address is already active. Please sign in instead")
-          )
+        messages.error(request, _("A member with the same email address is already active. Please sign in instead"))
         return False
       # if member is already registered but is not active, ask him to contact his/her member manager
       manager = Member.objects.get(id=member.id).member_manager
-      messages.error(request,
-                     _("You are already registered but not active. Please contact %(admin)s to activate your account") %
-                     {'admin': manager.full_name})
+      messages.error(
+        request,
+        _("You are already registered but not active. Please contact %(admin)s to activate your account")
+        % {"admin": manager.full_name},
+      )
       return False
     return True
 
   def get(self, request, encoded_email, token):
     if not self.check_before_register(request, encoded_email, token):
       return redirect("/")
-    return render(request, self.template_name, {
-          "form": MemberRegistrationForm(),
-          "addr_form": AddressUpdateForm(),
-          "family_form": FamilyUpdateForm(),
-          "title": self.title,
-      })
+    return render(
+      request,
+      self.template_name,
+      {
+        "form": MemberRegistrationForm(),
+        "addr_form": AddressUpdateForm(),
+        "family_form": FamilyUpdateForm(),
+        "title": self.title,
+      },
+    )
 
   def post(self, request, encoded_email, token):
     if not self.check_before_register(request, encoded_email, token):
@@ -69,29 +69,35 @@ class RegistrationCheckingView(generic.CreateView):
 
     if form.is_valid():
       send_verification_email(request, form)  # also saves the member
-      username = form.cleaned_data.get('username')
+      username = form.cleaned_data.get("username")
       messages.success(
-          request,
-          _('Hello %(username)s, your account has been created! You will now receive an email '
-            'to verify your email address. Click in the link inside the mail to finish the registration.') %
-          {"username": username}
-          )
+        request,
+        _(
+          "Hello %(username)s, your account has been created! You will now receive an email "
+          "to verify your email address. Click in the link inside the mail to finish the registration."
+        )
+        % {"username": username},
+      )
       return redirect("members:login")
 
-    return render(request, self.template_name, {
-      "form": form,
-      "addr_form": AddressUpdateForm(),
-      "family_form": FamilyUpdateForm(),
-      "title": self.title,
-    })
+    return render(
+      request,
+      self.template_name,
+      {
+        "form": form,
+        "addr_form": AddressUpdateForm(),
+        "family_form": FamilyUpdateForm(),
+        "title": self.title,
+      },
+    )
 
 
 class MemberInvitationView(LoginRequiredMixin, generic.View):
   template_name = "members/registration/registration_invite.html"
 
   def check_before_invitation(self, request):
-      if not request.user.is_superuser and not settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS:
-        raise PermissionDenied(_("Only superusers can invite members"))
+    if not request.user.is_superuser and not settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS:
+      raise PermissionDenied(_("Only superusers can invite members"))
 
   def post(self, request):
     """
@@ -108,11 +114,11 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
       messages.error(request, form.errors)
       return render(request, self.template_name, {"form": form})
 
-    email = form.cleaned_data['email']
-    invited = form.cleaned_data['invited']
+    email = form.cleaned_data["email"]
+    invited = form.cleaned_data["invited"]
 
     if Member.objects.filter(email=email).exists():
-      messages.error(request, _('A member with this email already exists.'))
+      messages.error(request, _("A member with this email already exists."))
       return render(request, self.template_name, {"form": form})
 
     invitation_url = RegistrationLinkManager().generate_link(request, email)
@@ -124,53 +130,70 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
 
     msg = render_to_string(
       "members/email/registration_invite_email.html",
-      {"link": invitation_url, "admin": admin_name, "site_name": site_name,
-       "invited": invited, 'invited_email': email, 'inviter': inviter.full_name,
-       'inviter_email': inviter.email},
-      request=request
+      {
+        "link": invitation_url,
+        "admin": admin_name,
+        "site_name": site_name,
+        "invited": invited,
+        "invited_email": email,
+        "inviter": inviter.full_name,
+        "inviter_email": inviter.email,
+      },
+      request=request,
     )
 
     send_mail(
-      _("You are invited to register on %(site_name)s") % {'site_name': site_name}, strip_tags(msg),
+      _("You are invited to register on %(site_name)s") % {"site_name": site_name},
+      strip_tags(msg),
       from_email=from_email,
       recipient_list=[email],
-      html_message=msg
+      html_message=msg,
     )
 
     if admin != inviter:  # warn the admin if the inviter is not the admin
       msg = render_to_string(
         "members/email/registration_sent_email.html",
-        {"admin": admin_name, "site_name": site_name, "invited": invited,
-         'invited_email': email, 'inviter': inviter.full_name,
-         'inviter_email': inviter.email},
-        request=request
+        {
+          "admin": admin_name,
+          "site_name": site_name,
+          "invited": invited,
+          "invited_email": email,
+          "inviter": inviter.full_name,
+          "inviter_email": inviter.email,
+        },
+        request=request,
       )
       send_mail(
-        _("Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s") %
-        {'site_name': site_name, 'inviter': inviter.full_name, 'inviter_email': inviter.email,
-         'invited': invited, 'invited_email': email},
+        _("Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s")
+        % {
+          "site_name": site_name,
+          "inviter": inviter.full_name,
+          "inviter_email": inviter.email,
+          "invited": invited,
+          "invited_email": email,
+        },
         strip_tags(msg),
         from_email=from_email,
         recipient_list=[admin.email],
-        html_message=msg
+        html_message=msg,
       )
-    messages.success(request, _("Invitation sent to %(email)s.") % {'email': email})
+    messages.success(request, _("Invitation sent to %(email)s.") % {"email": email})
     return render(request, self.template_name, {"form": form})
 
   def get(self, request):
     ko = self.check_before_invitation(request)
     if ko:
       return ko
-    email = request.GET.get('mail')
+    email = request.GET.get("mail")
     if email:
-      form = MemberInvitationForm(initial={'email': email})
+      form = MemberInvitationForm(initial={"email": email})
     else:
       form = MemberInvitationForm()
     return render(request, self.template_name, {"form": form})
 
 
 class RegistrationRequestView(generic.View):
-  template_name = 'members/registration/registration_request.html'
+  template_name = "members/registration/registration_request.html"
 
   def post(self, request):
     """
@@ -180,11 +203,10 @@ class RegistrationRequestView(generic.View):
     # Validate the form: the captcha field will automatically
     # check the input
     if form.is_valid():  # Captcha OK
-
       site_name = settings.SITE_NAME
       requester_email = request.POST.get("email")
       if Member.objects.filter(email=requester_email).exists():
-        messages.error(request, _('A member with this email already exists.'))
+        messages.error(request, _("A member with this email already exists."))
       else:
         requester_name = request.POST.get("name")
         requester_message = request.POST.get("message")
@@ -193,21 +215,22 @@ class RegistrationRequestView(generic.View):
 
         context = {
           "site_name": site_name,
-          "requester": {
-            "email": requester_email,
-            "name": requester_name,
-            "message": requester_message
-          },
-          "link": absolute_link
+          "requester": {"email": requester_email, "name": requester_name, "message": requester_message},
+          "link": absolute_link,
         }
 
         msg = render_to_string("members/email/registration_request_email.html", context, request=request)
         admin = Member.objects.filter(is_superuser=True).first()
-        if send_mail(
-          _("Registration request for %(site_name)s") % {'site_name': site_name}, strip_tags(msg),
-          from_email=settings.DEFAULT_FROM_EMAIL,
-          recipient_list=[admin.email], html_message=msg
-        ) == 1:
+        if (
+          send_mail(
+            _("Registration request for %(site_name)s") % {"site_name": site_name},
+            strip_tags(msg),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[admin.email],
+            html_message=msg,
+          )
+          == 1
+        ):
           messages.success(request, _("Registration request sent."))
           return redirect("/")
         else:

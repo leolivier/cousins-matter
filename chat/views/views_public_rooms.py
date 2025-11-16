@@ -41,7 +41,7 @@ def edit_room(request, room_slug):
   room = get_object_or_404(ChatRoom, slug=room_slug)
   check_edit_permission(request, room.owner())
   # print(request.POST)
-  if 'room-name' not in request.POST:
+  if "room-name" not in request.POST:
     raise ValidationError("No room name provided")
   room.name = request.POST["room-name"]
   room.save(update_fields=["name"])
@@ -54,4 +54,4 @@ def delete_room(request, room_slug):
   check_edit_permission(request, room.owner())
   room.delete()
   messages.success(request, f"Chat room {room.name} deleted")
-  return redirect('chat:chat_rooms')
+  return redirect("chat:chat_rooms")

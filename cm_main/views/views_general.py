@@ -51,20 +51,20 @@ def download_protected_media(request, media):
   logger.debug(f"Downloading protected media {media}")
 
   hasher = blake2b()
-  tbh = bytes(f'{request.user.username}@{media}', 'utf-8')
+  tbh = bytes(f"{request.user.username}@{media}", "utf-8")
   hasher.update(tbh)
   media_etag = hasher.hexdigest()
 
-  request_etag = request.headers.get('If-None-Match', None)
+  request_etag = request.headers.get("If-None-Match", None)
   if request_etag and request_etag == media_etag:
-      return HttpResponseNotModified()
+    return HttpResponseNotModified()
 
   chunk_size = 64 * 1024
   try:
     media_file = default_storage.open(media, "rb")
     response = StreamingHttpResponse(
-        FileWrapper(media_file, chunk_size),
-        content_type=mimetypes.guess_type(media)[0],
+      FileWrapper(media_file, chunk_size),
+      content_type=mimetypes.guess_type(media)[0],
     )
   except FileNotFoundError:
     raise Http404(_("Media not found"))
@@ -80,51 +80,51 @@ def download_protected_media(request, media):
 
 
 def health_check():
-    try:
-        with connections['default'].cursor() as cursor:
-            cursor.execute('SELECT 1')
-            cursor.fetchone()
-    except DatabaseError as e:
-        return {'status': 'db_error', 'msg': str(e)}
-    try:
-        r = redis.Redis(host=os.getenv('REDIS_HOST', 'redis'), port=os.getenv('REDIS_PORT', 6379), decode_responses=True)
-        r.ping()
-    except redis.exceptions.ConnectionError as e:
-        return {'status': 'redis_error', 'msg': str(e)}
-    return {'status': 'ok'}
+  try:
+    with connections["default"].cursor() as cursor:
+      cursor.execute("SELECT 1")
+      cursor.fetchone()
+  except DatabaseError as e:
+    return {"status": "db_error", "msg": str(e)}
+  try:
+    r = redis.Redis(host=os.getenv("REDIS_HOST", "redis"), port=os.getenv("REDIS_PORT", 6379), decode_responses=True)
+    r.ping()
+  except redis.exceptions.ConnectionError as e:
+    return {"status": "redis_error", "msg": str(e)}
+  return {"status": "ok"}
 
 
 def health(request):
-    """
-    Health check view.
+  """
+  Health check view.
 
-    This view checks if the database connection and the redis connection are working.
+  This view checks if the database connection and the redis connection are working.
 
-    :return: A JsonResponse object containing a single key-value pair with the key 'status' and the value 'ok'
-             if both connections are working, or 'db_error' if the database connection is not working , or
-             'redis_error' if the redis connection is not working.
-    :rtype: JsonResponse
-    :status: 200 (OK) or 503 (Service Unavailable)
-    """
-    check = health_check()
-    return JsonResponse(check, status=200 if check['status'] == 'ok' else 503)
+  :return: A JsonResponse object containing a single key-value pair with the key 'status' and the value 'ok'
+           if both connections are working, or 'db_error' if the database connection is not working , or
+           'redis_error' if the redis connection is not working.
+  :rtype: JsonResponse
+  :status: 200 (OK) or 503 (Service Unavailable)
+  """
+  check = health_check()
+  return JsonResponse(check, status=200 if check["status"] == "ok" else 503)
 
 
 def qhealth(request):
-    """
-    Django Q Health check view.
+  """
+  Django Q Health check view.
 
-    This view checks through Django Q if the database connection and the redis connection are working.
+  This view checks through Django Q if the database connection and the redis connection are working.
 
-    :return: A JsonResponse object containing a single key-value pair with the key 'status' and the value 'ok'
-             if both connections are working, or 'db_error' if the database connection is not working , or
-             'redis_error' if the redis connection is not working.
-    :rtype: JsonResponse
-    :status: 200 (OK) or 503 (Service Unavailable)
-    """
-    task_id = async_task('cm_main.views.views_general.health_check')
-    check = result(task_id, 1000)
-    return JsonResponse(check, status=200 if check['status'] == 'ok' else 503)
+  :return: A JsonResponse object containing a single key-value pair with the key 'status' and the value 'ok'
+           if both connections are working, or 'db_error' if the database connection is not working , or
+           'redis_error' if the redis connection is not working.
+  :rtype: JsonResponse
+  :status: 200 (OK) or 503 (Service Unavailable)
+  """
+  task_id = async_task("cm_main.views.views_general.health_check")
+  check = result(task_id, 1000)
+  return JsonResponse(check, status=200 if check["status"] == "ok" else 503)
 
 
 def send_zipfile(request):
@@ -134,22 +134,22 @@ def send_zipfile(request):
   be used for large dynamic PDF files.
   """
   chunk_size = 8192
-  temp = tempfile.TemporaryFile(suffix='.zip')
-  archive = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
+  temp = tempfile.TemporaryFile(suffix=".zip")
+  archive = zipfile.ZipFile(temp, "w", zipfile.ZIP_DEFLATED)
   files = []  # Select your files here.
   for filename in files:
-      abs_filename = os.path.abspath(filename)
-      rel_filename = filename if filename.startswith('./') else '.' / filename  # TODO: won't work on Windows
-      archive.write(abs_filename, rel_filename)
+    abs_filename = os.path.abspath(filename)
+    rel_filename = filename if filename.startswith("./") else "." / filename  # TODO: won't work on Windows
+    archive.write(abs_filename, rel_filename)
   archive.close()
   response = StreamingHttpResponse(
     FileWrapper(
-          open(temp, "rb"),
-          chunk_size,
-      ),
+      open(temp, "rb"),
+      chunk_size,
+    ),
     content_type=mimetypes.guess_type(temp)[0],
   )
-  response["Content-Type"] = 'application/zip'
+  response["Content-Type"] = "application/zip"
   response["Content-Length"] = temp.tell()
   response["Content-Disposition"] = "attachment; filename=file.zip"
   temp.seek(0)

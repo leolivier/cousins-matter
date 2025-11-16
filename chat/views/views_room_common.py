@@ -39,13 +39,9 @@ def list_chat_rooms(request, page_num=1, private=False):
 
   """
   # Subquery to get the author of the first related ChatMessage instance of a private room
-  first_msg_auth_subquery = ChatMessage.objects.filter(
-    room=OuterRef('pk')
-  ).order_by(
-      'date_added'
-  )[:1].select_related(
-        'member'
-  ).values('member_id')
+  first_msg_auth_subquery = (
+    ChatMessage.objects.filter(room=OuterRef("pk")).order_by("date_added")[:1].select_related("member").values("member_id")
+  )
   if private:
     # look for private rooms of which the user who sent the request is member
     chat_rooms = PrivateChatRoom.objects.filter(followers=request.user)
@@ -53,14 +49,17 @@ def list_chat_rooms(request, page_num=1, private=False):
     chat_rooms = ChatRoom.objects.public()
   # Annotate room instances with the first message and the number of messages in the room
   chat_rooms = chat_rooms.annotate(
-    num_messages=Count("chatmessage"),
-    first_message_author=Subquery(first_msg_auth_subquery)
-    ).order_by('date_added')
+    num_messages=Count("chatmessage"), first_message_author=Subquery(first_msg_auth_subquery)
+  ).order_by("date_added")
 
   try:
-    page = Paginator.get_page(request, chat_rooms, page_num,
-                              reverse_link="chat:private_chat_page" if private else "chat:chat_page",
-                              default_page_size=settings.DEFAULT_CHATROOMS_PER_PAGE)
+    page = Paginator.get_page(
+      request,
+      chat_rooms,
+      page_num,
+      reverse_link="chat:private_chat_page" if private else "chat:chat_page",
+      default_page_size=settings.DEFAULT_CHATROOMS_PER_PAGE,
+    )
     author_ids = [room.first_message_author for room in page.object_list if room.first_message_author is not None]
     # print("author ids", author_ids)
     authors = Member.objects.filter(id__in=author_ids)
@@ -72,9 +71,9 @@ def list_chat_rooms(request, page_num=1, private=False):
           if room.first_message_author == author.id:
             room.first_message_author = author
         # print("final author:", room.first_message_author)
-    return render(request, 'chat/chat_rooms.html', {"page": page, 'private': private})
+    return render(request, "chat/chat_rooms.html", {"page": page, "private": private})
   except PageOutOfBounds as exc:
-      return redirect(exc.redirect_to)
+    return redirect(exc.redirect_to)
 
 
 @login_required
@@ -95,11 +94,11 @@ def create_chat_room(request, private=False):
       ValidationError: If the room name is invalid.
 
   """
-  room_name = unquote(request.GET['name'])
+  room_name = unquote(request.GET["name"])
   room_class = PrivateChatRoom if private else ChatRoom
   try:
     new_room, created = room_class.objects.get_or_create(name=room_name)
-    urlpath = 'chat:private_room' if private else 'chat:room'
+    urlpath = "chat:private_room" if private else "chat:room"
     room_url = reverse(urlpath, args=[new_room.slug])
     if created:
       if private:
@@ -125,16 +124,18 @@ def create_chat_room(request, private=False):
   except ValidationError as ve:
     for error in ve:
       match error[0]:
-        case '__all__':
-          messages.error(request, ' '.join(error[1]))
-        case 'slug':
+        case "__all__":
+          messages.error(request, " ".join(error[1]))
+        case "slug":
           similar_room = room_class.objects.get(slug=slugify(room_name))
-          messages.error(request,
-                         _("Another room with a similar name already exists ('%(similar_room_name)s'). "
-                           "Please choose a different name.") % {'similar_room_name': similar_room.name})
+          messages.error(
+            request,
+            _("Another room with a similar name already exists ('%(similar_room_name)s'). Please choose a different name.")
+            % {"similar_room_name": similar_room.name},
+          )
         case _:
-          messages.error(request, f'{error[0]}: {" ".join(error[1])}')
-    return redirect(reverse('chat:private_chat_rooms'))
+          messages.error(request, f"{error[0]}: {' '.join(error[1])}")
+    return redirect(reverse("chat:private_chat_rooms"))
 
 
 @login_required
@@ -181,19 +182,25 @@ def display_chat_room(request, room_slug, private=False, page_num=None):
   room = get_object_or_404(ChatRoom if not private else PrivateChatRoom, slug=room_slug)
   if private and request.user not in room.followers.all():
     messages.error(request, _("You are not a member of this private room"))
-    return redirect(reverse('chat:private_chat_rooms'))
-  message_list = ChatMessage.objects.filter(room=room.id).order_by('date_added', 'id')
+    return redirect(reverse("chat:private_chat_rooms"))
+  message_list = ChatMessage.objects.filter(room=room.id).order_by("date_added", "id")
   try:
-    page = Paginator.get_page(request, message_list,
-                              page_num=page_num,
-                              reverse_link="chat:room_page",
-                              compute_link=lambda page_num: reverse("chat:room_page", args=[room_slug, page_num]),
-                              default_page_size=settings.DEFAULT_CHATMESSAGES_PER_PAGE)
+    page = Paginator.get_page(
+      request,
+      message_list,
+      page_num=page_num,
+      reverse_link="chat:room_page",
+      compute_link=lambda page_num: reverse("chat:room_page", args=[room_slug, page_num]),
+      default_page_size=settings.DEFAULT_CHATMESSAGES_PER_PAGE,
+    )
     last_msg = message_list.last()
-    last_date = last_msg.date_added.strftime('%Y-%m-%d') if message_list else None
+    last_date = last_msg.date_added.strftime("%Y-%m-%d") if message_list else None
     last_sender = last_msg.member.username if message_list else None
     # print("last date found", last_date)
-    return render(request, 'chat/room_detail.html',
-                  {'room': room, "page": page, "private": private, "last_date": last_date, "last_sender": last_sender})
+    return render(
+      request,
+      "chat/room_detail.html",
+      {"room": room, "page": page, "private": private, "last_date": last_date, "last_sender": last_sender},
+    )
   except PageOutOfBounds as exc:
-      return redirect(exc.redirect_to)
+    return redirect(exc.redirect_to)

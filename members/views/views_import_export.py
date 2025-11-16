@@ -26,27 +26,32 @@ from ..models import ALL_FIELD_NAMES, MANDATORY_MEMBER_FIELD_NAMES, MEMBER_FIELD
 logger = logging.getLogger(__name__)
 
 
-def t(field: str) -> str: return ALL_FIELD_NAMES[field]
+def t(field: str) -> str:
+  return ALL_FIELD_NAMES[field]
 
 
 def check_fields(fieldnames: list[str]):
   for fieldname in fieldnames:
     if fieldname not in ALL_FIELD_NAMES.values():
-      raise ValidationError(_('Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s') %
-                            {'fieldname': fieldname, 'all_names': ', '.join([str(s) for s in ALL_FIELD_NAMES.values()])})
+      raise ValidationError(
+        _('Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s')
+        % {"fieldname": fieldname, "all_names": ", ".join([str(s) for s in ALL_FIELD_NAMES.values()])}
+      )
   for fieldname in MANDATORY_MEMBER_FIELD_NAMES.values():
     if fieldname not in fieldnames:
-      raise ValidationError(_('Missing column in CSV file: "%(fieldname)s". Mandatory fields are %(all_names)s') %
-                            {'fieldname': fieldname,
-                             'all_names': ', '.join([str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()])})
+      raise ValidationError(
+        _('Missing column in CSV file: "%(fieldname)s". Mandatory fields are %(all_names)s')
+        % {"fieldname": fieldname, "all_names": ", ".join([str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()])}
+      )
 
   return True
 
 
 def import_csv(csv_file, task_group, user_id, activate_users):
   default_manager = Member.objects.get(id=user_id)
-  import_context = ImportContext(default_manager=default_manager, activate_users=activate_users,
-                                 group=task_group, lang=get_language())
+  import_context = ImportContext(
+    default_manager=default_manager, activate_users=activate_users, group=task_group, lang=get_language()
+  )
   import_context.register()
   csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")
   reader = csv.DictReader(csvf)
@@ -54,7 +59,7 @@ def import_csv(csv_file, task_group, user_id, activate_users):
   broker = get_broker()
   for row in reader:
     logger.debug(f"create task #{import_context.rows_num + 1} for importing row: {row}")
-    async_task('members.tasks.import_row', import_context, row, broker=broker, group=task_group)
+    async_task("members.tasks.import_row", import_context, row, broker=broker, group=task_group)
     import_context.rows_num += 1
   logger.info("importing %d rows", import_context.rows_num)
 
@@ -69,10 +74,10 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
   def get_context_data(self, *args, **kwargs):
     optional_fields = {str(s) for s in ALL_FIELD_NAMES.values()} - {str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()}
     return super().get_context_data() | {
-      'mandatory_fields': MANDATORY_MEMBER_FIELD_NAMES.values(),
-      'optional_fields': optional_fields,
-      'media_root': settings.MEDIA_ROOT,
-      }
+      "mandatory_fields": MANDATORY_MEMBER_FIELD_NAMES.values(),
+      "optional_fields": optional_fields,
+      "media_root": settings.MEDIA_ROOT,
+    }
 
   def post(self, request, *args, **kwargs):
     self.request = request
@@ -88,9 +93,11 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
 
         hx_get_url = reverse("members:import_progress", args=(task_group,))
         logger.debug(f"rendering first progress-bar url: {hx_get_url} task group: {task_group}")
-        return render(request, "cm_main/common/progress-bar.html",
-                      {"hx_get": hx_get_url, "frequency": "1s",
-                       "value": 0, "max": import_data.rows_num, "text": "0%"})
+        return render(
+          request,
+          "cm_main/common/progress-bar.html",
+          {"hx_get": hx_get_url, "frequency": "1s", "value": 0, "max": import_data.rows_num, "text": "0%"},
+        )
       except ValidationError as ve:
         logger.error(ve.message)
         messages.error(request, ve.message)
@@ -125,81 +132,80 @@ def import_progress(request, id):
       errors.append(row_data.errors)
       warnings.append(row_data.warnings)
       users.append(row_data.current_member.username)
-  context = {"hx_get": request.get_full_path(), "frequency": "1s",
-             "value": value, "max": max, "text": str(int(value * 100 / max)) + "%",
-             "processed_objects": users, "errors": errors, "warnings": warnings}
+  context = {
+    "hx_get": request.get_full_path(),
+    "frequency": "1s",
+    "value": value,
+    "max": max,
+    "text": str(int(value * 100 / max)) + "%",
+    "processed_objects": users,
+    "errors": errors,
+    "warnings": warnings,
+  }
   if value == max:  # reached the end
-    context["back_url"] = reverse('members:members')
-    context["back_text"] = _('Back to members list')
-    context["success"] = _("CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
-                           "and %(updated_num)i updated.") % {
-                          'rows_num': import_data.rows_num, 'created_num': import_data.created_num,
-                          'updated_num': import_data.updated_num
-                          }
+    context["back_url"] = reverse("members:members")
+    context["back_text"] = _("Back to members list")
+    context["success"] = _(
+      "CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created and %(updated_num)i updated."
+    ) % {"rows_num": import_data.rows_num, "created_num": import_data.created_num, "updated_num": import_data.updated_num}
     # remove zimport from the cache
     import_data.unregister()
     logger.debug(f"cleaned {import_data}")
-  logger.debug(f"upload progress bar value: {value}, max: {max}, "
-               f"processed objects: {users}, errors: {errors}, warnings: {warnings}")
+  logger.debug(
+    f"upload progress bar value: {value}, max: {max}, processed objects: {users}, errors: {errors}, warnings: {warnings}"
+  )
   return render(request, "cm_main/common/progress-bar.html", context)
 
 
 @login_required
 def select_name(request):
-    assert_request_is_ajax(request)
-    query = request.GET.get('q', '')
-    # List of matching names, case insensitive, limited to 12 results
-    names = Member.objects.filter(last_name__icontains=query) \
-                          .values_list('last_name', flat=True) \
-                          .distinct() \
-                          .order_by('last_name')[:12]
-    t_names = set(name.title() for name in names)
-    data = [{'id': name, 'text': name} for name in t_names]
-    return JsonResponse({'results': data})
+  assert_request_is_ajax(request)
+  query = request.GET.get("q", "")
+  # List of matching names, case insensitive, limited to 12 results
+  names = (
+    Member.objects.filter(last_name__icontains=query).values_list("last_name", flat=True).distinct().order_by("last_name")[:12]
+  )
+  t_names = set(name.title() for name in names)
+  data = [{"id": name, "text": name} for name in t_names]
+  return JsonResponse({"results": data})
 
 
 @login_required
 def select_family(request):
-    assert_request_is_ajax(request)
-    query = request.GET.get('q', '')
-    # List of matching familynames, case insensitive, limited to 12 results
-    families = Family.objects.filter(name__icontains=query) \
-                             .values_list('name', flat=True) \
-                             .distinct() \
-                             .order_by('name')[:12]
-    t_families = set(family.title() for family in families)
-    data = [{'id': family, 'text': family} for family in t_families]
-    return JsonResponse({'results': data})
+  assert_request_is_ajax(request)
+  query = request.GET.get("q", "")
+  # List of matching familynames, case insensitive, limited to 12 results
+  families = Family.objects.filter(name__icontains=query).values_list("name", flat=True).distinct().order_by("name")[:12]
+  t_families = set(family.title() for family in families)
+  data = [{"id": family, "text": family} for family in t_families]
+  return JsonResponse({"results": data})
 
 
 @login_required
 def select_city(request):
-    assert_request_is_ajax(request)
-    query = request.GET.get('q', '')
-    # List of matching city names, case insensitive, limited to 12 results
-    cities = Address.objects.filter(city__icontains=query) \
-                            .values_list('city', flat=True) \
-                            .distinct() \
-                            .order_by('city')[:12]
-    t_cities = set(city.title() for city in cities)
-    data = [{'id': city, 'text': city} for city in t_cities]
+  assert_request_is_ajax(request)
+  query = request.GET.get("q", "")
+  # List of matching city names, case insensitive, limited to 12 results
+  cities = Address.objects.filter(city__icontains=query).values_list("city", flat=True).distinct().order_by("city")[:12]
+  t_cities = set(city.title() for city in cities)
+  data = [{"id": city, "text": city} for city in t_cities]
 
-    return JsonResponse({'results': data})
+  return JsonResponse({"results": data})
 
 
 @login_required
 def select_members_to_export(request):
-  return render(request, 'members/members/export_members.html')
+  return render(request, "members/members/export_members.html")
 
 
 @login_required
 def export_members_to_csv(request):
-  if request.method != 'POST':
-    raise ValidationError(_('Method not allowed'))
+  if request.method != "POST":
+    raise ValidationError(_("Method not allowed"))
 
-  city = request.POST.get('city-id')
-  family = request.POST.get('family-id')
-  name = request.POST.get('name-id')
+  city = request.POST.get("city-id")
+  family = request.POST.get("family-id")
+  name = request.POST.get("name-id")
   # print('city: ', city, ' family: ', family, ' name: ', name)
 
   members = Member.objects.all()
@@ -213,8 +219,8 @@ def export_members_to_csv(request):
   # print([(m.last_name, m.address.city if m.address else '', m.family.name if m.family else '') for m in members])
   # print(members.query)
   # Create an HTTP response with the CSV content type
-  response = HttpResponse(content_type='text/csv')
-  response['Content-Disposition'] = 'attachment; filename="members.csv"'
+  response = HttpResponse(content_type="text/csv")
+  response["Content-Disposition"] = 'attachment; filename="members.csv"'
 
   writer = csv.writer(response)
 
@@ -222,20 +228,20 @@ def export_members_to_csv(request):
   writer.writerow(ALL_FIELD_NAMES.values())
 
   # Retrieve member data
-  members = members.select_related('address').select_related('family').select_related('member_manager').order_by('username')
+  members = members.select_related("address").select_related("family").select_related("member_manager").order_by("username")
 
   # Write member data to CSV file
   for member in members:
     row = []
     for field in MEMBER_FIELD_NAMES.keys():
-      if field == 'family':
-        row.append(member.family.name if member.family else '')
-      elif field == 'managed_by':
-        row.append(member.member_manager.username if member.member_manager else '')
+      if field == "family":
+        row.append(member.family.name if member.family else "")
+      elif field == "managed_by":
+        row.append(member.member_manager.username if member.member_manager else "")
       else:
-        row.append(getattr(member, field, ''))
+        row.append(getattr(member, field, ""))
     for field in ADDRESS_FIELD_NAMES.keys():
-      row.append(getattr(member.address, field, '') if member.address else '')
+      row.append(getattr(member.address, field, "") if member.address else "")
     writer.writerow(row)
 
   return response

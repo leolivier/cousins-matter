@@ -39,29 +39,24 @@ class TestMemberFollowersMixin(TestFollowersMixin):
 
 @django_q_sync_class
 class TestMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, MemberTestCase):
-
   def test_follow_member(self):
     """Tests that the follow member view works correctly."""
     follower = self.member
     followed = self.do_test_toggle_follow_member()
     followed_url = get_test_absolute_url(reverse("members:detail", args=[followed.id]))
     # now check the email to the owner to inform about the new follower
-    self.check_new_follower_email(
-      follower=follower,
-      owner=followed,
-      followed_object=followed,
-      followed_url=followed_url)
+    self.check_new_follower_email(follower=follower, owner=followed, followed_object=followed, followed_url=followed_url)
 
     # now, followed will create a post
     self.client.login(username=followed.username, password=followed.password)
     url = reverse("forum:create")
-    post_title = 'a post to be followed'
-    post_content = 'a content of the new post'
-    response = self.client.post(url, {'title': post_title, 'content': post_content}, follow=True)
+    post_title = "a post to be followed"
+    post_content = "a content of the new post"
+    response = self.client.post(url, {"title": post_title, "content": post_content}, follow=True)
     self.assertEqual(response.status_code, 200)
     # self.print_response(response)
     post = Post.objects.get(title=post_title)
-    post_url = reverse('forum:display', args=[post.id])
+    post_url = reverse("forum:display", args=[post.id])
     self.assertRedirects(response, post_url)
 
     # now check the email to the follower to inform about the new post
@@ -72,14 +67,15 @@ class TestMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, Membe
       followed_url=get_test_absolute_url(post_url),
       followed_object=post,
       created_object=post,
-      created_content=post_title)
+      created_content=post_title,
+    )
 
     # now, followed will reply to his own post
     url = reverse("forum:reply", args=[post.id])
-    reply_msg_content = 'a reply to be followed'
-    response = self.client.post(url, {'content': reply_msg_content}, follow=True)
+    reply_msg_content = "a reply to be followed"
+    response = self.client.post(url, {"content": reply_msg_content}, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertRedirects(response, reverse('forum:display', args=[post.id]))
+    self.assertRedirects(response, reverse("forum:display", args=[post.id]))
 
     message = Message.objects.get(post=post, content=reply_msg_content)
     self.assertEqual(message.author, followed)
@@ -91,7 +87,8 @@ class TestMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixin, Membe
       followed_url=get_test_absolute_url(post_url),
       followed_object=post,
       created_object=message,
-      created_content=reply_msg_content)
+      created_content=reply_msg_content,
+    )
 
     # test unfollow
     self.do_test_toggle_unfollow_member(followed)
@@ -113,11 +110,11 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
 
     # first, followed creates a chat room
     await self.client.alogin(username=followed.username, password=followed.password)
-    room_name = 'a room to be followed'
-    response = await self.async_client.get(reverse('chat:new_room'), {'name': room_name})
+    room_name = "a room to be followed"
+    response = await self.async_client.get(reverse("chat:new_room"), {"name": room_name})
     self.assertEqual(response.status_code, 302)
     room = await ChatRoom.objects.aget(name=room_name)
-    room_url = get_test_absolute_url(reverse('chat:room', args=[room.slug]))
+    room_url = get_test_absolute_url(reverse("chat:room", args=[room.slug]))
     # now check the email to the follower to inform about the new room
     self.check_new_content_email(
       follower=follower,
@@ -130,7 +127,7 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
     )
 
     # now, followed will create a message on the room
-    msg = 'this is the first message on the room so I become the owner!'
+    msg = "this is the first message on the room so I become the owner!"
     await self.send_chat_message(msg, room_slug=room.slug)
     message = await ChatMessage.objects.aget(room=room, content=msg)
     self.check_new_content_email(
@@ -148,11 +145,11 @@ class TestChatWithMemberFollower(TestMemberFollowersMixin, ChatMessageSenderMixi
     # followed reply to it, and check the email to the follower
     await self.client.alogin(username=follower.username, password=follower.password)
 
-    room_name = 'a new room created by follower'
-    response = await self.async_client.get(reverse('chat:new_room'), {'name': room_name})
+    room_name = "a new room created by follower"
+    response = await self.async_client.get(reverse("chat:new_room"), {"name": room_name})
     self.assertEqual(response.status_code, 302)
     room = await ChatRoom.objects.aget(name=room_name)
-    room_url = get_test_absolute_url(reverse('chat:room', args=[room.slug]))
+    room_url = get_test_absolute_url(reverse("chat:room", args=[room.slug]))
     first_msg = "a 1rst msg in the followed's room"
     await self.send_chat_message(first_msg, room_slug=room.slug)
 

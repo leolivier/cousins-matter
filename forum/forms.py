@@ -6,23 +6,23 @@ from .models import Message, Post, Comment
 class MessageForm(ModelForm):
   class Meta:
     model = Message
-    fields = ['content']
+    fields = ["content"]
     widgets = {
-        'content': RichTextarea(),
+      "content": RichTextarea(),
     }
 
 
 class PostForm(ModelForm):
   class Meta:
     model = Post
-    fields = ['title']
+    fields = ["title"]
 
 
 class CommentForm(ModelForm):
   class Meta:
     model = Comment
-    fields = ['content']
+    fields = ["content"]
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    self.fields['content'].widget.attrs['id'] = 'id_comment_content'
+    self.fields["content"].widget.attrs["id"] = "id_comment_content"

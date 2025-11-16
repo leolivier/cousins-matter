@@ -15,34 +15,36 @@ from .widgets import FieldLinkWrapper
 from cm_main.utils import check_file_size
 
 
-class MemberFormMixin():
+class MemberFormMixin:
   def initialize_fields(self, *args, **kwargs):
     can_change_family = self.instance and self.instance.family
-    self.fields['family'].widget = FieldLinkWrapper(self.fields['family'].widget, can_add_related=True,
-                                                    can_change_related=can_change_family)
+    self.fields["family"].widget = FieldLinkWrapper(
+      self.fields["family"].widget, can_add_related=True, can_change_related=can_change_family
+    )
     can_change_address = self.instance and self.instance.address
-    self.fields['address'].widget = FieldLinkWrapper(self.fields['address'].widget, can_add_related=True,
-                                                     can_change_related=can_change_address)
+    self.fields["address"].widget = FieldLinkWrapper(
+      self.fields["address"].widget, can_add_related=True, can_change_related=can_change_address
+    )
     # force first and last name to be required  # TODO: is this useful?
-    self.fields['first_name'].required = True
-    self.fields['last_name'].required = True
+    self.fields["first_name"].required = True
+    self.fields["last_name"].required = True
     # we don't need the password field, it's useless and harmful
     # the generated code is wrong (it creates a link to f"../../{self.instance.pk}/password/")
     # which is not what we want, and furthermore we have a link to change password in the template
     # so we remove the password field
-    if 'password' in self.fields:
-      del self.fields['password']
+    if "password" in self.fields:
+      del self.fields["password"]
     # description is a rich text field
-    if 'description' in self.fields:
-      self.fields['description'].widget = RichTextarea()
+    if "description" in self.fields:
+      self.fields["description"].widget = RichTextarea()
     # remove death date field from profile page
     if isinstance(self, MemberUpdateForm) and self.is_profile_form:
-      del self.fields['deathdate']
+      del self.fields["deathdate"]
 
   def clean_avatar(self):
-    avatar = self.cleaned_data['avatar']
+    avatar = self.cleaned_data["avatar"]
     # print(f"Validating avatar for {self.instance.full_name} in {avatar}")
-    if 'avatar' not in self.changed_data:
+    if "avatar" not in self.changed_data:
       # print("No change in avatar, skipping validation")
       return avatar
     try:
@@ -52,41 +54,55 @@ class MemberFormMixin():
         return None
       # validate file size
       if len(avatar) > settings.AVATAR_MAX_SIZE:
-          nMB = settings.AVATAR_MAX_SIZE / 1024 / 1024
-          raise ValidationError(
-              f'Avatar file size may not exceed {nMB} bytes.')
+        nMB = settings.AVATAR_MAX_SIZE / 1024 / 1024
+        raise ValidationError(f"Avatar file size may not exceed {nMB} bytes.")
 
     except AttributeError:
-        """
+      """
         Handles case when we are updating the member
         and do not supply a new avatar
         """
-        pass
+      pass
 
     return avatar
 
   def init_privacy_field(self):
     "Initialize the privacy consent field with a link to the privacy policy and force it to be required"
-    privacy_url = '/' + get_language() + settings.PRIVACY_URL
-    self.fields['privacy_consent'].label = \
-      mark_safe(_(
-        "By checking this box, you agree to this site's <a target='blank' href='%(privacy_url)s'>privacy policy</a>") %
-        {'privacy_url': privacy_url})
-    self.fields['privacy_consent'].required = True
+    privacy_url = "/" + get_language() + settings.PRIVACY_URL
+    self.fields["privacy_consent"].label = mark_safe(
+      _("By checking this box, you agree to this site's <a target='blank' href='%(privacy_url)s'>privacy policy</a>")
+      % {"privacy_url": privacy_url}
+    )
+    self.fields["privacy_consent"].required = True
 
 
 class MemberRegistrationForm(MemberFormMixin, UserCreationForm):
   class Meta:
     model = Member
     localized_fields = "__all__"
-    fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'avatar',
-              'birthdate', 'address', 'phone', 'description', 'hobbies', 'website', 'family', 'privacy_consent']
+    fields = [
+      "username",
+      "email",
+      "password1",
+      "password2",
+      "first_name",
+      "last_name",
+      "avatar",
+      "birthdate",
+      "address",
+      "phone",
+      "description",
+      "hobbies",
+      "website",
+      "family",
+      "privacy_consent",
+    ]
 
   def __init__(self, *args, **kwargs):
     super(UserCreationForm, self).__init__(*args, **kwargs)
     self.initialize_fields(*args, **kwargs)
     # force email to be required  # TODO: is this useful?
-    self.fields['email'].required = True
+    self.fields["email"].required = True
     self.init_privacy_field()
 
 
@@ -94,15 +110,29 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
   class Meta:
     model = Member
     localized_fields = "__all__"
-    fields = ['username', 'email', 'first_name', 'last_name', 'avatar',
-              'birthdate', 'address', 'phone', 'description', 'hobbies', 'website', 'family', 'deathdate', 'privacy_consent']
-    exclude = ['password']
+    fields = [
+      "username",
+      "email",
+      "first_name",
+      "last_name",
+      "avatar",
+      "birthdate",
+      "address",
+      "phone",
+      "description",
+      "hobbies",
+      "website",
+      "family",
+      "deathdate",
+      "privacy_consent",
+    ]
+    exclude = ["password"]
 
   def __init__(self, *args, **kwargs):
     self.is_profile_form = False
-    if 'is_profile' in kwargs:
-      self.is_profile_form = kwargs['is_profile']
-      del kwargs['is_profile']
+    if "is_profile" in kwargs:
+      self.is_profile_form = kwargs["is_profile"]
+      del kwargs["is_profile"]
     super().__init__(*args, **kwargs)
     self.initialize_fields(*args, **kwargs)
     self.init_privacy_field()
@@ -126,15 +156,14 @@ class FamilyUpdateForm(ModelForm):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     can_change_parent = self.instance and self.instance.parent
-    self.fields['parent'].widget = FieldLinkWrapper(self.fields['parent'].widget,
-                                                    can_add_related=True,
-                                                    can_change_related=can_change_parent,
-                                                    name="parent-family")
+    self.fields["parent"].widget = FieldLinkWrapper(
+      self.fields["parent"].widget, can_add_related=True, can_change_related=can_change_parent, name="parent-family"
+    )
 
   def clean_name(self):
-    name = self.cleaned_data['name'].strip()
+    name = self.cleaned_data["name"].strip()
     if not name:
-      raise ValidationError(_("Family name cannot be empty"), code='empty')
+      raise ValidationError(_("Family name cannot be empty"), code="empty")
     return name
 
 
@@ -151,10 +180,11 @@ class RegistrationRequestForm(Form):
 
 
 def validate_csv_extension(value):
-    from django.core.exceptions import ValidationError
-    ext = os.path.splitext(value.name)[1]
-    if ext.lower() != ".csv":
-        raise ValidationError('File must be a csv file')
+  from django.core.exceptions import ValidationError
+
+  ext = os.path.splitext(value.name)[1]
+  if ext.lower() != ".csv":
+    raise ValidationError("File must be a csv file")
 
 
 def check_csv_file_size(file):
@@ -162,9 +192,10 @@ def check_csv_file_size(file):
 
 
 class CSVImportMembersForm(forms.Form):
-    csv_file = forms.FileField(label=_('CSV file'),
-                               help_text=_("The CSV file containing the members to import."),
-                               validators=[validate_csv_extension, check_csv_file_size],
-                               widget=forms.FileInput(attrs={'accept': ".csv"})
-                               )
-    activate_users = forms.BooleanField(label=_('Automatically activate imported users'), required=False)
+  csv_file = forms.FileField(
+    label=_("CSV file"),
+    help_text=_("The CSV file containing the members to import."),
+    validators=[validate_csv_extension, check_csv_file_size],
+    widget=forms.FileInput(attrs={"accept": ".csv"}),
+  )
+  activate_users = forms.BooleanField(label=_("Automatically activate imported users"), required=False)

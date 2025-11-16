@@ -12,7 +12,7 @@ CATEGORIES = {
       "commercial": _("Commercial"),
       "collective_housing": _("Collective Housing"),
       "other": _("Other"),
-    }
+    },
   },
   "vehicles": {
     "translation": _("Vehicles"),
@@ -25,14 +25,14 @@ CATEGORIES = {
       "scooters": _("Scooters"),
       "caravan": _("Caravan"),
       "other": _("Other"),
-    }
+    },
   },
   "holidays": {
     "translation": _("Holidays"),
     "subcategories": {
       "seasonal_rental": _("Seasonal Rental"),
       "other": _("Other"),
-    }
+    },
   },
   "job_offers": {
     "translation": _("Job offers"),
@@ -45,7 +45,7 @@ CATEGORIES = {
       "professional_training": _("Professional Training"),
       "volunteering": _("Volunteering"),
       "other": _("Other"),
-    }
+    },
   },
   "services": {
     "translation": _("Services"),
@@ -53,7 +53,7 @@ CATEGORIES = {
       "home_services": _("Home Services"),
       "professional_services": _("Professional Services"),
       "other": _("Other"),
-    }
+    },
   },
   "mode": {
     "translation": _("Mode"),
@@ -63,7 +63,7 @@ CATEGORIES = {
       "accessories": _("Accessories"),
       "jewelry": _("Jewelry"),
       "other": _("Other"),
-    }
+    },
   },
   "home": {
     "translation": _("Home"),
@@ -76,7 +76,7 @@ CATEGORIES = {
       "diy": _("DIY tools and equipment"),
       "garden": _("Garden tools and equipment, plants and seeds"),
       "other": _("Other"),
-    }
+    },
   },
   "family": {
     "translation": _("Family"),
@@ -91,7 +91,7 @@ CATEGORIES = {
       "toys": _("Toys"),
       "baby_sitting": _("Baby sitting"),
       "other": _("Other"),
-    }
+    },
   },
   "electronics": {
     "translation": _("Electronics"),
@@ -106,7 +106,7 @@ CATEGORIES = {
       "ebook_readers": _("eBook Readers & Tablets"),
       "video_games": _("Video Games"),
       "other": _("Other"),
-    }
+    },
   },
   "leisure": {
     "translation": _("Leisure"),
@@ -122,7 +122,7 @@ CATEGORIES = {
       "models": _("Models"),
       "antiques": _("Antiques"),
       "other": _("Other"),
-    }
+    },
   },
   "other": {
     "translation": _("Other"),
@@ -131,6 +131,6 @@ CATEGORIES = {
       "pets": _("Pets"),
       "donations": _("Donations"),
       "other": _("Other"),
-    }
-  }
+    },
+  },
 }

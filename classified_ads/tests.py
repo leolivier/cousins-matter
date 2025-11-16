@@ -16,14 +16,12 @@ from .views import CreateAdView
 def create_test_image():
   "Creates a dummy image file with minimal binary content and random ending"
   # 1 pixel gif with 1 bit per pixel
-  image_content = b"GIF89a\x01\x00\x01\x00\x00\x00\x00!\xf9\x04\x01\x00\x00\x00\x00,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;"  # noqa
+  image_content = (
+    b"GIF89a\x01\x00\x01\x00\x00\x00\x00!\xf9\x04\x01\x00\x00\x00\x00,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;"  # noqa
+  )
   # Adds between 1 and 16 random bytes at the end
   random_padding = os.urandom(random.randint(1, 16))
-  return SimpleUploadedFile(
-    name="test_image.gif",
-    content=image_content + random_padding,
-    content_type="image/gif"
-  )
+  return SimpleUploadedFile(name="test_image.gif", content=image_content + random_padding, content_type="image/gif")
 
 
 class ClassifiedAdBaseTestCase(TestLoginRequiredMixin, MemberTestCase):
@@ -76,13 +74,12 @@ class ClassifiedAdBaseTestCase(TestLoginRequiredMixin, MemberTestCase):
 
 
 class ClassifiedAdCreateTestCase(ClassifiedAdBaseTestCase):
-
   def test_create_ad(self):
     """Tests creating a classified ad."""
     url = reverse("classified_ads:create")
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'classified_ads/form.html')
+    self.assertTemplateUsed(response, "classified_ads/form.html")
     self.assertIs(response.resolver_match.func.view_class, CreateAdView)
 
     response = self.client.post(url, self.ad, follow=True)
@@ -91,7 +88,6 @@ class ClassifiedAdCreateTestCase(ClassifiedAdBaseTestCase):
 
 
 class ClassifiedAdUpdateTestCase(ClassifiedAdBaseTestCase):
-
   def test_update_ad(self):
     """Tests updating a classified ad."""
     self.ad["owner"] = self.member
@@ -121,11 +117,11 @@ class ClassifiedAdUpdateTestCase(ClassifiedAdBaseTestCase):
     for i in range(nphotos):
       photo = create_test_image()
       photos.append(photo)
-      data = {'image': photo}
-      form = AdPhotoForm(data=data, files={'image': photo})
+      data = {"image": photo}
+      form = AdPhotoForm(data=data, files={"image": photo})
       self.assertTrue(form.is_valid())
 
-      response = self.client.post(url, data, format='multipart', follow=True)
+      response = self.client.post(url, data, format="multipart", follow=True)
       self.assertEqual(response.status_code, 200)
 
     ad = self.check_ad()
@@ -136,7 +132,7 @@ class ClassifiedAdUpdateTestCase(ClassifiedAdBaseTestCase):
     # delete photos
     for photo in AdPhoto.objects.all():
       url = reverse("classified_ads:delete_photo", kwargs={"pk": photo.id})
-      response = self.client.post(url, follow=True, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+      response = self.client.post(url, follow=True, **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
       self.assertEqual(response.status_code, 200)
       self.assertEqual(AdPhoto.objects.count(), nphotos - 1)
       nphotos = nphotos - 1
@@ -145,7 +141,6 @@ class ClassifiedAdUpdateTestCase(ClassifiedAdBaseTestCase):
 
 
 class DeleteAdTestCase(ClassifiedAdBaseTestCase):
-
   def test_delete_ad(self):
     """Tests deleting a classified ad."""
     self.ad["owner"] = self.member
@@ -165,7 +160,6 @@ class DeleteAdTestCase(ClassifiedAdBaseTestCase):
 
 
 class ListAdTestCase(ClassifiedAdBaseTestCase):
-
   def test_list_ad(self):
     """Tests listing classified ads."""
     self.ad["owner"] = self.member
@@ -187,11 +181,13 @@ class ListAdTestCase(ClassifiedAdBaseTestCase):
     url = reverse("classified_ads:list")
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'classified_ads/list.html')
+    self.assertTemplateUsed(response, "classified_ads/list.html")
     self.assertEqual(ClassifiedAd.objects.count(), 2)
 
     for ad in [ad1, ad2]:
-      self.assertContains(response, f"""
+      self.assertContains(
+        response,
+        f"""
 <div class="panel-block is-flex">
   <span class="is-flex-grow-1">
     <span class="panel-icon is-large">
@@ -203,16 +199,21 @@ class ListAdTestCase(ClassifiedAdBaseTestCase):
     <a href="{reverse("classified_ads:detail", kwargs={"pk": ad.id})}">{ad.title}</a> ({ad.price})
   </span>
   <span>
-    {_("Added by %(owner)s on %(date_created)s") %
-       {"owner": ad.owner.full_name,  # noqa
-        "date_created": formats.date_format(ad.date_created, "SHORT_DATE_FORMAT")}}
+    {
+          _("Added by %(owner)s on %(date_created)s")
+          % {
+            "owner": ad.owner.full_name,  # noqa
+            "date_created": formats.date_format(ad.date_created, "SHORT_DATE_FORMAT"),
+          }
+        }
   </span>
 </div>
-""", html=True)
+""",
+        html=True,
+      )
 
 
 class DetailAdTestCase(ClassifiedAdBaseTestCase):
-
   def test_detail_ad(self):
     """
     Test that the detail view of an ad displays the ad's information and photos.
@@ -228,24 +229,27 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
 
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'classified_ads/detail.html')
+    self.assertTemplateUsed(response, "classified_ads/detail.html")
     localtime = timezone.localtime(ad.date_created)
-    self.assertContains(response, f"""
+    self.assertContains(
+      response,
+      f"""
 <div class="panel-heading is-flex">
   <span class="icon is-medium mr-1">
     <i class="mdi mdi-24px mdi-file-document" aria-hidden="true"></i>
   </span>
   <span class="is-flex-grow-1">{ad.title}</span>
-  <span>{_("Added by %(owner)s on %(date_created)s") %
-         {"owner": ad.owner.full_name,
-          "date_created": formats.date_format(localtime, "SHORT_DATETIME_FORMAT")}}</span>
+  <span>{
+        _("Added by %(owner)s on %(date_created)s")
+        % {"owner": ad.owner.full_name, "date_created": formats.date_format(localtime, "SHORT_DATETIME_FORMAT")}
+      }</span>
 </div>
 <div class="panel-block is-flex">
   <div class="fixed-grid has-3-cols is-flex-grow-1">
     <div class="grid">
-      <div class="cell"><strong>{_('Category')}:</strong>{ad.display_category()}</div>
-      <div class="cell"><strong>{_('Subcategory')}:</strong>{ad.display_subcategory()}</div>
-      <div class="cell"><strong>{_('State')}:</strong>{_(ad.display_item_status())}</div>
+      <div class="cell"><strong>{_("Category")}:</strong>{ad.display_category()}</div>
+      <div class="cell"><strong>{_("Subcategory")}:</strong>{ad.display_subcategory()}</div>
+      <div class="cell"><strong>{_("State")}:</strong>{_(ad.display_item_status())}</div>
     </div>
   </div>
 </div>
@@ -257,15 +261,19 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
 <div class="panel-block is-flex">
   <div class="fixed-grid has-3-cols is-flex-grow-1">
     <div class="grid">
-      <div class="cell"><strong>{_('Price')}:</strong>{ad.price}</div>
-      <div class="cell"><strong>{_('Location')}:</strong>{ad.location}</div>
-      <div class="cell"><strong>{_('Shipping')}:</strong>{_(ad.display_shipping_method())}</div>
+      <div class="cell"><strong>{_("Price")}:</strong>{ad.price}</div>
+      <div class="cell"><strong>{_("Location")}:</strong>{ad.location}</div>
+      <div class="cell"><strong>{_("Shipping")}:</strong>{_(ad.display_shipping_method())}</div>
     </div>
   </div>
-</div>""", html=True)
+</div>""",
+      html=True,
+    )
 
     for photo in ad.photos.all():
-      self.assertContains(response, f"""
+      self.assertContains(
+        response,
+        f"""
         <div
           class="cell has-text-centered photo-item"
           id="photo-{photo.id}"
@@ -273,13 +281,14 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
           data-fullscreen="{protected_media_url(photo.image.name)}"
         >
           <figure class="image thumbnail mx-auto">
-            <img src="{protected_media_url(photo.thumbnail.name)}" alt="{_('Photo')}">
+            <img src="{protected_media_url(photo.thumbnail.name)}" alt="{_("Photo")}">
           </figure>
-        </div>""", html=True)
+        </div>""",
+        html=True,
+      )
 
 
 class SendMessageTestCase(ClassifiedAdBaseTestCase):
-
   def test_send_message(self):
     """
     Test that when a user sends a message to another user (the owner of an ad),
@@ -296,11 +305,7 @@ class SendMessageTestCase(ClassifiedAdBaseTestCase):
     # check the email to the owner to inform about the new message
     self.assertEqual(len(mail.outbox), 1)
     self.assertSequenceEqual(mail.outbox[0].recipients(), [ad.owner.email])
-    subject = _("Message from %(username)s about ad %(title)s") % \
-      {
-        "username": sender.full_name,
-        "title": ad.title
-      }
+    subject = _("Message from %(username)s about ad %(title)s") % {"username": sender.full_name, "title": ad.title}
     message = _("""Hello %(recipient)s,
 %(username)s sent you the following message about ad %(title)s:
 ==========
@@ -311,16 +316,15 @@ Best,
 The %(site_name)s admin team
 
 %(site_url)s
-""") % \
-      {
-        "recipient": ad.owner.full_name,
-        "username": sender.full_name,
-        "title": ad.title,
-        "message": "Hello, how are you?",
-        "site_name": settings.SITE_NAME,
-        "site_url": settings.SITE_DOMAIN,
-        "email": sender.email,
-      }
+""") % {
+      "recipient": ad.owner.full_name,
+      "username": sender.full_name,
+      "title": ad.title,
+      "message": "Hello, how are you?",
+      "site_name": settings.SITE_NAME,
+      "site_url": settings.SITE_DOMAIN,
+      "email": sender.email,
+    }
 
     self.assertEqual(mail.outbox[0].subject, subject)
     self.assertEqual(mail.outbox[0].body, message)

@@ -21,32 +21,32 @@ logger = logging.getLogger(__name__)
 
 
 def get_github_release_version(request, owner, repo):
-    """
-    Retrieves the latest release version of a GitHub repository.
+  """
+  Retrieves the latest release version of a GitHub repository.
 
-    :param request: Django request object
-    :param owner: Repository owner
-    :param repo: Repository name
-    :return: JSON response with version of latest release or error message if not found
-    """
+  :param request: Django request object
+  :param owner: Repository owner
+  :param repo: Repository name
+  :return: JSON response with version of latest release or error message if not found
+  """
 
-    url = f'https://api.github.com/repos/{owner}/{repo}/releases/latest'
-    try:
-      with urlopen(url) as response:
-        data = response.read()
-        json_data = json.loads(data)
-        if 'tag_name' in json_data:
-          return json_data['tag_name']
-        else:
-          messages.error(request, _("Version not found"))
-          return None
-    except HTTPError as e:
-      messages.error(request, e.msg)
-      return None
+  url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+  try:
+    with urlopen(url) as response:
+      data = response.read()
+      json_data = json.loads(data)
+      if "tag_name" in json_data:
+        return json_data["tag_name"]
+      else:
+        messages.error(request, _("Version not found"))
+        return None
+  except HTTPError as e:
+    messages.error(request, e.msg)
+    return None
 
 
 def get_latest_release_text(request):
-  latest_release = get_github_release_version(request, 'leolivier', 'cousins-matter')
+  latest_release = get_github_release_version(request, "leolivier", "cousins-matter")
   # print('latest_release', latest_release)
   if latest_release is not None:
     latest_version = version.parse(latest_release)
@@ -58,29 +58,17 @@ def get_latest_release_text(request):
         release_warning += _("Please update it by running the following command:<br><code>docker-start.sh -u</code>")
         release_warning = mark_safe(release_warning)
 
-      latest_release = {
-        'value': latest_release,
-        'warning': release_warning,
-        'icon': 'poop'
-      }
+      latest_release = {"value": latest_release, "warning": release_warning, "icon": "poop"}
     elif current_version == latest_version:
-      latest_release = {
-        'value': latest_release,
-        'info': _("Your version is up-to-date."),
-        'icon': 'cool'
-      }
+      latest_release = {"value": latest_release, "info": _("Your version is up-to-date."), "icon": "cool"}
     else:
       latest_release = {
-        'value': latest_release,
-        'warning': _("Your version is newer than the latest release (?!?)"),
-        'icon': 'confused'
+        "value": latest_release,
+        "warning": _("Your version is newer than the latest release (?!?)"),
+        "icon": "confused",
       }
   else:
-    latest_release = {
-      'value': '?',
-      'error': _("Version not found"),
-      'icon': 'poop'
-    }
+    latest_release = {"value": "?", "error": _("Version not found"), "icon": "poop"}
 
   return latest_release
 
@@ -93,55 +81,55 @@ def statistics(request):
   public_chat_messages_count = ChatMessage.objects.filter(room__in=public_chat_rooms).count()
 
   stats = {
-    'site': {
-      'key': _('Site'),
-      'stats': [
-        {'key': _('Site name'), 'value': settings.SITE_NAME},
-        {'key': _('Site URL'), 'value': request.build_absolute_uri('/')},
-        {'key': _('Application Version'), 'value': settings.APP_VERSION},
-        {'key': _('Latest release'), 'value': get_latest_release_text(request)},
-      ]
+    "site": {
+      "key": _("Site"),
+      "stats": [
+        {"key": _("Site name"), "value": settings.SITE_NAME},
+        {"key": _("Site URL"), "value": request.build_absolute_uri("/")},
+        {"key": _("Application Version"), "value": settings.APP_VERSION},
+        {"key": _("Latest release"), "value": get_latest_release_text(request)},
+      ],
     },
-    'members': {
-      'key': _('Members'),
-      'stats': [
-        {'key': _('Total number of members'), 'value': Member.objects.count()},
-        {'key': _('Number of active members'), 'value': Member.objects.filter(is_active=True).count()},
-        {'key': _('Number of managed members'), 'value': Member.objects.filter(is_active=False).count()},
-      ]
+    "members": {
+      "key": _("Members"),
+      "stats": [
+        {"key": _("Total number of members"), "value": Member.objects.count()},
+        {"key": _("Number of active members"), "value": Member.objects.filter(is_active=True).count()},
+        {"key": _("Number of managed members"), "value": Member.objects.filter(is_active=False).count()},
+      ],
     },
-    'galleries': {
-      'key': _('Galleries'),
-      'stats': [
-        {'key': _('Number of galleries'), 'value': Gallery.objects.count()},
-        {'key': _('Number of photos'), 'value': Photo.objects.count()},
-      ]
+    "galleries": {
+      "key": _("Galleries"),
+      "stats": [
+        {"key": _("Number of galleries"), "value": Gallery.objects.count()},
+        {"key": _("Number of photos"), "value": Photo.objects.count()},
+      ],
     },
-    'forums': {
-      'key': _('Forums'),
-      'stats': [
-        {'key': _('Number of posts'), 'value': Post.objects.count()},
-        {'key': _('Number of post messages'), 'value': Message.objects.count()},
-        {'key': _('Number of message comments'), 'value': Comment.objects.count()},
-      ]
+    "forums": {
+      "key": _("Forums"),
+      "stats": [
+        {"key": _("Number of posts"), "value": Post.objects.count()},
+        {"key": _("Number of post messages"), "value": Message.objects.count()},
+        {"key": _("Number of message comments"), "value": Comment.objects.count()},
+      ],
     },
-    'chats': {
-      'key': _('Chats'),
-      'stats': [
-        {'key': _('Number of chat rooms'), 'value': ChatRoom.objects.count()},
-        {'key': _('Number of public chat rooms'), 'value': ChatRoom.objects.public().count()},
-        {'key': _('Number of private chat rooms'), 'value': PrivateChatRoom.objects.count()},
-        {'key': _('Number of chat messages'), 'value': all_messages_count},
-        {'key': _('Number of private chat messages'), 'value': all_messages_count - public_chat_messages_count},
-        {'key': _('Number of public chat messages'), 'value': public_chat_messages_count},
-      ]
+    "chats": {
+      "key": _("Chats"),
+      "stats": [
+        {"key": _("Number of chat rooms"), "value": ChatRoom.objects.count()},
+        {"key": _("Number of public chat rooms"), "value": ChatRoom.objects.public().count()},
+        {"key": _("Number of private chat rooms"), "value": PrivateChatRoom.objects.count()},
+        {"key": _("Number of chat messages"), "value": all_messages_count},
+        {"key": _("Number of private chat messages"), "value": all_messages_count - public_chat_messages_count},
+        {"key": _("Number of public chat messages"), "value": public_chat_messages_count},
+      ],
     },
-    'admin': {
-      'key': _('Administrator'),
-      'stats': [
-        {'key': _('This site is managed by'), 'value': admin.full_name},
-        {'key': _('Administrator email'), 'value': admin.email},
-      ]
+    "admin": {
+      "key": _("Administrator"),
+      "stats": [
+        {"key": _("This site is managed by"), "value": admin.full_name},
+        {"key": _("Administrator email"), "value": admin.email},
+      ],
     },
   }
-  return render(request, 'cm_main/about/site-stats.html', {'stats': stats})
+  return render(request, "cm_main/about/site-stats.html", {"stats": stats})

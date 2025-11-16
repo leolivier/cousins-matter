@@ -19,117 +19,128 @@ from members.models import Member
 
 
 class PostsListView(LoginRequiredMixin, generic.ListView):
-    model = Post
+  model = Post
 
-    def get(self, request, page=1):
-      posts = Post.objects.select_related('first_message').annotate(num_messages=Count("message")) \
-                  .all().order_by('-first_message__date')
-      try:
-        page = Paginator.get_page(request, object_list=posts,
-                                  page_num=page,
-                                  reverse_link='forum:page',
-                                  default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
-        return render(request, "forum/post_list.html", {"page": page})
-      except PageOutOfBounds as exc:
-          return redirect(exc.redirect_to)
+  def get(self, request, page=1):
+    posts = (
+      Post.objects.select_related("first_message")
+      .annotate(num_messages=Count("message"))
+      .all()
+      .order_by("-first_message__date")
+    )
+    try:
+      page = Paginator.get_page(
+        request, object_list=posts, page_num=page, reverse_link="forum:page", default_page_size=settings.DEFAULT_POSTS_PER_PAGE
+      )
+      return render(request, "forum/post_list.html", {"page": page})
+    except PageOutOfBounds as exc:
+      return redirect(exc.redirect_to)
 
 
 class PostDisplayView(LoginRequiredMixin, generic.DetailView):
-    model = Post
+  model = Post
 
-    def get(self, request, pk, page_num=1):
-      post_id = pk
-      post = get_object_or_404(Post, pk=post_id)
-      replies = Message.objects.filter(post=post_id, first_of_post=None).all()
-      try:
-        page = Paginator.get_page(request,
-                                  object_list=replies,
-                                  page_num=page_num,
-                                  reverse_link='forum:display_page',
-                                  compute_link=lambda page_num: reverse('forum:display_page', args=[post_id, page_num]),
-                                  default_page_size=settings.DEFAULT_POSTS_PER_PAGE)
-        return render(request, "forum/post_detail.html", {
+  def get(self, request, pk, page_num=1):
+    post_id = pk
+    post = get_object_or_404(Post, pk=post_id)
+    replies = Message.objects.filter(post=post_id, first_of_post=None).all()
+    try:
+      page = Paginator.get_page(
+        request,
+        object_list=replies,
+        page_num=page_num,
+        reverse_link="forum:display_page",
+        compute_link=lambda page_num: reverse("forum:display_page", args=[post_id, page_num]),
+        default_page_size=settings.DEFAULT_POSTS_PER_PAGE,
+      )
+      return render(
+        request,
+        "forum/post_detail.html",
+        {
           "page": page,
           "nreplies": replies.count(),
-          'post': post,
-          'comment_form': CommentForm(),
-          'reply_form': MessageForm(),
-        })
-      except PageOutOfBounds as exc:
-          return redirect(exc.redirect_to)
+          "post": post,
+          "comment_form": CommentForm(),
+          "reply_form": MessageForm(),
+        },
+      )
+    except PageOutOfBounds as exc:
+      return redirect(exc.redirect_to)
 
 
 class PostCreateView(LoginRequiredMixin, generic.CreateView):
-    model = Post
+  model = Post
 
-    @csrf_exempt
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            return super().dispatch(request, *args, **kwargs)
-        except RequestDataTooBig:
-            return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
+  @csrf_exempt
+  def dispatch(self, request, *args, **kwargs):
+    try:
+      return super().dispatch(request, *args, **kwargs)
+    except RequestDataTooBig:
+      return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
 
-    def get(self, request):
-      post_form = PostForm()
-      message_form = MessageForm()
-      return render(request, "forum/post_form.html", context={'post_form': post_form, 'message_form': message_form})
+  def get(self, request):
+    post_form = PostForm()
+    message_form = MessageForm()
+    return render(request, "forum/post_form.html", context={"post_form": post_form, "message_form": message_form})
 
-    def post(self, request):
-      post_form = PostForm(request.POST)
-      message_form = MessageForm(request.POST)
-      post = message = None
-      if post_form.is_valid() and message_form.is_valid():
-        try:
-            author = Member.objects.only('id').get(id=request.user.id)
-            message_form.instance.author_id = author.id
-            with transaction.atomic():
-                message = message_form.save()
-                post_form.instance.first_message = message
-                post = post_form.save()
-                message.post = post
-                message.save()
-            # send notifications to followers
-            check_followers_on_new_post(request, post)
-            return redirect("forum:display", post.id)
-        except Exception as e:
-            if message and message.id:  # message saved, delete it
-              message.delete()
-            if post and post.id:  # post saved, delete it
-              post.delete()
-            raise e
-      # if the form is invalid, an error message will be displayed
-      return render(request, "forum/post_form.html", context={'post_form': post_form, 'message_form': message_form})
+  def post(self, request):
+    post_form = PostForm(request.POST)
+    message_form = MessageForm(request.POST)
+    post = message = None
+    if post_form.is_valid() and message_form.is_valid():
+      try:
+        author = Member.objects.only("id").get(id=request.user.id)
+        message_form.instance.author_id = author.id
+        with transaction.atomic():
+          message = message_form.save()
+          post_form.instance.first_message = message
+          post = post_form.save()
+          message.post = post
+          message.save()
+        # send notifications to followers
+        check_followers_on_new_post(request, post)
+        return redirect("forum:display", post.id)
+      except Exception as e:
+        if message and message.id:  # message saved, delete it
+          message.delete()
+        if post and post.id:  # post saved, delete it
+          post.delete()
+        raise e
+    # if the form is invalid, an error message will be displayed
+    return render(request, "forum/post_form.html", context={"post_form": post_form, "message_form": message_form})
 
 
 class PostEditView(LoginRequiredMixin, generic.UpdateView):
-    model = Post
-    form_class = PostForm
+  model = Post
+  form_class = PostForm
 
-    @csrf_exempt
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            return super().dispatch(request, *args, **kwargs)
-        except RequestDataTooBig:
-            return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
+  @csrf_exempt
+  def dispatch(self, request, *args, **kwargs):
+    try:
+      return super().dispatch(request, *args, **kwargs)
+    except RequestDataTooBig:
+      return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
 
-    def get(self, request, pk):
-      instance = get_object_or_404(Post, pk=pk)
-      post_form = PostForm(instance=instance)
-      message_form = MessageForm(instance=instance.first_message)
-      return render(request, "forum/post_form.html",
-                    context={'post_form': post_form, 'message_form': message_form, 'post': instance})
+  def get(self, request, pk):
+    instance = get_object_or_404(Post, pk=pk)
+    post_form = PostForm(instance=instance)
+    message_form = MessageForm(instance=instance.first_message)
+    return render(
+      request, "forum/post_form.html", context={"post_form": post_form, "message_form": message_form, "post": instance}
+    )
 
-    def post(self, request, pk):
-      instance = get_object_or_404(Post, pk=pk)
-      check_edit_permission(request, instance.first_message.author)
-      post_form = PostForm(request.POST, instance=instance)
-      message_form = MessageForm(request.POST, instance=instance.first_message)
-      if post_form.is_valid() and message_form.is_valid():
-        message_form.save()
-        post = post_form.save()
-        return redirect("forum:display", post.id)
-      return render(request, "forum/post_form.html",
-                    context={'post_form': post_form, 'message_form': message_form, 'post': instance})
+  def post(self, request, pk):
+    instance = get_object_or_404(Post, pk=pk)
+    check_edit_permission(request, instance.first_message.author)
+    post_form = PostForm(request.POST, instance=instance)
+    message_form = MessageForm(request.POST, instance=instance.first_message)
+    if post_form.is_valid() and message_form.is_valid():
+      message_form.save()
+      post = post_form.save()
+      return redirect("forum:display", post.id)
+    return render(
+      request, "forum/post_form.html", context={"post_form": post_form, "message_form": message_form, "post": instance}
+    )
 
 
 @login_required
@@ -137,7 +148,7 @@ def delete_post(request, pk):
   post = get_object_or_404(Post, pk=pk)
   check_edit_permission(request, post.first_message.author)
   post.delete()
-  return redirect('forum:list')
+  return redirect("forum:list")
 
 
 @login_required
@@ -170,7 +181,7 @@ def delete_reply(request, reply):
   assert_request_is_ajax(request)
   reply = get_object_or_404(Message, pk=reply)
   check_edit_permission(request, reply.author)
-  if (Post.objects.filter(first_message=reply).exists()):
+  if Post.objects.filter(first_message=reply).exists():
     raise ValidationError(_("Can't delete the first message of a thread!"))
   id = reply.id
   reply.delete()

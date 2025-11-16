@@ -13,26 +13,27 @@ logger = logging.getLogger(__name__)
 
 
 class FamilyDetailView(LoginRequiredMixin, generic.DetailView):
-    model = Family
-    template_name = "members/family/family_detail.html"
+  model = Family
+  template_name = "members/family/family_detail.html"
 
 
 class FamilyCreateView(LoginRequiredMixin, generic.CreateView):
-    model = Family
-    template_name = "members/family/family_form.html"
-    fields = "__all__"
+  model = Family
+  template_name = "members/family/family_form.html"
+  fields = "__all__"
 
 
 class FamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
-    model = Family
-    template_name = "members/family/family_form.html"
-    fields = "__all__"
+  model = Family
+  template_name = "members/family/family_form.html"
+  fields = "__all__"
 
 
 def _json_family_response(family):
-  return JsonResponse({"family_id": family.id, "family_name": str(family),
-                       "parent_family_id": family.parent.id if family.parent else ''},
-                      status=200)
+  return JsonResponse(
+    {"family_id": family.id, "family_name": str(family), "parent_family_id": family.parent.id if family.parent else ""},
+    status=200,
+  )
 
 
 class ModalFamilyUpsertViewMixin(LoginRequiredMixin):
@@ -59,7 +60,7 @@ class ModalFamilyCreateView(ModalFamilyUpsertViewMixin, generic.CreateView):
 
 class ModalFamilyUpdateView(ModalFamilyUpsertViewMixin, generic.UpdateView):
   def post(self, request, *args, **kwargs):
-    family = get_object_or_404(Family, pk=kwargs['pk'])
+    family = get_object_or_404(Family, pk=kwargs["pk"])
     # create a form instance and populate it with data from the request on existing member (or None):
     form = FamilyUpdateForm(request.POST, instance=family)
     return self.process_form(request, form)

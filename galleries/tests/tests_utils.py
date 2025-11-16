@@ -5,7 +5,6 @@ from members.tests.tests_member_base import MemberTestCase
 
 @test_media_root_decorator(__file__)
 class GalleryBaseTestCase(MemberTestCase):
-
   def setUp(self):
     super().setUp()
 

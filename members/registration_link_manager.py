@@ -14,6 +14,7 @@ class TokenManager:
   creates and verifies tokens based on the user's email.
   Based on the code from django.contrib.auth.tokens.
   """
+
   _algorithm = "sha256"
   _secret = settings.SECRET_KEY
   _key_salt = "cousinsmatter.members.check_before_registry.TokenManager"
@@ -50,9 +51,9 @@ class TokenManager:
 
     # Check that the timestamp/uid has not been tampered with
     if not constant_time_compare(
-        self._make_token_with_timestamp(text, ts, self._secret),
-        token,
-        ):
+      self._make_token_with_timestamp(text, ts, self._secret),
+      token,
+    ):
       return False
 
     # Check the timestamp is within limit.
@@ -70,9 +71,7 @@ class TokenManager:
       f"{text}:{timestamp}",
       secret=secret,
       algorithm=self._algorithm,
-    ).hexdigest()[
-      ::2
-    ]  # Limit to shorten the URL.
+    ).hexdigest()[::2]  # Limit to shorten the URL.
     return "%s-%s" % (ts_b36, hash_string)
 
   def _num_seconds(self, dt):
@@ -89,9 +88,15 @@ class RegistrationLinkManager(TokenManager):
     Generates link for the text.
     """
     token = self.make_token(text)
-    encoded_text = urlsafe_b64encode(str(text).encode('utf-8')).decode('utf-8')
+    encoded_text = urlsafe_b64encode(str(text).encode("utf-8")).decode("utf-8")
 
-    link = reverse("members:register", args=(encoded_text, token, ))
+    link = reverse(
+      "members:register",
+      args=(
+        encoded_text,
+        token,
+      ),
+    )
     absolute_link = request.build_absolute_uri(link)
     return absolute_link
 
@@ -99,8 +104,8 @@ class RegistrationLinkManager(TokenManager):
     """
     main verification and decryption happens here.
     """
-    logger.debug(f'\n{"~" * 40}\nDecoding the link {encoded_email}/{encoded_token}\n{"~" * 40}\n')
-    decoded_email = urlsafe_b64decode(encoded_email).decode('UTF-8')
+    logger.debug(f"\n{'~' * 40}\nDecoding the link {encoded_email}/{encoded_token}\n{'~' * 40}\n")
+    decoded_email = urlsafe_b64decode(encoded_email).decode("UTF-8")
     # decoded_token = urlsafe_b64decode(encoded_token).decode('UTF-8')
     decoded_token = encoded_token
 
@@ -108,5 +113,5 @@ class RegistrationLinkManager(TokenManager):
       if self.check_token(decoded_email, decoded_token):
         return decoded_email
     else:
-      logger.error(f'\n{"~" * 40}\nError occurred in decoding the link!\n{"~" * 40}\n')
+      logger.error(f"\n{'~' * 40}\nError occurred in decoding the link!\n{'~' * 40}\n")
       return False

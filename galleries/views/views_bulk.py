@@ -35,7 +35,7 @@ def _get_parent_gallery(path: str, zimport: ZipImport):  # path should be direct
   args: "path" should be one of a folder
   """
   parent_dir = os.path.dirname(os.path.normpath(path))
-  return _get_or_create_gallery(parent_dir, zimport) if parent_dir != '' else None
+  return _get_or_create_gallery(parent_dir, zimport) if parent_dir != "" else None
 
 
 def _get_or_create_gallery(path: str, zimport: ZipImport):
@@ -49,20 +49,20 @@ def _get_or_create_gallery(path: str, zimport: ZipImport):
   returned and not updated to avoid overwriting handwritten description
   """
   # remove leading './', trailing slash and dots inside the path
-  path = path.rstrip('/').removeprefix('./').replace('/./', '/')
+  path = path.rstrip("/").removeprefix("./").replace("/./", "/")
 
   # check possible path traversal attempt (code from django internals)
   if ".." in pathlib.PurePath(path).parts:
     raise SuspiciousFileOperation(_("Detected path traversal attempt, '..' is not allowed in paths inside the zip file"))
 
-  if path == '.':  # should never happen
+  if path == ".":  # should never happen
     return None
 
   if path in zimport.galleries:  # gallery in cache
     return zimport.galleries[path]
 
   name = os.path.basename(os.path.normpath(path))
-  description = _('Imported from zipfile directory %(path)s') % {'path': path}
+  description = _("Imported from zipfile directory %(path)s") % {"path": path}
   parent = _get_parent_gallery(path, zimport)
 
   # Create gallery if it does not already exists.
@@ -92,17 +92,26 @@ def handle_zip(zip_file, task_group, owner_id):
   zimport.register()
   broker = get_broker()
   # extract the zip file to a temporary directory
-  with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+  with zipfile.ZipFile(zip_file, "r") as zip_ref:
     zip_ref.extractall(tmpdir)
   for dir, subdirs, files in os.walk(tmpdir):
-    images = [file for file in files if mimetypes.guess_type(file)[0].startswith('image/')]
+    images = [file for file in files if mimetypes.guess_type(file)[0].startswith("image/")]
     if len(images) == 0:  # create galleries only if there are photos inside
       continue
     gallery_path = os.path.relpath(dir, tmpdir)  # get relative path from temp to see the galleries path
     gallery = _get_or_create_gallery(gallery_path, zimport)
     for image in images:
-      async_task(handle_photo_file, zimport, dir, image, gallery.id,
-                 group=task_group, cached=False, hook=post_create_photo, broker=broker)
+      async_task(
+        handle_photo_file,
+        zimport,
+        dir,
+        image,
+        gallery.id,
+        group=task_group,
+        cached=False,
+        hook=post_create_photo,
+        broker=broker,
+      )
       zimport.nbPhotos += 1
       logger.debug(f"created task for {image} group: {task_group}")
 
@@ -125,10 +134,12 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
         zimport = handle_zip(zip_file, task_group, request.user.id)
         hx_get_url = reverse("galleries:upload_progress", args=(task_group,))
         logger.debug(f"rendering first progress-bar url: {hx_get_url}")
-        return render(request, "cm_main/common/progress-bar.html",
-                      {"hx_get": hx_get_url, "frequency": "1s",
-                        "value": 0, "max": zimport.nbPhotos, "text": "0%"},
-                      status=200)
+        return render(
+          request,
+          "cm_main/common/progress-bar.html",
+          {"hx_get": hx_get_url, "frequency": "1s", "value": 0, "max": zimport.nbPhotos, "text": "0%"},
+          status=200,
+        )
         # print("post upload progress returns", r.content)
         # return r
       except ValidationError as e:
@@ -163,20 +174,28 @@ def upload_progress(request, id):
       if errors:
         for err in errors:
           zimport.errors.add(err)
-  context = {"hx_get": request.get_full_path(), "frequency": "1s",
-             "value": value, "max": max, "text": str(int(value * 100 / max)) + "%",
-             "processed_objects": zimport.photos, "errors": zimport.errors}
+  context = {
+    "hx_get": request.get_full_path(),
+    "frequency": "1s",
+    "value": value,
+    "max": max,
+    "text": str(int(value * 100 / max)) + "%",
+    "processed_objects": zimport.photos,
+    "errors": zimport.errors,
+  }
   if value == max:  # reached the end
-    context["back_url"] = reverse('galleries:galleries')
-    context["back_text"] = _('Back to galleries list')
+    context["back_url"] = reverse("galleries:galleries")
+    context["back_text"] = _("Back to galleries list")
     context["success"] = _("Zip file uploaded: %(lg)d galleries and %(nbp)d photos created") % {
-                          'lg': zimport.nbGalleries, 'nbp': len(zimport.photos)
-                          }
+      "lg": zimport.nbGalleries,
+      "nbp": len(zimport.photos),
+    }
     # clean temp directory
     shutil.rmtree(zimport.root)
     # remove zimport from the cache
     zimport.unregister()
     logger.debug(f"cleaned {zimport}")
-  logger.debug(f"upload progress bar value: {value}, max: {max}, "
-               f"processed objects: {zimport.photos}, errors: {zimport.errors}")
+  logger.debug(
+    f"upload progress bar value: {value}, max: {max}, processed objects: {zimport.photos}, errors: {zimport.errors}"
+  )
   return render(request, "cm_main/common/progress-bar.html", context)

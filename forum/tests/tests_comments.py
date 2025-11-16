@@ -8,7 +8,6 @@ from ..models import Comment
 
 
 class CommentCreateTestCase(ForumTestCase):
-
   def tearDown(self):
     Comment.objects.all().delete()
     super().tearDown()
@@ -16,10 +15,10 @@ class CommentCreateTestCase(ForumTestCase):
   def test_add_comment_view(self):
     """Tests adding a comment to a forum message."""
     url = reverse("forum:add_comment", args=[self.message.id])
-    content = 'a wonderful comment'
-    response = self.client.post(url, {'content': content}, follow=True)
+    content = "a wonderful comment"
+    response = self.client.post(url, {"content": content}, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertRedirects(response, reverse('forum:display', args=[self.post.id]))
+    self.assertRedirects(response, reverse("forum:display", args=[self.post.id]))
     comment = Comment.objects.filter(message=self.message.id)
     self.assertEqual(comment.count(), 1)
     self.assertEqual(comment.first().content, content)
@@ -28,17 +27,14 @@ class CommentCreateTestCase(ForumTestCase):
     comment = Comment(content="a comment to be modified", message=self.message, author=self.member)
     comment.save()
     url = reverse("forum:edit_comment", args=[comment.id])
-    comment_content = 'a modified comment'
+    comment_content = "a modified comment"
     with self.assertRaises(ValidationError):
-      self.client.post(url, {'content': comment_content})
+      self.client.post(url, {"content": comment_content})
 
-    response = self.client.post(url, {'content': comment_content}, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+    response = self.client.post(url, {"content": comment_content}, **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
     # pprint(vars(response))
     self.assertEqual(response.status_code, 200)
-    self.assertJSONEqual(
-            str(response.content, encoding='utf8'),
-            {'comment_id': comment.id, 'comment_str': comment_content}
-        )
+    self.assertJSONEqual(str(response.content, encoding="utf8"), {"comment_id": comment.id, "comment_str": comment_content})
     comment.refresh_from_db()
     self.assertEqual(comment.content, comment_content)
     # TODO: how to check the edit inside the page which is done in javascript?
@@ -52,20 +48,16 @@ class CommentCreateTestCase(ForumTestCase):
     with self.assertRaises(ValidationError):
       self.client.post(url)
 
-    response = self.client.post(url, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+    response = self.client.post(url, **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
     self.assertEqual(response.status_code, 200)
     new_cnt = Comment.objects.filter(message=self.message.id).count()
     self.assertEqual(new_cnt, cnt - 1)
-    self.assertJSONEqual(
-            str(response.content, encoding='utf8'),
-            {'comment_id': comment.id}
-        )
+    self.assertJSONEqual(str(response.content, encoding="utf8"), {"comment_id": comment.id})
     # TODO: how to check the removal inside the page which is done in javascript?
 
 
 @django_q_sync_class
 class TestFollower(TestFollowersMixin, ForumTestCase):
-
   def test_follow_post_on_comment(self):
     """
     Tests that when a follower follows a post and then a member posts a comment on the post,
@@ -88,8 +80,8 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
     self.client.login(username=member.username, password=member.password)
     # poster posts a comment on the first message to the post
     url = reverse("forum:add_comment", args=[self.post.first_message.id])
-    comment_msg_content = 'a comment'
-    response = self.client.post(url, {'content': comment_msg_content}, follow=True)
+    comment_msg_content = "a comment"
+    response = self.client.post(url, {"content": comment_msg_content}, follow=True)
     self.assertEqual(response.status_code, 200)
 
     message = self.post.first_message
@@ -99,7 +91,7 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
       follower=follower,
       sender=comment.author,
       owner=original_poster,
-      url=reverse('forum:display', args=[self.post.id]),
+      url=reverse("forum:display", args=[self.post.id]),
       followed_object=self.post,
       created_object=comment,
       created_content=comment_msg_content,

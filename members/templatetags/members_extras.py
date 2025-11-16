@@ -22,8 +22,8 @@ def members_header(title):
 @register.filter
 def birthday_color(when):
   if when == 0:
-    return 'danger'
+    return "danger"
   elif when == 1:
-    return 'warning'
+    return "warning"
   else:
-    return 'link'
+    return "link"

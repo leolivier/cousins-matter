@@ -26,10 +26,10 @@ def get_gallery_name():
 class CheckLoginRequired(TestLoginRequiredMixin, TestCase):
   def test_login_required(self):
     """Tests login required for galleries views."""
-    for url in ['galleries:galleries', 'galleries:create']:
+    for url in ["galleries:galleries", "galleries:create"]:
       self.assertRedirectsToLogin(url)
 
-    for url in ['galleries:edit', 'galleries:detail', 'galleries:add_photo']:
+    for url in ["galleries:edit", "galleries:detail", "galleries:add_photo"]:
       self.assertRedirectsToLogin(url, args=[1])
 
 
@@ -91,15 +91,19 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     response = self.client.get(url)
     # print(response.content)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'galleries/gallery_form.html')
+    self.assertTemplateUsed(response, "galleries/gallery_form.html")
     self.assertIs(response.resolver_match.func.view_class, GalleryCreateView)
     # check rich editor by class richtextarea, the rest is dynamic in the browser, can't be tested
-    self.assertContains(response,
-                        '''<div class="control"> <textarea name="description" cols="40" rows="10"
-                           maxlength="3000" class="richtextarea" id="id_description"> </textarea> </div>''',
-                        html=True)
+    self.assertContains(
+      response,
+      """<div class="control"> <textarea name="description" cols="40" rows="10"
+                           maxlength="3000" class="richtextarea" id="id_description"> </textarea> </div>""",
+      html=True,
+    )
     # check cover field is empty
-    self.assertContains(response, f'''
+    self.assertContains(
+      response,
+      f"""
 <div id="div_id_cover" class="field">
   <label for="id_cover" class="label">{_("Cover Photo")}</label>
   <div class="control">
@@ -109,9 +113,11 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
       </select>
     </div>
   </div>
-</div>''', html=True)
+</div>""",
+      html=True,
+    )
     gal_name = get_gallery_name()
-    response = self.client.post(url, {'name': gal_name, 'description': "a test root gallery"}, follow=True)
+    response = self.client.post(url, {"name": gal_name, "description": "a test root gallery"}, follow=True)
     rg = Gallery.objects.filter(name=gal_name).first()
     self.assertIsNotNone(rg)
     self.assertTrue(rg.cover_url() == settings.DEFAULT_GALLERY_COVER_URL)
@@ -125,7 +131,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     # create a sub gallery through view
     url = reverse("galleries:create")
     sgal_name = get_gallery_name()
-    response = self.client.post(url, {'name': sgal_name, 'description': "a test sub gallery", 'parent': rg.id}, follow=True)
+    response = self.client.post(url, {"name": sgal_name, "description": "a test sub gallery", "parent": rg.id}, follow=True)
     self.assertTrue(response.status_code, 200)
     # self.print_response(response)
     # get the sub gallery by name and parent
@@ -134,7 +140,9 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     # check redirects to the newly created gallery detail
     self.assertRedirects(response, reverse("galleries:detail", args=[sg.id]), 302, 200)
     # check the response contains the sub gallery details (name, photo count)
-    self.assertContains(response, f'''
+    self.assertContains(
+      response,
+      f'''
 <div class="container">
   <figure class="image gallery-cover is-pulled-left mr-3 mb-3 is-flex is-align-items-center is-justify-content-center">
     <img src="{sg.cover_url()}">
@@ -142,20 +150,28 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
   <span class="title is-4">{sg.name}</span>
   <span class="tag">{_("No photo")}</span>
   <p>{sg.description}</p>
-</div>''', html=True)
+</div>''',
+      html=True,
+    )
     # check root gallery has the sub gallery for child
     self.assertTrue(rg.children.first().name == sgal_name)
     # check the root gallery appears as the parent gallery in the details
-    self.assertContains(response, f'''<a class="button" href="{reverse('galleries:detail', args=[rg.id])}"
-      title="{_("Back to %(gname)s") % {'gname': rg.name}}">
-      {icon('back')}
-    </a>''', html=True)
+    self.assertContains(
+      response,
+      f'''<a class="button" href="{reverse("galleries:detail", args=[rg.id])}"
+      title="{_("Back to %(gname)s") % {"gname": rg.name}}">
+      {icon("back")}
+    </a>''',
+      html=True,
+    )
 
     # check the sub gallery appears in the root gallery children list
     response = self.client.get(reverse("galleries:detail", args=[rg.id]), follow=True)
     # self.print_response(response)
     url = reverse("galleries:detail", args=[sg.id])
-    self.assertContains(response, f'''
+    self.assertContains(
+      response,
+      f'''
 <p class="content has-text-centered mr-3">{_("Children galleries")}</p>
 <div class="grid">
   <a class="cell mr-2" href="{url}">
@@ -164,7 +180,9 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     </figure>
     <p class="has-text-centered">{sg.name}</p>
   </a>
-</div>''', html=True)
+</div>''',
+      html=True,
+    )
 
   def test_modify_gallery(self):
     """Tests modifying a gallery through the view."""
@@ -173,10 +191,10 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     rg = Gallery(name=gal_name)
     rg.save()
     # add 3 photos in it
-    photos = [Photo(name=f'Photo#{i + 1}',
-                    image=create_test_image(__file__, f'test-image-{i + 1}.jpg'),
-                    date=date.today(), gallery=rg)
-              for i in range(3)]
+    photos = [
+      Photo(name=f"Photo#{i + 1}", image=create_test_image(__file__, f"test-image-{i + 1}.jpg"), date=date.today(), gallery=rg)
+      for i in range(3)
+    ]
     for p in photos:
       p.save()
     url = reverse("galleries:edit", args=[rg.id])
@@ -184,7 +202,9 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     self.assertTrue(response.status_code, 200)
     self.assertIs(response.resolver_match.func.view_class, GalleryUpdateView)
     # check cover field contains the gallery photos
-    self.assertContains(response, f'''
+    self.assertContains(
+      response,
+      f"""
 <div id="div_id_cover" class="field">
   <label for="id_cover" class="label">{_("Cover Photo")}</label>
   <div class="control">
@@ -195,9 +215,11 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
       </select>
     </div>
   </div>
-</div>''', html=True)
+</div>""",
+      html=True,
+    )
     gal_name = get_gallery_name()
-    response = self.client.post(url, {'name': gal_name, 'description': rg.description}, follow=True)
+    response = self.client.post(url, {"name": gal_name, "description": rg.description}, follow=True)
     self.assertTrue(response.status_code, 200)
     self.assertIs(response.resolver_match.func.view_class, GalleryDetailView)
     # print(response.content)
@@ -206,13 +228,16 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
 
   def rec_build_tree(self, n, N=0, parent=None):
     if n == 0:
-      return ''
+      return ""
     name = get_gallery_name()
-    gal = Gallery(name=name, parent=parent, description=f'a test gallery named {name}')
+    gal = Gallery(name=name, parent=parent, description=f"a test gallery named {name}")
     gal.save()
     url = reverse("galleries:detail", args=[gal.id])
-    left_margin = ''.join(['<div class="ml-6">&nbsp;</div>' for i in range(N - 1)]) + \
-      f'<div class="ml-6">{icon("menu-right")}</div>' if N else ''
+    left_margin = (
+      "".join(['<div class="ml-6">&nbsp;</div>' for i in range(N - 1)]) + f'<div class="ml-6">{icon("menu-right")}</div>'
+      if N
+      else ""
+    )
 
     html = f'''
 <div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
@@ -264,8 +289,8 @@ class DeleteGalleryViewTest(GalleryBaseTestCase):
     url = reverse("galleries:delete_gallery", kwargs={"pk": gal})
     response = self.client.get(url, follow=True)
 
-    self.assertRedirects(response, reverse('galleries:galleries'), 302, 200)
-    self.assertContainsMessage(response, "success", _('Gallery deleted successfully'))
+    self.assertRedirects(response, reverse("galleries:galleries"), 302, 200)
+    self.assertContainsMessage(response, "success", _("Gallery deleted successfully"))
     # check root not removed
     gid, pid = lst[0]
     # print("gid/pid:", gid, pid)

@@ -8,17 +8,17 @@ from members.models import Member
 
 
 class ChatRoomManager(models.Manager):
-    def public(self):
-        return self.filter(privatechatroom__isnull=True)
+  def public(self):
+    return self.filter(privatechatroom__isnull=True)
 
-    def private(self):
-        return self.filter(privatechatroom__isnull=False)
+  def private(self):
+    return self.filter(privatechatroom__isnull=False)
 
-    def apublic(self):
-        return self.afilter(privatechatroom__isnull=True)
+  def apublic(self):
+    return self.afilter(privatechatroom__isnull=True)
 
-    def aprivate(self):
-        return self.afilter(privatechatroom__isnull=False)
+  def aprivate(self):
+    return self.afilter(privatechatroom__isnull=False)
 
 
 class ChatRoom(models.Model):
@@ -28,13 +28,14 @@ class ChatRoom(models.Model):
   name = models.CharField(max_length=255)
   slug = models.CharField(max_length=255, blank=True, unique=True)
   date_added = models.DateTimeField(auto_now_add=True)
-  followers = models.ManyToManyField(Member, related_name='followed_chat_rooms', blank=True,
-                                     limit_choices_to={"is_active": True})
+  followers = models.ManyToManyField(
+    Member, related_name="followed_chat_rooms", blank=True, limit_choices_to={"is_active": True}
+  )
 
   class Meta:
-    verbose_name = _('chat room')
-    verbose_name_plural = _('chat rooms')
-    ordering = ('date_added',)
+    verbose_name = _("chat room")
+    verbose_name_plural = _("chat rooms")
+    ordering = ("date_added",)
     indexes = [
       models.Index(fields=["slug"]),
     ]
@@ -60,50 +61,47 @@ class ChatRoom(models.Model):
     return self.chatmessage_set.last()
 
   def is_public(self):
-    return not hasattr(self, 'privatechatroom')
+    return not hasattr(self, "privatechatroom")
 
   @classmethod
   def FlaggedRooms(cls, *filters):
     return cls.objects.annotate(
-      is_private=Case(
-        When(privatechatroom__isnull=False, then=Value(True)),
-        default=Value(False),
-        output_field=BooleanField()
-      )).filter(filters)
+      is_private=Case(When(privatechatroom__isnull=False, then=Value(True)), default=Value(False), output_field=BooleanField())
+    ).filter(filters)
 
 
 class MessageStatus(Enum):
-    UNREAD = 'unread'
-    PARTIALLY_READ = 'partially'
-    READ = 'read'
+  UNREAD = "unread"
+  PARTIALLY_READ = "partially"
+  READ = "read"
 
 
 class ChatMessage(models.Model):
   member = models.ForeignKey(Member, on_delete=models.CASCADE)
   room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
-  content = models.TextField(_('message'), max_length=2 * 1024 * 1024)
+  content = models.TextField(_("message"), max_length=2 * 1024 * 1024)
   date_added = models.DateTimeField(auto_now_add=True)
   date_modified = models.DateTimeField(null=True, blank=True)
 
   class Meta:
-    ordering = ('date_added',)
+    ordering = ("date_added",)
     indexes = [
-            models.Index(fields=["room"]),
+      models.Index(fields=["room"]),
     ]
 
   def __str__(self):
     # room = self.room.name if len(self.room.name) < 20 else f'{self.room.name[:20]}...'
     # msg = self.content if len(self.content) < 100 else f'{self.content[:100]}...'
     # return f'{room}:{msg}'
-    return f'{self.room}:{self.content}'
+    return f"{self.room}:{self.content}"
 
 
 class PrivateChatRoom(ChatRoom):
-  admins = models.ManyToManyField(Member, related_name='group_chat_rooms_admins', blank=True)
+  admins = models.ManyToManyField(Member, related_name="group_chat_rooms_admins", blank=True)
 
   class Meta:
-    verbose_name = _('private chat room')
-    verbose_name_plural = _('private chat rooms')
+    verbose_name = _("private chat room")
+    verbose_name_plural = _("private chat rooms")
 
   def members(self):
     return self.followers

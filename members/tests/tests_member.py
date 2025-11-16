@@ -15,52 +15,51 @@ from verify_email.app_configurations import GetFieldFromSettings
 from verify_email.views import verify_user_and_activate
 from ..views.views_member import EditProfileView, MemberDetailView
 from ..models import Member
-from .tests_member_base import (
-  TestLoginRequiredMixin, MemberTestCase, modify_member_data,
-  get_new_member_data, today_minus
-)
+from .tests_member_base import TestLoginRequiredMixin, MemberTestCase, modify_member_data, get_new_member_data, today_minus
 from cm_main.utils import get_test_absolute_url
 
 
 class UsersManagersTests(TestCase):
+  def test_create_member(self):
+    UserModel = get_user_model()
+    self.assertEqual(UserModel, Member)
+    member = UserModel.objects.create_member(
+      username="foobar", email="normal@member.com", password="foo", first_name="foo", last_name="bar", privacy_consent=True
+    )
+    self.assertEqual(member.email, "normal@member.com")
+    self.assertFalse(member.is_active)
+    self.assertFalse(member.is_staff)
+    self.assertFalse(member.is_superuser)
+    self.assertEqual(member.first_name, "foo")
+    self.assertEqual(member.last_name, "bar")
+    with self.assertRaises(TypeError):
+      UserModel.objects.create_member()
+    with self.assertRaises(TypeError):
+      UserModel.objects.create_member(username="")
+    with self.assertRaises(ValueError):
+      UserModel.objects.create_member(
+        username="", email="normal@member.com", password="foo", first_name="foo", last_name="bar"
+      )
+    # with self.assertRaises(ValueError):
+    #     UserModel.objects.create_member(username="**+//", email="normal@member.com", password="foo",
+    #                                     first_name='foo', last_name='bar')
 
-    def test_create_member(self):
-        UserModel = get_user_model()
-        self.assertEqual(UserModel, Member)
-        member = UserModel.objects.create_member(username='foobar', email="normal@member.com", password="foo",
-                                                 first_name='foo', last_name='bar', privacy_consent=True)
-        self.assertEqual(member.email, "normal@member.com")
-        self.assertFalse(member.is_active)
-        self.assertFalse(member.is_staff)
-        self.assertFalse(member.is_superuser)
-        self.assertEqual(member.first_name, 'foo')
-        self.assertEqual(member.last_name, 'bar')
-        with self.assertRaises(TypeError):
-            UserModel.objects.create_member()
-        with self.assertRaises(TypeError):
-            UserModel.objects.create_member(username="")
-        with self.assertRaises(ValueError):
-            UserModel.objects.create_member(username='', email="normal@member.com", password="foo",
-                                            first_name='foo', last_name='bar')
-        # with self.assertRaises(ValueError):
-        #     UserModel.objects.create_member(username="**+//", email="normal@member.com", password="foo",
-        #                                     first_name='foo', last_name='bar')
-
-    def test_create_superuser(self):
-        UserModel = get_user_model()
-        admin_user = UserModel.objects.create_superuser(username="superuser", email="super@member.com", password="foo",
-                                                        first_name='foo', last_name='bar', privacy_consent=True)
-        self.assertEqual(admin_user.email, "super@member.com")
-        self.assertTrue(admin_user.is_active)
-        self.assertTrue(admin_user.is_staff)
-        self.assertTrue(admin_user.is_superuser)
-        with self.assertRaises(ValueError):
-            UserModel.objects.create_superuser(
-                username="superuser", email="super@member.com", password="foo", is_superuser=False,
-                first_name='foo', last_name='bar')
+  def test_create_superuser(self):
+    UserModel = get_user_model()
+    admin_user = UserModel.objects.create_superuser(
+      username="superuser", email="super@member.com", password="foo", first_name="foo", last_name="bar", privacy_consent=True
+    )
+    self.assertEqual(admin_user.email, "super@member.com")
+    self.assertTrue(admin_user.is_active)
+    self.assertTrue(admin_user.is_staff)
+    self.assertTrue(admin_user.is_superuser)
+    with self.assertRaises(ValueError):
+      UserModel.objects.create_superuser(
+        username="superuser", email="super@member.com", password="foo", is_superuser=False, first_name="foo", last_name="bar"
+      )
 
 
-class MemberViewTestMixin():
+class MemberViewTestMixin:
   def create_member_by_view(self, member_data=None):
     """creates and returns a new member through the UI using provided member data.
     Compared to create_member directly to DB, created users are supposed to be managed
@@ -68,7 +67,7 @@ class MemberViewTestMixin():
     member_data = member_data or get_new_member_data()
     response = self.client.post(reverse("members:create"), member_data, follow=True)
     self.assertEqual(response.status_code, 200)
-    new_member = Member.objects.filter(username=member_data['username']).first()
+    new_member = Member.objects.filter(username=member_data["username"]).first()
     self.assertIsNotNone(new_member)
     self.assertFalse(new_member.is_active)
     self.assertEqual(new_member.member_manager, self.member)
@@ -77,7 +76,6 @@ class MemberViewTestMixin():
 
 
 class MemberCreateTest(MemberViewTestMixin, MemberTestCase):
-
   def test_create_member_with_same_username(self):
     with self.assertRaises(IntegrityError):
       with transaction.atomic():
@@ -94,7 +92,6 @@ class MemberCreateTest(MemberViewTestMixin, MemberTestCase):
 
 
 class MemberDeleteTest(MemberViewTestMixin, MemberTestCase):
-
   def test_delete_member(self):
     member = self.create_member()
     member.delete()
@@ -104,37 +101,53 @@ class MemberDeleteTest(MemberViewTestMixin, MemberTestCase):
   def test_delete_member_by_view(self):
     member = self.create_member_by_view()
     response = self.client.post(reverse("members:delete", args=[member.id]), follow=True)
-    self.assertContainsMessage(response, 'info', _("Member deleted"))
+    self.assertContainsMessage(response, "info", _("Member deleted"))
     self.assertEqual(Member.objects.filter(id=member.id).count(), 0)
     self.assertEqual(Member.objects.filter(username=member.username).count(), 0)
 
 
 class LoginRequiredTests(TestLoginRequiredMixin, TestCase):
-
   def test_login_required(self):
-    for url in ['members:logout', 'change_password', 'members:members', 'members:profile',
-                'members:create', 'members:birthdays']:
+    for url in [
+      "members:logout",
+      "change_password",
+      "members:members",
+      "members:profile",
+      "members:create",
+      "members:birthdays",
+    ]:
       self.assertRedirectsToLogin(url)
-    for url in ['members:member_edit', 'members:detail']:
+    for url in ["members:member_edit", "members:detail"]:
       self.assertRedirectsToLogin(url, args=(1,))
 
 
 class MemberProfileViewTest(MemberTestCase):
-
   def test_member_profile_view(self):
-    profile_url = reverse('members:profile')
+    profile_url = reverse("members:profile")
     response = self.client.get(profile_url)
     # self.print_response(response)
-    self.assertTemplateUsed(response, 'members/members/member_upsert.html')
+    self.assertTemplateUsed(response, "members/members/member_upsert.html")
     self.assertIs(response.resolver_match.func.view_class, EditProfileView)
 
-    self.assertContains(response, f'''<input type="text" name="username" value="{self.member.username}"
+    self.assertContains(
+      response,
+      f'''<input type="text" name="username" value="{self.member.username}"
                       maxlength="150" class="input" required aria-describedby="id_username_helptext"
-                      id="id_username">''', html=True)
-    self.assertContains(response, f'''<input type="text" name="first_name" value="{self.member.first_name}"
-                      maxlength="150" class="input" id="id_first_name" required>''', html=True)
-    self.assertContains(response, f'''<input type="text" name="last_name" value="{self.member.last_name}"
-                      maxlength="150" class="input" id="id_last_name" required>''', html=True)
+                      id="id_username">''',
+      html=True,
+    )
+    self.assertContains(
+      response,
+      f'''<input type="text" name="first_name" value="{self.member.first_name}"
+                      maxlength="150" class="input" id="id_first_name" required>''',
+      html=True,
+    )
+    self.assertContains(
+      response,
+      f'''<input type="text" name="last_name" value="{self.member.last_name}"
+                      maxlength="150" class="input" id="id_last_name" required>''',
+      html=True,
+    )
 
     self.assertTrue(self.member.is_active)
     self.assertIsNone(self.member.member_manager)
@@ -148,10 +161,10 @@ class MemberProfileViewTest(MemberTestCase):
     # self.assertTrue(self.member.is_active)
     # self.assertIsNone(self.member.member_manager)
 
-    self.assertEqual(self.member.first_name, new_data['first_name'])
-    self.assertEqual(self.member.phone, new_data['phone'])
-    self.assertEqual(self.member.birthdate, new_data['birthdate'])
-    self.assertEqual(self.member.email, new_data['email'])
+    self.assertEqual(self.member.first_name, new_data["first_name"])
+    self.assertEqual(self.member.phone, new_data["phone"])
+    self.assertEqual(self.member.birthdate, new_data["birthdate"])
+    self.assertEqual(self.member.email, new_data["email"])
 
   def test_avatar(self):
     from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -159,13 +172,12 @@ class MemberProfileViewTest(MemberTestCase):
     from PIL import Image
     import sys
 
-    avatar_file = os.path.join(os.path.dirname(__file__), 'resources', self.base_avatar)
+    avatar_file = os.path.join(os.path.dirname(__file__), "resources", self.base_avatar)
     membuf = BytesIO()
     with Image.open(avatar_file) as img:
-      img.save(membuf, format='JPEG', quality=90)
+      img.save(membuf, format="JPEG", quality=90)
       size = sys.getsizeof(membuf)
-      self.member.avatar = InMemoryUploadedFile(membuf, 'ImageField', self.base_avatar,
-                                                'image/jpeg', size, None)
+      self.member.avatar = InMemoryUploadedFile(membuf, "ImageField", self.base_avatar, "image/jpeg", size, None)
     self.member.save()
     self.assertTrue(default_storage.exists(self.member.avatar.name))
     # reusing several times the same image which is renamed each time with a suffix
@@ -200,31 +212,31 @@ class ManagedMemberChangeTests(MemberViewTestMixin, MemberTestCase):
 
   def test_managed_change_view(self):
     # change the managed member data
-    edit_url = reverse('members:member_edit', kwargs={'pk': self.managed.id})
+    edit_url = reverse("members:member_edit", kwargs={"pk": self.managed.id})
     new_data = modify_member_data(self.managed)
     response = self.client.post(edit_url, new_data, follow=True)
     # print(response.content.decode())
     self.assertEqual(response.status_code, 200)
     self.managed.refresh_from_db()
-    self.assertEqual(self.managed.first_name, new_data['first_name'])
-    self.assertEqual(self.managed.phone, new_data['phone'])
-    self.assertEqual(self.managed.birthdate, new_data['birthdate'])
-    self.assertEqual(self.managed.email, new_data['email'])
+    self.assertEqual(self.managed.first_name, new_data["first_name"])
+    self.assertEqual(self.managed.phone, new_data["phone"])
+    self.assertEqual(self.managed.birthdate, new_data["birthdate"])
+    self.assertEqual(self.managed.email, new_data["email"])
 
     # chack that active members can't be changed
-    edit_url = reverse('members:member_edit', kwargs={'pk': self.active.id})
+    edit_url = reverse("members:member_edit", kwargs={"pk": self.active.id})
     new_data = modify_member_data(self.active)
     # for get
     response = self.client.get(edit_url, new_data, follow=True)
     self.assertEqual(response.status_code, 200)
     # self.print_response(response)
     self.assertContainsMessage(response, "error", _("You do not have permission to edit this member."))
-    self.assertRedirects(response, reverse('members:detail', kwargs={'pk': self.active.id}))
+    self.assertRedirects(response, reverse("members:detail", kwargs={"pk": self.active.id}))
     # and post
     response = self.client.post(edit_url, new_data, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertContainsMessage(response, "error", _("You do not have permission to edit this member."))
-    self.assertRedirects(response, reverse('members:detail', kwargs={'pk': self.active.id}))
+    self.assertRedirects(response, reverse("members:detail", kwargs={"pk": self.active.id}))
 
 
 class TestDisplayMembers(MemberTestCase):
@@ -237,70 +249,83 @@ class TestDisplayMembers(MemberTestCase):
 
   def test_view_one_member(self):
     member = self.members[3]
-    detail_url = reverse('members:detail', kwargs={'pk': member.id})
+    detail_url = reverse("members:detail", kwargs={"pk": member.id})
     response = self.client.get(detail_url)
     self.assertEqual(response.status_code, 200)
     # pprint(vars(response))
-    self.assertTemplateUsed(response, 'members/members/member_detail.html')
+    self.assertTemplateUsed(response, "members/members/member_detail.html")
     self.assertIs(response.resolver_match.func.view_class, MemberDetailView)
-    active = _("Active member") if member.is_active else _("Member managed by") + ' ' + member.member_manager.full_name
-    self.assertContains(response, f'''<p class="content small">{member.username}<br>( {active} )</p>''', html=True)
+    active = _("Active member") if member.is_active else _("Member managed by") + " " + member.member_manager.full_name
+    self.assertContains(response, f"""<p class="content small">{member.username}<br>( {active} )</p>""", html=True)
     bdate = localize(member.birthdate, use_l10n=True)
-    self.assertContains(response, f'''<tr>
+    self.assertContains(
+      response,
+      f"""<tr>
           <td class="content has-text-right">{_("Birthdate")}</td>
           <td class="content">{bdate}</td>
-        </tr>''', html=True)
+        </tr>""",
+      html=True,
+    )
 
   def test_display_members(self):
     response = self.client.get(reverse("members:members"))
-    html = response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '').replace('is-dark', '')
+    html = response.content.decode("utf-8").replace("is-link", "").replace("is-primary", "").replace("is-dark", "")
     # print(str(response.content))
     for i in range(len(self.members)):
-      avatar = '' if not self.members[i].avatar else f'''<figure class="image mini-avatar mr-2">
+      avatar = (
+        ""
+        if not self.members[i].avatar
+        else f'''<figure class="image mini-avatar mr-2">
                       <img class="is-rounded" src="{self.members[i].avatar_mini_url}">
                      </figure>'''
-      self.assertInHTML(f'''
+      )
+      self.assertInHTML(
+        f"""
   <div class="cell has-text-centered my-auto">
     <a class="button button-wrap" href="/members/{self.members[i].id}/">
       {avatar}
       <strong>{self.members[i].full_name}</strong>
     </a>
   </div>
-''', html)
+""",
+        html,
+      )
 
   def test_filter_members_display(self):
-
     def check_is_in(content, member):
-      self.assertInHTML(f'''<div class="cell has-text-centered my-auto">
-        <a class="button button-wrap" href="{reverse("members:detail", kwargs={'pk': member.id})}">
-          <strong>{member.full_name}</strong></a></div>''', content)
+      self.assertInHTML(
+        f'''<div class="cell has-text-centered my-auto">
+        <a class="button button-wrap" href="{reverse("members:detail", kwargs={"pk": member.id})}">
+          <strong>{member.full_name}</strong></a></div>''',
+        content,
+      )
 
     def check_is_not_in(content, member):
       # no assertNotContains or assertNotInHTML in django yet
-      self.assertNotIn(content, f'''<strong>{member.full_name}</strong>''')
-      self.assertNotIn(content, f'''href={reverse("members:detail", kwargs={'pk': member.id})}>''')
+      self.assertNotIn(content, f"""<strong>{member.full_name}</strong>""")
+      self.assertNotIn(content, f"""href={reverse("members:detail", kwargs={"pk": member.id})}>""")
 
     def filter_member(member, first_name=False, last_name=False):
       filter = {}
       if first_name:  # remove first 4 chars
         if type(first_name) is bool:
           first_name = member.first_name
-        filter['first_name_filter'] = first_name[4:]
+        filter["first_name_filter"] = first_name[4:]
       if last_name:
         if type(last_name) is bool:
           last_name = member.last_name
-        filter['last_name_filter'] = last_name[4:]
+        filter["last_name_filter"] = last_name[4:]
       response = self.client.get(reverse("members:members"), filter)
       # print(response.content)
       self.assertEqual(response.status_code, 200)
-      return response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '').replace('is-dark', '')
+      return response.content.decode("utf-8").replace("is-link", "").replace("is-primary", "").replace("is-dark", "")
 
     member1 = self.create_member()
     member2 = self.create_member()
     member3 = self.create_member()
     accented_member = get_new_member_data()
-    accented_filter = accented_member['first_name'] + 'exxx '
-    accented_member['first_name'] += 'éxxx'
+    accented_filter = accented_member["first_name"] + "exxx "
+    accented_member["first_name"] += "éxxx"
     member4 = self.create_member(accented_member)
     # can see all members when not filtered
     content = filter_member(None)
@@ -337,10 +362,10 @@ class TestDisplayMembers(MemberTestCase):
     check_is_in(content, member4)
 
   def _check_member_order(self, response, members):
-    html = response.content.decode('utf-8').replace('is-link', '').replace('is-primary', '').replace('is-dark', '')
-    content = ''
+    html = response.content.decode("utf-8").replace("is-link", "").replace("is-primary", "").replace("is-dark", "")
+    content = ""
     for m in members:
-      url = reverse('members:detail', kwargs={'pk': m.id})
+      url = reverse("members:detail", kwargs={"pk": m.id})
       name = m.full_name
       content += f'''<div class="cell has-text-centered my-auto">
         <a class="button button-wrap" href="{url}">
@@ -358,19 +383,19 @@ class TestDisplayMembers(MemberTestCase):
     self.create_member()
     self.create_member()
     # check default sort
-    response = self.client.get(reverse('members:members'))
+    response = self.client.get(reverse("members:members"))
     self.assertEqual(response.status_code, 200)
-    ms = Member.objects.all().order_by('last_name', 'first_name')
+    ms = Member.objects.all().order_by("last_name", "first_name")
     self._check_member_order(response, ms)
     # check sort by birthdate
-    response = self.client.get(reverse('members:members'), {'member_sort': 'birthdate'})
+    response = self.client.get(reverse("members:members"), {"member_sort": "birthdate"})
     self.assertEqual(response.status_code, 200)
-    ms = Member.objects.all().order_by('birthdate')
+    ms = Member.objects.all().order_by("birthdate")
     self._check_member_order(response, ms)
     # check reverse order
-    response = self.client.get(reverse('members:members'), {'member_sort': 'birthdate', 'member_order': 'option2'})
+    response = self.client.get(reverse("members:members"), {"member_sort": "birthdate", "member_order": "option2"})
     self.assertEqual(response.status_code, 200)
-    ms = Member.objects.all().order_by('-birthdate')
+    ms = Member.objects.all().order_by("-birthdate")
     self._check_member_order(response, ms)
 
 
@@ -387,15 +412,17 @@ class TestActivateManagedMember(MemberTestCase):
     self.assertEqual(len(mail.outbox), 1)
     email = mail.outbox[0]
     self.assertSequenceEqual(email.to, [managed.email])
-    self.assertEqual(email.subject, GetFieldFromSettings().get('subject'))
+    self.assertEqual(email.subject, GetFieldFromSettings().get("subject"))
     for content, type in email.alternatives:
-      if type == 'text/html':
+      if type == "text/html":
         break
-    s1 = _("You received this mail because you attempted to create an account on our website or "
-           "because a member created and activated your account")
+    s1 = _(
+      "You received this mail because you attempted to create an account on our website or "
+      "because a member created and activated your account"
+    )
     s2 = _("Please click on the link below to confirm the email and activate your account.")
-    self.assertInHTML(f'''<p class="mt-2">{s1}<br>{s2}</p>''', content)
-    url = reverse(verify_user_and_activate, args=['XXX_encoded_email__XXX', "XXX_token_XXX"])
+    self.assertInHTML(f"""<p class="mt-2">{s1}<br>{s2}</p>""", content)
+    url = reverse(verify_user_and_activate, args=["XXX_encoded_email__XXX", "XXX_token_XXX"])
     url = get_test_absolute_url(url.replace("/XXX_encoded_email__XXX/XXX_token_XXX", "")) + r'[^"]+'
     # print('url:', url, 'content', content)
     match = re.search(url, content)
@@ -403,8 +430,8 @@ class TestActivateManagedMember(MemberTestCase):
     url = match.group(0)
     # print('url:', url)
     response = self.client.get(url, follow=True)
-    tr1 = f'{_("Your Email is verified successfully and your account has been activated.")}'
-    tr2 = f'{_("You can sign in with your credentials now...")}'
+    tr1 = f"{_('Your Email is verified successfully and your account has been activated.')}"
+    tr2 = f"{_('You can sign in with your credentials now...')}"
     self.assertContains(response, f'<p class="content">{tr1}</p><p class="content">{tr2}</p>', html=True)
     managed.refresh_from_db()
     self.assertTrue(managed.is_active)
@@ -414,7 +441,7 @@ class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
   def get_dead_member_data(self):
     data = get_new_member_data()
     # set death date 5 days ago
-    data['deathdate'] = today_minus('5d')
+    data["deathdate"] = today_minus("5d")
     return data
 
   def check_dead_member(self, member):
@@ -438,10 +465,10 @@ class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
   def test_update_dead_member(self):
     user = self.create_member()
     # change the managed member data
-    edit_url = reverse('members:member_edit', kwargs={'pk': user.id})
+    edit_url = reverse("members:member_edit", kwargs={"pk": user.id})
     new_data = modify_member_data(user)
     # set deathdate
-    new_data['deathdate'] = today_minus('5d')
+    new_data["deathdate"] = today_minus("5d")
     response = self.client.post(edit_url, new_data, follow=True)
     # print(response.content.decode())
     self.assertEqual(response.status_code, 200)
@@ -449,25 +476,33 @@ class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
     self.check_dead_member(user)
 
     # check that dead members can't be activated
-    activate_url = reverse('members:activate', kwargs={'pk': user.id})
+    activate_url = reverse("members:activate", kwargs={"pk": user.id})
     response = self.client.get(activate_url, follow=True)
     self.assertEqual(response.status_code, 200)
     # self.print_response(response)
     self.assertContainsMessage(response, "error", _("Error: Cannot activate a dead member "))
-    self.assertRedirects(response, reverse('members:detail', kwargs={'pk': user.id}))
+    self.assertRedirects(response, reverse("members:detail", kwargs={"pk": user.id}))
 
   def test_display_dead_members(self):
     data = self.get_dead_member_data()
     dead = self.create_member(data)
     self.check_dead_member(dead)
-    dead_url = reverse('members:detail', kwargs={'pk': dead.id})
+    dead_url = reverse("members:detail", kwargs={"pk": dead.id})
     response = self.client.get(dead_url, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertContains(response, '''<span class="icon is-large">
+    self.assertContains(
+      response,
+      """<span class="icon is-large">
     <i class="mdi mdi-24px mdi-shield-cross-outline" aria-hidden="true"></i>
-</span>''', html=True)
+</span>""",
+      html=True,
+    )
     deathdate = localize(dead.deathdate, use_l10n=True)
-    self.assertContains(response, f'''<tr>
+    self.assertContains(
+      response,
+      f"""<tr>
     <td class="content has-text-right">{_("Deceased on")}</td>
     <td class="content">{deathdate}</td>
-  </tr>''', html=True)
+  </tr>""",
+      html=True,
+    )

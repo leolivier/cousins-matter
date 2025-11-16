@@ -9,7 +9,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from PIL import Image, ImageOps
 from io import BytesIO
 from django.forms import ValidationError
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, gettext_lazy
 from django_q.tasks import Task
 
 from .models import Gallery, Photo
@@ -57,7 +57,7 @@ def create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
   """
   # compute all needed fields
   filename_wo_ext, _ = os.path.splitext(filename)
-  description = _("Imported from zipfile directory %(path)s") % {"path": filename}
+  description = gettext_lazy("Imported from zipfile directory %(path)s") % {"path": filename}
 
   # create photo using an in memory buffer (BytesIO)
   membuffer = BytesIO()
@@ -107,8 +107,13 @@ def handle_photo_file(zimport: ZipImport, dir: str, image: str, gallery_id: str)
     # print an error but continue with next photo
     error_msg = _("Unable to import photo '%(path)s', it was ignored") % {"path": os.path.relpath(filepath, zimport.root)}
     errors.append(f"""{error_msg}: {oserror.strerror}""")
+    logger.exception(f"Error while importing photo {filepath}", exc_info=True)
   except ValidationError as verr:
     errors.extend(verr.messages)
+    logger.exception(f"Error while importing photo {filepath}", exc_info=True)
+  except Exception as e:
+    errors.append(str(e))
+    logger.exception(f"Error while importing photo {filepath}", exc_info=True)
 
   return photo_path, errors
 

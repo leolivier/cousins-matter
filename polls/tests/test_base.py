@@ -43,7 +43,7 @@ class PollTestBase(MemberTestCase):
 
     def random_choice(self, possible_choices, nb):
         max = len(possible_choices)
-        rnd_idx = random.randint(0, max-1)
+        rnd_idx = random.randint(0, max - 1)
         return [possible_choices[(rnd_idx + i) % max] for i in range(nb)]
 
 
@@ -158,7 +158,7 @@ class EventPlannerTestMixin(PollTestBase):
 
     def get_possible_dates(self):
         now = timezone.now()
-        dates = [now + datetime.timedelta(days=i+1, hours=i+1) for i in range(6)]
+        dates = [now + datetime.timedelta(days=i + 1, hours=i + 1) for i in range(6)]
         return [datetime.datetime.strftime(date, "%Y-%m-%d %H:%M") for date in dates]
 
     def create_event_planner(self, title, description, open_to=Poll.OPEN_TO_ACTIVE,

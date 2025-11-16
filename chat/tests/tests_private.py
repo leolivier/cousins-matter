@@ -146,7 +146,7 @@ class PrivateChatRoomTests(PrivateChatRoomTestsMixin, MemberTestCase):
     with self.assertRaises(ValidationError):
       ChatRoom.objects.create(name=room_name)
     # and finally, try with a different room name but which has the same slug
-    new_room_name = '#'+room_name+'!'
+    new_room_name = '#' + room_name + '!'
     new_slug = slugify(new_room_name)
     self.assertEqual(new_slug, slug)
     url = reverse('chat:new_private_room') + '?' + urlencode({'name': new_room_name})

@@ -28,7 +28,7 @@ class ChatMessageSenderMixin(object):
         path=f"/chat/{room_slug}",
     )
     communicator.scope['user'] = user_obj
-    connected, subprotocol = await communicator.connect()
+    connected, _ = await communicator.connect()
     self.assertTrue(connected)
     # Test sending data as text
     await communicator.send_json_to(data)

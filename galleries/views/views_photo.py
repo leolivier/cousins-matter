@@ -67,7 +67,7 @@ def get_photo_url(request, gallery, photo_idx=1):
   nb_photos = Photo.objects.filter(gallery=gallery).count()
   if photo_idx > nb_photos:
     return JsonResponse({'results': []})
-  photo = Photo.objects.filter(gallery=gallery)[photo_idx-1]
+  photo = Photo.objects.filter(gallery=gallery)[photo_idx - 1]
   return JsonResponse({'pk': photo.id, 'image_url': protected_media_url(photo.image.name)})
 
 

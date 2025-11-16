@@ -38,12 +38,12 @@ class TestBirthdaysMixin():
     self.check_birthday(member, 'danger', b_is_today, with_icons=True, response=response, reversed=reversed)
 
   def check_birthdays_tomorrow(self, member, response=None, reversed=False):
-    b_is_tomorrow = _("will turn %(age)s tomorrow, happy birthday!") % {'age': member.age+1}
+    b_is_tomorrow = _("will turn %(age)s tomorrow, happy birthday!") % {'age': member.age + 1}
     self.check_birthday(member, 'warning', b_is_tomorrow, with_icons=True, response=response, reversed=reversed)
 
   def check_birthdays_after_tomorrow(self, member, response=None, reversed=False):
     b_date = date_format(member.next_birthday, "l d F", use_l10n=True)
-    b_is_after = _("will turn %(age)s on %(birthday)s") % {'age': member.age+1, 'birthday': b_date}
+    b_is_after = _("will turn %(age)s on %(birthday)s") % {'age': member.age + 1, 'birthday': b_date}
     self.check_birthday(member, 'link', b_is_after, with_icons=False, response=response, reversed=reversed)
 
   def check_no_birthdays(self, response=None, reversed=False):

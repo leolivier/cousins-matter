@@ -59,7 +59,7 @@ def download_protected_media(request, media):
   if request_etag and request_etag == media_etag:
       return HttpResponseNotModified()
 
-  chunk_size = 64*1024
+  chunk_size = 64 * 1024
   try:
     media_file = default_storage.open(media, "rb")
     response = StreamingHttpResponse(

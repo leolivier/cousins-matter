@@ -101,7 +101,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
     """
     if page_num == 1:
       for i in range(nb_photos):
-        image = create_test_image(__file__, f"test-image-{i+1}.jpg")
+        image = create_test_image(__file__, f"test-image-{i + 1}.jpg")
         p = Photo(name=get_photo_name(), gallery=gallery, date=date.today(), image=image)
         p.save()
     photos = Photo.objects.filter(gallery=gallery)[first:last]
@@ -113,9 +113,9 @@ class CreatePhotoViewTests(PhotoTestsBase):
     for idx, p in enumerate(photo_dicts):
       pmu = protected_media_url(p['image'].name)
       if idx > 0:
-        photo_dicts[idx-1]['next_url'] = pmu
+        photo_dicts[idx - 1]['next_url'] = pmu
       if idx < nb_dicts - 1:
-        photo_dicts[idx+1]['previous_url'] = pmu
+        photo_dicts[idx + 1]['previous_url'] = pmu
 
     # print('first, last, nb_photos:', first, last, nb_photos)
 

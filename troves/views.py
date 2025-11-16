@@ -18,9 +18,11 @@ def trove_cave(request, page=1):
     category = request.GET.get('category')
     if category and category in dict(Trove.CATEGORY_CHOICES).keys():
         treasures = Trove.objects.filter(category=category).order_by('id')
+
         def compute_link(idx): return reverse('troves:page', args=[idx]) + '?' + urlencode({'category': category})
     else:
         treasures = Trove.objects.all().order_by('category', 'id')
+
         def compute_link(idx): return reverse('troves:page', args=[idx])
     try:
         trove_page = Paginator.get_page(request, object_list=treasures,

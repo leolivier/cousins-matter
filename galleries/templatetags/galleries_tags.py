@@ -26,8 +26,8 @@ def complete_photos_data(page, page_num, num_pages):
 
     photos_dict[idx] = {"id": p.id, "name": p.name, "image_url": pmu, "thumbnail_url": tmu}
     if idx > 0:
-      photos_dict[idx-1]['next_url'] = pmu
-      photos_dict[idx]['previous_url'] = photos_dict[idx-1]['image_url']
+      photos_dict[idx - 1]['next_url'] = pmu
+      photos_dict[idx]['previous_url'] = photos_dict[idx - 1]['image_url']
 
       if idx == len(page.object_list) - 1 and page_num != num_pages:
         # last photo of the page and not last page ==> take the next photo

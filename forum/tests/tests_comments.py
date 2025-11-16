@@ -55,7 +55,7 @@ class CommentCreateTestCase(ForumTestCase):
     response = self.client.post(url, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
     self.assertEqual(response.status_code, 200)
     new_cnt = Comment.objects.filter(message=self.message.id).count()
-    self.assertEqual(new_cnt, cnt-1)
+    self.assertEqual(new_cnt, cnt - 1)
     self.assertJSONEqual(
             str(response.content, encoding='utf8'),
             {'comment_id': comment.id}

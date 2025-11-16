@@ -81,7 +81,7 @@ class MessageStatus(Enum):
 class ChatMessage(models.Model):
   member = models.ForeignKey(Member, on_delete=models.CASCADE)
   room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
-  content = models.TextField(_('message'), max_length=2*1024*1024)
+  content = models.TextField(_('message'), max_length=2 * 1024 * 1024)
   date_added = models.DateTimeField(auto_now_add=True)
   date_modified = models.DateTimeField(null=True, blank=True)
 

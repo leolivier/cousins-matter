@@ -173,8 +173,8 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     rg = Gallery(name=gal_name)
     rg.save()
     # add 3 photos in it
-    photos = [Photo(name=f'Photo#{i+1}',
-                    image=create_test_image(__file__, f'test-image-{i+1}.jpg'),
+    photos = [Photo(name=f'Photo#{i + 1}',
+                    image=create_test_image(__file__, f'test-image-{i + 1}.jpg'),
                     date=date.today(), gallery=rg)
               for i in range(3)]
     for p in photos:
@@ -211,7 +211,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     gal = Gallery(name=name, parent=parent, description=f'a test gallery named {name}')
     gal.save()
     url = reverse("galleries:detail", args=[gal.id])
-    left_margin = ''.join(['<div class="ml-6">&nbsp;</div>' for i in range(N-1)]) + \
+    left_margin = ''.join(['<div class="ml-6">&nbsp;</div>' for i in range(N - 1)]) + \
       f'<div class="ml-6">{icon("menu-right")}</div>' if N else ''
 
     html = f'''
@@ -228,7 +228,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     </p>
   </a>
 </div>
-{self.rec_build_tree(n-1, N+1, gal)}
+{self.rec_build_tree(n - 1, N + 1, gal)}
 '''
     return html
 
@@ -250,7 +250,7 @@ class DeleteGalleryViewTest(GalleryBaseTestCase):
     gal.save()
     p = Photo(name=get_gallery_name(), gallery=gal, date=date.today(), image=image)
     p.save()
-    res = self.rec_build_tree(n-1, gal, image)
+    res = self.rec_build_tree(n - 1, gal, image)
     return [(gal.id, p.id)] + res
 
   def test_delete_gallery(self):

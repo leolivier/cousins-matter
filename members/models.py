@@ -122,7 +122,7 @@ class Member(AbstractUser):
 
     family = models.ForeignKey(Family, verbose_name=_('Family'), on_delete=models.CASCADE, null=True, blank=True)
 
-    description = models.TextField(_("Who I am"), max_length=2*1024*1024, blank=True, null=True,
+    description = models.TextField(_("Who I am"), max_length=2 * 1024 * 1024, blank=True, null=True,
                                    help_text=_("Describe yourself, your likes and dislikes..."))
     hobbies = models.CharField(_("My hobbies"), blank=True, null=True, max_length=256,
                                help_text=_("Provide a list of hobbies separated by commas"))
@@ -197,7 +197,7 @@ class Member(AbstractUser):
     def age(self) -> int:
       today = datetime.date.today()
       years = today.year - self.birthdate.year
-      return years if (today >= self.next_birthday) else years-1
+      return years if (today >= self.next_birthday) else years - 1
 
     def get_manager(self):
       return self.member_manager if self.member_manager else self

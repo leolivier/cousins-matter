@@ -164,7 +164,7 @@ def upload_progress(request, id):
         for err in errors:
           zimport.errors.add(err)
   context = {"hx_get": request.get_full_path(), "frequency": "1s",
-             "value": value, "max": max, "text": str(int(value*100/max)) + "%",
+             "value": value, "max": max, "text": str(int(value * 100 / max)) + "%",
              "processed_objects": zimport.photos, "errors": zimport.errors}
   if value == max:  # reached the end
     context["back_url"] = reverse('galleries:galleries')

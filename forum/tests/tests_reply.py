@@ -52,7 +52,7 @@ class PostReplyTestCase(ForumTestCase):
     response = self.client.post(url, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
     self.assertEqual(response.status_code, 200)
     new_cnt = Message.objects.filter(post=self.post.id).count()
-    self.assertEqual(new_cnt, cnt-1)
+    self.assertEqual(new_cnt, cnt - 1)
     self.assertJSONEqual(
             str(response.content, encoding='utf8'),
             {'reply_id': msg.id}

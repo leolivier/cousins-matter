@@ -118,9 +118,9 @@ class MemberTestCase(TestCase):
 
   @staticmethod
   def print_response(response):
-    print('*'*80)
+    print('*' * 80)
     print(response.content.decode().replace('\\t', '\t').replace('\\n', '\n'))
-    print('*'*80)
+    print('*' * 80)
 
   def current_user(self):
     return get_user(self.client)

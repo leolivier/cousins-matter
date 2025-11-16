@@ -39,7 +39,7 @@ class TestImportMixin():
     response = self.do_upload_file(file, lang, activate_users)
     self.assertEqual(response.status_code, 200)
     # Check that expected_num members were imported
-    self.assertEqual(Member.objects.count(), prev_num+expected_num)
+    self.assertEqual(Member.objects.count(), prev_num + expected_num)
     # Check that specific members were created
     for member in Member.objects.all():
       print(member)
@@ -51,7 +51,7 @@ class TestImportMixin():
     if not check_active:
       return
     for i in range(4):
-      name = member_prefix + str(i+1)
+      name = member_prefix + str(i + 1)
       # print("name=", name)
       m = Member.objects.get(username=name)
       if activate_users:
@@ -113,7 +113,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
                         expected_num=0 if update else 4, member_prefix='member-mngd',
                         activate_users=activate_users, check_active=False)
     for i in range(4):
-      name = f'member-mngd{str(i+1)}'
+      name = f'member-mngd{str(i + 1)}'
       m = Member.objects.get(username=name)
       if expected_result[name]['manager'] is None:
         self.assertIsNone(m.member_manager)
@@ -143,7 +143,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
 
   def create_members(self, nb_members=4, activate_users=False):
     for i in range(nb_members):
-      member_data = get_new_member_data(username=f'member-mngd{str(i+1)}')
+      member_data = get_new_member_data(username=f'member-mngd{str(i + 1)}')
       self.create_member(member_data=member_data, is_active=activate_users)
 
   def test_update_import_manager_activation2(self):

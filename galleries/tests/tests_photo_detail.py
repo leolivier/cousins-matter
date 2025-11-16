@@ -21,8 +21,8 @@ class PhotoDetailTest(GalleryBaseTestCase):
     self.gallery.save()
     self.photos = []
     for i in range(self.nb_photos):
-      image = create_test_image(__file__, f"test-image-{i+1}.jpg")
-      p = Photo(name=f'photo #{i+1}', gallery=self.gallery, date=date.today(), image=image)
+      image = create_test_image(__file__, f"test-image-{i + 1}.jpg")
+      p = Photo(name=f'photo #{i + 1}', gallery=self.gallery, date=date.today(), image=image)
       p.save()
       self.photos.append(p)
     self.photo = self.photos[self.position]
@@ -41,7 +41,7 @@ class PhotoDetailTest(GalleryBaseTestCase):
   def test_photo_detail_with_gallery_and_num(self):
     # print("gal&num: id:", self.photo.id, "position:", self.position, "max pos:", len(self.photos) - 1)
     response = self.client.get(
-      reverse('galleries:gallery_photo_url', args=[self.gallery.id, self.position+1]),
+      reverse('galleries:gallery_photo_url', args=[self.gallery.id, self.position + 1]),
       **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
     )
     self.assertEqual(response.status_code, 200)

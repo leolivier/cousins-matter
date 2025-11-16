@@ -66,8 +66,8 @@ def assert_request_is_ajax(request):
 
 def check_file_size(file, limit):
     if file.size > limit:
-        limitmb = math.floor(limit*100/(1024*1024))/100
-        sizemb = math.floor(file.size*100/(1024*1024))/100
+        limitmb = math.floor(limit * 100 / (1024 * 1024)) / 100
+        sizemb = math.floor(file.size * 100 / (1024 * 1024)) / 100
         filename = file.name
         raise ValidationError(_("Uploaded file %(filename)s is too big (%(sizemb)sMB), maximum is %(limitmb)sMB.") %
                               {'filename': filename, 'sizemb': sizemb, 'limitmb': limitmb})
@@ -99,12 +99,12 @@ class Paginator(paginator.Paginator):
         page_num = min(page_num, self.num_pages)
         page = self.page(page_num)
         # compute a page range from the initial range + or -max-pages
-        page.first = max(0, page_num-self.max_pages-1)
-        page.last = min(self.num_pages+1, page_num+self.max_pages)
+        page.first = max(0, page_num - self.max_pages - 1)
+        page.last = min(self.num_pages + 1, page_num + self.max_pages)
         if page.first == 0:
-            page.last = min(self.num_pages, 2*self.max_pages)+1
-        elif page.last == self.num_pages+1:
-            page.first = max(0, page.last-2*self.max_pages-1)
+            page.last = min(self.num_pages, 2 * self.max_pages) + 1
+        elif page.last == self.num_pages + 1:
+            page.first = max(0, page.last - 2 * self.max_pages - 1)
         page.page_range = self.page_range[page.first:page.last]
         page.num_pages = self.num_pages
         # compute page links
@@ -305,7 +305,7 @@ def translate_date_format(format_string):
     while i < len(format_string):
         if format_string[i] == '%':
             if i + 1 < len(format_string):
-                code = format_string[i:i+2]
+                code = format_string[i:i + 2]
                 # Handle the double percentage '%%' which means a literal '%'.
                 if code == '%%':
                     translated_parts.append('%')
@@ -346,7 +346,7 @@ def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFil
 
     output_thumb = BytesIO()
     filename = image.name.split('/')[-1]
-    file, ext = os.path.splitext(filename)
+    file, _ = os.path.splitext(filename)
     # ISSUE WITH Image.open() which raises "ValueError: seek on closed file" in some circumstances
     if image.file.closed:
         image.file = default_storage.open(image.name, 'rb')
@@ -366,12 +366,12 @@ def protected_media_url(media):
     media = str(media)
     # print("media=", media, "settings.MEDIA_ROOT=", settings.MEDIA_ROOT)
     if media.startswith(str(settings.MEDIA_ROOT)):
-        media = media[len(str(settings.MEDIA_ROOT))+1:]
+        media = media[len(str(settings.MEDIA_ROOT)) + 1:]
     else:
         # for a file in base_dir/media when MEDIA_ROOT has been changed
         p = str(settings.BASE_DIR / settings.MEDIA_REL)
         if media.startswith(p):
-            media = media[len(p)+1:]
+            media = media[len(p) + 1:]
     return reverse('get_protected_media', args=[quote(media)])
 
 

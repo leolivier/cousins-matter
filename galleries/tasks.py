@@ -55,7 +55,7 @@ def create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
   with the new image and date.
   """
   # compute all needed fields
-  filename_wo_ext, ext = os.path.splitext(filename)
+  filename_wo_ext, _ = os.path.splitext(filename)
   description = _('Imported from zipfile directory %(path)s') % {'path': filename}
 
   # create photo using an in memory buffer (BytesIO)

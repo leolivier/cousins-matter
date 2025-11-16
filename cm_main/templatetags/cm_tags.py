@@ -82,7 +82,7 @@ def get_view(parser, token):
 
     for t in tokens[2:]:
         kw = t.find("=")
-        args.append(t) if kw == -1 else kwargs.update({str(t[:kw]): t[kw+1:]})
+        args.append(t) if kw == -1 else kwargs.update({str(t[:kw]): t[kw + 1:]})
     # print(kwargs)
 
     return ViewNode(tokens[1], args, kwargs)
@@ -136,8 +136,8 @@ def paginate(page, no_per_page=False):
         "page_range": page.page_range,
         "first_page_url": page.first_page_link,
         "last_page_url": page.last_page_link,
-        "prev_page_url": page.page_links[page.number-page.first-2] if page.has_previous() else None,
-        "next_page_url": page.page_links[page.number-page.first] if page.has_next() else None,
+        "prev_page_url": page.page_links[page.number - page.first - 2] if page.has_previous() else None,
+        "next_page_url": page.page_links[page.number - page.first] if page.has_next() else None,
         "current_page": page.number,
         "possible_per_pages": page.possible_per_pages,
         "page_size": page.paginator.per_page,

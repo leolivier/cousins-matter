@@ -32,7 +32,7 @@ class TestDisplayPollInfo(PollTestMixin):
             answer = next((a for a in answers if a.poll_answer == poll_answer), None)
             match question.question_type:
                 case Question.YESNO_QUESTION:
-                    result = sum(1 for a in answers if a.answer)/len(answers)
+                    result = sum(1 for a in answers if a.answer) / len(answers)
                     result = f"{result:.1%}"
                 case Question.DATE_QUESTION:
                     result = "<br><hr>".join([formats.date_format(timezone.localtime(a.answer), "DATETIME_FORMAT")
@@ -42,13 +42,13 @@ class TestDisplayPollInfo(PollTestMixin):
                 case Question.SINGLECHOICE_QUESTION:
                     choice_results = {}
                     for choice in question.possible_choices:
-                        choice_results[choice] = sum(1 for a in answers if a.answer == choice)/len(answers)
+                        choice_results[choice] = sum(1 for a in answers if a.answer == choice) / len(answers)
                     result = '<br><hr>'.join([f"{choice}: {choice_results[choice]:.1%}"
                                               for choice in question.possible_choices])
                 case Question.MULTICHOICES_QUESTION:
                     choice_results = {}
                     for choice in question.possible_choices:
-                        choice_results[choice] = sum(1 for a in answers if choice in a.answer)/len(answers)
+                        choice_results[choice] = sum(1 for a in answers if choice in a.answer) / len(answers)
                     result = '<br><hr>'.join([f"{choice}: {choice_results[choice]:.1%}"
                                               for choice in question.possible_choices])
 

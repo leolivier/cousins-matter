@@ -53,7 +53,7 @@ def import_csv(csv_file, task_group, user_id, activate_users):
   check_fields(reader.fieldnames)
   broker = get_broker()
   for row in reader:
-    logger.debug(f"create task #{import_context.rows_num+1} for importing row: {row}")
+    logger.debug(f"create task #{import_context.rows_num + 1} for importing row: {row}")
     async_task('members.tasks.import_row', import_context, row, broker=broker, group=task_group)
     import_context.rows_num += 1
   logger.info("importing %d rows", import_context.rows_num)
@@ -126,7 +126,7 @@ def import_progress(request, id):
       warnings.append(row_data.warnings)
       users.append(row_data.current_member.username)
   context = {"hx_get": request.get_full_path(), "frequency": "1s",
-             "value": value, "max": max, "text": str(int(value*100/max)) + "%",
+             "value": value, "max": max, "text": str(int(value * 100 / max)) + "%",
              "processed_objects": users, "errors": errors, "warnings": warnings}
   if value == max:  # reached the end
     context["back_url"] = reverse('members:members')

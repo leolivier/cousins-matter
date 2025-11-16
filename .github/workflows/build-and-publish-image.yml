@@ -164,7 +164,8 @@ jobs:
         if: failure()
         run: |
           docker ps
-          docker compose logs
+          docker logs cousins-matter.db
+          docker logs cousins-matter
   
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3

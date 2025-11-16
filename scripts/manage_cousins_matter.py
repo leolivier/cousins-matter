@@ -358,7 +358,7 @@ def check_permissions(directory: Path):
     finally:
         if warn:
             warning(f"media directory {media_dir} and ALL its subdirectories must be owned and writable by user 1000")
-            warning("Please, run the 2 following commands before tryning to start Cousins Matter:")
+            warning("Please, run the 2 following commands before trying to start Cousins Matter:")
             print(f'{ON_WHITE}sudo chown -R 1000:1000 {media_dir}{NC}')
             print(f'{ON_WHITE}sudo chmod -R u+w {media_dir}{NC}')
 
@@ -456,6 +456,9 @@ def migrate_v1_v2(args):
 
     verbose("Migrating database...")
     migrate_sqlite3_to_postgres(pg_pwd)
+
+    verbose("Pulling new docker images...")
+    run(["docker", "compose", "pull"])
 
 
 ####################################

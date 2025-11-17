@@ -284,7 +284,7 @@ def main():
     logger.error(f"Unexpected error during initialization: {e}")
     sys.exit(1)
   finally:
-    cleanup()
+    release_lock()
 
 
 if __name__ == "__main__":

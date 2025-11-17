@@ -110,6 +110,12 @@ jobs:
           EMAIL_HOST_PASSWORD=no matter
           POSTGRES_PASSWORD=
           Q_SYNC=True
+          ADMIN=admin
+          ADMIN_PASSWORD=admin
+          ADMIN_EMAIL=3eK6F@example.com
+          ADMIN_FIRST_NAME=Ahd
+          ADMIN_LAST_NAME=Mihn
+          ADMIN_BIRTHDATE=2000-01-01
           EOF
 
       - name: export COUSINS_MATTER_IMAGE in environment

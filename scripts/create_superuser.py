@@ -25,6 +25,7 @@ def error(code: int, *msg: str) -> None:
 
 def create_superuser_from_env():
   """Create a Django superuser based on environment variables stored in .env file."""
+
   from members.models import Member
 
   env = environ.Env()
@@ -51,6 +52,12 @@ def create_superuser_from_env():
     error(3, f"Superuser creation failed: user {username} does not exist")
 
   logger.info("Superuser created successfully")
+
+
+def has_superuser():
+  from members.models import Member
+
+  return Member.objects.filter(is_superuser=True).exists()
 
 
 if __name__ == "__main__":

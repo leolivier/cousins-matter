@@ -15,6 +15,7 @@ import django
 import environ
 import logging
 import os
+import redis
 import signal
 import sys
 import time
@@ -25,10 +26,25 @@ from django.conf import settings
 
 # from cousinsmatter import settings as cousinsmatter_defaults
 from django.core.management import call_command, CommandError
-from .create_superuser import create_superuser_from_env
+from .create_superuser import create_superuser_from_env, has_superuser
 
 logger = logging.getLogger(f"{__name__}/{sys.argv[1]}")
-INIT_IN_PROGRESS_DIR = None  # set in acquire_lock
+
+# Locking management
+INIT_LOCK_KEY = "CM__init_lock__"
+FIRST_RUN_LOCK_KEY = "CM__first_run_lock__"
+LOCK_TIMEOUT_SECONDS = 60  # Safety
+REDIS_SINGLETON = None  # used only in get_redis()
+
+
+def get_redis():
+  global REDIS_SINGLETON
+  if REDIS_SINGLETON is None:
+    REDIS_SINGLETON = redis.Redis(
+      host=settings.Q_CLUSTER["redis"]["host"],
+      port=settings.Q_CLUSTER["redis"]["port"],
+    )
+  return REDIS_SINGLETON
 
 
 class InitException(Exception):
@@ -36,16 +52,6 @@ class InitException(Exception):
     self.message = message
     self.code = code
     super().__init__(message)
-
-
-def cleanup():
-  """Remove lock dir if present."""
-  try:
-    if INIT_IN_PROGRESS_DIR.exists():
-      INIT_IN_PROGRESS_DIR.rmdir()
-      logger.debug(f"Removed lock {INIT_IN_PROGRESS_DIR}")
-  except Exception as e:
-    logger.error(f"Warning: Could not remove {INIT_IN_PROGRESS_DIR}: {e}")
 
 
 def signal_handler(signum, frame):
@@ -58,66 +64,46 @@ def signal_handler(signum, frame):
       logger.warn(f"\nReceived signal {signum}, cleaning up...")
   except Exception:
     logger.warn(f"\nReceived signal {signum}, cleaning up...")
-  cleanup()
-  sys.exit(1)
 
-
-def wait_init_and_exec(wait_time=10):
-  """Wait for initialization to complete or timeout and exec CMD if no timeout"""
-  logger.info(f"Waiting (max {wait_time} seconds)...")
-
-  for i in range(1, wait_time + 1):
-    if not INIT_IN_PROGRESS_DIR.exists():
-      logger.info("Initialization completed by another process.")
-      exec_docker_cmd()
-    time.sleep(1)
-
-  logger.error(f"Init not finished in {wait_time} seconds, please remove {INIT_IN_PROGRESS_DIR} manually. Exiting...")
+  release_lock()
   sys.exit(1)
 
 
 def acquire_lock():
   """
-  Try to acquire initialization leadership via atomic mkdir creation.
-        If mkdir succeeds, we are the leader, otherwise, we wait for the lock to be released and exit.
+  Tries to acquire initialization leadership via a lock in Redis.
+  Returns True if the lock was acquired, False if it was not.
   """
-  global INIT_IN_PROGRESS_DIR
-  try:
-    INIT_IN_PROGRESS_DIR = settings.BASE_DIR / "config" / ".init_in_progress"  # lock dir
-    INIT_IN_PROGRESS_DIR.mkdir()
-    logger.info("Initialization lock acquired.")
-  except FileExistsError:
-    logger.info("Failed to acquire lock: Another container is already initializing the environment.")
-    wait_init_and_exec(20)
-
-
-def first_run_init():
-  """Check if this is first run by trying to create avatars directory
-  if first run, create other needed directories and files
-  """
-  first_run_lock_dir = settings.BASE_DIR / "config" / ".first_run_done"  # lock dir
-  try:
-    # will raise FileExistsError if it already exists
-    # and FileNotFoundError if MEDIA_ROOT does not exist
-    first_run_lock_dir.mkdir()
-
-    # First run setup
-    logger.debug("Setting up directories for first run...")
-    avatars_dir = settings.MEDIA_ROOT / settings.AVATARS_DIR
-    avatars_dir.mkdir(parents=True, exist_ok=True)
-    settings.PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
-    theme_css = settings.PUBLIC_MEDIA_ROOT / "theme.css"
-    theme_css.touch()
-    logger.info("Created media subdirectories and theme.css file.")
+  # Attempts to set a lock (SETNX) with an expiration (ex)
+  # nx=True -> Only create the key if it does not exist
+  # ex=60 -> The key will expire after LOCK_TIMEOUT_SECONDS seconds (to prevent permanent lockouts).
+  if get_redis().set(INIT_LOCK_KEY, "in_progress", nx=True, ex=LOCK_TIMEOUT_SECONDS):
+    # We got the lock!
+    logger.info("Lock acquired. Running init tasks...")
     return True
-  except FileExistsError:
-    logger.info("This is not the first run. Skipping first run init...")
-    stats = first_run_lock_dir.stat()
-    logger.info(f"First run lock directory {first_run_lock_dir} stats: {stats}")
+  else:
+    # The lock is already taken.
+    logger.info("Another process is running init. Waiting...")
     return False
-  except FileNotFoundError as e:
-    logger.exception("File not found", exc_info=e)
-    sys.exit(1)
+
+
+def release_lock():
+  get_redis().delete(INIT_LOCK_KEY)
+  logger.info("Init finished. Lock released.")
+
+
+def wait_for_lock(wait_time=20):
+  """Wait for initialization to complete or timeout"""
+  logger.info(f"Waiting (max {wait_time} seconds)...")
+
+  for i in range(wait_time):
+    if not get_redis().exists(INIT_LOCK_KEY):
+      logger.info("Init finished by another process. Starting.")
+      return True  # It's okay, the init is done.
+    time.sleep(1)
+
+  logger.error(f"Init not finished in {wait_time}s. Exiting.")
+  sys.exit(1)
 
 
 def check_db_connection():
@@ -137,14 +123,16 @@ def wait_for_db():
     try:
       # Try to connect to the database
       check_db_connection()
-      logger.info("Database is ready!")
+      # try to ping redis
+      get_redis().ping()
+      logger.info("Postgres and Redis are ready!")
       return
     except OperationalError as e:
       if i < MAX_RETRIES - 1:
-        logger.debug(f"Database unavailable ({i + 1}/{MAX_RETRIES}), waiting {RETRY_DELAY} seconds...")
+        logger.debug(f"Postgres and/or Redis unavailable ({i + 1}/{MAX_RETRIES}), waiting {RETRY_DELAY} seconds...")
         time.sleep(RETRY_DELAY)
       else:
-        logger.error(f"Error: Database connection failed after {MAX_RETRIES * RETRY_DELAY} seconds.")
+        logger.error(f"Error: Postgres and/or Redis connection failed after {MAX_RETRIES * RETRY_DELAY} seconds.")
         logger.exception("Last error:", exc_info=e)
         raise InitException("Error: cannot connect to database.", 1)
 
@@ -182,8 +170,11 @@ def run_check_deploy():
 def run_create_superuser():
   """Create superuser using environment variables"""
   try:
-    logger.info("Creating superuser...")
-    create_superuser_from_env()
+    if not has_superuser():
+      logger.info("Creating superuser...")
+      create_superuser_from_env()
+    else:
+      logger.info("Superuser already exists.")
   except CommandError as e:
     logger.error(f"Error creating superuser: {e}")
     sys.exit(1)
@@ -220,23 +211,22 @@ def initialize_environment():
   signal.signal(signal.SIGHUP, signal_handler)
   signal.signal(signal.SIGQUIT, signal_handler)
 
-  # Try to acquire lock using mkdir
-  acquire_lock()
-  # will never come here if the lock is not acquired
-  try:
-    first_run = first_run_init()
-    wait_for_db()  # here, or before acquire_lock() ?
-    run_migrations()
-    run_collectstatic()
-    run_check_deploy()
-    if first_run:
+  wait_for_db()
+  if acquire_lock():  # we got the lock, we can do the init
+    try:
+      run_migrations()
+      run_collectstatic()
+      run_check_deploy()
       run_create_superuser()
 
-    logger.info("Environment is ready...")
+      logger.info("Environment is ready...")
 
-  finally:
-    # Cleanup is handled by signal handlers and this ensures cleanup on normal exit
-    cleanup()
+    finally:
+      # Release the acquired lock
+      release_lock()
+
+  else:
+    wait_for_lock(20)
 
 
 def exec_docker_cmd():

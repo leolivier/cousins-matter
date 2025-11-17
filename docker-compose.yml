@@ -16,6 +16,7 @@ services:
       - ./media:/app/media
       - ./static:/app/static
       - ./.env:/app/.env
+      - config-lock-volume:/app/config
     healthcheck:
       test: ["CMD-SHELL", "python /app/scripts/healthcheck.py"]
       interval: 30s
@@ -40,6 +41,7 @@ services:
       - ./media:/app/media
       - ./static:/app/static
       - ./.env:/app/.env
+      - config-lock-volume:/app/config
 
   postgres:
     image: postgres:alpine
@@ -105,3 +107,5 @@ volumes:
     name: cousins_matter_postgres_data
   cousins_matter_redis_data:
     name: cousins_matter_redis_data
+  config-lock-volume:
+    name: config-lock-volume

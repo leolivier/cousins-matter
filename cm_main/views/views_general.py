@@ -133,7 +133,8 @@ def qhealth(request):
   """
   task_id = async_task("cm_main.views.views_general.health_check")
   check = result(task_id, 1000)
-  return JsonResponse(check, status=200 if check["status"] == "ok" else 503)
+  status=200 if check and "status" in check and check["status"] == "ok" else 503
+  return JsonResponse(check, status=status)
 
 
 def send_zipfile(request):

@@ -3,15 +3,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('chat', '0007_remove_chatroom_chat_room_slugs_must_be_unique_and_more'),
+        ("chat", "0007_remove_chatroom_chat_room_slugs_must_be_unique_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='chatmessage',
-            name='date_modified',
+            model_name="chatmessage",
+            name="date_modified",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

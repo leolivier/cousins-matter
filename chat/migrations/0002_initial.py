@@ -6,35 +6,41 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('chat', '0001_initial'),
+        ("chat", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='chatmessage',
-            name='account',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to=settings.AUTH_USER_MODEL),
+            model_name="chatmessage",
+            name="account",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.DO_NOTHING,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddIndex(
-            model_name='chatroom',
-            index=models.Index(fields=['slug'], name='chat_chatro_slug_23d243_idx'),
+            model_name="chatroom",
+            index=models.Index(fields=["slug"], name="chat_chatro_slug_23d243_idx"),
         ),
         migrations.AddConstraint(
-            model_name='chatroom',
-            constraint=models.UniqueConstraint(fields=('slug',), name='chat room slugs must be unique'),
+            model_name="chatroom",
+            constraint=models.UniqueConstraint(
+                fields=("slug",), name="chat room slugs must be unique"
+            ),
         ),
         migrations.AddField(
-            model_name='chatmessage',
-            name='room',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='chat.chatroom'),
+            model_name="chatmessage",
+            name="room",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="chat.chatroom"
+            ),
         ),
         migrations.AddIndex(
-            model_name='chatmessage',
-            index=models.Index(fields=['room'], name='chat_chatme_room_id_95b551_idx'),
+            model_name="chatmessage",
+            index=models.Index(fields=["room"], name="chat_chatme_room_id_95b551_idx"),
         ),
     ]

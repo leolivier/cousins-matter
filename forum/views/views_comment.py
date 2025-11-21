@@ -22,17 +22,19 @@ class CommentCreateView(LoginRequiredMixin, generic.CreateView):
         try:
             return super().dispatch(request, *args, **kwargs)
         except RequestDataTooBig:
-            return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
+            return HttpResponseBadRequest(
+                _("The size of the message exceeds the authorised limit.")
+            )
 
     def post(self, request, message_id):
-      message = get_object_or_404(Message, pk=message_id)
-      form = CommentForm(request.POST)
-      if form.is_valid():
-        form.instance.author_id = request.user.id
-        form.instance.message_id = message_id
-        comment = form.save()
-        check_followers_on_comment(request, comment)
-        return redirect("forum:display", message.post.id)
+        message = get_object_or_404(Message, pk=message_id)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.instance.author_id = request.user.id
+            form.instance.message_id = message_id
+            comment = form.save()
+            check_followers_on_comment(request, comment)
+            return redirect("forum:display", message.post.id)
 
 
 class CommentEditView(LoginRequiredMixin, generic.UpdateView):
@@ -44,7 +46,9 @@ class CommentEditView(LoginRequiredMixin, generic.UpdateView):
         try:
             return super().dispatch(request, *args, **kwargs)
         except RequestDataTooBig:
-            return HttpResponseBadRequest(_("The size of the message exceeds the authorised limit."))
+            return HttpResponseBadRequest(
+                _("The size of the message exceeds the authorised limit.")
+            )
 
     def post(self, request, pk):
         assert_request_is_ajax(request)
@@ -54,7 +58,9 @@ class CommentEditView(LoginRequiredMixin, generic.UpdateView):
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             comment = form.save()
-            return JsonResponse({"comment_id": comment.id, "comment_str": comment.content}, status=200)
+            return JsonResponse(
+                {"comment_id": comment.id, "comment_str": comment.content}, status=200
+            )
         else:
             errors = form.errors.as_json()
         return JsonResponse({"errors": errors}, status=400)

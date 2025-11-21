@@ -21,85 +21,87 @@ logger = logging.getLogger(__name__)
 
 
 class PasswordResetView(PasswordResetView):
-  form_class = PasswordResetForm
+    form_class = PasswordResetForm
 
 
 class OnlyAdminMixin(LoginRequiredMixin, PermissionRequiredMixin):
-  raise_exception = True
-  permission_required = "is_superuser"
+    raise_exception = True
+    permission_required = "is_superuser"
 
 
 class HomeView(generic.TemplateView):
-  template_name = "cm_main/base.html"
+    template_name = "cm_main/base.html"
 
 
 @login_required
 def download_protected_media(request, media):
-  """
-  View to download a protected media file.
+    """
+    View to download a protected media file.
 
-  The file is streamed in chunks of 8KB to avoid loading the whole file into memory.
-  The file must be stored in the MEDIA_ROOT directory in the media backend storage as defined in the settings (e.g. S3).
-  :param request: The request object (unused)
-  :param media: The name of the media file to download
-  :return: A StreamingHttpResponse object containing the media file
-  :raises Http404: If the file is not found, or if the path is invalid
-  """
-  logger.debug(f"Downloading protected media {media}")
+    The file is streamed in chunks of 8KB to avoid loading the whole file into memory.
+    The file must be stored in the MEDIA_ROOT directory in the media backend storage as defined in the settings (e.g. S3).
+    :param request: The request object (unused)
+    :param media: The name of the media file to download
+    :return: A StreamingHttpResponse object containing the media file
+    :raises Http404: If the file is not found, or if the path is invalid
+    """
+    logger.debug(f"Downloading protected media {media}")
 
-  hasher = blake2b()
-  tbh = bytes(f'{request.user.username}@{media}', 'utf-8')
-  hasher.update(tbh)
-  media_etag = hasher.hexdigest()
+    hasher = blake2b()
+    tbh = bytes(f"{request.user.username}@{media}", "utf-8")
+    hasher.update(tbh)
+    media_etag = hasher.hexdigest()
 
-  request_etag = request.headers.get('If-None-Match', None)
-  if request_etag and request_etag == media_etag:
-      return HttpResponseNotModified()
+    request_etag = request.headers.get("If-None-Match", None)
+    if request_etag and request_etag == media_etag:
+        return HttpResponseNotModified()
 
-  chunk_size = 64*1024
-  try:
-    media_file = default_storage.open(media, "rb")
-    response = StreamingHttpResponse(
-        FileWrapper(media_file, chunk_size),
-        content_type=mimetypes.guess_type(media)[0],
-    )
-  except FileNotFoundError:
-    raise Http404(_("Media not found"))
-  except Exception as e:
-    raise Http404(_("Error when retrieving media: %s") % e)
+    chunk_size = 64 * 1024
+    try:
+        media_file = default_storage.open(media, "rb")
+        response = StreamingHttpResponse(
+            FileWrapper(media_file, chunk_size),
+            content_type=mimetypes.guess_type(media)[0],
+        )
+    except FileNotFoundError:
+        raise Http404(_("Media not found"))
+    except Exception as e:
+        raise Http404(_("Error when retrieving media: %s") % e)
 
-  response["Content-Length"] = media_file.size
-  # response["Content-Disposition"] = f"inline; filename={filename}"
-  response["Content-Disposition"] = "inline"
-  response["ETag"] = media_etag
+    response["Content-Length"] = media_file.size
+    # response["Content-Disposition"] = f"inline; filename={filename}"
+    response["Content-Disposition"] = "inline"
+    response["ETag"] = media_etag
 
-  return response
+    return response
 
 
 def send_zipfile(request):
-  """
-  Create a ZIP file on disk and transmit it in chunks of 8KB,
-  without loading the whole file into memory. A similar approach can
-  be used for large dynamic PDF files.
-  """
-  chunk_size = 8192
-  temp = tempfile.TemporaryFile(suffix='.zip')
-  archive = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
-  files = []  # Select your files here.
-  for filename in files:
-      abs_filename = os.path.abspath(filename)
-      rel_filename = filename if filename.startswith('./') else '.' / filename  # TODO: won't work on Windows
-      archive.write(abs_filename, rel_filename)
-  archive.close()
-  response = StreamingHttpResponse(
-    FileWrapper(
-          open(temp, "rb"),
-          chunk_size,
-      ),
-    content_type=mimetypes.guess_type(temp)[0],
-  )
-  response["Content-Type"] = 'application/zip'
-  response["Content-Length"] = temp.tell()
-  response["Content-Disposition"] = "attachment; filename=file.zip"
-  temp.seek(0)
-  return response
+    """
+    Create a ZIP file on disk and transmit it in chunks of 8KB,
+    without loading the whole file into memory. A similar approach can
+    be used for large dynamic PDF files.
+    """
+    chunk_size = 8192
+    temp = tempfile.TemporaryFile(suffix=".zip")
+    archive = zipfile.ZipFile(temp, "w", zipfile.ZIP_DEFLATED)
+    files = []  # Select your files here.
+    for filename in files:
+        abs_filename = os.path.abspath(filename)
+        rel_filename = (
+            filename if filename.startswith("./") else "." / filename
+        )  # TODO: won't work on Windows
+        archive.write(abs_filename, rel_filename)
+    archive.close()
+    response = StreamingHttpResponse(
+        FileWrapper(
+            open(temp, "rb"),
+            chunk_size,
+        ),
+        content_type=mimetypes.guess_type(temp)[0],
+    )
+    response["Content-Type"] = "application/zip"
+    response["Content-Length"] = temp.tell()
+    response["Content-Disposition"] = "attachment; filename=file.zip"
+    temp.seek(0)
+    return response

@@ -7,105 +7,282 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('polls', '0001_initial'),
+        ("polls", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='choice',
-            name='votes',
+            model_name="choice",
+            name="votes",
         ),
         migrations.RemoveField(
-            model_name='question',
-            name='pub_date',
+            model_name="question",
+            name="pub_date",
         ),
         migrations.AddField(
-            model_name='question',
-            name='question_type',
-            field=models.CharField(choices=[('YN', 'Yes/No'), ('MC', 'Multiple Choice'), ('OT', 'Open Text'), ('DT', 'Date')], default='YN', max_length=2),
+            model_name="question",
+            name="question_type",
+            field=models.CharField(
+                choices=[
+                    ("YN", "Yes/No"),
+                    ("MC", "Multiple Choice"),
+                    ("OT", "Open Text"),
+                    ("DT", "Date"),
+                ],
+                default="YN",
+                max_length=2,
+            ),
         ),
         migrations.AlterField(
-            model_name='choice',
-            name='question',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='choices', to='polls.question'),
+            model_name="choice",
+            name="question",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="choices",
+                to="polls.question",
+            ),
         ),
         migrations.CreateModel(
-            name='Poll',
+            name="Poll",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('description', models.TextField(blank=True, default='', max_length=500)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('pub_date', models.DateTimeField(blank=True, default=django.utils.timezone.now, null=True)),
-                ('close_date', models.DateTimeField(blank=True, null=True)),
-                ('open_to', models.CharField(choices=[('all', 'All members'), ('act', 'Active members only'), ('lst', 'Closed list')], default='act', max_length=3)),
-                ('closed_list', models.ManyToManyField(blank=True, related_name='closed_list', to=settings.AUTH_USER_MODEL)),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                (
+                    "description",
+                    models.TextField(blank=True, default="", max_length=500),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "pub_date",
+                    models.DateTimeField(
+                        blank=True, default=django.utils.timezone.now, null=True
+                    ),
+                ),
+                ("close_date", models.DateTimeField(blank=True, null=True)),
+                (
+                    "open_to",
+                    models.CharField(
+                        choices=[
+                            ("all", "All members"),
+                            ("act", "Active members only"),
+                            ("lst", "Closed list"),
+                        ],
+                        default="act",
+                        max_length=3,
+                    ),
+                ),
+                (
+                    "closed_list",
+                    models.ManyToManyField(
+                        blank=True,
+                        related_name="closed_list",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='question',
-            name='poll',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='questions', to='polls.poll'),
+            model_name="question",
+            name="poll",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="questions",
+                to="polls.poll",
+            ),
             preserve_default=False,
         ),
         migrations.CreateModel(
-            name='PollAnswer',
+            name="PollAnswer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('poll', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.poll')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "member",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "poll",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="polls.poll"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='DateTimeAnswer',
+            name="DateTimeAnswer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answer', models.DateTimeField(default=django.utils.timezone.now, verbose_name='answer')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='answers_%(class)s', to='polls.question')),
-                ('poll_answer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.pollanswer')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "answer",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, verbose_name="answer"
+                    ),
+                ),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="answers_%(class)s",
+                        to="polls.question",
+                    ),
+                ),
+                (
+                    "poll_answer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="polls.pollanswer",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='ChoiceAnswer',
+            name="ChoiceAnswer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.choice', verbose_name='choice')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='answers_%(class)s', to='polls.question')),
-                ('poll_answer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.pollanswer')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "answer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="polls.choice",
+                        verbose_name="choice",
+                    ),
+                ),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="answers_%(class)s",
+                        to="polls.question",
+                    ),
+                ),
+                (
+                    "poll_answer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="polls.pollanswer",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='TextAnswer',
+            name="TextAnswer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answer', models.TextField(blank=True, default='', max_length=500, verbose_name='answer')),
-                ('poll_answer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.pollanswer')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='answers_%(class)s', to='polls.question')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "answer",
+                    models.TextField(
+                        blank=True, default="", max_length=500, verbose_name="answer"
+                    ),
+                ),
+                (
+                    "poll_answer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="polls.pollanswer",
+                    ),
+                ),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="answers_%(class)s",
+                        to="polls.question",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='YesNoAnswer',
+            name="YesNoAnswer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answer', models.BooleanField(default=False, verbose_name='answer')),
-                ('poll_answer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.pollanswer')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='answers_%(class)s', to='polls.question')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("answer", models.BooleanField(default=False, verbose_name="answer")),
+                (
+                    "poll_answer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="polls.pollanswer",
+                    ),
+                ),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="answers_%(class)s",
+                        to="polls.question",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

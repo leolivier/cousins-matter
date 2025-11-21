@@ -18,7 +18,7 @@ class PollUpsertTest(PollTestMixin):
                 "close_date": self.close_date.isoformat(),
                 "open_to": Poll.OPEN_TO_ACTIVE,
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Poll.objects.count(), 1)
@@ -45,7 +45,7 @@ class PollUpsertTest(PollTestMixin):
                 "close_date": close_date.isoformat(),
                 "open_to": Poll.OPEN_TO_ALL,
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Poll.objects.count(), 1)
@@ -61,9 +61,15 @@ class PollUpsertTest(PollTestMixin):
 class PollDeleteViewTest(PollTestMixin):
     def test_delete_poll_view(self):
         poll = self.create_poll("Test poll", "Test description")
-        self.create_question(question_text="Test question", question_type=Question.YESNO_QUESTION, poll=poll)
+        self.create_question(
+            question_text="Test question",
+            question_type=Question.YESNO_QUESTION,
+            poll=poll,
+        )
 
-        response = self.client.post(reverse("polls:delete_poll", args=(poll.id,)), follow=True)
+        response = self.client.post(
+            reverse("polls:delete_poll", args=(poll.id,)), follow=True
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Poll.objects.count(), 0)
         self.assertEqual(Question.objects.count(), 0)
@@ -83,7 +89,7 @@ class QuestionUpsertTest(PollTestMixin):
                 "question_type": Question.SINGLECHOICE_QUESTION,
                 "possible_choices": "Choice 1\nChoice 2",
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 1)
@@ -99,7 +105,7 @@ class QuestionUpsertTest(PollTestMixin):
                 "question_text": "Test YN question",
                 "question_type": Question.YESNO_QUESTION,
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 2)
@@ -114,7 +120,7 @@ class QuestionUpsertTest(PollTestMixin):
                 "question_text": "Test OT question",
                 "question_type": Question.OPENTEXT_QUESTION,
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 3)
@@ -129,7 +135,7 @@ class QuestionUpsertTest(PollTestMixin):
                 "question_text": "Test DT question",
                 "question_type": Question.DATE_QUESTION,
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 4)
@@ -145,7 +151,7 @@ class QuestionUpsertTest(PollTestMixin):
                 "question_type": Question.MULTICHOICES_QUESTION,
                 "possible_choices": "Choice #1\nChoice #2\nChoice #3\nChoice #4",
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 5)
@@ -153,23 +159,35 @@ class QuestionUpsertTest(PollTestMixin):
         question = Question.objects.last()
         self.assertEqual(question.question_text, "Test MC question")
         self.assertEqual(question.question_type, Question.MULTICHOICES_QUESTION)
-        self.assertSequenceEqual(question.possible_choices, ["Choice #1", "Choice #2", "Choice #3", "Choice #4"])
+        self.assertSequenceEqual(
+            question.possible_choices,
+            ["Choice #1", "Choice #2", "Choice #3", "Choice #4"],
+        )
 
     def test_update_questions_view(self):
         """
         Test that a question's type can be changed.
         """
         poll = self.create_poll("Test poll", "Test description")
-        question = self.create_question(question_text="Test YN question", question_type=Question.YESNO_QUESTION,
-                                        poll=poll)
+        question = self.create_question(
+            question_text="Test YN question",
+            question_type=Question.YESNO_QUESTION,
+            poll=poll,
+        )
 
         response = self.client.post(
-            reverse("polls:update_question", args=(poll.id, question.id,)),
+            reverse(
+                "polls:update_question",
+                args=(
+                    poll.id,
+                    question.id,
+                ),
+            ),
             {
                 "question_text": "Updated YN question",
                 "question_type": Question.YESNO_QUESTION,
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 1)
@@ -178,17 +196,27 @@ class QuestionUpsertTest(PollTestMixin):
         self.assertEqual(question.question_text, "Updated YN question")
         self.assertEqual(question.question_type, Question.YESNO_QUESTION)
 
-        question = self.create_question(question_text="Test SC question", question_type=Question.SINGLECHOICE_QUESTION,
-                                        poll=poll, possible_choices=["Choice 1", "Choice 2"])
+        question = self.create_question(
+            question_text="Test SC question",
+            question_type=Question.SINGLECHOICE_QUESTION,
+            poll=poll,
+            possible_choices=["Choice 1", "Choice 2"],
+        )
 
         response = self.client.post(
-            reverse("polls:update_question", args=(poll.id, question.id,)),
+            reverse(
+                "polls:update_question",
+                args=(
+                    poll.id,
+                    question.id,
+                ),
+            ),
             {
                 "question_text": "Updated SC question",
                 "question_type": Question.SINGLECHOICE_QUESTION,
                 "possible_choices": "Choice 1\nChoice 2\nChoice 3",
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 2)
@@ -196,19 +224,31 @@ class QuestionUpsertTest(PollTestMixin):
         question = Question.objects.last()
         self.assertEqual(question.question_text, "Updated SC question")
         self.assertEqual(question.question_type, Question.SINGLECHOICE_QUESTION)
-        self.assertSequenceEqual(question.possible_choices, ["Choice 1", "Choice 2", "Choice 3"])
+        self.assertSequenceEqual(
+            question.possible_choices, ["Choice 1", "Choice 2", "Choice 3"]
+        )
 
-        question = self.create_question(question_text="Test MC question", question_type=Question.MULTICHOICES_QUESTION,
-                                        poll=poll, possible_choices=["Choice 1", "Choice 2"])
+        question = self.create_question(
+            question_text="Test MC question",
+            question_type=Question.MULTICHOICES_QUESTION,
+            poll=poll,
+            possible_choices=["Choice 1", "Choice 2"],
+        )
 
         response = self.client.post(
-            reverse("polls:update_question", args=(poll.id, question.id,)),
+            reverse(
+                "polls:update_question",
+                args=(
+                    poll.id,
+                    question.id,
+                ),
+            ),
             {
                 "question_text": "Updated MC question",
                 "question_type": Question.MULTICHOICES_QUESTION,
                 "possible_choices": "Choice 1\nChoice 2\nChoice 3\nChoice 4",
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 3)
@@ -216,18 +256,29 @@ class QuestionUpsertTest(PollTestMixin):
         question = Question.objects.last()
         self.assertEqual(question.question_text, "Updated MC question")
         self.assertEqual(question.question_type, Question.MULTICHOICES_QUESTION)
-        self.assertSequenceEqual(question.possible_choices, ["Choice 1", "Choice 2", "Choice 3", "Choice 4"])
+        self.assertSequenceEqual(
+            question.possible_choices, ["Choice 1", "Choice 2", "Choice 3", "Choice 4"]
+        )
 
-        question = self.create_question(question_text="Test DT question", question_type=Question.DATE_QUESTION,
-                                        poll=poll)
+        question = self.create_question(
+            question_text="Test DT question",
+            question_type=Question.DATE_QUESTION,
+            poll=poll,
+        )
 
         response = self.client.post(
-            reverse("polls:update_question", args=(poll.id, question.id,)),
+            reverse(
+                "polls:update_question",
+                args=(
+                    poll.id,
+                    question.id,
+                ),
+            ),
             {
                 "question_text": "Updated DT question",
                 "question_type": Question.DATE_QUESTION,
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 4)
@@ -236,16 +287,25 @@ class QuestionUpsertTest(PollTestMixin):
         self.assertEqual(question.question_text, "Updated DT question")
         self.assertEqual(question.question_type, Question.DATE_QUESTION)
 
-        question = self.create_question(question_text="Test OT question", question_type=Question.OPENTEXT_QUESTION,
-                                        poll=poll)
+        question = self.create_question(
+            question_text="Test OT question",
+            question_type=Question.OPENTEXT_QUESTION,
+            poll=poll,
+        )
 
         response = self.client.post(
-            reverse("polls:update_question", args=(poll.id, question.id,)),
+            reverse(
+                "polls:update_question",
+                args=(
+                    poll.id,
+                    question.id,
+                ),
+            ),
             {
                 "question_text": "Updated OT question",
                 "question_type": Question.OPENTEXT_QUESTION,
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 5)
@@ -258,16 +318,26 @@ class QuestionUpsertTest(PollTestMixin):
         "Test that a question's type can be changed."
         poll = self.create_poll("Test poll", "Test description")
 
-        question = self.create_question(question_text="Test MC question", question_type=Question.SINGLECHOICE_QUESTION,
-                                        poll=poll, possible_choices=["Choice 1", "Choice 2"])
+        question = self.create_question(
+            question_text="Test MC question",
+            question_type=Question.SINGLECHOICE_QUESTION,
+            poll=poll,
+            possible_choices=["Choice 1", "Choice 2"],
+        )
 
         response = self.client.post(
-            reverse("polls:update_question", args=(poll.id, question.id,)),
+            reverse(
+                "polls:update_question",
+                args=(
+                    poll.id,
+                    question.id,
+                ),
+            ),
             {
                 "question_text": "Updated MC2DT question",
                 "question_type": Question.DATE_QUESTION,
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 1)
@@ -276,17 +346,26 @@ class QuestionUpsertTest(PollTestMixin):
         self.assertEqual(question.question_text, "Updated MC2DT question")
         self.assertEqual(question.question_type, Question.DATE_QUESTION)
 
-        question = self.create_question(question_text="Test YN question", question_type=Question.YESNO_QUESTION,
-                                        poll=poll)
+        question = self.create_question(
+            question_text="Test YN question",
+            question_type=Question.YESNO_QUESTION,
+            poll=poll,
+        )
 
         response = self.client.post(
-            reverse("polls:update_question", args=(poll.id, question.id,)),
+            reverse(
+                "polls:update_question",
+                args=(
+                    poll.id,
+                    question.id,
+                ),
+            ),
             {
                 "question_text": "Updated YN2MC question",
                 "question_type": Question.SINGLECHOICE_QUESTION,
                 "possible_choices": "Choice 4\nChoice 5\nChoice 6",
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 2)
@@ -294,7 +373,9 @@ class QuestionUpsertTest(PollTestMixin):
         question = Question.objects.last()
         self.assertEqual(question.question_text, "Updated YN2MC question")
         self.assertEqual(question.question_type, Question.SINGLECHOICE_QUESTION)
-        self.assertSequenceEqual(question.possible_choices, ["Choice 4", "Choice 5", "Choice 6"])
+        self.assertSequenceEqual(
+            question.possible_choices, ["Choice 4", "Choice 5", "Choice 6"]
+        )
 
 
 class TestDeleteQuestionView(PollTestMixin):
@@ -302,10 +383,20 @@ class TestDeleteQuestionView(PollTestMixin):
         "Test that a question can be deleted."
         poll = self.create_poll("Test poll", "Test description")
 
-        question1 = self.create_question(question_text="Test question 1", question_type=Question.YESNO_QUESTION, poll=poll)
-        question2 = self.create_question(question_text="Test question 2", question_type=Question.DATE_QUESTION, poll=poll)
+        question1 = self.create_question(
+            question_text="Test question 1",
+            question_type=Question.YESNO_QUESTION,
+            poll=poll,
+        )
+        question2 = self.create_question(
+            question_text="Test question 2",
+            question_type=Question.DATE_QUESTION,
+            poll=poll,
+        )
 
-        response = self.client.post(reverse("polls:delete_question", args=(question2.id,)), follow=True)
+        response = self.client.post(
+            reverse("polls:delete_question", args=(question2.id,)), follow=True
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(Question.objects.last(), question1)

@@ -5,17 +5,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('chat', '0003_rename_account_chatmessage_member'),
+        ("chat", "0003_rename_account_chatmessage_member"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='chatroom',
-            name='followers',
-            field=models.ManyToManyField(blank=True, limit_choices_to={'is_active': True}, 
-                                         related_name='followed_chat_rooms', to=settings.AUTH_USER_MODEL),
+            model_name="chatroom",
+            name="followers",
+            field=models.ManyToManyField(
+                blank=True,
+                limit_choices_to={"is_active": True},
+                related_name="followed_chat_rooms",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

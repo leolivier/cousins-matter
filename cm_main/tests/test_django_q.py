@@ -7,15 +7,15 @@ class _DjangoQSwitcher:
         self._saved = {}
 
     def enable(self):
-        self._saved['SYNC'] = Conf.SYNC
-        self._saved['TESTING'] = Conf.TESTING
+        self._saved["SYNC"] = Conf.SYNC
+        self._saved["TESTING"] = Conf.TESTING
         Conf.SYNC = True
         Conf.TESTING = True
 
     def disable(self):
         # restore even if exceptions have occurred
-        Conf.SYNC = self._saved.get('SYNC', Conf.SYNC)
-        Conf.TESTING = self._saved.get('TESTING', Conf.TESTING)
+        Conf.SYNC = self._saved.get("SYNC", Conf.SYNC)
+        Conf.TESTING = self._saved.get("TESTING", Conf.TESTING)
         self._saved.clear()
 
 
@@ -35,6 +35,7 @@ def django_q_sync_class(cls):
                 return method(self, *args, **kwargs)
             finally:
                 switcher.disable()
+
         return _wrapped
 
     for attr_name, attr_value in list(vars(cls).items()):

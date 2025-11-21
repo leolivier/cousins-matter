@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 14:19+0200\n"
+"POT-Creation-Date: 2025-11-21 17:46+0100\n"
 "PO-Revision-Date: 2025-04-06 13:04+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
@@ -23,12 +23,12 @@ msgstr ""
 msgid "Cousins Matter!"
 msgstr "Cousins zahlen!"
 
-#: cm_main/followers.py:61 cm_main/tests/tests_followers.py:80
+#: cm_main/followers.py:78 cm_main/tests/tests_followers.py:80
 #, python-format
 msgid "New %(followed_type)s \"%(followed_object_name)s\""
 msgstr "Neuer %(followed_type)s %(followed_object_name)s"
 
-#: cm_main/followers.py:65
+#: cm_main/followers.py:82
 #, python-format
 msgid ""
 "%(follower_name)s has created a new %(followed_type)s "
@@ -37,7 +37,7 @@ msgstr ""
 "%(follower_name)s hat ein neues %(followed_type)s erstellt: "
 "%(followed_object_name)s"
 
-#: cm_main/followers.py:70 cm_main/tests/tests_followers.py:92
+#: cm_main/followers.py:87 cm_main/tests/tests_followers.py:92
 #, python-format
 msgid ""
 "New %(obj_type)s added to %(followed_type)s \"%(followed_object_name)s\""
@@ -45,7 +45,7 @@ msgstr ""
 "Ein neues %(obj_type)s wurde zum %(followed_type)s hinzugefügt: "
 "%(followed_object_name)s"
 
-#: cm_main/followers.py:75
+#: cm_main/followers.py:92
 #, python-format
 msgid ""
 "%(follower_name)s has added a new %(obj_type)s in the %(followed_type)s "
@@ -54,22 +54,22 @@ msgstr ""
 "%(follower_name)s hat einen neuen **%(obj_type)s in der **%(followed_type)s "
 "hinzugefügt: **%(followed_object_name)s"
 
-#: cm_main/followers.py:123
+#: cm_main/followers.py:141
 #, python-format
 msgid "You are no longer following this %(followed_type)s"
 msgstr "Du bist nicht mehr Folge dieser %(followed_type)s"
 
-#: cm_main/followers.py:126
+#: cm_main/followers.py:144
 #, python-format
 msgid "You are now following this %(followed_type)s"
 msgstr "Du folgst jetzt dieser %(followed_type)s."
 
-#: cm_main/followers.py:134 cm_main/tests/tests_followers.py:29
+#: cm_main/followers.py:152 cm_main/tests/tests_followers.py:29
 #, python-format
 msgid "New follower to your %(followed_type)s \"%(followed_object_name)s\""
 msgstr "Neuer Follower für dein %(followed_type)s: %(followed_object_name)s"
 
-#: cm_main/followers.py:136
+#: cm_main/followers.py:154
 #, python-format
 msgid ""
 "%(follower_name)s is now following your %(followed_type)s "
@@ -111,19 +111,19 @@ msgstr "Statistiken"
 msgid "Home"
 msgstr "Heim"
 
-#: cm_main/templates/cm_main/base.html:78
+#: cm_main/templates/cm_main/base.html:80
 msgid "This site proudly built using"
 msgstr "Diese Website stolz gebaut mit"
 
-#: cm_main/templates/cm_main/base.html:80
+#: cm_main/templates/cm_main/base.html:82
 msgid "The source code is licensed"
 msgstr "Die Quellcode ist lizenziert"
 
-#: cm_main/templates/cm_main/base.html:86
+#: cm_main/templates/cm_main/base.html:88
 msgid "Copyright © 2024 Cousins Matter. All rights reserved."
 msgstr "Urheberrecht © 2024 Cousins Matter. Alle Rechte vorbehalten."
 
-#: cm_main/templates/cm_main/base.html:89
+#: cm_main/templates/cm_main/base.html:91
 #: cm_main/templates/cm_main/navbar.html:152
 msgid "Contact the site admin"
 msgstr "Kontaktiere den Site-Administrator"
@@ -291,46 +291,46 @@ msgstr "Folgen"
 msgid "Members"
 msgstr "Mitglieder"
 
-#: cm_main/templates/cm_main/navbar.html:34 cm_main/tests/test_featured.py:23
+#: cm_main/templates/cm_main/navbar.html:34 cm_main/tests/test_featured.py:25
 #: cm_main/views/views_stats.py:114
 msgid "Galleries"
 msgstr "Gallerie"
 
-#: cm_main/templates/cm_main/navbar.html:41 cm_main/tests/test_featured.py:24
+#: cm_main/templates/cm_main/navbar.html:41 cm_main/tests/test_featured.py:26
 msgid "Forum"
 msgstr "Forum"
 
 #: cm_main/templates/cm_main/navbar.html:50
 #: cm_main/templates/cm_main/navbar.html:56
-#: cm_main/templates/cm_main/navbar.html:58 cm_main/tests/test_featured.py:74
-#: cm_main/tests/test_featured.py:78 cm_main/tests/test_featured.py:85
-#: cm_main/tests/test_featured.py:87 cm_main/tests/test_featured.py:89
+#: cm_main/templates/cm_main/navbar.html:58 cm_main/tests/test_featured.py:82
+#: cm_main/tests/test_featured.py:86 cm_main/tests/test_featured.py:94
+#: cm_main/tests/test_featured.py:96 cm_main/tests/test_featured.py:98
 msgid "Chat"
 msgstr "Chat"
 
-#: cm_main/templates/cm_main/navbar.html:52 cm_main/tests/test_featured.py:22
-#: cm_main/tests/test_featured.py:76 cm_main/tests/test_featured.py:98
+#: cm_main/templates/cm_main/navbar.html:52 cm_main/tests/test_featured.py:24
+#: cm_main/tests/test_featured.py:84 cm_main/tests/test_featured.py:108
 msgid "Public Chat Rooms"
 msgstr "Öffentliche Chaträume"
 
-#: cm_main/templates/cm_main/navbar.html:53 cm_main/tests/test_featured.py:21
-#: cm_main/tests/test_featured.py:96
+#: cm_main/templates/cm_main/navbar.html:53 cm_main/tests/test_featured.py:23
+#: cm_main/tests/test_featured.py:106
 msgid "Private Chat Rooms"
 msgstr "Privat-Chat-Rooms"
 
-#: cm_main/templates/cm_main/navbar.html:66 cm_main/tests/test_featured.py:25
+#: cm_main/templates/cm_main/navbar.html:66 cm_main/tests/test_featured.py:27
 msgid "Troves"
 msgstr "Schätze"
 
-#: cm_main/templates/cm_main/navbar.html:73 cm_main/tests/test_featured.py:26
+#: cm_main/templates/cm_main/navbar.html:73 cm_main/tests/test_featured.py:28
 msgid "Polls"
 msgstr "Umfragen"
 
-#: cm_main/templates/cm_main/navbar.html:78 cm_main/tests/test_featured.py:27
+#: cm_main/templates/cm_main/navbar.html:78 cm_main/tests/test_featured.py:29
 msgid "Event Planners"
 msgstr ""
 
-#: cm_main/templates/cm_main/navbar.html:85 cm_main/tests/test_featured.py:28
+#: cm_main/templates/cm_main/navbar.html:85 cm_main/tests/test_featured.py:30
 msgid "Classified Ads"
 msgstr ""
 
@@ -351,7 +351,7 @@ msgstr "Importiere Mitglieder aus CSV"
 msgid "Admin site"
 msgstr "Verwaltungsseite"
 
-#: cm_main/templates/cm_main/navbar.html:129 cm_main/tests/test_featured.py:30
+#: cm_main/templates/cm_main/navbar.html:129 cm_main/tests/test_featured.py:32
 msgid "Export Members as CSV"
 msgstr "Exportiere Mitglieder als CSV"
 
@@ -392,11 +392,9 @@ msgstr "Kontaktformular"
 msgid "You have a new message from %(name)s (%(email)s). "
 msgstr "Du hast eine neue Nachricht von %(name)s (%(email)s)."
 
-#: cm_main/tests/test_featured.py:29
-#, fuzzy
-#| msgid "Edit Pages"
+#: cm_main/tests/test_featured.py:31
 msgid "Pages"
-msgstr "Bearbeiten Sie Seiten"
+msgstr "Seiten"
 
 #: cm_main/tests/tests_followers.py:27
 msgid "You have a new follower!"
@@ -411,7 +409,7 @@ msgstr ""
 "Hallo %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</"
 "a> ist jetzt auf %(site_name)s gefolgt!"
 
-#: cm_main/utils.py:70
+#: cm_main/utils.py:72
 #, python-format
 msgid ""
 "Uploaded file %(filename)s is too big (%(sizemb)sMB), maximum is "
@@ -420,7 +418,7 @@ msgstr ""
 "Der hochgeladene Datei %(filename)s ist zu groß (%(sizemb)s MB), der "
 "maximale Wert beträgt %(limitmb)s MB."
 
-#: cm_main/utils.py:254
+#: cm_main/utils.py:286
 #, python-format
 msgid ""
 "Date '%(date_string_to_parse)s' does not match any expected format: "
@@ -429,44 +427,44 @@ msgstr ""
 "Das Datum '%(date_string_to_parse)s' passt nicht zu einem erwarteten Format: "
 "%(translated_date_formats)s."
 
-#: cm_main/utils.py:260
+#: cm_main/utils.py:292
 #, python-format
 msgid "%%d"
 msgstr "TT"
 
-#: cm_main/utils.py:260
+#: cm_main/utils.py:292
 msgid "%m"
 msgstr "MM"
 
-#: cm_main/utils.py:260
+#: cm_main/utils.py:292
 msgid "%Y"
 msgstr "JJJJ"
 
-#: cm_main/utils.py:260
+#: cm_main/utils.py:292
 msgid "%y"
 msgstr "JJ"
 
-#: cm_main/utils.py:261
+#: cm_main/utils.py:293
 msgid "%H"
 msgstr "HH"
 
-#: cm_main/utils.py:261
+#: cm_main/utils.py:293
 msgid "%h"
 msgstr "hh"
 
-#: cm_main/utils.py:261
+#: cm_main/utils.py:293
 msgid "%p"
 msgstr ""
 
-#: cm_main/utils.py:261
+#: cm_main/utils.py:293
 msgid "%M"
 msgstr "MM"
 
-#: cm_main/utils.py:262
+#: cm_main/utils.py:294
 msgid "%S"
 msgstr "SS"
 
-#: cm_main/utils.py:333
+#: cm_main/utils.py:381
 msgid "You do not have permission to edit/delete this object."
 msgstr ""
 
@@ -478,9 +476,14 @@ msgstr "Aber dein Mail-Tool ist zu alt, um es anzuzeigen :'("
 msgid "This file type is not supported"
 msgstr "Dieser Dateityp wird nicht unterstützt"
 
-#: cm_main/views/views_general.py:41
+#: cm_main/views/views_general.py:67
 msgid "Media not found"
 msgstr "Medien nicht gefunden"
+
+#: cm_main/views/views_general.py:69
+#, python-format
+msgid "Error when retrieving media: %s"
+msgstr ""
 
 #: cm_main/views/views_stats.py:41 cm_main/views/views_stats.py:81
 msgid "Version not found"

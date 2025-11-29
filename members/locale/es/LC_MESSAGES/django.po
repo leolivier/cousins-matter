@@ -769,7 +769,7 @@ msgstr "Aniversarios"
 #: templates/members/members/birthdays_include.html:4
 #, python-format
 msgid "Birthdays in the next %(ndays)s days"
-msgstr "Birthday en los próximos %(ndays)s días"
+msgstr "Aniversarios en los próximos %(ndays)s días"
 
 #: templates/members/members/birthdays_include.html:16
 #: tests/tests_birthdays.py:37

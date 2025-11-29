@@ -1,0 +1,74 @@
+{% extends "genealogy/base_genealogy.html" %}
+{% load i18n %}
+
+{% block genealogy_content %}
+<div class="box">
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <h2 class="subtitle">{% trans "Families" %}</h2>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <a href="{% url 'genealogy:family_create' %}" class="button is-primary">
+                    <span class="icon"><i class="fas fa-plus"></i></span>
+                    <span>{% trans "Add Family" %}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table is-fullwidth is-striped is-hoverable">
+        <thead>
+            <tr>
+                <th>{% trans "Partner 1" %}</th>
+                <th>{% trans "Partner 2" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Actions" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for family in families %}
+            <tr>
+                <td>
+                    {% if family.partner1 %}
+                    <a href="{% url 'genealogy:person_detail' family.partner1.id %}">
+                        {{ family.partner1 }}
+                    </a>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if family.partner2 %}
+                    <a href="{% url 'genealogy:person_detail' family.partner2.id %}">
+                        {{ family.partner2 }}
+                    </a>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>{{ family.get_union_type_display }}</td>
+                <td>{{ family.union_date|default:"-" }}</td>
+                <td>
+                    <div class="buttons are-small">
+                        <a href="{% url 'genealogy:family_update' family.id %}" class="button is-warning is-light">
+                            <span class="icon"><i class="fas fa-edit"></i></span>
+                        </a>
+                        <a href="{% url 'genealogy:family_delete' family.id %}" class="button is-danger is-light">
+                            <span class="icon"><i class="fas fa-trash"></i></span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="has-text-centered">{% trans "No families found." %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

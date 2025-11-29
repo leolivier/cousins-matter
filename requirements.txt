@@ -19,4 +19,6 @@ blessed~=1.23.0
 psycopg[binary]~=3.2.12
 whitenoise~=6.11.0
 django-storages[dropbox,s3]~=1.14.6
+django-htmx~=1.17.0
+python-gedcom~=1.0.0
 

@@ -1,0 +1,134 @@
+{% extends "genealogy/base_genealogy.html" %}
+{% load i18n %}
+
+{% block genealogy_content %}
+<div class="columns">
+    <div class="column is-one-third">
+        <div class="card">
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            {% if person.member and person.member.avatar %}
+                                <img src="{{ person.member.avatar_url }}" alt="Avatar">
+                            {% else %}
+                                <img src="{{settings.DEFAULT_AVATAR_URL}}" alt="Placeholder">
+                            {% endif %}
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="title is-4">{{ person.first_name }} {{ person.last_name }}</p>
+                        <p class="subtitle is-6">
+                            {% if person.sex == 'M' %}<i class="fas fa-mars"></i>
+                            {% elif person.sex == 'F' %}<i class="fas fa-venus"></i>
+                            {% else %}<i class="fas fa-genderless"></i>{% endif %}
+                            {{ person.get_sex_display }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <p>
+                        <strong>{% trans "Born:" %}</strong> {{ person.birth_date|default:"?" }}<br>
+                        {% if person.birth_place %}
+                        <span class="is-size-7">{{ person.birth_place }}</span>
+                        {% endif %}
+                    </p>
+                    {% if person.death_date or person.death_place %}
+                    <p>
+                        <strong>{% trans "Died:" %}</strong> {{ person.death_date|default:"?" }}<br>
+                        {% if person.death_place %}
+                        <span class="is-size-7">{{ person.death_place }}</span>
+                        {% endif %}
+                    </p>
+                    {% endif %}
+
+                    {% if person.age %}
+                    <p><strong>{% trans "Age:" %}</strong> {{ person.age }}</p>
+                    {% endif %}
+
+                    {% if person.notes %}
+                    <hr>
+                    <p>{{ person.notes|linebreaks }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            <footer class="card-footer">
+                <a href="{% url 'genealogy:person_update' person.pk %}" class="card-footer-item">{% trans "Edit" %}</a>
+                <a href="{% url 'genealogy:person_delete' person.pk %}" class="card-footer-item has-text-danger">{% trans "Delete" %}</a>
+            </footer>
+        </div>
+    </div>
+
+    <div class="column">
+        <div class="box">
+            <h3 class="title is-5">{% trans "Family" %}</h3>
+
+            <div class="columns">
+                <div class="column">
+                    <h4 class="subtitle is-6">{% trans "Parents" %}</h4>
+                    {% if person.child_of_family %}
+                        <ul>
+                            {% if person.child_of_family.partner1 %}
+                            <li>
+                                <a href="{% url 'genealogy:person_detail' person.child_of_family.partner1.id %}">
+                                    {{ person.child_of_family.partner1 }}
+                                </a> ({{ person.child_of_family.partner1.get_sex_display }})
+                            </li>
+                            {% endif %}
+                            {% if person.child_of_family.partner2 %}
+                            <li>
+                                <a href="{% url 'genealogy:person_detail' person.child_of_family.partner2.id %}">
+                                    {{ person.child_of_family.partner2 }}
+                                </a> ({{ person.child_of_family.partner2.get_sex_display }})
+                            </li>
+                            {% endif %}
+                        </ul>
+                    {% else %}
+                        <p class="has-text-grey-light">{% trans "Unknown parents" %}</p>
+                    {% endif %}
+                </div>
+
+                <div class="column">
+                    <h4 class="subtitle is-6">{% trans "Partners" %}</h4>
+                    <ul>
+                        {% for partner in person.get_partners %}
+                        <li>
+                            <a href="{% url 'genealogy:person_detail' partner.id %}">
+                                {{ partner }}
+                            </a>
+                        </li>
+                        {% empty %}
+                        <li class="has-text-grey-light">{% trans "No partners recorded" %}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="column">
+                    <h4 class="subtitle is-6">{% trans "Children" %}</h4>
+                    <ul>
+                        {% for family in person.unions_as_p1.all %}
+                            {% for child in family.children.all %}
+                            <li>
+                                <a href="{% url 'genealogy:person_detail' child.id %}">
+                                    {{ child }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for family in person.unions_as_p2.all %}
+                            {% for child in family.children.all %}
+                            <li>
+                                <a href="{% url 'genealogy:person_detail' child.id %}">
+                                    {{ child }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

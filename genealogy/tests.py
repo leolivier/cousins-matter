@@ -66,7 +66,11 @@ class GenealogyViewsTest(MemberTestCase):
     def setUp(self):
         super().setUp()
         self.person = Person.objects.create(
-            first_name="View", last_name="Test", sex="F", birth_date=date(1990, 1, 1), death_date=date(2020, 1, 1)
+            first_name="View",
+            last_name="Test",
+            sex="F",
+            birth_date=date(1990, 1, 1),
+            death_date=date(2020, 1, 1),
         )
         self.family = Family.objects.create(partner1=self.person, union_type="MARR")
 
@@ -75,14 +79,20 @@ class GenealogyViewsTest(MemberTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "genealogy/dashboard.html")
         content = response.content.decode("utf-8")
-        self.assertInHTML(f"""<div class='box'>
+        self.assertInHTML(
+            f"""<div class='box'>
             <div class='heading'>{_("Total People")}</div>
             <div class='title'>{Person.objects.count()}</div>
-        </div>""", content)
-        self.assertInHTML(f"""<div class='box'>
+        </div>""",
+            content,
+        )
+        self.assertInHTML(
+            f"""<div class='box'>
             <div class='heading'>{_("Total Families")}</div>
             <div class='title'>{Family.objects.count()}</div>
-        </div>""", content)
+        </div>""",
+            content,
+        )
 
     def test_person_list_view(self):
         response = self.client.get(reverse("genealogy:person_list"), follow=True)
@@ -110,7 +120,11 @@ class GenealogyViewsTest(MemberTestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_tree_data_api(self):
-        response = self.client.get(reverse("genealogy:tree_data"), follow=True, headers={"HTTP_ACCEPT": "application/json"})
+        response = self.client.get(
+            reverse("genealogy:tree_data"),
+            follow=True,
+            headers={"HTTP_ACCEPT": "application/json"},
+        )
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertIn("nodes", data)

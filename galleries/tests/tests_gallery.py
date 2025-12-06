@@ -179,9 +179,9 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
         # check the root gallery appears as the parent gallery in the details
         self.assertContains(
             response,
-            f"""<a class="button" href="{reverse('galleries:detail', args=[rg.id])}"
-      title="{_("Back to %(gname)s") % {'gname': rg.name}}">
-      {icon('back')}
+            f"""<a class="button" href="{reverse("galleries:detail", args=[rg.id])}"
+      title="{_("Back to %(gname)s") % {"gname": rg.name}}">
+      {icon("back")}
     </a>""",
             html=True,
         )
@@ -216,8 +216,8 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
         # add 3 photos in it
         photos = [
             Photo(
-                name=f"Photo#{i+1}",
-                image=create_test_image(__file__, f"test-image-{i+1}.jpg"),
+                name=f"Photo#{i + 1}",
+                image=create_test_image(__file__, f"test-image-{i + 1}.jpg"),
                 date=date.today(),
                 gallery=rg,
             )
@@ -286,7 +286,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     </p>
   </a>
 </div>
-{self.rec_build_tree(n-1, N+1, gal)}
+{self.rec_build_tree(n - 1, N + 1, gal)}
 """
         return html
 

@@ -155,7 +155,7 @@ def create_chat_room(request, private=False):
                         % {"similar_room_name": similar_room.name},
                     )
                 case _:
-                    messages.error(request, f'{error[0]}: {" ".join(error[1])}')
+                    messages.error(request, f"{error[0]}: {' '.join(error[1])}")
         return redirect(reverse("chat:private_chat_rooms"))
 
 

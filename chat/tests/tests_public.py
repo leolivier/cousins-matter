@@ -93,7 +93,7 @@ class ChatRoomTests(MemberTestCase):
   </div>
   <div class="is-flex-shrink-1 has-text-primary has-text-weight-bold mr-5">
     {self.member.full_name}
-    <a href="{reverse("members:detail", kwargs={'pk': self.member.id})}" aria-label="{profile}">
+    <a href="{reverse("members:detail", kwargs={"pk": self.member.id})}" aria-label="{profile}">
       <span class="icon is-large"><i class="mdi mdi-24px mdi-open-in-new" aria-hidden="true"></i></span>
     </a>
     <br>
@@ -101,10 +101,10 @@ class ChatRoomTests(MemberTestCase):
     <span class="tag ">{nfollowers}</span>
   </div>
   <div class="is-flex-grow-1">
-    <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[0].slug])}">{rooms[0].name}</a>
+    <a class="title is-size-6" href="{reverse("chat:room", args=[rooms[0].slug])}">{rooms[0].name}</a>
   </div>
   <div class="mr-1">
-    <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[0].slug])}"
+    <a class="button is-pulled-right" href="{reverse("chat:toggle_follow", args=[rooms[0].slug])}"
       aria-label="{follow}" title="{follow}">
       <span class="icon is-large"><i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i></span>
       <span class="is-hidden-mobile">{follow}</span>
@@ -132,10 +132,10 @@ class ChatRoomTests(MemberTestCase):
     <span class="tag ">{nfollowers}</span>
   </div>
   <div class="is-flex-grow-1">
-    <a class="title is-size-6" href="{reverse('chat:room', args=[rooms[i].slug])}">{rooms[i].name}</a>
+    <a class="title is-size-6" href="{reverse("chat:room", args=[rooms[i].slug])}">{rooms[i].name}</a>
   </div>
   <div class="mr-1">
-    <a class="button is-pulled-right" href="{reverse('chat:toggle_follow', args=[rooms[i].slug])}"
+    <a class="button is-pulled-right" href="{reverse("chat:toggle_follow", args=[rooms[i].slug])}"
       aria-label="{follow}" title="{follow}">
       <span class="icon is-large"><i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i></span>
       <span class="is-hidden-mobile">{follow}</span>

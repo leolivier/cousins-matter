@@ -204,13 +204,13 @@ class TestFeaturedPolls(TestFeaturedMixin):
         self.assertEqual(response.status_code, 200)
         lep_url = reverse("polls:list_event_planners")
         self.assertContains(
-            response, f"""<a  href="{lep_url}">{_('Event planners')}</a>""", html=True
+            response, f"""<a  href="{lep_url}">{_("Event planners")}</a>""", html=True
         )
         response = self.client.get(reverse("polls:list_event_planners"))
         self.assertEqual(response.status_code, 200)
         poll_url = reverse("polls:list_polls")
         self.assertContains(
-            response, f"""<a  href="{poll_url}">{_('Polls')}</a>""", html=True
+            response, f"""<a  href="{poll_url}">{_("Polls")}</a>""", html=True
         )
 
 

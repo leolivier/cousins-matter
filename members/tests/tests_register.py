@@ -66,8 +66,10 @@ class MemberInviteTests(MemberTestCase):
 
         self.assertInHTML(
             f"""<h2 class="center">
-      {_("Hello %(invited)s, this is %(inviter)s!") %
-       {'invited': test_invite['invited'], 'inviter': sender.full_name}} <br/>
+      {
+                _("Hello %(invited)s, this is %(inviter)s!")
+                % {"invited": test_invite["invited"], "inviter": sender.full_name}
+            } <br/>
       {msg}
       </h2>""",
             content,
@@ -80,8 +82,16 @@ class MemberInviteTests(MemberTestCase):
             self.assertInHTML(
                 f"""
 <h1 class="center" style="padding:2px">
-  {_("Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s") %
-        {'site_name': settings.SITE_NAME, 'inviter': sender.full_name, 'invited': test_invite['invited']}}
+  {
+                    _(
+                        "Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s"
+                    )
+                    % {
+                        "site_name": settings.SITE_NAME,
+                        "inviter": sender.full_name,
+                        "invited": test_invite["invited"],
+                    }
+                }
 </h1>""",
                 content,
             )
@@ -182,12 +192,12 @@ class RequestRegistrationLinkTests(TestLoginRequiredMixin, MemberTestCase):
             content,
         )
         self.assertInHTML(
-            f"""<div class="container">{test_requester['message']}</div>""", content
+            f"""<div class="container">{test_requester["message"]}</div>""", content
         )
         request = get_fake_request()
         absolute_link = request.build_absolute_uri(reverse("members:invite"))
         self.assertInHTML(
-            f"""<a href="{absolute_link}?mail={test_requester['email']}" class="button green">
+            f"""<a href="{absolute_link}?mail={test_requester["email"]}" class="button green">
                             {_("Open invitation page")}
                           </a>""",
             content,

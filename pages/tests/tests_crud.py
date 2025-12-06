@@ -196,8 +196,8 @@ class TestDisplayPageList(TestPageMixin, BasePageTestCase, MemberTestCase):
                 response,
                 f"""
   <div class="panel-block">
-    <a href="{reverse('pages-edit:update', args=[page.id])}">
-      {icon('edit-page', 'panel-icon')}
+    <a href="{reverse("pages-edit:update", args=[page.id])}">
+      {icon("edit-page", "panel-icon")}
       {page.url}
     </a>
     &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<strong>{page.title}</strong>

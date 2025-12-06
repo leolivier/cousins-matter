@@ -319,7 +319,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # Check user permissions
             if not await self.check_user_permission(msgid):
                 return
-            del_msg = f'**{_("This message has been deleted")}**'
+            del_msg = f"**{_('This message has been deleted')}**"
             await self.update_message(msgid, del_msg)
             logger.info(f"Message {msgid} marked as deleted")
 

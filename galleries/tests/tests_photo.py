@@ -134,7 +134,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
         """
         if page_num == 1:
             for i in range(nb_photos):
-                image = create_test_image(__file__, f"test-image-{i+1}.jpg")
+                image = create_test_image(__file__, f"test-image-{i + 1}.jpg")
                 p = Photo(
                     name=get_photo_name(),
                     gallery=gallery,
@@ -203,16 +203,16 @@ class CreatePhotoViewTests(PhotoTestsBase):
             content = f"""
   <div class="cell has-text-centered">
     <figure class="image thumbnail mx-auto">
-      <img src="{protected_media_url(p['thumbnail'])}"
+      <img src="{protected_media_url(p["thumbnail"])}"
         class="gallery-image"
-        {f'data-next="{p['next_url']}"' if 'next_url' in p else ""}
-        data-fullscreen="{protected_media_url(p['image'].name)}"
-        {f'data-prev="{p['previous_url']}"' if 'previous_url' in p else ""}
+        {f'data-next="{p['next_url']}"' if "next_url" in p else ""}
+        data-fullscreen="{protected_media_url(p["image"].name)}"
+        {f'data-prev="{p['previous_url']}"' if "previous_url" in p else ""}
         data-idx="{(page_num - 1) * page_size + idx + 1}"
-        data-pk="{p['id']}"
+        data-pk="{p["id"]}"
       >
     </figure>
-    <p>{p['name']}</p>
+    <p>{p["name"]}</p>
   </div>
     """
             if idx < page_size:

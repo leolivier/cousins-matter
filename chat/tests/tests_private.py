@@ -16,11 +16,11 @@ class PrivateChatRoomTestsMixin:
     def get_lists_buttons(self, slug):
         members_icon = icon("members")
         return f"""
-  <a class="button" href="{reverse('chat:private_room_members', args=[slug])}">
-    {members_icon} <span>{_('Room Members')}</span>
+  <a class="button" href="{reverse("chat:private_room_members", args=[slug])}">
+    {members_icon} <span>{_("Room Members")}</span>
   </a>
-  <a class="button" href="{reverse('chat:private_room_admins', args=[slug])}">
-    {members_icon} <span>{_('Room Admins')}</span>
+  <a class="button" href="{reverse("chat:private_room_admins", args=[slug])}">
+    {members_icon} <span>{_("Room Admins")}</span>
   </a>"""
 
     def do_check_private_chat_room(self, room_name):
@@ -60,7 +60,7 @@ class PrivateChatRoomTestsMixin:
   </div>
   <div class="is-flex-shrink-1 has-text-primary has-text-weight-bold mr-5">
     {admin.full_name}
-    <a href="{reverse('members:detail', args=[admin.id])}" aria-label="{profile}">
+    <a href="{reverse("members:detail", args=[admin.id])}" aria-label="{profile}">
       {icon("member-link")}
     </a>
     <br>
@@ -68,7 +68,7 @@ class PrivateChatRoomTestsMixin:
     <span class="tag ">{tr_nmembers}</span>
   </div>
   <div class="is-flex-grow-1">
-    <a class="title is-size-6" href="{reverse('chat:private_room', args=[room.slug])}">{room.name}</a>
+    <a class="title is-size-6" href="{reverse("chat:private_room", args=[room.slug])}">{room.name}</a>
   </div>
   <div class="mr-1 buttons has-addons is-rounded">
   {self.get_lists_buttons(room.slug)}
@@ -84,9 +84,9 @@ class PrivateChatRoomTestsMixin:
 
         return f"""
     <button class="button"
-    onclick="confirm_and_redirect('{areyousure}', '{reverse('chat:leave_private_room', args=[room.slug])}')"
+    onclick="confirm_and_redirect('{areyousure}', '{reverse("chat:leave_private_room", args=[room.slug])}')"
     title="{leave_room}">
-    {icon('leave-group')}
+    {icon("leave-group")}
     <span class="is-hidden-mobile">{leave_room}</span>
   </button>"""
 
@@ -108,7 +108,7 @@ class PrivateChatRoomTestsMixin:
 <button class="button"
     onclick="confirm_and_redirect('{areyousure}', '{remove_url}')"
     title="{remove_member}">
-  {icon('leave-group')}
+  {icon("leave-group")}
   <span>{remove_member}</span>
 </button>"""
 
@@ -122,7 +122,7 @@ class PrivateChatRoomTestsMixin:
   </div>
   <div class="has-text-primary has-text-weight-bold has-text-left is-flex-grow-1 mr-5">
     {member.full_name}
-    <a href="{reverse('members:detail', args=[member.id])}" aria-label="{_('profile')}">
+    <a href="{reverse("members:detail", args=[member.id])}" aria-label="{_("profile")}">
       {icon("member-link")}
     </a>
   </div>
@@ -141,7 +141,7 @@ class PrivateChatRoomTestsMixin:
   </div>
   <div class="has-text-primary has-text-weight-bold has-text-left is-flex-grow-1 mr-5">
     {admin.full_name}
-    <a href="{reverse('members:detail', args=[admin.id])}" aria-label="{_('profile')}">
+    <a href="{reverse("members:detail", args=[admin.id])}" aria-label="{_("profile")}">
       {icon("member-link")}
     </a>
   </div>
@@ -234,8 +234,8 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
                 response,
                 f"""
 <div class="buttons has-addons is-rounded ml-auto">
-  <a class="button" title="{back_to_room}" href="{reverse('chat:private_room', args=[self.room.slug])}">
-    {icon('back')}
+  <a class="button" title="{back_to_room}" href="{reverse("chat:private_room", args=[self.room.slug])}">
+    {icon("back")}
     <span class="is-hidden-mobile">{back_to_room}</span>
   </a>
   {self.get_leave_text(self.room)}
@@ -252,7 +252,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
             # print(cleaned_content)
             self.assertInHTML(
                 f"""
-<form id="add-member-form" method="post" action="{reverse('chat:add_member_to_private_room', args=[self.room.slug])}">
+<form id="add-member-form" method="post" action="{reverse("chat:add_member_to_private_room", args=[self.room.slug])}">
   <select id="member-select" name="member-id" style="width: 300px;"></select>
   <button class="button" type="submit" disabled="true" id="add-member-button">
     {icon("new-member")} {_("Add member to the room")}
@@ -313,8 +313,8 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
                 response,
                 f"""
 <div class="buttons has-addons is-rounded ml-auto">
-  <a class="button" title="{back_to_room}" href="{reverse('chat:private_room', args=[self.room.slug])}">
-    {icon('back')}
+  <a class="button" title="{back_to_room}" href="{reverse("chat:private_room", args=[self.room.slug])}">
+    {icon("back")}
     <span class="is-hidden-mobile">{back_to_room}</span>
   </a>
   {self.get_leave_text(self.room)}
@@ -331,7 +331,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
             # print(cleaned_content)
             self.assertInHTML(
                 f"""
-<form id="add-member-form" method="post" action="{reverse('chat:add_member_to_private_room', args=[self.room.slug])}">
+<form id="add-member-form" method="post" action="{reverse("chat:add_member_to_private_room", args=[self.room.slug])}">
   <select id="member-select" name="member-id" style="width: 300px;"></select>
   <button class="button" type="submit" disabled="true" id="add-member-button">
     {icon("new-member")}{_("Add member to the room")}
@@ -502,11 +502,11 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
             f"""
 <div class="mr-1 buttons has-addons is-rounded">
   {self.get_leave_text(self.room)}
-  <a class="button" href="{reverse('chat:private_room_members', args=[self.room.slug])}">
-    {icon("members")} <span>{_('Room Members')}</span>
+  <a class="button" href="{reverse("chat:private_room_members", args=[self.room.slug])}">
+    {icon("members")} <span>{_("Room Members")}</span>
   </a>
-  <a class="button" href="{reverse('chat:private_room_admins', args=[self.room.slug])}">
-    {icon("members")} <span>{_('Room Admins')}</span>
+  <a class="button" href="{reverse("chat:private_room_admins", args=[self.room.slug])}">
+    {icon("members")} <span>{_("Room Admins")}</span>
   </a>
 </div>""",
             html=True,

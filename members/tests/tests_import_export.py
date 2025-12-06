@@ -149,7 +149,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
             check_active=False,
         )
         for i in range(4):
-            name = f"member-mngd{str(i+1)}"
+            name = f"member-mngd{str(i + 1)}"
             m = Member.objects.get(username=name)
             if expected_result[name]["manager"] is None:
                 self.assertIsNone(m.member_manager)
@@ -185,7 +185,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
 
     def create_members(self, nb_members=4, activate_users=False):
         for i in range(nb_members):
-            member_data = get_new_member_data(username=f"member-mngd{str(i+1)}")
+            member_data = get_new_member_data(username=f"member-mngd{str(i + 1)}")
             self.create_member(member_data=member_data, is_active=activate_users)
 
     def test_update_import_manager_activation2(self):

@@ -105,7 +105,7 @@ class RegistrationLinkManager(TokenManager):
         main verification and decryption happens here.
         """
         logger.debug(
-            f'\n{"~" * 40}\nDecoding the link {encoded_email}/{encoded_token}\n{"~" * 40}\n'
+            f"\n{'~' * 40}\nDecoding the link {encoded_email}/{encoded_token}\n{'~' * 40}\n"
         )
         decoded_email = urlsafe_b64decode(encoded_email).decode("UTF-8")
         # decoded_token = urlsafe_b64decode(encoded_token).decode('UTF-8')
@@ -116,6 +116,6 @@ class RegistrationLinkManager(TokenManager):
                 return decoded_email
         else:
             logger.error(
-                f'\n{"~" * 40}\nError occurred in decoding the link!\n{"~" * 40}\n'
+                f"\n{'~' * 40}\nError occurred in decoding the link!\n{'~' * 40}\n"
             )
             return False

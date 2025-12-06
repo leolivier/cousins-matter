@@ -34,7 +34,7 @@ class TestBirthdaysMixin:
         tester(response, common_chain, html=True)
 
         icons = (
-            f"""{icon('birthday')}{icon('birthday-variant')}{icon('birthday')}"""
+            f"""{icon("birthday")}{icon("birthday-variant")}{icon("birthday")}"""
             if with_icons
             else ""
         )
@@ -87,7 +87,7 @@ class TestBirthdaysMixin:
     def check_no_birthdays(self, response=None, reversed=False):
         no_bdays = f"""
   <div>
-    <p>{_("No birthdays in next %(ndays)s days") % {'ndays': settings.BIRTHDAY_DAYS}}.</p>
+    <p>{_("No birthdays in next %(ndays)s days") % {"ndays": settings.BIRTHDAY_DAYS}}.</p>
   </div>
   """
         tester = self.assertNotContains if reversed else self.assertContains

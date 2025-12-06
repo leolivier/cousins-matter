@@ -79,7 +79,7 @@ def import_csv(csv_file, task_group, user_id, activate_users):
     broker = get_broker()
     for row in reader:
         logger.debug(
-            f"create task #{import_context.rows_num+1} for importing row: {row}"
+            f"create task #{import_context.rows_num + 1} for importing row: {row}"
         )
         async_task(
             "members.tasks.import_row",

@@ -347,7 +347,7 @@ class TestDisplayMembers(MemberTestCase):
         def check_is_in(content, member):
             self.assertInHTML(
                 f"""<div class="cell has-text-centered my-auto">
-        <a class="button button-wrap" href="{reverse("members:detail", kwargs={'pk': member.id})}">
+        <a class="button button-wrap" href="{reverse("members:detail", kwargs={"pk": member.id})}">
           <strong>{member.full_name}</strong></a></div>""",
                 content,
             )
@@ -357,7 +357,7 @@ class TestDisplayMembers(MemberTestCase):
             self.assertNotIn(content, f"""<strong>{member.full_name}</strong>""")
             self.assertNotIn(
                 content,
-                f"""href={reverse("members:detail", kwargs={'pk': member.id})}>""",
+                f"""href={reverse("members:detail", kwargs={"pk": member.id})}>""",
             )
 
         def filter_member(member, first_name=False, last_name=False):
@@ -511,8 +511,8 @@ class TestActivateManagedMember(MemberTestCase):
         url = match.group(0)
         # print('url:', url)
         response = self.client.get(url, follow=True)
-        tr1 = f'{_("Your Email is verified successfully and your account has been activated.")}'
-        tr2 = f'{_("You can sign in with your credentials now...")}'
+        tr1 = f"{_('Your Email is verified successfully and your account has been activated.')}"
+        tr2 = f"{_('You can sign in with your credentials now...')}"
         self.assertContains(
             response,
             f'<p class="content">{tr1}</p><p class="content">{tr2}</p>',

@@ -21,7 +21,7 @@ class TestAdminMessage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
             response,
             f"""<div class="notification is-info admin-message" data-id="{adm_msg.id}">
         <button class="delete"></button>
-        {admin_message['content']}
+        {admin_message["content"]}
       </div>""",
             html=True,
         )
@@ -45,9 +45,9 @@ class TestAdminMessage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
         for admin_message in admin_messages:
             self.assertContains(
                 response,
-                f"""<div class="notification is-info admin-message" data-id="{admin_message['obj'].id}">
+                f"""<div class="notification is-info admin-message" data-id="{admin_message["obj"].id}">
           <button class="delete"></button>
-          {admin_message['content']}
+          {admin_message["content"]}
         </div>""",
                 html=True,
             )

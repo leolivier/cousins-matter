@@ -41,7 +41,7 @@ class TestPageMixin:
             )
             content = f"""<div class="control">
   <textarea name="content" cols="40" rows="10" class="richtextarea" id="id_content">
-    {page_data['content']}
+    {page_data["content"]}
   </textarea>
 </div>"""
             self.assertContains(response, content, html=True)
@@ -50,7 +50,7 @@ class TestPageMixin:
             self.assertRedirects(response, page_data["url"], 302, 200)
             content = f"""<div class="container px-2">
   <div class="content">
-    {page_data['content']}
+    {page_data["content"]}
   </div>
 </div>"""
             self.assertContains(response, content, html=True)

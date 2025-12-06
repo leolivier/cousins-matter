@@ -242,7 +242,7 @@ def check_cousins_matter_is_down():
         )
         if result.returncode != 0:
             error(1, "Unable to check if cousins-matter is down")
-        containers = json.loads(f'[{",".join(result.stdout.splitlines())}]')
+        containers = json.loads(f"[{','.join(result.stdout.splitlines())}]")
         errors = []
         for container in containers:
             name = container.get("Names", "")

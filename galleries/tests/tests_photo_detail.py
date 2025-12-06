@@ -20,9 +20,9 @@ class PhotoDetailTest(GalleryBaseTestCase):
         self.gallery.save()
         self.photos = []
         for i in range(self.nb_photos):
-            image = create_test_image(__file__, f"test-image-{i+1}.jpg")
+            image = create_test_image(__file__, f"test-image-{i + 1}.jpg")
             p = Photo(
-                name=f"photo #{i+1}",
+                name=f"photo #{i + 1}",
                 gallery=self.gallery,
                 date=date.today(),
                 image=image,

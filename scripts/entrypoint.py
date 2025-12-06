@@ -150,7 +150,7 @@ def wait_for_db():
         except OperationalError as e:
             if i < MAX_RETRIES - 1:
                 logger.debug(
-                    f"Database unavailable ({i+1}/{MAX_RETRIES}), waiting {RETRY_DELAY} seconds..."
+                    f"Database unavailable ({i + 1}/{MAX_RETRIES}), waiting {RETRY_DELAY} seconds..."
                 )
                 time.sleep(RETRY_DELAY)
             else:

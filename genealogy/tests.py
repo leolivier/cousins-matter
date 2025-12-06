@@ -79,19 +79,21 @@ class GenealogyViewsTest(MemberTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "genealogy/dashboard.html")
         content = response.content.decode("utf-8")
-        self.assertInHTML(
+        self.assertContains(
+            response,
             f"""<div class='box'>
             <div class='heading'>{_("Total People")}</div>
             <div class='title'>{Person.objects.count()}</div>
         </div>""",
-            content,
+            html=True,
         )
-        self.assertInHTML(
+        self.assertContains(
+            response,
             f"""<div class='box'>
             <div class='heading'>{_("Total Families")}</div>
             <div class='title'>{Family.objects.count()}</div>
         </div>""",
-            content,
+            html=True,
         )
 
     def test_person_list_view(self):

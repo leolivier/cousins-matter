@@ -40,9 +40,14 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Gender Chart
-    const genderCtx = document.getElementById('genderChart').getContext('2d');
-    const genderData = '{{gender_data|safe}}';
-    const genderLabels = genderData.map(d => d.sex === 'M' ? '{% trans "Male" %}' : (d.sex === 'F' ? '{% trans "Female" %}' : '{% trans "Other" %}'));
+    const genderCtx = $('#genderChart')[0].getContext('2d');
+;
+    const genderData = {{gender_data|safe}};
+    const genderLabels = genderData.map(
+        d => d.sex === 'M' ? '{% trans "Male" %}' :
+            (d.sex === 'F' ? '{% trans "Female" %}' :
+            '{% trans "Other" %}')
+    );
     const genderCounts = genderData.map(d => d.count);
 
     new Chart(genderCtx, {
@@ -57,14 +62,14 @@
     });
 
     // Births Chart
-    const birthsCtx = document.getElementById('birthsChart').getContext('2d');
+    const birthsCtx = $('#birthsChart')[0].getContext('2d');
     new Chart(birthsCtx, {
         type: 'line',
         data: {
-            labels: "{{ decades|safe }}",
+            labels: {{ decades|safe }},
             datasets: [{
                 label: '{% trans "Births" %}',
-                data: '{{ births_per_decade|safe }}',
+                data: {{ births_per_decade|safe }},
                 borderColor: '#3e8ed0',
                 tension: 0.1,
                 fill: true,
@@ -74,8 +79,8 @@
     });
 
     // Top First Names
-    const firstNameCtx = document.getElementById('firstNameChart').getContext('2d');
-    const firstNames = '{{ top_first_names|safe }}';
+    const firstNameCtx = $('#firstNameChart')[0].getContext('2d');
+    const firstNames = {{ top_first_names|safe }};
     new Chart(firstNameCtx, {
         type: 'bar',
         data: {
@@ -90,8 +95,8 @@
     });
 
     // Top Last Names
-    const lastNameCtx = document.getElementById('lastNameChart').getContext('2d');
-    const lastNames = '{{ top_last_names|safe }}';
+    const lastNameCtx = $('#lastNameChart')[0].getContext('2d');
+    const lastNames = {{ top_last_names|safe }};
     new Chart(lastNameCtx, {
         type: 'bar',
         data: {

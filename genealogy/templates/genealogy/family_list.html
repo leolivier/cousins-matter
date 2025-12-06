@@ -1,5 +1,5 @@
 {% extends "genealogy/base_genealogy.html" %}
-{% load i18n %}
+{% load i18n cm_tags %}
 
 {% block genealogy_content %}
 <div class="box">
@@ -12,11 +12,14 @@
         <div class="level-right">
             <div class="level-item">
                 <a href="{% url 'genealogy:family_create' %}" class="button is-primary">
-                    <span class="icon"><i class="fas fa-plus"></i></span>
+                    {%icon "new"%}
                     <span>{% trans "Add Family" %}</span>
                 </a>
             </div>
         </div>
+    </div>
+    <div class="level">
+        {%paginate page%}
     </div>
 
     <table class="table is-fullwidth is-striped is-hoverable">
@@ -30,12 +33,12 @@
             </tr>
         </thead>
         <tbody>
-            {% for family in families %}
+            {% for family in page.object_list %}
             <tr>
                 <td>
                     {% if family.partner1 %}
                     <a href="{% url 'genealogy:person_detail' family.partner1.id %}">
-                        {{ family.partner1 }}
+                        {{ family.partner1 }} {%icon family.partner1.gender_icon%}
                     </a>
                     {% else %}
                     -
@@ -44,7 +47,7 @@
                 <td>
                     {% if family.partner2 %}
                     <a href="{% url 'genealogy:person_detail' family.partner2.id %}">
-                        {{ family.partner2 }}
+                        {{ family.partner2 }} {%icon family.partner2.gender_icon%}
                     </a>
                     {% else %}
                     -
@@ -55,10 +58,10 @@
                 <td>
                     <div class="buttons are-small">
                         <a href="{% url 'genealogy:family_update' family.id %}" class="button is-warning is-light">
-                            <span class="icon"><i class="fas fa-edit"></i></span>
+                            {%icon "edit" %}
                         </a>
                         <a href="{% url 'genealogy:family_delete' family.id %}" class="button is-danger is-light">
-                            <span class="icon"><i class="fas fa-trash"></i></span>
+                            {%icon "delete" %}
                         </a>
                     </div>
                 </td>

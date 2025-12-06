@@ -1,12 +1,16 @@
-from django.test import TestCase, Client
+from django.test import Client
+from django.utils.translation import gettext as _
 from django.urls import reverse
 from datetime import date
+from django.utils import timezone, formats
 from .models import Person, Family
 from .forms import PersonForm, FamilyForm
+from members.tests.tests_member_base import MemberTestCase
 
 
-class PersonModelTest(TestCase):
+class PersonModelTest(MemberTestCase):
     def setUp(self):
+        super().setUp()
         self.person = Person.objects.create(
             first_name="John", last_name="Doe", sex="M", birth_date=date(1990, 1, 1)
         )
@@ -28,8 +32,9 @@ class PersonModelTest(TestCase):
         self.assertEqual(self.person.age, 30)
 
 
-class FamilyModelTest(TestCase):
+class FamilyModelTest(MemberTestCase):
     def setUp(self):
+        super().setUp()
         self.p1 = Person.objects.create(first_name="P1", last_name="Test", sex="M")
         self.p2 = Person.objects.create(first_name="P2", last_name="Test", sex="F")
         self.family = Family.objects.create(
@@ -57,44 +62,62 @@ class FamilyModelTest(TestCase):
         self.assertIn(child, self.family.children.all())
 
 
-class GenealogyViewsTest(TestCase):
+class GenealogyViewsTest(MemberTestCase):
     def setUp(self):
-        self.client = Client()
+        super().setUp()
         self.person = Person.objects.create(
-            first_name="View", last_name="Test", sex="F"
+            first_name="View", last_name="Test", sex="F", birth_date=date(1990, 1, 1), death_date=date(2020, 1, 1)
         )
         self.family = Family.objects.create(partner1=self.person, union_type="MARR")
 
     def test_dashboard_view(self):
-        response = self.client.get(reverse("genealogy:dashboard"))
+        response = self.client.get(reverse("genealogy:dashboard"), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "genealogy/dashboard.html")
+        content = response.content.decode("utf-8")
+        self.assertInHTML(f"""<div class='box'>
+            <div class='heading'>{_("Total People")}</div>
+            <div class='title'>{Person.objects.count()}</div>
+        </div>""", content)
+        self.assertInHTML(f"""<div class='box'>
+            <div class='heading'>{_("Total Families")}</div>
+            <div class='title'>{Family.objects.count()}</div>
+        </div>""", content)
 
     def test_person_list_view(self):
-        response = self.client.get(reverse("genealogy:person_list"))
+        response = self.client.get(reverse("genealogy:person_list"), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Test, View")
+        self.assertContains(
+            response, formats.date_format(self.person.birth_date, "DATE_FORMAT")
+        )
 
     def test_person_detail_view(self):
         response = self.client.get(
-            reverse("genealogy:person_detail", args=[self.person.id])
+            reverse("genealogy:person_detail", args=[self.person.id]), follow=True
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "View Test")
+        self.assertContains(
+            response, formats.date_format(self.person.birth_date, "DATE_FORMAT")
+        )
+        self.assertContains(
+            response, formats.date_format(self.person.death_date, "DATE_FORMAT")
+        )
 
     def test_family_tree_view(self):
-        response = self.client.get(reverse("genealogy:family_tree"))
+        response = self.client.get(reverse("genealogy:family_tree"), follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_tree_data_api(self):
-        response = self.client.get(reverse("genealogy:tree_data"))
+        response = self.client.get(reverse("genealogy:tree_data"), follow=True, headers={"HTTP_ACCEPT": "application/json"})
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertIn("nodes", data)
         self.assertIn("links", data)
 
 
-class GenealogyFormsTest(TestCase):
+class GenealogyFormsTest(MemberTestCase):
     def test_person_form_valid(self):
         form = PersonForm(
             data={

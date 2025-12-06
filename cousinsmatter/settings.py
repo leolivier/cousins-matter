@@ -424,6 +424,7 @@ FEATURES_FLAGS = env.dict(
         "show_site_stats": True,
         "show_export_members": True,
         "show_change_language": True,
+        "show_genealogy": True,
     },
 )
 

@@ -1,5 +1,5 @@
 {% extends "genealogy/base_genealogy.html" %}
-{% load i18n %}
+{% load i18n cm_tags %}
 
 {% block genealogy_content %}
 <div class="columns">
@@ -17,12 +17,8 @@
                         </figure>
                     </div>
                     <div class="media-content">
-                        <p class="title is-4">{{ person.first_name }} {{ person.last_name }}</p>
-                        <p class="subtitle is-6">
-                            {% if person.sex == 'M' %}<i class="fas fa-mars"></i>
-                            {% elif person.sex == 'F' %}<i class="fas fa-venus"></i>
-                            {% else %}<i class="fas fa-genderless"></i>{% endif %}
-                            {{ person.get_sex_display }}
+                        <p class="title is-4">{{ person.first_name }} {{ person.last_name }}
+                            {%icon person.gender_icon%}
                         </p>
                     </div>
                 </div>
@@ -72,15 +68,15 @@
                             {% if person.child_of_family.partner1 %}
                             <li>
                                 <a href="{% url 'genealogy:person_detail' person.child_of_family.partner1.id %}">
-                                    {{ person.child_of_family.partner1 }}
-                                </a> ({{ person.child_of_family.partner1.get_sex_display }})
+                                    {{ person.child_of_family.partner1 }} {%icon person.child_of_family.partner1.gender_icon%}
+                                </a>
                             </li>
                             {% endif %}
                             {% if person.child_of_family.partner2 %}
                             <li>
                                 <a href="{% url 'genealogy:person_detail' person.child_of_family.partner2.id %}">
-                                    {{ person.child_of_family.partner2 }}
-                                </a> ({{ person.child_of_family.partner2.get_sex_display }})
+                                    {{ person.child_of_family.partner2 }} {%icon person.child_of_family.partner2.gender_icon%}
+                                </a>
                             </li>
                             {% endif %}
                         </ul>
@@ -95,7 +91,7 @@
                         {% for partner in person.get_partners %}
                         <li>
                             <a href="{% url 'genealogy:person_detail' partner.id %}">
-                                {{ partner }}
+                                {{ partner }} {%icon partner.gender_icon%}
                             </a>
                         </li>
                         {% empty %}
@@ -111,7 +107,7 @@
                             {% for child in family.children.all %}
                             <li>
                                 <a href="{% url 'genealogy:person_detail' child.id %}">
-                                    {{ child }}
+                                    {{ child }} {%icon child.gender_icon%}
                                 </a>
                             </li>
                             {% endfor %}
@@ -120,7 +116,7 @@
                             {% for child in family.children.all %}
                             <li>
                                 <a href="{% url 'genealogy:person_detail' child.id %}">
-                                    {{ child }}
+                                    {{ child }} {%icon child.gender_icon%}
                                 </a>
                             </li>
                             {% endfor %}

@@ -8,10 +8,10 @@ from cm_main.templatetags.cm_tags import icon
 
 
 class TestFeaturedMixin(MemberTestCase):
-    def build_url(self, url, name, icon_name, icon_classes="is-small mr-3"):
+    def build_url(self, url, name, icon_name, icon_classes="is-small"):
         "Helper method to build navigation URLs for testing."
         return f"""
-<a class="navbar-item" href="{reverse(url)}">
+<a class="navbar-item is-hoverable" href="{reverse(url)}">
   {icon(icon_name, icon_classes)} <span>{name}</span>
 </a>
 """
@@ -42,6 +42,9 @@ class TestFeaturedMixin(MemberTestCase):
             "members:select_members_to_export",
             _("Export Members as CSV"),
             "import-members",
+        )
+        self.genealogy_url = self.build_url(
+            "genealogy:dashboard", _("Genealogy"), "family-tree"
         )
 
 
@@ -257,3 +260,19 @@ class TestFeaturedPages(TestFeaturedMixin):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, self.pages_url, html=True)
+
+
+class TestFeaturedGenealogy(TestFeaturedMixin):
+    @override_settings(FEATURES_FLAGS={"show_genealogy": False})
+    def test_genealogy_disabled(self):
+        "Tests genealogy are hidden when feature is disabled in settings."
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, self.genealogy_url, html=True)
+
+    @override_settings(FEATURES_FLAGS={"show_genealogy": True})
+    def test_genealogy_enabled(self):
+        "Tests genealogy is visible when feature is enabled in settings."
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.genealogy_url, html=True)

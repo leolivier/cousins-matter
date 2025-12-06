@@ -1,5 +1,5 @@
 {% extends "genealogy/base_genealogy.html" %}
-{% load i18n %}
+{% load i18n cm_tags %}
 
 {% block genealogy_content %}
 <div class="box">
@@ -28,11 +28,14 @@
             </div>
             <div class="level-item">
                 <a href="{% url 'genealogy:person_create' %}" class="button is-primary">
-                    <span class="icon"><i class="fas fa-plus"></i></span>
+                    {%icon "new" %}
                     <span>{% trans "Add Person" %}</span>
                 </a>
             </div>
         </div>
+    </div>
+    <div class="level">
+        {%paginate page%}
     </div>
 
     <table class="table is-fullwidth is-striped is-hoverable">
@@ -45,7 +48,7 @@
             </tr>
         </thead>
         <tbody id="person-table-body">
-            {% for person in people %}
+            {% for person in page.object_list %}
             <tr>
                 <td>
                     <a href="{% url 'genealogy:person_detail' person.id %}">
@@ -57,10 +60,10 @@
                 <td>
                     <div class="buttons are-small">
                         <a href="{% url 'genealogy:person_detail' person.id %}" class="button is-info is-light">
-                            <span class="icon"><i class="fas fa-eye"></i></span>
+                            {%icon "details" %}
                         </a>
                         <a href="{% url 'genealogy:person_update' person.id %}" class="button is-warning is-light">
-                            <span class="icon"><i class="fas fa-edit"></i></span>
+                            {%icon "edit" %}
                         </a>
                     </div>
                 </td>

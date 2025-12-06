@@ -3,15 +3,20 @@ from django.http import JsonResponse, HttpResponse
 from django.db.models import Q, Count
 from django.db.models.functions import ExtractYear
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.views.decorators.cache import cache_page
 import os
+from cm_main.utils import PageOutOfBounds, Paginator
 from .models import Person, Family
 from .forms import PersonForm, FamilyForm, GedcomImportForm
 from .utils import GedcomParser, GedcomExporter
 
 
+@login_required
+@cache_page(60 * 5)
 def dashboard(request):
     total_people = Person.objects.count()
     total_families = Family.objects.count()
@@ -22,7 +27,9 @@ def dashboard(request):
     return render(request, "genealogy/dashboard.html", context)
 
 
-def person_list(request):
+@login_required
+@cache_page(60 * 5)
+def person_list(request, page_num=1):
     query = request.GET.get("q")
     if query:
         people = Person.objects.filter(
@@ -36,18 +43,34 @@ def person_list(request):
     else:
         template = "genealogy/person_list.html"
 
-    return render(request, template, {"people": people})
+    try:
+        page = Paginator.get_page(
+            request,
+            object_list=people,
+            page_num=page_num,
+            reverse_link="genealogy:person_list_page",
+            default_page_size=50,
+        )
+        return render(request, template, {"page": page})
+    except PageOutOfBounds as exc:
+        return redirect(exc.redirect_to)
 
 
+@login_required
+@cache_page(60 * 5)
 def person_detail(request, pk):
     person = get_object_or_404(Person, pk=pk)
     return render(request, "genealogy/person_detail.html", {"person": person})
 
 
+@login_required
+@cache_page(60 * 5)
 def family_tree(request):
     return render(request, "genealogy/family_tree.html")
 
 
+@login_required
+@cache_page(60 * 10)
 def tree_data(request):
     nodes = []
     links = []
@@ -99,6 +122,7 @@ def tree_data(request):
     return JsonResponse({"nodes": nodes, "links": links})
 
 
+@login_required
 def person_create(request):
     if request.method == "POST":
         form = PersonForm(request.POST)
@@ -113,6 +137,7 @@ def person_create(request):
     )
 
 
+@login_required
 def person_update(request, pk):
     person = get_object_or_404(Person, pk=pk)
     if request.method == "POST":
@@ -128,6 +153,7 @@ def person_update(request, pk):
     )
 
 
+@login_required
 def person_delete(request, pk):
     person = get_object_or_404(Person, pk=pk)
     if request.method == "POST":
@@ -137,11 +163,24 @@ def person_delete(request, pk):
     return render(request, "genealogy/person_confirm_delete.html", {"person": person})
 
 
-def family_list(request):
+@login_required
+@cache_page(60 * 5)
+def family_list(request, page_num=1):
     families = Family.objects.all()
-    return render(request, "genealogy/family_list.html", {"families": families})
+    try:
+        page = Paginator.get_page(
+            request,
+            object_list=families,
+            page_num=page_num,
+            reverse_link="genealogy:family_list_page",
+            default_page_size=25,
+        )
+        return render(request, "genealogy/family_list.html", {"page": page})
+    except PageOutOfBounds as exc:
+        return redirect(exc.redirect_to)
 
 
+@login_required
 def family_create(request):
     if request.method == "POST":
         form = FamilyForm(request.POST)
@@ -157,6 +196,7 @@ def family_create(request):
     )
 
 
+@login_required
 def family_update(request, pk):
     family = get_object_or_404(Family, pk=pk)
     if request.method == "POST":
@@ -172,6 +212,7 @@ def family_update(request, pk):
     )
 
 
+@login_required
 def family_delete(request, pk):
     family = get_object_or_404(Family, pk=pk)
     if request.method == "POST":
@@ -181,6 +222,7 @@ def family_delete(request, pk):
     return render(request, "genealogy/family_confirm_delete.html", {"family": family})
 
 
+@login_required
 def import_gedcom(request):
     if request.method == "POST":
         form = GedcomImportForm(request.POST, request.FILES)
@@ -209,6 +251,7 @@ def import_gedcom(request):
     return render(request, "genealogy/import_gedcom.html", {"form": form})
 
 
+@login_required
 def export_gedcom(request):
     exporter = GedcomExporter()
     gedcom_content = exporter.export()
@@ -217,6 +260,7 @@ def export_gedcom(request):
     return response
 
 
+@login_required
 def statistics(request):
     # Gender Distribution
     gender_data = Person.objects.values("sex").annotate(count=Count("sex"))

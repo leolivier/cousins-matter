@@ -1,28 +1,28 @@
 {% extends "genealogy/base_genealogy.html" %}
-{% load i18n %}
+{% load i18n cm_tags %}
 
 {% block genealogy_content %}
-    <div class="level">
-        <div class="level-left">
-            <div class="level-item">
-                <h2 class="subtitle">{% trans "Overview" %}</h2>
-            </div>
+<div class="level">
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="subtitle">{% trans "Overview" %}</h2>
         </div>
-        <div class="level-right">
-            <div class="level-item">
-                <div class="buttons">
-                    <a href="{% url 'genealogy:import_gedcom' %}" class="button is-info is-outlined">
-                        <span class="icon"><i class="fas fa-file-upload"></i></span>
-                        <span>{% trans "Import GEDCOM" %}</span>
-                    </a>
-                    <a href="{% url 'genealogy:export_gedcom' %}" class="button is-info is-outlined">
-                        <span class="icon"><i class="fas fa-file-download"></i></span>
-                        <span>{% trans "Export GEDCOM" %}</span>
-                    </a>
-                </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <div class="buttons">
+                <a href="{% url 'genealogy:import_gedcom' %}" class="button is-info">
+                    {%icon "upload"%}
+                    <span>{% trans "Import GEDCOM" %}</span>
+                </a>
+                <a href="{% url 'genealogy:export_gedcom' %}" class="button is-info">
+                    {%icon "download"%}
+                    <span>{% trans "Export GEDCOM" %}</span>
+                </a>
             </div>
         </div>
     </div>
+</div>
 <div class="columns">
     <div class="column">
         <div class="box">

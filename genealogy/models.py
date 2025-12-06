@@ -70,6 +70,14 @@ class Person(models.Model):
             )
         )
 
+    @property
+    def gender_icon(self):
+        return {
+            "M": "gender-male",
+            "F": "gender-female",
+            "O": "genderless",
+        }.get(self.sex, "question")
+
     def get_partners(self):
         """Returns a list of partners from all unions."""
         partners = []

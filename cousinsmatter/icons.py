@@ -7,6 +7,7 @@ DJANGO_ICONS = {
     "delete": "trash-can-outline",
     "edit": "pencil-outline",
     "save": "content-save-outline",
+    "details": "eye-outline",
     "submit": "check-circle-outline",
     "create": "checkbox-marked-circle-auto-outline",
     "create-plus": "checkbox-marked-circle-plus-outline",
@@ -26,6 +27,7 @@ DJANGO_ICONS = {
     "contact": "card-account-mail-outline",
     "private": "eye-lock-outline",
     "upload": "upload-box-outline",
+    "download": "download-box-outline",
     "about": "information-variant",
     "admin": "application-cog-outline",
     "stats": "chart-box-outline",
@@ -109,4 +111,11 @@ DJANGO_ICONS = {
     "classified-ads": "file-document-multiple",
     "classified-ad": "file-document",
     "camera": "camera",
+    # genealogy icons
+    "family-tree": "family-tree",
+    "statistics": "chart-pie",
+    "dashboard": "monitor-dashboard",
+    "gender-male": "gender-male",
+    "gender-female": "gender-female",
+    "genderless": "gender-non-binary",
 }

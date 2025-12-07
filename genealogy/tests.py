@@ -1,4 +1,4 @@
-from django.test import Client
+from django.test import Client, TestCase
 from django.utils.translation import gettext as _
 from django.urls import reverse
 from datetime import date
@@ -129,11 +129,11 @@ class GenealogyViewsTest(MemberTestCase):
         )
         self.assertEqual(response.status_code, 200)
         data = response.json()
-        self.assertIn("nodes", data)
-        self.assertIn("links", data)
+        self.assertIn("people", data)
+        self.assertIn("families", data)
 
 
-class GenealogyFormsTest(MemberTestCase):
+class GenealogyFormsTest(TestCase):
     def test_person_form_valid(self):
         form = PersonForm(
             data={

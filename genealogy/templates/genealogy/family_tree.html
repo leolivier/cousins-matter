@@ -1,25 +1,14 @@
 {% extends "genealogy/base_genealogy.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block genealogy_content %}
-<div class="box">
-    <div class="level">
-        <div class="level-left">
-            <h2 class="subtitle">{% trans "Family Tree" %}</h2>
-        </div>
-        <div class="level-right">
-            <div class="buttons">
-                <button class="button is-small" onclick="resetZoom()">
-                    <span class="icon"><i class="fas fa-compress-arrows-alt"></i></span>
-                    <span>{% trans "Reset" %}</span>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div id="tree-container" style="width: 100%; height: 700px; border: 1px solid #eee; border-radius: 4px; overflow: hidden; background: #fcfcfc;"></div>
+<div class="box" style="height: 80vh; overflow: hidden; position: relative;">
+    <div id="tree-container" style="width: 100%; height: 100%;"></div>
 </div>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.5/dagre.min.js"></script>
 <script>
     const container = document.getElementById('tree-container');
     const width = container.clientWidth;
@@ -35,115 +24,178 @@
 
     const g = svg.append("g");
 
-    // Arrow marker
-    svg.append("defs").selectAll("marker")
-        .data(["end"])
-        .enter().append("marker")
-        .attr("id", String)
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 25)
-        .attr("refY", 0)
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto")
-        .append("path")
-        .attr("d", "M0,-5L10,0L0,5");
-
-    const simulation = d3.forceSimulation()
-        .force("link", d3.forceLink().id(d => d.id).distance(100))
-        .force("charge", d3.forceManyBody().strength(-400))
-        .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("y", d3.forceY(0).strength(0.05))
-        .force("x", d3.forceX(0).strength(0.05));
-
     d3.json("{% url 'genealogy:tree_data' %}").then(data => {
-        const link = g.append("g")
-            .attr("class", "links")
-            .selectAll("line")
-            .data(data.links)
-            .enter().append("line")
-            .attr("stroke", "#999")
-            .attr("stroke-opacity", 0.6)
-            .attr("stroke-width", d => d.type === 'partner' ? 2 : 1.5)
-            .attr("stroke-dasharray", d => d.type === 'partner' ? "5,5" : null)
-            .attr("marker-end", d => d.type === 'parent' ? "url(#end)" : null);
-
-        const node = g.append("g")
-            .attr("class", "nodes")
-            .selectAll("g")
-            .data(data.nodes)
-            .enter().append("g")
-            .call(d3.drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended));
-
-        node.append("circle")
-            .attr("r", 10)
-            .attr("fill", d => {
-                if (d.sex === 'M') return "#3298dc"; // Bulma info
-                if (d.sex === 'F') return "#f14668"; // Bulma danger
-                return "#00d1b2"; // Bulma primary
-            })
-            .attr("stroke", "#fff")
-            .attr("stroke-width", 2);
-
-        node.append("text")
-            .attr("dx", 15)
-            .attr("dy", 4)
-            .text(d => d.name)
-            .style("font-size", "12px")
-            .style("font-family", "sans-serif")
-            .style("pointer-events", "none")
-            .style("text-shadow", "0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff");
-
-        node.on("click", (event, d) => {
-            window.location.href = d.url;
+        // Create a new directed graph
+        const graph = new dagre.graphlib.Graph();
+        graph.setGraph({
+            rankdir: 'TB',
+            nodesep: 50,
+            ranksep: 100,
+            marginx: 20,
+            marginy: 20
         });
-        node.append("title").text(d => d.name);
+        graph.setDefaultEdgeLabel(() => ({}));
 
-        simulation
-            .nodes(data.nodes)
-            .on("tick", ticked);
+        // Add nodes
+        data.people.forEach(person => {
+            // Calculate width based on name length
+            const nameWidth = person.name.length * 10; // Approx 10px per char
+            const width = Math.max(200, nameWidth + 80); // Min 200px, +80 for avatar/padding
+            const height = 100;
 
-        simulation.force("link")
-            .links(data.links);
+            graph.setNode(person.id, {
+                label: person.name,
+                width: width,
+                height: height,
+                data: person,
+                type: 'person'
+            });
+        });
 
-        function ticked() {
-            link
-                .attr("x1", d => d.source.x)
-                .attr("y1", d => d.source.y)
-                .attr("x2", d => d.target.x)
-                .attr("y2", d => d.target.y);
+        // Add family nodes and edges
+        data.families.forEach(family => {
+            // Family node (invisible junction)
+            graph.setNode(family.id, {
+                label: '',
+                width: 1,
+                height: 1,
+                type: 'family',
+                data: family
+            });
 
-            node
-                .attr("transform", d => `translate(${d.x},${d.y})`);
-        }
+            // Edges from partners to family
+            graph.setEdge(family.partner1_id, family.id, { type: 'partner' });
+            graph.setEdge(family.partner2_id, family.id, { type: 'partner' });
+
+            // Edges from family to children
+            family.children_ids.forEach(childId => {
+                graph.setEdge(family.id, childId, { type: 'child' });
+            });
+        });
+
+        // Compute the layout
+        dagre.layout(graph);
+
+        // Render edges
+        const edges = g.append("g")
+            .attr("class", "edges")
+            .selectAll("path")
+            .data(graph.edges())
+            .enter().append("g");
+
+        edges.append("path")
+            .attr("d", e => {
+                const v = graph.node(e.v);
+                const w = graph.node(e.w);
+                const points = graph.edge(e).points;
+
+                // Custom orthogonal path
+                // Start
+                let path = `M ${v.x} ${v.y + v.height / 2}`; // Bottom center of source (or center)
+
+                // For partner links (Person -> Family), we want them to go down then horizontal
+                // For child links (Family -> Person), we want them to go down then horizontal
+
+                // Dagre gives us points. Let's try to use them but orthogonalize
+                // Or just use simple Manhattan routing since we know the structure
+
+                // Simple approach:
+                // Start at bottom center of source
+                // End at top center of target
+
+                const startX = v.x;
+                const startY = v.y + v.height / 2;
+                const endX = w.x;
+                const endY = w.y - w.height / 2;
+
+                const midY = (startY + endY) / 2;
+
+                return `M ${startX} ${startY} V ${midY} H ${endX} V ${endY}`;
+            })
+            .attr("stroke", "#999")
+            .attr("stroke-width", 2)
+            .attr("fill", "none");
+
+        // Render union dates on family nodes
+        g.append("g")
+            .attr("class", "family-labels")
+            .selectAll("text")
+            .data(data.families)
+            .enter().append("text")
+            .attr("x", d => {
+                const node = graph.node(d.id);
+                return node ? node.x : 0;
+            })
+            .attr("y", d => {
+                const node = graph.node(d.id);
+                return node ? node.y - 10 : 0; // Slightly above the junction
+            })
+            .attr("text-anchor", "middle")
+            .style("font-size", "10px")
+            .style("fill", "#555")
+            .style("background-color", "white") // Optional: add background rect for readability
+            .text(d => {
+                if (d.union_date) {
+                    let text = d.union_date;
+                    if (d.separation_date) text += " - " + d.separation_date;
+                    return text;
+                }
+                return "";
+            });
+
+        // Render nodes
+        const nodes = g.append("g")
+            .attr("class", "nodes")
+            .selectAll("foreignObject")
+            .data(graph.nodes().filter(id => graph.node(id).type === 'person'))
+            .enter().append("foreignObject")
+            .attr("width", id => graph.node(id).width)
+            .attr("height", id => graph.node(id).height)
+            .attr("x", id => graph.node(id).x - graph.node(id).width / 2)
+            .attr("y", id => graph.node(id).y - graph.node(id).height / 2)
+            .on("click", (event, id) => {
+                const d = graph.node(id).data;
+                window.location.href = d.url;
+            });
+
+        nodes.append("xhtml:div")
+            .style("width", "100%")
+            .style("height", "100%")
+            .style("border", "1px solid #ccc")
+            .style("border-radius", "5px")
+            .style("background-color", "white")
+            .style("display", "flex")
+            .style("align-items", "center")
+            .style("padding", "5px")
+            .style("box-shadow", "2px 2px 5px rgba(0,0,0,0.1)")
+            .style("cursor", "pointer")
+            .html(id => {
+                const d = graph.node(id).data;
+                return `
+                <div style="margin-right: 10px;">
+                    ${d.avatar_url ? `<img src="${d.avatar_url}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">` : '<span class="icon is-large"><i class="mdi mdi-account mdi-48px"></i></span>'}
+                </div>
+                <div style="flex-grow: 1; overflow: hidden;">
+                    <div style="font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${d.name}</div>
+                    <div style="font-size: 0.8em;">
+                        ${d.birth_date} ${d.death_date ? '- ' + d.death_date : ''}
+                    </div>
+                    <div>
+                        <span class="icon is-small">
+                            <i class="mdi mdi-${d.gender_icon}"></i>
+                        </span>
+                    </div>
+                </div>
+            `});
+
+        // Center the graph
+        const graphWidth = graph.graph().width;
+        const graphHeight = graph.graph().height;
+        const zoomScale = Math.min(width / graphWidth, height / graphHeight) * 0.9;
+        const zoomX = (width - graphWidth * zoomScale) / 2;
+        const zoomY = (height - graphHeight * zoomScale) / 2;
+
+        svg.call(d3.zoom().transform, d3.zoomIdentity.translate(zoomX, zoomY).scale(zoomScale));
     });
-
-    function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-
-    function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
-    }
-
-    function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-    }
-
-    function resetZoom() {
-        svg.transition().duration(750).call(
-            d3.zoom().transform,
-            d3.zoomIdentity,
-            d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
-        );
-    }
 </script>
 {% endblock %}

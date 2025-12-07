@@ -72,54 +72,48 @@ def family_tree(request):
 @login_required
 @cache_page(60 * 10)
 def tree_data(request):
-    nodes = []
-    links = []
-
-    # Add all people as nodes
+    people_data = []
     for person in Person.objects.all():
-        nodes.append(
+        avatar_url = None
+        if person.member and person.member.avatar:
+            avatar_url = person.member.avatar_mini_url
+
+        people_data.append(
             {
                 "id": f"p{person.id}",
                 "name": str(person),
-                "type": "person",
                 "sex": person.sex,
                 "url": f"/genealogy/people/{person.id}/",
+                "avatar_url": avatar_url,
+                "birth_date": person.birth_date.strftime("%Y")
+                if person.birth_date
+                else "",
+                "death_date": person.death_date.strftime("%Y")
+                if person.death_date
+                else "",
+                "gender_icon": person.gender_icon,
             }
         )
 
-        # Add link to parents (via family)
-        if person.child_of_family:
-            # We can link person to their parents directly or to a "family" node
-            # For a force graph, linking to parents is often clearer
-            if person.child_of_family.partner1:
-                links.append(
-                    {
-                        "source": f"p{person.child_of_family.partner1.id}",
-                        "target": f"p{person.id}",
-                        "type": "parent",
-                    }
-                )
-            if person.child_of_family.partner2:
-                links.append(
-                    {
-                        "source": f"p{person.child_of_family.partner2.id}",
-                        "target": f"p{person.id}",
-                        "type": "parent",
-                    }
-                )
-
-    # Add partner links
+    families_data = []
     for family in Family.objects.all():
         if family.partner1 and family.partner2:
-            links.append(
+            families_data.append(
                 {
-                    "source": f"p{family.partner1.id}",
-                    "target": f"p{family.partner2.id}",
-                    "type": "partner",
+                    "id": f"f{family.id}",
+                    "partner1_id": f"p{family.partner1.id}",
+                    "partner2_id": f"p{family.partner2.id}",
+                    "children_ids": [f"p{child.id}" for child in family.children.all()],
+                    "union_date": family.union_date.strftime("%Y")
+                    if family.union_date
+                    else "",
+                    "separation_date": family.separation_date.strftime("%Y")
+                    if family.separation_date
+                    else "",
                 }
             )
 
-    return JsonResponse({"nodes": nodes, "links": links})
+    return JsonResponse({"people": people_data, "families": families_data})
 
 
 @login_required
@@ -261,6 +255,7 @@ def export_gedcom(request):
 
 
 @login_required
+@cache_page(60 * 5)
 def statistics(request):
     # Gender Distribution
     gender_data = Person.objects.values("sex").annotate(count=Count("sex"))

@@ -21,4 +21,5 @@ urlpatterns = [
     path("statistics/", views.statistics, name="statistics"),
     path("tree/", views.family_tree, name="family_tree"),
     path("api/tree-data/", views.tree_data, name="tree_data"),
+    path("refresh/", views.refresh, name="refresh"),
 ]

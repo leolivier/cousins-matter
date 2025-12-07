@@ -1,5 +1,5 @@
 {% extends "cm_main/base.html" %}
-{% load i18n cm_tags static %}
+{% load i18n cm_tags static cache %}
 
 {% block title %}{% title _("Genealogy") %}{% endblock %}
 
@@ -47,5 +47,8 @@
         {% block genealogy_content %}
         {% endblock %}
     </div>
+</div>
+<div class="container has-text-centered">
+<a href="{% url 'genealogy:refresh' %}" class="button is-primary">{% trans "Force refresh" %}</a>
 </div>
 {% endblock %}

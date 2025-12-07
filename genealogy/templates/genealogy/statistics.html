@@ -1,8 +1,8 @@
 {% extends "genealogy/base_genealogy.html" %}
-{% load i18n %}
-{% load static %}
+{% load i18n static cache %}
 
 {% block genealogy_content %}
+{% cache 300 genealogy_statistics %}
 <div class="columns is-multiline">
     <!-- Gender Distribution -->
     <div class="column is-one-third">
@@ -36,7 +36,6 @@
         </div>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Gender Chart
@@ -110,4 +109,5 @@
         options: { indexAxis: 'y' }
     });
 </script>
+{% endcache %}
 {% endblock %}

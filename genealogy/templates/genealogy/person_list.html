@@ -1,7 +1,8 @@
 {% extends "genealogy/base_genealogy.html" %}
-{% load i18n cm_tags %}
+{% load i18n cm_tags cache %}
 
 {% block genealogy_content %}
+{% cache 300 genealogy_person_list cache_key_suffix %}
 <div class="box">
     <div class="level">
         <div class="level-left">
@@ -47,6 +48,7 @@
                 <th>{% trans "Actions" %}</th>
             </tr>
         </thead>
+        {% partialdef person_list_table inline %}
         <tbody id="person-table-body">
             {% for person in page.object_list %}
             <tr>
@@ -74,8 +76,8 @@
             </tr>
             {% endfor %}
         </tbody>
+        {% endpartialdef %}
     </table>
-
-    <!-- Pagination could go here -->
 </div>
+{% endcache %}
 {% endblock %}

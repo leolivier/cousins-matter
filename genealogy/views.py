@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 import os
 from cm_main.utils import PageOutOfBounds, Paginator
 from .models import Person, Family
@@ -16,7 +16,6 @@ from .utils import GedcomParser, GedcomExporter
 
 
 @login_required
-@cache_page(60 * 5)
 def dashboard(request):
     total_people = Person.objects.count()
     total_families = Family.objects.count()
@@ -28,18 +27,20 @@ def dashboard(request):
 
 
 @login_required
-@cache_page(60 * 5)
 def person_list(request, page_num=1):
     query = request.GET.get("q")
-    if query:
-        people = Person.objects.filter(
+    people = (
+        Person.objects.filter(
             Q(first_name__icontains=query) | Q(last_name__icontains=query)
         )
-    else:
-        people = Person.objects.all()
+        if query
+        else Person.objects.all()
+    )
+
+    cache_key_suffix = (request.GET.urlencode() or "default") + str(page_num)
 
     if request.htmx:
-        template = "genealogy/person_list.html#person-table-body"
+        template = "genealogy/person_list.html#person_list_table"
     else:
         template = "genealogy/person_list.html"
 
@@ -51,26 +52,25 @@ def person_list(request, page_num=1):
             reverse_link="genealogy:person_list_page",
             default_page_size=50,
         )
-        return render(request, template, {"page": page})
+        return render(
+            request, template, {"page": page, "cache_key_suffix": cache_key_suffix}
+        )
     except PageOutOfBounds as exc:
         return redirect(exc.redirect_to)
 
 
 @login_required
-@cache_page(60 * 5)
 def person_detail(request, pk):
     person = get_object_or_404(Person, pk=pk)
     return render(request, "genealogy/person_detail.html", {"person": person})
 
 
 @login_required
-@cache_page(60 * 5)
 def family_tree(request):
     return render(request, "genealogy/family_tree.html")
 
 
 @login_required
-@cache_page(60 * 10)
 def tree_data(request):
     people_data = []
     for person in Person.objects.all():
@@ -123,6 +123,7 @@ def person_create(request):
         if form.is_valid():
             person = form.save()
             messages.success(request, _("Person created successfully."))
+            clear_genealogy_caches(request)
             return redirect("genealogy:person_detail", pk=person.pk)
     else:
         form = PersonForm()
@@ -139,6 +140,7 @@ def person_update(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, _("Person updated successfully."))
+            clear_genealogy_caches(request)
             return redirect("genealogy:person_detail", pk=person.pk)
     else:
         form = PersonForm(instance=person)
@@ -153,14 +155,31 @@ def person_delete(request, pk):
     if request.method == "POST":
         person.delete()
         messages.success(request, _("Person deleted successfully."))
+        clear_genealogy_caches(request)
         return redirect("genealogy:person_list")
     return render(request, "genealogy/person_confirm_delete.html", {"person": person})
 
 
 @login_required
-@cache_page(60 * 5)
 def family_list(request, page_num=1):
-    families = Family.objects.all()
+    query = request.GET.get("q")
+    if query:
+        families = Family.objects.filter(
+            Q(partner1__first_name__icontains=query)
+            | Q(partner2__first_name__icontains=query)
+            | Q(partner1__last_name__icontains=query)
+            | Q(partner2__last_name__icontains=query)
+        )
+    else:
+        families = Family.objects.all()
+
+    cache_key_suffix = (request.GET.urlencode() or "default") + str(page_num)
+
+    if request.htmx:
+        template = "genealogy/family_list.html#family_list_table"
+    else:
+        template = "genealogy/family_list.html"
+
     try:
         page = Paginator.get_page(
             request,
@@ -169,7 +188,9 @@ def family_list(request, page_num=1):
             reverse_link="genealogy:family_list_page",
             default_page_size=25,
         )
-        return render(request, "genealogy/family_list.html", {"page": page})
+        return render(
+            request, template, {"page": page, "cache_key_suffix": cache_key_suffix}
+        )
     except PageOutOfBounds as exc:
         return redirect(exc.redirect_to)
 
@@ -182,6 +203,7 @@ def family_create(request):
             # family =
             form.save()
             messages.success(request, _("Family created successfully."))
+            clear_genealogy_caches(request)
             return redirect("genealogy:dashboard")  # Or family detail if we had one
     else:
         form = FamilyForm()
@@ -198,6 +220,7 @@ def family_update(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, _("Family updated successfully."))
+            clear_genealogy_caches(request)
             return redirect("genealogy:dashboard")
     else:
         form = FamilyForm(instance=family)
@@ -212,6 +235,7 @@ def family_delete(request, pk):
     if request.method == "POST":
         family.delete()
         messages.success(request, _("Family deleted successfully."))
+        clear_genealogy_caches(request)
         return redirect("genealogy:dashboard")
     return render(request, "genealogy/family_confirm_delete.html", {"family": family})
 
@@ -232,6 +256,7 @@ def import_gedcom(request):
                 parser = GedcomParser(full_path)
                 parser.parse()
                 messages.success(request, _("GEDCOM imported successfully."))
+                clear_genealogy_caches(request)
             except Exception as e:
                 messages.error(
                     request, _("Error importing GEDCOM: %(error)s") % {"error": str(e)}
@@ -255,7 +280,6 @@ def export_gedcom(request):
 
 
 @login_required
-@cache_page(60 * 5)
 def statistics(request):
     # Gender Distribution
     gender_data = Person.objects.values("sex").annotate(count=Count("sex"))
@@ -293,3 +317,17 @@ def statistics(request):
         "births_per_decade": list(sorted_decades.values()),
     }
     return render(request, "genealogy/statistics.html", context)
+
+
+def clear_genealogy_caches(request):
+    cache.delete("genealogy_statistics")
+    cache.delete("genealogy_family_tree")
+    cache.delete("genealogy_person_list")
+    cache.delete("genealogy_family_list")
+
+
+@login_required
+def refresh(request):
+    clear_genealogy_caches(request)
+    messages.success(request, _("Genealogy data refreshed successfully."))
+    return redirect(request.META.get("HTTP_REFERER"))

@@ -85,13 +85,29 @@ class GedcomParser:
         partner2 = self.person_map.get(wife_id)
 
         if partner1 or partner2:
-            family = Family.objects.create(
-                partner1=partner1,
-                partner2=partner2,
-                union_type="MARR",  # Default to marriage for GEDCOM families
-            )
+            # Try to find existing family with these partners to avoid duplicates
+            family = None
+            if partner1 and partner2:
+                family = Family.objects.filter(
+                    partner1=partner1, partner2=partner2
+                ).first()
+            elif partner1:
+                family = Family.objects.filter(
+                    partner1=partner1, partner2__isnull=True
+                ).first()
+            elif partner2:
+                family = Family.objects.filter(
+                    partner1__isnull=True, partner2=partner2
+                ).first()
 
-            # Link children
+            if not family:
+                family = Family.objects.create(
+                    partner1=partner1,
+                    partner2=partner2,
+                    union_type="MARR",
+                )
+
+            # Update/Link children
             for child_id in children_ids:
                 child = self.person_map.get(child_id)
                 if child:
@@ -138,7 +154,12 @@ class GedcomExporter:
 
         # Individuals
         for person in Person.objects.all():
-            lines.append(f"0 @I{person.id}@ INDI")
+            p_id = person.gedcom_id if person.gedcom_id else f"@I{person.id}@"
+            # Ensure proper format if stored id is raw text
+            if not p_id.startswith("@"):
+                p_id = f"@{p_id}@"
+
+            lines.append(f"0 {p_id} INDI")
             lines.append(f"1 NAME {person.first_name} /{person.last_name}/")
             lines.append(f"2 GIVN {person.first_name}")
             lines.append(f"2 SURN {person.last_name}")

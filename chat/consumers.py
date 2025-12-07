@@ -10,13 +10,60 @@ from django.utils import timezone
 from django.utils.translation import gettext as _, get_language
 
 from cm_main.followers import check_followers
-from cm_main.utils import is_testing, get_test_absolute_url
+from cm_main.utils import get_test_absolute_url
 from .models import ChatMessage, ChatRoom
 from members.models import Member
 
 random.seed()
 
 logger = logging.getLogger(__name__)
+
+
+# typical self.scope content in an AsyncWebsocketConsumer
+# {
+# 	'type': 'websocket',
+# 	'path': '/chat/a-chat-room-4',
+# 	'raw_path': b'/chat/a-chat-room-4',
+# 	'root_path': '',
+# 	'headers': [
+# 		(b'host', b'127.0.0.1:8000'),
+# 		(b'user-agent', b'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0'),
+# 		(b'accept', b'*/*'),
+# 		(b'accept-language', b'fr-FR,en-US;q=0.7,fr;q=0.3'),
+# 		(b'accept-encoding', b'gzip, deflate, br, zstd'),
+# 		(b'sec-websocket-version', b'13'),
+# 		(b'origin', b'http://127.0.0.1:8000'),
+# 		(b'sec-websocket-extensions', b'permessage-deflate'),
+# 		(b'sec-websocket-key', b'RzYCMMrzBmkgmlrfiaOOqA=='),
+# 		(b'dnt', b'1'),
+# 		(b'connection', b'keep-alive, Upgrade'),
+# 		(b'cookie', b'csrftoken=uo28rDClBtn8WSqPQKE2C7RlkAGKkZIP; sessionid=aiuv54p3xsznwsuu0biwd6bu6ucm74b5'),
+# 		(b'sec-fetch-dest', b'empty'),
+# 		(b'sec-fetch-mode', b'websocket'),
+# 		(b'sec-fetch-site', b'same-origin'),
+# 		(b'pragma', b'no-cache'),
+# 		(b'cache-control', b'no-cache'),
+# 		(b'upgrade', b'websocket')
+# 	],
+# 	'query_string': b'',
+# 	'client': ['127.0.0.1', 43706],
+# 	'server': ['127.0.0.1', 8000],
+# 	'subprotocols': [],
+# 	'asgi': {
+# 		'version': '3.0'},
+# 		'cookies': {
+# 			'csrftoken': 'uo28rDClBtn8WSqPQKE2C7RlkAGKkZIP',
+# 			'sessionid': 'aiuv54p3xsznwsuu0biwd6bu6ucm74b5'
+# 		},
+# 		'session': <django.utils.functional.LazyObject object at 0x7458c85fb6b0>,
+# 		'user': <channels.auth.UserLazyObject object at 0x7458c8554da0>,
+# 		'path_remaining': '',
+# 		'url_route': {
+# 			'args': (),
+# 			'kwargs': {'room_slug': 'a-chat-room-4'}
+# 		}
+# 	}
+# }
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -80,57 +127,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def acheck_followers(self, room, message, member, url):
         check_followers(None, room, room.owner(), url, message, member)
 
-    # typical self.scope content
-    # {
-    # 	'type': 'websocket',
-    # 	'path': '/chat/a-chat-room-4',
-    # 	'raw_path': b'/chat/a-chat-room-4',
-    # 	'root_path': '',
-    # 	'headers': [
-    # 		(b'host', b'127.0.0.1:8000'),
-    # 		(b'user-agent', b'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0'),
-    # 		(b'accept', b'*/*'),
-    # 		(b'accept-language', b'fr-FR,en-US;q=0.7,fr;q=0.3'),
-    # 		(b'accept-encoding', b'gzip, deflate, br, zstd'),
-    # 		(b'sec-websocket-version', b'13'),
-    # 		(b'origin', b'http://127.0.0.1:8000'),
-    # 		(b'sec-websocket-extensions', b'permessage-deflate'),
-    # 		(b'sec-websocket-key', b'RzYCMMrzBmkgmlrfiaOOqA=='),
-    # 		(b'dnt', b'1'),
-    # 		(b'connection', b'keep-alive, Upgrade'),
-    # 		(b'cookie', b'csrftoken=uo28rDClBtn8WSqPQKE2C7RlkAGKkZIP; sessionid=aiuv54p3xsznwsuu0biwd6bu6ucm74b5'),
-    # 		(b'sec-fetch-dest', b'empty'),
-    # 		(b'sec-fetch-mode', b'websocket'),
-    # 		(b'sec-fetch-site', b'same-origin'),
-    # 		(b'pragma', b'no-cache'),
-    # 		(b'cache-control', b'no-cache'),
-    # 		(b'upgrade', b'websocket')
-    # 	],
-    # 	'query_string': b'',
-    # 	'client': ['127.0.0.1', 43706],
-    # 	'server': ['127.0.0.1', 8000],
-    # 	'subprotocols': [],
-    # 	'asgi': {
-    # 		'version': '3.0'},
-    # 		'cookies': {
-    # 			'csrftoken': 'uo28rDClBtn8WSqPQKE2C7RlkAGKkZIP',
-    # 			'sessionid': 'aiuv54p3xsznwsuu0biwd6bu6ucm74b5'
-    # 		},
-    # 		'session': <django.utils.functional.LazyObject object at 0x7458c85fb6b0>,
-    # 		'user': <channels.auth.UserLazyObject object at 0x7458c8554da0>,
-    # 		'path_remaining': '',
-    # 		'url_route': {
-    # 			'args': (),
-    # 			'kwargs': {'room_slug': 'a-chat-room-4'}
-    # 		}
-    # 	}
-    # }
     def _build_absolute_url(self, relative_url):
         # big hack...
         headers = dict(self.scope["headers"])
         origin = headers.get(b"origin", b"").decode()
         if origin == "":
-            if is_testing():
+            if settings.TESTING:
                 return get_test_absolute_url(relative_url)
             else:
                 raise ValueError("Missing origin header")

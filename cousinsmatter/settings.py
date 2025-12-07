@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import environ
+import sys
+import os
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
@@ -28,6 +30,9 @@ environ.Env.read_env(BASE_DIR / ".env", overwrite=True)
 DEBUG = env.bool("DEBUG", False)
 if DEBUG:
     print(f"WARNING! DEBUG={DEBUG}. This is not suited for production!")
+
+TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
+
 SECRET_KEY = env.str("SECRET_KEY")
 # when rotating the secret key, you can provide the old key here to avoid breaking the site
 SECRET_KEY_FALLBACKS = env.list("PREVIOUS_SECRET_KEYS", default=[])
@@ -142,6 +147,7 @@ INSTALLED_APPS = [
     "pages",
     "troves",
     "classified_ads",
+    "genealogy",
     "crispy_forms",
     "crispy_bulma",
     "verify_email",
@@ -158,8 +164,9 @@ INSTALLED_APPS = [
     "channels",
     "django_q",
     "django_htmx",
-    "genealogy",
 ]
+if DEBUG and not TESTING:
+    INSTALLED_APPS.append("debug_toolbar")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -175,8 +182,18 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
 ]
-# if DEBUG:
+if DEBUG and not TESTING:
+    MIDDLEWARE = [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        *MIDDLEWARE,
+    ]
 #   MIDDLEWARE.append('cousinsmatter.htmlvalidator.HtmlValidatorMiddleware')
+
+if DEBUG and not TESTING:
+    INTERNAL_IPS = [
+        "127.0.0.1",
+        "::1",
+    ]
 
 ROOT_URLCONF = "cousinsmatter.urls"
 

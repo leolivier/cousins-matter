@@ -33,24 +33,6 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 logger = logging.getLogger(__name__)
 
-# terrible hack to check if we are in testing mode!!!
-IS_TESTING = None
-
-
-def is_testing():
-    global IS_TESTING
-    if IS_TESTING is not None:
-        return IS_TESTING
-    IS_TESTING = False
-    for connection in connections.all():
-        # print(f"searching test in {connection.settings_dict['NAME']}...")
-        if not isinstance(connection.settings_dict["NAME"], PosixPath):
-            # print("found")
-            IS_TESTING = True
-            break
-    # print("no test connection found")
-    return IS_TESTING
-
 
 def get_test_absolute_url(url):
     return "http://testserver%s" % (url)

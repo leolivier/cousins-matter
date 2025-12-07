@@ -132,6 +132,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         headers = dict(self.scope["headers"])
         origin = headers.get(b"origin", b"").decode()
         if origin == "":
+            from django.conf import settings
             if settings.TESTING:
                 return get_test_absolute_url(relative_url)
             else:

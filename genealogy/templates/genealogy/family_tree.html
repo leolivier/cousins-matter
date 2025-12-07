@@ -2,7 +2,27 @@
 {% load i18n static cache %}
 
 {% block genealogy_content %}
-{% cache 300 genealogy_family_tree %}
+{% cache 300 genealogy_family_tree_v5 %}
+<style>
+    .edge-path {
+        transition: stroke 0.2s, stroke-width 0.2s;
+        cursor: pointer;
+        stroke-opacity: 0.6; /* Default opacity */
+    }
+    .edge-path:hover {
+        /* Optional: keep single hover selection or remove it if user strictly wants group behavior.
+           User request implies group visibility is key.
+           Let's keep hover for single line guide, but 'selected' is for the group. */
+        stroke: #3273dc;
+        stroke-width: 3px;
+        z-index: 100;
+    }
+    .edge-path.selected {
+        stroke: #f14668 !important; /* Bulma danger red */
+        stroke-width: 4px !important;
+        stroke-opacity: 1 !important;
+    }
+</style>
 <div class="box" style="height: 80vh; overflow: hidden; position: relative;">
     <div id="tree-container" style="width: 100%; height: 100%;"></div>
 </div>
@@ -29,7 +49,7 @@
         graph.setGraph({
             rankdir: 'TB',
             nodesep: 50,
-            ranksep: 100,
+            ranksep: 200,
             marginx: 20,
             marginy: 20
         });
@@ -63,12 +83,13 @@
             });
 
             // Edges from partners to family
-            graph.setEdge(family.partner1_id, family.id, { type: 'partner' });
-            graph.setEdge(family.partner2_id, family.id, { type: 'partner' });
+            // high weight to keep partners close to the family center
+            graph.setEdge(family.partner1_id, family.id, { type: 'partner', weight: 10 });
+            graph.setEdge(family.partner2_id, family.id, { type: 'partner', weight: 10 });
 
             // Edges from family to children
             family.children_ids.forEach(childId => {
-                graph.setEdge(family.id, childId, { type: 'child' });
+                graph.setEdge(family.id, childId, { type: 'child', weight: 1 });
             });
         });
 
@@ -83,6 +104,7 @@
             .enter().append("g");
 
         edges.append("path")
+            .attr("class", "edge-path")
             .attr("d", e => {
                 const v = graph.node(e.v);
                 const w = graph.node(e.w);
@@ -107,13 +129,101 @@
                 const endX = w.x;
                 const endY = w.y - w.height / 2;
 
-                const midY = (startY + endY) / 2;
+                // Calculate a basic midY
+                let midY = (startY + endY) / 2;
+
+                // Add an offset based on the Family ID to separate lines for different families
+                // The edge could be Partner->Family (target is family) or Family->Child (source is family)
+                let familyId = null;
+                if (graph.node(e.w).type === 'family') {
+                    familyId = e.w;
+                } else if (graph.node(e.v).type === 'family') {
+                    familyId = e.v;
+                }
+
+                if (familyId) {
+                    // Simple hash function for the ID string (e.g. "f123")
+                    let hash = 0;
+                    for (let i = 0; i < familyId.length; i++) {
+                        hash = (hash << 5) - hash + familyId.charCodeAt(i);
+                        hash |= 0;
+                    }
+                    // Offset between -40 and +40 (range 80)
+                    // Use a prime number for modulo to reduce collisions
+                    const offset = (Math.abs(hash) % 79) - 39;
+                    midY += offset;
+                }
 
                 return `M ${startX} ${startY} V ${midY} H ${endX} V ${endY}`;
             })
             .attr("stroke", "#999")
             .attr("stroke-width", 2)
-            .attr("fill", "none");
+            .attr("fill", "none")
+            .attr("data-family-id", e => {
+                const graph = new dagre.graphlib.Graph(); // We don't have access to graph scope here directly if we don't be careful?
+                // Wait, 'graph' is available in the scope above.
+                // We need to re-derive familyId or store it.
+                // Let's copy the logic or better yet, calculate it once.
+
+                // Oops, the previous block was calculating it inside the 'd' attribute function.
+                // D3 'attr' takes a function.
+
+                // Let's refactor the attribute setting to be cleaner or duplicate the logic safely.
+                // Since I can't easily refactor the whole block with replace_file_content safely without context,
+                // I will duplicate the lightweight check.
+
+                // Actually, I can just not set it here and set it in a .each() or just rely on the fact that I am replacing the .attr chain.
+                // But replace_file_content works on chunks.
+
+                // I'll rewrite the whole edges.append("path") chain to be safe and clean.
+                // But I should be careful about the previous chunk replacement.
+                return null;
+            });
+
+        // Re-selecting to apply logic cleanly
+        edges.selectAll("path")
+            .attr("data-family-id", e => {
+                 let familyId = null;
+                if (graph.node(e.w).type === 'family') {
+                    familyId = e.w;
+                } else if (graph.node(e.v).type === 'family') {
+                    familyId = e.v;
+                }
+                return familyId;
+            })
+            .on("mousedown", function(event, d) {
+                const familyId = d3.select(this).attr("data-family-id");
+                if (familyId) {
+                    d3.selectAll(`.edge-path[data-family-id="${familyId}"]`).classed("selected", true);
+                }
+                event.stopPropagation();
+            })
+            .on("mouseup", function(event, d) {
+                d3.selectAll(".edge-path").classed("selected", false);
+                event.stopPropagation();
+            })
+            .on("mouseleave", function(event, d) {
+                // Also clear if mouse leaves the element while pressing?
+                // Or maybe global mouseup?
+                // User said "during the time where the mouse button is down".
+                // Usually implying a press-hold.
+                // A simple mouseup on the element is good, but if they drag out it might stick.
+                // Let's attach a global mouseup listener to body once?
+                // For simplicity, let's stick to local mouseup/mouseleave for now as it's cleaner.
+                d3.selectAll(".edge-path").classed("selected", false);
+            })
+            // Support touch for mobile
+            .on("touchstart", function(event, d) {
+                 const familyId = d3.select(this).attr("data-family-id");
+                if (familyId) {
+                    d3.selectAll(`.edge-path[data-family-id="${familyId}"]`).classed("selected", true);
+                }
+                event.stopPropagation();
+            })
+            .on("touchend", function(event, d) {
+               d3.selectAll(".edge-path").classed("selected", false);
+               event.stopPropagation();
+            });
 
         // Render union dates on family nodes
         g.append("g")

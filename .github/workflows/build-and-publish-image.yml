@@ -4,12 +4,14 @@ name: Image Build & Push
 
 on:
   push:
-  
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+
   release:
     types: [prereleased, published]
 
   workflow_dispatch:
-
 
 env:
   # The registry where the image will be pushed.
@@ -115,7 +117,6 @@ jobs:
 
       - name: Test Docker Image
         run: |
-          echo "Tested image is ${{env.COUSINS_MATTER_IMAGE}}"
           python ./scripts/manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"
           docker compose -f docker-compose.yml up -d
           # let the server start before running tests

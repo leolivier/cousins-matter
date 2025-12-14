@@ -21,6 +21,11 @@ urlpatterns = [
     path("download-gedcom/", views.download_gedcom, name="download_gedcom"),
     path("download.ged", views.download_gedcom, name="download_gedcom_file"),
     path("family-chart/", views.family_chart_view, name="family_chart"),
+    path(
+        "family-chart/<int:main_person_id>/",
+        views.family_chart_view,
+        name="family_chart",
+    ),
     path("api/family-chart-data/", views.family_chart_data, name="family_chart_data"),
     path("statistics/", views.statistics, name="statistics"),
     path("tree/", views.family_tree, name="family_tree"),

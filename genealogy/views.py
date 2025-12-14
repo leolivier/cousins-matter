@@ -9,6 +9,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core.cache import cache
 import os
+from django.utils import timezone, formats
 from cm_main.utils import PageOutOfBounds, Paginator
 from .models import Person, Family
 from .forms import PersonForm, FamilyForm, GedcomImportForm
@@ -287,8 +288,10 @@ def download_gedcom(request):
 
 
 @login_required
-def family_chart_view(request):
-    return render(request, "genealogy/family_chart.html")
+def family_chart_view(request, main_person_id=None):
+    return render(
+        request, "genealogy/family_chart.html", {"main_person_id": main_person_id}
+    )
 
 
 @login_required
@@ -307,10 +310,6 @@ def family_chart_data(request):
     for person in people:
         # Determine gender for display
         gender = "M" if person.sex == "M" else "F" if person.sex == "F" else "O"
-
-        # Safe date formatting
-        birth_year = person.birth_date.year if person.birth_date else ""
-        death_year = person.death_date.year if person.death_date else ""
 
         # Relationships
         rels = {}
@@ -346,12 +345,18 @@ def family_chart_data(request):
             "data": {
                 "first name": person.first_name,
                 "last name": person.last_name,
-                "birthday": str(person.birth_date) if person.birth_date else "",
+                "birthday": formats.date_format(person.birth_date, "SHORT_DATE_FORMAT")
+                if person.birth_date
+                else "",
+                "deathday": formats.date_format(person.death_date, "SHORT_DATE_FORMAT")
+                if person.death_date
+                else "",
                 "avatar": "",  # Placeholder for avatar
                 "gender": gender,
             },
             "rels": rels,
         }
+
         data.append(person_data)
 
     return JsonResponse(data, safe=False)

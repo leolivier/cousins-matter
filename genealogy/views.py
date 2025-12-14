@@ -280,6 +280,84 @@ def export_gedcom(request):
 
 
 @login_required
+def download_gedcom(request):
+    exporter = GedcomExporter()
+    gedcom_content = exporter.export()
+    return HttpResponse(gedcom_content, content_type="text/plain")
+
+
+@login_required
+def family_chart_view(request):
+    return render(request, "genealogy/family_chart.html")
+
+
+@login_required
+def family_chart_data(request):
+    people = Person.objects.prefetch_related(
+        "unions_as_p1",
+        "unions_as_p2",
+        "unions_as_p1__children",
+        "unions_as_p2__children",
+        "child_of_family",
+        "child_of_family__partner1",
+        "child_of_family__partner2",
+    ).all()
+
+    data = []
+    for person in people:
+        # Determine gender for display
+        gender = "M" if person.sex == "M" else "F" if person.sex == "F" else "O"
+
+        # Safe date formatting
+        birth_year = person.birth_date.year if person.birth_date else ""
+        death_year = person.death_date.year if person.death_date else ""
+
+        # Relationships
+        rels = {}
+
+        # Parents
+        if person.child_of_family:
+            father = person.child_of_family.partner1
+            mother = person.child_of_family.partner2
+            if father:
+                rels["father"] = str(father.id)
+            if mother:
+                rels["mother"] = str(mother.id)
+
+        # Spouses
+        spouses = person.get_partners()
+        if spouses:
+            rels["spouses"] = [str(spouse.id) for spouse in spouses]
+
+        # Children
+        children = []
+        # Unions where person is partner 1
+        for union in person.unions_as_p1.all():
+            children.extend([str(child.id) for child in union.children.all()])
+        # Unions where person is partner 2
+        for union in person.unions_as_p2.all():
+            children.extend([str(child.id) for child in union.children.all()])
+
+        if children:
+            rels["children"] = list(set(children))  # Remove duplicates if any
+
+        person_data = {
+            "id": str(person.id),
+            "data": {
+                "first name": person.first_name,
+                "last name": person.last_name,
+                "birthday": str(person.birth_date) if person.birth_date else "",
+                "avatar": "",  # Placeholder for avatar
+                "gender": gender,
+            },
+            "rels": rels,
+        }
+        data.append(person_data)
+
+    return JsonResponse(data, safe=False)
+
+
+@login_required
 def statistics(request):
     # Gender Distribution
     gender_data = Person.objects.values("sex").annotate(count=Count("sex"))

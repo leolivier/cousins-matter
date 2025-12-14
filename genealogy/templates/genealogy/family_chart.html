@@ -1,0 +1,30 @@
+{% extends "genealogy/base_genealogy.html" %}
+{% load i18n static %}
+{%block header%}
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+	<script src="https://unpkg.com/d3@7"></script>
+  <script type="module" src="https://unpkg.com/family-chart@0.9.0"></script>
+  <link rel="stylesheet" href="https://unpkg.com/family-chart@0.9.0/dist/styles/family-chart.css">
+{% endblock %}
+{% block genealogy_content %}
+<div id="FamilyChart" class="f3" style="width:100%;height:900px;margin:auto;background-color:rgb(33,33,33);color:#fff;"></div>
+<script type="module">
+    fetch("{% url 'genealogy:family_chart_data' %}")
+        .then(response => response.json())
+        .then(data => create(data))
+        .catch(error => console.error('Error fetching tree data:', error));
+
+		function create(data) {
+			const f3Chart = f3.createChart('#FamilyChart', data)
+				.setTransitionTime(1000)
+				.setCardXSpacing(250)
+				.setCardYSpacing(150)
+
+			f3Chart.setCardHtml()
+				.setCardDisplay([["first name","last name"],["birthday"]])
+
+			f3Chart.updateTree({initial: true})
+		}
+
+</script>
+{% endblock %}

@@ -1,7 +1,8 @@
 // bulma calendar integration
 
 $(document).ready(()=>{
-	lang = navigator.language.substring(0, 2) || "en"
+	// lang = navigator.language.substring(0, 2) || "en"
+	lang = document.documentElement.lang || "en"
 	date_fmt = get_format('SHORT_DATE_FORMAT')
 	date_fmt = date_fmt.replace('d', 'dd').replace('m', 'MM').replace('y', 'yy')
 	date_fmt = date_fmt.replace('Y', 'yyyy').replace('n', 'mm')

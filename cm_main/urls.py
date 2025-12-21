@@ -28,10 +28,8 @@ urlpatterns = [
     path("contact/", views_contact.ContactView.as_view(), name="contact"),
     path("about/", views_stats.statistics, name="about"),
     path(
-        "jsi18n/cm_main",
-        last_modified(
-            lambda req, **kw: last_modified_date
-        )(  # JS Catalog will be reloaded only at server restart
+        "jsi18n/cm_main/<str:lang>",  # JS Catalog will be reloaded only at server restart, caching by language
+        last_modified(lambda req, **kw: last_modified_date)(
             JavaScriptCatalog.as_view(packages=["cm_main"])
         ),
         name="javascript-catalog",

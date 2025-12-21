@@ -1,0 +1,54 @@
+{% extends "cm_main/base.html" %}
+{% load i18n cm_tags static cache %}
+
+{% block title %}{% title _("Genealogy") %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="title">{% title _("Genealogy") %}</h1>
+    <div class="tabs is-boxed">
+    {%with active_tab=request.resolver_match.url_name %}
+        <ul>
+            <li class="{% if active_tab == 'dashboard' %}is-active{% endif %}">
+                <a href="{% url 'genealogy:dashboard' %}">
+                    {%icon "dashboard"%}
+                    <span>{% trans "Dashboard" %}</span>
+                </a>
+            </li>
+            <li class="{% if active_tab == 'person_list' %}is-active{% endif %}">
+                <a href="{% url 'genealogy:person_list' %}">
+                    {%icon "member" %}
+                    <span>{% trans "People" %}</span>
+                </a>
+            </li>
+            <li class="{% if active_tab == 'family_list' %}is-active{% endif %}">
+                <a href="{% url 'genealogy:family_list' %}">
+                    {%icon "members" %}
+                    <span>{% trans "Families" %}</span>
+                </a>
+            </li>
+            <li class="{% if active_tab == 'family_chart' %}is-active{% endif %}">
+                <a href="{% url 'genealogy:family_chart' %}">
+                    {%icon "family-tree" %}
+                    <span>{% trans "Family Tree" %}</span>
+                </a>
+            </li>
+            <li class="{% if active_tab == 'statistics' %}is-active{% endif %}">
+                <a href="{% url 'genealogy:statistics' %}">
+                    {%icon "chart-pie" %}
+                    <span>{% trans "Statistics" %}</span>
+                </a>
+            </li>
+        </ul>
+    {%endwith%}
+    </div>
+
+    <div id="genealogy-content">
+        {% block genealogy_content %}
+        {% endblock %}
+    </div>
+</div>
+<div class="container has-text-centered">
+<a href="{% url 'genealogy:refresh' %}" class="button is-primary">{% trans "Force refresh" %}</a>
+</div>
+{% endblock %}

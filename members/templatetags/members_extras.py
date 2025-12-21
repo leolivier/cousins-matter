@@ -6,8 +6,8 @@ register = template.Library()
 
 @register.filter(is_safe=True)
 def members_header(title):
-  """generate an html header including a title and an import of Bulma through CDN"""
-  return f"""
+    """generate an html header including a title and an import of Bulma through CDN"""
+    return f"""
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,9 +21,9 @@ def members_header(title):
 
 @register.filter
 def birthday_color(when):
-  if when == 0:
-    return 'danger'
-  elif when == 1:
-    return 'warning'
-  else:
-    return 'link'
+    if when == 0:
+        return "danger"
+    elif when == 1:
+        return "warning"
+    else:
+        return "link"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 14:19+0200\n"
+"POT-Creation-Date: 2025-11-21 17:46+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Italian <LL@li.org>\n"
@@ -25,12 +25,12 @@ msgstr ""
 msgid "Pages"
 msgstr "Pagine"
 
-#: pages/forms.py:35 pages/tests/tests_crud.py:46 pages/tests/tests_crud.py:116
+#: pages/forms.py:35 pages/tests/tests_crud.py:49 pages/tests/tests_crud.py:122
 #, python-format
 msgid "Flatpage with url %(url)s already exists"
 msgstr "Una pagina con l'url %(url)s esiste già"
 
-#: pages/forms.py:39 pages/tests/tests_crud.py:55
+#: pages/forms.py:39 pages/tests/tests_crud.py:58
 msgid "A flatpage cannot be a subpage of another flatpage, check your URLs"
 msgstr ""
 "Una flatpage non può essere una sottopagina di un'altra flatpage, controlla "

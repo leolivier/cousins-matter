@@ -27,12 +27,15 @@ BASIS, AND THE AUTHOR HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
 UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 """
 
-__author__ = "Olivier LEVILLAIN based on code from Brian St. Pierre <http://bstpierre.org/>"
+__author__ = (
+    "Olivier LEVILLAIN based on code from Brian St. Pierre <http://bstpierre.org/>"
+)
 
 # TODO: distribute on PyPi as a standalone django middleware
 import math
 import os
 import subprocess
+
 # from django.utils.html import escape
 from django.http import HttpResponseServerError
 from django.template import Context, Template
@@ -47,7 +50,7 @@ from django.template import Context, Template
 # you get a validation error.
 
 # Customize this template if you want to.
-ERROR_MESSAGE_TEMPLATE = '''
+ERROR_MESSAGE_TEMPLATE = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-us" xml:lang="en-us">
@@ -73,7 +76,7 @@ HtmlValidatorMiddleware</a>.
 
 </body>
 </html>
-'''
+"""
 
 
 class HtmlValidatorMiddleware:
@@ -82,16 +85,16 @@ class HtmlValidatorMiddleware:
         # One-time configuration and initialization.
 
     def escaped_source(self, content):
-        '''Return the given content with html escaped and line
-        numbers in the left margin.'''
+        """Return the given content with html escaped and line
+        numbers in the left margin."""
 
         # This is overkill, but it's nice to know that no matter how
         # long the content is, we'll have enough leading zeros so that
         # all of the numbers line up!
-        lines = content.split('\n')
-        format = '%%0%dd: %%s\n' % int(math.ceil(math.log(len(lines), 10)))
+        lines = content.split("\n")
+        format = "%%0%dd: %%s\n" % int(math.ceil(math.log(len(lines), 10)))
 
-        output = ''
+        output = ""
         n = 1
         for line in lines:
             # output += format % (n, escape(line))
@@ -102,13 +105,17 @@ class HtmlValidatorMiddleware:
     def process_response(self, response):
         # Don't validate error pages.
         # Don't try to validate if it isn't html.
-        if (response.status_code != 200 or
-            not response['Content-Type'].startswith('text/html')):
+        if response.status_code != 200 or not response["Content-Type"].startswith(
+            "text/html"
+        ):
             return response
         # run html-validate as a subprocess connected to stdin and stdout pipes
-        config_file = os.path.join(os.path.dirname(__file__), '.htmlvalidate.json')
-        with subprocess.Popen(['html-validate', '--stdin', '-c', config_file, '--max-warnings', 10],
-                              stdin=subprocess.PIPE, stdout=subprocess.PIPE) as validator:
+        config_file = os.path.join(os.path.dirname(__file__), ".htmlvalidate.json")
+        with subprocess.Popen(
+            ["html-validate", "--stdin", "-c", config_file, "--max-warnings", 10],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        ) as validator:
             # write response content to validator input
             validator.stdin.write(response.content)
             validator.stdin.close()
@@ -120,13 +127,16 @@ class HtmlValidatorMiddleware:
             # the error message(s) and the escaped source.
             print("Error in HTML:", output.decode())
             t = Template(ERROR_MESSAGE_TEMPLATE)
-            c = Context({
-                'error_message': output.decode() + repr(response.headers),
-                'escaped_source': self.escaped_source(response.content.decode()),
-                })
+            c = Context(
+                {
+                    "error_message": output.decode() + repr(response.headers),
+                    "escaped_source": self.escaped_source(response.content.decode()),
+                }
+            )
 
-            error_response = HttpResponseServerError(t.render(c),
-                                                     content_type='text/html; charset=utf-8')
+            error_response = HttpResponseServerError(
+                t.render(c), content_type="text/html; charset=utf-8"
+            )
             return error_response
         else:
             return response

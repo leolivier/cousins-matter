@@ -20,9 +20,9 @@ class EventPlannerUpsertTest(EventPlannerTestMixin):
                 "close_date": self.close_date.isoformat(),
                 "open_to": Poll.OPEN_TO_ACTIVE,
                 "possible_dates": "\n".join(possible_dates),
-                "multichoices_planner": False
+                "multichoices_planner": False,
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         # self.print_response(response)
@@ -39,14 +39,24 @@ class EventPlannerUpsertTest(EventPlannerTestMixin):
 
         date_question = Question.objects.filter(poll=event_planner).first()
         self.assertIsNotNone(date_question)
-        self.assertEqual(date_question.question_type, Question.SINGLEEVENTPLANNING_QUESTION)
+        self.assertEqual(
+            date_question.question_type, Question.SINGLEEVENTPLANNING_QUESTION
+        )
         self.assertSetEqual(set(date_question.possible_choices), set(possible_dates))
 
     def test_update_event_planner_view(self):
-        event_planner, question = self.create_event_planner("Test event planner", "Event planner description")
+        event_planner, question = self.create_event_planner(
+            "Test event planner", "Event planner description"
+        )
         # add a yes no question
-        self.create_question(question_text="Test question 1", question_type=Question.YESNO_QUESTION, poll=event_planner)
-        response = self.client.get(reverse("polls:update_event_planner", args=(event_planner.id,)))
+        self.create_question(
+            question_text="Test question 1",
+            question_type=Question.YESNO_QUESTION,
+            poll=event_planner,
+        )
+        response = self.client.get(
+            reverse("polls:update_event_planner", args=(event_planner.id,))
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Test question 1")
         # the planner base question is not shown in the questions list
@@ -66,9 +76,9 @@ class EventPlannerUpsertTest(EventPlannerTestMixin):
                 "open_to": Poll.OPEN_TO_ALL,
                 "possible_dates": "\n".join(possible_dates),
                 "multichoices_planner": True,
-                "chosen_date": possible_dates[2]
+                "chosen_date": possible_dates[2],
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EventPlanner.objects.count(), 1)
@@ -81,19 +91,27 @@ class EventPlannerUpsertTest(EventPlannerTestMixin):
         self.assertEqual(event_planner.close_date, close_date)
         self.assertEqual(event_planner.open_to, Poll.OPEN_TO_ALL)
         chosen_date = timezone.localtime(event_planner.chosen_date)
-        self.assertEqual(datetime.datetime.strftime(chosen_date, "%Y-%m-%d %H:%M"), possible_dates[2])
+        self.assertEqual(
+            datetime.datetime.strftime(chosen_date, "%Y-%m-%d %H:%M"), possible_dates[2]
+        )
         self.assertEqual(Poll.objects.first().eventplanner, event_planner)
 
         date_question = Question.objects.filter(poll=event_planner).first()
         self.assertEqual(date_question, question)
-        self.assertEqual(date_question.question_type, Question.MULTIEVENTPLANNING_QUESTION)
+        self.assertEqual(
+            date_question.question_type, Question.MULTIEVENTPLANNING_QUESTION
+        )
         self.assertSetEqual(set(date_question.possible_choices), set(possible_dates))
 
 
 class EventPlannerDeleteViewTest(EventPlannerTestMixin):
     def test_delete_event_planner_view(self):
-        event_planner, question = self.create_event_planner("Test event planner", "Event planner description")
-        response = self.client.post(reverse("polls:delete_event_planner", args=(event_planner.id,)), follow=True)
+        event_planner, question = self.create_event_planner(
+            "Test event planner", "Event planner description"
+        )
+        response = self.client.post(
+            reverse("polls:delete_event_planner", args=(event_planner.id,)), follow=True
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EventPlanner.objects.count(), 0)
         self.assertEqual(Question.objects.count(), 0)
@@ -101,5 +119,7 @@ class EventPlannerDeleteViewTest(EventPlannerTestMixin):
 
 class EventPlannerVoteViewTest(EventPlannerTestMixin):
     def test_event_planner_vote_view(self):
-        event_planner, question = self.create_event_planner("Test event planner", "Event planner description")
+        event_planner, question = self.create_event_planner(
+            "Test event planner", "Event planner description"
+        )
         self.create_and_check_answers(event_planner, question, expected_poll_answers=1)

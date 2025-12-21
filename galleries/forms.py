@@ -12,13 +12,16 @@ def check_zip_size(file):
 
 
 class BulkUploadPhotosForm(forms.Form):
-    zipfile = forms.FileField(label=_('Zip file'),
-                              help_text=_('The zip file containing the photos to upload. '
-                                          'All folders will be created as galleries and photos in these folders '
-                                          'added to the galleries. All photos must be in folders.'),
-                              validators=[validate_zipfile_extension, check_zip_size],
-                              widget=forms.FileInput(attrs={'accept': ".zip"})
-                              )
+    zipfile = forms.FileField(
+        label=_("Zip file"),
+        help_text=_(
+            "The zip file containing the photos to upload. "
+            "All folders will be created as galleries and photos in these folders "
+            "added to the galleries. All photos must be in folders."
+        ),
+        validators=[validate_zipfile_extension, check_zip_size],
+        widget=forms.FileInput(attrs={"accept": ".zip"}),
+    )
 
 
 class PhotoForm(forms.ModelForm):
@@ -49,6 +52,8 @@ class GalleryForm(forms.ModelForm):
             self.fields["cover"].queryset = Photo.objects.filter(gallery=self.instance)
             # ... or in sub galleries if the gallery is empty
             if not self.fields["cover"].queryset.exists():
-                self.fields["cover"].queryset = Photo.objects.filter(gallery__in=children)
+                self.fields["cover"].queryset = Photo.objects.filter(
+                    gallery__in=children
+                )
         else:  # new gallery, so no photo in the gallery
             self.fields["cover"].queryset = Photo.objects.none()

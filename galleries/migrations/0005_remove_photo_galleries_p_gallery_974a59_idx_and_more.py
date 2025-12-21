@@ -5,27 +5,30 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('galleries', '0004_gallery_owner_photo_uploaded_by'),
+        ("galleries", "0004_gallery_owner_photo_uploaded_by"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RemoveIndex(
-            model_name='photo',
-            name='galleries_p_gallery_974a59_idx',
+            model_name="photo",
+            name="galleries_p_gallery_974a59_idx",
         ),
         migrations.AddIndex(
-            model_name='photo',
-            index=models.Index(fields=['gallery'], name='galleries_p_gallery_226659_idx'),
+            model_name="photo",
+            index=models.Index(
+                fields=["gallery"], name="galleries_p_gallery_226659_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='photo',
-            index=models.Index(fields=['name'], name='galleries_p_name_7dd314_idx'),
+            model_name="photo",
+            index=models.Index(fields=["name"], name="galleries_p_name_7dd314_idx"),
         ),
         migrations.AddIndex(
-            model_name='photo',
-            index=models.Index(fields=['gallery', 'id'], name='galleries_p_gallery_8b7786_idx'),
+            model_name="photo",
+            index=models.Index(
+                fields=["gallery", "id"], name="galleries_p_gallery_8b7786_idx"
+            ),
         ),
     ]

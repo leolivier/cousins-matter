@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 14:19+0200\n"
+"POT-Creation-Date: 2025-11-21 17:46+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Italian <LL@li.org>\n"
@@ -81,14 +81,14 @@ msgid "Create room"
 msgstr "Crea una stanza"
 
 #: chat/templates/chat/chat_rooms.html:47 chat/tests/tests_private.py:46
-#: chat/tests/tests_public.py:64 chat/tests/tests_public.py:94
+#: chat/tests/tests_public.py:67 chat/tests/tests_public.py:97
 #, python-format
 msgid "%(nmsgs)s message"
 msgid_plural "%(nmsgs)s messages"
 msgstr[0] "%(nmsgs)s message"
 msgstr[1] "%(nmsgs)s messages"
 
-#: chat/templates/chat/chat_rooms.html:59 chat/tests/tests_public.py:95
+#: chat/templates/chat/chat_rooms.html:59 chat/tests/tests_public.py:98
 msgid "No author yet"
 msgstr "Nessun autore ancora"
 
@@ -97,7 +97,7 @@ msgstr "Nessun autore ancora"
 #: chat/templates/chat/private/room_admins.html:44
 #: chat/templates/chat/private/room_members.html:44
 #: chat/templates/chat/room_detail.html:96 chat/tests/tests_private.py:43
-#: chat/tests/tests_public.py:67
+#: chat/tests/tests_public.py:70
 msgid "profile"
 msgstr "profilo"
 
@@ -127,7 +127,7 @@ msgstr "Amministratori della stanza privata \"%(room_name)s"
 
 #: chat/templates/chat/private/room_admins.html:15
 #: chat/templates/chat/private/room_members.html:15
-#: chat/tests/tests_private.py:196 chat/tests/tests_private.py:244
+#: chat/tests/tests_private.py:199 chat/tests/tests_private.py:250
 msgid "Back to room"
 msgstr "Ritorno al salone"
 
@@ -238,7 +238,8 @@ msgid_plural "%(nfollowers)s members"
 msgstr[0] "%(nfollowers)s membre"
 msgstr[1] "%(nfollowers)s membres"
 
-#: chat/tests/tests_private.py:155 chat/views/views_room_common.py:133
+#: chat/tests/tests_private.py:156 chat/tests/tests_public.py:57
+#: chat/views/views_room_common.py:133
 #, python-format
 msgid ""
 "Another room with a similar name already exists ('%(similar_room_name)s'). "
@@ -247,18 +248,18 @@ msgstr ""
 "Un'altra stanza con un nome simile esiste già ('%(similar_room_name)s'). Per "
 "favore, scegli un nome diverso."
 
-#: chat/tests/tests_private.py:229 chat/tests/tests_private.py:302
+#: chat/tests/tests_private.py:234 chat/tests/tests_private.py:310
 #: chat/views/views_private_rooms.py:188
 #, python-format
 msgid "%s has been removed from the room"
 msgstr "%s è stato rimosso dalla stanza"
 
-#: chat/tests/tests_private.py:239 chat/views/views_private_rooms.py:305
+#: chat/tests/tests_private.py:245 chat/views/views_private_rooms.py:305
 msgid "Only members of this private room can become admins"
 msgstr ""
 "Solo i membri di questa stanza privata possono diventare amministratori"
 
-#: chat/tests/tests_private.py:291 chat/views/views_private_rooms.py:181
+#: chat/tests/tests_private.py:299 chat/views/views_private_rooms.py:181
 msgid ""
 "This member is the only one in this private room. Please add another one "
 "before removing this one."
@@ -266,7 +267,7 @@ msgstr ""
 "Questo membro è l'unico in questa stanza privata. Per favore, aggiungi un "
 "altro membro prima di rimuovere questo."
 
-#: chat/tests/tests_private.py:319 chat/views/views_private_rooms.py:227
+#: chat/tests/tests_private.py:327 chat/views/views_private_rooms.py:227
 msgid ""
 "You are the only member in this private room. Please add another one before "
 "removing yourself."
@@ -274,7 +275,7 @@ msgstr ""
 "Sei l'unico membro in questa stanza privata. Per favore, aggiungi un altro "
 "membro prima di rimuoverti."
 
-#: chat/tests/tests_private.py:330 chat/views/views_private_rooms.py:230
+#: chat/tests/tests_private.py:338 chat/views/views_private_rooms.py:230
 msgid ""
 "You are the only admin in this private room. If you leave the room, no one "
 "will be left. Please add another admin from the members before you remove "
@@ -284,39 +285,27 @@ msgstr ""
 "rimarrà nessuno. Per favore, aggiungi un altro amministratore tra i membri "
 "prima di rimuoverti."
 
-#: chat/tests/tests_private.py:339 chat/views/views_private_rooms.py:238
+#: chat/tests/tests_private.py:347 chat/views/views_private_rooms.py:238
 msgid "You have left the room"
 msgstr "Hai lasciato la stanza"
 
-#: chat/tests/tests_private.py:365 chat/views/views_private_rooms.py:97
+#: chat/tests/tests_private.py:374 chat/views/views_private_rooms.py:97
 #: chat/views/views_private_rooms.py:223 chat/views/views_private_rooms.py:264
 #: chat/views/views_room_common.py:183
 msgid "You are not a member of this private room"
 msgstr "Non sei membro di questa stanza privata"
 
-#: chat/tests/tests_private.py:386 chat/views/views_private_rooms.py:133
+#: chat/tests/tests_private.py:395 chat/views/views_private_rooms.py:133
 #: chat/views/views_private_rooms.py:176 chat/views/views_private_rooms.py:298
 #: chat/views/views_private_rooms.py:346 chat/views/views_private_rooms.py:387
 msgid "You are not an admin of this private room"
 msgstr "Non sei un amministratore di questa stanza privata"
 
-#: chat/tests/tests_public.py:23 chat/tests/tests_public.py:66
+#: chat/tests/tests_public.py:24 chat/tests/tests_public.py:69
 msgid "Follow"
 msgstr "Segui"
 
-#: chat/tests/tests_public.py:55
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Another room with a similar name already exists "
-#| "('%(similar_room_name)s'). Please choose a different name."
-msgid ""
-"Another room with a similar name already exists ('{room_name}'). Please "
-"choose a different name."
-msgstr ""
-"Un'altra stanza con un nome simile esiste già ('%(similar_room_name)s'). Per "
-"favore, scegli un nome diverso."
-
-#: chat/tests/tests_public.py:65
+#: chat/tests/tests_public.py:68
 #, python-format
 msgid "%(nfollowers)s follower"
 msgid_plural "%(nfollowers)s followers"
@@ -368,9 +357,3 @@ msgstr "Esiste già una stanza privata con un nome quasi identico: %s"
 #, python-format
 msgid "A public room with almost the same name already exists: %s"
 msgstr "Esiste già una stanza pubblica con un nome quasi identico: %s"
-
-#~ msgid "Malformed message: no asgi"
-#~ msgstr "Messaggio malformato: nessun asgi"
-
-#~ msgid "Malformed message: no user in asgi"
-#~ msgstr "Messaggio malformato: nessun utente in asgi"

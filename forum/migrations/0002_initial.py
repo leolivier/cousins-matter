@@ -6,50 +6,68 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('forum', '0001_initial'),
+        ("forum", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='comment',
-            name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="comment",
+            name="author",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='message',
-            name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="message",
+            name="author",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='comment',
-            name='message',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='forum.message'),
+            model_name="comment",
+            name="message",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="forum.message"
+            ),
         ),
         migrations.AddField(
-            model_name='post',
-            name='first_message',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='first_of_post', to='forum.message'),
+            model_name="post",
+            name="first_message",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="first_of_post",
+                to="forum.message",
+            ),
         ),
         migrations.AddField(
-            model_name='message',
-            name='post',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='forum.post'),
+            model_name="message",
+            name="post",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="forum.post",
+            ),
         ),
         migrations.AddIndex(
-            model_name='comment',
-            index=models.Index(fields=['message', 'author'], name='forum_comme_message_e8c1a7_idx'),
+            model_name="comment",
+            index=models.Index(
+                fields=["message", "author"], name="forum_comme_message_e8c1a7_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='post',
-            index=models.Index(fields=['title'], name='forum_post_title_46fb82_idx'),
+            model_name="post",
+            index=models.Index(fields=["title"], name="forum_post_title_46fb82_idx"),
         ),
         migrations.AddIndex(
-            model_name='message',
-            index=models.Index(fields=['post', 'author'], name='forum_messa_post_id_9ecfe0_idx'),
+            model_name="message",
+            index=models.Index(
+                fields=["post", "author"], name="forum_messa_post_id_9ecfe0_idx"
+            ),
         ),
     ]

@@ -82,7 +82,7 @@ def strip_quotes(s: str) -> str:
     return s
 
 
-SECRET_MARK_PATTERN = re.compile(r'##!(.*?)!##', re.S)
+SECRET_MARK_PATTERN = re.compile(r"##!(.*?)!##", re.S)
 
 
 def mark_as_secret(string: str) -> str:
@@ -90,24 +90,38 @@ def mark_as_secret(string: str) -> str:
 
 
 def hide_if_secret(string: str) -> str:
-    return SECRET_MARK_PATTERN.sub('[***]', string)
+    return SECRET_MARK_PATTERN.sub("[***]", string)
 
 
 def clean_secret_mark(string: str) -> str:
     return SECRET_MARK_PATTERN.sub(lambda m: m.group(1), string)
 
 
-def run(cmd: list[str], check=True, capture_output=False, text=True, quiet=False, cwd: str | None = None):
+def run(
+    cmd: list[str],
+    check=True,
+    capture_output=False,
+    text=True,
+    quiet=False,
+    cwd: str | None = None,
+):
     """Will run the given shell command and return the result"""
     verbose("$", " ".join(cmd))
-    return subprocess.run([clean_secret_mark(c) for c in cmd], check=check,
-                          capture_output=capture_output, text=text, cwd=cwd)
+    return subprocess.run(
+        [clean_secret_mark(c) for c in cmd],
+        check=check,
+        capture_output=capture_output,
+        text=text,
+        cwd=cwd,
+    )
 
 
 def require_docker():
     """Will check if docker is installed and raise an error if not"""
     try:
-        subprocess.run(["docker", "--version"], check=True, capture_output=True, text=True)
+        subprocess.run(
+            ["docker", "--version"], check=True, capture_output=True, text=True
+        )
     except Exception:
         error(1, "docker is not installed, please install it and restart the command")
 
@@ -133,7 +147,9 @@ def write_env(content: str) -> None:
 def docker_logs(container: str) -> str:
     """Will return the logs of the given container"""
     try:
-        res = subprocess.run(["docker", "logs", container], check=False, capture_output=True, text=True)
+        res = subprocess.run(
+            ["docker", "logs", container], check=False, capture_output=True, text=True
+        )
         return res.stdout + (res.stderr or "")
     except Exception as ex:
         return str(ex)
@@ -152,7 +168,7 @@ def github_latest_release(repo: str) -> str:
 
 def get_github_base_url(branch: str | None, release: str | None) -> str:
     """Will return the base URL for the given branch or release if branch is None.
-       Default release is latest if branch is None"""
+    Default release is latest if branch is None"""
     if branch and not release:
         return f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/{branch}"
     else:
@@ -185,11 +201,14 @@ def download_github_file(file: str, dest: Path, base_url: str):
 
 def download_V2_needed_files(directory: Path, branch: str | None, release: str | None):
     files_to_download = [
-            ("docker-compose.yml", directory / "docker-compose.yml"),
-            (".env.example", directory / ".env.example"),
-            ("config/nginx.conf", directory / "config" / "nginx.conf"),
-            ("config/nginx.d/errors/413.html", directory / "config" / "nginx.d" / "errors" / "413.html"),
-        ]
+        ("docker-compose.yml", directory / "docker-compose.yml"),
+        (".env.example", directory / ".env.example"),
+        ("config/nginx.conf", directory / "config" / "nginx.conf"),
+        (
+            "config/nginx.d/errors/413.html",
+            directory / "config" / "nginx.d" / "errors" / "413.html",
+        ),
+    ]
     base_url = get_github_base_url(branch, release)
     for rel, dest in files_to_download:
         download_github_file(rel, dest, base_url)
@@ -207,39 +226,55 @@ def check_cousins_matter_is_down():
     will check containers and networks with name starting with cousins-matter
     """
     try:
-      result = run(["docker", "ps", "-a", "--filter", "name=cousins-matter", "--format", "json"],
-                   check=True, capture_output=True, text=True)
-      if result.returncode != 0:
-        error(1, "Unable to check if cousins-matter is down")
-      containers = json.loads(f'[{",".join(result.stdout.splitlines())}]')
-      errors = []
-      for container in containers:
-        name = container.get("Names", "")
-        state = container.get("State", "")
-        status = container.get("Status", "")
-        match state:
-            case "running":
-                errors.append(f"""{name} is already running ({status}),
+        result = run(
+            [
+                "docker",
+                "ps",
+                "-a",
+                "--filter",
+                "name=cousins-matter",
+                "--format",
+                "json",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            error(1, "Unable to check if cousins-matter is down")
+        containers = json.loads(f"[{','.join(result.stdout.splitlines())}]")
+        errors = []
+        for container in containers:
+            name = container.get("Names", "")
+            state = container.get("State", "")
+            status = container.get("Status", "")
+            match state:
+                case "running":
+                    errors.append(f"""{name} is already running ({status}),
 please stop it and remove the container before running this script""")
-            case "exited":
-                errors.append(f"""{name} is already stopped ({status})
+                case "exited":
+                    errors.append(f"""{name} is already stopped ({status})
 but the container is still there, please remove it before running this script""")
-            case _:
-                errors.append(f"""{name} is in an unknown state ({state}),
+                case _:
+                    errors.append(f"""{name} is in an unknown state ({state}),
 please remove the container before running this script""")
     except subprocess.CalledProcessError as e:
-      error(1, f"Unable to check if cousins-matter containers are down: {e}")
+        error(1, f"Unable to check if cousins-matter containers are down: {e}")
 
-    result = run(["docker", "network", "ls", "--filter", "name=cousins_matter", "-q"],
-                 check=True, capture_output=True, text=True)
+    result = run(
+        ["docker", "network", "ls", "--filter", "name=cousins_matter", "-q"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
 
     if result.returncode != 0:
-      error(1, "Unable to check if cousins-matter networks are down")
+        error(1, "Unable to check if cousins-matter networks are down")
     if result.stdout != "":
-      errors.append(f"""This cousins-matter network is still up: {result.stdout},
+        errors.append(f"""This cousins-matter network is still up: {result.stdout},
 please remove it before running this script""")
     if errors:
-      error(1, "\n".join(errors))
+        error(1, "\n".join(errors))
 
 
 def create_pg_password():
@@ -273,7 +308,9 @@ def rotate_secrets(args: argparse.Namespace | None = None) -> int:
     SEC_REGEX = get_regex("SECRET_KEY")
     PREV_REGEX = get_regex("PREVIOUS_SECRET_KEYS")
     # Allowed characters for SECRET_KEY
-    SECRET_KEY_ALLOWED_CHARS = string.ascii_letters + string.digits + "!@#$%^*()_-+{}[]:;<>?."
+    SECRET_KEY_ALLOWED_CHARS = (
+        string.ascii_letters + string.digits + "!@#$%^*()_-+{}[]:;<>?."
+    )
 
     # Load .env
     env = read_env()
@@ -303,7 +340,9 @@ PREVIOUS_SECRET_KEYS=''
     else:
         prev_val = strip_quotes(prev_secret_match.group(1))
         combined = f"{prev_val},{old_secret}" if old_secret else prev_val
-        env = env.replace(prev_secret_match.group(0), f"PREVIOUS_SECRET_KEYS='{combined}'")
+        env = env.replace(
+            prev_secret_match.group(0), f"PREVIOUS_SECRET_KEYS='{combined}'"
+        )
 
     write_env(env)
 
@@ -315,6 +354,7 @@ SECRET_KEY rotated successfully""")
 #######################################
 #  V1.X TO V2 MIGRATION FUNCTIONS
 #######################################
+
 
 def check_if_cousins_matter_V1_directory(directory: Path):
     """Will check if the given directory is a Cousins Matter V1.x project directory"""
@@ -344,8 +384,12 @@ def check_permissions(directory: Path):
         for dir in all_dirs:
             st = dir.stat()
             if st.st_uid == 1000:
-                if (st.st_mode & stat.S_IWUSR) != stat.S_IWUSR:  # dir is not writable by user 1000
-                    if cur_uid == st.st_uid or cur_uid == 0:  # current user is also 1000 or root, let's chmod
+                if (
+                    st.st_mode & stat.S_IWUSR
+                ) != stat.S_IWUSR:  # dir is not writable by user 1000
+                    if (
+                        cur_uid == st.st_uid or cur_uid == 0
+                    ):  # current user is also 1000 or root, let's chmod
                         dir.chmod(st.st_mode | stat.S_IWUSR)
                     else:
                         warn = True
@@ -357,21 +401,31 @@ def check_permissions(directory: Path):
         error(14, f"Error while checking permissions: {ex}")
     finally:
         if warn:
-            warning(f"media directory {media_dir} and ALL its subdirectories must be owned and writable by user 1000")
-            warning("Please, run the 2 following commands before tryning to start Cousins Matter:")
-            print(f'{ON_WHITE}sudo chown -R 1000:1000 {media_dir}{NC}')
-            print(f'{ON_WHITE}sudo chmod -R u+w {media_dir}{NC}')
+            warning(
+                f"media directory {media_dir} and ALL its subdirectories must be owned and writable by user 1000"
+            )
+            warning(
+                "Please, run the 2 following commands before tryning to start Cousins Matter:"
+            )
+            print(f"{ON_WHITE}sudo chown -R 1000:1000 {media_dir}{NC}")
+            print(f"{ON_WHITE}sudo chmod -R u+w {media_dir}{NC}")
 
 
 def migrate_sqlite3_to_postgres(pg_pwd: str):
     """Will run the database migration from sqlite3 to postgres"""
     # Start postgres and wait for readiness
     verbose("Starting postgres server...")
-    r = run(["docker", "compose", "up", "-d", "--wait", "--wait-timeout", "30", "postgres"], check=False)
+    r = run(
+        ["docker", "compose", "up", "-d", "--wait", "--wait-timeout", "30", "postgres"],
+        check=False,
+    )
     if r.returncode != 0:
         run(["docker", "compose", "logs", "postgres"], check=False)
         run(["docker", "compose", "down", "-v", "postgres"], check=False)
-        error(17, """Postgres failed to start, see error message above, try to fix it, then rerun this script""")
+        error(
+            17,
+            """Postgres failed to start, see error message above, try to fix it, then rerun this script""",
+        )
     verbose("Postgres is ready, starting migration...")
 
     # Run pgloader
@@ -387,16 +441,36 @@ def migrate_sqlite3_to_postgres(pg_pwd: str):
     postgres_user = os.getenv("POSTGRES_USER") or "cousinsmatter"
     postgres_db = os.getenv("POSTGRES_DB") or "cousinsmatter"
     postgres_port = os.getenv("POSTGRES_PORT") or "5432"
-    r = run(["docker", "run", "--entrypoint", "pgloader", "-v", "./data:/data", "--network", "cousins_matter_network",
-             "--name", "cousins-matter-pgloader", pgloader_image, "sqlite:///data/db.sqlite3",
-             f"postgresql://{postgres_user}:{mark_as_secret(pg_pwd)}@postgres:{postgres_port}/{postgres_db}"], check=False)
-    if (r.returncode != 0):
+    r = run(
+        [
+            "docker",
+            "run",
+            "--entrypoint",
+            "pgloader",
+            "-v",
+            "./data:/data",
+            "--network",
+            "cousins_matter_network",
+            "--name",
+            "cousins-matter-pgloader",
+            pgloader_image,
+            "sqlite:///data/db.sqlite3",
+            f"postgresql://{postgres_user}:{mark_as_secret(pg_pwd)}@postgres:{postgres_port}/{postgres_db}",
+        ],
+        check=False,
+    )
+    if r.returncode != 0:
         run(["docker", "down", "-v", "postgres"], check=False)
         run(["docker", "rm", "-v", "cousins-matter-pgloader"], check=False)
-        error(16, """Database migration failed, see error message, try to fix it, then rerun this script""")
+        error(
+            16,
+            """Database migration failed, see error message, try to fix it, then rerun this script""",
+        )
 
     verbose("Database migration done, removing pgloader container...")
-    subprocess.run(["docker", "container", "rm", "cousins-matter-pgloader"], check=False)
+    subprocess.run(
+        ["docker", "container", "rm", "cousins-matter-pgloader"], check=False
+    )
 
     print(f"""
 {ON_GREEN}Your database has now been migrated to postgres, you can start Cousins Matter with 'docker compose up -d'{NC}
@@ -468,8 +542,16 @@ def ensure_empty_directory(directory: Path):
     if not directory.exists():
         directory.mkdir(parents=True, exist_ok=True)
         return
-    if any(filter(lambda x: not x.is_dir() or x.name not in ["scripts", "media", "static"], directory.iterdir())):
-        error(1, f"{directory} is not empty, cousins-matter must be installed in an empty directory.")
+    if any(
+        filter(
+            lambda x: not x.is_dir() or x.name not in ["scripts", "media", "static"],
+            directory.iterdir(),
+        )
+    ):
+        error(
+            1,
+            f"{directory} is not empty, cousins-matter must be installed in an empty directory.",
+        )
 
 
 def check_envfile(directory: Path, review_environment: bool):
@@ -481,20 +563,27 @@ def check_envfile(directory: Path, review_environment: bool):
     ENV_PATH = directory / ".env"
     if review_environment:
         if not ENV_PATH.exists():
-            print(framed("""WARNING! '-e' param was provided and skipped dowloading .env.example. However, .env
+            print(
+                framed("""WARNING! '-e' param was provided and skipped dowloading .env.example. However, .env
 does not exist in this directory. Please check .env.example, .env.old if it exists, and
-create a .env file to make sure all required variables are present."""))
+create a .env file to make sure all required variables are present.""")
+            )
     else:
         # Normal install: ensure directory is empty and move .env to .env.old if it exists
         ensure_empty_directory(directory)
         if ENV_PATH.exists():
-            print(framed("""WARNING! .env already existed and as been moved to .env.old
+            print(
+                framed("""WARNING! .env already existed and as been moved to .env.old
 WARNING! Recreating a new .env file from .env.example
-WARNING! Please check .env and copy the variables from .env.old to .env when it makes sense."""))
+WARNING! Please check .env and copy the variables from .env.old to .env when it makes sense.""")
+            )
             try:
                 ENV_PATH.replace(ENV_PATH.with_name(".env.old"))
             except Exception as ex:
-                error(1, f"Failed to move {ENV_PATH} to {ENV_PATH.with_name('.env.old')}: {ex}")
+                error(
+                    1,
+                    f"Failed to move {ENV_PATH} to {ENV_PATH.with_name('.env.old')}: {ex}",
+                )
 
 
 def get_directory(review_environment: bool, directory: str | None):
@@ -507,7 +596,10 @@ def get_directory(review_environment: bool, directory: str | None):
         # Ensure we're running from scripts dir
         script_dir_name = Path(__file__).resolve().parent.name
         if script_dir_name != "scripts":
-            error(1, "this script should be run from the scripts directory if -e selected. Are you in a devt environment?")
+            error(
+                1,
+                "this script should be run from the scripts directory if -e selected. Are you in a devt environment?",
+            )
     else:
         directory = Path(directory or (cwd / "cousins-matter")).resolve()
 
@@ -577,18 +669,24 @@ You can hit Ctrl-C to skip the editor if you want to see more details about the 
             try:
                 run([editor, str(ENV_PATH)], check=True)
             except Exception as e:
-                print(f"{ON_RED}Couldn't start the editor automatically ({e}), please start it manually and edit "
-                      f"the {ENV_PATH} file.{NC}")
+                print(
+                    f"{ON_RED}Couldn't start the editor automatically ({e}), please start it manually and edit "
+                    f"the {ENV_PATH} file.{NC}"
+                )
 
-            print(framed(f"""
+            print(
+                framed(f"""
 Once your environment variables are set properly in {str(ENV_PATH)}, you can cd to your directory
 {directory} and start the container with 'docker compose up -d'
-You can check the logs with 'docker compose logs -f'"""))
+You can check the logs with 'docker compose logs -f'""")
+            )
         else:
-            print(framed(f"""
+            print(
+                framed(f"""
 You can now edit .env to set your environment variables, then cd to your directory
 {directory} and start the container with 'docker compose up -d'
-You can check the logs with 'docker compose logs -f'"""))
+You can check the logs with 'docker compose logs -f'""")
+            )
 
 
 ######################
@@ -599,51 +697,116 @@ def main(argv=None):
         argv = sys.argv[1:]
 
     # Main parser (global options)
-    parser = argparse.ArgumentParser(prog="manage_cousins_matter", description="""
+    parser = argparse.ArgumentParser(
+        prog="manage_cousins_matter",
+        description="""
 Manage Cousins Matter utilities. Provides several commands (see below). To get help on a specific command, use:
-manage_cousins_matter <command> -h""")
+manage_cousins_matter <command> -h""",
+    )
     # Global options (can be placed before the subcommand)
-    parser.add_argument('-q', '--quiet', action='store_true', dest="quiet", help='quiet mode (default mode is verbose)')
+    parser.add_argument(
+        "-q",
+        "--quiet",
+        action="store_true",
+        dest="quiet",
+        help="quiet mode (default mode is verbose)",
+    )
 
     # Subcommands
-    subparsers = parser.add_subparsers(dest='command', required=True, help='command')
+    subparsers = parser.add_subparsers(dest="command", required=True, help="command")
 
     # Migrate subcommand
-    p_migrate = subparsers.add_parser('migrate-v1-v2', help="""
+    p_migrate = subparsers.add_parser(
+        "migrate-v1-v2",
+        help="""
 Migrates Cousins Matter from v1.x to v2: after some checks, migrates the sqlite3 database to postgres, downloads v2 files
 from GitHub, and rotates the secret key.
-    """)
-    p_migrate.add_argument("-d", "--directory", dest="directory", default=os.getcwd(),
-                           help="cousins-matter directory (default: current directory)")
-    p_migrate.add_argument("-b", "--branch", dest="branch", default=None, help="""
-branch to use (default: none, -r always takes precedence)""")
-    p_migrate.add_argument("-r", "--release", dest="release", default=None, help="""
-release to use (default: latest release, takes precedence over -b)""")
+    """,
+    )
+    p_migrate.add_argument(
+        "-d",
+        "--directory",
+        dest="directory",
+        default=os.getcwd(),
+        help="cousins-matter directory (default: current directory)",
+    )
+    p_migrate.add_argument(
+        "-b",
+        "--branch",
+        dest="branch",
+        default=None,
+        help="""
+branch to use (default: none, -r always takes precedence)""",
+    )
+    p_migrate.add_argument(
+        "-r",
+        "--release",
+        dest="release",
+        default=None,
+        help="""
+release to use (default: latest release, takes precedence over -b)""",
+    )
     p_migrate.set_defaults(func=migrate_v1_v2)
 
     # Install subcommand
-    p_install = subparsers.add_parser('install', help="""
+    p_install = subparsers.add_parser(
+        "install",
+        help="""
 Install Cousins Matter local files and directories. After some checks, it will download a few files
 from GitHub. Then, it will rotate/generate the secret key and the postgres password if missing, create
 needed directories with appropriate permissions, and finally open an editor on .env after a countdown.
-    """)
-    p_install.add_argument("-e", "--review-environment", action="store_true", dest="review_environment", help="""
+    """,
+    )
+    p_install.add_argument(
+        "-e",
+        "--review-environment",
+        action="store_true",
+        dest="review_environment",
+        help="""
 review environment only. No download, assumes .env and the files needed to be downloaded are already there,
-ie in a CI/CD workflow""")
-    p_install.add_argument("-d", "--directory", dest="directory", default=None, help="""
+ie in a CI/CD workflow""",
+    )
+    p_install.add_argument(
+        "-d",
+        "--directory",
+        dest="directory",
+        default=None,
+        help="""
 the target directory where cousins-matter will be installed. Defaults is "." if -e is specified, otherwise
-./cousins-matter. In this case, directory must either not exist or be empty.""")
-    p_install.add_argument("-b", "--branch", dest="branch", default=None, help="""
-branch to use for downloading files from GitHub (default: none, -r always takes precedence)""")
-    p_install.add_argument("-r", "--release", dest="release", default=None, help="""
-Release to use for downloading files from GitHub (default: latest release, always takes precedence over -b)""")
-    p_install.add_argument("-n", "--no-editor", dest="no_editor", action="store_true", help="""
-do not start an editor to edit .env at the end of the process""")
+./cousins-matter. In this case, directory must either not exist or be empty.""",
+    )
+    p_install.add_argument(
+        "-b",
+        "--branch",
+        dest="branch",
+        default=None,
+        help="""
+branch to use for downloading files from GitHub (default: none, -r always takes precedence)""",
+    )
+    p_install.add_argument(
+        "-r",
+        "--release",
+        dest="release",
+        default=None,
+        help="""
+Release to use for downloading files from GitHub (default: latest release, always takes precedence over -b)""",
+    )
+    p_install.add_argument(
+        "-n",
+        "--no-editor",
+        dest="no_editor",
+        action="store_true",
+        help="""
+do not start an editor to edit .env at the end of the process""",
+    )
     p_install.set_defaults(func=install_cousins_matter)
 
     # Rotate secrets subcommand
-    p_rotate_secrets = subparsers.add_parser('rotate-secrets', help="""
-Rotate SECRET_KEY and update PREVIOUS_SECRET_KEYS in .env""")
+    p_rotate_secrets = subparsers.add_parser(
+        "rotate-secrets",
+        help="""
+Rotate SECRET_KEY and update PREVIOUS_SECRET_KEYS in .env""",
+    )
     p_rotate_secrets.set_defaults(func=rotate_secrets)
 
     # Parse and execution
@@ -654,5 +817,5 @@ Rotate SECRET_KEY and update PREVIOUS_SECRET_KEYS in .env""")
     args.func(args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -4,15 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('members', '0010_member_first_name_unaccent_member_last_name_unaccent_and_more'),
+        (
+            "members",
+            "0010_member_first_name_unaccent_member_last_name_unaccent_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='logintrace',
-            name='ip',
+            model_name="logintrace",
+            name="ip",
             field=models.CharField(db_index=True, max_length=39, unique=False),
         ),
     ]

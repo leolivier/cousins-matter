@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 14:19+0200\n"
+"POT-Creation-Date: 2025-11-21 17:46+0100\n"
 "PO-Revision-Date: 2025-01-01 09:13+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
@@ -18,57 +18,65 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: troves/models.py:19
+#: troves/models.py:15
 msgid "History & Stories"
 msgstr "Geschichte und Geschichten"
 
-#: troves/models.py:20
+#: troves/models.py:16
 msgid "Recipes"
 msgstr "Rezepte"
 
-#: troves/models.py:21
+#: troves/models.py:17
 msgid "Family meetings"
 msgstr "Familientreffen"
 
-#: troves/models.py:22
+#: troves/models.py:18
 msgid "Recollections"
 msgstr "Erinnerungen"
 
-#: troves/models.py:23
+#: troves/models.py:19
 msgid "Arts"
 msgstr "Arts"
 
-#: troves/models.py:24
+#: troves/models.py:20
 msgid "Miscellaneous"
 msgstr "Verschiedenes"
 
-#: troves/models.py:27
-msgid "Description of the treasure"
-msgstr "Beschreibung des Schatzes"
+#: troves/models.py:25
+msgid "Description of the treasure (this will appear in the details)"
+msgstr "Beschreibung des Schatzes (dies erscheint in den Details)"
 
-#: troves/models.py:28
+#: troves/models.py:27
 msgid "Treasure photo"
 msgstr "Foto des Schatzes"
 
-#: troves/models.py:31
+#: troves/models.py:30
 msgid "Treasure file"
 msgstr "Schatzkartei"
 
-#: troves/models.py:33
+#: troves/models.py:32
 msgid "Category"
 msgstr "Kategorie"
 
-#: troves/models.py:37
+#: troves/models.py:36
 msgid "trove"
 msgstr "Schatz"
 
-#: troves/models.py:38
+#: troves/models.py:37
 msgid "troves"
 msgstr "Schaetze"
 
 #: troves/models.py:56
 msgid "A treasure must have an owner."
 msgstr "Ein Schatz muss einen Besitzer haben."
+
+#: troves/templates/troves/treasure_detail.html:4
+msgid "Treasure"
+msgstr "Schatz"
+
+#: troves/templates/troves/treasure_detail.html:41
+msgid "Look at the file contents"
+msgstr "Die Dateiinhalt anschauen"
 
 #: troves/templates/troves/treasure_form.html:8
 #: troves/templates/troves/treasure_form.html:20

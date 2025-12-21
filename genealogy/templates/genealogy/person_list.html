@@ -1,0 +1,83 @@
+{% extends "genealogy/base_genealogy.html" %}
+{% load i18n cm_tags cache %}
+
+{% block genealogy_content %}
+{% cache 300 genealogy_person_list cache_key_suffix %}
+<div class="box">
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <h2 class="subtitle">{% trans "People" %}</h2>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input class="input" type="text" name="q" placeholder="{% trans 'Search...' %}"
+                               hx-get="{% url 'genealogy:person_list' %}"
+                               hx-trigger="keyup changed delay:500ms"
+                               hx-target="#person-table-body"
+                               hx-select="#person-table-body">
+                    </div>
+                    <div class="control">
+                        <a class="button is-info">
+                            {% trans "Search" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="level-item">
+                <a href="{% url 'genealogy:person_create' %}" class="button is-primary">
+                    {%icon "new" %}
+                    <span>{% trans "Add Person" %}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="level">
+        {%paginate page%}
+    </div>
+
+    <table class="table is-fullwidth is-striped is-hoverable">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Birth Date" %}</th>
+                <th>{% trans "Birth Place" %}</th>
+                <th>{% trans "Actions" %}</th>
+            </tr>
+        </thead>
+        {% partialdef person_list_table inline %}
+        <tbody id="person-table-body">
+            {% for person in page.object_list %}
+            <tr>
+                <td>
+                    <a href="{% url 'genealogy:person_detail' person.id %}">
+                        {{ person.last_name }}, {{ person.first_name }}
+                    </a>
+                </td>
+                <td>{{ person.birth_date|default:"-" }}</td>
+                <td>{{ person.birth_place|default:"-" }}</td>
+                <td>
+                    <div class="buttons are-small">
+                        <a href="{% url 'genealogy:person_detail' person.id %}" class="button is-info is-light">
+                            {%icon "details" %}
+                        </a>
+                        <a href="{% url 'genealogy:person_update' person.id %}" class="button is-warning is-light">
+                            {%icon "edit" %}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="has-text-centered">{% trans "No people found." %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% endpartialdef %}
+    </table>
+</div>
+{% endcache %}
+{% endblock %}

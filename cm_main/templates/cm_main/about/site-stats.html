@@ -6,8 +6,7 @@
 	<h1 class="title has-text-centered">{% title _("Site Statistics") %}</h1>
 	<p class="content">{% trans "This page displays some statistics about this site:" %} {{site_admin}}</p>
 	<section class="panel">
-		<p class="panel-heading">{% title _("Statistics") %}</p>
-		<div class="panel-tabs">
+		<div class="panel-tabs is-boxed">
 		{% for category, data in stats.items %}
 		{%with scategory=data.key|slugify%}
 		<a class="stat-category {%if forloop.first%}is-active{%endif%}" data-category="{{ scategory }}">{{ data.key }}</a>

@@ -55,14 +55,14 @@ class TestAuthenticatedHomePage(
 
     @override_settings(FEATURES_FLAGS={"show_birthdays_in_homepage": False})
     def test_home_page_without_birthdays(self):
-        for lang in ["fr", "en-US"]:
+        for lang in ["fr", "en"]:
             with lang_override(lang):
                 response = self.check_home_page(lang, "authenticated")
                 self.check_if_birthdays(response, reversed=True)
 
     @override_settings(FEATURES_FLAGS={"show_birthdays_in_homepage": True})
     def test_home_page_with_birthdays(self):
-        for lang in ["fr", "en-US"]:
+        for lang in ["fr", "en"]:
             with lang_override(lang):
                 response = self.check_home_page(lang, "authenticated")
                 self.check_if_birthdays(response)
@@ -70,5 +70,5 @@ class TestAuthenticatedHomePage(
 
 class TestUnAuthenticatedHomePage(TestHomePageMixin, BasePageTestCase, TestCase):
     def test_unauthenticated_home_page(self):
-        for lang in ["fr", "en-US"]:
+        for lang in ["fr", "en"]:
             self.check_home_page(lang, "unauthenticated")

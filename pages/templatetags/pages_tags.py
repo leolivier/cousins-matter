@@ -131,8 +131,9 @@ def include_page(url):
         count = pages.count()
         match count:
             case 0:
-                # page not found for the current language, try the default language (ie en-US)
-                new_url = url.replace(f"/{get_language()}/", "/en-US/")
+                # page not found for the current language, try the default language (ie en)
+                # print("page not found for language", get_language(), "try default language")
+                new_url = url.replace(f"/{get_language()}/", "/en/")
                 if new_url != url:
                     return include_page(new_url)
                 else:

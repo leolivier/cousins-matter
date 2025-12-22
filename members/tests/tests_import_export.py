@@ -110,7 +110,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
         }
         member1 = self.create_member(data)
         self.do_test_import(
-            "import_members.csv", "en-us", 3
+            "import_members.csv", "en", 3
         )  # expected 3 and not 4 because we just created one above
         member1.refresh_from_db()
         # check the changes have been taken from the import file
@@ -142,7 +142,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
         # self._reset_manager('member-mngd4')
         self.do_test_import(
             "import_members-managers.csv",
-            "en-us",
+            "en",
             expected_num=0 if update else 4,
             member_prefix="member-mngd",
             activate_users=activate_users,
@@ -236,11 +236,11 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
         )
 
     def test_wrong_field(self):
-        response = self.do_upload_file("import_members-wrong-field.csv", "en-us")
+        response = self.do_upload_file("import_members-wrong-field.csv", "en")
         self.assertEqual(response.status_code, 200)
         # self.print_response(response)
         # force language to make sure the CSV fields are ok
-        with translation.override("en-us"):
+        with translation.override("en"):
             self.assertContainsMessage(
                 response,
                 "error",
@@ -252,7 +252,7 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
             )
 
     def test_missing_field(self):
-        response = self.do_upload_file("import_members-missing-field.csv", "en-us")
+        response = self.do_upload_file("import_members-missing-field.csv", "en")
         self.assertEqual(response.status_code, 200)
         self.assertContainsMessage(
             response,
@@ -398,10 +398,10 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
             self.check_CSVs_are_equivalent(exp_csv, rsp_csv, filter)
 
     # force language to make sure the CSV fields are properly translated
-    @translation.override("en-us")
+    @translation.override("en")
     def test_export_en(self):
-        self.do_test_import("import_members.csv", "en-us", 4)
-        self.do_test_export("import_members.csv", "en-us")
+        self.do_test_import("import_members.csv", "en", 4)
+        self.do_test_export("import_members.csv", "en")
 
     # force language to make sure the CSV fields are properly translated
     @translation.override("fr")
@@ -409,9 +409,9 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
         self.do_test_import("import_members-fr.csv", "fr", 4, member_prefix="member-fr")
         self.do_test_export("import_members-fr.csv", "fr")
 
-    @translation.override("en-us")
+    @translation.override("en")
     def test_export_en_with_filter(self):
-        self.do_test_import("import_members.csv", "en-us", 4)
-        self.do_test_export("import_members.csv", "en-us", {"name-id": "Doe"})
-        self.do_test_export("import_members.csv", "en-us", {"city-id": "Liverpool"})
-        self.do_test_export("import_members.csv", "en-us", {"name-id": "Doe"})
+        self.do_test_import("import_members.csv", "en", 4)
+        self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
+        self.do_test_export("import_members.csv", "en", {"city-id": "Liverpool"})
+        self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})

@@ -99,13 +99,13 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 LANGUAGES = [
     ("fr", "Français"),
-    ("en-us", "English (US)"),
+    ("en", "English"),
     ("es", "Español"),
     ("de", "Deutsch"),
     ("it", "Italiano"),
     ("pt", "Português"),
 ]
-LANGUAGE_CODE = env.str("LANGUAGE_CODE", default="en-us")
+LANGUAGE_CODE = env.str("LANGUAGE_CODE", default="en")
 TIME_ZONE = env.str("TIME_ZONE", default="Europe/Paris")
 
 SITE_COPYRIGHT = env.str("SITE_COPYRIGHT", default=None)

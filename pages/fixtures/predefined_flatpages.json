@@ -228,7 +228,7 @@
 		"model": "flatpages.flatpage",
 		"pk": 16,
 		"fields": {
-			"url": "/en-US/about/privacy-policy/",
+			"url": "/en/about/privacy-policy/",
 			"title": "Cousins Matter Privacy Policy",
 			"content": "<h1 class=\"title\">Cousins Matter Privacy Policy</h1>\r\n\r\n<ul class=\"bullet\">\r\n<li>Using a site created with the Cousins Matter application, anyone can ask the administrator to invite them to create their own account on this site.</li>\r\n<li>The administrator of said site is responsible for sending or not an invitation to do so and must ensure that the requester is part of the community (usually a family) which is managed on the site.</li>\r\n<li>Once their account is created, any active user can also create \"managed\" accounts for members of their family who cannot do it themselves (for example young children or elderly people who do not master the Internet. \r\n\tThe active member is entirely responsible for the data of the members he manages and must ensure the consent of the people for whom he manages a member to see their data shared with other active members of the site.</li>\r\n<li>All sites created with the Cousins Matter application record the personal data of members who create their account there as well as those of members managed by active members.</li>\r\n<li>This data is <strong>never</strong> shared by the Cousins Matter application outside the site and is visible <strong>only to</strong> active members of the site.</li>\r\n<li>Any active member can delete their account at any time by editing their profile and clicking on the red button symbolizing a trash can. In this case, all member data is deleted.</li>\r\n<li>The developer(s) of the Cousins Matter application cannot be held responsible for any data leak as the site is managed by its administrator and security measures must be ensured by him.</li>\r\n<li>The site administrator is responsible for translating the policy into the languages appropriate to its audience.</li><li>eee<br></li>\r\n</ul>",
 			"enable_comments": false,
@@ -243,7 +243,7 @@
 		"model": "flatpages.flatpage",
 		"pk": 17,
 		"fields": {
-			"url": "/en-US/home/authenticated/",
+			"url": "/en/home/authenticated/",
 			"title": "Cousins Matter!",
 			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Cousins Matter!</h1>\n\t<p>This is the default home page of your site for the connected members.</p>\n\t\t\t<p>Please use the <a href=\"/pages-edit/admin\">Edit Pages</a> \n\t\t\t\tmenu to update the content of this page.</p>\n</div>",
 			"enable_comments": false,
@@ -258,7 +258,7 @@
 		"model": "flatpages.flatpage",
 		"pk": 18,
 		"fields": {
-			"url": "/en-US/home/unauthenticated/",
+			"url": "/en/home/unauthenticated/",
 			"title": "Cousins Matter!",
 			"content": "<div class=\"content\">\n\t<figure class=\"image home-logo is-pulled-left mr-3 mb-3\">\n\t\t<img src=\"/static/cm_main/images/cousinsmatter.jpg\">\n\t</figure>\n\t<h1 class=\"title\">Cousins Matter!</h1>\n\t<p>This is the default public home page of your site (i.e. the page seen by non connected people).</p>\n\t\t\t<p>Please use the <a href=\"/pages-edit/admin\">Edit Pages</a> \n\t\t\t\tmenu to update the content of this page.</p>\n</div>",
 			"enable_comments": false,

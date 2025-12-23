@@ -18,399 +18,353 @@ from .utils import GedcomParser, GedcomExporter
 
 @login_required
 def dashboard(request):
-    total_people = Person.objects.count()
-    total_families = Family.objects.count()
-    context = {
-        "total_people": total_people,
-        "total_families": total_families,
-    }
-    return render(request, "genealogy/dashboard.html", context)
+  total_people = Person.objects.count()
+  total_families = Family.objects.count()
+  context = {
+    "total_people": total_people,
+    "total_families": total_families,
+  }
+  return render(request, "genealogy/dashboard.html", context)
 
 
 @login_required
 def person_list(request, page_num=1):
-    query = request.GET.get("q")
-    people = (
-        Person.objects.filter(
-            Q(first_name__icontains=query) | Q(last_name__icontains=query)
-        )
-        if query
-        else Person.objects.all()
+  query = request.GET.get("q")
+  people = (
+    Person.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query)) if query else Person.objects.all()
+  )
+
+  cache_key_suffix = (request.GET.urlencode() or "default") + str(page_num)
+
+  if request.htmx:
+    template = "genealogy/person_list.html#person_list_table"
+  else:
+    template = "genealogy/person_list.html"
+
+  try:
+    page = Paginator.get_page(
+      request,
+      object_list=people,
+      page_num=page_num,
+      reverse_link="genealogy:person_list_page",
+      default_page_size=50,
     )
-
-    cache_key_suffix = (request.GET.urlencode() or "default") + str(page_num)
-
-    if request.htmx:
-        template = "genealogy/person_list.html#person_list_table"
-    else:
-        template = "genealogy/person_list.html"
-
-    try:
-        page = Paginator.get_page(
-            request,
-            object_list=people,
-            page_num=page_num,
-            reverse_link="genealogy:person_list_page",
-            default_page_size=50,
-        )
-        return render(
-            request, template, {"page": page, "cache_key_suffix": cache_key_suffix}
-        )
-    except PageOutOfBounds as exc:
-        return redirect(exc.redirect_to)
+    return render(request, template, {"page": page, "cache_key_suffix": cache_key_suffix})
+  except PageOutOfBounds as exc:
+    return redirect(exc.redirect_to)
 
 
 @login_required
 def person_detail(request, pk):
-    person = get_object_or_404(Person, pk=pk)
-    return render(request, "genealogy/person_detail.html", {"person": person})
+  person = get_object_or_404(Person, pk=pk)
+  return render(request, "genealogy/person_detail.html", {"person": person})
 
 
 @login_required
 def family_tree(request):
-    return render(request, "genealogy/family_tree.html")
+  return render(request, "genealogy/family_tree.html")
 
 
 @login_required
 def tree_data(request):
-    people_data = []
-    for person in Person.objects.all():
-        avatar_url = None
-        if person.member and person.member.avatar:
-            avatar_url = person.member.avatar_mini_url
+  people_data = []
+  for person in Person.objects.all():
+    avatar_url = None
+    if person.member and person.member.avatar:
+      avatar_url = person.member.avatar_mini_url
 
-        people_data.append(
-            {
-                "id": f"p{person.id}",
-                "name": str(person),
-                "sex": person.sex,
-                "url": f"/genealogy/people/{person.id}/",
-                "avatar_url": avatar_url,
-                "birth_date": person.birth_date.strftime("%Y")
-                if person.birth_date
-                else "",
-                "death_date": person.death_date.strftime("%Y")
-                if person.death_date
-                else "",
-                "gender_icon": person.gender_icon,
-            }
-        )
+    people_data.append(
+      {
+        "id": f"p{person.id}",
+        "name": str(person),
+        "sex": person.sex,
+        "url": f"/genealogy/people/{person.id}/",
+        "avatar_url": avatar_url,
+        "birth_date": person.birth_date.strftime("%Y") if person.birth_date else "",
+        "death_date": person.death_date.strftime("%Y") if person.death_date else "",
+        "gender_icon": person.gender_icon,
+      }
+    )
 
-    families_data = []
-    for family in Family.objects.all():
-        if family.partner1 and family.partner2:
-            families_data.append(
-                {
-                    "id": f"f{family.id}",
-                    "partner1_id": f"p{family.partner1.id}",
-                    "partner2_id": f"p{family.partner2.id}",
-                    "children_ids": [f"p{child.id}" for child in family.children.all()],
-                    "union_date": family.union_date.strftime("%Y")
-                    if family.union_date
-                    else "",
-                    "separation_date": family.separation_date.strftime("%Y")
-                    if family.separation_date
-                    else "",
-                }
-            )
+  families_data = []
+  for family in Family.objects.all():
+    if family.partner1 and family.partner2:
+      families_data.append(
+        {
+          "id": f"f{family.id}",
+          "partner1_id": f"p{family.partner1.id}",
+          "partner2_id": f"p{family.partner2.id}",
+          "children_ids": [f"p{child.id}" for child in family.children.all()],
+          "union_date": family.union_date.strftime("%Y") if family.union_date else "",
+          "separation_date": family.separation_date.strftime("%Y") if family.separation_date else "",
+        }
+      )
 
-    return JsonResponse({"people": people_data, "families": families_data})
+  return JsonResponse({"people": people_data, "families": families_data})
 
 
 @login_required
 def person_create(request):
-    if request.method == "POST":
-        form = PersonForm(request.POST)
-        if form.is_valid():
-            person = form.save()
-            messages.success(request, _("Person created successfully."))
-            clear_genealogy_caches(request)
-            return redirect("genealogy:person_detail", pk=person.pk)
-    else:
-        form = PersonForm()
-    return render(
-        request, "genealogy/person_form.html", {"form": form, "title": _("Add Person")}
-    )
+  if request.method == "POST":
+    form = PersonForm(request.POST)
+    if form.is_valid():
+      person = form.save()
+      messages.success(request, _("Person created successfully."))
+      clear_genealogy_caches(request)
+      return redirect("genealogy:person_detail", pk=person.pk)
+  else:
+    form = PersonForm()
+  return render(request, "genealogy/person_form.html", {"form": form, "title": _("Add Person")})
 
 
 @login_required
 def person_update(request, pk):
-    person = get_object_or_404(Person, pk=pk)
-    if request.method == "POST":
-        form = PersonForm(request.POST, instance=person)
-        if form.is_valid():
-            form.save()
-            messages.success(request, _("Person updated successfully."))
-            clear_genealogy_caches(request)
-            return redirect("genealogy:person_detail", pk=person.pk)
-    else:
-        form = PersonForm(instance=person)
-    return render(
-        request, "genealogy/person_form.html", {"form": form, "title": _("Edit Person")}
-    )
+  person = get_object_or_404(Person, pk=pk)
+  if request.method == "POST":
+    form = PersonForm(request.POST, instance=person)
+    if form.is_valid():
+      form.save()
+      messages.success(request, _("Person updated successfully."))
+      clear_genealogy_caches(request)
+      return redirect("genealogy:person_detail", pk=person.pk)
+  else:
+    form = PersonForm(instance=person)
+  return render(request, "genealogy/person_form.html", {"form": form, "title": _("Edit Person")})
 
 
 @login_required
 def person_delete(request, pk):
-    person = get_object_or_404(Person, pk=pk)
-    if request.method == "POST":
-        person.delete()
-        messages.success(request, _("Person deleted successfully."))
-        clear_genealogy_caches(request)
-        return redirect("genealogy:person_list")
-    return render(request, "genealogy/person_confirm_delete.html", {"person": person})
+  person = get_object_or_404(Person, pk=pk)
+  if request.method == "POST":
+    person.delete()
+    messages.success(request, _("Person deleted successfully."))
+    clear_genealogy_caches(request)
+    return redirect("genealogy:person_list")
+  return render(request, "genealogy/person_confirm_delete.html", {"person": person})
 
 
 @login_required
 def family_list(request, page_num=1):
-    query = request.GET.get("q")
-    if query:
-        families = Family.objects.filter(
-            Q(partner1__first_name__icontains=query)
-            | Q(partner2__first_name__icontains=query)
-            | Q(partner1__last_name__icontains=query)
-            | Q(partner2__last_name__icontains=query)
-        )
-    else:
-        families = Family.objects.all()
+  query = request.GET.get("q")
+  if query:
+    families = Family.objects.filter(
+      Q(partner1__first_name__icontains=query)
+      | Q(partner2__first_name__icontains=query)
+      | Q(partner1__last_name__icontains=query)
+      | Q(partner2__last_name__icontains=query)
+    )
+  else:
+    families = Family.objects.all()
 
-    cache_key_suffix = (request.GET.urlencode() or "default") + str(page_num)
+  cache_key_suffix = (request.GET.urlencode() or "default") + str(page_num)
 
-    if request.htmx:
-        template = "genealogy/family_list.html#family_list_table"
-    else:
-        template = "genealogy/family_list.html"
+  if request.htmx:
+    template = "genealogy/family_list.html#family_list_table"
+  else:
+    template = "genealogy/family_list.html"
 
-    try:
-        page = Paginator.get_page(
-            request,
-            object_list=families,
-            page_num=page_num,
-            reverse_link="genealogy:family_list_page",
-            default_page_size=25,
-        )
-        return render(
-            request, template, {"page": page, "cache_key_suffix": cache_key_suffix}
-        )
-    except PageOutOfBounds as exc:
-        return redirect(exc.redirect_to)
+  try:
+    page = Paginator.get_page(
+      request,
+      object_list=families,
+      page_num=page_num,
+      reverse_link="genealogy:family_list_page",
+      default_page_size=25,
+    )
+    return render(request, template, {"page": page, "cache_key_suffix": cache_key_suffix})
+  except PageOutOfBounds as exc:
+    return redirect(exc.redirect_to)
 
 
 @login_required
 def family_create(request):
-    if request.method == "POST":
-        form = FamilyForm(request.POST)
-        if form.is_valid():
-            # family =
-            form.save()
-            messages.success(request, _("Family created successfully."))
-            clear_genealogy_caches(request)
-            return redirect("genealogy:dashboard")  # Or family detail if we had one
-    else:
-        form = FamilyForm()
-    return render(
-        request, "genealogy/family_form.html", {"form": form, "title": _("Add Family")}
-    )
+  if request.method == "POST":
+    form = FamilyForm(request.POST)
+    if form.is_valid():
+      # family =
+      form.save()
+      messages.success(request, _("Family created successfully."))
+      clear_genealogy_caches(request)
+      return redirect("genealogy:dashboard")  # Or family detail if we had one
+  else:
+    form = FamilyForm()
+  return render(request, "genealogy/family_form.html", {"form": form, "title": _("Add Family")})
 
 
 @login_required
 def family_update(request, pk):
-    family = get_object_or_404(Family, pk=pk)
-    if request.method == "POST":
-        form = FamilyForm(request.POST, instance=family)
-        if form.is_valid():
-            form.save()
-            messages.success(request, _("Family updated successfully."))
-            clear_genealogy_caches(request)
-            return redirect("genealogy:dashboard")
-    else:
-        form = FamilyForm(instance=family)
-    return render(
-        request, "genealogy/family_form.html", {"form": form, "title": _("Edit Family")}
-    )
+  family = get_object_or_404(Family, pk=pk)
+  if request.method == "POST":
+    form = FamilyForm(request.POST, instance=family)
+    if form.is_valid():
+      form.save()
+      messages.success(request, _("Family updated successfully."))
+      clear_genealogy_caches(request)
+      return redirect("genealogy:dashboard")
+  else:
+    form = FamilyForm(instance=family)
+  return render(request, "genealogy/family_form.html", {"form": form, "title": _("Edit Family")})
 
 
 @login_required
 def family_delete(request, pk):
-    family = get_object_or_404(Family, pk=pk)
-    if request.method == "POST":
-        family.delete()
-        messages.success(request, _("Family deleted successfully."))
-        clear_genealogy_caches(request)
-        return redirect("genealogy:dashboard")
-    return render(request, "genealogy/family_confirm_delete.html", {"family": family})
+  family = get_object_or_404(Family, pk=pk)
+  if request.method == "POST":
+    family.delete()
+    messages.success(request, _("Family deleted successfully."))
+    clear_genealogy_caches(request)
+    return redirect("genealogy:dashboard")
+  return render(request, "genealogy/family_confirm_delete.html", {"family": family})
 
 
 @login_required
 def import_gedcom(request):
-    if request.method == "POST":
-        form = GedcomImportForm(request.POST, request.FILES)
-        if form.is_valid():
-            gedcom_file = request.FILES["gedcom_file"]
-            # Save temporary file
-            path = default_storage.save(
-                "tmp/" + gedcom_file.name, ContentFile(gedcom_file.read())
-            )
-            full_path = os.path.join(default_storage.location, path)
+  if request.method == "POST":
+    form = GedcomImportForm(request.POST, request.FILES)
+    if form.is_valid():
+      gedcom_file = request.FILES["gedcom_file"]
+      # Save temporary file
+      path = default_storage.save("tmp/" + gedcom_file.name, ContentFile(gedcom_file.read()))
+      full_path = os.path.join(default_storage.location, path)
 
-            try:
-                parser = GedcomParser(full_path)
-                parser.parse()
-                messages.success(request, _("GEDCOM imported successfully."))
-                clear_genealogy_caches(request)
-            except Exception as e:
-                messages.error(
-                    request, _("Error importing GEDCOM: %(error)s") % {"error": str(e)}
-                )
-            finally:
-                default_storage.delete(path)
+      try:
+        parser = GedcomParser(full_path)
+        parser.parse()
+        messages.success(request, _("GEDCOM imported successfully."))
+        clear_genealogy_caches(request)
+      except Exception as e:
+        messages.error(request, _("Error importing GEDCOM: %(error)s") % {"error": str(e)})
+      finally:
+        default_storage.delete(path)
 
-            return redirect("genealogy:dashboard")
-    else:
-        form = GedcomImportForm()
-    return render(request, "genealogy/import_gedcom.html", {"form": form})
+      return redirect("genealogy:dashboard")
+  else:
+    form = GedcomImportForm()
+  return render(request, "genealogy/import_gedcom.html", {"form": form})
 
 
 @login_required
 def export_gedcom(request):
-    exporter = GedcomExporter()
-    gedcom_content = exporter.export()
-    response = HttpResponse(gedcom_content, content_type="text/gedcom")
-    response["Content-Disposition"] = 'attachment; filename="genealogy.ged"'
-    return response
+  exporter = GedcomExporter()
+  gedcom_content = exporter.export()
+  response = HttpResponse(gedcom_content, content_type="text/gedcom")
+  response["Content-Disposition"] = 'attachment; filename="genealogy.ged"'
+  return response
 
 
 @login_required
 def download_gedcom(request):
-    exporter = GedcomExporter()
-    gedcom_content = exporter.export()
-    return HttpResponse(gedcom_content, content_type="text/plain")
+  exporter = GedcomExporter()
+  gedcom_content = exporter.export()
+  return HttpResponse(gedcom_content, content_type="text/plain")
 
 
 @login_required
 def family_chart_view(request, main_person_id=None):
-    return render(
-        request, "genealogy/family_chart.html", {"main_person_id": main_person_id}
-    )
+  return render(request, "genealogy/family_chart.html", {"main_person_id": main_person_id})
 
 
 @login_required
 def family_chart_data(request):
-    people = Person.objects.prefetch_related(
-        "unions_as_p1",
-        "unions_as_p2",
-        "unions_as_p1__children",
-        "unions_as_p2__children",
-        "child_of_family",
-        "child_of_family__partner1",
-        "child_of_family__partner2",
-    ).all()
+  people = Person.objects.prefetch_related(
+    "unions_as_p1",
+    "unions_as_p2",
+    "unions_as_p1__children",
+    "unions_as_p2__children",
+    "child_of_family",
+    "child_of_family__partner1",
+    "child_of_family__partner2",
+  ).all()
 
-    data = []
-    for person in people:
-        # Determine gender for display
-        gender = "M" if person.sex == "M" else "F" if person.sex == "F" else "O"
+  data = []
+  for person in people:
+    # Determine gender for display
+    gender = "M" if person.sex == "M" else "F" if person.sex == "F" else "O"
 
-        # Relationships
-        rels = {}
+    # Relationships
+    rels = {}
 
-        # Parents
-        if person.child_of_family:
-            father = person.child_of_family.partner1
-            mother = person.child_of_family.partner2
-            if father:
-                rels["father"] = str(father.id)
-            if mother:
-                rels["mother"] = str(mother.id)
+    # Parents
+    if person.child_of_family:
+      father = person.child_of_family.partner1
+      mother = person.child_of_family.partner2
+      if father:
+        rels["father"] = str(father.id)
+      if mother:
+        rels["mother"] = str(mother.id)
 
-        # Spouses
-        spouses = person.get_partners()
-        if spouses:
-            rels["spouses"] = [str(spouse.id) for spouse in spouses]
+    # Spouses
+    spouses = person.get_partners()
+    if spouses:
+      rels["spouses"] = [str(spouse.id) for spouse in spouses]
 
-        # Children
-        children = []
-        # Unions where person is partner 1
-        for union in person.unions_as_p1.all():
-            children.extend([str(child.id) for child in union.children.all()])
-        # Unions where person is partner 2
-        for union in person.unions_as_p2.all():
-            children.extend([str(child.id) for child in union.children.all()])
+    # Children
+    children = []
+    # Unions where person is partner 1
+    for union in person.unions_as_p1.all():
+      children.extend([str(child.id) for child in union.children.all()])
+    # Unions where person is partner 2
+    for union in person.unions_as_p2.all():
+      children.extend([str(child.id) for child in union.children.all()])
 
-        if children:
-            rels["children"] = list(set(children))  # Remove duplicates if any
+    if children:
+      rels["children"] = list(set(children))  # Remove duplicates if any
 
-        person_data = {
-            "id": str(person.id),
-            "data": {
-                "first name": person.first_name,
-                "last name": person.last_name,
-                "birthday": formats.date_format(person.birth_date, "SHORT_DATE_FORMAT")
-                if person.birth_date
-                else "",
-                "deathday": formats.date_format(person.death_date, "SHORT_DATE_FORMAT")
-                if person.death_date
-                else "",
-                "avatar": "",  # Placeholder for avatar
-                "gender": gender,
-            },
-            "rels": rels,
-        }
+    person_data = {
+      "id": str(person.id),
+      "data": {
+        "first name": person.first_name,
+        "last name": person.last_name,
+        "birthday": formats.date_format(person.birth_date, "SHORT_DATE_FORMAT") if person.birth_date else "",
+        "deathday": formats.date_format(person.death_date, "SHORT_DATE_FORMAT") if person.death_date else "",
+        "avatar": "",  # Placeholder for avatar
+        "gender": gender,
+      },
+      "rels": rels,
+    }
 
-        data.append(person_data)
+    data.append(person_data)
 
-    return JsonResponse(data, safe=False)
+  return JsonResponse(data, safe=False)
 
 
 @login_required
 def statistics(request):
-    # Gender Distribution
-    gender_data = Person.objects.values("sex").annotate(count=Count("sex"))
+  # Gender Distribution
+  gender_data = Person.objects.values("sex").annotate(count=Count("sex"))
 
-    # Top Names
-    top_first_names = (
-        Person.objects.values("first_name")
-        .annotate(count=Count("first_name"))
-        .order_by("-count")[:10]
-    )
-    top_last_names = (
-        Person.objects.values("last_name")
-        .annotate(count=Count("last_name"))
-        .order_by("-count")[:10]
-    )
+  # Top Names
+  top_first_names = Person.objects.values("first_name").annotate(count=Count("first_name")).order_by("-count")[:10]
+  top_last_names = Person.objects.values("last_name").annotate(count=Count("last_name")).order_by("-count")[:10]
 
-    # Births per Decade
-    birth_years = (
-        Person.objects.filter(birth_date__isnull=False)
-        .annotate(year=ExtractYear("birth_date"))
-        .values("year")
-    )
-    decades = {}
-    for entry in birth_years:
-        decade = (entry["year"] // 10) * 10
-        decades[decade] = decades.get(decade, 0) + 1
+  # Births per Decade
+  birth_years = Person.objects.filter(birth_date__isnull=False).annotate(year=ExtractYear("birth_date")).values("year")
+  decades = {}
+  for entry in birth_years:
+    decade = (entry["year"] // 10) * 10
+    decades[decade] = decades.get(decade, 0) + 1
 
-    sorted_decades = dict(sorted(decades.items()))
+  sorted_decades = dict(sorted(decades.items()))
 
-    context = {
-        "gender_data": list(gender_data),
-        "top_first_names": list(top_first_names),
-        "top_last_names": list(top_last_names),
-        "decades": list(sorted_decades.keys()),
-        "births_per_decade": list(sorted_decades.values()),
-    }
-    return render(request, "genealogy/statistics.html", context)
+  context = {
+    "gender_data": list(gender_data),
+    "top_first_names": list(top_first_names),
+    "top_last_names": list(top_last_names),
+    "decades": list(sorted_decades.keys()),
+    "births_per_decade": list(sorted_decades.values()),
+  }
+  return render(request, "genealogy/statistics.html", context)
 
 
 def clear_genealogy_caches(request):
-    cache.delete("genealogy_statistics")
-    cache.delete("genealogy_family_tree")
-    cache.delete("genealogy_person_list")
-    cache.delete("genealogy_family_list")
+  cache.delete("genealogy_statistics")
+  cache.delete("genealogy_family_tree")
+  cache.delete("genealogy_person_list")
+  cache.delete("genealogy_family_list")
 
 
 @login_required
 def refresh(request):
-    clear_genealogy_caches(request)
-    messages.success(request, _("Genealogy data refreshed successfully."))
-    return redirect(request.META.get("HTTP_REFERER"))
+  clear_genealogy_caches(request)
+  messages.success(request, _("Genealogy data refreshed successfully."))
+  return redirect(request.META.get("HTTP_REFERER"))

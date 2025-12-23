@@ -4,70 +4,70 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    initial = True
+  initial = True
 
-    dependencies = []
+  dependencies = []
 
-    operations = [
-        migrations.CreateModel(
-            name="Comment",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("date", models.DateTimeField(auto_now=True)),
-                ("content", models.CharField(max_length=1000, verbose_name="Comment")),
-            ],
-            options={
-                "verbose_name_plural": "comments",
-                "ordering": ["message", "date"],
-            },
+  operations = [
+    migrations.CreateModel(
+      name="Comment",
+      fields=[
+        (
+          "id",
+          models.BigAutoField(
+            auto_created=True,
+            primary_key=True,
+            serialize=False,
+            verbose_name="ID",
+          ),
         ),
-        migrations.CreateModel(
-            name="Message",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("date", models.DateTimeField(auto_now=True)),
-                (
-                    "content",
-                    models.TextField(max_length=1048576, verbose_name="Content"),
-                ),
-            ],
-            options={
-                "ordering": ["date"],
-            },
+        ("date", models.DateTimeField(auto_now=True)),
+        ("content", models.CharField(max_length=1000, verbose_name="Comment")),
+      ],
+      options={
+        "verbose_name_plural": "comments",
+        "ordering": ["message", "date"],
+      },
+    ),
+    migrations.CreateModel(
+      name="Message",
+      fields=[
+        (
+          "id",
+          models.BigAutoField(
+            auto_created=True,
+            primary_key=True,
+            serialize=False,
+            verbose_name="ID",
+          ),
         ),
-        migrations.CreateModel(
-            name="Post",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("title", models.CharField(max_length=120, verbose_name="Title")),
-            ],
-            options={
-                "verbose_name_plural": "posts",
-                "ordering": ["first_message__date"],
-            },
+        ("date", models.DateTimeField(auto_now=True)),
+        (
+          "content",
+          models.TextField(max_length=1048576, verbose_name="Content"),
         ),
-    ]
+      ],
+      options={
+        "ordering": ["date"],
+      },
+    ),
+    migrations.CreateModel(
+      name="Post",
+      fields=[
+        (
+          "id",
+          models.BigAutoField(
+            auto_created=True,
+            primary_key=True,
+            serialize=False,
+            verbose_name="ID",
+          ),
+        ),
+        ("title", models.CharField(max_length=120, verbose_name="Title")),
+      ],
+      options={
+        "verbose_name_plural": "posts",
+        "ordering": ["first_message__date"],
+      },
+    ),
+  ]

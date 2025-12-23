@@ -4,52 +4,48 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    dependencies = [
-        ("members", "0011_alter_logintrace_ip"),
-    ]
+  dependencies = [
+    ("members", "0011_alter_logintrace_ip"),
+  ]
 
-    operations = [
-        migrations.AlterModelOptions(
-            name="address",
-            options={
-                "ordering": [
-                    "country",
-                    "state",
-                    "city",
-                    "zip_code",
-                    "number_and_street",
-                ],
-                "verbose_name": "address",
-                "verbose_name_plural": "addresses",
-            },
-        ),
-        migrations.RemoveIndex(
-            model_name="address",
-            name="members_add_city_8915c5_idx",
-        ),
-        migrations.AddField(
-            model_name="address",
-            name="state",
-            field=models.CharField(blank=True, max_length=32, verbose_name="State"),
-        ),
-        migrations.AddIndex(
-            model_name="address",
-            index=models.Index(fields=["city"], name="members_add_city_f9f4a2_idx"),
-        ),
-        migrations.AddIndex(
-            model_name="address",
-            index=models.Index(
-                fields=["zip_code"], name="members_add_zip_cod_5a8e89_idx"
-            ),
-        ),
-        migrations.AddIndex(
-            model_name="address",
-            index=models.Index(
-                fields=["country"], name="members_add_country_1780c7_idx"
-            ),
-        ),
-        migrations.AddIndex(
-            model_name="address",
-            index=models.Index(fields=["state"], name="members_add_state_45f666_idx"),
-        ),
-    ]
+  operations = [
+    migrations.AlterModelOptions(
+      name="address",
+      options={
+        "ordering": [
+          "country",
+          "state",
+          "city",
+          "zip_code",
+          "number_and_street",
+        ],
+        "verbose_name": "address",
+        "verbose_name_plural": "addresses",
+      },
+    ),
+    migrations.RemoveIndex(
+      model_name="address",
+      name="members_add_city_8915c5_idx",
+    ),
+    migrations.AddField(
+      model_name="address",
+      name="state",
+      field=models.CharField(blank=True, max_length=32, verbose_name="State"),
+    ),
+    migrations.AddIndex(
+      model_name="address",
+      index=models.Index(fields=["city"], name="members_add_city_f9f4a2_idx"),
+    ),
+    migrations.AddIndex(
+      model_name="address",
+      index=models.Index(fields=["zip_code"], name="members_add_zip_cod_5a8e89_idx"),
+    ),
+    migrations.AddIndex(
+      model_name="address",
+      index=models.Index(fields=["country"], name="members_add_country_1780c7_idx"),
+    ),
+    migrations.AddIndex(
+      model_name="address",
+      index=models.Index(fields=["state"], name="members_add_state_45f666_idx"),
+    ),
+  ]

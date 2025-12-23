@@ -15,9 +15,9 @@ cmd = load_command_class(app_name, cmd)
 
 # inspect the arguments added
 if hasattr(cmd, "add_arguments"):
-    # argparse actions registered on cmd.parser after create_parser called
-    parser = cmd.create_parser("manage.py", cmd)
-    for action in parser._actions:
-        print(action.option_strings, action.dest, action.help)
+  # argparse actions registered on cmd.parser after create_parser called
+  parser = cmd.create_parser("manage.py", cmd)
+  for action in parser._actions:
+    print(action.option_strings, action.dest, action.help)
 else:
-    print("No add_arguments method found on the command.")
+  print("No add_arguments method found on the command.")

@@ -3,6 +3,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CmMainConfig(AppConfig):
-    default_auto_field = "django.db.models.BigAutoField"
-    name = "cm_main"
-    verbose_name = _("Cousins Matter!")
+  default_auto_field = "django.db.models.BigAutoField"
+  name = "cm_main"
+  verbose_name = _("Cousins Matter!")

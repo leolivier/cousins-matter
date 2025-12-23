@@ -4,46 +4,42 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    dependencies = [
-        ("polls", "0002_remove_choice_votes_remove_question_pub_date_and_more"),
-    ]
+  dependencies = [
+    ("polls", "0002_remove_choice_votes_remove_question_pub_date_and_more"),
+  ]
 
-    operations = [
-        migrations.AlterField(
-            model_name="choiceanswer",
-            name="answer",
-            field=models.CharField(
-                blank=True, default="", max_length=100, verbose_name="choice"
-            ),
-        ),
-        migrations.AddField(
-            model_name="question",
-            name="possible_choices",
-            field=models.JSONField(
-                blank=True, default=list, verbose_name="Possible choices"
-            ),
-        ),
-        migrations.AlterField(
-            model_name="question",
-            name="question_text",
-            field=models.CharField(max_length=200, verbose_name="Question"),
-        ),
-        migrations.AlterField(
-            model_name="question",
-            name="question_type",
-            field=models.CharField(
-                choices=[
-                    ("YN", "Yes/No"),
-                    ("MC", "Multiple Choice"),
-                    ("OT", "Open Text"),
-                    ("DT", "Date"),
-                ],
-                default="YN",
-                max_length=2,
-                verbose_name="Question Type",
-            ),
-        ),
-        migrations.DeleteModel(
-            name="Choice",
-        ),
-    ]
+  operations = [
+    migrations.AlterField(
+      model_name="choiceanswer",
+      name="answer",
+      field=models.CharField(blank=True, default="", max_length=100, verbose_name="choice"),
+    ),
+    migrations.AddField(
+      model_name="question",
+      name="possible_choices",
+      field=models.JSONField(blank=True, default=list, verbose_name="Possible choices"),
+    ),
+    migrations.AlterField(
+      model_name="question",
+      name="question_text",
+      field=models.CharField(max_length=200, verbose_name="Question"),
+    ),
+    migrations.AlterField(
+      model_name="question",
+      name="question_type",
+      field=models.CharField(
+        choices=[
+          ("YN", "Yes/No"),
+          ("MC", "Multiple Choice"),
+          ("OT", "Open Text"),
+          ("DT", "Date"),
+        ],
+        default="YN",
+        max_length=2,
+        verbose_name="Question Type",
+      ),
+    ),
+    migrations.DeleteModel(
+      name="Choice",
+    ),
+  ]

@@ -8,273 +8,251 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    initial = True
+  initial = True
 
-    dependencies = [
-        ("auth", "0012_alter_user_first_name_max_length"),
-    ]
+  dependencies = [
+    ("auth", "0012_alter_user_first_name_max_length"),
+  ]
 
-    operations = [
-        migrations.CreateModel(
-            name="Address",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "number_and_street",
-                    models.CharField(
-                        max_length=120, verbose_name="Number & Street name"
-                    ),
-                ),
-                (
-                    "complementary_info",
-                    models.CharField(
-                        blank=True,
-                        default="",
-                        max_length=120,
-                        verbose_name="Complementary info",
-                    ),
-                ),
-                ("zip_code", models.CharField(max_length=12, verbose_name="Zip code")),
-                ("city", models.CharField(max_length=120, verbose_name="City")),
-                ("country", models.CharField(max_length=32, verbose_name="Country")),
-            ],
-            options={
-                "verbose_name": "address",
-                "verbose_name_plural": "addresses",
-                "ordering": ["city", "zip_code", "number_and_street"],
-                "indexes": [
-                    models.Index(
-                        fields=["city", "zip_code"], name="members_add_city_8915c5_idx"
-                    )
-                ],
-            },
+  operations = [
+    migrations.CreateModel(
+      name="Address",
+      fields=[
+        (
+          "id",
+          models.BigAutoField(
+            auto_created=True,
+            primary_key=True,
+            serialize=False,
+            verbose_name="ID",
+          ),
         ),
-        migrations.CreateModel(
-            name="Family",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("name", models.CharField(max_length=72, verbose_name="Name")),
-                (
-                    "parent",
-                    models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="members.family",
-                        verbose_name="Parent family",
-                    ),
-                ),
-            ],
-            options={
-                "verbose_name": "family",
-                "verbose_name_plural": "families",
-                "ordering": ["name"],
-            },
+        (
+          "number_and_street",
+          models.CharField(max_length=120, verbose_name="Number & Street name"),
         ),
-        migrations.CreateModel(
-            name="Member",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("password", models.CharField(max_length=128, verbose_name="password")),
-                (
-                    "last_login",
-                    models.DateTimeField(
-                        blank=True, null=True, verbose_name="last login"
-                    ),
-                ),
-                (
-                    "is_superuser",
-                    models.BooleanField(
-                        default=False,
-                        help_text="Designates that this user has all permissions without explicitly assigning them.",
-                        verbose_name="superuser status",
-                    ),
-                ),
-                (
-                    "username",
-                    models.CharField(
-                        error_messages={
-                            "unique": "A user with that username already exists."
-                        },
-                        help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
-                        max_length=150,
-                        unique=True,
-                        validators=[
-                            django.contrib.auth.validators.UnicodeUsernameValidator()
-                        ],
-                        verbose_name="username",
-                    ),
-                ),
-                (
-                    "first_name",
-                    models.CharField(
-                        blank=True, max_length=150, verbose_name="first name"
-                    ),
-                ),
-                (
-                    "last_name",
-                    models.CharField(
-                        blank=True, max_length=150, verbose_name="last name"
-                    ),
-                ),
-                (
-                    "email",
-                    models.EmailField(
-                        blank=True, max_length=254, verbose_name="email address"
-                    ),
-                ),
-                (
-                    "is_staff",
-                    models.BooleanField(
-                        default=False,
-                        help_text="Designates whether the user can log into this admin site.",
-                        verbose_name="staff status",
-                    ),
-                ),
-                (
-                    "is_active",
-                    models.BooleanField(
-                        default=True,
-                        help_text="Designates whether this user should be treated as active. Unselect this instead of deleting accounts.",
-                        verbose_name="active",
-                    ),
-                ),
-                (
-                    "date_joined",
-                    models.DateTimeField(
-                        default=django.utils.timezone.now, verbose_name="date joined"
-                    ),
-                ),
-                (
-                    "avatar",
-                    models.ImageField(blank=True, null=True, upload_to="avatars"),
-                ),
-                (
-                    "phone",
-                    models.CharField(blank=True, max_length=32, verbose_name="Phone"),
-                ),
-                (
-                    "birthdate",
-                    models.DateField(
-                        help_text="Click on the month name or the year to change them quickly",
-                        null=True,
-                        verbose_name="Birthdate",
-                    ),
-                ),
-                ("website", models.URLField(blank=True, verbose_name="Website")),
-                (
-                    "description",
-                    models.TextField(
-                        blank=True,
-                        help_text="Describe yourself, your likes and dislikes...",
-                        max_length=2097152,
-                        null=True,
-                        verbose_name="Who I am",
-                    ),
-                ),
-                (
-                    "hobbies",
-                    models.CharField(
-                        blank=True,
-                        help_text="Provide a list of hobbies separated by commas",
-                        max_length=256,
-                        null=True,
-                        verbose_name="My hobbies",
-                    ),
-                ),
-                (
-                    "groups",
-                    models.ManyToManyField(
-                        blank=True,
-                        help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
-                        related_name="user_set",
-                        related_query_name="user",
-                        to="auth.group",
-                        verbose_name="groups",
-                    ),
-                ),
-                (
-                    "managing_member",
-                    models.ForeignKey(
-                        blank=True,
-                        default=None,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="managed_members",
-                        to=settings.AUTH_USER_MODEL,
-                        verbose_name="Managing member",
-                    ),
-                ),
-                (
-                    "user_permissions",
-                    models.ManyToManyField(
-                        blank=True,
-                        help_text="Specific permissions for this user.",
-                        related_name="user_set",
-                        related_query_name="user",
-                        to="auth.permission",
-                        verbose_name="user permissions",
-                    ),
-                ),
-                (
-                    "address",
-                    models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.DO_NOTHING,
-                        to="members.address",
-                        verbose_name="Address",
-                    ),
-                ),
-                (
-                    "family",
-                    models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="members.family",
-                        verbose_name="Family",
-                    ),
-                ),
-            ],
-            options={
-                "verbose_name": "member",
-                "verbose_name_plural": "members",
-                "ordering": ["last_name", "first_name"],
-            },
+        (
+          "complementary_info",
+          models.CharField(
+            blank=True,
+            default="",
+            max_length=120,
+            verbose_name="Complementary info",
+          ),
         ),
-        migrations.AddIndex(
-            model_name="family",
-            index=models.Index(fields=["name"], name="members_fam_name_9e8e97_idx"),
+        ("zip_code", models.CharField(max_length=12, verbose_name="Zip code")),
+        ("city", models.CharField(max_length=120, verbose_name="City")),
+        ("country", models.CharField(max_length=32, verbose_name="Country")),
+      ],
+      options={
+        "verbose_name": "address",
+        "verbose_name_plural": "addresses",
+        "ordering": ["city", "zip_code", "number_and_street"],
+        "indexes": [models.Index(fields=["city", "zip_code"], name="members_add_city_8915c5_idx")],
+      },
+    ),
+    migrations.CreateModel(
+      name="Family",
+      fields=[
+        (
+          "id",
+          models.BigAutoField(
+            auto_created=True,
+            primary_key=True,
+            serialize=False,
+            verbose_name="ID",
+          ),
         ),
-        migrations.AddIndex(
-            model_name="member",
-            index=models.Index(
-                fields=["birthdate"], name="members_mem_birthda_da42de_idx"
-            ),
+        ("name", models.CharField(max_length=72, verbose_name="Name")),
+        (
+          "parent",
+          models.ForeignKey(
+            blank=True,
+            null=True,
+            on_delete=django.db.models.deletion.CASCADE,
+            to="members.family",
+            verbose_name="Parent family",
+          ),
         ),
-    ]
+      ],
+      options={
+        "verbose_name": "family",
+        "verbose_name_plural": "families",
+        "ordering": ["name"],
+      },
+    ),
+    migrations.CreateModel(
+      name="Member",
+      fields=[
+        (
+          "id",
+          models.BigAutoField(
+            auto_created=True,
+            primary_key=True,
+            serialize=False,
+            verbose_name="ID",
+          ),
+        ),
+        ("password", models.CharField(max_length=128, verbose_name="password")),
+        (
+          "last_login",
+          models.DateTimeField(blank=True, null=True, verbose_name="last login"),
+        ),
+        (
+          "is_superuser",
+          models.BooleanField(
+            default=False,
+            help_text="Designates that this user has all permissions without explicitly assigning them.",
+            verbose_name="superuser status",
+          ),
+        ),
+        (
+          "username",
+          models.CharField(
+            error_messages={"unique": "A user with that username already exists."},
+            help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+            max_length=150,
+            unique=True,
+            validators=[django.contrib.auth.validators.UnicodeUsernameValidator()],
+            verbose_name="username",
+          ),
+        ),
+        (
+          "first_name",
+          models.CharField(blank=True, max_length=150, verbose_name="first name"),
+        ),
+        (
+          "last_name",
+          models.CharField(blank=True, max_length=150, verbose_name="last name"),
+        ),
+        (
+          "email",
+          models.EmailField(blank=True, max_length=254, verbose_name="email address"),
+        ),
+        (
+          "is_staff",
+          models.BooleanField(
+            default=False,
+            help_text="Designates whether the user can log into this admin site.",
+            verbose_name="staff status",
+          ),
+        ),
+        (
+          "is_active",
+          models.BooleanField(
+            default=True,
+            help_text="Designates whether this user should be treated as active. Unselect this instead of deleting accounts.",
+            verbose_name="active",
+          ),
+        ),
+        (
+          "date_joined",
+          models.DateTimeField(default=django.utils.timezone.now, verbose_name="date joined"),
+        ),
+        (
+          "avatar",
+          models.ImageField(blank=True, null=True, upload_to="avatars"),
+        ),
+        (
+          "phone",
+          models.CharField(blank=True, max_length=32, verbose_name="Phone"),
+        ),
+        (
+          "birthdate",
+          models.DateField(
+            help_text="Click on the month name or the year to change them quickly",
+            null=True,
+            verbose_name="Birthdate",
+          ),
+        ),
+        ("website", models.URLField(blank=True, verbose_name="Website")),
+        (
+          "description",
+          models.TextField(
+            blank=True,
+            help_text="Describe yourself, your likes and dislikes...",
+            max_length=2097152,
+            null=True,
+            verbose_name="Who I am",
+          ),
+        ),
+        (
+          "hobbies",
+          models.CharField(
+            blank=True,
+            help_text="Provide a list of hobbies separated by commas",
+            max_length=256,
+            null=True,
+            verbose_name="My hobbies",
+          ),
+        ),
+        (
+          "groups",
+          models.ManyToManyField(
+            blank=True,
+            help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
+            related_name="user_set",
+            related_query_name="user",
+            to="auth.group",
+            verbose_name="groups",
+          ),
+        ),
+        (
+          "managing_member",
+          models.ForeignKey(
+            blank=True,
+            default=None,
+            null=True,
+            on_delete=django.db.models.deletion.CASCADE,
+            related_name="managed_members",
+            to=settings.AUTH_USER_MODEL,
+            verbose_name="Managing member",
+          ),
+        ),
+        (
+          "user_permissions",
+          models.ManyToManyField(
+            blank=True,
+            help_text="Specific permissions for this user.",
+            related_name="user_set",
+            related_query_name="user",
+            to="auth.permission",
+            verbose_name="user permissions",
+          ),
+        ),
+        (
+          "address",
+          models.ForeignKey(
+            blank=True,
+            null=True,
+            on_delete=django.db.models.deletion.DO_NOTHING,
+            to="members.address",
+            verbose_name="Address",
+          ),
+        ),
+        (
+          "family",
+          models.ForeignKey(
+            blank=True,
+            null=True,
+            on_delete=django.db.models.deletion.CASCADE,
+            to="members.family",
+            verbose_name="Family",
+          ),
+        ),
+      ],
+      options={
+        "verbose_name": "member",
+        "verbose_name_plural": "members",
+        "ordering": ["last_name", "first_name"],
+      },
+    ),
+    migrations.AddIndex(
+      model_name="family",
+      index=models.Index(fields=["name"], name="members_fam_name_9e8e97_idx"),
+    ),
+    migrations.AddIndex(
+      model_name="member",
+      index=models.Index(fields=["birthdate"], name="members_mem_birthda_da42de_idx"),
+    ),
+  ]

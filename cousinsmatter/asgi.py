@@ -20,8 +20,8 @@ import chat.routing  # noqa E402
 
 
 application = ProtocolTypeRouter(
-    {
-        "http": get_asgi_application(),
-        "websocket": AuthMiddlewareStack(URLRouter(chat.routing.websocket_urlpatterns)),
-    }
+  {
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(URLRouter(chat.routing.websocket_urlpatterns)),
+  }
 )

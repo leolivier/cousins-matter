@@ -13,70 +13,66 @@ from .forms import PageForm
 
 
 class PageCreateView(OnlyAdminMixin, generic.CreateView):
-    template_name = "pages/page_form.html"
-    model = FlatPage
-    form_class = PageForm
+  template_name = "pages/page_form.html"
+  model = FlatPage
+  form_class = PageForm
 
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_superuser:
-            raise PermissionDenied
-        form = PageForm(request.POST)
-        if form.is_valid():
-            page = form.save()
-            page.sites.set([Site.objects.get(pk=settings.SITE_ID)])
-            page.updated = True
-            page.save()
-            if "save" in request.POST:
-                return redirect(page.url)
-            elif "save-and-continue" in request.POST:
-                messages.success(
-                    request, _('Page "%(title)s" saved') % {"title": page.title}
-                )
-            else:
-                raise ValueError("Unexpected button: {}".format(request.POST))
-        return render(request, self.template_name, {"form": form})
+  def post(self, request, *args, **kwargs):
+    if not request.user.is_superuser:
+      raise PermissionDenied
+    form = PageForm(request.POST)
+    if form.is_valid():
+      page = form.save()
+      page.sites.set([Site.objects.get(pk=settings.SITE_ID)])
+      page.updated = True
+      page.save()
+      if "save" in request.POST:
+        return redirect(page.url)
+      elif "save-and-continue" in request.POST:
+        messages.success(request, _('Page "%(title)s" saved') % {"title": page.title})
+      else:
+        raise ValueError("Unexpected button: {}".format(request.POST))
+    return render(request, self.template_name, {"form": form})
 
 
 class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
-    template_name = "pages/page_form.html"
-    model = FlatPage
-    form_class = PageForm
+  template_name = "pages/page_form.html"
+  model = FlatPage
+  form_class = PageForm
 
-    def post(self, request, pk, *args, **kwargs):
-        if not request.user.is_superuser:
-            raise PermissionDenied
-        page = get_object_or_404(FlatPage, pk=pk)
-        form = PageForm(request.POST, instance=page)
-        if form.is_valid():
-            page = form.save()
-            page.updated = True
-            page.save(update_fields=["updated"])
-            if "save" in request.POST:
-                return redirect(page.url)
-            elif "save-and-continue" in request.POST:
-                messages.success(
-                    request, _('Page "%(title)s" saved') % {"title": page.title}
-                )
-            else:
-                raise ValueError("Unexpected button: {}".format(request.POST))
-        return render(request, self.template_name, {"form": form})
+  def post(self, request, pk, *args, **kwargs):
+    if not request.user.is_superuser:
+      raise PermissionDenied
+    page = get_object_or_404(FlatPage, pk=pk)
+    form = PageForm(request.POST, instance=page)
+    if form.is_valid():
+      page = form.save()
+      page.updated = True
+      page.save(update_fields=["updated"])
+      if "save" in request.POST:
+        return redirect(page.url)
+      elif "save-and-continue" in request.POST:
+        messages.success(request, _('Page "%(title)s" saved') % {"title": page.title})
+      else:
+        raise ValueError("Unexpected button: {}".format(request.POST))
+    return render(request, self.template_name, {"form": form})
 
 
 class PageAdminListView(OnlyAdminMixin, generic.ListView):
-    model = FlatPage
-    template_name = "pages/pages_admin_list.html"
+  model = FlatPage
+  template_name = "pages/pages_admin_list.html"
 
 
 class PageTreeView(LoginRequiredMixin, generic.ListView):
-    model = FlatPage
-    template_name = "pages/page_tree.html"
+  model = FlatPage
+  template_name = "pages/page_tree.html"
 
 
 class PageDeleteView(OnlyAdminMixin, generic.View):
-    def post(self, request, pk):
-        if not request.user.is_superuser:
-            raise PermissionDenied
-        page = get_object_or_404(FlatPage, pk=pk)
-        page.delete()
-        messages.success(request, _('Page "%(title)s" deleted') % {"title": page.title})
-        return redirect("pages-edit:edit_list")
+  def post(self, request, pk):
+    if not request.user.is_superuser:
+      raise PermissionDenied
+    page = get_object_or_404(FlatPage, pk=pk)
+    page.delete()
+    messages.success(request, _('Page "%(title)s" deleted') % {"title": page.title})
+    return redirect("pages-edit:edit_list")

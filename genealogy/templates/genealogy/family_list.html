@@ -1,0 +1,97 @@
+{% extends "genealogy/base_genealogy.html" %}
+{% load i18n cm_tags cache %}
+
+{% block genealogy_content %}
+{% cache 300 genealogy_family_list cache_key_suffix %}
+<div class="box">
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <h2 class="subtitle">{% trans "Families" %}</h2>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input class="input" type="text" name="q" placeholder="{% trans 'Search...' %}"
+                               hx-get="{% url 'genealogy:family_list' %}"
+                               hx-trigger="keyup changed delay:500ms"
+                               hx-target="#family-table-body"
+                               hx-select="#family-table-body">
+                    </div>
+                    <div class="control">
+                        <a class="button is-info">
+                            {% trans "Search" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="level-item">
+                <a href="{% url 'genealogy:family_create' %}" class="button is-primary">
+                    {%icon "new"%}
+                    <span>{% trans "Add Family" %}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="level">
+        {%paginate page%}
+    </div>
+
+    <table class="table is-fullwidth is-striped is-hoverable">
+        <thead>
+            <tr>
+                <th>{% trans "Partner 1" %}</th>
+                <th>{% trans "Partner 2" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Actions" %}</th>
+            </tr>
+        </thead>
+        {% partialdef family_list_table inline %}
+        <tbody id="family-table-body">
+            {% for family in page.object_list %}
+            <tr>
+                <td>
+                    {% if family.partner1 %}
+                    <a href="{% url 'genealogy:person_detail' family.partner1.id %}">
+                        {{ family.partner1 }} {%icon family.partner1.gender_icon%}
+                    </a>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if family.partner2 %}
+                    <a href="{% url 'genealogy:person_detail' family.partner2.id %}">
+                        {{ family.partner2 }} {%icon family.partner2.gender_icon%}
+                    </a>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>{{ family.get_union_type_display }}</td>
+                <td>{{ family.union_date|default:"-" }}</td>
+                <td>
+                    <div class="buttons are-small">
+                        <a href="{% url 'genealogy:family_update' family.id %}" class="button is-warning is-light">
+                            {%icon "edit" %}
+                        </a>
+                        <a href="{% url 'genealogy:family_delete' family.id %}" class="button is-danger is-light">
+                            {%icon "delete" %}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="has-text-centered">{% trans "No families found." %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% endpartialdef %}
+    </table>
+</div>
+{% endcache %}
+{% endblock %}

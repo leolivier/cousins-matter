@@ -4,12 +4,14 @@ name: Image Build & Push
 
 on:
   push:
-  
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+
   release:
     types: [prereleased, published]
 
   workflow_dispatch:
-
 
 env:
   # The registry where the image will be pushed.

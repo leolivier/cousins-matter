@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 14:19+0200\n"
+"POT-Creation-Date: 2025-11-21 17:46+0100\n"
 "PO-Revision-Date: 2025-01-01 09:13+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Portuguese <LL@li.org>\n"
@@ -18,57 +18,65 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: troves/models.py:19
+#: troves/models.py:15
 msgid "History & Stories"
 msgstr "História e histórias"
 
-#: troves/models.py:20
+#: troves/models.py:16
 msgid "Recipes"
 msgstr "Ricette"
 
-#: troves/models.py:21
+#: troves/models.py:17
 msgid "Family meetings"
 msgstr "Reuniões familiares"
 
-#: troves/models.py:22
+#: troves/models.py:18
 msgid "Recollections"
 msgstr "Recolhas"
 
-#: troves/models.py:23
+#: troves/models.py:19
 msgid "Arts"
 msgstr "Artes"
 
-#: troves/models.py:24
+#: troves/models.py:20
 msgid "Miscellaneous"
 msgstr "Diversos"
 
-#: troves/models.py:27
-msgid "Description of the treasure"
-msgstr "Descrição do tesouro"
+#: troves/models.py:25
+msgid "Description of the treasure (this will appear in the details)"
+msgstr "Descrição do tesouro (isto vai aparecer nos detalhes)"
 
-#: troves/models.py:28
+#: troves/models.py:27
 msgid "Treasure photo"
 msgstr "Foto do tesouro"
 
-#: troves/models.py:31
+#: troves/models.py:30
 msgid "Treasure file"
 msgstr "Ficheiro do tesouro"
 
-#: troves/models.py:33
+#: troves/models.py:32
 msgid "Category"
 msgstr "Categoria"
 
-#: troves/models.py:37
+#: troves/models.py:36
 msgid "trove"
 msgstr "tesouro"
 
-#: troves/models.py:38
+#: troves/models.py:37
 msgid "troves"
 msgstr "tesouro"
 
 #: troves/models.py:56
 msgid "A treasure must have an owner."
 msgstr "tesouros"
+
+#: troves/templates/troves/treasure_detail.html:4
+msgid "Treasure"
+msgstr "Tesouro"
+
+#: troves/templates/troves/treasure_detail.html:41
+msgid "Look at the file contents"
+msgstr "Ver o conteúdo do ficheiro"
 
 #: troves/templates/troves/treasure_form.html:8
 #: troves/templates/troves/treasure_form.html:20

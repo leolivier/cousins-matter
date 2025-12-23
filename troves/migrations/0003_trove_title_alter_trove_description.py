@@ -14,30 +14,34 @@ def set_title(apps, schema_editor):
                 treasure.title = descr
                 treasure.description = None
             else:
-                treasure.title = descr[:97] + '...'
+                treasure.title = descr[:97] + "..."
         treasure.save()
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('troves', '0002_mkdirs'),
+        ("troves", "0002_mkdirs"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='trove',
-            name='title',
-            field=models.CharField(default='title', verbose_name='Title of the treasure (this will appear in the list)',
-                                   max_length=100),
+            model_name="trove",
+            name="title",
+            field=models.CharField(
+                default="title",
+                verbose_name="Title of the treasure (this will appear in the list)",
+                max_length=100,
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='trove',
-            name='description',
-            field=models.TextField(blank=True, null=True,
-                                   verbose_name='Description of the treasure (this will appear in the details)'),
+            model_name="trove",
+            name="description",
+            field=models.TextField(
+                blank=True,
+                null=True,
+                verbose_name="Description of the treasure (this will appear in the details)",
+            ),
         ),
         migrations.RunPython(set_title),
-
     ]

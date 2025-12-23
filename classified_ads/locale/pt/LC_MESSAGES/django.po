@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 14:19+0200\n"
+"POT-Creation-Date: 2025-11-21 17:46+0100\n"
 "PO-Revision-Date: 2025-05-20 11:37+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Portuguese <LL@li.org>\n"
@@ -389,11 +389,11 @@ msgstr "Anúncio"
 msgid "Classified Ads"
 msgstr "Anúncios"
 
-#: classified_ads/models.py:134
+#: classified_ads/models.py:131
 msgid "Ad Photo"
 msgstr "Foto do Anúncio"
 
-#: classified_ads/models.py:135
+#: classified_ads/models.py:132
 msgid "Ad Photos"
 msgstr "Fotos do Anúncio"
 
@@ -419,40 +419,40 @@ msgstr "Subcategoria"
 msgid "State"
 msgstr "Estado"
 
-#: classified_ads/templates/classified_ads/detail.html:40
+#: classified_ads/templates/classified_ads/detail.html:42
 msgid "Price"
 msgstr "Preço"
 
-#: classified_ads/templates/classified_ads/detail.html:41
+#: classified_ads/templates/classified_ads/detail.html:43
 msgid "Location"
 msgstr "Localização"
 
-#: classified_ads/templates/classified_ads/detail.html:42
+#: classified_ads/templates/classified_ads/detail.html:44
 msgid "Shipping"
 msgstr "Envio"
 
-#: classified_ads/templates/classified_ads/detail.html:50
+#: classified_ads/templates/classified_ads/detail.html:52
 #: classified_ads/templates/classified_ads/form.html:66
 msgid "Update Ad"
 msgstr "Actualizar Anúncio"
 
-#: classified_ads/templates/classified_ads/detail.html:52
+#: classified_ads/templates/classified_ads/detail.html:54
 #: classified_ads/templates/classified_ads/form.html:70
 #, python-format
 msgid "Are you sure you want to delete the classified ads \"%(ad_name)s\""
 msgstr "Tem a certeza que deseja eliminar o anúncio \"%(ad_name)s\"?"
 
-#: classified_ads/templates/classified_ads/detail.html:55
+#: classified_ads/templates/classified_ads/detail.html:57
 #: classified_ads/templates/classified_ads/form.html:73
 msgid "Delete Ad"
 msgstr "Eliminar Anúncio"
 
-#: classified_ads/templates/classified_ads/detail.html:57
+#: classified_ads/templates/classified_ads/detail.html:59
 #: classified_ads/templates/classified_ads/form.html:75
 msgid "Classified ads deletion"
 msgstr "Eliminar Anúncio"
 
-#: classified_ads/templates/classified_ads/detail.html:62
+#: classified_ads/templates/classified_ads/detail.html:64
 msgid "Send a message to the owner of this ad"
 msgstr "Enviar mensagem ao proprietário deste anúncio"
 
@@ -490,12 +490,12 @@ msgstr "Nova Foto"
 msgid "You will be able to add photos after creating the ad"
 msgstr "Poderá adicionar fotos após criar o anúncio"
 
-#: classified_ads/tests.py:290 classified_ads/views.py:115
+#: classified_ads/tests.py:299 classified_ads/views.py:115
 #, python-format
 msgid "Message from %(username)s about ad %(title)s"
 msgstr "Mensagem de %(username)s sobre o anúncio %(title)s"
 
-#: classified_ads/tests.py:295 classified_ads/views.py:120
+#: classified_ads/tests.py:304 classified_ads/views.py:120
 #, python-format
 msgid ""
 "Hello %(recipient)s,\n"

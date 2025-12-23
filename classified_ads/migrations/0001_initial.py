@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,44 +14,112 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ClassifiedAd',
+            name="ClassifiedAd",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('date_created', models.DateTimeField(auto_now_add=True)),
-                ('category', models.CharField(max_length=55)),
-                ('subcategory', models.CharField(blank=True, max_length=255, null=True)),
-                ('description', models.TextField()),
-                ('shipping_method', models.CharField(choices=[('pickup', 'Pickup'), ('shipping', 'Shipping')], default='pickup', max_length=255)),
-                ('price', models.CharField(max_length=25)),
-                ('item_status', models.CharField(choices=[('new', 'New'), ('like_new', 'Like New'), ('very_good', 'Very Good'), ('good', 'Good'), ('fair', 'Fair'), ('poor', 'Poor'), ('parts', 'For Parts/Not Working')], default='new', max_length=255)),
-                ('ad_status', models.CharField(choices=[('for_sale', 'For Sale'), ('sold', 'Sold'), ('closed', 'Closed')], default='for_sale', max_length=255)),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("date_created", models.DateTimeField(auto_now_add=True)),
+                ("category", models.CharField(max_length=55)),
+                (
+                    "subcategory",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                ("description", models.TextField()),
+                (
+                    "shipping_method",
+                    models.CharField(
+                        choices=[("pickup", "Pickup"), ("shipping", "Shipping")],
+                        default="pickup",
+                        max_length=255,
+                    ),
+                ),
+                ("price", models.CharField(max_length=25)),
+                (
+                    "item_status",
+                    models.CharField(
+                        choices=[
+                            ("new", "New"),
+                            ("like_new", "Like New"),
+                            ("very_good", "Very Good"),
+                            ("good", "Good"),
+                            ("fair", "Fair"),
+                            ("poor", "Poor"),
+                            ("parts", "For Parts/Not Working"),
+                        ],
+                        default="new",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "ad_status",
+                    models.CharField(
+                        choices=[
+                            ("for_sale", "For Sale"),
+                            ("sold", "Sold"),
+                            ("closed", "Closed"),
+                        ],
+                        default="for_sale",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Classified Ad',
-                'verbose_name_plural': 'Classified Ads',
-                'ordering': ['-date_created'],
+                "verbose_name": "Classified Ad",
+                "verbose_name_plural": "Classified Ads",
+                "ordering": ["-date_created"],
             },
         ),
         migrations.CreateModel(
-            name='AdPhoto',
+            name="AdPhoto",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='classified_ads/photos/')),
-                ('ad', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='photos', to='classified_ads.classifiedad')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="classified_ads/photos/")),
+                (
+                    "ad",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="photos",
+                        to="classified_ads.classifiedad",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Ad Photo',
-                'verbose_name_plural': 'Ad Photos',
+                "verbose_name": "Ad Photo",
+                "verbose_name_plural": "Ad Photos",
             },
         ),
         migrations.AddIndex(
-            model_name='classifiedad',
-            index=models.Index(fields=['owner', 'category', 'subcategory'], name='classified__owner_i_f37fd9_idx'),
+            model_name="classifiedad",
+            index=models.Index(
+                fields=["owner", "category", "subcategory"],
+                name="classified__owner_i_f37fd9_idx",
+            ),
         ),
         migrations.AddIndex(
-            model_name='adphoto',
-            index=models.Index(fields=['ad'], name='classified__ad_id_8408d9_idx'),
+            model_name="adphoto",
+            index=models.Index(fields=["ad"], name="classified__ad_id_8408d9_idx"),
         ),
     ]

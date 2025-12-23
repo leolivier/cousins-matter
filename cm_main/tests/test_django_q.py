@@ -6,17 +6,17 @@ class _DjangoQSwitcher:
   def __init__(self):
     self._saved = {}
 
-  def enable(self):
-    self._saved["SYNC"] = Conf.SYNC
-    self._saved["TESTING"] = Conf.TESTING
-    Conf.SYNC = True
-    Conf.TESTING = True
+    def enable(self):
+        self._saved["SYNC"] = Conf.SYNC
+        self._saved["TESTING"] = Conf.TESTING
+        Conf.SYNC = True
+        Conf.TESTING = True
 
-  def disable(self):
-    # restore even if exceptions have occurred
-    Conf.SYNC = self._saved.get("SYNC", Conf.SYNC)
-    Conf.TESTING = self._saved.get("TESTING", Conf.TESTING)
-    self._saved.clear()
+    def disable(self):
+        # restore even if exceptions have occurred
+        Conf.SYNC = self._saved.get("SYNC", Conf.SYNC)
+        Conf.TESTING = self._saved.get("TESTING", Conf.TESTING)
+        self._saved.clear()
 
 
 def django_q_sync_class(cls):
@@ -27,14 +27,16 @@ def django_q_sync_class(cls):
   """
   switcher = _DjangoQSwitcher()
 
-  def _wrap_test_method(method):
-    @wraps(method)
-    def _wrapped(self, *args, **kwargs):
-      switcher.enable()
-      try:
-        return method(self, *args, **kwargs)
-      finally:
-        switcher.disable()
+    def _wrap_test_method(method):
+        @wraps(method)
+        def _wrapped(self, *args, **kwargs):
+            switcher.enable()
+            try:
+                return method(self, *args, **kwargs)
+            finally:
+                switcher.disable()
+
+        return _wrapped
 
     return _wrapped
 

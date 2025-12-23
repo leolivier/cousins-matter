@@ -1,0 +1,29 @@
+{% extends "genealogy/base_genealogy.html" %}
+{% load i18n %}
+
+{% block genealogy_content %}
+<div class="columns is-centered">
+    <div class="column is-half">
+        <div class="box has-background-warning-light">
+            <h2 class="title is-4 has-text-danger">{% trans "Confirm Deletion" %}</h2>
+            <p class="mb-4">
+                {% blocktrans with name=person %}Are you sure you want to delete "{{ name }}"?{% endblocktrans %}
+            </p>
+            <p class="mb-4 is-size-7">
+                {% trans "This action cannot be undone." %}
+            </p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" class="button is-danger">{% trans "Yes, delete" %}</button>
+                    </div>
+                    <div class="control">
+                        <a href="{% url 'genealogy:person_detail' person.pk %}" class="button is-light">{% trans "Cancel" %}</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

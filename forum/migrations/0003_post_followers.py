@@ -5,16 +5,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('forum', '0002_initial'),
+        ("forum", "0002_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='post',
-            name='followers',
-            field=models.ManyToManyField(blank=True, limit_choices_to={'is_active': True}, related_name='followed_posts', to=settings.AUTH_USER_MODEL),
+            model_name="post",
+            name="followers",
+            field=models.ManyToManyField(
+                blank=True,
+                limit_choices_to={"is_active": True},
+                related_name="followed_posts",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

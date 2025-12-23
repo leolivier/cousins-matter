@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 14:19+0200\n"
+"POT-Creation-Date: 2025-11-21 17:46+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Italian <LL@li.org>\n"
@@ -33,31 +33,31 @@ msgstr ""
 "come gallerie e le foto in queste cartelle saranno aggiunte alle gallerie. "
 "Tutte le foto devono essere all'interno di cartelle."
 
-#: galleries/models.py:20 galleries/models.py:74
+#: galleries/models.py:20 galleries/models.py:73
 msgid "A photo must belong to a gallery."
 msgstr "Una foto deve appartenere a una galleria."
 
-#: galleries/models.py:43 galleries/templates/galleries/photo_detail.html:3
+#: galleries/models.py:40 galleries/templates/galleries/photo_detail.html:3
 msgid "Photo"
 msgstr "Foto"
 
-#: galleries/models.py:48 galleries/models.py:106
+#: galleries/models.py:45 galleries/models.py:106
 msgid "Name"
 msgstr "Nome"
 
-#: galleries/models.py:49 galleries/models.py:107
+#: galleries/models.py:46 galleries/models.py:107
 msgid "Description"
 msgstr "Descrizione"
 
-#: galleries/models.py:51
+#: galleries/models.py:48
 msgid "Date"
 msgstr "Data"
 
-#: galleries/models.py:51
+#: galleries/models.py:48
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Clicca sul nome del mese o dell'anno per modificarli rapidamente"
 
-#: galleries/models.py:53
+#: galleries/models.py:50
 msgid "Uploaded by"
 msgstr "Caricato da"
 
@@ -90,12 +90,22 @@ msgstr "Un'altra sottogalleria di %(parent)s con lo stesso nome esiste già"
 msgid "Another root gallery with the same name already exists"
 msgstr "Un'altra galleria principale con lo stesso nome esiste già"
 
+#: galleries/tasks.py:59 galleries/views/views_bulk.py:65
+#, python-format
+msgid "Imported from zipfile directory %(path)s"
+msgstr "Importato dalla directory %(path)s del file zip"
+
+#: galleries/tasks.py:108
+#, python-format
+msgid "Unable to import photo '%(path)s', it was ignored"
+msgstr "Impossibile importare la foto '%(path)s', è stata ignorata"
+
 #: galleries/templates/galleries/bulk_upload.html:3
 #: galleries/templates/galleries/bulk_upload.html:6
 msgid "Bulk Upload Photos"
 msgstr "Caricamento di foto in blocco"
 
-#: galleries/templates/galleries/bulk_upload.html:13
+#: galleries/templates/galleries/bulk_upload.html:15
 msgid "Upload"
 msgstr "Carica"
 
@@ -159,6 +169,7 @@ msgid "Back to %(gname)s"
 msgstr "Torna a %(gname)s"
 
 #: galleries/templates/galleries/gallery_detail.html:55
+#: galleries/views/views_bulk.py:171
 msgid "Back to galleries list"
 msgstr "Torna all'elenco delle gallerie"
 
@@ -229,25 +240,21 @@ msgstr "Crea e aggiungi un'altra"
 msgid "Close"
 msgstr "Chiudi"
 
-#: galleries/tests/tests_gallery.py:255 galleries/views/views_gallery.py:76
+#: galleries/tests/tests_gallery.py:268 galleries/views/views_gallery.py:76
 msgid "Gallery deleted successfully"
 msgstr "Galleria eliminata con successo"
 
-#: galleries/tests/tests_photo.py:206 galleries/tests/tests_photo.py:215
-#: galleries/tests/tests_photo.py:227 galleries/views/views_photo.py:135
+#: galleries/tests/tests_photo.py:213 galleries/tests/tests_photo.py:222
+#: galleries/tests/tests_photo.py:234 galleries/views/views_photo.py:126
 msgid "Photo deleted"
 msgstr "Foto eliminata"
 
-#: galleries/tests/tests_photo.py:265 galleries/tests/tests_photo.py:275
-#: galleries/views/views_photo.py:122
+#: galleries/tests/tests_photo.py:272 galleries/tests/tests_photo.py:282
+#: galleries/views/views_photo.py:113
 msgid "Photo updated successfully"
 msgstr "Foto aggiornata con successo"
 
-#: galleries/views/views_bulk.py:51
-msgid "Photos can't be at the root of the zip file."
-msgstr "Le foto non possono essere nella radice del file zip."
-
-#: galleries/views/views_bulk.py:69
+#: galleries/views/views_bulk.py:56
 msgid ""
 "Detected path traversal attempt, '..' is not allowed in paths inside the zip "
 "file"
@@ -255,17 +262,11 @@ msgstr ""
 "Rilevato tentativo di attraversamento del percorso, '..' non è consentito "
 "nei percorsi all'interno del file zip"
 
-#: galleries/views/views_bulk.py:78 galleries/views/views_bulk.py:106
-#, python-format
-msgid "Imported from zipfile directory %(path)s"
-msgstr "Importato dalla directory %(path)s del file zip"
+#: galleries/views/views_bulk.py:152
+msgid "Upload not found"
+msgstr ""
 
-#: galleries/views/views_bulk.py:176
-#, python-format
-msgid "Unable to import photo '%(path)s', it was ignored"
-msgstr "Impossibile importare la foto '%(path)s', è stata ignorata"
-
-#: galleries/views/views_bulk.py:192
+#: galleries/views/views_bulk.py:172
 #, python-format
 msgid "Zip file uploaded: %(lg)d galleries and %(nbp)d photos created"
 msgstr "%(lg)d gallerie e %(nbp)d foto create dal file zip caricato"
@@ -278,16 +279,17 @@ msgstr "Galleria creata con successo"
 msgid "Missing either photo id or gallery id"
 msgstr "Manca l'identificativo della foto o della galleria"
 
-#: galleries/views/views_photo.py:55
-msgid "Photo not found on that page"
-msgstr "Foto non trovata su questa pagina"
-
-#: galleries/views/views_photo.py:94
+#: galleries/views/views_photo.py:86
 msgid "Photo created"
 msgstr "Foto creata"
 
-#: galleries/views/views_photo.py:100
-msgid ""
-"Error when creating this photo: %s."
-msgstr ""
-"Errore durante la creazione di questa foto: %s."
+#: galleries/views/views_photo.py:92
+#, python-format
+msgid "Error when creating this photo: %s."
+msgstr "Errore durante la creazione di questa foto: %s."
+
+#~ msgid "Photos can't be at the root of the zip file."
+#~ msgstr "Le foto non possono essere nella radice del file zip."
+
+#~ msgid "Photo not found on that page"
+#~ msgstr "Foto non trovata su questa pagina"

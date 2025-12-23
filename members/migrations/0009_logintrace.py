@@ -6,23 +6,36 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('members', '0008_alter_member_managing_member'),
+        ("members", "0008_alter_member_managing_member"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='LoginTrace',
+            name="LoginTrace",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('ip', models.GenericIPAddressField(db_index=True)),
-                ('ip_info', models.JSONField(default=dict)),
-                ('country_code', models.CharField(blank=True, max_length=2)),
-                ('user_agent', models.TextField()),
-                ('login_at', models.DateTimeField(auto_now_add=True)),
-                ('logout_at', models.DateTimeField(blank=True, null=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("ip", models.GenericIPAddressField(db_index=True)),
+                ("ip_info", models.JSONField(default=dict)),
+                ("country_code", models.CharField(blank=True, max_length=2)),
+                ("user_agent", models.TextField()),
+                ("login_at", models.DateTimeField(auto_now_add=True)),
+                ("logout_at", models.DateTimeField(blank=True, null=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

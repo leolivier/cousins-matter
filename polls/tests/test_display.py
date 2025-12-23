@@ -23,31 +23,56 @@ class TestDisplayPollInfo(PollTestMixin):
     self.client.login(username=member.username, password=member.password)
     self.create_and_check_answers(poll, expected_poll_answers=2)
 
-    response = self.client.get(reverse("polls:poll_detail", args=(poll.id,)), follow=True)
-    self.assertEqual(response.status_code, 200)
-    self.check_display_info(poll, response)
-    poll_answer = PollAnswer.objects.filter(poll=poll, member=self.current_user()).first()
-    for question in questions:
-      answers = Answer.filter_answers(question=question)
-      answer = next((a for a in answers if a.poll_answer == poll_answer), None)
-      match question.question_type:
-        case Question.YESNO_QUESTION:
-          result = sum(1 for a in answers if a.answer) / len(answers)
-          result = f"{result:.1%}"
-        case Question.DATE_QUESTION:
-          result = "<br><hr>".join([formats.date_format(timezone.localtime(a.answer), "DATETIME_FORMAT") for a in answers])
-        case Question.OPENTEXT_QUESTION:
-          result = "<br><hr>".join((a.answer for a in answers))
-        case Question.SINGLECHOICE_QUESTION:
-          choice_results = {}
-          for choice in question.possible_choices:
-            choice_results[choice] = sum(1 for a in answers if a.answer == choice) / len(answers)
-          result = "<br><hr>".join([f"{choice}: {choice_results[choice]:.1%}" for choice in question.possible_choices])
-        case Question.MULTICHOICES_QUESTION:
-          choice_results = {}
-          for choice in question.possible_choices:
-            choice_results[choice] = sum(1 for a in answers if choice in a.answer) / len(answers)
-          result = "<br><hr>".join([f"{choice}: {choice_results[choice]:.1%}" for choice in question.possible_choices])
+        response = self.client.get(
+            reverse("polls:poll_detail", args=(poll.id,)), follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.check_display_info(poll, response)
+        poll_answer = PollAnswer.objects.filter(
+            poll=poll, member=self.current_user()
+        ).first()
+        for question in questions:
+            answers = Answer.filter_answers(question=question)
+            answer = next((a for a in answers if a.poll_answer == poll_answer), None)
+            match question.question_type:
+                case Question.YESNO_QUESTION:
+                    result = sum(1 for a in answers if a.answer) / len(answers)
+                    result = f"{result:.1%}"
+                case Question.DATE_QUESTION:
+                    result = "<br><hr>".join(
+                        [
+                            formats.date_format(
+                                timezone.localtime(a.answer), "DATETIME_FORMAT"
+                            )
+                            for a in answers
+                        ]
+                    )
+                case Question.OPENTEXT_QUESTION:
+                    result = "<br><hr>".join((a.answer for a in answers))
+                case Question.SINGLECHOICE_QUESTION:
+                    choice_results = {}
+                    for choice in question.possible_choices:
+                        choice_results[choice] = sum(
+                            1 for a in answers if a.answer == choice
+                        ) / len(answers)
+                    result = "<br><hr>".join(
+                        [
+                            f"{choice}: {choice_results[choice]:.1%}"
+                            for choice in question.possible_choices
+                        ]
+                    )
+                case Question.MULTICHOICES_QUESTION:
+                    choice_results = {}
+                    for choice in question.possible_choices:
+                        choice_results[choice] = sum(
+                            1 for a in answers if choice in a.answer
+                        ) / len(answers)
+                    result = "<br><hr>".join(
+                        [
+                            f"{choice}: {choice_results[choice]:.1%}"
+                            for choice in question.possible_choices
+                        ]
+                    )
 
       line = f"""
 <div class="cell has-text-centered my-auto has-background-link has-text-light is-col-span-3">
@@ -66,9 +91,11 @@ class TestDisplayPollInfo(PollTestMixin):
     """
     poll = self.create_poll("Test poll", "Test description")
 
-    response = self.client.get(reverse("polls:poll_detail", args=(poll.id,)), follow=True)
-    self.assertEqual(response.status_code, 200)
-    self.check_display_info(poll, response)
+        response = self.client.get(
+            reverse("polls:poll_detail", args=(poll.id,)), follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.check_display_info(poll, response)
 
   def test_display_poll_no_answers_info(self):
     """
@@ -77,23 +104,29 @@ class TestDisplayPollInfo(PollTestMixin):
     poll = self.create_poll("Test poll", "Test description")
     questions = self.create_questions(poll)
 
-    response = self.client.get(reverse("polls:poll_detail", args=(poll.id,)), follow=True)
-    self.assertEqual(response.status_code, 200)
-    self.check_display_info(poll, response)
+        response = self.client.get(
+            reverse("polls:poll_detail", args=(poll.id,)), follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.check_display_info(poll, response)
 
-    for question in questions:
-      match question.question_type:
-        case Question.YESNO_QUESTION:
-          result = "0%"
-        case Question.DATE_QUESTION:
-          result = "-"
-        case Question.OPENTEXT_QUESTION:
-          result = "-"
-        case Question.SINGLECHOICE_QUESTION:
-          result = "<br><hr>".join([f"{choice}: 0%" for choice in question.possible_choices])
-        case Question.MULTICHOICES_QUESTION:
-          result = "<br><hr>".join([f"{choice}: 0%" for choice in question.possible_choices])
-      line = f"""
+        for question in questions:
+            match question.question_type:
+                case Question.YESNO_QUESTION:
+                    result = "0%"
+                case Question.DATE_QUESTION:
+                    result = "-"
+                case Question.OPENTEXT_QUESTION:
+                    result = "-"
+                case Question.SINGLECHOICE_QUESTION:
+                    result = "<br><hr>".join(
+                        [f"{choice}: 0%" for choice in question.possible_choices]
+                    )
+                case Question.MULTICHOICES_QUESTION:
+                    result = "<br><hr>".join(
+                        [f"{choice}: 0%" for choice in question.possible_choices]
+                    )
+            line = f"""
 <div class="cell has-text-centered my-auto has-background-link has-text-light is-col-span-3">
   {icon(question_icon(question.question_type))}
   {question.question_text}
@@ -106,12 +139,18 @@ class TestDisplayPollInfo(PollTestMixin):
 
 
 class TestPollListsView(PollTestMixin):
-  def setUp(self):
-    super().setUp()
-    self.create_poll("published, not yet closed", "Test poll 1", pub_days=-1, duration=2)
-    self.create_poll("published today, not yet closed", "Test poll 2", pub_days=0, duration=2)
-    self.create_poll("not published yet, not yet closed", "Test poll 3", pub_days=1, duration=2)
-    self.create_poll("published and closed", "Test poll 4", pub_days=-5, duration=2)
+    def setUp(self):
+        super().setUp()
+        self.create_poll(
+            "published, not yet closed", "Test poll 1", pub_days=-1, duration=2
+        )
+        self.create_poll(
+            "published today, not yet closed", "Test poll 2", pub_days=0, duration=2
+        )
+        self.create_poll(
+            "not published yet, not yet closed", "Test poll 3", pub_days=1, duration=2
+        )
+        self.create_poll("published and closed", "Test poll 4", pub_days=-5, duration=2)
 
   def tearDown(self):
     Poll.objects.all().delete()

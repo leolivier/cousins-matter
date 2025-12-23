@@ -5,21 +5,30 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('flatpages', '0001_initial'),
+        ("flatpages", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='FlatPage',
+            name="FlatPage",
             fields=[
-                ('flatpage_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='flatpages.flatpage')),
-                ('predefined', models.BooleanField(default=False)),
-                ('updated', models.BooleanField(default=True)),
+                (
+                    "flatpage_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="flatpages.flatpage",
+                    ),
+                ),
+                ("predefined", models.BooleanField(default=False)),
+                ("updated", models.BooleanField(default=True)),
             ],
-            bases=('flatpages.flatpage',),
+            bases=("flatpages.flatpage",),
         ),
     ]

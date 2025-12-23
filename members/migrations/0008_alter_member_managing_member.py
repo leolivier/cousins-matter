@@ -6,22 +6,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('members', '0007_member_deathdate_member_is_dead'),
+        ("members", "0007_member_deathdate_member_is_dead"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='member',
-            name='managing_member',
-            field=models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE,
-                                    related_name='managed_members', to=settings.AUTH_USER_MODEL,
-                                    verbose_name='Member manager'),
+            model_name="member",
+            name="managing_member",
+            field=models.ForeignKey(
+                blank=True,
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="managed_members",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Member manager",
+            ),
         ),
         migrations.RenameField(
-            model_name='member',
-            old_name='managing_member',
-            new_name='member_manager',
+            model_name="member",
+            old_name="managing_member",
+            new_name="member_manager",
         ),
     ]

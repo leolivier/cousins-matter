@@ -24,14 +24,14 @@ from .views import views_general, views_contact, views_stats
 app_name = "cm_main"
 last_modified_date = timezone.now()
 urlpatterns = [
-  path("", views_general.HomeView.as_view(), name="Home"),
-  path("contact/", views_contact.ContactView.as_view(), name="contact"),
-  path("about/", views_stats.statistics, name="about"),
-  path(
-    "jsi18n/cm_main",
-    last_modified(lambda req, **kw: last_modified_date)(  # JS Catalog will be reloaded only at server restart
-      JavaScriptCatalog.as_view(packages=["cm_main"])
+    path("", views_general.HomeView.as_view(), name="Home"),
+    path("contact/", views_contact.ContactView.as_view(), name="contact"),
+    path("about/", views_stats.statistics, name="about"),
+    path(
+        "jsi18n/cm_main/<str:lang>",  # JS Catalog will be reloaded only at server restart, caching by language
+        last_modified(lambda req, **kw: last_modified_date)(
+            JavaScriptCatalog.as_view(packages=["cm_main"])
+        ),
+        name="javascript-catalog",
     ),
-    name="javascript-catalog",
-  ),
 ]

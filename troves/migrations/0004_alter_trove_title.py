@@ -4,15 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('troves', '0003_trove_title_alter_trove_description'),
+        ("troves", "0003_trove_title_alter_trove_description"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='trove',
-            name='title',
-            field=models.CharField(max_length=110, verbose_name='Title of the treasure (this will appear in the list)'),
+            model_name="trove",
+            name="title",
+            field=models.CharField(
+                max_length=110,
+                verbose_name="Title of the treasure (this will appear in the list)",
+            ),
         ),
     ]

@@ -1,6 +1,15 @@
 from django.contrib import admin
 
-from .models import EventPlanner, Poll, Question, PollAnswer, YesNoAnswer, ChoiceAnswer, TextAnswer, DateTimeAnswer
+from .models import (
+    EventPlanner,
+    Poll,
+    Question,
+    PollAnswer,
+    YesNoAnswer,
+    ChoiceAnswer,
+    TextAnswer,
+    DateTimeAnswer,
+)
 
 admin.site.register(Poll)
 admin.site.register(EventPlanner)

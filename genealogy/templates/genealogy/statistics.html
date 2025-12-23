@@ -1,0 +1,113 @@
+{% extends "genealogy/base_genealogy.html" %}
+{% load i18n static cache %}
+
+{% block genealogy_content %}
+{% cache 300 genealogy_statistics %}
+<div class="columns is-multiline">
+    <!-- Gender Distribution -->
+    <div class="column is-one-third">
+        <div class="box">
+            <h3 class="title is-5 has-text-centered">{% trans "Gender Distribution" %}</h3>
+            <canvas id="genderChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Births per Decade -->
+    <div class="column is-two-thirds">
+        <div class="box">
+            <h3 class="title is-5 has-text-centered">{% trans "Births per Decade" %}</h3>
+            <canvas id="birthsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Top First Names -->
+    <div class="column is-half">
+        <div class="box">
+            <h3 class="title is-5 has-text-centered">{% trans "Top First Names" %}</h3>
+            <canvas id="firstNameChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Top Last Names -->
+    <div class="column is-half">
+        <div class="box">
+            <h3 class="title is-5 has-text-centered">{% trans "Top Last Names" %}</h3>
+            <canvas id="lastNameChart"></canvas>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Gender Chart
+    const genderCtx = $('#genderChart')[0].getContext('2d');
+;
+    const genderData = {{gender_data|safe}};
+    const genderLabels = genderData.map(
+        d => d.sex === 'M' ? '{% trans "Male" %}' :
+            (d.sex === 'F' ? '{% trans "Female" %}' :
+            '{% trans "Other" %}')
+    );
+    const genderCounts = genderData.map(d => d.count);
+
+    new Chart(genderCtx, {
+        type: 'doughnut',
+        data: {
+            labels: genderLabels,
+            datasets: [{
+                data: genderCounts,
+                backgroundColor: ['#3e8ed0', '#f14668', '#48c774']
+            }]
+        }
+    });
+
+    // Births Chart
+    const birthsCtx = $('#birthsChart')[0].getContext('2d');
+    new Chart(birthsCtx, {
+        type: 'line',
+        data: {
+            labels: {{ decades|safe }},
+            datasets: [{
+                label: '{% trans "Births" %}',
+                data: {{ births_per_decade|safe }},
+                borderColor: '#3e8ed0',
+                tension: 0.1,
+                fill: true,
+                backgroundColor: 'rgba(62, 142, 208, 0.2)'
+            }]
+        }
+    });
+
+    // Top First Names
+    const firstNameCtx = $('#firstNameChart')[0].getContext('2d');
+    const firstNames = {{ top_first_names|safe }};
+    new Chart(firstNameCtx, {
+        type: 'bar',
+        data: {
+            labels: firstNames.map(d => d.first_name || '{% trans "Unknown" %}'),
+            datasets: [{
+                label: '{% trans "Count" %}',
+                data: firstNames.map(d => d.count),
+                backgroundColor: '#48c774'
+            }]
+        },
+        options: { indexAxis: 'y' }
+    });
+
+    // Top Last Names
+    const lastNameCtx = $('#lastNameChart')[0].getContext('2d');
+    const lastNames = {{ top_last_names|safe }};
+    new Chart(lastNameCtx, {
+        type: 'bar',
+        data: {
+            labels: lastNames.map(d => d.last_name || '{% trans "Unknown" %}'),
+            datasets: [{
+                label: '{% trans "Count" %}',
+                data: lastNames.map(d => d.count),
+                backgroundColor: '#ffe08a'
+            }]
+        },
+        options: { indexAxis: 'y' }
+    });
+</script>
+{% endcache %}
+{% endblock %}

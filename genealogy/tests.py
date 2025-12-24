@@ -74,7 +74,7 @@ class GenealogyViewsTest(MemberTestCase):
     response = self.client.get(reverse("genealogy:dashboard"), follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "genealogy/dashboard.html")
-    content = response.content.decode("utf-8")
+    # content = response.content.decode("utf-8")
     self.assertContains(
       response,
       f"""<div class='box'>

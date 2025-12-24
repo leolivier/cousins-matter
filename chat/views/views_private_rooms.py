@@ -61,7 +61,8 @@ def search_private_members(request, room_slug):
   room = get_object_or_404(PrivateChatRoom, slug=room_slug)
   query = request.GET.get("q", "")
   members = (
-    Member.objects.filter(followed_chat_rooms=room)
+    Member.objects
+    .filter(followed_chat_rooms=room)
     .filter(
       Q(last_name__icontains=query)
       | Q(first_name__icontains=query)

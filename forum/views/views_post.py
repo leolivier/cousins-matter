@@ -31,7 +31,8 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
 
   def get(self, request, page=1):
     posts = (
-      Post.objects.select_related("first_message")
+      Post.objects
+      .select_related("first_message")
       .annotate(num_messages=Count("message"))
       .all()
       .order_by("-first_message__date")

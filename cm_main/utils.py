@@ -7,7 +7,6 @@ from contextlib import contextmanager
 from datetime import datetime
 from io import BytesIO
 from PIL import Image, ImageOps, ImageFile
-from pathlib import PosixPath
 
 # import pprint
 import sys
@@ -19,7 +18,7 @@ from django.core import paginator
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import FileSystemStorage, default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.db import connections, models
+from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
 from django.utils import formats

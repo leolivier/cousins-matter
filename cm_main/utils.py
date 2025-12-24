@@ -350,7 +350,7 @@ def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFil
 
   output_thumb = BytesIO()
   filename = image.name.split("/")[-1]
-  file, ext = os.path.splitext(filename)
+  file, ext = os.path.splitext(filename)  # noqa: S105
   # ISSUE WITH Image.open() which raises "ValueError: seek on closed file" in some circumstances
   if image.file.closed:
     image.file = default_storage.open(image.name, "rb")

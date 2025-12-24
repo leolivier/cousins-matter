@@ -53,14 +53,12 @@ class TestCreatePage(TestPageMixin, BasePageTestCase, MemberTestCase):
     )
     # now, try to create with "sub url"
     url = self.page_data["url"]
-    form = PageForm(
-      {
-        "url": f"{url}/3rd-title/",
-        "title": "3rd title",
-        "content": "3rd content",
-        "save": "true",
-      }
-    )
+    form = PageForm({
+      "url": f"{url}/3rd-title/",
+      "title": "3rd title",
+      "content": "3rd content",
+      "save": "true",
+    })
     self.assertFormError(
       form,
       "url",

@@ -37,7 +37,7 @@ class TestFollowersMixin:
         break
     if followed_object == owner:
       message = _(
-        'Hi %(followed_name)s, <br><a href="%(follower_url)s">%(follower_name)s</a> ' "is now following you on %(site_name)s!"
+        'Hi %(followed_name)s, <br><a href="%(follower_url)s">%(follower_name)s</a> is now following you on %(site_name)s!'
       ) % {
         "followed_name": followed_object.full_name,
         "follower_url": get_test_absolute_url(reverse("members:detail", args=[follower.pk])),

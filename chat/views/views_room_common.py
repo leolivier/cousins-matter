@@ -131,7 +131,7 @@ def create_chat_room(request, private=False):
           similar_room = room_class.objects.get(slug=slugify(room_name))
           messages.error(
             request,
-            _("Another room with a similar name already exists ('%(similar_room_name)s'). " "Please choose a different name.")
+            _("Another room with a similar name already exists ('%(similar_room_name)s'). Please choose a different name.")
             % {"similar_room_name": similar_room.name},
           )
         case _:

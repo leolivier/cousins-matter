@@ -182,7 +182,7 @@ def remove_member_from_private_room(request, room_slug, member_id):
     if room.followers.count() < 2:
       messages.error(
         request,
-        _("This member is the only one in this private room. " "Please add another one before removing this one."),
+        _("This member is the only one in this private room. Please add another one before removing this one."),
       )
     else:
       room.followers.remove(member)
@@ -230,7 +230,7 @@ def leave_private_room(request, room_slug):
     if room.followers.count() == 1:
       messages.error(
         request,
-        _("You are the only member in this private room. " "Please add another one before removing yourself."),
+        _("You are the only member in this private room. Please add another one before removing yourself."),
       )
     elif request.user in room.admins.all() and room.admins.count() == 1:
       messages.error(
@@ -362,7 +362,7 @@ def remove_admin_from_private_room(request, room_slug, member_id):
     if room.admins.count() < 2:
       messages.error(
         request,
-        _("There must be at least one admin in a private room. " "Please add another one before removing this one."),
+        _("There must be at least one admin in a private room. Please add another one before removing this one."),
       )
     else:
       room.followers.remove(member)
@@ -403,7 +403,7 @@ def leave_private_room_admins(request, room_slug):
     if room.admins.count() < 2:
       messages.error(
         request,
-        _("There must be at least one admin in a private room. " "Please add another one before removing yourself."),
+        _("There must be at least one admin in a private room. Please add another one before removing yourself."),
       )
     else:
       room.admins.remove(request.user)

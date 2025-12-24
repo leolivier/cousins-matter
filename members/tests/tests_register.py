@@ -65,10 +65,7 @@ class MemberInviteTests(MemberTestCase):
 
     self.assertInHTML(
       f"""<h2 class="center">
-      {
-                _("Hello %(invited)s, this is %(inviter)s!")
-                % {"invited": test_invite["invited"], "inviter": sender.full_name}
-            } <br/>
+      {_("Hello %(invited)s, this is %(inviter)s!") % {"invited": test_invite["invited"], "inviter": sender.full_name}} <br/>
       {msg}
       </h2>""",
       content,
@@ -82,15 +79,13 @@ class MemberInviteTests(MemberTestCase):
         f"""
 <h1 class="center" style="padding:2px">
   {
-                    _(
-                        "Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s"
-                    )
-                    % {
-                        "site_name": settings.SITE_NAME,
-                        "inviter": sender.full_name,
-                        "invited": test_invite["invited"],
-                    }
-                }
+          _("Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s")
+          % {
+            "site_name": settings.SITE_NAME,
+            "inviter": sender.full_name,
+            "invited": test_invite["invited"],
+          }
+        }
 </h1>""",
         content,
       )
@@ -141,7 +136,7 @@ class ignore_captcha_errors(TestContextDecorator):
     from django.test import SimpleTestCase
 
     if not issubclass(cls, SimpleTestCase):
-      raise ValueError("Only subclasses of Django SimpleTestCase can be decorated " "with ignore_captcha_errors")
+      raise ValueError("Only subclasses of Django SimpleTestCase can be decorated with ignore_captcha_errors")
     self.captcha_test_mode = captcha_settings.CAPTCHA_TEST_MODE
     return cls
 

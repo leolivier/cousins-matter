@@ -166,7 +166,7 @@ class PrivateChatRoomTests(PrivateChatRoomTestsMixin, MemberTestCase):
     self.assertContainsMessage(
       response,
       "error",
-      _("Another room with a similar name already exists ('%(similar_room_name)s'). " "Please choose a different name.")
+      _("Another room with a similar name already exists ('%(similar_room_name)s'). Please choose a different name.")
       % {"similar_room_name": room_name},
     )
     PrivateChatRoom.objects.all().delete()
@@ -354,7 +354,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.assertContainsMessage(
       response,
       "error",
-      _("This member is the only one in this private room. " "Please add another one before removing this one."),
+      _("This member is the only one in this private room. Please add another one before removing this one."),
     )
     # now, add a random member to self.room
     second_member = random.choice(self.created_members)
@@ -394,7 +394,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.assertContainsMessage(
       response,
       "error",
-      _("You are the only member in this private room. " "Please add another one before removing yourself."),
+      _("You are the only member in this private room. Please add another one before removing yourself."),
     )
     # now, add a random member to self.room
     second_member = random.choice(self.created_members)

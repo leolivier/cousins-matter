@@ -123,12 +123,10 @@ class HtmlValidatorMiddleware:
       # the error message(s) and the escaped source.
       print("Error in HTML:", output.decode())
       t = Template(ERROR_MESSAGE_TEMPLATE)
-      c = Context(
-        {
-          "error_message": output.decode() + repr(response.headers),
-          "escaped_source": self.escaped_source(response.content.decode()),
-        }
-      )
+      c = Context({
+        "error_message": output.decode() + repr(response.headers),
+        "escaped_source": self.escaped_source(response.content.decode()),
+      })
 
       error_response = HttpResponseServerError(t.render(c), content_type="text/html; charset=utf-8")
       return error_response

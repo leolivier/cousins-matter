@@ -16,12 +16,10 @@ class TestContactForm(MemberTestCase):
     self.assertTemplateUsed(response, "cm_main/contact/contact-form.html")
 
     # test the form with invalid data
-    form = ContactForm(
-      {
-        "name": "John Doe",
-        "email": "john.doe@example.com",
-      }
-    )
+    form = ContactForm({
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+    })
     self.assertFormError(form, "message", _("This field is required."))
 
     # test the form with valid data, message only

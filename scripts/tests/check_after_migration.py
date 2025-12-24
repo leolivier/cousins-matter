@@ -22,7 +22,7 @@ def check_members(cursor: sqlite3.Cursor):
   print(f"Found {len(migrated_members)} members after migration")
   if len(migrated_members) != len(old_members):
     raise Exception(
-      f"Number of members does not match after migration: before {len(old_members)}, " f"after {len(migrated_members)}"
+      f"Number of members does not match after migration: before {len(old_members)}, after {len(migrated_members)}"
     )
   # check members data
   for old_member, migrated_member in zip(old_members, migrated_members):
@@ -46,7 +46,7 @@ def check_galleries(cursor: sqlite3.Cursor):
   print(f"Found {len(migrated_galleries)} galleries after migration")
   if len(migrated_galleries) != len(old_galleries):
     raise Exception(
-      f"Number of galleries does not match after migration: before {len(old_galleries)}, " f"after {len(migrated_galleries)}"
+      f"Number of galleries does not match after migration: before {len(old_galleries)}, after {len(migrated_galleries)}"
     )
   # check galleries data
   for old_gallery, migrated_gallery in zip(old_galleries, migrated_galleries):
@@ -69,9 +69,7 @@ def check_photos(cursor: sqlite3.Cursor):
   migrated_photos = Photo.objects.all().order_by("id")
   print(f"Found {len(migrated_photos)} photos after migration")
   if len(migrated_photos) != len(old_photos):
-    raise Exception(
-      f"Number of photos does not match after migration: before {len(old_photos)}, " f"after {len(migrated_photos)}"
-    )
+    raise Exception(f"Number of photos does not match after migration: before {len(old_photos)}, after {len(migrated_photos)}")
   # check photos data
   for old_photo, migrated_photo in zip(old_photos, migrated_photos):
     if (
@@ -93,9 +91,7 @@ def check_forums(cursor: sqlite3.Cursor):
   migrated_posts = Post.objects.all().order_by("id")
   print(f"Found {len(migrated_posts)} posts after migration")
   if len(migrated_posts) != len(old_posts):
-    raise Exception(
-      f"Number of posts does not match after migration: before {len(old_posts)}, " f"after {len(migrated_posts)}"
-    )
+    raise Exception(f"Number of posts does not match after migration: before {len(old_posts)}, after {len(migrated_posts)}")
   # check posts data
   for old_post, migrated_post in zip(old_posts, migrated_posts):
     if old_post[0] != migrated_post.id or old_post[1] != migrated_post.title:
@@ -144,9 +140,7 @@ def check_polls(cursor: sqlite3.Cursor):
   migrated_polls = Poll.objects.all().order_by("id")
   print(f"Found {len(migrated_polls)} polls after migration")
   if len(migrated_polls) != len(old_polls):
-    raise Exception(
-      f"Number of polls does not match after migration: before {len(old_polls)}, " f"after {len(migrated_polls)}"
-    )
+    raise Exception(f"Number of polls does not match after migration: before {len(old_polls)}, after {len(migrated_polls)}")
   # check polls data
   for old_poll, migrated_poll in zip(old_polls, migrated_polls):
     if (
@@ -170,7 +164,7 @@ def check_chat(cursor: sqlite3.Cursor):
   print(f"Found {len(migrated_chatrooms)} chatrooms after migration")
   if len(migrated_chatrooms) != len(old_chatrooms):
     raise Exception(
-      f"Number of chatrooms does not match after migration: before {len(old_chatrooms)}, " f"after {len(migrated_chatrooms)}"
+      f"Number of chatrooms does not match after migration: before {len(old_chatrooms)}, after {len(migrated_chatrooms)}"
     )
   # check chatrooms data
   for old_chatroom, migrated_chatroom in zip(old_chatrooms, migrated_chatrooms):
@@ -211,9 +205,7 @@ def check_troves(cursor: sqlite3.Cursor):
   migrated_troves = Trove.objects.all().order_by("id")
   print(f"Found {len(migrated_troves)} troves after migration")
   if len(migrated_troves) != len(old_troves):
-    raise Exception(
-      f"Number of troves does not match after migration: before {len(old_troves)}, " f"after {len(migrated_troves)}"
-    )
+    raise Exception(f"Number of troves does not match after migration: before {len(old_troves)}, after {len(migrated_troves)}")
   # check troves data
   for old_trove, migrated_trove in zip(old_troves, migrated_troves):
     if (

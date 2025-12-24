@@ -60,7 +60,7 @@ class ChatRoomTests(MemberTestCase):
     self.assertContainsMessage(
       response,
       "error",
-      _("Another room with a similar name already exists ('%(similar_room_name)s'). " "Please choose a different name.")
+      _("Another room with a similar name already exists ('%(similar_room_name)s'). Please choose a different name.")
       % {"similar_room_name": room_name},
     )
     ChatRoom.objects.all().delete()

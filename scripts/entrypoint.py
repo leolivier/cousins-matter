@@ -80,7 +80,7 @@ def acquire_lock():
   """
   Try to acquire initialization leadership via atomic mkdir creation.
         If mkdir succeeds, we are the leader, otherwise, we wait for the lock to be released and exit.
-        """
+  """
   global INIT_IN_PROGRESS_DIR
   try:
     INIT_IN_PROGRESS_DIR = settings.BASE_DIR / "config" / ".init_in_progress"  # lock dir

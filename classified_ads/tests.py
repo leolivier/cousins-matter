@@ -205,17 +205,17 @@ class ListAdTestCase(ClassifiedAdBaseTestCase):
     </span>
     <span class="mx-1">{ad.display_category()}</span>/
     <span class="mx-1">{ad.display_subcategory()}</span>/
-    <span class="mx-1 has-background-primary has-text-white">{
-                    ad.display_item_status()
-                }</span>
-    <a href="{reverse("classified_ads:detail", kwargs={"pk": ad.id})}">{ad.title}</a> ({
-                    ad.price
-                })
+    <span class="mx-1 has-background-primary has-text-white">{ad.display_item_status()}</span>
+    <a href="{reverse("classified_ads:detail", kwargs={"pk": ad.id})}">{ad.title}</a> ({ad.price})
   </span>
   <span>
-    {_("Added by %(owner)s on %(date_created)s") %
-       {"owner": ad.owner.full_name,  # noqa
-        "date_created": formats.date_format(ad.date_created, "SHORT_DATE_FORMAT")}}
+    {
+          _("Added by %(owner)s on %(date_created)s")
+          % {
+            "owner": ad.owner.full_name,  # noqa
+            "date_created": formats.date_format(ad.date_created, "SHORT_DATE_FORMAT"),
+          }
+        }
   </span>
 </div>
 """,
@@ -249,20 +249,17 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
     <i class="mdi mdi-24px mdi-file-document" aria-hidden="true"></i>
   </span>
   <span class="is-flex-grow-1">{ad.title}</span>
-  <span>{_("Added by %(owner)s on %(date_created)s") %
-         {"owner": ad.owner.full_name,
-          "date_created": formats.date_format(localtime, "SHORT_DATETIME_FORMAT")}}</span>
+  <span>{
+        _("Added by %(owner)s on %(date_created)s")
+        % {"owner": ad.owner.full_name, "date_created": formats.date_format(localtime, "SHORT_DATETIME_FORMAT")}
+      }</span>
 </div>
 <div class="panel-block is-flex">
   <div class="fixed-grid has-3-cols is-flex-grow-1">
     <div class="grid">
       <div class="cell"><strong>{_("Category")}:</strong>{ad.display_category()}</div>
-      <div class="cell"><strong>{_("Subcategory")}:</strong>{
-                ad.display_subcategory()
-            }</div>
-      <div class="cell"><strong>{_("State")}:</strong>{
-                _(ad.display_item_status())
-            }</div>
+      <div class="cell"><strong>{_("Subcategory")}:</strong>{ad.display_subcategory()}</div>
+      <div class="cell"><strong>{_("State")}:</strong>{_(ad.display_item_status())}</div>
     </div>
   </div>
 </div>
@@ -276,9 +273,7 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
     <div class="grid">
       <div class="cell"><strong>{_("Price")}:</strong>{ad.price}</div>
       <div class="cell"><strong>{_("Location")}:</strong>{ad.location}</div>
-      <div class="cell"><strong>{_("Shipping")}:</strong>{
-                _(ad.display_shipping_method())
-            }</div>
+      <div class="cell"><strong>{_("Shipping")}:</strong>{_(ad.display_shipping_method())}</div>
     </div>
   </div>
 </div>""",

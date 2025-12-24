@@ -162,7 +162,7 @@ def get_valid_manager(default_manager: Member, row_data: MemberImportData, manag
     )
   elif not new_member_manager.is_active:
     row_data.errors.append(
-      _("%(manager)s is inactive and cannot be used as manager for %(member)s. " "Activate it manually!")
+      _("%(manager)s is inactive and cannot be used as manager for %(member)s. Activate it manually!")
       % {"manager": manager_username, "member": row_data.current_member.full_name}
       + " "
       + warning
@@ -180,7 +180,7 @@ def handle_no_manager_case(context: ImportContext, row_data: MemberImportData):
     row_data.set_updated()
   elif row_data.current_member.member_manager:
     row_data.warnings.append(
-      _("No manager provided for member %(member)s although inactive. " "Keeping existing one (%(manager)s)...")
+      _("No manager provided for member %(member)s although inactive. Keeping existing one (%(manager)s)...")
       % {
         "member": row_data.current_member.full_name,
         "manager": row_data.current_member.member_manager.full_name,
@@ -188,7 +188,7 @@ def handle_no_manager_case(context: ImportContext, row_data: MemberImportData):
     )
   else:
     row_data.errors.append(
-      _("Inactive member %(member)s has no manager. Please provide one! " "Meanwhile, you will be used as manager")
+      _("Inactive member %(member)s has no manager. Please provide one! Meanwhile, you will be used as manager")
       % {"member": row_data.current_member.full_name}
     )
     row_data.current_member.member_manager = context.default_manager

@@ -246,12 +246,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     except Exception as e:
       logger.error(f"Error checking permissions for message {msgid}: {str(e)}")
       await self.send(
-        text_data=json.dumps(
-          {
-            "action": "error",
-            "error": _("An error occurred while checking permissions."),
-          }
-        )
+        text_data=json.dumps({
+          "action": "error",
+          "error": _("An error occurred while checking permissions."),
+        })
       )
       return
 
@@ -286,12 +284,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     except Exception as e:
       logger.error(f"Error updating message {msgid}: {str(e)}")
       await self.send(
-        text_data=json.dumps(
-          {
-            "action": "error",
-            "error": f"{_('An error occurred while updating the message')}: {str(e)}",
-          }
-        )
+        text_data=json.dumps({
+          "action": "error",
+          "error": f"{_('An error occurred while updating the message')}: {str(e)}",
+        })
       )
 
   async def update_chat_message(self, event):
@@ -328,10 +324,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
     except Exception as e:
       logger.error(f"Error marking message {msgid} as deleted: {str(e)}")
       await self.send(
-        text_data=json.dumps(
-          {
-            "action": "error",
-            "error": f'_("An error occurred while deleting the message"): {str(e)}',
-          }
-        )
+        text_data=json.dumps({
+          "action": "error",
+          "error": f'_("An error occurred while deleting the message"): {str(e)}',
+        })
       )

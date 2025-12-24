@@ -9,7 +9,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core.cache import cache
 import os
-from django.utils import timezone, formats
+from django.utils import formats
 from cm_main.utils import PageOutOfBounds, Paginator
 from .models import Person, Family
 from .forms import PersonForm, FamilyForm, GedcomImportForm
@@ -73,32 +73,28 @@ def tree_data(request):
     if person.member and person.member.avatar:
       avatar_url = person.member.avatar_mini_url
 
-    people_data.append(
-      {
-        "id": f"p{person.id}",
-        "name": str(person),
-        "sex": person.sex,
-        "url": f"/genealogy/people/{person.id}/",
-        "avatar_url": avatar_url,
-        "birth_date": person.birth_date.strftime("%Y") if person.birth_date else "",
-        "death_date": person.death_date.strftime("%Y") if person.death_date else "",
-        "gender_icon": person.gender_icon,
-      }
-    )
+    people_data.append({
+      "id": f"p{person.id}",
+      "name": str(person),
+      "sex": person.sex,
+      "url": f"/genealogy/people/{person.id}/",
+      "avatar_url": avatar_url,
+      "birth_date": person.birth_date.strftime("%Y") if person.birth_date else "",
+      "death_date": person.death_date.strftime("%Y") if person.death_date else "",
+      "gender_icon": person.gender_icon,
+    })
 
   families_data = []
   for family in Family.objects.all():
     if family.partner1 and family.partner2:
-      families_data.append(
-        {
-          "id": f"f{family.id}",
-          "partner1_id": f"p{family.partner1.id}",
-          "partner2_id": f"p{family.partner2.id}",
-          "children_ids": [f"p{child.id}" for child in family.children.all()],
-          "union_date": family.union_date.strftime("%Y") if family.union_date else "",
-          "separation_date": family.separation_date.strftime("%Y") if family.separation_date else "",
-        }
-      )
+      families_data.append({
+        "id": f"f{family.id}",
+        "partner1_id": f"p{family.partner1.id}",
+        "partner2_id": f"p{family.partner2.id}",
+        "children_ids": [f"p{child.id}" for child in family.children.all()],
+        "union_date": family.union_date.strftime("%Y") if family.union_date else "",
+        "separation_date": family.separation_date.strftime("%Y") if family.separation_date else "",
+      })
 
   return JsonResponse({"people": people_data, "families": families_data})
 

@@ -1,8 +1,8 @@
-from django.test import Client, TestCase
+from django.test import TestCase
 from django.utils.translation import gettext as _
 from django.urls import reverse
 from datetime import date
-from django.utils import timezone, formats
+from django.utils import formats
 from .models import Person, Family
 from .forms import PersonForm, FamilyForm
 from members.tests.tests_member_base import MemberTestCase

@@ -655,8 +655,7 @@ You can hit Ctrl-C to skip the editor if you want to see more details about the 
         run([editor, str(ENV_PATH)], check=True)
       except Exception as e:
         print(
-          f"{ON_RED}Couldn't start the editor automatically ({e}), please start it manually and edit "
-          f"the {ENV_PATH} file.{NC}"
+          f"{ON_RED}Couldn't start the editor automatically ({e}), please start it manually and edit the {ENV_PATH} file.{NC}"
         )
 
       print(

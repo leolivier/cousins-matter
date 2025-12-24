@@ -46,7 +46,7 @@ class GedcomParser:
     sex_map = {"M": "M", "F": "F"}
     model_sex = sex_map.get(sex, "O")
 
-    person, created = Person.objects.update_or_create(
+    person, _ = Person.objects.update_or_create(
       gedcom_id=gedcom_id,
       defaults={
         "first_name": first_name,

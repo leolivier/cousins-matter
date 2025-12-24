@@ -61,13 +61,7 @@ class GedcomParser:
     self.person_map[gedcom_id] = person
     return person
 
-  def _create_family(self, element):
-    # In python-gedcom, getting family members might need direct traversal
-    # This depends on the library version, assuming standard methods or manual traversal
-
-    # Note: python-gedcom 1.0.0 might not have helper methods for everything
-    # We might need to look at sub-elements
-
+  def _extract_family_members(self, element):
     husband_id = None
     wife_id = None
     children_ids = []
@@ -81,25 +75,33 @@ class GedcomParser:
       elif tag == "CHIL":
         children_ids.append(child.get_value())
 
+    return husband_id, wife_id, children_ids
+
+  def _find_or_create_family(self, partner1, partner2):
+    family = None
+    if partner1 and partner2:
+      family = Family.objects.filter(partner1=partner1, partner2=partner2).first()
+    elif partner1:
+      family = Family.objects.filter(partner1=partner1, partner2__isnull=True).first()
+    elif partner2:
+      family = Family.objects.filter(partner1__isnull=True, partner2=partner2).first()
+
+    if not family:
+      family = Family.objects.create(
+        partner1=partner1,
+        partner2=partner2,
+        union_type="MARR",
+      )
+    return family
+
+  def _create_family(self, element):
+    husband_id, wife_id, children_ids = self._extract_family_members(element)
+
     partner1 = self.person_map.get(husband_id)
     partner2 = self.person_map.get(wife_id)
 
     if partner1 or partner2:
-      # Try to find existing family with these partners to avoid duplicates
-      family = None
-      if partner1 and partner2:
-        family = Family.objects.filter(partner1=partner1, partner2=partner2).first()
-      elif partner1:
-        family = Family.objects.filter(partner1=partner1, partner2__isnull=True).first()
-      elif partner2:
-        family = Family.objects.filter(partner1__isnull=True, partner2=partner2).first()
-
-      if not family:
-        family = Family.objects.create(
-          partner1=partner1,
-          partner2=partner2,
-          union_type="MARR",
-        )
+      family = self._find_or_create_family(partner1, partner2)
 
       # Update/Link children
       for child_id in children_ids:
@@ -136,8 +138,8 @@ class GedcomParser:
 
 
 class GedcomExporter:
-  def export(self):
-    lines = [
+  def _get_gedcom_header(self):
+    return [
       "0 HEAD",
       "1 SOUR CousinsMatter",
       "1 GEDC",
@@ -146,58 +148,71 @@ class GedcomExporter:
       "1 CHAR UTF-8",
     ]
 
+  def _export_individual(self, person):
+    lines = []
+    p_id = person.gedcom_id if person.gedcom_id else f"@I{person.id}@"
+    # Ensure proper format if stored id is raw text
+    if not p_id.startswith("@"):
+      p_id = f"@{p_id}@"
+
+    lines.append(f"0 {p_id} INDI")
+    lines.append(f"1 NAME {person.first_name} /{person.last_name}/")
+    lines.append(f"2 GIVN {person.first_name}")
+    lines.append(f"2 SURN {person.last_name}")
+
+    sex_map = {"M": "M", "F": "F"}
+    lines.append(f"1 SEX {sex_map.get(person.sex, 'U')}")
+
+    if person.birth_date:
+      lines.append("1 BIRT")
+      lines.append(f"2 DATE {person.birth_date.strftime('%d %b %Y').upper()}")
+      if person.birth_place:
+        lines.append(f"2 PLAC {person.birth_place}")
+
+    if person.death_date:
+      lines.append("1 DEAT")
+      lines.append(f"2 DATE {person.death_date.strftime('%d %b %Y').upper()}")
+      if person.death_place:
+        lines.append(f"2 PLAC {person.death_place}")
+
+    # Families where this person is a partner (FAMS)
+    families = Family.objects.filter(Q(partner1=person) | Q(partner2=person))
+    for family in families:
+      lines.append(f"1 FAMS @F{family.id}@")
+
+    # Family where this person is a child (FAMC)
+    if person.child_of_family:
+      lines.append(f"1 FAMC @F{person.child_of_family.id}@")
+    return lines
+
+  def _export_family(self, family):
+    lines = []
+    lines.append(f"0 @F{family.id}@ FAM")
+    if family.partner1:
+      lines.append(f"1 HUSB @I{family.partner1.id}@")
+    if family.partner2:
+      lines.append(f"1 WIFE @I{family.partner2.id}@")
+
+    for child in family.children.all():
+      lines.append(f"1 CHIL @I{child.id}@")
+
+    if family.union_date:
+      lines.append("1 MARR")
+      lines.append(f"2 DATE {family.union_date.strftime('%d %b %Y').upper()}")
+      if family.union_place:
+        lines.append(f"2 PLAC {family.union_place}")
+    return lines
+
+  def export(self):
+    lines = self._get_gedcom_header()
+
     # Individuals
     for person in Person.objects.all():
-      p_id = person.gedcom_id if person.gedcom_id else f"@I{person.id}@"
-      # Ensure proper format if stored id is raw text
-      if not p_id.startswith("@"):
-        p_id = f"@{p_id}@"
-
-      lines.append(f"0 {p_id} INDI")
-      lines.append(f"1 NAME {person.first_name} /{person.last_name}/")
-      lines.append(f"2 GIVN {person.first_name}")
-      lines.append(f"2 SURN {person.last_name}")
-
-      sex_map = {"M": "M", "F": "F"}
-      lines.append(f"1 SEX {sex_map.get(person.sex, 'U')}")
-
-      if person.birth_date:
-        lines.append("1 BIRT")
-        lines.append(f"2 DATE {person.birth_date.strftime('%d %b %Y').upper()}")
-        if person.birth_place:
-          lines.append(f"2 PLAC {person.birth_place}")
-
-      if person.death_date:
-        lines.append("1 DEAT")
-        lines.append(f"2 DATE {person.death_date.strftime('%d %b %Y').upper()}")
-        if person.death_place:
-          lines.append(f"2 PLAC {person.death_place}")
-
-      # Families where this person is a partner (FAMS)
-      families = Family.objects.filter(Q(partner1=person) | Q(partner2=person))
-      for family in families:
-        lines.append(f"1 FAMS @F{family.id}@")
-
-      # Family where this person is a child (FAMC)
-      if person.child_of_family:
-        lines.append(f"1 FAMC @F{person.child_of_family.id}@")
+      lines.extend(self._export_individual(person))
 
     # Families
     for family in Family.objects.all():
-      lines.append(f"0 @F{family.id}@ FAM")
-      if family.partner1:
-        lines.append(f"1 HUSB @I{family.partner1.id}@")
-      if family.partner2:
-        lines.append(f"1 WIFE @I{family.partner2.id}@")
-
-      for child in family.children.all():
-        lines.append(f"1 CHIL @I{child.id}@")
-
-      if family.union_date:
-        lines.append("1 MARR")
-        lines.append(f"2 DATE {family.union_date.strftime('%d %b %Y').upper()}")
-        if family.union_place:
-          lines.append(f"2 PLAC {family.union_place}")
+      lines.extend(self._export_family(family))
 
     lines.append("0 TRLR")
     return "\n".join(lines)

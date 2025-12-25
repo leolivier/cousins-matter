@@ -11,7 +11,7 @@ If not already done, install Docker on your server:
 curl https://get.docker.com | sh
 ```
 
-You will also need a Python 3.12+ environment to run the Cousins Matter admin script.
+You will also need a Python 3.14+ environment to run the Cousins Matter admin script.
 
 ### Download and run the Cousins Matter admin script
 

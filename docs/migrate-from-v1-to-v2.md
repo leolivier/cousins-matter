@@ -19,7 +19,7 @@ Amongst other big changes:
 
 You have to have Cousins Matter v1 installed and working on your system.
 
-You will also need a Python 3.12+ environment to run the migration script.
+You will also need a Python 3.14+ environment to run the migration script.
 
 ## Procedure
 

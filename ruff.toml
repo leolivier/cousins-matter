@@ -38,7 +38,7 @@ fix = true
 force-exclude = true
 preview = true
 
-# Assume Python 3.12
+# Assume Python 3.14
 target-version = "py312"
 
 [lint]

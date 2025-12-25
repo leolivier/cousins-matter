@@ -84,7 +84,7 @@ def download_protected_media(request, media):
   return response
 
 
-def health_check():
+def health_check() -> dict:
   try:
     with connections["default"].cursor() as cursor:
       cursor.execute("SELECT 1")
@@ -115,7 +115,7 @@ def health(request):
   :rtype: JsonResponse
   :status: 200 (OK) or 503 (Service Unavailable)
   """
-  check = health_check()
+  check: dict = health_check()
   return JsonResponse(check, status=200 if check["status"] == "ok" else 503)
 
 
@@ -134,7 +134,7 @@ def qhealth(request):
   task_id = async_task("cm_main.views.views_general.health_check")
   check = result(task_id, 1000)
   status = 200 if check and "status" in check and check["status"] == "ok" else 503
-  return JsonResponse(check, status=status)
+  return JsonResponse(check, status=status, safe=False)
 
 
 def send_zipfile(request):

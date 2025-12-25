@@ -331,10 +331,10 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
       self.check_CSVs_are_equivalent(exp_csv, rsp_csv, filter)
 
   # force language to make sure the CSV fields are properly translated
-  @translation.override("en-us")
+  @translation.override("en")
   def test_export_en(self):
-    self.do_test_import("import_members.csv", "en-us", 4)
-    self.do_test_export("import_members.csv", "en-us")
+    self.do_test_import("import_members.csv", "en", 4)
+    self.do_test_export("import_members.csv", "en")
 
   # force language to make sure the CSV fields are properly translated
   @translation.override("fr")
@@ -342,9 +342,9 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
     self.do_test_import("import_members-fr.csv", "fr", 4, member_prefix="member-fr")
     self.do_test_export("import_members-fr.csv", "fr")
 
-  @translation.override("en-us")
+  @translation.override("en")
   def test_export_en_with_filter(self):
-    self.do_test_import("import_members.csv", "en-us", 4)
-    self.do_test_export("import_members.csv", "en-us", {"name-id": "Doe"})
-    self.do_test_export("import_members.csv", "en-us", {"city-id": "Liverpool"})
-    self.do_test_export("import_members.csv", "en-us", {"name-id": "Doe"})
+    self.do_test_import("import_members.csv", "en", 4)
+    self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
+    self.do_test_export("import_members.csv", "en", {"city-id": "Liverpool"})
+    self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})

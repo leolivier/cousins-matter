@@ -123,6 +123,8 @@ jobs:
           docker exec cousins-matter python manage.py test --failfast
 
       - name: test install script
+        env:
+          COUSINS_MATTER_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
         run: |
           # make sure no previous containers are running
           docker compose down -v
@@ -132,6 +134,8 @@ jobs:
           ./scripts/tests/test_install.sh -g
 
       - name: test migrate v1 to v2 script
+        env:
+          COUSINS_MATTER_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
         run: |
           # make sure no previous containers are running
           docker compose down -v

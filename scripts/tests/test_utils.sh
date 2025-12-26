@@ -107,19 +107,14 @@ set_variables() {
 }
 
 docker_run_cousins_matter() {
-
 	(docker images --format "{{.Repository}}:{{.Tag}}" | grep -q -- "$COUSINS_MATTER_IMAGE") || error 1 "Image $COUSINS_MATTER_IMAGE not found"
-
 	docker compose up -d --wait --wait-timeout 45
-	sleep 5  # let the system stabilize
+}
 
-	docker ps -a --filter name=cousins-matter --format '{{.Names}} {{.State}} "{{.Status}}"' | while read -r name state status; do
-		if [ "$state" != "running" ]; then
-			echo "#########################################################################################"
-			echo "# ERROR! $name $status"
-			echo "#########################################################################################"
-			docker ps -a --filter name=cousins-matter --format '{{.Names}} {{.State}} "{{.Status}}"'
-			exit 1
-		fi
-	done
+set_admin_env_vars() {
+	# use temp file to avoid that sed changes the inode of the file while docker-compose is reading it
+	tmpfile=$(mktemp)
+	sed 's/ADMIN=.*/ADMIN=admin/;s/ADMIN_PASSWORD=.*/ADMIN_PASSWORD=123456/;s/ADMIN_EMAIL=.*/ADMIN_EMAIL=admin@example.com/;s/ADMIN_FIRSTNAME=.*/ADMIN_FIRSTNAME=Cousins/;s/ADMIN_LASTNAME=.*/ADMIN_LASTNAME=Matter;/' .env > "$tmpfile"
+	cat "$tmpfile" > .env
+	rm -f "$tmpfile"
 }

@@ -17,11 +17,13 @@ cd "$tmpdir"
 # .env must have been created by manage_cousins_matter install above
 [ ! -f .env ] && error 1 "No .env file found in $tmpdir"
 
-# set the superuser variables in .env
-sed -i 's/ADMIN=.*/ADMIN=admin/;s/ADMIN_PASSWORD=.*/ADMIN_PASSWORD=123456/;s/ADMIN_EMAIL=.*/ADMIN_EMAIL=admin@example.com/;s/ADMIN_FIRSTNAME=.*/ADMIN_FIRSTNAME=Cousins/;s/ADMIN_LASTNAME=.*/ADMIN_LASTNAME=Matter;/' .env
+cat .env | grep -v "^#" | grep -v -e "^\s*$"
+
+set_admin_env_vars
 export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-$tag}
 echo "tested image: $COUSINS_MATTER_IMAGE"
-echo "env: $(grep ADMIN .env)"
+
+grep 'POSTGRES_PASSWORD' .env || error 1 "No POSTGRES_PASSWORD found in .env"
 
 docker_run_cousins_matter
 

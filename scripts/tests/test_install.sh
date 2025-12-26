@@ -17,24 +17,11 @@ cd "$tmpdir"
 # .env must have been created by manage_cousins_matter install above
 [ ! -f .env ] && error 1 "No .env file found in $tmpdir"
 
-# set the superuser variables in .env 
-ADMIN=admin
-ADMIN_PASSWORD=123456
-ADMIN_EMAIL=admin@example.com
-ADMIN_FIRSTNAME=Cousins
-ADMIN_LASTNAME=Matter
-for var in ADMIN ADMIN_PASSWORD ADMIN_EMAIL ADMIN_FIRSTNAME ADMIN_LASTNAME
-do
-    eval val="\${$var}"
-    esc=$(printf '%s' "$val" | sed 's/[&\/]/\\&/g')
-    tmpfile=$(mktemp)
-    sed "s/^$var=.*/$var=$esc/" .env > "$tmpfile"
-done
-cat "$tmpfile" > .env
-rm -f "$tmpfile"
-
+# set the superuser variables in .env
+sed -i 's/ADMIN=.*/ADMIN=admin/;s/ADMIN_PASSWORD=.*/ADMIN_PASSWORD=123456/;s/ADMIN_EMAIL=.*/ADMIN_EMAIL=admin@example.com/;s/ADMIN_FIRSTNAME=.*/ADMIN_FIRSTNAME=Cousins/;s/ADMIN_LASTNAME=.*/ADMIN_LASTNAME=Matter;/' .env
 export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-$tag}
 echo "tested image: $COUSINS_MATTER_IMAGE"
+echo "env: $(grep ADMIN .env)"
 
 docker_run_cousins_matter
 

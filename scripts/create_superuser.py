@@ -36,7 +36,7 @@ def create_superuser_from_env():
   first_name = env.str("ADMIN_FIRSTNAME", default="Cousins")
   last_name = env.str("ADMIN_LASTNAME", default="Matter")
   birthdate = env.str("ADMIN_BIRTHDATE", default="2000-01-01")
-  logger.info("Creating superuser...")
+  logger.info(f"Creating superuser {username} ({email}, {first_name} {last_name}, {birthdate})...")
   try:
     Member.objects.create_superuser(
       username=username,
@@ -59,7 +59,7 @@ def create_superuser_from_env():
   except Member.DoesNotExist:
     error(3, f"Superuser creation failed: user {username} does not exist")
 
-  logger.info("Superuser created successfully")
+  logger.info(f"Superuser {username} created successfully")
 
 
 def has_superuser():

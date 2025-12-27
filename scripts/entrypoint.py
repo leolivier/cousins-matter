@@ -170,6 +170,7 @@ def run_check_deploy():
 def run_create_superuser():
   """Create a Django superuser based on environment variables stored in .env file."""
   from members.models import Member
+
   if not Member.objects.filter(is_superuser=True).exists():
     logger.info("Creating superuser...")
     env = environ.Env()

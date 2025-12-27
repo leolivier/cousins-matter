@@ -192,17 +192,19 @@ def run_create_superuser():
         birthdate=birthdate,
       )
     except Exception as e:
-      error(1, f"Superuser creation failed: {e}")
+      logger.error(f"Superuser creation failed: {e}")
+      sys.exit(1)
 
     try:
       su = Member.objects.get(username=username)
       if not su.is_superuser:
-        error(
-          2,
+        logger.error(
           f"Superuser creation failed: user {username} was created but is not a superuser",
         )
+        sys.exit(2)
     except Member.DoesNotExist:
-      error(3, f"Superuser creation failed: user {username} does not exist")
+      logger.error(f"Superuser creation failed: user {username} does not exist")
+      sys.exit(3)
 
     logger.info(f"Superuser {username} created successfully")
   else:

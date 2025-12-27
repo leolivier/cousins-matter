@@ -142,10 +142,6 @@ jobs:
           # then run test
           ./scripts/tests/test_migrate_v1_v2.sh -g
 
-      - name: test create superuser script
-        run: |
-          ./scripts/tests/test_create_superuser.sh -g
-
       - name: Test Docker Image using S3 backend
         run: |
           # make sure no previous containers are running

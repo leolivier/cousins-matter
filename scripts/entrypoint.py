@@ -168,16 +168,44 @@ def run_check_deploy():
 
 
 def run_create_superuser():
-  """Create superuser using environment variables"""
-  try:
-    if not has_superuser():
-      logger.info("Creating superuser...")
-      create_superuser_from_env()
-    else:
-      logger.info("Superuser already exists.")
-  except CommandError as e:
-    logger.error(f"Error creating superuser: {e}")
-    sys.exit(1)
+  """Create a Django superuser based on environment variables stored in .env file."""
+  from members.models import Member
+  if not Member.objects.filter(is_superuser=True).exists():
+    logger.info("Creating superuser...")
+    env = environ.Env()
+    env.read_env(settings.BASE_DIR / ".env", overwrite=True)
+    username = env.str("ADMIN")
+    email = env.str("ADMIN_EMAIL")
+    password = env.str("ADMIN_PASSWORD")
+    first_name = env.str("ADMIN_FIRSTNAME")
+    last_name = env.str("ADMIN_LASTNAME")
+    birthdate = env.str("ADMIN_BIRTHDATE")
+    logger.info(f"Creating superuser {username} ({email}, {first_name} {last_name}, {birthdate})...")
+    try:
+      Member.objects.create_superuser(
+        username=username,
+        email=email,
+        password=password,
+        first_name=first_name,
+        last_name=last_name,
+        birthdate=birthdate,
+      )
+    except Exception as e:
+      error(1, f"Superuser creation failed: {e}")
+
+    try:
+      su = Member.objects.get(username=username)
+      if not su.is_superuser:
+        error(
+          2,
+          f"Superuser creation failed: user {username} was created but is not a superuser",
+        )
+    except Member.DoesNotExist:
+      error(3, f"Superuser creation failed: user {username} does not exist")
+
+    logger.info(f"Superuser {username} created successfully")
+  else:
+    logger.info("Superuser already exists.")
 
 
 def set_logger_level(debug: bool):

@@ -17,9 +17,8 @@ cd "$tmpdir"
 # .env must have been created by manage_cousins_matter install above
 [ ! -f .env ] && error 1 "No .env file found in $tmpdir"
 
-cat .env | grep -v "^#" | grep -v -e "^\s*$"
-
 set_admin_env_vars
+cat .env | grep -v "^#" | grep -v -e "^\s*$"
 export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-$tag}
 echo "tested image: $COUSINS_MATTER_IMAGE"
 

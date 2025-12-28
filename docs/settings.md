@@ -39,12 +39,6 @@ Before running `docker compose up -d` the first time, provide the information to
 
 **ALL THESE VARIABLES ARE MANDATORY TO CREATE THE SUPERUSER ACCOUNT AND HAVE NO DEFAULT VALUES**
 
-If you forgot to provide this information before starting `docker compose up -d`, you can still create it by running 
-```
-docker exec -it cousins-matter python manage.py createsuperuser
-```
-It will ask you the parameters interactively.
-
 ## Features Management
 
 You can manage the features that will be offered to members in the .env file.

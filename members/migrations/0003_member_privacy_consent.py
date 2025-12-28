@@ -4,15 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    dependencies = [
-        ("members", "0002_alter_member_description"),
-    ]
+  dependencies = [
+    ("members", "0002_alter_member_description"),
+  ]
 
-    operations = [
-        migrations.AddField(
-            model_name="member",
-            name="privacy_consent",
-            field=models.BooleanField(default=True, verbose_name="Privacy consent"),
-            preserve_default=False,
-        ),
-    ]
+  operations = [
+    migrations.AddField(
+      model_name="member",
+      name="privacy_consent",
+      field=models.BooleanField(default=True, verbose_name="Privacy consent"),
+      preserve_default=False,
+    ),
+  ]

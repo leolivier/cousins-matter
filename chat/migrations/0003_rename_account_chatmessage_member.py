@@ -4,14 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-    dependencies = [
-        ("chat", "0002_initial"),
-    ]
+  dependencies = [
+    ("chat", "0002_initial"),
+  ]
 
-    operations = [
-        migrations.RenameField(
-            model_name="chatmessage",
-            old_name="account",
-            new_name="member",
-        ),
-    ]
+  operations = [
+    migrations.RenameField(
+      model_name="chatmessage",
+      old_name="account",
+      new_name="member",
+    ),
+  ]

@@ -16,6 +16,12 @@ services:
       - ./media:/app/media
       - ./static:/app/static
       - ./.env:/app/.env
+    healthcheck:
+      test: ["CMD-SHELL", "python /app/scripts/healthcheck.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
 
   qcluster:
     image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}

@@ -4,19 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    dependencies = [
-        ("forum", "0003_post_followers"),
-    ]
+  dependencies = [
+    ("forum", "0003_post_followers"),
+  ]
 
-    operations = [
-        migrations.AlterField(
-            model_name="comment",
-            name="content",
-            field=models.CharField(max_length=400, verbose_name="Comment"),
-        ),
-        migrations.AlterField(
-            model_name="message",
-            name="content",
-            field=models.TextField(max_length=10000000, verbose_name="Content"),
-        ),
-    ]
+  operations = [
+    migrations.AlterField(
+      model_name="comment",
+      name="content",
+      field=models.CharField(max_length=400, verbose_name="Comment"),
+    ),
+    migrations.AlterField(
+      model_name="message",
+      name="content",
+      field=models.TextField(max_length=10000000, verbose_name="Content"),
+    ),
+  ]

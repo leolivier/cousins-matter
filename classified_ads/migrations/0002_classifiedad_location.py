@@ -4,14 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    dependencies = [
-        ("classified_ads", "0001_initial"),
-    ]
+  dependencies = [
+    ("classified_ads", "0001_initial"),
+  ]
 
-    operations = [
-        migrations.AddField(
-            model_name="classifiedad",
-            name="location",
-            field=models.CharField(blank=True, max_length=255, null=True),
-        ),
-    ]
+  operations = [
+    migrations.AddField(
+      model_name="classifiedad",
+      name="location",
+      field=models.CharField(blank=True, max_length=255, null=True),
+    ),
+  ]

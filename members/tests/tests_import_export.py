@@ -16,402 +16,335 @@ from ..views.views_import_export import CSVImportView
 
 
 def get_test_file(filename):
-    return os.path.join(os.path.dirname(__file__), "resources", filename)
+  return os.path.join(os.path.dirname(__file__), "resources", filename)
 
 
 class TestImportMixin:
-    def do_upload_file(self, file, lang, activate_users=True):
-        url = reverse("members:csv_import")
-        csv_file = get_test_file(file)
-        # force language to make sure the CSV fields are ok
-        with translation.override(lang):
-            response = self.client.post(
-                url,
-                {
-                    "csv_file": SimpleUploadedFile(
-                        file, open(csv_file, "rb").read(), content_type="text/csv"
-                    ),
-                    "activate_users": activate_users,
-                },
-                follow=True,
-                HTTP_ACCEPT_LANGUAGE=lang,
-            )
-        # print(response.content)
-        return response
+  def do_upload_file(self, file, lang, activate_users=True):
+    url = reverse("members:csv_import")
+    csv_file = get_test_file(file)
+    # force language to make sure the CSV fields are ok
+    with translation.override(lang):
+      response = self.client.post(
+        url,
+        {
+          "csv_file": SimpleUploadedFile(file, open(csv_file, "rb").read(), content_type="text/csv"),
+          "activate_users": activate_users,
+        },
+        follow=True,
+        HTTP_ACCEPT_LANGUAGE=lang,
+      )
+    # print(response.content)
+    return response
 
-    def do_test_import(
-        self,
-        file,
-        lang,
-        expected_num,
-        activate_users=True,
-        member_prefix="member",
-        check_active=True,
-    ):
-        prev_num = Member.objects.count()
-        response = self.do_upload_file(file, lang, activate_users)
-        self.assertEqual(response.status_code, 200)
-        # Check that expected_num members were imported
-        self.assertEqual(Member.objects.count(), prev_num + expected_num)
-        # Check that specific members were created
-        for member in Member.objects.all():
-            print(member)
-        self.assertTrue(
-            Member.objects.filter(first_name="John", last_name="Doe").exists()
-        )
-        self.assertTrue(Member.objects.filter(email="member2@test.com").exists())
-        self.assertTrue(Member.objects.filter(birthdate=date(2000, 1, 3)).exists())
-        self.assertTrue(Address.objects.filter(city="Blackpool").exists())
-        self.assertTrue(Member.objects.filter(address__city="Blackpool").exists())
-        if not check_active:
-            return
-        for i in range(4):
-            name = member_prefix + str(i + 1)
-            # print("name=", name)
-            m = Member.objects.get(username=name)
-            if activate_users:
-                self.assertIsNone(m.member_manager)
-                self.assertTrue(m.is_active)
-            else:  # member_manager is None if and only if active
-                self.assertEqual(m.member_manager is None, m.is_active)
+  def do_test_import(self, file, lang, expected_num, activate_users=True, member_prefix="member", check_active=True):
+    prev_num = Member.objects.count()
+    response = self.do_upload_file(file, lang, activate_users)
+    self.assertEqual(response.status_code, 200)
+    # Check that expected_num members were imported
+    self.assertEqual(Member.objects.count(), prev_num + expected_num)
+    # Check that specific members were created
+    for member in Member.objects.all():
+      print(member)
+    self.assertTrue(Member.objects.filter(first_name="John", last_name="Doe").exists())
+    self.assertTrue(Member.objects.filter(email="member2@test.com").exists())
+    self.assertTrue(Member.objects.filter(birthdate=date(2000, 1, 3)).exists())
+    self.assertTrue(Address.objects.filter(city="Blackpool").exists())
+    self.assertTrue(Member.objects.filter(address__city="Blackpool").exists())
+    if not check_active:
+      return
+    for i in range(4):
+      name = member_prefix + str(i + 1)
+      # print("name=", name)
+      m = Member.objects.get(username=name)
+      if activate_users:
+        self.assertIsNone(m.member_manager)
+        self.assertTrue(m.is_active)
+      else:  # member_manager is None if and only if active
+        self.assertEqual(m.member_manager is None, m.is_active)
 
 
 class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
-    def setUp(self):
-        super().setUp()
-        # create several avatars based on test_avatar_jpg
-        for i in range(5):
-            avatar = os.path.join("avatars", "test_avatar_%d.jpg" % i)
-            if not default_storage.exists(avatar):
-                avatar_from = os.path.join(
-                    os.path.dirname(__file__), "resources", self.base_avatar
-                )
-                if not os.path.exists(avatar_from):
-                    raise Exception("Test avatar file not found in resources")
-                self.copy_test_resource(avatar_from, avatar)
+  def setUp(self):
+    super().setUp()
+    # create several avatars based on test_avatar_jpg
+    for i in range(5):
+      avatar = os.path.join("avatars", "test_avatar_%d.jpg" % i)
+      if not default_storage.exists(avatar):
+        avatar_from = os.path.join(os.path.dirname(__file__), "resources", self.base_avatar)
+        if not os.path.exists(avatar_from):
+          raise Exception("Test avatar file not found in resources")
+        self.copy_test_resource(avatar_from, avatar)
 
-    def test_get_import(self):
-        response = self.client.get(reverse("members:csv_import"))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "members/members/import_members.html")
-        self.assertIs(response.resolver_match.func.view_class, CSVImportView)
+  def test_get_import(self):
+    response = self.client.get(reverse("members:csv_import"))
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "members/members/import_members.html")
+    self.assertIs(response.resolver_match.func.view_class, CSVImportView)
 
-    def test_import_en(self):
-        """test the import in english (create and update)"""
-        # more or less the same as 1rst line of import file with differences on first_name, birthdate and phone
-        data = {
-            "username": "member1",
-            "email": "member1@test.com",
-            "password": self.member.password,
-            "first_name": "Johnny",
-            "last_name": "Doe",
-            "birthdate": date(2001, 1, 1),
-            "phone": "+45 01 02 30",
-        }
-        member1 = self.create_member(data)
-        self.do_test_import(
-            "import_members.csv", "en", 3
-        )  # expected 3 and not 4 because we just created one above
-        member1.refresh_from_db()
-        # check the changes have been taken from the import file
-        self.assertEqual(member1.first_name, "John")
-        self.assertEqual(member1.birthdate, date(2000, 1, 1))
-        self.assertEqual(member1.phone, "+45 01 02 03")
+  def test_import_en(self):
+    """test the import in english (create and update)"""
+    # more or less the same as 1rst line of import file with differences on first_name, birthdate and phone
+    data = {
+      "username": "member1",
+      "email": "member1@test.com",
+      "password": self.member.password,
+      "first_name": "Johnny",
+      "last_name": "Doe",
+      "birthdate": date(2001, 1, 1),
+      "phone": "+45 01 02 30",
+    }
+    member1 = self.create_member(data)
+    self.do_test_import("import_members.csv", "en-us", 3)  # expected 3 and not 4 because we just created one above
+    member1.refresh_from_db()
+    # check the changes have been taken from the import file
+    self.assertEqual(member1.first_name, "John")
+    self.assertEqual(member1.birthdate, date(2000, 1, 1))
+    self.assertEqual(member1.phone, "+45 01 02 03")
 
-    def test_import_fr(self):
-        "test the import in French"
-        self.do_test_import(
-            "import_members-fr.csv",
-            "fr",
-            4,
-            member_prefix="member-fr",
-            check_active=False,
-        )
+  def test_import_fr(self):
+    "test the import in French"
+    self.do_test_import("import_members-fr.csv", "fr", 4, member_prefix="member-fr", check_active=False)
 
-    def _reset_manager(self, username):
-        # make sure the member for which we change the managing member either does not exist or is not active
-        m = Member.objects.filter(username=username).first()
-        if m is not None:
-            # print("setting {m.full_name} to inactive")
-            m.is_active = False
-            m.member_manager = None
-            m.save()
+  def _reset_manager(self, username):
+    # make sure the member for which we change the managing member either does not exist or is not active
+    m = Member.objects.filter(username=username).first()
+    if m is not None:
+      # print("setting {m.full_name} to inactive")
+      m.is_active = False
+      m.member_manager = None
+      m.save()
 
-    def _test_import_managers(self, activate_users, expected_result, update=False):
-        # self._reset_manager('member-mngd3')
-        # self._reset_manager('member-mngd4')
-        self.do_test_import(
-            "import_members-managers.csv",
-            "en",
-            expected_num=0 if update else 4,
-            member_prefix="member-mngd",
-            activate_users=activate_users,
-            check_active=False,
-        )
-        for i in range(4):
-            name = f"member-mngd{str(i + 1)}"
-            m = Member.objects.get(username=name)
-            if expected_result[name]["manager"] is None:
-                self.assertIsNone(m.member_manager)
-            else:
-                mngr = Member.objects.get(username=expected_result[name]["manager"])
-                # print(f"checking that {m.username}'s manager {m.member_manager.username} is {mngr.username}")
-                self.assertEqual(m.member_manager, mngr)
-            self.assertEqual(m.is_active, expected_result[name]["active"])
+  def _test_import_managers(self, activate_users, expected_result, update=False):
+    # self._reset_manager('member-mngd3')
+    # self._reset_manager('member-mngd4')
+    self.do_test_import(
+      "import_members-managers.csv",
+      "en-us",
+      expected_num=0 if update else 4,
+      member_prefix="member-mngd",
+      activate_users=activate_users,
+      check_active=False,
+    )
+    for i in range(4):
+      name = f"member-mngd{str(i + 1)}"
+      m = Member.objects.get(username=name)
+      if expected_result[name]["manager"] is None:
+        self.assertIsNone(m.member_manager)
+      else:
+        mngr = Member.objects.get(username=expected_result[name]["manager"])
+        # print(f"checking that {m.username}'s manager {m.member_manager.username} is {mngr.username}")
+        self.assertEqual(m.member_manager, mngr)
+      self.assertEqual(m.is_active, expected_result[name]["active"])
 
-    def test_create_import_manager_activation(self):
-        self._test_import_managers(
-            activate_users=True,
-            expected_result={
-                "member-mngd1": {"manager": None, "active": True},
-                "member-mngd2": {"manager": None, "active": True},
-                "member-mngd3": {"manager": "member-mngd1", "active": False},
-                "member-mngd4": {"manager": "superuser", "active": False},
-            },
-        )
+  def test_create_import_manager_activation(self):
+    self._test_import_managers(
+      activate_users=True,
+      expected_result={
+        "member-mngd1": {"manager": None, "active": True},
+        "member-mngd2": {"manager": None, "active": True},
+        "member-mngd3": {"manager": "member-mngd1", "active": False},
+        "member-mngd4": {"manager": "superuser", "active": False},
+      },
+    )
 
-    def test_create_import_manager_no_activation(self):
-        self._test_import_managers(
-            activate_users=False,
-            expected_result={
-                "member-mngd1": {"manager": self.member.username, "active": False},
-                "member-mngd2": {"manager": self.member.username, "active": False},
-                # in the file, member-mngd1 should be used as manager but, as it is not active,
-                # so the current user is used
-                "member-mngd3": {"manager": self.member.username, "active": False},
-                "member-mngd4": {"manager": "superuser", "active": False},
-            },
-        )
+  def test_create_import_manager_no_activation(self):
+    self._test_import_managers(
+      activate_users=False,
+      expected_result={
+        "member-mngd1": {"manager": self.member.username, "active": False},
+        "member-mngd2": {"manager": self.member.username, "active": False},
+        # in the file, member-mngd1 should be used as manager but, as it is not active,
+        # so the current user is used
+        "member-mngd3": {"manager": self.member.username, "active": False},
+        "member-mngd4": {"manager": "superuser", "active": False},
+      },
+    )
 
-    def create_members(self, nb_members=4, activate_users=False):
-        for i in range(nb_members):
-            member_data = get_new_member_data(username=f"member-mngd{str(i + 1)}")
-            self.create_member(member_data=member_data, is_active=activate_users)
+  def create_members(self, nb_members=4, activate_users=False):
+    for i in range(nb_members):
+      member_data = get_new_member_data(username=f"member-mngd{str(i + 1)}")
+      self.create_member(member_data=member_data, is_active=activate_users)
 
-    def test_update_import_manager_activation2(self):
-        # first create the members, so the import updates them
-        self.create_members(activate_users=True)
+  def test_update_import_manager_activation2(self):
+    # first create the members, so the import updates them
+    self.create_members(activate_users=True)
 
-        self._test_import_managers(
-            activate_users=True,
-            expected_result={
-                "member-mngd1": {"manager": None, "active": True},
-                "member-mngd2": {"manager": None, "active": True},
-                "member-mngd3": {"manager": "member-mngd1", "active": False},
-                "member-mngd4": {"manager": "superuser", "active": False},
-            },
-            update=True,
-        )
+    self._test_import_managers(
+      activate_users=True,
+      expected_result={
+        "member-mngd1": {"manager": None, "active": True},
+        "member-mngd2": {"manager": None, "active": True},
+        "member-mngd3": {"manager": "member-mngd1", "active": False},
+        "member-mngd4": {"manager": "superuser", "active": False},
+      },
+      update=True,
+    )
 
-    def test_update_import_manager_no_activation1(self):
-        # first create the members, so the import updates them
-        self.create_members(activate_users=False)
+  def test_update_import_manager_no_activation1(self):
+    # first create the members, so the import updates them
+    self.create_members(activate_users=False)
 
-        self._test_import_managers(
-            activate_users=False,
-            expected_result={
-                "member-mngd1": {"manager": self.member.username, "active": False},
-                "member-mngd2": {"manager": self.member.username, "active": False},
-                # in the file, member-mngd1 should be used as manager but, as it is not active,
-                # so the current user is used
-                "member-mngd3": {"manager": self.member.username, "active": False},
-                "member-mngd4": {"manager": "superuser", "active": False},
-            },
-            update=True,
-        )
+    self._test_import_managers(
+      activate_users=False,
+      expected_result={
+        "member-mngd1": {"manager": self.member.username, "active": False},
+        "member-mngd2": {"manager": self.member.username, "active": False},
+        # in the file, member-mngd1 should be used as manager but, as it is not active,
+        # so the current user is used
+        "member-mngd3": {"manager": self.member.username, "active": False},
+        "member-mngd4": {"manager": "superuser", "active": False},
+      },
+      update=True,
+    )
 
-    def test_update_import_manager_no_activation2(self):
-        # first create the members, so the import updates them
-        self.create_members(activate_users=True)
+  def test_update_import_manager_no_activation2(self):
+    # first create the members, so the import updates them
+    self.create_members(activate_users=True)
 
-        self._test_import_managers(
-            activate_users=False,
-            expected_result={
-                "member-mngd1": {"manager": None, "active": True},
-                "member-mngd2": {"manager": None, "active": True},
-                "member-mngd3": {"manager": "member-mngd1", "active": False},
-                "member-mngd4": {"manager": "superuser", "active": False},
-            },
-            update=True,
-        )
+    self._test_import_managers(
+      activate_users=False,
+      expected_result={
+        "member-mngd1": {"manager": None, "active": True},
+        "member-mngd2": {"manager": None, "active": True},
+        "member-mngd3": {"manager": "member-mngd1", "active": False},
+        "member-mngd4": {"manager": "superuser", "active": False},
+      },
+      update=True,
+    )
 
-    def test_wrong_field(self):
-        response = self.do_upload_file("import_members-wrong-field.csv", "en")
-        self.assertEqual(response.status_code, 200)
-        # self.print_response(response)
-        # force language to make sure the CSV fields are ok
-        with translation.override("en"):
-            self.assertContainsMessage(
-                response,
-                "error",
-                'Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s'
-                % {
-                    "fieldname": "citi",
-                    "all_names": ", ".join([str(s) for s in ALL_FIELD_NAMES.values()]),
-                },
-            )
+  def test_wrong_field(self):
+    response = self.do_upload_file("import_members-wrong-field.csv", "en-us")
+    self.assertEqual(response.status_code, 200)
+    # self.print_response(response)
+    # force language to make sure the CSV fields are ok
+    with translation.override("en-us"):
+      self.assertContainsMessage(
+        response,
+        "error",
+        'Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s'
+        % {"fieldname": "citi", "all_names": ", ".join([str(s) for s in ALL_FIELD_NAMES.values()])},
+      )
 
-    def test_missing_field(self):
-        response = self.do_upload_file("import_members-missing-field.csv", "en")
-        self.assertEqual(response.status_code, 200)
-        self.assertContainsMessage(
-            response,
-            "error",
-            'Missing column in CSV file: "%(fieldname)s". Mandatory fields are %(all_names)s'
-            % {
-                "fieldname": "first_name",
-                "all_names": ", ".join(
-                    [str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.keys()]
-                ),
-            },
-        )
+  def test_missing_field(self):
+    response = self.do_upload_file("import_members-missing-field.csv", "en-us")
+    self.assertEqual(response.status_code, 200)
+    self.assertContainsMessage(
+      response,
+      "error",
+      'Missing column in CSV file: "%(fieldname)s". Mandatory fields are %(all_names)s'
+      % {"fieldname": "first_name", "all_names": ", ".join([str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.keys()])},
+    )
 
 
 class CSVExportViewTests(TestImportMixin, MemberTestCase):
-    def matches_filter(self, row, filter):
-        """returns True if row is filtered according to filter"""
+  def matches_filter(self, row, filter):
+    """returns True if row is filtered according to filter"""
 
-        if filter:
-            filter = {k: v for k, v in filter.items() if v != ""}  # remove empty values
+    if filter:
+      filter = {k: v for k, v in filter.items() if v != ""}  # remove empty values
 
-        if not filter:  # can be None or {}
-            return False
+    if not filter:  # can be None or {}
+      return False
 
-        map = {
-            "city-id": ALL_FIELD_NAMES["city"],
-            "family-id": ALL_FIELD_NAMES["family"],
-            "name-id": ALL_FIELD_NAMES["last_name"],
-        }
+    map = {"city-id": ALL_FIELD_NAMES["city"], "family-id": ALL_FIELD_NAMES["family"], "name-id": ALL_FIELD_NAMES["last_name"]}
 
-        # print("check filters for row=%s filter=%s" % (row, filter))
-        for filter_key, filter_val in filter.items():
-            # print("checking filter %s=%s" % (filter_key, filter_val))
-            field = map[filter_key]
-            row_val = row.get(field)
-            if filter_val != row_val:
-                # print("filter_val=%s != row_val=%s => not matching" % (filter_val, row_val))
-                return False
-        # print('All filters match')
-        return True
+    # print("check filters for row=%s filter=%s" % (row, filter))
+    for filter_key, filter_val in filter.items():
+      # print("checking filter %s=%s" % (filter_key, filter_val))
+      field = map[filter_key]
+      row_val = row.get(field)
+      if filter_val != row_val:
+        # print("filter_val=%s != row_val=%s => not matching" % (filter_val, row_val))
+        return False
+    # print('All filters match')
+    return True
 
-    def check_CSVs_are_equivalent(self, exp_csv, rsp_csv, filter=None):
-        """
-        Utility function to check the equivalence of two CSVs in the context of this test class.
-        exp_csv and rsp_csv must be csv.DictReader objects.
-        All lines of exp_csv should be in rsp_csv plus the lines about self.member and self.superuser
-        """
-        # check that rsp_csv columns (received columns) contains all defined columns
-        for column in [str(s) for s in ALL_FIELD_NAMES.values()]:
-            self.assertTrue(
-                column in rsp_csv.fieldnames,
-                msg="Column %s not in received CSV" % column,
-            )
+  def check_CSVs_are_equivalent(self, exp_csv, rsp_csv, filter=None):
+    """
+    Utility function to check the equivalence of two CSVs in the context of this test class.
+    exp_csv and rsp_csv must be csv.DictReader objects.
+    All lines of exp_csv should be in rsp_csv plus the lines about self.member and self.superuser
+    """
+    # check that rsp_csv columns (received columns) contains all defined columns
+    for column in [str(s) for s in ALL_FIELD_NAMES.values()]:
+      self.assertTrue(column in rsp_csv.fieldnames, msg="Column %s not in received CSV" % column)
 
-        username_key = ALL_FIELD_NAMES["username"]  # get the key for username
-        # transform both csvs into dict of rows indexed by username and a list of usernames
-        rsp_rows = {row[username_key]: row for row in list(rsp_csv)}
-        rsp_usernames = rsp_rows.keys()
+    username_key = ALL_FIELD_NAMES["username"]  # get the key for username
+    # transform both csvs into dict of rows indexed by username and a list of usernames
+    rsp_rows = {row[username_key]: row for row in list(rsp_csv)}
+    rsp_usernames = rsp_rows.keys()
 
-        exp_rows = {row[username_key]: row for row in list(exp_csv)}
-        exp_usernames = exp_rows.keys()
+    exp_rows = {row[username_key]: row for row in list(exp_csv)}
+    exp_usernames = exp_rows.keys()
 
-        # check that rsp_csv does not contain lines that should have been filtered
-        if filter:
-            for rsp_row in rsp_rows.values():
-                self.assertTrue(
-                    self.matches_filter(rsp_row, filter),
-                    msg="Row with username %s should have been filtered: %s"
-                    % (rsp_row[username_key], filter),
-                )
-
-        # All the usernames in exp_usernames should be in rsp_usernames except filtered ones
-        missing_usernames = [
-            username for username in exp_usernames if username not in rsp_usernames
-        ]
-        if len(missing_usernames) > 0 and filter:
-            # check if they have been filtered
-            missing_usernames = [
-                username
-                for username in missing_usernames
-                if self.matches_filter(exp_rows[username], filter)
-            ]
-        self.assertSequenceEqual(
-            missing_usernames,
-            [],
-            msg="Missing usernames %s in received CSV" % missing_usernames,
+    # check that rsp_csv does not contain lines that should have been filtered
+    if filter:
+      for rsp_row in rsp_rows.values():
+        self.assertTrue(
+          self.matches_filter(rsp_row, filter),
+          msg="Row with username %s should have been filtered: %s" % (rsp_row[username_key], filter),
         )
 
-        # All the usernames in exp_usernames should be in rsp_usernames except self.member and self.superuser
-        for unkown_username in [
-            username for username in rsp_usernames if username not in exp_usernames
-        ]:
-            self.assertIn(
-                unkown_username,
-                [self.member.username, self.superuser.username],
-                "Unknown username %s in received CSV" % unkown_username,
-            )
+    # All the usernames in exp_usernames should be in rsp_usernames except filtered ones
+    missing_usernames = [username for username in exp_usernames if username not in rsp_usernames]
+    if len(missing_usernames) > 0 and filter:
+      # check if they have been filtered
+      missing_usernames = [username for username in missing_usernames if self.matches_filter(exp_rows[username], filter)]
+    self.assertSequenceEqual(missing_usernames, [], msg="Missing usernames %s in received CSV" % missing_usernames)
 
-        # All the columns in exp_rows should be the same in rsp_rows
-        for username, exp_row in exp_rows.items():
-            if not self.matches_filter(exp_row, filter):
-                continue
-            rsp_row = rsp_rows[username]
-            # avatar not exported, so ignore it
-            wrong_columns = [
-                key
-                for key in exp_row.keys()
-                if exp_row[key] != rsp_row[key] and key != "avatar"
-            ]
-            self.assertSequenceEqual(
-                wrong_columns,
-                [],
-                "Wrong column %s for username %s" % (wrong_columns, username),
-            )
-            # check that other columns are empty
-            non_empty_columns = [
-                key
-                for key in rsp_row.keys()
-                if key not in exp_csv.fieldnames and rsp_row[key] != ""
-            ]
-            self.assertSequenceEqual(
-                non_empty_columns,
-                [],
-                "Columns %s for username %s should be empty"
-                % (non_empty_columns, username),
-            )
+    # All the usernames in exp_usernames should be in rsp_usernames except self.member and self.superuser
+    for unkown_username in [username for username in rsp_usernames if username not in exp_usernames]:
+      self.assertIn(
+        unkown_username,
+        [self.member.username, self.superuser.username],
+        "Unknown username %s in received CSV" % unkown_username,
+      )
 
-    def do_test_export(self, expected_filename, lang, filter=None):
-        url = reverse("members:export_members_to_csv")
-        if filter is None:
-            filter = {}
-        response = self.client.post(url, filter, follow=True, HTTP_ACCEPT_LANGUAGE=lang)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.get("Content-Disposition"), 'attachment; filename="members.csv"'
-        )
-        self.assertEqual(response.get("Content-Type"), "text/csv")
-        response_content = response.content.decode("utf-8")
-        # print("response_content=", response_content)
-        rsp_csv = csv.DictReader(io.StringIO(response_content))
-        with open(get_test_file(expected_filename)) as csvfile:
-            exp_csv = csv.DictReader(csvfile)
-            self.check_CSVs_are_equivalent(exp_csv, rsp_csv, filter)
+    # All the columns in exp_rows should be the same in rsp_rows
+    for username, exp_row in exp_rows.items():
+      if not self.matches_filter(exp_row, filter):
+        continue
+      rsp_row = rsp_rows[username]
+      # avatar not exported, so ignore it
+      wrong_columns = [key for key in exp_row.keys() if exp_row[key] != rsp_row[key] and key != "avatar"]
+      self.assertSequenceEqual(wrong_columns, [], "Wrong column %s for username %s" % (wrong_columns, username))
+      # check that other columns are empty
+      non_empty_columns = [key for key in rsp_row.keys() if key not in exp_csv.fieldnames and rsp_row[key] != ""]
+      self.assertSequenceEqual(
+        non_empty_columns, [], "Columns %s for username %s should be empty" % (non_empty_columns, username)
+      )
 
-    # force language to make sure the CSV fields are properly translated
-    @translation.override("en")
-    def test_export_en(self):
-        self.do_test_import("import_members.csv", "en", 4)
-        self.do_test_export("import_members.csv", "en")
+  def do_test_export(self, expected_filename, lang, filter=None):
+    url = reverse("members:export_members_to_csv")
+    if filter is None:
+      filter = {}
+    response = self.client.post(url, filter, follow=True, HTTP_ACCEPT_LANGUAGE=lang)
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.get("Content-Disposition"), 'attachment; filename="members.csv"')
+    self.assertEqual(response.get("Content-Type"), "text/csv")
+    response_content = response.content.decode("utf-8")
+    # print("response_content=", response_content)
+    rsp_csv = csv.DictReader(io.StringIO(response_content))
+    with open(get_test_file(expected_filename)) as csvfile:
+      exp_csv = csv.DictReader(csvfile)
+      self.check_CSVs_are_equivalent(exp_csv, rsp_csv, filter)
 
-    # force language to make sure the CSV fields are properly translated
-    @translation.override("fr")
-    def test_export_fr(self):
-        self.do_test_import("import_members-fr.csv", "fr", 4, member_prefix="member-fr")
-        self.do_test_export("import_members-fr.csv", "fr")
+  # force language to make sure the CSV fields are properly translated
+  @translation.override("en")
+  def test_export_en(self):
+    self.do_test_import("import_members.csv", "en", 4)
+    self.do_test_export("import_members.csv", "en")
 
-    @translation.override("en")
-    def test_export_en_with_filter(self):
-        self.do_test_import("import_members.csv", "en", 4)
-        self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
-        self.do_test_export("import_members.csv", "en", {"city-id": "Liverpool"})
-        self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
+  # force language to make sure the CSV fields are properly translated
+  @translation.override("fr")
+  def test_export_fr(self):
+    self.do_test_import("import_members-fr.csv", "fr", 4, member_prefix="member-fr")
+    self.do_test_export("import_members-fr.csv", "fr")
+
+  @translation.override("en")
+  def test_export_en_with_filter(self):
+    self.do_test_import("import_members.csv", "en", 4)
+    self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
+    self.do_test_export("import_members.csv", "en", {"city-id": "Liverpool"})
+    self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})

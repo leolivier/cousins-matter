@@ -5,40 +5,38 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    dependencies = [
-        ("classified_ads", "0002_classifiedad_location"),
-    ]
+  dependencies = [
+    ("classified_ads", "0002_classifiedad_location"),
+  ]
 
-    operations = [
-        migrations.AddField(
-            model_name="adphoto",
-            name="thumbnail",
-            field=models.ImageField(
-                blank=True, upload_to=classified_ads.models.get_thumbnail_path
-            ),
-        ),
-        migrations.AlterField(
-            model_name="adphoto",
-            name="image",
-            field=models.ImageField(upload_to=classified_ads.models.get_photo_path),
-        ),
-        migrations.AlterField(
-            model_name="classifiedad",
-            name="shipping_method",
-            field=models.CharField(
-                choices=[
-                    ("pickup", "Pickup only"),
-                    ("shipping", "Shipping only"),
-                    ("both", "Pickup or Shipping"),
-                ],
-                default="pickup",
-                max_length=255,
-            ),
-        ),
-        migrations.AlterField(
-            model_name="classifiedad",
-            name="subcategory",
-            field=models.CharField(default="unset", max_length=255),
-            preserve_default=False,
-        ),
-    ]
+  operations = [
+    migrations.AddField(
+      model_name="adphoto",
+      name="thumbnail",
+      field=models.ImageField(blank=True, upload_to=classified_ads.models.get_thumbnail_path),
+    ),
+    migrations.AlterField(
+      model_name="adphoto",
+      name="image",
+      field=models.ImageField(upload_to=classified_ads.models.get_photo_path),
+    ),
+    migrations.AlterField(
+      model_name="classifiedad",
+      name="shipping_method",
+      field=models.CharField(
+        choices=[
+          ("pickup", "Pickup only"),
+          ("shipping", "Shipping only"),
+          ("both", "Pickup or Shipping"),
+        ],
+        default="pickup",
+        max_length=255,
+      ),
+    ),
+    migrations.AlterField(
+      model_name="classifiedad",
+      name="subcategory",
+      field=models.CharField(default="unset", max_length=255),
+      preserve_default=False,
+    ),
+  ]

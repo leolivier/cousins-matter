@@ -114,8 +114,8 @@ jobs:
           ADMIN_PASSWORD=admin
           ADMIN_EMAIL=3eK6F@example.com
           ADMIN_BIRTHDATE=2000-01-01
-          ADMIN_FIRST_NAME=Ahd
-          ADMIN_LAST_NAME=Mihn
+          ADMIN_FIRSTNAME=Ahd
+          ADMIN_LASTNAME=Mihn
           EOF
 
       - name: Test Docker Image

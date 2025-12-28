@@ -31,7 +31,7 @@ This command will:
 * download the necessary files for Cousins Matter;
 * create the necessary directories;
 * create the base .env file from an example;
-* run an editor on the .env file to suit your needs (see the [Settings](settings.md) page). In particular, don't forget to add the information to create the superuser.
+* run an editor on the .env file to suit your needs (see the [Settings](settings.md) page). In particular, __don't forget to add the information to create the superuser__.
 
 This script can also help you to [migrate from v1 to v2 version of Cousins Matter](migrate-from-v1-to-v2.md) and to [rotate your secret key from time to time](other-management-operations.md#rotate-your-secret-key).
 

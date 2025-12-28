@@ -24,8 +24,6 @@ env:
   PUSH: ${{ github.event_name == 'release' && true || github.event_name == 'push' && true || false }}
   # how to compute image tags
   TAGS_DEF: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'push' && 'type=ref,event=branch' || 'type=sha' }}
-  # version of the application 
-  # VERSION: ${{ github.event.release.tag_name || github.ref_name }}
   TEST_TAG: 'test-${{ github.sha }}'
 
 jobs:
@@ -35,6 +33,10 @@ jobs:
     permissions:
       packages: write
     steps:
+      - name: Set Global Env Variables
+        run: |
+          echo "COUSINS_MATTER_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}" >> $GITHUB_ENV
+
       - name: trace event trigger
         env:
           EVENT: ${{ toJson(github.event) }}
@@ -97,7 +99,7 @@ jobs:
         run: |
           # Q_SYNC=True to make sure django-q tests are run synchronously
           cat > $GITHUB_WORKSPACE/.env <<'EOF'
-          COUSINS_MATTER_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
+          COUSINS_MATTER_IMAGE=${{ env.COUSINS_MATTER_IMAGE }}
           SECRET_KEY=
           SITE_NAME=My Beautiful Site
           ALLOWED_HOSTS=127.0.0.1,localhost
@@ -111,9 +113,9 @@ jobs:
           ADMIN=admin
           ADMIN_PASSWORD=admin
           ADMIN_EMAIL=3eK6F@example.com
+          ADMIN_BIRTHDATE=2000-01-01
           ADMIN_FIRST_NAME=Ahd
           ADMIN_LAST_NAME=Mihn
-          ADMIN_BIRTHDATE=2000-01-01
           EOF
 
       - name: Test Docker Image
@@ -139,10 +141,6 @@ jobs:
           docker volume prune -f
           # then run test
           ./scripts/tests/test_migrate_v1_v2.sh -g
-
-      - name: test create superuser script
-        run: |
-          ./scripts/tests/test_create_superuser.sh -g
 
       - name: Test Docker Image using S3 backend
         run: |

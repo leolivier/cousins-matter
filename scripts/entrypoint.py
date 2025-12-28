@@ -26,7 +26,6 @@ from django.conf import settings
 
 # from cousinsmatter import settings as cousinsmatter_defaults
 from django.core.management import call_command, CommandError
-from .create_superuser import create_superuser_from_env, has_superuser
 
 logger = logging.getLogger(f"{__name__}/{sys.argv[1]}")
 

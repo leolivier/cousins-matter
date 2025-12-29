@@ -61,20 +61,32 @@ class FamilyModelTest(TestCase):
 class GenealogyViewsTest(MemberTestCase):
   def setUp(self):
     super().setUp()
-    self.person = Person.objects.create(
-      first_name="View",
+    self.p1 = Person.objects.create(
+      first_name="View_P1",
       last_name="Test",
       sex="F",
       birth_date=date(1990, 1, 1),
       death_date=date(2020, 1, 1),
     )
-    self.family = Family.objects.create(partner1=self.person, union_type="MARR")
+    self.p2 = Person.objects.create(
+      first_name="View_P2",
+      last_name="Test",
+      sex="M",
+      birth_date=date(1990, 1, 1),
+      death_date=date(2020, 1, 1),
+    )
+    self.family = Family.objects.create(partner1=self.p1, partner2=self.p2, union_type="MARR")
+    self.p3 = Person.objects.create(
+      first_name="View_P3",
+      last_name="Test",
+      sex="M",
+      child_of_family=self.family,
+    )
 
   def test_dashboard_view(self):
     response = self.client.get(reverse("genealogy:dashboard"), follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "genealogy/dashboard.html")
-    # content = response.content.decode("utf-8")
     self.assertContains(
       response,
       f"""<div class='box'>
@@ -95,15 +107,19 @@ class GenealogyViewsTest(MemberTestCase):
   def test_person_list_view(self):
     response = self.client.get(reverse("genealogy:person_list"), follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertContains(response, "Test, View")
-    self.assertContains(response, formats.date_format(self.person.birth_date, "DATE_FORMAT"))
+    self.assertContains(response, "View_P1 Test")
+    self.assertContains(response, formats.date_format(self.p1.birth_date, "DATE_FORMAT"))
+    self.assertContains(response, "View_P2 Test")
+    self.assertContains(response, formats.date_format(self.p2.birth_date, "DATE_FORMAT"))
+    self.assertContains(response, "View_P3 Test")
+    self.assertContains(response, formats.date_format(self.p3.birth_date, "DATE_FORMAT"))
 
   def test_person_detail_view(self):
-    response = self.client.get(reverse("genealogy:person_detail", args=[self.person.id]), follow=True)
+    response = self.client.get(reverse("genealogy:person_detail", args=[self.p1.id]), follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertContains(response, "View Test")
-    self.assertContains(response, formats.date_format(self.person.birth_date, "DATE_FORMAT"))
-    self.assertContains(response, formats.date_format(self.person.death_date, "DATE_FORMAT"))
+    self.assertContains(response, "View_P1 Test")
+    self.assertContains(response, formats.date_format(self.p1.birth_date, "DATE_FORMAT"))
+    self.assertContains(response, formats.date_format(self.p1.death_date, "DATE_FORMAT"))
 
   def test_family_chart_view(self):
     response = self.client.get(reverse("genealogy:family_chart"), follow=True)
@@ -117,8 +133,29 @@ class GenealogyViewsTest(MemberTestCase):
     )
     self.assertEqual(response.status_code, 200)
     data = response.json()
-    self.assertIn("people", data)
-    self.assertIn("families", data)
+    # print(data)
+    persons = [self.p1, self.p2, self.p3]
+    for i in range(3):
+      self.assertEqual(data[i]["id"], str(persons[i].id))
+      self.assertEqual(data[i]["data"]["first name"], persons[i].first_name)
+      self.assertEqual(data[i]["data"]["last name"], persons[i].last_name)
+      self.assertEqual(data[i]["data"]["gender"], persons[i].sex)
+      if persons[i].birth_date:
+        self.assertEqual(data[i]["data"]["birthday"], formats.date_format(persons[i].birth_date, "SHORT_DATE_FORMAT"))
+      if persons[i].death_date:
+        self.assertEqual(data[i]["data"]["deathday"], formats.date_format(persons[i].death_date, "SHORT_DATE_FORMAT"))
+      spouses = persons[i].get_partners()
+      if spouses:
+        self.assertSetEqual(set([str(spouse.id) for spouse in spouses]), set(data[i]["rels"]["spouses"]))
+      children = [
+        p.id
+        for p in persons
+        if p.id != persons[i].id
+        and p.child_of_family
+        and (p.child_of_family.partner1 == persons[i].id or p.child_of_family.partner2 == persons[i].id)
+      ]
+      if children:
+        self.assertSetEqual(set(children), set(data[i]["rels"]["children"]))
 
 
 class GenealogyFormsTest(TestCase):
@@ -127,8 +164,8 @@ class GenealogyFormsTest(TestCase):
       data={
         "first_name": "Form",
         "last_name": "Test",
-        "sex": "M",
-        "birth_date": "2000-01-01",
+        "gender": "M",
+        "birthday": "2000-01-01",
       }
     )
     self.assertTrue(form.is_valid())

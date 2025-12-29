@@ -240,9 +240,14 @@ DATABASES = {
     "HOST": env.str("POSTGRES_HOST", default="postgres"),
     "PORT": env.int("POSTGRES_PORT", default=5432),
     "NAME": env.str("POSTGRES_DB", default="cousinsmatter"),
-    "CONN_MAX_AGE": 60,  # Keep connections open for 1 minute (balance for 10 users)
+    "CONN_MAX_AGE": 0,  # Disable persistent connections for PgBouncer transaction pooling
     "OPTIONS": {
       "connect_timeout": 10,
+      "pool": {
+        "min_size": 2,
+        "max_size": 20,
+        "timeout": 30,
+      },
     },
     "TEST": {"NAME": "test_cousinsmatter"},
   }

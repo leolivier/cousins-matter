@@ -70,8 +70,8 @@
       </form>
     </div>
   </div>
-  {%paginate page %}
   {% if page.object_list.count > 0 %}
+  {%paginate page %}
   <div class="grid mx-3 is-col-min-8">
     {% for member in page.object_list %}
       <div class="cell has-text-centered my-auto">
@@ -87,6 +87,7 @@
       </div>
     {% endfor %}
   </div>
+  {% if page.num_pages > 1 %}{%paginate page%}{% endif %}
   {% else %}
   <div>
     <p>{% translate "No members found" %}.</p>

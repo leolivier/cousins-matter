@@ -81,6 +81,11 @@
         </tbody>
         {% endpartialdef %}
     </table>
+    {% if page.num_pages > 1 %}
+    <div class="level">
+        {%paginate page%}
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}

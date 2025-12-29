@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from datetime import date
+import uuid
 
 
 class Person(models.Model):
@@ -32,6 +33,7 @@ class Person(models.Model):
 
   notes = models.TextField(_("Notes"), blank=True)
   gedcom_id = models.CharField("GEDCOM ID", max_length=50, blank=True, unique=True, null=True)
+  uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, verbose_name=_("GedCom UUID"))
 
   child_of_family = models.ForeignKey(
     "Family",

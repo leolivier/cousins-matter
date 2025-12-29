@@ -8,7 +8,7 @@ from .forms import PersonForm, FamilyForm
 from members.tests.tests_member_base import MemberTestCase
 
 
-class PersonModelTest(MemberTestCase):
+class PersonModelTest(TestCase):
   def setUp(self):
     super().setUp()
     self.person = Person.objects.create(first_name="John", last_name="Doe", sex="M", birth_date=date(1990, 1, 1))
@@ -30,7 +30,7 @@ class PersonModelTest(MemberTestCase):
     self.assertEqual(self.person.age, 30)
 
 
-class FamilyModelTest(MemberTestCase):
+class FamilyModelTest(TestCase):
   def setUp(self):
     super().setUp()
     self.p1 = Person.objects.create(first_name="P1", last_name="Test", sex="M")
@@ -105,13 +105,13 @@ class GenealogyViewsTest(MemberTestCase):
     self.assertContains(response, formats.date_format(self.person.birth_date, "DATE_FORMAT"))
     self.assertContains(response, formats.date_format(self.person.death_date, "DATE_FORMAT"))
 
-  def test_family_tree_view(self):
-    response = self.client.get(reverse("genealogy:family_tree"), follow=True)
+  def test_family_chart_view(self):
+    response = self.client.get(reverse("genealogy:family_chart"), follow=True)
     self.assertEqual(response.status_code, 200)
 
-  def test_tree_data_api(self):
+  def test_family_chart_data_api(self):
     response = self.client.get(
-      reverse("genealogy:tree_data"),
+      reverse("genealogy:family_chart_data"),
       follow=True,
       headers={"HTTP_ACCEPT": "application/json"},
     )

@@ -2,7 +2,7 @@
 {% load i18n cm_tags cache %}
 
 {% block genealogy_content %}
-{% cache 300 genealogy_family_list cache_key_suffix %}
+
 <div class="box">
     <div class="level">
         <div class="level-left">
@@ -93,5 +93,5 @@
         {% endpartialdef %}
     </table>
 </div>
-{% endcache %}
+
 {% endblock %}

@@ -50,8 +50,9 @@
                 </div>
             </div>
             <footer class="card-footer">
-                <a href="{% url 'genealogy:person_update' person.pk %}" class="card-footer-item">{% trans "Edit" %}</a>
-                <a href="{% url 'genealogy:person_delete' person.pk %}" class="card-footer-item has-text-danger">{% trans "Delete" %}</a>
+                <a href="{% url 'genealogy:person_update' person.pk %}" class="card-footer-item" title="{% trans 'Edit' %}">{% icon "edit" %}</a>
+                <a href="{% url 'genealogy:person_delete' person.pk %}" class="card-footer-item has-text-danger" title="{% trans 'Delete' %}">{% icon "delete" %}</a>
+                <a href="{% url 'genealogy:person_chart' person.id %}" class="card-footer-item has-text-primary" title="{% trans 'View family tree' %}">{% icon "family-tree" %}</a>
             </footer>
         </div>
     </div>

@@ -25,7 +25,7 @@ urlpatterns = [
   path(
     "family-chart/<int:main_person_id>/",
     views_family_chart.family_chart_view,
-    name="family_chart",
+    name="person_chart",
   ),
   path("api/family-chart-data/", views_family_chart.family_chart_data, name="family_chart_data"),
   path("statistics/", views_dashboard_stats.statistics, name="statistics"),

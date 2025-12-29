@@ -240,7 +240,7 @@ DATABASES = {
     "HOST": env.str("POSTGRES_HOST", default="postgres"),
     "PORT": env.int("POSTGRES_PORT", default=5432),
     "NAME": env.str("POSTGRES_DB", default="cousinsmatter"),
-    "CONN_MAX_AGE": 600,  # Keep connections open for 10 minutes
+    "CONN_MAX_AGE": 60,  # Keep connections open for 1 minute (balance for 10 users)
     "OPTIONS": {
       "connect_timeout": 10,
     },
@@ -440,7 +440,7 @@ if DEBUG:
 # Django Q2 settings
 Q_CLUSTER = {
   "name": slugify(SITE_NAME),
-  # 'workers': 4,
+  "workers": 2,
   # 'recycle': 500,
   "timeout": 60,
   "max_attempts": 5,
@@ -456,3 +456,5 @@ Q_CLUSTER = {
   },
   "sync": env.bool("Q_SYNC", False),  # set to True in development
 }
+
+GEDCOM_FILE = env.str("GEDCOM_FILE", default="genealogy.ged")

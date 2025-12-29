@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import environ
 import sys
 import os
+import socket
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
@@ -190,6 +191,11 @@ if DEBUG and not TESTING:
     "127.0.0.1",
     "::1",
   ]
+  try:
+    hostname, __un__, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
+  except Exception:
+    pass
 
 ROOT_URLCONF = "cousinsmatter.urls"
 
@@ -240,7 +246,7 @@ DATABASES = {
     "HOST": env.str("POSTGRES_HOST", default="postgres"),
     "PORT": env.int("POSTGRES_PORT", default=5432),
     "NAME": env.str("POSTGRES_DB", default="cousinsmatter"),
-    "CONN_MAX_AGE": 0,  # Disable persistent connections for PgBouncer transaction pooling
+    "CONN_MAX_AGE": 0,
     "OPTIONS": {
       "connect_timeout": 10,
       "pool": {

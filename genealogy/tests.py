@@ -66,20 +66,21 @@ class GenealogyViewsTest(MemberTestCase):
       last_name="Test",
       sex="F",
       birth_date=date(1990, 1, 1),
-      death_date=date(2020, 1, 1),
+      death_date=date(2025, 1, 1),
     )
     self.p2 = Person.objects.create(
       first_name="View_P2",
       last_name="Test",
       sex="M",
       birth_date=date(1990, 1, 1),
-      death_date=date(2020, 1, 1),
+      death_date=date(2025, 1, 1),
     )
     self.family = Family.objects.create(partner1=self.p1, partner2=self.p2, union_type="MARR")
     self.p3 = Person.objects.create(
       first_name="View_P3",
       last_name="Test",
       sex="M",
+      birth_date=date(2020, 1, 1),
       child_of_family=self.family,
     )
 
@@ -107,11 +108,11 @@ class GenealogyViewsTest(MemberTestCase):
   def test_person_list_view(self):
     response = self.client.get(reverse("genealogy:person_list"), follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertContains(response, "View_P1 Test")
+    self.assertContains(response, "Test, View_P1")
     self.assertContains(response, formats.date_format(self.p1.birth_date, "DATE_FORMAT"))
-    self.assertContains(response, "View_P2 Test")
+    self.assertContains(response, "Test, View_P2")
     self.assertContains(response, formats.date_format(self.p2.birth_date, "DATE_FORMAT"))
-    self.assertContains(response, "View_P3 Test")
+    self.assertContains(response, "Test, View_P3")
     self.assertContains(response, formats.date_format(self.p3.birth_date, "DATE_FORMAT"))
 
   def test_person_detail_view(self):
@@ -164,11 +165,11 @@ class GenealogyFormsTest(TestCase):
       data={
         "first_name": "Form",
         "last_name": "Test",
-        "gender": "M",
-        "birthday": "2000-01-01",
+        "sex": "M",
+        "birth_date": "2000-01-01",
       }
     )
-    self.assertTrue(form.is_valid())
+    self.assertTrue(form.is_valid(), form.errors)
 
   def test_family_form_valid(self):
     p1 = Person.objects.create(first_name="F1", last_name="T", sex="M")
@@ -181,4 +182,4 @@ class GenealogyFormsTest(TestCase):
         "union_date": "2010-01-01",
       }
     )
-    self.assertTrue(form.is_valid())
+    self.assertTrue(form.is_valid(), form.errors)

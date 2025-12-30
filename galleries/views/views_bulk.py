@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import SuspiciousFileOperation
 from django.db.models import ObjectDoesNotExist
 from django.forms import ValidationError
+from django_htmx.http import HttpResponseClientRefresh
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
@@ -35,7 +36,7 @@ def _get_parent_gallery(path: str, zimport: ZipImport):  # path should be direct
   args: "path" should be one of a folder
   """
   parent_dir = os.path.dirname(os.path.normpath(path))
-  return _get_or_create_gallery(parent_dir, zimport) if parent_dir != "" else None
+  return _get_or_create_gallery(parent_dir, zimport) if parent_dir != "" else zimport.root_gallery
 
 
 def _get_or_create_gallery(path: str, zimport: ZipImport):
@@ -55,8 +56,10 @@ def _get_or_create_gallery(path: str, zimport: ZipImport):
   if ".." in pathlib.PurePath(path).parts:
     raise SuspiciousFileOperation(_("Detected path traversal attempt, '..' is not allowed in paths inside the zip file"))
 
-  if path == ".":  # should never happen
-    return None
+  if path == ".":
+    if zimport.root_gallery is None:
+      raise ValidationError(_("Root gallery not found. Please select a root gallery. Create it first if necessary."))
+    return zimport.root_gallery
 
   if path in zimport.galleries:  # gallery in cache
     return zimport.galleries[path]
@@ -77,7 +80,7 @@ def _get_or_create_gallery(path: str, zimport: ZipImport):
   return gallery
 
 
-def handle_zip(zip_file, task_group, owner_id):
+def handle_zip(zip_file, task_group, owner_id, root_gallery=None):
   """
   reads a zip file and creates galleries for each folder
   and create tasks to create photos inside these galleries for each image in the folder.
@@ -88,7 +91,7 @@ def handle_zip(zip_file, task_group, owner_id):
     raise zipfile.BadZipFile(f"{zip_file} is not a zip file")
 
   tmpdir = tempfile.mkdtemp()
-  zimport = ZipImport(owner_id=owner_id, root=tmpdir, group=task_group)
+  zimport = ZipImport(owner_id=owner_id, root=tmpdir, group=task_group, root_gallery=root_gallery)
   zimport.register()
   broker = get_broker()
   # extract the zip file to a temporary directory
@@ -131,7 +134,7 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
         zip_file = request.FILES["zipfile"]
         # task_group = request.POST.get("csrfmiddlewaretoken")  # not generated in test context
         task_group = uuid.uuid4().hex
-        zimport = handle_zip(zip_file, task_group, request.user.id)
+        zimport = handle_zip(zip_file, task_group, request.user.id, form.cleaned_data.get("gallery"))
         hx_get_url = reverse("galleries:upload_progress", args=(task_group,))
         logger.debug(f"rendering first progress-bar url: {hx_get_url}")
         return render(
@@ -145,14 +148,14 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
       except ValidationError as e:
         for err in e.messages:
           messages.error(request, err)
-        return redirect(reverse("galleries:bulk_upload"))
+        return HttpResponseClientRefresh()
       except Exception as e:
         messages.error(request, e.__str__())
-        return redirect(reverse("galleries:bulk_upload"))
+        return HttpResponseClientRefresh()
     else:
       for code, error in form.errors.items():
         messages.error(request, ": ".join(code, error))
-      return redirect(reverse("galleries:bulk_upload"))
+      return HttpResponseClientRefresh()
 
 
 @login_required

@@ -137,10 +137,11 @@ class MemberTestCase(TestCase):
   def assertContainsMessage(self, response, type, message):
     self.assertContains(
       response,
-      f"""<li class="message is-{type}">
-      <div class="message-body">{message}
-      </div>
-    </li>""",
+      f"""<li class="message is-{type} {"is-danger" if type == "error" else ""}">
+  <div class="message-body">
+    {message}
+  </div>
+</li>""",
       html=True,
     )
 

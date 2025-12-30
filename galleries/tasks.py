@@ -24,6 +24,7 @@ class ZipImport:
   galleries: dict[Gallery] = field(default_factory=dict)  # galleries cache, contains both created and pre-existing galleries
   nbPhotos: int = 0  # number of tasks created for importing photos
   nbGalleries: int = 0
+  root_gallery: Gallery = None
   group: str = ""  # group of tasks
   # photos and errors are sets to avoid duplicates, they are filled in upload_progress (so, after tasks are finished)
   photos: set[str] = field(default_factory=set)

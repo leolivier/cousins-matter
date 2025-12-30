@@ -22,6 +22,12 @@ class BulkUploadPhotosForm(forms.Form):
     validators=[validate_zipfile_extension, check_zip_size],
     widget=forms.FileInput(attrs={"accept": ".zip"}),
   )
+  gallery = forms.ModelChoiceField(
+    queryset=Gallery.objects.all(),
+    label=_("Parent Gallery"),
+    required=False,
+    help_text=_("Optional. If selected, imported galleries will be created inside this gallery."),
+  )
 
 
 class PhotoForm(forms.ModelForm):

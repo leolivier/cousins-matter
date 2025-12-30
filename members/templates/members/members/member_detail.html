@@ -59,7 +59,7 @@
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Who I am" %}</td>
-					<td class="content">{%if member.description%}{{ member.description }}{%endif%}</td>
+					<td class="content">{%if member.description%}{{ member.description|safe }}{%endif%}</td>
 				</tr>
 				<tr>
 					<td class="content has-text-right">{% translate "Hobbies" %}</td>

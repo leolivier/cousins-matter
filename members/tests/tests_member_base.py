@@ -134,10 +134,10 @@ class MemberTestCase(TestCase):
   def assertRequestUserIsNotLogged(self):
     self.assertFalse(self.current_user().is_authenticated)
 
-  def assertContainsMessage(self, response, type, message):
+  def assertContainsMessage(self, response, type, message, is_danger=False):
     self.assertContains(
       response,
-      f"""<li class="message is-{type} {"is-danger" if type == "error" else ""}">
+      f"""<li class="message is-{type} {"is-danger" if is_danger else ""}">
   <div class="message-body">
     {message}
   </div>

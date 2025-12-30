@@ -84,6 +84,13 @@ def download_protected_media(request, media):
   return response
 
 
+redis_client = redis.Redis(
+  host=os.getenv("REDIS_HOST", "redis"),
+  port=os.getenv("REDIS_PORT", 6379),
+  decode_responses=True,
+)
+
+
 def health_check() -> dict:
   try:
     with connections["default"].cursor() as cursor:
@@ -92,12 +99,7 @@ def health_check() -> dict:
   except DatabaseError as e:
     return {"status": "db_error", "msg": str(e)}
   try:
-    r = redis.Redis(
-      host=os.getenv("REDIS_HOST", "redis"),
-      port=os.getenv("REDIS_PORT", 6379),
-      decode_responses=True,
-    )
-    r.ping()
+    redis_client.ping()
   except redis.exceptions.ConnectionError as e:
     return {"status": "redis_error", "msg": str(e)}
   return {"status": "ok"}

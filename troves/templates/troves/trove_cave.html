@@ -78,6 +78,11 @@ function delete_treasure(url) {
       </div>
     </div>
     {% endfor %}
+    {% if page.num_pages > 1 %}
+		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
+			{%paginate page%}
+		</div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

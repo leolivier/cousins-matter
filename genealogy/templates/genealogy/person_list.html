@@ -2,7 +2,7 @@
 {% load i18n cm_tags cache %}
 
 {% block genealogy_content %}
-{% cache 300 genealogy_person_list cache_key_suffix %}
+
 <div class="box">
     <div class="level">
         <div class="level-left">
@@ -61,6 +61,9 @@
                 <td>{{ person.birth_place|default:"-" }}</td>
                 <td>
                     <div class="buttons are-small">
+                        <a href="{% url 'genealogy:person_chart' person.id %}" class="button is-link is-light" title="{% trans 'View family tree' %}">
+                            {% icon "family-tree" %}
+                        </a>
                         <a href="{% url 'genealogy:person_detail' person.id %}" class="button is-info is-light">
                             {%icon "details" %}
                         </a>
@@ -78,6 +81,11 @@
         </tbody>
         {% endpartialdef %}
     </table>
+    {% if page.num_pages > 1 %}
+    <div class="level">
+        {%paginate page%}
+    </div>
+    {% endif %}
 </div>
-{% endcache %}
+
 {% endblock %}

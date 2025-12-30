@@ -123,10 +123,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     logger.debug(f"websocket closed connection: {code} {reason}")
     await super().close(code, reason)
 
-  @sync_to_async
-  def acheck_followers(self, room, message, member, url):
-    check_followers(None, room, room.owner(), url, message, member)
-
   def _build_absolute_url(self, relative_url):
     # big hack...
     headers = dict(self.scope["headers"])
@@ -147,7 +143,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     member = await Member.objects.aget(pk=member_id)
     message = await ChatMessage.objects.acreate(member=member, room=room, content=msg_content)
     url = self._build_absolute_url(reverse("chat:room", args=[room_slug]))
-    await self.acheck_followers(room, message, member, url)
+    await sync_to_async(self.check_followers)(room, message, member, url)
     return message
 
   async def update_message(self, message_id, msg_content):

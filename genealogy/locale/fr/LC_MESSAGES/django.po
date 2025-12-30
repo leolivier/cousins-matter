@@ -378,3 +378,7 @@ msgstr "Personne crée avec succès."
 #, python-format
 msgid "Error importing GEDCOM: %(error)s"
 msgstr "Erreur lors de l'importation du GEDCOM: %(error)s"
+
+#: templates/genealogy/person_list.html:64
+msgid "View family tree"
+msgstr "Voir l'arbre généalogique"

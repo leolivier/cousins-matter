@@ -1,9 +1,13 @@
 import logging
+import uuid
 from datetime import datetime
 from gedcom.element.individual import IndividualElement
 from gedcom.element.family import FamilyElement
 from gedcom.parser import Parser
+from django.conf import settings
 from django.db.models import Q
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 from .models import Person, Family
 
 logger = logging.getLogger(__name__)
@@ -42,21 +46,40 @@ class GedcomParser:
     death_date = self._parse_date(death_data[0]) if death_data[0] else None
     death_place = death_data[1]
 
+    # Extract _UID if present
+    uid_hex = None
+    for child in element.get_child_elements():
+      if child.get_tag() == "_UID":
+        uid_hex = child.get_value().strip()
+        break
+
     # Map sex to model choices
     sex_map = {"M": "M", "F": "F"}
     model_sex = sex_map.get(sex, "O")
 
+    person_defaults = {
+      "first_name": first_name,
+      "last_name": last_name,
+      "sex": model_sex,
+      "birth_date": birth_date,
+      "birth_place": birth_place,
+      "death_date": death_date,
+      "death_place": death_place,
+    }
+
+    if uid_hex:
+      try:
+        # Some Gedcoms use 32 hex chars, some use UUID string format
+        if len(uid_hex) == 32:
+          person_defaults["uid"] = uuid.UUID(hex=uid_hex)
+        else:
+          person_defaults["uid"] = uuid.UUID(uid_hex)
+      except ValueError:
+        logger.warning(f"Invalid _UID format: {uid_hex} for person {gedcom_id}")
+
     person, _ = Person.objects.update_or_create(
       gedcom_id=gedcom_id,
-      defaults={
-        "first_name": first_name,
-        "last_name": last_name,
-        "sex": model_sex,
-        "birth_date": birth_date,
-        "birth_place": birth_place,
-        "death_date": death_date,
-        "death_place": death_place,
-      },
+      defaults=person_defaults,
     )
     self.person_map[gedcom_id] = person
     return person
@@ -139,13 +162,40 @@ class GedcomParser:
 
 class GedcomExporter:
   def _get_gedcom_header(self):
+    now = datetime.now()
+    nindi = Person.objects.count()
+    nfam = Family.objects.count()
     return [
       "0 HEAD",
-      "1 SOUR CousinsMatter",
       "1 GEDC",
       "2 VERS 5.5.1",
       "2 FORM LINEAGE-LINKED",
       "1 CHAR UTF-8",
+      "1 DEST CousinsMatter",
+      "1 SOUR CousinsMatter",
+      f"2 VERS {settings.APP_VERSION}",
+      "2 NAME CousinsMatter",
+      "2 CORP CousinsMatter",
+      "1 SUBM @U0@",
+      f"1 DATE {now.strftime('%d %b %Y')}",
+      f"2 TIME {now.strftime('%H:%M:%S.%f')[:6]}",
+      "1 LANG English",
+      f"1 FILE {settings.GEDCOM_FILE}",
+      "1 COPR © 2025 CousinsMatter",
+      f"1 _TITL {settings.SITE_NAME}",
+      "1 _STS",
+      f"2 INDI {nindi}",
+      f"2 FAM {nfam}",
+      "2 REPO 0",
+      "2 SOUR 1",
+      "2 NOTE 0",
+      "2 SUBM 1",
+      "2 OBJE 0",
+      "2 _TASK 0",
+      "0 @U0@ SUBM",
+      "1 NAME CousinsMatter",
+      "1 CHAN",
+      "2 DATE 30 DEC 2015",
     ]
 
   def _export_individual(self, person):
@@ -162,6 +212,7 @@ class GedcomExporter:
 
     sex_map = {"M": "M", "F": "F"}
     lines.append(f"1 SEX {sex_map.get(person.sex, 'U')}")
+    lines.append(f"1 _UID {person.uid.hex.upper()}")
 
     if person.birth_date:
       lines.append("1 BIRT")
@@ -216,3 +267,21 @@ class GedcomExporter:
 
     lines.append("0 TRLR")
     return "\n".join(lines)
+
+
+genealogy_caches: set[str] = set()
+
+
+def register_genealogy_cache(cache_name: str):
+  global genealogy_caches
+  genealogy_caches.add(cache_name)
+
+
+def clear_genealogy_caches():
+  for cache_name in genealogy_caches:
+    # Try direct delete
+    cache.delete(cache_name)
+    # Try template fragment delete
+    fragment_key = make_template_fragment_key(cache_name)
+    cache.delete(fragment_key)
+    logger.info(f"Cleared cache: {cache_name}")

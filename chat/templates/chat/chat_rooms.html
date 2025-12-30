@@ -114,6 +114,11 @@
 		</div>
 		{%endwith%}
 	{%endfor%}
+	{% if page.num_pages > 1 %}
+		<div class="panel-block">
+			<span class="control">{%paginate page%}</span>
+		</div>
+	{% endif %}
 	</div>
 </div>
 {%if private%}

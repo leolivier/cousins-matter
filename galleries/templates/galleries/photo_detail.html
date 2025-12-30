@@ -49,6 +49,11 @@ $photos_count = {{ photos_count }}
 					{% endautoescape %}
 				</p>
 			</div>
+			{% if page.num_pages > 1 %}
+				<div class="level-item">
+					{%paginate page True %}
+				</div>
+			{% endif %}
 		</div>
 	</div>
 	<div class="container">

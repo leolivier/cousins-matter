@@ -20,4 +20,4 @@
 	</div>
 </div>
 {%include "galleries/photo_fullscreen.html"%}
-
+{% if page.num_pages > 1 %}{%paginate page%}{% endif %}

@@ -131,6 +131,11 @@ var $lastSender = '{{last_sender}}';
 				{%endif%}
 			</div>
 			{%endfor%}
+			{% if page.num_pages > 1 %}
+				<div class="panel-block">
+					<span class="control">{%paginate page%}</span>
+				</div>
+			{% endif %}
 		</div>
 		<div class="panel-block">
 				<div class="field is-grouped is-flex-grow-5">

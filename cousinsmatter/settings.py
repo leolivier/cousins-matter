@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import environ
 import sys
 import os
+import socket
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
@@ -190,6 +191,11 @@ if DEBUG and not TESTING:
     "127.0.0.1",
     "::1",
   ]
+  try:
+    hostname, __un__, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
+  except Exception:
+    pass
 
 ROOT_URLCONF = "cousinsmatter.urls"
 
@@ -240,9 +246,14 @@ DATABASES = {
     "HOST": env.str("POSTGRES_HOST", default="postgres"),
     "PORT": env.int("POSTGRES_PORT", default=5432),
     "NAME": env.str("POSTGRES_DB", default="cousinsmatter"),
-    "CONN_MAX_AGE": 600,  # Keep connections open for 10 minutes
+    "CONN_MAX_AGE": 0,
     "OPTIONS": {
       "connect_timeout": 10,
+      "pool": {
+        "min_size": 2,
+        "max_size": 20,
+        "timeout": 30,
+      },
     },
     "TEST": {"NAME": "test_cousinsmatter"},
   }
@@ -440,7 +451,7 @@ if DEBUG:
 # Django Q2 settings
 Q_CLUSTER = {
   "name": slugify(SITE_NAME),
-  # 'workers': 4,
+  "workers": 2,
   # 'recycle': 500,
   "timeout": 60,
   "max_attempts": 5,
@@ -456,3 +467,5 @@ Q_CLUSTER = {
   },
   "sync": env.bool("Q_SYNC", False),  # set to True in development
 }
+
+GEDCOM_FILE = env.str("GEDCOM_FILE", default="genealogy.ged")

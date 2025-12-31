@@ -1478,3 +1478,45 @@ msgstr "Solo i superutenti possono invitare membri"
 #: members/views/views_registration.py:214
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossibile inviare l'email. Si prega di contattare l'amministratore."
+
+msgid "Notify Death"
+msgstr "Segnala Decesso"
+
+msgid "Notify Death of"
+msgstr "Segnala il decesso di"
+
+msgid "Date of Death"
+msgstr "Data del decesso"
+
+msgid "Message (Optional)"
+msgstr "Messaggio (Opzionale)"
+
+msgid "Any additional information..."
+msgstr "Qualsiasi informazione aggiuntiva..."
+
+msgid "Notify Admin"
+msgstr "Avvisa Amministratore"
+
+msgid "Death Notification"
+msgstr "Notifica di Decesso"
+
+msgid "Reported Date of Death:"
+msgstr "Data del decesso segnalata:"
+
+msgid "Message:"
+msgstr "Messaggio:"
+
+msgid "Manage Member Profile"
+msgstr "Gestisci Profilo Membro"
+
+msgid "Please log in to the administration panel or the member profile to verify and update the status."
+msgstr "Accedi al pannello di amministrazione o al profilo del membro per verificare e aggiornare lo stato."
+
+msgid "Death notification for %(member)s"
+msgstr "Notifica di decesso per %(member)s"
+
+msgid "The administrator has been notified."
+msgstr "L'amministratore è stato avvisato."
+
+msgid "%(sender_name)s has reported the death of %(member_name)s on %(site_name)s."
+msgstr "%(sender_name)s ha segnalato il decesso di %(member_name)s su %(site_name)s."

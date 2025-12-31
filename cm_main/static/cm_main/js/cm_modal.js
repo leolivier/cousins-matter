@@ -35,7 +35,7 @@ function init_modal_form(opener_element) {
       },
       error: on_ajax_error
     });
-  } else {  // direct call to on_init, no data given, on_init must take the data from the page
+  } else if (on_init) {  // direct call to on_init, no data given, on_init must take the data from the page
     window[on_init]();
   }
 }

@@ -1,0 +1,39 @@
+{% load i18n cm_tags %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>{% title _("Death Notification") %}</title>
+		{% inline_css "cm_main/css/email_msg_css.css" %}
+	</head>
+	<body>
+		<div class="container">
+			<div class="red">
+				<h1 class="center" style="padding:2px">
+					{% translate "Death Notification" %}
+				</h1>
+			</div>
+			<p class="mt-2">
+				<strong>
+				{% blocktranslate with sender_name=sender.full_name member_name=member.full_name site_name=site_name trimmed %}
+				{{ sender_name }} has reported the death of {{ member_name }} on {{ site_name }}.
+				{% endblocktranslate %}
+				</strong>
+			</p>
+			<p>
+				<strong>{% translate "Reported Date of Death:" %}</strong> {{ deathdate }}
+			</p>
+			{% if message %}
+			<p>
+				<strong>{% translate "Message:" %}</strong><br>
+				<i>{{ message|linebreaksbr }}</i>
+			</p>
+			{% endif %}
+			<p class="mt-3">
+				{% comment %} We need absolute URL here, but keeping it simple for now. View should probably pass full URL or use build_absolute_uri {% endcomment %}
+                {% translate "Please log in to the administration panel or the member profile to verify and update the status." %}
+			</p>
+		</div>
+	</body>
+</html>

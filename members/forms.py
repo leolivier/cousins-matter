@@ -45,6 +45,11 @@ class MemberFormMixin:
     if isinstance(self, MemberUpdateForm) and self.is_profile_form:
       del self.fields["deathdate"]
 
+    if "birthdate" in self.fields:
+      self.fields["birthdate"].widget = forms.DateInput(attrs={'type': 'date'})
+    if "deathdate" in self.fields:
+      self.fields["deathdate"].widget = forms.DateInput(attrs={'type': 'date'})
+
   def clean_avatar(self):
     avatar = self.cleaned_data["avatar"]
     # print(f"Validating avatar for {self.instance.full_name} in {avatar}")
@@ -133,13 +138,17 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
     exclude = ["password"]
 
   def __init__(self, *args, **kwargs):
-    self.is_profile_form = False
-    if "is_profile" in kwargs:
-      self.is_profile_form = kwargs["is_profile"]
-      del kwargs["is_profile"]
+    self.user = kwargs.pop("user", None)
+    self.is_profile_form = kwargs.pop("is_profile", False)
     super().__init__(*args, **kwargs)
     self.initialize_fields(*args, **kwargs)
     self.init_privacy_field()
+    # restrict deathdate to superusers or managed members
+    if self.user and self.instance.is_active and not self.user.is_superuser:
+      if "deathdate" in self.fields:
+        del self.fields["deathdate"]
+      if "is_dead" in self.fields:
+        del self.fields["is_dead"]
 
 
 class AddressUpdateForm(ModelForm):
@@ -209,3 +218,11 @@ class CSVImportMembersForm(forms.Form):
     widget=forms.FileInput(attrs={"accept": ".csv"}),
   )
   activate_users = forms.BooleanField(label=_("Automatically activate imported users"), required=False)
+
+class NotifyDeathForm(forms.Form):
+  deathdate = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}),
+                              label=_("Date of Death"),
+                              required=True)
+  message = forms.CharField(widget=forms.Textarea(attrs={"rows": 4, "cols": 50, "placeholder": _("Any additional information...")}),
+                            label=_("Message (Optional)"),
+                            required=False)

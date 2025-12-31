@@ -1466,3 +1466,45 @@ msgstr "Somente os superusuários podem convidar membros."
 msgid "Unable to send mail, please contact your administrator"
 msgstr ""
 "Impossível enviar e-mail, por favor entre em contato com seu administrador."
+
+msgid "Notify Death"
+msgstr "Notificar Falecimento"
+
+msgid "Notify Death of"
+msgstr "Notificar o falecimento de"
+
+msgid "Date of Death"
+msgstr "Data de falecimento"
+
+msgid "Message (Optional)"
+msgstr "Mensagem (Opcional)"
+
+msgid "Any additional information..."
+msgstr "Qualquer informação adicional..."
+
+msgid "Notify Admin"
+msgstr "Notificar Administrador"
+
+msgid "Death Notification"
+msgstr "Notificação de Falecimento"
+
+msgid "Reported Date of Death:"
+msgstr "Data de falecimento reportada:"
+
+msgid "Message:"
+msgstr "Mensagem:"
+
+msgid "Manage Member Profile"
+msgstr "Gerenciar Perfil de Membro"
+
+msgid "Please log in to the administration panel or the member profile to verify and update the status."
+msgstr "Por favor, faça login no painel de administração ou no perfil do membro para verificar e atualizar o status."
+
+msgid "Death notification for %(member)s"
+msgstr "Notificação de falecimento para %(member)s"
+
+msgid "The administrator has been notified."
+msgstr "O administrador foi notificado."
+
+msgid "%(sender_name)s has reported the death of %(member_name)s on %(site_name)s."
+msgstr "%(sender_name)s relatou o falecimento de %(member_name)s em %(site_name)s."

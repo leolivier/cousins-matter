@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
+from django_htmx.http import HttpResponseClientRefresh
 from cm_main.utils import (
   PageOutOfBounds,
   Paginator,
@@ -297,6 +298,10 @@ def notify_death(request, pk):
   member = get_object_or_404(Member, pk=pk)
   if request.method == "POST":
     deathdate = request.POST.get("deathdate")
+    if not deathdate:
+      messages.error(request, _("Please provide a death date."))
+      return HttpResponseClientRefresh()
+
     message = request.POST.get("message")
 
     # Send email to admins
@@ -334,7 +339,6 @@ def notify_death(request, pk):
       )
 
     messages.success(request, _("The administrator has been notified."))
-    return redirect("members:detail", pk=pk)
+    return HttpResponseClientRefresh()
 
-  # return render(request, 'members/partials/modal-forms.html#notify_death_form', {"member": member})
   return render(request, "members/members/notify_death_form.html", {"member": member})

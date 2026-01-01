@@ -2,9 +2,7 @@
 {% load i18n cm_tags crispy_forms_tags static %}
 {% block title %}{% title _("Member Detail") %} {% endblock %}
 {% block header %}
-	<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 	{%include "cm_main/common/include-bulma-calendar.html" %}
-	{%include "cm_main/common/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
 {%endblock%}
 
 {% block content %}
@@ -97,40 +95,18 @@
 				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=object %}
 			{% endif %}
       {% if not request.user.is_superuser and member.is_active and not member.is_dead %}
-			{% comment %}
-        <a class="button is-danger is-light" href="{% url 'members:notify_death' member.id %}">
-          {%icon "deceased" %}
-          <span>{% translate "Notify Death" %}</span>
-        </a>
-			{% endcomment %}
-				<button type="button" id="js-modal-notify-death"
-					class="button js-modal-trigger is-danger is-light"
-					title="{% trans "Notify Death" %}"
-					data-target="notify-death-modal"
-					data-action="{% url 'members:notify_death' member.id%}"
-					data-title="{% trans 'Notify Death of' %} {{ member.full_name }}"
-					data-form='{{notify_death_form|crispy}}'
-					data-warning-msg="{% trans 'This will send a notification to the administrator of this site.' %}"
-					data-kind="send"
-				>
-					{%icon "deceased" %}
-					<span class="ml-2">{% trans "Notify Death" %}</span>
-				</button>
-				{% comment %}
 				<button hx-get="{% url 'members:notify_death' member.id%}"
-					hx-target="#notify-death-modal2"
+					hx-target="#notify-death-modal"
 					hx-swap="innerHTML"
 					class="button is-danger is-light"
-					title="{% trans "Notify Death" %}">
+					title="{% trans 'Notify Death' %}">
 					{%icon "deceased" %}
-					<span class="ml-2">{% trans "Notify Death" %}</span>
+					<span class="ml-2">{% trans 'Notify Death' %}</span>
 				</button>
-				{% endcomment %}
       {% endif %}
 		</div>
 	</div>
 </div>
 {%endwith%}
-{% include "cm_main/common/modal_form.html" with modal_id="notify-death-modal"%}
-{# <div id="notify-death-modal2"></div> #}
+<div id="notify-death-modal"></div>
 {% endblock %}

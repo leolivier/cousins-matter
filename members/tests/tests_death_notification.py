@@ -32,9 +32,8 @@ class DeathNotificationTests(MemberTestCase):
 
     # POST request
     response = self.client.post(url, {"deathdate": "2023-01-01", "message": "Passed away peacefully."}, follow=True)
-
-    self.assertRedirects(response, reverse("members:detail", args=[self.other_member.id]))
-    self.assertContainsMessage(response, "success", _("The administrator has been notified."))
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "members/email/notify_death_email.html")
 
     # Check email
     self.assertEqual(len(mail.outbox), 1)
@@ -49,11 +48,11 @@ class DeathNotificationTests(MemberTestCase):
   def test_notify_death_button_visibility(self):
     # self.member is logged in
     response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
-    self.assertContains(response, 'data-action="/members/' + str(self.other_member.id) + '/notify-death"')
+    self.assertContains(response, 'hx-get="/members/' + str(self.other_member.id) + '/notify-death"')
 
     self.client.login(username=self.superuser.username, password=self.superuser.password)
     response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
-    self.assertNotContains(response, 'data-action="/members/' + str(self.other_member.id) + '/notify-death"')
+    self.assertNotContains(response, 'hx-get="/members/' + str(self.other_member.id) + '/notify-death"')
 
   def test_notify_death_button_hidden_if_already_dead(self):
     from datetime import date
@@ -62,4 +61,4 @@ class DeathNotificationTests(MemberTestCase):
     self.other_member.save()
     # self.member is logged in
     response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
-    self.assertNotContains(response, 'data-action="/members/' + str(self.other_member.id) + '/notify-death"')
+    self.assertNotContains(response, 'hx-get="/members/' + str(self.other_member.id) + '/notify-death"')

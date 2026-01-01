@@ -253,3 +253,12 @@ function confirm_and_redirect(message, action_url) {
 			window.location.replace(action_url);
 	}
 }
+
+$(document).on('htmx:afterOnLoad', () => {
+	 // Add a click event on various modal child elements to close the parent modal
+  $('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button').
+    not('.keep-open-on-click').
+    on('click', function(el) {
+      $(this).closest('.modal').removeClass('is-active'); // close the parent modal
+  });
+});

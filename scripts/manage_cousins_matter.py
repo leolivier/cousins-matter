@@ -304,7 +304,7 @@ def rotate_secrets(args: argparse.Namespace | None = None) -> int:
   SEC_REGEX = get_regex("SECRET_KEY")
   PREV_REGEX = get_regex("PREVIOUS_SECRET_KEYS")
   # Allowed characters for SECRET_KEY
-  SECRET_KEY_ALLOWED_CHARS = string.ascii_letters + string.digits + "!@#$%^*()_-+{}[]:;<>?."
+  SECRET_KEY_ALLOWED_CHARS = string.ascii_letters + string.digits + "!@#$%^*()_-+{}[]:?."
 
   # Load .env
   env = read_env()

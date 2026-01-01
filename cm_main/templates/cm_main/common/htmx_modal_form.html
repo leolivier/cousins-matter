@@ -1,0 +1,43 @@
+{% load i18n %}
+<div class="modal is-active" _="on click close me">
+	<div class="modal-background"></div>
+	<div class="modal-card"_="on click halt the event">
+		<header class="modal-card-head">
+			<p class="modal-card-title">
+				{%block modal_title%}Modal title{%endblock%}
+			</p>
+			<button class="delete" aria-label="close"></button>
+		</header>
+		<form {%block form_params%}hx-get="#"{%endblock%}>
+			{% csrf_token %}
+			<section class="modal-card-body">
+				{%block user_warning%}{%endblock%}
+				{%if update_warning%}
+				<div class="notification is-warning is-update-warning">
+					{%trans "WARNING: This item will be modified for all other members using it! Please create a new one if that's not what you want to achieve." %}
+				</div>
+				{%endif%}
+				{%if create_warning%}
+				<div class="notification is-warning is-create-warning">
+					{%trans "Before creating a new item, please make sure it doesn't already exist!" %}
+				</div>
+				{%endif%}
+				{%if delete_warning%}
+				<div class="notification is-warning is-delete-warning">
+					{%trans "Warning, this will delete the item!" %}
+				</div>
+				{%endif%}
+				{%block form%}{%endblock%}
+			</section>
+
+			<footer class="modal-card-foot">
+				<div class="buttons mx-auto">
+					<button type="submit" class="button is-danger">
+						{% block submit_button_text %}{%trans "Submit" %}{% endblock %}
+					</button>
+					<button type="button" class="button is-light" _="on click remove me">{% trans "Cancel" %}</button>
+				</div>
+			</footer>
+		</form>
+	</div>
+</div>

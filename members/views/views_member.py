@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
+from django_htmx.http import HttpResponseClientRefresh
 from cm_main.utils import (
   PageOutOfBounds,
   Paginator,
@@ -18,7 +19,7 @@ from cm_main.utils import (
 )
 from verify_email.email_handler import send_verification_email
 from ..models import Family, Member
-from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm
+from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm, NotifyDeathForm
 
 logger = logging.getLogger(__name__)
 
@@ -99,6 +100,7 @@ class MemberDetailView(LoginRequiredMixin, generic.DetailView):
       "can_edit": editable(self.request, member),
       "member_manager_name": member.member_manager.username if member.member_manager else None,
       "hobbies_list": [s.strip() for s in member.hobbies.split(",")] if member.hobbies else [],
+      "notify_death_form": NotifyDeathForm(),
     }
 
   def get_absolute_url(self):
@@ -183,7 +185,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
       request,
       self.template_name,
       {
-        "form": MemberUpdateForm(instance=member, is_profile=self.is_profile_view),
+        "form": MemberUpdateForm(instance=member, is_profile=self.is_profile_view, user=request.user),
         "addr_form": AddressUpdateForm(),
         "family_form": FamilyUpdateForm(),
         "pk": pk,
@@ -204,6 +206,7 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
       request.FILES,
       instance=member,
       is_profile=self.is_profile_view,
+      user=request.user,
     )
 
     if form.is_valid():
@@ -288,3 +291,54 @@ def search_members(request):
   ).distinct()[:12]  # Limited to 12 results
   data = [{"id": m.id, "text": m.full_name} for m in members]
   return JsonResponse({"results": data})
+
+
+@login_required
+def notify_death(request, pk):
+  member = get_object_or_404(Member, pk=pk)
+  if request.method == "POST":
+    deathdate = request.POST.get("deathdate")
+    if not deathdate:
+      messages.error(request, _("Please provide a death date."))
+      return HttpResponseClientRefresh()
+
+    message = request.POST.get("message")
+
+    # Send email to admins
+    admins = Member.objects.filter(is_superuser=True)
+    emails = [admin.email for admin in admins if admin.email]
+
+    if emails:
+      from django.core.mail import send_mail
+      from django.template.loader import render_to_string
+
+      subject = _("Death notification for %(member)s") % {"member": member.full_name}
+      email_context = {
+        "member": member,
+        "sender": request.user,
+        "deathdate": deathdate,
+        "message": message,
+        "site_name": settings.SITE_NAME,
+      }
+
+      html_message = render_to_string("members/email/notify_death_email.html", email_context)
+      plain_message = render_to_string(
+        "members/email/notify_death_email.html", email_context
+      )  # simplify for now, or strip tags
+
+      from django.utils.html import strip_tags
+
+      plain_message = strip_tags(html_message)
+
+      send_mail(
+        subject,
+        plain_message,
+        settings.DEFAULT_FROM_EMAIL,
+        emails,
+        html_message=html_message,
+      )
+
+    messages.success(request, _("The administrator has been notified."))
+    return HttpResponseClientRefresh()
+
+  return render(request, "members/members/notify_death_form.html", {"member": member})

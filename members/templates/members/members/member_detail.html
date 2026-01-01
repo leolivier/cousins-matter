@@ -1,6 +1,10 @@
 {% extends "members/base_members.html" %}
-{% load i18n cm_tags %}
+{% load i18n cm_tags crispy_forms_tags static %}
 {% block title %}{% title _("Member Detail") %} {% endblock %}
+{% block header %}
+	{%include "cm_main/common/include-bulma-calendar.html" %}
+{%endblock%}
+
 {% block content %}
 {%with member=object %}
 <div class="container">
@@ -71,7 +75,6 @@
 					<td class="content">{{ member.deathdate }}</td>
 				</tr>
 				{%endif%}
-				
 			</table>
 		</div>
 		<div class="card-footer buttons is-centered">
@@ -91,8 +94,19 @@
 				{%url 'members:toggle_follow' member.id as toggle_follow_url %}
 				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=object %}
 			{% endif %}
+      {% if not request.user.is_superuser and member.is_active and not member.is_dead %}
+				<button hx-get="{% url 'members:notify_death' member.id%}"
+					hx-target="#notify-death-modal"
+					hx-swap="innerHTML"
+					class="button is-danger is-light"
+					title="{% trans 'Notify Death' %}">
+					{%icon "deceased" %}
+					<span class="ml-2">{% trans 'Notify Death' %}</span>
+				</button>
+      {% endif %}
 		</div>
 	</div>
 </div>
 {%endwith%}
+<div id="notify-death-modal"></div>
 {% endblock %}

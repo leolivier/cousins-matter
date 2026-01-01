@@ -1,0 +1,25 @@
+{%extends "cm_main/common/htmx_modal_form.html" %}
+{%load i18n %}
+{% block modal_title %}
+	{% trans "Notify Death of" %} {{ member.full_name }}
+{% endblock modal_title %}
+{%block form_params %}
+	hx-post="{% url 'members:notify_death' member.id %}"
+{%endblock form_params %}
+{% block form %}
+		<div class="field">
+			<label class="label">{% trans "Date of Death" %}*</label>
+			<div class="control">
+				<input class="input dateinput" type="date" name="deathdate">
+			</div>
+		</div>
+		<div class="field">
+			<label class="label">{% trans "Message (Optional)" %}</label>
+			<div class="control">
+				<textarea class="textarea" name="message" placeholder="{% trans 'Any additional information...' %}"></textarea>
+			</div>
+		</div>
+{% endblock form %}
+{% block submit_button_text %}
+	{%trans "Notify Admin" %}
+{% endblock submit_button_text %}

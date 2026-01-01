@@ -9,7 +9,6 @@ from django.utils.formats import localize  # , date_format
 from django.utils import timezone
 from django.utils.translation import gettext as _, get_language
 
-from cm_main.followers import check_followers
 from cm_main.utils import get_test_absolute_url
 from .models import ChatMessage, ChatRoom
 from members.models import Member

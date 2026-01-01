@@ -30,3 +30,8 @@ $(document).ready(()=>{
 	// });
 });
 
+$(document).on('htmx:afterOnLoad', () => {
+	bulmaCalendar.attach('[class~="dateinput"]', {'type': "date", ...options}),
+	bulmaCalendar.attach('[class~="datetimeinput"]', {'type': "datetime", ...options})
+});
+

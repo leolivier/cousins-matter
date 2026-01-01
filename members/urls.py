@@ -31,6 +31,7 @@ urlpatterns = [
   path("<int:pk>/", views_member.MemberDetailView.as_view(), name="detail"),
   path("<int:pk>/edit", views_member.EditMemberView.as_view(), name="member_edit"),
   path("<int:pk>/delete", views_member.delete_member, name="delete"),
+  path("<int:pk>/notify-death", views_member.notify_death, name="notify_death"),
   path("<int:pk>/toggle-follow", views_followers.toggle_follow, name="toggle_follow"),
   path("create/", views_member.CreateManagedMemberView.as_view(), name="create"),
   path("profile/", views_member.EditProfileView.as_view(), name="profile"),

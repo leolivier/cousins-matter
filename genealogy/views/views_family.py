@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from cm_main.utils import PageOutOfBounds, Paginator
 from ..models import Family
 from ..forms import FamilyForm
-from ..utils import clear_genealogy_caches, register_genealogy_cache
+from ..utils import clear_genealogy_caches
 
 
 @login_required

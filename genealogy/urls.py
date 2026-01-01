@@ -1,5 +1,4 @@
 from django.urls import path
-from django.views.decorators.cache import cache_page
 from .views import views_family_chart, views_family, views_person, views_dashboard_stats, views_gedcom
 
 app_name = "genealogy"

@@ -13,7 +13,7 @@ from django.db.models import ObjectDoesNotExist
 from django.forms import ValidationError
 from django_htmx.http import HttpResponseClientRefresh
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.views import generic

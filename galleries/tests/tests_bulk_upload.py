@@ -1,6 +1,5 @@
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.utils.translation import gettext as _
 from cm_main.tests.test_django_q import django_q_sync_class
 from cm_main.utils import test_resource_full_path
 from django_htmx.http import HttpResponseClientRefresh

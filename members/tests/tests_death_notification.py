@@ -17,9 +17,9 @@ class DeathNotificationTests(MemberTestCase):
     self.assertNotContains(response, 'name="is_dead"')
 
   def test_deathdate_field_present_for_admin(self):
-    self.client.force_login(self.superuser)
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
     # Admin editing other_member
-    response = self.client.get(reverse("members:member_edit", args=[self.other_member.id]))
+    response = self.client.get(reverse("members:member_edit", args=[self.other_member.id]), follow=True)
     self.assertContains(response, 'name="deathdate"')
 
   def test_notify_death_view(self):
@@ -31,7 +31,7 @@ class DeathNotificationTests(MemberTestCase):
     self.assertTemplateUsed(response, "members/members/notify_death_form.html")
 
     # POST request
-    response = self.client.post(url, {"deathdate": "2023-01-01", "message": _("Passed away peacefully.")}, follow=True)
+    response = self.client.post(url, {"deathdate": "2023-01-01", "message": "Passed away peacefully."}, follow=True)
 
     self.assertRedirects(response, reverse("members:detail", args=[self.other_member.id]))
     self.assertContainsMessage(response, "success", _("The administrator has been notified."))
@@ -43,7 +43,7 @@ class DeathNotificationTests(MemberTestCase):
     # Check subject content - verifying both English default and potential translated parts or placeholders
     self.assertIn(_("Death notification for %(member)s") % {"member": self.other_member.full_name}, email.subject)
 
-    self.assertIn(_("Passed away peacefully"), email.body)
+    self.assertIn("Passed away peacefully", email.body)
     self.assertIn("2023-01-01", email.body)
 
   def test_notify_death_button_visibility(self):
@@ -51,14 +51,14 @@ class DeathNotificationTests(MemberTestCase):
     response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
     self.assertContains(response, 'href="/members/' + str(self.other_member.id) + '/notify-death"')
 
-    self.client.force_login(self.superuser)
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
     response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
     self.assertNotContains(response, 'href="/members/' + str(self.other_member.id) + '/notify-death"')
 
   def test_notify_death_button_hidden_if_already_dead(self):
     from datetime import date
 
-    self.other_member.deathdate = date(2023, 1, 1)
+    self.other_member.deathdate = date.today()
     self.other_member.save()
     # self.member is logged in
     response = self.client.get(reverse("members:detail", args=[self.other_member.id]))

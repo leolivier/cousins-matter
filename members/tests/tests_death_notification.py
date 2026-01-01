@@ -49,11 +49,11 @@ class DeathNotificationTests(MemberTestCase):
   def test_notify_death_button_visibility(self):
     # self.member is logged in
     response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
-    self.assertContains(response, 'href="/members/' + str(self.other_member.id) + '/notify-death"')
+    self.assertContains(response, 'data-action="/members/' + str(self.other_member.id) + '/notify-death"')
 
     self.client.login(username=self.superuser.username, password=self.superuser.password)
     response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
-    self.assertNotContains(response, 'href="/members/' + str(self.other_member.id) + '/notify-death"')
+    self.assertNotContains(response, 'data-action="/members/' + str(self.other_member.id) + '/notify-death"')
 
   def test_notify_death_button_hidden_if_already_dead(self):
     from datetime import date
@@ -62,4 +62,4 @@ class DeathNotificationTests(MemberTestCase):
     self.other_member.save()
     # self.member is logged in
     response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
-    self.assertNotContains(response, 'href="/members/' + str(self.other_member.id) + '/notify-death"')
+    self.assertNotContains(response, 'data-action="/members/' + str(self.other_member.id) + '/notify-death"')

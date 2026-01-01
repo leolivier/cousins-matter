@@ -46,9 +46,9 @@ class MemberFormMixin:
       del self.fields["deathdate"]
 
     if "birthdate" in self.fields:
-      self.fields["birthdate"].widget = forms.DateInput(attrs={'type': 'date'})
+      self.fields["birthdate"].widget = forms.DateInput(attrs={"type": "date"})
     if "deathdate" in self.fields:
-      self.fields["deathdate"].widget = forms.DateInput(attrs={'type': 'date'})
+      self.fields["deathdate"].widget = forms.DateInput(attrs={"type": "date"})
 
   def clean_avatar(self):
     avatar = self.cleaned_data["avatar"]
@@ -219,10 +219,11 @@ class CSVImportMembersForm(forms.Form):
   )
   activate_users = forms.BooleanField(label=_("Automatically activate imported users"), required=False)
 
+
 class NotifyDeathForm(forms.Form):
-  deathdate = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}),
-                              label=_("Date of Death"),
-                              required=True)
-  message = forms.CharField(widget=forms.Textarea(attrs={"rows": 4, "cols": 50, "placeholder": _("Any additional information...")}),
-                            label=_("Message (Optional)"),
-                            required=False)
+  deathdate = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}), label=_("Date of Death"), required=True)
+  message = forms.CharField(
+    widget=forms.Textarea(attrs={"rows": 4, "cols": 50, "placeholder": _("Any additional information...")}),
+    label=_("Message (Optional)"),
+    required=False,
+  )

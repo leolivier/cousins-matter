@@ -137,7 +137,7 @@ msgstr ""
 #: cm_main/templates/cm_main/common/confirm-delete-modal.html:32
 #, python-format
 msgid "Enter %(expected_value)s in the field below before pressing confirm"
-msgstr "Saisis %(expected_value)s dans le champ ci-dessous avant de confirmer."
+msgstr "Saisis %(expected_value)s dans le champ ci-dessous avant de confirmer"
 
 #: cm_main/templates/cm_main/common/include-summernote.html:12
 msgid "Toggle Note Editor Toolbar"

@@ -1,14 +1,10 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from cm_main.utils import assert_request_is_ajax
-from ..models import EventPlanner, Poll, Question
+from ..models import EventPlanner, Poll
 
 
 class PollsListView(LoginRequiredMixin, generic.ListView):
@@ -43,6 +39,8 @@ class PollsListView(LoginRequiredMixin, generic.ListView):
       filter &= Q(close_date__gte=timezone.now()) | Q(close_date__isnull=True)
     if self.only_closed:
       filter &= Q(close_date__lte=timezone.now())
+    if self.model == Poll:  # Exclude EventPlanners
+      filter &= Q(eventplanner__isnull=True)
     query_set = self.model.objects.filter(filter).order_by(self.ordering)
     result = query_set[: (self.show_last or 250)]
     # print(filter, result, self.__dict__)
@@ -121,22 +119,3 @@ class EventPlannerDetailView(PollDetailView):
   "View for displaying an EventPlanner, its Questions and the already given Answers."
 
   model = EventPlanner
-
-
-@login_required
-def get_question(request, pk):
-  # print("get_question", pk)
-  assert_request_is_ajax(request)
-  if request.method != "GET":
-    return JsonResponse({"error": "Only GET method is allowed"}, status=405)
-  question = get_object_or_404(Question, pk=pk)
-  # print("returning question", question.question_text)
-  return JsonResponse(
-    {
-      "question_id": question.id,
-      "question_text": question.question_text,
-      "question_type": question.question_type,
-      "possible_choices": "\n".join(question.possible_choices),
-    },
-    status=200,
-  )

@@ -19,11 +19,10 @@ urlpatterns = [
     name="add_question",
   ),
   path(
-    "<int:poll_id>/question/<int:pk>/update/",
+    "question/<int:pk>/update/",
     upsert_views.QuestionUpdateView.as_view(),
     name="update_question",
   ),
-  path("question/<int:pk>/", display_views.get_question, name="question_detail"),
   path(
     "question/<int:pk>/delete/",
     upsert_views.QuestionDeleteView.as_view(),

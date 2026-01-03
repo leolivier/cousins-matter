@@ -138,7 +138,7 @@ msgstr ""
 #, python-format
 msgid "Enter %(expected_value)s in the field below before pressing confirm"
 msgstr ""
-"Saisí %(expected_value)s en el campo debajo antes de presionar confirmar."
+"Saisí %(expected_value)s en el campo debajo antes de presionar confirmar"
 
 #: cm_main/templates/cm_main/common/include-summernote.html:12
 msgid "Toggle Note Editor Toolbar"

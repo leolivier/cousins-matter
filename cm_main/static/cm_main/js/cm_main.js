@@ -254,11 +254,29 @@ function confirm_and_redirect(message, action_url) {
 	}
 }
 
-$(document).on('htmx:afterOnLoad', () => {
+$(document).on('htmx:load', () => {
 	 // Add a click event on various modal child elements to close the parent modal
   $('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button').
     not('.keep-open-on-click').
     on('click', function(el) {
       $(this).closest('.modal').removeClass('is-active'); // close the parent modal
   });
+  $('.confirmation_check').trigger('keyup');
+});
+
+$(document).on('keyup', '.confirmation_check', function(event) {
+  expected_value = $(this).data('expected-value');
+  form=$(this).parents('form');
+  submit=form.find('.modal-card-foot button[type="submit"]');
+  not_possible = form.find("#deletion_not_possible");
+  possible = form.find("#deletion_possible");
+  if ( event.target.value == expected_value ) {
+    submit.prop('disabled', false);
+    possible.removeClass('is-hidden');
+    not_possible.addClass('is-hidden');
+  } else {
+    submit.prop('disabled', true);
+    possible.addClass('is-hidden');
+    not_possible.removeClass('is-hidden');
+  }
 });

@@ -1,0 +1,98 @@
+{%extends "cm_main/common/htmx_modal_form.html"%}
+{%comment%}
+This is a generic delete modal form and triggering button based on htmx.
+The delete button is shown where the partial template is included and displays {{button_text}} as text
+and has the class {{button_class}}. It "hx-get"s the modal form through the {{delete_url}}.
+{{button_text}} default is "Delete" and {{button_class}} default is "is-danger".
+Pass button_text="" if you don't want a button text to be displayed.
+
+The dialog box shows an {{ays_title}} and an {{ays_msg}}. (ays=are you sure).
+If {{expected_value}} is provided, the user must fill an input text with the given {{expected_value}} before being able to confirm.
+In case of confirmation, {{delete_url}} is triggered.
+Example:
+where the button should be displayed:
+{%with button_text="" delete_url="..." %}
+{% partial "cm_main/common/confirm-delete-modal-htmx#show_delete_button" %}
+{%endwith%}
+And in the delete_url view:
+@login_required
+def delete_my_item(request, pk):
+  model = MyItem
+  item = get_object_or_404(self.model, pk=pk)
+	if request.method == 'POST'
+    item.delete()
+    return HttpResponseClientRefresh()
+  return render(request, "cm_main/common/confirm-delete-modal-htmx.html", {
+    "ays_title": _("Delete Item"),
+    "ays_msg": _("Are you sure you want to delete the item \"%(title)s\"?") % {"title": item.title},
+    "delete_url": request.get_full_path(),
+    "expected_value": "item.title",
+    })
+{%endcomment%}
+{% load i18n cm_tags%}
+
+{% block modal_title %}{{ays_title}}{% endblock modal_title %}
+
+{%block form_params %}
+	hx-post="{{delete_url}}"
+{%endblock form_params %}
+{% block user_warning %}
+<div class="notification is-warning is-update-warning">
+	{%autoescape off%}{{ays_msg|force_escape}}{%endautoescape%}
+</div>
+{% endblock user_warning %}
+
+{# hard confirmation: add a field to be filled by the user to confirm #}
+{% block form %}
+{% if expected_value %}
+	{%trans 'Mandatory. Deletion will not be possible until the correct value is entered.' as deletion_deletion_not_possible%}
+	{%trans 'Deletion possible...' as deletion_deletion_possible%}
+	{%with expected_value|escape as escaped_expected_value %}
+	{%with red_expected_value='<span class="has-text-danger">'|add:escaped_expected_value|add:'</span>' %}
+		{%blocktranslate asvar warning_expected_value trimmed%}
+		Enter {{red_expected_value}} in the field below before pressing confirm
+		{%endblocktranslate%}
+	<div class="field">
+		<label class="label">{{warning_expected_value}}:</label>
+		<div class="control">
+			<input type="text" class="input confirmation_check" name="confirmation_check"
+				value="" required="" aria-describedby="deletion_confirmation_helptext"
+				data-expected-value="{{expected_value}}"
+				placeholder="{{expected_value}}"
+			>
+		</div>
+		<span id="confirmation_validation_span" class="has-text-danger"></span>
+		<p id="deletion_not_possible" class="help">{{deletion_deletion_not_possible|escape}}</p>
+		<p id="deletion_possible" class="help is-hidden">{{deletion_deletion_possible|escape}}</p>
+	</div>
+	{%endwith%}{%endwith%}
+{%endif%}
+{% endblock form %}
+
+{% block submit_button_text %}
+	{%trans "Delete" %}
+{% endblock submit_button_text %}
+
+{% block submit_button_class %}
+	is-danger
+{% endblock submit_button_class %}
+
+{% block submit_button_icon %}
+	{%icon "delete" %}
+{% endblock submit_button_icon %}
+
+{%partialdef show_delete_button %}
+<button hx-get="{{delete_url}}"
+	type="button"
+	hx-target="#modal"
+	hx-swap="innerHTML"
+	class="button {{button_class|default:'is-danger'}}"
+	title="{% trans 'Delete' %}">
+	{%icon "delete" %}
+	{%if button_text is None %}
+		<span class="ml-2">{%trans "Delete"%}</span>
+	{%elif button_text != ''%}
+		<span class="ml-2">{{button_text}}</span>
+	{%endif%}
+</button>
+{%endpartialdef show_delete_button%}

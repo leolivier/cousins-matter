@@ -1,0 +1,35 @@
+{%extends "cm_main/common/htmx_modal_form.html" %}
+{%load i18n crispy_forms_tags cm_tags %}
+{% with question_id=form.instance.pk %}
+{% block modal_title %}
+{%if question_id%}
+	{% trans "Update Question" %}
+{%else%}
+	{% trans "New Question" %}
+{%endif%}
+{% endblock modal_title %}
+{%block form_params %}
+{%if question_id%}
+	hx-post="{% url 'polls:update_question' question_id %}"
+{%elif poll_id%}
+	hx-post="{% url 'polls:add_question' poll_id %}"
+{%endif%}
+{%endblock form_params %}
+{% block form %}
+{{form|crispy}}
+{% endblock form %}
+{% block submit_button_text %}
+	{%if question_id%}
+		{%trans "Update" %}
+	{%else%}
+		{%trans "Create" %}
+	{%endif%}
+{% endblock submit_button_text %}
+{% block submit_button_icon %}
+	{%if question_id%}
+		{%icon "update" %}
+	{%else%}
+		{%icon "new" %}
+	{%endif%}
+{% endblock submit_button_icon %}
+{% endwith %}

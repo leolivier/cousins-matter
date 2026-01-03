@@ -176,9 +176,7 @@ class QuestionUpsertTest(PollTestMixin):
     response = self.client.post(
       reverse(
         "polls:update_question",
-        args=(
-          question.id,
-        ),
+        args=(question.id,),
       ),
       {
         "question_text": "Updated YN question",
@@ -203,9 +201,7 @@ class QuestionUpsertTest(PollTestMixin):
     response = self.client.post(
       reverse(
         "polls:update_question",
-        args=(
-          question.id,
-        ),
+        args=(question.id,),
       ),
       {
         "question_text": "Updated SC question",
@@ -232,9 +228,7 @@ class QuestionUpsertTest(PollTestMixin):
     response = self.client.post(
       reverse(
         "polls:update_question",
-        args=(
-          question.id,
-        ),
+        args=(question.id,),
       ),
       {
         "question_text": "Updated MC question",
@@ -260,9 +254,7 @@ class QuestionUpsertTest(PollTestMixin):
     response = self.client.post(
       reverse(
         "polls:update_question",
-        args=(
-          question.id,
-        ),
+        args=(question.id,),
       ),
       {
         "question_text": "Updated DT question",
@@ -286,9 +278,7 @@ class QuestionUpsertTest(PollTestMixin):
     response = self.client.post(
       reverse(
         "polls:update_question",
-        args=(
-          question.id,
-        ),
+        args=(question.id,),
       ),
       {
         "question_text": "Updated OT question",
@@ -317,9 +307,7 @@ class QuestionUpsertTest(PollTestMixin):
     response = self.client.post(
       reverse(
         "polls:update_question",
-        args=(
-          question.id,
-        ),
+        args=(question.id,),
       ),
       {
         "question_text": "Updated MC2DT question",
@@ -343,9 +331,7 @@ class QuestionUpsertTest(PollTestMixin):
     response = self.client.post(
       reverse(
         "polls:update_question",
-        args=(
-          question.id,
-        ),
+        args=(question.id,),
       ),
       {
         "question_text": "Updated YN2MC question",

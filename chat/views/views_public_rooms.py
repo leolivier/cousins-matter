@@ -1,10 +1,13 @@
 import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.utils.translation import gettext as _
+from django_htmx.http import HttpResponseClientRedirect
 from ..models import ChatRoom
 from .views_room_common import display_chat_room, list_chat_rooms, create_chat_room
 from cm_main import followers
@@ -51,7 +54,20 @@ def edit_room(request, room_slug):
 @login_required
 def delete_room(request, room_slug):
   room = get_object_or_404(ChatRoom, slug=room_slug)
-  check_edit_permission(request, room.owner())
-  room.delete()
-  messages.success(request, f"Chat room {room.name} deleted")
-  return redirect("chat:chat_rooms")
+  if request.method == "POST":
+    check_edit_permission(request, room.owner())
+    room.delete()
+    messages.success(request, f"Chat room {room.name} deleted")
+    return HttpResponseClientRedirect(reverse("chat:chat_rooms"))
+  else:
+    return render(
+      request,
+      "cm_main/common/confirm-delete-modal-htmx.html",
+      {
+        "ays_title": _("Room deletion"),
+        "ays_msg": _('Are you sure you want to delete the room "%(room_name)s" and all its messages?')
+        % {"room_name": room.name},
+        "delete_url": request.get_full_path(),
+        # "expected_value": room.name,
+      },
+    )

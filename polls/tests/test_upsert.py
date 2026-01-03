@@ -177,7 +177,6 @@ class QuestionUpsertTest(PollTestMixin):
       reverse(
         "polls:update_question",
         args=(
-          poll.id,
           question.id,
         ),
       ),
@@ -205,7 +204,6 @@ class QuestionUpsertTest(PollTestMixin):
       reverse(
         "polls:update_question",
         args=(
-          poll.id,
           question.id,
         ),
       ),
@@ -235,7 +233,6 @@ class QuestionUpsertTest(PollTestMixin):
       reverse(
         "polls:update_question",
         args=(
-          poll.id,
           question.id,
         ),
       ),
@@ -264,7 +261,6 @@ class QuestionUpsertTest(PollTestMixin):
       reverse(
         "polls:update_question",
         args=(
-          poll.id,
           question.id,
         ),
       ),
@@ -291,7 +287,6 @@ class QuestionUpsertTest(PollTestMixin):
       reverse(
         "polls:update_question",
         args=(
-          poll.id,
           question.id,
         ),
       ),
@@ -323,7 +318,6 @@ class QuestionUpsertTest(PollTestMixin):
       reverse(
         "polls:update_question",
         args=(
-          poll.id,
           question.id,
         ),
       ),
@@ -350,7 +344,6 @@ class QuestionUpsertTest(PollTestMixin):
       reverse(
         "polls:update_question",
         args=(
-          poll.id,
           question.id,
         ),
       ),

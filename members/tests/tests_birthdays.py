@@ -88,17 +88,19 @@ class TestBirthdays(TestBirthdaysMixin, MemberTestCase):
     bday = date(2000, 2, 29)
     member = self.get_member_with_bday(bday)
 
-    # Mock today to a non-leap year (e.g., 2026-01-01)
-    import datetime
     from unittest.mock import patch
+    import datetime
 
+    # Mock today to a non-leap year (e.g., 2026-01-01)
     mock_today = datetime.date(2026, 1, 1)
-    with patch("datetime.date.today", return_value=mock_today):
+    with patch("members.models.datetime.date", wraps=datetime.date) as mock_date:
+      mock_date.today.return_value = mock_today
       # Should return Feb 28th of 2026
       self.assertEqual(member.next_birthday, datetime.date(2026, 2, 28))
 
     # Mock today to a leap year (e.g., 2024-01-01)
     mock_today = datetime.date(2024, 1, 1)
-    with patch("datetime.date.today", return_value=mock_today):
+    with patch("members.models.datetime.date", wraps=datetime.date) as mock_date:
+      mock_date.today.return_value = mock_today
       # Should return Feb 29th of 2024
       self.assertEqual(member.next_birthday, datetime.date(2024, 2, 29))

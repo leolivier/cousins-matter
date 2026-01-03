@@ -202,7 +202,11 @@ class Member(AbstractUser):
     if self.birthdate:
       if today.month > self.birthdate.month or (today.month == self.birthdate.month and today.day > self.birthdate.day):
         year += 1
-      return self.birthdate.replace(year=year)
+      try:
+        return self.birthdate.replace(year=year)
+      except ValueError:
+        # Fallback for Feb 29th in non-leap years
+        return self.birthdate.replace(year=year, month=2, day=28)
     return datetime.date(2999, 1, 1)
 
   @property

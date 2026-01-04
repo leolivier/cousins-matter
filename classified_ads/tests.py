@@ -285,14 +285,22 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
         response,
         f"""
         <div
-          class="cell has-text-centered photo-item"
+          class="cell has-text-centered photo-div"
           id="photo-{photo.id}"
-          data-pk="{photo.id}"
-          data-fullscreen="{protected_media_url(photo.image.name)}"
         >
-          <figure class="image thumbnail mx-auto">
+          <figure class="image thumbnail photo-item"
+            data-pk="{photo.id}"
+            data-fullscreen="{protected_media_url(photo.image.name)}"
+          >
             <img src="{protected_media_url(photo.thumbnail.name)}" alt="{_("Photo")}">
           </figure>
+          <button hx-get="{reverse("classified_ads:delete_photo", kwargs={"pk": photo.id})}"
+            type="button"
+            hx-target="#modal"
+            hx-swap="innerHTML"
+            class="button delete delete-photo"
+            title="{_("Delete")}">
+          </button>
         </div>""",
         html=True,
       )

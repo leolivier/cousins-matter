@@ -54,6 +54,8 @@ MEDIA_URL = f"/protected_{MEDIA_REL}/"
 
 PUBLIC_MEDIA_ROOT = MEDIA_ROOT / "public"
 PUBLIC_MEDIA_URL = f"/{MEDIA_REL}/public/"
+if DEBUG:
+  WHITENOISE_MANIFEST_STRICT = False
 
 STORAGES = {
   "staticfiles": {

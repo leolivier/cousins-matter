@@ -9,6 +9,10 @@ Pass button_text="" if you don't want a button text to be displayed.
 The dialog box shows an {{ays_title}} and an {{ays_msg}}. (ays=are you sure).
 If {{expected_value}} is provided, the user must fill an input text with the given {{expected_value}} before being able to confirm.
 In case of confirmation, {{delete_url}} is triggered.
+You can also set {{hx_params}}, e.g. in the delete_url view, pass:
+   "hx_params": f"hx-target=#item-{item.id} hx-swap=delete"
+will remove the item from the page when deleted.
+
 Example:
 where the button should be displayed:
 {%with button_text="" delete_url="..." %}
@@ -27,6 +31,7 @@ def delete_my_item(request, pk):
     "ays_msg": _("Are you sure you want to delete the item \"%(title)s\"?") % {"title": item.title},
     "delete_url": request.get_full_path(),
     "expected_value": "item.title",
+    "hx_params": f"hx-target=#item-{item.id} hx-swap=delete"
     })
 {%endcomment%}
 {% load i18n cm_tags%}
@@ -88,7 +93,11 @@ def delete_my_item(request, pk):
 	hx-swap="innerHTML"
 	class="button {{button_class|default:'is-danger'}}"
 	title="{% trans 'Delete' %}">
-	{%icon "delete" %}
+	{%if button_icon is None %}
+		{%icon "delete" %}
+	{%elif button_icon != ''%}
+		{%icon button_icon %}
+	{%endif%}
 	{%if button_text is None %}
 		<span class="ml-2">{%trans "Delete"%}</span>
 	{%elif button_text != ''%}

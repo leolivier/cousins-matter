@@ -1,0 +1,17 @@
+{%extends "cm_main/common/htmx_modal_form.html" %}
+{%load i18n crispy_forms_tags cm_tags %}
+{% block modal_title %}
+	{% trans "Send a message to the owner of this ad" %}
+{% endblock modal_title %}
+{%block form_params %}
+	hx-post="{% url 'classified_ads:send_message' ad.pk%}"
+{%endblock form_params %}
+{% block form %}
+{{form|crispy}}
+{% endblock form %}
+{% block submit_button_text %}
+	{%trans "Send" %}
+{% endblock submit_button_text %}
+{% block submit_button_icon %}
+	{%icon "send" %}
+{% endblock submit_button_icon %}

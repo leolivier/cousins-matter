@@ -12,4 +12,5 @@ urlpatterns = [
   path("<int:pk>/photo", views.AdPhotoAddView.as_view(), name="add_photo"),
   path("photo/<int:pk>/delete", views.delete_photo, name="delete_photo"),
   path("<int:pk>/send-message", views.send_message, name="send_message"),
+  path("subcategories", views.get_subcategories, name="get_subcategories"),
 ]

@@ -16,62 +16,74 @@
 	maxsize=('{{maxsize}}' == '' ? '{{settings.DATA_UPLOAD_MAX_MEMORY_SIZE}}' : '{{maxsize}}');
 	summernoteMaxSize = parseInt(maxsize);
 	// alert('summernoteMaxSize='+summernoteMaxSize);
-	var summernoteLang = '{{LANGUAGE_CODE}}';
-	$(document).ready(function() {
-	  $('.richtextarea').summernote(
-			{
-				lang: summernoteLang,
+	function init_summernote(container) {
+		$(container).find('.richtextarea').not('.summernote-initialized').each(function() {
+			var $elem = $(this); // the textarea is not the editor, but a masqued textarea
+			var $countDisplay = null;
+			$elem.summernote({
+				lang: '{{LANGUAGE_CODE}}',
 				callbacks: {
-					onKeydown: function (e) { 
-						var t = e.currentTarget.innerText;
-						if (t.length >= summernoteMaxSize) {
-							if (e.keyCode != 8 && !(e.keyCode >=37 && e.keyCode <=40) && e.keyCode != 46 && !(e.keyCode == 88 && e.ctrlKey) && !(e.keyCode == 67 && e.ctrlKey) && !(e.keyCode == 65 && e.ctrlKey))
-								e.preventDefault(); 
-						}  
+					onInit: function () {
+						var remaining = summernoteMaxSize - $elem.summernote('code').length;
+						$elem.addClass('summernote-initialized');
+						$elem.before(`
+<button class="button" id="toggle-note-editor-toolbar" title="{{trtoggle}}">
+	{%icon "menu-open" %}
+</button>
+						`).parent().append(`
+<p class="is-size-6 has-text-right">{{trchar}} <span class="has-text-right"><span class="char-count">${remaining}</span> / ${summernoteMaxSize}</span></p>
+						`);
+						$countDisplay = $elem.parent().find('.char-count');
+						$countDisplay.text(remaining);
+						$elem.parent().find('#toggle-note-editor-toolbar').on('click', function(e) {
+							e.preventDefault();
+							$(this).find('.note-editor > .note-toolbar').toggle(300);
+							$icon = $(this).find('i')
+							$icon.toggleClass('mdi-menu-open').toggleClass('mdi-menu-close');
+						});
 					},
-					onKeyup: function (e) {
+					onKeydown: function (e) { 
 						var t = e.currentTarget.innerHTML;
-						// alert('t.length='+t.length+' summernoteMaxSize='+summernoteMaxSize);
-						$('#maxContentPost').text(summernoteMaxSize - t.length -1);
+						if (t.length >= summernoteMaxSize) {
+							// Allow : Backspace (8), Delete (46), Arrows (37-40), Copy (67), Cut (88)
+							var allowedKeys = [8, 37, 38, 39, 40, 46, 67, 88];
+							if ($.inArray(e.keyCode, allowedKeys) === -1) {
+								// not in allowedKeys, block event
+								e.preventDefault();
+							}
+						}  
 					},
 					onPaste: function (e) {
 						var t = e.currentTarget.innerHTML;
 						var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
 						e.preventDefault();
-						var maxPaste = bufferText.length;
-						if(t.length + bufferText.length > summernoteMaxSize){
-							maxPaste = summernoteMaxSize - t.length;
-						}
+						var remaining = summernoteMaxSize - t.length;
+						var maxPaste = Math.min(bufferText.length, remaining);
 						if(maxPaste > 0){
 							document.execCommand('insertText', false, bufferText.substring(0, maxPaste));
 						}
-						$('#maxContentPost').text(summernoteMaxSize - t.length - maxPaste);
+						$countDisplay.text(remaining-maxPaste);
 					},
-					onChange: function(e) {  // e = content string after change
-						remaining = summernoteMaxSize - e.length -1;
-						$('#maxContentPost').text(remaining);
-						if (remaining <= 0) {
+					onChange: function(content) {  // content string after change
+						remaining = summernoteMaxSize - content.length;
+						$countDisplay.text(remaining);
+						if (remaining <= 10) {
 							alert(gettext("Max size reached!"));
+							$countDisplay.addClass('has-background-danger');
+						} else {
+							$countDisplay.removeClass('has-background-danger');
 						}
 					},
 				}
-			}
-		);
-		const initial_size = summernoteMaxSize - $('.richtextarea').summernote('code').length;
-		$('.richtextarea').before(`
-			<button class="button" id="toggle-note-editor-toolbar" title="{{trtoggle}}">
-				{%icon "menu-open" %}
-			</button>
-		`).parent().after(`
-			<p class="is-size-6 has-text-right">{{trchar}} <span id="maxContentPost" class="has-text-right">`+initial_size+`</span></p>
-		`);
+			})
+		});
+	}
 
-		$('#toggle-note-editor-toolbar').on('click', function(e) {
-			e.preventDefault();
-    	$('.note-editor > .note-toolbar').toggle(300);
-			$icon = $(this).find('i')
-			$icon.toggleClass('mdi-menu-open').toggleClass('mdi-menu-close');
-  	});
+	$(document).ready(function() {
+		init_summernote(document);
+	});
+	$(document).on('htmx:load', function(evt) {
+		init_summernote(evt.detail.elt);
 	});
 </script>
 <style>

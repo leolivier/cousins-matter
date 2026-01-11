@@ -56,6 +56,9 @@ msgstr "¿Estás seguro(a) de querer eliminar este mensaje?"
 msgid "Deletion confirmed..."
 msgstr "Supresión confirmada..."
 
+msgid "Deletion possible..."
+msgstr "Supresión possible..."
+
 msgid "The message was empty!"
 msgstr "El mensaje está vacío!"
 

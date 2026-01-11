@@ -286,22 +286,22 @@ def parse_locale_date(date_string_to_parse):
 
 # Listing strftime format codes for makemessages
 FORMAT_CODE_DESCRIPTIONS = {
-  "%d": gettext_lazy("%%d"),
-  "%m": gettext_lazy("%m"),
-  "%Y": gettext_lazy("%Y"),
-  "%y": gettext_lazy("%y"),
-  "%H": gettext_lazy("%H"),
-  "%h": gettext_lazy("%h"),
-  "%p": gettext_lazy("%p"),
-  "%M": gettext_lazy("%M"),
-  "%S": gettext_lazy("%S"),
+  "%d": gettext_lazy("DD"),
+  "%m": gettext_lazy("MM"),
+  "%Y": gettext_lazy("YYYY"),
+  "%y": gettext_lazy("YY"),
+  "%H": gettext_lazy("HH"),
+  "%I": gettext_lazy("hh"),
+  "%p": gettext_lazy("AM/PM"),
+  "%M": gettext_lazy("mm"),
+  "%S": gettext_lazy("ss"),
 }
 
 
 def translate_date_format(format_string):
   """
   Translates a date/time format string (strftime) into a description
-  in the current locale.
+  in the current locale (eg: %d/%m/%Y -> JJ/MM/AAAA in French and DD/MM/YYYY in English).
   """
   translated_parts = []
   i = 0

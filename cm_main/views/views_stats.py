@@ -55,7 +55,7 @@ def get_latest_release_text(request):
       release_warning = _("Your version is not up-to-date.")
       if request.user.is_superuser:
         release_warning += "<br>"
-        release_warning += _("Please update it by running the following command:<br><code>docker-start.sh -u</code>")
+        release_warning += _("Please look at the documentation for updating.")
         release_warning = mark_safe(release_warning)
 
       latest_release = {

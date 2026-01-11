@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-21 17:46+0100\n"
+"POT-Creation-Date: 2026-01-11 17:54+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Spanish <LL@li.org>\n"
@@ -19,39 +19,39 @@ msgstr ""
 "\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: chat/consumers.py:235
+#: chat/consumers.py:225
 msgid "User not authenticated"
-msgstr ""
+msgstr "El usuario no está autenticado"
 
-#: chat/consumers.py:244
+#: chat/consumers.py:231
 msgid "You can only update or delete your own messages"
 msgstr "Tú solo puedes actualizar o eliminar tus propios mensajes"
 
-#: chat/consumers.py:253
+#: chat/consumers.py:237
 msgid "Message does not exist"
-msgstr ""
+msgstr "El mensaje no existe"
 
-#: chat/consumers.py:264
+#: chat/consumers.py:246
 msgid "An error occurred while checking permissions."
-msgstr ""
+msgstr "Un error ocurrió al verificar los permisos."
 
-#: chat/models.py:35
+#: chat/models.py:36
 msgid "chat room"
 msgstr "sala de discusión"
 
-#: chat/models.py:36
+#: chat/models.py:37
 msgid "chat rooms"
 msgstr "salones de discusión"
 
-#: chat/models.py:84
+#: chat/models.py:82
 msgid "message"
 msgstr "mensaje"
 
-#: chat/models.py:105
+#: chat/models.py:103
 msgid "private chat room"
 msgstr "sala de discusión privada"
 
-#: chat/models.py:106
+#: chat/models.py:104
 msgid "private chat rooms"
 msgstr "chat privado en salas"
 
@@ -68,7 +68,7 @@ msgid "Choose an existing room or create a new one."
 msgstr "Elige un salón existente o crea uno nuevo."
 
 #: chat/templates/chat/chat_rooms.html:26
-#: chat/templates/chat/room_detail.html:31
+#: chat/templates/chat/room_detail.html:30
 msgid "Room name"
 msgstr "Nombres del salón"
 
@@ -81,14 +81,14 @@ msgid "Create room"
 msgstr "Criar una sala"
 
 #: chat/templates/chat/chat_rooms.html:47 chat/tests/tests_private.py:46
-#: chat/tests/tests_public.py:67 chat/tests/tests_public.py:97
+#: chat/tests/tests_public.py:74 chat/tests/tests_public.py:108
 #, python-format
 msgid "%(nmsgs)s message"
 msgid_plural "%(nmsgs)s messages"
 msgstr[0] "%(nmsgs)s message"
 msgstr[1] "%(nmsgs)s messages"
 
-#: chat/templates/chat/chat_rooms.html:59 chat/tests/tests_public.py:98
+#: chat/templates/chat/chat_rooms.html:59 chat/tests/tests_public.py:109
 msgid "No author yet"
 msgstr "Pas encore de auteur"
 
@@ -96,18 +96,18 @@ msgstr "Pas encore de auteur"
 #: chat/templates/chat/chat_rooms.html:81
 #: chat/templates/chat/private/room_admins.html:44
 #: chat/templates/chat/private/room_members.html:44
-#: chat/templates/chat/room_detail.html:96 chat/tests/tests_private.py:43
-#: chat/tests/tests_public.py:70
+#: chat/templates/chat/room_detail.html:89 chat/tests/tests_private.py:43
+#: chat/tests/tests_public.py:77
 msgid "profile"
 msgstr "profile"
 
 #: chat/templates/chat/chat_rooms.html:102
-#: chat/templates/chat/room_detail.html:64
+#: chat/templates/chat/room_detail.html:57
 msgid "Room Members"
 msgstr "Membres del salón"
 
 #: chat/templates/chat/chat_rooms.html:105
-#: chat/templates/chat/room_detail.html:67
+#: chat/templates/chat/room_detail.html:60
 msgid "Room Admins"
 msgstr "Administradores del salón"
 
@@ -127,7 +127,7 @@ msgstr "Administradores del salón privado \"%(room_name)s"
 
 #: chat/templates/chat/private/room_admins.html:15
 #: chat/templates/chat/private/room_members.html:15
-#: chat/tests/tests_private.py:199 chat/tests/tests_private.py:250
+#: chat/tests/tests_private.py:215 chat/tests/tests_private.py:290
 msgid "Back to room"
 msgstr "Volver al salón"
 
@@ -144,12 +144,12 @@ msgid "Add admin to the room"
 msgstr "Agregar administrador al salón"
 
 #: chat/templates/chat/private/room_admins.html:48
-#: chat/tests/tests_private.py:85
+#: chat/tests/tests_private.py:89
 msgid "Remove Admin from Room"
 msgstr "Quitar administrador del salón"
 
 #: chat/templates/chat/private/room_admins.html:50
-#: chat/tests/tests_private.py:86
+#: chat/tests/tests_private.py:90
 msgid "Are you sure you want to remove this admin from the room?"
 msgstr "¿Seguro que quieres quitar este administrador del salón?"
 
@@ -164,12 +164,12 @@ msgid "Members of \"%(room_name)s\" private room"
 msgstr "Membres del salón privado \"%(room_name)s"
 
 #: chat/templates/chat/private/room_members.html:21
-#: chat/templates/chat/room_detail.html:56 chat/tests/tests_private.py:72
+#: chat/templates/chat/room_detail.html:49 chat/tests/tests_private.py:76
 msgid "Leave this room"
 msgstr "Salir de este salón"
 
 #: chat/templates/chat/private/room_members.html:23
-#: chat/templates/chat/room_detail.html:58 chat/tests/tests_private.py:73
+#: chat/templates/chat/room_detail.html:51 chat/tests/tests_private.py:77
 msgid "Are you sure you want to leave this room?"
 msgstr "¿Estás seguro de que quieres salir de este salón?"
 
@@ -178,56 +178,43 @@ msgid "Add member to the room"
 msgstr "Agregar miembro al salón"
 
 #: chat/templates/chat/private/room_members.html:48
-#: chat/tests/tests_private.py:89
+#: chat/tests/tests_private.py:93
 msgid "Remove Member from Room"
 msgstr "Eliminar miembro del salón"
 
 #: chat/templates/chat/private/room_members.html:50
-#: chat/tests/tests_private.py:90
+#: chat/tests/tests_private.py:94
 msgid "Are you sure you want to remove this member from the room?"
 msgstr "¿Estás seguro de que quieres eliminar este miembro de este salón?"
 
-#: chat/templates/chat/room_detail.html:23
+#: chat/templates/chat/room_detail.html:22
 msgid "Let's chat!"
 msgstr "Discutamos!"
 
-#: chat/templates/chat/room_detail.html:32
+#: chat/templates/chat/room_detail.html:31
 msgid "hit return to submit, escape to give up"
 msgstr "enter para enviar, escape para rendirse"
 
-#: chat/templates/chat/room_detail.html:43
-#, python-format
-msgid ""
-"Are you sure you want to delete the room \"%(room_name)s\" and all its "
-"messages?"
-msgstr ""
-"Haz seguro de que quieres eliminar el salón \"%(room_name)s\" y todos sus "
-"mensajes?"
-
-#: chat/templates/chat/room_detail.html:47
-msgid "Room deletion"
-msgstr "Sustanción del salón"
-
-#: chat/templates/chat/room_detail.html:50
-#: chat/templates/chat/room_detail.html:123
-#: chat/templates/chat/room_detail.html:124
+#: chat/templates/chat/room_detail.html:41
+#: chat/templates/chat/room_detail.html:116
+#: chat/templates/chat/room_detail.html:117
 msgid "Edit"
 msgstr "Modificar"
 
-#: chat/templates/chat/room_detail.html:120
-#: chat/templates/chat/room_detail.html:121
+#: chat/templates/chat/room_detail.html:113
+#: chat/templates/chat/room_detail.html:114
 msgid "Delete"
 msgstr "Eliminar"
 
-#: chat/templates/chat/room_detail.html:138
+#: chat/templates/chat/room_detail.html:136
 msgid "Message"
 msgstr "Mensaje"
 
-#: chat/templates/chat/room_detail.html:143
+#: chat/templates/chat/room_detail.html:141
 msgid "Submit"
 msgstr "Enviar"
 
-#: chat/templates/chat/room_detail.html:148
+#: chat/templates/chat/room_detail.html:146
 msgid "Modified message"
 msgstr "Mensaje modificado"
 
@@ -238,119 +225,97 @@ msgid_plural "%(nfollowers)s members"
 msgstr[0] "%(nfollowers)s membre"
 msgstr[1] "%(nfollowers)s membres"
 
-#: chat/tests/tests_private.py:156 chat/tests/tests_public.py:57
-#: chat/views/views_room_common.py:133
+#: chat/tests/tests_private.py:169 chat/tests/tests_public.py:63
+#: chat/views/views_room_common.py:134
 #, python-format
-msgid ""
-"Another room with a similar name already exists ('%(similar_room_name)s'). "
-"Please choose a different name."
-msgstr ""
-"Otro salón con un nombre similar ya existe ('%(similar_room_name)s'). Por "
-"favor, elige otro nombre."
+msgid "Another room with a similar name already exists ('%(similar_room_name)s'). Please choose a different name."
+msgstr "Otro salón con un nombre similar ya existe ('%(similar_room_name)s'). Por favor, elige otro nombre."
 
-#: chat/tests/tests_private.py:234 chat/tests/tests_private.py:310
-#: chat/views/views_private_rooms.py:188
+#: chat/tests/tests_private.py:267 chat/tests/tests_private.py:376
+#: chat/views/views_private_rooms.py:192
 #, python-format
 msgid "%s has been removed from the room"
 msgstr "%s ha sido removido de este salón."
 
-#: chat/tests/tests_private.py:245 chat/views/views_private_rooms.py:305
+#: chat/tests/tests_private.py:282 chat/views/views_private_rooms.py:316
 msgid "Only members of this private room can become admins"
-msgstr ""
-"Sólo los miembros de este salón privado pueden convertirse en administradores"
+msgstr "Sólo los miembros de este salón privado pueden convertirse en administradores"
 
-#: chat/tests/tests_private.py:299 chat/views/views_private_rooms.py:181
-msgid ""
-"This member is the only one in this private room. Please add another one "
-"before removing this one."
-msgstr ""
-"Este miembro es el único miembro del salón privado. Por favor, añade otro "
-"antes de eliminar este uno."
+#: chat/tests/tests_private.py:357 chat/views/views_private_rooms.py:185
+msgid "This member is the only one in this private room. Please add another one before removing this one."
+msgstr "Este miembro es el único miembro del salón privado. Por favor, añade otro antes de eliminar este uno."
 
-#: chat/tests/tests_private.py:327 chat/views/views_private_rooms.py:227
-msgid ""
-"You are the only member in this private room. Please add another one before "
-"removing yourself."
-msgstr ""
-"Tú eres el único miembro de este salón privado. Por favor, añade a otro "
-"antes de retirarte."
+#: chat/tests/tests_private.py:397 chat/views/views_private_rooms.py:233
+msgid "You are the only member in this private room. Please add another one before removing yourself."
+msgstr "Tú eres el único miembro de este salón privado. Por favor, añade a otro antes de retirarte."
 
-#: chat/tests/tests_private.py:338 chat/views/views_private_rooms.py:230
-msgid ""
-"You are the only admin in this private room. If you leave the room, no one "
-"will be left. Please add another admin from the members before you remove "
-"yourself."
-msgstr ""
-"Tú eres el único administrador de este salón privado. Si sales del salón, no "
-"habrá nadie más. Por favor, añade a otro administrador antes de salir."
+#: chat/tests/tests_private.py:410 chat/views/views_private_rooms.py:239
+msgid "You are the only admin in this private room. If you leave the room, no one will be left. Please add another admin from the members before you remove yourself."
+msgstr "Tú eres el único administrador de este salón privado. Si sales del salón, no habrá nadie más. Por favor, añade a otro administrador antes de salir."
 
-#: chat/tests/tests_private.py:347 chat/views/views_private_rooms.py:238
+#: chat/tests/tests_private.py:421 chat/views/views_private_rooms.py:249
 msgid "You have left the room"
 msgstr "Tienes abandonado el salón."
 
-#: chat/tests/tests_private.py:374 chat/views/views_private_rooms.py:97
-#: chat/views/views_private_rooms.py:223 chat/views/views_private_rooms.py:264
-#: chat/views/views_room_common.py:183
+#: chat/tests/tests_private.py:448 chat/views/views_private_rooms.py:99
+#: chat/views/views_private_rooms.py:227 chat/views/views_private_rooms.py:275
+#: chat/views/views_room_common.py:185
 msgid "You are not a member of this private room"
 msgstr "No eres miembro de este salón privado."
 
-#: chat/tests/tests_private.py:395 chat/views/views_private_rooms.py:133
-#: chat/views/views_private_rooms.py:176 chat/views/views_private_rooms.py:298
-#: chat/views/views_private_rooms.py:346 chat/views/views_private_rooms.py:387
+#: chat/tests/tests_private.py:476 chat/views/views_private_rooms.py:135
+#: chat/views/views_private_rooms.py:178 chat/views/views_private_rooms.py:309
+#: chat/views/views_private_rooms.py:357 chat/views/views_private_rooms.py:400
 msgid "You are not an admin of this private room"
 msgstr "No eres administrador de este sala privada"
 
-#: chat/tests/tests_public.py:24 chat/tests/tests_public.py:69
+#: chat/tests/tests_public.py:24 chat/tests/tests_public.py:76
 msgid "Follow"
 msgstr "Suscribirse"
 
-#: chat/tests/tests_public.py:68
+#: chat/tests/tests_public.py:75
 #, python-format
 msgid "%(nfollowers)s follower"
 msgid_plural "%(nfollowers)s followers"
 msgstr[0] "%(nfollowers)s follower"
 msgstr[1] "%(nfollowers)s followers"
 
-#: chat/views/views_private_rooms.py:128 chat/views/views_private_rooms.py:294
+#: chat/views/views_private_rooms.py:130 chat/views/views_private_rooms.py:305
 msgid "Method not allowed"
 msgstr "Método no permitido"
 
-#: chat/views/views_private_rooms.py:143 chat/views/views_private_rooms.py:310
+#: chat/views/views_private_rooms.py:145 chat/views/views_private_rooms.py:321
 msgid "This user is already a member of this private room"
-msgstr ""
-"Cuál es el mejor término en español para describir una relación entre dos "
-"personas que no está formalizada pero que implica un nivel de intimidad y "
-"responsabilidad?"
+msgstr "Este usuario ya es miembro de esta sala privada."
 
-#: chat/views/views_private_rooms.py:190
+#: chat/views/views_private_rooms.py:194
 msgid "This user is not a member of this private room"
-msgstr ""
-"Cuál es el mejor término para describir la relación entre un usuario y una "
-"sala privada en español?"
+msgstr "Este usuario no es miembro de esta sala privada."
 
-#: chat/views/views_private_rooms.py:352
-msgid ""
-"There must be at least one admin in a private room. Please add another one "
-"before removing this one."
-msgstr ""
-"Debe haber al menos uno de los administradores en un salón privado. Por "
-"favor, añada otro antes de eliminar este."
+#: chat/views/views_private_rooms.py:365
+msgid "There must be at least one admin in a private room. Please add another one before removing this one."
+msgstr "Debe haber al menos uno de los administradores en un salón privado. Por favor, añada otro antes de eliminar este."
 
-#: chat/views/views_private_rooms.py:358
+#: chat/views/views_private_rooms.py:371
 msgid "This member is not an admin of this private room"
 msgstr "Ce miembro no es administrador de este salón privado"
 
-#: chat/views/views_private_rooms.py:391
-msgid ""
-"There must be at least one admin in a private room. Please add another one "
-"before removing yourself."
-msgstr ""
-"Debe haber al menos uno de los administradores en un salón privado. Por "
-"favor, añada otro antes de retirarse del salón."
+#: chat/views/views_private_rooms.py:406
+msgid "There must be at least one admin in a private room. Please add another one before removing yourself."
+msgstr "Debe haber al menos uno de los administradores en un salón privado. Por favor, añada otro antes de retirarse del salón."
 
-#: chat/views/views_private_rooms.py:396
+#: chat/views/views_private_rooms.py:413
 msgid "You have been removed from the admins of this private room."
 msgstr "Has sido removido de los administradores del este salón privado."
+
+#: chat/views/views_public_rooms.py:67
+msgid "Room deletion"
+msgstr "Sustanción del salón"
+
+#: chat/views/views_public_rooms.py:68
+#, python-format
+msgid "Are you sure you want to delete the room \"%(room_name)s\" and all its messages?"
+msgstr "Haz seguro de que quieres eliminar el salón \"%(room_name)s\" y todos sus mensajes?"
 
 #: chat/views/views_room_common.py:121
 #, python-format

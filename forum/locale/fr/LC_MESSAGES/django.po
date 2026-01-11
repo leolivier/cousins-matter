@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 14:19+0200\n"
+"POT-Creation-Date: 2026-01-11 17:54+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -26,15 +26,15 @@ msgstr "Contenu"
 msgid "Title"
 msgstr "Titre"
 
-#: forum/models.py:34
+#: forum/models.py:38
 msgid "posts"
 msgstr "discussions"
 
-#: forum/models.py:51
+#: forum/models.py:55
 msgid "Comment"
 msgstr "Commentaire"
 
-#: forum/models.py:54
+#: forum/models.py:58
 msgid "comments"
 msgstr "commentaires"
 
@@ -47,23 +47,21 @@ msgstr[1] "%(ncomments)s commentaires"
 
 #: forum/templates/forum/comment_list.html:33
 #: forum/templates/forum/post_detail.html:46
-#: forum/templates/forum/post_detail.html:96
+#: forum/templates/forum/post_detail.html:114
 msgid "Edit"
 msgstr "Modifier"
 
 #: forum/templates/forum/comment_list.html:37
-#: forum/templates/forum/post_detail.html:100
 msgid "Delete"
 msgstr "Supprimer"
 
 #: forum/templates/forum/comment_list.html:50
-#: forum/templates/forum/post_detail.html:114
+#: forum/templates/forum/post_detail.html:87
 msgid "Update"
 msgstr "Mettre à jour"
 
 #: forum/templates/forum/comment_list.html:53
 #: forum/templates/forum/comment_list.html:78
-#: forum/templates/forum/post_detail.html:117
 #: forum/templates/forum/post_form_include.html:21
 msgid "Cancel"
 msgstr "Annuler"
@@ -92,20 +90,11 @@ msgstr[1] "%(nreplies)s réponses"
 msgid "No answer"
 msgstr "Pas de réponse"
 
-#: forum/templates/forum/post_detail.html:50
-msgid "Delete post"
-msgstr "Supprimer la conversation"
+#: forum/templates/forum/post_detail.html:123
+msgid "Are you sure you want to delete this reply???"
+msgstr "Est tu sûr(e) de vouloir supprimer cette réponse ?"
 
-#: forum/templates/forum/post_detail.html:51
-#, python-format
-msgid ""
-"Are you sure you want to delete \"%(post)s\" and all associated replies and "
-"comments?"
-msgstr ""
-"Est tu sûr(e) de vouloir supprimer \"%(post)s\" et toutes les réponses et "
-"commentaires associés ?"
-
-#: forum/templates/forum/post_detail.html:135
+#: forum/templates/forum/post_detail.html:140
 msgid "Your answer"
 msgstr "Ta réponse"
 
@@ -130,10 +119,23 @@ msgid "Latest Posts"
 msgstr "Dernières discussions"
 
 #: forum/views/views_comment.py:25 forum/views/views_comment.py:47
-#: forum/views/views_post.py:70 forum/views/views_post.py:113
+#: forum/views/views_post.py:93 forum/views/views_post.py:144
 msgid "The size of the message exceeds the authorised limit."
 msgstr "La taille du message dépasse la limite autorisée."
 
-#: forum/views/views_post.py:174
+#: forum/views/views_post.py:190
+msgid "Delete post"
+msgstr "Supprimer la conversation"
+
+#: forum/views/views_post.py:191
+#, python-format
+msgid "Are you sure you want to delete \"%(post)s\" and all associated replies and comments?"
+msgstr "Est tu sûr(e) de vouloir supprimer \"%(post)s\" et toutes les réponses et commentaires associés ?"
+
+#: forum/views/views_post.py:220
+msgid "Errors: "
+msgstr "Erreurs: "
+
+#: forum/views/views_post.py:231
 msgid "Can't delete the first message of a thread!"
 msgstr "Impossible de supprimer le premier message d'une discussion!"

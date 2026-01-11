@@ -3,8 +3,10 @@ from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import generic
+from django.contrib import messages
 from django.db import transaction
-from django.http import HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseBadRequest, HttpResponse
+from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,7 +16,6 @@ from django.core.exceptions import RequestDataTooBig
 from cm_main.utils import (
   PageOutOfBounds,
   Paginator,
-  assert_request_is_ajax,
   check_edit_permission,
 )
 from forum.views.views_follow import (
@@ -178,9 +179,21 @@ class PostEditView(LoginRequiredMixin, generic.UpdateView):
 @login_required
 def delete_post(request, pk):
   post = get_object_or_404(Post, pk=pk)
-  check_edit_permission(request, post.first_message.author)
-  post.delete()
-  return redirect("forum:list")
+  if request.method == "POST":
+    check_edit_permission(request, post.first_message.author)
+    post.delete()
+    return HttpResponseClientRedirect(reverse("forum:list"))
+  return render(
+    request,
+    "cm_main/common/confirm-delete-modal-htmx.html",
+    {
+      "ays_title": _("Delete post"),
+      "ays_msg": _('Are you sure you want to delete "%(post)s" and all associated replies and comments?')
+      % {"post": post.title},
+      "delete_url": request.get_full_path(),
+      "expected_value": post.title,
+    },
+  )
 
 
 @login_required
@@ -195,26 +208,27 @@ def add_reply(request, pk):
 
 @login_required
 def edit_reply(request, reply):
-  assert_request_is_ajax(request)
   reply = get_object_or_404(Message, pk=reply)
   check_edit_permission(request, reply.author)
-  form = MessageForm(request.POST, instance=reply)
-  if form.is_valid():
-    replyobj = form.save()
-    return JsonResponse({"reply_id": replyobj.id, "reply_str": replyobj.content}, status=200)
-  else:
-    errors = form.errors.as_json()
-    return JsonResponse({"errors": errors}, status=400)
+  if request.method == "POST":
+    form = MessageForm(request.POST, instance=reply)
+    if form.is_valid():
+      reply = form.save()
+      return render(request, "forum/post_detail.html#forum_reply", {"reply": reply}, status=200)
+    else:
+      errors = form.errors.as_json()
+      messages.error(request, _("Errors: ") + errors)
+      return HttpResponseClientRefresh()
+  form = MessageForm(instance=reply)
+  return render(request, "forum/post_detail.html#forum_reply", {"reply": reply, "reply_form": form, "edit": True})
 
 
 @csrf_exempt
 @login_required
 def delete_reply(request, reply):
-  assert_request_is_ajax(request)
   reply = get_object_or_404(Message, pk=reply)
   check_edit_permission(request, reply.author)
   if Post.objects.filter(first_message=reply).exists():
     raise ValidationError(_("Can't delete the first message of a thread!"))
-  id = reply.id
   reply.delete()
-  return JsonResponse({"reply_id": id}, status=200)
+  return HttpResponse(status=200)

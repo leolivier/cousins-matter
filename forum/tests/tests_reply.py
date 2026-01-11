@@ -1,5 +1,4 @@
 from django.urls import reverse
-from django.core.exceptions import ValidationError
 from cm_main.tests.tests_followers import TestFollowersMixin
 from forum.tests.tests_post import ForumTestCase
 from cm_main.tests.test_django_q import django_q_sync_class
@@ -25,16 +24,12 @@ class PostReplyTestCase(ForumTestCase):
     msg.save()
     url = reverse("forum:edit_reply", args=[msg.id])
     reply_msg_content = "a modified reply"
-    with self.assertRaises(ValidationError):
-      self.client.post(url, {"content": reply_msg_content})
-
-    response = self.client.post(url, {"content": reply_msg_content}, **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
-    # pprint(vars(response))
+    response = self.client.post(url, {"content": reply_msg_content})
     self.assertEqual(response.status_code, 200)
-    self.assertJSONEqual(str(response.content, encoding="utf8"), {"reply_id": msg.id, "reply_str": reply_msg_content})
+    self.assertContains(response, reply_msg_content)
     msg.refresh_from_db()
     self.assertEqual(msg.content, reply_msg_content)
-    # TODO: how to check the edit inside the page which is done in javascript?
+    # print("edit reply response:", response.__dict__)
 
   def test_delete_reply(self):
     """Tests deleting a reply to a forum post."""
@@ -42,15 +37,13 @@ class PostReplyTestCase(ForumTestCase):
     msg.save()
     url = reverse("forum:delete_reply", args=[msg.id])
     cnt = Message.objects.filter(post=self.post.id).count()
-    with self.assertRaises(ValidationError):
-      self.client.post(url)
-
-    response = self.client.post(url, **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
+    response = self.client.post(url)
     self.assertEqual(response.status_code, 200)
     new_cnt = Message.objects.filter(post=self.post.id).count()
     self.assertEqual(new_cnt, cnt - 1)
-    self.assertJSONEqual(str(response.content, encoding="utf8"), {"reply_id": msg.id})
-    # TODO: how to check the removal inside the page which is done in javascript?
+    self.assertEqual(response.content, b"")
+    # print("delete reply response:", response.__dict__)
+    # TODO: how to check the removal inside the page which is done using HTMX?
 
 
 @django_q_sync_class

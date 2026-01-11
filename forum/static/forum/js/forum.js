@@ -26,47 +26,6 @@ function delete_comment(url, id) {
 	}
 }
 
-function show_edit_reply_form(id) {
-	content = $('#reply-content-'+id).html()
-	// Sanitize the content to prevent XSS
-	// DOMPurify is included in the summernote library, which is included in the reply form template.
-	content = DOMPurify.sanitize(content);
-	$('#edit-reply-'+id+' div.note-editable').html(content); 
-	$('#reply-level-'+id).hide()
-	$('#edit-reply-'+id).show()
-}
-function hide_edit_reply_form(id, value=undefined) {
-	if (value) { 
-		if (value.includes('<')) {
-			$('#reply-content-'+id).html(value);
-		} else {
-			$('#reply-content-'+id).text(value);
-		}
-	}
-	$('#edit-reply-'+id+' div.note-editable').val('');
-	$('#edit-reply-'+id).hide()
-	$('#reply-level-'+id).show()
-}
-
-function delete_reply(url, id) {
-	if (confirm(gettext("Are you sure you want to delete this reply and its comments?"))) {
-		ajax_action(url, (response)=>{
-			$('#reply-div-'+id).remove()
-			update_nb_replies(-1)
-		})                
-	}
-}
-
-function update_nb_replies(delta) {
-	nbreplies = $('#nb-replies-id1').text().replace(/[^0-9]/g, '')
-	if (nbreplies == '') { nbreplies = delta }
-	else { nbreplies = parseInt(nbreplies) + delta }
-	formats = ngettext('%s answer', '%s answers', nbreplies)
-	nreps = interpolate(formats, [nbreplies])
-	$('#nb-replies-id1').text(nreps)
-	$('#nb-replies-id2').text(nreps)
-}
-
 function update_nb_comments(delta) {
 	nbcomments = $('#nb-comments-id').text().replace(/[^0-9]/g, '')
 	if (nbcomments == '') { nbcomments = delta }

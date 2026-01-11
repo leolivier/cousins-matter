@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-21 17:46+0100\n"
+"POT-Creation-Date: 2026-01-11 17:54+0100\n"
 "PO-Revision-Date: 2025-01-01 09:13+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Spanish <LL@li.org>\n"
@@ -42,31 +42,31 @@ msgstr "Artes"
 msgid "Miscellaneous"
 msgstr "Varios"
 
-#: troves/models.py:25
+#: troves/models.py:30
 msgid "Description of the treasure (this will appear in the details)"
 msgstr "Descripción del tesoro (esto aparecerá en los detalles)"
 
-#: troves/models.py:27
+#: troves/models.py:36
 msgid "Treasure photo"
 msgstr "Foto del tesoro"
 
-#: troves/models.py:30
+#: troves/models.py:43
 msgid "Treasure file"
 msgstr "Archivo del tesoro"
 
-#: troves/models.py:32
+#: troves/models.py:47
 msgid "Category"
 msgstr "Categoría"
 
-#: troves/models.py:36
+#: troves/models.py:51
 msgid "trove"
 msgstr "tesoro"
 
-#: troves/models.py:37
+#: troves/models.py:52
 msgid "troves"
 msgstr "tesoros"
 
-#: troves/models.py:56
+#: troves/models.py:71
 msgid "A treasure must have an owner."
 msgstr "Un tesoro debe tener dueño."
 

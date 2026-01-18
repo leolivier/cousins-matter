@@ -8,8 +8,8 @@ from django.core.exceptions import ValidationError
 from django.test import tag
 
 from chat.tests.tests_mixin import ChatMessageSenderMixin
-from members.tests.tests_member_base import MemberTestCase
-from cm_main.tests.test_django_q import django_q_sync_class
+from members.tests.tests_member_base import MemberTestCase, AsyncMemberTestCase
+from cm_main.tests.test_django_q import async_django_q_sync_class
 from ..models import ChatMessage, ChatRoom
 
 
@@ -139,12 +139,12 @@ class ChatRoomTests(MemberTestCase):
 
 
 @tag("needs-redis")
-@django_q_sync_class
-class ChatMessageTests(ChatMessageSenderMixin, MemberTestCase):
+@async_django_q_sync_class
+class ChatMessageTests(ChatMessageSenderMixin, AsyncMemberTestCase):
   async def test_chat_consumer(self):
     """Tests the chat consumer."""
     msg = "this is my message to the world!"
-    communicator = await self.send_chat_message(msg, self.slug, disconnect=False)
+    communicator = await self.send_chat_message(msg, self.slug, disconnect=False, sender=self.member)
     response = await communicator.receive_json_from()
     # print(response)
     self.assertTrue("args" in response)

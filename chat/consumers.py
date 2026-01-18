@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _, get_language
 
 from cm_main.utils import get_test_absolute_url
+from cm_main.followers import check_followers
 from .models import ChatMessage, ChatRoom
 from members.models import Member
 
@@ -142,7 +143,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     member = await Member.objects.aget(pk=member_id)
     message = await ChatMessage.objects.acreate(member=member, room=room, content=msg_content)
     url = self._build_absolute_url(reverse("chat:room", args=[room_slug]))
-    await sync_to_async(self.check_followers)(room, message, member, url)
+    await sync_to_async(check_followers)(
+      None, room, await sync_to_async(room.owner)(), url, new_internal_object=message, author=member
+    )
     return message
 
   async def update_message(self, message_id, msg_content):

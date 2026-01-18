@@ -35,7 +35,7 @@
     <script src="{% url 'cm_main:javascript-catalog' LANGUAGE_CODE %}"></script>
     {%if settings.DEBUG%}<script>htmx.logAll();</script> <!-- for debugging -->{%endif%}
   </head>
-  <body>
+  <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
     
     {% block navbar %}
     {%if user.is_authenticated %}

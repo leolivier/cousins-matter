@@ -1,4 +1,4 @@
-.PHONY: run cpmsg mkmsg up down ps logs stop up4run help h u4r
+.PHONY: run cpmsg mkmsg up down ps logs stop up4run help h u4r test mig mkmig
 
 help, h:
 	@echo "Available targets:"
@@ -12,9 +12,11 @@ help, h:
 	@echo "  stop: Stop the application (pass c=container_name to target a specific container)"
 	@echo "  cpmsg: pass d=directory to target a specific directory, then cd to this directory and compile messages"
 	@echo "  mkmsg: pass d=directory to target a specific directory, then cd to this directory and make messages"
+	@echo "  test: pass t=test_name to target a specific test, then run tests"
+
 
 run:
-	export POSTGRES_HOST=localhost && export REDIS_HOST=localhost && ./manage.py runserver
+	POSTGRES_HOST=localhost	REDIS_HOST=localhost ./manage.py runserver
 
 up:
 	docker compose up -d $(c)
@@ -42,3 +44,12 @@ mkmsg:
 
 clean:
 	docker compose down --volumes
+
+test:
+	POSTGRES_HOST=localhost REDIS_HOST=localhost ./manage.py test $(t) $(o)
+
+mig:
+	POSTGRES_HOST=localhost REDIS_HOST=localhost ./manage.py migrate
+
+mkmig:
+	POSTGRES_HOST=localhost REDIS_HOST=localhost ./manage.py makemigrations

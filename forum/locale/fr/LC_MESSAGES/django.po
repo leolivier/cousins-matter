@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 17:54+0100\n"
+"POT-Creation-Date: 2026-01-18 13:14+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,124 +18,121 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: forum/models.py:13
+#: models.py:14
 msgid "Content"
 msgstr "Contenu"
 
-#: forum/models.py:28
+#: models.py:28
 msgid "Title"
 msgstr "Titre"
 
-#: forum/models.py:38
+#: models.py:38
 msgid "posts"
 msgstr "discussions"
 
-#: forum/models.py:55
+#: models.py:56
 msgid "Comment"
 msgstr "Commentaire"
 
-#: forum/models.py:58
+#: models.py:59 templates/forum/comment_list.html:5
 msgid "comments"
 msgstr "commentaires"
 
-#: forum/templates/forum/comment_list.html:5
+#: templates/forum/comment_list.html:20 templates/forum/post_detail.html:111
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: templates/forum/comment_list.html:43
 #, python-format
 msgid "%(ncomments)s comment"
 msgid_plural "%(ncomments)s comments"
 msgstr[0] "%(ncomments)s commentaire"
 msgstr[1] "%(ncomments)s commentaires"
 
-#: forum/templates/forum/comment_list.html:33
-#: forum/templates/forum/post_detail.html:46
-#: forum/templates/forum/post_detail.html:114
-msgid "Edit"
-msgstr "Modifier"
-
-#: forum/templates/forum/comment_list.html:37
-msgid "Delete"
-msgstr "Supprimer"
-
-#: forum/templates/forum/comment_list.html:50
-#: forum/templates/forum/post_detail.html:87
-msgid "Update"
-msgstr "Mettre à jour"
-
-#: forum/templates/forum/comment_list.html:53
-#: forum/templates/forum/comment_list.html:78
-#: forum/templates/forum/post_form_include.html:21
-msgid "Cancel"
-msgstr "Annuler"
-
-#: forum/templates/forum/comment_list.html:69
+#: templates/forum/comment_list.html:51
 msgid "Add comment"
 msgstr "Ajouter un commentaire"
 
-#: forum/templates/forum/comment_list.html:77
+#: templates/forum/comment_list.html:81 templates/forum/post_detail.html:75
+#: templates/forum/post_detail.html:144
+msgid "Edit"
+msgstr "Modifier"
+
+#: templates/forum/comment_list.html:88
+msgid "Are you sure you want to delete this comment?"
+msgstr "Est tu sûr(e) de vouloir supprimer ce commentaire ?"
+
+#: templates/forum/comment_list.html:108
 msgid "Add"
 msgstr "Ajouter"
 
-#: forum/templates/forum/post_detail.html:8
+#: templates/forum/post_detail.html:37
 msgid "Post"
 msgstr "Discussion"
 
-#: forum/templates/forum/post_detail.html:12
-#: forum/templates/forum/post_list.html:34
+#: templates/forum/post_detail.html:41 templates/forum/post_list.html:34
 #, python-format
 msgid "%(nreplies)s answer"
 msgid_plural "%(nreplies)s answers"
 msgstr[0] "%(nreplies)s réponse"
 msgstr[1] "%(nreplies)s réponses"
 
-#: forum/templates/forum/post_detail.html:18
+#: templates/forum/post_detail.html:47
 msgid "No answer"
 msgstr "Pas de réponse"
 
-#: forum/templates/forum/post_detail.html:123
-msgid "Are you sure you want to delete this reply???"
+#: templates/forum/post_detail.html:151
+msgid "Are you sure you want to delete this reply?"
 msgstr "Est tu sûr(e) de vouloir supprimer cette réponse ?"
 
-#: forum/templates/forum/post_detail.html:140
+#: templates/forum/post_detail.html:174
 msgid "Your answer"
 msgstr "Ta réponse"
 
-#: forum/templates/forum/post_form.html:8
-#: forum/templates/forum/post_form.html:16
-msgid "Edit Post"
-msgstr "Modifier le message"
-
-#: forum/templates/forum/post_form.html:10
-#: forum/templates/forum/post_form.html:18
-#: forum/templates/forum/post_list.html:9
-msgid "Create Post"
-msgstr "Créer une discussion"
-
-#: forum/templates/forum/post_form_include.html:17
+#: templates/forum/post_detail.html:181
+#: templates/forum/post_form_include.html:17
 msgid "Send"
 msgstr "Envoyer"
 
-#: forum/templates/forum/post_list.html:3
-#: forum/templates/forum/post_list.html:8
+#: templates/forum/post_form.html:8 templates/forum/post_form.html:16
+msgid "Edit Post"
+msgstr "Modifier le message"
+
+#: templates/forum/post_form.html:10 templates/forum/post_form.html:18
+#: templates/forum/post_list.html:9
+msgid "Create Post"
+msgstr "Créer une discussion"
+
+#: templates/forum/post_form_include.html:21
+msgid "Cancel"
+msgstr "Annuler"
+
+#: templates/forum/post_list.html:3 templates/forum/post_list.html:8
 msgid "Latest Posts"
 msgstr "Dernières discussions"
 
-#: forum/views/views_comment.py:25 forum/views/views_comment.py:47
-#: forum/views/views_post.py:93 forum/views/views_post.py:144
+#: views/views_comment.py:25 views/views_comment.py:55 views/views_post.py:92
+#: views/views_post.py:142
 msgid "The size of the message exceeds the authorised limit."
 msgstr "La taille du message dépasse la limite autorisée."
 
-#: forum/views/views_post.py:190
+#: views/views_post.py:189
 msgid "Delete post"
 msgstr "Supprimer la conversation"
 
-#: forum/views/views_post.py:191
+#: views/views_post.py:190
 #, python-format
-msgid "Are you sure you want to delete \"%(post)s\" and all associated replies and comments?"
-msgstr "Est tu sûr(e) de vouloir supprimer \"%(post)s\" et toutes les réponses et commentaires associés ?"
+msgid ""
+"Are you sure you want to delete \"%(post)s\" and all associated replies and "
+"comments?"
+msgstr ""
+"Est tu sûr(e) de vouloir supprimer \"%(post)s\" et toutes les réponses et "
+"commentaires associés ?"
 
-#: forum/views/views_post.py:220
+#: views/views_post.py:210 views/views_post.py:225
 msgid "Errors: "
 msgstr "Erreurs: "
 
-#: forum/views/views_post.py:231
+#: views/views_post.py:241
 msgid "Can't delete the first message of a thread!"
 msgstr "Impossible de supprimer le premier message d'une discussion!"

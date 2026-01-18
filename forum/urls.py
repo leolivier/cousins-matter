@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.urls import path
 
-from .views import views_comment, views_post, views_test, views_follow
+from .views import views_comment, views_post, views_test, views_follow, views_reply
 
 app_name = "forum"
 urlpatterns = [
@@ -16,9 +16,9 @@ urlpatterns = [
   ),
   path("<int:pk>/edit", views_post.PostEditView.as_view(), name="edit"),
   path("<int:pk>/delete", views_post.delete_post, name="delete"),
-  path("<int:pk>/reply", views_post.add_reply, name="reply"),
-  path("<int:reply>/edit_reply", views_post.edit_reply, name="edit_reply"),
-  path("<int:reply>/delete_reply", views_post.delete_reply, name="delete_reply"),
+  path("<int:pk>/reply", views_reply.add_reply, name="reply"),
+  path("<int:reply>/edit_reply", views_reply.edit_reply, name="edit_reply"),
+  path("<int:reply>/delete_reply", views_reply.delete_reply, name="delete_reply"),
   path(
     "<int:message_id>/comments",
     views_comment.CommentCreateView.as_view(),

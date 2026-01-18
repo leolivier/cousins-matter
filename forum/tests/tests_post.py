@@ -3,6 +3,7 @@ from django.db import transaction
 from members.tests.tests_member_base import MemberTestCase
 from ..views.views_post import PostCreateView, PostEditView
 from ..models import Post, Message, Comment
+# from pprint import pprint
 
 
 class ForumTestCase(MemberTestCase):
@@ -84,7 +85,7 @@ class PostDeleteTestCase(ForumTestCase):
     url = reverse("forum:delete", args=[self.post.id])
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.url, reverse("forum:list"))
     # pprint(vars(response))
     post = Post.objects.filter(id=self.post.id)
     self.assertFalse(post.exists())
-    self.assertRedirects(response, reverse("forum:list"))

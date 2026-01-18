@@ -12,7 +12,7 @@ class PostReplyTestCase(ForumTestCase):
     reply_msg_content = "a reply"
     response = self.client.post(url, {"content": reply_msg_content}, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertRedirects(response, reverse("forum:display", args=[self.post.id]))
+    self.assertContains(response, reply_msg_content)
     msgs = Message.objects.filter(post=self.post)
     self.assertEqual(msgs.count(), 2)
     amsgs = {msg.content for msg in msgs}
@@ -70,8 +70,7 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
     reply_msg_content = "a reply"
     response = self.client.post(url, {"content": reply_msg_content}, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertRedirects(response, reverse("forum:display", args=[self.post.id]))
-
+    self.assertContains(response, reply_msg_content)
     message = Message.objects.get(post=self.post, content=reply_msg_content)
     self.assertEqual(message.author, new_poster)
 

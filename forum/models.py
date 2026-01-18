@@ -9,18 +9,18 @@ logger = logging.getLogger(__name__)
 
 class Message(models.Model):
   author = models.ForeignKey(Member, on_delete=models.CASCADE)
-  date = models.DateTimeField(auto_now=True)
+  created = models.DateTimeField(auto_now_add=True)
+  modified = models.DateTimeField(auto_now=True)
   content = models.TextField(_("Content"), max_length=settings.MESSAGE_MAX_SIZE)
   post = models.ForeignKey("Post", on_delete=models.CASCADE, null=True, blank=True)
 
   class Meta:
-    ordering = ["date"]
+    ordering = ["created"]
     indexes = [
       models.Index(fields=["post", "author"]),
     ]
 
   def __str__(self):
-    # return self.content
     return self.content
 
 
@@ -36,7 +36,7 @@ class Post(models.Model):
 
   class Meta:
     verbose_name_plural = _("posts")
-    ordering = ["first_message__date"]
+    ordering = ["first_message__created"]
     indexes = [
       models.Index(fields=["title"]),
     ]
@@ -50,13 +50,14 @@ class Post(models.Model):
 
 class Comment(models.Model):
   author = models.ForeignKey(Member, on_delete=models.CASCADE)
-  date = models.DateTimeField(auto_now=True)
+  created = models.DateTimeField(auto_now_add=True)
+  modified = models.DateTimeField(auto_now=True)
   message = models.ForeignKey(Message, on_delete=models.CASCADE)
   content = models.CharField(_("Comment"), max_length=settings.MESSAGE_COMMENTS_MAX_SIZE)
 
   class Meta:
     verbose_name_plural = _("comments")
-    ordering = ["message", "date"]
+    ordering = ["message", "created"]
     indexes = [
       models.Index(fields=["message", "author"]),
     ]

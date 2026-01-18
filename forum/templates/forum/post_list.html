@@ -28,7 +28,7 @@
 						{%icon "member-link" %}
 					</a>
 					<br>
-					<span class="is-size-7">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>
+					<span class="is-size-7">{{post.first_message.created|date:"DATETIME_FORMAT"}}</span>
 					<br>
 					<span class="tag">
 						{%blocktranslate count nreplies=post.num_messages|add:-1 trimmed %}

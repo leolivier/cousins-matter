@@ -1,13 +1,10 @@
 from django.conf import settings
-from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import generic
-from django.contrib import messages
 from django.db import transaction
-from django.http import HttpResponseBadRequest, HttpResponse
-from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
+from django_htmx.http import HttpResponseClientRedirect
 from django.utils.translation import gettext as _
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -19,11 +16,10 @@ from cm_main.utils import (
   check_edit_permission,
 )
 from forum.views.views_follow import (
-  check_followers_on_message,
   check_followers_on_new_post,
 )
 from ..models import Post, Message
-from ..forms import MessageForm, PostForm, CommentForm
+from ..forms import MessageForm, PostForm
 from members.models import Member
 
 
@@ -35,7 +31,7 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
       Post.objects.select_related("first_message")
       .annotate(num_messages=Count("message"))
       .all()
-      .order_by("-first_message__date")
+      .order_by("-first_message__created")
     )
     try:
       page = Paginator.get_page(
@@ -54,16 +50,18 @@ class PostDisplayView(LoginRequiredMixin, generic.DetailView):
   model = Post
 
   def get(self, request, pk, page_num=1):
-    post_id = pk
-    post = get_object_or_404(Post, pk=post_id)
-    replies = Message.objects.filter(post=post_id, first_of_post=None).all()
+    try:
+      post = Post.objects.select_related("first_message").get(pk=pk)
+    except Post.DoesNotExist:
+      return HttpResponseNotFound()
+    replies = Message.objects.filter(post=post, first_of_post=None).all()
     try:
       page = Paginator.get_page(
         request,
         object_list=replies,
         page_num=page_num,
         reverse_link="forum:display_page",
-        compute_link=lambda page_num: reverse("forum:display_page", args=[post_id, page_num]),
+        compute_link=lambda page_num: reverse("forum:display_page", args=[pk, page_num]),
         default_page_size=settings.DEFAULT_POSTS_PER_PAGE,
       )
       return render(
@@ -73,8 +71,8 @@ class PostDisplayView(LoginRequiredMixin, generic.DetailView):
           "page": page,
           "nreplies": replies.count(),
           "post": post,
-          "comment_form": CommentForm(),
-          "reply_form": MessageForm(),
+          # "comment_form": CommentForm(),
+          # "reply_form": MessageForm(),
         },
       )
     except PageOutOfBounds as exc:
@@ -84,7 +82,6 @@ class PostDisplayView(LoginRequiredMixin, generic.DetailView):
 class PostCreateView(LoginRequiredMixin, generic.CreateView):
   model = Post
 
-  @csrf_exempt
   def dispatch(self, request, *args, **kwargs):
     try:
       return super().dispatch(request, *args, **kwargs)
@@ -135,7 +132,6 @@ class PostEditView(LoginRequiredMixin, generic.UpdateView):
   model = Post
   form_class = PostForm
 
-  @csrf_exempt
   def dispatch(self, request, *args, **kwargs):
     try:
       return super().dispatch(request, *args, **kwargs)
@@ -194,41 +190,3 @@ def delete_post(request, pk):
       "expected_value": post.title,
     },
   )
-
-
-@login_required
-def add_reply(request, pk):
-  replyForm = MessageForm(request.POST)
-  replyForm.instance.post_id = pk
-  replyForm.instance.author_id = request.user.id
-  reply = replyForm.save()
-  check_followers_on_message(request, reply)
-  return redirect(reverse("forum:display", args=[pk]))
-
-
-@login_required
-def edit_reply(request, reply):
-  reply = get_object_or_404(Message, pk=reply)
-  check_edit_permission(request, reply.author)
-  if request.method == "POST":
-    form = MessageForm(request.POST, instance=reply)
-    if form.is_valid():
-      reply = form.save()
-      return render(request, "forum/post_detail.html#forum_reply", {"reply": reply}, status=200)
-    else:
-      errors = form.errors.as_json()
-      messages.error(request, _("Errors: ") + errors)
-      return HttpResponseClientRefresh()
-  form = MessageForm(instance=reply)
-  return render(request, "forum/post_detail.html#forum_reply", {"reply": reply, "reply_form": form, "edit": True})
-
-
-@csrf_exempt
-@login_required
-def delete_reply(request, reply):
-  reply = get_object_or_404(Message, pk=reply)
-  check_edit_permission(request, reply.author)
-  if Post.objects.filter(first_message=reply).exists():
-    raise ValidationError(_("Can't delete the first message of a thread!"))
-  reply.delete()
-  return HttpResponse(status=200)

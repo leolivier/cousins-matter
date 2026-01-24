@@ -50,8 +50,8 @@ def delete_my_item(request, pk):
 {# hard confirmation: add a field to be filled by the user to confirm #}
 {% block form %}
 {% if expected_value %}
-	{%trans 'Mandatory. Deletion will not be possible until the correct value is entered.' as deletion_deletion_not_possible%}
-	{%trans 'Deletion possible...' as deletion_deletion_possible%}
+	{%trans 'Mandatory. Deletion will not be possible until the correct value is entered.' as deletion_not_possible%}
+	{%trans 'Deletion possible...' as deletion_possible%}
 	{%with expected_value|escape as escaped_expected_value %}
 	{%with red_expected_value='<span class="has-text-danger">'|add:escaped_expected_value|add:'</span>' %}
 		{%blocktranslate asvar warning_expected_value trimmed%}
@@ -67,8 +67,8 @@ def delete_my_item(request, pk):
 			>
 		</div>
 		<span id="confirmation_validation_span" class="has-text-danger"></span>
-		<p id="deletion_not_possible" class="help">{{deletion_deletion_not_possible|escape}}</p>
-		<p id="deletion_possible" class="help is-hidden">{{deletion_deletion_possible|escape}}</p>
+		<p id="deletion_not_possible" class="help">{{deletion_not_possible|escape}}</p>
+		<p id="deletion_possible" class="help is-hidden">{{deletion_possible|escape}}</p>
 	</div>
 	{%endwith%}{%endwith%}
 {%endif%}

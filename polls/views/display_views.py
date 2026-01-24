@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -7,7 +6,7 @@ from django.views import generic
 from ..models import EventPlanner, Poll
 
 
-class PollsListView(LoginRequiredMixin, generic.ListView):
+class PollsListView(generic.ListView):
   "View for listing published Polls."
 
   model = Poll
@@ -100,7 +99,7 @@ class ClosedEventPlannersListView(ClosedPollsListView):
   type = "event"
 
 
-class PollDetailView(LoginRequiredMixin, generic.DetailView):
+class PollDetailView(generic.DetailView):
   "View for displaying a Poll, its Questions and the already given Answers."
 
   model = Poll

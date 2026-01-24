@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.urls import reverse
@@ -10,7 +9,6 @@ from django.core.mail import send_mail
 from ..models import Member
 
 
-@login_required
 def toggle_follow(request, pk):
   follower = request.user
   followed = get_object_or_404(Member, pk=pk)

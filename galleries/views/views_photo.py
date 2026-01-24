@@ -7,8 +7,6 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.paginator import Paginator as BasePaginator
 from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax, protected_media_url
@@ -20,7 +18,7 @@ from ..forms import PhotoForm
 logger = logging.getLogger(__name__)
 
 
-class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
+class PhotoDetailView(generic.DetailView):
   template_name = "galleries/photo_detail.html"
   model = Photo
 
@@ -60,7 +58,6 @@ class PhotoDetailView(LoginRequiredMixin, generic.DetailView):
       return redirect(exc.redirect_to)
 
 
-@login_required
 def get_photo_url(request, gallery, photo_idx=1):
   assert_request_is_ajax(request)
   if photo_idx < 1:
@@ -72,7 +69,7 @@ def get_photo_url(request, gallery, photo_idx=1):
   return JsonResponse({"pk": photo.id, "image_url": protected_media_url(photo.image.name)})
 
 
-class PhotoAddView(LoginRequiredMixin, generic.CreateView):
+class PhotoAddView(generic.CreateView):
   template_name = "galleries/photo_form.html"
   model = Photo
   form_class = PhotoForm
@@ -101,7 +98,7 @@ class PhotoAddView(LoginRequiredMixin, generic.CreateView):
     return render(request, self.template_name, {"form": form})
 
 
-class PhotoEditView(LoginRequiredMixin, generic.UpdateView):
+class PhotoEditView(generic.UpdateView):
   template_name = "galleries/photo_form.html"
   model = Photo
   form_class = PhotoForm
@@ -115,7 +112,6 @@ class PhotoEditView(LoginRequiredMixin, generic.UpdateView):
     return super().form_valid(form)
 
 
-@login_required
 def delete_photo(request, pk):
   photo = get_object_or_404(Photo, pk=pk)
   gallery = photo.gallery.id

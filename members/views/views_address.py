@@ -1,8 +1,6 @@
 import logging
 from django.views import generic
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from ..models import Address
 from ..forms import AddressUpdateForm
@@ -11,18 +9,18 @@ from cm_main.utils import assert_request_is_ajax
 logger = logging.getLogger(__name__)
 
 
-class AddressDetailView(LoginRequiredMixin, generic.DetailView):
+class AddressDetailView(generic.DetailView):
   model = Address
   template_name = "members/address/address_detail.html"
 
 
-class AddressCreateView(LoginRequiredMixin, generic.CreateView):
+class AddressCreateView(generic.CreateView):
   model = Address
   template_name = "members/address/address_form.html"
   fields = "__all__"
 
 
-class AddressUpdateView(LoginRequiredMixin, generic.UpdateView):
+class AddressUpdateView(generic.UpdateView):
   model = Address
   template_name = "members/address/address_form.html"
   fields = "__all__"
@@ -40,7 +38,7 @@ def _json_address_response(address):
   return JsonResponse(res, status=200)
 
 
-class ModalAddressMixinView(LoginRequiredMixin):
+class ModalAddressMixin:
   model = Address
   template_name = "members/address/address_form.html"
   fields = "__all__"
@@ -55,14 +53,14 @@ class ModalAddressMixinView(LoginRequiredMixin):
       return JsonResponse({"errors": errors}, status=400)
 
 
-class ModalAddressCreateView(ModalAddressMixinView, generic.CreateView):
+class ModalAddressCreateView(ModalAddressMixin, generic.CreateView):
   def post(self, request, *args, **kwargs):
     # create a form instance from the request and save it
     form = AddressUpdateForm(request.POST)
     return self.process_form(request, form)
 
 
-class ModalAddressUpdateView(ModalAddressMixinView, generic.UpdateView):
+class ModalAddressUpdateView(ModalAddressMixin, generic.UpdateView):
   def post(self, request, *args, **kwargs):
     address = get_object_or_404(Address, pk=kwargs["pk"])
     # create a form instance and populate it with data from the request on existing member (or None):
@@ -70,7 +68,6 @@ class ModalAddressUpdateView(ModalAddressMixinView, generic.UpdateView):
     return self.process_form(request, form)
 
 
-@login_required
 def get_address(request, pk):
   assert_request_is_ajax(request)
   address = get_object_or_404(Address, pk=pk)

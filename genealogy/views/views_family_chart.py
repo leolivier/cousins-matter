@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
 from django.utils import formats
 from django.core.cache import cache
 from ..models import Person
@@ -10,12 +9,8 @@ CACHE_KEY_FAMILY_CHART_DATA = "genealogy_family_chart_data"
 register_genealogy_cache(CACHE_KEY_FAMILY_CHART_DATA)
 
 
-@login_required
 def family_chart_view(request, main_person_id=None):
   return render(request, "genealogy/family_chart.html", {"main_person_id": main_person_id})
-
-
-@login_required
 def family_chart_data(request):
   data = cache.get(CACHE_KEY_FAMILY_CHART_DATA)
   if data is not None:

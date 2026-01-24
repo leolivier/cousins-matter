@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import gettext as _
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 
 from ..registration_link_manager import RegistrationLinkManager
@@ -20,9 +19,10 @@ from ..forms import (
 from ..models import Member
 from verify_email.email_handler import send_verification_email
 from django.conf import settings
+from cm_main.mixins import LoginNotRequiredMixin
 
 
-class RegistrationCheckingView(generic.CreateView):
+class RegistrationCheckingView(LoginNotRequiredMixin, generic.CreateView):
   title = _("Sign up")
   template_name = "members/members/member_upsert.html"
 
@@ -101,7 +101,7 @@ class RegistrationCheckingView(generic.CreateView):
     )
 
 
-class MemberInvitationView(LoginRequiredMixin, generic.View):
+class MemberInvitationView(generic.View):
   template_name = "members/registration/registration_invite.html"
 
   def check_before_invitation(self, request):
@@ -201,7 +201,7 @@ class MemberInvitationView(LoginRequiredMixin, generic.View):
     return render(request, self.template_name, {"form": form})
 
 
-class RegistrationRequestView(generic.View):
+class RegistrationRequestView(LoginNotRequiredMixin, generic.View):
   template_name = "members/registration/registration_request.html"
 
   def post(self, request):

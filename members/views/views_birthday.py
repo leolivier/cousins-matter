@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from datetime import date, timedelta
 from django.template.response import TemplateResponse
-from django.contrib.auth.decorators import login_required
 from ..models import Member
 from django.conf import settings
 
@@ -28,11 +27,9 @@ def _birthdays(request, template_name) -> HttpResponse:
   return TemplateResponse(request, template_name, context).render()
 
 
-@login_required
 def birthdays(request) -> HttpResponse:
   return _birthdays(request, "members/members/birthdays.html")
 
 
-@login_required
 def include_birthdays(request) -> HttpResponse:
   return _birthdays(request, "members/members/birthdays_include.html")

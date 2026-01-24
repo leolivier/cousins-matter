@@ -2,12 +2,11 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.models import Site
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext as _
 
-from cm_main.views.views_general import OnlyAdminMixin
+from cm_main.mixins import OnlyAdminMixin
 from .models import FlatPage
 from .forms import PageForm
 
@@ -63,7 +62,7 @@ class PageAdminListView(OnlyAdminMixin, generic.ListView):
   template_name = "pages/pages_admin_list.html"
 
 
-class PageTreeView(LoginRequiredMixin, generic.ListView):
+class PageTreeView(generic.ListView):
   model = FlatPage
   template_name = "pages/page_tree.html"
 

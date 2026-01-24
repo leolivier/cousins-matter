@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -18,7 +17,7 @@ def managed_closed_list(poll, form):
     raise ValueError("Closed list must be empty for this type of Poll")
 
 
-class PollCreateView(LoginRequiredMixin, generic.CreateView):
+class PollCreateView(generic.CreateView):
   model = Poll
   form_class = PollUpsertForm
   template_name = "polls/poll_upsert_form.html"
@@ -50,7 +49,7 @@ class PollCreateView(LoginRequiredMixin, generic.CreateView):
       )
 
 
-class PollUpdateView(LoginRequiredMixin, generic.UpdateView):
+class PollUpdateView(generic.UpdateView):
   model = Poll
   form_class = PollUpsertForm
   template_name = "polls/poll_upsert_form.html"
@@ -85,7 +84,7 @@ class PollUpdateView(LoginRequiredMixin, generic.UpdateView):
       return render(request, self.template_name, {"form": form})
 
 
-class PollDeleteView(LoginRequiredMixin, generic.DeleteView):
+class PollDeleteView(generic.DeleteView):
   model = Poll
 
   def get(self, request, pk):
@@ -108,13 +107,13 @@ class PollDeleteView(LoginRequiredMixin, generic.DeleteView):
     return HttpResponseClientRedirect(reverse("polls:all_polls"))
 
 
-class QuestionUpsertViewMixin(LoginRequiredMixin):
+class QuestionUpsertMixin:
   model = Question
   form_class = QuestionUpsertForm
   template_name = "polls/questions/question_form.html"
 
 
-class QuestionCreateView(QuestionUpsertViewMixin, generic.CreateView):
+class QuestionCreateView(QuestionUpsertMixin, generic.CreateView):
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context["poll_id"] = self.kwargs["poll_id"]
@@ -133,7 +132,7 @@ class QuestionCreateView(QuestionUpsertViewMixin, generic.CreateView):
     return HttpResponseClientRefresh()
 
 
-class QuestionUpdateView(QuestionUpsertViewMixin, generic.UpdateView):
+class QuestionUpdateView(QuestionUpsertMixin, generic.UpdateView):
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context["question_id"] = self.kwargs["pk"]
@@ -155,7 +154,7 @@ class QuestionUpdateView(QuestionUpsertViewMixin, generic.UpdateView):
     return HttpResponseClientRefresh()
 
 
-class QuestionDeleteView(QuestionUpsertViewMixin, generic.DeleteView):
+class QuestionDeleteView(QuestionUpsertMixin, generic.DeleteView):
   model = Question
 
   def get(self, request, pk):

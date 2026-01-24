@@ -6,8 +6,6 @@ from django.db.models import Q
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import logout
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
 from django_htmx.http import HttpResponseClientRefresh
@@ -24,7 +22,6 @@ from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm, Notif
 logger = logging.getLogger(__name__)
 
 
-@login_required
 def validate_username(request):
   """Check username availability"""
   username = request.GET.get("username", None)
@@ -32,7 +29,6 @@ def validate_username(request):
   return JsonResponse(response)
 
 
-@login_required
 def validate_family_name(request):
   """Check family name availability"""
   family_name = request.GET.get("name", None)
@@ -40,7 +36,6 @@ def validate_family_name(request):
   return JsonResponse(response)
 
 
-@login_required
 def logout_member(request):
   logout(request)
   messages.success(request, _("You have been logged out"))
@@ -58,7 +53,7 @@ def member_manager_name(member):
   return Member.objects.get(id=member.member_manager.id).full_name if member and member.member_manager else None
 
 
-class MembersView(LoginRequiredMixin, generic.ListView):
+class MembersView(generic.ListView):
   template_name = "members/members/members.html"
   # paginate_by = 100
   model = Member
@@ -90,7 +85,7 @@ class MembersView(LoginRequiredMixin, generic.ListView):
       return redirect(exc.redirect_to)
 
 
-class MemberDetailView(LoginRequiredMixin, generic.DetailView):
+class MemberDetailView(generic.DetailView):
   model = Member
   template_name = "members/members/member_detail.html"
 
@@ -107,7 +102,7 @@ class MemberDetailView(LoginRequiredMixin, generic.DetailView):
     return reverse("members:detail", kwargs={"pk": self.pk})
 
 
-class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
+class CreateManagedMemberView(generic.CreateView):
   """View used to create a managed member"""
 
   model = Member
@@ -169,7 +164,7 @@ def _can_edit_member(request, member):
     return member.member_manager.id == request.user.id
 
 
-class EditMemberView(LoginRequiredMixin, generic.UpdateView):
+class EditMemberView(generic.UpdateView):
   template_name = "members/members/member_upsert.html"
   title = _("Update Member Details")
   success_message = _("Member successfully updated")
@@ -279,7 +274,6 @@ def delete_member(request, pk):
   return redirect(reverse("members:members"))
 
 
-@login_required
 def search_members(request):
   assert_request_is_ajax(request)
   query = request.GET.get("q", "")
@@ -293,7 +287,6 @@ def search_members(request):
   return JsonResponse({"results": data})
 
 
-@login_required
 def notify_death(request, pk):
   member = get_object_or_404(Member, pk=pk)
   if request.method == "POST":

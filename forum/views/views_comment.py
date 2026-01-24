@@ -1,8 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from django.http import HttpResponseBadRequest, JsonResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import RequestDataTooBig
 from django.utils.translation import gettext as _
 from django_htmx.http import HttpResponseClientRefresh
@@ -14,7 +12,7 @@ from ..models import Message, Comment
 from ..forms import CommentForm
 
 
-class CommentCreateView(LoginRequiredMixin, generic.CreateView):
+class CommentCreateView(generic.CreateView):
   model = Comment
   form_class = CommentForm
 
@@ -43,7 +41,7 @@ class CommentCreateView(LoginRequiredMixin, generic.CreateView):
       return HttpResponseClientRefresh()
 
 
-class CommentEditView(LoginRequiredMixin, generic.UpdateView):
+class CommentEditView(generic.UpdateView):
   model = Comment
   form_class = CommentForm
 
@@ -80,7 +78,6 @@ class CommentEditView(LoginRequiredMixin, generic.UpdateView):
     return JsonResponse({"errors": errors}, status=400)
 
 
-@login_required
 def delete_comment(request, pk):
   comment = get_object_or_404(Comment, pk=pk)
   check_edit_permission(request, comment.author)

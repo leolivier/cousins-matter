@@ -1,6 +1,5 @@
 import logging
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import JsonResponse
@@ -32,7 +31,6 @@ def display_private_chat_room(request, room_slug, page_num=None):
   return display_chat_room(request, room_slug, private=True, page_num=page_num)
 
 
-@login_required
 def search_private_members(request, room_slug):
   """
   Search for private members in a given chat room.
@@ -74,7 +72,6 @@ def search_private_members(request, room_slug):
   return JsonResponse({"results": data})
 
 
-@login_required
 def list_private_room_members(request, room_slug):
   """
   Renders the 'chat/private/room_members.html' template with the list of members of a private chat room.
@@ -101,7 +98,6 @@ def list_private_room_members(request, room_slug):
   return render(request, "chat/private/room_members.html", {"room": room})
 
 
-@login_required
 def add_member_to_private_room(request, room_slug):
   """
   Add a member to a private chat room.
@@ -146,7 +142,6 @@ def add_member_to_private_room(request, room_slug):
   return redirect(reverse("chat:private_room_members", args=[room.slug]))
 
 
-@login_required
 def remove_member_from_private_room(request, room_slug, member_id):
   """
   Remove a member from a private chat room.
@@ -195,7 +190,6 @@ def remove_member_from_private_room(request, room_slug, member_id):
   return redirect(reverse("chat:private_room_members", args=[room.slug]))
 
 
-@login_required
 def leave_private_room(request, room_slug):
   """
   Leave a private chat room.
@@ -250,7 +244,6 @@ def leave_private_room(request, room_slug):
   return redirect(reverse("chat:private_chat_rooms"))
 
 
-@login_required
 def list_private_room_admins(request, room_slug):
   """
   Renders the 'chat/private/room_admins.html' template with the list of admins of a private chat room.
@@ -277,7 +270,6 @@ def list_private_room_admins(request, room_slug):
   return render(request, "chat/private/room_admins.html", {"room": room})
 
 
-@login_required
 def add_admin_to_private_room(request, room_slug):
   """
   Adds a member as an admin to a private chat room.
@@ -323,7 +315,6 @@ def add_admin_to_private_room(request, room_slug):
   return redirect(reverse("chat:private_room_admins", args=[room.slug]))
 
 
-@login_required
 def remove_admin_from_private_room(request, room_slug, member_id):
   """
   Removes an admin from a private chat room.
@@ -372,7 +363,6 @@ def remove_admin_from_private_room(request, room_slug, member_id):
   return redirect(reverse("chat:private_room_admins", args=[room.slug]))
 
 
-@login_required
 def leave_private_room_admins(request, room_slug):
   """
   Removes the authenticated user from the admins of a private chat room.

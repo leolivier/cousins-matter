@@ -1,6 +1,5 @@
 import logging
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
@@ -31,14 +30,12 @@ def display_public_chat_room(request, room_slug, page_num=None):
   return display_chat_room(request, room_slug, private=False, page_num=page_num)
 
 
-@login_required
 def toggle_follow(request, room_slug):
   room = get_object_or_404(ChatRoom, slug=room_slug)
   room_url = reverse("chat:room", args=[room_slug])
   return followers.toggle_follow(request, room, room.owner(), room_url)
 
 
-@login_required
 def edit_room(request, room_slug):
   assert_request_is_ajax(request)
   room = get_object_or_404(ChatRoom, slug=room_slug)
@@ -51,7 +48,6 @@ def edit_room(request, room_slug):
   return JsonResponse({"room_name": room.name})
 
 
-@login_required
 def delete_room(request, room_slug):
   room = get_object_or_404(ChatRoom, slug=room_slug)
   if request.method == "POST":

@@ -1,7 +1,6 @@
 from urllib.parse import urlencode
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
@@ -13,7 +12,6 @@ from .models import Trove
 from .forms import TreasureForm
 
 
-@login_required
 def trove_cave(request, page=1):
   category = request.GET.get("category")
   if category and category in dict(Trove.CATEGORY_CHOICES).keys():
@@ -42,7 +40,6 @@ def trove_cave(request, page=1):
     return redirect(exc.redirect_to)
 
 
-@login_required
 def create_treasure(request):
   if request.method == "POST":
     form = TreasureForm(request.POST, request.FILES)
@@ -60,7 +57,6 @@ def create_treasure(request):
   return render(request, "troves/treasure_form.html", {"form": form})
 
 
-@login_required
 def update_treasure(request, pk):
   treasure = get_object_or_404(Trove, pk=pk)
   check_edit_permission(request, treasure.owner)
@@ -75,7 +71,6 @@ def update_treasure(request, pk):
 
 
 @csrf_exempt
-@login_required
 def delete_treasure(request, pk):
   assert_request_is_ajax(request)
   try:
@@ -87,7 +82,6 @@ def delete_treasure(request, pk):
     return JsonResponse({"deleted": False})
 
 
-@login_required
 def treasure_detail(request, pk):
   try:
     treasure = get_object_or_404(Trove, pk=pk)

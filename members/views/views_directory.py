@@ -6,13 +6,7 @@ from django.utils.translation import gettext as _
 from fpdf import FPDF
 from io import BytesIO
 
-# from reportlab.rl_config import defaultPageSize
-# from reportlab.platypus import Table, TableStyle, SimpleDocTemplate
-# from reportlab.lib.pagesizes import letter, A4
-# from reportlab.lib import colors
-# from reportlab.lib.units import inch
 from django.http import FileResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.staticfiles import finders
 from django.views import generic
 from django.utils.text import slugify
@@ -27,7 +21,7 @@ def get_static_path(filename):
   return finders.find(filename) or None
 
 
-class MembersDirectoryView(LoginRequiredMixin, generic.View):
+class MembersDirectoryView(generic.View):
   template_name = "members/members/members_directory.html"
   model = Member
 
@@ -150,7 +144,7 @@ class DirectoryPDF(FPDF):
     self.ln(final_height)
 
 
-class MembersPrintDirectoryView(LoginRequiredMixin, generic.View):
+class MembersPrintDirectoryView(generic.View):
   def get(self, request):
     pdf = DirectoryPDF("P", "mm", settings.PDF_SIZE)
     pdf.draw_table_header()

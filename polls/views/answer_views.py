@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -9,7 +8,7 @@ from ..models import Answer, EventPlanner, PollAnswer, Poll
 from ..forms.answer_forms import get_answerform_class_for_question_type
 
 
-class PollsVoteView(LoginRequiredMixin, generic.View):
+class PollsVoteView(generic.View):
   model = PollAnswer
   template_name = "polls/poll_vote.html"
   poll_model = Poll

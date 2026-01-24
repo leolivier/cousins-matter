@@ -4,7 +4,6 @@ from urllib.request import urlopen
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
@@ -81,7 +80,6 @@ def get_latest_release_text(request):
   return latest_release
 
 
-@login_required
 def statistics(request):
   admin = Member.objects.filter(is_superuser=True).first()
   all_messages_count = ChatMessage.objects.count()

@@ -6,8 +6,6 @@ from django.db import transaction
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django_htmx.http import HttpResponseClientRedirect
 from django.utils.translation import gettext as _
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.exceptions import RequestDataTooBig
 from cm_main.utils import (
@@ -23,7 +21,7 @@ from ..forms import MessageForm, PostForm
 from members.models import Member
 
 
-class PostsListView(LoginRequiredMixin, generic.ListView):
+class PostsListView(generic.ListView):
   model = Post
 
   def get(self, request, page=1):
@@ -46,7 +44,7 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
       return redirect(exc.redirect_to)
 
 
-class PostDisplayView(LoginRequiredMixin, generic.DetailView):
+class PostDisplayView(generic.DetailView):
   model = Post
 
   def get(self, request, pk, page_num=1):
@@ -79,7 +77,7 @@ class PostDisplayView(LoginRequiredMixin, generic.DetailView):
       return redirect(exc.redirect_to)
 
 
-class PostCreateView(LoginRequiredMixin, generic.CreateView):
+class PostCreateView(generic.CreateView):
   model = Post
 
   def dispatch(self, request, *args, **kwargs):
@@ -128,7 +126,7 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
     )
 
 
-class PostEditView(LoginRequiredMixin, generic.UpdateView):
+class PostEditView(generic.UpdateView):
   model = Post
   form_class = PostForm
 
@@ -172,7 +170,6 @@ class PostEditView(LoginRequiredMixin, generic.UpdateView):
     )
 
 
-@login_required
 def delete_post(request, pk):
   post = get_object_or_404(Post, pk=pk)
   if request.method == "POST":

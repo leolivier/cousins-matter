@@ -3,7 +3,6 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user, get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import redirect, render
@@ -15,7 +14,7 @@ from ..forms import ContactForm
 logger = logging.getLogger(__name__)
 
 
-class ContactView(LoginRequiredMixin, generic.FormView):
+class ContactView(generic.FormView):
   template_name = "cm_main/contact/contact-form.html"
   form_class = ContactForm
   success_url = "/"

@@ -1,7 +1,5 @@
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -15,7 +13,7 @@ from cm_main.utils import check_edit_permission
 from .models import AdPhoto, ClassifiedAd, Categories
 
 
-class CreateAdView(LoginRequiredMixin, generic.CreateView):
+class CreateAdView(generic.CreateView):
   model = ClassifiedAd
   template_name = "classified_ads/form.html"
   form_class = ClassifiedAdForm
@@ -35,7 +33,7 @@ class CreateAdView(LoginRequiredMixin, generic.CreateView):
     return reverse("classified_ads:detail", args=[self.object.pk])
 
 
-class UpdateAdView(LoginRequiredMixin, generic.UpdateView):
+class UpdateAdView(generic.UpdateView):
   model = ClassifiedAd
   template_name = "classified_ads/form.html"
   form_class = ClassifiedAdForm
@@ -54,7 +52,7 @@ class UpdateAdView(LoginRequiredMixin, generic.UpdateView):
     return super().form_valid(form)
 
 
-class DeleteAdView(LoginRequiredMixin, generic.View):
+class DeleteAdView(generic.View):
   model = ClassifiedAd
 
   def get(self, request, pk):
@@ -78,7 +76,7 @@ class DeleteAdView(LoginRequiredMixin, generic.View):
     return HttpResponseClientRedirect(reverse("classified_ads:list"))
 
 
-class ListAdsView(LoginRequiredMixin, generic.ListView):
+class ListAdsView(generic.ListView):
   model = ClassifiedAd
   template_name = "classified_ads/list.html"
 
@@ -86,12 +84,12 @@ class ListAdsView(LoginRequiredMixin, generic.ListView):
     return ClassifiedAd.objects.filter(ad_status=ClassifiedAd.AD_STATUS_FOR_SALE).order_by("-date_created")
 
 
-class AdDetailView(LoginRequiredMixin, generic.DetailView):
+class AdDetailView(generic.DetailView):
   model = ClassifiedAd
   template_name = "classified_ads/detail.html"
 
 
-class AdPhotoAddView(LoginRequiredMixin, generic.View):
+class AdPhotoAddView(generic.View):
   def get(self, request, pk):
     ad = get_object_or_404(ClassifiedAd, pk=pk)
     check_edit_permission(request, ad.owner)
@@ -110,7 +108,6 @@ class AdPhotoAddView(LoginRequiredMixin, generic.View):
       return HttpResponseClientRefresh()
 
 
-@login_required
 def delete_photo(request, pk):
   photo = get_object_or_404(AdPhoto, pk=pk)
   ad = photo.ad
@@ -133,7 +130,6 @@ def delete_photo(request, pk):
   )
 
 
-@login_required
 def send_message(request, pk):
   ad = get_object_or_404(ClassifiedAd, pk=pk)
   if request.method == "POST":
@@ -168,7 +164,6 @@ The %(site_name)s admin team
   return render(request, "classified_ads/send-message.html", {"form": MessageForm(), "ad": ad})
 
 
-@login_required
 def get_subcategories(request):
   category = request.GET.get("category")
   subcategories = [("", _("Select a subcategory")), *Categories.list_subcategories(category)]

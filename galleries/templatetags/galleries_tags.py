@@ -8,9 +8,9 @@ register = Library()
 
 def get_gallery_photos(gallery):
   """
-  Helper function returning all the photos in a gallery, including only the id, name, image and thumbnail fields.
+  Helper function returning all the photos in a gallery.
   """
-  return Photo.objects.filter(gallery=gallery).order_by("id").only("id", "name", "image", "thumbnail")
+  return Photo.objects.filter(gallery=gallery).order_by("id")
 
 
 def complete_photos_data(page, page_num, num_pages):
@@ -19,8 +19,8 @@ def complete_photos_data(page, page_num, num_pages):
   in each photo, and transforming URLs to protected media URLs
   """
 
-  photos_dict = [{} for _ in range(len(page.object_list))]
-  for idx, p in enumerate(page.object_list):
+  photos_dict = [{} for _ in range(page.object_list.count())]
+  for idx, p in enumerate(page.object_list.all()):
     pmu = protected_media_url(p.image.name)
     tmu = protected_media_url(p.thumbnail.name)
 

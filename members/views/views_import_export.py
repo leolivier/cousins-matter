@@ -190,6 +190,7 @@ def select_city(request):
 def select_members_to_export(request):
   return render(request, "members/members/export_members.html")
 
+
 def export_members_to_csv(request):
   if request.method != "POST":
     raise ValidationError(_("Method not allowed"))

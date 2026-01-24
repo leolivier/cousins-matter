@@ -11,6 +11,8 @@ register_genealogy_cache(CACHE_KEY_FAMILY_CHART_DATA)
 
 def family_chart_view(request, main_person_id=None):
   return render(request, "genealogy/family_chart.html", {"main_person_id": main_person_id})
+
+
 def family_chart_data(request):
   data = cache.get(CACHE_KEY_FAMILY_CHART_DATA)
   if data is not None:

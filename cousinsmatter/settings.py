@@ -34,6 +34,9 @@ if DEBUG:
 
 TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
 
+DEBUG_TOOLBAR = env.bool("DEBUG_TOOLBAR", default=DEBUG and not TESTING)
+DEBUG_HTMX = env.bool("DEBUG_HTMX", default=DEBUG)
+
 SECRET_KEY = env.str("SECRET_KEY")
 # when rotating the secret key, you can provide the old key here to avoid breaking the site
 SECRET_KEY_FALLBACKS = env.list("PREVIOUS_SECRET_KEYS", default=[])
@@ -164,7 +167,7 @@ INSTALLED_APPS = [
   "django_q",
   "django_htmx",
 ]
-if DEBUG and not TESTING:
+if DEBUG_TOOLBAR:
   INSTALLED_APPS.append("debug_toolbar")
 
 MIDDLEWARE = [
@@ -182,14 +185,14 @@ MIDDLEWARE = [
   "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
   "django_htmx.middleware.HtmxMiddleware",
 ]
-if DEBUG and not TESTING:
+if DEBUG_TOOLBAR:
   MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     *MIDDLEWARE,
   ]
 #   MIDDLEWARE.append('cousinsmatter.htmlvalidator.HtmlValidatorMiddleware')
 
-if DEBUG and not TESTING:
+if DEBUG_TOOLBAR:
   INTERNAL_IPS = [
     "127.0.0.1",
     "::1",

@@ -33,7 +33,7 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'cm_main/images/favicon.jpg' %}"/>
     {# javascript catalog #}
     <script src="{% url 'cm_main:javascript-catalog' LANGUAGE_CODE %}"></script>
-    {%if settings.DEBUG%}<script>htmx.logAll();</script> <!-- for debugging -->{%endif%}
+    {%if settings.DEBUG_HTMX%}<script>htmx.logAll();</script> <!-- for debugging -->{%endif%}
   </head>
   <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
     

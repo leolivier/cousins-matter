@@ -2,19 +2,18 @@
 {% load i18n cm_tags static %}
 {% block title %}{% title _("Photo") %} {% endblock %}
 {%block header %}
-{%url 'galleries:gallery_photo_url' gallery_id '1234567890' as image_url %}
-{%url 'galleries:photo' '1234567890' as photo_url%}
 <link rel="stylesheet" href="{% static 'galleries/css/galleries.css' %}"/>
 <script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 <script>
-$image_url = '{{ image_url }}';
-$photo_url =	'{{ photo_url }}';
-$photos_count = {{ photos_count }}
+	function get_photo_detail_url(pk) {
+		const url = "{% url 'galleries:photo' 123456789 %}".replace('123456789', pk);
+		return url;
+	}
 </script>
 <script src="{% static 'galleries/js/galleries.js' %}"></script>
 {% endblock %}
 {% block content %}
-{%with photo=page.object_list|first%}
+{%with photo=object%}
 <div class="container px-2">
 	<div class="box">
 		<div class="level">
@@ -26,51 +25,36 @@ $photos_count = {{ photos_count }}
 					</p>
 				</div>
 			</div>
-			<div class="level-item">
-				{%paginate page True %}
-			</div>
 			<div class="level-right">
 				<p class="buttons has-addons">
-					<a class="button" href="{% url 'galleries:detail' gallery_id %}" 
-					title="{% blocktranslate with gname=photo.gallery.name%}Back to {{gname}}{%endblocktranslate %}">
-					{%icon "back" %}
+					<a class="button" href="{% url 'galleries:detail' photo.gallery.id %}"
+						title="{% blocktranslate with gname=photo.gallery.name%}Back to {{gname}}{%endblocktranslate %}">
+						{%icon "back" %}
 					</a>
+				{% if not photo.uploaded_by_id or photo.uploaded_by_id == request.user.id or request.user.is_superuser %}
 					<a class="button" href="{% url 'galleries:edit_photo' photo.id %}"
 						title="{% trans 'Edit Photo' %}">
 						{%icon "edit-photo" %}
 					</a>
-					{% autoescape off %}
-						{%trans "Delete photo" as delete_title %}
-						{% blocktranslate asvar delete_msg with object=photo.name|escape trimmed%}
-							Are you sure you want to delete "{{ object }}"?
-						{% endblocktranslate %}
-						{% url 'galleries:delete_photo' photo.id as delete_url %}
-						{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title button_text='' ays_msg=delete_msg|force_escape delete_url=delete_url expected_value=photo.name|escape %}
-					{% endautoescape %}
+					{% url 'galleries:delete_photo' photo.id as delete_url %}
+					{%include "cm_main/common/confirm-delete-modal-htmx.html#show_delete_button" with button_text='' delete_url=delete_url %}
+				{% endif %}
 				</p>
 			</div>
-			{% if page.num_pages > 1 %}
-				<div class="level-item">
-					{%paginate page True %}
-				</div>
-			{% endif %}
 		</div>
 	</div>
 	<div class="container">
 		<figure class="photo">
-			<img src="{{photo.image_url}}"
+			<img src="{{photo.image.url}}"
 				class="gallery-image"
-				{%if photo.next_url%}data-next="{{photo.next_url}}"{%endif%}
-				data-fullscreen="{{photo.image_url}}"
-				{%if photo.previous_url%}data-prev="{{photo.previous_url}}"{%endif%}
-				data-idx="{{page.number}}"
+				data-fullscreen="{{photo.image.url}}"
 				data-pk="{{photo.id}}"
+				data-swipe-url="{%url 'galleries:get_fullscreen_photo' photo.id %}"
 			>
 		</figure>
 		<div class="rich-text">{% autoescape off %}{{photo.description}}{% endautoescape %}</div>
 	</div>
 </div>
-{%include "galleries/photo_fullscreen.html"%}
-{% include "cm_main/common/modal_form.html" with modal_id="delete-item-modal"%}
+{%include "galleries/photo_fullscreen_htmx.html"%}
 {%endwith%}
 {% endblock %}

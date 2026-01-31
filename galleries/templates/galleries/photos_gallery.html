@@ -1,17 +1,15 @@
 {% load i18n cm_tags %}
 <div class="container px-2">
 	{%paginate page%}
-	<div class="grid image-gallery">
+	<div class="grid gallery-image">
 		{% for photo in page.object_list %}
 		<div class="cell has-text-centered">
 			<figure class="image thumbnail mx-auto">
 				<img src="{{photo.thumbnail_url}}" 
 					class="gallery-image"
-					{%if photo.next_url%}data-next="{{photo.next_url}}"{%endif%}
 					data-fullscreen="{{photo.image_url}}"
-					{%if photo.previous_url%}data-prev="{{photo.previous_url}}"{%endif%}
-					data-idx="{%get_absolute_idx_from_page page forloop.counter%}"
 					data-pk="{{photo.id}}"
+					data-swipe-url="{%url 'galleries:get_fullscreen_photo' photo.id %}"
 				>
 			</figure>
 			<p>{{photo.name}}</p>
@@ -19,5 +17,6 @@
 		{% endfor %}
 	</div>
 </div>
-{%include "galleries/photo_fullscreen.html"%}
+
+{%include "galleries/photo_fullscreen_htmx.html"%}
 {% if page.num_pages > 1 %}{%paginate page%}{% endif %}

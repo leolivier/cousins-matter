@@ -1,16 +1,13 @@
 from datetime import date
 import logging
 from django.forms import ValidationError
-from django.http import JsonResponse
-from django.shortcuts import redirect, render, get_object_or_404
+from django_htmx.http import HttpResponseClientRedirect
+from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.views import generic
 from django.utils.translation import gettext as _
-from django.core.paginator import Paginator as BasePaginator
-from cm_main.utils import PageOutOfBounds, Paginator, assert_request_is_ajax, protected_media_url
-from galleries.templatetags.galleries_tags import complete_photos_data, get_gallery_photos
 from cm_main.utils import check_edit_permission
 from ..models import Photo
 from ..forms import PhotoForm
@@ -18,55 +15,46 @@ from ..forms import PhotoForm
 logger = logging.getLogger(__name__)
 
 
+def get_next_prev_photo(pk, side):
+  # this raises an exception Photo.DoesNotExist if the photo doesn't exist
+  gallery_id = Photo.objects.only("gallery_id").get(pk=pk).gallery_id
+  photo = Photo.objects.filter(gallery=gallery_id).order_by("id")
+
+  match side:
+    case "prev":
+      photo = photo.filter(id__lt=pk).last()
+    case "next":
+      photo = photo.filter(id__gt=pk).first()
+    case None:
+      photo = photo.get(id=pk)
+    case _:
+      raise ValueError("Invalid side: %s" % side)
+
+  return photo or Photo.objects.get(id=pk)
+
+
 class PhotoDetailView(generic.DetailView):
   template_name = "galleries/photo_detail.html"
   model = Photo
 
-  def get(self, request, **kwargs):
-    """This method can be called either with a photo id, or with a gallery id and a photo number in the gallery
-    (if photo num not given, it takes the first one)"""
-    if "pk" not in kwargs:
-      # if we don't have the pk in args, let's find the proper photo based on the photo_num in the gallery
-      # using the BasePaginator ==> we try to find which photo is contained in the page, and use its pk
-      if "gallery" not in kwargs:
-        raise ValidationError(_("Missing either photo id or gallery id"))
-      gallery_id = kwargs["gallery"]
-      photo_num = kwargs["photo_num"] if "photo_num" in kwargs else 1
-      ptor = BasePaginator(Photo.objects.filter(gallery=gallery_id), 1)
-      page = ptor.page(photo_num)
-      # only one photo in the page, take it
-      photo = page.object_list[0]
-    else:
-      # we have the pk in the args, now compute the gallery and photo num
-      pk = kwargs["pk"]
-      photo = get_object_or_404(Photo, pk=pk)
-      gallery_id = photo.gallery.id
-      photo_num = Photo.objects.filter(gallery=gallery_id).order_by("id").filter(id__lte=pk).count()
 
-    # Now, we have everything, we can repaginate
-    photos = get_gallery_photos(gallery_id)
-    photos_count = photos.count()
-    try:
-      # per_page=1 so page_num = photo_num
-      ptor = Paginator(
-        photos, per_page=1, compute_link=lambda photo_num: reverse("galleries:photo_list", args=[gallery_id, photo_num])
-      )
-      page = ptor.get_page_data(photo_num)
-      complete_photos_data(page, photo_num, ptor.num_pages)
-      return render(request, self.template_name, {"page": page, "gallery_id": gallery_id, "photos_count": photos_count})
-    except PageOutOfBounds as exc:
-      return redirect(exc.redirect_to)
+def get_fullscreen_photo(request, pk):
+  assert request.htmx
+  try:
+    photo = get_next_prev_photo(pk, request.GET.get("side"))
+  except Photo.DoesNotExist:
+    messages.error(request, _("Photo not found"))
+    return HttpResponseClientRedirect(reverse("galleries:galleries"))
 
-
-def get_photo_url(request, gallery, photo_idx=1):
-  assert_request_is_ajax(request)
-  if photo_idx < 1:
-    return JsonResponse({"results": []})
-  nb_photos = Photo.objects.filter(gallery=gallery).count()
-  if photo_idx > nb_photos:
-    return JsonResponse({"results": []})
-  photo = Photo.objects.filter(gallery=gallery)[photo_idx - 1]
-  return JsonResponse({"pk": photo.id, "image_url": protected_media_url(photo.image.name)})
+  return render(
+    request,
+    "galleries/photo_fullscreen_htmx.html#image",
+    {
+      "swipe_url": reverse("galleries:get_fullscreen_photo", args=[photo.id]),
+      "fullscreen_url": photo.image.url,
+      "pk": photo.id,
+    },
+  )
 
 
 class PhotoAddView(generic.CreateView):
@@ -113,13 +101,30 @@ class PhotoEditView(generic.UpdateView):
 
 
 def delete_photo(request, pk):
-  photo = get_object_or_404(Photo, pk=pk)
-  gallery = photo.gallery.id
-  if not request.user.is_superuser:
-    if (
-      (photo.uploaded_by or photo.gallery.owner) and request.user != photo.uploaded_by and request.user != photo.gallery.owner
-    ):
-      raise PermissionDenied
-  photo.delete()
-  messages.success(request, _("Photo deleted"))
-  return redirect("galleries:detail", gallery)
+  try:
+    photo = Photo.objects.select_related("gallery").get(pk=pk)
+  except Photo.DoesNotExist:
+    return HttpResponseClientRedirect(reverse("galleries:galleries"), status=404)
+  if not (
+    request.user.is_superuser
+    or (photo.uploaded_by and request.user == photo.uploaded_by)
+    or (photo.gallery.owner and request.user == photo.gallery.owner)
+  ):
+    raise PermissionDenied
+  if request.method == "POST":
+    photo.delete()
+    messages.success(request, _("Photo deleted"))
+    return HttpResponseClientRedirect(reverse("galleries:detail", args=[photo.gallery.id]))
+  delete_title = _("Delete photo")
+  delete_msg = _('Are you sure you want to delete "%(object)s"?') % {"object": photo.name}
+  return render(
+    request,
+    "cm_main/common/confirm-delete-modal-htmx.html",
+    {
+      "ays_title": delete_title,
+      "button_text": "",
+      "ays_msg": delete_msg,
+      "delete_url": request.get_full_path(),
+      "expected_value": photo.name,
+    },
+  )

@@ -34,15 +34,3 @@ class PhotoDetailTest(GalleryBaseTestCase):
     self.assertTemplateUsed(response, "galleries/photo_detail.html")
     self.assertContains(response, self.photo.name)
     self.assertContains(response, protected_media_url(self.photo.image.name))
-    self.assertContains(response, f'data-next="{protected_media_url(self.photos[self.position + 1].image.name)}"')
-    self.assertContains(response, f'data-prev="{protected_media_url(self.photos[self.position - 1].image.name)}"')
-
-  def test_photo_detail_with_gallery_and_num(self):
-    # print("gal&num: id:", self.photo.id, "position:", self.position, "max pos:", len(self.photos) - 1)
-    response = self.client.get(
-      reverse("galleries:gallery_photo_url", args=[self.gallery.id, self.position + 1]),
-      **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
-    )
-    self.assertEqual(response.status_code, 200)
-    print("response:", response.json())
-    self.assertEqual(response.json(), {"pk": self.photo.id, "image_url": protected_media_url(self.photo.image.name)})

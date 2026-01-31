@@ -5,11 +5,11 @@
 {%url 'galleries:gallery_photo_url' gallery.id '1234567890' as image_url %}
 {%url 'galleries:photo' '1234567890' as photo_url%}
 <link rel="stylesheet" href="{% static 'galleries/css/galleries.css' %}"/>
-<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 <script>
-$image_url = '{{ image_url }}';
-$photo_url =	'{{ photo_url }}';
-$photos_count = {{ gallery.photo_set.count }}
+	function get_photo_detail_url(pk) {
+		const url = "{% url 'galleries:photo' 123456789 %}".replace('123456789', pk);
+		return url;
+	}
 </script>
 <script src="{% static 'galleries/js/galleries.js' %}"></script>
 {% endblock header %}
@@ -64,16 +64,14 @@ $photos_count = {{ gallery.photo_set.count }}
 					title="{% translate 'Create Sub Gallery' %}">
 					{%icon "new-gallery" %}
 				</a>
+			{% if gallery.owner and gallery.owner == request.user or request.user.is_superuser %}
 				<a class="button" href="{% url 'galleries:edit' gallery.id %}"
 					title="{% trans 'Edit Gallery' %}">
 					{%icon "edit-gallery" %}
 				</a>
-				{% trans 'Delete gallery' as delete_title%}
-				{% blocktranslate with object=gallery.name asvar delete_msg trimmed %}
-					Are you sure you want to delete "{{ object }}" and all photos and sub galleries it contains?
-				{% endblocktranslate %}
 				{% url 'galleries:delete_gallery' gallery.id as delete_url %}
-				{%include "cm_main/common/confirm-delete-modal.html" with button_text='' ays_title=delete_title ays_msg=delete_msg|force_escape action_url=delete_url expected_value=gallery.name|escape %}
+				{%include "cm_main/common/confirm-delete-modal-htmx.html#show_delete_button" with button_text='' delete_url=delete_url %}
+			{% endif %}
 			</p>
 		</div>
 	</div>
@@ -82,5 +80,4 @@ $photos_count = {{ gallery.photo_set.count }}
 <div class="container mt-5">
 	{% include_photos gallery page_num page_size %}
 </div>
-{% include "cm_main/common/modal_form.html" with modal_id="delete-item-modal"%}
 {% endblock %}

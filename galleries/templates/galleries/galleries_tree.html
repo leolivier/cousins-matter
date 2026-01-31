@@ -17,7 +17,9 @@
 		</div>
 
 		{% if galleries.count == 0 %}
-		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start has-text-centered has-text-warning has-background-warning-light">{% translate "No galleries found" %}</div>
+		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start has-text-centered has-text-warning has-background-warning-light">
+			{% translate "No galleries found" %}
+		</div>
 		{% else %}
 		  {% include_galleries galleries recursive=True level=0 %}
 		{% endif %}

@@ -22,14 +22,9 @@ urlpatterns = [
   ),
   path("<int:gallery>/photos", views_photo.PhotoAddView.as_view(), name="add_photo"),
   path(
-    "<int:gallery>/photos/<int:photo_num>",
-    views_photo.PhotoDetailView.as_view(),
-    name="photo_list",
-  ),
-  path(
-    "<int:gallery>/photo/<int:photo_idx>",
-    views_photo.get_photo_url,
-    name="gallery_photo_url",
+    "photo/<int:pk>/fullscreen",
+    views_photo.get_fullscreen_photo,
+    name="get_fullscreen_photo",
   ),
   path("photo/<int:pk>", views_photo.PhotoDetailView.as_view(), name="photo"),
   path("photo/<int:pk>/edit", views_photo.PhotoEditView.as_view(), name="edit_photo"),

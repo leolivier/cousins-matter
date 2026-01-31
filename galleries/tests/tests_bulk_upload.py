@@ -85,3 +85,4 @@ class TestBulkUpload(GalleryBaseTestCase):
 
     # Check that the import gallery contains the imported photos
     self.assertEqual(target_gallery.photo_set.count(), 12)
+    # TODO: remove target gallery directory

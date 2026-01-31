@@ -10,7 +10,7 @@ from cm_main.utils import protected_media_url
 from members.tests.tests_member import TestLoginRequiredMixin, MemberTestCase
 from classified_ads.forms import ClassifiedAdForm, AdPhotoForm
 from classified_ads.models import Categories, ClassifiedAd, AdPhoto
-from classified_ads.views import CreateAdView
+from classified_ads.views import CreateAdView, UpdateAdView, AdPhotoAddView
 
 
 def create_test_image():
@@ -100,9 +100,17 @@ class ClassifiedAdCreateTestCase(ClassifiedAdBaseTestCase):
 class ClassifiedAdUpdateTestCase(ClassifiedAdBaseTestCase):
   def test_update_ad(self):
     """Tests updating a classified ad."""
+    response = self.client.get(reverse("classified_ads:update", kwargs={"pk": 9999}))
+    self.assertEqual(response.status_code, 404)
+
     self.ad["owner"] = self.member
     ad = ClassifiedAd.objects.create(**self.ad)
     url = reverse("classified_ads:update", kwargs={"pk": ad.id})
+
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "classified_ads/form.html")
+    self.assertIs(response.resolver_match.func.view_class, UpdateAdView)
 
     # change price
     self.ad["price"] = "90$"
@@ -120,6 +128,11 @@ class ClassifiedAdUpdateTestCase(ClassifiedAdBaseTestCase):
     self.ad["owner"] = self.member
     ad = ClassifiedAd.objects.create(**self.ad)
     url = reverse("classified_ads:add_photo", kwargs={"pk": ad.id})
+
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "classified_ads/photo-form.html")
+    self.assertIs(response.resolver_match.func.view_class, AdPhotoAddView)
 
     # add photos
     photos = []
@@ -162,6 +175,10 @@ class DeleteAdTestCase(ClassifiedAdBaseTestCase):
     self.assertEqual(AdPhoto.objects.filter(ad=ad).count(), 2)
 
     url = reverse("classified_ads:delete", kwargs={"pk": ad.id})
+
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal-htmx.html")
 
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 200)
@@ -350,3 +367,60 @@ The %(site_name)s admin team
 
     self.assertEqual(mail.outbox[0].subject, subject)
     self.assertEqual(mail.outbox[0].body, message)
+
+
+class ClassifiedAdFullscreenViewTests(ClassifiedAdBaseTestCase):
+  def setUp(self):
+    super().setUp()
+    self.ad["owner"] = self.member
+    ad = ClassifiedAd.objects.create(**self.ad)
+
+    # Create 3 photos in order
+    for i in range(3):
+      image = create_test_image()
+      AdPhoto.objects.create(ad=ad, image=image)
+
+    self.photo1 = ad.photos.all()[0]
+    self.photo2 = ad.photos.all()[1]
+    self.photo3 = ad.photos.all()[2]
+
+  def test_get_fullscreen_photo_none(self):
+    """Tests getting a photo in fullscreen with no side parameter."""
+    url = reverse("classified_ads:get_fullscreen_photo", args=[self.photo2.id])
+    # HTMX request
+    response = self.client.get(url, HTTP_HX_REQUEST="true")
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "image")
+    self.assertEqual(response.context["pk"], self.photo2.id)
+
+  def test_get_fullscreen_photo_next(self):
+    """Tests getting the next photo in fullscreen."""
+    url = reverse("classified_ads:get_fullscreen_photo", args=[self.photo1.id])
+    # Request next from photo 1 -> should get photo 2
+    response = self.client.get(url, {"side": "next"}, HTTP_HX_REQUEST="true")
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.context["pk"], self.photo2.id)
+
+  def test_get_fullscreen_photo_prev(self):
+    """Tests getting the previous photo in fullscreen."""
+    url = reverse("classified_ads:get_fullscreen_photo", args=[self.photo3.id])
+    # Request prev from photo 3 -> should get photo 2
+    response = self.client.get(url, {"side": "prev"}, HTTP_HX_REQUEST="true")
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.context["pk"], self.photo2.id)
+
+  def test_get_fullscreen_photo_next_limit(self):
+    """Tests getting the next photo from the last one (should stay on last)."""
+    url = reverse("classified_ads:get_fullscreen_photo", args=[self.photo3.id])
+    # Request next from photo 3 (last) -> should get photo 3
+    response = self.client.get(url, {"side": "next"}, HTTP_HX_REQUEST="true")
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.context["pk"], self.photo3.id)
+
+  def test_get_fullscreen_photo_prev_limit(self):
+    """Tests getting the previous photo from the first one (should stay on first)."""
+    url = reverse("classified_ads:get_fullscreen_photo", args=[self.photo1.id])
+    # Request prev from photo 1 (first) -> should get photo 1
+    response = self.client.get(url, {"side": "prev"}, HTTP_HX_REQUEST="true")
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.context["pk"], self.photo1.id)

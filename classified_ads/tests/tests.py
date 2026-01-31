@@ -8,9 +8,9 @@ from django.utils import formats, timezone
 from django.utils.translation import gettext as _
 from cm_main.utils import protected_media_url
 from members.tests.tests_member import TestLoginRequiredMixin, MemberTestCase
-from .forms import ClassifiedAdForm, AdPhotoForm
-from .models import Categories, ClassifiedAd, AdPhoto
-from .views import CreateAdView
+from classified_ads.forms import ClassifiedAdForm, AdPhotoForm
+from classified_ads.models import Categories, ClassifiedAd, AdPhoto
+from classified_ads.views import CreateAdView
 
 
 def create_test_image():
@@ -288,9 +288,10 @@ class DetailAdTestCase(ClassifiedAdBaseTestCase):
           class="cell has-text-centered photo-div"
           id="photo-{photo.id}"
         >
-          <figure class="image thumbnail photo-item"
+          <figure class="image thumbnail gallery-image"
             data-pk="{photo.id}"
             data-fullscreen="{protected_media_url(photo.image.name)}"
+            data-swipe-url="{reverse("classified_ads:get_fullscreen_photo", kwargs={"pk": photo.id})}"
           >
             <img src="{protected_media_url(photo.thumbnail.name)}" alt="{_("Photo")}">
           </figure>

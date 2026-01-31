@@ -108,6 +108,43 @@ class AdPhotoAddView(generic.View):
       return HttpResponseClientRefresh()
 
 
+def get_next_prev_photo(pk, side):
+  # this raises an exception Photo.DoesNotExist if the photo doesn't exist
+  ad_id = AdPhoto.objects.only("ad_id").get(pk=pk).ad_id
+  photo = AdPhoto.objects.filter(ad=ad_id).order_by("id")
+
+  match side:
+    case "prev":
+      photo = photo.filter(id__lt=pk).last()
+    case "next":
+      photo = photo.filter(id__gt=pk).first()
+    case None:
+      photo = photo.get(id=pk)
+    case _:
+      raise ValueError("Invalid side: %s" % side)
+
+  return photo or AdPhoto.objects.get(id=pk)
+
+
+def get_fullscreen_photo(request, pk):
+  assert request.htmx
+  try:
+    photo = get_next_prev_photo(pk, request.GET.get("side"))
+  except AdPhoto.DoesNotExist:
+    messages.error(request, _("Photo not found"))
+    return HttpResponseClientRedirect(reverse("classified_ads:list"))
+
+  return render(
+    request,
+    "galleries/photo_fullscreen_htmx.html#image",
+    {
+      "swipe_url": reverse("classified_ads:get_fullscreen_photo", args=[photo.id]),
+      "fullscreen_url": photo.image.url,
+      "pk": photo.id,
+    },
+  )
+
+
 def delete_photo(request, pk):
   photo = get_object_or_404(AdPhoto, pk=pk)
   ad = photo.ad

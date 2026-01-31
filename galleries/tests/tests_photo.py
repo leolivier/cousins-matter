@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
 from cm_main.utils import create_test_image, protected_media_url
 from galleries.models import Photo, Gallery
-from galleries.views.views_photo import PhotoAddView
+from galleries.views.views_photo import PhotoAddView, PhotoDetailView
 from members.tests.tests_member import TestLoginRequiredMixin
 from .tests_utils import GalleryBaseTestCase
 from .tests_gallery import get_gallery_name
@@ -93,6 +93,18 @@ class CreatePhotoViewTests(PhotoTestsBase):
     form = formclass(data=formdata, files={"image": self.image})
     print(form.errors)  # doesn't print anything if there are no errors
     self.assertTrue(form.is_valid())
+
+    formdata["image"] = self.image
+    response = self.client.post(ap_url, formdata, format="multipart", follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "galleries/photo_detail.html")
+    self.assertIs(response.resolver_match.func.view_class, PhotoDetailView)
+    self.assertTrue(Photo.objects.filter(name=formdata["name"]).exists())
+    photo = Photo.objects.get(name=formdata["name"])
+    self.assertEqual(photo.gallery, self.root_gallery)
+    self.assertEqual(photo.date, formdata["date"])
+    self.assertEqual(photo.description, formdata["description"])
+    # self.assertEqual(photo.image, self.image)  # not working if image already existed in media, it is renamed
 
   def get_several_photos(self, nb_photos, page_num, first, last, gallery):
     """
@@ -204,7 +216,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
     """Tests deleting a photo with no owner (should fail)."""
     response = self.client.post(self.url, follow=True)
     self.assertTrue(Photo.objects.filter(pk=self.photo.id).exists())
-    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.status_code, 403)
     # self.assertContainsMessage(response, "success", _("Photo deleted"))
 
   def test_delete_photo_as_owner(self):
@@ -242,6 +254,20 @@ class DeletePhotoViewTest(PhotoTestsBase):
     url = reverse("galleries:delete_photo", args=[99999])
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 404)
+
+  def test_delete_photo_as_superuser(self):
+    """Tests deleting a photo as a superuser."""
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    response = self.client.post(self.url, follow=True)
+    self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
+    self.assertEqual(response.status_code, 200)
+
+  def test_get_delete_photo(self):
+    self.photo.uploaded_by = self.member
+    self.photo.save()
+    response = self.client.get(self.url)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal-htmx.html")
 
 
 class PhotoEditViewTest(PhotoTestsBase):

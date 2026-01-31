@@ -1,6 +1,6 @@
-.PHONY: run cpmsg mkmsg up down ps logs stop up4run help h u4r test mig mkmig
+.PHONY: run cpmsg mkmsg up down ps logs stop up4run help h u4r test mig mkmig cover
 
-help, h:
+help h:
 	@echo "Available targets:"
 	@echo "  help, h: Show this help"
 	@echo "  run: Run the application outside of docker (supposes postgres, redis and qcluster are running)"
@@ -13,7 +13,7 @@ help, h:
 	@echo "  cpmsg: pass d=directory to target a specific directory, then cd to this directory and compile messages"
 	@echo "  mkmsg: pass d=directory to target a specific directory, then cd to this directory and make messages"
 	@echo "  test: pass t=test_name to target a specific test, then run tests"
-
+	@echo "  cover: pass t=test_name to target a specific test, then run tests with coverage"
 
 run:
 	POSTGRES_HOST=localhost	REDIS_HOST=localhost ./manage.py runserver
@@ -21,7 +21,7 @@ run:
 up:
 	docker compose up -d $(c)
 
-up4run, u4r:
+up4run u4r:
 	docker compose up -d postgres redis qcluster
 
 down:
@@ -47,6 +47,15 @@ clean:
 
 test:
 	POSTGRES_HOST=localhost REDIS_HOST=localhost ./manage.py test $(t) $(o)
+
+cover:
+	if [ -z "$(t)" ]; then \
+		POSTGRES_HOST=localhost REDIS_HOST=localhost coverage run --source="." ./manage.py test $(o); \
+	else \
+		POSTGRES_HOST=localhost REDIS_HOST=localhost coverage run --source="$(t)" ./manage.py test $(t) $(o); \
+	fi
+	coverage report --sort=cover --skip-covered -m --fail-under=80
+
 
 mig:
 	POSTGRES_HOST=localhost REDIS_HOST=localhost ./manage.py migrate

@@ -19,7 +19,6 @@ where the button should be displayed:
 {% partial "cm_main/common/confirm-delete-modal-htmx#show_delete_button" %}
 {%endwith%}
 And in the delete_url view:
-@login_required
 def delete_my_item(request, pk):
   model = MyItem
   item = get_object_or_404(self.model, pk=pk)

@@ -34,8 +34,6 @@ msgstr ""
 "Tutte le foto devono essere all'interno di cartelle."
 
 #: forms.py:27
-#, fuzzy
-#| msgid "Parent gallery"
 msgid "Parent Gallery"
 msgstr "Galleria principale"
 
@@ -44,6 +42,8 @@ msgid ""
 "Optional. If selected, imported galleries will be created inside this "
 "gallery."
 msgstr ""
+"Opzionale. Se selezionato, le gallerie importate saranno create all'interno "
+"di questa galleria."
 
 #: models.py:20 models.py:94
 msgid "A photo must belong to a gallery."
@@ -273,10 +273,12 @@ msgid ""
 "Root gallery not found. Please select a root gallery. Create it first if "
 "necessary."
 msgstr ""
+"Galleria radice non trovata. Seleziona una galleria radice. Crea la prima "
+"se necessario."
 
 #: views/views_bulk.py:166
 msgid "Upload not found"
-msgstr ""
+msgstr "Caricamento non trovato"
 
 #: views/views_bulk.py:192
 #, python-format
@@ -288,15 +290,12 @@ msgid "Gallery created successfully"
 msgstr "Galleria creata con successo"
 
 #: views/views_gallery.py:87
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete \"%(object)s\" and all photos and sub "
-#| "galleries it contains?"
+#, python-format
 msgid ""
 "Are you sure you want to delete '%(object)s' and all photos and sub "
 "galleries it contains?"
 msgstr ""
-"Sei sicuro di voler eliminare \"%(object)s\" e tutte le foto e le sotto-"
+"Sei sicuro di voler eliminare '%(object)s' e tutte le foto e le sotto-"
 "gallerie che contiene?"
 
 #: views/views_photo.py:34
@@ -311,9 +310,3 @@ msgstr "Foto creata"
 #, python-format
 msgid "Error when creating this photo: %s."
 msgstr "Errore durante la creazione di questa foto: %s."
-
-#~ msgid "Photos can't be at the root of the zip file."
-#~ msgstr "Le foto non possono essere nella radice del file zip."
-
-#~ msgid "Photo not found on that page"
-#~ msgstr "Foto non trovata su questa pagina"

@@ -33,8 +33,6 @@ msgstr ""
 "galeries. Toutes les photos doivent être dans des dossiers."
 
 #: forms.py:27
-#, fuzzy
-#| msgid "Parent gallery"
 msgid "Parent Gallery"
 msgstr "Galerie parente"
 
@@ -43,6 +41,8 @@ msgid ""
 "Optional. If selected, imported galleries will be created inside this "
 "gallery."
 msgstr ""
+"Optionnel. Si sélectionné, les galeries importées seront créées à l'intérieur "
+"de cette galerie."
 
 #: models.py:20 models.py:94
 msgid "A photo must belong to a gallery."
@@ -272,10 +272,12 @@ msgid ""
 "Root gallery not found. Please select a root gallery. Create it first if "
 "necessary."
 msgstr ""
+"Galerie racine non trouvée. Merci de sélectionner une galerie racine. "
+"Crée la d'abord si nécessaire."
 
 #: views/views_bulk.py:166
 msgid "Upload not found"
-msgstr ""
+msgstr "Téléchargement non trouvé"
 
 #: views/views_bulk.py:192
 #, python-format
@@ -284,18 +286,15 @@ msgstr "Fichier zip téléchargé : %(lg)d galeries et %(nbp)d photos créées"
 
 #: views/views_gallery.py:31
 msgid "Gallery created successfully"
-msgstr ""
+msgstr "Galerie créée avec succès"
 
 #: views/views_gallery.py:87
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete \"%(object)s\" and all photos and sub "
-#| "galleries it contains?"
+#, python-format
 msgid ""
 "Are you sure you want to delete '%(object)s' and all photos and sub "
 "galleries it contains?"
 msgstr ""
-"Es-tu sûr de vouloir supprimer \"%(object)s\" et toutes les photos et les "
+"Es-tu sûr de vouloir supprimer '%(object)s' et toutes les photos et les "
 "sous-galeries qu'elle contient ?"
 
 #: views/views_photo.py:34
@@ -310,9 +309,3 @@ msgstr "Photo créée"
 #, python-format
 msgid "Error when creating this photo: %s."
 msgstr "Erreur lors de la création de cette photo: %s."
-
-#~ msgid "Photos can't be at the root of the zip file."
-#~ msgstr "Les photos ne peuvent pas être à la racine du fichier zip."
-
-#~ msgid "Photo not found on that page"
-#~ msgstr "Photo non trouvée sur cette page"

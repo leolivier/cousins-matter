@@ -34,16 +34,16 @@ msgstr ""
 "Galerien hinzugefügt. Alle Fotos müssen in Ordnern sein."
 
 #: forms.py:27
-#, fuzzy
-#| msgid "Parent gallery"
 msgid "Parent Gallery"
-msgstr "Eltern Galerie"
+msgstr "El"
 
 #: forms.py:29
 msgid ""
 "Optional. If selected, imported galleries will be created inside this "
 "gallery."
 msgstr ""
+"Optional. Wenn ausgewählt, werden importierte Galerien innerhalb dieser "
+"Galerie erstellt."
 
 #: models.py:20 models.py:94
 msgid "A photo must belong to a gallery."
@@ -275,10 +275,12 @@ msgid ""
 "Root gallery not found. Please select a root gallery. Create it first if "
 "necessary."
 msgstr ""
+"Stammgalerie nicht gefunden. Bitte wählen Sie eine Stammgalerie aus. "
+"Erstellen Sie diese falls nötig zuerst."
 
 #: views/views_bulk.py:166
 msgid "Upload not found"
-msgstr ""
+msgstr "Hochgeladen nicht gefunden"
 
 #: views/views_bulk.py:192
 #, python-format
@@ -290,10 +292,7 @@ msgid "Gallery created successfully"
 msgstr "Galerie erfolgreich erstellt"
 
 #: views/views_gallery.py:87
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete \"%(object)s\" and all photos and sub "
-#| "galleries it contains?"
+#, python-format
 msgid ""
 "Are you sure you want to delete '%(object)s' and all photos and sub "
 "galleries it contains?"
@@ -313,9 +312,3 @@ msgstr "Foto erstellt"
 #, python-format
 msgid "Error when creating this photo: %s."
 msgstr "Fehler beim Erstellen dieser Foto: %s."
-
-#~ msgid "Photos can't be at the root of the zip file."
-#~ msgstr "Fotos können nicht an der Wurzel des Zip-Datei sein."
-
-#~ msgid "Photo not found on that page"
-#~ msgstr "Foto nicht gefunden auf dieser Seite"

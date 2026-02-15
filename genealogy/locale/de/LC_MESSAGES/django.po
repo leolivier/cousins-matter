@@ -77,7 +77,7 @@ msgstr "Anmerkungen"
 
 #: genealogy/models.py:36
 msgid "GedCom UUID"
-msgstr ""
+msgstr "GEDCOM UUID"
 
 #: genealogy/models.py:44
 msgid "Child of Family"

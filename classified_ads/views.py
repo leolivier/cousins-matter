@@ -8,7 +8,7 @@ from django.views import generic
 from django_htmx.http import HttpResponseClientRedirect, HttpResponseClientRefresh
 
 from classified_ads.forms import AdPhotoForm, ClassifiedAdForm, MessageForm
-from cm_main.utils import check_edit_permission
+from cm_main.utils import check_edit_permission, confirm_delete_modal
 
 from .models import AdPhoto, ClassifiedAd, Categories
 
@@ -57,15 +57,11 @@ class DeleteAdView(generic.View):
 
   def get(self, request, pk):
     ad = get_object_or_404(self.model, pk=pk)
-    return render(
+    return confirm_delete_modal(
       request,
-      "cm_main/common/confirm-delete-modal-htmx.html",
-      {
-        "ays_title": _("Classified ads deletion"),
-        "ays_msg": _('Are you sure you want to delete the classified ad "%(title)s"?') % {"title": ad.title},
-        "delete_url": request.get_full_path(),
-        "expected_value": ad.title,
-      },
+      _("Classified ads deletion"),
+      _('Are you sure you want to delete the classified ad "%(title)s"?') % {"title": ad.title},
+      expected_value=ad.title,
     )
 
   def post(self, request, pk):
@@ -154,16 +150,12 @@ def delete_photo(request, pk):
     # # as the swap is delete below, we don't care of the reponse (but status must be ok)
     # return HttpResponse(status=200, content="<div>ok</div>")
     return render(request, "classified_ads/gallery.html", {"edit_gallery": True, "ad": ad})
-  return render(
+
+  return confirm_delete_modal(
     request,
-    "cm_main/common/confirm-delete-modal-htmx.html",
-    {
-      "ays_title": _("Photo deletion"),
-      "ays_msg": _("Are you sure you want to delete this photo?"),
-      "delete_url": request.get_full_path(),
-      # "hx_params": f"hx-target=#photo-{photo.id} hx-swap=delete"
-      "hx_params": "hx-target=#ad-photos hx-swap=outerHTML",
-    },
+    _("Photo deletion"),
+    _("Are you sure you want to delete this photo?"),
+    hx_params="hx-target=#ad-photos hx-swap=outerHTML",
   )
 
 

@@ -12,6 +12,7 @@ from cm_main.utils import (
   PageOutOfBounds,
   Paginator,
   check_edit_permission,
+  confirm_delete_modal,
 )
 from forum.views.views_follow import (
   check_followers_on_new_post,
@@ -176,14 +177,9 @@ def delete_post(request, pk):
     check_edit_permission(request, post.first_message.author)
     post.delete()
     return HttpResponseClientRedirect(reverse("forum:list"))
-  return render(
+  return confirm_delete_modal(
     request,
-    "cm_main/common/confirm-delete-modal-htmx.html",
-    {
-      "ays_title": _("Delete post"),
-      "ays_msg": _('Are you sure you want to delete "%(post)s" and all associated replies and comments?')
-      % {"post": post.title},
-      "delete_url": request.get_full_path(),
-      "expected_value": post.title,
-    },
+    _("Delete post"),
+    _('Are you sure you want to delete "%(post)s" and all associated replies and comments?') % {"post": post.title},
+    expected_value=post.title,
   )

@@ -4,9 +4,11 @@ from django.views import generic
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core.exceptions import PermissionDenied
+from django.urls import reverse
 from django.utils.translation import gettext as _
-
+from django_htmx.http import HttpResponseClientRedirect
 from cm_main.mixins import OnlyAdminMixin
+from cm_main.utils import confirm_delete_modal
 from .models import FlatPage
 from .forms import PageForm
 
@@ -74,4 +76,10 @@ class PageDeleteView(OnlyAdminMixin, generic.View):
     page = get_object_or_404(FlatPage, pk=pk)
     page.delete()
     messages.success(request, _('Page "%(title)s" deleted') % {"title": page.title})
-    return redirect("pages-edit:edit_list")
+    return HttpResponseClientRedirect(reverse("pages-edit:edit_list"))
+
+  def get(self, request, pk):
+    page = get_object_or_404(FlatPage, pk=pk)
+    delete_title = _("Delete Page")
+    delete_msg = _('Are you sure you want to delete the page "%(title)s"?') % {"title": page.title}
+    return confirm_delete_modal(request, delete_title, delete_msg)

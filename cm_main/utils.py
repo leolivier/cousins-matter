@@ -20,6 +20,7 @@ from django.core.files.storage import FileSystemStorage, default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.forms import ValidationError
+from django.shortcuts import render
 from django.urls import reverse
 from django.utils import formats
 from django.utils.translation import gettext as _, get_language, gettext_lazy
@@ -445,3 +446,11 @@ def storage_rmtree(storage, prefix):
   # If listdir not available (e.g. some backends), try direct deletion of prefix
   logger.warning(f"listdir not available for {storage} - trying to delete {prefix} directly")
   storage.delete(f"{prefix}/")
+
+
+def confirm_delete_modal(request, title, msg, expected_value=None, hx_params=None):
+  return render(
+    request,
+    "cm_main/common/confirm-delete-modal-htmx.html",
+    {"ays_title": title, "ays_msg": msg, "expected_value": expected_value, "hx_params": hx_params},
+  )

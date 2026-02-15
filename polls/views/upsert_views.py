@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import generic
 from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
-from cm_main.utils import check_edit_permission
+from cm_main.utils import check_edit_permission, confirm_delete_modal
 from ..models import Poll, Question
 from ..forms.upsert_forms import PollUpsertForm, QuestionUpsertForm
 
@@ -89,15 +89,11 @@ class PollDeleteView(generic.DeleteView):
 
   def get(self, request, pk):
     poll = get_object_or_404(self.model, pk=pk)
-    return render(
+    return confirm_delete_modal(
       request,
-      "cm_main/common/confirm-delete-modal-htmx.html",
-      {
-        "ays_title": _("Delete Poll"),
-        "ays_msg": _('Are you sure you want to delete the poll "%(title)s"?') % {"title": poll.title},
-        "delete_url": request.get_full_path(),
-        "expected_value": poll.title,
-      },
+      _("Delete Poll"),
+      _('Are you sure you want to delete the poll "%(title)s"?') % {"title": poll.title},
+      expected_value=poll.title,
     )
 
   def post(self, request, pk):
@@ -159,14 +155,10 @@ class QuestionDeleteView(QuestionUpsertMixin, generic.DeleteView):
 
   def get(self, request, pk):
     question = get_object_or_404(self.model, pk=pk)
-    return render(
+    return confirm_delete_modal(
       request,
-      "cm_main/common/confirm-delete-modal-htmx.html",
-      {
-        "ays_title": _("Delete Question"),
-        "ays_msg": _('Are you sure you want to delete the question "%(title)s"?') % {"title": question.question_text},
-        "delete_url": request.get_full_path(),
-      },
+      _("Delete Question"),
+      _('Are you sure you want to delete the question "%(title)s"?') % {"title": question.question_text},
     )
 
   def post(self, request, pk):

@@ -8,11 +8,12 @@ from django.views import generic
 from django.contrib.auth import logout
 from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
-from django_htmx.http import HttpResponseClientRefresh
+from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
 from cm_main.utils import (
   PageOutOfBounds,
   Paginator,
   remove_accents,
+  confirm_delete_modal,
 )
 from verify_email.email_handler import send_verification_email
 from ..models import Family, Member
@@ -271,13 +272,22 @@ class EditProfileView(EditMemberView):
 
 
 def delete_member(request, pk):
+  assert request.htmx
   member = get_object_or_404(Member, pk=pk)
   if not _can_edit_member(request, member):
     messages.error(request, _("You do not have permission to delete this member."))
     return redirect("members:detail", member.id)
-  member.delete()
-  messages.info(request, _("Member deleted"))
-  return redirect(reverse("members:members"))
+  if request.method == "POST":
+    member.delete()
+    messages.info(request, _("Member deleted"))
+    return HttpResponseClientRedirect(reverse("members:members"))
+  if member.id == request.user.id:
+    delete_title = _("Delete my account")
+    delete_msg = _("Are you sure you want to delete your account and all associated data? This is irrecoverable!")
+  else:
+    delete_title = _("Delete member")
+    delete_msg = _("Are you sure you want to delete %(name)s's account and all associated data?") % {"name": member.full_name}
+  return confirm_delete_modal(request, delete_title, delete_msg)
 
 
 def search_members(request):

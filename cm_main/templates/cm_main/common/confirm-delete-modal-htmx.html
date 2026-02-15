@@ -2,14 +2,14 @@
 {%comment%}
 This is a generic delete modal form and triggering button based on htmx.
 The delete button is shown where the partial template is included and displays {{button_text}} as text
-and has the class {{button_class}}. It "hx-get"s the modal form through the {{delete_url}}.
+and has the class {{button_class}}. It "hx-get"s the modal form through the same url as the current one.
 {{button_text}} default is "Delete" and {{button_class}} default is "is-danger".
 Pass button_text="" if you don't want a button text to be displayed.
 
 The dialog box shows an {{ays_title}} and an {{ays_msg}}. (ays=are you sure).
 If {{expected_value}} is provided, the user must fill an input text with the given {{expected_value}} before being able to confirm.
-In case of confirmation, {{delete_url}} is triggered.
-You can also set {{hx_params}}, e.g. in the delete_url view, pass:
+In case of confirmation, the same url is triggered with a POST request.
+You can also set {{hx_params}}, e.g. in the delete view, pass:
    "hx_params": f"hx-target=#item-{item.id} hx-swap=delete"
 will remove the item from the page when deleted.
 
@@ -18,27 +18,28 @@ where the button should be displayed:
 {%with button_text="" delete_url="..." %}
 {% partial "cm_main/common/confirm-delete-modal-htmx#show_delete_button" %}
 {%endwith%}
-And in the delete_url view:
+And in the delete view:
+from cm_main.utils import confirm_delete_modal
 def delete_my_item(request, pk):
   model = MyItem
   item = get_object_or_404(self.model, pk=pk)
 	if request.method == 'POST'
     item.delete()
     return HttpResponseClientRefresh()
-  return render(request, "cm_main/common/confirm-delete-modal-htmx.html", {
-    "ays_title": _("Delete Item"),
-    "ays_msg": _("Are you sure you want to delete the item \"%(title)s\"?") % {"title": item.title},
-    "delete_url": request.get_full_path(),
-    "expected_value": "item.title",
-    "hx_params": f"hx-target=#item-{item.id} hx-swap=delete"
-    })
+  return confirm_delete_modal(
+    request,
+    _("Delete Item"),
+    _("Are you sure you want to delete the item \"%(title)s\"?") % {"title": item.title},
+    expected_value=item.title,
+    hx_params="hx-target=#item-{item.id} hx-swap=delete",
+  )
 {%endcomment%}
 {% load i18n cm_tags%}
 
 {% block modal_title %}{{ays_title}}{% endblock modal_title %}
 
 {%block form_params %}
-	hx-post="{{delete_url}}"
+	hx-post="{{request.get_full_path}}"
 {%endblock form_params %}
 {% block user_warning %}
 <div class="notification is-warning is-update-warning">

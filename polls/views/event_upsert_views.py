@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django_htmx.http import HttpResponseClientRedirect
-from cm_main.utils import check_edit_permission
+from cm_main.utils import check_edit_permission, confirm_delete_modal
 from polls.views.upsert_views import (
   PollCreateView,
   PollDeleteView,
@@ -119,15 +119,11 @@ class EventPlannerDeleteView(PollDeleteView):
 
   def get(self, request, pk):
     planner = get_object_or_404(self.model, pk=pk)
-    return render(
+    return confirm_delete_modal(
       request,
-      "cm_main/common/confirm-delete-modal-htmx.html",
-      {
-        "ays_title": _("Delete Event Planner"),
-        "ays_msg": _('Are you sure you want to delete the event planner "%(title)s"?') % {"title": planner.title},
-        "delete_url": request.get_full_path(),
-        "expected_value": planner.title,
-      },
+      _("Delete Event Planner"),
+      _('Are you sure you want to delete the event planner "%(title)s"?') % {"title": planner.title},
+      expected_value=planner.title,
     )
 
   def post(self, request, pk):

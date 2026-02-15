@@ -8,7 +8,7 @@ from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.views import generic
 from django.utils.translation import gettext as _
-from cm_main.utils import check_edit_permission
+from cm_main.utils import check_edit_permission, confirm_delete_modal
 from ..models import Photo
 from ..forms import PhotoForm
 
@@ -117,14 +117,9 @@ def delete_photo(request, pk):
     return HttpResponseClientRedirect(reverse("galleries:detail", args=[photo.gallery.id]))
   delete_title = _("Delete photo")
   delete_msg = _('Are you sure you want to delete "%(object)s"?') % {"object": photo.name}
-  return render(
+  return confirm_delete_modal(
     request,
-    "cm_main/common/confirm-delete-modal-htmx.html",
-    {
-      "ays_title": delete_title,
-      "button_text": "",
-      "ays_msg": delete_msg,
-      "delete_url": request.get_full_path(),
-      "expected_value": photo.name,
-    },
+    delete_title,
+    delete_msg,
+    expected_value=photo.name,
   )

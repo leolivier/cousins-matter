@@ -44,17 +44,8 @@
 					<span>{% translate "Activate Account" %}</span>
 				</a>
 				{% endif %}
-				{% autoescape off %}
-				{% if member.id == request.user.id %}{# profile update #}
-					{%trans "Delete my account" as delete_title%}
-					{% trans "Are you sure you want to delete your account and all associated data? This is irrecoverable!" as delete_msg %}
-				{% else %}
-					{%trans "Delete member" as delete_title%}
-					{% blocktranslate asvar delete_msg with name=member.full_name|force_escape trimmed %}Are you sure you want to delete {{ name }}'s account and all associated data?{% endblocktranslate %}
-				{% endif %}
 				{% url 'members:delete' member.id as delete_url %}
-				{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title button_text=_("Delete") ays_msg=delete_msg|force_escape delete_url=delete_url  expected_value=member.full_name|escape %}
-				{% endautoescape %}
+				{%include "cm_main/common/confirm-delete-modal-htmx.html#show_delete_button" with button_text=_("Delete") button_class='is-warning' delete_url=delete_url %}
 			</div>
 		</div>
   </div>
@@ -87,10 +78,6 @@
 	{% include "cm_main/common/modal_form.html" with modal_id="upsert-address-modal"%}
 	{% include "cm_main/common/modal_form.html" with modal_id="upsert-family-modal"%}
 	{% include "cm_main/common/modal_form.html" with modal_id="create-parent-family-modal" %}
-
-	{%if member and member.id %}
-		{%include "cm_main/common/modal_form.html" with modal_id="delete-item-modal" %}
-	{%endif%}
 	{% endblock modals %}
 
 	{% block javascript %}

@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django_htmx.http import HttpResponseClientRedirect
 
-from cm_main.utils import check_edit_permission
+from cm_main.utils import check_edit_permission, confirm_delete_modal
 from ..models import Gallery
 from ..forms import GalleryForm
 
@@ -77,14 +77,9 @@ def delete_gallery(request, pk):
     gallery.delete()
     messages.success(request, _("Gallery deleted successfully"))
     return HttpResponseClientRedirect(reverse("galleries:galleries"))
-  return render(
+  return confirm_delete_modal(
     request,
-    "cm_main/common/confirm-delete-modal-htmx.html",
-    {
-      "ays_title": _("Delete gallery"),
-      "ays_msg": _('Are you sure you want to delete "%(object)s" and all photos and sub galleries it contains?')
-      % {"object": gallery.name},
-      "delete_url": request.get_full_path(),
-      "expected_value": gallery.name,
-    },
+    _("Delete gallery"),
+    _('Are you sure you want to delete "%(object)s" and all photos and sub galleries it contains?') % {"object": gallery.name},
+    expected_value=gallery.name,
   )

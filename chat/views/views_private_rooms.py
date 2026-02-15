@@ -2,7 +2,6 @@ import logging
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -10,7 +9,6 @@ from django.utils.translation import gettext as _
 from members.models import Member
 from ..models import PrivateChatRoom
 from .views_room_common import display_chat_room, list_chat_rooms, create_chat_room
-from cm_main.utils import assert_request_is_ajax
 
 
 logger = logging.getLogger(__name__)
@@ -55,7 +53,7 @@ def search_private_members(request, room_slug):
   - `ValidationError`: If the request is not an AJAX request.
 
   """
-  assert_request_is_ajax(request)
+  assert request.htmx
   room = get_object_or_404(PrivateChatRoom, slug=room_slug)
   query = request.GET.get("q", "")
   members = (
@@ -68,8 +66,7 @@ def search_private_members(request, room_slug):
     )
     .distinct()[:12]
   )  # Limited to 12 results
-  data = [{"id": m.id, "text": m.full_name} for m in members]
-  return JsonResponse({"results": data})
+  return render(request, "chat/private/add-member.html#member_search_results", {"members": members})
 
 
 def list_private_room_members(request, room_slug):

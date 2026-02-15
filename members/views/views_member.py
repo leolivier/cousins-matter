@@ -13,7 +13,6 @@ from cm_main.utils import (
   PageOutOfBounds,
   Paginator,
   remove_accents,
-  assert_request_is_ajax,
 )
 from verify_email.email_handler import send_verification_email
 from ..models import Family, Member
@@ -53,34 +52,41 @@ def member_manager_name(member):
   return Member.objects.get(id=member.member_manager.id).full_name if member and member.member_manager else None
 
 
+def get_members_page(request, page_num=1):
+  members = Member.objects
+  # print("request.GET", request.GET)
+  filters = {
+    f"{name}_unaccent__icontains": remove_accents(request.GET[f"{name}_filter"]).strip()
+    for name in ["first_name", "last_name"]
+    if request.GET.get(f"{name}_filter", "").strip()
+  }
+  members = members.filter(**filters) if filters else members.all()
+  sort_by = request.GET.get("member_sort")
+  order = "-" if request.GET.get("toggle_slider") == "option2" else ""  # default is ascending
+  sort_by = [sort_by] if sort_by else ["last_name", "first_name"]  # default order
+  sort_by = [order + s for s in sort_by]
+  members = members.order_by(*sort_by)
+  page_size = request.GET.get("page_size", settings.DEFAULT_MEMBERS_PAGE_SIZE)
+  # print(f"page_size: {page_size}, page_num: {page_num}, sort_by: {sort_by}, filters: {filters}")
+  return Paginator.get_page(
+    request,
+    object_list=members,
+    page_num=page_num,
+    reverse_link="members:members_page",
+    default_page_size=page_size,
+  )
+
+
 class MembersView(generic.ListView):
   template_name = "members/members/members.html"
-  # paginate_by = 100
   model = Member
 
   def get(self, request, page_num=1):
-    members = Member.objects
-    filters = {
-      f"{name}_unaccent__icontains": remove_accents(request.GET[f"{name}_filter"]).strip()
-      for name in ["first_name", "last_name"]
-      if request.GET.get(f"{name}_filter", "").strip()
-    }
-    members = members.filter(**filters) if filters else members.all()
-    sort_by = request.GET.get("member_sort")
-    order = "-" if request.GET.get("member_order") == "option2" else ""  # default is ascending
-    sort_by = [sort_by] if sort_by else ["last_name", "first_name"]  # default order
-    sort_by = [order + s for s in sort_by]
-    members = members.order_by(*sort_by)
-    # print('sort by: ', sort_by, ' order: "', order, '" members query: ', members.query)
     try:
-      page = Paginator.get_page(
-        request,
-        object_list=members,
-        page_num=page_num,
-        reverse_link="members:members_page",
-        default_page_size=settings.DEFAULT_MEMBERS_PAGE_SIZE,
-      )
-      return render(request, self.template_name, {"page": page})
+      page = get_members_page(request, page_num)
+      if request.htmx:
+        return render(request, self.template_name + "#members_list", {"page": page, "members": page.object_list})
+      return render(request, self.template_name, {"page": page, "members": page.object_list})
     except PageOutOfBounds as exc:
       return redirect(exc.redirect_to)
 
@@ -275,16 +281,24 @@ def delete_member(request, pk):
 
 
 def search_members(request):
-  assert_request_is_ajax(request)
-  query = request.GET.get("q", "")
-  members = Member.objects.filter(
-    Q(last_name__icontains=query)
-    | Q(first_name__icontains=query)
-    | Q(last_name__icontains=query.split()[-1])
-    | Q(first_name__icontains=query.split()[0])
-  ).distinct()[:12]  # Limited to 12 results
-  data = [{"id": m.id, "text": m.full_name} for m in members]
-  return JsonResponse({"results": data})
+  assert request.htmx
+  query = request.GET.get("q", "").strip().lower()
+  render_with = request.GET.get("render_with", "members/members/members.html#members_content")
+  page_num = request.GET.get("page_num", 1)
+  render_empty_query = request.GET.get("render_empty_query", "true")
+  logger.debug(f"search_members: query={query}, render_with={render_with}, page_num={page_num}")
+  if not query or len(query) < 3:
+    if render_empty_query == "false":
+      return render(request, render_with, {"members": None, "page": None, "page_num": None})
+    try:
+      page = get_members_page(request, page_num)
+      return render(request, render_with, {"page": page, "members": page.object_list, "page_num": page.number})
+    except PageOutOfBounds:
+      page = get_members_page(request, 1)
+      return render(request, render_with, {"page": page, "members": page.object_list, "page_num": page.number})
+
+  members = Member.objects.filter(Q(last_name__icontains=query) | Q(first_name__icontains=query)).distinct()[:12]
+  return render(request, render_with, {"members": members, "page": None, "page_num": page_num})
 
 
 def notify_death(request, pk):

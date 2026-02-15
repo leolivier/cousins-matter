@@ -92,7 +92,8 @@ def create_chat_room(request, private=False):
       ValidationError: If the room name is invalid.
 
   """
-  room_name = unquote(request.GET["name"])
+  # print("create_chat_room", request.POST)
+  room_name = unquote(request.POST["name"])
   room_class = PrivateChatRoom if private else ChatRoom
   try:
     new_room, created = room_class.objects.get_or_create(name=room_name)
@@ -114,9 +115,9 @@ def create_chat_room(request, private=False):
         logger.debug("public room created, checking followers")
         followers.check_followers(request, new_room, request.user, room_url)
     else:
-      if not private and not new_room.is_public():
+      if not private and not new_room.is_public:
         raise ValidationError(_("A private room with almost the same name already exists: %s") % new_room.name)
-      elif private and new_room.is_public():
+      elif private and new_room.is_public:
         raise ValidationError(_("A public room with almost the same name already exists: %s") % new_room.name)
     return redirect(room_url)
   except ValidationError as ve:

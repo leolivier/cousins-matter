@@ -44,8 +44,8 @@ class TestImportMixin:
     # Check that expected_num members were imported
     self.assertEqual(Member.objects.count(), prev_num + expected_num)
     # Check that specific members were created
-    for member in Member.objects.all():
-      print(member)
+    # for member in Member.objects.all():
+    #   print(member)
     self.assertTrue(Member.objects.filter(first_name="John", last_name="Doe").exists())
     self.assertTrue(Member.objects.filter(email="member2@test.com").exists())
     self.assertTrue(Member.objects.filter(birthdate=date(2000, 1, 3)).exists())

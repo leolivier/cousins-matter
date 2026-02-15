@@ -1,34 +1,85 @@
 {%load i18n cm_tags%}
-<form id="add-member-form" method="post" action="{%url add_url room.slug %}">
-	{% csrf_token %}
-	<select id="member-select" name="member-id" style="width: 300px;"></select>
-	<button class="button" type="submit" disabled="true" id="add-member-button">{%icon "new-member" %} {{tr_add_member}}</button>
+<form style="width: 100%">
+    <div class="dropdown" id="member-search-dropdown" style="width: 100%">
+      <div class="dropdown-trigger" style="width: 100%">
+        <div class="field has-addons">
+          <div class="control is-expanded has-icons-left is-relative">
+            <span class="htmx-indicator">{%icon "loading" %}</span>
+            <input class="input" type="search"
+                   name="q"
+                   placeholder="{%trans 'Begin typing to search members...' %}"
+                   hx-get="{{search_url}}"
+                   hx-vals='{"render_with": "chat/private/add-member.html#member_search_results", "render_empty_query": "false"}'
+                   hx-trigger="input[this.value.length == 0 || this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= 3)]"
+                   hx-target="#search-results"
+                   hx-indicator=".htmx-indicator"
+                   autocomplete="off"
+                   id="member-search-input"
+                   oninput="check_search_length(this, 3)"
+                   >
+            {%icon "search" "is-small is-left"%}
+            <div class="dropdown-menu" id="dropdown-menu" role="menu" style="width: 100%">
+                <div class="dropdown-content" id="search-results">
+                </div>
+            </div>
+          </div>
+          <div class="control">
+            <button class="button" type="button" disabled="true" id="add-member-button"
+              hx-post="{%url add_url room.slug %}"
+              hx-include="#member-id">
+              {%icon "new-member" %} {{tr_add_member}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="member-id" id="member-id">
 </form>
-{%trans 'Search a member...' as placeholder %}
+
 <script>
-	$(document).ready(function() {
-			$('#member-select').select2({
-					ajax: {
-							url: '{{search_url}}',
-							dataType: 'json',
-							delay: 250,
-							data: function (params) {
-									return {
-											q: params.term
-									};
-							},
-							processResults: function (data) {
-									return {
-											results: data.results
-									};
-							},
-							cache: true
-					},
-					minimumInputLength: 2,
-					placeholder: '{{placeholder}}'
-			});
-	});
-	$('#member-select').on('change', function() {
-			$('#add-member-button').prop('disabled', $('#member-select').val() == null);
-	});
-	</script>
+function selectMember(id, name) {
+    $('#member-id').val(id);
+    $('#member-search-input').val(name);
+    $('#member-search-dropdown').removeClass('is-active');
+    $('#add-member-button').prop('disabled', false);
+    // clear results to avoid showing them again on simple focus
+    // but we might want to keep them if user deletes input.
+    // For now, removing 'is-active' hides them.
+}
+
+// Show dropdown when results are loaded
+$(document).on('htmx:afterSwap', function(evt) {
+    if (evt.target.id === 'search-results') {
+        const dropdown = $('#member-search-dropdown');
+        if (evt.target.innerHTML.trim() !== "") {
+             dropdown.addClass('is-active');
+        } else {
+             dropdown.removeClass('is-active');
+        }
+    }
+});
+
+// Close dropdown when clicking outside
+$(document).on('click', function(event) {
+    const dropdown = $('#member-search-dropdown');
+    const input = $('#member-search-input');
+    if (!dropdown.has(event.target)) {
+        dropdown.removeClass('is-active');
+    }
+});
+</script>
+
+{%partialdef member_search_results %}
+{% if members is not None %}
+<div class="dropdown-content">
+  {% for member in members %}
+  <a href="#" class="dropdown-item member-result"
+     onclick="selectMember('{{member.id}}', '{{member.full_name|escapejs}}'); return false;">
+    {{ member.full_name }}
+  </a>
+  {% empty %}
+    {% trans "No results found" %}
+  {% endfor %}
+</div>
+{% endif %}
+{% endpartialdef %}

@@ -123,7 +123,7 @@ class Paginator(paginator.Paginator):
     page_size = int(request.GET["page_size"]) if "page_size" in request.GET else default_page_size
 
     ptor = Paginator(object_list, page_size, reverse_link=reverse_link, compute_link=compute_link)
-    page_num = page_num or ptor.num_pages
+    page_num = int(page_num) if page_num else ptor.num_pages
     if page_num > ptor.num_pages:
       url = ptor._get_link(ptor.num_pages)
       url += ("&" if "?" in url else "?") + urlencode({"page_size": page_size})

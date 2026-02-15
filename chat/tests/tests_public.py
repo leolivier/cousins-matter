@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.utils.translation import gettext as _, ngettext
 from django.core.exceptions import ValidationError
 from django.test import tag
+from django.utils.formats import date_format
+from django.utils import timezone
 
 from chat.tests.tests_mixin import ChatMessageSenderMixin
 from members.tests.tests_member_base import MemberTestCase, AsyncMemberTestCase
@@ -15,17 +17,17 @@ from ..models import ChatMessage, ChatRoom
 
 class ChatRoomTests(MemberTestCase):
   def do_check_chat_room(self, room_name, slug):
-    url = reverse("chat:new_room") + "?" + urlencode({"name": room_name})
-    response = self.client.get(url, follow=True)
+    url = reverse("chat:new_room")
+    response = self.client.post(url, {"name": room_name}, follow=True)
     # self.print_response(response)
     # should be redirected to room detail. if not, it means there was an error
     self.assertTemplateUsed(response, "chat/room_detail.html")
-    self.assertContains(response, f'<span id="show-room-name">{room_name}</span>', html=True)
+    self.assertContains(response, f'<div hx-target="this" hx-swap="outerHTML"><span>{room_name}</span></div>', html=True)
     follow = _("Follow")
     self.assertContains(
       response,
       f"""
-<a class="button " href="{reverse("chat:toggle_follow", args=[slug])}"
+<a class="button ml-auto mr-5" href="{reverse("chat:toggle_follow", args=[slug])}"
    aria-label="{follow}" title="{follow}">
   <span class="icon is-large">
     <i class="mdi mdi-24px mdi-link-variant" aria-hidden="true"></i>
@@ -54,8 +56,8 @@ class ChatRoomTests(MemberTestCase):
     new_room_name = "#" + room_name + "!"
     new_slug = slugify(new_room_name)
     self.assertEqual(new_slug, slug)
-    url = reverse("chat:new_room") + "?" + urlencode({"name": new_room_name})
-    response = self.client.get(url, follow=True)
+    url = reverse("chat:new_room")
+    response = self.client.post(url, {"name": new_room_name}, follow=True)
     # self.print_response(response)
     self.assertContainsMessage(
       response,
@@ -137,6 +139,34 @@ class ChatRoomTests(MemberTestCase):
       )
     ChatRoom.objects.all().delete()
 
+  def test_edit_room(self):
+    room = ChatRoom.objects.create(name="a room")
+    url = reverse("chat:room-edit", args=[room.slug])
+    response = self.client.get(url, HTTP_HX_REQUEST="true")
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "room_edit_form")
+
+    # post a new name
+    new_name = "a new name"
+    response = self.client.put(
+      url, urlencode({"room-name": new_name}), content_type="application/x-www-form-urlencoded", HTTP_HX_REQUEST="true"
+    )
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response["HX-Redirect"], reverse("chat:room", args=[slugify(new_name)]))
+    room.refresh_from_db()
+    self.assertEqual(room.name, new_name)
+
+  def test_delete_room(self):
+    room = ChatRoom.objects.create(name="a room")
+    url = reverse("chat:room-delete", args=[room.slug])
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal-htmx.html")
+    response = self.client.post(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response["HX-Redirect"], reverse("chat:chat_rooms"))
+    self.assertFalse(ChatRoom.objects.filter(id=room.id).exists())
+
 
 @tag("needs-redis")
 @async_django_q_sync_class
@@ -146,13 +176,17 @@ class ChatMessageTests(ChatMessageSenderMixin, AsyncMemberTestCase):
     msg = "this is my message to the world!"
     communicator = await self.send_chat_message(msg, self.slug, disconnect=False, sender=self.member)
     response = await communicator.receive_json_from()
-    # print(response)
-    self.assertTrue("args" in response)
-    self.assertEqual(response["args"]["message"], msg)
-    self.assertEqual(response["args"]["username"], self.member.username)
+    self.assertIn("args", response)
+    self.assertIn("rendered_message", response["args"])
+    rendered_message = response["args"]["rendered_message"]
+    self.assertIn(msg, rendered_message)
+    now = timezone.localtime(timezone.now())
+    self.assertIn(date_format(now, "DATE_FORMAT"), rendered_message)
+    self.assertIn(date_format(now, "TIME_FORMAT"), rendered_message)
+    self.assertNotIn(self.member.get_full_name(), rendered_message)  # because it is my message
     message = await ChatMessage.objects.filter(room=self.room).afirst()
     self.assertIsNotNone(message)
-    self.assertEqual(response["args"]["message"], message.content)
+    self.assertIn(message.content, rendered_message)
     self.assertEqual(self.member.id, message.member_id)
     # Close communication
     await communicator.disconnect()
@@ -162,7 +196,7 @@ class ChatMessageTests(ChatMessageSenderMixin, AsyncMemberTestCase):
     communicator = await self.send_updated_message(self.slug, message.id, new_msg, disconnect=False)
     response = await communicator.receive_json_from()
 
-    self.assertTrue("args" in response)
+    self.assertIn("args", response)
     self.assertEqual(response["args"]["message"], new_msg)
     self.assertEqual(response["args"]["msgid"], message.id)
     await message.arefresh_from_db()
@@ -174,3 +208,67 @@ class ChatMessageTests(ChatMessageSenderMixin, AsyncMemberTestCase):
     await self.send_delete_message(self.slug, message.id)
     await message.arefresh_from_db()
     self.assertEqual(message.content, "**This message has been deleted**")
+
+  async def test_chat_consumer_same_date(self):
+    """Tests that the date is not displayed when 2 messages are sent on the same date."""
+    msg1 = "this is my message to the world!"
+    # Send first message
+    communicator1 = await self.send_chat_message(msg1, self.slug, disconnect=False, sender=self.member)
+    response1 = await communicator1.receive_json_from()
+    rendered_message1 = response1["args"]["rendered_message"]
+
+    # Check that date header IS present in first message (since it's the first one of the day/room)
+    # The class for the date header paragraph
+    date_header_class = "has-text-centered is-size-7 has-text-link mx-auto my-3"
+    self.assertIn(date_header_class, rendered_message1)
+
+    # Send second message
+    msg2 = "this is my second message to the world!"
+    communicator2 = await self.send_chat_message(msg2, self.slug, disconnect=False, sender=self.member)
+    response2 = await communicator2.receive_json_from()
+    rendered_message2 = response2["args"]["rendered_message"]
+
+    # Check that date header is NOT present in second message
+    self.assertNotIn(date_header_class, rendered_message2)
+
+    await communicator1.disconnect()
+    await communicator2.disconnect()
+
+  async def test_chat_consumer_different_users(self):
+    """Tests that the full name is displayed when a different user sends a message."""
+    # 1. Send message as member 1
+    msg1 = "this is my message to the world!"
+    # We keep communicator1 open to receive the second and third message broadcast
+    communicator1 = await self.send_chat_message(msg1, self.slug, disconnect=False, sender=self.member)
+    response1 = await communicator1.receive_json_from()
+    # consume the message on communicator1
+    self.assertIn("rendered_message", response1["args"])
+
+    # 2. Create member 2
+    member2 = await self.acreate_member(username="member2", first_name="Member", last_name="Two")
+
+    # 3. Send message as member 2
+    msg2 = "this is my second message to the world!"
+    communicator2 = await self.send_chat_message(msg2, self.slug, disconnect=False, sender=member2)
+
+    # 4. Receive message on communicator1 (member1's view)
+    response2_on_1 = await communicator1.receive_json_from()
+    rendered_message = response2_on_1["args"]["rendered_message"]
+
+    # 5. Verify member2's full name is in the rendered message
+    # Since member1 != member2, member1 should see the name of member2
+    self.assertIn(member2.get_full_name(), rendered_message)
+
+    # 6. Send another message as member 2
+    msg3 = "this is my third message to the world!"
+    communicator3 = await self.send_chat_message(msg3, self.slug, disconnect=False, sender=member2)
+    response3 = await communicator1.receive_json_from()
+    rendered_message3 = response3["args"]["rendered_message"]
+
+    # 7. Verify member2's full name is not in the rendered message
+    # Since the sender is the same as the previous message, the full name should not be displayed
+    self.assertNotIn(member2.get_full_name(), rendered_message3)
+
+    await communicator1.disconnect()
+    await communicator2.disconnect()
+    await communicator3.disconnect()

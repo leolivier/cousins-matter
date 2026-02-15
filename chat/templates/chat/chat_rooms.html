@@ -11,33 +11,38 @@
 <div class="container px-2">
 	<h1 class="title is-centered">
 		{%if private%}
-			{% title _("Private Chat Rooms") as room_title %}
+			{% title _("Private Chat Rooms") as rooms_title %}
 		{%else%}
-			{% title _("Chat Rooms") as room_title %}
+			{% title _("Chat Rooms") as rooms_title %}
 		{%endif%}
 	</h1>
 	<p class="content">{%trans 'Choose an existing room or create a new one.'%}</p>
 
 	<div class="panel">
 		<div class="panel-heading is-flex is-align-items-center is-justify-content-center">
-			<span class="is-flex-grow-1 has-text-centered">{{room_title}}</span>
-			<span class="field has-addons ml-auto">  {# ml-auto to push on the right#}
-				<div class="control has-icons-left">
-					<input class="input" type="text" placeholder="{%trans 'Room name'%}" id="room-name-input">
-					{%icon 'new-chat-room' 'is-left'%}
-				</div>
-				<div class="control">
-					{%if private%}
-						{%trans 'Create private room' as create_room%}
-					{%else%}
-						{%trans 'Create room' as create_room%}
-					{%endif%}
-					<a class="button is-responsive" id="room-name-submit" title="{{create_room}}">
-						{%icon 'new-chat-room'%}
-						<span class="is-hidden-mobile">{{create_room}}</span>
-					</a>
-				</div>
-			</span>
+			<span class="is-flex-grow-1 has-text-centered">{{rooms_title}}</span>
+			{%if private%}
+				{%trans 'Create private room' as create_room%}
+				{%url "chat:new_private_room" as new_room_url %}
+			{%else%}
+				{%trans 'Create room' as create_room%}
+				{%url "chat:new_room" as new_room_url %}
+			{%endif%}
+			<form action="{{new_room_url}}" method="post">
+				{%csrf_token%}
+				<span class="field has-addons ml-auto">  {# ml-auto to push on the right#}
+					<div class="control has-icons-left">
+						<input class="input" type="text" name="name" placeholder="{%trans 'Room name'%}">
+						{%icon 'new-chat-room' 'is-left'%}
+					</div>
+					<div class="control">
+						<button type="submit" class="button is-responsive" title="{{create_room}}">
+							{%icon 'new-chat-room'%}
+							<span class="is-hidden-mobile">{{create_room}}</span>
+						</button>
+					</div>
+				</span>
+			</form>
 		</div>
 		<div class="panel-block">
 			<span class="control">{%paginate page%}</span>
@@ -57,7 +62,7 @@
 		{%endif%}
 
 		{%trans "No author yet" as nobody %}
-		{% with admin=room.admins.first %}
+		{% with admin=room.admins.first owner=room.owner %}
 		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
 			<div class="panel-icon mini-avatar is-flex is-align-items-center is-justify-content-center is-flex-shrink-5 image">
 				<img class="is-rounded" 
@@ -65,38 +70,38 @@
 					src="{{admin.avatar_mini_url}}"
 					alt="{{admin.username}}" 
 				{%else%}
-					src="{{room.first_message_author.avatar_mini_url|default:settings.DEFAULT_AVATAR_URL}}"
-					alt="{{room.first_message_author.username|default:nobody}}"
+					src="{{owner.avatar_mini_url|default:settings.DEFAULT_AVATAR_URL}}"
+					alt="{{owner.username|default:nobody}}"
 				{%endif%}
 				>
 			</div>
 			<div class="is-flex-shrink-1 has-text-primary has-text-weight-bold mr-5">
-				{%if private%}
-				{{room.admins.first.get_full_name}}
-				<a href="{%url 'members:detail' room.admins.first.id %}" aria-label="{%trans 'profile'%}">
+			{%if private%}
+				{{admin.get_full_name}}
+				<a href="{%url 'members:detail' admin.id %}" aria-label="{%trans 'profile'%}">
 					{%icon "member-link" %}
 				</a>
-				{%elif room.first_message_author%}
-				{{room.first_message_author.get_full_name}}
-				<a href="{%url 'members:detail' room.first_message_author.id %}" aria-label="{%trans 'profile'%}">
+			{%elif owner%}
+				{{owner.get_full_name}}
+				<a href="{%url 'members:detail' owner.id %}" aria-label="{%trans 'profile'%}">
 					{%icon "member-link" %}
 				</a>
-				{%else%}
+			{%else%}
 				{{nobody}}
 				{%icon "chat" "has-text-link"%}
-				{%endif%}
+			{%endif%}
 				<br>
 				<span class="tag mr-3">{{trans_nmsgs}}</span>
-				{%if private%}
-					{%include "cm_main/followers/followers-count-tag.html" with followed_object=room name="members"%}
-				{%else%}
-					{%include "cm_main/followers/followers-count-tag.html" with followed_object=room %}
-				{%endif%}
+			{%if private%}
+				{%include "cm_main/followers/followers-count-tag.html" with followed_object=room name="members"%}
+			{%else%}
+				{%include "cm_main/followers/followers-count-tag.html" with followed_object=room %}
+			{%endif%}
 			</div>
 			<div class="is-flex-grow-1">
 				<a class="title is-size-6" href="{{room_url}}">{{room.name}}</a> 
 			</div>
-			{%if private%}
+		{%if private%}
 			<div class="mr-1 buttons has-addons is-rounded">
 				<a class="button" href="{%url 'chat:private_room_members' room.slug %}">
 					{%icon "members" %} <span>{%trans 'Room Members' %}</span>
@@ -105,12 +110,12 @@
 					{%icon "members" %} <span>{%trans 'Room Admins' %}</span>
 				</a>
 			</div>
-			{%else%}
+		{%else%}
 			<div class="mr-1">
 				{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
 				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room extra_class="is-pulled-right" is_hidden_mobile="true"%}
 			</div>
-			{%endif%}
+		{%endif%}
 		</div>
 		{%endwith%}
 	{%endfor%}
@@ -121,25 +126,4 @@
 	{% endif %}
 	</div>
 </div>
-{%if private%}
-	{%url "chat:new_private_room" as new_room_url %}
-{%else%}
-	{%url "chat:new_room" as new_room_url %}
-{%endif%}
-<script>
-$(document).ready(() => {
-	$('#room-name-input').focus();
-
-	$('#room-name-input').on('keyup', (e) => {
-		if (e.keyCode === 13) {
-			$('#room-name-submit').trigger('click');
-  	}
-	});
-
-	$('#room-name-submit').on('click', (e) => {
-	  var roomName = encodeURIComponent($('#room-name-input').val());
-	  window.location.replace('{{new_room_url}}?name='+roomName);
-	});
-});
-</script>
 {% endblock %}

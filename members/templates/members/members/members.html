@@ -2,59 +2,62 @@
 {% load i18n cm_tags %}
 {% block title %}{% title _("Members List") %}{% endblock %}
 {% block content %}
-<div class="container mb-5"> 
+<div class="container mb-5">
+  <h1 class="title mx-5 has-text-centered">{% title _("Members List") %}</h1>
   <div class="level">
-    <h1 class="level-left title mx-5 has-text-centered">{% title _("Members List") %}</h1>
     <div class="level-item">
-      <div class="buttons has-addons mt-5">
-        <a class="button" href="{% url 'members:birthdays' %}"
-          title='{% translate "Birthdays" %}'>
-          {%icon "birthday" %}
-        </a>
-        <a class="button" href="{% url 'members:directory' %}"
-          title="{% translate 'Show directory' %}">
-          {%icon "directory" %}
-        </a>
-        {%if user.is_superuser or settings.ALLOW_MEMBERS_TO_CREATE_MEMBERS%}
-        <a class="button" href="{% url 'members:create' %}"
-          title="{% translate 'Create Member' %}">
-          {%icon "new-member" %}
-        </a>
-        {%endif%}
-        {%if user.is_superuser or settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS%}
-        <a class="button" href="{% url 'members:invite' %}"
-          title="{% translate 'Invite Member' %}">
-          {%icon "invite" %}
-        </a>
-        {%endif%}
+      <div class="control">
+        <div class="buttons has-addons">
+          <a class="button" href="{% url 'members:birthdays' %}"
+            title='{% translate "Birthdays" %}'>
+            {%icon "birthday" %}
+          </a>
+          <a class="button" href="{% url 'members:directory' %}"
+            title="{% translate 'Show directory' %}">
+            {%icon "directory" %}
+          </a>
+          {%if user.is_superuser or settings.ALLOW_MEMBERS_TO_CREATE_MEMBERS%}
+          <a class="button" href="{% url 'members:create' %}"
+            title="{% translate 'Create Member' %}">
+            {%icon "new-member" %}
+          </a>
+          {%endif%}
+          {%if user.is_superuser or settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS%}
+          <a class="button" href="{% url 'members:invite' %}"
+            title="{% translate 'Invite Member' %}">
+            {%icon "invite" %}
+          </a>
+          {%endif%}
+        </div>
       </div>
     </div>
-    <div class="level-item ml-3">
-      <form method="get">
-        <label class="content is-size-6">{%trans "Filter Members"%}:</label>
-        <div class="field has-addons">
-          <div class="control">
-            <input class="input" type="text" size="12" name="first_name_filter" placeholder="{% trans 'first name' %}"
-            {%if request.GET.first_name_filter%}value="{{request.GET.first_name_filter}}"{%endif%}>
-          </div>
-          <div class="control">
-            <input class="input" type="text" size="12" name="last_name_filter" placeholder="{% trans 'last name' %}"
-            {%if request.GET.last_name_filter%}value="{{request.GET.last_name_filter}}"{%endif%}>
-          </div>
-          <div class="control">
-            <button class="button is-link" type="submit" title="{% translate 'Filter Members' %}">
-              {%icon "search" %}
-            </button>
-          </div>
+    <div class="level-item">
+      <form>
+        {%url 'members:search_members' as search_url %}
+        <div class="control is-expanded has-icons-left is-relative">
+          <span class="htmx-indicator">{%icon "loading" %}</span>
+          <input class="input" type="search"
+                  name="q"
+                  placeholder="{%trans 'Begin typing to search members...' %}"
+                  hx-get="{{search_url}}"
+                  hx-trigger="input[this.value.length == 0 || this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= 3)]"
+                  hx-target="#members-content-container"
+                  hx-indicator=".htmx-indicator"
+                  hx-vals='{"page_num": {{page.number|default:1}} }'
+                  autocomplete="off"
+                  id="member-search-input"
+                  oninput="check_search_length(this, 3)"
+                  >
+            {%icon "search" "is-small is-left"%}
         </div>
       </form>
     </div>
     <div class="level-item">
-      <form method="get">
-        <label class="content is-size-6">{%trans "Sort by"%}:</label>
+      <form>
         <div class="field has-addons">
-          <div class="control mt-2">
-            <div class="select is-small">
+          <label class="label my-auto mr-2">{%trans "Sort by"%} </label>
+          <div class="control">
+            <div class="select">
               {%with member_sort=request.GET.member_sort|default:"last_name" %}
               <select name="member_sort" onchange="this.form.submit()">
                 <option value="first_name" {%if member_sort == 'first_name' %}selected{%endif%}>{% translate "First name" %}</option>
@@ -65,33 +68,41 @@
               {%endwith%}
             </div>
           </div>
-          {%include "cm_main/common/toggle-slider.html" with choice_name="member_order" icon1="arrow-down" icon2="arrow-up" selected=request.GET.member_order on_change="this.form.submit()" %}
+          {%with icon1="arrow-down" icon2="arrow-up" selected=request.GET.member_order %}
+            {%include "cm_main/common/toggle-slider.html" with hx_target="#members-grid" %}
+          {%endwith%}
         </div>
       </form>
     </div>
   </div>
-  {% if page.object_list.count > 0 %}
-  {%paginate page %}
-  <div class="grid mx-3 is-col-min-8">
-    {% for member in page.object_list %}
-      <div class="cell has-text-centered my-auto">
-        <a class="button {% cycle 'is-dark' 'is-primary' 'is-link' %} button-wrap"
-           href="{% url 'members:detail' member.id %}">
-          {%if member.avatar%}
-          <figure class="image mini-avatar mr-2">
-            <img class="is-rounded" src="{{member.avatar_mini_url}}">
-          </figure>
-          {%endif%}
-          <strong>{{ member.get_full_name }}</strong>
-        </a>
-      </div>
-    {% endfor %}
-  </div>
-  {% if page.num_pages > 1 %}{%paginate page%}{% endif %}
+  <div id="members-content-container">
+  {% partialdef members_content inline %}
+  {% if members %}
+    {% if page %}{% paginate page %}{% endif %}
+    <div class="grid mx-3 is-col-min-8" id="members-grid">
+      {% partialdef members_list inline %}
+      {% for member in members %}
+        <div class="cell has-text-centered my-auto">
+          <a class="button {% cycle 'is-dark' 'is-primary' 'is-link' %} button-wrap"
+             href="{% url 'members:detail' member.id %}">
+            {% if member.avatar %}
+            <figure class="image mini-avatar mr-2">
+              <img class="is-rounded" src="{{member.avatar_mini_url}}">
+            </figure>
+            {% endif %}
+            <strong>{{ member.get_full_name }}</strong>
+          </a>
+        </div>
+      {% endfor %}
+      {% endpartialdef %}
+    </div>
+    {% if page and page.num_pages > 1 %}{% paginate page %}{% endif %}
   {% else %}
-  <div>
-    <p>{% translate "No members found" %}.</p>
-  </div>
+    <div>
+      <p>{% translate "No members found" %}.</p>
+    </div>
   {% endif %}
+  {% endpartialdef %}
+  </div>
 </div>
 {% endblock %}

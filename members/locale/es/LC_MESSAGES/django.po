@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-31 19:14+0100\n"
+"POT-Creation-Date: 2026-02-15 13:21+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Spanish <LL@li.org>\n"
@@ -72,18 +72,15 @@ msgstr "El archivo CSV que contiene a los miembros para importar."
 msgid "Automatically activate imported users"
 msgstr "Activar automáticamente los usuarios importados"
 
-#: forms.py:224 templates/members/members/notify_death_form.html:22
-#: templates/members/partials/modal-forms.html:14
+#: forms.py:224 templates/members/members/notify_death_form.html:11
 msgid "Date of Death"
 msgstr "Fecha de fallecimiento"
 
-#: forms.py:226 templates/members/members/notify_death_form.html:31
-#: templates/members/partials/modal-forms.html:22
+#: forms.py:226 templates/members/members/notify_death_form.html:19
 msgid "Any additional information..."
 msgstr "Cualquier información adicional..."
 
-#: forms.py:227 templates/members/members/notify_death_form.html:29
-#: templates/members/partials/modal-forms.html:20
+#: forms.py:227 templates/members/members/notify_death_form.html:17
 msgid "Message (Optional)"
 msgstr "Mensaje (Opcional)"
 
@@ -180,7 +177,7 @@ msgid "managed_by"
 msgstr "gestionado_por"
 
 #: models.py:48 templates/members/members/members_directory.html:29
-#: views/views_directory.py:94
+#: views/views_directory.py:88
 msgid "Name"
 msgstr "Nombre"
 
@@ -210,15 +207,15 @@ msgstr "Código postal"
 
 #: models.py:74 templates/members/address/address_detail.html:20
 msgid "City"
-msgstr "Ville"
+msgstr "Ciudad"
 
 #: models.py:76
 msgid "State"
-msgstr ""
+msgstr "Estado"
 
 #: models.py:78 templates/members/address/address_detail.html:24
 msgid "Country"
-msgstr "Pais"
+msgstr "País"
 
 #: models.py:92
 msgid "address"
@@ -226,26 +223,26 @@ msgstr "dirección"
 
 #: models.py:93
 msgid "addresses"
-msgstr "adres"
+msgstr "direcciones"
 
 #: models.py:106
 msgid "Member manager"
 msgstr "Gestor de miembro"
 
-#: models.py:116 templates/members/members/member_detail.html:46
+#: models.py:116 templates/members/members/member_detail.html:41
 #: templates/members/members/members_directory.html:33
-#: views/views_directory.py:94
+#: views/views_directory.py:88
 msgid "Address"
 msgstr "Dirección"
 
-#: models.py:118 templates/members/members/member_detail.html:54
+#: models.py:118 templates/members/members/member_detail.html:49
 #: templates/members/members/members_directory.html:31
-#: views/views_directory.py:94
+#: views/views_directory.py:88
 msgid "Phone"
 msgstr "Télefono"
 
-#: models.py:121 templates/members/members/member_detail.html:58
-#: templates/members/members/members.html:62
+#: models.py:121 templates/members/members/member_detail.html:53
+#: templates/members/members/members.html:65
 #: templates/members/members/members_directory.html:30
 msgid "Birthdate"
 msgstr "Fecha de nacimiento"
@@ -262,15 +259,15 @@ msgstr "Ha muerto"
 msgid "Death date"
 msgstr "Fecha de defunción"
 
-#: models.py:127 templates/members/members/member_detail.html:62
+#: models.py:127 templates/members/members/member_detail.html:57
 msgid "Website"
 msgstr "Sitio web"
 
-#: models.py:129 templates/members/members/member_detail.html:66
+#: models.py:129 templates/members/members/member_detail.html:61
 msgid "Family"
 msgstr "Familia"
 
-#: models.py:132 templates/members/members/member_detail.html:70
+#: models.py:132 templates/members/members/member_detail.html:65
 msgid "Who I am"
 msgstr "Qui soyé"
 
@@ -302,7 +299,7 @@ msgstr "miembro"
 msgid "members"
 msgstr "miembros"
 
-#: models.py:222
+#: models.py:226
 #, python-format
 msgid "Death date %(dd)s is before birthdate %(bd)s"
 msgstr ""
@@ -399,7 +396,7 @@ msgstr "Esta dirección no es utilizada por nadie"
 
 #: templates/members/address/address_detail.html:48
 #: templates/members/family/family_detail.html:23
-#: templates/members/members/member_detail.html:92
+#: templates/members/members/member_detail.html:87
 msgid "Edit"
 msgstr "Editar"
 
@@ -415,8 +412,6 @@ msgstr "Enviar"
 
 #: templates/members/address/address_form.html:18
 #: templates/members/family/family_form.html:18
-#: templates/members/members/notify_death_form.html:43
-#: templates/members/partials/modal-forms.html:32
 msgid "Cancel"
 msgstr "Anular"
 
@@ -813,7 +808,7 @@ msgstr ""
 "spam."
 
 #: templates/members/members/birthdays.html:3
-#: templates/members/members/members.html:11
+#: templates/members/members/members.html:12
 msgid "Birthdays"
 msgstr "Aniversarios"
 
@@ -961,38 +956,37 @@ msgstr "Importar"
 msgid "Member Detail"
 msgstr "Detalles de un Miembro"
 
-#: templates/members/members/member_detail.html:35
+#: templates/members/members/member_detail.html:30
 #: templates/members/members/member_upsert.html:27 tests/tests_member.py:283
 msgid "Active member"
 msgstr "Membro activo"
 
-#: templates/members/members/member_detail.html:37
+#: templates/members/members/member_detail.html:32
 #: templates/members/members/member_upsert.html:29 tests/tests_member.py:283
 msgid "Member managed by"
 msgstr "Miembro gestionado por"
 
-#: templates/members/members/member_detail.html:50
+#: templates/members/members/member_detail.html:45
 #: templates/members/members/members_directory.html:32
-#: views/views_directory.py:94
+#: views/views_directory.py:88
 msgid "Email"
 msgstr "Email"
 
-#: templates/members/members/member_detail.html:74
+#: templates/members/members/member_detail.html:69
 msgid "Hobbies"
 msgstr "Hobbies"
 
-#: templates/members/members/member_detail.html:79
+#: templates/members/members/member_detail.html:74
 msgid "Deceased on"
 msgstr "Fallecido el"
 
-#: templates/members/members/member_detail.html:96
+#: templates/members/members/member_detail.html:91
 #, python-format
 msgid "(Only %(name)s can manage this member)"
 msgstr "(Sólo %(name)s puede gestionar este miembro)"
 
-#: templates/members/members/member_detail.html:107
-#: templates/members/members/member_detail.html:109
-#: templates/members/members/notify_death_form.html:3
+#: templates/members/members/member_detail.html:102
+#: templates/members/members/member_detail.html:104
 msgid "Notify Death"
 msgstr "Notificar Fallecimiento"
 
@@ -1114,53 +1108,44 @@ msgid "This username is not available!"
 msgstr "Este nombre de usuario ya está en uso!"
 
 #: templates/members/members/members.html:3
-#: templates/members/members/members.html:7
+#: templates/members/members/members.html:6
 msgid "Members List"
 msgstr "Lista de Miembros"
 
-#: templates/members/members/members.html:15
+#: templates/members/members/members.html:16
 msgid "Show directory"
 msgstr "Mostrar el directorio"
 
-#: templates/members/members/members.html:20 views/views_member.py:132
-#: views/views_member.py:158
+#: templates/members/members/members.html:21 views/views_member.py:133
+#: views/views_member.py:159
 msgid "Create Member"
 msgstr "Criar un Miembro"
 
-#: templates/members/members/members.html:26
+#: templates/members/members/members.html:27
 msgid "Invite Member"
 msgstr "Invitar un Miembro"
 
-#: templates/members/members/members.html:34
-#: templates/members/members/members.html:45
-msgid "Filter Members"
-msgstr "Filtrar los Miembros"
-
-#: templates/members/members/members.html:37
-msgid "first name"
-msgstr "primer nombre"
-
 #: templates/members/members/members.html:41
-msgid "last name"
-msgstr "nombre"
+msgid "Begin typing to search members..."
+msgstr "Comienza a escribir para buscar miembros..."
 
-#: templates/members/members/members.html:54
+#: templates/members/members/members.html:58
 msgid "Sort by"
 msgstr "Ordenar por"
 
-#: templates/members/members/members.html:60
+#: templates/members/members/members.html:63
 msgid "First name"
 msgstr "Primer nombre"
 
-#: templates/members/members/members.html:61
+#: templates/members/members/members.html:64
 msgid "Last name"
 msgstr "Nombre"
 
-#: templates/members/members/members.html:63
+#: templates/members/members/members.html:66
 msgid "Active/Managed"
 msgstr "Activo/Gestionado"
 
-#: templates/members/members/members.html:93
+#: templates/members/members/members.html:102
 #: templates/members/members/members_directory.html:53
 msgid "No members found"
 msgstr "No miembros encontrados"
@@ -1179,13 +1164,11 @@ msgstr "Imprimir"
 msgid "Print as PDF"
 msgstr "Imprimir como PDF"
 
-#: templates/members/members/notify_death_form.html:14
-#: templates/members/partials/modal-forms.html:7
+#: templates/members/members/notify_death_form.html:4
 msgid "Notify Death of"
 msgstr "Notificar el fallecimiento de"
 
-#: templates/members/members/notify_death_form.html:38
-#: templates/members/partials/modal-forms.html:30
+#: templates/members/members/notify_death_form.html:24
 msgid "Notify Admin"
 msgstr "Notificar Administrador"
 
@@ -1306,21 +1289,17 @@ msgstr ""
 "Advertencia: no olvides hacer clic en el botón de guardar al final de la "
 "página, de lo contrario los cambios no se guardarán"
 
-#: tests/tests_death_notification.py:37 views/views_member.py:341
-msgid "The administrator has been notified."
-msgstr "Se ha notificado al administrador."
-
-#: tests/tests_death_notification.py:44 views/views_member.py:315
+#: tests/tests_death_notification.py:43 views/views_member.py:322
 #, python-format
 msgid "Death notification for %(member)s"
 msgstr "Notificación de fallecimiento para %(member)s"
 
-#: tests/tests_member.py:129 views/views_member.py:278
+#: tests/tests_member.py:129 views/views_member.py:279
 msgid "Member deleted"
 msgstr "Membres eliminados"
 
 #: tests/tests_member.py:258 tests/tests_member.py:263
-#: views/views_member.py:181 views/views_member.py:200
+#: views/views_member.py:182 views/views_member.py:201
 msgid "You do not have permission to edit this member."
 msgstr "No tienes permiso para editar este miembro."
 
@@ -1370,19 +1349,19 @@ msgstr "Línea inválida. Por favor, contacte al administrador."
 msgid "This field is required."
 msgstr "Este campo es requerido."
 
-#: views/views_activate.py:21
+#: views/views_activate.py:19
 msgid "Error: Cannot activate a dead member"
 msgstr "Error: No se puede activar un miembro muerto"
 
-#: views/views_activate.py:26
+#: views/views_activate.py:24
 msgid "Error: Member already active"
 msgstr "Error: Miembro ya activado"
 
-#: views/views_activate.py:28
+#: views/views_activate.py:26
 msgid "Error: Member without email cannot be activated"
 msgstr "Error: Miembro sin correo electrónico no puede ser activado"
 
-#: views/views_activate.py:34
+#: views/views_activate.py:32
 msgid ""
 "Member account successfully activated. The owner of the account will now "
 "receive an email containing an activation link then will be redirected to "
@@ -1392,44 +1371,44 @@ msgstr ""
 "un correo electrónico que contiene un enlace de activación, luego será "
 "redirigido/a al pantalla de restablecimiento de contraseña."
 
-#: views/views_directory.py:57
+#: views/views_directory.py:51
 #, python-format
 msgid "%(site_name)s directory"
 msgstr "%(site_name)s directorio"
 
-#: views/views_directory.py:86
+#: views/views_directory.py:80
 #, python-format
 msgid "Page %(doc_page)s - %(title)s"
 msgstr "Page %(doc_page)s - %(title)s"
 
-#: views/views_followers.py:21
+#: views/views_followers.py:19
 msgid "You can't follow yourself!"
 msgstr "No puedes seguir a ti mismo!"
 
-#: views/views_followers.py:26
+#: views/views_followers.py:24
 #, python-format
 msgid "You are no longer following %(followed_name)s"
 msgstr "No más sigues a %(followed_name)s"
 
-#: views/views_followers.py:29
+#: views/views_followers.py:27
 msgid "Error: You can't follow dead people"
 msgstr "Error: No puedes seguir a ti mismo!"
 
-#: views/views_followers.py:34
+#: views/views_followers.py:32
 #, python-format
 msgid "You are now following %(followed_name)s"
 msgstr "You estás ahora siguiendo %(followed_name)s"
 
-#: views/views_followers.py:39
+#: views/views_followers.py:37
 msgid "You have a new follower!"
 msgstr "¡Tienes un nuevo seguidor!"
 
-#: views/views_followers.py:40
+#: views/views_followers.py:38
 #, python-format
 msgid "%(follower_name)s is now following you!"
 msgstr "%(follower_name)s te sigue ahora!"
 
-#: views/views_import_export.py:37
+#: views/views_import_export.py:35
 #, python-format
 msgid ""
 "Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
@@ -1437,7 +1416,7 @@ msgstr ""
 "Columna desconocida en el archivo CSV : \"%(fieldname)s\". Los campos "
 "válidos son %(all_names)s"
 
-#: views/views_import_export.py:43
+#: views/views_import_export.py:41
 #, python-format
 msgid ""
 "Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
@@ -1446,15 +1425,15 @@ msgstr ""
 "Fehlende Spalte in der CSV-Datei: \"%(fieldname)s\". Obligatorische Felder "
 "sind %(all_names)s"
 
-#: views/views_import_export.py:116
+#: views/views_import_export.py:113
 msgid "Import not found"
 msgstr "Importe no encontrado"
 
-#: views/views_import_export.py:147
+#: views/views_import_export.py:144
 msgid "Back to members list"
 msgstr "Volver a la lista de miembros"
 
-#: views/views_import_export.py:149
+#: views/views_import_export.py:146
 #, python-format
 msgid ""
 "CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
@@ -1463,51 +1442,55 @@ msgstr ""
 "Archivo CSV cargado: %(rows_num)i líneas leídas, %(created_num)i miembros "
 "creados y %(updated_num)i actualizados."
 
-#: views/views_import_export.py:204
+#: views/views_import_export.py:196
 msgid "Method not allowed"
 msgstr "Método no permitido"
 
-#: views/views_member.py:46
+#: views/views_member.py:40
 msgid "You have been logged out"
 msgstr "Has sido deslogerado(a)"
 
-#: views/views_member.py:119
+#: views/views_member.py:120
 msgid "Only superusers can create members"
 msgstr "Solo los superusuarios pueden crear miembros"
 
-#: views/views_member.py:148
+#: views/views_member.py:149
 msgid "Member successfully created"
 msgstr "El miembro fue creado con éxito"
 
-#: views/views_member.py:174
+#: views/views_member.py:175
 msgid "Update Member Details"
 msgstr "Modificar los detalles de un Miembro"
 
-#: views/views_member.py:175
+#: views/views_member.py:176
 msgid "Member successfully updated"
 msgstr "El miembro fue actualizado con éxito"
 
-#: views/views_member.py:218
+#: views/views_member.py:219
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Se ha enviado un correo electrónico de verificación para validar tu nueva "
 "dirección de correo electrónico."
 
-#: views/views_member.py:261
+#: views/views_member.py:262
 msgid "My Profile"
 msgstr "Mi Perfil"
 
-#: views/views_member.py:262
+#: views/views_member.py:263
 msgid "Profile successfully updated"
 msgstr "Perfil actualizado con éxito"
 
-#: views/views_member.py:275
+#: views/views_member.py:276
 msgid "You do not have permission to delete this member."
 msgstr "No tienes permiso para eliminar este miembro."
 
-#: views/views_member.py:302
+#: views/views_member.py:309
 msgid "Please provide a death date."
 msgstr "Por favor, proporcione una fecha de fallecimiento."
+
+#: views/views_member.py:348
+msgid "The administrator has been notified."
+msgstr "Se ha notificado al administrador."
 
 #: views/views_registration.py:36
 msgid "You are already logged in"
@@ -1537,6 +1520,3 @@ msgstr "Solo los superusuarios pueden invitar a miembros"
 #: views/views_registration.py:256
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Imposible de enviar un correo. Por favor, contacte al administrador."
-
-#~ msgid "Manage Member Profile"
-#~ msgstr "Gestionar Perfil de Miembro"

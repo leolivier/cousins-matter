@@ -427,7 +427,7 @@ class TestDisplayMembers(MemberTestCase):
     # check reverse order
     response = self.client.get(
       reverse("members:members"),
-      {"member_sort": "birthdate", "member_order": "option2"},
+      {"member_sort": "birthdate", "toggle_slider": "option2"},
     )
     self.assertEqual(response.status_code, 200)
     ms = Member.objects.all().order_by("-birthdate")

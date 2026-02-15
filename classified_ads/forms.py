@@ -1,3 +1,4 @@
+import logging
 from django import forms
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -6,6 +7,8 @@ from .models import AdPhoto, ClassifiedAd, Categories
 from crispy_forms.helper import FormHelper
 from crispy_bulma.layout import Layout, Row, Column
 from cm_main.widgets import RichTextarea
+
+logger = logging.getLogger(__name__)
 
 
 class ClassifiedAdForm(forms.ModelForm):
@@ -38,7 +41,7 @@ class ClassifiedAdForm(forms.ModelForm):
       if self.instance and self.instance.category:
         self.fields["subcategory"].choices = Categories.list_subcategories(self.instance.category)
     except Exception as e:
-      print(f"Error retrieving categories and subcategories : {e}")
+      logger.error(f"Error retrieving categories and subcategories : {e}")
 
     # crispy bulma does not implement layouts I need :/
     self.helper = FormHelper(self)

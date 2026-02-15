@@ -105,7 +105,7 @@ class QuestionUpsertForm(forms.ModelForm):
     if self.cleaned_data["question_type"] not in Question.CHOICE_TYPES:
       return []
     data = self.cleaned_data["possible_choices"]
-    print("choices:", data)
+    # print("choices:", data)
     possible_choices = [choice.strip() for choice in data.split("\n") if choice.strip()]
     if len(possible_choices) < 2:
       raise forms.ValidationError(_("You must provide at least two possible choices!"))

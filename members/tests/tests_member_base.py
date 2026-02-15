@@ -74,7 +74,7 @@ def modify_member_data(member):
   }
 
 
-class MemberTestCase(TestCase):
+class BaseMemberTestCase:
   member = None
   superuser = None
 
@@ -86,37 +86,10 @@ class MemberTestCase(TestCase):
   test_avatar_jpg = os.path.join(settings.AVATARS_DIR, "test_avatar.jpg")
   test_mini_avatar_jpg = os.path.join(settings.AVATARS_DIR, "mini_test_avatar.jpg")
 
-  @classmethod
-  def setUpTestData(cls):
-    "called once by the test framework before running the tests"
-    # create a superuser for testing
-    superuser_data = get_new_member_data(prefix="superuser-")
-    # force username
-    superuser_data["username"] = "superuser"
-    pwd = superuser_data["password"]
-    cls.superuser = Member.objects.create_superuser(**superuser_data)
-    cls.superuser.password = pwd  # keep unhashed password in memory for login
-
-    # create a member for testing
-    member_data = get_new_member_data()
-    pwd = member_data["password"]
-    member_data["is_active"] = True
-    cls.member = Member.objects.create_member(**member_data)
-    cls.member.password = pwd  # keep unhashed password in memory for login
-
   def setUp(self):
-    super().setUp()
     self.created_members = []
-    # self.async_client = AsyncClient()
-    self.client.login(username=self.member.username, password=self.member.password)
-    # Note: we don't alogin here because it's async and setUp is sync.
-    # Individual async tests will need to alogin if they use async_client.
-    # async_to_sync(self.async_client.alogin)(username=self.member.username, password=self.member.password)
 
   def tearDown(self):
-    super().tearDown()  # Changed return super().tearDown() to super().tearDown()
-    self.client.logout()
-
     # remove all members created during the test
     for member in self.created_members:
       if member.id:
@@ -181,6 +154,61 @@ class MemberTestCase(TestCase):
     new_member.password = pwd  # keep unhashed password in memory for login
     self.created_members.append(new_member)
     return new_member
+
+
+class MemberTestCase(BaseMemberTestCase, TestCase):
+  @classmethod
+  def setUpTestData(cls):
+    "called once by the test framework before running the tests"
+    # create a superuser for testing
+    superuser_data = get_new_member_data(prefix="superuser-")
+    # force username
+    superuser_data["username"] = "superuser"
+    pwd = superuser_data["password"]
+    cls.superuser = Member.objects.create_superuser(**superuser_data)
+    cls.superuser.password = pwd  # keep unhashed password in memory for login
+
+    # create a member for testing
+    member_data = get_new_member_data()
+    pwd = member_data["password"]
+    member_data["is_active"] = True
+    cls.member = Member.objects.create_member(**member_data)
+    cls.member.password = pwd  # keep unhashed password in memory for login
+    # print(f"\nMemberTestCase.setUpTestData: {cls.member.username}")
+
+  def setUp(self):
+    super().setUp()
+    self.client.login(username=self.member.username, password=self.member.password)
+
+  def tearDown(self):
+    self.client.logout()
+    super().tearDown()
+
+
+class TransactionMemberTestCase(BaseMemberTestCase, TransactionTestCase):
+  def setUp(self):
+    super().setUp()
+    # create a superuser for testing
+    superuser_data = get_new_member_data(prefix="superuser-")
+    # force username
+    superuser_data["username"] = "superuser"
+    pwd = superuser_data["password"]
+    self.superuser = Member.objects.create_superuser(**superuser_data)
+    self.superuser.password = pwd  # keep unhashed password in memory for login
+
+    # create a member for testing
+    member_data = get_new_member_data()
+    pwd = member_data["password"]
+    member_data["is_active"] = True
+    self.member = Member.objects.create_member(**member_data)
+    self.member.password = pwd  # keep unhashed password in memory for login
+    self.client.login(username=self.member.username, password=self.member.password)
+
+  def tearDown(self):
+    self.client.logout()
+    self.superuser.delete()
+    self.member.delete()
+    super().tearDown()
 
 
 class TestLoginRequiredMixin:

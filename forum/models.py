@@ -44,6 +44,7 @@ class Post(models.Model):
   def __str__(self):
     return self.title
 
+  @property
   def owner(self):
     return self.first_message.author if self.first_message else None
 

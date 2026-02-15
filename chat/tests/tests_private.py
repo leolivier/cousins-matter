@@ -215,8 +215,10 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
                    name="q"
                    placeholder="{_("Begin typing to search members...")}"
                    hx-get="{reverse("members:search_members")}"
-hx-vals='{{"render_with": "chat/private/add-member.html#member_search_results", "render_empty_query": "false"}}'
-hx-trigger="input[this.value.length == 0 || this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= 3)]"
+                   hx-vals=
+'{{"render_with": "chat/private/add-member.html#member_search_results", "render_empty_query": "false"}}'
+                   hx-trigger=
+"input[this.value.length == 0 || this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= 3)]"
                    hx-target="#search-results"
                    hx-indicator=".htmx-indicator"
                    autocomplete="off"

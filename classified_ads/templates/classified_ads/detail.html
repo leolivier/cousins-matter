@@ -47,7 +47,7 @@
 			{% if user == ad.owner %}
 				<a class="button" href="{% url 'classified_ads:update' ad.id %}">{%icon "edit" "mr-1" %}{% trans "Update Ad" %}</a>
 				{%url "classified_ads:delete" ad.pk as delete_ads_url%}
-				{%include "cm_main/common/confirm-delete-modal-htmx.html#show_delete_button" with button_text=_("Delete Ad") button_class='is-warning' delete_url=delete_ads_url %}
+				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete Ad") button_class='is-warning' delete_url=delete_ads_url %}
 			{% else %}
 				{% autoescape off %}
 				{%trans "Send a message to the owner of this ad" as button_text%}

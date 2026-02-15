@@ -267,7 +267,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
     self.photo.save()
     response = self.client.get(self.url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal-htmx.html")
+    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal.html")
 
 
 class PhotoEditViewTest(PhotoTestsBase):

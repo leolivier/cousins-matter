@@ -70,7 +70,7 @@
 					{%icon "edit-gallery" %}
 				</a>
 				{% url 'galleries:delete_gallery' gallery.id as delete_url %}
-				{%include "cm_main/common/confirm-delete-modal-htmx.html#show_delete_button" with button_text='' delete_url=delete_url %}
+				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text='' delete_url=delete_url %}
 			{% endif %}
 			</p>
 		</div>

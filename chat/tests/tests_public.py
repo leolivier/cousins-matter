@@ -161,7 +161,7 @@ class ChatRoomTests(MemberTestCase):
     url = reverse("chat:room-delete", args=[room.slug])
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal-htmx.html")
+    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal.html")
     response = self.client.post(url)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(response["HX-Redirect"], reverse("chat:chat_rooms"))

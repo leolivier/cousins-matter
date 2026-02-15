@@ -451,6 +451,6 @@ def storage_rmtree(storage, prefix):
 def confirm_delete_modal(request, title, msg, expected_value=None, hx_params=None):
   return render(
     request,
-    "cm_main/common/confirm-delete-modal-htmx.html",
+    "cm_main/common/confirm-delete-modal.html",
     {"ays_title": title, "ays_msg": msg, "expected_value": expected_value, "hx_params": hx_params},
   )

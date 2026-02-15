@@ -27,7 +27,7 @@
 			</button>
 			{%if ad.owner == user%}
 				{%url "classified_ads:delete" ad.pk as delete_ads_url%}
-				{%include "cm_main/common/confirm-delete-modal-htmx.html#show_delete_button" with button_text=_("Delete Ad") button_class='is-warning' delete_url=delete_ads_url %}
+				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete Ad") button_class='is-warning' delete_url=delete_ads_url %}
 			{%endif%}
 		{%else%}
 			<button class="button is-primary" type="submit">

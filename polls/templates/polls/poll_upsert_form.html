@@ -35,7 +35,7 @@
 			{%if poll_id%}
 				{%url "polls:delete_poll" poll_id as delete_poll_url%}
 				{%trans "Delete Poll" as button_text %}
-				{%include "cm_main/common/confirm-delete-modal-htmx.html#show_delete_button" with button_text=button_text delete_url=delete_poll_url %}
+				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text=button_text delete_url=delete_poll_url %}
 			{%endif%}
 		</div>
 	</form>
@@ -55,7 +55,7 @@
 				{%icon "edit"%}
 			</button>
 			{%url "polls:delete_question" question.id as delete_question_url%}
-			{%include "cm_main/common/confirm-delete-modal-htmx.html#show_delete_button" with button_text='' button_class='is-small' delete_url=delete_question_url %}
+			{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text='' button_class='is-small' delete_url=delete_question_url %}
 		</div>
 		{% empty %}
 		<div id="no-question-for-this-poll" class="panel-block">No questions linked to this poll.</div>

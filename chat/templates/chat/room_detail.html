@@ -141,7 +141,7 @@ $(document).ready(()=>{
 						</button>
 						{%url "chat:room-delete" room.slug as delete_room_url%}
 						{% with button_text='' button_class='is-small ml-1' delete_url=delete_room_url %}
-							{%include "cm_main/common/confirm-delete-modal-htmx.html#show_delete_button" %}
+							{%include "cm_main/common/confirm-delete-modal.html#delete_button" %}
 						{% endwith %}
 					{%endif%}
 				</div>

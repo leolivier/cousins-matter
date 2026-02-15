@@ -178,7 +178,7 @@ class DeleteAdTestCase(ClassifiedAdBaseTestCase):
 
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal-htmx.html")
+    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal.html")
 
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 200)

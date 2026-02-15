@@ -33,7 +33,7 @@
 					</figure>
 					{%if edit_gallery or request.user.is_superuser or photo.uploaded_by_id == request.user.id%}
 						{%url 'classified_ads:delete_photo' photo.id as delete_photo_url%}
-						{%include "cm_main/common/confirm-delete-modal-htmx.html#show_delete_button" with button_class="delete delete-photo" button_icon="" button_text='' delete_url=delete_photo_url %}
+						{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_class="delete delete-photo" button_icon="" button_text='' delete_url=delete_photo_url %}
 					{%endif%}
 				</div>
 				{% empty %}

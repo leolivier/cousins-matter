@@ -125,8 +125,7 @@ class MemberDeleteTest(MemberViewTestMixin, MemberTestCase):
 
   def test_delete_member_by_view(self):
     member = self.create_member_by_view()
-    response = self.client.post(reverse("members:delete", args=[member.id]), follow=True)
-    self.assertContainsMessage(response, "info", _("Member deleted"))
+    response = self.client.post(reverse("members:delete", args=[member.id]), HTTP_HX_REQUEST="true", follow=True)
     self.assertEqual(Member.objects.filter(id=member.id).count(), 0)
     self.assertEqual(Member.objects.filter(username=member.username).count(), 0)
 

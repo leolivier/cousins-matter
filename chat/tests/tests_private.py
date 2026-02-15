@@ -1,5 +1,5 @@
 import random
-
+import json
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -201,6 +201,14 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     super().tearDown()
 
   def _search_form_content(self):
+    trigger = (
+      "input[this.value.length == 0 || this.value.length >= 3] changed delay:300ms, "
+      "keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= 3)]"
+    )
+    vals = {
+      "render_with": "chat/private/add-member.html#member_search_results",
+      "render_empty_query": "false",
+    }
     return f"""<form style="width: 100%">
     <div class="dropdown" id="member-search-dropdown" style="width: 100%">
       <div class="dropdown-trigger" style="width: 100%">
@@ -215,10 +223,8 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
                    name="q"
                    placeholder="{_("Begin typing to search members...")}"
                    hx-get="{reverse("members:search_members")}"
-                   hx-vals=
-'{{"render_with": "chat/private/add-member.html#member_search_results", "render_empty_query": "false"}}'
-                   hx-trigger=
-"input[this.value.length == 0 || this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= 3)]"
+                   hx-vals='{json.dumps(vals)}'
+                   hx-trigger="{trigger}"
                    hx-target="#search-results"
                    hx-indicator=".htmx-indicator"
                    autocomplete="off"

@@ -20,6 +20,6 @@ psycopg[binary]~=3.3.2
 whitenoise~=6.11.0
 django-storages[dropbox,s3]~=1.14.6
 django-htmx~=1.27.0
-python-gedcom~=1.0.0
+python-gedcom~=1.1.0
 django-debug-toolbar~=6.2.0
 psycopg-pool~=3.3.0

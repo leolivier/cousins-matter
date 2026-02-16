@@ -1,8 +1,5 @@
 from django.urls import reverse
 from ..views.views_family import (
-  FamilyCreateView,
-  FamilyUpdateView,
-  FamilyDetailView,
   ModalFamilyCreateView,
   ModalFamilyUpdateView,
 )
@@ -40,37 +37,6 @@ class TestFamily(MemberTestCase):
     self.assertEqual(self.member.family.parent.name, "My Very Big Family")
 
 
-class TestFamilyView(MemberTestCase):
-  def test_create_family_view(self):
-    """Tests that the family creation view works correctly."""
-    cr_family_url = reverse("members:create_family")
-    response = self.client.get(cr_family_url)
-    self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, "members/family/family_form.html")
-    self.assertIs(response.resolver_match.func.view_class, FamilyCreateView)
-    test_family = get_test_family()
-    response = self.client.post(cr_family_url, test_family, follow=True)
-    self.assertEqual(response.status_code, 200)
-    self.assertTrue(Family.objects.filter(name=test_family["name"]).exists())
-
-  def test_modify_family_view(self):
-    """Tests that the family update view works correctly."""
-    family = Family(**get_test_family())
-    family.save()
-    self.assertIsNotNone(family.id)
-    ud_family_url = reverse("members:update_family", kwargs={"pk": family.id})
-    response = self.client.get(ud_family_url)
-    self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, "members/family/family_form.html")
-    self.assertIs(response.resolver_match.func.view_class, FamilyUpdateView)
-    test_family = get_test_family()
-    response = self.client.post(ud_family_url, test_family, follow=True)
-    self.assertEqual(response.status_code, 200)
-    self.assertIs(response.resolver_match.func.view_class, FamilyDetailView)
-    family.refresh_from_db()
-    self.assertEqual(family.name, str(test_family["name"]))
-
-
 class TestModalFamilyView(MemberTestCase):
   def test_modal_family_create_view(self):
     """Tests family creation via modal view."""
@@ -81,21 +47,12 @@ class TestModalFamilyView(MemberTestCase):
     # self.assertTemplateUsed(response, 'members/modal_form.html')
     self.assertIs(response.resolver_match.func.view_class, ModalFamilyCreateView)
     test_family = get_test_family()
-    response = self.client.post(cr_family_url, test_family, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+    response = self.client.post(cr_family_url, test_family, HTTP_HX_REQUEST="true")
     self.assertEqual(response.status_code, 200)
     self.assertIs(response.resolver_match.func.view_class, ModalFamilyCreateView)
-    self.assertEqual(response.headers["Content-Type"], "application/json")
     family = Family.objects.filter(name=test_family["name"]).first()
     self.assertIsNotNone(family)
-    self.assertJSONEqual(
-      response.content.decode(),
-      {
-        "family_id": family.id,
-        "family_name": str(family),
-        "parent_family_id": family.parent.id if family.parent else "",
-      },
-    )
-    # pprint(vars(response))
+    self.assertContains(response, '<option value="' + str(family.id) + '" selected>' + str(family) + "</option>")
 
   def test_modify_modal_family_view(self):
     """Tests family update via modal view."""
@@ -111,17 +68,8 @@ class TestModalFamilyView(MemberTestCase):
     self.assertIs(response.resolver_match.func.view_class, ModalFamilyUpdateView)
     # test post update
     test_addr = get_test_family()  # modifies the name
-    response = self.client.post(ud_addr_url, test_addr, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+    response = self.client.post(ud_addr_url, test_addr, HTTP_HX_REQUEST="true")
     self.assertEqual(response.status_code, 200)
     self.assertIs(response.resolver_match.func.view_class, ModalFamilyUpdateView)
-    self.assertEqual(response.headers["Content-Type"], "application/json")
     family.refresh_from_db()
-    self.assertJSONEqual(
-      response.content.decode(),
-      {
-        "family_id": family.id,
-        "family_name": str(family),
-        "parent_family_id": family.parent.id if family.parent else "",
-      },
-    )
-    # pprint(vars(response))
+    self.assertContains(response, '<option value="' + str(family.id) + '" selected>' + str(family) + "</option>")

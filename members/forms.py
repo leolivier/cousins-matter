@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, get_language
+from django.urls import reverse
 
 from captcha.fields import CaptchaField
 
@@ -22,12 +23,20 @@ class MemberFormMixin:
       self.fields["family"].widget,
       can_add_related=True,
       can_change_related=can_change_family,
+      add_url=reverse("members:modal_create_family"),
+      change_url=reverse("members:modal_update_family", args=[self.instance.family.pk]) if can_change_family else None,
+      add_title=_("New Family"),
+      change_title=_("Change Family"),
     )
     can_change_address = self.instance and self.instance.address
     self.fields["address"].widget = FieldLinkWrapper(
       self.fields["address"].widget,
       can_add_related=True,
       can_change_related=can_change_address,
+      add_url=reverse("members:modal_create_address"),
+      change_url=reverse("members:modal_update_address", args=[self.instance.address.pk]) if can_change_address else None,
+      add_title=_("New Address"),
+      change_title=_("Change Address"),
     )
     # force first and last name to be required  # TODO: is this useful?
     self.fields["first_name"].required = True
@@ -174,6 +183,10 @@ class FamilyUpdateForm(ModelForm):
       can_add_related=True,
       can_change_related=can_change_parent,
       name="parent-family",
+      add_url=reverse("members:modal_create_family"),
+      change_url=reverse("members:modal_update_family", args=[self.instance.parent.pk]) if can_change_parent else None,
+      add_title=_("New Family"),
+      change_title=_("Change Family"),
     )
 
   def clean_name(self):

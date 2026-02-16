@@ -1,24 +1,42 @@
-{% extends "members/base_members.html" %}
+{%extends "cm_main/common/htmx_modal_form.html"%}
 {% load i18n crispy_forms_tags cm_tags %}
-{% block title %}{% title _("Edit Family") %}{% endblock %}
-{% block content %}
-<div class="container">
-	<div class="card">
-		<header class="card-header">
-			<p class="card-header-title">{% title _("Edit Family") %}</p>
-		</header>
-		<form method="post">
-			{% csrf_token %}
-			<section class="card-content">
-				{{ form | crispy}}
-			</section>
-			<footer class="card-footer">
-				<div class="buttons container">
-					<button type="submit" class="button is-primary">{%translate "Submit" %}</button>
-					<button type="reset" class="button" aria-label="close">{%translate "Cancel" %}</button>
-				</div>
-			</footer>
-		</form>
-	</div>
+
+{% block modal_title %}{{title}}{% endblock modal_title %}
+
+{%block form_params %}
+	hx-post="{{request.get_full_path}}"
+	hx-target="#id_parent"
+	hx-vals='{"current_family_id": "{{family.id}}"}'
+{%endblock form_params %}
+
+{% block user_warning %}
+{% trans "Change Family" as tr_title %}
+{% if title == tr_title %}
+<div class="notification is-warning is-update-warning">
+	{%trans "WARNING: This item will be modified for all other members using it! Please create a new one if that's not what you want to achieve."%}
 </div>
-{% endblock %}
+{% endif %}
+{% endblock user_warning %}
+
+{% block form %}
+	{{form|crispy}}
+{% endblock form %}
+
+{% block submit_button_text %}
+	{%trans "Submit" %}
+{% endblock submit_button_text %}
+
+{% block submit_button_class %}
+	is-primary
+{% endblock submit_button_class %}
+
+{% block submit_button_icon %}
+	{%icon "check" %}
+{% endblock submit_button_icon %}
+
+{%partialdef set_family %}
+<option value="">---------</option>
+{%for family in families %}
+<option value="{{family.id}}" {%if family.id == selected_family.id %}selected{%endif%}>{{family}}</option>
+{%endfor%}
+{%endpartialdef %}

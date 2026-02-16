@@ -17,7 +17,7 @@ from cm_main.utils import (
 )
 from verify_email.email_handler import send_verification_email
 from ..models import Family, Member
-from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm, NotifyDeathForm
+from ..forms import MemberUpdateForm, NotifyDeathForm
 
 logger = logging.getLogger(__name__)
 
@@ -129,8 +129,6 @@ class CreateManagedMemberView(generic.CreateView):
       self.template_name,
       {
         "form": MemberUpdateForm(),
-        "addr_form": AddressUpdateForm(),
-        "family_form": FamilyUpdateForm(),
         "title": _("Create Member"),
       },
     )
@@ -155,8 +153,6 @@ class CreateManagedMemberView(generic.CreateView):
       self.template_name,
       {
         "form": form,
-        "addr_form": AddressUpdateForm(),
-        "family_form": FamilyUpdateForm(),
         "title": _("Create Member"),
       },
     )
@@ -188,8 +184,6 @@ class EditMemberView(generic.UpdateView):
       self.template_name,
       {
         "form": MemberUpdateForm(instance=member, is_profile=self.is_profile_view, user=request.user),
-        "addr_form": AddressUpdateForm(),
-        "family_form": FamilyUpdateForm(),
         "pk": pk,
         "title": self.title,
         "member_manager_name": member_manager_name(member),
@@ -230,8 +224,6 @@ class EditMemberView(generic.UpdateView):
             self.template_name,
             {
               "form": form,
-              "addr_form": AddressUpdateForm(),
-              "family_form": FamilyUpdateForm(),
               "pk": pk,
               "title": self.title,
               "member_manager_name": member_manager_name(member),
@@ -247,8 +239,6 @@ class EditMemberView(generic.UpdateView):
         self.template_name,
         {
           "form": form,
-          "addr_form": AddressUpdateForm(),
-          "family_form": FamilyUpdateForm(),
           "pk": pk,
           "title": self.title,
           "member_manager_name": member_manager_name(member),

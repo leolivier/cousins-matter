@@ -59,7 +59,6 @@ urlpatterns = [
     views_address.AddressDetailView.as_view(),
     name="address_detail",
   ),
-  path("address/<int:pk>/json/", views_address.get_address, name="get_address"),
   path(
     "address/create",
     views_address.AddressCreateView.as_view(),
@@ -85,7 +84,6 @@ urlpatterns = [
     views_family.FamilyDetailView.as_view(),
     name="family_detail",
   ),
-  path("family/<int:pk>/json/", views_family.get_family, name="get_family"),
   path(
     "family/modcreate",
     views_family.ModalFamilyCreateView.as_view(),

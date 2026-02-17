@@ -2,15 +2,14 @@
 {% load i18n cm_tags static %}
 {% block title %}{% title _("Photo") %} {% endblock %}
 {%block header %}
-<link rel="stylesheet" href="{% static 'galleries/css/galleries.css' %}"/>
-<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
+<link rel="stylesheet" href="{% static 'galleries/css/galleries.min.css' %}"/>
 <script>
 	function get_photo_detail_url(pk) {
 		const url = "{% url 'galleries:photo' 123456789 %}".replace('123456789', pk);
 		return url;
 	}
 </script>
-<script src="{% static 'galleries/js/galleries.js' %}"></script>
+<script src="{% static 'galleries/js/galleries.min.js' %}"></script>
 {% endblock %}
 {% block content %}
 {%with photo=object%}

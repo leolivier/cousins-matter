@@ -9,7 +9,6 @@
 {% endblock %}
 {% block header %}
 	{%include "cm_main/common/include-summernote.html" with maxsize=settings.PAGE_MAX_SIZE %}
-	<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 {%endblock%}
 {% block content %}
 {%with page=form.instance has_page=form.instance.pk%}

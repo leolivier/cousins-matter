@@ -2,9 +2,9 @@
 {% load i18n cm_tags static crispy_forms_tags%}
 {% block title %}{% title _("Classified Ad Detail") %}{% endblock %}
 {% block header %}
-<link rel="stylesheet" href="{% static 'galleries/css/galleries.css' %}">
-<link rel="stylesheet" href="{% static 'classified_ads/css/classified_ads.css' %}">
-<script src="{% static 'galleries/js/galleries.js' %}"></script>
+<link rel="stylesheet" href="{% static 'galleries/css/galleries.min.css' %}">
+<link rel="stylesheet" href="{% static 'classified_ads/css/classified_ads.min.css' %}">
+<script src="{% static 'galleries/js/galleries.min.js' %}"></script>
 {% endblock%}
 {% block content %}
 {%with ad=object%}

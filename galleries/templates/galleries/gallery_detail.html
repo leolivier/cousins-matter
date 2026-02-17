@@ -4,14 +4,14 @@
 {%block header %}
 {%url 'galleries:gallery_photo_url' gallery.id '1234567890' as image_url %}
 {%url 'galleries:photo' '1234567890' as photo_url%}
-<link rel="stylesheet" href="{% static 'galleries/css/galleries.css' %}"/>
+<link rel="stylesheet" href="{% static 'galleries/css/galleries.min.css' %}"/>
 <script>
 	function get_photo_detail_url(pk) {
 		const url = "{% url 'galleries:photo' 123456789 %}".replace('123456789', pk);
 		return url;
 	}
 </script>
-<script src="{% static 'galleries/js/galleries.js' %}"></script>
+<script src="{% static 'galleries/js/galleries.min.js' %}"></script>
 {% endblock header %}
 {% block content %}
 <div class="container px-3">

@@ -2,7 +2,7 @@
 
 ## Reverse proxying with Nginx (default)
 
-There is a default configuration to reverse proxy Cousins Matter with Nginx. It is located in the config/nginx.conf file.
+There is a default configuration to reverse proxy Cousins Matter with Nginx. It is located in the config/nginx/nginx.conf file.
 By default, this configuration is started when you run `docker compose up -d`.
 
 You can edit this configuration file to adapt it to your needs.

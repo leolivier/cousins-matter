@@ -126,7 +126,7 @@ msgid ""
 "Are you sure you want to delete \"%(post)s\" and all associated replies and "
 "comments?"
 msgstr ""
-"Est tu sûr(e) de vouloir supprimer \"%(post)s\" et toutes les réponses et "
+"Es-tu sûr(e) de vouloir supprimer \"%(post)s\" et toutes les réponses et "
 "commentaires associés ?"
 
 #: views/views_post.py:210 views/views_post.py:225

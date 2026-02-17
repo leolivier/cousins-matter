@@ -1,10 +1,11 @@
+from django.test import TestCase
 from django.urls import reverse
 from ..views.views_family import (
   ModalFamilyCreateView,
   ModalFamilyUpdateView,
 )
 from ..models import Family
-from .tests_member_base import MemberTestCase
+from .tests_member_base import MemberTestCase, MemberTestCaseMixin
 
 FAMILY_COUNT = 0
 
@@ -18,7 +19,7 @@ def get_test_family(parent=None):
   return family
 
 
-class TestFamily(MemberTestCase):
+class TestFamily(MemberTestCaseMixin, TestCase):
   def test_create_and_modify_family(self):
     """Tests creating and modifying a family with its members."""
     # test create
@@ -27,6 +28,7 @@ class TestFamily(MemberTestCase):
     f_data = get_test_family(root_family)
     family = Family(**f_data)
     family.save()
+    self.member = self.create_member()
     self.member.family = family
     self.member.save()
     self.assertEqual(Family.objects.get(name=f_data["name"]), self.member.family)

@@ -74,7 +74,7 @@ def modify_member_data(member):
   }
 
 
-class BaseMemberTestCase:
+class MemberTestCaseMixin:
   member = None
   superuser = None
 
@@ -156,7 +156,7 @@ class BaseMemberTestCase:
     return new_member
 
 
-class MemberTestCase(BaseMemberTestCase, TestCase):
+class MemberTestCase(MemberTestCaseMixin, TestCase):
   @classmethod
   def setUpTestData(cls):
     "called once by the test framework before running the tests"
@@ -185,7 +185,7 @@ class MemberTestCase(BaseMemberTestCase, TestCase):
     super().tearDown()
 
 
-class TransactionMemberTestCase(BaseMemberTestCase, TransactionTestCase):
+class TransactionMemberTestCase(MemberTestCaseMixin, TransactionTestCase):
   def setUp(self):
     super().setUp()
     # create a superuser for testing

@@ -3,6 +3,7 @@ from django.core import mail
 from django.utils.translation import gettext as _
 from django.conf import settings
 from django.contrib.auth import get_user
+from django.test import TestCase
 from django.test.utils import TestContextDecorator
 from captcha.conf import settings as captcha_settings
 from verify_email.app_configurations import GetFieldFromSettings
@@ -197,6 +198,8 @@ class RequestRegistrationLinkTests(TestLoginRequiredMixin, MemberTestCase):
     response = self.client.post(reverse("members:register_request"), test_requester, follow=True)
     self.assertContainsMessage(response, "error", _("A member with this email already exists."))
 
+
+class MemberRegisterRequestTests(TestCase):
   def test_request_registration_wrong_captcha(self):
     from ..forms import RegistrationRequestForm
 
@@ -268,13 +271,15 @@ class MemberRegisterTests(MemberTestCase):
       status_code=200,
     )
 
+
+class MemberRegisterTests(TestCase):
   def test_register_needs_consent(self):
     user = {
       "username": "test_register_view",
-      "password1": self.member.password,
-      "password2": self.member.password,
-      "first_name": self.member.first_name,
-      "last_name": self.member.last_name,
+      "password1": "1213",
+      "password2": "1213",
+      "first_name": "test",
+      "last_name": "test",
       "email": "test_register_view@test.com",
       "phone": "01 23 45 67 78",
       "birthdate": today_minus("40y"),

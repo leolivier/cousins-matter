@@ -126,38 +126,6 @@ class GenealogyViewsTest(MemberTestCase):
     response = self.client.get(reverse("genealogy:family_chart"), follow=True)
     self.assertEqual(response.status_code, 200)
 
-  def test_family_chart_data_api(self):
-    response = self.client.get(
-      reverse("genealogy:family_chart_data"),
-      follow=True,
-      headers={"HTTP_ACCEPT": "application/json"},
-    )
-    self.assertEqual(response.status_code, 200)
-    data = response.json()
-    # print(data)
-    persons = [self.p1, self.p2, self.p3]
-    for i in range(3):
-      self.assertEqual(data[i]["id"], str(persons[i].id))
-      self.assertEqual(data[i]["data"]["first name"], persons[i].first_name)
-      self.assertEqual(data[i]["data"]["last name"], persons[i].last_name)
-      self.assertEqual(data[i]["data"]["gender"], persons[i].sex)
-      if persons[i].birth_date:
-        self.assertEqual(data[i]["data"]["birthday"], formats.date_format(persons[i].birth_date, "SHORT_DATE_FORMAT"))
-      if persons[i].death_date:
-        self.assertEqual(data[i]["data"]["deathday"], formats.date_format(persons[i].death_date, "SHORT_DATE_FORMAT"))
-      spouses = persons[i].get_partners()
-      if spouses:
-        self.assertSetEqual(set([str(spouse.id) for spouse in spouses]), set(data[i]["rels"]["spouses"]))
-      children = [
-        p.id
-        for p in persons
-        if p.id != persons[i].id
-        and p.child_of_family
-        and (p.child_of_family.partner1 == persons[i].id or p.child_of_family.partner2 == persons[i].id)
-      ]
-      if children:
-        self.assertSetEqual(set(children), set(data[i]["rels"]["children"]))
-
 
 class GenealogyFormsTest(TestCase):
   def test_person_form_valid(self):

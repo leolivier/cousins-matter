@@ -164,10 +164,9 @@ class TestTroveList(MemberTestCase):
     treasure = self.treasures[0]
     response = self.client.delete(
       reverse("troves:delete", args=[treasure.id]),
-      HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+      HTTP_HX_REQUEST="true",
     )
     self.assertEqual(response.status_code, 200)
-    self.print_response(response)
     self.assertFalse(Trove.objects.filter(id=treasure.id).exists())
 
   def test_translate_category(self):

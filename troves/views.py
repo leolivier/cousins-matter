@@ -70,7 +70,7 @@ def update_treasure(request, pk):
 
 
 def delete_treasure(request, pk):
-  assert_request_is_ajax(request)
+  assert request.htmx
   try:
     treasure = get_object_or_404(Trove, pk=pk)
     check_edit_permission(request, treasure.owner)

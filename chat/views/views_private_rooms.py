@@ -33,7 +33,7 @@ def search_private_members(request, room_slug):
   """
   Search for private members in a given chat room.
 
-  This view is accessible only to authenticated users. It performs an AJAX search
+  This view is accessible only to authenticated users. It performs an HTMX search
   for private members in a chat room based on the provided query. The search is
   case-insensitive and matches the query against the `last_name`, `first_name`,
   last name's last word, and first name's first word of the `Member` model.
@@ -44,13 +44,10 @@ def search_private_members(request, room_slug):
   - `room_slug` (str): The slug of the chat room to search in.
 
   Returns:
-  - `JsonResponse`: A JSON response containing the search results. The response
-    is a dictionary with a single key `'results'` which contains a list of dictionaries
-    representing the matching members. Each dictionary contains the `id` and `text`
-    fields of the matching member.
+  - `HttpResponse`: An HTMX response containing the search results.
 
   Raises:
-  - `ValidationError`: If the request is not an AJAX request.
+  - `ValidationError`: If the request is not an HTMX request.
 
   """
   assert request.htmx
@@ -353,7 +350,7 @@ def remove_admin_from_private_room(request, room_slug, member_id):
         _("There must be at least one admin in a private room. Please add another one before removing this one."),
       )
     else:
-      room.followers.remove(member)
+      room.admins.remove(member)
       room.save()
   else:
     messages.warning(request, _("This member is not an admin of this private room"))

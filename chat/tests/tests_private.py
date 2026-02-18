@@ -492,3 +492,125 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     )
     self.assertContainsMessage(response, "error", _("You are not an admin of this private room"))
     self.assertTemplateUsed(response, "chat/chat_rooms.html")
+
+  def test_list_private_room_members_not_member(self):
+    member = self.created_members[0]
+    self.client.login(username=member.username, password=member.password)
+    response = self.client.get(reverse("chat:private_room_members", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(response, "error", _("You are not a member of this private room"))
+
+  def test_add_member_to_private_room_invalid_method(self):
+    with self.assertRaises(ValidationError):
+      self.client.get(reverse("chat:add_member_to_private_room", args=[self.room.slug]))
+
+  def test_add_member_to_private_room_already_member(self):
+    member = self.created_members[0]
+    self.room.followers.add(member)
+    response = self.client.post(
+      reverse("chat:add_member_to_private_room", args=[self.room.slug]), {"member-id": member.id}, follow=True
+    )
+    self.assertContainsMessage(response, "warning", _("This user is already a member of this private room"))
+
+  def test_remove_member_from_private_room_not_admin(self):
+    member = self.created_members[0]
+    self.room.followers.add(member)
+    other_member = self.created_members[1]
+    self.client.login(username=other_member.username, password=other_member.password)
+    response = self.client.post(reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.id]), follow=True)
+    self.assertContainsMessage(response, "error", _("You are not an admin of this private room"))
+
+  def test_remove_member_from_private_room_not_member(self):
+    member = self.created_members[0]
+    # member is NOT in room followers
+    response = self.client.post(reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.id]), follow=True)
+    self.assertContainsMessage(response, "warning", _("This user is not a member of this private room"))
+
+  def test_remove_member_who_is_admin(self):
+    member = self.created_members[0]
+    self.room.followers.add(member)
+    self.room.admins.add(member)
+    self.client.post(reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.id]), follow=True)
+    self.assertNotIn(member, self.room.followers.all())
+    self.assertNotIn(member, self.room.admins.all())
+
+  def test_leave_private_room_not_member(self):
+    member = self.created_members[0]
+    self.client.login(username=member.username, password=member.password)
+    response = self.client.post(reverse("chat:leave_private_room", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(response, "error", _("You are not a member of this private room"))
+
+  def test_list_private_room_admins_not_member(self):
+    member = self.created_members[0]
+    self.client.login(username=member.username, password=member.password)
+    response = self.client.get(reverse("chat:private_room_admins", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(response, "error", _("You are not a member of this private room"))
+
+  def test_add_admin_to_private_room_invalid_method(self):
+    # This hits line 294 raise ValidationError
+    with self.assertRaises(ValidationError):
+      self.client.get(reverse("chat:add_admin_to_private_room", args=[self.room.slug]))
+
+  def test_add_admin_to_private_room_already_admin(self):
+    response = self.client.post(
+      reverse("chat:add_admin_to_private_room", args=[self.room.slug]), {"member-id": self.member.id}, follow=True
+    )
+    self.assertContainsMessage(response, "warning", _("This user is already a member of this private room"))
+
+  def test_remove_admin_from_private_room(self):
+    # Permission check
+    other_member = self.created_members[0]
+    self.room.followers.add(other_member)
+    self.client.login(username=other_member.username, password=other_member.password)
+    response = self.client.post(
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, self.member.id]), follow=True
+    )
+    self.assertContainsMessage(response, "error", _("You are not an admin of this private room"))
+
+    # Success case (2 admins)
+    self.client.login(username=self.member.username, password=self.member.password)
+    self.room.followers.add(other_member)
+    self.room.admins.add(other_member)
+    response = self.client.post(
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, other_member.id]), follow=True
+    )
+    self.assertIn(other_member, self.room.followers.all())
+    self.assertNotIn(other_member, self.room.admins.all())
+
+    # Failure case (not an admin)
+    response = self.client.post(
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, other_member.id]), follow=True
+    )
+    self.assertContainsMessage(response, "warning", _("This member is not an admin of this private room"))
+
+    # Failure case (only one admin)
+    response = self.client.post(
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, self.member.id]), follow=True
+    )
+    self.assertContainsMessage(
+      response,
+      "error",
+      _("There must be at least one admin in a private room. Please add another one before removing this one."),
+    )
+
+  def test_leave_private_room_admins(self):
+    # Permission check
+    other_member = self.created_members[0]
+    self.room.followers.add(other_member)
+    self.client.login(username=other_member.username, password=other_member.password)
+    response = self.client.post(reverse("chat:leave_private_room_admins", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(response, "error", _("You are not an admin of this private room"))
+
+    # Failure case (only one admin)
+    self.client.login(username=self.member.username, password=self.member.password)
+    response = self.client.post(reverse("chat:leave_private_room_admins", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(
+      response,
+      "error",
+      _("There must be at least one admin in a private room. Please add another one before removing yourself."),
+    )
+
+    # Success case
+    self.room.admins.add(other_member)
+    response = self.client.post(reverse("chat:leave_private_room_admins", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(response, "success", _("You have been removed from the admins of this private room."))
+    self.assertNotIn(self.member, self.room.admins.all())

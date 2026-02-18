@@ -10,7 +10,6 @@ from django.db.utils import IntegrityError
 from django.utils.formats import localize
 from django.utils.translation import gettext as _
 from django.contrib.auth import get_user_model
-from django.test import TestCase
 from django.core import mail
 from verify_email.app_configurations import GetFieldFromSettings
 from verify_email.views import verify_user_and_activate
@@ -124,6 +123,7 @@ class MemberDeleteTest(MemberTestCaseMixin, TestCase):
     member.delete()
     self.assertEqual(Member.objects.filter(id=member.id).count(), 0)
     self.assertEqual(Member.objects.filter(username=member.username).count(), 0)
+
 
 class MemberDeleteTestByView(MemberViewTestMixin, MemberTestCase):
   def test_delete_member_by_view(self):

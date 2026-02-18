@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from unittest.mock import patch
 from datetime import date
-from .models import Person, Family
+from ..models import Person, Family
 from members.tests.tests_member_base import MemberTestCase
 
 

@@ -45,6 +45,31 @@ class PostReplyTestCase(ForumTestCase):
     # print("delete reply response:", response.__dict__)
     # TODO: how to check the removal inside the page which is done using HTMX?
 
+  def test_add_reply_invalid(self):
+    """Tests adding an empty reply returns an error with a client refresh."""
+    url = reverse("forum:reply", args=[self.post.id])
+    response = self.client.post(url, {"content": ""}, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertHXRefresh(response)
+    # can't test the error message because it's not displayed in the response
+
+  def test_edit_reply_get(self):
+    """Tests the GET request for editing a reply returns a form."""
+    msg = Message(content="a reply to be edited via GET", post=self.post, author=self.member)
+    msg.save()
+    url = reverse("forum:edit_reply", args=[msg.id])
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, msg.content)
+
+  def test_delete_first_message_fails(self):
+    """Tests that deleting the first message of a thread raises a ValidationError."""
+    url = reverse("forum:delete_reply", args=[self.message.id])
+    from django.core.exceptions import ValidationError
+
+    with self.assertRaises(ValidationError):
+      self.client.post(url)
+
 
 @django_q_sync_class
 class TestFollower(TestFollowersMixin, ForumTestCase):

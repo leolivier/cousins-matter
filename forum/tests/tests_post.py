@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.db import transaction
+from django.utils.translation import gettext as _
 from members.tests.tests_member_base import MemberTestCase
 from ..views.views_post import PostCreateView, PostEditView
 from ..models import Post, Message, Comment
@@ -89,3 +90,20 @@ class PostDeleteTestCase(ForumTestCase):
     # pprint(vars(response))
     post = Post.objects.filter(id=self.post.id)
     self.assertFalse(post.exists())
+
+  def test_display_post_not_found(self):
+    """Tests that displaying a non-existent post returns 404."""
+    url = reverse("forum:display", args=[99999])
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 404)
+
+  def test_delete_post_get_confirm(self):
+    """Tests the GET request for deleting shows a confirmation modal."""
+    url = reverse("forum:delete", args=[self.post.id])
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(
+      response,
+      _('Are you sure you want to delete "%(post)s" and all associated replies and comments?') % {"post": self.post.title},
+      html=True,
+    )

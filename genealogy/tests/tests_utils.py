@@ -4,8 +4,8 @@ import uuid
 from datetime import date
 from django.test import TestCase
 from django.core.cache import cache
-from .models import Person, Family
-from .utils import GedcomParser, GedcomExporter, register_genealogy_cache, clear_genealogy_caches
+from ..models import Person, Family
+from ..utils import GedcomParser, GedcomExporter, register_genealogy_cache, clear_genealogy_caches
 
 
 class GedcomParserTests(TestCase):

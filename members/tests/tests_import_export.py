@@ -2,6 +2,8 @@ import csv
 from datetime import date
 import io
 import os
+import uuid
+from unittest.mock import patch
 
 from django.core.files.storage import default_storage
 from django.urls import reverse
@@ -348,3 +350,134 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
     self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
     self.do_test_export("import_members.csv", "en", {"city-id": "Liverpool"})
     self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
+
+
+class TestSelectViews(TestMemberImport):
+  """Tests for the AJAX select views and export selection view."""
+
+  def test_select_name(self):
+    response = self.client.get(
+      reverse("members:select_name"),
+      {"q": self.member.last_name[:3]},
+      HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+    )
+    self.assertEqual(response.status_code, 200)
+    data = response.json()
+    self.assertIn("results", data)
+    results = data["results"]
+    self.assertIsInstance(results, list)
+    self.assertTrue(len(results) > 0)
+    for n in ["text", "id"]:
+      self.assertIn(results[0][n].lower(), [self.member.last_name, self.superuser.last_name])
+
+  def test_select_family(self):
+    from ..models import Family
+
+    Family.objects.create(name="TestFamily")
+    response = self.client.get(
+      reverse("members:select_family"),
+      {"q": "Test"},
+      HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+    )
+    self.assertEqual(response.status_code, 200)
+    data = response.json()
+    self.assertIn("results", data)
+    self.assertTrue(len(data["results"]) > 0)
+    result = data["results"][0]
+    self.assertDictEqual(result, {"text": "Testfamily", "id": "Testfamily"})
+
+  def test_select_city(self):
+    from ..models import Address
+
+    Address.objects.get_or_create(city="TestCity", number_and_street="1 Main St", zip_code="12345")
+    response = self.client.get(
+      reverse("members:select_city"),
+      {"q": "Test"},
+      HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+      follow=True,
+    )
+    self.assertEqual(response.status_code, 200)
+    data = response.json()
+    self.assertIn("results", data)
+    results = data["results"]
+    self.assertIsInstance(results, list)
+    self.assertTrue(len(results) > 0)
+    self.assertEqual(results[0]["text"], "Testcity")
+    self.assertEqual(results[0]["id"], "Testcity")
+
+  def test_select_members_to_export(self):
+    response = self.client.get(reverse("members:select_members_to_export"))
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "members/members/export_members.html")
+
+  def test_import_progress_not_found(self):
+    response = self.client.get(reverse("members:import_progress", args=["non-existent-id"]))
+    self.assertEqual(response.status_code, 404)
+
+  @patch("members.views.views_import_export.result_group")
+  @patch("members.views.views_import_export.count_group")
+  def test_import_progress_success(self, mock_count, mock_result):
+    from members.tasks import ImportContext, MemberImportData
+
+    task_id = uuid.uuid4().hex
+    import_ctx = ImportContext(group=task_id, rows_num=2, default_manager=self.member)
+    import_ctx.register()
+
+    mock_count.return_value = 1
+    # Mock row data to cover lines 125-131
+    row1 = MemberImportData(current_member=self.member)
+    row1.set_created()
+    row1.errors = ["error1"]
+    row1.warnings = ["warn1"]
+
+    mock_result.return_value = [row1]
+
+    response = self.client.get(reverse("members:import_progress", args=[task_id]))
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, "50%")
+    self.assertContains(response, "error1")
+    self.assertContains(response, "warn1")
+
+    # Test completion
+    mock_count.return_value = 2
+    response = self.client.get(reverse("members:import_progress", args=[task_id]))
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, "100%")
+    self.assertIn("back_url", response.context)
+
+    import_ctx.unregister()
+
+  def test_export_invalid_method(self):
+    from django.core.exceptions import ValidationError
+
+    with self.assertRaises(ValidationError):
+      self.client.get(reverse("members:export_members_to_csv"))
+
+  @patch("members.views.views_import_export.import_csv")
+  def test_import_csv_exception(self, mock_import):
+    mock_import.side_effect = Exception("Major Fail")
+    csv_file = get_test_file("import_members.csv")
+    url = reverse("members:csv_import")
+    response = self.client.post(
+      url,
+      {
+        "csv_file": SimpleUploadedFile("import_members.csv", open(csv_file, "rb").read(), content_type="text/csv"),
+        "activate_users": True,
+      },
+      follow=True,
+    )
+    self.assertRedirects(response, url)
+    self.assertContains(response, "Major Fail")
+
+  def test_export_with_family_filter(self):
+    self.do_test_import("import_members.csv", "en", 4)
+    url = reverse("members:export_members_to_csv")
+    response = self.client.post(url, {"city-id": "Blackpool"}, follow=True)
+    self.assertEqual(response.status_code, 200)
+    content = response.content.decode()
+    self.assertIn("Blackpool", content)
+
+  def test_t_function(self):
+    from members.views.views_import_export import t
+
+    self.assertEqual(t("username"), ALL_FIELD_NAMES["username"])

@@ -2,9 +2,9 @@ from datetime import date
 from django.urls import reverse
 from django.utils import formats
 from django.core.cache import cache
-from .models import Person, Family
+from ..models import Person, Family
 from members.tests.tests_member_base import MemberTestCase
-from .views.views_family_chart import CACHE_KEY_FAMILY_CHART_DATA
+from ..views.views_family_chart import CACHE_KEY_FAMILY_CHART_DATA
 
 
 class FamilyChartViewsTest(MemberTestCase):

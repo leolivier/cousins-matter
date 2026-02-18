@@ -3,10 +3,11 @@ from django.urls import reverse
 from django.db.utils import DatabaseError
 from unittest.mock import patch
 import redis
+from members.tests.tests_member_base import MemberTestCase
 from cm_main.forms import PasswordResetForm
 
 
-class GeneralViewsTestCase(TestCase):
+class GeneralViewsTestCase(MemberTestCase):
   def test_home_view(self):
     """Test that HomeView returns 200 and uses the correct template."""
     response = self.client.get(reverse("cm_main:Home"))
@@ -19,6 +20,51 @@ class GeneralViewsTestCase(TestCase):
     self.assertEqual(response.status_code, 200)
     self.assertIsInstance(response.context["form"], PasswordResetForm)
     self.assertTemplateUsed(response, "members/login/password_reset.html")
+
+  def test_password_reset_post(self):
+    """Test that PasswordResetForm.save is called and works."""
+    # We need to test the save method which is called during POST
+    response = self.client.post(reverse("reset_password"), {"email": self.member.email}, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "members/login/password_reset_done.html")
+
+  def test_download_protected_media_not_found(self):
+    """Test that download_protected_media raises 404 if file not found."""
+    # Line 68
+    response = self.client.get(reverse("get_protected_media", args=["non_existent_file.jpg"]))
+    self.assertEqual(response.status_code, 404)
+
+  def test_download_protected_media_not_modified(self):
+    """Test that download_protected_media returns 304 if ETag matches."""
+    # Line 58
+    from hashlib import blake2b
+
+    media = "test_file.jpg"
+    hasher = blake2b()
+    tbh = bytes(f"{self.member.username}@{media}", "utf-8")
+    hasher.update(tbh)
+    media_etag = hasher.hexdigest()
+
+    response = self.client.get(reverse("get_protected_media", args=[media]), HTTP_IF_NONE_MATCH=media_etag)
+    self.assertEqual(response.status_code, 304)
+
+  @patch("cm_main.views.views_general.default_storage.open")
+  def test_download_protected_media_error(self, mock_open):
+    """Test that download_protected_media raises 404 on general exception."""
+    # Line 70
+    mock_open.side_effect = Exception("General Error")
+    response = self.client.get(reverse("get_protected_media", args=["some_file.jpg"]))
+    self.assertEqual(response.status_code, 404)
+
+  def test_send_zipfile(self):
+    """Test that send_zipfile works."""
+    from cm_main.views.views_general import send_zipfile
+    from members.tests.tests_member_base import get_fake_request
+
+    request = get_fake_request()
+    response = send_zipfile(request)
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response["Content-Type"], "application/zip")
 
 
 class HealthCheckTestCase(TestCase):

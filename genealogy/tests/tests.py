@@ -3,8 +3,8 @@ from django.utils.translation import gettext as _
 from django.urls import reverse
 from datetime import date
 from django.utils import formats
-from .models import Person, Family
-from .forms import PersonForm, FamilyForm
+from ..models import Person, Family
+from ..forms import PersonForm, FamilyForm
 from members.tests.tests_member_base import MemberTestCase
 
 
@@ -15,7 +15,7 @@ class PersonModelTest(TestCase):
 
   def test_person_creation(self):
     self.assertTrue(isinstance(self.person, Person))
-    self.assertEqual(self.person.__str__(), "John Doe")
+    self.assertEqual(str(self.person), "John Doe")
 
   def test_person_age(self):
     # Age calculation depends on today's date

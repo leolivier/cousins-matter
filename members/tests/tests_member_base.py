@@ -129,6 +129,9 @@ class MemberTestCaseMixin:
       html=True,
     )
 
+  def assertHXRefresh(self, response):
+    self.assertEqual(response.get("HX-Refresh"), "true")
+
   def create_member(self, member_data=None, is_active=False):
     """creates and returns a new member using provided member data.
     If the member data is None, a new one is created.
@@ -136,19 +139,6 @@ class MemberTestCaseMixin:
     member_data = member_data or get_new_member_data()
     pwd = member_data["password"]
     new_member = Member.objects.create_member(
-      **member_data, is_active=is_active, member_manager=None if is_active else self.member
-    )
-    new_member.password = pwd  # keep unhashed password in memory for login
-    self.created_members.append(new_member)
-    return new_member
-
-  async def acreate_member(self, member_data=None, is_active=False):
-    """asynchronously creates and returns a new member using provided member data.
-    If the member data is None, a new one is created.
-    """
-    member_data = member_data or get_new_member_data()
-    pwd = member_data.get("password")
-    new_member = await Member.objects.acreate_member(
       **member_data, is_active=is_active, member_manager=None if is_active else self.member
     )
     new_member.password = pwd  # keep unhashed password in memory for login

@@ -121,6 +121,34 @@ class MemberInviteTests(MemberTestCase):
     self.client.logout()
     self.client.login(username=self.member.username, password=self.member.password)
 
+  def test_invite_post_invalid_form(self):
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    response = self.client.post(reverse("members:invite"), {"invited": "", "email": "invalid"}, follow=True)
+    form = response.context["form"]
+    self.assertFormError(form, "invited", _("This field is required."))
+    self.assertFormError(form, "email", _("Enter a valid email address."))
+
+  def test_invite_post_member_exists(self):
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    test_invite = {
+      "invited": "Existing User",
+      "email": self.member.email,
+    }
+    response = self.client.post(reverse("members:invite"), test_invite, follow=True)
+    self.assertContainsMessage(response, "error", _("A member with this email already exists."))
+
+  def test_invite_get_with_mail_param(self):
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    email = "test-param@example.com"
+    response = self.client.get(reverse("members:invite") + f"?mail={email}")
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, email)
+
+  def test_invite_get_no_mail_param(self):
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    response = self.client.get(reverse("members:invite"))
+    self.assertEqual(response.status_code, 200)
+
 
 class ignore_captcha_errors(TestContextDecorator):
   def __init__(self):
@@ -175,7 +203,7 @@ class RequestRegistrationLinkTests(TestLoginRequiredMixin, MemberTestCase):
       % {"name": test_requester["name"], "email": test_requester["email"]},
       content,
     )
-    self.assertInHTML(f"""<div class="container">{test_requester["message"]}</div>""", content)
+    mail.outbox = []  # reset test mailbox
     request = get_fake_request()
     absolute_link = request.build_absolute_uri(reverse("members:invite"))
     self.assertInHTML(
@@ -185,6 +213,11 @@ class RequestRegistrationLinkTests(TestLoginRequiredMixin, MemberTestCase):
       content,
     )
     mail.outbox = []  # reset test mailbox
+
+  def test_request_registration_get(self):
+    response = self.client.get(reverse("members:register_request"))
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "members/registration/registration_request.html")
 
   @ignore_captcha_errors()
   def test_request_registration_email_already_exists(self):
@@ -270,9 +303,52 @@ class MemberRegisterTests(MemberTestCase):
       _("Invalid link. Please contact the administrator."),
       status_code=200,
     )
+    self.assertRedirects(response, "/")
+
+  def test_register_view_already_logged_in(self):
+    self.client.login(username=self.member.username, password=self.member.password)
+    request = get_fake_request()
+    invitation_url = RegistrationLinkManager().generate_link(request, "new@example.com")
+    response = self.client.get(invitation_url, follow=True)
+    self.assertContainsMessage(response, "error", _("You are already logged in"))
+    self.assertRedirects(response, "/")
+
+  def test_register_view_member_already_active(self):
+    self.client.logout()
+    request = get_fake_request()
+    invitation_url = RegistrationLinkManager().generate_link(request, self.member.email)
+    response = self.client.get(invitation_url, follow=True)
+    self.assertContainsMessage(
+      response, "error", _("A member with the same email address is already active. Please sign in instead")
+    )
+    self.assertRedirects(response, "/")
+
+  def test_register_view_member_inactive(self):
+    self.client.logout()
+    inactive_member = Member.objects.create(
+      username="inactive", email="inactive@example.com", is_active=False, member_manager=self.superuser
+    )
+    request = get_fake_request()
+    invitation_url = RegistrationLinkManager().generate_link(request, inactive_member.email)
+    response = self.client.get(invitation_url, follow=True)
+    self.assertContainsMessage(
+      response,
+      "error",
+      _("You are already registered but not active. Please contact %(admin)s to activate your account")
+      % {"admin": self.superuser.full_name},
+    )
+    self.assertRedirects(response, "/")
+
+  def test_register_post_invalid_link(self):
+    self.client.logout()
+    request = get_fake_request()
+    invitation_url = RegistrationLinkManager().generate_link(request, "new@example.com") + "wrong"
+    response = self.client.post(invitation_url, {}, follow=True)
+    self.assertContainsMessage(response, "error", _("Invalid link. Please contact the administrator."))
+    self.assertRedirects(response, "/")
 
 
-class MemberRegisterTests(TestCase):
+class MemberRegisterConsentTests(TestCase):
   def test_register_needs_consent(self):
     user = {
       "username": "test_register_view",

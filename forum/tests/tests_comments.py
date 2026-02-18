@@ -48,6 +48,22 @@ class CommentCreateTestCase(ForumTestCase):
     self.assertEqual(new_cnt, cnt - 1)
     # TODO: how to check the removal inside the page which is done with htmx?
 
+  def test_add_comment_get(self):
+    """Tests the GET request for adding a comment returns a form."""
+    url = reverse("forum:add_comment", args=[self.message.id])
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "forum_add_comment")
+
+  def test_edit_comment_get(self):
+    """Tests the GET request for editing a comment returns a form."""
+    comment = Comment(content="comment to edit via GET", message=self.message, author=self.member)
+    comment.save()
+    url = reverse("forum:edit_comment", args=[comment.id])
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, comment.content)
+
 
 @django_q_sync_class
 class TestFollower(TestFollowersMixin, ForumTestCase):

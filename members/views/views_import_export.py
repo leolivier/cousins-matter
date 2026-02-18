@@ -2,7 +2,7 @@ import logging
 import csv
 import io
 import uuid
-from django.forms import ValidationError
+from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy

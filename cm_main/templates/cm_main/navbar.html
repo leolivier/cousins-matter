@@ -38,7 +38,7 @@
 			{%endif%}
 
 			{%if 'show_public_chats'|featured or 'show_private_chats'|featured%}
-			<div class="navbar-item has-dropdown">
+			<div class="navbar-item has-dropdown is-hoverable">
 				{% url 'chat:chat_rooms' as public_chat_url%}
 				{% url 'chat:private_chat_rooms' as private_chat_url%}
 				{%if 'show_public_chats'|featured and 'show_private_chats'|featured%}

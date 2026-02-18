@@ -97,18 +97,15 @@
 
 {%partialdef forum_add_comment%}
 <form hx-post="{%url 'forum:add_comment' message.id %}"
-			hx-target="#next-comment-{{message.id}}"
-			hx-swap="beforebegin"
-			hx-vals='{"delta": 1}'
-			id="create-comment-{{message.id}}" method="POST" class="comment-form">
+			hx-target="#next-comment-{{message.id}}" hx-swap="beforebegin"
+			hx-vals='{"delta": 1}' method="POST" class="comment-form">
 	<div class="level">
 		<div class="level-left">{{comment_form|crispy}}</div>
 		<div class="level-right">
 			<div class="buttons">
 				<input type="submit" class="button is-link" value="{%trans 'Add'%}">
 				<button type="button" class="button"
-					hx-get="{% url 'forum:add_comment' message.id %}"
-					hx-target="#create-comment-{{message.id}}">
+					_="on click remove <form/>">
 					{%icon "cancel" %}
 				</button>
 			</div>

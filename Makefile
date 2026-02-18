@@ -1,4 +1,4 @@
-.PHONY: run cpmsg mkmsg up down clean ps logs stop up4run help h u4r test mig mkmig cover
+.PHONY: run cpmsg mkmsg up down clean ps logs stop up4run help h u4r test mig mkmig cover minify
 
 help h:
 	@echo "Available targets:"
@@ -17,6 +17,7 @@ help h:
 	@echo "  mig: migrate the database"
 	@echo "  test [t=test_name]: run test(s)"
 	@echo "  cover [a=application] [co=coverage_options] [to=test_options]: run test(s) with coverage. Default is all applications. If an application is given, the coverage result is stored in .coverage.<application>."
+	@echo "  minify [a=application]: minify the css and js files of an application. Default is all applications."
 
 run:
 	POSTGRES_HOST=localhost	REDIS_HOST=localhost ./manage.py runserver
@@ -69,3 +70,8 @@ mig:
 
 mkmig:
 	POSTGRES_HOST=localhost REDIS_HOST=localhost ./manage.py makemigrations
+
+minify:
+	app="$(a)"; \
+	if [ -z "$$app" ]; then app="."; fi; \
+	css-html-js-minify $$app

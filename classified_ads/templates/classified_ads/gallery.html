@@ -44,9 +44,7 @@
 			{%endpartialdef image-gallery%}
 		</div>
 	</div>
-	{%if ad.pk%}
-		{% include "cm_main/common/modal_form.html" with modal_id="upsert-photo-modal" multipart=True %}
-	{%else%}
+	{%if not ad.pk%}
 		<div class="content has-text-centered">({%trans "You will be able to add photos after creating the ad"%})</div>
 	{%endif%}
 </nav>

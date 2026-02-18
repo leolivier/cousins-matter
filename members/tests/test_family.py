@@ -46,7 +46,6 @@ class TestModalFamilyView(MemberTestCase):
     response = self.client.get(cr_family_url)
     self.assertEqual(response.status_code, 200)
     # actually does not used this form directly as it is included in a master one
-    # self.assertTemplateUsed(response, 'members/modal_form.html')
     self.assertIs(response.resolver_match.func.view_class, ModalFamilyCreateView)
     test_family = get_test_family()
     response = self.client.post(cr_family_url, test_family, HTTP_HX_REQUEST="true")
@@ -65,8 +64,6 @@ class TestModalFamilyView(MemberTestCase):
     ud_addr_url = reverse("members:modal_update_family", kwargs={"pk": family.id})
     response = self.client.get(ud_addr_url)
     self.assertEqual(response.status_code, 200)
-    # actually does not used this form directmy as it is included in a master one
-    # self.assertTemplateUsed(response, 'members/modal_form.html')
     self.assertIs(response.resolver_match.func.view_class, ModalFamilyUpdateView)
     # test post update
     test_addr = get_test_family()  # modifies the name

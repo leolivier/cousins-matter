@@ -150,14 +150,14 @@ def send_zipfile(request):
     rel_filename = filename if filename.startswith("./") else "." / filename  # TODO: won't work on Windows
     archive.write(abs_filename, rel_filename)
   archive.close()
+  temp.seek(0)
   response = StreamingHttpResponse(
     FileWrapper(
-      open(temp, "rb"),
+      temp,
       chunk_size,
     ),
-    content_type=mimetypes.guess_type(temp)[0],
+    content_type="application/zip",
   )
-  response["Content-Type"] = "application/zip"
   response["Content-Length"] = temp.tell()
   response["Content-Disposition"] = "attachment; filename=file.zip"
   temp.seek(0)

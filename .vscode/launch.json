@@ -14,7 +14,12 @@
 			],
 			"django": true,
 			"autoStartBrowser": false,
-			"justMyCode": false
+			"justMyCode": false,
+			"envFile": "${workspaceFolder}/.env",
+			"env": {
+				"POSTGRES_HOST": "localhost",
+				"REDIS_HOST": "localhost"
+			}
 		},
 		{
 			"name": "Django qcluster Debugger",
@@ -26,7 +31,12 @@
 			],
 			"django": true,
 			"autoStartBrowser": false,
-			"justMyCode": false
+			"justMyCode": false,
+			"envFile": "${workspaceFolder}/.env",
+			"env": {
+				"POSTGRES_HOST": "localhost",
+				"REDIS_HOST": "localhost"
+			}
 		},
 		{
 			"name": "Django Test Debugger",
@@ -38,11 +48,16 @@
 				"--failfast",
 				"-v",
 				"2",
-				"galleries.tests.tests_photo_detail"
+				"members.tests.tests_search.MemberSearchTests.test_search_members_htmx"
 			],
 			"django": true,
 			"autoStartBrowser": false,
-			"justMyCode": false
+			"justMyCode": false,
+			"envFile": "${workspaceFolder}/.env",
+			"env": {
+				"POSTGRES_HOST": "localhost",
+				"REDIS_HOST": "localhost"
+			}
 		},
 		{
 			"name": "Docker Django Debug",

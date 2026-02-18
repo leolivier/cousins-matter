@@ -8,39 +8,34 @@ from ..models import ChatRoom
 from ..routing import websocket_urlpatterns
 
 
-@sync_to_async
-def astr(obj):
-  return str(obj)
-
-
 class ChatMessageSenderMixin(object):
-  async def _send_msg(self, room_slug, data, disconnect):
+  async def _send_msg(self, room_slug, data, disconnect, sender=None):
     "Actually sends a message to a chat room."
     application = URLRouter(websocket_urlpatterns)
     # Get the currently logged-in user
-    # user = await sync_to_async(lambda: self.client.session.get('_auth_user_id'))()
-    # user_obj = await sync_to_async(get_user_model().objects.get)(pk=user)
-    user = await self.client.session.aget("_auth_user_id")
-    user_obj = await get_user_model().objects.aget(pk=user)
+    if sender is None:
+      session = await sync_to_async(getattr)(self.async_client, "session")
+      user_id = await session.aget("_auth_user_id")
+      user = await get_user_model().objects.aget(pk=user_id)
+    else:
+      user = sender
 
-    communicator = WebsocketCommunicator(
-      application=application,
-      path=f"/chat/{room_slug}",
-    )
-    communicator.scope["user"] = user_obj
+    communicator = WebsocketCommunicator(application, f"chat/{room_slug}")
+    communicator.scope["user"] = user
     connected, _ = await communicator.connect()
-    self.assertTrue(connected)
-    # Test sending data as text
+    if not connected:
+      raise Exception(f"Failed to connect to WebSocket for room {room_slug}")
     await communicator.send_json_to(data)
     if disconnect:
       await communicator.disconnect()
-    else:
-      return communicator
+    return communicator
 
-  async def send_chat_message(self, msg, room_slug, disconnect=True):
+  async def send_chat_message(self, msg, room_slug, disconnect=True, sender=None):
     "Sends a chat message to a room."
     # sender is the currently connected user
-    sender = await aget_user(self.client)
+    if sender is None:
+      await sync_to_async(getattr)(self.async_client, "session")
+      sender = await aget_user(self.async_client)
     data = {
       "action": "create_chat_message",
       "args": {
@@ -50,20 +45,28 @@ class ChatMessageSenderMixin(object):
         "room": room_slug,
       },
     }
-    return await self._send_msg(room_slug, data, disconnect)
+    return await self._send_msg(room_slug, data, disconnect, sender=sender)
 
-  async def send_updated_message(self, room_slug, msgid, msg, disconnect=True):
+  async def send_updated_message(self, room_slug, msgid, msg, disconnect=True, sender=None):
     "Sends an updated chat message to a room."
+    # sender is the currently connected user
+    if sender is None:
+      await sync_to_async(getattr)(self.async_client, "session")
+      sender = await aget_user(self.async_client)
     data = {
       "action": "update_chat_message",
       "args": {"msgid": msgid, "message": msg},
     }
-    return await self._send_msg(room_slug, data, disconnect)
+    return await self._send_msg(room_slug, data, disconnect, sender=sender)
 
-  async def send_delete_message(self, room_slug, msgid, disconnect=True):
+  async def send_delete_message(self, room_slug, msgid, disconnect=True, sender=None):
     "Sends a delete chat message to a room."
+    # sender is the currently connected user
+    if sender is None:
+      await sync_to_async(getattr)(self.async_client, "session")
+      sender = await aget_user(self.async_client)
     data = {"action": "delete_chat_message", "args": {"msgid": msgid}}
-    return await self._send_msg(room_slug, data, disconnect)
+    return await self._send_msg(room_slug, data, disconnect, sender=sender)
 
   def setUp(self):
     "All tests start with a new room."

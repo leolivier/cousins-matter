@@ -7,7 +7,6 @@ import tempfile
 import pathlib
 import uuid
 
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import SuspiciousFileOperation
 from django.db.models import ObjectDoesNotExist
 from django.forms import ValidationError
@@ -17,7 +16,6 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
 
 from django_q.tasks import async_task, result_group, count_group
@@ -121,7 +119,7 @@ def handle_zip(zip_file, task_group, owner_id, root_gallery=None):
   return zimport
 
 
-class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
+class BulkUploadPhotosView(generic.FormView):
   template_name = "galleries/bulk_upload.html"
   form_class = BulkUploadPhotosForm
   success_url = reverse_lazy("galleries:galleries")
@@ -158,7 +156,6 @@ class BulkUploadPhotosView(LoginRequiredMixin, generic.FormView):
       return HttpResponseClientRefresh()
 
 
-@login_required
 def upload_progress(request, id):
   zimport = ZipImport.get(id)
   logger.debug(f"upload progress group: {id}, zimport: {zimport}")

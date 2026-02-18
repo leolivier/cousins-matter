@@ -20,6 +20,7 @@ from django.core.files.storage import FileSystemStorage, default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.forms import ValidationError
+from django.shortcuts import render
 from django.urls import reverse
 from django.utils import formats
 from django.utils.translation import gettext as _, get_language, gettext_lazy
@@ -123,7 +124,7 @@ class Paginator(paginator.Paginator):
     page_size = int(request.GET["page_size"]) if "page_size" in request.GET else default_page_size
 
     ptor = Paginator(object_list, page_size, reverse_link=reverse_link, compute_link=compute_link)
-    page_num = page_num or ptor.num_pages
+    page_num = int(page_num) if page_num else ptor.num_pages
     if page_num > ptor.num_pages:
       url = ptor._get_link(ptor.num_pages)
       url += ("&" if "?" in url else "?") + urlencode({"page_size": page_size})
@@ -286,22 +287,22 @@ def parse_locale_date(date_string_to_parse):
 
 # Listing strftime format codes for makemessages
 FORMAT_CODE_DESCRIPTIONS = {
-  "%d": gettext_lazy("%%d"),
-  "%m": gettext_lazy("%m"),
-  "%Y": gettext_lazy("%Y"),
-  "%y": gettext_lazy("%y"),
-  "%H": gettext_lazy("%H"),
-  "%h": gettext_lazy("%h"),
-  "%p": gettext_lazy("%p"),
-  "%M": gettext_lazy("%M"),
-  "%S": gettext_lazy("%S"),
+  "%d": gettext_lazy("DD"),
+  "%m": gettext_lazy("MM"),
+  "%Y": gettext_lazy("YYYY"),
+  "%y": gettext_lazy("YY"),
+  "%H": gettext_lazy("HH"),
+  "%I": gettext_lazy("hh"),
+  "%p": gettext_lazy("AM/PM"),
+  "%M": gettext_lazy("mm"),
+  "%S": gettext_lazy("ss"),
 }
 
 
 def translate_date_format(format_string):
   """
   Translates a date/time format string (strftime) into a description
-  in the current locale.
+  in the current locale (eg: %d/%m/%Y -> JJ/MM/AAAA in French and DD/MM/YYYY in English).
   """
   translated_parts = []
   i = 0
@@ -445,3 +446,11 @@ def storage_rmtree(storage, prefix):
   # If listdir not available (e.g. some backends), try direct deletion of prefix
   logger.warning(f"listdir not available for {storage} - trying to delete {prefix} directly")
   storage.delete(f"{prefix}/")
+
+
+def confirm_delete_modal(request, title, msg, expected_value=None, hx_params=None):
+  return render(
+    request,
+    "cm_main/common/confirm-delete-modal.html",
+    {"ays_title": title, "ays_msg": msg, "expected_value": expected_value, "hx_params": hx_params},
+  )

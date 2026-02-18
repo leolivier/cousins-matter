@@ -2,8 +2,37 @@
 {% load i18n cm_tags crispy_forms_tags static %}
 {% block header %}
 	{%include "cm_main/common/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
-	<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
-	<script src="{% static 'forum/js/forum.js' %}"></script>
+	<script>
+		$(document).ready(()=>{  // is this still needed?
+			$('.comment-form').hide();
+			$('.reply-form').hide()
+		});
+    $(document).on('updateCommentCount', (evt) => {
+      if (!('delta' in evt.detail) || evt.detail.delta == 0) { return }
+			message_id = evt.detail.message_id
+			ncomments = $('#nb-comments-id-' + message_id)
+      let nbcomments = ncomments.text().replace(/[^0-9]/g, '')
+      if (nbcomments == '') { nbcomments = evt.detail.delta }
+      else { nbcomments = parseInt(nbcomments) + evt.detail.delta }
+      let formats = ngettext('%s comment', '%s comments', nbcomments)
+      let ncoms = interpolate(formats, [nbcomments])
+      ncomments.text(ncoms)
+			$('#create-comment-' + message_id).html('')
+    })
+    $(document).on('updateReplyCount', (evt) => {
+      if (!('delta' in evt.detail) || evt.detail.delta == 0) { return }
+			nreplies = $('#nb-replies-id')
+      let nbreplies = nreplies.text().replace(/[^0-9]/g, '')
+      if (nbreplies == '') { nbreplies = evt.detail.delta }
+      else { nbreplies = parseInt(nbreplies) + evt.detail.delta }
+      let formats = ngettext('%s answer', '%s answers', nbreplies)
+      let ncoms = interpolate(formats, [nbreplies])
+      nreplies.text(ncoms)
+			$('#id_my_reply').summernote('reset');
+			$countDisplay = $('#id_my_reply').parent().find('.char-count');
+			$countDisplay.text(summernoteMaxSize);
+    })
+	</script>
 {%endblock%}
 {% block title %}{% title _("Post") %}{% endblock %}
 {% block content %}
@@ -34,9 +63,9 @@
 					{%icon "member-link" %}
 				</a>
 				<br>
-				<span class="is-size-7">{{post.first_message.date|date:"DATETIME_FORMAT"}}</span>
+				<span class="is-size-7">{{post.first_message.created|date:"DATETIME_FORMAT"}}</span>
 				<br>
-				<span class="tag" id="nb-replies-id1">{{trans_nreplies}}</span>
+				<span class="tag" id="nb-replies-id">{{trans_nreplies}}</span>
 				{%include "cm_main/followers/followers-count-tag.html" with followed_object=post %}
 			</div>
 		</div>
@@ -46,13 +75,8 @@
 				<a class="button" href="{% url 'forum:edit' post.id %}" title="{%trans 'Edit' %}">
 					{%icon "edit" %}
 				</a>
-
-				{% trans 'Delete post' as delete_title%}
-				{% blocktranslate asvar delete_msg trimmed %}
-						Are you sure you want to delete "{{ post }}" and all associated replies and comments?
-				{% endblocktranslate %}
-				{% url 'forum:delete' post.id as delete_url %}
-				{%include "cm_main/common/confirm-delete-modal.html" with button_text='' ays_title=delete_title ays_msg=delete_msg|force_escape action_url=delete_url expected_value=post.title|escape %}
+				{%url "forum:delete" post.id as delete_url%}
+				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text='' delete_url=delete_url %}
 			</div>
 			{%else%}
 				{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
@@ -60,81 +84,105 @@
 			{%endif%}
 		</div>
 	</div>
-	<div class="container px-2">
+	<div class="container has-background-primary-light p-2">
 		{% autoescape off %}{{message.content}}{%endautoescape%}
 	</div>
 </div>
 {%include "forum/comment_list.html" with message=message%}
 <hr>
 <div class="container px-2">
-	<p class="tag is-medium mb-4" id="nb-replies-id2">
-		{{trans_nreplies}}
-		{%if nreplies > 0 %}
-			{%paginate page%}
-		{%endif%}
-	</p>
+	{%if nreplies > 0 %}
+		{%paginate page%}
+	{%endif%}
 
 	{%for reply in page.object_list %}
+	{%partialdef forum_reply inline %}
 	<div class="container has-text-left" id="reply-div-{{reply.id}}">
 		<hr>
-		<div class="block" id="reply-level-{{reply.id}}">
-			<span id="reply-content-{{reply.id}}">{% autoescape off %}{{reply.content}}{%endautoescape%}</span>
+		{%if edit_reply and edit_reply != 'false'%}
+		<form method="POST" class="reply-form"
+			hx-post="{% url 'forum:edit_reply' reply.id %}"
+			hx-target="#reply-div-{{reply.id}}"
+			id='edit-reply-{{reply.id}}'>
 			<div class="level">
 				<div class="level-left">
-					<p class="content is-small">
-						{{reply.author.get_full_name}}
-						<a href="{%url 'members:detail' reply.author.id %}">
-							{%icon "member-link" %}
-						</a>
-						<br>
-						{{reply.date}}
-					</p>
-				</div>
-				{% if reply.author.username == user.username %}
-				<div class="level-right">
-					<div class="buttons">
-						<a class="button" onclick="show_edit_reply_form('{{reply.id}}')" title="{%trans 'Edit' %}">
-							{%icon "edit" %}
-						</a>
-						{% url 'forum:delete_reply' reply.id as delete_reply_url %}
-						<a class="button" onclick="delete_reply('{{delete_reply_url}}', '{{reply.id}}')" title="{%trans 'Delete' %}">
-							{%icon "delete" %}
-						</a>
-					</div>
-				</div>
-				{%endif%}
-			</div>
-		</div>
-		<form method="POST" class="reply-form" id='edit-reply-{{reply.id}}'>
-			{% csrf_token %}
-			<div class="level">
-				<div class="level-left is-flex-shrink-3">{{reply_form|crispy}}</div>
-				<div class="level-right">
-					<div class="buttons">
+					<div class="is-flex-shrink-3">{{reply_form|crispy}}</div>
+					<div class="buttons ml-4">
 						<button type="submit" class="button is-dark" title="{%trans 'Update' %}">
 							{%icon "send" %}
 						</button>
-						<button type="reset" class="button" onclick="hide_edit_reply_form('{{reply.id}}')" title="{%trans 'Cancel' %}">
+						<button type="button" class="button"
+							hx-get="{% url 'forum:edit_reply' reply.id %}"
+							hx-target="#reply-div-{{reply.id}}"
+							hx-vals='{"edit_reply": false}'>
 							{%icon "cancel" %}
 						</button>
 					</div>
 				</div>
 			</div>
-			<script>$(document).ready(()=>{
-				ajax_form_action('#edit-reply-{{reply.id}}', "{% url 'forum:edit_reply' reply.id %}", (response)=>{
-					hide_edit_reply_form('{{reply.id}}', response.reply_str)
-				})
-			});</script>
 		</form>
+		{%else%}
+		<div class="level" id="reply-div-{{reply.id}}">
+			<div class="level-left" id="reply-content-{{reply.id}}">
+				<div class="level-item">
+					<div class="block">
+						<div class="has-background-primary-light p-2">
+							{% autoescape off %}{{reply.content}}{%endautoescape%}
+						</div>
+						<p class="content is-small">
+							{{reply.created}},
+							<a href="{%url 'members:detail' reply.author.id %}">{{reply.author.get_full_name}}</a>
+						</p>
+					</div>
+				</div>
+				{% if reply.author.username == user.username %}
+				<div class="level-item ml-4">
+					<div class="buttons">
+						<button class="button" type="button"
+							hx-get="{% url 'forum:edit_reply' reply.id %}"
+							hx-target="#reply-div-{{reply.id}}"
+							title="{%trans 'Edit' %}">
+							{%icon "edit" %}
+						</button>
+						<button type="button" class="button"
+							hx-post="{% url 'forum:delete_reply' reply.id %}"
+							hx-target="#reply-div-{{reply.id}}"
+							hx-swap="delete"
+							hx-confirm="{%trans 'Are you sure you want to delete this reply?'%}">
+							{%icon "delete" %}
+						</button>
+					</div>
+				</div>
+				{%endif%}
+			</div>
+		</div>
+		{%endif%}
+
 	{%include "forum/comment_list.html" with message=reply %}
 	</div>
+	{%endpartialdef forum_reply%}
 	{%endfor%}
+	<div id="next-reply-{{post.id}}"></div>
 	<hr>
 </div>
-{%url "forum:reply" post.id as url%}
-{%include "forum/post_form_include.html" with title=_('Your answer') message_form=reply_form action=url post=post %}
+<div class="container">
+	<form hx-post="{%url 'forum:reply' post.id %}"
+		hx-target="#next-reply-{{post.id}}"
+		hx-swap="beforebegin"
+		>
+		<div class="field">
+			<label class="label" for="id_my_reply">{% trans 'Your answer' %}</label>
+			<div class="control">
+				<textarea class="textarea richtextarea" name="content" id="id_my_reply"></textarea>
+			</div>
+		</div>
+		<div class="buttons">
+			<button type="submit" class="button is-dark ml-auto">
+				{%icon "send" %} <span>{%translate "Send" %}</span>
+			</button>
+		</div>
+	</form>
+</div>
 {%endwith%}
-{% if post.first_message.author.username == user.username %}
-	{% include "cm_main/common/modal_form.html" with modal_id="delete-item-modal"%}
-{% endif %}
+
 {% endblock %}

@@ -1,19 +1,20 @@
 import logging
 from django.conf import settings
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.urls import reverse
 from django.utils.translation import gettext as _
-from cm_main.utils import check_edit_permission
+from django_htmx.http import HttpResponseClientRedirect
+
+from cm_main.utils import check_edit_permission, confirm_delete_modal
 from ..models import Gallery
 from ..forms import GalleryForm
 
 logger = logging.getLogger(__name__)
 
 
-class GalleryCreateView(LoginRequiredMixin, generic.CreateView):
+class GalleryCreateView(generic.CreateView):
   template_name = "galleries/gallery_form.html"
   model = Gallery
   form_class = GalleryForm
@@ -29,7 +30,7 @@ class GalleryCreateView(LoginRequiredMixin, generic.CreateView):
     return super().form_valid(form)
 
 
-class GalleryUpdateView(LoginRequiredMixin, generic.UpdateView):
+class GalleryUpdateView(generic.UpdateView):
   template_name = "galleries/gallery_form.html"
   model = Gallery
   form_class = GalleryForm
@@ -41,13 +42,14 @@ class GalleryUpdateView(LoginRequiredMixin, generic.UpdateView):
     return gallery
 
 
-class GalleryDetailView(LoginRequiredMixin, generic.DetailView):
+class GalleryDetailView(generic.DetailView):
   template_name = "galleries/gallery_detail.html"
   model = Gallery
   fields = "__all__"
 
   def get(self, request, pk, page=1):  # TODO manage slug instead of pk
-    gallery = get_object_or_404(Gallery, pk=pk)
+    # gallery = get_object_or_404(Gallery, pk=pk)
+    gallery = Gallery.objects.select_related("owner").select_related("parent").get(pk=pk)
     page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_GALLERY_PAGE_SIZE
     return render(
       request,
@@ -58,7 +60,7 @@ class GalleryDetailView(LoginRequiredMixin, generic.DetailView):
   # TODO: every member can edit any gallery ???
 
 
-class GalleryTreeView(LoginRequiredMixin, generic.ListView):
+class GalleryTreeView(generic.ListView):
   template_name = "galleries/galleries_tree.html"
   model = Gallery
 
@@ -67,11 +69,17 @@ class GalleryTreeView(LoginRequiredMixin, generic.ListView):
     return {"galleries": galleries}
 
 
-@login_required
 def delete_gallery(request, pk):
   gallery = get_object_or_404(Gallery, pk=pk)
-  if gallery.owner:
-    check_edit_permission(request, gallery.owner)
-  gallery.delete()
-  messages.success(request, _("Gallery deleted successfully"))
-  return redirect("galleries:galleries")
+  if request.method == "POST":
+    if gallery.owner:
+      check_edit_permission(request, gallery.owner)
+    gallery.delete()
+    messages.success(request, _("Gallery deleted successfully"))
+    return HttpResponseClientRedirect(reverse("galleries:galleries"))
+  return confirm_delete_modal(
+    request,
+    _("Delete gallery"),
+    _('Are you sure you want to delete "%(object)s" and all photos and sub galleries it contains?') % {"object": gallery.name},
+    expected_value=gallery.name,
+  )

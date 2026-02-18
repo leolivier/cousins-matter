@@ -82,6 +82,8 @@ DJANGO_ICONS = {
   # forum icons
   "forum": "forum-outline",
   "new-forum": "forum-plus-outline",
+  "comment": "comment-outline",
+  "new-comment": "comment-plus-outline",
   # chat icons
   "new-chat-room": "chat-plus-outline",
   "chat-room": "chat",

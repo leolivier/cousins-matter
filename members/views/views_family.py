@@ -1,77 +1,71 @@
 import logging
 from django.views import generic
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django_htmx.http import HttpResponseClientRefresh
+from django.shortcuts import get_object_or_404, render
+from django.utils.translation import gettext_lazy as _
+from django.contrib import messages
 
 from ..models import Family
 from ..forms import FamilyUpdateForm
-from cm_main.utils import assert_request_is_ajax
 
 logger = logging.getLogger(__name__)
 
 
-class FamilyDetailView(LoginRequiredMixin, generic.DetailView):
+class FamilyDetailView(generic.DetailView):
   model = Family
   template_name = "members/family/family_detail.html"
 
 
-class FamilyCreateView(LoginRequiredMixin, generic.CreateView):
+class FamilyCreateView(generic.CreateView):
   model = Family
   template_name = "members/family/family_form.html"
   fields = "__all__"
 
 
-class FamilyUpdateView(LoginRequiredMixin, generic.UpdateView):
+class FamilyUpdateView(generic.UpdateView):
   model = Family
   template_name = "members/family/family_form.html"
   fields = "__all__"
 
 
-def _json_family_response(family):
-  return JsonResponse(
-    {
-      "family_id": family.id,
-      "family_name": str(family),
-      "parent_family_id": family.parent.id if family.parent else "",
-    },
-    status=200,
-  )
-
-
-class ModalFamilyUpsertViewMixin(LoginRequiredMixin):
+class ModalFamilyUpsertMixin(generic.View):
   model = Family
   template_name = "members/family/family_form.html"
-  fields = "__all__"
+  form_class = FamilyUpdateForm
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context["title"] = self.title
+    return context
 
   def process_form(self, request, form):
-    assert_request_is_ajax(request)
+    assert request.htmx
     if form.is_valid():
       family = form.save()
-      return _json_family_response(family)
+      families = Family.objects.all()
+      child_family_id = request.GET.get("current_family_id", "")
+      if child_family_id:
+        child_family = get_object_or_404(Family, pk=child_family_id)
+        child_family.parent = family
+        child_family.save(update_fields=["parent"])
+      return render(request, "members/family/family_form.html#set_family", {"selected_family": family, "families": families})
     else:
-      errors = form.errors.as_json()
-      return JsonResponse({"errors": errors}, status=400)
+      messages.error(request, form.errors)
+      return HttpResponseClientRefresh()
 
 
-class ModalFamilyCreateView(ModalFamilyUpsertViewMixin, generic.CreateView):
+class ModalFamilyCreateView(ModalFamilyUpsertMixin, generic.CreateView):
+  title = _("New Family")
+
   def post(self, request, *args, **kwargs):
-    # create a form instance from the request and save it
     form = FamilyUpdateForm(request.POST)
     return self.process_form(request, form)
 
 
-class ModalFamilyUpdateView(ModalFamilyUpsertViewMixin, generic.UpdateView):
+class ModalFamilyUpdateView(ModalFamilyUpsertMixin, generic.UpdateView):
+  title = _("Change Family")
+
   def post(self, request, *args, **kwargs):
     family = get_object_or_404(Family, pk=kwargs["pk"])
-    # create a form instance and populate it with data from the request on existing member (or None):
     form = FamilyUpdateForm(request.POST, instance=family)
     return self.process_form(request, form)
-
-
-@login_required
-def get_family(request, pk):
-  assert_request_is_ajax(request)
-  family = get_object_or_404(Family, pk=pk)
-  return _json_family_response(family)

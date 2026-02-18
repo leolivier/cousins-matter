@@ -168,4 +168,4 @@ FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=
 
 ## NOTES
 
-__(*) WARNING:__ If you want to change any of the variables controling the size of what can be uploaded and you are using the nginx reverse proxy, please check that the value of `client_max_body_size` in config/nginx.conf so that it remains higher than the size variables you change above. Otherwise you will receive a 413 error from Nginx. The default value provided is high (20MB) so it should be an issue except when videos is supported.
+__(*) WARNING:__ If you want to change any of the variables controling the size of what can be uploaded and you are using the nginx reverse proxy, please check that the value of `client_max_body_size` in config/nginx/nginx.conf so that it remains higher than the size variables you change above. Otherwise you will receive a 413 error from Nginx. The default value provided is high (20MB) so it should be an issue except when videos is supported.

@@ -89,7 +89,7 @@ urlpatterns = [
   path("qhealth/", qhealth, name="qhealth"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-if settings.DEBUG and not settings.TESTING:
+if settings.DEBUG_TOOLBAR:
   from debug_toolbar.toolbar import debug_toolbar_urls
 
   urlpatterns = [

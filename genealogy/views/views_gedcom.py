@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -11,7 +10,6 @@ from ..forms import GedcomImportForm
 from ..utils import GedcomParser, GedcomExporter, clear_genealogy_caches
 
 
-@login_required
 def import_gedcom(request):
   if request.method == "POST":
     form = GedcomImportForm(request.POST, request.FILES)
@@ -37,7 +35,6 @@ def import_gedcom(request):
   return render(request, "genealogy/import_gedcom.html", {"form": form})
 
 
-@login_required
 def export_gedcom(request):
   exporter = GedcomExporter()
   gedcom_content = exporter.export()
@@ -46,7 +43,6 @@ def export_gedcom(request):
   return response
 
 
-@login_required
 def download_gedcom(request):
   exporter = GedcomExporter()
   gedcom_content = exporter.export()

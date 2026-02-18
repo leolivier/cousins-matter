@@ -4,19 +4,12 @@
 	{% block links %}
 		{% spaceless %}
 		{% if can_change_related %}
-		<a class="change-related button js-modal-trigger" 
-			id="id_change_{{ name }}_link"
-			title="{% blocktranslate %}Change selected {{ name }}{% endblocktranslate %}"
-			>
+		<a class="button" title="{{change_title}}" hx-get="{{change_url}}" hx-target="#modal" hx-trigger="click">
 			{%icon "edit" %}
 		</a>
 		{% endif %}
 		{% if can_add_related %}
-		<a class="add-related button js-modal-trigger"
-			id="id_create_{{ name }}_link"
-			{% translate name as translated_name %}
-			title="{% blocktranslate %}Add another {{ translated_name }}{% endblocktranslate %}"
-			>
+		<a class="button" title="{{add_title}}" hx-get="{{add_url}}" hx-target="#modal" hx-trigger="click">
 			{%icon "new" %}
 		</a>
 		{% endif %}

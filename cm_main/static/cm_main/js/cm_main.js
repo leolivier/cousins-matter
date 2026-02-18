@@ -112,104 +112,14 @@ $(document).ready(function() {
   });
 
   // Set initial state
-  checked = $('.icon-radio-group input[type="radio"]:checked');
-  $container = checked.closest('.toggle-container');
-  $translation = (checked.val() === 'option2') ? 'translateX(100%)' : 'translateX(0)';
-  $container.css('--toggle-translate', $translation);
+  $('.icon-radio-group input[type="radio"][checked="checked"]').each(function() {
+    $container = $(this).closest('.toggle-container');
+    $translation = ($(this).val() === 'option2') ? 'translateX(100%)' : 'translateX(0)';
+    $container.css('--toggle-translate', $translation);
+    console.log('toggle initial state: ' + $(this).val());
+  });
 // end toggle slider js
 });
-
-// ajax functions
-
-// function to set a form to make an AJAX call
-function ajax_form_action(id, action, on_success, on_error=on_ajax_error) {
-  $(id).submit(function () {
-    // create an AJAX call
-    $.ajax({
-      data: $(this).serialize(), // get the form data
-      type: $(this).attr('method'), // GET or POST
-      url: action,
-      success: on_success,
-      error: on_error
-    });
-    return false;
-  });
-}
-
-// function to execute an action (POST) through ajax with no form
-function ajax_action(action, on_success, on_error=on_ajax_error) {
-  $.ajax({
-    data: {}, // no data
-    type: 'POST',
-    url: action,
-    success: on_success,
-    error: on_error
-  });
-  return false;
-}
-
-// function to display ajax errors
-function on_ajax_error(response) {
-  // alert the error if any error occured
-  if (response.responseJSON) { console.log(response.responseJSON.errors); }
-  else if (response.responseText) { 
-    add_error_message(response.responseText);
-  } else console.log(response)
-}
-
-
-// function to add an ajax checker to a field
-// if response[response_field] is true, then error triggered
-function add_ajax_checker(selector, validator_url, response_field, error_message) {
-  // console.log(selector, validator_url, response_field, error_message, $(selector));
-  const $selector = $(selector);
-  $selector.keyup(function () {
-    // create an AJAX call
-    $.ajax({
-        data: $(this).serialize(), // get the form data
-        url: validator_url,
-      // on success
-      success: function (response) {
-        const check_error = $selector.next('.ajax-checker-error');
-        // pop an alert if any error occured
-        if (response[response_field] == true) {
-          $selector.removeClass('is-success').addClass('is-danger');
-          if (!check_error.length) {
-            $selector.after(`
-              <div class="has-text-danger has-background-danger-light has-text-weight-semibold ajax-checker-error">
-                ${error_message}
-              </div>`)
-          }
-        } else {
-          $selector.removeClass('is-danger').addClass('is-success');
-          $(check_error).remove();
-        }
-      },
-      error: on_ajax_error
-    });
-    return false;
-  })
-}
-
-////// utility functions
-
-// function to add a new option to a select
-function add_selected_option(id, value, text, message) {
-  if (message) add_success_message(message);
-  // add option with new value/text
-  $(id).append($('<option>').val(value).text(text));
-  // and select it
-  $(id+' option[value='+value+']').attr('selected','selected');
-}
-
-// function to change an option of a select
-function change_option(id, value, text, message) {
-  if (message) add_success_message(message);
-  option = $(id+' option[value='+value+']');
-  option.text(text);
-  // and reselect it
-  option.attr('selected','selected');
-}
 
 // function to display messages 
 function add_message(kind, message) {
@@ -248,17 +158,40 @@ function printSection(el) {
   $('body').html(originalContent);
 }
 
-function confirm_and_redirect(message, action_url) {
-	if (confirm(message)) {
-			window.location.replace(action_url);
-	}
+function check_search_length(el, min_length) {
+  if (el.value.length > 0 && el.value.length < min_length) {
+    // try to use gettext if available
+    var message = (typeof gettext === 'function') ? gettext('Please enter at least ') + min_length + gettext(' characters') : 'Please enter at least ' + min_length + ' characters';
+    el.setCustomValidity(message);
+    el.reportValidity();
+  } else {
+    el.setCustomValidity('');
+  }
 }
 
-$(document).on('htmx:afterOnLoad', () => {
+$(document).on('htmx:load', () => {
 	 // Add a click event on various modal child elements to close the parent modal
   $('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button').
     not('.keep-open-on-click').
     on('click', function(el) {
       $(this).closest('.modal').removeClass('is-active'); // close the parent modal
   });
+  $('.confirmation_check').trigger('keyup');
+});
+
+$(document).on('keyup', '.confirmation_check', function(event) {
+  expected_value = $(this).data('expected-value');
+  form=$(this).parents('form');
+  submit=form.find('.modal-card-foot button[type="submit"]');
+  not_possible = form.find("#deletion_not_possible");
+  possible = form.find("#deletion_possible");
+  if ( event.target.value == expected_value ) {
+    submit.prop('disabled', false);
+    possible.removeClass('is-hidden');
+    not_possible.addClass('is-hidden');
+  } else {
+    submit.prop('disabled', true);
+    possible.addClass('is-hidden');
+    not_possible.removeClass('is-hidden');
+  }
 });

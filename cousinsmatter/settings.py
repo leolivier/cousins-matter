@@ -34,6 +34,9 @@ if DEBUG:
 
 TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
 
+DEBUG_TOOLBAR = env.bool("DEBUG_TOOLBAR", default=DEBUG and not TESTING)
+DEBUG_HTMX = env.bool("DEBUG_HTMX", default=DEBUG)
+
 SECRET_KEY = env.str("SECRET_KEY")
 # when rotating the secret key, you can provide the old key here to avoid breaking the site
 SECRET_KEY_FALLBACKS = env.list("PREVIOUS_SECRET_KEYS", default=[])
@@ -54,6 +57,8 @@ MEDIA_URL = f"/protected_{MEDIA_REL}/"
 
 PUBLIC_MEDIA_ROOT = MEDIA_ROOT / "public"
 PUBLIC_MEDIA_URL = f"/{MEDIA_REL}/public/"
+if DEBUG:
+  WHITENOISE_MANIFEST_STRICT = False
 
 STORAGES = {
   "staticfiles": {
@@ -162,31 +167,32 @@ INSTALLED_APPS = [
   "django_q",
   "django_htmx",
 ]
-if DEBUG and not TESTING:
+if DEBUG_TOOLBAR:
   INSTALLED_APPS.append("debug_toolbar")
 
 MIDDLEWARE = [
   "django.middleware.security.SecurityMiddleware",
   "whitenoise.middleware.WhiteNoiseMiddleware",
   "django.contrib.sessions.middleware.SessionMiddleware",
+  "django.middleware.locale.LocaleMiddleware",
   "corsheaders.middleware.CorsMiddleware",
   "django.middleware.common.CommonMiddleware",
   "django.middleware.csrf.CsrfViewMiddleware",
   "django.contrib.auth.middleware.AuthenticationMiddleware",
+  "django.contrib.auth.middleware.LoginRequiredMiddleware",
   "django.contrib.messages.middleware.MessageMiddleware",
   "django.middleware.clickjacking.XFrameOptionsMiddleware",
   "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
-  "django.middleware.locale.LocaleMiddleware",
   "django_htmx.middleware.HtmxMiddleware",
 ]
-if DEBUG and not TESTING:
+if DEBUG_TOOLBAR:
   MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     *MIDDLEWARE,
   ]
 #   MIDDLEWARE.append('cousinsmatter.htmlvalidator.HtmlValidatorMiddleware')
 
-if DEBUG and not TESTING:
+if DEBUG_TOOLBAR:
   INTERNAL_IPS = [
     "127.0.0.1",
     "::1",
@@ -296,7 +302,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CRISPY_FAIL_SILENTLY = not DEBUG
 CRISPY_TEMPLATE_PACK = "bulma"
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bulma"
+CRISPY_ALLOWED_TEMPLATE_PACKS = ("bulma",)
 
 LOGIN_REDIRECT_URL = "/"
 # LOGIN_URL = '/members/login'

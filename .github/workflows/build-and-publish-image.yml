@@ -55,9 +55,12 @@ jobs:
           python-version: '3.14'
           cache: 'pip'
 
+      - name: Install dev dependencies
+        run: |
+          python -m pip install -r dev-requirements.txt
+
       - name: Lint with ruff
         run: |
-          python -m pip install ruff
           ruff check .
 
       - name: Login to GHCR.io

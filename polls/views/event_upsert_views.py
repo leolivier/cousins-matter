@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from cm_main.utils import check_edit_permission
+from django_htmx.http import HttpResponseClientRedirect
+from cm_main.utils import check_edit_permission, confirm_delete_modal
 from polls.views.upsert_views import (
   PollCreateView,
   PollDeleteView,
@@ -13,7 +14,7 @@ from ..models import Answer, EventPlanner, Question
 from ..forms.upsert_forms import (
   QuestionUpsertForm,
   EventPlannerUpsertForm,
-)  # , MultipleEventUpsertForm, PollUpsertForm
+)
 
 
 class EventPlannerCreateView(PollCreateView):
@@ -116,7 +117,17 @@ class EventPlannerDeleteView(PollDeleteView):
   model = EventPlanner
   success_url = "/polls/event-planners/all/"
 
+  def get(self, request, pk):
+    planner = get_object_or_404(self.model, pk=pk)
+    return confirm_delete_modal(
+      request,
+      _("Delete Event Planner"),
+      _('Are you sure you want to delete the event planner "%(title)s"?') % {"title": planner.title},
+      expected_value=planner.title,
+    )
+
   def post(self, request, pk):
     planner = get_object_or_404(self.model, pk=pk)
     check_edit_permission(request, planner.owner)
-    return super().post(request, pk)
+    planner.delete()
+    return HttpResponseClientRedirect(reverse("polls:all_event_planners"))

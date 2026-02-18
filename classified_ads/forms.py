@@ -1,21 +1,29 @@
+import logging
 from django import forms
-
-# from django.utils.translation import gettext as _
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from .models import AdPhoto, ClassifiedAd, Categories
 
-# from crispy_forms.helper import FormHelper
-# from crispy_forms.layout import Layout, Fieldset
+from crispy_forms.helper import FormHelper
+from crispy_bulma.layout import Layout, Row, Column
 from cm_main.widgets import RichTextarea
+
+logger = logging.getLogger(__name__)
 
 
 class ClassifiedAdForm(forms.ModelForm):
   category = forms.ChoiceField(
-    choices=[],  # Will be populated in __init__.
-    widget=forms.Select(),
+    choices=[("", _("Select a category")), *Categories.list_categories()],
+    widget=forms.Select(
+      attrs={
+        "hx-get": reverse_lazy("classified_ads:get_subcategories"),
+        "hx-target": "#id_subcategory",
+      }
+    ),
     required=True,
   )
   subcategory = forms.ChoiceField(
-    choices=[],  # Will be populated either in __init__ or in the javascript based on the selected category.
+    choices=[("", _("Select a subcategory"))],  # Will be populated in get_subcategories view
     widget=forms.Select(),
     required=False,
   )
@@ -30,36 +38,31 @@ class ClassifiedAdForm(forms.ModelForm):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     try:
-      categories_choices = Categories.list_categories()
       if self.instance and self.instance.category:
-        subcategories_choices = Categories.list_subcategories(self.instance.category)
-      else:
-        subcategories_choices = []
+        self.fields["subcategory"].choices = Categories.list_subcategories(self.instance.category)
     except Exception as e:
-      print(f"Error retrieving categories and subcategories : {e}")
-      categories_choices = []
-      subcategories_choices = []
-
-    self.fields["category"].choices = categories_choices
-    self.fields["subcategory"].choices = subcategories_choices
+      logger.error(f"Error retrieving categories and subcategories : {e}")
 
     # crispy bulma does not implement layouts I need :/
-    # # Initialize the crispy form helper
-    # self.helper = FormHelper(self)
-    # all_fields = list(self.fields.keys())
-    # # fields with a special layout
-    # special_fields = ['title', 'category', 'subcategory']
-    # other_fields = [field for field in all_fields if field not in special_fields]
+    self.helper = FormHelper(self)
+    self.helper.form_tag = False
+    all_fields = list(self.fields.keys())
+    # fields with a special layout
+    special_fields = ["title", "category", "subcategory"]
+    other_fields = [field for field in all_fields if field not in special_fields]
 
-    # # Define the custom layout: first the line with the two fields side by side,
-    # # then let crispy automatically display the other fields.
-    # self.helper.layout = Layout(
-    #   'title',
-    #   Fieldset("Text for the label {{ username }}", 'category', 'subcategory'),
-    #   # Then automatically add the other fields in the natural order:
-    #   *other_fields
-    # )
-    # print(self.helper.layout)
+    # Define the custom layout: first the line with the two fields side by side,
+    # then let crispy automatically display the other fields.
+    self.helper.layout = Layout(
+      "title",
+      Row(
+        Column("category", css_class="is-6"),
+        Column("subcategory", css_class="is-6"),
+      ),
+      # Then automatically add the other fields in the natural order:
+      *other_fields,
+    )
+    # print(self.helper.layout.__dict__)
 
   def is_valid(self):
     # set the subcategory choices before checking validity

@@ -6,25 +6,22 @@ from django.db.models import Q
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import logout
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
-from django_htmx.http import HttpResponseClientRefresh
+from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
 from cm_main.utils import (
   PageOutOfBounds,
   Paginator,
   remove_accents,
-  assert_request_is_ajax,
+  confirm_delete_modal,
 )
 from verify_email.email_handler import send_verification_email
 from ..models import Family, Member
-from ..forms import MemberUpdateForm, AddressUpdateForm, FamilyUpdateForm, NotifyDeathForm
+from ..forms import MemberUpdateForm, NotifyDeathForm
 
 logger = logging.getLogger(__name__)
 
 
-@login_required
 def validate_username(request):
   """Check username availability"""
   username = request.GET.get("username", None)
@@ -32,7 +29,6 @@ def validate_username(request):
   return JsonResponse(response)
 
 
-@login_required
 def validate_family_name(request):
   """Check family name availability"""
   family_name = request.GET.get("name", None)
@@ -40,7 +36,6 @@ def validate_family_name(request):
   return JsonResponse(response)
 
 
-@login_required
 def logout_member(request):
   logout(request)
   messages.success(request, _("You have been logged out"))
@@ -58,39 +53,46 @@ def member_manager_name(member):
   return Member.objects.get(id=member.member_manager.id).full_name if member and member.member_manager else None
 
 
-class MembersView(LoginRequiredMixin, generic.ListView):
+def get_members_page(request, page_num=1):
+  members = Member.objects
+  # print("request.GET", request.GET)
+  filters = {
+    f"{name}_unaccent__icontains": remove_accents(request.GET[f"{name}_filter"]).strip()
+    for name in ["first_name", "last_name"]
+    if request.GET.get(f"{name}_filter", "").strip()
+  }
+  members = members.filter(**filters) if filters else members.all()
+  sort_by = request.GET.get("member_sort")
+  order = "-" if request.GET.get("toggle_slider") == "option2" else ""  # default is ascending
+  sort_by = [sort_by] if sort_by else ["last_name", "first_name"]  # default order
+  sort_by = [order + s for s in sort_by]
+  members = members.order_by(*sort_by)
+  page_size = request.GET.get("page_size", settings.DEFAULT_MEMBERS_PAGE_SIZE)
+  # print(f"page_size: {page_size}, page_num: {page_num}, sort_by: {sort_by}, filters: {filters}")
+  return Paginator.get_page(
+    request,
+    object_list=members,
+    page_num=page_num,
+    reverse_link="members:members_page",
+    default_page_size=page_size,
+  )
+
+
+class MembersView(generic.ListView):
   template_name = "members/members/members.html"
-  # paginate_by = 100
   model = Member
 
   def get(self, request, page_num=1):
-    members = Member.objects
-    filters = {
-      f"{name}_unaccent__icontains": remove_accents(request.GET[f"{name}_filter"]).strip()
-      for name in ["first_name", "last_name"]
-      if request.GET.get(f"{name}_filter", "").strip()
-    }
-    members = members.filter(**filters) if filters else members.all()
-    sort_by = request.GET.get("member_sort")
-    order = "-" if request.GET.get("member_order") == "option2" else ""  # default is ascending
-    sort_by = [sort_by] if sort_by else ["last_name", "first_name"]  # default order
-    sort_by = [order + s for s in sort_by]
-    members = members.order_by(*sort_by)
-    # print('sort by: ', sort_by, ' order: "', order, '" members query: ', members.query)
     try:
-      page = Paginator.get_page(
-        request,
-        object_list=members,
-        page_num=page_num,
-        reverse_link="members:members_page",
-        default_page_size=settings.DEFAULT_MEMBERS_PAGE_SIZE,
-      )
-      return render(request, self.template_name, {"page": page})
+      page = get_members_page(request, page_num)
+      if request.htmx:
+        return render(request, self.template_name + "#members_list", {"page": page, "members": page.object_list})
+      return render(request, self.template_name, {"page": page, "members": page.object_list})
     except PageOutOfBounds as exc:
       return redirect(exc.redirect_to)
 
 
-class MemberDetailView(LoginRequiredMixin, generic.DetailView):
+class MemberDetailView(generic.DetailView):
   model = Member
   template_name = "members/members/member_detail.html"
 
@@ -107,7 +109,7 @@ class MemberDetailView(LoginRequiredMixin, generic.DetailView):
     return reverse("members:detail", kwargs={"pk": self.pk})
 
 
-class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
+class CreateManagedMemberView(generic.CreateView):
   """View used to create a managed member"""
 
   model = Member
@@ -127,8 +129,6 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
       self.template_name,
       {
         "form": MemberUpdateForm(),
-        "addr_form": AddressUpdateForm(),
-        "family_form": FamilyUpdateForm(),
         "title": _("Create Member"),
       },
     )
@@ -153,8 +153,6 @@ class CreateManagedMemberView(LoginRequiredMixin, generic.CreateView):
       self.template_name,
       {
         "form": form,
-        "addr_form": AddressUpdateForm(),
-        "family_form": FamilyUpdateForm(),
         "title": _("Create Member"),
       },
     )
@@ -169,7 +167,7 @@ def _can_edit_member(request, member):
     return member.member_manager.id == request.user.id
 
 
-class EditMemberView(LoginRequiredMixin, generic.UpdateView):
+class EditMemberView(generic.UpdateView):
   template_name = "members/members/member_upsert.html"
   title = _("Update Member Details")
   success_message = _("Member successfully updated")
@@ -186,8 +184,6 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
       self.template_name,
       {
         "form": MemberUpdateForm(instance=member, is_profile=self.is_profile_view, user=request.user),
-        "addr_form": AddressUpdateForm(),
-        "family_form": FamilyUpdateForm(),
         "pk": pk,
         "title": self.title,
         "member_manager_name": member_manager_name(member),
@@ -228,8 +224,6 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
             self.template_name,
             {
               "form": form,
-              "addr_form": AddressUpdateForm(),
-              "family_form": FamilyUpdateForm(),
               "pk": pk,
               "title": self.title,
               "member_manager_name": member_manager_name(member),
@@ -245,8 +239,6 @@ class EditMemberView(LoginRequiredMixin, generic.UpdateView):
         self.template_name,
         {
           "form": form,
-          "addr_form": AddressUpdateForm(),
-          "family_form": FamilyUpdateForm(),
           "pk": pk,
           "title": self.title,
           "member_manager_name": member_manager_name(member),
@@ -270,30 +262,45 @@ class EditProfileView(EditMemberView):
 
 
 def delete_member(request, pk):
+  assert request.htmx
   member = get_object_or_404(Member, pk=pk)
   if not _can_edit_member(request, member):
     messages.error(request, _("You do not have permission to delete this member."))
     return redirect("members:detail", member.id)
-  member.delete()
-  messages.info(request, _("Member deleted"))
-  return redirect(reverse("members:members"))
+  if request.method == "POST":
+    member.delete()
+    messages.info(request, _("Member deleted"))
+    return HttpResponseClientRedirect(reverse("members:members"))
+  if member.id == request.user.id:
+    delete_title = _("Delete my account")
+    delete_msg = _("Are you sure you want to delete your account and all associated data? This is irrecoverable!")
+  else:
+    delete_title = _("Delete member")
+    delete_msg = _("Are you sure you want to delete %(name)s's account and all associated data?") % {"name": member.full_name}
+  return confirm_delete_modal(request, delete_title, delete_msg)
 
 
-@login_required
 def search_members(request):
-  assert_request_is_ajax(request)
-  query = request.GET.get("q", "")
-  members = Member.objects.filter(
-    Q(last_name__icontains=query)
-    | Q(first_name__icontains=query)
-    | Q(last_name__icontains=query.split()[-1])
-    | Q(first_name__icontains=query.split()[0])
-  ).distinct()[:12]  # Limited to 12 results
-  data = [{"id": m.id, "text": m.full_name} for m in members]
-  return JsonResponse({"results": data})
+  assert request.htmx
+  query = request.GET.get("q", "").strip().lower()
+  render_with = request.GET.get("render_with", "members/members/members.html#members_content")
+  page_num = request.GET.get("page_num", 1)
+  render_empty_query = request.GET.get("render_empty_query", "true")
+  logger.debug(f"search_members: query={query}, render_with={render_with}, page_num={page_num}")
+  if not query or len(query) < 3:
+    if render_empty_query == "false":
+      return render(request, render_with, {"members": None, "page": None, "page_num": None})
+    try:
+      page = get_members_page(request, page_num)
+      return render(request, render_with, {"page": page, "members": page.object_list, "page_num": page.number})
+    except PageOutOfBounds:
+      page = get_members_page(request, 1)
+      return render(request, render_with, {"page": page, "members": page.object_list, "page_num": page.number})
+
+  members = Member.objects.filter(Q(last_name__icontains=query) | Q(first_name__icontains=query)).distinct()[:12]
+  return render(request, render_with, {"members": members, "page": None, "page_num": page_num})
 
 
-@login_required
 def notify_death(request, pk):
   member = get_object_or_404(Member, pk=pk)
   if request.method == "POST":

@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.db.models import Count
 from django.db.models.functions import ExtractYear
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from ..models import Person, Family
 from ..utils import clear_genealogy_caches, register_genealogy_cache
@@ -10,7 +9,6 @@ from ..utils import clear_genealogy_caches, register_genealogy_cache
 register_genealogy_cache("genealogy_statistics")
 
 
-@login_required
 def dashboard(request):
   total_people = Person.objects.count()
   total_families = Family.objects.count()
@@ -21,7 +19,6 @@ def dashboard(request):
   return render(request, "genealogy/dashboard.html", context)
 
 
-@login_required
 def statistics(request):
   # Gender Distribution
   gender_data = Person.objects.values("sex").annotate(count=Count("sex"))
@@ -49,7 +46,6 @@ def statistics(request):
   return render(request, "genealogy/statistics.html", context)
 
 
-@login_required
 def refresh(request):
   clear_genealogy_caches()
   messages.success(request, _("Genealogy data refreshed successfully."))

@@ -1,10 +1,10 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import generic
-from cm_main.utils import check_edit_permission
+from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
+from cm_main.utils import check_edit_permission, confirm_delete_modal
 from ..models import Poll, Question
 from ..forms.upsert_forms import PollUpsertForm, QuestionUpsertForm
 
@@ -17,7 +17,7 @@ def managed_closed_list(poll, form):
     raise ValueError("Closed list must be empty for this type of Poll")
 
 
-class PollCreateView(LoginRequiredMixin, generic.CreateView):
+class PollCreateView(generic.CreateView):
   model = Poll
   form_class = PollUpsertForm
   template_name = "polls/poll_upsert_form.html"
@@ -29,7 +29,7 @@ class PollCreateView(LoginRequiredMixin, generic.CreateView):
     return render(
       request,
       self.template_name,
-      {"form": form, "question_form": QuestionUpsertForm()},
+      {"form": form},
     )
 
   def post(self, request):
@@ -49,7 +49,7 @@ class PollCreateView(LoginRequiredMixin, generic.CreateView):
       )
 
 
-class PollUpdateView(LoginRequiredMixin, generic.UpdateView):
+class PollUpdateView(generic.UpdateView):
   model = Poll
   form_class = PollUpsertForm
   template_name = "polls/poll_upsert_form.html"
@@ -67,7 +67,7 @@ class PollUpdateView(LoginRequiredMixin, generic.UpdateView):
     return render(
       request,
       self.template_name,
-      {"form": form, "question_form": QuestionUpsertForm()},
+      {"form": form},
     )
 
   def post(self, request, pk):
@@ -84,22 +84,37 @@ class PollUpdateView(LoginRequiredMixin, generic.UpdateView):
       return render(request, self.template_name, {"form": form})
 
 
-class PollDeleteView(LoginRequiredMixin, generic.DeleteView):
+class PollDeleteView(generic.DeleteView):
   model = Poll
-  success_url = "/polls/all/"
+
+  def get(self, request, pk):
+    poll = get_object_or_404(self.model, pk=pk)
+    return confirm_delete_modal(
+      request,
+      _("Delete Poll"),
+      _('Are you sure you want to delete the poll "%(title)s"?') % {"title": poll.title},
+      expected_value=poll.title,
+    )
 
   def post(self, request, pk):
-    check_edit_permission(request, self.get_object().owner)
-    return super().post(request, pk)
+    poll = get_object_or_404(self.model, pk=pk)
+    check_edit_permission(request, poll.owner)
+    poll.delete()
+    return HttpResponseClientRedirect(reverse("polls:all_polls"))
 
 
-class QuestionUpsertViewMixin(LoginRequiredMixin):
+class QuestionUpsertMixin:
   model = Question
   form_class = QuestionUpsertForm
-  template_name = "cm_main/common/modal_form.html"
+  template_name = "polls/questions/question_form.html"
 
 
-class QuestionCreateView(QuestionUpsertViewMixin, generic.CreateView):
+class QuestionCreateView(QuestionUpsertMixin, generic.CreateView):
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context["poll_id"] = self.kwargs["poll_id"]
+    return context
+
   def post(self, request, poll_id):
     # create a form instance from the request and save it
     form = self.form_class(request.POST)
@@ -110,17 +125,21 @@ class QuestionCreateView(QuestionUpsertViewMixin, generic.CreateView):
       form.save()
     else:
       messages.error(request, _("Error creating question:%s" % form.errors))
-    return redirect(reverse("polls:update_poll", args=(poll_id,)))
+    return HttpResponseClientRefresh()
 
 
-class QuestionUpdateView(QuestionUpsertViewMixin, generic.UpdateView):
-  def post(self, request, poll_id, pk):
-    # print("poll_id", poll_id, "pk", pk)
+class QuestionUpdateView(QuestionUpsertMixin, generic.UpdateView):
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context["question_id"] = self.kwargs["pk"]
+    return context
+
+  # automatic get
+  def post(self, request, pk):
+    # print("pk", pk)
     question = get_object_or_404(self.model, pk=pk)
     check_edit_permission(request, question.poll.owner)
     # print("Before save", question.__dict__)
-    if question.poll.id != poll_id:
-      raise ValueError("Question does not belong to this Poll")
     # create a form instance and populate it with data from the request on existing member (or None):
     form = self.form_class(request.POST, instance=question)
     if form.is_valid():
@@ -128,15 +147,22 @@ class QuestionUpdateView(QuestionUpsertViewMixin, generic.UpdateView):
       # print("After save", question.__dict__)
     else:
       messages.error(request, _("Error creating question:%s" % form.errors))
-    return redirect(reverse("polls:update_poll", args=(poll_id,)))
+    return HttpResponseClientRefresh()
 
 
-class QuestionDeleteView(QuestionUpsertViewMixin, generic.DeleteView):
+class QuestionDeleteView(QuestionUpsertMixin, generic.DeleteView):
   model = Question
+
+  def get(self, request, pk):
+    question = get_object_or_404(self.model, pk=pk)
+    return confirm_delete_modal(
+      request,
+      _("Delete Question"),
+      _('Are you sure you want to delete the question "%(title)s"?') % {"title": question.question_text},
+    )
 
   def post(self, request, pk):
     question = get_object_or_404(self.model, pk=pk)
     check_edit_permission(request, question.poll.owner)
-    poll_id = question.poll.id
     question.delete()
-    return redirect(reverse("polls:update_poll", args=(poll_id,)))
+    return HttpResponseClientRefresh()

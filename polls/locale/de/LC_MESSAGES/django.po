@@ -458,7 +458,7 @@ msgstr "Leider sind derzeit keine Umfragen verfügbar."
 
 #: polls/views/answer_views.py:75
 msgid "Your answers have been saved"
-msgstr ""
+msgstr "Deine Antworten wurden gespeichert"
 
 #: polls/views/display_views.py:24
 msgid "Open Polls"

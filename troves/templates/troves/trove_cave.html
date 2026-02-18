@@ -1,18 +1,8 @@
 {% extends "cm_main/base.html" %}
 {%load i18n cm_tags troves_tags%}
-{%block header%}
-<script>
-function delete_treasure(url) {
-	if (confirm(gettext("Are you sure you want to delete this treasure?"))) {
-		ajax_action(url, (response)=>{
-      window.location.reload(true)  // force page to reload
-		})                
-	}
-}
 
-</script>
-{%endblock%}
 {% block title %}{% title _("The treasure trove") %}{% endblock %}
+
 {% block content %}
 {% trans 'Add a treasure' as create_label %}
 <div class="container">
@@ -56,7 +46,7 @@ function delete_treasure(url) {
     <div class="panel-block">
       <div class="grid is-flex is-flex-direction-row">
         {% for trove in troves %}
-        <div class="cell has-text-centered">
+        <div class="cell has-text-centered" id="trove-{{trove.id}}">
           <a 
             {%if trove.file and not trove.description %}href="{% url 'get_protected_media' trove.file.name%}" target="_blank"
             {%else%}href="{%url 'troves:detail' trove.pk %}"
@@ -70,7 +60,8 @@ function delete_treasure(url) {
           <p>
             <a class="button" href='{%url "troves:update" trove.id%}'>{%icon "edit"%}</a>
             {%url "troves:delete" trove.id as delete_url%}
-            <a class="button" onclick="delete_treasure('{{delete_url}}')">{%icon "delete"%}</a>
+            <a class="button" hx-post="{{delete_url}}" hx-target="#trove-{{trove.id}}"  hx-swap="delete"
+              hx-confirm="{%trans 'Are you sure you want to delete this treasure?'%}">{%icon "delete"%}</a>
           </p>
           {%endif%}
         </div>

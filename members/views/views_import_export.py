@@ -2,14 +2,12 @@ import logging
 import csv
 import io
 import uuid
-from django.contrib.auth.decorators import login_required
-from django.forms import ValidationError
+from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _, get_language
 from django_q.tasks import async_task, count_group, result_group
 from django_q.brokers import get_broker
@@ -66,7 +64,7 @@ def import_csv(csv_file, task_group, user_id, activate_users):
   return import_context
 
 
-class CSVImportView(LoginRequiredMixin, generic.FormView):
+class CSVImportView(generic.FormView):
   template_name = "members/members/import_members.html"
   form_class = CSVImportMembersForm
   success_url = reverse_lazy("members:members")
@@ -109,7 +107,6 @@ class CSVImportView(LoginRequiredMixin, generic.FormView):
     return redirect(reverse("members:csv_import"))
 
 
-@login_required
 def import_progress(request, id):
   import_data = ImportContext.get(id)
   if not import_data:  # removed from the list when completed
@@ -157,7 +154,6 @@ def import_progress(request, id):
   return render(request, "cm_main/common/progress-bar.html", context)
 
 
-@login_required
 def select_name(request):
   assert_request_is_ajax(request)
   query = request.GET.get("q", "")
@@ -170,7 +166,6 @@ def select_name(request):
   return JsonResponse({"results": data})
 
 
-@login_required
 def select_family(request):
   assert_request_is_ajax(request)
   query = request.GET.get("q", "")
@@ -181,7 +176,6 @@ def select_family(request):
   return JsonResponse({"results": data})
 
 
-@login_required
 def select_city(request):
   assert_request_is_ajax(request)
   query = request.GET.get("q", "")
@@ -193,12 +187,10 @@ def select_city(request):
   return JsonResponse({"results": data})
 
 
-@login_required
 def select_members_to_export(request):
   return render(request, "members/members/export_members.html")
 
 
-@login_required
 def export_members_to_csv(request):
   if request.method != "POST":
     raise ValidationError(_("Method not allowed"))

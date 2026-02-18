@@ -1,7 +1,6 @@
 from django.urls import reverse
 from cm_main.tests.tests_followers import TestFollowersMixin
 from forum.tests.tests_post import ForumTestCase
-from django.core.exceptions import ValidationError
 from cm_main.tests.test_django_q import django_q_sync_class
 
 from ..models import Comment
@@ -18,7 +17,8 @@ class CommentCreateTestCase(ForumTestCase):
     content = "a wonderful comment"
     response = self.client.post(url, {"content": content}, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertRedirects(response, reverse("forum:display", args=[self.post.id]))
+    self.assertTemplateUsed(response, "cm_main/followers/email-followers-on-change.html")
+    self.assertTemplateUsed(response, "display_comment")
     comment = Comment.objects.filter(message=self.message.id)
     self.assertEqual(comment.count(), 1)
     self.assertEqual(comment.first().content, content)
@@ -28,20 +28,10 @@ class CommentCreateTestCase(ForumTestCase):
     comment.save()
     url = reverse("forum:edit_comment", args=[comment.id])
     comment_content = "a modified comment"
-    with self.assertRaises(ValidationError):
-      self.client.post(url, {"content": comment_content})
-
-    response = self.client.post(
-      url,
-      {"content": comment_content},
-      **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
-    )
+    response = self.client.post(url, {"content": comment_content})
     # pprint(vars(response))
     self.assertEqual(response.status_code, 200)
-    self.assertJSONEqual(
-      str(response.content, encoding="utf8"),
-      {"comment_id": comment.id, "comment_str": comment_content},
-    )
+    self.assertTemplateUsed(response, "display_comment")
     comment.refresh_from_db()
     self.assertEqual(comment.content, comment_content)
     # TODO: how to check the edit inside the page which is done in javascript?
@@ -52,15 +42,27 @@ class CommentCreateTestCase(ForumTestCase):
     comment.save()
     url = reverse("forum:delete_comment", args=[comment.id])
     cnt = Comment.objects.filter(message=self.message.id).count()
-    with self.assertRaises(ValidationError):
-      self.client.post(url)
-
-    response = self.client.post(url, **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
+    response = self.client.post(url)
     self.assertEqual(response.status_code, 200)
     new_cnt = Comment.objects.filter(message=self.message.id).count()
     self.assertEqual(new_cnt, cnt - 1)
-    self.assertJSONEqual(str(response.content, encoding="utf8"), {"comment_id": comment.id})
-    # TODO: how to check the removal inside the page which is done in javascript?
+    # TODO: how to check the removal inside the page which is done with htmx?
+
+  def test_add_comment_get(self):
+    """Tests the GET request for adding a comment returns a form."""
+    url = reverse("forum:add_comment", args=[self.message.id])
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "forum_add_comment")
+
+  def test_edit_comment_get(self):
+    """Tests the GET request for editing a comment returns a form."""
+    comment = Comment(content="comment to edit via GET", message=self.message, author=self.member)
+    comment.save()
+    url = reverse("forum:edit_comment", args=[comment.id])
+    response = self.client.get(url)
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, comment.content)
 
 
 @django_q_sync_class

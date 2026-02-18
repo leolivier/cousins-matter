@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-21 17:46+0100\n"
+"POT-Creation-Date: 2026-02-18 14:43+0100\n"
 "PO-Revision-Date: 2025-01-01 09:13+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,94 +18,95 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: troves/models.py:15
+#: models.py:15 tests/tests.py:177
 msgid "History & Stories"
 msgstr "Histoire et histoires"
 
-#: troves/models.py:16
+#: models.py:16
 msgid "Recipes"
 msgstr "Recettes"
 
-#: troves/models.py:17
+#: models.py:17
 msgid "Family meetings"
 msgstr "Réunions de famille"
 
-#: troves/models.py:18
+#: models.py:18
 msgid "Recollections"
 msgstr "Souvenirs"
 
-#: troves/models.py:19
+#: models.py:19
 msgid "Arts"
 msgstr "Arts"
 
-#: troves/models.py:20
+#: models.py:20
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: troves/models.py:25
+#: models.py:30
 msgid "Description of the treasure (this will appear in the details)"
 msgstr "Description du trésor (ceci apparaîtra dans les détails)"
 
-#: troves/models.py:27
+#: models.py:36
 msgid "Treasure photo"
 msgstr "Photo du trésor"
 
-#: troves/models.py:30
+#: models.py:43
 msgid "Treasure file"
 msgstr "Fichier contenant le trésor"
 
-#: troves/models.py:32
+#: models.py:47
 msgid "Category"
 msgstr "Catégorie"
 
-#: troves/models.py:36
+#: models.py:51
 msgid "trove"
 msgstr "trésor"
 
-#: troves/models.py:37
+#: models.py:52
 msgid "troves"
 msgstr "trésors"
 
-#: troves/models.py:56
+#: models.py:71
 msgid "A treasure must have an owner."
 msgstr "Un trésor doit avoir un propriétaire."
 
-#: troves/templates/troves/treasure_detail.html:4
+#: templates/troves/treasure_detail.html:4
 msgid "Treasure"
 msgstr "Trésor"
 
-#: troves/templates/troves/treasure_detail.html:41
+#: templates/troves/treasure_detail.html:41
 msgid "Look at the file contents"
 msgstr "Voir le contenu du fichier"
 
-#: troves/templates/troves/treasure_form.html:8
-#: troves/templates/troves/treasure_form.html:20
+#: templates/troves/treasure_form.html:8 templates/troves/treasure_form.html:20
 msgid "Modify treasure"
 msgstr "Modifier le trésor"
 
-#: troves/templates/troves/treasure_form.html:10
-#: troves/templates/troves/treasure_form.html:22
-#: troves/templates/troves/trove_cave.html:17
+#: templates/troves/treasure_form.html:10
+#: templates/troves/treasure_form.html:22 templates/troves/trove_cave.html:7
 msgid "Add a treasure"
 msgstr "Ajouter un trésor"
 
-#: troves/templates/troves/treasure_form.html:34
+#: templates/troves/treasure_form.html:34
 msgid "Submit"
 msgstr "Valider"
 
-#: troves/templates/troves/treasure_form.html:38
+#: templates/troves/treasure_form.html:38
 msgid "Cancel"
 msgstr "Annuler"
 
-#: troves/templates/troves/trove_cave.html:15
-#: troves/templates/troves/trove_cave.html:21
+#: templates/troves/trove_cave.html:4 templates/troves/trove_cave.html:11
 msgid "The treasure trove"
 msgstr "La caverne aux trésors"
 
-#: troves/templates/troves/trove_cave.html:28
+#: templates/troves/trove_cave.html:18
 msgid "Filter Treasures"
 msgstr "Filtrer les trésors"
 
-#: troves/templates/troves/trove_cave.html:31
+#: templates/troves/trove_cave.html:21
 msgid "All"
 msgstr "Tous"
+
+#: templates/troves/trove_cave.html:64
+msgid "Are you sure you want to delete this treasure?"
+msgstr "Es-tu sûr de vouloir supprimer ce trésor ?"

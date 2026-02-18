@@ -4,7 +4,8 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth import get_user
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, TransactionTestCase, AsyncClient
+from asgiref.sync import async_to_sync
 
 from ..models import Member
 
@@ -73,7 +74,7 @@ def modify_member_data(member):
   }
 
 
-class MemberTestCase(TestCase):
+class MemberTestCaseMixin:
   member = None
   superuser = None
 
@@ -85,36 +86,19 @@ class MemberTestCase(TestCase):
   test_avatar_jpg = os.path.join(settings.AVATARS_DIR, "test_avatar.jpg")
   test_mini_avatar_jpg = os.path.join(settings.AVATARS_DIR, "mini_test_avatar.jpg")
 
-  @classmethod
-  def setUpTestData(cls):
-    "called once by the test framework before running the tests"
-    # create a superuser for testing
-    superuser_data = get_new_member_data(prefix="superuser-")
-    # force username
-    superuser_data["username"] = "superuser"
-    pwd = superuser_data["password"]
-    cls.superuser = Member.objects.create_superuser(**superuser_data)
-    cls.superuser.password = pwd  # keep unhashed password in memory for login
-
-    # create a member for testing
-    member_data = get_new_member_data()
-    pwd = member_data["password"]
-    member_data["is_active"] = True
-    cls.member = Member.objects.create_member(**member_data)
-    cls.member.password = pwd  # keep unhashed password in memory for login
-
   def setUp(self):
-    super().setUp()
     self.created_members = []
-    self.client.login(username=self.member.username, password=self.member.password)
 
   def tearDown(self):
-    for m in self.created_members:
-      if m.id is not None:
-        m.delete()
-    self.created_members = []
-    self.client.logout()
-    return super().tearDown()
+    # remove all members created during the test
+    for member in self.created_members:
+      if member.id:
+        member.delete()
+
+    if os.path.exists(self.test_avatar_jpg):
+      os.remove(self.test_avatar_jpg)
+    if os.path.exists(self.test_mini_avatar_jpg):
+      os.remove(self.test_mini_avatar_jpg)
 
   @staticmethod
   def print_response(response):
@@ -145,6 +129,9 @@ class MemberTestCase(TestCase):
       html=True,
     )
 
+  def assertHXRefresh(self, response):
+    self.assertEqual(response.get("HX-Refresh"), "true")
+
   def create_member(self, member_data=None, is_active=False):
     """creates and returns a new member using provided member data.
     If the member data is None, a new one is created.
@@ -158,18 +145,60 @@ class MemberTestCase(TestCase):
     self.created_members.append(new_member)
     return new_member
 
-  async def acreate_member(self, member_data=None, is_active=False):
-    """asynchronously creates and returns a new member using provided member data.
-    If the member data is None, a new one is created.
-    """
-    member_data = member_data or get_new_member_data()
-    pwd = member_data.get("password")
-    new_member = Member.objects.acreate_member(
-      **member_data, is_active=is_active, member_manager=None if is_active else self.member
-    )
-    new_member.password = pwd  # keep unhashed password in memory for login
-    self.created_members.append(new_member)
-    return new_member
+
+class MemberTestCase(MemberTestCaseMixin, TestCase):
+  @classmethod
+  def setUpTestData(cls):
+    "called once by the test framework before running the tests"
+    # create a superuser for testing
+    superuser_data = get_new_member_data(prefix="superuser-")
+    # force username
+    superuser_data["username"] = "superuser"
+    pwd = superuser_data["password"]
+    cls.superuser = Member.objects.create_superuser(**superuser_data)
+    cls.superuser.password = pwd  # keep unhashed password in memory for login
+
+    # create a member for testing
+    member_data = get_new_member_data()
+    pwd = member_data["password"]
+    member_data["is_active"] = True
+    cls.member = Member.objects.create_member(**member_data)
+    cls.member.password = pwd  # keep unhashed password in memory for login
+    # print(f"\nMemberTestCase.setUpTestData: {cls.member.username}")
+
+  def setUp(self):
+    super().setUp()
+    self.client.login(username=self.member.username, password=self.member.password)
+
+  def tearDown(self):
+    self.client.logout()
+    super().tearDown()
+
+
+class TransactionMemberTestCase(MemberTestCaseMixin, TransactionTestCase):
+  def setUp(self):
+    super().setUp()
+    # create a superuser for testing
+    superuser_data = get_new_member_data(prefix="superuser-")
+    # force username
+    superuser_data["username"] = "superuser"
+    pwd = superuser_data["password"]
+    self.superuser = Member.objects.create_superuser(**superuser_data)
+    self.superuser.password = pwd  # keep unhashed password in memory for login
+
+    # create a member for testing
+    member_data = get_new_member_data()
+    pwd = member_data["password"]
+    member_data["is_active"] = True
+    self.member = Member.objects.create_member(**member_data)
+    self.member.password = pwd  # keep unhashed password in memory for login
+    self.client.login(username=self.member.username, password=self.member.password)
+
+  def tearDown(self):
+    self.client.logout()
+    self.superuser.delete()
+    self.member.delete()
+    super().tearDown()
 
 
 class TestLoginRequiredMixin:
@@ -184,3 +213,59 @@ class TestLoginRequiredMixin:
     rurl = reverse(url, args=args)
     response = self.client.get(rurl)
     self.assertRedirects(response, self.next(self.login_url, rurl), 302, 200)
+
+
+class AsyncMemberTestCase(TransactionTestCase):
+  """
+  Specialized test case for async tests that need to avoid atomic block issues.
+  Duplicates setup logic from MemberTestCase but uses TransactionTestCase.
+  """
+
+  member = None
+  superuser = None
+
+  test_avatar_jpg = os.path.join(settings.AVATARS_DIR, "test_avatar.jpg")
+  test_mini_avatar_jpg = os.path.join(settings.AVATARS_DIR, "mini_test_avatar.jpg")
+
+  def setUp(self):
+    super().setUp()
+    # Logic duplicated from MemberTestCase.setUpTestData and setUp
+    superuser_data = get_new_member_data(prefix="superuser-")
+    superuser_data["username"] = "superuser"
+    pwd = superuser_data["password"]
+    self.superuser = Member.objects.create_superuser(**superuser_data)
+    self.superuser.password = pwd
+
+    member_data = get_new_member_data()
+    pwd = member_data["password"]
+    member_data["is_active"] = True
+    self.member = Member.objects.create_member(**member_data)
+    self.member.password = pwd
+
+    self.created_members = []
+    self.async_client = AsyncClient()
+    self.client.login(username=self.member.username, password=self.member.password)
+    async_to_sync(self.async_client.alogin)(username=self.member.username, password=self.member.password)
+
+  def tearDown(self):
+    super().tearDown()
+    self.client.logout()
+
+    # remove all members created during the test
+    for member in self.created_members:
+      member.delete()
+
+    if os.path.exists(self.test_avatar_jpg):
+      os.remove(self.test_avatar_jpg)
+    if os.path.exists(self.test_mini_avatar_jpg):
+      os.remove(self.test_mini_avatar_jpg)
+
+  async def acreate_member(self, **kwargs):
+    # Duplicated from MemberTestCase
+    data = get_new_member_data()
+    data.update(kwargs)
+    pwd = data["password"]
+    member = await Member.objects.acreate_member(**data)
+    member.password = pwd
+    self.created_members.append(member)
+    return member

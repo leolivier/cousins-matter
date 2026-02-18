@@ -1,85 +1,115 @@
 {% load i18n crispy_forms_tags cm_tags %}
-{%with message_id=message.id%}
+{%with message.comment_set.all as comments %}
 <div class="container px-2">
-	<span class="tag" id="nb-comments-id">
+	{%if comments %}
+	<h2 class="is-5 mt-1">{% trans "comments" %}</h2>
+	<hr style="margin: 0 0;">
+	{% for comment in comments %}
+	{%partialdef forum_comment inline %}
+	<div class="container" id="comment-div-{{comment.id}}">
+		{%if edit_comment and edit_comment != 'false'%}
+		<form method="POST" class="comment-form" id='edit-comment-{{comment.id}}'
+				hx-post="{% url 'forum:edit_comment' comment.id %}"
+				hx-target="#comment-div-{{comment.id}}"
+		>
+			<div class="level">
+				<div class="level-left">
+					<div class="level-item">{{comment_form|crispy}}</div>
+					<div class="level-item ml-4">
+						<div class="buttons">
+							<button type="submit" class="button is-link" title="{%trans 'Update' %}">
+								{%icon "submit" %}
+							</button>
+							<button type="button" class="button"
+								hx-get="{% url 'forum:edit_comment' comment.id %}"
+								hx-target="#comment-div-{{comment.id}}"
+								hx-vals='{"edit_comment": false}'>
+								{%icon "cancel" %}
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		{%else%}
+			{%include "forum/comment_list.html#display_comment" with comment=comment%}
+		{%endif%}
+	</div>
+	{%endpartialdef forum_comment%}
+	{% endfor %}
+	{%endif%}
+	<div id="next-comment-{{message.id}}"></div>
+	<span class="tag" id="nb-comments-id-{{message.id}}">
 	{%blocktranslate count ncomments=message.comment_set.count trimmed %}
 		{{ncomments}} comment
 	{%plural%}
 		{{ncomments}} comments
 	{%endblocktranslate%}
 	</span>
-	<hr style="margin-bottom: 0;">
-	{% for comment in message.comment_set.all %}
-	<div class="container" id="comment-div-{{comment.id}}">
-		<div class="level" id="comment-level-{{comment.id}}">
-			<div class="level-left">
-				<div class="content is-small">
-					<p class="mr-5" id="comment-content-{{comment.id}}">{{comment.content}}</p>
-				</div>
-			</div>
-			<div class="level-right">
-				<div class="container">
-					<p class="content is-small">
+	<a hx-get="{%url 'forum:add_comment' message.id %}"
+		hx-target="#create-comment-{{message.id}}"
+		title="{%trans 'Add comment' %}">
+		{%icon "new-comment"%}
+	</a>
+	<div id="create-comment-{{message.id}}"></div>
+</div>
+{%endwith%}
+
+{%partialdef display_comment%}
+{# display one comment #}
+<div class="level display-comment" id="comment-level-{{comment.id}}">
+	<div class="level-left">
+		<div class="level-item ml-5">
+			<div class="block">
+				<p class="content is-small mb-1">
+					{{comment.content}}
+					<br class="mb-1"/>
+					{{comment.created}}
+					<a href="{%url 'members:detail' comment.author.id %}">
 						{{comment.author.get_full_name}}
-						<a href="{%url 'members:detail' comment.author.id %}">
-							{%icon "member-link" %}
-						</a>
-						<br>
-						{{comment.date}}
-					</p>
-				</div>
-				<p class="buttons is-centered">
-					{% if comment.author.username == user.username %}
-					<a class="button" onclick="show_edit_comment_form('{{comment.id}}');" title="{%trans 'Edit' %}">
-						{%icon "edit" %}
 					</a>
-					{%url "forum:delete_comment" comment.id as delete_url%}
-					<a class="button" onclick="delete_comment('{{delete_url}}', '{{comment.id}}')" title="{%trans 'Delete' %}">
-						{%icon "delete" %}
-					</a>
-					{%endif%}
+					<hr class="mt-0 mb-0">
 				</p>
 			</div>
 		</div>
-		<form method="POST" class="comment-form" id='edit-comment-{{comment.id}}'>
-			{% csrf_token %}
-			<div class="level">
-				<div class="level-left">{{comment_form|crispy}}</div>
-				<div class="level-right">
-					<div class="buttons">
-						<button type="submit" class="button is-link" title="{%trans 'Update' %}">
-							{%icon "submit" %}
-						</button>
-						<button type="reset" class="button" onclick="hide_edit_comment_form('{{comment.id}}')"  title="{%trans 'Cancel' %}">
-							{%icon "cancel" %}
-						</button>
-					</div>
-				</div>
-			</div>
-			<script>$(document).ready(()=>{
-				ajax_form_action('#edit-comment-{{comment.id}}', "{% url 'forum:edit_comment' comment.id %}", (response)=>{
-					hide_edit_comment_form('{{comment.id}}', response.comment_str)
-				})
-			});</script>
-		</form>
-		<hr style="margin: 0;">
-	</div>
-	{% endfor %}
-
-	<a class="is-small content" onclick="show_comment_form('#create-comment-{{message_id}}');">{%trans 'Add comment'%}</a>
-
-	<form action="{%url 'forum:add_comment' message_id %}" id="create-comment-{{message_id}}" method="POST" class="comment-form">
-		{% csrf_token %}
-		<div class="level">
-			<div class="level-left">{{comment_form|crispy}}</div>
-			<div class="level-right">
-				<div class="buttons">
-					<input type="submit" class="button is-link" value="{%trans 'Add'%}">
-					<input type="reset" class="button" value="{%trans 'Cancel'%}" 
-						onclick="hide_comment_form('#create-comment-{{message_id}}')">
-				</div>
+		{% if comment.author.username == user.username %}
+		<div class="level-item ml-4 mt-1">
+			<div class="buttons">
+				<button class="button is-small" type="button"
+					hx-get="{% url 'forum:edit_comment' comment.id %}"
+					hx-target="#comment-div-{{comment.id}}"
+					title="{%trans 'Edit' %}">
+					{%icon "edit"%}
+				</button>
+				<button type="button" class="button is-small"
+					hx-post="{% url 'forum:delete_comment' comment.id %}"
+					hx-target="#comment-div-{{comment.id}}"
+					hx-swap="delete"
+					hx-confirm="{%trans 'Are you sure you want to delete this comment?'%}">
+					{%icon "delete"%}
+				</button>
 			</div>
 		</div>
-	</form>
+		{%endif%}
+	</div>
 </div>
-{%endwith%}
+{%endpartialdef display_comment%}
+
+{%partialdef forum_add_comment%}
+<form hx-post="{%url 'forum:add_comment' message.id %}"
+			hx-target="#next-comment-{{message.id}}" hx-swap="beforebegin"
+			hx-vals='{"delta": 1}' method="POST" class="comment-form">
+	<div class="level">
+		<div class="level-left">{{comment_form|crispy}}</div>
+		<div class="level-right">
+			<div class="buttons">
+				<input type="submit" class="button is-link" value="{%trans 'Add'%}">
+				<button type="button" class="button"
+					_="on click remove <form/>">
+					{%icon "cancel" %}
+				</button>
+			</div>
+		</div>
+	</div>
+</form>
+{%endpartialdef forum_add_comment%}

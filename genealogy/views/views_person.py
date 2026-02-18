@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from cm_main.utils import PageOutOfBounds, Paginator
 from ..models import Person
@@ -9,7 +8,6 @@ from ..forms import PersonForm
 from ..utils import clear_genealogy_caches
 
 
-@login_required
 def person_list(request, page_num=1):
   query = request.GET.get("q")
   people = (
@@ -36,13 +34,11 @@ def person_list(request, page_num=1):
     return redirect(exc.redirect_to)
 
 
-@login_required
 def person_detail(request, pk):
   person = get_object_or_404(Person, pk=pk)
   return render(request, "genealogy/person_detail.html", {"person": person})
 
 
-@login_required
 def person_create(request):
   if request.method == "POST":
     form = PersonForm(request.POST)
@@ -56,7 +52,6 @@ def person_create(request):
   return render(request, "genealogy/person_form.html", {"form": form, "title": _("Add Person")})
 
 
-@login_required
 def person_update(request, pk):
   person = get_object_or_404(Person, pk=pk)
   if request.method == "POST":
@@ -71,7 +66,6 @@ def person_update(request, pk):
   return render(request, "genealogy/person_form.html", {"form": form, "title": _("Edit Person")})
 
 
-@login_required
 def person_delete(request, pk):
   person = get_object_or_404(Person, pk=pk)
   if request.method == "POST":

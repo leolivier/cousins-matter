@@ -1,0 +1,3 @@
+css-html-js-minify>=2.5.5
+ruff>=0.14.10
+coverage>=7.13

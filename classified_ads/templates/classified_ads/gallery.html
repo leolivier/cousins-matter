@@ -5,54 +5,49 @@
 		{%icon "camera" "is-medium"%} 
 		<span class="ml-2 is-flex-grow-1">{%trans "Photos"%}</span>
 		{%if ad.pk and edit_gallery%}
-		<button class="button js-modal-trigger"
-			type="button"
-			{%if ad.pk and ad.photos.count >= settings.MAX_PHOTO_PER_AD %}
-				title='{%trans "Maximum number of photos reached"%}'
-			{%else%}
-				title="{%trans 'Add photo'%}"
-			{%endif%}
-			id="js-modal-add-photo"
-			data-target="upsert-photo-modal"
-			data-action="{% url 'classified_ads:add_photo' ad.pk%}"
-			data-title='{%trans "New photo"%}'
-			data-form='{{photo_form|crispy}}'
-			data-init-function='fillPhoto'
-			data-kind="create"
-			{%if not ad.pk or ad.photos.count >= settings.MAX_PHOTO_PER_AD %}disabled="true"{%endif%}
-		>{%icon "new-photo" %}</button>
+		<button class="button" type="button"
+						hx-target="#modal"
+						hx-get="{% url 'classified_ads:add_photo' ad.pk%}"
+						{%if ad.pk and ad.photos.count >= settings.MAX_PHOTO_PER_AD %}
+							title='{%trans "Maximum number of photos reached"%}'
+							disabled="true"
+						{%else%}
+							title="{%trans 'Add photo'%}"
+						{%endif%}
+		>
+			{%icon "new-photo" %}
+		</button>
 		{%endif%}
 	</div>
 	<div class="panel-block">
 		<div class="container px-2">
-			<div class="grid image-gallery">
+			{%partialdef image-gallery inline%}
+			<div class="grid image-gallery" id="image-gallery">
 				{%if ad.pk%}
 				{% for photo in ad.photos.all %}
-				<div class="cell has-text-centered photo-item"
-					id="photo-{{photo.id}}"
-					data-pk="{{photo.id}}"
-					data-fullscreen="{% url 'get_protected_media' photo.image.name%}"
-				>
-					<figure class="image thumbnail mx-auto">
+				<div class="cell has-text-centered photo-div" id="photo-{{photo.id}}">
+					<figure class="image thumbnail gallery-image" data-pk="{{photo.id}}"
+								data-fullscreen="{% url 'get_protected_media' photo.image.name%}"
+								data-swipe-url="{% url 'classified_ads:get_fullscreen_photo' photo.id%}">
 						<img src="{% url 'get_protected_media' photo.thumbnail.name%}" alt="Photo">
-						{%if edit_gallery%}
-						<button class="delete delete-photo" type="button" data-action="{% url 'classified_ads:delete_photo' photo.id %}"></button>
-						{%endif%}
 					</figure>
+					{%if edit_gallery or request.user.is_superuser or photo.uploaded_by_id == request.user.id%}
+						{%url 'classified_ads:delete_photo' photo.id as delete_photo_url%}
+						{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_class="delete delete-photo" button_icon="" button_text='' delete_url=delete_photo_url %}
+					{%endif%}
 				</div>
 				{% empty %}
 				<div id="no-photo-for-this-ad" class="panel-block">No photos linked to this ad.</div>
 				{% endfor %}
 				{%endif%}
 			</div>
+			{%endpartialdef image-gallery%}
 		</div>
 	</div>
-	{%if ad.pk%}
-		{% include "cm_main/common/modal_form.html" with modal_id="upsert-photo-modal" multipart=True %}
-	{%else%}
+	{%if not ad.pk%}
 		<div class="content has-text-centered">({%trans "You will be able to add photos after creating the ad"%})</div>
 	{%endif%}
 </nav>
 
 
-{%include "galleries/photo_fullscreen.html"%}
+{%include "galleries/photo_fullscreen_htmx.html"%}

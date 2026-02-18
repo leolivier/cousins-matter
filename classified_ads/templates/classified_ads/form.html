@@ -2,56 +2,16 @@
 {%load i18n crispy_forms_tags cm_tags static%}
 {% block title %}{% title _("Create Classified Ad") %}{% endblock %}
 {%block header %}
-<link rel="stylesheet" href="{% static 'galleries/css/galleries.css' %}">
-<style>
-	.photo-item {
-  position: relative;
-  display: inline-block;
-	}
-	.delete-photo {
-		position: absolute;
-		top: 0.5em; /*var(--bulma-delete-dimensions);*/
-		right: 0.5em; /*var(--bulma-delete-dimensions);*/
-	}
-</style>
+<link rel="stylesheet" href="{% static 'galleries/css/galleries.min.css' %}">
+<link rel="stylesheet" href="{% static 'classified_ads/css/classified_ads.min.css' %}">
 {%include "cm_main/common/include-summernote.html" %}
-<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
-{{ categories|json_script:'categories' }} {# include the categories as JSON data #}
-<script>
-var photos_count = parseInt('{%if form.instance.pk%}{{ form.instance.photos.count }}{%else%}0{%endif%}')
-const max_photo = parseInt('{{ settings.MAX_PHOTO_PER_AD }}')
-var categories
-function setSubCategories(newCategory) {
-	$('#id_subcategory').empty()
-	const category = categories[newCategory]
-	const newSubcategories = category.subcategories
-	$.each(newSubcategories, function(subcat, translation) {
-		$('#id_subcategory').append('<option value="' + subcat + '">' + translation + '</option>')
-	})
-}
-$(document).ready(function() {
-	categories = JSON.parse($('#categories').text())
-	$('#id_category').change(function() { 
-		setSubCategories($(this).val())
-	})
-	$('.delete-photo').on('click', function() {
-		ajax_action($(this).attr('data-action'), (response)=>{
-			$(this).closest('.photo-item').remove()
-			photos_count--
-			if (photos_count < max_photo) {
-				$('#js-modal-add-photo').prop('disabled', false)
-			}
-		})
-	})
-})
-function fillPhoto() {}
-</script>
-<script src="{% static 'classified_ads/js/classified_ads.js' %}"></script>
+<script src="{% static 'galleries/js/galleries.min.js' %}"></script>
 {% endblock %}
 {% block content %}
+{% with ad=form.instance %}
 <div class="container mx-auto">
 	<h1 class="title has-text-centered">
-		{%if form.instance.pk%}
+		{%if ad.pk%}
 			{% title _("Edit Classified Ad") %}
 		{%else%}
 			{% title _("Create Classified Ad") %}
@@ -59,22 +19,15 @@ function fillPhoto() {}
 	</h1>
 	<form method="post" class="mx-auto">
 		{% csrf_token %}
-		{{ form|crispy }}
+		{% crispy form %}
 		<div class="buttons is-centered">
-		{%if form.instance.pk%}
-			<button class="button is-primary" type="submit" {%if user != form.instance.owner%}disabled="true"{%endif%}>
+		{%if ad.pk%}
+			<button class="button is-primary" type="submit" {%if user != ad.owner%}disabled="true"{%endif%}>
 				{%icon "update" %} <span class="ml-2">{% trans "Update Ad" %}</span>
 			</button>
-			{%if user == form.instance.owner%}
-				{% autoescape off %}
-				{%blocktranslate asvar delete_msg with ad_name=form.instance.title|force_escape trimmed %}
-					Are you sure you want to delete the classified ads "{{ad_name}}"
-				{%endblocktranslate%}
-				{% trans "Delete Ad" as button_text %}
-				{%url 'classified_ads:delete' form.instance.pk as delete_url%}
-				{%trans 'Classified ads deletion' as delete_title%}
-				{%include "cm_main/common/confirm-delete-modal.html" with button_text=button_text button_class="is-warning" ays_title=delete_title ays_msg=delete_msg|force_escape action_url=delete_url expected_value=form.instance.title|escape %}
-				{% endautoescape %}
+			{%if ad.owner == user%}
+				{%url "classified_ads:delete" ad.pk as delete_ads_url%}
+				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete Ad") button_class='is-warning' delete_url=delete_ads_url %}
 			{%endif%}
 		{%else%}
 			<button class="button is-primary" type="submit">
@@ -83,11 +36,14 @@ function fillPhoto() {}
 		{%endif%}
 		</div>
 	</form>
-	{%if form.instance.pk and form.instance.owner == user %}
-		{%include "cm_main/common/modal_form.html" with modal_id="delete-item-modal" %}
-	{%endif%}
 
-	{%include "classified_ads/gallery.html" with edit_gallery=True ad=form.instance %}
+	{%include "classified_ads/gallery.html" with edit_gallery=True ad=ad %}
 </div>
-
+{% endwith %}
 {% endblock %}
+
+{% partialdef subcategories %}
+{%for subcategory in subcategories %}
+<option value="{{ subcategory.0 }}">{{ subcategory.1 }}</option>
+{%endfor%}
+{% endpartialdef %}

@@ -95,13 +95,17 @@ class QuestionUpsertForm(forms.ModelForm):
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    if "instance" in kwargs and kwargs["instance"].question_type in Question.CHOICE_TYPES:
-      self.fields["possible_choices"].initial = "\n".join(kwargs["instance"].possible_choices)
+    if "instance" in kwargs and kwargs["instance"] and kwargs["instance"].question_type in Question.CHOICE_TYPES:
+      self.initial["possible_choices"] = "\n".join(kwargs["instance"].possible_choices)
+    else:
+      self.initial["possible_choices"] = ""
+    # print("initial choices:", self.initial["possible_choices"])
 
   def clean_possible_choices(self):
     if self.cleaned_data["question_type"] not in Question.CHOICE_TYPES:
       return []
     data = self.cleaned_data["possible_choices"]
+    # print("choices:", data)
     possible_choices = [choice.strip() for choice in data.split("\n") if choice.strip()]
     if len(possible_choices) < 2:
       raise forms.ValidationError(_("You must provide at least two possible choices!"))

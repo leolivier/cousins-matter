@@ -96,7 +96,7 @@
 			{% endif %}
       {% if not request.user.is_superuser and member.is_active and not member.is_dead %}
 				<button hx-get="{% url 'members:notify_death' member.id%}"
-					hx-target="#notify-death-modal"
+					hx-target="#modal"
 					hx-swap="innerHTML"
 					class="button is-danger is-light"
 					title="{% trans 'Notify Death' %}">
@@ -108,5 +108,4 @@
 	</div>
 </div>
 {%endwith%}
-<div id="notify-death-modal"></div>
 {% endblock %}

@@ -9,7 +9,6 @@
 {% endblock %}
 {% block header %}
 	{%include "cm_main/common/include-summernote.html" with maxsize=settings.PAGE_MAX_SIZE %}
-	<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 {%endblock%}
 {% block content %}
 {%with page=form.instance has_page=form.instance.pk%}
@@ -35,18 +34,11 @@
 				{%icon "update"%} <span>{%trans "Save Page and Continue Editing"%}</span>
 			</button>
 			{%if has_page%}
-				{%trans "Delete Page" as delete_title %}
-				{%blocktranslate asvar delete_msg with title=page.title trimmed%}
-					Are you sure you want to delete the page "{{title}}"?
-				{%endblocktranslate%}
 				{%url "pages-edit:delete" page.pk as delete_url%}
-				{%include "cm_main/common/confirm-delete-modal.html" with button_text=delete_title ays_title=delete_title ays_msg=delete_msg|force_escape delete_url=delete_url expected_value=page.title %}
+				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete Page") delete_url=delete_url %}
 			{%endif%}
 		</div>
 	</form>
 </div>
-{%if has_page%}
-	{% include "cm_main/common/modal_form.html" with modal_id="delete-item-modal"%}
-{%endif%}
 {%endwith%}
 {% endblock %}

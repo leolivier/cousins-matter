@@ -1,9 +1,7 @@
 import logging
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -11,7 +9,6 @@ from django.utils.translation import gettext as _
 from members.models import Member
 from ..models import PrivateChatRoom
 from .views_room_common import display_chat_room, list_chat_rooms, create_chat_room
-from cm_main.utils import assert_request_is_ajax
 
 
 logger = logging.getLogger(__name__)
@@ -32,12 +29,11 @@ def display_private_chat_room(request, room_slug, page_num=None):
   return display_chat_room(request, room_slug, private=True, page_num=page_num)
 
 
-@login_required
 def search_private_members(request, room_slug):
   """
   Search for private members in a given chat room.
 
-  This view is accessible only to authenticated users. It performs an AJAX search
+  This view is accessible only to authenticated users. It performs an HTMX search
   for private members in a chat room based on the provided query. The search is
   case-insensitive and matches the query against the `last_name`, `first_name`,
   last name's last word, and first name's first word of the `Member` model.
@@ -48,16 +44,13 @@ def search_private_members(request, room_slug):
   - `room_slug` (str): The slug of the chat room to search in.
 
   Returns:
-  - `JsonResponse`: A JSON response containing the search results. The response
-    is a dictionary with a single key `'results'` which contains a list of dictionaries
-    representing the matching members. Each dictionary contains the `id` and `text`
-    fields of the matching member.
+  - `HttpResponse`: An HTMX response containing the search results.
 
   Raises:
-  - `ValidationError`: If the request is not an AJAX request.
+  - `ValidationError`: If the request is not an HTMX request.
 
   """
-  assert_request_is_ajax(request)
+  assert request.htmx
   room = get_object_or_404(PrivateChatRoom, slug=room_slug)
   query = request.GET.get("q", "")
   members = (
@@ -70,11 +63,9 @@ def search_private_members(request, room_slug):
     )
     .distinct()[:12]
   )  # Limited to 12 results
-  data = [{"id": m.id, "text": m.full_name} for m in members]
-  return JsonResponse({"results": data})
+  return render(request, "chat/private/add-member.html#member_search_results", {"members": members})
 
 
-@login_required
 def list_private_room_members(request, room_slug):
   """
   Renders the 'chat/private/room_members.html' template with the list of members of a private chat room.
@@ -101,7 +92,6 @@ def list_private_room_members(request, room_slug):
   return render(request, "chat/private/room_members.html", {"room": room})
 
 
-@login_required
 def add_member_to_private_room(request, room_slug):
   """
   Add a member to a private chat room.
@@ -146,7 +136,6 @@ def add_member_to_private_room(request, room_slug):
   return redirect(reverse("chat:private_room_members", args=[room.slug]))
 
 
-@login_required
 def remove_member_from_private_room(request, room_slug, member_id):
   """
   Remove a member from a private chat room.
@@ -195,7 +184,6 @@ def remove_member_from_private_room(request, room_slug, member_id):
   return redirect(reverse("chat:private_room_members", args=[room.slug]))
 
 
-@login_required
 def leave_private_room(request, room_slug):
   """
   Leave a private chat room.
@@ -250,7 +238,6 @@ def leave_private_room(request, room_slug):
   return redirect(reverse("chat:private_chat_rooms"))
 
 
-@login_required
 def list_private_room_admins(request, room_slug):
   """
   Renders the 'chat/private/room_admins.html' template with the list of admins of a private chat room.
@@ -277,7 +264,6 @@ def list_private_room_admins(request, room_slug):
   return render(request, "chat/private/room_admins.html", {"room": room})
 
 
-@login_required
 def add_admin_to_private_room(request, room_slug):
   """
   Adds a member as an admin to a private chat room.
@@ -323,7 +309,6 @@ def add_admin_to_private_room(request, room_slug):
   return redirect(reverse("chat:private_room_admins", args=[room.slug]))
 
 
-@login_required
 def remove_admin_from_private_room(request, room_slug, member_id):
   """
   Removes an admin from a private chat room.
@@ -365,14 +350,13 @@ def remove_admin_from_private_room(request, room_slug, member_id):
         _("There must be at least one admin in a private room. Please add another one before removing this one."),
       )
     else:
-      room.followers.remove(member)
+      room.admins.remove(member)
       room.save()
   else:
     messages.warning(request, _("This member is not an admin of this private room"))
   return redirect(reverse("chat:private_room_admins", args=[room.slug]))
 
 
-@login_required
 def leave_private_room_admins(request, room_slug):
   """
   Removes the authenticated user from the admins of a private chat room.

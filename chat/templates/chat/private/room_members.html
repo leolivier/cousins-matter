@@ -21,7 +21,10 @@
 				{%trans 'Leave this room' as leave_room%}
 				{%url 'chat:leave_private_room' room.slug as leave_url %}
 				{%trans "Are you sure you want to leave this room?" as areyousure %}
-				<button class="button" onclick="confirm_and_redirect('{{areyousure}}', '{{leave_url}}')" title="{{leave_room}}">
+				<button class="button"
+					hx-post="{{leave_url}}"
+					hx-confirm="{{areyousure}}"
+					title="{{leave_room}}">
 					{%icon 'leave-group'%}
 					<span class="is-hidden-mobile">{{leave_room}}</span>
 				</button>
@@ -45,11 +48,14 @@
 					{%icon "member-link" %}
 				</a>
 			</div>
-			{%trans 'Remove Member from Room' as leave_room%}
+			{%trans 'Remove Member from Room' as remove_member%}
 			{%url 'chat:remove_member_from_private_room' room.slug member.id as remove_url %}
 			{%trans "Are you sure you want to remove this member from the room?" as areyousure %}
-			<button class="button" onclick="confirm_and_redirect('{{areyousure}}', '{{remove_url}}')" title="{{leave_room}}">
-				{%icon "leave-group" %} <span>{{leave_room}}</span>
+			<button class="button"
+					hx-post="{{remove_url}}"
+					hx-confirm="{{areyousure}}"
+					title="{{remove_member}}">
+				{%icon "leave-group" %} <span class="is-hidden-mobile">{{remove_member}}</span>
 			</button>
 		</div>
 		{%endfor%}

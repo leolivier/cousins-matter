@@ -9,13 +9,13 @@
 {% endblock %}
 {%block header%}
 {%include "cm_main/common/include-bulma-calendar.html" %}
-<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
 <script src="{% static 'polls/js/polls.js' %}"></script>
 {%endblock%}
 {% block content %}
+{% with poll_id=form.instance.pk %}
 <div class="container mt-5 px-2">
 	<h1 class="title has-text-centered">
-	{%if form.instance.pk%}
+	{%if poll_id%}
 		{% title _("Update Poll") %}
 	{%else%}
 		{% title _("Create Poll") %}
@@ -32,74 +32,49 @@
 					{%icon "create"%} <span>{%trans "Create Poll"%}</span>
 				{%endif%}
 			</button>
-			{%if form.instance.pk%}
-			{% autoescape off %}
-				{%trans "Delete Poll" as delete_title %}
-				{%blocktranslate asvar delete_msg with title=form.instance.title|escape%}Are you sure you want to delete the poll "{{title}}"?{%endblocktranslate%}
-				{%url "polls:delete_poll" form.instance.pk as delete_url%}
-				{%include "cm_main/common/confirm-delete-modal.html" with ays_title=delete_title button_text=delete_title ays_msg=delete_msg|force_escape delete_url=delete_url expected_value=form.instance.title|escape %}
-				{% endautoescape %}
+			{%if poll_id%}
+				{%url "polls:delete_poll" poll_id as delete_poll_url%}
+				{%trans "Delete Poll" as button_text %}
+				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text=button_text delete_url=delete_poll_url %}
 			{%endif%}
 		</div>
 	</form>
 	<nav class="panel mt-5" id="poll-questions">
 		<p class="panel-heading">{%trans "Poll Questions" %}</p>
-		{%if form.instance.pk%}
+	{%if poll_id%}
 		{% for question in form.instance.questions.all %}
 		<div class="panel-block" id="question-{{question.id}}">
 			{%icon question.question_type|question_icon %}
 			{{question.question_text}}
-			<button class="button ml-auto	is-small js-modal-trigger"
+			<button class="button ml-auto	is-small"
 				type="button"
-				id="js-modal-update-question-{{question.id}}"
-				data-target="upsert-question-modal"
-				data-id="{{question.id}}"
-				data-action="{% url 'polls:update_question' form.instance.pk question.id%}"
-				data-title='{%trans "Update Question"%}'
-				data-form='{{question_form|crispy}}'
-				data-get-url="{% url 'polls:question_detail' question.id %}"
-				data-init-function='fillQuestion'
-				data-kind="update"
-				data-no-warning="true"
-			>
+				hx-target="#modal"
+				hx-get="{% url 'polls:update_question' question.id%}"
+				hx-swap="innerHTML"
+				title="{% trans 'Update Question' %}"			>
 				{%icon "edit"%}
 			</button>
-			{%with qid=question.id|stringformat:"s"%}{%with bid='js-modal-delete-question-'|add:qid%}
-			{% autoescape off %}
-				{%trans "Delete Question" as delete_question_title %}
-				{%blocktranslate asvar delete_question_msg with title=question.question_text|escape trimmed%}
-					Are you sure you want to delete the question "{{title}}"?
-				{%endblocktranslate%}
-				{%url "polls:delete_question" question.id as delete_question_url%}
-				{%include "cm_main/common/confirm-delete-modal.html" with button_id=bid ays_title=delete_question_title button_text='' button_class='is-small' ays_msg=delete_question_msg|force_escape delete_url=delete_question_url %}
-			{% endautoescape %}
-			{% endwith %}{% endwith %}
+			{%url "polls:delete_question" question.id as delete_question_url%}
+			{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text='' button_class='is-small' delete_url=delete_question_url %}
 		</div>
 		{% empty %}
 		<div id="no-question-for-this-poll" class="panel-block">No questions linked to this poll.</div>
 		{% endfor %}
-		{%endif%}
-		{%if form.instance.pk%}
 		<div class="panel-block" id="add-question-button">
-			<button class="button is-link is-outlined is-fullwidth js-modal-trigger"
-						type="button"
-						id="js-modal-add-question"
-						data-target="upsert-question-modal"
-						data-action="{% url 'polls:add_question' form.instance.pk%}"
-						data-title='{%trans "New Question"%}'
-						data-form='{{question_form|crispy}}'
-						data-init-function='fillQuestion'
-						data-kind="create"
-						>
-				{%icon "edit" %}
+			<button class="button is-link is-outlined is-fullwidth"
+							type="button"
+							hx-target="#modal"
+							hx-get="{% url 'polls:add_question' poll_id%}"
+							hx-swap="innerHTML"
+							title="{% trans 'Add Question' %}"			>
+				{%icon "new" %}
 				<span class="ml-2">{%trans "Add Question" %}</span>
 			</button>
 		</div>
-		{% include "cm_main/common/modal_form.html" with modal_id="upsert-question-modal"%}
-		{% include "cm_main/common/modal_form.html" with modal_id="delete-item-modal"%}
-		{%else%}
+	{%else%}
 		<p>{%trans "Save the poll to add questions."%}</p>
-		{%endif%}
+	{%endif%}
 	</nav>
 </div>
+{% endwith %}
 {% endblock %}

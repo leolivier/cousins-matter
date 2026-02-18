@@ -287,17 +287,15 @@ class DeleteGalleryViewTest(GalleryBaseTestCase):
     self.assertIsNotNone(gal)
     # delete the gallery
     url = reverse("galleries:delete_gallery", kwargs={"pk": gal})
-    response = self.client.get(url, follow=True)
-
-    self.assertRedirects(response, reverse("galleries:galleries"), 302, 200)
-    self.assertContainsMessage(response, "success", _("Gallery deleted successfully"))
+    response = self.client.post(url, follow=True)
+    self.assertTrue(response.status_code, 200)
+    # self.print_response(response)
     # check root not removed
     gid, pid = lst[0]
-    # print("gid/pid:", gid, pid)
     self.assertTrue(Gallery.objects.filter(pk=gid).exists())
     self.assertTrue(Photo.objects.filter(pk=pid).exists())
     # check others removed
+    self.assertFalse(Gallery.objects.filter(pk=gal).exists())
     for gid, pid in lst[1:]:
-      # print("gid/pid:", gid, pid)
       self.assertFalse(Gallery.objects.filter(pk=gid).exists())
       self.assertFalse(Photo.objects.filter(pk=pid).exists())

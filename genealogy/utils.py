@@ -41,10 +41,10 @@ class GedcomParser:
     death_data = element.get_death_data()
 
     birth_date = self._parse_date(birth_data[0]) if birth_data[0] else None
-    birth_place = birth_data[1]
+    birth_place = birth_data[1] or ""
 
     death_date = self._parse_date(death_data[0]) if death_data[0] else None
-    death_place = death_data[1]
+    death_place = death_data[1] or ""
 
     # Extract _UID if present
     uid_hex = None

@@ -4,12 +4,12 @@ import os
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import transaction
+from django.test import TestCase
 from django.urls import reverse
 from django.db.utils import IntegrityError
 from django.utils.formats import localize
 from django.utils.translation import gettext as _
 from django.contrib.auth import get_user_model
-from django.test import TestCase
 from django.core import mail
 from verify_email.app_configurations import GetFieldFromSettings
 from verify_email.views import verify_user_and_activate
@@ -17,6 +17,7 @@ from ..views.views_member import EditProfileView, MemberDetailView
 from ..models import Member
 from .tests_member_base import (
   TestLoginRequiredMixin,
+  MemberTestCaseMixin,
   MemberTestCase,
   modify_member_data,
   get_new_member_data,
@@ -116,17 +117,19 @@ class MemberCreateTest(MemberViewTestMixin, MemberTestCase):
     self.assertEqual(managed.member_manager, self.member)
 
 
-class MemberDeleteTest(MemberViewTestMixin, MemberTestCase):
+class MemberDeleteTest(MemberTestCaseMixin, TestCase):
   def test_delete_member(self):
     member = self.create_member()
     member.delete()
     self.assertEqual(Member.objects.filter(id=member.id).count(), 0)
     self.assertEqual(Member.objects.filter(username=member.username).count(), 0)
 
+
+class MemberDeleteTestByView(MemberViewTestMixin, MemberTestCase):
   def test_delete_member_by_view(self):
     member = self.create_member_by_view()
-    response = self.client.post(reverse("members:delete", args=[member.id]), follow=True)
-    self.assertContainsMessage(response, "info", _("Member deleted"))
+    response = self.client.post(reverse("members:delete", args=[member.id]), HTTP_HX_REQUEST="true", follow=True)
+    self.assertEqual(response.status_code, 200)
     self.assertEqual(Member.objects.filter(id=member.id).count(), 0)
     self.assertEqual(Member.objects.filter(username=member.username).count(), 0)
 
@@ -191,12 +194,15 @@ class MemberProfileViewTest(MemberTestCase):
     self.assertEqual(self.member.birthdate, new_data["birthdate"])
     self.assertEqual(self.member.email, new_data["email"])
 
+
+class MemberAvatarTest(MemberTestCaseMixin, TestCase):
   def test_avatar(self):
     from django.core.files.uploadedfile import InMemoryUploadedFile
     from io import BytesIO
     from PIL import Image
     import sys
 
+    self.member = self.create_member()
     avatar_file = os.path.join(os.path.dirname(__file__), "resources", self.base_avatar)
     membuf = BytesIO()
     with Image.open(avatar_file) as img:
@@ -427,7 +433,7 @@ class TestDisplayMembers(MemberTestCase):
     # check reverse order
     response = self.client.get(
       reverse("members:members"),
-      {"member_sort": "birthdate", "member_order": "option2"},
+      {"member_sort": "birthdate", "toggle_slider": "option2"},
     )
     self.assertEqual(response.status_code, 200)
     ms = Member.objects.all().order_by("-birthdate")

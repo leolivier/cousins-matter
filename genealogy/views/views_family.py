@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from cm_main.utils import PageOutOfBounds, Paginator
 from ..models import Family
@@ -9,7 +8,6 @@ from ..forms import FamilyForm
 from ..utils import clear_genealogy_caches
 
 
-@login_required
 def family_list(request, page_num=1):
   query = request.GET.get("q")
   if query:
@@ -42,7 +40,6 @@ def family_list(request, page_num=1):
     return redirect(exc.redirect_to)
 
 
-@login_required
 def family_create(request):
   if request.method == "POST":
     form = FamilyForm(request.POST)
@@ -57,7 +54,6 @@ def family_create(request):
   return render(request, "genealogy/family_form.html", {"form": form, "title": _("Add Family")})
 
 
-@login_required
 def family_update(request, pk):
   family = get_object_or_404(Family, pk=pk)
   if request.method == "POST":
@@ -72,7 +68,6 @@ def family_update(request, pk):
   return render(request, "genealogy/family_form.html", {"form": form, "title": _("Edit Family")})
 
 
-@login_required
 def family_delete(request, pk):
   family = get_object_or_404(Family, pk=pk)
   if request.method == "POST":

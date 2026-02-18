@@ -2,19 +2,125 @@
 {% load i18n cm_tags static crispy_forms_tags %}
 {%block header %}
 <script>
-const $roomSlug = encodeURIComponent('{{room.slug}}');
-const $member = '{{request.user.id}}';
-const $userName = '{{request.user.username}}';
-const $pageNumber = parseInt('{{page.number}}');
-const $numPages = parseInt('{{page.num_pages}}');
-const $lastPageLink = '{{page.last_page_link}}';
-const $roomEditLink = "{% url 'chat:room-edit' room.slug %}";
-var $lastDate = '{{last_date}}';
-var $lastSender = '{{last_sender}}';
-// console.log("input last date: ", $lastDate)
+function escapeHtml(str){
+	return new Option(str).innerHTML;
+}
+
+$(document).ready(()=>{
+
+	const $roomSlug = encodeURIComponent('{{room.slug}}');
+	const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+	const $chatSocket = new WebSocket(
+		wsProtocol + window.location.host + '/chat/' + $roomSlug
+	);
+
+	$chatSocket.onclose = (e) => {
+		console.error('The socket closed unexpectedly');
+	};
+
+	$chatSocket.onmessage = (e) => {
+		const $data = JSON.parse(e.data);
+		// console.log($data)
+		switch ($data.action) {
+			case 'create_chat_message':
+				// {%if page.number == page.num_pages %}  {# use comment to avoid JS syntax error #}
+					if ($data.args.rendered_message) {
+						$('#chat-messages').append($data.args.rendered_message)
+						$('#chat-message-input').focus();
+					} else {
+						alert(gettext('The message was empty!'))
+					}
+				// {%else%}
+					goto_page_url('{{page.last_page_link}}')
+				// {%endif%}
+				break
+			case 'update_chat_message':
+				if ($('#message-div-' + $data.args.msgid).length > 0) {
+					txt = escapeHtml($data.args.message)
+					if (txt.startsWith("**") && txt.endsWith("**")) {
+						txt = '<b>' + txt.slice(2, -2) + '</b>'
+					}
+					txt = txt + " <i> (*)</i>"
+					$('#message-div-' + $data.args.msgid + ' span.content').html(txt)
+				}
+				break
+			case 'error':
+				alert($data.error)
+				break
+			default:
+				console.error('Unknown action: ' + $data.action)
+		}
+	};
+
+	$('#chat-message-submit').on('click', (e) => {
+		const $msg_el = $('#chat-message-input');
+		const $message = $msg_el.val();
+
+		$chatSocket.send(JSON.stringify({
+			'action': 'create_chat_message',
+			'args': {
+				'message': $message,
+				'member': '{{request.user.id}}',
+				'room': $roomSlug,
+			}
+		}));
+
+		$msg_el.val('');
+	});
+
+	// if enter is pressed on the message input, submit the message form
+	$('#chat-message-input').on('keyup', (e) => {
+		if (e.keyCode === 13) {
+			$('#chat-message-submit').trigger('click');
+		}
+	});
+
+	function onclick_delete_chat_message(e) {
+		if (confirm(gettext("Are you sure you want to delete this message?"))) {
+			const msgid = $(this).data('msgid');
+			$chatSocket.send(JSON.stringify({
+				'action': 'delete_chat_message',
+				'args': {
+					'msgid': msgid,
+				}
+			}));
+		}
+	}
+
+	function onclick_edit_chat_message(e) {
+		const msgid = $(this).data('msgid');
+		const $block = $('#message-div-' + msgid)
+		if ($block.length > 0) {
+			content = escapeHtml($block.find('span.content').text())
+			$block.append('<input class="input" type="text" id="chat-message-edit" value="' + content + '">')
+			$editor = $('#chat-message-edit')
+			$editor.focus();
+			// if enter is pressed on the message input, submit the content
+			$editor.on('keyup', (e) => {
+				if (e.keyCode === 13) {
+					new_content = $editor.val()
+					$chatSocket.send(JSON.stringify({
+						'action': 'update_chat_message',
+						'args': {
+							'msgid': msgid,
+							'message': new_content
+						}
+					}));
+					$editor.remove()
+				}
+			});
+		}
+	}
+
+	$('#chat-messages').on('click', '.delete-chat-message', onclick_delete_chat_message)
+
+	$('#chat-messages').on('click', '.edit-chat-message', onclick_edit_chat_message)
+
+	// focus the message input
+	$('#chat-message-input').focus();
+});
+
 </script>
-<script src="{% static 'cm_main/js/cm_modal.js' %}"></script>
-<script src="{% static 'chat/js/chat.js' %}"></script>
 {%endblock%}
 {% block title %}{% title room.name %}{% endblock %}
 {% block content %}
@@ -24,41 +130,49 @@ var $lastSender = '{{last_sender}}';
 
 		<div class="panel">
 			<div class="panel-heading is-flex is-align-items-center is-justify-content-center">
-				<span id="show-room-name">{{room.name}}</span>
-				<form method="POST" id="room-edit-form">
-					{% csrf_token %}
-						<span class="control">
-							<input class="input" class="is-flex-grow-1" type="text" placeholder="{%trans 'Room name'%}" 
-										id="room-name-input" name="room-name" title="{%trans 'hit return to submit, escape to give up'%}">
-						</span>
+			{%partialdef room_name_display inline %}
+				<div hx-target="this" hx-swap="outerHTML">
+					<span>{{room.name}}</span>
+					{%if room.owner == request.user or request.user.is_superuser %}
+						<button class="button is-responsive is-small ml-1"
+								hx-get="{%url 'chat:room-edit' room.slug %}"
+								title="{%trans 'Edit' %}">
+							{%icon "edit"%}
+						</button>
+						{%url "chat:room-delete" room.slug as delete_room_url%}
+						{% with button_text='' button_class='is-small ml-1' delete_url=delete_room_url %}
+							{%include "cm_main/common/confirm-delete-modal.html#delete_button" %}
+						{% endwith %}
+					{%endif%}
+				</div>
+			{%endpartialdef room_name_display %}
+			{%partialdef room_edit_form %}
+				<form hx-put="{%url 'chat:room-edit' room.slug %}" hx-target="this" hx-swap="outerHTML"
+					hx-trigger="submit, keyup[key=='Escape']" hx-vals="js:{trigger: event.key}">
+					<span class="control">
+						<input class="input" class="is-flex-grow-1" type="text"
+							placeholder="{%trans 'Room name'%}" name="room-name"
+							title="{%trans 'hit return to submit, escape to give up'%}"
+							value="{{room.name}}"
+							autofocus>
+					</span>
 				</form>
-				{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
+			{%endpartialdef room_edit_form %}
+			{%with followed_object=room extra_class="ml-auto mr-5" %}
 				{%if private%}
-					{%include "cm_main/followers/followers-count-tag.html" with followed_object=room extra_class="ml-auto mr-5" name="members" %}
+					{%include "cm_main/followers/followers-count-tag.html" with name="members"%}
 				{%else%}
-					{%include "cm_main/followers/followers-count-tag.html" with followed_object=room extra_class="ml-auto mr-5"%}
+					{%include "cm_main/followers/followers-count-tag.html" %}
 				{%endif%}
-				{%if room.owner == request.user %}
-					{% autoescape off %}
-					{%blocktranslate asvar delete_msg with room_name=room.name|force_escape trimmed %}
-						Are you sure you want to delete the room "{{room_name}}" and all its messages?
-					{%endblocktranslate%}
-					{%url 'chat:room-delete' room.slug as delete_url%}
-					{%trans 'Room deletion' as delete_title%}
-					{%include "cm_main/common/confirm-delete-modal.html" with button_text="" button_class="is-responsive is-pulled-right" ays_title=delete_title ays_msg=delete_msg|force_escape action_url=delete_url expected_value=room.name|escape %}
-					{% endautoescape %}
-					<a class="button is-responsive is-pulled-right" onclick="toggle_edit_room_form();" title="{%trans 'Edit' %}">
-						{%icon "edit" %}
-					</a>
-				{%else%}
+				{%if room.owner != request.user %}
 					{%if private%}
 					<div class="mr-1 buttons has-addons is-rounded">
-						{%trans 'Leave this room' as leave_room%}
-						{%url 'chat:leave_private_room' room.slug as leave_url %}
-						{%trans "Are you sure you want to leave this room?" as areyousure %}
-						<button class="button" onclick="confirm_and_redirect('{{areyousure}}', '{{leave_url}}')" title="{{leave_room}}">
+						<button class="button"
+								hx-post="{%url 'chat:leave_private_room' room.slug %}"
+								hx-confirm="{%trans "Are you sure you want to leave this room?" %}"
+								title="{%trans 'Leave this room' %}">
 							{%icon 'leave-group'%}
-							<span class="is-hidden-mobile">{{leave_room}}</span>
+							<span class="is-hidden-mobile">{%trans 'Leave this room' %}</span>
 						</button>
 						<a class="button" href="{%url 'chat:private_room_members' room.slug %}">
 							{%icon "members" %} <span>{%trans 'Room Members' %}</span>
@@ -68,47 +182,60 @@ var $lastSender = '{{last_sender}}';
 						</a>
 					</div>
 					{%else%}
-						{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room %}
+						{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
+						{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room toggle_follow_url=toggle_follow_url %}
 					{%endif%}
 				{%endif%}
-		
-				</div>
+			{%endwith%}
+			</div>
 			<div class="panel-block">
 				<span class="control">{%paginate page%}</span>
 			</div>
 			<div  id="chat-messages" class="has-background-light">
 			{%for msg in chat_messages %}
-			{# WARNING!!! The code of below <div> is duplicated in chat.js, function append_message_data #}
-				{% ifchanged msg.date_added.date %}
+			{% with user_id=request.user.id member_id=msg.member.id member_name=msg.member.username member_fullname=msg.member.get_full_name msg_id=msg.id date_added=msg.date_added date_modified=msg.date_modified content=msg.content member_changed=True date_changed=True %}
+			{% partialdef message_div inline %}
+				{% ifchanged date_added.date %}
+					{% if date_changed %}
 					<p class="has-text-centered is-size-7 has-text-link mx-auto my-3">
-						{{ msg.date_added|date:"DATE_FORMAT" }}
+						{% with date_formated=date_added|date:"DATE_FORMAT" %}
+							{% if date_formated %}
+								{{ date_formated }}
+							{% else %}
+								{{ date_added }}
+							{% endif %}
+						{% endwith %}
 					</p>
+					{% endif %}
 				{% endifchanged %}
-				{%if request.user == msg.member %}
-				<div class="panel-block is-justify-content-flex-end" id="message-div-{{msg.id}}">
+
+				{%if user_id == member_id %}
+				<div class="panel-block is-justify-content-flex-end" id="message-div-{{msg_id}}">
 				{%else%}
-				<div class="panel-block is-flex-wrap-wrap is-align-items-flex-start" id="message-div-{{msg.id}}">
+				<div class="panel-block is-flex-wrap-wrap is-align-items-flex-start" id="message-div-{{msg_id}}">
 					<p class="has-background-white mx-5 br-2">
 				{%endif%}
 				{# The code below could be simplified but the %ifchanged must be traversed in every case #}
-				{% ifchanged msg.member.username %}{%if request.user != msg.member %}
-					<span class="has-text-primary has-text-weight-bold mx-5">{{msg.member.get_full_name}}</span>
-					<a href="{%url 'members:detail' msg.member.id %}" aria-label="{%trans 'profile'%}" class="my-auto">
-						{%icon "member-link" %}
-					</a>
-					<br>
-				{%endif%}{% endifchanged %}
-				{%if request.user == msg.member %}
-					<span class="content mr-1 my-auto px-2 py-1 has-background-primary-light br-2">{{msg.content|boldify}}</span> 
-				{%else%}
-					<span class="content has-text-left mx-5 my-auto">{{msg.content|boldify}}</span>
-				{%endif%}
-				{%if msg.date_modified %}
-					<span class="is-size-7 mx-2 my-auto has-text-right">(*) {{msg.date_modified|date:"DATETIME_FORMAT"}}</span>
-				{%else%}
-					<span class="is-size-7 mx-2 my-auto has-text-right">{{msg.date_added|date:"TIME_FORMAT"}}</span>
-				{%endif%}
-				{%if request.user == msg.member %}
+				{% ifchanged member_name %}
+					{%if member_changed and user_id != member_id %}
+						<span class="has-text-primary has-text-weight-bold mx-5 is-size-6">{{member_fullname}}</span>
+						<a href="{%url 'members:detail' member_id %}" aria-label="{%trans 'profile'%}" class="my-auto">
+							{%icon "member-link" "is-small" %}
+						</a>
+						<br/>
+					{%endif%}
+				{% endifchanged %}
+				<span class="content my-auto is-size-5
+					{%if user_id == member_id %}mr-1 px-2 py-1 has-background-primary-light br-2{%else%}has-text-left mx-5{%endif%}">
+					{{content|boldify}}
+				</span>
+				<span class="is-size-7 mx-2 my-auto has-text-right">
+					{%if date_modified %}(*) {{date_modified|date:"DATETIME_FORMAT"}}
+					{%elif time_added %}{{time_added}}
+					{%else%}{{date_added|date:"TIME_FORMAT"}}
+					{%endif%}
+				</span>
+				{%if user_id == member_id %}
 					<div class="dropdown is-hoverable">
 						<div class="dropdown-trigger">
 							<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -117,10 +244,10 @@ var $lastSender = '{{last_sender}}';
 						</div>
 						<div class="dropdown-menu" id="dropdown-menu" role="menu">
 							<div class="dropdown-content">
-								<a class="dropdown-item delete-chat-message" title="{%trans 'Delete' %}" data-msgid="{{msg.id}}">
+								<a class="dropdown-item delete-chat-message" title="{%trans 'Delete' %}" data-msgid="{{msg_id}}">
 									{%icon "delete" %} <span class="is-hidden-mobile my-auto">{%trans "Delete"%}</span>
 								</a>
-								<a class="dropdown-item edit-chat-message" title="{%trans 'Edit' %}" data-msgid="{{msg.id}}">
+								<a class="dropdown-item edit-chat-message" title="{%trans 'Edit' %}" data-msgid="{{msg_id}}">
 									{%icon "edit" %} <span class="is-hidden-mobile my-auto">{%trans "Edit"%}</span>
 								</a>
 							</div>
@@ -130,31 +257,30 @@ var $lastSender = '{{last_sender}}';
 				</p>
 				{%endif%}
 			</div>
+			{%endpartialdef%}
+			{%endwith%}
 			{%endfor%}
-			{% if page.num_pages > 1 %}
-				<div class="panel-block">
-					<span class="control">{%paginate page%}</span>
-				</div>
-			{% endif %}
 		</div>
+		{% if page.num_pages > 1 %}
+			<div class="panel-block">
+				<span class="control">{%paginate page%}</span>
+			</div>
+		{% endif %}
 		<div class="panel-block">
-				<div class="field is-grouped is-flex-grow-5">
-					<div class="control is-flex-grow-5">
-						<input class="input" type="text" placeholder="{%trans 'Message' %}" id="chat-message-input">
-					</div>
-					<div class="control">
-						<a class="button is-primary" id="chat-message-submit">
-							{%icon "send-message" %}
-							<span class="is-hidden-mobile">{%trans 'Submit' %}</span>
-						</a>
-					</div>
+			<div class="field is-grouped is-flex-grow-5">
+				<div class="control is-flex-grow-5">
+					<input class="input" type="text" placeholder="{%trans 'Message' %}" id="chat-message-input">
 				</div>
+				<div class="control">
+					<button class="button is-primary" id="chat-message-submit">
+						{%icon "send-message" %}
+						<span class="is-hidden-mobile">{%trans 'Submit' %}</span>
+					</button>
+				</div>
+			</div>
 		</div>
 		<div class="panel-block"><i>(*) {%trans "Modified message"%}</i></div>
 	</div>
-	{%if room.owner == request.user %}
-		{%include "cm_main/common/modal_form.html" with modal_id="delete-item-modal" %}
-	{%endif%}
 </div>
 
 {%endwith%}

@@ -1,5 +1,5 @@
-{% load i18n %}
-<div class="modal is-active" _="on click close me">
+{% load i18n cm_tags%}
+<div class="modal is-active" _="on click remove me">
 	<div class="modal-background"></div>
 	<div class="modal-card"_="on click halt the event">
 		<header class="modal-card-head">
@@ -8,7 +8,7 @@
 			</p>
 			<button class="delete" aria-label="close"></button>
 		</header>
-		<form {%block form_params%}hx-get="#"{%endblock%}>
+		<form {%block form_params%}hx-get="#"{%endblock%} {{ hx_params }}>
 			{% csrf_token %}
 			<section class="modal-card-body">
 				{%block user_warning%}{%endblock%}
@@ -32,10 +32,13 @@
 
 			<footer class="modal-card-foot">
 				<div class="buttons mx-auto">
-					<button type="submit" class="button is-danger">
-						{% block submit_button_text %}{%trans "Submit" %}{% endblock %}
+					<button type="submit"
+									class="button {% block submit_button_class %}is-danger{% endblock %}"
+									>
+						{% block submit_button_icon %}{%icon "send"%}{%endblock%}
+						<span class="ml-2">{% block submit_button_text %}{%trans "Submit" %}{% endblock %}</span>
 					</button>
-					<button type="button" class="button is-light" _="on click remove me">{% trans "Cancel" %}</button>
+					<button type="button" class="button is-black">{% trans "Cancel" %}</button>
 				</div>
 			</footer>
 		</form>

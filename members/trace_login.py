@@ -12,6 +12,9 @@ from django_q.tasks import schedule
 from django_q.models import Schedule
 from functools import lru_cache
 from members.models import LoginTrace
+import logging
+
+logger = logging.getLogger(__name__)
 
 default_geolocation_data = None
 
@@ -63,13 +66,13 @@ def get_geolocation_data(ip: str):
     response.raise_for_status()  # Checks if the request was successful
     return response.json()  # Try to decode the JSON response
   except requests.exceptions.RequestException as e:
-    print(f"Error during request: {e}")
+    logger.error(f"Error during request: {e}")
     return {"error": True, "reason": f"Error during request: {e}"}
   except ValueError as e:
-    print(f"Error decoding JSON: {e}")
+    logger.error(f"Error decoding JSON: {e}")
     return {"error": True, "reason": f"Error decoding JSON: {e}"}
   except Exception as e:
-    print(f"An error occurred: {e}")
+    logger.error(f"An error occurred: {e}")
     return {"error": True, "reason": f"An error occurred: {e}"}
 
 

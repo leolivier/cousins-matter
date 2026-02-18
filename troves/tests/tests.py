@@ -131,3 +131,52 @@ class TestTroveList(MemberTestCase):
       self.assertEqual(response.status_code, 200)
       self.assertTemplateUsed(response, "troves/treasure_detail.html")
       self.check_treasure_in_response(treasure, response, True)
+
+  def test_trove_cave_filter_by_category(self):
+    self.create_troves()
+    response = self.client.get(reverse("troves:list"), {"category": "history"}, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "troves/trove_cave.html")
+    self.assertContains(response, "title 1")  # history
+    self.assertNotContains(response, "title 2")  # recipes
+
+  def test_trove_cave_invalid_category(self):
+    self.create_troves()
+    response = self.client.get(reverse("troves:list"), {"category": "nonexistent"}, follow=True)
+    self.assertEqual(response.status_code, 200)
+    # Invalid category falls back to showing all treasures
+    self.assertTemplateUsed(response, "troves/trove_cave.html")
+    self.assertContains(response, "title 1")  # history
+    self.assertContains(response, "title 2")  # recipes
+
+  def test_trove_cave_page_out_of_bounds(self):
+    self.create_troves()
+    response = self.client.get(reverse("troves:page", args=[9999]))
+    self.assertEqual(response.status_code, 302)
+    response = self.client.get(reverse("troves:page", args=[9999]), follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertTemplateUsed(response, "troves/trove_cave.html")
+    self.assertContains(response, "title 1")  # history
+    self.assertContains(response, "title 2")  # recipes
+
+  def test_delete_treasure(self):
+    self.create_troves()
+    treasure = self.treasures[0]
+    response = self.client.delete(
+      reverse("troves:delete", args=[treasure.id]),
+      HTTP_HX_REQUEST="true",
+    )
+    self.assertEqual(response.status_code, 200)
+    self.assertFalse(Trove.objects.filter(id=treasure.id).exists())
+
+  def test_translate_category(self):
+    from django.utils.translation import gettext as _
+
+    result = Trove.translate_category("history")
+    self.assertEqual(result, _("History & Stories"))
+
+  def test_thumbnail_path(self):
+    self.create_troves()
+    treasure = self.treasures[0]
+    path = treasure._thumbnail_path()
+    self.assertIn(treasure.picture.name.split("/")[-1], path)

@@ -199,10 +199,10 @@ def download_V2_needed_files(directory: Path, branch: str | None, release: str |
   files_to_download = [
     ("docker-compose.yml", directory / "docker-compose.yml"),
     (".env.example", directory / ".env.example"),
-    ("config/nginx.conf", directory / "config" / "nginx.conf"),
+    ("config/nginx/nginx.conf", directory / "config" / "nginx" / "nginx.conf"),
     (
-      "config/nginx.d/errors/413.html",
-      directory / "config" / "nginx.d" / "errors" / "413.html",
+      "config/nginx/nginx.d/errors/413.html",
+      directory / "config" / "nginx" / "nginx.d" / "errors" / "413.html",
     ),
   ]
   base_url = get_github_base_url(branch, release)

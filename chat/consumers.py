@@ -5,11 +5,12 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from urllib.parse import unquote
 from django.urls import reverse
-from django.utils.formats import localize  # , date_format
+from django.utils.formats import date_format
 from django.utils import timezone
 from django.utils.translation import gettext as _, get_language
-
+from django.template.loader import render_to_string
 from cm_main.utils import get_test_absolute_url
+from cm_main.followers import check_followers
 from .models import ChatMessage, ChatRoom
 from members.models import Member
 
@@ -136,16 +137,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
     else:
       return f"{origin}{relative_url}"
 
-  async def create_message(self, member_id, room_slug, msg_content):
+  async def acreate_message(self, member_id, room_slug, msg_content):
     # print('room slug: ', room_slug)
     room = await ChatRoom.objects.aget(slug=room_slug)
     member = await Member.objects.aget(pk=member_id)
     message = await ChatMessage.objects.acreate(member=member, room=room, content=msg_content)
     url = self._build_absolute_url(reverse("chat:room", args=[room_slug]))
-    await sync_to_async(self.check_followers)(room, message, member, url)
+    await sync_to_async(check_followers)(None, room, await room.aowner(), url, new_internal_object=message, author=member)
     return message
 
-  async def update_message(self, message_id, msg_content):
+  async def aupdate_message(self, message_id, msg_content):
     message = await ChatMessage.objects.aget(pk=message_id)
     message.content = msg_content
     message.date_modified = timezone.now()
@@ -176,35 +177,41 @@ class ChatConsumer(AsyncWebsocketConsumer):
     Handles the creation of a chat message.
     """
     message = data["message"]
-    member_id = data["member"]
+    member_id = str(data["member"])
     room_slug = unquote(data["room"])
-    # Send message to WebSocket
+    # retrieve previous message author
+    prev_msg = await ChatMessage.objects.filter(room__slug=room_slug).order_by("-date_added").afirst()
+    prev_msg_author_id = str(prev_msg.member_id) if prev_msg else None
+    prev_msg_date_added = prev_msg.date_added if prev_msg else None
     mbr = await Member.objects.aget(pk=member_id)
     # Save the new message
-    msg = await self.create_message(member_id, room_slug, message)
-    # print("saved: ", message, ', now sends to ', self.room_group_name)
+    msg = await self.acreate_message(member_id, room_slug, message)
+    local_date_added = timezone.localtime(msg.date_added)
     # Then send it to room group so each member can receive it and display it in its own browser
-    await self.channel_layer.group_send(
-      self.room_group_name,
-      {
-        "type": "create_chat_message",
-        "message": message,
-        "username": mbr.username,
-        "full_username": mbr.full_name,
-        "member_id": member_id,
-        "date_added": localize(timezone.localtime(msg.date_added)),
-        "unformated_date_added": msg.date_added.strftime("%Y-%m-%d"),  # for checking if the date has changed
-        "member_url": reverse("members:detail", args=[member_id]),
-        "msgid": msg.id,
-      },
-    )
-    # print("websocket send: ", message, ' to ', self.room_group_name)
+    context = {
+      "type": "create_chat_message",
+      "content": msg.content,
+      "member_id": member_id,
+      "member_name": mbr.username,
+      "member_fullname": mbr.get_full_name(),
+      "member_changed": prev_msg_author_id != member_id if prev_msg_author_id else True,
+      "date_changed": prev_msg_date_added.date() != msg.date_added.date() if prev_msg_date_added else True,
+      "msg_id": msg.id,
+      "date_added": date_format(local_date_added, "DATE_FORMAT"),
+      "time_added": date_format(local_date_added, "TIME_FORMAT"),
+    }
+    # print(f"websocket send: {context} to {self.room_group_name},
+    # prev_msg_author_id: {prev_msg_author_id}, member_id: {member_id}")
+    await self.channel_layer.group_send(self.room_group_name, context)
 
   async def create_chat_message(self, event):
     """
     Sends a creation message to the WebSocket for each connected member of the room.
     """
-    await self.send(text_data=json.dumps({"action": "create_chat_message", "args": event}))
+    user_id = self.scope.get("user").id
+    context = {"user_id": str(user_id), **event}
+    rendered_message = render_to_string("chat/room_detail.html#message_div", context)
+    await self.send(text_data=json.dumps({"action": "create_chat_message", "args": {"rendered_message": rendered_message}}))
     # print('create_chat_message', args)
 
   async def check_user_permission(self, msgid):
@@ -263,7 +270,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
       if not await self.check_user_permission(msgid):
         return
-      msg = await self.update_message(msgid, message)
+      msg = await self.aupdate_message(msgid, message)
       logger.info(f"Message {msgid} updated successfully")
 
       # Send the update to all members of the group
@@ -307,7 +314,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
       if not await self.check_user_permission(msgid):
         return
       del_msg = f"**{_('This message has been deleted')}**"
-      await self.update_message(msgid, del_msg)
+      await self.aupdate_message(msgid, del_msg)
       logger.info(f"Message {msgid} marked as deleted")
 
       # Send the deletion notice to all members of the group

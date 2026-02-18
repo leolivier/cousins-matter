@@ -1,7 +1,5 @@
 import logging
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_not_required
 from django.contrib.auth.views import PasswordResetView
 from django.core.files.storage import default_storage
 from django.db import connections, DatabaseError
@@ -24,6 +22,7 @@ import tempfile
 import zipfile
 
 from cm_main.forms import PasswordResetForm
+from cm_main.mixins import LoginNotRequiredMixin
 
 logger = logging.getLogger(__name__)
 
@@ -32,16 +31,10 @@ class PasswordResetView(PasswordResetView):
   form_class = PasswordResetForm
 
 
-class OnlyAdminMixin(LoginRequiredMixin, PermissionRequiredMixin):
-  raise_exception = True
-  permission_required = "is_superuser"
-
-
-class HomeView(generic.TemplateView):
+class HomeView(LoginNotRequiredMixin, generic.TemplateView):
   template_name = "cm_main/base.html"
 
 
-@login_required
 def download_protected_media(request, media):
   """
   View to download a protected media file.
@@ -91,6 +84,7 @@ redis_client = redis.Redis(
 )
 
 
+@login_not_required
 def health_check() -> dict:
   try:
     with connections["default"].cursor() as cursor:
@@ -105,6 +99,7 @@ def health_check() -> dict:
   return {"status": "ok"}
 
 
+@login_not_required
 def health(request):
   """
   Health check view.
@@ -121,6 +116,7 @@ def health(request):
   return JsonResponse(check, status=200 if check["status"] == "ok" else 503)
 
 
+@login_not_required
 def qhealth(request):
   """
   Django Q Health check view.
@@ -154,14 +150,14 @@ def send_zipfile(request):
     rel_filename = filename if filename.startswith("./") else "." / filename  # TODO: won't work on Windows
     archive.write(abs_filename, rel_filename)
   archive.close()
+  temp.seek(0)
   response = StreamingHttpResponse(
     FileWrapper(
-      open(temp, "rb"),
+      temp,
       chunk_size,
     ),
-    content_type=mimetypes.guess_type(temp)[0],
+    content_type="application/zip",
   )
-  response["Content-Type"] = "application/zip"
   response["Content-Length"] = temp.tell()
   response["Content-Disposition"] = "attachment; filename=file.zip"
   temp.seek(0)

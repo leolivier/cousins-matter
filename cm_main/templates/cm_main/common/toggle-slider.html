@@ -4,12 +4,20 @@
 		{%for option_n in "12"%}
 		  {%with option="option"|add:option_n %}
 			<label>
-					<input type="radio" name="{{choice_name}}" value="{{option}}" 
-						{%if selected == option %}checked{%endif%} 
-						{%if on_change%}onchange="{{on_change}}"{%endif%}>
-					{%if option_n == "1" %}{%icon icon1 clazz="is-small" %}{%else%}{%icon icon2 clazz="is-small" %}{%endif%}
+				<input type="radio" name="toggle_slider" value="{{option}}"
+					{%if selected == option %}checked="checked"{%endif%}
+					hx-get="{{request.path}}"
+					hx-target="{{hx_target}}"
+					hx-trigger="click"
+					hx-indicator="#slider-indicator">
+				{%if option_n == "1" %}
+					{%icon icon1 "is-small" %}
+				{%else%}
+					{%icon icon2 "is-small" %}
+				{%endif%}
 			</label>
 		  {%endwith%}
 		{%endfor%}
 	</div>
+	<span class="slider-indicator" hidden>{%icon loading "is-small" %}</span>
 </div>

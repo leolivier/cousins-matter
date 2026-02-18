@@ -1,7 +1,5 @@
 import random
-from urllib.parse import urlencode
-import re
-
+import json
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -25,12 +23,12 @@ class PrivateChatRoomTestsMixin:
 
   def do_check_private_chat_room(self, room_name):
     slug = slugify(room_name)
-    url = reverse("chat:new_private_room") + "?" + urlencode({"name": room_name})
-    response = self.client.get(url, follow=True)
+    url = reverse("chat:new_private_room")
+    response = self.client.post(url, data={"name": room_name}, follow=True)
     # self.print_response(response)
     # should be redirected to room detail. if not, it means there was an error
     self.assertTemplateUsed(response, "chat/room_detail.html")
-    self.assertContains(response, f'<span id="show-room-name">{room_name}</span>', html=True)
+    self.assertContains(response, f'<div hx-target="this" hx-swap="outerHTML"><span>{room_name}</span></div>', html=True)
 
     self.assertContains(response, self.get_lists_buttons(slug), html=True)
     rooms = ChatRoom.objects.filter(slug=slug)
@@ -78,11 +76,12 @@ class PrivateChatRoomTestsMixin:
 
     return f"""
     <button class="button"
-    onclick="confirm_and_redirect('{areyousure}', '{reverse("chat:leave_private_room", args=[room.slug])}')"
-    title="{leave_room}">
-    {icon("leave-group")}
-    <span class="is-hidden-mobile">{leave_room}</span>
-  </button>"""
+        hx-post="{reverse("chat:leave_private_room", args=[room.slug])}"
+        hx-confirm="{areyousure}"
+        title="{leave_room}">
+      {icon("leave-group")}
+      <span class="is-hidden-mobile">{leave_room}</span>
+    </button>"""
 
   def get_remove_text(self, room, member, is_admin=False):
     if is_admin:
@@ -96,10 +95,11 @@ class PrivateChatRoomTestsMixin:
 
     return f"""
 <button class="button"
-    onclick="confirm_and_redirect('{areyousure}', '{remove_url}')"
+    hx-post="{remove_url}"
+    hx-confirm="{areyousure}"
     title="{remove_member}">
   {icon("leave-group")}
-  <span>{remove_member}</span>
+  <span class="is-hidden-mobile">{remove_member}</span>
 </button>"""
 
   def check_private_members_list(self, response, room, member):
@@ -160,8 +160,8 @@ class PrivateChatRoomTests(PrivateChatRoomTestsMixin, MemberTestCase):
     new_room_name = "#" + room_name + "!"
     new_slug = slugify(new_room_name)
     self.assertEqual(new_slug, slug)
-    url = reverse("chat:new_private_room") + "?" + urlencode({"name": new_room_name})
-    response = self.client.get(url, follow=True)
+    url = reverse("chat:new_private_room")
+    response = self.client.post(url, {"name": new_room_name}, follow=True)
     # self.print_response(response)
     self.assertContainsMessage(
       response,
@@ -176,8 +176,8 @@ class PrivateChatRoomTests(PrivateChatRoomTestsMixin, MemberTestCase):
     rooms = []
     for i in range(5):
       name = "Private Chat Room #%i" % i
-      url = reverse("chat:new_private_room") + "?" + urlencode({"name": name})
-      response = self.client.get(url, follow=True)
+      url = reverse("chat:new_private_room")
+      response = self.client.post(url, data={"name": name}, follow=True)
       rooms.append(PrivateChatRoom.objects.get(name=name))
     ChatMessage.objects.create(room=rooms[0], content="a message", member=self.member)
     response = self.client.get(reverse("chat:private_chat_rooms"))
@@ -199,6 +199,56 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
   def tearDown(self):
     PrivateChatRoom.objects.all().delete()
     super().tearDown()
+
+  def _search_form_content(self):
+    trigger = (
+      "input[this.value.length == 0 || this.value.length >= 3] changed delay:300ms, "
+      "keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= 3)]"
+    )
+    vals = {
+      "render_with": "chat/private/add-member.html#member_search_results",
+      "render_empty_query": "false",
+    }
+    return f"""<form style="width: 100%">
+    <div class="dropdown" id="member-search-dropdown" style="width: 100%">
+      <div class="dropdown-trigger" style="width: 100%">
+        <div class="field has-addons">
+          <div class="control is-expanded has-icons-left is-relative">
+            <span class="htmx-indicator">
+              <span class="icon is-large">
+                <i class="mdi mdi-24px mdi-loading" aria-hidden="true"></i>
+              </span>
+            </span>
+            <input class="input" type="search"
+                   name="q"
+                   placeholder="{_("Begin typing to search members...")}"
+                   hx-get="{reverse("members:search_members")}"
+                   hx-vals='{json.dumps(vals)}'
+                   hx-trigger="{trigger}"
+                   hx-target="#search-results"
+                   hx-indicator=".htmx-indicator"
+                   autocomplete="off"
+                   id="member-search-input"
+                   oninput="check_search_length(this, 3)"
+                   >
+            {icon("search", "is-small is-left")}
+            <div class="dropdown-menu" id="dropdown-menu" role="menu" style="width: 100%">
+                <div class="dropdown-content" id="search-results">
+                </div>
+            </div>
+          </div>
+          <div class="control">
+            <button class="button" type="button" disabled="true" id="add-member-button"
+              hx-post="{reverse("chat:add_member_to_private_room", args=[self.room.slug])}"
+              hx-include="#member-id">
+              {icon("new-member")} {_("Add member to the room")}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="member-id" id="member-id">
+</form>"""
 
   def test_list_private_members(self):
     """Tests listing private chat room members."""
@@ -225,24 +275,8 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
 </div>""",
         html=True,
       )
-      # remove csrf token before checking
-      content = response.content.decode("utf-8")
-      cleaned_content = re.sub(
-        r'<input type="hidden" name="csrfmiddlewaretoken" value="[^"]+">',
-        "",
-        content,
-      )
       # print(cleaned_content)
-      self.assertInHTML(
-        f"""
-<form id="add-member-form" method="post" action="{reverse("chat:add_member_to_private_room", args=[self.room.slug])}">
-  <select id="member-select" name="member-id" style="width: 300px;"></select>
-  <button class="button" type="submit" disabled="true" id="add-member-button">
-    {icon("new-member")} {_("Add member to the room")}
-  </button>
-</form>""",
-        cleaned_content,
-      )
+      self.assertContains(response, self._search_form_content(), html=True)
     # then list the members
     response = self.client.get(reverse("chat:private_room_members", args=[self.room.slug]), follow=True)
     # self.print_response(response)
@@ -300,24 +334,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
 </div>""",
         html=True,
       )
-      # remove csrf token before checking
-      content = response.content.decode("utf-8")
-      cleaned_content = re.sub(
-        r'<input type="hidden" name="csrfmiddlewaretoken" value="[^"]+">',
-        "",
-        content,
-      )
-      # print(cleaned_content)
-      self.assertInHTML(
-        f"""
-<form id="add-member-form" method="post" action="{reverse("chat:add_member_to_private_room", args=[self.room.slug])}">
-  <select id="member-select" name="member-id" style="width: 300px;"></select>
-  <button class="button" type="submit" disabled="true" id="add-member-button">
-    {icon("new-member")}{_("Add member to the room")}
-  </button>
-</form>""",
-        cleaned_content,
-      )
+      self.assertContains(response, self._search_form_content(), html=True)
     # now, select a random member
     second_member = random.choice(self.created_members)
     # then list the members
@@ -475,3 +492,125 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     )
     self.assertContainsMessage(response, "error", _("You are not an admin of this private room"))
     self.assertTemplateUsed(response, "chat/chat_rooms.html")
+
+  def test_list_private_room_members_not_member(self):
+    member = self.created_members[0]
+    self.client.login(username=member.username, password=member.password)
+    response = self.client.get(reverse("chat:private_room_members", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(response, "error", _("You are not a member of this private room"))
+
+  def test_add_member_to_private_room_invalid_method(self):
+    with self.assertRaises(ValidationError):
+      self.client.get(reverse("chat:add_member_to_private_room", args=[self.room.slug]))
+
+  def test_add_member_to_private_room_already_member(self):
+    member = self.created_members[0]
+    self.room.followers.add(member)
+    response = self.client.post(
+      reverse("chat:add_member_to_private_room", args=[self.room.slug]), {"member-id": member.id}, follow=True
+    )
+    self.assertContainsMessage(response, "warning", _("This user is already a member of this private room"))
+
+  def test_remove_member_from_private_room_not_admin(self):
+    member = self.created_members[0]
+    self.room.followers.add(member)
+    other_member = self.created_members[1]
+    self.client.login(username=other_member.username, password=other_member.password)
+    response = self.client.post(reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.id]), follow=True)
+    self.assertContainsMessage(response, "error", _("You are not an admin of this private room"))
+
+  def test_remove_member_from_private_room_not_member(self):
+    member = self.created_members[0]
+    # member is NOT in room followers
+    response = self.client.post(reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.id]), follow=True)
+    self.assertContainsMessage(response, "warning", _("This user is not a member of this private room"))
+
+  def test_remove_member_who_is_admin(self):
+    member = self.created_members[0]
+    self.room.followers.add(member)
+    self.room.admins.add(member)
+    self.client.post(reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.id]), follow=True)
+    self.assertNotIn(member, self.room.followers.all())
+    self.assertNotIn(member, self.room.admins.all())
+
+  def test_leave_private_room_not_member(self):
+    member = self.created_members[0]
+    self.client.login(username=member.username, password=member.password)
+    response = self.client.post(reverse("chat:leave_private_room", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(response, "error", _("You are not a member of this private room"))
+
+  def test_list_private_room_admins_not_member(self):
+    member = self.created_members[0]
+    self.client.login(username=member.username, password=member.password)
+    response = self.client.get(reverse("chat:private_room_admins", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(response, "error", _("You are not a member of this private room"))
+
+  def test_add_admin_to_private_room_invalid_method(self):
+    # This hits line 294 raise ValidationError
+    with self.assertRaises(ValidationError):
+      self.client.get(reverse("chat:add_admin_to_private_room", args=[self.room.slug]))
+
+  def test_add_admin_to_private_room_already_admin(self):
+    response = self.client.post(
+      reverse("chat:add_admin_to_private_room", args=[self.room.slug]), {"member-id": self.member.id}, follow=True
+    )
+    self.assertContainsMessage(response, "warning", _("This user is already a member of this private room"))
+
+  def test_remove_admin_from_private_room(self):
+    # Permission check
+    other_member = self.created_members[0]
+    self.room.followers.add(other_member)
+    self.client.login(username=other_member.username, password=other_member.password)
+    response = self.client.post(
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, self.member.id]), follow=True
+    )
+    self.assertContainsMessage(response, "error", _("You are not an admin of this private room"))
+
+    # Success case (2 admins)
+    self.client.login(username=self.member.username, password=self.member.password)
+    self.room.followers.add(other_member)
+    self.room.admins.add(other_member)
+    response = self.client.post(
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, other_member.id]), follow=True
+    )
+    self.assertIn(other_member, self.room.followers.all())
+    self.assertNotIn(other_member, self.room.admins.all())
+
+    # Failure case (not an admin)
+    response = self.client.post(
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, other_member.id]), follow=True
+    )
+    self.assertContainsMessage(response, "warning", _("This member is not an admin of this private room"))
+
+    # Failure case (only one admin)
+    response = self.client.post(
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, self.member.id]), follow=True
+    )
+    self.assertContainsMessage(
+      response,
+      "error",
+      _("There must be at least one admin in a private room. Please add another one before removing this one."),
+    )
+
+  def test_leave_private_room_admins(self):
+    # Permission check
+    other_member = self.created_members[0]
+    self.room.followers.add(other_member)
+    self.client.login(username=other_member.username, password=other_member.password)
+    response = self.client.post(reverse("chat:leave_private_room_admins", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(response, "error", _("You are not an admin of this private room"))
+
+    # Failure case (only one admin)
+    self.client.login(username=self.member.username, password=self.member.password)
+    response = self.client.post(reverse("chat:leave_private_room_admins", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(
+      response,
+      "error",
+      _("There must be at least one admin in a private room. Please add another one before removing yourself."),
+    )
+
+    # Success case
+    self.room.admins.add(other_member)
+    response = self.client.post(reverse("chat:leave_private_room_admins", args=[self.room.slug]), follow=True)
+    self.assertContainsMessage(response, "success", _("You have been removed from the admins of this private room."))
+    self.assertNotIn(self.member, self.room.admins.all())

@@ -1,32 +1,28 @@
 from django.conf import settings
-from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import generic
 from django.db import transaction
-from django.http import HttpResponseBadRequest, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
+from django_htmx.http import HttpResponseClientRedirect
 from django.utils.translation import gettext as _
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.exceptions import RequestDataTooBig
 from cm_main.utils import (
   PageOutOfBounds,
   Paginator,
-  assert_request_is_ajax,
   check_edit_permission,
+  confirm_delete_modal,
 )
 from forum.views.views_follow import (
-  check_followers_on_message,
   check_followers_on_new_post,
 )
 from ..models import Post, Message
-from ..forms import MessageForm, PostForm, CommentForm
+from ..forms import MessageForm, PostForm
 from members.models import Member
 
 
-class PostsListView(LoginRequiredMixin, generic.ListView):
+class PostsListView(generic.ListView):
   model = Post
 
   def get(self, request, page=1):
@@ -34,7 +30,7 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
       Post.objects.select_related("first_message")
       .annotate(num_messages=Count("message"))
       .all()
-      .order_by("-first_message__date")
+      .order_by("-first_message__created")
     )
     try:
       page = Paginator.get_page(
@@ -49,20 +45,22 @@ class PostsListView(LoginRequiredMixin, generic.ListView):
       return redirect(exc.redirect_to)
 
 
-class PostDisplayView(LoginRequiredMixin, generic.DetailView):
+class PostDisplayView(generic.DetailView):
   model = Post
 
   def get(self, request, pk, page_num=1):
-    post_id = pk
-    post = get_object_or_404(Post, pk=post_id)
-    replies = Message.objects.filter(post=post_id, first_of_post=None).all()
+    try:
+      post = Post.objects.select_related("first_message").get(pk=pk)
+    except Post.DoesNotExist:
+      return HttpResponseNotFound()
+    replies = Message.objects.filter(post=post, first_of_post=None).all()
     try:
       page = Paginator.get_page(
         request,
         object_list=replies,
         page_num=page_num,
         reverse_link="forum:display_page",
-        compute_link=lambda page_num: reverse("forum:display_page", args=[post_id, page_num]),
+        compute_link=lambda page_num: reverse("forum:display_page", args=[pk, page_num]),
         default_page_size=settings.DEFAULT_POSTS_PER_PAGE,
       )
       return render(
@@ -72,18 +70,17 @@ class PostDisplayView(LoginRequiredMixin, generic.DetailView):
           "page": page,
           "nreplies": replies.count(),
           "post": post,
-          "comment_form": CommentForm(),
-          "reply_form": MessageForm(),
+          # "comment_form": CommentForm(),
+          # "reply_form": MessageForm(),
         },
       )
     except PageOutOfBounds as exc:
       return redirect(exc.redirect_to)
 
 
-class PostCreateView(LoginRequiredMixin, generic.CreateView):
+class PostCreateView(generic.CreateView):
   model = Post
 
-  @csrf_exempt
   def dispatch(self, request, *args, **kwargs):
     try:
       return super().dispatch(request, *args, **kwargs)
@@ -130,11 +127,10 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
     )
 
 
-class PostEditView(LoginRequiredMixin, generic.UpdateView):
+class PostEditView(generic.UpdateView):
   model = Post
   form_class = PostForm
 
-  @csrf_exempt
   def dispatch(self, request, *args, **kwargs):
     try:
       return super().dispatch(request, *args, **kwargs)
@@ -175,46 +171,15 @@ class PostEditView(LoginRequiredMixin, generic.UpdateView):
     )
 
 
-@login_required
 def delete_post(request, pk):
   post = get_object_or_404(Post, pk=pk)
-  check_edit_permission(request, post.first_message.author)
-  post.delete()
-  return redirect("forum:list")
-
-
-@login_required
-def add_reply(request, pk):
-  replyForm = MessageForm(request.POST)
-  replyForm.instance.post_id = pk
-  replyForm.instance.author_id = request.user.id
-  reply = replyForm.save()
-  check_followers_on_message(request, reply)
-  return redirect(reverse("forum:display", args=[pk]))
-
-
-@login_required
-def edit_reply(request, reply):
-  assert_request_is_ajax(request)
-  reply = get_object_or_404(Message, pk=reply)
-  check_edit_permission(request, reply.author)
-  form = MessageForm(request.POST, instance=reply)
-  if form.is_valid():
-    replyobj = form.save()
-    return JsonResponse({"reply_id": replyobj.id, "reply_str": replyobj.content}, status=200)
-  else:
-    errors = form.errors.as_json()
-    return JsonResponse({"errors": errors}, status=400)
-
-
-@csrf_exempt
-@login_required
-def delete_reply(request, reply):
-  assert_request_is_ajax(request)
-  reply = get_object_or_404(Message, pk=reply)
-  check_edit_permission(request, reply.author)
-  if Post.objects.filter(first_message=reply).exists():
-    raise ValidationError(_("Can't delete the first message of a thread!"))
-  id = reply.id
-  reply.delete()
-  return JsonResponse({"reply_id": id}, status=200)
+  if request.method == "POST":
+    check_edit_permission(request, post.first_message.author)
+    post.delete()
+    return HttpResponseClientRedirect(reverse("forum:list"))
+  return confirm_delete_modal(
+    request,
+    _("Delete post"),
+    _('Are you sure you want to delete "%(post)s" and all associated replies and comments?') % {"post": post.title},
+    expected_value=post.title,
+  )

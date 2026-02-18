@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Case, When, Value, BooleanField
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
+from asgiref.sync import sync_to_async
 from enum import Enum
 
 from members.models import Member
@@ -14,11 +15,11 @@ class ChatRoomManager(models.Manager):
   def private(self):
     return self.filter(privatechatroom__isnull=False)
 
-  def apublic(self):
-    return self.afilter(privatechatroom__isnull=True)
+  async def apublic(self):
+    return await self.afilter(privatechatroom__isnull=True)
 
-  def aprivate(self):
-    return self.afilter(privatechatroom__isnull=False)
+  async def aprivate(self):
+    return await self.afilter(privatechatroom__isnull=False)
 
 
 class ChatRoom(models.Model):
@@ -50,18 +51,35 @@ class ChatRoom(models.Model):
     self.full_clean()
     super().save(*args, **kwargs)
 
+  @property
   def first_message(self):
     return self.chatmessage_set.first()
 
+  async def afirst_message(self):
+    return await sync_to_async(self.first_message)()
+
+  @property
   def owner(self):
-    first_message = self.first_message()
+    first_message = self.first_message
     return first_message.member if first_message else None
 
+  async def aowner(self):
+    first_message = await self.chatmessage_set.afirst()
+    return await Member.objects.aget(pk=first_message.member_id) if first_message else None
+
+  @property
   def last_message(self):
     return self.chatmessage_set.last()
 
+  async def alast_message(self):
+    return await sync_to_async(self.last_message)()
+
+  @property
   def is_public(self):
     return not hasattr(self, "privatechatroom")
+
+  async def ais_public(self):
+    return await sync_to_async(self.is_public)()
 
   @classmethod
   def FlaggedRooms(cls, *filters):

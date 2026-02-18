@@ -2,7 +2,6 @@ import logging
 
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
@@ -13,7 +12,6 @@ from ..models import Member
 logger = logging.getLogger(__name__)
 
 
-@login_required
 def activate_member(request, pk):
   """activate the member with id pk"""
   member = get_object_or_404(Member, pk=pk)

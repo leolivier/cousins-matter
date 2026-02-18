@@ -2,7 +2,6 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.db.models import Count, OuterRef, Subquery
 from django.shortcuts import get_object_or_404, redirect, render
@@ -18,7 +17,6 @@ from urllib.parse import unquote
 logger = logging.getLogger(__name__)
 
 
-@login_required
 def list_chat_rooms(request, page_num=1, private=False):
   """
   Renders a page displaying a list of chat rooms (public or private and only the ones the user is
@@ -77,7 +75,6 @@ def list_chat_rooms(request, page_num=1, private=False):
     return redirect(exc.redirect_to)
 
 
-@login_required
 def create_chat_room(request, private=False):
   """
   Creates a new public or private chat room with the given name for the authenticated user.
@@ -95,7 +92,8 @@ def create_chat_room(request, private=False):
       ValidationError: If the room name is invalid.
 
   """
-  room_name = unquote(request.GET["name"])
+  # print("create_chat_room", request.POST)
+  room_name = unquote(request.POST["name"])
   room_class = PrivateChatRoom if private else ChatRoom
   try:
     new_room, created = room_class.objects.get_or_create(name=room_name)
@@ -117,9 +115,9 @@ def create_chat_room(request, private=False):
         logger.debug("public room created, checking followers")
         followers.check_followers(request, new_room, request.user, room_url)
     else:
-      if not private and not new_room.is_public():
+      if not private and not new_room.is_public:
         raise ValidationError(_("A private room with almost the same name already exists: %s") % new_room.name)
-      elif private and new_room.is_public():
+      elif private and new_room.is_public:
         raise ValidationError(_("A public room with almost the same name already exists: %s") % new_room.name)
     return redirect(room_url)
   except ValidationError as ve:
@@ -139,7 +137,6 @@ def create_chat_room(request, private=False):
     return redirect(reverse("chat:private_chat_rooms"))
 
 
-@login_required
 def display_chat_room(request, room_slug, private=False, page_num=None):
   """
   View function for displaying a chat room. When private is True, it displays a private chat room.

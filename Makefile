@@ -11,12 +11,12 @@ help h:
 	@echo "  ps [c=container_name]: List the running container(s)"
 	@echo "  logs [c=container_name]: Show the logs of the application or the container"
 	@echo "  stop [c=container_name]: Stop the application or the container"
-	@echo "  mkmsg d=directory: cd to \"directory\" and make messages"
-	@echo "  cpmsg d=directory: cd to \"directory\" and compile messages"
+	@echo "  mkmsg a=application: cd to \"application\" and make messages"
+	@echo "  cpmsg a=application: cd to \"application\" and compile messages"
 	@echo "  mkmig: create a migration"
 	@echo "  mig: migrate the database"
 	@echo "  test [t=test_name]: run test(s)"
-	@echo "  cover [t=test_name]: run test(s) with coverage"
+	@echo "  cover [a=application] [co=coverage_options] [to=test_options]: run test(s) with coverage. Default is all applications. If an application is given, the coverage result is stored in .coverage.<application>."
 
 run:
 	POSTGRES_HOST=localhost	REDIS_HOST=localhost ./manage.py runserver
@@ -43,10 +43,10 @@ stop:
 	docker compose stop $(c)
 
 cpmsg:
-	cd "$(d)" && ../manage.py compilemessages
+	cd "$(a)" && ../manage.py compilemessages
 
 mkmsg:
-	cd "$(d)" && ../manage.py makemessages -a
+	cd "$(a)" && ../manage.py makemessages -a
 
 clean:
 	docker compose down --volumes
@@ -55,12 +55,14 @@ test:
 	POSTGRES_HOST=localhost REDIS_HOST=localhost ./manage.py test $(t) $(o)
 
 cover:
-	if [ -z "$(t)" ]; then \
-		POSTGRES_HOST=localhost REDIS_HOST=localhost coverage run --source="." ./manage.py test $(o); \
+	if [ -z "$(a)" ]; then \
+	  df=.coverage; \
+		POSTGRES_HOST=localhost REDIS_HOST=localhost coverage run --source="." $(co) ./manage.py test $(to); \
 	else \
-		POSTGRES_HOST=localhost REDIS_HOST=localhost coverage run --source="$(t)" ./manage.py test $(t) $(o); \
-	fi
-	coverage report --sort=cover --skip-covered -m --fail-under=80 --omit='scripts/*,manage.py,*/asgi.py,*.wsgi.py,*/views_test.py'
+	  df=.coverage.$(a); \
+		POSTGRES_HOST=localhost REDIS_HOST=localhost coverage run --source="$(a)" $(co) ./manage.py test $(to); \
+	fi; \
+	coverage report --sort=cover --skip-covered -m --fail-under=80 --omit='scripts/*,manage.py,cousinsmatter/asgi.py,cousinsmatter/wsgi.py,cousinsmatter/htmlvalidator.py,*/views_test.py,*/migrations/*,*/tests/*' --data-file=$(df)
 
 mig:
 	POSTGRES_HOST=localhost REDIS_HOST=localhost ./manage.py migrate

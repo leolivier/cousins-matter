@@ -24,7 +24,7 @@ def add_reply(request, pk):
     response = render(request, "forum/post_detail.html#forum_reply", {"reply": reply, "edit_reply": False}, status=200)
     return trigger_client_event(response, "updateReplyCount", {"delta": 1})
   else:
-    errors = replyForm.errors.as_json()
+    errors = replyForm.errors.as_text()
     messages.error(request, _("Errors: ") + errors)
     return HttpResponseClientRefresh()
 

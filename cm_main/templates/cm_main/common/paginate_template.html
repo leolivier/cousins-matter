@@ -2,12 +2,18 @@
 <script>
 	function goto_page_url(url, fullscreen=false) {
 		new_location = url
+		query_string = '{{request.META.QUERY_STRING|escapejs}}'
+		// alert('qs='+query_string)
 		next_par = '?'
-		if (fullscreen) {
-			new_location += '?fullscreen=true'
+		if (query_string) {
+			new_location += '?' + query_string
 			next_par = '&'
 		}
-		new_location += `{%if not no_per_page%}${next_par}page_size=${$('#page_size').val()}{%endif%}`
+		if (fullscreen) {
+			new_location += `${next_par}fullscreen=true`
+			next_par = '&'
+		}
+		// new_location += `{%if not no_per_page%}${next_par}page_size=${$('#page_size').val()}{%endif%}`
 		window.location = new_location
 	}
 	function get_prev_page_url() {
@@ -24,6 +30,11 @@
 	<div class="pagination-previous" style="box-shadow: unset; border-style: hidden;">
 		<label class="mr-3">{% translate "Items per page:" %}</label>
 		<form>
+			{% for key, value in request.GET.items %}
+				{% if key != 'page_size' %}
+					<input type="hidden" name="{{key}}" value="{{value}}">
+				{% endif %}
+			{% endfor %}
 			<div class="select">
 				<select id="page_size" name="page_size" onchange="this.form.submit()">
 				{%for per_page in possible_per_pages %}

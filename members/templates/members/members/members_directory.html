@@ -20,7 +20,7 @@
 		</div>
 	</div>
   {% if page.object_list.count > 0 %}
-	{%paginate page %}
+	{% paginate page request %}
 	<hr/>
 
 	<section class="section printable">
@@ -47,7 +47,7 @@
 			{% endfor %}
 		</table>
 	</section>
-	{% if page.num_pages > 1 %}{%paginate page%}{% endif %}
+	{% if page.num_pages > 1 %}{% paginate page request %}{% endif %}
 	{% else %}
 	<div>
 		<p>{% translate "No members found" %}.</p>

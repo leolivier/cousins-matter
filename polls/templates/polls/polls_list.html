@@ -37,7 +37,7 @@
       <a {%if kind == "closed"%}class="is-active"{%endif%} href="{% url 'polls:closed_event_planners' %}">{%trans "Closed"%}</a>
     {%endif%}
     </div>
-    {# <div class="panel-block is-flex is-align-items-center is-justify-content-center">{%paginate page%}</div> #}
+    {# <div class="panel-block is-flex is-align-items-center is-justify-content-center">{% paginate page request %}</div> #}
     {% for poll in polls_list %}
     <div class="panel-block">
       {%if tab == "polls"%}

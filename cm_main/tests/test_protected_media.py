@@ -1,13 +1,10 @@
 from pathlib import Path
 
-# import shutil
 import urllib.parse
 
-# from django.conf import settings
 from django.urls import reverse
 from django.http import StreamingHttpResponse
 
-# from django.core.files.storage import FileSystemStorage, default_storage
 from django.core.files.storage import default_storage
 
 from cm_main.utils import (

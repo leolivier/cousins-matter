@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="level">
-        {%paginate page%}
+        {% paginate page request %}
     </div>
 
     <table class="table is-fullwidth is-striped is-hoverable">
@@ -94,7 +94,7 @@
     </table>
     {% if page.num_pages > 1 %}
     <div class="level">
-        {%paginate page%}
+        {% paginate page request %}
     </div>
     {% endif %}
 </div>

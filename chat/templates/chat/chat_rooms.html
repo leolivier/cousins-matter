@@ -45,7 +45,7 @@
 			</form>
 		</div>
 		<div class="panel-block">
-			<span class="control">{%paginate page%}</span>
+			<span class="control">{% paginate page request %}</span>
 		</div>
 	{% for room in page.object_list %}
 
@@ -121,7 +121,7 @@
 	{%endfor%}
 	{% if page.num_pages > 1 %}
 		<div class="panel-block">
-			<span class="control">{%paginate page%}</span>
+			<span class="control">{% paginate page request %}</span>
 		</div>
 	{% endif %}
 	</div>

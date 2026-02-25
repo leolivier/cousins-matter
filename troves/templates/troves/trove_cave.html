@@ -37,7 +37,7 @@
       </div>
 		</div>
 		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
-			{%paginate page%}
+			{% paginate page request %}
 		</div>
     {% for category, troves in page.object_list.items %}
     <div class="panel-block is-flex is-align-items-center is-justify-content-center">
@@ -71,7 +71,7 @@
     {% endfor %}
     {% if page.num_pages > 1 %}
 		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
-			{%paginate page%}
+			{% paginate page request %}
 		</div>
     {% endif %}
   </div>

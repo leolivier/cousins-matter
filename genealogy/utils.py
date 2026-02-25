@@ -1,5 +1,7 @@
 import logging
 import uuid
+import os
+import re
 from datetime import datetime
 from gedcom.element.individual import IndividualElement
 from gedcom.element.family import FamilyElement
@@ -17,8 +19,65 @@ class GedcomParser:
   def __init__(self, file_path):
     self.file_path = file_path
     self.gedcom = Parser()
-    self.gedcom.parse_file(self.file_path)
+
+    # Detect encoding and transcode to UTF-8 if necessary
+    # python-gedcom library hardcodes UTF-8 decoding
+    transcoded_path = self._ensure_utf8(file_path)
+
+    try:
+      self.gedcom.parse_file(transcoded_path)
+    finally:
+      if transcoded_path != file_path:
+        os.remove(transcoded_path)
+
     self.person_map = {}  # Map GEDCOM ID to Person object
+
+  def _ensure_utf8(self, file_path):
+    """
+    Check if the GEDCOM file is UTF-8. If not, transcode it to a temporary UTF-8 file.
+    """
+    import os
+    import tempfile
+
+    with open(file_path, "rb") as f:
+      content = f.read()
+
+    # Try to decode as UTF-8 (with BOM)
+    try:
+      content.decode("utf-8-sig")
+      return file_path
+    except UnicodeDecodeError:
+      pass
+
+    # Detect encoding from 1 CHAR tag
+    encoding = "utf-8"  # fallback
+    # GEDCOM CHAR tag is usually near the top
+    match = re.search(rb"1 CHAR\s+([^\r\n]+)", content)
+    if match:
+      gedcom_encoding = match.group(1).decode("ascii", errors="ignore").strip().upper()
+      # Map GEDCOM encoding names to Python codec names
+      encoding_map = {
+        "ANSEL": "latin1",  # ANSEL is not natively supported by Python, latin1 is a common fallback
+        "ANSI": "latin1",
+        "ASCII": "ascii",
+        "UTF-8": "utf-8",
+        "UNICODE": "utf-16",
+        "IBMPC": "cp437",
+        "ISO-8859-1": "iso-8859-1",
+        "WINDOWS-1252": "cp1252",
+      }
+      encoding = encoding_map.get(gedcom_encoding, "latin1")
+
+    # Transcode to UTF-8
+    try:
+      decoded_content = content.decode(encoding, errors="replace")
+      fd, temp_path = tempfile.mkstemp(suffix=".ged", prefix="transcoded_")
+      with os.fdopen(fd, "w", encoding="utf-8") as f:
+        f.write(decoded_content)
+      return temp_path
+    except Exception as e:
+      logger.error(f"Failed to transcode GEDCOM file {file_path}: {e}")
+      return file_path
 
   def parse(self):
     root_child_elements = self.gedcom.get_root_child_elements()

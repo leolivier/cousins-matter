@@ -31,6 +31,23 @@ class GedcomViewsTest(MemberTestCase):
     self.assertEqual(len(messages), 1)
     self.assertEqual(str(messages[0]), _("GEDCOM imported successfully."))
 
+  def test_import_gedcom_post_iso8859_1_success(self):
+    # CRLF and non-UTF-8 character (ö in ISO-8859-1 is 0xf6)
+    gedcom_content = b"0 HEAD\r\n1 CHAR ISO-8859-1\r\n0 @I1@ INDI\r\n1 NAME J\xf6rg /Doe/\r\n0 TRLR\r\n"
+    gedcom_file = SimpleUploadedFile("test_iso.ged", gedcom_content)
+
+    # We don't mock GedcomParser here because we want to test the actual transcoding logic
+    # But we might need to mock Person.objects.update_or_create to avoid DB side effects if we want a pure unit test
+    # However, this is a view test, so let's see if we can run it with a real DB (TestCase works fine)
+    response = self.client.post(reverse("genealogy:import_gedcom"), {"gedcom_file": gedcom_file})
+
+    self.assertRedirects(response, reverse("genealogy:dashboard"))
+
+    # Check success message
+    messages = list(get_messages(response.wsgi_request))
+    self.assertEqual(len(messages), 1)
+    self.assertEqual(str(messages[0]), _("GEDCOM imported successfully."))
+
   def test_import_gedcom_post_invalid_form(self):
     response = self.client.post(reverse("genealogy:import_gedcom"), {})
     self.assertEqual(response.status_code, 200)

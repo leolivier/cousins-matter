@@ -189,7 +189,7 @@ $(document).ready(()=>{
 			{%endwith%}
 			</div>
 			<div class="panel-block">
-				<span class="control">{%paginate page%}</span>
+				<span class="control">{% paginate page request %}</span>
 			</div>
 			<div  id="chat-messages" class="has-background-light">
 			{%for msg in chat_messages %}
@@ -263,7 +263,7 @@ $(document).ready(()=>{
 		</div>
 		{% if page.num_pages > 1 %}
 			<div class="panel-block">
-				<span class="control">{%paginate page%}</span>
+				<span class="control">{% paginate page request %}</span>
 			</div>
 		{% endif %}
 		<div class="panel-block">

@@ -92,7 +92,7 @@
 <hr>
 <div class="container px-2">
 	{%if nreplies > 0 %}
-		{%paginate page%}
+		{% paginate page request %}
 	{%endif%}
 
 	{%for reply in page.object_list %}

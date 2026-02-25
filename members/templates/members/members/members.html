@@ -78,7 +78,7 @@
   <div id="members-content-container">
   {% partialdef members_content inline %}
   {% if members %}
-    {% if page %}{% paginate page %}{% endif %}
+    {% if page %}{% paginate page request %}{% endif %}
     <div class="grid mx-3 is-col-min-8" id="members-grid">
       {% partialdef members_list inline %}
       {% for member in members %}
@@ -96,7 +96,7 @@
       {% endfor %}
       {% endpartialdef %}
     </div>
-    {% if page and page.num_pages > 1 %}{% paginate page %}{% endif %}
+    {% if page and page.num_pages > 1 %}{% paginate page request %}{% endif %}
   {% else %}
     <div>
       <p>{% translate "No members found" %}.</p>

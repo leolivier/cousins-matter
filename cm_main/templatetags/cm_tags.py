@@ -125,7 +125,7 @@ def do_title(parser, token):
 
 
 @register.inclusion_tag("cm_main/common/paginate_template.html")
-def paginate(page, no_per_page=False):
+def paginate(page, request=None, no_per_page=False):
   # print("page=", page)
   return {
     "page_urls": page.page_links,
@@ -139,6 +139,7 @@ def paginate(page, no_per_page=False):
     "page_size": page.paginator.per_page,
     "num_pages": page.num_pages,
     "no_per_page": no_per_page,
+    "request": request,
   }
 
 

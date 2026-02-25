@@ -1119,8 +1119,8 @@ msgid "Invite Member"
 msgstr "Convidar Membro"
 
 #: templates/members/members/members.html:41
-msgid "Begin typing to search members..."
-msgstr "Comece a digitar para buscar membros..."
+msgid "Search...."
+msgstr "Busca..."
 
 #: templates/members/members/members.html:58
 msgid "Sort by"

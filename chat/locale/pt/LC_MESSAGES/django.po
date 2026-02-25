@@ -108,8 +108,8 @@ msgid "Room Admins"
 msgstr "Administradores de salas"
 
 #: templates/chat/private/add-member.html:10
-msgid "Begin typing to search members..."
-msgstr "Comece a digitar para buscar membros..."
+msgid "Search...."
+msgstr "Busca..."
 
 #: templates/chat/private/add-member.html:81
 msgid "No results found"

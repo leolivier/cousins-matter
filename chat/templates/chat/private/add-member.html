@@ -7,7 +7,7 @@
             <span class="htmx-indicator">{%icon "loading" %}</span>
             <input class="input" type="search"
                    name="q"
-                   placeholder="{%trans 'Begin typing to search members...' %}"
+                   placeholder="{%trans 'Search....' %}"
                    hx-get="{{search_url}}"
                    hx-vals='{"render_with": "chat/private/add-member.html#member_search_results", "render_empty_query": "false"}'
                    hx-trigger="input[this.value.length == 0 || this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= 3)]"

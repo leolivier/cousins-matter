@@ -221,7 +221,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
             </span>
             <input class="input" type="search"
                    name="q"
-                   placeholder="{_("Begin typing to search members...")}"
+                   placeholder="{_("Search....")}"
                    hx-get="{reverse("members:search_members")}"
                    hx-vals='{json.dumps(vals)}'
                    hx-trigger="{trigger}"

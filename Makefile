@@ -1,8 +1,9 @@
-.PHONY: run cpmsg mkmsg up down clean ps logs stop up4run help h u4r test mig mkmig cover minify
+.PHONY: build run cpmsg mkmsg up down clean ps logs stop up4run help h u4r test mig mkmig cover minify
 
 help h:
 	@echo "Available targets:"
 	@echo "  help, h: Show this help"
+	@echo "  build [t=tag]: Build the docker image. Default tag is local"
 	@echo "  run: Run the application outside of docker (supposes postgres, redis and qcluster are running)"
 	@echo "  up [c=container_name]: Start the application with docker"
 	@echo "  up4run, u4r: Start the docker containers for postgres, redis and qcluster, so you can use run afterwards"
@@ -18,6 +19,11 @@ help h:
 	@echo "  test [t=test_name]: run test(s)"
 	@echo "  cover [a=application] [co=coverage_options] [to=test_options]: run test(s) with coverage. Default is all applications. If an application is given, the coverage result is stored in .coverage.<application>."
 	@echo "  minify [a=application]: minify the css and js files of an application. Default is all applications."
+
+
+build:
+	t=$(if $(t),$(t),local); \
+	docker build -t cousins-matter:$$t .
 
 run:
 	POSTGRES_HOST=localhost	REDIS_HOST=localhost ./manage.py runserver

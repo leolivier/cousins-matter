@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.template.defaultfilters import slugify
@@ -103,12 +104,37 @@ class Photo(models.Model):
   def save(self, *args, **kwargs):
     self.full_clean()
 
+    is_new = self.pk is None
+    old_gallery_id = None
+    old_image_name = None
+    old_thumbnail_name = None
+    if not is_new:
+      old_photo = Photo.objects.get(pk=self.pk)
+      old_gallery_id = old_photo.gallery_id
+      old_image_name = old_photo.image.name if old_photo.image else None
+      old_thumbnail_name = old_photo.thumbnail.name if old_photo.thumbnail else None
+
     # need to save first to upload the image
     super().save(*args, **kwargs)
+
+    gallery_changed = not is_new and old_gallery_id != self.gallery_id
+
+    if gallery_changed and self.image and old_image_name:
+      new_image_name = photo_path(self, os.path.basename(old_image_name))
+      if old_image_name != new_image_name:
+        content = self.image.storage.open(old_image_name).read()
+        self.image.storage.save(new_image_name, ContentFile(content))
+        self.image.name = new_image_name
+        super().save(force_update=True, update_fields=["image"])
+        self.image.storage.delete(old_image_name)
 
     try:
       self.thumbnail = create_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
       super().save(force_update=True, update_fields=["thumbnail"])
+
+      if gallery_changed and old_thumbnail_name:
+        if not self.thumbnail or self.thumbnail.name != old_thumbnail_name:
+          self.image.storage.delete(old_thumbnail_name)
 
     except Exception as e:
       # issue #120: if any exception during the thumbnail creation process, remove the photo from the database

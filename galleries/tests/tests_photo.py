@@ -325,6 +325,39 @@ class PhotoEditViewTest(PhotoTestsBase):
     unchanged_photo = Photo.objects.get(pk=self.photo.id)
     self.assertEqual(unchanged_photo.name, self.name)
 
+  def test_edit_photo_change_gallery_moves_files(self):
+    """Tests editing a photo and changing its gallery moves the files."""
+    self.photo.uploaded_by = self.member
+    self.photo.save()
+
+    old_image_name = self.photo.image.name
+    old_thumbnail_name = self.photo.thumbnail.name
+    storage = self.photo.image.storage
+
+    self.assertTrue(storage.exists(old_image_name))
+    if old_thumbnail_name:
+      self.assertTrue(storage.exists(old_thumbnail_name))
+
+    self.update_data["gallery"] = self.sub_gallery.id
+
+    response = self.client.post(self.url, self.update_data, follow=True)
+    self.assertRedirects(response, reverse("galleries:photo", kwargs={"pk": self.photo.id}), 302, 200)
+
+    updated_photo = Photo.objects.get(pk=self.photo.id)
+    self.assertEqual(updated_photo.gallery, self.sub_gallery)
+
+    new_image_name = updated_photo.image.name
+    new_thumbnail_name = updated_photo.thumbnail.name
+
+    self.assertNotEqual(old_image_name, new_image_name)
+    self.assertTrue(storage.exists(new_image_name))
+    self.assertFalse(storage.exists(old_image_name))
+
+    if new_thumbnail_name:
+      self.assertNotEqual(old_thumbnail_name, new_thumbnail_name)
+      self.assertTrue(storage.exists(new_thumbnail_name))
+      self.assertFalse(storage.exists(old_thumbnail_name))
+
   def test_edit_nonexistent_photo(self):
     """Tests editing a photo that doesn't exist."""
     url = reverse("galleries:edit_photo", args=[99999])

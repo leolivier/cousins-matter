@@ -474,4 +474,10 @@ Q_CLUSTER = {
   "sync": env.bool("Q_SYNC", False),  # set to True in development
 }
 
+# Number of generations to show in the family chart
+FAMILY_CHART_GENERATIONS = env.int("FAMILY_CHART_GENERATIONS", default=4)
+
+# Default root person ID to show in the family chart if none is specified
+FAMILY_CHART_ROOT_PERSON_ID = env.int("FAMILY_CHART_ROOT_PERSON_ID", default=None)
+
 GEDCOM_FILE = env.str("GEDCOM_FILE", default="genealogy.ged")

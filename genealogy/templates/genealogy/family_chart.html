@@ -5,13 +5,26 @@
 	<script src="https://unpkg.com/d3@7"></script>
   <script type="module" src="https://unpkg.com/family-chart@0.9.0"></script>
   <link rel="stylesheet" href="https://unpkg.com/family-chart@0.9.0/dist/styles/family-chart.css">
-{% endblock %}
+	<style>
+		.f3 {
+			width:100%;
+			height:900px;
+			margin:auto;
+			background-color:rgb(33,33,33);
+			color:#fff;
+		}
+	</style>
+	{% endblock %}
 {% block genealogy_content %}
-<div id="FamilyChart" class="f3" style="width:100%;height:900px;margin:auto;background-color:rgb(33,33,33);color:#fff;"></div>
+<div id="FamilyChart" class="f3"></div>
 <script type="module">
 
-		const mainPersonId = '{{ main_person_id }}';
-    fetch("{% url 'genealogy:family_chart_data' %}")
+		const mainPersonId = '{{ main_person_id|default_if_none:"" }}';
+		let dataUrl = "{% url 'genealogy:family_chart_data' %}";
+		if (mainPersonId) {
+			dataUrl += `?main_person_id=${mainPersonId}`;
+		}
+    fetch(dataUrl)
         .then(response => response.json())
         .then(data => create(data))
         .catch(error => console.error('Error fetching tree data:', error));

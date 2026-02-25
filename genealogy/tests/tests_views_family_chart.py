@@ -80,7 +80,13 @@ class FamilyChartViewsTest(MemberTestCase):
     self.assertEqual(response.status_code, 200)
 
     # Verify cache is populated
-    cached_data = cache.get(CACHE_KEY_FAMILY_CHART_DATA)
+    cache_version = cache.get(CACHE_KEY_FAMILY_CHART_DATA)
+    self.assertIsNotNone(cache_version)
+
+    # We expect p1 to be the main person because p1 is Person.objects.first()
+    first_person_id = str(Person.objects.first().id)
+    specific_cache_key = f"{CACHE_KEY_FAMILY_CHART_DATA}_{first_person_id}_{cache_version}"
+    cached_data = cache.get(specific_cache_key)
     self.assertIsNotNone(cached_data)
     self.assertEqual(len(cached_data), Person.objects.count())
 
@@ -135,11 +141,48 @@ class FamilyChartViewsTest(MemberTestCase):
     p_none = Person.objects.create(first_name="None", last_name="Person", sex="")
 
     cache.clear()
-    response = self.client.get(reverse("genealogy:family_chart_data"))
+    response = self.client.get(reverse("genealogy:family_chart_data") + f"?main_person_id={p_other.id}")
     data = response.json()
 
     p_other_data = next(item for item in data if item["id"] == str(p_other.id))
     self.assertEqual(p_other_data["data"]["gender"], "O")
 
+    cache.clear()
+    response = self.client.get(reverse("genealogy:family_chart_data") + f"?main_person_id={p_none.id}")
+    data = response.json()
+
     p_none_data = next(item for item in data if item["id"] == str(p_none.id))
     self.assertEqual(p_none_data["data"]["gender"], "O")  # Default in view is 'O' for non-M/F
+
+  from django.test import override_settings
+
+  @override_settings(FAMILY_CHART_GENERATIONS=1)
+  def test_family_chart_generations_limit(self):
+    # Create a linear tree of 4 generations
+    p_g1 = Person.objects.create(first_name="Gen1", last_name="Test")
+    p_g2 = Person.objects.create(first_name="Gen2", last_name="Test")
+    f_1_2 = Family.objects.create(partner1=p_g1)
+    p_g2.child_of_family = f_1_2
+    p_g2.save()
+
+    p_g3 = Person.objects.create(first_name="Gen3", last_name="Test")
+    f_2_3 = Family.objects.create(partner1=p_g2)
+    p_g3.child_of_family = f_2_3
+    p_g3.save()
+
+    p_g4 = Person.objects.create(first_name="Gen4", last_name="Test")
+    f_3_4 = Family.objects.create(partner1=p_g3)
+    p_g4.child_of_family = f_3_4
+    p_g4.save()
+
+    cache.clear()
+    # Request tree for Gen2, with generation limit 1
+    # Should find Gen1 (parent, 1 up) and Gen3 (child, 1 down). Gen4 is 2 down, shouldn't be included.
+    response = self.client.get(reverse("genealogy:family_chart_data") + f"?main_person_id={p_g2.id}")
+    data = response.json()
+
+    returned_ids = [item["id"] for item in data]
+    self.assertIn(str(p_g1.id), returned_ids)
+    self.assertIn(str(p_g2.id), returned_ids)
+    self.assertIn(str(p_g3.id), returned_ids)
+    self.assertNotIn(str(p_g4.id), returned_ids)

@@ -223,10 +223,23 @@ class DeletePhotoViewTest(PhotoTestsBase):
     """Tests deleting a photo as the photo owner."""
     self.photo.uploaded_by = self.member
     self.photo.save()
+
+    image_name = self.photo.image.name
+    thumbnail_name = self.photo.thumbnail.name
+    storage = self.photo.image.storage
+
+    self.assertTrue(storage.exists(image_name))
+    if thumbnail_name:
+      self.assertTrue(storage.exists(thumbnail_name))
+
     response = self.client.post(self.url, follow=True)
+
     self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
     self.assertEqual(response.status_code, 200)
-    # self.assertContainsMessage(response, "success", _("Photo deleted"))
+
+    self.assertFalse(storage.exists(image_name))
+    if thumbnail_name:
+      self.assertFalse(storage.exists(thumbnail_name))
 
   def test_delete_photo_as_gallery_owner(self):
     """Tests deleting a photo as the gallery owner."""

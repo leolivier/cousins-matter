@@ -1,6 +1,8 @@
 import logging
 import os
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
@@ -113,14 +115,6 @@ class Photo(models.Model):
       self.delete()
       raise ValidationError(f"Error during saving photo: {e}")
 
-  def delete(self, *args, **kwargs):
-    # delete the image and the thumbnail if they exist
-    if self.image:
-      self.image.delete(False)
-    if self.thumbnail:
-      self.thumbnail.delete(False)
-    super().delete(*args, **kwargs)
-
 
 class Gallery(models.Model):
   name = models.CharField(_("Name"), max_length=70)
@@ -203,3 +197,15 @@ class Gallery(models.Model):
     for child in self.children.all():
       result.extend(child.rec_children_list())
     return result
+
+
+@receiver(post_delete, sender=Photo)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+  """
+  Deletes photo files from filesystem
+  when corresponding `Photo` object is deleted.
+  """
+  if getattr(instance, "image", None):
+    instance.image.delete(save=False)
+  if getattr(instance, "thumbnail", None):
+    instance.thumbnail.delete(save=False)

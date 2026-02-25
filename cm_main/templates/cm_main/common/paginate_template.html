@@ -3,7 +3,7 @@
 	function goto_page_url(url, fullscreen=false) {
 		new_location = url
 		query_string = '{{request.META.QUERY_STRING|escapejs}}'
-		alert('qs='+query_string)
+		// alert('qs='+query_string)
 		next_par = '?'
 		if (query_string) {
 			new_location += '?' + query_string

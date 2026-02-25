@@ -56,5 +56,5 @@ class GedcomImportForm(forms.Form):
     label=_("GEDCOM File"),
     help_text=_("Upload a .ged file to import your genealogy data."),
     required=True,
-    widget=forms.FileInput(attrs={'accept': '.ged'}),
+    widget=forms.FileInput(attrs={"accept": ".ged"}),
   )

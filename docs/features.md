@@ -53,6 +53,10 @@
 
 Basic CMS features: admins can create static HTML pages and publish them on the site. 
 The home page can also be configured this way as well as the privcay policy, the about pages... 
+Public pages (those which are shown from the Pages menu even if you are not logged in) can be created and published by any admin member. Their URL must start with '/publish/'
+Private pages (those which are shown from the Pages menu only if you are logged in) can be created and published by any admin member. Their URL must start with '/private/'
+Admin messages are a specific kind of page which is displayed to all connected members at the top of the site. Their URL must start with '/admin-message/'
+Other default specific pages can be modified by any admin member. They are displayed from the admin menu under "Edit pages" and they show respectively the home page when youre not connected (/home/unauthenticated/\<lang>), when you're connected (/home/authenticated/\<lang>), the privacy policy (/about/privacy-policy/\<lang>).
 
 ### Troves
 
@@ -78,3 +82,7 @@ As a sub module of the Poll module, any active member can create an event planni
 ### Classified ads
 
 Any active member can publish a classified ad that can be seen by all other members. If a memeber is interested in an ad, s.he can send a message to the ad publisher who will receive an email.
+
+### Genealogy
+
+Any active member can add people to the genealogy of the site. You can add people to the genealogy by typing their data in forms or by importing a GEDCOM file. You can export the genealogy in GEDCOM format. The genealogy can be displayed as a dynamic tree or as a lists of persons or families.

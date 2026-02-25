@@ -47,7 +47,17 @@ To do so, modify the FEATURES_FLAGS variable based on the contents of the .env.e
 
 The default value of FEATURES_FLAGS is:
 ```
-FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=True;show_chats=True;show_classified_ads=True;show_polls=True;show_event_planners=True;show_pages=True;show_treasures=True;show_privacy_policy=True;show_site_stats=True;show_import_members=True;show_export_members=True"`
+FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=True;show_public_chats=True;show_private_chats=True;show_classified_ads=True;show_polls=True;show_event_planners=True;show_pages=True;show_treasures=True;show_site_stats=True;show_export_members=True;show_change_language=True;show_genealogy=True"`
+```
+
+**WARNINGS:**
+
+1. The variable INCLUDE_BIRTHDAYS_IN_HOMEPAGE has been replaced by the feature flag show_birthdays_in_homepage, as shown above.
+2. The FEATURES_FLAGS must stay on one line in the .env file. All flags are separated by semicolons. If you set this variable in your .env file and a flag is not present in the list, it is considered false.
+    "show_export_members": True,
+    "show_change_language": True,
+    "show_genealogy": True,
+  },"`
 ```
 
 **WARNINGS:**
@@ -110,6 +120,12 @@ FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=
 ### Classified ads
 
 * `MAX_PHOTO_PER_AD`: Maximum number of photos per classified ad, default is 10
+
+### Genealogy
+
+* `FAMILY_CHART_GENERATIONS`: Number of generations to show up and down the center person in the family chart, default is 4
+* `FAMILY_CHART_ROOT_PERSON_ID`: Default root person ID to show in the family chart if none is specified, default is if the id of the first person in the database
+* `GEDCOM_FILE`: GEDCOM file to use for exporting genealogy, default is 'genealogy.ged'
 
 ## Log levels
 

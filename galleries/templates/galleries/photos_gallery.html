@@ -1,6 +1,20 @@
 {% load i18n cm_tags %}
 <div class="container px-2">
-	{% paginate page request %}
+	<div class="level is-mobile px-3 py-2">
+		<div class="level-left">
+			{% paginate page request %}
+		</div>
+		<div class="level-right">
+			<button id="slideshow-toggle" class="button is-ghost has-text-primary is-large"
+				title="{% trans 'Start slideshow' %}"
+				data-delay="{{settings.SLIDESHOW_DELAY}}"
+			>
+				<span class="icon is-large">
+					<i class="mdi mdi-play mdi-48px" id="slideshow-icon"></i>
+				</span>
+			</button>
+		</div>
+	</div>
 	<div class="grid image-gallery">
 		{% for photo in page.object_list %}
 		<div class="cell has-text-centered">

@@ -31,10 +31,11 @@
 
 ### Galleries
 
-* All active members can create galleries and add photos to them
+* All active members can create galleries and add photos and videos to them
 * Galleries can have sub galleries of any depth
-* Photos can be imported in bulk using zip files. Each folder in the zip file becomes a gallery. Updates are managed
+* Photos and videos can be imported in bulk using zip files. Each folder in the zip file becomes a gallery. Updates are managed
 * Gallery photo display is paginated
+* Photos and videos can be displayed in fullscreen mode and as a slideshow with a configurable delay
 
 ### Forum
 

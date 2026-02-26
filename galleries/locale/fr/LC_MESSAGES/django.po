@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-26 16:22+0100\n"
+"POT-Creation-Date: 2026-02-26 19:37+0100\n"
 "PO-Revision-Date: 2025-05-24 19:23+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -220,19 +220,26 @@ msgid "Create and add another one"
 msgstr "Créer et ajouter une autre"
 
 #: templates/galleries/photo_fullscreen.html:3
-#: templates/galleries/photo_fullscreen.html:3
 msgid "Close"
 msgstr "Fermer"
 
-#: templates/galleries/photo_fullscreen.html:8
+#: templates/galleries/photo_fullscreen.html:4
+msgid "Play/Pause slideshow"
+msgstr "Lecture/Pause du diaporama"
+
+#: templates/galleries/photo_fullscreen.html:14
 msgid "Detail"
 msgstr "Détail"
 
-#: templates/galleries/photos_gallery.html:16
+#: templates/galleries/photos_gallery.html:9
+msgid "Start slideshow"
+msgstr "Démarrer le diaporama"
+
+#: templates/galleries/photos_gallery.html:30
 msgid "Video"
 msgstr "Vidéo"
 
-#: tests/tests_photo.py:309 tests/tests_photo.py:319 views/views_photo.py:102
+#: tests/tests_photo.py:310 tests/tests_photo.py:320 views/views_photo.py:106
 msgid "Photo updated successfully"
 msgstr "Photo mise à jour avec succès"
 
@@ -282,28 +289,28 @@ msgstr ""
 "Es-tu sûr de vouloir supprimer \"%(object)s\" et toutes les photos et les "
 "sous-galeries qu'elle contient ?"
 
-#: views/views_photo.py:47
+#: views/views_photo.py:51
 msgid "Photo not found"
 msgstr "Photo non trouvée"
 
-#: views/views_photo.py:75
+#: views/views_photo.py:79
 msgid "Photo created"
 msgstr "Photo créée"
 
-#: views/views_photo.py:81
+#: views/views_photo.py:85
 #, python-format
 msgid "Error when creating this photo: %s."
 msgstr "Erreur lors de la création de cette photo: %s."
 
-#: views/views_photo.py:119
+#: views/views_photo.py:123
 msgid "Photo deleted"
 msgstr "Photo supprimée"
 
-#: views/views_photo.py:121
+#: views/views_photo.py:125
 msgid "Delete photo"
 msgstr "Supprimer la photo"
 
-#: views/views_photo.py:122
+#: views/views_photo.py:126
 #, python-format
 msgid "Are you sure you want to delete \"%(object)s\"?"
 msgstr "Es-tu sûr de vouloir supprimer \"%(object)s\"?"

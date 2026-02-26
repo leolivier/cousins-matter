@@ -482,3 +482,6 @@ FAMILY_CHART_GENERATIONS = env.int("FAMILY_CHART_GENERATIONS", default=4)
 FAMILY_CHART_ROOT_PERSON_ID = env.int("FAMILY_CHART_ROOT_PERSON_ID", default=None)
 
 GEDCOM_FILE = env.str("GEDCOM_FILE", default="genealogy.ged")
+
+# Slideshow settings
+SLIDESHOW_DELAY = env.int("SLIDESHOW_DELAY", default=5)

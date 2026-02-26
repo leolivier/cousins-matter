@@ -21,13 +21,17 @@ def get_next_prev_photo(pk, side):
     return Photo.objects.get(pk=pk)
 
   gallery_id = Photo.objects.only("gallery_id").get(pk=pk).gallery_id
-  photo = Photo.objects.filter(gallery=gallery_id).order_by("id")
+  photos = Photo.objects.filter(gallery=gallery_id).order_by("id")
 
   match side:
     case "prev":
-      photo = photo.filter(id__lt=pk).last()
+      photo = photos.filter(id__lt=pk).last()
+      if not photo:
+        photo = photos.last()
     case "next":
-      photo = photo.filter(id__gt=pk).first()
+      photo = photos.filter(id__gt=pk).first()
+      if not photo:
+        photo = photos.first()
     case _:
       raise ValueError("Invalid side: %s" % side)
 

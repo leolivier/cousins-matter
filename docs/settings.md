@@ -92,6 +92,7 @@ FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=
 * `MAX_PHOTO_FILE_SIZE`(*): Maximum size of each photo, default is 5MB
 * `MAX_VIDEO_FILE_SIZE`(*): Maximum size of each video, default is 20MB
 * `MAX_GALLERY_BULK_UPLOAD_SIZE`(*): Maximum size of galleries zip bulk upload file, default is 20MB
+* `SLIDESHOW_DELAY`: Delay in seconds between each photo in a slideshow, default is 5
 
 ### Messages and chats
 

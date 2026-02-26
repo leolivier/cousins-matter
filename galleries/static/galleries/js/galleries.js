@@ -107,4 +107,99 @@ $(document).ready(function() {
 	if (urlParams.get('openFullscreen') === 'true') {
 		openFullscreen($(`.gallery-image[data-fullscreen="${urlParams.get('firstImage')}"]`));
 	}
+
+	// Slideshow logic
+	let slideshowTimer = null;
+	const slideshowDelay = (parseInt($('#slideshow-toggle').data('delay')) || 5) * 1000;
+
+	function startSlideshowTimer() {
+		stopSlideshowTimer(); // Clear any existing timer
+		slideshowTimer = setTimeout(function() {
+			executeSwipe("next");
+		}, slideshowDelay);
+	}
+
+	function stopSlideshowTimer() {
+		if (slideshowTimer) {
+			clearTimeout(slideshowTimer);
+			slideshowTimer = null;
+		}
+	}
+
+	function toggleSlideshow() {
+		const btn = $('#slideshow-toggle');
+		const icon = $('#slideshow-icon');
+		const fullscreenBtn = $('#fullscreen-slideshow-toggle');
+		const fullscreenIcon = $('#fullscreen-slideshow-icon');
+		const isActive = btn.hasClass('is-active');
+
+		if (isActive) {
+			// Stop slideshow
+			btn.removeClass('is-active');
+			icon.removeClass('mdi-pause').addClass('mdi-play');
+			fullscreenBtn.removeClass('is-active');
+			fullscreenIcon.removeClass('mdi-pause').addClass('mdi-play');
+			stopSlideshowTimer();
+		} else {
+			// Start slideshow
+			btn.addClass('is-active');
+			icon.removeClass('mdi-play').addClass('mdi-pause');
+			fullscreenBtn.addClass('is-active');
+			fullscreenIcon.removeClass('mdi-play').addClass('mdi-pause');
+
+			// If not already in fullscreen, open the first image
+			if (fullscreenContainer.css('display') === 'none') {
+				const firstImage = $('.gallery-image').first();
+				if (firstImage.length > 0) {
+					openFullscreen(firstImage);
+				}
+			}
+			startSlideshowTimer();
+		}
+	}
+
+	$('#slideshow-toggle, #fullscreen-slideshow-toggle').click(function(e) {
+		e.stopPropagation(); // Prevent closing fullscreen
+		toggleSlideshow();
+	});
+
+	// Initial state for fullscreen slideshow button when opening fullscreen
+	function syncFullscreenButton() {
+		const isActive = $('#slideshow-toggle').hasClass('is-active');
+		const fullscreenIcon = $('#fullscreen-slideshow-icon');
+		const fullscreenBtn = $('#fullscreen-slideshow-toggle');
+
+		if (isActive) {
+			fullscreenBtn.addClass('is-active');
+			fullscreenIcon.removeClass('mdi-play').addClass('mdi-pause');
+		} else {
+			fullscreenBtn.removeClass('is-active');
+			fullscreenIcon.removeClass('mdi-pause').addClass('mdi-play');
+		}
+	}
+
+	$(document).on('click', '.gallery-image', function() {
+		syncFullscreenButton();
+	});
+
+	// Automatically move to the next slide when content is loaded, if slideshow is active
+	$(document).on('htmx:afterOnLoad', function(evt) {
+		if (evt.detail.target.id === 'swipe-container' && $('#slideshow-toggle').hasClass('is-active')) {
+			startSlideshowTimer();
+		}
+	});
+
+	// Reset timer on manual navigation
+	$('#prev-image, #next-image').click(function() {
+		if ($('#slideshow-toggle').hasClass('is-active')) {
+			startSlideshowTimer();
+		}
+	});
+
+	// Stop slideshow when fullscreen is closed
+	$('#close-fullscreen').click(function() {
+		if ($('#slideshow-toggle').hasClass('is-active')) {
+			toggleSlideshow();
+		}
+	});
 });

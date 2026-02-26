@@ -182,6 +182,11 @@ class CreatePhotoViewTests(PhotoTestsBase):
       f"""
 <div id="fullscreen-overlay">
   <button class="button" id="close-fullscreen">{_("Close")}</button>
+  <button id="fullscreen-slideshow-toggle" class="button is-ghost has-text-white is-large" title="Lecture/Pause du diaporama">
+		<span class="icon is-large">
+			<i class="mdi mdi-play mdi-48px" id="fullscreen-slideshow-icon"></i>
+		</span>
+	</button>
   <button id="prev-image" class="navigation-arrow">❮</button>
   <button id="next-image" class="navigation-arrow">❯</button>
   <div id="swipe-container" class="swipe-container">
@@ -410,17 +415,17 @@ class PhotoFullscreenViewTests(PhotoTestsBase):
     self.assertEqual(response.context["pk"], self.photo2.id)
 
   def test_get_fullscreen_photo_next_limit(self):
-    """Tests getting the next photo from the last one (should stay on last)."""
+    """Tests getting the next photo from the last one (should move to first)."""
     url = reverse("galleries:get_fullscreen_photo", args=[self.photo3.id])
-    # Request next from photo 3 (last) -> should get photo 3
+    # Request next from photo 3 (last) -> should get photo 1
     response = self.client.get(url, {"side": "next"}, HTTP_HX_REQUEST="true")
     self.assertEqual(response.status_code, 200)
-    self.assertEqual(response.context["pk"], self.photo3.id)
+    self.assertEqual(response.context["pk"], self.photo1.id)
 
   def test_get_fullscreen_photo_prev_limit(self):
-    """Tests getting the previous photo from the first one (should stay on first)."""
+    """Tests getting the previous photo from the first one (should move to last)."""
     url = reverse("galleries:get_fullscreen_photo", args=[self.photo1.id])
-    # Request prev from photo 1 (first) -> should get photo 1
+    # Request prev from photo 1 (first) -> should get photo 3
     response = self.client.get(url, {"side": "prev"}, HTTP_HX_REQUEST="true")
     self.assertEqual(response.status_code, 200)
-    self.assertEqual(response.context["pk"], self.photo1.id)
+    self.assertEqual(response.context["pk"], self.photo3.id)

@@ -53,6 +53,14 @@
 	right: 20px;
 }
 
+#fullscreen-slideshow-toggle {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	z-index: 1001;
+	color: white;
+}
+
 #detail-fullscreen {
 	right: 140px;
 }

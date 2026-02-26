@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-26 16:22+0100\n"
+"POT-Creation-Date: 2026-02-26 19:37+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
@@ -223,19 +223,26 @@ msgid "Create and add another one"
 msgstr "Erstelle und füge eine weitere hinzu"
 
 #: templates/galleries/photo_fullscreen.html:3
-#: templates/galleries/photo_fullscreen_htmx.html:3
 msgid "Close"
 msgstr "Schließen"
 
-#: templates/galleries/photo_fullscreen_htmx.html:8
+#: templates/galleries/photo_fullscreen.html:4
+msgid "Play/Pause slideshow"
+msgstr "Diashow abspielen/anhalten"
+
+#: templates/galleries/photo_fullscreen.html:14
 msgid "Detail"
 msgstr "Detail"
 
-#: templates/galleries/photos_gallery.html:16
+#: templates/galleries/photos_gallery.html:9
+msgid "Start slideshow"
+msgstr "Diashow abspielen"
+
+#: templates/galleries/photos_gallery.html:30
 msgid "Video"
 msgstr "Video"
 
-#: tests/tests_photo.py:309 tests/tests_photo.py:319 views/views_photo.py:102
+#: tests/tests_photo.py:310 tests/tests_photo.py:320 views/views_photo.py:106
 msgid "Photo updated successfully"
 msgstr "Foto erfolgreich aktualisiert"
 
@@ -285,28 +292,28 @@ msgstr ""
 "Bist du sicher, dass du \"%(object)s\" löschen und alle Fotos und "
 "Untergalerien, die es enthält, willst?"
 
-#: views/views_photo.py:47
+#: views/views_photo.py:51
 msgid "Photo not found"
 msgstr "Foto nicht gefunden"
 
-#: views/views_photo.py:75
+#: views/views_photo.py:79
 msgid "Photo created"
 msgstr "Foto erstellt"
 
-#: views/views_photo.py:81
+#: views/views_photo.py:85
 #, python-format
 msgid "Error when creating this photo: %s."
 msgstr "Fehler beim Erstellen dieser Foto: %s."
 
-#: views/views_photo.py:119
+#: views/views_photo.py:123
 msgid "Photo deleted"
 msgstr "Foto gelöscht"
 
-#: views/views_photo.py:121
+#: views/views_photo.py:125
 msgid "Delete photo"
 msgstr "Löschen Sie die Foto"
 
-#: views/views_photo.py:122
+#: views/views_photo.py:126
 #, python-format
 msgid "Are you sure you want to delete \"%(object)s\"?"
 msgstr "Seest du sicher, dass du \"%(object)s\" löschen willst?"

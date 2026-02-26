@@ -1,21 +1,32 @@
 {%load i18n cm_tags%}
 <div id="fullscreen-overlay">
-	<button id="close-fullscreen">{%trans "Close"%}</button>
+	<button class="button" id="close-fullscreen">{%trans "Close"%}</button>
+	<button id="fullscreen-slideshow-toggle" class="button is-ghost has-text-white is-large" title="{% trans 'Play/Pause slideshow' %}">
+		<span class="icon is-large">
+			<i class="mdi mdi-play mdi-48px" id="fullscreen-slideshow-icon"></i>
+		</span>
+	</button>
 	<button id="prev-image" class="navigation-arrow">❮</button>
 	<button id="next-image" class="navigation-arrow">❯</button>
-	<div class="image-wrapper prev" style="transform: translateX(-100%);">
-		<div class="image-container">
-			<img src="">
+	<div id="swipe-container" class="swipe-container">
+		{%partialdef image inline %}
+		{%if photo_detail_url%}
+		<a class="button" id="detail-fullscreen" href="{{photo_detail_url}}">{%trans "Detail"%}</a>
+		{%endif%}
+		<div id="image-container" class="swipe-card"
+			hx-get="{{swipe_url}}"
+			hx-target="#swipe-container"
+			data-pk="{{pk}}"
+			data-is-video="{{is_video}}"
+		>
+			{% if is_video %}
+			<video controls playsinline autoplay>
+				<source src="{{fullscreen_url}}">
+			</video>
+			{% else %}
+			<img src="{{fullscreen_url}}">
+			{% endif %}
 		</div>
-	</div>
-	<div class="image-wrapper current">
-		<div class="image-container">
-			<img src="">
-		</div>
-	</div>
-	<div class="image-wrapper next" style="transform: translateX(100%);">
-		<div class="image-container">
-			<img src="">
-		</div>
+		{%endpartialdef%}
 	</div>
 </div>

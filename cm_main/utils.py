@@ -7,9 +7,6 @@ from contextlib import contextmanager
 from datetime import datetime
 from io import BytesIO
 from PIL import Image, ImageOps, ImageFile
-
-VIDEO_EXTENSIONS = {".mp4", ".mov", ".webm", ".avi", ".mkv", ".m4v", ".ogv"}
-
 # import pprint
 import sys
 import unicodedata
@@ -29,6 +26,7 @@ from django.utils.translation import gettext as _, get_language, gettext_lazy
 
 from cousinsmatter.context_processors import override_settings
 
+VIDEO_EXTENSIONS = {".mp4", ".mov", ".webm", ".avi", ".mkv", ".m4v", ".ogv"}
 
 # issue #120 try to avoid error about truncated images when creating thumbnails
 ImageFile.LOAD_TRUNCATED_IMAGES = True

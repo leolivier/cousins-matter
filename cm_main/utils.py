@@ -350,11 +350,11 @@ def create_video_thumbnail(video_field: models.FileField, size: int) -> InMemory
   import cv2  # imported here so that this function not called for images
   from tempfile import NamedTemporaryFile
 
-  filename = video_field.name.split("/")[-1]
-  file_stem, _ = os.path.splitext(filename)
+  filename = os.path.basename(video_field.name)
+  file_stem, file_extension = os.path.splitext(filename)
 
   # Write the video to a named temp file so OpenCV can open it
-  with NamedTemporaryFile(suffix=os.path.splitext(filename)[-1], delete=False) as tmp:
+  with NamedTemporaryFile(suffix=file_extension, delete=False) as tmp:
     tmp_path = tmp.name
     if video_field.file.closed:
       video_field.file = default_storage.open(video_field.name, "rb")

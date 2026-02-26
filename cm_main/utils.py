@@ -352,7 +352,10 @@ def create_video_thumbnail(video_field: models.FileField, size: int) -> InMemory
 
   filename = os.path.basename(video_field.name)
   file_stem, file_extension = os.path.splitext(filename)
-
+  file_extension = file_extension.lower()
+  if file_extension not in VIDEO_EXTENSIONS:
+    # Fallback to a safe default extension for the temporary video file
+    file_extension = ".mp4"
   # Write the video to a named temp file so OpenCV can open it
   with NamedTemporaryFile(suffix=file_extension, delete=False) as tmp:
     tmp_path = tmp.name

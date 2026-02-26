@@ -221,11 +221,11 @@ msgid "Create and add another one"
 msgstr "Crear y agregar otra"
 
 #: templates/galleries/photo_fullscreen.html:3
-#: templates/galleries/photo_fullscreen_htmx.html:3
+#: templates/galleries/photo_fullscreen.html:3
 msgid "Close"
 msgstr "Cerrar"
 
-#: templates/galleries/photo_fullscreen_htmx.html:8
+#: templates/galleries/photo_fullscreen.html:8
 msgid "Detail"
 msgstr "Detalle"
 

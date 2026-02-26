@@ -49,7 +49,7 @@ def get_fullscreen_photo(request, pk):
 
   return render(
     request,
-    "galleries/photo_fullscreen_htmx.html#image",
+    "galleries/photo_fullscreen.html#image",
     {
       "swipe_url": reverse("galleries:get_fullscreen_photo", args=[photo.id]),
       "photo_detail_url": reverse("galleries:photo", args=[photo.id]),

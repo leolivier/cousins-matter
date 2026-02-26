@@ -132,7 +132,7 @@ def get_fullscreen_photo(request, pk):
 
   return render(
     request,
-    "galleries/photo_fullscreen_htmx.html#image",
+    "galleries/photo_fullscreen.html#image",
     {
       "swipe_url": reverse("classified_ads:get_fullscreen_photo", args=[photo.id]),
       "fullscreen_url": photo.image.url,

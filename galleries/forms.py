@@ -36,6 +36,7 @@ class PhotoForm(forms.ModelForm):
     fields = ["name", "description", "image", "date", "gallery"]
     widgets = {
       "description": RichTextarea(),
+      "image": forms.FileInput(attrs={"accept": "image/*,video/*"}),
     }
 
 

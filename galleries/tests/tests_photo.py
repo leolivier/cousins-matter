@@ -162,7 +162,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
   <div class="cell has-text-centered">
     <figure class="image thumbnail mx-auto">
       <img src="{protected_media_url(p["thumbnail"])}"
-        class="gallery-image"
+        class="gallery-image mx-auto"
         data-fullscreen="{protected_media_url(str(p["image"]))}"
         data-swipe-url="{reverse("galleries:get_fullscreen_photo", kwargs={"pk": p["id"]})}"
         data-pk="{p["id"]}"
@@ -188,7 +188,8 @@ class CreatePhotoViewTests(PhotoTestsBase):
     <div id="image-container" class="swipe-card"
 			hx-get=""
 			hx-target="#swipe-container"
-			data-pk="">
+			data-pk=""
+      data-is-video="">
 			<img src="">
 		</div>
 	</div>

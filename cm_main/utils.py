@@ -27,6 +27,7 @@ from django.utils.translation import gettext as _, get_language, gettext_lazy
 
 from cousinsmatter.context_processors import override_settings
 
+VIDEO_EXTENSIONS = {".mp4", ".mov", ".webm", ".avi", ".mkv", ".m4v", ".ogv"}
 
 # issue #120 try to avoid error about truncated images when creating thumbnails
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -332,36 +333,89 @@ def translate_date_format(format_string):
   return "".join(translated_parts)
 
 
-def create_thumbnail(image: models.ImageField, size: int) -> InMemoryUploadedFile:
-  """
-  Creates a thumbnail for a photo.
+def is_video_file(name: str) -> bool:
+  """Returns True if the given filename/path has a recognized video extension."""
+  _, ext = os.path.splitext(str(name))
+  return ext.lower() in VIDEO_EXTENSIONS
 
-  If the photo is larger than settings.GALLERIES_THUMBNAIL_SIZE, it is resized
-  to that size and saved as a new file. Otherwise, the original photo is used
+
+def create_video_thumbnail(video_field: models.FileField, size: int) -> InMemoryUploadedFile:
+  """
+  Extracts the first frame from a video file and returns it as a WEBP thumbnail.
+
+  :param video_field: The video FileField instance.
+  :param size: The maximum size (width or height) of the thumbnail.
+  :return: An InMemoryUploadedFile representing the thumbnail.
+  """
+  import cv2  # imported here so that this function not called for images
+  from tempfile import NamedTemporaryFile
+
+  filename = os.path.basename(video_field.name)
+  file_stem, file_extension = os.path.splitext(filename)
+  file_extension = file_extension.lower()
+  if file_extension not in VIDEO_EXTENSIONS:
+    # Fallback to a safe default extension for the temporary video file
+    file_extension = ".mp4"
+  # Write the video to a named temp file so OpenCV can open it
+  with NamedTemporaryFile(suffix=file_extension, delete=False) as tmp:
+    tmp_path = tmp.name
+    if video_field.file.closed:
+      video_field.file = default_storage.open(video_field.name, "rb")
+    tmp.write(video_field.file.read())
+
+  try:
+    cap = cv2.VideoCapture(tmp_path)
+    success, frame = cap.read()
+    cap.release()
+    if not success:
+      raise ValueError("Could not read a frame from the video.")
+
+    # OpenCV gives BGR, convert to RGB
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    img = Image.fromarray(frame_rgb)
+    img.thumbnail((size, size))
+
+    output_thumb = BytesIO()
+    img.save(output_thumb, format="WEBP", quality=90)
+    output_thumb.seek(0)
+    thumb_size = sys.getsizeof(output_thumb)
+    logger.debug(f"Extracted video thumbnail for {video_field.name}, size={thumb_size}")
+    return InMemoryUploadedFile(output_thumb, "ImageField", f"{file_stem}.webp", "image/webp", thumb_size, None)
+  finally:
+    os.unlink(tmp_path)
+
+
+def create_thumbnail(image: models.FileField, size: int) -> InMemoryUploadedFile:
+  """
+  Creates a thumbnail for an image file.
+
+  If the image is larger than settings.GALLERIES_THUMBNAIL_SIZE, it is resized
+  to that size and saved as a new file. Otherwise, the original image is used
   as the thumbnail.
 
-  :param image: The image to create a thumbnail for.
+  :param image: The FileField holding the image to create a thumbnail for.
   :param size: The requested size of the thumbnail. If the image is larger
       than this, it is resized.
   :return: An InMemoryUploadedFile representing the thumbnail.
   """
-  if image.height <= size or image.width <= size:
-    return image
-
-  output_thumb = BytesIO()
-  filename = image.name.split("/")[-1]
-  file, _ = os.path.splitext(filename)
   # ISSUE WITH Image.open() which raises "ValueError: seek on closed file" in some circumstances
   if image.file.closed:
     image.file = default_storage.open(image.name, "rb")
   with Image.open(image.file) as img:
+    img_width, img_height = img.size
+    if img_height <= size or img_width <= size:
+      return image
     img.thumbnail((size, size))
     img = ImageOps.exif_transpose(img)  # avoid image rotating
+    output_thumb = BytesIO()
     # use WEBP format for thumbnails instead of JPEG to avoid loss of transparency
     img.save(output_thumb, format="WEBP", quality=90)
-    size = sys.getsizeof(output_thumb)
-    thumbnail = InMemoryUploadedFile(output_thumb, "ImageField", f"{file}.webp", "image/webp", size, None)
-    logger.debug(f"Resized and saved thumbnail for {image.name}, size={size}")
+    output_thumb.seek(0)
+    filename = image.name.split("/")[-1]
+    file_stem, _ = os.path.splitext(filename)
+    thumb_size = sys.getsizeof(output_thumb)
+    thumbnail = InMemoryUploadedFile(output_thumb, "ImageField", f"{file_stem}.webp", "image/webp", thumb_size, None)
+    logger.debug(f"Resized and saved thumbnail for {image.name}, size={thumb_size}")
     return thumbnail
 
 

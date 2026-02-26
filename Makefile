@@ -55,9 +55,6 @@ cpmsg:
 mkmsg:
 	cd "$(a)" && ../manage.py makemessages -a
 
-clean:
-	docker compose down --volumes
-
 test:
 	POSTGRES_HOST=localhost REDIS_HOST=localhost ./manage.py test $(t) $(o)
 

@@ -1,6 +1,6 @@
 from django.template import Library
 from django.urls import reverse
-from cm_main.utils import Paginator, protected_media_url
+from cm_main.utils import Paginator, is_video_file, protected_media_url
 from ..models import Photo
 
 register = Library()
@@ -24,7 +24,14 @@ def complete_photos_data(page, page_num, num_pages):
     pmu = protected_media_url(p.image.name)
     tmu = protected_media_url(p.thumbnail.name)
 
-    photos_dict[idx] = {"id": p.id, "name": p.name, "image_url": pmu, "thumbnail_url": tmu, "uploaded_by_id": p.uploaded_by_id}
+    photos_dict[idx] = {
+      "id": p.id,
+      "name": p.name,
+      "image_url": pmu,
+      "thumbnail_url": tmu,
+      "uploaded_by_id": p.uploaded_by_id,
+      "is_video": is_video_file(p.image.name),
+    }
     if idx > 0:
       photos_dict[idx - 1]["next_url"] = pmu
       photos_dict[idx]["previous_url"] = photos_dict[idx - 1]["image_url"]

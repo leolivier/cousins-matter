@@ -3,12 +3,6 @@
 {% block title %}{% title _("Photo") %} {% endblock %}
 {%block header %}
 <link rel="stylesheet" href="{% static 'galleries/css/galleries.min.css' %}"/>
-<script>
-	function get_photo_detail_url(pk) {
-		const url = "{% url 'galleries:photo' 123456789 %}".replace('123456789', pk);
-		return url;
-	}
-</script>
 <script src="{% static 'galleries/js/galleries.min.js' %}"></script>
 {% endblock %}
 {% block content %}
@@ -44,12 +38,23 @@
 	</div>
 	<div class="container">
 		<figure class="photo">
+			{% if photo.is_video %}
+			<video class="gallery-image gallery-video" controls playsinline
+				poster="{{photo.thumbnail.url}}"
+				data-fullscreen="{{photo.image.url}}"
+				data-pk="{{photo.id}}"
+				data-swipe-url="{%url 'galleries:get_fullscreen_photo' photo.id %}">
+				<source src="{{photo.image.url}}">
+				{% trans "Your browser does not support the video tag." %}
+			</video>
+			{% else %}
 			<img src="{{photo.image.url}}"
 				class="gallery-image"
 				data-fullscreen="{{photo.image.url}}"
 				data-pk="{{photo.id}}"
 				data-swipe-url="{%url 'galleries:get_fullscreen_photo' photo.id %}"
 			>
+			{% endif %}
 		</figure>
 		<div class="rich-text">{% autoescape off %}{{photo.description}}{% endautoescape %}</div>
 	</div>

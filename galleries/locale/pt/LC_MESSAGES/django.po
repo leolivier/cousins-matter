@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-18 19:38+0100\n"
+"POT-Creation-Date: 2026-02-26 16:22+0100\n"
 "PO-Revision-Date: 2025-05-24 19:36+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Portuguese <LL@li.org>\n"
@@ -45,64 +45,64 @@ msgstr ""
 "Opcional. Se selecionado, as galerias importadas serão criadas dentro desta "
 "galeria."
 
-#: models.py:20 models.py:94
+#: models.py:23 models.py:103
 msgid "A photo must belong to a gallery."
 msgstr "Uma foto deve pertencer a uma galeria."
 
-#: models.py:44 templates/galleries/photo_detail.html:3
-msgid "Photo"
-msgstr "Foto"
+#: models.py:52
+msgid "Photo or Video"
+msgstr "Foto ou Vídeo"
 
-#: models.py:55 models.py:126
+#: models.py:59 models.py:155
 msgid "Name"
 msgstr "Nome"
 
-#: models.py:56 models.py:127
+#: models.py:60 models.py:156
 msgid "Description"
 msgstr "Descrição"
 
-#: models.py:59
+#: models.py:63
 msgid "Date"
 msgstr "Data"
 
-#: models.py:60
+#: models.py:64
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Clique em nome do mês ou do ano para mudá-los rapidamente"
 
-#: models.py:65
+#: models.py:69
 msgid "Uploaded by"
 msgstr "Carregado por"
 
-#: models.py:130
+#: models.py:159
 msgid "Cover Photo"
 msgstr "Capa"
 
-#: models.py:138
+#: models.py:167
 msgid "Parent gallery"
 msgstr "Galera de pais"
 
-#: models.py:147
+#: models.py:176
 msgid "Owner"
 msgstr "Proprietário"
 
-#: models.py:154
+#: models.py:183
 msgid "galleries"
 msgstr "Galérias"
 
-#: models.py:176
+#: models.py:205
 msgid "A gallery can't be its own parent!"
 msgstr "Uma galeria não pode ser sua própria mãe!"
 
-#: models.py:185
+#: models.py:214
 #, python-format
 msgid "Another sub gallery of %(parent)s with the same name already exists"
 msgstr "Outra subgaleria de %(parent)s com o mesmo nome já existe"
 
-#: models.py:188
+#: models.py:217
 msgid "Another root gallery with the same name already exists"
 msgstr "Outra galeria de raiz com o mesmo nome já existe"
 
-#: tasks.py:61 views/views_bulk.py:68
+#: tasks.py:61 views/views_bulk.py:66
 #, python-format
 msgid "Imported from zipfile directory %(path)s"
 msgstr "Importado de diretório do arquivo zip %(path)s"
@@ -136,62 +136,38 @@ msgstr "Criar Galeria"
 msgid "Bulk Upload"
 msgstr "Carregar em Lote"
 
-#: templates/galleries/galleries_tree.html:20
+#: templates/galleries/galleries_tree.html:21
 msgid "No galleries found"
 msgstr "Não foram encontradas galerias"
-
-#: templates/galleries/gallery_confirm_delete.html:6 views/views_gallery.py:86
-msgid "Delete gallery"
-msgstr "Apagar galeria"
-
-#: templates/galleries/gallery_confirm_delete.html:10
-#, python-format
-msgid ""
-"Are you sure you want to delete \"%(object)s\" and all photos and sub "
-"galleries it contains?"
-msgstr ""
-"Você está seguro de querer apagar '%(object)s' e todas as fotos e "
-"subgalerias que ela contém?"
-
-#: templates/galleries/gallery_confirm_delete.html:17
-#: templates/galleries/photo_confirm_delete.html:17
-msgid "Confirm"
-msgstr "Confirmar"
-
-#: templates/galleries/gallery_confirm_delete.html:21
-#: templates/galleries/photo_confirm_delete.html:21
-#: templates/galleries/photo_form.html:29
-msgid "Cancel"
-msgstr "Cancelar"
 
 #: templates/galleries/gallery_detail.html:3
 msgid "Show Gallery"
 msgstr "Mostrar Galeria"
 
-#: templates/galleries/gallery_detail.html:31
+#: templates/galleries/gallery_detail.html:26
 msgid "Children galleries"
 msgstr "Galérias infantis"
 
-#: templates/galleries/gallery_detail.html:49
-#: templates/galleries/photo_detail.html:35
+#: templates/galleries/gallery_detail.html:44
+#: templates/galleries/photo_detail.html:24
 #, python-format
 msgid "Back to %(gname)s"
 msgstr "Voltar para %(gname)s"
 
-#: templates/galleries/gallery_detail.html:54 views/views_bulk.py:191
+#: templates/galleries/gallery_detail.html:49 views/views_bulk.py:188
 msgid "Back to galleries list"
 msgstr "Voltando para a lista de galerias"
 
-#: templates/galleries/gallery_detail.html:59
+#: templates/galleries/gallery_detail.html:54
 #: templates/galleries/photo_form.html:7 templates/galleries/photo_form.html:20
 msgid "Add Photo"
 msgstr "Adicionar Foto"
 
-#: templates/galleries/gallery_detail.html:63
+#: templates/galleries/gallery_detail.html:58
 msgid "Create Sub Gallery"
 msgstr "Criar uma Galeria Subsidiária"
 
-#: templates/galleries/gallery_detail.html:67
+#: templates/galleries/gallery_detail.html:63
 #: templates/galleries/gallery_form.html:5
 #: templates/galleries/gallery_form.html:17
 msgid "Edit Gallery"
@@ -207,17 +183,6 @@ msgstr "Atualizar"
 msgid "Create"
 msgstr "Crear"
 
-#: templates/galleries/photo_confirm_delete.html:6
-#: templates/galleries/photo_detail.html:43
-msgid "Delete photo"
-msgstr "Apagar a foto"
-
-#: templates/galleries/photo_confirm_delete.html:10
-#: templates/galleries/photo_detail.html:44
-#, python-format
-msgid "Are you sure you want to delete \"%(object)s\"?"
-msgstr "Você está seguro de querer apagar '%(object)s'?"
-
 #: templates/galleries/photo_counter.html:4
 #, python-format
 msgid "One photo"
@@ -229,38 +194,50 @@ msgstr[1] "%(counter)s fotos"
 msgid "No photo"
 msgstr "Não há foto"
 
-#: templates/galleries/photo_detail.html:25
+#: templates/galleries/photo_detail.html:3
+msgid "Photo"
+msgstr "Foto"
+
+#: templates/galleries/photo_detail.html:17
 #, python-format
 msgid "Gallery %(gname)s"
 msgstr "Galera %(gname)s"
 
-#: templates/galleries/photo_detail.html:39
+#: templates/galleries/photo_detail.html:29
 #: templates/galleries/photo_form.html:5 templates/galleries/photo_form.html:18
 msgid "Edit Photo"
 msgstr "Editar a Foto"
+
+#: templates/galleries/photo_detail.html:48
+msgid "Your browser does not support the video tag."
+msgstr "O seu navegador não suporta a tag de vídeo."
+
+#: templates/galleries/photo_form.html:29
+msgid "Cancel"
+msgstr "Cancelar"
 
 #: templates/galleries/photo_form.html:32
 msgid "Create and add another one"
 msgstr "Criar e adicionar outro"
 
 #: templates/galleries/photo_fullscreen.html:3
+#: templates/galleries/photo_fullscreen_htmx.html:3
 msgid "Close"
 msgstr "Fechar"
 
-#: tests/tests_gallery.py:293 views/views_gallery.py:80
-msgid "Gallery deleted successfully"
-msgstr "Galera excluída com sucesso"
+#: templates/galleries/photo_fullscreen_htmx.html:8
+msgid "Detail"
+msgstr "Detalhe"
 
-#: tests/tests_photo.py:218 tests/tests_photo.py:227 tests/tests_photo.py:239
-#: views/views_photo.py:128
-msgid "Photo deleted"
-msgstr "Foto excluída"
+#: templates/galleries/photos_gallery.html:16
+msgid "Video"
+msgstr "Video"
 
-#: tests/tests_photo.py:277 tests/tests_photo.py:287 views/views_photo.py:114
+#: tests/tests_photo.py:309 tests/tests_photo.py:319 views/views_photo.py:102
 msgid "Photo updated successfully"
 msgstr "Foto atualizada com sucesso"
 
-#: views/views_bulk.py:57
+#: views/views_bulk.py:55
 msgid ""
 "Detected path traversal attempt, '..' is not allowed in paths inside the zip "
 "file"
@@ -268,7 +245,7 @@ msgstr ""
 "Traversão de caminho detectada, '..' não é permitida em caminhos dentro do "
 "arquivo zip"
 
-#: views/views_bulk.py:61
+#: views/views_bulk.py:59
 msgid ""
 "Root gallery not found. Please select a root gallery. Create it first if "
 "necessary."
@@ -276,37 +253,58 @@ msgstr ""
 "Galeria raiz não encontrada. Por favor, selecione uma galeria raiz. Crie a "
 "primeira se necessário."
 
-#: views/views_bulk.py:166
+#: views/views_bulk.py:163
 msgid "Upload not found"
 msgstr "Carregamento não encontrado"
 
-#: views/views_bulk.py:192
+#: views/views_bulk.py:189
 #, python-format
 msgid "Zip file uploaded: %(lg)d galleries and %(nbp)d photos created"
 msgstr "Arquivo zip carregado: %(lg)d galerias e %(nbp)d fotos criadas"
 
-#: views/views_gallery.py:31
+#: views/views_gallery.py:29
 msgid "Gallery created successfully"
 msgstr "Galeria criada com sucesso"
 
-#: views/views_gallery.py:87
+#: views/views_gallery.py:78
+msgid "Gallery deleted successfully"
+msgstr "Galera excluída com sucesso"
+
+#: views/views_gallery.py:82
+msgid "Delete gallery"
+msgstr "Apagar galeria"
+
+#: views/views_gallery.py:83
 #, python-format
 msgid ""
-"Are you sure you want to delete '%(object)s' and all photos and sub "
+"Are you sure you want to delete \"%(object)s\" and all photos and sub "
 "galleries it contains?"
 msgstr ""
 "Você está seguro de querer apagar '%(object)s' e todas as fotos e "
 "subgalerias que ela contém?"
 
-#: views/views_photo.py:34
-msgid "Missing either photo id or gallery id"
-msgstr "Um identificador de foto ou de galeria está faltando."
+#: views/views_photo.py:47
+msgid "Photo not found"
+msgstr "Foto não encontrada"
 
-#: views/views_photo.py:87
+#: views/views_photo.py:75
 msgid "Photo created"
 msgstr "Foto criada"
 
-#: views/views_photo.py:93
+#: views/views_photo.py:81
 #, python-format
 msgid "Error when creating this photo: %s."
 msgstr "Erro ao criar essa foto: %s."
+
+#: views/views_photo.py:119
+msgid "Photo deleted"
+msgstr "Foto excluída"
+
+#: views/views_photo.py:121
+msgid "Delete photo"
+msgstr "Apagar a foto"
+
+#: views/views_photo.py:122
+#, python-format
+msgid "Are you sure you want to delete \"%(object)s\"?"
+msgstr "Você está seguro de querer apagar '%(object)s'?"

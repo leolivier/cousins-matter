@@ -17,6 +17,9 @@ logger = logging.getLogger(__name__)
 
 def get_next_prev_photo(pk, side):
   # this raises an exception Photo.DoesNotExist if the photo doesn't exist
+  if side is None:
+    return Photo.objects.get(pk=pk)
+
   gallery_id = Photo.objects.only("gallery_id").get(pk=pk).gallery_id
   photo = Photo.objects.filter(gallery=gallery_id).order_by("id")
 
@@ -25,8 +28,6 @@ def get_next_prev_photo(pk, side):
       photo = photo.filter(id__lt=pk).last()
     case "next":
       photo = photo.filter(id__gt=pk).first()
-    case None:
-      photo = photo.get(id=pk)
     case _:
       raise ValueError("Invalid side: %s" % side)
 
@@ -51,8 +52,10 @@ def get_fullscreen_photo(request, pk):
     "galleries/photo_fullscreen_htmx.html#image",
     {
       "swipe_url": reverse("galleries:get_fullscreen_photo", args=[photo.id]),
+      "photo_detail_url": reverse("galleries:photo", args=[photo.id]),
       "fullscreen_url": photo.image.url,
       "pk": photo.id,
+      "is_video": photo.is_video,
     },
   )
 

@@ -4,35 +4,28 @@ $(document).ready(function() {
 	let startX = 0;
 	const minSwipeDistance = 120; // Minimum distance to detect a swipe
 
-	// Function to open image in full screen
+	// Function to open image or video in full screen
 	function openFullscreen(imageElement) {
-		// set the src of the current, next and previous images
-		const currentSrc = imageElement.data('fullscreen');
-		const currentPk = imageElement.data('pk');
 		const swipeUrl = imageElement.data('swipe-url');
+		const pk = imageElement.data('pk');
+		const isVideo = imageElement.data('is-video');
 
-		// set photo source
-		$('#image-container img').attr('src', currentSrc);
-		$('#image-container').attr('hx-get', swipeUrl);
-		// set photo detail url when clicked
-		$('#image-container img').click(function(e) {
-			e.stopPropagation();
-			if (typeof get_photo_detail_url === 'function') {
-				const href = get_photo_detail_url(currentPk);
-				console.log("href", href);
-				window.location.href = href;
-			}
-		})
-	
+		// Trigger HTMX to load the initial image or video content
+		htmx.ajax('GET', swipeUrl+ "#image", {
+			target: '#swipe-container'
+		});
+
 		fullscreenContainer  // display the overlay
 			.css('display', 'flex')
 			.hide()
 			.fadeIn(300);
 	}
 
+
 	function executeSwipe(side, diff=null) {
 		console.log("executeSwipe", side);
 		const container = $('#image-container');
+		const pk = container.data('pk');
 		const url = container.attr('hx-get');
 		const angle = diff ?  -diff/15 : (side === 'prev' ? -60 : 60);
 		const sign = side === 'prev' ? '-' : '';
@@ -62,15 +55,13 @@ $(document).ready(function() {
 	$(document).on('touchend', '#image-container', function(e) {
 			const currentX = e.originalEvent.changedTouches[0].pageX;
 			const diff = currentX - startX;
-			// Reactivate transition for end animation
-			// $(this).css('transition', 'transform 0.9s ease-out, opacity 0.9s ease-out');
 			if (diff > minSwipeDistance) {
 					// SWIPE RIGHT ==> PREV
-					console.log("swipe prev", diff);
+					// console.log("swipe prev", diff);
 					setTimeout(() => executeSwipe("prev", diff), 20);
 			} else if (diff < -minSwipeDistance) {
 					// SWIPE LEFT ==> NEXT
-					console.log("swipe next", diff);
+					// console.log("swipe next", diff);
 					setTimeout(() => executeSwipe("next", diff), 20);
 			} else {
 					// CANCEL
@@ -100,12 +91,14 @@ $(document).ready(function() {
 	// Close full screen
 	$('#close-fullscreen').click(function() {
 		fullscreenContainer.fadeOut(300);
+		fullscreenContainer.find('#image-container').html('');
 	});
 
 	// Close full screen if clicked outside image
 	fullscreenContainer.find('div[class="image-container"]').click(function(e) {
 		if (e.target === e.currentTarget) {
 			fullscreenContainer.fadeOut(300);
+			fullscreenContainer.find('#image-container').html('');
 		}
 	});
 

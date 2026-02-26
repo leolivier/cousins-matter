@@ -124,7 +124,8 @@ class CreatePhotoViewTests(PhotoTestsBase):
     photo_dicts = [p.__dict__ for p in photos]
     nb_dicts = len(photo_dicts)
     for idx, p in enumerate(photo_dicts):
-      pmu = protected_media_url(p["image"].name)
+      image_name = str(p["image"])  # can be a FieldFile or a string path depending on Django internals
+      pmu = protected_media_url(image_name)
       if idx > 0:
         photo_dicts[idx - 1]["next_url"] = pmu
       if idx < nb_dicts - 1:
@@ -161,10 +162,11 @@ class CreatePhotoViewTests(PhotoTestsBase):
   <div class="cell has-text-centered">
     <figure class="image thumbnail mx-auto">
       <img src="{protected_media_url(p["thumbnail"])}"
-        class="gallery-image"
-        data-fullscreen="{protected_media_url(p["image"].name)}"
+        class="gallery-image mx-auto"
+        data-fullscreen="{protected_media_url(str(p["image"]))}"
         data-swipe-url="{reverse("galleries:get_fullscreen_photo", kwargs={"pk": p["id"]})}"
         data-pk="{p["id"]}"
+        data-is-video="false"
       >
     </figure>
     <p>{p["name"]}</p>
@@ -185,7 +187,9 @@ class CreatePhotoViewTests(PhotoTestsBase):
   <div id="swipe-container" class="swipe-container">
     <div id="image-container" class="swipe-card"
 			hx-get=""
-			hx-target="#swipe-container">
+			hx-target="#swipe-container"
+			data-pk=""
+      data-is-video="">
 			<img src="">
 		</div>
 	</div>

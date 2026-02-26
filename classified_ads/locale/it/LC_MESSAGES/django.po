@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-04 16:00+0100\n"
+"POT-Creation-Date: 2026-02-26 16:34+0100\n"
 "PO-Revision-Date: 2025-05-20 11:37+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Italian <LL@li.org>\n"
@@ -324,11 +324,11 @@ msgstr "Animali di compagnia"
 msgid "Donations"
 msgstr "Donazioni"
 
-#: forms.py:13
+#: forms.py:16
 msgid "Select a category"
 msgstr "Seleziona una categoria"
 
-#: forms.py:22
+#: forms.py:26 views.py:198
 msgid "Select a subcategory"
 msgstr "Seleziona una sottocategoria"
 
@@ -405,77 +405,77 @@ msgstr "Fotos del anuncio"
 msgid "Classified Ad Detail"
 msgstr "Detalle del anuncio clasificado"
 
-#: templates/classified_ads/detail.html:20
+#: templates/classified_ads/detail.html:17
 #: templates/classified_ads/list.html:25
 #, python-format
 msgid "Added by %(owner)s on %(date_created)s"
 msgstr "Aggiunto da %(owner)s il %(date_created)s"
 
-#: templates/classified_ads/detail.html:28
+#: templates/classified_ads/detail.html:25
 msgid "Category"
 msgstr "Categoria"
 
-#: templates/classified_ads/detail.html:29
+#: templates/classified_ads/detail.html:26
 msgid "Subcategory"
 msgstr "Subcategoria"
 
-#: templates/classified_ads/detail.html:30
+#: templates/classified_ads/detail.html:27
 msgid "State"
 msgstr "Stato"
 
-#: templates/classified_ads/detail.html:42
+#: templates/classified_ads/detail.html:39
 msgid "Price"
 msgstr "Prezzo"
 
-#: templates/classified_ads/detail.html:43
+#: templates/classified_ads/detail.html:40
 msgid "Location"
 msgstr "Ubicazione"
 
-#: templates/classified_ads/detail.html:44
+#: templates/classified_ads/detail.html:41
 msgid "Shipping"
 msgstr "Spedizione"
 
-#: templates/classified_ads/detail.html:56
-#: templates/classified_ads/form.html:46
+#: templates/classified_ads/detail.html:48
+#: templates/classified_ads/form.html:26
 msgid "Update Ad"
 msgstr "Aggiorna anuncio"
 
-#: templates/classified_ads/detail.html:58
-#: templates/classified_ads/form.html:50
+#: templates/classified_ads/detail.html:50
+#: templates/classified_ads/form.html:30
 msgid "Delete Ad"
 msgstr "Elimina anuncio"
 
-#: templates/classified_ads/detail.html:61
+#: templates/classified_ads/detail.html:53
 #: templates/classified_ads/send-message.html:4
 msgid "Send a message to the owner of this ad"
 msgstr "Invia un messaggio al proprietario di questo annuncio"
 
-#: templates/classified_ads/form.html:3 templates/classified_ads/form.html:37
+#: templates/classified_ads/form.html:3 templates/classified_ads/form.html:17
 msgid "Create Classified Ad"
 msgstr "Crea un annuncio clasificato"
 
-#: templates/classified_ads/form.html:35
+#: templates/classified_ads/form.html:15
 msgid "Edit Classified Ad"
 msgstr "Modifica un annuncio clasificato"
 
-#: templates/classified_ads/form.html:54 templates/classified_ads/list.html:9
+#: templates/classified_ads/form.html:34 templates/classified_ads/list.html:9
 msgid "Create Ad"
 msgstr "Crea un annuncio"
 
-#: templates/classified_ads/gallery.html:7
+#: templates/classified_ads/gallery.html:6
 msgid "Photos"
 msgstr "Fotos"
 
-#: templates/classified_ads/gallery.html:13
+#: templates/classified_ads/gallery.html:12
 msgid "Maximum number of photos reached"
 msgstr "Numero massimo di foto raggiunto"
 
-#: templates/classified_ads/gallery.html:16
+#: templates/classified_ads/gallery.html:15
 #: templates/classified_ads/photo-form.html:16
 msgid "Add photo"
 msgstr "Aggiungi foto"
 
-#: templates/classified_ads/gallery.html:54
+#: templates/classified_ads/gallery.html:48
 msgid "You will be able to add photos after creating the ad"
 msgstr "Dopo aver creato l'annuncio, potrai aggiungere le foto"
 
@@ -487,12 +487,12 @@ msgstr "Nuova foto"
 msgid "Send"
 msgstr "Invia"
 
-#: tests.py:318 views.py:137
+#: tests/tests.py:344 views.py:167
 #, python-format
 msgid "Message from %(username)s about ad %(title)s"
 msgstr "Messaggio di %(username)s riguardo all'annuncio %(title)s"
 
-#: tests.py:322 views.py:141
+#: tests/tests.py:348 views.py:171
 #, python-format
 msgid ""
 "Hello %(recipient)s,\n"
@@ -518,41 +518,45 @@ msgstr ""
 "\n"
 "%(site_url)s\n"
 
-#: views.py:27
+#: views.py:23
 msgid "Classified ad created successfully"
 msgstr "Anuncio creato con successo"
 
-#: views.py:55
+#: views.py:51
 msgid "Classified ad updated successfully"
 msgstr "Anuncio aggiornato con successo"
 
-#: views.py:67
+#: views.py:62
 msgid "Classified ads deletion"
 msgstr "Eliminazione di annunci clasificati"
 
-#: views.py:68
+#: views.py:63
 #, python-format
 msgid "Are you sure you want to delete the classified ad \"%(title)s\"?"
 msgstr "Sei sicuro di voler eliminare l'annuncio \"%(title)s\""
 
-#: views.py:78
+#: views.py:71
 #, python-format
 msgid "Ad \"%(title)s\" deleted"
 msgstr "Anuncio \"%(title)s\" eliminato"
 
-#: views.py:110
+#: views.py:103
 #, python-format
 msgid "Photo not added: %(errors)s"
 msgstr "Foto non aggiunta: %(errors)s"
 
-#: views.py:124
+#: views.py:130
+msgid "Photo not found"
+msgstr "Foto non trovata"
+
+#: views.py:156
 msgid "Photo deletion"
 msgstr "Eliminazione di foto"
 
-#: views.py:125
+#: views.py:157
 msgid "Are you sure you want to delete this photo?"
 msgstr "Sei sicuro di voler eliminare questa foto?"
 
-#: views.py:161
+#: views.py:191
 msgid "Message sent successfully"
 msgstr "Messaggio inviato con successo"

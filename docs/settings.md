@@ -90,6 +90,7 @@ FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=
 
 * `DEFAULT_GALLERY_PAGE_SIZE`: Number of photos per gallery page (changeable on screen), default is 25
 * `MAX_PHOTO_FILE_SIZE`(*): Maximum size of each photo, default is 5MB
+* `MAX_VIDEO_FILE_SIZE`(*): Maximum size of each video, default is 20MB
 * `MAX_GALLERY_BULK_UPLOAD_SIZE`(*): Maximum size of galleries zip bulk upload file, default is 20MB
 
 ### Messages and chats
@@ -184,4 +185,4 @@ FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=
 
 ## NOTES
 
-__(*) WARNING:__ If you want to change any of the variables controling the size of what can be uploaded and you are using the nginx reverse proxy, please check that the value of `client_max_body_size` in config/nginx/nginx.conf so that it remains higher than the size variables you change above. Otherwise you will receive a 413 error from Nginx. The default value provided is high (20MB) so it should be an issue except when videos is supported.
+__(*) WARNING:__ If you want to change any of the variables controling the size of what can be uploaded and you are using the nginx reverse proxy, please check that the value of `client_max_body_size` in config/nginx/nginx.conf so that it remains higher than the size variables you change above. Otherwise you will receive a 413 error from Nginx. The default value provided is high (20MB) but you might need to increase it to support larger videos.

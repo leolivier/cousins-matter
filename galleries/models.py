@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from cm_main.utils import check_file_size, create_thumbnail, protected_media_url
+from cm_main.utils import check_file_size, create_thumbnail, create_video_thumbnail, is_video_file, protected_media_url
 
 logger = logging.getLogger(__name__)
 
@@ -38,22 +38,23 @@ def thumbnail_path(instance, filename):
   return get_path(instance, filename, "thumbnails")
 
 
-def check_image_size(image):
-  return check_file_size(image, settings.MAX_PHOTO_FILE_SIZE)
+def check_image_size(file):
+  """Validates the file size; uses MAX_VIDEO_FILE_SIZE for videos, otherwise MAX_PHOTO_FILE_SIZE."""
+  if is_video_file(file.name):
+    limit = settings.MAX_VIDEO_FILE_SIZE
+  else:
+    limit = settings.MAX_PHOTO_FILE_SIZE
+  return check_file_size(file, limit)
 
 
 class Photo(models.Model):
-  image = models.ImageField(
-    _("Photo"),
+  image = models.FileField(
+    _("Photo or Video"),
     upload_to=photo_path,
     validators=[check_image_size],
-    height_field="image_height",
-    width_field="image_width",
     max_length=1000,
     null=False,
   )
-  image_height = models.IntegerField(default=0)
-  image_width = models.IntegerField(default=0)
   thumbnail = models.ImageField(upload_to=thumbnail_path, blank=True)
   name = models.CharField(_("Name"), max_length=70, blank=True)
   description = models.TextField(_("Description"), max_length=3000, blank=True)
@@ -70,6 +71,11 @@ class Photo(models.Model):
     blank=True,
     null=True,
   )
+
+  @property
+  def is_video(self):
+    """Returns True if this photo entry holds a video file."""
+    return is_video_file(self.image.name) if self.image else False
 
   class Meta:
     ordering = ["id"]
@@ -129,7 +135,10 @@ class Photo(models.Model):
         self.image.storage.delete(old_image_name)
 
     try:
-      self.thumbnail = create_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
+      if self.is_video:
+        self.thumbnail = create_video_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
+      else:
+        self.thumbnail = create_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
       super().save(force_update=True, update_fields=["thumbnail"])
 
       if gallery_changed and old_thumbnail_name:

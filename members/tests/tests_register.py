@@ -8,7 +8,7 @@ from django.test.utils import TestContextDecorator
 from captcha.conf import settings as captcha_settings
 from verify_email.app_configurations import GetFieldFromSettings
 
-from cousinsmatter.context_processors import override_settings
+from core.context_processors import override_settings
 from ..forms import MemberRegistrationForm
 from ..models import Member
 from ..registration_link_manager import RegistrationLinkManager

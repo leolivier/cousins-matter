@@ -1,6 +1,13 @@
+from typing import TypedDict
 from django.utils.translation import gettext_lazy as _
 
-CATEGORIES = {
+
+class CategoryInfo(TypedDict):
+  translation: str
+  subcategories: dict[str, str]
+
+
+CATEGORIES: dict[str, CategoryInfo] = {
   "real_estate": {
     "translation": _("Real estate"),
     "subcategories": {

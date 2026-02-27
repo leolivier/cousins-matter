@@ -8,7 +8,7 @@ from django_htmx.http import HttpResponseClientRedirect
 from django.utils.translation import gettext as _
 from django.db.models import Count
 from django.core.exceptions import RequestDataTooBig
-from cm_main.utils import (
+from core.utils import (
   PageOutOfBounds,
   Paginator,
   check_edit_permission,

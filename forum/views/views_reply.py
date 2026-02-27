@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django_htmx.http import HttpResponseClientRefresh, trigger_client_event
 from django.utils.translation import gettext as _
-from cm_main.utils import (
+from core.utils import (
   check_edit_permission,
 )
 from forum.views.views_follow import (

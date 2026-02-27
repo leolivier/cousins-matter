@@ -4,9 +4,9 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
-from cm_main.utils import PageOutOfBounds, Paginator
+from core.utils import PageOutOfBounds, Paginator
 from members.models import Member
-from cm_main.utils import check_edit_permission
+from core.utils import check_edit_permission
 from .models import Trove
 from .forms import TreasureForm
 

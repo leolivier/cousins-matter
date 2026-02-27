@@ -39,12 +39,12 @@ def generate_random_string(length: int) -> str:
 class MemberImportData:
   "Represent a task of an import of members"
 
-  # current row
-  row: dict[str, str] = None
   # the member linked to the current row
-  current_member: Member = None
+  current_member: Member
+  # current row
+  row: dict[str, str] = field(default_factory=dict)
   # current member has been changed or updated
-  status: Literal["created", "updated"] | None = None
+  status: Literal["created", "updated", ""] = ""
   # indicates if the activation was managed for the current member
   activation_managed: bool = False
   # indicates if we have warned the user that even if user activation is requested,
@@ -74,6 +74,9 @@ class MemberImportData:
 class ImportContext:
   "Represent the data of an import of members"
 
+  # default manager used when a user is inactive, has no manager defined in the file and has no
+  # current manager. Set to connected user (the one who is importing the file).
+  default_manager: Member
   # indicate if we should activate imported users
   activate_users: bool = False
   # number of created members
@@ -82,9 +85,6 @@ class ImportContext:
   updated_num: int = 0
   # number of rows processed
   rows_num: int = 0
-  # default manager used when a user is inactive, has no manager defined in the file and has no
-  # current manager. Set to connected user (the one who is importing the file).
-  default_manager: Member = None
   group: str = ""  # id of the group of tasks
   lang: str = "en"  # language of the file
 

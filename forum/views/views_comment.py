@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from django_htmx.http import HttpResponseClientRefresh
 from django.contrib import messages
 from django_htmx.http import trigger_client_event
-from cm_main.utils import check_edit_permission
+from core.utils import check_edit_permission
 from forum.views.views_follow import check_followers_on_comment
 from ..models import Message, Comment
 from ..forms import CommentForm

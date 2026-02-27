@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django_htmx.http import HttpResponseClientRedirect
-from cm_main.utils import check_edit_permission, confirm_delete_modal
+from core.utils import check_edit_permission, confirm_delete_modal
 from polls.views.upsert_views import (
   PollCreateView,
   PollDeleteView,

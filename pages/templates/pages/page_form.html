@@ -1,4 +1,4 @@
-{% extends "cm_main/base.html" %}
+{% extends "core/base.html" %}
 {% load i18n crispy_forms_tags cm_tags static %}
 {% block title %}
 	{%if form.instance.pk%}
@@ -8,7 +8,7 @@
 	{%endif%}
 {% endblock %}
 {% block header %}
-	{%include "cm_main/common/include-summernote.html" with maxsize=settings.PAGE_MAX_SIZE %}
+	{%include "core/common/include-summernote.html" with maxsize=settings.PAGE_MAX_SIZE %}
 {%endblock%}
 {% block content %}
 {%with page=form.instance has_page=form.instance.pk%}
@@ -35,7 +35,7 @@
 			</button>
 			{%if has_page%}
 				{%url "pages-edit:delete" page.pk as delete_url%}
-				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete Page") delete_url=delete_url %}
+				{%include "core/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete Page") delete_url=delete_url %}
 			{%endif%}
 		</div>
 	</form>

@@ -1,10 +1,10 @@
-{% extends 'cm_main/base.html' %}
+{% extends 'core/base.html' %}
 {%load i18n crispy_forms_tags cm_tags static%}
 {% block title %}{% title _("Create Classified Ad") %}{% endblock %}
 {%block header %}
 <link rel="stylesheet" href="{% static 'galleries/css/galleries.min.css' %}">
 <link rel="stylesheet" href="{% static 'classified_ads/css/classified_ads.min.css' %}">
-{%include "cm_main/common/include-summernote.html" %}
+{%include "core/common/include-summernote.html" %}
 <script src="{% static 'galleries/js/galleries.min.js' %}"></script>
 {% endblock %}
 {% block content %}
@@ -27,7 +27,7 @@
 			</button>
 			{%if ad.owner == user%}
 				{%url "classified_ads:delete" ad.pk as delete_ads_url%}
-				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete Ad") button_class='is-warning' delete_url=delete_ads_url %}
+				{%include "core/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete Ad") button_class='is-warning' delete_url=delete_ads_url %}
 			{%endif%}
 		{%else%}
 			<button class="button is-primary" type="submit">

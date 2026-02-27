@@ -9,8 +9,8 @@ from django.utils.formats import date_format
 from django.utils import timezone
 from django.utils.translation import gettext as _, get_language
 from django.template.loader import render_to_string
-from cm_main.utils import get_test_absolute_url
-from cm_main.followers import check_followers
+from core.utils import get_test_absolute_url
+from core.followers import check_followers
 from .models import ChatMessage, ChatRoom
 from members.models import Member
 

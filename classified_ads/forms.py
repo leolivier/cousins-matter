@@ -6,7 +6,7 @@ from .models import AdPhoto, ClassifiedAd, Categories
 
 from crispy_forms.helper import FormHelper
 from crispy_bulma.layout import Layout, Row, Column
-from cm_main.widgets import RichTextarea
+from core.widgets import RichTextarea
 
 logger = logging.getLogger(__name__)
 

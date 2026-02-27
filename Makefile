@@ -66,7 +66,7 @@ cover:
 	  df=.coverage.$(a); \
 		POSTGRES_HOST=localhost REDIS_HOST=localhost coverage run --source="$(a)" $(co) ./manage.py test $(to); \
 	fi; \
-	coverage report --sort=cover --skip-covered -m --fail-under=80 --omit='scripts/*,manage.py,cousinsmatter/asgi.py,cousinsmatter/wsgi.py,cousinsmatter/htmlvalidator.py,*/views_test.py,*/migrations/*,*/tests/*' --data-file=$(df)
+	coverage report --sort=cover --skip-covered -m --fail-under=80 --omit='scripts/*,manage.py,cousinsmatter/asgi.py,cousinsmatter/wsgi.py,core/htmlvalidator.py,*/views_test.py,*/migrations/*,*/tests/*' --data-file=$(df)
 
 mig:
 	POSTGRES_HOST=localhost REDIS_HOST=localhost ./manage.py migrate
@@ -78,3 +78,8 @@ minify:
 	app="$(a)"; \
 	if [ -z "$$app" ]; then app="."; fi; \
 	css-html-js-minify $$app
+
+check:
+	ruff format -q .
+	ruff check . --fix
+	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'

@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from cm_main.widgets import RichTextarea
+from core.widgets import RichTextarea
 
 from ..models import (
   MultiChoiceAnswer,
@@ -17,7 +17,7 @@ from ..models import (
 
 
 class AnswerFormMixin:
-  models_dict = {}
+  models_dict: dict[type[Answer], type[forms.ModelForm]] = {}
 
   def __init_subclass__(cls):
     super().__init_subclass__()

@@ -1,5 +1,5 @@
 from django.urls import reverse
-from cm_main.utils import (
+from core.utils import (
   create_test_image,
   test_media_root_decorator,
   protected_media_url,

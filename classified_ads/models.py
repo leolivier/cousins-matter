@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from cm_main.utils import create_thumbnail
+from core.utils import create_thumbnail
 from members.models import Member
 
 
@@ -28,7 +28,7 @@ class Categories:
   def list_category_keys() -> list[str]:
     if Categories.cat_keys is None:
       Categories.cat_keys = Categories.CATEGORIES.keys()
-    return Categories.cat_keys
+    return list(Categories.cat_keys)
 
   @staticmethod
   def list_subcategories(category) -> list[tuple[str, str]]:
@@ -102,13 +102,13 @@ class ClassifiedAd(models.Model):
     return "-"
 
   def display_shipping_method(self) -> str:
-    return dict(self.SHIPPING_METHODS).get(self.shipping_method)
+    return dict[str, str](self.SHIPPING_METHODS).get(self.shipping_method, "")
 
   def display_item_status(self) -> str:
-    return dict(self.ITEM_STATUS_TYPES).get(self.item_status)
+    return dict[str, str](self.ITEM_STATUS_TYPES).get(self.item_status, "")
 
   def display_ad_status(self) -> str:
-    return dict(self.AD_STATUSES).get(self.ad_status)
+    return dict[str, str](self.AD_STATUSES).get(self.ad_status, "")
 
 
 def get_photo_path(photo, filename):

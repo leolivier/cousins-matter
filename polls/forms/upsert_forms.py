@@ -2,7 +2,7 @@ import datetime
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from cm_main.utils import allowed_date_formats, parse_locale_date, translate_date_format
+from core.utils import allowed_date_formats, parse_locale_date, translate_date_format
 from ..models import EventPlanner, Poll, Question
 
 

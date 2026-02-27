@@ -1,4 +1,4 @@
-{% extends "cm_main/base.html" %}
+{% extends "core/base.html" %}
 {%load i18n crispy_forms_tags cm_tags polls_tags static %}
 {% block title %}
 	{%if form.instance.pk%}
@@ -8,7 +8,7 @@
 	{%endif%}
 {% endblock %}
 {%block header%}
-{%include "cm_main/common/include-bulma-calendar.html" %}
+{%include "core/common/include-bulma-calendar.html" %}
 <script src="{% static 'polls/js/polls.js' %}"></script>
 {%endblock%}
 {% block content %}
@@ -35,7 +35,7 @@
 			{%if planner_id%}
 				{%url "polls:delete_event_planner" planner_id as delete_url%}
 				{%trans "Delete Event Planner" as button_text %}
-				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text=button_text delete_url=delete_url %}
+				{%include "core/common/confirm-delete-modal.html#delete_button" with button_text=button_text delete_url=delete_url %}
 			{%endif%}
 		</div>
 	</form>
@@ -55,7 +55,7 @@
 				{%icon "edit"%}
 			</button>
 			{%url "polls:delete_question" question.id as delete_question_url%}
-			{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text='' button_class='is-small' delete_url=delete_question_url %}
+			{%include "core/common/confirm-delete-modal.html#delete_button" with button_text='' button_class='is-small' delete_url=delete_question_url %}
 		</div>
 		{% empty %}
 		<div id="no-question-for-this-poll" class="panel-block">No questions linked to this poll.</div>

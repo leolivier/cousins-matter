@@ -8,7 +8,7 @@ from django.views import generic
 from django_htmx.http import HttpResponseClientRedirect, HttpResponseClientRefresh
 
 from classified_ads.forms import AdPhotoForm, ClassifiedAdForm, MessageForm
-from cm_main.utils import check_edit_permission, confirm_delete_modal
+from core.utils import check_edit_permission, confirm_delete_modal
 
 from .models import AdPhoto, ClassifiedAd, Categories
 

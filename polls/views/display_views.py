@@ -66,7 +66,7 @@ class AllPollsListView(PollsListView):
 
   only_published = False
   show_closed = True
-  show_last = None
+  show_last = 0
   title = _("All Polls")
   kind = "all"
 
@@ -85,7 +85,7 @@ class ClosedPollsListView(PollsListView):
   only_published = False
   show_closed = True
   only_closed = True
-  show_last = None
+  show_last = 0
   ordering = "-close_date"
   title = _("Closed Polls")
   kind = "closed"

@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
-from cm_main.utils import create_test_image, protected_media_url
+from core.utils import create_test_image, protected_media_url
 from galleries.models import Photo, Gallery
 from galleries.views.views_photo import PhotoAddView, PhotoDetailView
 from members.tests.tests_member import TestLoginRequiredMixin
@@ -289,7 +289,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
     self.photo.save()
     response = self.client.get(self.url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal.html")
+    self.assertTemplateUsed(response, "core/common/confirm-delete-modal.html")
 
 
 class PhotoEditViewTest(PhotoTestsBase):

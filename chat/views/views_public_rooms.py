@@ -11,8 +11,8 @@ from django.views.decorators.http import require_http_methods
 from django.utils.text import slugify
 from ..models import ChatRoom
 from .views_room_common import display_chat_room, list_chat_rooms, create_chat_room
-from cm_main import followers
-from cm_main.utils import check_edit_permission, confirm_delete_modal
+from core import followers
+from core.utils import check_edit_permission, confirm_delete_modal
 
 logger = logging.getLogger(__name__)
 

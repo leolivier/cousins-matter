@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.urls import reverse
 
-from cm_main.templatetags.cm_tags import icon
+from core.templatetags.cm_tags import icon
 
-from cousinsmatter.context_processors import override_settings
+from core.context_processors import override_settings
 from members.tests.tests_member_base import MemberTestCase
 from ..models import FlatPage
 from .test_base import BasePageTestCase, TestPageMixin

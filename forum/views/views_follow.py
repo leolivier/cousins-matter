@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
-from cm_main import followers
+from core import followers
 from ..models import Post
 
 

@@ -33,7 +33,7 @@ class UploadProgressViewTest(MemberTestCase):
     response = self.client.get(url, HTTP_HX_REQUEST="true")
 
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, "cm_main/common/progress-bar.html")
+    self.assertTemplateUsed(response, "core/common/progress-bar.html")
 
     # Check context variables
     self.assertEqual(response.context["value"], 5)

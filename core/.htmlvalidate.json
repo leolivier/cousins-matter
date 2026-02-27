@@ -1,0 +1,106 @@
+{
+  "rules": {
+    "area-alt": [
+      "error",
+      {
+        "accessible": true
+      }
+    ],
+    "aria-hidden-body": "error",
+    "aria-label-misuse": [
+      "error",
+      {
+        "allowAnyNamable": false
+      }
+    ],
+    "attr-case": "error",
+    "attr-delimiter": "error",
+    "attr-quotes": "error",
+    "attr-spacing": "error",
+    "attribute-allowed-values": "error",
+    "attribute-boolean-style": "error",
+    "attribute-empty-style": "error",
+    "attribute-misuse": "error",
+    "close-attr": "error",
+    "close-order": "error",
+    "deprecated": "error",
+    "deprecated-rule": "warn",
+    "doctype-html": "error",
+    "doctype-style": "error",
+    "element-case": "error",
+    "element-name": "error",
+    "element-permitted-content": "error",
+    "element-permitted-occurrences": "error",
+    "element-permitted-order": "error",
+    "element-permitted-parent": "error",
+    "element-required-ancestor": "error",
+    "element-required-attributes": "error",
+    "element-required-content": "error",
+    "empty-heading": "error",
+    "empty-title": "error",
+    "form-dup-name": "error",
+    "hidden-focusable": "error",
+    "input-attributes": "error",
+    "long-title": "error",
+    "map-dup-name": "error",
+    "map-id-name": "error",
+    "meta-refresh": "error",
+    "multiple-labeled-controls": "error",
+    "no-abstract-role": "error",
+    "no-autoplay": [
+      "error",
+      {
+        "include": [
+          "audio",
+          "video"
+        ]
+      }
+    ],
+    "no-conditional-comment": "error",
+    "no-deprecated-attr": "error",
+    "no-dup-attr": "error",
+    "no-dup-class": "error",
+    "no-dup-id": "error",
+    "no-implicit-button-type": "error",
+    "no-implicit-input-type": "error",
+    "no-implicit-close": "error",
+    "no-inline-style": "error",
+    "no-multiple-main": "error",
+    "no-raw-characters": "error",
+    "no-redundant-aria-label": "error",
+    "no-redundant-for": "error",
+    "no-redundant-role": "error",
+    "no-self-closing": "error",
+    "no-trailing-whitespace": "off",
+    "no-utf8-bom": "error",
+    "no-unused-disable": "error",
+    "prefer-button": "error",
+    "prefer-native-element": "off",
+    "prefer-tbody": "error",
+    "script-element": "error",
+    "script-type": "error",
+    "svg-focusable": "off",
+    "tel-non-breaking": "error",
+    "text-content": "error",
+    "unique-landmark": "error",
+    "unrecognized-char-ref": "error",
+    "valid-autocomplete": "error",
+    "valid-id": [
+      "error",
+      {
+        "relaxed": false
+      }
+    ],
+    "void": "off",
+    "void-content": "error",
+    "void-style": "off",
+    "wcag/h30": "error",
+    "wcag/h32": "warn",
+    "wcag/h36": "error",
+    "wcag/h37": "error",
+    "wcag/h63": "error",
+    "wcag/h67": "error",
+    "wcag/h71": "error"
+  },
+  "transform": {}
+}

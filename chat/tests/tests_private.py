@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _, ngettext
 
 from members.tests.tests_member_base import MemberTestCase
 from ..models import ChatMessage, ChatRoom, PrivateChatRoom
-from cm_main.templatetags.cm_tags import icon
+from core.templatetags.cm_tags import icon
 
 
 class PrivateChatRoomTestsMixin:

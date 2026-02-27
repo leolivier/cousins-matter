@@ -3,7 +3,7 @@ from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import override as lang_override
-from cousinsmatter.context_processors import override_settings
+from core.context_processors import override_settings
 from members.models import Member
 from members.tests.tests_member_base import MemberTestCase
 from members.tests.tests_birthdays import TestBirthdaysMixin
@@ -19,7 +19,7 @@ class TestHomePageMixin(TestPageMixin):
     home_content = FlatPage.objects.get(url__iexact=home_url).content
     with lang_override(lang):
       with override_settings(LANGUAGE_CODE=lang):
-        response = self.client.get(reverse("cm_main:Home"), follow=True)
+        response = self.client.get(reverse("core:Home"), follow=True)
         # self.print_response(response)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, home_content, html=True)

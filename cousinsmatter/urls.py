@@ -21,8 +21,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
-from cm_main.views.views_general import download_protected_media, health, qhealth
-from cm_main.views.views_general import PasswordResetView
+from core.views.views_general import download_protected_media, health, qhealth
+from core.views.views_general import PasswordResetView
 
 # from django.utils.translation import gettext_lazy as _
 
@@ -31,7 +31,7 @@ from cm_main.views.views_general import PasswordResetView
 # admin.site.site_title = _('My Site Management')
 
 urlpatterns = [
-  path("", include("cm_main.urls")),
+  path("", include("core.urls")),
   path("members/", include("members.urls")),
   path("posts/", include("forum.urls")),
   path("chat/", include("chat.urls")),
@@ -72,7 +72,7 @@ urlpatterns = [
   path("verification/", include("verify_email.urls")),
   path(
     "robots.txt",
-    TemplateView.as_view(template_name="cm_main/robots.txt", content_type="text/plain"),
+    TemplateView.as_view(template_name="core/robots.txt", content_type="text/plain"),
   ),
   path("captcha/", include("captcha.urls")),
   path(

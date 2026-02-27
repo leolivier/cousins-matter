@@ -301,7 +301,7 @@ def main():
 
   try:
     # Initialize Django
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cousinsmatter.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
     # settings.configure(default_settings=cousinsmatter_defaults, DEBUG=True)
     django.setup()
     check_environment()

@@ -19,7 +19,7 @@ from ..forms import (
 from ..models import Member
 from verify_email.email_handler import send_verification_email
 from django.conf import settings
-from cm_main.mixins import LoginNotRequiredMixin
+from core.mixins import LoginNotRequiredMixin
 
 
 class RegistrationCheckingView(LoginNotRequiredMixin, generic.CreateView):

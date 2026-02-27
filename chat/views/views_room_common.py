@@ -10,8 +10,8 @@ from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from members.models import Member
 from ..models import PrivateChatRoom, ChatRoom, ChatMessage
-from cm_main import followers
-from cm_main.utils import PageOutOfBounds, Paginator
+from core import followers
+from core.utils import PageOutOfBounds, Paginator
 from urllib.parse import unquote
 
 logger = logging.getLogger(__name__)

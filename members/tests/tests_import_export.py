@@ -11,7 +11,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import translation
 # from django.utils.translation import gettext as _
 
-from cm_main.tests.test_protected_media import TestMediaResourceMixin
+from core.tests.test_protected_media import TestMediaResourceMixin
 from ..models import ALL_FIELD_NAMES, MANDATORY_MEMBER_FIELD_NAMES, Member, Address
 from .tests_member_base import MemberTestCase, get_new_member_data
 from ..views.views_import_export import CSVImportView

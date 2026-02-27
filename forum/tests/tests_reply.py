@@ -1,7 +1,7 @@
 from django.urls import reverse
-from cm_main.tests.tests_followers import TestFollowersMixin
+from core.tests.tests_followers import TestFollowersMixin
 from forum.tests.tests_post import ForumTestCase
-from cm_main.tests.test_django_q import django_q_sync_class
+from core.tests.test_django_q import django_q_sync_class
 from ..models import Message
 
 

@@ -16,7 +16,7 @@ Cousins Matter is a self-hosted application for managing large families, listing
 You can have a look at the demo site on https://cousins-matter.levillain.eu
 
 ## Features
-Cousins Matter provides a bunch of features (described in details at [Features](https://cousins-matter.readthedocs.io/features)) amongs which:
+Cousins Matter provides a bunch of features (described in details at [Features](https://cousins-matter.readthedocs.io/en/latest/features)) amongs which:
 
 * _Member Management_: profiles, invitations, directories, birthdays, bulk import, managed members (for youngsters and elders), member following...
 * _Photo Galleries_: bulk import, gallery trees,...

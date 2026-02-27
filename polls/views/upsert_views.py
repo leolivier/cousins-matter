@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import generic
 from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
-from cm_main.utils import check_edit_permission, confirm_delete_modal
+from core.utils import check_edit_permission, confirm_delete_modal
 from ..models import Poll, Question
 from ..forms.upsert_forms import PollUpsertForm, QuestionUpsertForm
 

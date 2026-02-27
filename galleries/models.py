@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from cm_main.utils import check_file_size, create_thumbnail, create_video_thumbnail, is_video_file, protected_media_url
+from core.utils import check_file_size, create_thumbnail, create_video_thumbnail, is_video_file, protected_media_url
 
 logger = logging.getLogger(__name__)
 

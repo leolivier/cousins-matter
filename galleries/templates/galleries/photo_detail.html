@@ -1,4 +1,4 @@
-{% extends "cm_main/base.html" %}
+{% extends "core/base.html" %}
 {% load i18n cm_tags static %}
 {% block title %}{% title _("Photo") %} {% endblock %}
 {%block header %}
@@ -30,7 +30,7 @@
 						{%icon "edit-photo" %}
 					</a>
 					{% url 'galleries:delete_photo' photo.id as delete_url %}
-					{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text='' delete_url=delete_url %}
+					{%include "core/common/confirm-delete-modal.html#delete_button" with button_text='' delete_url=delete_url %}
 				{% endif %}
 				</p>
 			</div>

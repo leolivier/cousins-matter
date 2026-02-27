@@ -3,12 +3,12 @@ from django.urls import reverse
 from django.test import tag
 from django.core import mail
 
-from cm_main.utils import get_test_absolute_url
-from cm_main.tests.tests_followers import TestFollowersMixin
+from core.utils import get_test_absolute_url
+from core.tests.tests_followers import TestFollowersMixin
 from members.tests.tests_member_base import AsyncMemberTestCase, TransactionMemberTestCase
 from ..models import ChatMessage, ChatRoom
 from .tests_mixin import ChatMessageSenderMixin
-from cm_main.tests.test_django_q import async_django_q_sync_class
+from core.tests.test_django_q import async_django_q_sync_class
 
 
 @tag("needs-redis")

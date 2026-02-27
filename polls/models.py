@@ -70,6 +70,7 @@ class Question(models.Model):
   linked to it which are the possible answers.
   """
 
+  UNKOWN_QUESTION = "?"
   YESNO_QUESTION = "YN"
   SINGLECHOICE_QUESTION = "SC"
   MULTICHOICES_QUESTION = "MC"
@@ -122,10 +123,10 @@ class Answer(models.Model):
 
   poll_answer = models.ForeignKey(PollAnswer, on_delete=models.CASCADE)
   question = models.ForeignKey(Question, related_name="answers_%(class)s", on_delete=models.CASCADE)
-  question_type = None
+  question_type = Question.UNKOWN_QUESTION
   answer = None
   subclasses = None
-  question_dict = {}
+  question_dict: dict[str, type["Answer"]] = {}
 
   class Meta:
     abstract = True

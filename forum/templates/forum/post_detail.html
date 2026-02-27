@@ -1,7 +1,7 @@
-{% extends "cm_main/base.html" %}
+{% extends "core/base.html" %}
 {% load i18n cm_tags crispy_forms_tags static %}
 {% block header %}
-	{%include "cm_main/common/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
+	{%include "core/common/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
 	<script>
 		$(document).ready(()=>{  // is this still needed?
 			$('.comment-form').hide();
@@ -66,7 +66,7 @@
 				<span class="is-size-7">{{post.first_message.created|date:"DATETIME_FORMAT"}}</span>
 				<br>
 				<span class="tag" id="nb-replies-id">{{trans_nreplies}}</span>
-				{%include "cm_main/followers/followers-count-tag.html" with followed_object=post %}
+				{%include "core/followers/followers-count-tag.html" with followed_object=post %}
 			</div>
 		</div>
 		<div class="level-right is-flex-shrink-1">
@@ -76,11 +76,11 @@
 					{%icon "edit" %}
 				</a>
 				{%url "forum:delete" post.id as delete_url%}
-				{%include "cm_main/common/confirm-delete-modal.html#delete_button" with button_text='' delete_url=delete_url %}
+				{%include "core/common/confirm-delete-modal.html#delete_button" with button_text='' delete_url=delete_url %}
 			</div>
 			{%else%}
 				{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
-				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=post %}
+				{%include "core/followers/toggle-follow-button.html" with followed_object=post %}
 			{%endif%}
 		</div>
 	</div>

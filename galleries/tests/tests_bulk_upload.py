@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
-from cm_main.tests.test_django_q import django_q_sync_class
-from cm_main.utils import test_resource_full_path
+from core.tests.test_django_q import django_q_sync_class
+from core.utils import test_resource_full_path
 from django_htmx.http import HttpResponseClientRefresh
 from ..models import Gallery, Photo
 from ..views import views_bulk

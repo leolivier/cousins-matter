@@ -1,6 +1,6 @@
 from django.template import Library
 from django.urls import reverse
-from cm_main.utils import Paginator, is_video_file, protected_media_url
+from core.utils import Paginator, is_video_file, protected_media_url
 from ..models import Photo
 
 register = Library()

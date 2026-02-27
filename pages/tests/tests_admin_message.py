@@ -15,7 +15,7 @@ class TestAdminMessage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
     }
     adm_msg = create_page(**admin_message)
     self.assertIsNotNone(adm_msg)
-    response = self.client.get(reverse("cm_main:Home"), follow=True)
+    response = self.client.get(reverse("core:Home"), follow=True)
     # self.print_response(response)
     self.assertContains(
       response,
@@ -41,7 +41,7 @@ class TestAdminMessage(TestHomePageMixin, BasePageTestCase, MemberTestCase):
     ]
     for admin_message in admin_messages:
       admin_message["obj"] = create_page(**admin_message)
-    response = self.client.get(reverse("cm_main:Home"), follow=True)
+    response = self.client.get(reverse("core:Home"), follow=True)
     for admin_message in admin_messages:
       self.assertContains(
         response,

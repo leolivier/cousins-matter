@@ -124,14 +124,16 @@ def require_docker():
     error(1, "docker is not installed, please install it and restart the command")
 
 
-def read_env() -> str:
+def read_env() -> str | None:
   """Will return the content of the .env file"""
   try:
     return ENV_PATH.read_text(encoding="utf-8")
   except FileNotFoundError:
     error(1, f"{ENV_PATH} file not found")
+    return None
   except Exception as ex:
     error(1, f"Failed to read {ENV_PATH}: {ex}")
+    return None
 
 
 def write_env(content: str) -> None:
@@ -308,7 +310,7 @@ def rotate_secrets(args: argparse.Namespace | None = None) -> int:
 
   # Load .env
   env = read_env()
-
+  assert env is not None
   # If SECRET_KEY missing: create and append comment + keys, then exit 1
   secret_match = SEC_REGEX.search(env)
   if secret_match is None:
@@ -527,12 +529,11 @@ def ensure_empty_directory(directory: Path):
   if not directory.exists():
     directory.mkdir(parents=True, exist_ok=True)
     return
-  if any(
-    filter(
-      lambda x: not x.is_dir() or x.name not in ["scripts", "media", "static"],
-      directory.iterdir(),
-    )
-  ):
+
+  def is_nok_dir(x: Path) -> bool:
+    return not x.is_dir() or x.name not in ["scripts", "media", "static"]
+
+  if any(is_nok_dir(x) for x in directory.iterdir()):
     error(
       1,
       f"{directory} is not empty, cousins-matter must be installed in an empty directory.",
@@ -571,13 +572,13 @@ WARNING! Please check .env and copy the variables from .env.old to .env when it 
         )
 
 
-def get_directory(review_environment: bool, directory: str | None):
-  """Resolve directory based on review_environment param. directory param is optional and comes from argv.
+def get_directory(review_environment: bool, directory_arg: str | None):
+  """Resolve directory based on review_environment param. directory_arg param is optional and comes from argv.
   Creates media and config directories if they do not exist.
   """
   cwd = Path.cwd()
   if review_environment:  # review environment only
-    directory = Path(directory or cwd).resolve()
+    target_dir = Path(directory_arg or cwd).resolve()
     # Ensure we're running from scripts dir
     script_dir_name = Path(__file__).resolve().parent.name
     if script_dir_name != "scripts":
@@ -586,27 +587,27 @@ def get_directory(review_environment: bool, directory: str | None):
         "this script should be run from the scripts directory if -e selected. Are you in a devt environment?",
       )
   else:
-    directory = Path(directory or (cwd / "cousins-matter")).resolve()
+    target_dir = Path(directory_arg or (cwd / "cousins-matter")).resolve()
 
   try:
-    directory.mkdir(parents=True, exist_ok=False)
-    verbose(f"directory {directory} does not exist, creating it...")
+    target_dir.mkdir(parents=True, exist_ok=False)
+    verbose(f"directory {target_dir} does not exist, creating it...")
   except FileExistsError:
-    verbose(f"directory {directory} already exists.")
+    verbose(f"directory {target_dir} already exists.")
 
-  check_envfile(directory, review_environment)
+  check_envfile(target_dir, review_environment)
 
-  os.chdir(directory)
+  os.chdir(target_dir)
   try:
-    directory.chmod(0o777)
+    target_dir.chmod(0o777)
   except Exception as ex:
-    error(1, f"Failed to set permissions for {directory}: {ex}")
+    error(1, f"Failed to set permissions for {target_dir}: {ex}")
 
   Path("media").mkdir(parents=True, exist_ok=True, mode=0o777)
   Path("config").mkdir(parents=True, exist_ok=True, mode=0o777)
   Path("static").mkdir(parents=True, exist_ok=True, mode=0o777)
 
-  return directory
+  return target_dir
 
 
 def install_cousins_matter(args):

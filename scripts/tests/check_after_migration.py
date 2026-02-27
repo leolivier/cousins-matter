@@ -238,6 +238,6 @@ def check_after_migration():
 
 
 if __name__ == "__main__":
-  os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cousinsmatter.settings")
+  os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
   django.setup()
   check_after_migration()

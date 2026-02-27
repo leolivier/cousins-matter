@@ -1,4 +1,4 @@
-{% extends "cm_main/base.html" %}
+{% extends "core/base.html" %}
 {% load i18n cm_tags %}
 {% block title %}{% title _("Latest Posts") %}{% endblock %}
 {% block content %}
@@ -37,7 +37,7 @@
 						{{nreplies}} answers
 						{%endblocktranslate%}
 					</span>
-					{%include "cm_main/followers/followers-count-tag.html" with followed_object=post %}
+					{%include "core/followers/followers-count-tag.html" with followed_object=post %}
 				</div>
 				<div class="is-flex-grow-1">
 					<p class="content">
@@ -54,7 +54,7 @@
 				</div>
 				<div class="mr-1">
 					{%url 'forum:toggle_follow' post.id as toggle_follow_url %}
-					{%include "cm_main/followers/toggle-follow-button.html" with followed_object=post extra_class="is-pulled-right" is_hidden_mobile="true"%}
+					{%include "core/followers/toggle-follow-button.html" with followed_object=post extra_class="is-pulled-right" is_hidden_mobile="true"%}
 				</div>
 			</div>
 		{%endfor%}

@@ -1,4 +1,4 @@
-from cm_main.utils import test_media_root_decorator
+from core.utils import test_media_root_decorator
 from galleries.models import Gallery, Photo
 from members.tests.tests_member_base import MemberTestCase
 

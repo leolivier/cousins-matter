@@ -5,7 +5,7 @@
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/leolivier/cousins-matter) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-raw/leolivier/cousins-matter) [![GitHub CI devt build status badge](https://github.com/leolivier/cousins-matter/actions/workflows/build-and-publish-image.yml/badge.svg?branch=main)](https://github.com/leolivier/cousins-matter/actions?query=workflow%3APush+build)
 
 
-![Cousins Matter!](https://raw.githubusercontent.com/leolivier/cousins-matter/main/cm_main/static/cm_main/images/cousinades.jpg)
+![Cousins Matter!](https://raw.githubusercontent.com/leolivier/cousins-matter/main/core/static/core/images/cousinades.jpg)
 
 
 # Cousins Matter project

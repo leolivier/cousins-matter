@@ -1,11 +1,14 @@
 import logging
+from typing import Literal, TypeAlias
+
 from django.conf import settings
 from django.template import Library
-from django.utils.translation import get_language, gettext as _
 from django.utils.safestring import mark_safe
+from django.utils.translation import get_language, gettext as _
 
 from ..models import FlatPage
-from typing import Literal
+
+PageTree: TypeAlias = dict[str, "FlatPage | PageTree"]
 
 register = Library()
 logger = logging.getLogger(__name__)
@@ -37,14 +40,14 @@ def build_pages_tree(
   if prefix and include_or_exclude_prefix == "exclude":
     pages = pages.exclude(url__istartswith=prefix)
 
-  page_tree = {}
+  page_tree: PageTree = {}
   last_tree = None
   start = len(prefix) if prefix else 0
   for page in pages:
     trc = ""
     url = page.url[start:-1]
     logger.debug(trc, "url:", url)
-    tree_level = page_tree
+    tree_level: PageTree = page_tree
     for level in url.split("/"):
       trc += "\t"
       if level == "":

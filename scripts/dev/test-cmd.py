@@ -5,7 +5,7 @@ import sys
 
 # first, setup django
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cousinsmatter.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
 
 # then, get the command

@@ -23,7 +23,7 @@ from .tests_member_base import (
   get_new_member_data,
   today_minus,
 )
-from cm_main.utils import get_test_absolute_url
+from core.utils import get_test_absolute_url
 
 
 class UsersManagersTests(TestCase):

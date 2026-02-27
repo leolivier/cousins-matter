@@ -1,6 +1,6 @@
 from django import forms
 from .models import Trove
-from cm_main.widgets import RichTextarea
+from core.widgets import RichTextarea
 
 
 class TreasureForm(forms.ModelForm):

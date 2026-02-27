@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from cm_main.templatetags.cm_tags import icon
+from core.templatetags.cm_tags import icon
 from members.tests.tests_member_base import MemberTestCase
 from ..forms import PageForm
 from ..models import FlatPage

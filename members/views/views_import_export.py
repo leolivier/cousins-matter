@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _, get_language
 from django_q.tasks import async_task, count_group, result_group
 from django_q.brokers import get_broker
 
-from cm_main.utils import assert_request_is_ajax
+from core.utils import assert_request_is_ajax
 from members.tasks import ImportContext
 
 from ..models import Address, Member, Family
@@ -93,7 +93,7 @@ class CSVImportView(generic.FormView):
         logger.debug(f"rendering first progress-bar url: {hx_get_url} task group: {task_group}")
         return render(
           request,
-          "cm_main/common/progress-bar.html",
+          "core/common/progress-bar.html",
           {"hx_get": hx_get_url, "frequency": "1s", "value": 0, "max": import_data.rows_num, "text": "0%"},
         )
       except ValidationError as ve:
@@ -151,7 +151,7 @@ def import_progress(request, id):
   logger.debug(
     f"upload progress bar value: {value}, max: {max}, processed objects: {users}, errors: {errors}, warnings: {warnings}"
   )
-  return render(request, "cm_main/common/progress-bar.html", context)
+  return render(request, "core/common/progress-bar.html", context)
 
 
 def select_name(request):

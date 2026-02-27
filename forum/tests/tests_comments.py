@@ -1,7 +1,7 @@
 from django.urls import reverse
-from cm_main.tests.tests_followers import TestFollowersMixin
+from core.tests.tests_followers import TestFollowersMixin
 from forum.tests.tests_post import ForumTestCase
-from cm_main.tests.test_django_q import django_q_sync_class
+from core.tests.test_django_q import django_q_sync_class
 
 from ..models import Comment
 
@@ -17,7 +17,7 @@ class CommentCreateTestCase(ForumTestCase):
     content = "a wonderful comment"
     response = self.client.post(url, {"content": content}, follow=True)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, "cm_main/followers/email-followers-on-change.html")
+    self.assertTemplateUsed(response, "core/followers/email-followers-on-change.html")
     self.assertTemplateUsed(response, "display_comment")
     comment = Comment.objects.filter(message=self.message.id)
     self.assertEqual(comment.count(), 1)

@@ -3,8 +3,8 @@ from django.conf import settings
 from django.utils.translation import gettext as _
 from .validators import validate_zipfile_extension
 from .models import Photo, Gallery
-from cm_main.widgets import RichTextarea
-from cm_main.utils import check_file_size
+from core.widgets import RichTextarea
+from core.utils import check_file_size
 
 
 def check_zip_size(file):

@@ -19,12 +19,16 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class ZipImport:
-  root: str = ""  # temp directory where the zip is extracted
-  owner_id: str = ""  # member id of the member who imports the photos
-  galleries: dict[Gallery] = field(default_factory=dict)  # galleries cache, contains both created and pre-existing galleries
-  nbPhotos: int = 0  # number of tasks created for importing photos
+  # temp directory where the zip is extracted
+  root: str = ""
+  # member id of the member who imports the photos
+  owner_id: str = ""
+  # galleries cache, contains both created and pre-existing galleries
+  galleries: dict[str, Gallery] = field(default_factory=dict)
+  # number of tasks created for importing photos
+  nbPhotos: int = 0
   nbGalleries: int = 0
-  root_gallery: Gallery = None
+  root_gallery: Gallery | None = None
   group: str = ""  # group of tasks
   # photos and errors are sets to avoid duplicates, they are filled in upload_progress (so, after tasks are finished)
   photos: set[str] = field(default_factory=set)
@@ -62,8 +66,8 @@ def create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
 
   # create photo using an in memory buffer (BytesIO)
   membuffer = BytesIO()
-  with Image.open(filepath) as img:
-    img = ImageOps.exif_transpose(img)  # avoid image rotating
+  with Image.open(filepath) as imgf:
+    img = ImageOps.exif_transpose(imgf)  # avoid image rotating
     img.save(membuffer, format="JPEG", quality=90)  # save the img in mem buffer
     exifdata = img.getexif()  # get exif data for the image date
 

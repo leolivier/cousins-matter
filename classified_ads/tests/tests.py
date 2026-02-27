@@ -6,7 +6,7 @@ from django.core import mail
 from django.urls import reverse
 from django.utils import formats, timezone
 from django.utils.translation import gettext as _
-from cm_main.utils import protected_media_url
+from core.utils import protected_media_url
 from members.tests.tests_member import TestLoginRequiredMixin, MemberTestCase
 from classified_ads.forms import ClassifiedAdForm, AdPhotoForm
 from classified_ads.models import Categories, ClassifiedAd, AdPhoto
@@ -178,7 +178,7 @@ class DeleteAdTestCase(ClassifiedAdBaseTestCase):
 
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, "cm_main/common/confirm-delete-modal.html")
+    self.assertTemplateUsed(response, "core/common/confirm-delete-modal.html")
 
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 200)

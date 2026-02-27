@@ -1,4 +1,4 @@
-from cm_main.widgets import RichTextarea
+from core.widgets import RichTextarea
 from django.contrib.flatpages.forms import FlatpageForm
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError

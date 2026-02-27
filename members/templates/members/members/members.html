@@ -69,7 +69,7 @@
             </div>
           </div>
           {%with icon1="arrow-down" icon2="arrow-up" selected=request.GET.member_order %}
-            {%include "cm_main/common/toggle-slider.html" with hx_target="#members-grid" %}
+            {%include "core/common/toggle-slider.html" with hx_target="#members-grid" %}
           {%endwith%}
         </div>
       </form>

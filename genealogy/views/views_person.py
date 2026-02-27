@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib import messages
 from django.utils.translation import gettext as _
-from cm_main.utils import PageOutOfBounds, Paginator
+from core.utils import PageOutOfBounds, Paginator
 from ..models import Person
 from ..forms import PersonForm
 from ..utils import clear_genealogy_caches

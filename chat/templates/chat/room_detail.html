@@ -1,4 +1,4 @@
-{% extends "cm_main/base.html" %}
+{% extends "core/base.html" %}
 {% load i18n cm_tags static crispy_forms_tags %}
 {%block header %}
 <script>
@@ -141,7 +141,7 @@ $(document).ready(()=>{
 						</button>
 						{%url "chat:room-delete" room.slug as delete_room_url%}
 						{% with button_text='' button_class='is-small ml-1' delete_url=delete_room_url %}
-							{%include "cm_main/common/confirm-delete-modal.html#delete_button" %}
+							{%include "core/common/confirm-delete-modal.html#delete_button" %}
 						{% endwith %}
 					{%endif%}
 				</div>
@@ -160,9 +160,9 @@ $(document).ready(()=>{
 			{%endpartialdef room_edit_form %}
 			{%with followed_object=room extra_class="ml-auto mr-5" %}
 				{%if private%}
-					{%include "cm_main/followers/followers-count-tag.html" with name="members"%}
+					{%include "core/followers/followers-count-tag.html" with name="members"%}
 				{%else%}
-					{%include "cm_main/followers/followers-count-tag.html" %}
+					{%include "core/followers/followers-count-tag.html" %}
 				{%endif%}
 				{%if room.owner != request.user %}
 					{%if private%}
@@ -183,7 +183,7 @@ $(document).ready(()=>{
 					</div>
 					{%else%}
 						{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
-						{%include "cm_main/followers/toggle-follow-button.html" with followed_object=room toggle_follow_url=toggle_follow_url %}
+						{%include "core/followers/toggle-follow-button.html" with followed_object=room toggle_follow_url=toggle_follow_url %}
 					{%endif%}
 				{%endif%}
 			{%endwith%}

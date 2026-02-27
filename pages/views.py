@@ -7,8 +7,8 @@ from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django_htmx.http import HttpResponseClientRedirect
-from cm_main.mixins import OnlyAdminMixin
-from cm_main.utils import confirm_delete_modal
+from core.mixins import OnlyAdminMixin
+from core.utils import confirm_delete_modal
 from .models import FlatPage
 from .forms import PageForm
 

@@ -1,6 +1,6 @@
 from datetime import date
 from django.urls import reverse
-from cm_main.utils import create_test_image, protected_media_url
+from core.utils import create_test_image, protected_media_url
 from galleries.models import Photo, Gallery
 from galleries.views.views_photo import PhotoDetailView
 from .tests_utils import GalleryBaseTestCase

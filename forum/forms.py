@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from cm_main.widgets import RichTextarea
+from core.widgets import RichTextarea
 from .models import Message, Post, Comment
 
 

@@ -10,10 +10,10 @@ from django.urls import reverse
 
 from captcha.fields import CaptchaField
 
-from cm_main.widgets import RichTextarea
+from core.widgets import RichTextarea
 from .models import Member, Address, Family
 from .widgets import FieldLinkWrapper
-from cm_main.utils import check_file_size
+from core.utils import check_file_size
 
 
 class MemberFormMixin:
@@ -165,7 +165,7 @@ class AddressUpdateForm(ModelForm):
     model = Address
     fields = "__all__"
     localized_fields = "__all__"
-    exclude = []
+    exclude: list[str] = []
 
 
 class FamilyUpdateForm(ModelForm):
@@ -173,7 +173,7 @@ class FamilyUpdateForm(ModelForm):
     model = Family
     fields = "__all__"
     localized_fields = "__all__"
-    exclude = []
+    exclude: list[str] = []
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)

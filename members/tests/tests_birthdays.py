@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.translation import gettext as _
 
-from cm_main.templatetags.cm_tags import icon
+from core.templatetags.cm_tags import icon
 from .tests_member_base import MemberTestCase, get_new_member_data
 
 

@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.utils import formats, timezone
 
-from cm_main.templatetags.cm_tags import icon
+from core.templatetags.cm_tags import icon
 from polls.templatetags.polls_tags import question_icon
 from .test_base import PollTestMixin
 from ..models import Answer, Poll, PollAnswer, Question

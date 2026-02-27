@@ -137,7 +137,7 @@ class BulkUploadPhotosView(generic.FormView):
         logger.debug(f"rendering first progress-bar url: {hx_get_url}")
         return render(
           request,
-          "cm_main/common/progress-bar.html",
+          "core/common/progress-bar.html",
           {"hx_get": hx_get_url, "frequency": "1s", "value": 0, "max": zimport.nbPhotos, "text": "0%"},
           status=200,
         )
@@ -198,4 +198,4 @@ def upload_progress(request, id):
   logger.debug(
     f"upload progress bar value: {value}, max: {max}, processed objects: {zimport.photos}, errors: {zimport.errors}"
   )
-  return render(request, "cm_main/common/progress-bar.html", context)
+  return render(request, "core/common/progress-bar.html", context)

@@ -2,7 +2,7 @@
 {% load i18n cm_tags crispy_forms_tags static %}
 {% block title %}{% title _("Member Detail") %} {% endblock %}
 {% block header %}
-	{%include "cm_main/common/include-bulma-calendar.html" %}
+	{%include "core/common/include-bulma-calendar.html" %}
 {%endblock%}
 
 {% block content %}
@@ -21,7 +21,7 @@
 						<strong>{{ member.first_name }} {{ member.last_name }}</strong>
 						{%if member.email %}<small>&lt;{{ member.email }}&gt;</small>{% endif %}
 						{%if member.is_dead %}{% icon "deceased" %}{% endif %}
-						{%include "cm_main/followers/followers-count-tag.html" with followed_object=object %}
+						{%include "core/followers/followers-count-tag.html" with followed_object=object %}
 
 					</p>
 					<p class="content small">{{ member.username }}
@@ -92,7 +92,7 @@
 			</p>
 			{%else%}
 				{%url 'members:toggle_follow' member.id as toggle_follow_url %}
-				{%include "cm_main/followers/toggle-follow-button.html" with followed_object=object %}
+				{%include "core/followers/toggle-follow-button.html" with followed_object=object %}
 			{% endif %}
       {% if not request.user.is_superuser and member.is_active and not member.is_dead %}
 				<button hx-get="{% url 'members:notify_death' member.id%}"

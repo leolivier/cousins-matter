@@ -9,7 +9,7 @@ from django.contrib.auth import logout
 from django.utils.translation import gettext as _
 from django.http import HttpResponseForbidden, JsonResponse
 from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
-from cm_main.utils import (
+from core.utils import (
   PageOutOfBounds,
   Paginator,
   remove_accents,

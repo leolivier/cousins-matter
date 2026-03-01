@@ -1,4 +1,4 @@
-from .base import *
+from .base import *  # noqa: F403, F405
 
 DEBUG = env.bool("DEBUG", False)
 TESTING = True
@@ -20,7 +20,7 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 DATABASES["default"]["TEST"] = {"NAME": "test_cousinsmatter"}
 DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="localhost")
 
-CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [
+getattr(CHANNEL_LAYERS["default"], "CONFIG").hosts = [
   (
     env.str("REDIS_HOST", default="localhost"),
     env.int("REDIS_PORT", default=6379),

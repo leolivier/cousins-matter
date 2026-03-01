@@ -124,7 +124,7 @@ jobs:
       - name: Test Docker Image
         run: |
           python ./scripts/manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"
-          docker compose -f docker-compose.yml up --wait
+          ENVIRONMENT="docker-test" docker compose -f docker-compose.yml up --wait
           docker exec cousins-matter python manage.py test --failfast
 
       - name: test install script

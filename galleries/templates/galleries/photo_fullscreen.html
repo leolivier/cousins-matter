@@ -1,18 +1,31 @@
 {%load i18n cm_tags%}
 <div id="fullscreen-overlay">
-	<button class="button" id="close-fullscreen">{%trans "Close"%}</button>
-	<button id="fullscreen-slideshow-toggle" class="button is-ghost has-text-white is-large" title="{% trans 'Play/Pause slideshow' %}">
-		<span class="icon is-large">
-			<i class="mdi mdi-play mdi-48px" id="fullscreen-slideshow-icon"></i>
-		</span>
-	</button>
+	<div id="fullscreen-top-right-actions">
+		<button id="fullscreen-slideshow-toggle" class="button is-ghost has-text-white"
+				title="{% trans 'Play/Pause slideshow' %}">
+			<span class="icon is-large">
+				<i class="mdi mdi-play mdi-48px" id="fullscreen-slideshow-icon"></i>
+			</span>
+		</button>
+		<a class="button has-text-link-invert has-background-link is-ghost"
+			id="detail-fullscreen" href="{{photo_detail_url}}">
+			{%trans "Detail"%}
+		</a>
+		<button class="button has-text-link-invert has-background-link is-ghost" id="close-fullscreen">
+			{%trans "Close"%}
+		</button>
+	</div>
 	<button id="prev-image" class="navigation-arrow">❮</button>
 	<button id="next-image" class="navigation-arrow">❯</button>
 	<div id="swipe-container" class="swipe-container">
 		{%partialdef image inline %}
-		{%if photo_detail_url%}
-		<a class="button" id="detail-fullscreen" href="{{photo_detail_url}}">{%trans "Detail"%}</a>
-		{%endif%}
+		{% if request.htmx %}
+		<a class="button has-text-link-invert has-background-link is-ghost"
+				id="detail-fullscreen" hx-swap-oob="true" href="{{photo_detail_url}}">
+			{%trans "Detail"%}
+		</a>
+		{% endif %}
+
 		<div id="image-container" class="swipe-card"
 			hx-get="{{swipe_url}}"
 			hx-target="#swipe-container"

@@ -43,11 +43,10 @@ DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="cousinsmatter@localh
 
 # log levels
 DJANGO_LOG_LEVEL = env.str("DJANGO_LOG_LEVEL", default="WARN")
-getattr(LOGGING["loggers"], "django").level = DJANGO_LOG_LEVEL
-
 CM_LOG_LEVEL = env.str("CM_LOG_LEVEL", default="WARN")
+LOGGING["loggers"]["django"]["level"] = DJANGO_LOG_LEVEL
 for app in LOCAL_APPS:
-  getattr(LOGGING["loggers"], app).level = CM_LOG_LEVEL
+  LOGGING["loggers"][app]["level"] = CM_LOG_LEVEL
 
 INSTALLED_APPS = [
   "daphne",

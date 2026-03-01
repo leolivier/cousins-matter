@@ -20,7 +20,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # Log levels
 CM_LOG_LEVEL = env.str("CM_LOG_LEVEL", default="DEBUG")
 for app in LOCAL_APPS:
-  getattr(LOGGING["loggers"], app).level = CM_LOG_LEVEL
+  LOGGING["loggers"][app]["level"] = CM_LOG_LEVEL
 
 # MIDDLEWARE.append('core.htmlvalidator.HtmlValidatorMiddleware')
 
@@ -43,7 +43,7 @@ if DEBUG_TOOLBAR:
 DATABASES["default"]["USER"] = "cousinsmatter"
 DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="localhost")
 
-getattr(CHANNEL_LAYERS["default"], "CONFIG").hosts = [
+CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [
   (
     env.str("REDIS_HOST", default="localhost"),
     env.int("REDIS_PORT", default=6379),

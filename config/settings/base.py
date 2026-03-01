@@ -4,6 +4,7 @@ Django basic settings for cousinsmatter project.
 
 import environ
 from pathlib import Path
+from typing import Any
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 
@@ -167,7 +168,7 @@ WSGI_APPLICATION = "cousinsmatter.wsgi.application"
 
 ASGI_APPLICATION = "cousinsmatter.asgi.application"
 
-CHANNEL_LAYERS = {
+CHANNEL_LAYERS: dict[str, Any] = {
   "default": {
     "BACKEND": "channels_redis.core.RedisChannelLayer",
     "CONFIG": {
@@ -181,7 +182,7 @@ CHANNEL_LAYERS = {
   },
 }
 
-DATABASES = {
+DATABASES: dict[str, Any] = {
   "default": {
     "ENGINE": "django.db.backends.postgresql",
     "USER": env.str("POSTGRES_USER", default="cousinsmatter"),
@@ -202,7 +203,7 @@ DATABASES = {
 }
 
 # Django Q2 settings
-Q_CLUSTER = {
+Q_CLUSTER: dict[str, Any] = {
   "name": slugify(SITE_NAME),
   "workers": 2,
   # 'recycle': 500,
@@ -254,7 +255,7 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "members:login"
 MAX_REGISTRATION_AGE = env.int("MAX_REGISTRATION_AGE", default=2 * 24 * 3600)
 
-LOGGING = {
+LOGGING: dict[str, Any] = {
   "version": 1,
   "disable_existing_loggers": False,
   "formatters": {

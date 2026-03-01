@@ -20,7 +20,7 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 DATABASES["default"]["TEST"] = {"NAME": "test_cousinsmatter"}
 DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="localhost")
 
-getattr(CHANNEL_LAYERS["default"], "CONFIG").hosts = [
+CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [
   (
     env.str("REDIS_HOST", default="localhost"),
     env.int("REDIS_PORT", default=6379),

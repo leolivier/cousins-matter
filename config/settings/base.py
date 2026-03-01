@@ -3,7 +3,6 @@ Django basic settings for cousinsmatter project.
 """
 
 import environ
-import socket
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
@@ -45,10 +44,13 @@ SITE_DOMAIN = env.str("SITE_DOMAIN", None)
 SITE_PORT = env.int("SITE_PORT", default=0 if SITE_DOMAIN else 8000)
 SITE_PORT = f":{SITE_PORT}" if SITE_PORT else ""
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
-CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[
-  f"http://localhost{SITE_PORT}",
-  f"http://127.0.0.1{SITE_PORT}",
-])
+CORS_ALLOWED_ORIGINS = env.list(
+  "CORS_ALLOWED_ORIGINS",
+  default=[
+    f"http://localhost{SITE_PORT}",
+    f"http://127.0.0.1{SITE_PORT}",
+  ],
+)
 
 LANGUAGES = [
   ("fr", "Français"),
@@ -195,7 +197,7 @@ DATABASES = {
         "max_size": 20,
         "timeout": 30,
       },
-    }
+    },
   }
 }
 
@@ -412,7 +414,7 @@ FEATURES_FLAGS = env.dict(
   },
 )
 
-## GENEALOGY
+# GENEALOGY
 # Number of generations to show in the family chart
 FAMILY_CHART_GENERATIONS = env.int("FAMILY_CHART_GENERATIONS", default=4)
 # Default root person ID to show in the family chart if none is specified

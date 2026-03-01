@@ -1,5 +1,4 @@
 import os
-from django.conf import settings
 
 envt = os.getenv("ENVIRONMENT", "production")
 match envt:

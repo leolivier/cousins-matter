@@ -13,7 +13,7 @@ SECRET_KEY_FALLBACKS = []
 WHITENOISE_MANIFEST_STRICT = False
 
 # Email properties
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Log levels
 CM_LOG_LEVEL = env.str("CM_LOG_LEVEL", default="DEBUG")

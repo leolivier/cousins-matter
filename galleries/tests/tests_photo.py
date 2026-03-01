@@ -183,7 +183,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
 <div id="fullscreen-overlay">
 	<div id="fullscreen-top-right-actions">
 		<button id="fullscreen-slideshow-toggle" class="button is-ghost has-text-white"
-				title="{_('Play/Pause slideshow')}">
+				title="{_("Play/Pause slideshow")}">
 			<span class="icon is-large">
 				<i class="mdi mdi-play mdi-48px" id="fullscreen-slideshow-icon"></i>
 			</span>

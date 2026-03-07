@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.templatetags.static import static
 
 from core.context_processors import override_settings
-from core.utils import storage_rmtree, test_media_root_decorator
+from core.utils import test_media_root_decorator
 from core.tests.test_protected_media import TestMediaResourceMixin
 
 

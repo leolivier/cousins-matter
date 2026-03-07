@@ -7,9 +7,11 @@ from django.test import TestCase
 from django.templatetags.static import static
 
 from core.context_processors import override_settings
+from core.utils import storage_rmtree, test_media_root_decorator
 from core.tests.test_protected_media import TestMediaResourceMixin
 
 
+@test_media_root_decorator(__file__)
 class TestSiteLogo(TestMediaResourceMixin, TestCase):
   # disable navbar cache for this test
   @override_settings(CACHES={"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"}})

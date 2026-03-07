@@ -487,6 +487,10 @@ def storage_rmtree(storage, prefix):
   - storage: an instance of Storage (or subclass)
   - prefix: path related to MEDIA_ROOT without leading slash (e.g. "clients/client_42")
   """
+  if not prefix or str(prefix).strip("/") == "":
+    logger.warning("Attempted to delete MEDIA_ROOT via storage_rmtree with empty prefix. Aborting.")
+    return
+
   if _fs_rmtree(storage, prefix):
     return
 

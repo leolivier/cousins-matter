@@ -134,8 +134,7 @@ jobs:
           # and no unused volumes are remaining
           docker volume prune -f
           # then run test with a SITE_DOMAIN set to localhost
-          echo 'SITE_DOMAIN=localhost' >> $GITHUB_WORKSPACE/.env
-          ./scripts/tests/test_install.sh -g
+          SITE_DOMAIN=localhost ./scripts/tests/test_install.sh -g
 
       - name: test migrate v1 to v2 script
         run: |

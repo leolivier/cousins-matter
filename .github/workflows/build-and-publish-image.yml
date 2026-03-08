@@ -128,8 +128,6 @@ jobs:
           docker exec cousins-matter python manage.py test --failfast
 
       - name: test install script
-        env:
-          SITE_DOMAIN: localhost
         run: |
           # make sure no previous containers are running
           docker compose down -v

@@ -4,21 +4,18 @@ Django basic settings for cousinsmatter project.
 
 import environ
 from pathlib import Path
-from typing import Any
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# load keys from .env
 env = environ.Env()
-DEBUG = False
-TESTING = False
-DEBUG_TOOLBAR = False
-DEBUG_HTMX = False
 
-environ.Env.read_env(BASE_DIR / ".env", overwrite=True)
+# load keys from .env
+# We don't use overwrite=True so that variables already set in the environment (e.g. by Docker) are preserved
+environ.Env.read_env(BASE_DIR / ".env")
+
 
 SECRET_KEY = env.str("SECRET_KEY")
 # when rotating the secret key, you can provide the old key here to avoid breaking the site
@@ -43,13 +40,20 @@ PUBLIC_MEDIA_URL = f"/{MEDIA_REL}/public/"
 SITE_NAME = env.str("SITE_NAME", default="Cousins Matter")
 SITE_DOMAIN = env.str("SITE_DOMAIN", None)
 SITE_PORT = env.int("SITE_PORT", default=0 if SITE_DOMAIN else 8000)
-SITE_PORT = f":{SITE_PORT}" if SITE_PORT else ""
+SITE_PORTS = f":{SITE_PORT}" if SITE_PORT else ""
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
 CORS_ALLOWED_ORIGINS = env.list(
   "CORS_ALLOWED_ORIGINS",
   default=[
-    f"http://localhost{SITE_PORT}",
-    f"http://127.0.0.1{SITE_PORT}",
+    f"http://localhost{SITE_PORTS}",
+    f"http://127.0.0.1{SITE_PORTS}",
+  ],
+)
+CSRF_TRUSTED_ORIGINS = env.list(
+  "CSRF_TRUSTED_ORIGINS",
+  default=[
+    f"http://localhost{SITE_PORTS}",
+    f"http://127.0.0.1{SITE_PORTS}",
   ],
 )
 

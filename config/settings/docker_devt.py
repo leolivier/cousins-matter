@@ -40,6 +40,7 @@ if DEBUG_TOOLBAR:
   except Exception:
     pass
 
+DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="postgres")
 CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [
   (
     env.str("REDIS_HOST", default="redis"),

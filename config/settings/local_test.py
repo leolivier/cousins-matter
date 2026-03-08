@@ -17,8 +17,13 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 # MIDDLEWARE.append("core.htmlvalidator.HtmlValidatorMiddleware")
 
 # Database
-DATABASES["default"]["TEST"] = {"NAME": "test_cousinsmatter"}
+DATABASES["default"]["TEST"] = {
+  "NAME": "test_cousinsmatter",
+  "MIRROR": None,
+  "CHARSET": None,
+}
 DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="localhost")
+DATABASES["default"]["OPTIONS"].pop("pool", None)
 
 CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [
   (

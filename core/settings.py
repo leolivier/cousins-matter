@@ -7,7 +7,7 @@ match envt:
   case "production":
     from config.settings.production import *  # noqa: F403, F405
   case "test":
-    from config.settings.test import *  # noqa: F403, F405
+    from config.settings.local_test import *  # noqa: F403, F405
   case "docker-devt":
     from config.settings.docker_devt import *  # noqa: F403, F405
   case "docker-test":

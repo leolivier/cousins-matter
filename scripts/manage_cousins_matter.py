@@ -332,11 +332,11 @@ PREVIOUS_SECRET_KEYS=''
   # Update PREVIOUS_SECRET_KEYS
   prev_secret_match = PREV_REGEX.search(env)
   if prev_secret_match is None:  # no prev secrets, generate one
-    env += f"PREVIOUS_SECRET_KEYS='{old_secret}'"
+    env += f"\nPREVIOUS_SECRET_KEYS='{old_secret}'\n"
   else:
     prev_val = strip_quotes(prev_secret_match.group(1))
     combined = f"{prev_val},{old_secret}" if old_secret else prev_val
-    env = env.replace(prev_secret_match.group(0), f"PREVIOUS_SECRET_KEYS='{combined}'")
+    env = env.replace(prev_secret_match.group(0), f"PREVIOUS_SECRET_KEYS='{combined}'\n")
 
   write_env(env)
 

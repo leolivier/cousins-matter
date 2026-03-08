@@ -3,6 +3,7 @@ Django basic settings for cousinsmatter project.
 """
 
 import environ
+from typing import Any
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify

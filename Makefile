@@ -70,6 +70,11 @@ cover:
 	fi; \
 	coverage report --sort=cover --skip-covered -m --fail-under=80 --omit='scripts/*,manage.py,cousinsmatter/asgi.py,cousinsmatter/wsgi.py,core/htmlvalidator.py,*/views_test.py,*/migrations/*,*/tests/*' --data-file=$(df)
 
+dtest: build
+	docker compose down cousins-matter qcluster
+	ENVIRONMENT="docker-test" docker compose up -d
+	docker exec -it cousins-matter python manage.py test $(t) $(o)
+
 mig:
 	ENVIRONMENT="development" ./manage.py migrate
 

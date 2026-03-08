@@ -153,7 +153,7 @@ jobs:
           docker volume prune -f
           # then restart with S3 variables in .env
           echo 'MEDIA_STORAGE=storages.backends.s3.S3Storage' >> $GITHUB_WORKSPACE/.env
-          echo "MEDIA_STORAGE_OPTIONS='${{ secrets.S3_MEDIA_STORAGE_OPTIONS }}'" >> $GITHUB_WORKSPACE/.env
+          echo "MEDIA_STORAGE_OPTIONS='${{ secrets.S3_MEDIA_STORAGE_OPTIONS }}'" | sed -e 's/"/\"/g' >> $GITHUB_WORKSPACE/.env
           ENVIRONMENT="docker-test" docker compose -f docker-compose.yml up -d --wait --wait-timeout 30
           docker exec cousins-matter python manage.py test --failfast
 

@@ -25,7 +25,7 @@ env:
   # how to compute image tags
   TAGS_DEF: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'push' && 'type=ref,event=branch' || 'type=sha' }}
   TEST_TAG: 'test-${{ github.sha }}'
-  S3_MEDIA_STORAGE_OPTIONS: '{"access_key":"${{ secrets.ACCESS_KEY }}","secret_key":"${{ secrets.SECRET_KEY }}","bucket_name":"${{ secrets.BUCKET_NAME }}","endpoint_url":"https://${{ secrets.ACCOUNT_ID }}.r2.cloudflarestorage.com"}'
+  S3_MEDIA_STORAGE_OPTIONS: '{\"access_key\":\"${{ secrets.ACCESS_KEY }}\",\"secret_key\":\"${{ secrets.SECRET_KEY }}\",\"bucket_name\":\"${{ secrets.BUCKET_NAME }}\",\"endpoint_url\":\"https://${{ secrets.ACCOUNT_ID }}.r2.cloudflarestorage.com\"}'
 
 
 jobs:

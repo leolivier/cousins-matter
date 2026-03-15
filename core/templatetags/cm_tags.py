@@ -244,6 +244,7 @@ def boldify(value: str) -> str:
     txt = "<i>" + txt[2:-2] + "</i>"
   return mark_safe(txt)
 
+
 @register.filter
 def protected_media_url(value: str) -> str:
   return _protected_media_url(value)

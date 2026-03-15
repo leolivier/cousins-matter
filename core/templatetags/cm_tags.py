@@ -12,6 +12,7 @@ from django.utils.translation import get_language
 from functools import lru_cache
 
 from core.icons import DJANGO_ICONS
+from core.utils import protected_media_url as _protected_media_url
 
 register = Library()
 logger = logging.getLogger(__name__)
@@ -242,3 +243,7 @@ def boldify(value: str) -> str:
   if txt.startswith("**") and txt.endswith("**"):
     txt = "<i>" + txt[2:-2] + "</i>"
   return mark_safe(txt)
+
+@register.filter
+def protected_media_url(value: str) -> str:
+  return _protected_media_url(value)

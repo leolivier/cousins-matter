@@ -31,6 +31,7 @@ class GedcomParser:
     Check if the GEDCOM file is UTF-8. If not, transcode it to a temporary UTF-8 file.
     """
     from django.core.files.storage import default_storage
+
     if os.path.isabs(file_path):
       with open(file_path, "rb") as f:
         content = f.read()

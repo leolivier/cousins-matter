@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-import os
 from ..forms import GedcomImportForm
 from ..utils import GedcomParser, GedcomExporter, clear_genealogy_caches
 

@@ -28,7 +28,8 @@ class TokenManagerTests(TestCase):
   def test_check_token_tampered_hash(self):
     token = self.manager.make_token(self.text)
     ts, hash_val = token.split("-")
-    tampered_token = f"{ts}-{hash_val[:-1]}0"
+    tampered_char = "1" if hash_val[-1] == "0" else "0"
+    tampered_token = f"{ts}-{hash_val[:-1]}{tampered_char}"
     self.assertFalse(self.manager.check_token(self.text, tampered_token))
 
   def test_check_token_expired(self):

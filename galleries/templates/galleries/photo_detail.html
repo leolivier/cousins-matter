@@ -40,17 +40,17 @@
 		<figure class="photo">
 			{% if photo.is_video %}
 			<video class="gallery-image gallery-video" controls playsinline
-				poster="{{photo.thumbnail.url}}"
-				data-fullscreen="{{photo.image.url}}"
+				poster="{{photo.thumbnail.name|protected_media_url}}"
+				data-fullscreen="{{photo.image.name|protected_media_url}}"
 				data-pk="{{photo.id}}"
 				data-swipe-url="{%url 'galleries:get_fullscreen_photo' photo.id %}">
-				<source src="{{photo.image.url}}">
+				<source src="{{photo.image.name|protected_media_url}}">
 				{% trans "Your browser does not support the video tag." %}
 			</video>
 			{% else %}
-			<img src="{{photo.image.url}}"
+			<img src="{{photo.image.name|protected_media_url}}"
 				class="gallery-image"
-				data-fullscreen="{{photo.image.url}}"
+				data-fullscreen="{{photo.image.name|protected_media_url}}"
 				data-pk="{{photo.id}}"
 				data-swipe-url="{%url 'galleries:get_fullscreen_photo' photo.id %}"
 			>

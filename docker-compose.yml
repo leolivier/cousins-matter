@@ -16,6 +16,8 @@ services:
       - ./media:/app/media
       - ./static:/app/static
       - ./.env:/app/.env
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-production}
     healthcheck:
       test: ["CMD-SHELL", "python /app/scripts/healthcheck.py"]
       interval: 30s
@@ -40,6 +42,8 @@ services:
       - ./media:/app/media
       - ./static:/app/static
       - ./.env:/app/.env
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-production}
 
   postgres:
     image: postgres:alpine

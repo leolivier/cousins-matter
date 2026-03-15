@@ -115,6 +115,7 @@ set_admin_env_vars() {
 	# use temp file to avoid that sed changes the inode of the file while docker-compose is reading it
 	tmpfile=$(mktemp)
 	sed 's/ADMIN=.*/ADMIN=admin/;s/ADMIN_PASSWORD=.*/ADMIN_PASSWORD=123456/;s/ADMIN_EMAIL=.*/ADMIN_EMAIL=admin@example.com/;s/ADMIN_FIRSTNAME=.*/ADMIN_FIRSTNAME=Cousins/;s/ADMIN_LASTNAME=.*/ADMIN_LASTNAME=Matter/;s/ADMIN_BIRTHDATE=.*/ADMIN_BIRTHDATE=2000-01-01/' .env > "$tmpfile"
+	echo "SITE_DOMAIN=localhost" >> "$tmpfile"
 	cat "$tmpfile" > .env
 	echo "Admin env vars set:"
 	grep -e "^ADMIN" .env

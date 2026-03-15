@@ -181,12 +181,17 @@ class CreatePhotoViewTests(PhotoTestsBase):
       response,
       f"""
 <div id="fullscreen-overlay">
-  <button class="button" id="close-fullscreen">{_("Close")}</button>
-  <button id="fullscreen-slideshow-toggle" class="button is-ghost has-text-white is-large" title="Lecture/Pause du diaporama">
-		<span class="icon is-large">
-			<i class="mdi mdi-play mdi-48px" id="fullscreen-slideshow-icon"></i>
-		</span>
-	</button>
+	<div id="fullscreen-top-right-actions">
+		<button id="fullscreen-slideshow-toggle" class="button is-ghost has-text-white"
+				title="{_("Play/Pause slideshow")}">
+			<span class="icon is-large">
+				<i class="mdi mdi-play mdi-48px" id="fullscreen-slideshow-icon"></i>
+			</span>
+		</button>
+		<a class="button has-text-link-invert has-background-link is-ghost"
+			id="detail-fullscreen" href="">{_("Detail")}</a>
+		<button class="button has-text-link-invert has-background-link is-ghost" id="close-fullscreen">{_("Close")}</button>
+	</div>
   <button id="prev-image" class="navigation-arrow">❮</button>
   <button id="next-image" class="navigation-arrow">❯</button>
   <div id="swipe-container" class="swipe-container">

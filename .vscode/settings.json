@@ -13,5 +13,17 @@
 		"editor.defaultFormatter": "charliermarsh.ruff",
 		"editor.formatOnSave": true
 	},
-	"makefile.configureOnOpen": false
+	"makefile.configureOnOpen": false,
+	"djangoTestManager.pythonPath": "python3",
+	"djangoTestManager.managePyPath": "manage.py",
+	"djangoTestManager.testCommandTemplate": "${pythonPath} ${managePyPath} test ${testPath} ${testArguments}",
+	"djangoTestManager.testFilePattern": "**/*test*.py",
+	"djangoTestManager.testMethodPattern": "test_",
+	"djangoTestManager.testArguments": [
+		"-v",
+		"2"
+	],
+	"djangoTestManager.environmentVariables": {
+		"ENVIRONMENT": "test"
+	}
 }

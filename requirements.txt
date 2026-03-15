@@ -1,4 +1,4 @@
-django~=6.0
+django~=6.0.3
 pillow~=12.1.1
 django-crispy-forms~=2.6
 crispy-bulma~=0.12.0

@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-import os
 from ..forms import GedcomImportForm
 from ..utils import GedcomParser, GedcomExporter, clear_genealogy_caches
 
@@ -17,10 +16,8 @@ def import_gedcom(request):
       gedcom_file = request.FILES["gedcom_file"]
       # Save temporary file
       path = default_storage.save("tmp/" + gedcom_file.name, ContentFile(gedcom_file.read()))
-      full_path = os.path.join(default_storage.location, path)
-
       try:
-        parser = GedcomParser(full_path)
+        parser = GedcomParser(path)
         parser.parse()
         messages.success(request, _("GEDCOM imported successfully."))
         clear_genealogy_caches()

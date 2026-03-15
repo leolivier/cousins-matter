@@ -2,6 +2,7 @@ import logging
 import uuid
 import os
 import re
+import io
 from datetime import datetime
 from gedcom.element.individual import IndividualElement
 from gedcom.element.family import FamilyElement
@@ -17,18 +18,11 @@ logger = logging.getLogger(__name__)
 
 class GedcomParser:
   def __init__(self, file_path):
-    self.file_path = file_path
     self.gedcom = Parser()
 
     # Detect encoding and transcode to UTF-8 if necessary
     # python-gedcom library hardcodes UTF-8 decoding
-    transcoded_path = self._ensure_utf8(file_path)
-
-    try:
-      self.gedcom.parse_file(transcoded_path)
-    finally:
-      if transcoded_path != file_path:
-        os.remove(transcoded_path)
+    self.gedcom.parse(self._ensure_utf8(file_path))
 
     self.person_map = {}  # Map GEDCOM ID to Person object
 
@@ -36,16 +30,19 @@ class GedcomParser:
     """
     Check if the GEDCOM file is UTF-8. If not, transcode it to a temporary UTF-8 file.
     """
-    import os
-    import tempfile
+    from django.core.files.storage import default_storage
 
-    with open(file_path, "rb") as f:
-      content = f.read()
+    if os.path.isabs(file_path):
+      with open(file_path, "rb") as f:
+        content = f.read()
+    else:
+      with default_storage.open(file_path, "rb") as f:
+        content = f.read()
 
     # Try to decode as UTF-8 (with BOM)
     try:
-      content.decode("utf-8-sig")
-      return file_path
+      decoded_content = content.decode("utf-8-sig")
+      return io.BytesIO(decoded_content.encode("utf-8"))
     except UnicodeDecodeError:
       pass
 
@@ -71,13 +68,10 @@ class GedcomParser:
     # Transcode to UTF-8
     try:
       decoded_content = content.decode(encoding, errors="replace")
-      fd, temp_path = tempfile.mkstemp(suffix=".ged", prefix="transcoded_")
-      with os.fdopen(fd, "w", encoding="utf-8") as f:
-        f.write(decoded_content)
-      return temp_path
+      return io.BytesIO(decoded_content.encode("utf-8"))
     except Exception as e:
       logger.error(f"Failed to transcode GEDCOM file {file_path}: {e}")
-      return file_path
+      return io.BytesIO(content) if isinstance(content, bytes) else io.BytesIO(content.encode("utf-8"))
 
   def parse(self):
     root_child_elements = self.gedcom.get_root_child_elements()

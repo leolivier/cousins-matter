@@ -21,9 +21,12 @@ default_geolocation_data = None
 
 @receiver(user_logged_in)
 def post_login(sender, user, request, **kwargs):
-  client_ip, is_routable = get_client_ip(request)
   result = None
   mapped_fields = {}
+  client_ip, is_routable = get_client_ip(request)
+  if not client_ip and not settings.LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP:
+    return
+  client_ip = client_ip or settings.LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP  # if set, for tests only
 
   result = (
     get_default_geolocation_data()
@@ -32,7 +35,7 @@ def post_login(sender, user, request, **kwargs):
     if is_routable
     else {"error": True, "reason": "Address not routable"}
   )
-  client_ip = client_ip or settings.LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP  # for tests only
+
   assert isinstance(result, dict)
   for key, value in result.items():
     if key in ["user", "ip", "user_agent", "ip_info", "created_at"]:

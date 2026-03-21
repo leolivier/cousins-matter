@@ -58,9 +58,7 @@ def build_pages_tree(
         last_tree = tree_level
         tree_level[level] = {}
       tree_level = tree_level[level]
-      logger.debug(
-        f"{trc}tree for level: {level} is {last_tree}\n" f"{trc}full tree {page_tree}"
-      )
+      logger.debug(f"{trc}tree for level: {level} is {last_tree}\n{trc}full tree {page_tree}")
     if last_tree is not None:
       del last_tree[level]
       last_tree[page.title] = page

@@ -12,7 +12,7 @@ for path in ["health", "qhealth"]:
   # test the health check
   r = urllib.request.urlopen(url, timeout=5)
   if r.getcode() != 200:
-    logger.error(f"url= {url} code= {r.getcode()} msg= {r.read().decode("utf-8")}")
+    logger.error(f"url= {url} code= {r.getcode()} msg= {r.read().decode('utf-8')}")
     sys.exit(1)
 
 sys.exit(0)

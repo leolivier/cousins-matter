@@ -1,5 +1,5 @@
 {%load cm_tags%}
 <a class="navbar-link" href="{{url}}">
 	{%icon icon "is-small" %}
-	<span>{{name}}</span>
+	{%if name%}<span>{{name}}</span>{%endif%}
 </a>

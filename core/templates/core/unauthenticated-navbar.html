@@ -3,13 +3,11 @@
 <nav class="navbar is-primary has-shadow" role="navigation" aria-label="main navigation">
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
-			<img src=
 			{% if settings.SITE_LOGO|startswith:settings.PUBLIC_MEDIA_URL %}
-				"{{settings.SITE_LOGO}}"
+				<img src="{{settings.SITE_LOGO}}">
 			{%else%}
-				"{% static settings.SITE_LOGO %}"
+				<img src="{% static settings.SITE_LOGO %}">
 			{%endif%}
-			width="112" height="28">
 		</a>
 
 		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
@@ -22,7 +20,7 @@
 	<div id="navMenu" class="navbar-menu">
 		<div class="navbar-end">
 			<div class="navbar-item has-dropdown is-hoverable">
-				{%navbar_link "#" _("Settings") "settings" %}
+				{%navbar_link "#" "" "settings" %}
 				<div class="navbar-dropdown is-right">
 					{%if 'show_change_language'|featured%}
 					<div class="navbar-item">

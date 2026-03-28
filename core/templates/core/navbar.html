@@ -82,7 +82,7 @@
 
 			<div class="navbar-end">
 			<div class="navbar-item has-dropdown is-hoverable">
-				{%navbar_link "#" _("Settings") "settings" %}
+				{%navbar_link "#" "" "settings" %}
 				<div class="navbar-dropdown is-right">
 					{%if 'show_change_language'|featured%}
 					<div class="navbar-item">
@@ -127,7 +127,7 @@
 				</div>
 			</div>
 			<div class="navbar-item has-dropdown is-hoverable">
-				{%navbar_link "#" _("Help") "help" %}
+				{%navbar_link "#" "" "help" %}
 
 				{%with about_prefix='/'|add:LANGUAGE_CODE|add:'/about/' private_prefix=settings.PRIVATE_PAGE_URL_PREFIX%}
 				<div class="navbar-dropdown is-right">

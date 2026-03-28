@@ -39,8 +39,13 @@ def delete_my_item(request, pk):
 {% block modal_title %}{{ays_title}}{% endblock modal_title %}
 
 {%block form_params %}
-	hx-post="{{request.get_full_path}}"
 {%endblock form_params %}
+
+{% block submit_button_params %}
+	hx-post="{{request.get_full_path}}"
+	hx-target="#modal"
+	{{ hx_params|default:"" }}
+{% endblock submit_button_params %}
 {% block user_warning %}
 <div class="notification is-warning is-update-warning">
 	{%autoescape off%}{{ays_msg|force_escape}}{%endautoescape%}

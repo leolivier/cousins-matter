@@ -12,6 +12,16 @@ DEBUG_HTMX = env.bool("DEBUG_HTMX", default=DEBUG)
 SECRET_KEY = env.str("SECRET_KEY", "dummy-secret-key-for-devtests")
 SECRET_KEY_FALLBACKS = []
 
+if SITE_DOMAIN is None:
+  SITE_DOMAIN = "localhost"
+  SITE_PORT = 8000
+
+# Support for ngrok
+ALLOWED_HOSTS.append(".ngrok-free.app")
+CSRF_TRUSTED_ORIGINS.append("https://*.ngrok-free.app")
+# To ensure Django knows it's behind an HTTPS proxy (ngrok)
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 WHITENOISE_MANIFEST_STRICT = False
 
 # Email properties

@@ -127,7 +127,7 @@ DJANGO_ICONS = {
   "facebook": "facebook",
   "apple": "apple",
   "github": "github",
-#  "pocketid": "shield-key-outline",
+  #  "pocketid": "shield-key-outline",
   "pocketid": "core/images/pocket-id.svg",
   "openid_connect": "openid",
 }

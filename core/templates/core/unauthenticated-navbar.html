@@ -29,7 +29,7 @@
 							<input name="next" type="hidden" value="{{ request.get_full_path|slice:":-1" }}"> {# Ou request.path si vous ne voulez pas les paramètres GET #}
 							<div class="control">
 								<label for="language">{%trans "Change language" %}:</label>
-								<select name="language" onchange="this.form.submit()">
+								<select id="language" name="language" onchange="this.form.submit()">
 								{% get_current_language as LANGUAGE_CODE %}
 								{% get_available_languages as LANGUAGES %}
 								{% get_language_info_list for LANGUAGES as languages %}

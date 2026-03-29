@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 import os
-from urllib.parse import urlencode
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth import get_user

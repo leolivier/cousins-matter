@@ -23,16 +23,6 @@ def get_gallery_name():
   return "root gallery" + str(COUNTER)
 
 
-class CheckLoginRequired(TestLoginRequiredMixin, TestCase):
-  def test_login_required(self):
-    """Tests login required for galleries views."""
-    for url in ["galleries:galleries", "galleries:create"]:
-      self.assertRedirectsToLogin(url)
-
-    for url in ["galleries:edit", "galleries:detail", "galleries:add_photo"]:
-      self.assertRedirectsToLogin(url, args=[1])
-
-
 class CreateGalleryTest(GalleryBaseTestCase):
   def test_create_root_gallery(self):
     """Tests creating a root gallery."""

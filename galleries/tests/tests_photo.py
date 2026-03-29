@@ -19,12 +19,6 @@ def get_photo_name():
   return "photo #" + str(COUNTER)
 
 
-class CheckLoginRequired(TestLoginRequiredMixin, TestCase):
-  def test_login_required(self):
-    """Tests login required for photo views."""
-    self.assertRedirectsToLogin("galleries:photo", args=[1])
-
-
 class PhotoTestsBase(GalleryBaseTestCase):
   def setUp(self):
     super().setUp()

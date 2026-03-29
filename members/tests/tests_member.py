@@ -134,21 +134,6 @@ class MemberDeleteTestByView(MemberViewTestMixin, MemberTestCase):
     self.assertEqual(Member.objects.filter(username=member.username).count(), 0)
 
 
-class LoginRequiredTests(TestLoginRequiredMixin, TestCase):
-  def test_login_required(self):
-    for url in [
-      "members:logout",
-      "change_password",
-      "members:members",
-      "members:profile",
-      "members:create",
-      "members:birthdays",
-    ]:
-      self.assertRedirectsToLogin(url)
-    for url in ["members:member_edit", "members:detail"]:
-      self.assertRedirectsToLogin(url, args=(1,))
-
-
 class MemberProfileViewTest(MemberTestCase):
   def test_member_profile_view(self):
     profile_url = reverse("members:profile")

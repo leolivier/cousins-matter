@@ -1,5 +1,5 @@
 import socket
-import base
+from . import base
 from .base import *  # noqa: F403, F405
 
 DEBUG = env.bool("DEBUG", True)

@@ -16,7 +16,6 @@ from verify_email.views import verify_user_and_activate
 from ..views.views_member import EditProfileView, MemberDetailView
 from ..models import Member
 from .tests_member_base import (
-  TestLoginRequiredMixin,
   MemberTestCaseMixin,
   MemberTestCase,
   modify_member_data,

@@ -4,9 +4,9 @@
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
 			{% if settings.SITE_LOGO|startswith:settings.PUBLIC_MEDIA_URL %}
-				<img src="{{settings.SITE_LOGO}}">
+				<img src="{{settings.SITE_LOGO}}" width="112" height="28">
 			{%else%}
-				<img src="{% static settings.SITE_LOGO %}">
+				<img src="{% static settings.SITE_LOGO %}" width="112" height="28">
 			{%endif%}
 		</a>
 

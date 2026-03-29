@@ -201,20 +201,6 @@ class TransactionMemberTestCase(MemberTestCaseMixin, TransactionTestCase):
     super().tearDown()
 
 
-class TestLoginRequiredMixin:
-  login_url = reverse("members:login")
-
-  def next(self, from_url, to_url):
-    return f"{from_url}?{urlencode({'next': to_url})}"
-
-  def assertRedirectsToLogin(self, url, args=None):
-    """checks that getting the provided url w/o being logged
-    afterward to the original url"""
-    rurl = reverse(url, args=args)
-    response = self.client.get(rurl)
-    self.assertRedirects(response, self.next(self.login_url, rurl), 302, 200)
-
-
 class AsyncMemberTestCase(TransactionTestCase):
   """
   Specialized test case for async tests that need to avoid atomic block issues.

@@ -131,6 +131,9 @@ INSTALLED_APPS = [
   "channels",
   "django_q",
   "django_htmx",
+  "allauth",
+  "allauth.account",
+  "allauth.socialaccount",
 ]
 
 MIDDLEWARE = [
@@ -142,7 +145,8 @@ MIDDLEWARE = [
   "django.middleware.common.CommonMiddleware",
   "django.middleware.csrf.CsrfViewMiddleware",
   "django.contrib.auth.middleware.AuthenticationMiddleware",
-  "django.contrib.auth.middleware.LoginRequiredMiddleware",
+  "allauth.account.middleware.AccountMiddleware",
+  "core.middleware.LoginRequiredMiddleware",
   "django.contrib.messages.middleware.MessageMiddleware",
   "django.middleware.clickjacking.XFrameOptionsMiddleware",
   "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
@@ -154,7 +158,7 @@ ROOT_URLCONF = "cousinsmatter.urls"
 TEMPLATES = [
   {
     "BACKEND": "django.template.backends.django.DjangoTemplates",
-    "DIRS": [],
+    "DIRS": ["members/templates/allauth/"],
     "APP_DIRS": True,
     "OPTIONS": {
       "context_processors": [
@@ -260,6 +264,21 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "members:login"
 MAX_REGISTRATION_AGE = env.int("MAX_REGISTRATION_AGE", default=2 * 24 * 3600)
 
+# URLs that should be accessible without authentication
+LOGIN_REQUIRED_IGNORE_PATHS = [
+  "/captcha/",
+  # OAuth-related URLs that need to be accessible without authentication
+  "/accounts/oidc/",  # OAuth provider URLs (login, callback)
+  "/accounts/login/",  # Regular login (and social auth redirects)
+  "/accounts/signup/",  # Signup (for social auth signup flow)
+  "/accounts/password/reset/",  # Password reset request
+  "/accounts/password/reset/key/",  # Password reset confirmation
+  "/accounts/confirm-email/",  # Email confirmation
+  "/robots.txt",
+  "/jsi18n/",
+  "/static/",
+]
+
 LOGGING: dict[str, Any] = {
   "version": 1,
   "disable_existing_loggers": False,
@@ -292,6 +311,12 @@ LOGGING: dict[str, Any] = {
     "django": {
       "handlers": ["console", "file"],
       "level": DJANGO_LOG_LEVEL,
+      "propagate": False,
+    },
+    # Suppress verbose "variable does not exist" template debug messages
+    "django.template": {
+      "handlers": ["console", "file"],
+      "level": "INFO",
       "propagate": False,
     },
     **{
@@ -426,3 +451,61 @@ FAMILY_CHART_GENERATIONS = env.int("FAMILY_CHART_GENERATIONS", default=4)
 # Default root person ID to show in the family chart if none is specified
 FAMILY_CHART_ROOT_PERSON_ID = env.int("FAMILY_CHART_ROOT_PERSON_ID", default=None)
 GEDCOM_FILE = env.str("GEDCOM_FILE", default="genealogy.ged")
+
+# --- Allauth Configuration ---
+AUTHENTICATION_BACKENDS = [
+  "django.contrib.auth.backends.ModelBackend",
+  "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+SOCIALACCOUNT_AUTO_SIGNUP = env.bool("SOCIALACCOUNT_AUTO_SIGNUP", False)
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_LOGIN_METHODS = {"email", "username"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
+SOCIALACCOUNT_ADAPTER = "members.adapter.CustomSocialAccountAdapter"
+SOCIALACCOUNT_FORMS = {"signup": "members.forms.MemberSocialSignupForm"}
+
+
+OAUTH_PROVIDERS_CONFIG = env.list("OAUTH_PROVIDERS", default=[])
+
+SOCIALACCOUNT_PROVIDERS: dict[str, dict[str, list[dict[str, str]]]] = {}
+
+for provider in OAUTH_PROVIDERS_CONFIG:
+  provider_prefix = provider.upper()
+  if provider == "pocketid":
+    app = "openid_connect"
+    provider_name = "PocketID"
+  else:
+    app = provider
+    provider_name = provider.capitalize()
+
+  provider_app_path = f"allauth.socialaccount.providers.{app}"
+  if provider_app_path not in INSTALLED_APPS:
+    INSTALLED_APPS.append(provider_app_path)
+
+  # Initialize or update the provider configuration
+  if app not in SOCIALACCOUNT_PROVIDERS:
+    SOCIALACCOUNT_PROVIDERS[app] = {"APPS": []}
+
+  app_config = {
+    "client_id": env.str(f"{provider_prefix}_OAUTH_CLIENT_ID"),
+    "secret": env.str(f"{provider_prefix}_OAUTH_CLIENT_SECRET"),
+    "key": "",
+  }
+
+  if app == "openid_connect":
+    app_config.update({
+      "settings": {
+        "server_url": env.str(f"{provider_prefix}_SERVER_URL"),
+        "token_auth_method": "client_secret_post",
+        "issuer": env.str(f"{provider_prefix}_SERVER_URL"),
+        "oauth_pkce_enabled": True,
+      },
+      "provider_id": provider,
+      "name": provider_name,
+    })
+
+  SOCIALACCOUNT_PROVIDERS[app]["APPS"].append(app_config)
+
+
+# Re-use existing LOGIN_REDIRECT_URL and others

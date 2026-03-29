@@ -328,3 +328,25 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 .progress-bar progress {
 	transition: width 1s ease;
 }
+
+@media screen and (min-width: 1024px) {
+	.max-w-25 {
+		max-width: 25% !important;
+		flex-basis: 25% !important;
+	}
+
+	.max-w-40 {
+		max-width: 40% !important;
+		flex-basis: 40% !important;
+	}
+
+	.max-w-50 {
+		max-width: 50% !important;
+		flex-basis: 50% !important;
+	}
+
+	.max-w-75 {
+		max-width: 75% !important;
+		flex-basis: 75% !important;
+	}
+}

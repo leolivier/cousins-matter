@@ -12,6 +12,7 @@ from captcha.fields import CaptchaField
 
 from core.widgets import RichTextarea
 from .models import Member, Address, Family
+from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from .widgets import FieldLinkWrapper
 from core.utils import check_file_size
 
@@ -122,6 +123,52 @@ class MemberRegistrationForm(MemberFormMixin, UserCreationForm):
     # force email to be required  # TODO: is this useful?
     self.fields["email"].required = True
     self.init_privacy_field()
+
+
+class MemberSocialSignupForm(MemberFormMixin, SocialSignupForm):
+  first_name = forms.CharField(label=_("First name"), max_length=150, required=True)
+  last_name = forms.CharField(label=_("Last name"), max_length=150, required=True)
+  avatar = forms.ImageField(label=_("Avatar"), required=False)
+  birthdate = forms.DateField(label=_("Birthdate"), required=True, widget=forms.DateInput(attrs={"type": "date"}))
+  address = forms.ModelChoiceField(queryset=Address.objects.all(), label=_("Address"), required=False)
+  phone = forms.CharField(label=_("Phone"), max_length=20, required=False)
+  description = forms.CharField(label=_("Description"), widget=RichTextarea(), required=False)
+  hobbies = forms.CharField(label=_("Hobbies"), max_length=1024, required=False)
+  website = forms.URLField(label=_("Website"), required=False)
+  family = forms.ModelChoiceField(queryset=Family.objects.all(), label=_("Family"), required=False)
+  privacy_consent = forms.BooleanField(label=_("Privacy consent"), required=True)
+
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    # Pre-fill from social login
+    user = self.sociallogin.user
+    if user:
+      if not self.initial.get("first_name"):
+        self.initial["first_name"] = getattr(user, "first_name", "")
+      if not self.initial.get("last_name"):
+        self.initial["last_name"] = getattr(user, "last_name", "")
+
+    # For MemberFormMixin.initialize_fields
+    self.instance = self.sociallogin.user
+    self.initialize_fields(*args, **kwargs)
+    self.init_privacy_field()
+
+  def save(self, request):
+    user = super().save(request)
+    # Update user with extra fields
+    user.first_name = self.cleaned_data["first_name"]
+    user.last_name = self.cleaned_data["last_name"]
+    user.avatar = self.cleaned_data["avatar"]
+    user.birthdate = self.cleaned_data["birthdate"]
+    user.address = self.cleaned_data["address"]
+    user.phone = self.cleaned_data["phone"]
+    user.description = self.cleaned_data["description"]
+    user.hobbies = self.cleaned_data["hobbies"]
+    user.website = self.cleaned_data["website"]
+    user.family = self.cleaned_data["family"]
+    user.privacy_consent = self.cleaned_data["privacy_consent"]
+    user.save()
+    return user
 
 
 class MemberUpdateForm(MemberFormMixin, UserChangeForm):

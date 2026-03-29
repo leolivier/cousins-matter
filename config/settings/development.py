@@ -1,5 +1,5 @@
 import socket
-
+import base
 from .base import *  # noqa: F403, F405
 
 DEBUG = env.bool("DEBUG", True)
@@ -12,7 +12,7 @@ DEBUG_HTMX = env.bool("DEBUG_HTMX", default=DEBUG)
 SECRET_KEY = env.str("SECRET_KEY", "dummy-secret-key-for-devtests")
 SECRET_KEY_FALLBACKS = []
 
-if SITE_DOMAIN is None:
+if getattr(base, "SITE_DOMAIN", None) is None:
   SITE_DOMAIN = "localhost"
   SITE_PORT = 8000
 

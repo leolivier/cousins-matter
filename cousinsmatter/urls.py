@@ -85,6 +85,7 @@ urlpatterns = [
   path("troves/", include("troves.urls")),
   path("classified-ads/", include("classified_ads.urls")),
   path("i18n/", include("django.conf.urls.i18n")),
+  path("accounts/", include("allauth.urls")),
   path("health/", health, name="health"),
   path("qhealth/", qhealth, name="qhealth"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

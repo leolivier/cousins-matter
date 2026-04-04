@@ -1,6 +1,6 @@
 import socket
 
-from .base import *  # noqa: F403, F405
+from .dev_base import *  # noqa: F403, F405
 
 DEBUG = env.bool("DEBUG", True)
 
@@ -9,12 +9,6 @@ TESTING = False
 DEBUG_TOOLBAR = env.bool("DEBUG_TOOLBAR", default=True)
 DEBUG_HTMX = env.bool("DEBUG_HTMX", default=DEBUG)
 
-SECRET_KEY = env.str("SECRET_KEY", "dummy-secret-key-for-devtests")
-SECRET_KEY_FALLBACKS = []
-
-if getattr(base, "SITE_DOMAIN", None) is None:
-  SITE_DOMAIN = "localhost"
-  SITE_PORT = 8000
 
 WHITENOISE_MANIFEST_STRICT = False
 
@@ -53,6 +47,3 @@ CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [
 ]
 
 CRISPY_FAIL_SILENTLY = False
-
-# Django Q2 settings
-Q_CLUSTER["sync"] = env.bool("Q_SYNC", True)  # Synchronous by default in dev for easier debugging

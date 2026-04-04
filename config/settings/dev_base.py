@@ -1,4 +1,4 @@
-from .base import *
+from .base import *  # noqa: F403, F405
 from . import base
 
 # Use a dummy secret key if none is provided in the environment/dotenv file

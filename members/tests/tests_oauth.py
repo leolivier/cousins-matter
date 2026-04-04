@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from allauth.socialaccount.models import SocialLogin, SocialAccount
 from allauth.socialaccount.adapter import get_adapter
 from django.contrib.messages.storage.fallback import FallbackStorage
@@ -33,8 +34,11 @@ class OAuthActivationTests(MemberTestCase):
     request.session = session
     setattr(request, "_messages", FallbackStorage(request))
 
-    # Run adapter method
-    self.adapter.pre_social_login(request, sociallogin)
+    # Mock sociallogin.connect to avoid SocialApp.DoesNotExist in CI
+    # (allauth looks up a SocialApp DB record which only exists locally)
+    with patch.object(sociallogin, "connect"):
+      # Run adapter method
+      self.adapter.pre_social_login(request, sociallogin)
 
     # Verify member is now active
     self.inactive_member.refresh_from_db()

@@ -53,7 +53,7 @@ def search_private_members(request, room_slug):
   assert request.htmx
   room = get_object_or_404(PrivateChatRoom, slug=room_slug)
   query = request.GET.get("q", "")
-  members = (
+  members = (  # fmt: skip
     Member.objects
     .filter(followed_chat_rooms=room)
     .filter(

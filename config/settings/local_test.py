@@ -8,6 +8,10 @@ DEBUG_HTMX = False
 SECRET_KEY = env.str("SECRET_KEY", "dummy-secret-key-for-devtests")
 SECRET_KEY_FALLBACKS = []
 
+if getattr(base, "SITE_DOMAIN", None) is None:
+  SITE_DOMAIN = "localhost"
+  SITE_PORT = 8000
+
 WHITENOISE_MANIFEST_STRICT = True
 
 # Email properties

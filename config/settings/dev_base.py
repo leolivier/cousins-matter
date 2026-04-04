@@ -7,8 +7,8 @@ SECRET_KEY_FALLBACKS = []
 
 # Default domain and port for local development and testing
 if getattr(base, "SITE_DOMAIN", None) is None:
-    SITE_DOMAIN = "localhost"
-    SITE_PORT = 8000
+  SITE_DOMAIN = "localhost"
+  SITE_PORT = 8000
 
 # Django Q2 settings: synchronous by default for easier debugging and testing
 Q_CLUSTER["sync"] = env.bool("Q_SYNC", True)
@@ -18,8 +18,8 @@ DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="localhost")
 
 # Default redis host
 CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [
-    (
-        env.str("REDIS_HOST", default="localhost"),
-        env.int("REDIS_PORT", default=6379),
-    )
+  (
+    env.str("REDIS_HOST", default="localhost"),
+    env.int("REDIS_PORT", default=6379),
+  )
 ]

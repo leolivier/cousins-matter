@@ -1,6 +1,5 @@
 import socket
 from .dev_base import *  # noqa: F403, F405
-from . import dev_base as base
 
 DEBUG = env.bool("DEBUG", True)
 

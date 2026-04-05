@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-15 13:21+0100\n"
+"POT-Creation-Date: 2026-03-29 18:43+0200\n"
 "PO-Revision-Date: 2025-04-06 13:05+020\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Français <LL@li.org>\n"
@@ -18,11 +18,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: adapter.py:23
+msgid "The identity provider did not provide an email address."
+msgstr "Le fournisseur d'identité n'a pas fourni d'adresse e-mail."
+
+#: adapter.py:45
+msgid ""
+"This account is not yet active. Please use the invitation link sent to you "
+"by email."
+msgstr ""
+"Ce compte n'est pas encore actif. Veuillez utiliser le lien d'invitation qui "
+"vous a été envoyé par e-mail."
+
+#: adapter.py:58
+msgid ""
+"No invitation found for this email address. Please request an invitation "
+"first."
+msgstr ""
+"Aucune invitation trouvée pour cette adresse e-mail. Veuillez d'abord "
+"demander une invitation."
+
 #: apps.py:8
 msgid "Members"
 msgstr "Membres"
 
-#: forms.py:82
+#: forms.py:29 forms.py:235 views/views_family.py:58
+msgid "New Family"
+msgstr "Nouvelle Famille"
+
+#: forms.py:30 forms.py:236 templates/members/family/family_form.html:13
+#: views/views_family.py:66
+msgid "Change Family"
+msgstr "Modifier la Famille"
+
+#: forms.py:39 views/views_address.py:55
+msgid "New Address"
+msgstr "Nouvelle Adresse"
+
+#: forms.py:40 templates/members/address/address_form.html:12
+#: views/views_address.py:63
+msgid "Change Address"
+msgstr "Modifier l'adresse"
+
+#: forms.py:92
 #, python-format
 msgid ""
 "By checking this box, you agree to this site's <a target='blank' "
@@ -31,55 +69,105 @@ msgstr ""
 "En cochant cette case, tu consents à la <a target='blank' "
 "href='%(privacy_url)s'>politique de confidentialité</a> de ce site"
 
-#: forms.py:182
+#: forms.py:129 templates/members/members/members.html:63
+msgid "First name"
+msgstr "Prénom"
+
+#: forms.py:130 templates/members/members/members.html:64
+msgid "Last name"
+msgstr "Nom"
+
+#: forms.py:131
+msgid "Avatar"
+msgstr "Avatar"
+
+#: forms.py:132 models.py:121 templates/members/members/member_detail.html:53
+#: templates/members/members/members.html:65
+#: templates/members/members/members_directory.html:30
+msgid "Birthdate"
+msgstr "Date de naissance"
+
+#: forms.py:133 models.py:116 templates/members/members/member_detail.html:41
+#: templates/members/members/members_directory.html:33
+#: views/views_directory.py:88
+msgid "Address"
+msgstr "Adresse"
+
+#: forms.py:134 models.py:118 templates/members/members/member_detail.html:49
+#: templates/members/members/members_directory.html:31
+#: views/views_directory.py:88
+msgid "Phone"
+msgstr "Téléphone"
+
+#: forms.py:135
+msgid "Description"
+msgstr "Description"
+
+#: forms.py:136 templates/members/members/member_detail.html:69
+msgid "Hobbies"
+msgstr "Loisirs"
+
+#: forms.py:137 models.py:127 templates/members/members/member_detail.html:57
+msgid "Website"
+msgstr "Site web"
+
+#: forms.py:138 models.py:129 templates/members/members/member_detail.html:61
+msgid "Family"
+msgstr "Famille"
+
+#: forms.py:139 models.py:142
+msgid "Privacy consent"
+msgstr "Consentement à la protection de la vie privée"
+
+#: forms.py:242
 msgid "Family name cannot be empty"
 msgstr "Le nom de famille ne peut pasêtre vide"
 
-#: forms.py:188
+#: forms.py:248
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Nom de la personne invitée (apparaîtra dans l'e-mail reçu)"
 
-#: forms.py:191
+#: forms.py:251
 msgid "Email to send invitation"
 msgstr "Email auquel envoyer l'invitation"
 
-#: forms.py:195
+#: forms.py:255
 msgid "Your name"
 msgstr "Ton nom"
 
-#: forms.py:196
+#: forms.py:256
 msgid "Email where you will receive the link"
 msgstr "Email où tu recevras le lien"
 
-#: forms.py:197
+#: forms.py:257
 msgid "Message to the administrator"
 msgstr "Message à l'administrateur"
 
-#: forms.py:198
+#: forms.py:258
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr "Captcha (cliquez sur l'image pour la rafraîchir si elle est illisible)"
 
-#: forms.py:215
+#: forms.py:275
 msgid "CSV file"
 msgstr "Fichier CSV"
 
-#: forms.py:216
+#: forms.py:276
 msgid "The CSV file containing the members to import."
 msgstr "Le fichier CSV contenant les membres à importer."
 
-#: forms.py:220
+#: forms.py:280
 msgid "Automatically activate imported users"
 msgstr "Activer automatiquement les utilisateurs importés"
 
-#: forms.py:224 templates/members/members/notify_death_form.html:11
+#: forms.py:284 templates/members/members/notify_death_form.html:11
 msgid "Date of Death"
 msgstr "Date du décès"
 
-#: forms.py:226 templates/members/members/notify_death_form.html:19
+#: forms.py:286 templates/members/members/notify_death_form.html:19
 msgid "Any additional information..."
 msgstr "Toute information complémentaire..."
 
-#: forms.py:227 templates/members/members/notify_death_form.html:17
+#: forms.py:287 templates/members/members/notify_death_form.html:17
 msgid "Message (Optional)"
 msgstr "Message (Optionnel)"
 
@@ -228,24 +316,6 @@ msgstr "adresses"
 msgid "Member manager"
 msgstr "Gestionnaire de ce membre"
 
-#: models.py:116 templates/members/members/member_detail.html:41
-#: templates/members/members/members_directory.html:33
-#: views/views_directory.py:88
-msgid "Address"
-msgstr "Adresse"
-
-#: models.py:118 templates/members/members/member_detail.html:49
-#: templates/members/members/members_directory.html:31
-#: views/views_directory.py:88
-msgid "Phone"
-msgstr "Téléphone"
-
-#: models.py:121 templates/members/members/member_detail.html:53
-#: templates/members/members/members.html:65
-#: templates/members/members/members_directory.html:30
-msgid "Birthdate"
-msgstr "Date de naissance"
-
 #: models.py:121
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Cliquez sur le nom du mois ou de l'année pour les modifier rapidement"
@@ -257,14 +327,6 @@ msgstr "Est décédé(e)"
 #: models.py:125
 msgid "Death date"
 msgstr "Date de décès"
-
-#: models.py:127 templates/members/members/member_detail.html:57
-msgid "Website"
-msgstr "Site web"
-
-#: models.py:129 templates/members/members/member_detail.html:61
-msgid "Family"
-msgstr "Famille"
 
 #: models.py:132 templates/members/members/member_detail.html:65
 msgid "Who I am"
@@ -281,10 +343,6 @@ msgstr "Mes loisirs"
 #: models.py:139
 msgid "Provide a list of hobbies separated by commas"
 msgstr "Donne un liste de loisirs séparés par des virgules"
-
-#: models.py:142
-msgid "Privacy consent"
-msgstr "Consentement à la protection de la vie privée"
 
 #: models.py:145
 msgid "Followers"
@@ -376,6 +434,49 @@ msgstr ""
 "Tu as demandé à activer les membres importés. Tous les membres ayant un "
 "gestionnaires dans le fichier seront ignorés et ne seraont pas activés."
 
+#: templates/allauth/socialaccount/login.html:5
+msgid "Sign In"
+msgstr "Se connecter"
+
+#: templates/allauth/socialaccount/login.html:10
+#, python-format
+msgid "Connect %(provider)s"
+msgstr "Connecter %(provider)s"
+
+#: templates/allauth/socialaccount/login.html:13
+#, python-format
+msgid "You are about to connect a new third-party account from %(provider)s."
+msgstr "Tu es sur le point de connecter un nouveau compte tiers de %(provider)s."
+
+#: templates/allauth/socialaccount/login.html:17
+#, python-format
+msgid "Sign In Via %(provider)s"
+msgstr "Se connecter via %(provider)s"
+
+#: templates/allauth/socialaccount/login.html:20
+#, python-format
+msgid "You are about to sign in using a third-party account from %(provider)s."
+msgstr "Tu es sur le point de te connecter en utilisant un compte tiers de %(provider)s."
+
+#: templates/allauth/socialaccount/login.html:28
+msgid "Continue"
+msgstr "Continuer"
+
+#: templates/allauth/socialaccount/signup.html:5
+#: templates/allauth/socialaccount/signup.html:9
+#: templates/allauth/socialaccount/signup.html:26
+msgid "Sign Up"
+msgstr "S'enregistrer"
+
+#: templates/allauth/socialaccount/signup.html:12
+#, python-format
+msgid ""
+"You are about to use your %(provider_name)s account to login to\n"
+"%(site_name)s. As a final step, please complete the following form:"
+msgstr ""
+"Tu es sur le point d'utiliser ton compte %(provider_name)s pour te connecter à\n"
+"%(site_name)s. Comme dernière étape, merci de compléter le formulaire suivant:"
+
 #: templates/members/address/address_detail.html:3
 msgid "Address Detail"
 msgstr "Détail de l'Adresse"
@@ -398,20 +499,19 @@ msgstr "Cette adresse n'est utilisée par personne"
 msgid "Edit"
 msgstr "Editer"
 
-#: templates/members/address/address_form.html:3
-#: templates/members/address/address_form.html:8
-msgid "Edit Address"
-msgstr "Editer l'adresse"
+#: templates/members/address/address_form.html:15
+#: templates/members/family/family_form.html:16
+msgid ""
+"WARNING: This item will be modified for all other members using it! Please "
+"create a new one if that's not what you want to achieve."
+msgstr ""
+"Attention: Cet élément sera modifié pour tous les autres membres "
+"l'utilisant! S'il ne s'agit pas de ce que tu veux faire, crées-en un nouveau."
 
-#: templates/members/address/address_form.html:17
-#: templates/members/family/family_form.html:17
+#: templates/members/address/address_form.html:25
+#: templates/members/family/family_form.html:26
 msgid "Submit"
 msgstr "Envoyer"
-
-#: templates/members/address/address_form.html:18
-#: templates/members/family/family_form.html:18
-msgid "Cancel"
-msgstr "Annuler"
 
 #: templates/members/email/email_verification_msg.html:8
 msgid "Verify Email address"
@@ -430,7 +530,7 @@ msgid "Greetings!"
 msgstr "Bonjour!"
 
 #: templates/members/email/email_verification_msg.html:27
-#: tests/tests_member.py:455
+#: tests/tests_member.py:461
 msgid ""
 "You received this mail because you attempted to create an account on our "
 "website or because a member created and activated your account"
@@ -439,7 +539,7 @@ msgstr ""
 "bien parce qu'un membre a créé et activé ton compte"
 
 #: templates/members/email/email_verification_msg.html:28
-#: tests/tests_member.py:458
+#: tests/tests_member.py:464
 msgid ""
 "Please click on the link below to confirm the email and activate your "
 "account."
@@ -554,7 +654,7 @@ msgid "Invitation for %(invited)s to register to %(site_name)s"
 msgstr "Invitation pour %(invited)s à s'inscrire sur %(site_name)s"
 
 #: templates/members/email/registration_invite_email.html:17
-#: tests/tests_register.py:53
+#: tests/tests_register.py:54
 #, python-format
 msgid "Registration to the \"%(site_name)s\" site"
 msgstr "Enregistrement sur le site \"%(site_name)s\""
@@ -565,7 +665,7 @@ msgid "Hello %(invited)s, this is %(inviter)s!"
 msgstr "Bonjour %(invited)s, c'est %(inviter)s!"
 
 #: templates/members/email/registration_invite_email.html:24
-#: tests/tests_register.py:57
+#: tests/tests_register.py:58
 #, python-format
 msgid ""
 "I invite you to register on the %(site_name)s website I created for managing "
@@ -575,7 +675,7 @@ msgstr ""
 "gérer notre grande famille !"
 
 #: templates/members/email/registration_invite_email.html:26
-#: tests/tests_register.py:61
+#: tests/tests_register.py:62
 #, python-format
 msgid ""
 "I invite you to register on the %(site_name)s website created by %(admin)s "
@@ -618,19 +718,19 @@ msgid "Sign up"
 msgstr "S'enregistrer"
 
 #: templates/members/email/registration_request_email.html:8
-#: tests/tests_register.py:162 views/views_registration.py:243
+#: tests/tests_register.py:191 views/views_registration.py:249
 #, python-format
 msgid "Registration request for %(site_name)s"
 msgstr "Demande d'enregistrement pour %(site_name)s"
 
 #: templates/members/email/registration_request_email.html:17
-#: tests/tests_register.py:169
+#: tests/tests_register.py:198
 #, python-format
 msgid "Registration request for the \"%(site_name)s\" site"
 msgstr "Demande d'enregistrement pour le site \"%(site_name)s\""
 
 #: templates/members/email/registration_request_email.html:21
-#: tests/tests_register.py:173
+#: tests/tests_register.py:202
 #, python-format
 msgid "%(name)s (%(email)s) requested to register to your cousinades site"
 msgstr ""
@@ -658,7 +758,7 @@ msgid "New invitation to register on %(site_name)s"
 msgstr "Nouvelle invitation à s'inscrire sur %(site_name)s"
 
 #: templates/members/email/registration_sent_email.html:15
-#: views/views_registration.py:176
+#: views/views_registration.py:182
 #, python-format
 msgid ""
 "Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s"
@@ -700,12 +800,7 @@ msgstr "Nom de Famille"
 msgid "This family has no declared parent family."
 msgstr "Cette famille n'a pas de famille parente déclarée."
 
-#: templates/members/family/family_form.html:3
-#: templates/members/family/family_form.html:8
-msgid "Edit Family"
-msgstr "Editer la Famille"
-
-#: templates/members/login/login.html:9 templates/members/login/login.html:13
+#: templates/members/login/login.html:5 templates/members/login/login.html:13
 #: templates/members/login/password_reset.html:18
 #: templates/members/login/password_reset_complete.html:9
 #: templates/members/login/password_reset_confirm.html:28
@@ -730,6 +825,26 @@ msgstr "Mot de passe oublié?"
 #: templates/members/login/password_change.html:18
 msgid "Reset password"
 msgstr "Reinitialiser le mot de passe"
+
+#: templates/members/login/oauth_login.html:7
+msgid "Sign in with:"
+msgstr "Connecte-toi avec :"
+
+#: templates/members/login/oauth_login.html:28
+msgid ""
+"Note that prior to using a social account to sign in, you must have an "
+"account on this site and link it to the same email address."
+msgstr ""
+"Note qu'avant d'utiliser un compte social pour te connecter, tu dois "
+"avoir un compte sur ce site et le lier à la même adresse e-mail."
+
+#: templates/members/login/oauth_login.html:33
+msgid "Or sign in with your email and password"
+msgstr "Ou connecte-toi avec ton email et mot de passe"
+
+#: templates/members/login/oauth_login.html:34
+msgid "Or register with your details"
+msgstr "Ou enregistre-toi avec tes informations"
 
 #: templates/members/login/password_change.html:9
 msgid "Password Change"
@@ -957,12 +1072,12 @@ msgid "Member Detail"
 msgstr "Détail d'un Membre"
 
 #: templates/members/members/member_detail.html:30
-#: templates/members/members/member_upsert.html:27 tests/tests_member.py:283
+#: templates/members/members/member_upsert.html:30 tests/tests_member.py:289
 msgid "Active member"
 msgstr "Membre actif"
 
 #: templates/members/members/member_detail.html:32
-#: templates/members/members/member_upsert.html:29 tests/tests_member.py:283
+#: templates/members/members/member_upsert.html:32 tests/tests_member.py:289
 msgid "Member managed by"
 msgstr "Membre géré par"
 
@@ -971,10 +1086,6 @@ msgstr "Membre géré par"
 #: views/views_directory.py:88
 msgid "Email"
 msgstr "Email"
-
-#: templates/members/members/member_detail.html:69
-msgid "Hobbies"
-msgstr "Loisirs"
 
 #: templates/members/members/member_detail.html:74
 msgid "Deceased on"
@@ -990,122 +1101,34 @@ msgstr "(Seul.e %(name)s peut gérer ce membre)"
 msgid "Notify Death"
 msgstr "Signaler un décès"
 
-#: templates/members/members/member_upsert.html:39
+#: templates/members/members/member_upsert.html:42
 msgid "Change Password"
 msgstr "Changer le mot de passe"
 
-#: templates/members/members/member_upsert.html:44
+#: templates/members/members/member_upsert.html:47
 msgid "Activate Account"
 msgstr "Activer le compte"
 
-#: templates/members/members/member_upsert.html:49
-msgid "Delete my account"
-msgstr "Supprimer mon compte?"
-
-#: templates/members/members/member_upsert.html:50
-msgid ""
-"Are you sure you want to delete your account and all associated data? This "
-"is irrecoverable!"
-msgstr ""
-"Es-tu sûr de vouloir supprimer ton compte et toutes les données qui y sont "
-"associées ? C'est irrécupérable !"
-
-#: templates/members/members/member_upsert.html:52
-msgid "Delete member"
-msgstr "Supprimer le Membre"
-
-#: templates/members/members/member_upsert.html:53
-#, python-format
-msgid ""
-"Are you sure you want to delete %(name)s's account and all associated data?"
-msgstr ""
-"Es-tu sûr de vouloir supprimer le compte de %(name)s et toutes les données "
-"associées ?"
-
-#: templates/members/members/member_upsert.html:56
+#: templates/members/members/member_upsert.html:51
 msgid "Delete"
 msgstr "Supprimer"
 
-#: templates/members/members/member_upsert.html:70
+#: templates/members/members/member_upsert.html:64
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: templates/members/members/member_upsert.html:73
+#: templates/members/members/member_upsert.html:67
 msgid "Create"
 msgstr "Créer"
 
-#: templates/members/members/member_upsert.html:80
+#: templates/members/members/member_upsert.html:74
 msgid "Lost your verification email?"
 msgstr "Mail de vérification perdu?"
 
-#: templates/members/members/member_upsert.html:82
+#: templates/members/members/member_upsert.html:76
 #: templates/members/registration/email_verification_failed.html:13
 msgid "Request a new link"
 msgstr "Demander un nouveau lien"
-
-#: templates/members/members/member_upsert.html:102
-msgid "New Address"
-msgstr "Nouvelle Adresse"
-
-#: templates/members/members/member_upsert.html:111
-msgid "New Family"
-msgstr "Nouvelle Famille"
-
-#: templates/members/members/member_upsert.html:126
-msgid "Change Address"
-msgstr "Modifier l'adresse"
-
-#: templates/members/members/member_upsert.html:142
-msgid "Change Family"
-msgstr "Modifier la Famille"
-
-#: templates/members/members/member_upsert.html:153
-msgid ""
-"Address created<br>Warning, it won't be assigned to the member until you "
-"save him/her"
-msgstr ""
-"Adresse créée<br>Avertissement, elle ne sera pas attribuée au membre jusqu'à "
-"ce que tu l'enregistres"
-
-#: templates/members/members/member_upsert.html:156
-msgid ""
-"Address updated<br>Warning, all other members with the same address have "
-"been updated too"
-msgstr ""
-"Adresse mise à jour<br>Attention, tous les autres membres ayant la meme "
-"adresse ont aussi été mis à jour"
-
-#: templates/members/members/member_upsert.html:188
-msgid "New Parent Family"
-msgstr "Nouvelle Famille Parente"
-
-#: templates/members/members/member_upsert.html:196
-msgid "A family with this name already exists!"
-msgstr "Une famille ayant ce nom existe déjà."
-
-#: templates/members/members/member_upsert.html:204
-msgid ""
-"Family created<br>Warning, it won't be assigned to the member until you save "
-"him/her"
-msgstr ""
-"Famille créée<br>Attention, elle ne sera pas attribuée au membre jusqu'a ce "
-"que tu l'enregistres"
-
-#: templates/members/members/member_upsert.html:207
-msgid "Parent family created"
-msgstr "Famille parente créée"
-
-#: templates/members/members/member_upsert.html:210
-msgid ""
-"Family updated<br>Warning, all other members of this family have been "
-"updated too"
-msgstr ""
-"Famille mise à jour<br>Attention, tous les autres membres de la meme famille "
-"ont aussi été mis à jour"
-
-#: templates/members/members/member_upsert.html:214
-msgid "This username is not available!"
-msgstr "Ce nom d'utilisateur est déjà pris!"
 
 #: templates/members/members/members.html:3
 #: templates/members/members/members.html:6
@@ -1116,8 +1139,8 @@ msgstr "Liste des Membres"
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: templates/members/members/members.html:21 views/views_member.py:133
-#: views/views_member.py:159
+#: templates/members/members/members.html:21 views/views_member.py:132
+#: views/views_member.py:156
 msgid "Create Member"
 msgstr "Créer un Membre"
 
@@ -1126,20 +1149,12 @@ msgid "Invite Member"
 msgstr "Inviter un Membre"
 
 #: templates/members/members/members.html:41
-msgid "Search...."
-msgstr "Recherche..."
+msgid "Search..."
+msgstr "Rechercher..."
 
 #: templates/members/members/members.html:58
 msgid "Sort by"
 msgstr "Trier par"
-
-#: templates/members/members/members.html:63
-msgid "First name"
-msgstr "Prénom"
-
-#: templates/members/members/members.html:64
-msgid "Last name"
-msgstr "Nom"
 
 #: templates/members/members/members.html:66
 msgid "Active/Managed"
@@ -1271,17 +1286,7 @@ msgstr "Demande d'un nouvel e-mail de vérification"
 msgid "Request New Email"
 msgstr "Demande d'un nouvel e-mail"
 
-#: templates/widgets/wrap_create_link.html:9
-#, python-format
-msgid "Change selected %(name)s"
-msgstr "Modifier les %(name)s sélectionnées"
-
-#: templates/widgets/wrap_create_link.html:18
-#, python-format
-msgid "Add another %(translated_name)s"
-msgstr "Ajouter une autre %(translated_name)s"
-
-#: templates/widgets/wrap_create_link.html:24
+#: templates/widgets/wrap_create_link.html:17
 msgid ""
 "Warning: don't forget to click the save button at the bottom of the page, "
 "otherwise the changes won't be saved"
@@ -1294,43 +1299,47 @@ msgstr ""
 msgid "Death notification for %(member)s"
 msgstr "Signalement de décès pour %(member)s"
 
-#: tests/tests_member.py:129 views/views_member.py:279
-msgid "Member deleted"
-msgstr "Membre supprimé"
-
-#: tests/tests_member.py:258 tests/tests_member.py:263
-#: views/views_member.py:182 views/views_member.py:201
+#: tests/tests_member.py:264 tests/tests_member.py:269
+#: views/views_member.py:179 views/views_member.py:196
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
 
-#: tests/tests_member.py:522
+#: tests/tests_member.py:528
 msgid "Error: Cannot activate a dead member "
 msgstr "Erreur: Impossible d'activer un membre mort "
 
-#: tests/tests_register.py:39 views/views_registration.py:189
+#: tests/tests_register.py:40 views/views_registration.py:195
 #, python-format
 msgid "Invitation sent to %(email)s."
 msgstr "Invitation envoyée à %(email)s."
 
-#: tests/tests_register.py:46 views/views_registration.py:155
+#: tests/tests_register.py:47 views/views_registration.py:161
 #, python-format
 msgid "You are invited to register on %(site_name)s"
 msgstr "Tu as été invité.e à créer ton compte sur %(site_name)s"
 
-#: tests/tests_register.py:155 views/views_registration.py:251
-msgid "Registration request sent."
-msgstr "Demande d'enregistrement envoyée."
+#: tests/tests_register.py:128 tests/tests_register.py:364
+msgid "This field is required."
+msgstr "Ce champ est obligatoire."
 
-#: tests/tests_register.py:198 views/views_registration.py:130
-#: views/views_registration.py:218
+#: tests/tests_register.py:129
+msgid "Enter a valid email address."
+msgstr "Entre une adresse e-mail valide."
+
+#: tests/tests_register.py:138 tests/tests_register.py:232
+#: views/views_registration.py:136 views/views_registration.py:224
 msgid "A member with this email already exists."
 msgstr "Un membre ayant cette adresse mail existe déjà."
 
-#: tests/tests_register.py:211
+#: tests/tests_register.py:184 views/views_registration.py:257
+msgid "Registration request sent."
+msgstr "Demande d'enregistrement envoyée."
+
+#: tests/tests_register.py:247
 msgid "Invalid CAPTCHA"
 msgstr "CAPTCHA invalide"
 
-#: tests/tests_register.py:250 views/views_registration.py:85
+#: tests/tests_register.py:286 views/views_registration.py:91
 #, python-format
 msgid ""
 "Hello %(username)s, your account has been created! You will now receive an "
@@ -1341,13 +1350,30 @@ msgstr ""
 "email pour vérifier ton adresse mail. Clique sur le lien dans le mail pour "
 "terminer le processus de création de compte."
 
-#: tests/tests_register.py:267 views/views_registration.py:32
+#: tests/tests_register.py:303 tests/tests_register.py:347
+#: views/views_registration.py:32
 msgid "Invalid link. Please contact the administrator."
 msgstr "Lien invalide. Merci de contacter l'administrateur."
 
-#: tests/tests_register.py:283
-msgid "This field is required."
-msgstr "Ce champ est obligatoire."
+#: tests/tests_register.py:313 views/views_registration.py:36
+msgid "You are already logged in"
+msgstr "Tu es déjà connecté"
+
+#: tests/tests_register.py:322 views/views_registration.py:46
+msgid ""
+"A member with the same email address is already active. Please sign in "
+"instead"
+msgstr ""
+"Un membre avec la même adresse mail est déjà actif. Connecte-toi plutôt."
+
+#: tests/tests_register.py:337 views/views_registration.py:53
+#, python-format
+msgid ""
+"You are already registered but not active. Please contact %(admin)s to "
+"activate your account"
+msgstr ""
+"Tu es déjà enregistré mais pas encore actif. Contacte %(admin)s pour activer "
+"ton compte."
 
 #: views/views_activate.py:19
 msgid "Error: Cannot activate a dead member"
@@ -1446,43 +1472,71 @@ msgstr ""
 msgid "Method not allowed"
 msgstr "Méthode non autorisée"
 
-#: views/views_member.py:40
+#: views/views_member.py:41
 msgid "You have been logged out"
 msgstr "Tu as été déconnecté(e)"
 
-#: views/views_member.py:120
+#: views/views_member.py:121
 msgid "Only superusers can create members"
 msgstr "Seuls les superutilisateurs peuvent créer des membres"
 
-#: views/views_member.py:149
+#: views/views_member.py:148
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: views/views_member.py:175
+#: views/views_member.py:172
 msgid "Update Member Details"
 msgstr "Modifier les détails d'un Membre"
 
-#: views/views_member.py:176
+#: views/views_member.py:173
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
-#: views/views_member.py:219
+#: views/views_member.py:214
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Un courriel de vérification a été envoyé pour valider ta nouvelle adresse "
 "électronique."
 
-#: views/views_member.py:262
+#: views/views_member.py:253
 msgid "My Profile"
 msgstr "Mon Profil"
 
-#: views/views_member.py:263
+#: views/views_member.py:254
 msgid "Profile successfully updated"
 msgstr "Profil mis à jour avec succès"
 
-#: views/views_member.py:276
+#: views/views_member.py:268
 msgid "You do not have permission to delete this member."
 msgstr "Tu n'as pas la permission de supprimer ce membre."
+
+#: views/views_member.py:272
+msgid "Member deleted"
+msgstr "Membre supprimé"
+
+#: views/views_member.py:275
+msgid "Delete my account"
+msgstr "Supprimer mon compte?"
+
+#: views/views_member.py:276
+msgid ""
+"Are you sure you want to delete your account and all associated data? This "
+"is irrecoverable!"
+msgstr ""
+"Es-tu sûr de vouloir supprimer ton compte et toutes les données qui y sont "
+"associées ? C'est irrécupérable !"
+
+#: views/views_member.py:278
+msgid "Delete member"
+msgstr "Supprimer le Membre"
+
+#: views/views_member.py:279
+#, python-format
+msgid ""
+"Are you sure you want to delete %(name)s's account and all associated data?"
+msgstr ""
+"Es-tu sûr de vouloir supprimer le compte de %(name)s et toutes les données "
+"associées ?"
 
 #: views/views_member.py:309
 msgid "Please provide a death date."
@@ -1492,30 +1546,10 @@ msgstr "Merci de fournir une date de décès."
 msgid "The administrator has been notified."
 msgstr "L'administrateur a été prévenu."
 
-#: views/views_registration.py:36
-msgid "You are already logged in"
-msgstr "Tu es déjà connecté"
-
-#: views/views_registration.py:46
-msgid ""
-"A member with the same email address is already active. Please sign in "
-"instead"
-msgstr ""
-"Un membre avec la même adresse mail est déjà actif. Connecte-toi plutôt."
-
-#: views/views_registration.py:53
-#, python-format
-msgid ""
-"You are already registered but not active. Please contact %(admin)s to "
-"activate your account"
-msgstr ""
-"Tu es déjà enregistré mais pas encore actif. Contacte %(admin)s pour activer "
-"ton compte."
-
-#: views/views_registration.py:109
+#: views/views_registration.py:115
 msgid "Only superusers can invite members"
 msgstr "Seuls les superutilisateurs peuvent inviter des membres"
 
-#: views/views_registration.py:256
+#: views/views_registration.py:262
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossible d'envoyer un mail. Merci de contacter l'administrateur."

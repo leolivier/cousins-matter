@@ -27,12 +27,10 @@ class TestSiteLogo(TestMediaResourceMixin, TestCase):
   <img src="%s" width="112" height="28">
 </a>"""
     # check if the current logo is already set to the test logo
-    if current_logo_url == logo_url:
-      self.assertTrue(False, f"SITE_LOGO should not be set to {logo_url} for this test")
-    else:
-      # test the current_logo
-      response = self.client.get(reverse("core:Home"), follow=True)
-      self.assertContains(response, format % current_logo_url, html=True)
+    self.assertFalse(current_logo_url == logo_url, f"SITE_LOGO should not be set to {logo_url} for this test")
+    # test the current_logo
+    response = self.client.get(reverse("core:Home"), follow=True)
+    self.assertContains(response, format % current_logo_url, html=True)
 
     logo_target_path = self.copy_test_resource(logo_testresources_file, logo_target_path)
 

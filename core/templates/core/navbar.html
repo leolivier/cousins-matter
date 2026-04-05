@@ -3,12 +3,11 @@
 <nav class="navbar is-primary has-shadow" role="navigation" aria-label="main navigation">
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
-			<img src=
 			{% if settings.SITE_LOGO|startswith:settings.PUBLIC_MEDIA_URL %}
-				"{{settings.SITE_LOGO}}"
+				<img src="{{settings.SITE_LOGO}}" width="112" height="28">
 			{%else%}
-				"{% static settings.SITE_LOGO %}"
-			{%endif%}>
+				<img src="{% static settings.SITE_LOGO %}" width="112" height="28">
+			{%endif%}
 		</a>
 
 		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
@@ -83,9 +82,7 @@
 
 			<div class="navbar-end">
 			<div class="navbar-item has-dropdown is-hoverable">
-				<button class="button navbar-link is-light">
-					{%icon "settings" %}
-				</button>
+				{%navbar_link "#" "" "settings" %}
 				<div class="navbar-dropdown is-right">
 					{%if 'show_change_language'|featured%}
 					<div class="navbar-item">
@@ -93,8 +90,8 @@
 							{% csrf_token %}
 							<input name="next" type="hidden" value="{{ request.get_full_path }}">
 							<div class="control">
-								<label for="lang">{%trans "Change language" %}:</label>
-								<select name="language" onchange="this.form.submit()">
+								<label for="language">{%trans "Change language" %}:</label>
+								<select id="language" name="language" onchange="this.form.submit()">
 								{% get_current_language as LANGUAGE_CODE %}
 								{% get_available_languages as LANGUAGES %}
 								{% get_language_info_list for LANGUAGES as languages %}
@@ -130,9 +127,7 @@
 				</div>
 			</div>
 			<div class="navbar-item has-dropdown is-hoverable">
-				<button class="button navbar-link is-light">
-					{%icon "help" %}
-				</button>
+				{%navbar_link "#" "" "help" %}
 
 				{%with about_prefix='/'|add:LANGUAGE_CODE|add:'/about/' private_prefix=settings.PRIVATE_PAGE_URL_PREFIX%}
 				<div class="navbar-dropdown is-right">
@@ -148,7 +143,7 @@
 				{%endwith%}
 			</div>
 			<div class="navbar-item has-dropdown is-hoverable">
-				{%uncached_navbar_item "#" user.username "member" %}
+				{%uncached_navbar_link "#" user.username "member" %}
 				<div class="navbar-dropdown is-right">
 					{% url 'members:profile' as profile_url%}
 					{%navbar_item profile_url _("Profile") "profile" %}

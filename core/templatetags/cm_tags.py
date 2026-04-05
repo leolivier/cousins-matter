@@ -184,9 +184,14 @@ def icon(name, clazz="icon", aria_hidden=False):
       clazz = "icon " + clazz
   if "is-medium" not in clazz and "is-small" not in clazz:
     clazz += " is-large"
+  img = (
+    f"<img src='{settings.STATIC_URL}{name}' alt='{name}'>"
+    if name.startswith("core/images/")
+    else f"<i class='mdi mdi-24px mdi-{name}' aria-hidden='true'></i>"
+  )
   return mark_safe(f"""
 <span class="{clazz}">
-    <i class="mdi mdi-24px mdi-{name}" aria-hidden="true"></i>
+    {img}
 </span>""")
 
 
@@ -198,6 +203,17 @@ def navbar_item(url, name, icon):
 
 @register.inclusion_tag("core/navbar_item.html")
 def uncached_navbar_item(url, name, icon):
+  return {"url": url, "name": name, "icon": icon}
+
+
+@lru_cache()
+@register.inclusion_tag("core/navbar_link.html")
+def navbar_link(url, name, icon):
+  return {"url": url, "name": name, "icon": icon}
+
+
+@register.inclusion_tag("core/navbar_link.html")
+def uncached_navbar_link(url, name, icon):
   return {"url": url, "name": name, "icon": icon}
 
 

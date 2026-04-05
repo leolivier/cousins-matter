@@ -1,16 +1,11 @@
-from .base import *  # noqa: F403, F405
+from .dev_base import *  # noqa: F403, F405
 
 DEBUG = env.bool("DEBUG", False)
 TESTING = True
 DEBUG_TOOLBAR = False
 DEBUG_HTMX = False
-
-SECRET_KEY = env.str("SECRET_KEY", "dummy-secret-key-for-devtests")
-SECRET_KEY_FALLBACKS = []
-
 WHITENOISE_MANIFEST_STRICT = True
-
-# Email properties
+# Email in memory
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 # Additional test middleware
@@ -22,15 +17,4 @@ DATABASES["default"]["TEST"] = {
   "MIRROR": None,
   "CHARSET": None,
 }
-DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="localhost")
 DATABASES["default"]["OPTIONS"].pop("pool", None)
-
-CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [
-  (
-    env.str("REDIS_HOST", default="localhost"),
-    env.int("REDIS_PORT", default=6379),
-  )
-]
-
-# Django Q2 settings for tests
-Q_CLUSTER["sync"] = True

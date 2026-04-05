@@ -48,7 +48,7 @@ def check_followers(
 
 
 def post_check_followers(task):
-  logger.debug("post_check_followers:", task.result)
+  logger.debug(f"post_check_followers: {task.result}")
 
 
 def do_check_followers(
@@ -68,13 +68,13 @@ def do_check_followers(
   obj_str = str(new_internal_object)
   # get the emails of the followers of the followed object except the author of the new object
   follower_emails = [follower.email for follower in followed_object.followers.all() if follower.id != author.id]
-  logger.debug("follower email:", follower_emails)
+  logger.debug(f"follower email: {follower_emails}")
   # also send emails to the followers of the owner
   follower_emails += [follower.email for follower in followed_object_owner.followers.all()]
-  logger.debug("follower email + owner followers emails:", follower_emails)
+  logger.debug(f"follower email + owner followers emails: {follower_emails}")
   # and also to the owner (he is an implicit follower of his own objects)
   follower_emails.append(followed_object_owner.email)
-  logger.debug("follower email + owner:", follower_emails)
+  logger.debug(f"follower email + owner: {follower_emails}")
   # remove duplicates
   follower_emails = list(set(follower_emails))
   # remove empty emails or None emails

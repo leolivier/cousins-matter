@@ -3,13 +3,11 @@
 <nav class="navbar is-primary has-shadow" role="navigation" aria-label="main navigation">
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
-			<img src=
 			{% if settings.SITE_LOGO|startswith:settings.PUBLIC_MEDIA_URL %}
-				"{{settings.SITE_LOGO}}"
+				<img src="{{settings.SITE_LOGO}}"  width="112" height="28">
 			{%else%}
-				"{% static settings.SITE_LOGO %}"
+				<img src="{% static settings.SITE_LOGO %}" width="112" height="28">
 			{%endif%}
-			width="112" height="28">
 		</a>
 
 		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
@@ -22,9 +20,7 @@
 	<div id="navMenu" class="navbar-menu">
 		<div class="navbar-end">
 			<div class="navbar-item has-dropdown is-hoverable">
-				<button class="button navbar-link is-light">
-					{%icon "settings" %}
-				</button>
+				{%navbar_link "#" "" "settings" %}
 				<div class="navbar-dropdown is-right">
 					{%if 'show_change_language'|featured%}
 					<div class="navbar-item">
@@ -32,8 +28,8 @@
 							{% csrf_token %}
 							<input name="next" type="hidden" value="{{ request.get_full_path|slice:":-1" }}"> {# Ou request.path si vous ne voulez pas les paramètres GET #}
 							<div class="control">
-								<label for="lang">{%trans "Change language" %}:</label>
-								<select name="language" onchange="this.form.submit()">
+								<label for="language">{%trans "Change language" %}:</label>
+								<select id="language" name="language" onchange="this.form.submit()">
 								{% get_current_language as LANGUAGE_CODE %}
 								{% get_available_languages as LANGUAGES %}
 								{% get_language_info_list for LANGUAGES as languages %}

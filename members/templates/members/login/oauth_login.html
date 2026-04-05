@@ -1,0 +1,39 @@
+{% load socialaccount cm_tags i18n %}
+{% get_providers as socialaccount_providers %}
+{% if socialaccount_providers %}
+<div class="container has-text-centered">
+	<div class="level is-flex-wrap-wrap">
+		<div class="level-left is-flex-grow-1 is-justify-content-center">
+			<span class="has-text-weight-bold has-text-primary">{% translate "Sign in with:" %}</span>
+			{% for provider in socialaccount_providers %}
+				<div class="level-item">
+				{%if provider.confirm_login %}
+					<a href="{% provider_login_url provider.id process='login' %}" class="button is-link">
+						{% icon provider.id "is-small" %}
+						<span>{{ provider.name }}</span>
+					</a>
+				{%else%}
+					<form method="post" action="{% provider_login_url provider.id process='login' %}">
+						{% csrf_token %}
+						<button type="submit" class="button is-link">
+							{% icon provider.id "is-small" %}
+							<span>{{ provider.name }}</span>
+						</button>
+					</form>
+				{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+		<div class="level-right is-block is-size-6 is-italic has-background-warning max-w-40">
+			(*) {% translate "Note that prior to using a social account to sign in, you must have an account on this site and link it to the same email address." %}
+		</div>
+	</div>
+	<div class="container has-text-centered">
+		<p class="has-text-weight-bold has-text-primary">
+			{% if kind == 'login' %}{% translate "Or sign in with your email and password" %}
+			{% elif kind == 'register' %}{% translate "Or register with your details" %}
+			{% endif %}:
+		</p>
+	</div>
+</div>
+{% endif %}

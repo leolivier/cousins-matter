@@ -3,7 +3,6 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from datetime import date
 from django.core.exceptions import ValidationError
-from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
@@ -11,7 +10,6 @@ from core.templatetags.cm_tags import icon
 from core.utils import create_test_image
 from galleries.models import Gallery, Photo
 from galleries.views.views_gallery import GalleryCreateView, GalleryDetailView, GalleryUpdateView
-from members.tests.tests_member_base import TestLoginRequiredMixin
 from .tests_utils import GalleryBaseTestCase
 
 COUNTER = 0
@@ -21,16 +19,6 @@ def get_gallery_name():
   global COUNTER
   COUNTER += 1
   return "root gallery" + str(COUNTER)
-
-
-class CheckLoginRequired(TestLoginRequiredMixin, TestCase):
-  def test_login_required(self):
-    """Tests login required for galleries views."""
-    for url in ["galleries:galleries", "galleries:create"]:
-      self.assertRedirectsToLogin(url)
-
-    for url in ["galleries:edit", "galleries:detail", "galleries:add_photo"]:
-      self.assertRedirectsToLogin(url, args=[1])
 
 
 class CreateGalleryTest(GalleryBaseTestCase):

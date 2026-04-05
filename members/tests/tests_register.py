@@ -14,7 +14,6 @@ from ..models import Member
 from ..registration_link_manager import RegistrationLinkManager
 from .tests_member_base import (
   MemberTestCase,
-  TestLoginRequiredMixin,
   get_fake_request,
   today_minus,
 )
@@ -170,7 +169,7 @@ class ignore_captcha_errors(TestContextDecorator):
     return cls
 
 
-class RequestRegistrationLinkTests(TestLoginRequiredMixin, MemberTestCase):
+class RequestRegistrationLinkTests(MemberTestCase):
   @ignore_captcha_errors()
   def test_request_registration(self):
     test_requester = {

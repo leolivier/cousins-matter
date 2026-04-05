@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import logout
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django.http import HttpResponseForbidden, JsonResponse
 from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
 from core.utils import (

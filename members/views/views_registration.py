@@ -59,6 +59,12 @@ class RegistrationCheckingView(LoginNotRequiredMixin, generic.CreateView):
   def get(self, request, encoded_email, token):
     if not self.check_before_register(request, encoded_email, token):
       return redirect("/")
+
+    # Store invitation info in session for potential social login
+    decoded_email = RegistrationLinkManager().decrypt_link(encoded_email, token)
+    request.session["invitation_token"] = token
+    request.session["invitation_email"] = decoded_email
+
     return render(
       request,
       self.template_name,

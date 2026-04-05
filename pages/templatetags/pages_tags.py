@@ -46,35 +46,25 @@ def build_pages_tree(
   for page in pages:
     trc = ""
     url = page.url[start:-1]
-    logger.debug(trc, "url:", url)
+    logger.debug(f"{trc}url: {url}")
     tree_level: PageTree = page_tree
     for level in url.split("/"):
       trc += "\t"
       if level == "":
         continue
-      logger.debug(trc, "level:", level)
+      logger.debug(f"{trc}level: {level}")
       if level not in tree_level:
-        logger.debug(trc, "is not in tree_level")
+        logger.debug(f"{trc}is not in tree_level")
         last_tree = tree_level
         tree_level[level] = {}
       tree_level = tree_level[level]
-      logger.debug(
-        trc,
-        "tree for level:",
-        level,
-        "is",
-        last_tree,
-        "\n",
-        trc,
-        "full tree",
-        page_tree,
-      )
+      logger.debug(f"{trc}tree for level: {level} is {last_tree}\n{trc}full tree {page_tree}")
     if last_tree is not None:
       del last_tree[level]
       last_tree[page.title] = page
 
-    logger.debug("tree for url:", page.url, "is", page_tree)
-  logger.debug("final tree:", page_tree)
+    logger.debug(f"tree for url: {page.url} is {page_tree}")
+  logger.debug(f"final tree: {page_tree}")
   return page_tree
 
 

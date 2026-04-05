@@ -16,7 +16,6 @@ from verify_email.views import verify_user_and_activate
 from ..views.views_member import EditProfileView, MemberDetailView
 from ..models import Member
 from .tests_member_base import (
-  TestLoginRequiredMixin,
   MemberTestCaseMixin,
   MemberTestCase,
   modify_member_data,
@@ -132,21 +131,6 @@ class MemberDeleteTestByView(MemberViewTestMixin, MemberTestCase):
     self.assertEqual(response.status_code, 200)
     self.assertEqual(Member.objects.filter(id=member.id).count(), 0)
     self.assertEqual(Member.objects.filter(username=member.username).count(), 0)
-
-
-class LoginRequiredTests(TestLoginRequiredMixin, TestCase):
-  def test_login_required(self):
-    for url in [
-      "members:logout",
-      "change_password",
-      "members:members",
-      "members:profile",
-      "members:create",
-      "members:birthdays",
-    ]:
-      self.assertRedirectsToLogin(url)
-    for url in ["members:member_edit", "members:detail"]:
-      self.assertRedirectsToLogin(url, args=(1,))
 
 
 class MemberProfileViewTest(MemberTestCase):

@@ -171,7 +171,7 @@ function check_search_length(el, min_length) {
 
 $(document).on('htmx:load', () => {
 	 // Add a click event on various modal child elements to close the parent modal
-  $('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button').
+  $('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button:not([type="submit"])').
     not('.keep-open-on-click').
     on('click', function(el) {
       $(this).closest('.modal').removeClass('is-active'); // close the parent modal

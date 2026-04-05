@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils import formats, timezone
 from django.utils.translation import gettext as _
 from core.utils import protected_media_url
-from members.tests.tests_member import TestLoginRequiredMixin, MemberTestCase
+from members.tests.tests_member import MemberTestCase
 from classified_ads.forms import ClassifiedAdForm, AdPhotoForm
 from classified_ads.models import Categories, ClassifiedAd, AdPhoto
 from classified_ads.views import CreateAdView, UpdateAdView, AdPhotoAddView
@@ -28,7 +28,7 @@ def create_test_image():
   )
 
 
-class ClassifiedAdBaseTestCase(TestLoginRequiredMixin, MemberTestCase):
+class ClassifiedAdBaseTestCase(MemberTestCase):
   model = ClassifiedAd
   template_name = "classified_ads/form.html"
   form_class = ClassifiedAdForm

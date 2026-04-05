@@ -7,6 +7,10 @@
 {%endblock%}
 {% block content %}
 {%with member=form.instance%}
+	{% if not member.pk %}  {# new member registration only: propose to login with OAuth #}
+		{% include "members/login/oauth_login.html" with kind="register" %}
+	{% endif %}
+
 <div class="container px-2">
 	<h1 class="title has-text-centered is-2">{{title}}</h1>
 	{% if member and member.id %} {# existing member #}

@@ -1,4 +1,7 @@
 # List of correspondance of icons in https://materialdesignicons.com/
+# For local icons stored in core/static/core/images/, use the filename with extension
+# eg "logo.png" -> "core/images/logo.png"
+# For Material Design Icons, use the icon name without the "mdi-" prefix
 DJANGO_ICONS = {
   # footer icons
   "copyleft": "copyleft",
@@ -120,4 +123,11 @@ DJANGO_ICONS = {
   "gender-male": "gender-male",
   "gender-female": "gender-female",
   "genderless": "gender-non-binary",
+  "google": "google",
+  "facebook": "facebook",
+  "apple": "apple",
+  "github": "github",
+  #  "pocketid": "shield-key-outline",
+  "pocketid": "core/images/pocket-id.svg",
+  "openid_connect": "openid",
 }

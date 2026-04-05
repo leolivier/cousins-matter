@@ -84,6 +84,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     :param self: The consumer instance.
     :type self: :py:class:`ChatConsumer`
     """
+    logger.debug("websocket connected")
     self.room_slug = self.scope["url_route"]["kwargs"]["room_slug"]
     self.room_group_name = "chat_%s" % self.room_slug
 

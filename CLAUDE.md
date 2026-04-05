@@ -8,7 +8,7 @@ Cousins Matter is a self-hosted Django application for managing large families. 
 
 ## Tech Stack
 
-- **Framework**: Django 5.x with Django Channels for WebSockets
+- **Framework**: Django 6.x with Django Channels for WebSockets
 - **Python**: 3.14+
 - **Database**: PostgreSQL (production), SQLite supported for dev
 - **Cache/Task Queue**: Redis with Django-Q2

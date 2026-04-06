@@ -93,7 +93,7 @@ class TestFollowersMixin:
     self.assertIn(follower.email, follower_message.bcc)
     logger.debug(f"""
       follower_message.bcc: {follower_message.bcc}
-      sender: {sender.email if sender else 'None'}
+      sender: {sender.email if sender else "None"}
       owner: {owner.email}
       follower: {follower.email}
     """)

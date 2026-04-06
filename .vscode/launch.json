@@ -5,6 +5,29 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Django Test Debugger",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/manage.py",
+			"args": [
+				"test",
+				"--failfast",
+				"-v",
+				"2",
+				"chat.tests.tests_followers.TestChatWithMemberFollower.test_follow_room"
+			],
+			"django": true,
+			"autoStartBrowser": false,
+			"justMyCode": false,
+			"envFile": "${workspaceFolder}/.env",
+			"env": {
+				"POSTGRES_HOST": "localhost",
+				"REDIS_HOST": "localhost",
+				"ENVIRONMENT": "development",
+				"TESTING": "true"
+			}
+		},
+		{
 			"name": "Django runserver Debugger",
 			"type": "debugpy",
 			"request": "launch",
@@ -18,7 +41,9 @@
 			"envFile": "${workspaceFolder}/.env",
 			"env": {
 				"POSTGRES_HOST": "localhost",
-				"REDIS_HOST": "localhost"
+				"REDIS_HOST": "localhost",
+				"ENVIRONMENT": "development",
+				"TESTING": "true"
 			}
 		},
 		{
@@ -35,28 +60,9 @@
 			"envFile": "${workspaceFolder}/.env",
 			"env": {
 				"POSTGRES_HOST": "localhost",
-				"REDIS_HOST": "localhost"
-			}
-		},
-		{
-			"name": "Django Test Debugger",
-			"type": "debugpy",
-			"request": "launch",
-			"program": "${workspaceFolder}/manage.py",
-			"args": [
-				"test",
-				"--failfast",
-				"-v",
-				"2",
-				"members.tests.tests_search.MemberSearchTests.test_search_members_htmx"
-			],
-			"django": true,
-			"autoStartBrowser": false,
-			"justMyCode": false,
-			"envFile": "${workspaceFolder}/.env",
-			"env": {
-				"POSTGRES_HOST": "localhost",
-				"REDIS_HOST": "localhost"
+				"REDIS_HOST": "localhost",
+				"ENVIRONMENT": "development",
+				"TESTING": "true"
 			}
 		},
 		{

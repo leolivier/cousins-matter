@@ -20,7 +20,7 @@ class ChatMessageSenderMixin(object):
     else:
       user = sender
 
-    communicator = WebsocketCommunicator(application, f"chat/{room_slug}")
+    communicator = WebsocketCommunicator(application, f"chat/ws/{room_slug}")
     communicator.scope["user"] = user
     connected, _ = await communicator.connect()
     if not connected:

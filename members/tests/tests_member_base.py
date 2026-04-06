@@ -43,7 +43,7 @@ def today_minus(delta: str):
 
 
 def get_new_member_data(**kwargs):
-  """returns a brand new member data (new username)"""
+  """Returns a brand new member data (new username)."""
   counter = get_counter()
   prefix = kwargs.get("prefix", "")
   return {
@@ -55,6 +55,7 @@ def get_new_member_data(**kwargs):
     "phone": kwargs.get("phone", f"01 23 45 67 {counter}"),
     "birthdate": kwargs.get("birthdate", today_minus(f"{counter}y")),
     "privacy_consent": kwargs.get("privacy_consent", True),
+    "email_batch_frequency": kwargs.get("email_batch_frequency", "immediate"),
   }
 
 
@@ -70,6 +71,7 @@ def modify_member_data(member):
     "birthdate": today_minus(f"{counter}y"),  # counter has changed so birthdate changes
     "privacy_consent": member.privacy_consent,
     "deathdate": member.deathdate or "",
+    "email_batch_frequency": member.email_batch_frequency,
   }
 
 

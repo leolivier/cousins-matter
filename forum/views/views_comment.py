@@ -1,17 +1,19 @@
-from django.shortcuts import get_object_or_404, render
-from django.views import generic
-from django.http import HttpResponseBadRequest, JsonResponse
-from django.core.exceptions import RequestDataTooBig
-from django.utils.translation import gettext as _
-from django_htmx.http import HttpResponseClientRefresh
 from django.contrib import messages
-from django_htmx.http import trigger_client_event
+from django.core.exceptions import RequestDataTooBig
+from django.http import HttpResponseBadRequest, JsonResponse
+from django.shortcuts import get_object_or_404, render
+from django.test import tag
+from django.utils.translation import gettext as _
+from django.views import generic
+from django_htmx.http import trigger_client_event, HttpResponseClientRefresh
+
 from core.utils import check_edit_permission
 from forum.views.views_follow import check_followers_on_comment
 from ..models import Message, Comment
 from ..forms import CommentForm
 
 
+@tag("followers")
 class CommentCreateView(generic.CreateView):
   model = Comment
   form_class = CommentForm

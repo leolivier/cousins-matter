@@ -11,7 +11,7 @@ $(document).ready(()=>{
 	const $roomSlug = encodeURIComponent('{{room.slug}}');
 	const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 	const $chatSocket = new WebSocket(
-		wsProtocol + window.location.host + '/chat/' + $roomSlug
+		wsProtocol + window.location.host + '/chat/ws/' + $roomSlug
 	);
 
 	$chatSocket.onclose = (e) => {

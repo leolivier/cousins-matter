@@ -60,15 +60,17 @@ mkmsg:
 test:
 	ENVIRONMENT="test" ./manage.py test $(t) $(o)
 
+EXCLUDE_COVER = 'core/tasks_schedules.py,scripts/*,config/*,core/settings.py,manage.py,cousinsmatter/asgi.py,cousinsmatter/wsgi.py,core/htmlvalidator.py,*/views_test.py,*/migrations/*,*/tests/*'
+
 cover:
 	if [ -z "$(a)" ]; then \
 	  df=.coverage; \
 		ENVIRONMENT="test" coverage run --source="." $(co) ./manage.py test $(to); \
 	else \
 	  df=.coverage.$(a); \
-		ENVIRONMENT="test" coverage run --source="$(a)" $(co) ./manage.py test $(to); \
+		ENVIRONMENT="test" coverage run --source="$(a)" --data-file=$(df) $(co) ./manage.py test $(to); \
 	fi; \
-	coverage report --sort=cover --skip-covered -m --fail-under=80 --omit='scripts/*,manage.py,cousinsmatter/asgi.py,cousinsmatter/wsgi.py,core/htmlvalidator.py,*/views_test.py,*/migrations/*,*/tests/*' --data-file=$(df)
+	coverage report --sort=cover --skip-covered -m --fail-under=80 --omit="$(EXCLUDE_COVER)" --data-file=$(df)
 
 dtest: build
 	docker compose down cousins-matter qcluster

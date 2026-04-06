@@ -3,14 +3,14 @@ from .dev_base import *  # noqa: F403, F405
 
 DEBUG = env.bool("DEBUG", True)
 
-TESTING = False
+TESTING = env.bool("TESTING", default=False)
 
 DEBUG_TOOLBAR = env.bool("DEBUG_TOOLBAR", default=True)
 DEBUG_HTMX = env.bool("DEBUG_HTMX", default=DEBUG)
 
 # Support for ngrok
-ALLOWED_HOSTS.append(".ngrok-free.app")
-CSRF_TRUSTED_ORIGINS.append("https://*.ngrok-free.app")
+ALLOWED_HOSTS.append(".ngrok-free.dev")
+CSRF_TRUSTED_ORIGINS.append("https://*.ngrok-free.dev")
 # To ensure Django knows it's behind an HTTPS proxy (ngrok)
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 

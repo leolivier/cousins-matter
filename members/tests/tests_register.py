@@ -272,6 +272,7 @@ class MemberRegisterTests(MemberTestCase):
       "phone": "01 23 45 67 78",
       "birthdate": today_minus("30y"),
       "privacy_consent": True,
+      "email_batch_frequency": "immediate",
     }
 
     mail.outbox = []  # reset mailbox

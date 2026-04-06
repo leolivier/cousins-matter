@@ -114,6 +114,7 @@ class MemberRegistrationForm(MemberFormMixin, UserCreationForm):
       "hobbies",
       "website",
       "family",
+      "email_batch_frequency",
       "privacy_consent",
     ]
 
@@ -136,6 +137,12 @@ class MemberSocialSignupForm(MemberFormMixin, SocialSignupForm):
   hobbies = forms.CharField(label=_("Hobbies"), max_length=1024, required=False)
   website = forms.URLField(label=_("Website"), required=False)
   family = forms.ModelChoiceField(queryset=Family.objects.all(), label=_("Family"), required=False)
+  email_batch_frequency = forms.ChoiceField(
+    label=_("Email frequency"),
+    choices=Member.FREQUENCY_CHOICES,
+    required=False,
+    initial=Member.FREQUENCY_IMMEDIATE,
+  )
   privacy_consent = forms.BooleanField(label=_("Privacy consent"), required=True)
 
   def __init__(self, *args, **kwargs):
@@ -166,6 +173,7 @@ class MemberSocialSignupForm(MemberFormMixin, SocialSignupForm):
     user.hobbies = self.cleaned_data["hobbies"]
     user.website = self.cleaned_data["website"]
     user.family = self.cleaned_data["family"]
+    user.email_batch_frequency = self.cleaned_data["email_batch_frequency"]
     user.privacy_consent = self.cleaned_data["privacy_consent"]
     user.save()
     return user
@@ -189,6 +197,7 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
       "website",
       "family",
       "deathdate",
+      "email_batch_frequency",
       "privacy_consent",
     ]
     exclude = ["password"]

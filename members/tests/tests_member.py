@@ -465,6 +465,25 @@ class TestActivateManagedMember(MemberTestCase):
     managed.refresh_from_db()
     self.assertTrue(managed.is_active)
 
+  def test_activate_already_active(self):
+    active = self.create_member()
+    active.is_active = True
+    active.member_manager = self.member
+    active.save()
+    response = self.client.post(reverse("members:activate", args=[active.id]), follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertContainsMessage(response, "error", _("Error: Member already active"))
+    active.refresh_from_db()
+    self.assertIsNone(active.member_manager)
+
+  def test_activate_no_email(self):
+    no_email = self.create_member()
+    no_email.email = ""
+    no_email.save()
+    response = self.client.post(reverse("members:activate", args=[no_email.id]), follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertContainsMessage(response, "error", _("Error: Member without email cannot be activated"))
+
 
 class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
   def get_dead_member_data(self):

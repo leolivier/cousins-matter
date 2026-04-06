@@ -116,6 +116,7 @@ LOCAL_APPS = [
 # Application definition
 
 INSTALLED_APPS = [
+  "daphne",
   *LOCAL_APPS,
   "crispy_forms",
   "crispy_bulma",

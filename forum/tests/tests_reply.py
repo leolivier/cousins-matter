@@ -1,4 +1,6 @@
+from django.test import tag
 from django.urls import reverse
+
 from core.tests.tests_followers import TestFollowersMixin
 from forum.tests.tests_post import ForumTestCase
 from core.tests.test_django_q import django_q_sync_class
@@ -71,6 +73,7 @@ class PostReplyTestCase(ForumTestCase):
       self.client.post(url)
 
 
+@tag("followers")
 @django_q_sync_class
 class TestFollower(TestFollowersMixin, ForumTestCase):
   def test_follow_post(self):

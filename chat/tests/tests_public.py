@@ -17,6 +17,7 @@ from ..models import ChatMessage, ChatRoom
 
 class ChatRoomTests(MemberTestCase):
   def do_check_chat_room(self, room_name, slug):
+    """Helper method to create a chat room and verify its initial state and UI elements."""
     url = reverse("chat:new_room")
     response = self.client.post(url, {"name": room_name}, follow=True)
     # self.print_response(response)
@@ -140,6 +141,7 @@ class ChatRoomTests(MemberTestCase):
     ChatRoom.objects.all().delete()
 
   def test_edit_room(self):
+    """Tests editing an existing chat room's name and verifying the redirection and database update."""
     room = ChatRoom.objects.create(name="a room")
     url = reverse("chat:room-edit", args=[room.slug])
     response = self.client.get(url, HTTP_HX_REQUEST="true")
@@ -157,6 +159,7 @@ class ChatRoomTests(MemberTestCase):
     self.assertEqual(room.name, new_name)
 
   def test_delete_room(self):
+    """Tests deleting a chat room and verifying it is removed from the database."""
     room = ChatRoom.objects.create(name="a room")
     url = reverse("chat:room-delete", args=[room.slug])
     response = self.client.get(url)
@@ -168,7 +171,7 @@ class ChatRoomTests(MemberTestCase):
     self.assertFalse(ChatRoom.objects.filter(id=room.id).exists())
 
 
-@tag("needs-redis")
+@tag("needs-redis", "followers")
 @async_django_q_sync_class
 class ChatMessageTests(ChatMessageSenderMixin, AsyncMemberTestCase):
   async def test_chat_consumer(self):

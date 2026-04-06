@@ -10,7 +10,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from members.models import Member
 from ..models import PrivateChatRoom, ChatRoom, ChatMessage
-from core import followers
+from core.followers import check_followers
 from core.utils import PageOutOfBounds, Paginator
 from urllib.parse import unquote
 
@@ -109,11 +109,16 @@ def create_chat_room(request, private=False):
         # even if room was created, we don't check user followers because:
         # IT MIGHT NOT BE ADAPTED; IF SOMEONE CREATES A PRIVATE ROOM AND DOES NOT WANT TO INVITE HIS/HER FOLLOWERS,
         # NO NEED TO TELL THE FOLLOWERS THAT HE/SHE CREATED THE ROOM WHERE THE FOLLOWER WON'T BE ADDED
-        # followers.check_followers(request, private_room, request.user, room_url)
+        # check_followers(request, private_room, request.user, room_url)
       else:
         # if room was created, check user followers
         logger.debug("public room created, checking followers")
-        followers.check_followers(request, new_room, request.user, room_url)
+        check_followers(
+          request,
+          followed_object=new_room,
+          followed_object_owner=request.user,
+          followed_object_url=room_url,
+        )
     else:
       if not private and not new_room.is_public:
         raise ValidationError(_("A private room with almost the same name already exists: %s") % new_room.name)

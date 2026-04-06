@@ -1,13 +1,17 @@
+import logging
+
 from django.conf import settings
 from django.core import mail
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from core.utils import get_test_absolute_url
 
+logger = logging.getLogger(__name__)
+
 
 class TestFollowersMixin:
   def check_new_follower_email(self, follower, owner, followed_object, followed_url, expected_emails_count=1):
-    """function to test the owner received an email to say he has a new folllower"""
+    """Verifies that the owner or object followers receive an email notification for a new follower."""
 
     if len(mail.outbox) != expected_emails_count:
       for m in mail.outbox:
@@ -73,7 +77,7 @@ class TestFollowersMixin:
     created_content,
     expected_emails_count=1,
   ):
-    """check email sent the followers, no recipients, only bcc. The owner is considered as implicit follower"""
+    """Verifies the email notification sent to followers (in BCC) when new content is created."""
     if len(mail.outbox) != expected_emails_count:
       for m in mail.outbox:
         print(m.subject, "to", m.to, "bcc", m.bcc)
@@ -87,9 +91,18 @@ class TestFollowersMixin:
     self.assertEqual(follower_message.from_email, settings.DEFAULT_FROM_EMAIL)
     self.assertSequenceEqual(follower_message.to, [])
     self.assertIn(follower.email, follower_message.bcc)
-    self.assertIn(owner.email, follower_message.bcc)
-    self.assertEqual(len(follower_message.bcc), 2 if owner != follower else 1)  # only the follower and the owner
+    logger.debug(f"""
+      follower_message.bcc: {follower_message.bcc}
+      sender: {sender.email if sender else 'None'}
+      owner: {owner.email}
+      follower: {follower.email}
+    """)
+    if sender and sender != owner:
+      self.assertIn(owner.email, follower_message.bcc)
+      self.assertEqual(len(follower_message.bcc), 2)
     if followed_object == created_object:  # e.g. when creating a chat room or a post
+      if sender:
+        self.assertEqual(len(follower_message.bcc), 1)  # only follower
       subject = _('New %(followed_type)s "%(followed_object_name)s"') % {
         "followed_object_name": followed_object_name,
         "followed_type": followed_type,
@@ -104,6 +117,8 @@ class TestFollowersMixin:
         "followed_object_name": followed_object_name,
       }
     else:  # e.g. when creating a comment or a message
+      expected_msg_nb = 2 if sender and sender != owner else 1
+      self.assertEqual(len(follower_message.bcc), expected_msg_nb)  # owner + follower
       subject = _('New %(obj_type)s added to %(followed_type)s "%(followed_object_name)s"') % {
         "obj_type": obj_type,
         "followed_object_name": followed_object_name,

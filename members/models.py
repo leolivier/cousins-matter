@@ -101,6 +101,22 @@ class Address(models.Model):
 
 
 class Member(AbstractUser):
+  FREQUENCY_NEVER = "never"
+  FREQUENCY_IMMEDIATE = "immediate"
+  FREQUENCY_HOURLY = "hourly"
+  FREQUENCY_DAILY = "daily"
+  FREQUENCY_WEEKLY = "weekly"
+  FREQUENCY_MONTHLY = "monthly"
+
+  FREQUENCY_CHOICES = [
+    (FREQUENCY_NEVER, _("Never")),
+    (FREQUENCY_IMMEDIATE, _("Immediately")),
+    (FREQUENCY_HOURLY, _("Hourly")),
+    (FREQUENCY_DAILY, _("Daily")),
+    (FREQUENCY_WEEKLY, _("Weekly")),
+    (FREQUENCY_MONTHLY, _("Monthly")),
+  ]
+
   member_manager = models.ForeignKey(
     "self",
     verbose_name=_("Member manager"),
@@ -147,6 +163,17 @@ class Member(AbstractUser):
   # issue #149: manage unaccent indexes
   first_name_unaccent = models.CharField(max_length=150, null=True, blank=True)
   last_name_unaccent = models.CharField(max_length=150, null=True, blank=True)
+
+  # email preferences
+  email_batch_frequency = models.CharField(
+    _("Email frequency"),
+    max_length=10,
+    choices=FREQUENCY_CHOICES,
+    default=FREQUENCY_IMMEDIATE,
+    help_text=_(
+      "How often you want to receive email notifications about the followed elements (members, chat messages, etc.)"
+    ),
+  )
 
   USERNAME_FIELD = "username"
   REQUIRED_FIELDS = ["first_name", "last_name", "birthdate", "email"]
@@ -221,21 +248,24 @@ class Member(AbstractUser):
   def clean(self):
     if self.deathdate:
       if self.deathdate < self.birthdate:
-        dd = self.deathdate
-        bd = self.birthdate
-        raise ValueError(_("Death date %(dd)s is before birthdate %(bd)s") % {"dd": dd, "bd": bd})
+        raise ValueError(
+          _("Death date %(dd)s is before birthdate %(bd)s")
+          % {
+            "dd": self.deathdate,
+            "bd": self.birthdate,
+          }
+        )
       self.is_dead = True
-      self.deathdate = self.deathdate or datetime.date.today()
       self.is_active = False
     else:
       self.is_dead = False
     # If member is active, set member manager to None
     if self.is_active and self.member_manager is not None:
-      logger.debug(f"Cleaning member {self.full_name}: removing member manager")
+      logger.info(f"Cleaning member {self.full_name}: removing member manager of active member")
       self.member_manager = None
     elif not self.is_active and self.member_manager is None:
       # If no member manager and member is inactive, use admin member
-      logger.debug(f"Cleaning member {self.full_name}: changing member manager to admin")
+      logger.info(f"Cleaning member {self.full_name}: setting member manager to admin for inactive member")
       self.member_manager = Member.objects.filter(is_superuser=True).first()
     self.first_name_unaccent = remove_accents(self.first_name)
     self.last_name_unaccent = remove_accents(self.last_name)

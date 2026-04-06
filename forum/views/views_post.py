@@ -27,7 +27,7 @@ class PostsListView(generic.ListView):
 
   def get(self, request, page=1):
     posts = (  # fmt: skip
-      Post.objects
+      Post.objects  # fmt: skip
       .select_related("first_message")
       .annotate(num_messages=Count("message"))
       .all()

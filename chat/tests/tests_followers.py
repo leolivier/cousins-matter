@@ -11,11 +11,11 @@ from .tests_mixin import ChatMessageSenderMixin
 from core.tests.test_django_q import async_django_q_sync_class
 
 
-@tag("needs-redis")
+@tag("needs-redis", "followers")
 @async_django_q_sync_class
 class ChatRoomFollowerTests(ChatMessageSenderMixin, TestFollowersMixin, AsyncMemberTestCase):
   async def test_follow_room(self):
-    "Tests following a chat room."
+    """Tests following a chat room and verifying email notifications to followers."""
     # we should start with zero followers
     self.assertEqual(await self.room.followers.acount(), 0)
 
@@ -23,7 +23,7 @@ class ChatRoomFollowerTests(ChatMessageSenderMixin, TestFollowersMixin, AsyncMem
     # message on the room and become the owner
     new_poster = await self.acreate_member(is_active=True)
     await self.async_client.alogin(username=new_poster.username, password=new_poster.password)
-    msg = "this is the first message on the room si I am the owner!"
+    msg = "this is the first message on the room so I am the owner!"
     await self.send_chat_message(msg, self.slug, sender=new_poster)
 
     # make sure the outbox is empty
@@ -64,10 +64,10 @@ class ChatRoomFollowerTests(ChatMessageSenderMixin, TestFollowersMixin, AsyncMem
     self.assertEqual(await self.room.followers.acount(), 0)
 
 
-@tag("needs-redis")
+@tag("needs-redis", "followers")
 class TestChatWithMemberFollower(ChatMessageSenderMixin, TestFollowersMixin, TransactionMemberTestCase):
   def test_follow_room(self):
-    """test room follow in the context of member follow"""
+    """Tests chat room following in the context of one member following another."""
     # setup follower and followed
     follower = self.member
     followed = self.create_member(is_active=True)
@@ -109,30 +109,32 @@ class TestChatWithMemberFollower(ChatMessageSenderMixin, TestFollowersMixin, Tra
     )
     # await room.adelete()
 
-    # now, let follower create a room and it's 1rst message and let the
+    # now, let someone else (the superuser) create a room and it's 1rst message and let the
     # followed reply to it, and check the email to the follower
-    self.client.login(username=follower.username, password=follower.password)
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
 
-    room_name = "a new room created by follower"
-    response = self.client.post(reverse("chat:new_room"), {"name": room_name})
-    self.assertEqual(response.status_code, 302)
+    room_name = "a new room created by superuser"
+    response = self.client.post(reverse("chat:new_room"), {"name": room_name}, follow=True)
+    self.assertEqual(response.status_code, 200)
     room = ChatRoom.objects.get(name=room_name)
     room_url = get_test_absolute_url(reverse("chat:room", args=[room.slug]))
-    first_msg = "a 1rst msg in the followed's room"
-    async_to_sync(self.send_chat_message)(first_msg, room_slug=room.slug, sender=follower)
+    first_msg = "a 1rst msg in the superuser's room"
+    async_to_sync(self.send_chat_message)(first_msg, room_slug=room.slug, sender=self.superuser)
 
     # force reset the mail outbox.
     mail.outbox = []
-    # now, followed will reply to the follower's message
+    # now, followed will reply to the superuser's message
     self.client.login(username=followed.username, password=followed.password)
-    reply_msg = "a reply to be followed's room"
+    reply_msg = "a reply to be superuser's message"
     async_to_sync(self.send_chat_message)(reply_msg, room_slug=room.slug, sender=followed)
-
+    print("follower email", follower.email)
+    print("followed email", followed.email)
+    print("superuser email", self.superuser.email)
     message = ChatMessage.objects.get(room=room, content=reply_msg)
     self.check_new_content_email(
       follower=follower,
       sender=followed,
-      owner=follower,
+      owner=self.superuser,
       followed_url=room_url,
       followed_object=room,
       created_object=message,

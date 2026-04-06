@@ -61,31 +61,71 @@ def do_check_followers(
   "see check_followers. Really implement the check"
   if new_internal_object is None:
     new_internal_object = followed_object
-  if author is None:
+
+  # get all potential recipients (Member objects)
+  recipients = set(followed_object.followers.all())
+  if followed_object_owner:
+    recipients.update(followed_object_owner.followers.all())
+    recipients.add(followed_object_owner)
+  if author:  # add author's followers to the list
+    recipients.update(author.followers.all())
+
+  logger.debug(f"recipients before author discard: {recipients}")
+  # Filter out author and members who opted out of emails
+  if author:
+    recipients.discard(author)
+  else:
     author = followed_object_owner
+  logger.debug(f"recipients after author discard: {recipients}")
+
+  immediate_recipients = []
+  interested_count = 0
+
+  from .models import NotificationEvent
+  from members.models import Member
+
+  for member in recipients:
+    if member.email_batch_frequency == Member.FREQUENCY_NEVER:
+      logger.debug(f"member {member} has email_batch_frequency == Member.FREQUENCY_NEVER")
+      continue
+
+    interested_count += 1
+    if member.email_batch_frequency == Member.FREQUENCY_IMMEDIATE:
+      logger.debug(f"member {member} has email_batch_frequency == Member.FREQUENCY_IMMEDIATE")
+      immediate_recipients.append(member)
+    else:
+      # Store event for batching
+      logger.debug(f"member {member} has email_batch_frequency == Member.FREQUENCY_BATCH")
+      NotificationEvent.objects.create(
+        member=member,
+        followed_object=followed_object,
+        new_object=new_internal_object,
+        author=author,
+        followed_object_url=followed_object_url,
+      )
 
   obj_type = new_internal_object._meta.verbose_name
   obj_str = str(new_internal_object)
-  # get the emails of the followers of the followed object except the author of the new object
-  follower_emails = [follower.email for follower in followed_object.followers.all() if follower.id != author.id]
-  logger.debug(f"follower email: {follower_emails}")
-  # also send emails to the followers of the owner
-  follower_emails += [follower.email for follower in followed_object_owner.followers.all()]
-  logger.debug(f"follower email + owner followers emails: {follower_emails}")
-  # and also to the owner (he is an implicit follower of his own objects)
-  follower_emails.append(followed_object_owner.email)
-  logger.debug(f"follower email + owner: {follower_emails}")
-  # remove duplicates
-  follower_emails = list(set(follower_emails))
-  # remove empty emails or None emails
-  follower_emails = [email for email in follower_emails if email]
+  follower_emails = [m.email for m in immediate_recipients if m.email]
 
-  if len(follower_emails) == 0:
+  if interested_count == 0:
     logger.debug(f"{obj_type}:'{obj_str}' change is not interesting anyone")
     return 0
   else:
-    logger.debug(f"{obj_type}:'{obj_str}' change is interesting for {len(follower_emails)} people: {follower_emails}")
+    logger.debug(
+      f"""{obj_type}:'{obj_str}' change is interesting for {interested_count} people.
+      Sending {len(immediate_recipients)} immediate emails."""
+    )
 
+  if not follower_emails:
+    return 0
+
+  return generate_emails(followed_object, followed_object_owner, new_internal_object, author, followed_object_url)
+
+
+def generate_emails(followed_object, followed_object_owner, new_internal_object, author, followed_object_url, follower_emails):
+  obj_type = new_internal_object._meta.verbose_name
+  obj_str = str(new_internal_object)
   author_name = author.full_name
   followed_object_name = str(followed_object)
   if not followed_object_name:

@@ -1,11 +1,14 @@
+from django.test import tag
 from django.urls import reverse
-from core.tests.tests_followers import TestFollowersMixin
+
 from core.tests.test_django_q import django_q_sync_class
+from core.tests.tests_followers import TestFollowersMixin
 from core.utils import get_test_absolute_url
 from forum.models import Message, Post
 from members.tests.tests_member_base import MemberTestCase
 
 
+@tag("followers")
 @django_q_sync_class
 class TestMemberFollower(TestFollowersMixin, MemberTestCase):
   def test_follow_member(self):

@@ -1,3 +1,4 @@
+from django.test import tag
 from django.urls import reverse
 from core.tests.tests_followers import TestFollowersMixin
 from forum.tests.tests_post import ForumTestCase
@@ -6,6 +7,7 @@ from core.tests.test_django_q import django_q_sync_class
 from ..models import Comment
 
 
+@tag("followers")
 class CommentCreateTestCase(ForumTestCase):
   def tearDown(self):
     Comment.objects.all().delete()
@@ -13,6 +15,9 @@ class CommentCreateTestCase(ForumTestCase):
 
   def test_add_comment_view(self):
     """Tests adding a comment to a forum message."""
+    # login as a new member
+    new_member = self.create_member(is_active=True)
+    self.client.login(username=new_member.username, password=new_member.password)
     url = reverse("forum:add_comment", args=[self.message.id])
     content = "a wonderful comment"
     response = self.client.post(url, {"content": content}, follow=True)
@@ -65,6 +70,7 @@ class CommentCreateTestCase(ForumTestCase):
     self.assertContains(response, comment.content)
 
 
+@tag("followers")
 @django_q_sync_class
 class TestFollower(TestFollowersMixin, ForumTestCase):
   def test_follow_post_on_comment(self):

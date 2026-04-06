@@ -3,7 +3,7 @@ from .dev_base import *  # noqa: F403, F405
 
 DEBUG = env.bool("DEBUG", True)
 
-TESTING = False
+TESTING = env.bool("TESTING", default=False)
 
 DEBUG_TOOLBAR = env.bool("DEBUG_TOOLBAR", default=True)
 DEBUG_HTMX = env.bool("DEBUG_HTMX", default=DEBUG)

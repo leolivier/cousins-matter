@@ -120,7 +120,7 @@ def do_check_followers(
   if not follower_emails:
     return 0
 
-  return generate_emails(followed_object, followed_object_owner, new_internal_object, author, followed_object_url)
+  return generate_emails(followed_object, followed_object_owner, new_internal_object, author, followed_object_url, follower_emails)
 
 
 def generate_emails(followed_object, followed_object_owner, new_internal_object, author, followed_object_url, follower_emails):

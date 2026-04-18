@@ -5,3 +5,7 @@ __pycache__/
 .env
 *.rdb
 *.swp
+.venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/

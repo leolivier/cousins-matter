@@ -60,7 +60,7 @@ jobs:
 
       - name: Install dev dependencies
         run: |
-          python -m pip install -r dev-requirements.txt
+          python -m pip install -r requirements-dev.txt
 
       - name: Lint with ruff
         run: |
@@ -131,7 +131,7 @@ jobs:
           docker exec cousins-matter python manage.py test --failfast
 
       - name: test install script
-        if: github.actor != 'dependabot[bot]'
+        if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
           # make sure no previous containers are running
           docker compose down -v
@@ -141,7 +141,7 @@ jobs:
           ./scripts/tests/test_install.sh -g
 
       - name: test migrate v1 to v2 script
-        if: github.actor != 'dependabot[bot]'
+        if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
           # make sure no previous containers are running
           docker compose down -v
@@ -151,7 +151,7 @@ jobs:
           ./scripts/tests/test_migrate_v1_v2.sh -g
 
       - name: Test Docker Image using S3 backend
-        if: github.actor != 'dependabot[bot]'
+        if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
           # make sure no previous containers are running
           docker compose down -v
@@ -177,7 +177,7 @@ jobs:
           docker logs cousins-matter.qcluster
 
       - name: Set up QEMU
-        if: github.actor != 'dependabot[bot]'
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: docker/setup-qemu-action@v3
 
       - name: remove tests resources from .dockerignore before real build
@@ -185,7 +185,7 @@ jobs:
           echo '**/tests/' >> .dockerignore
 
       - name: Determine version
-        if: github.actor != 'dependabot[bot]'
+        if: ${{ github.actor != 'dependabot[bot]' }}
         id: get_version
         run: |
             if [[ ${{ github.event_name }} == 'release' ]]; then
@@ -197,18 +197,18 @@ jobs:
             fi
       
       - name: Create release.txt
-        if: github.actor != 'dependabot[bot]'
+        if: ${{ github.actor != 'dependabot[bot]' }}
         run: echo ${{ steps.get_version.outputs.VERSION }} > release.txt
 
       - name: Upload release.txt
-        if: github.actor != 'dependabot[bot]'
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: actions/upload-artifact@v4
         with:
           name: release
           path: release.txt
 
       - name: Build and push
-        if: github.actor != 'dependabot[bot]'
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: docker/build-push-action@v5
         with:
           context: .

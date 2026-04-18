@@ -4,7 +4,8 @@ from typing import Literal, TypeAlias
 from django.conf import settings
 from django.template import Library
 from django.utils.safestring import mark_safe
-from django.utils.translation import get_language, gettext as _
+from django.utils.translation import get_language
+from django.utils.translation import gettext as _
 
 from ..models import FlatPage
 
@@ -126,7 +127,7 @@ def include_page(url):
         if new_url != url:
           return include_page(new_url)
         else:
-          raise Exception(f"page not found for url={url}")
+          raise ValueError(f"page not found for url={url}")
       case 1:
         page = pages.first()
         logger.info(f"searched for page with url={url}, found {page.url}")

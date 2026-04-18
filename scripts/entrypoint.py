@@ -11,21 +11,22 @@ Behavior mirrors old scripts/entrypoint.sh:
 - Finally exec the container CMD/args
 """
 
-import django
-import environ
 import logging
 import os
-import redis
 import signal
 import sys
 import time
 from pathlib import Path
-from django.db import connections
-from django.db.utils import OperationalError
+
+import django
+import environ
+import redis
 from django.conf import settings
 
 # from cousinsmatter import settings as cousinsmatter_defaults
-from django.core.management import call_command, CommandError
+from django.core.management import CommandError, call_command
+from django.db import connections
+from django.db.utils import OperationalError
 
 logger = logging.getLogger(f"{__name__}/{sys.argv[1]}")
 
@@ -180,7 +181,8 @@ def run_create_superuser():
     first_name = env.str("ADMIN_FIRSTNAME")
     last_name = env.str("ADMIN_LASTNAME")
     birthdate = env.str("ADMIN_BIRTHDATE")
-    logger.info(f"Creating superuser {username} ({email}, {first_name} {last_name}, {birthdate})...")
+    # logger.info(f"Creating superuser {username} ({email}, {first_name} {last_name}, {birthdate})...")
+    logger.info(f"Creating superuser {username}...")  # To avoid secrets logging
     try:
       Member.objects.create_superuser(
         username=username,

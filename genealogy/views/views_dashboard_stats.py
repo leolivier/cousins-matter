@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.db.models import Count
 from django.db.models.functions import ExtractYear
-from django.contrib import messages
+from django.shortcuts import redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
-from ..models import Person, Family
+
+from ..models import Family, Person
 from ..utils import clear_genealogy_caches, register_genealogy_cache
 
 register_genealogy_cache("genealogy_statistics")
@@ -49,4 +51,7 @@ def statistics(request):
 def refresh(request):
   clear_genealogy_caches()
   messages.success(request, _("Genealogy data refreshed successfully."))
-  return redirect(request.META.get("HTTP_REFERER"))
+  referer = request.META.get("HTTP_REFERER")
+  if referer and url_has_allowed_host_and_scheme(referer, {request.get_host()}, request.is_secure()):
+    return redirect(referer)
+  return redirect("genealogy:dashboard")

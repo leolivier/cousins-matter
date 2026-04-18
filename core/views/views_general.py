@@ -1,25 +1,25 @@
 import logging
+import mimetypes
+import os
+import tempfile
+import zipfile
+from hashlib import blake2b
+from wsgiref.util import FileWrapper
+
+import redis
 from django.contrib.auth.decorators import login_not_required
 from django.contrib.auth.views import PasswordResetView as DefaultPasswordResetView
 from django.core.files.storage import default_storage
-from django.db import connections, DatabaseError
+from django.db import DatabaseError, connections
 from django.http import (
   Http404,
-  StreamingHttpResponse,
   HttpResponseNotModified,
   JsonResponse,
+  StreamingHttpResponse,
 )
 from django.utils.translation import gettext as _
 from django.views import generic
 from django_q.tasks import async_task, result
-from wsgiref.util import FileWrapper
-
-from hashlib import blake2b
-import os
-import mimetypes
-import redis
-import tempfile
-import zipfile
 
 from core.forms import PasswordResetForm
 from core.mixins import LoginNotRequiredMixin
@@ -91,11 +91,13 @@ def health_check() -> dict[str, str]:
       cursor.execute("SELECT 1")
       cursor.fetchone()
   except DatabaseError as e:
-    return {"status": "db_error", "msg": str(e)}
+    logger.error(f"Database error: {e}")
+    return {"status": "db_error", "msg": "database error, see logs"}
   try:
     redis_client.ping()
   except redis.exceptions.ConnectionError as e:
-    return {"status": "redis_error", "msg": str(e)}
+    logger.error(f"Redis error: {e}")
+    return {"status": "redis_error", "msg": "redis error, see logs"}
   return {"status": "ok"}
 
 

@@ -18,6 +18,9 @@ scripts/dev/
 *.yml
 **/.vscode
 **/Dockerfile*
+**/.ruff_cache
+**/.coverage
+**/htmlcov
 
 **/*.*proj.user
 **/*.dbmdl

@@ -1,3 +1,20 @@
+# ----- Builder Stage -----
+FROM python:3.14-slim AS builder
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+WORKDIR /build
+
+COPY requirements.txt .
+# Install dependencies in the system python of the builder
+RUN uv pip install --system --no-cache -r requirements.txt
+
+# Optionnel: stripper les librairies partagées (.so) pour gagner un peu de place
+RUN apt-get update && apt-get install -y --no-install-recommends binutils && \
+    find /usr/local/lib/python3.14/site-packages -name "*.so" -exec strip --strip-unneeded {} +
+
+# ----- Final Stage -----
 FROM python:3.14-slim
 
 ARG UID=1000
@@ -18,9 +35,9 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Allows docker to cache installed dependencies between builds
-COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+# Copy python dependencies and binaries from builder
+COPY --from=builder /usr/local/lib/python3.14/site-packages /usr/local/lib/python3.14/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # This is the user that will run the application but through supervisord so 

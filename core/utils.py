@@ -347,7 +347,7 @@ def create_video_thumbnail(video_field: models.FileField, size: int) -> InMemory
   :param size: The maximum size (width or height) of the thumbnail.
   :return: An InMemoryUploadedFile representing the thumbnail.
   """
-  import cv2  # imported here so that this function not called for images
+  import av
   from tempfile import NamedTemporaryFile
 
   filename = os.path.basename(video_field.name)
@@ -356,7 +356,7 @@ def create_video_thumbnail(video_field: models.FileField, size: int) -> InMemory
   if file_extension not in VIDEO_EXTENSIONS:
     # Fallback to a safe default extension for the temporary video file
     file_extension = ".mp4"
-  # Write the video to a named temp file so OpenCV can open it
+  # Write the video to a named temp file so PyAV can open it
   with NamedTemporaryFile(suffix=file_extension, delete=False) as tmp:
     tmp_path = tmp.name
     if video_field.file.closed:
@@ -364,15 +364,14 @@ def create_video_thumbnail(video_field: models.FileField, size: int) -> InMemory
     tmp.write(video_field.file.read())
 
   try:
-    cap = cv2.VideoCapture(tmp_path)
-    success, frame = cap.read()
-    cap.release()
-    if not success:
-      raise ValueError("Could not read a frame from the video.")
+    with av.open(tmp_path) as container:
+      stream = container.streams.video[0]
+      for frame in container.decode(stream):
+        img = frame.to_image()
+        break
+      else:
+        raise ValueError("Could not read a frame from the video.")
 
-    # OpenCV gives BGR, convert to RGB
-    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    img = Image.fromarray(frame_rgb)
     img.thumbnail((size, size))
 
     output_thumb = BytesIO()

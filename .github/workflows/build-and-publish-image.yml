@@ -25,16 +25,20 @@ env:
   # how to compute image tags
   TAGS_DEF: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'push' && 'type=ref,event=branch' || 'type=sha' }}
   TEST_TAG: 'test-${{ github.sha }}'
-  S3_MEDIA_STORAGE_OPTIONS: '{\"access_key\":\"${{ secrets.ACCESS_KEY }}\",\"secret_key\":\"${{ secrets.SECRET_KEY }}\",\"bucket_name\":\"${{ secrets.BUCKET_NAME }}\",\"endpoint_url\":\"https://${{ secrets.ACCOUNT_ID }}.r2.cloudflarestorage.com\"}'
   # Environment is docker-test for all workflow jobs
   ENVIRONMENT: 'docker-test'
 
 jobs:
-  test-build-image-publish:
+  # ──────────────────────────────────────────────────────────────────────────────
+  # Job 1 – Lint, build test image and prepare shared artefacts
+  # ──────────────────────────────────────────────────────────────────────────────
+  lint-and-build:
     if: github.event_name == 'release' || github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-latest
     permissions:
       packages: write
+    outputs:
+      runner_id: ${{ steps.get_runner_id.outputs.RUNNER_ID }}
     steps:
       - name: Set Global Env Variables
         run: |
@@ -101,11 +105,23 @@ jobs:
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-buildcache,mode=max
 
+      - name: Save test Docker image as tarball
+        run: |
+          docker save ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }} \
+            | gzip > /tmp/test-image.tar.gz
+
+      - name: Upload test Docker image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-docker-image
+          path: /tmp/test-image.tar.gz
+          retention-days: 1
+
       - name: Write .env
         run: |
           # Q_SYNC=True to make sure django-q tests are run synchronously
           cat > $GITHUB_WORKSPACE/.env <<'EOF'
-          COUSINS_MATTER_IMAGE=${{ env.COUSINS_MATTER_IMAGE }}
+          COUSINS_MATTER_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}
           SECRET_KEY=
           SITE_NAME=My Beautiful Site
           ALLOWED_HOSTS=127.0.0.1,localhost
@@ -124,14 +140,113 @@ jobs:
           ADMIN_LASTNAME=Mihn
           EOF
 
+      - name: Upload .env artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotenv
+          path: ${{ github.workspace }}/.env
+          retention-days: 1
+
+  # ──────────────────────────────────────────────────────────────────────────────
+  # Job 2 – Test Docker Image (runs in parallel with jobs 3 & 4)
+  # ──────────────────────────────────────────────────────────────────────────────
+  test-docker-image:
+    needs: lint-and-build
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Set Global Env Variables
+        run: |
+          echo "COUSINS_MATTER_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+
+      - name: Install dev dependencies
+        run: |
+          python -m pip install -r requirements-dev.txt
+
+      - name: Download test Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-docker-image
+          path: /tmp
+
+      - name: Load test Docker image
+        run: |
+          docker load < /tmp/test-image.tar.gz
+
+      - name: Download .env artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dotenv
+          path: ${{ github.workspace }}
+
       - name: Test Docker Image
         run: |
           python ./scripts/manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"
           docker compose -f docker-compose.yml up --wait --wait-timeout 30
           docker exec cousins-matter python manage.py test --failfast
 
+      - name: Show docker-compose services logs on failure
+        if: failure()
+        run: |
+          cat $GITHUB_WORKSPACE/.env
+          docker ps
+          echo "====================cousins-matter.db============================="
+          docker logs cousins-matter.db
+          echo "====================cousins-matter================================"
+          docker logs cousins-matter
+          echo "====================cousins-matter.qcluster======================="
+          docker logs cousins-matter.qcluster
+
+  # ──────────────────────────────────────────────────────────────────────────────
+  # Job 3 – Test install & migration scripts (runs in parallel with jobs 2 & 4)
+  # ──────────────────────────────────────────────────────────────────────────────
+  test-install-migrate:
+    needs: lint-and-build
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Set Global Env Variables
+        run: |
+          echo "COUSINS_MATTER_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Download test Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-docker-image
+          path: /tmp
+
+      - name: Load test Docker image
+        run: |
+          docker load < /tmp/test-image.tar.gz
+
+      - name: Download .env artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dotenv
+          path: ${{ github.workspace }}
+
       - name: test install script
-        if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
           # make sure no previous containers are running
           docker compose down -v
@@ -141,7 +256,6 @@ jobs:
           ./scripts/tests/test_install.sh -g
 
       - name: test migrate v1 to v2 script
-        if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
           # make sure no previous containers are running
           docker compose down -v
@@ -150,8 +264,57 @@ jobs:
           # then run test
           ./scripts/tests/test_migrate_v1_v2.sh -g
 
+      - name: Show docker-compose services logs on failure
+        if: failure()
+        run: |
+          cat $GITHUB_WORKSPACE/.env
+          docker ps
+          echo "====================cousins-matter.db============================="
+          docker logs cousins-matter.db
+          echo "====================cousins-matter================================"
+          docker logs cousins-matter
+          echo "====================cousins-matter.qcluster======================="
+          docker logs cousins-matter.qcluster
+
+  # ──────────────────────────────────────────────────────────────────────────────
+  # Job 4 – Test S3 backend (runs in parallel with jobs 2 & 3)
+  # ──────────────────────────────────────────────────────────────────────────────
+  test-s3:
+    needs: lint-and-build
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    env:
+      S3_MEDIA_STORAGE_OPTIONS: '{\"access_key\":\"${{ secrets.ACCESS_KEY }}\",\"secret_key\":\"${{ secrets.SECRET_KEY }}\",\"bucket_name\":\"${{ secrets.BUCKET_NAME }}\",\"endpoint_url\":\"https://${{ secrets.ACCOUNT_ID }}.r2.cloudflarestorage.com\"}'
+    steps:
+      - name: Set Global Env Variables
+        run: |
+          echo "COUSINS_MATTER_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TEST_TAG }}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Download test Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-docker-image
+          path: /tmp
+
+      - name: Load test Docker image
+        run: |
+          docker load < /tmp/test-image.tar.gz
+
+      - name: Download .env artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dotenv
+          path: ${{ github.workspace }}
+
       - name: Test Docker Image using S3 backend
-        if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
           # make sure no previous containers are running
           docker compose down -v
@@ -176,16 +339,47 @@ jobs:
           echo "====================cousins-matter.qcluster======================="
           docker logs cousins-matter.qcluster
 
+  # ──────────────────────────────────────────────────────────────────────────────
+  # Job 5 – Final multiplatform build & push (waits for jobs 2, 3 & 4)
+  # ──────────────────────────────────────────────────────────────────────────────
+  build-and-push:
+    needs: [test-docker-image, test-install-migrate, test-s3]
+    if: ${{ github.actor != 'dependabot[bot]' && always() && needs.test-docker-image.result == 'success' && (needs.test-install-migrate.result == 'success' || needs.test-install-migrate.result == 'skipped') && (needs.test-s3.result == 'success' || needs.test-s3.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Login to GHCR.io
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: ${{ env.TAGS_DEF }}
+
       - name: Set up QEMU
-        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: remove tests resources from .dockerignore before real build
         run: |
           echo '**/tests/' >> .dockerignore
 
       - name: Determine version
-        if: ${{ github.actor != 'dependabot[bot]' }}
         id: get_version
         run: |
             if [[ ${{ github.event_name }} == 'release' ]]; then
@@ -195,20 +389,17 @@ jobs:
             else
               echo "VERSION=$(git describe --tags --abbrev=0)+$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
             fi
-      
+
       - name: Create release.txt
-        if: ${{ github.actor != 'dependabot[bot]' }}
         run: echo ${{ steps.get_version.outputs.VERSION }} > release.txt
 
       - name: Upload release.txt
-        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: actions/upload-artifact@v4
         with:
           name: release
           path: release.txt
 
       - name: Build and push
-        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: docker/build-push-action@v5
         with:
           context: .

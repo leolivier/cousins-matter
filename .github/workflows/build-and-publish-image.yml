@@ -146,6 +146,32 @@ jobs:
       packages: write
     steps:
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+
+      - name: Install dev dependencies
+        run: |
+          python -m pip install -r requirements-dev.txt
+
+      - name: Download test Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-docker-image
+          path: /tmp
+
+      - name: Load test Docker image
+        run: |
+          docker load < /tmp/test-image.tar.gz
+
       - name: Write .env
         run: |
           printf '%s' "$DOT_ENV_BASE" > $GITHUB_WORKSPACE/.env
@@ -178,6 +204,22 @@ jobs:
     permissions:
       packages: write
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Download test Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-docker-image
+          path: /tmp
+
+      - name: Load test Docker image
+        run: |
+          docker load < /tmp/test-image.tar.gz
 
       - name: Write .env
         run: |
@@ -225,6 +267,22 @@ jobs:
     env:
       S3_MEDIA_STORAGE_OPTIONS: '{\"access_key\":\"${{ secrets.ACCESS_KEY }}\",\"secret_key\":\"${{ secrets.SECRET_KEY }}\",\"bucket_name\":\"${{ secrets.BUCKET_NAME }}\",\"endpoint_url\":\"https://${{ secrets.ACCOUNT_ID }}.r2.cloudflarestorage.com\"}'
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Download test Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-docker-image
+          path: /tmp
+
+      - name: Load test Docker image
+        run: |
+          docker load < /tmp/test-image.tar.gz
 
       - name: Write .env
         run: |

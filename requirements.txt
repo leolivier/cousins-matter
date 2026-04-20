@@ -22,5 +22,5 @@ django-storages[dropbox,s3]~=1.14.6
 django-htmx~=1.27.0
 python-gedcom~=1.1.0
 av~=17.0.0
-django-allauth[socialaccount]~=65.15.0
+django-allauth[socialaccount]~=65.16.1
 psycopg-pool~=3.3.0

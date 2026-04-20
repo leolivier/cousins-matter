@@ -2,4 +2,4 @@ css-html-js-minify>=2.5.5
 ruff>=0.14.10
 coverage>=7.13
 types-requests>=2.32.4
-django-debug-toolbar~=6.2.0
+django-debug-toolbar~=6.3.0

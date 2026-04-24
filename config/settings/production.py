@@ -49,7 +49,6 @@ for app in LOCAL_APPS:
   LOGGING["loggers"][app]["level"] = CM_LOG_LEVEL
 
 INSTALLED_APPS = [
-  "daphne",
   *INSTALLED_APPS,
   "verify_email",
   "corsheaders",

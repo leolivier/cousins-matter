@@ -19,7 +19,7 @@ services:
     environment:
       - ENVIRONMENT=${ENVIRONMENT:-production}
     healthcheck:
-      test: ["CMD-SHELL", "python /app/scripts/healthcheck.py"]
+      test: [ "CMD-SHELL", "python /app/scripts/healthcheck.py" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -28,7 +28,7 @@ services:
   qcluster:
     image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
     container_name: cousins-matter.qcluster
-    command: ["python", "manage.py", "qcluster"]
+    command: [ "python", "manage.py", "qcluster" ]
     user: "cm_user:cm_user"
     restart: unless-stopped
     depends_on:
@@ -46,7 +46,7 @@ services:
       - ENVIRONMENT=${ENVIRONMENT:-production}
 
   postgres:
-    image: postgres:alpine
+    image: postgres:18.2-alpine
     container_name: cousins-matter.db
     restart: unless-stopped
     user: "postgres:postgres"
@@ -62,7 +62,7 @@ services:
     networks:
       - cousins_matter_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cousinsmatter}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cousinsmatter}" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -79,7 +79,7 @@ services:
     networks:
       - cousins_matter_network
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 3

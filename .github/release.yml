@@ -1,0 +1,18 @@
+# .github/release.yml
+changelog:
+  exclude:
+    labels:
+      - skip-changelog
+  categories:
+    - title: '🚀 New features'
+      labels:
+        - enhancement
+    - title: '🐛 Bug fixes'
+      labels:
+        - bug
+
+append_body: |
+  ---
+  ### 🐳 Docker Image
+  The image of this release is available here:
+  `docker pull ghcr.io/${{owner}}/${{repository}}:${{tag}}`

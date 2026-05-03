@@ -53,7 +53,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - cousins_matter_postgres_data:/var/lib/postgresql/data
+      - cousins_matter_postgres_data:/var/lib/postgresql
       - ./backup:/backup
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-cousinsmatter}

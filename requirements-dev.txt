@@ -1,5 +1,5 @@
 css-html-js-minify>=2.5.5
 ruff>=0.15.12
 coverage>=7.13.5
-types-requests>=2.33.0.20260408
+types-requests>=2.33.0.20260503
 django-debug-toolbar~=6.3.0

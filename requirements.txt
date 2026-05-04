@@ -23,4 +23,4 @@ django-htmx~=1.27.0
 python-gedcom~=1.1.0
 av~=17.0.1
 django-allauth[socialaccount]~=65.16.1
-psycopg-pool~=3.3.0
+psycopg-pool~=3.3.1

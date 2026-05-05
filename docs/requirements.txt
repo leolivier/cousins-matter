@@ -28,7 +28,7 @@ mkdocs==1.6.1
     # via -r docs/requirements.in
 mkdocs-get-deps==0.2.0
     # via mkdocs
-packaging==26.0
+packaging==26.2
     # via mkdocs
 pathspec==0.12.1
     # via mkdocs

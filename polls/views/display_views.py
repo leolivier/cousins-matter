@@ -40,7 +40,7 @@ class PollsListView(generic.ListView):
       filter &= Q(close_date__lte=timezone.now())
     if self.model == Poll:  # Exclude EventPlanners
       filter &= Q(eventplanner__isnull=True)
-    query_set = self.model.objects.filter(filter).order_by(self.ordering)
+    query_set = self.model.objects.filter(filter).select_related("owner").order_by(self.ordering)
     result = query_set[: (self.show_last or 250)]
     # print(filter, result, self.__dict__)
     return result
@@ -104,6 +104,10 @@ class PollDetailView(generic.DetailView):
 
   model = Poll
   template_name = "polls/poll_detail.html"
+
+  def get_queryset(self):
+    """Optimize query by prefetching related objects."""
+    return super().get_queryset().select_related("owner").prefetch_related("closed_list")
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)

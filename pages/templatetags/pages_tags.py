@@ -37,7 +37,9 @@ def build_pages_tree(
   if prefix and include_or_exclude_prefix == "include":
     filter["url__istartswith"] = prefix
   # print('filter:', filter)
-  pages = FlatPage.objects.filter(**filter) if filter else FlatPage.objects.all()
+  pages = (
+    FlatPage.objects.filter(**filter).prefetch_related("sites") if filter else FlatPage.objects.all().prefetch_related("sites")
+  )
   if prefix and include_or_exclude_prefix == "exclude":
     pages = pages.exclude(url__istartswith=prefix)
 
@@ -141,5 +143,5 @@ def include_page(url):
 @register.inclusion_tag("pages/link_pages_starting_with.html")
 def link_pages_starting_with(url_prefix, icon):
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
-  pages = FlatPage.objects.filter(url__istartswith=url_prefix)
+  pages = FlatPage.objects.filter(url__istartswith=url_prefix).prefetch_related("sites")
   return {"pages": pages, "icon": icon}

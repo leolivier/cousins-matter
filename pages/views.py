@@ -1,16 +1,18 @@
 from django.conf import settings
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views import generic
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.views import generic
 from django_htmx.http import HttpResponseClientRedirect
+
 from core.mixins import OnlyAdminMixin
 from core.utils import confirm_delete_modal
-from .models import FlatPage
+
 from .forms import PageForm
+from .models import FlatPage
 
 
 class PageCreateView(OnlyAdminMixin, generic.CreateView):
@@ -62,11 +64,13 @@ class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
 class PageAdminListView(OnlyAdminMixin, generic.ListView):
   model = FlatPage
   template_name = "pages/pages_admin_list.html"
+  queryset = FlatPage.objects.prefetch_related("sites")
 
 
 class PageTreeView(generic.ListView):
   model = FlatPage
   template_name = "pages/page_tree.html"
+  queryset = FlatPage.objects.prefetch_related("sites")
 
 
 class PageDeleteView(OnlyAdminMixin, generic.View):

@@ -9,7 +9,8 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from core.utils import remove_accents, create_thumbnail
+from core.utils import create_thumbnail, remove_accents
+
 from .managers import MemberManager
 
 logger = logging.getLogger(__name__)

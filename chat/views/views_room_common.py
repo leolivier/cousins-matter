@@ -46,7 +46,9 @@ def list_chat_rooms(request, page_num=1, private=False):
   else:
     chat_rooms = ChatRoom.objects.public()
   # Annotate room instances with the first message and the number of messages in the room
-  followers_count_subquery = ChatRoom.objects.filter(pk=OuterRef("pk")).values("pk").annotate(count=Count("followers")).values("count")
+  followers_count_subquery = (
+    ChatRoom.objects.filter(pk=OuterRef("pk")).values("pk").annotate(count=Count("followers")).values("count")
+  )
 
   chat_rooms = chat_rooms.annotate(
     num_messages=Count("chatmessage", distinct=True),

@@ -28,10 +28,10 @@ class PostsListView(generic.ListView):
   def get(self, request, page=1):
     posts = (  # fmt: skip
       Post.objects
-        .select_related("first_message")  # fmt: skip
-        .annotate(num_messages=Count("message"))
-        .all()
-        .order_by("-first_message__created")
+      .select_related("first_message")  # fmt: skip
+      .annotate(num_messages=Count("message"))
+      .all()
+      .order_by("-first_message__created")
     )
     try:
       page = Paginator.get_page(

@@ -55,15 +55,14 @@ def search_private_members(request, room_slug):
   query = request.GET.get("q", "")
   members = (  # fmt: skip
     Member.objects
-      .filter(followed_chat_rooms=room)
-      .filter(
-        Q(last_name__icontains=query)
-        | Q(first_name__icontains=query)
-        | Q(last_name__icontains=query.split()[-1])
-        | Q(first_name__icontains=query.split()[0])
-      )
-      .distinct()
-      [:12]  # Limited to 12 results
+    .filter(followed_chat_rooms=room)
+    .filter(
+      Q(last_name__icontains=query)
+      | Q(first_name__icontains=query)
+      | Q(last_name__icontains=query.split()[-1])
+      | Q(first_name__icontains=query.split()[0])
+    )
+    .distinct()[:12]  # Limited to 12 results
   )
   return render(request, "chat/private/add-member.html#member_search_results", {"members": members})
 

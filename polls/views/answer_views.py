@@ -14,15 +14,6 @@ class PollsVoteView(generic.View):
   poll_model = Poll
   redirect_to = "polls:poll_detail"
 
-  def get_question_form(self, poll_answer, question):
-    form_class = get_answerform_class_for_question_type(question.question_type)
-    # is there an existing answer for that poll question and that user?
-    if poll_answer:
-      answer = Answer.filter_answers(poll_answer=poll_answer, question=question)
-      if answer:
-        return form_class(instance=answer[0], prefix=f"q{question.id}")
-    return form_class(question=question, prefix=f"q{question.id}")
-
   def get_question_forms(self, poll):
     # is there an existing answer for that poll and that user?
     poll_answer = PollAnswer.objects.filter(poll=poll, member=self.request.user).first()
@@ -56,13 +47,14 @@ class PollsVoteView(generic.View):
       return form_class(instance=answers_cache[question.id], prefix=f"q{question.id}")
     return form_class(question=question, prefix=f"q{question.id}")
 
-  def get_question_form_classes(self, poll):
+  def get_question_form_classes(self, questions):
+    """Build form classes for given questions (already prefetched)."""
     return [
       {
         "question": question,
         "form": get_answerform_class_for_question_type(question.question_type),
       }
-      for question in poll.questions.all()
+      for question in questions
     ]
 
   def get(self, request, poll_id):
@@ -83,13 +75,7 @@ class PollsVoteView(generic.View):
 
     # Prefetch questions to avoid N+1
     questions = list(poll.questions.all())
-    question_form_classes = [
-      {
-        "question": question,
-        "form": get_answerform_class_for_question_type(question.question_type),
-      }
-      for question in questions
-    ]
+    question_form_classes = self.get_question_form_classes(questions)
 
     # are we modifyning an existing answer for that poll and that user?
     poll_answer = PollAnswer.objects.filter(poll=poll, member=request.user)
@@ -101,6 +87,8 @@ class PollsVoteView(generic.View):
       poll_answer.save()
 
     # Delete all previous answers in bulk to avoid N+1 queries
+    # Note: We iterate through subclasses because Django's multi-table inheritance
+    # requires deleting from each concrete table separately to maintain referential integrity
     Answer.set_subclasses()
     for subclass in Answer.subclasses:
       subclass.objects.filter(poll_answer=poll_answer, question__in=questions).delete()

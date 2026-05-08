@@ -1,11 +1,10 @@
 # util functions for member views
 import re
 from io import BytesIO
-from typing import Any
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
@@ -25,7 +24,7 @@ class MembersDirectoryView(generic.View):
   template_name = "members/members/members_directory.html"
   model = Member
 
-  def get(self, request, page_num=1) -> dict[str, Any]:
+  def get(self, request, page_num=1) -> HttpResponse:
     members = Member.objects.alive().select_related("address")
     try:
       page = Paginator.get_page(
@@ -66,7 +65,7 @@ class DirectoryPDF(FPDF):
     # Move to the right
     self.cell(60)
     # Title
-    self.cell(60, 10, self.title, 1, 0, "C")
+    self.cell(60, 10, self.title or "", 1, 0, "C")
     # Line break
     self.ln(20)
 

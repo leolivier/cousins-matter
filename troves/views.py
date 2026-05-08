@@ -1,26 +1,28 @@
 from urllib.parse import urlencode
+
 from django.conf import settings
 from django.contrib import messages
 from django.http import JsonResponse
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from core.utils import PageOutOfBounds, Paginator
+
+from core.utils import PageOutOfBounds, Paginator, check_edit_permission
 from members.models import Member
-from core.utils import check_edit_permission
-from .models import Trove
+
 from .forms import TreasureForm
+from .models import Trove
 
 
 def trove_cave(request, page=1):
   category = request.GET.get("category")
   if category and category in dict(Trove.CATEGORY_CHOICES).keys():
-    treasures = Trove.objects.filter(category=category).order_by("id")
+    treasures = Trove.objects.filter(category=category).select_related("owner").order_by("id")
 
     def compute_link(idx):
       return reverse("troves:page", args=[idx]) + "?" + urlencode({"category": category})
 
   else:
-    treasures = Trove.objects.all().order_by("category", "id")
+    treasures = Trove.objects.all().select_related("owner").order_by("category", "id")
 
     def compute_link(idx):
       return reverse("troves:page", args=[idx])
@@ -57,7 +59,7 @@ def create_treasure(request):
 
 
 def update_treasure(request, pk):
-  treasure = get_object_or_404(Trove, pk=pk)
+  treasure = get_object_or_404(Trove.objects.select_related("owner"), pk=pk)
   check_edit_permission(request, treasure.owner)
   if request.method == "POST":
     form = TreasureForm(request.POST, request.FILES, instance=treasure)
@@ -72,7 +74,7 @@ def update_treasure(request, pk):
 def delete_treasure(request, pk):
   assert request.htmx
   try:
-    treasure = get_object_or_404(Trove, pk=pk)
+    treasure = get_object_or_404(Trove.objects.select_related("owner"), pk=pk)
     check_edit_permission(request, treasure.owner)
     treasure.delete()
     return JsonResponse({"deleted": True})
@@ -82,7 +84,7 @@ def delete_treasure(request, pk):
 
 def treasure_detail(request, pk):
   try:
-    treasure = get_object_or_404(Trove, pk=pk)
+    treasure = get_object_or_404(Trove.objects.select_related("owner"), pk=pk)
     return render(request, "troves/treasure_detail.html", {"treasure": treasure})
   except Exception as e:
     messages.error(request, f"Exception: {e}")

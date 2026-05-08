@@ -1,13 +1,14 @@
 from django.conf import settings
+from django.core.exceptions import RequestDataTooBig
+from django.db import transaction
+from django.db.models import Count, Prefetch
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views import generic
-from django.db import transaction
-from django.http import HttpResponseBadRequest, HttpResponseNotFound
-from django_htmx.http import HttpResponseClientRedirect
 from django.utils.translation import gettext as _
-from django.db.models import Count
-from django.core.exceptions import RequestDataTooBig
+from django.views import generic
+from django_htmx.http import HttpResponseClientRedirect
+
 from core.utils import (
   PageOutOfBounds,
   Paginator,
@@ -17,9 +18,10 @@ from core.utils import (
 from forum.views.views_follow import (
   check_followers_on_new_post,
 )
-from ..models import Post, Message
-from ..forms import MessageForm, PostForm
 from members.models import Member
+
+from ..forms import MessageForm, PostForm
+from ..models import Comment, Message, Post
 
 
 class PostsListView(generic.ListView):
@@ -28,8 +30,8 @@ class PostsListView(generic.ListView):
   def get(self, request, page=1):
     posts = (  # fmt: skip
       Post.objects
-      .select_related("first_message")  # fmt: skip
-      .annotate(num_messages=Count("message"))
+      .select_related("first_message__author")  # fmt: skip
+      .annotate(num_messages=Count("message"), num_followers=Count("followers"))
       .all()
       .order_by("-first_message__created")
     )
@@ -51,10 +53,16 @@ class PostDisplayView(generic.DetailView):
 
   def get(self, request, pk, page_num=1):
     try:
-      post = Post.objects.select_related("first_message").get(pk=pk)
+      post = Post.objects.select_related("first_message__author").get(pk=pk)
     except Post.DoesNotExist:
       return HttpResponseNotFound()
-    replies = Message.objects.filter(post=post, first_of_post=None).all()
+    replies = (
+      Message.objects
+      .filter(post=post, first_of_post=None)
+      .select_related("author")
+      .prefetch_related(Prefetch("comment_set", queryset=Comment.objects.select_related("author")))
+      .all()
+    )
     try:
       page = Paginator.get_page(
         request,

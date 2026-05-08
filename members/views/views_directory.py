@@ -1,16 +1,15 @@
 # util functions for member views
 import re
-from typing import Any
-from django.shortcuts import redirect, render
-from django.utils.translation import gettext as _
-from fpdf import FPDF
 from io import BytesIO
 
-from django.http import FileResponse
-from django.contrib.staticfiles import finders
-from django.views import generic
-from django.utils.text import slugify
 from django.conf import settings
+from django.contrib.staticfiles import finders
+from django.http import FileResponse, HttpResponse
+from django.shortcuts import redirect, render
+from django.utils.text import slugify
+from django.utils.translation import gettext as _
+from django.views import generic
+from fpdf import FPDF
 
 from core.utils import PageOutOfBounds, Paginator
 
@@ -25,8 +24,8 @@ class MembersDirectoryView(generic.View):
   template_name = "members/members/members_directory.html"
   model = Member
 
-  def get(self, request, page_num=1) -> dict[str, Any]:
-    members = Member.objects.alive()
+  def get(self, request, page_num=1) -> HttpResponse:
+    members = Member.objects.alive().select_related("address")
     try:
       page = Paginator.get_page(
         request,
@@ -66,7 +65,7 @@ class DirectoryPDF(FPDF):
     # Move to the right
     self.cell(60)
     # Title
-    self.cell(60, 10, self.title, 1, 0, "C")
+    self.cell(60, 10, self.title or "", 1, 0, "C")
     # Line break
     self.ln(20)
 
@@ -166,7 +165,7 @@ class MembersPrintDirectoryView(generic.View):
     return response
 
   def _get_directory_data(self):
-    for member in Member.objects.alive():
+    for member in Member.objects.alive().select_related("address"):
       yield [
         member.full_name,
         member.phone if member.phone else "",

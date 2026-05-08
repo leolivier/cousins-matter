@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-# Register your models here.
 from .models import Trove
 
-admin.site.register(Trove)
+
+@admin.register(Trove)
+class TroveAdmin(admin.ModelAdmin):
+  list_display = ["title", "category", "owner"]
+  list_select_related = ["owner"]
+  list_filter = ["category"]
+  search_fields = ["title", "description"]
+  readonly_fields = ["thumbnail"]

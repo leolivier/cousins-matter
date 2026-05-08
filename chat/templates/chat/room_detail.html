@@ -133,7 +133,7 @@ $(document).ready(()=>{
 			{%partialdef room_name_display inline %}
 				<div hx-target="this" hx-swap="outerHTML">
 					<span>{{room.name}}</span>
-					{%if room.owner == request.user or request.user.is_superuser %}
+					{%if room_owner == request.user or request.user.is_superuser %}
 						<button class="button is-responsive is-small ml-1"
 								hx-get="{%url 'chat:room-edit' room.slug %}"
 								title="{%trans 'Edit' %}">
@@ -160,11 +160,11 @@ $(document).ready(()=>{
 			{%endpartialdef room_edit_form %}
 			{%with followed_object=room extra_class="ml-auto mr-5" %}
 				{%if private%}
-					{%include "core/followers/followers-count-tag.html" with name="members"%}
+					{%include "core/followers/followers-count-tag.html" with name="members" nfollowers=num_followers %}
 				{%else%}
-					{%include "core/followers/followers-count-tag.html" %}
+					{%include "core/followers/followers-count-tag.html" with nfollowers=num_followers %}
 				{%endif%}
-				{%if room.owner != request.user %}
+				{%if room_owner != request.user %}
 					{%if private%}
 					<div class="mr-1 buttons has-addons is-rounded">
 						<button class="button"

@@ -1,8 +1,9 @@
+import uuid
+from datetime import date
+
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
-from datetime import date
-import uuid
 
 
 class Person(models.Model):
@@ -77,11 +78,11 @@ class Person(models.Model):
     """Returns a list of partners from all unions."""
     partners = []
     # As partner1
-    for family in self.unions_as_p1.all():
+    for family in self.unions_as_p1.select_related("partner2").all():
       if family.partner2:
         partners.append(family.partner2)
     # As partner2
-    for family in self.unions_as_p2.all():
+    for family in self.unions_as_p2.select_related("partner1").all():
       if family.partner1:
         partners.append(family.partner1)
     return partners

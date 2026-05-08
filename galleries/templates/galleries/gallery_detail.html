@@ -20,12 +20,13 @@
 				<p>{{ gallery.description|safe }}</p>
 			</div>
 		</div>
-		{% if gallery.children.count > 0 %}
+		{% with sub_galleries=gallery.children.all %}
+		{% if sub_galleries %}
 		<div class="level-item">
 			<div class="container">
 				<p class="content has-text-centered mr-3">{% translate "Children galleries" %}</p>
 				<div class="grid">
-				{% for subgal in gallery.children.all %}
+				{% for subgal in sub_galleries %}
 					<a class="cell mr-2" href="{% url 'galleries:detail' subgal.id %}">
 						<figure class="image sub-gallery-cover mx-auto">
 							<img src="{{subgal.cover_url}}">
@@ -37,6 +38,7 @@
 			</div>
 		</div>
 		{% endif %}
+		{% endwith %}
 		<div class="level-right">
 			<p class="buttons has-addons mt-0">
 				{% if gallery.parent %}

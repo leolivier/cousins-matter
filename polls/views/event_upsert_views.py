@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django_htmx.http import HttpResponseClientRedirect
+
 from core.utils import check_edit_permission, confirm_delete_modal
 from polls.views.upsert_views import (
   PollCreateView,
@@ -10,11 +11,12 @@ from polls.views.upsert_views import (
   PollUpdateView,
   managed_closed_list,
 )
-from ..models import Answer, EventPlanner, Question
+
 from ..forms.upsert_forms import (
-  QuestionUpsertForm,
   EventPlannerUpsertForm,
+  QuestionUpsertForm,
 )
+from ..models import Answer, EventPlanner, Question
 
 
 class EventPlannerCreateView(PollCreateView):
@@ -72,8 +74,10 @@ class EventPlannerUpdateView(PollUpdateView):
       multichoices_planner = form.cleaned_data["multichoices_planner"]
       possible_dates = Question.objects.filter(poll=planner, question_type__in=Question.EVENT_TYPES).first()
       if possible_dates:
-        answers = Answer.filter_answers(question=possible_dates)
-        if answers:
+        # Use the specific answer class based on question type to avoid iterating all subclasses
+        answer_class = Answer.get_answer_class_for_question_type(possible_dates.question_type)
+        answers = answer_class.objects.filter(question=possible_dates)
+        if answers.exists():
           if (multichoices_planner and possible_dates.question_type == Question.SINGLEEVENTPLANNING_QUESTION) or (
             not multichoices_planner and possible_dates.question_type == Question.MULTIEVENTPLANNING_QUESTION
           ):

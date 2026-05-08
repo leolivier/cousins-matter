@@ -1,23 +1,26 @@
 import logging
+
 from django.conf import settings
-from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
-from django.db.models import Q
-from django.urls import reverse
-from django.views import generic
 from django.contrib.auth import logout
-from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
 from django.http import HttpResponseForbidden, JsonResponse
-from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+from django.views import generic
+from django_htmx.http import HttpResponseClientRedirect, HttpResponseClientRefresh
+from verify_email.email_handler import send_verification_email
+
 from core.utils import (
   PageOutOfBounds,
   Paginator,
-  remove_accents,
   confirm_delete_modal,
+  remove_accents,
 )
-from verify_email.email_handler import send_verification_email
-from ..models import Family, Member
+
 from ..forms import MemberUpdateForm, NotifyDeathForm
+from ..models import Family, Member
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +53,7 @@ def editable(request, member):
 
 
 def member_manager_name(member):
-  return Member.objects.get(id=member.member_manager.id).full_name if member and member.member_manager else None
+  return member.member_manager.full_name if member and member.member_manager else None
 
 
 def get_members_page(request, page_num=1):
@@ -95,6 +98,9 @@ class MembersView(generic.ListView):
 class MemberDetailView(generic.DetailView):
   model = Member
   template_name = "members/members/member_detail.html"
+
+  def get_queryset(self):
+    return Member.objects.select_related("member_manager", "address", "family")
 
   def get_context_data(self, **kwargs):
     member = self.object
@@ -174,7 +180,7 @@ class EditMemberView(generic.UpdateView):
   is_profile_view = False
 
   def get(self, request, pk):
-    member = get_object_or_404(Member, pk=pk)
+    member = get_object_or_404(Member.objects.select_related("member_manager"), pk=pk)
     if not _can_edit_member(request, member):
       messages.error(request, _("You do not have permission to edit this member."))
       return redirect("members:detail", member.id)
@@ -191,7 +197,7 @@ class EditMemberView(generic.UpdateView):
     )
 
   def post(self, request, pk):
-    member = get_object_or_404(Member, pk=pk)
+    member = get_object_or_404(Member.objects.select_related("member_manager"), pk=pk)
     if not _can_edit_member(request, member):
       messages.error(request, _("You do not have permission to edit this member."))
       return redirect("members:detail", member.id)
@@ -312,8 +318,9 @@ def notify_death(request, pk):
     message = request.POST.get("message")
 
     # Send email to admins
-    admins = Member.objects.filter(is_superuser=True)
-    emails = [admin.email for admin in admins if admin.email]
+    emails = list(
+      Member.objects.filter(is_superuser=True, email__isnull=False).exclude(email="").values_list("email", flat=True)
+    )
 
     if emails:
       from django.core.mail import send_mail

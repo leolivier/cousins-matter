@@ -1,24 +1,26 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Q
 from django.contrib import messages
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext as _
+
 from core.utils import PageOutOfBounds, Paginator
-from ..models import Family
+
 from ..forms import FamilyForm
+from ..models import Family
 from ..utils import clear_genealogy_caches
 
 
 def family_list(request, page_num=1):
   query = request.GET.get("q")
   if query:
-    families = Family.objects.filter(
+    families = Family.objects.select_related("partner1", "partner2").filter(
       Q(partner1__first_name__icontains=query)
       | Q(partner2__first_name__icontains=query)
       | Q(partner1__last_name__icontains=query)
       | Q(partner2__last_name__icontains=query)
     )
   else:
-    families = Family.objects.all()
+    families = Family.objects.select_related("partner1", "partner2").all()
 
   cache_key_suffix = (request.GET.urlencode() or "default") + str(page_num)
 

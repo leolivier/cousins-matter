@@ -1,8 +1,10 @@
 import datetime
+
 from django.apps import apps
 from django.db import models
-from django.utils import timezone, formats
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils import formats, timezone
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from members.models import Member
 
@@ -52,7 +54,22 @@ class Poll(models.Model):
         - the different dates for date questions as an array of strings
     """
     results = []
-    for question in self.questions.all():
+    # Prefetch all answer types to avoid N+1 queries
+    # Note: SingleEventAnswer inherits from ChoiceAnswer, so it uses answers_choiceanswer
+    # MultiEventAnswer inherits from MultiChoiceAnswer, so it uses answers_multichoiceanswer
+    questions = self.questions.prefetch_related(
+      "answers_yesnoanswer",
+      "answers_textanswer",
+      "answers_datetimeanswer",
+      "answers_choiceanswer",
+      "answers_multichoiceanswer",
+      "answers_yesnoanswer__poll_answer",
+      "answers_textanswer__poll_answer",
+      "answers_datetimeanswer__poll_answer",
+      "answers_choiceanswer__poll_answer",
+      "answers_multichoiceanswer__poll_answer",
+    ).all()
+    for question in questions:
       question_result = QuestionResult(question)
       question_result.build_result(user)
       results.append(question_result)

@@ -1,11 +1,11 @@
 import logging
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
+
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
-from django.shortcuts import redirect
 from django.contrib import messages
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives, send_mail
+from django.shortcuts import redirect
+from django.template.loader import render_to_string
+from django.utils.translation import gettext_lazy as _
 from django_q.tasks import async_task
 
 logger = logging.getLogger(__name__)
@@ -63,12 +63,15 @@ def do_check_followers(
     new_internal_object = followed_object
 
   # get all potential recipients (Member objects)
-  recipients = set(followed_object.followers.all())
+  # Optimize by only loading necessary fields
+  recipients = set(followed_object.followers.only("id", "email", "email_batch_frequency", "first_name", "last_name").all())
   if followed_object_owner:
-    recipients.update(followed_object_owner.followers.all())
+    recipients.update(
+      followed_object_owner.followers.only("id", "email", "email_batch_frequency", "first_name", "last_name").all()
+    )
     recipients.add(followed_object_owner)
   if author:  # add author's followers to the list
-    recipients.update(author.followers.all())
+    recipients.update(author.followers.only("id", "email", "email_batch_frequency", "first_name", "last_name").all())
 
   logger.debug(f"recipients before author discard: {recipients}")
   # Filter out author and members who opted out of emails
@@ -81,8 +84,9 @@ def do_check_followers(
   immediate_recipients = []
   interested_count = 0
 
-  from .models import NotificationEvent
   from members.models import Member
+
+  from .models import NotificationEvent
 
   for member in recipients:
     if member.email_batch_frequency == Member.FREQUENCY_NEVER:

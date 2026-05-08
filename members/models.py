@@ -5,11 +5,15 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.files.storage import default_storage
 from django.db import models
+from django.db.models.fields import CharField
+from django.db.models.fields.related import ForeignKey
+from django.db.models.indexes import Index
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from core.utils import remove_accents, create_thumbnail
+from core.utils import create_thumbnail, remove_accents
+
 from .managers import MemberManager
 
 logger = logging.getLogger(__name__)
@@ -45,15 +49,17 @@ ALL_FIELD_NAMES = MEMBER_FIELD_NAMES | ADDRESS_FIELD_NAMES
 
 
 class Family(models.Model):
-  name = models.CharField(_("Name"), max_length=72)
+  name: CharField = models.CharField(_("Name"), max_length=72)
 
-  parent = models.ForeignKey("self", verbose_name=_("Parent family"), on_delete=models.CASCADE, null=True, blank=True)
+  parent: ForeignKey = models.ForeignKey(
+    to="members.Family", related_name="self", verbose_name=_("Parent family"), on_delete=models.CASCADE, null=True, blank=True
+  )
 
   class Meta:
     verbose_name = _("family")
     verbose_name_plural = _("families")
-    ordering = ["name"]
-    indexes = [
+    ordering: list[str] = ["name"]
+    indexes: list[Index] = [
       models.Index(fields=["name"]),
     ]
 

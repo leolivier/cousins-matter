@@ -4,8 +4,8 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import generic
 
-from ..models import Answer, EventPlanner, PollAnswer, Poll
 from ..forms.answer_forms import get_answerform_class_for_question_type
+from ..models import Answer, EventPlanner, Poll, PollAnswer
 
 
 class PollsVoteView(generic.View):
@@ -14,33 +14,47 @@ class PollsVoteView(generic.View):
   poll_model = Poll
   redirect_to = "polls:poll_detail"
 
-  def get_question_form(self, poll_answer, question):
-    form_class = get_answerform_class_for_question_type(question.question_type)
-    # is there an existing answer for that poll question and that user?
-    if poll_answer:
-      answer = Answer.filter_answers(poll_answer=poll_answer, question=question)
-      if answer:
-        return form_class(instance=answer[0], prefix=f"q{question.id}")
-    return form_class(question=question, prefix=f"q{question.id}")
-
   def get_question_forms(self, poll):
     # is there an existing answer for that poll and that user?
     poll_answer = PollAnswer.objects.filter(poll=poll, member=self.request.user).first()
+
+    # Prefetch all questions to avoid N+1
+    questions = poll.questions.all()
+
+    # Prefetch all existing answers if poll_answer exists to avoid N+1 queries
+    if poll_answer:
+      Answer.set_subclasses()
+      # Build a cache of existing answers by question_id
+      answers_cache = {}
+      for subclass in Answer.subclasses:
+        for answer in subclass.objects.filter(poll_answer=poll_answer, question__in=questions):
+          answers_cache[answer.question_id] = answer
+    else:
+      answers_cache = {}
+
     return [
       {
         "question": question,
-        "form": self.get_question_form(poll_answer, question),
+        "form": self.get_question_form_cached(poll_answer, question, answers_cache),
       }
-      for question in poll.questions.all()
+      for question in questions
     ]
 
-  def get_question_form_classes(self, poll):
+  def get_question_form_cached(self, poll_answer, question, answers_cache):
+    """Get question form using cached answers to avoid N+1 queries."""
+    form_class = get_answerform_class_for_question_type(question.question_type)
+    if poll_answer and question.id in answers_cache:
+      return form_class(instance=answers_cache[question.id], prefix=f"q{question.id}")
+    return form_class(question=question, prefix=f"q{question.id}")
+
+  def get_question_form_classes(self, questions):
+    """Build form classes for given questions (already prefetched)."""
     return [
       {
         "question": question,
         "form": get_answerform_class_for_question_type(question.question_type),
       }
-      for question in poll.questions.all()
+      for question in questions
     ]
 
   def get(self, request, poll_id):
@@ -58,7 +72,11 @@ class PollsVoteView(generic.View):
 
   def post(self, request, poll_id):
     poll = get_object_or_404(self.poll_model, pk=poll_id)
-    question_form_classes = self.get_question_form_classes(poll)
+
+    # Prefetch questions to avoid N+1
+    questions = list(poll.questions.all())
+    question_form_classes = self.get_question_form_classes(questions)
+
     # are we modifyning an existing answer for that poll and that user?
     poll_answer = PollAnswer.objects.filter(poll=poll, member=request.user)
     if poll_answer.exists():
@@ -67,15 +85,19 @@ class PollsVoteView(generic.View):
       # otherwise create a new one
       poll_answer = PollAnswer(poll=poll, member=request.user)
       poll_answer.save()
+
+    # Delete all previous answers in bulk to avoid N+1 queries
+    # Note: We iterate through subclasses because Django's multi-table inheritance
+    # requires deleting from each concrete table separately to maintain referential integrity
+    Answer.set_subclasses()
+    for subclass in Answer.subclasses:
+      subclass.objects.filter(poll_answer=poll_answer, question__in=questions).delete()
+
     has_errors = False
     question_forms = []
     for question_data in question_form_classes:
       question = question_data["question"]
       form_class = question_data["form"]
-      # delete all answers for this question and this user
-      previous_answers = Answer.filter_answers(poll_answer=poll_answer, question=question)
-      if previous_answers:
-        previous_answers[0].delete()
       form = form_class(request.POST, question=question, prefix=f"q{question.id}")
       if form.is_valid():
         answer = form.save(commit=False)

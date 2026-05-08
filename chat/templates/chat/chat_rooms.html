@@ -62,7 +62,7 @@
 		{%endif%}
 
 		{%trans "No author yet" as nobody %}
-		{% with admin=room.admins.first owner=room.owner %}
+		{% with admin=room.admins.first owner=room.first_message_author %}
 		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
 			<div class="panel-icon mini-avatar is-flex is-align-items-center is-justify-content-center is-flex-shrink-5 image">
 				<img class="is-rounded" 
@@ -93,9 +93,9 @@
 				<br>
 				<span class="tag mr-3">{{trans_nmsgs}}</span>
 			{%if private%}
-				{%include "core/followers/followers-count-tag.html" with followed_object=room name="members"%}
+				{%include "core/followers/followers-count-tag.html" with followed_object=room name="members" nfollowers=room.num_followers %}
 			{%else%}
-				{%include "core/followers/followers-count-tag.html" with followed_object=room %}
+				{%include "core/followers/followers-count-tag.html" with followed_object=room nfollowers=room.num_followers %}
 			{%endif%}
 			</div>
 			<div class="is-flex-grow-1">
@@ -113,7 +113,7 @@
 		{%else%}
 			<div class="mr-1">
 				{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
-				{%include "core/followers/toggle-follow-button.html" with followed_object=room extra_class="is-pulled-right" is_hidden_mobile="true"%}
+				{%include "core/followers/toggle-follow-button.html" with followed_object=room extra_class="is-pulled-right" is_hidden_mobile="true" is_following=room.is_following %}
 			</div>
 		{%endif%}
 		</div>

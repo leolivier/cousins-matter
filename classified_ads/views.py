@@ -10,7 +10,7 @@ from django_htmx.http import HttpResponseClientRedirect, HttpResponseClientRefre
 from classified_ads.forms import AdPhotoForm, ClassifiedAdForm, MessageForm
 from core.utils import check_edit_permission, confirm_delete_modal
 
-from .models import AdPhoto, ClassifiedAd, Categories
+from .models import AdPhoto, Categories, ClassifiedAd
 
 
 class CreateAdView(generic.CreateView):
@@ -77,12 +77,17 @@ class ListAdsView(generic.ListView):
   template_name = "classified_ads/list.html"
 
   def get_queryset(self):
-    return ClassifiedAd.objects.filter(ad_status=ClassifiedAd.AD_STATUS_FOR_SALE).order_by("-date_created")
+    return (
+      ClassifiedAd.objects.filter(ad_status=ClassifiedAd.AD_STATUS_FOR_SALE).select_related("owner").order_by("-date_created")
+    )
 
 
 class AdDetailView(generic.DetailView):
   model = ClassifiedAd
   template_name = "classified_ads/detail.html"
+
+  def get_queryset(self):
+    return ClassifiedAd.objects.select_related("owner").prefetch_related("photos")
 
 
 class AdPhotoAddView(generic.View):

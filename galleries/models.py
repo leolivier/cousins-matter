@@ -228,9 +228,19 @@ class Gallery(models.Model):
     return protected_media_url(self.cover.thumbnail.name) if self.cover else settings.DEFAULT_GALLERY_COVER_URL
 
   def rec_children_list(self):
+    """Return list of IDs of this gallery and all its descendants.
+    Uses a single query to fetch all gallery relationships, then traverses in Python.
+    """
+    all_pairs = dict(Gallery.objects.values_list("id", "parent_id"))
+    children_map = {}
+    for gid, pid in all_pairs.items():
+      children_map.setdefault(pid, []).append(gid)
     result = [self.pk]
-    for child in self.children.all():
-      result.extend(child.rec_children_list())
+    queue = list(children_map.get(self.pk, []))
+    while queue:
+      current = queue.pop(0)
+      result.append(current)
+      queue.extend(children_map.get(current, []))
     return result
 
 

@@ -20,8 +20,8 @@
       </p>
     </a>
   </div>
-  {% if recursive and gallery.children.count > 0 %}
-    {% include_galleries gallery.children.all recursive=recursive level=level|add:1 %}
+  {% if recursive and gallery.cached_children %}
+    {% include_galleries gallery.cached_children recursive=recursive level=level|add:1 %}
   {% endif %}
 {% endfor %}
 {% endblock %}

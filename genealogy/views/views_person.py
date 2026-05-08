@@ -1,10 +1,12 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Q
 from django.contrib import messages
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext as _
+
 from core.utils import PageOutOfBounds, Paginator
-from ..models import Person
+
 from ..forms import PersonForm
+from ..models import Person
 from ..utils import clear_genealogy_caches
 
 
@@ -35,7 +37,12 @@ def person_list(request, page_num=1):
 
 
 def person_detail(request, pk):
-  person = get_object_or_404(Person, pk=pk)
+  person = get_object_or_404(
+    Person.objects.select_related(
+      "child_of_family", "child_of_family__partner1", "child_of_family__partner2", "member"
+    ).prefetch_related("unions_as_p1__partner2", "unions_as_p1__children", "unions_as_p2__partner1", "unions_as_p2__children"),
+    pk=pk,
+  )
   return render(request, "genealogy/person_detail.html", {"person": person})
 
 

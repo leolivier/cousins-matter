@@ -42,8 +42,9 @@ def toggle_follow(request, room_slug):
 def edit_room(request, room_slug):
   assert request.htmx
   room = get_object_or_404(ChatRoom, slug=room_slug)
-  if room.owner is not None:  # if the room has no first message, there is no owner
-    check_edit_permission(request, room.owner)
+  owner = room.owner
+  if owner is not None:  # if the room has no first message, there is no owner
+    check_edit_permission(request, owner)
   if request.method == "GET":
     return render(request, "chat/room_detail.html#room_edit_form", {"room": room})
   data = QueryDict(request.body)
@@ -64,8 +65,9 @@ def edit_room(request, room_slug):
 def delete_room(request, room_slug):
   room = get_object_or_404(ChatRoom, slug=room_slug)
   if request.method == "POST":
-    if room.owner is not None:  # if the room has no first message, there is no owner
-      check_edit_permission(request, room.owner)
+    owner = room.owner
+    if owner is not None:  # if the room has no first message, there is no owner
+      check_edit_permission(request, owner)
     room.delete()
     messages.success(request, f"Chat room {room.name} deleted")
     return HttpResponseClientRedirect(reverse("chat:chat_rooms"))

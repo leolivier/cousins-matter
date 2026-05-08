@@ -3,7 +3,7 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.db.models import Count, OuterRef, Subquery
+from django.db.models import Count, Exists, OuterRef, Subquery
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.text import slugify
@@ -42,13 +42,17 @@ def list_chat_rooms(request, page_num=1, private=False):
   )
   if private:
     # look for private rooms of which the user who sent the request is member
-    chat_rooms = PrivateChatRoom.objects.filter(followers=request.user)
+    chat_rooms = PrivateChatRoom.objects.filter(followers=request.user).prefetch_related("admins")
   else:
     chat_rooms = ChatRoom.objects.public()
   # Annotate room instances with the first message and the number of messages in the room
+  followers_count_subquery = ChatRoom.objects.filter(pk=OuterRef("pk")).values("pk").annotate(count=Count("followers")).values("count")
+
   chat_rooms = chat_rooms.annotate(
-    num_messages=Count("chatmessage"),
+    num_messages=Count("chatmessage", distinct=True),
+    num_followers=Subquery(followers_count_subquery),
     first_message_author=Subquery(first_msg_auth_subquery),
+    is_following=Exists(Member.objects.filter(id=request.user.id, followed_chat_rooms=OuterRef("id"))),
   ).order_by("date_added")
 
   try:
@@ -183,10 +187,10 @@ def display_chat_room(request, room_slug, private=False, page_num=None):
   the query parameters for the URL.
   """
   room = get_object_or_404(ChatRoom if not private else PrivateChatRoom, slug=room_slug)
-  if private and request.user not in room.followers.all():
+  if private and not room.followers.filter(pk=request.user.pk).exists():
     messages.error(request, _("You are not a member of this private room"))
     return redirect(reverse("chat:private_chat_rooms"))
-  message_list = ChatMessage.objects.filter(room=room.id).order_by("date_added", "id")
+  message_list = ChatMessage.objects.filter(room=room.id).order_by("date_added", "id").select_related("member")
   try:
     page = Paginator.get_page(
       request,
@@ -199,12 +203,16 @@ def display_chat_room(request, room_slug, private=False, page_num=None):
     last_msg = message_list.last()
     last_date = last_msg.date_added.strftime("%Y-%m-%d") if message_list else None
     last_sender = last_msg.member.username if message_list else None
-    # print("last date found", last_date)
+    first_msg = message_list.first()
+    room_owner = first_msg.member if first_msg else None
+    num_followers = room.followers.count()
     return render(
       request,
       "chat/room_detail.html",
       {
+        "num_followers": num_followers,
         "room": room,
+        "room_owner": room_owner,
         "page": page,
         "private": private,
         "last_date": last_date,

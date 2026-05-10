@@ -8,6 +8,7 @@ LICENSE
 *.md
 media/
 scripts/dev/
+backup/
 **/*.log
 **/.gitattributes
 **/*.rdb

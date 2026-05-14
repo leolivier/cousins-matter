@@ -1,20 +1,20 @@
 import os
-from django import forms
-from django.forms import ModelForm, Form
-from django.forms import ValidationError
-from django.conf import settings
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy as _, get_language
-from django.urls import reverse
 
-from captcha.fields import CaptchaField
-
-from core.widgets import RichTextarea
-from .models import Member, Address, Family
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
-from .widgets import FieldLinkWrapper
+from captcha.fields import CaptchaField
+from django import forms
+from django.conf import settings
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+from django.utils.translation import get_language
+from django.utils.translation import gettext_lazy as _
+
 from core.utils import check_file_size
+from core.widgets import BulmaCalendar, RichTextarea
+
+from .models import Address, Family, Member
+from .widgets import FieldLinkWrapper
 
 
 class MemberFormMixin:
@@ -56,9 +56,11 @@ class MemberFormMixin:
       del self.fields["deathdate"]
 
     if "birthdate" in self.fields:
-      self.fields["birthdate"].widget = forms.DateInput(attrs={"type": "date"})
+      self.fields["birthdate"].widget = BulmaCalendar()
+      self.fields["birthdate"].required = True
+
     if "deathdate" in self.fields:
-      self.fields["deathdate"].widget = forms.DateInput(attrs={"type": "date"})
+      self.fields["deathdate"].widget = BulmaCalendar()
 
   def clean_avatar(self):
     avatar = self.cleaned_data["avatar"]
@@ -74,7 +76,7 @@ class MemberFormMixin:
       # validate file size
       if len(avatar) > settings.AVATAR_MAX_SIZE:
         nMB = settings.AVATAR_MAX_SIZE / 1024 / 1024
-        raise ValidationError(f"Avatar file size may not exceed {nMB} bytes.")
+        raise forms.ValidationError(f"Avatar file size may not exceed {nMB} bytes.")
 
     except AttributeError:
       """
@@ -130,7 +132,7 @@ class MemberSocialSignupForm(MemberFormMixin, SocialSignupForm):
   first_name = forms.CharField(label=_("First name"), max_length=150, required=True)
   last_name = forms.CharField(label=_("Last name"), max_length=150, required=True)
   avatar = forms.ImageField(label=_("Avatar"), required=False)
-  birthdate = forms.DateField(label=_("Birthdate"), required=True, widget=forms.DateInput(attrs={"type": "date"}))
+  birthdate = forms.DateField(label=_("Birthdate"), required=True, widget=BulmaCalendar())
   address = forms.ModelChoiceField(queryset=Address.objects.all(), label=_("Address"), required=False)
   phone = forms.CharField(label=_("Phone"), max_length=20, required=False)
   description = forms.CharField(label=_("Description"), widget=RichTextarea(), required=False)
@@ -216,7 +218,7 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
         del self.fields["is_dead"]
 
 
-class AddressUpdateForm(ModelForm):
+class AddressUpdateForm(forms.ModelForm):
   class Meta:
     model = Address
     fields = "__all__"
@@ -224,7 +226,7 @@ class AddressUpdateForm(ModelForm):
     exclude: list[str] = []
 
 
-class FamilyUpdateForm(ModelForm):
+class FamilyUpdateForm(forms.ModelForm):
   class Meta:
     model = Family
     fields = "__all__"
@@ -248,11 +250,11 @@ class FamilyUpdateForm(ModelForm):
   def clean_name(self):
     name = self.cleaned_data["name"].strip()
     if not name:
-      raise ValidationError(_("Family name cannot be empty"), code="empty")
+      raise forms.ValidationError(_("Family name cannot be empty"), code="empty")
     return name
 
 
-class MemberInvitationForm(Form):
+class MemberInvitationForm(forms.Form):
   invited = forms.CharField(
     label=_("Name of the invited person (will appear in the received email)"),
     max_length=75,
@@ -260,7 +262,7 @@ class MemberInvitationForm(Form):
   email = forms.EmailField(label=_("Email to send invitation"), max_length=254)
 
 
-class RegistrationRequestForm(Form):
+class RegistrationRequestForm(forms.Form):
   name = forms.CharField(label=_("Your name"), max_length=254)
   email = forms.EmailField(label=_("Email where you will receive the link"), max_length=254)
   message = forms.CharField(label=_("Message to the administrator"), widget=forms.Textarea, max_length=2000)
@@ -290,7 +292,7 @@ class CSVImportMembersForm(forms.Form):
 
 
 class NotifyDeathForm(forms.Form):
-  deathdate = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}), label=_("Date of Death"), required=True)
+  deathdate = forms.DateField(widget=BulmaCalendar(), label=_("Date of Death"), required=True)
   message = forms.CharField(
     widget=forms.Textarea(attrs={"rows": 4, "cols": 50, "placeholder": _("Any additional information...")}),
     label=_("Message (Optional)"),

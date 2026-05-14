@@ -4,6 +4,41 @@
 <script src="{% static 'core/js/bulma-calendar.min.js' %}"></script>
 <script>
 	// bulma calendar integration
+	let lang, date_fmt, options;
+
+	function attachCalendar(className, type) {
+		$(className).each(function () {
+			let el = this;
+			if (!el.bulmaCalendar) {
+				let opts = { ...options, type: type };
+				let val = el.getAttribute('value');
+				if (val) {
+					el.type = 'text'; // Prevent browser from clearing non-ISO dates
+					el.value = val;
+					if (val.includes('-') && val.split('-')[0].length === 4) {
+						let parts = val.split(/[ T]/)[0].split('-');
+						opts.startDate = new Date(parts[0], parts[1] - 1, parts[2]);
+					}
+				}
+				let calendar = bulmaCalendar.attach(el, opts)[0];
+				// Ensure the input value is updated when a date is selected
+				if (calendar) {
+					calendar.on('select', function(date) {
+						// The 'select' event passes the selected date directly
+						if (date && date instanceof Date) {
+							// Convert to ISO format (YYYY-MM-DD) for Django
+							let isoDate = date.toISOString().split('T')[0];
+							// Set the ISO formatted date on the input element
+							el.value = isoDate;
+							// Trigger change event for form validation
+							$(el).trigger('change');
+						}
+					});
+				}
+			}
+		});
+	}
+
 	$(document).ready(() => {
 		// lang = navigator.language.substring(0, 2) || "en"
 		lang = document.documentElement.lang || "en"
@@ -18,24 +53,6 @@
 			"validateLabel": gettext("Validate"), "displayMode": "inline",
 			"enableYearSwitch": true, "enableMonthSwitch": true,
 			"minDate": new Date(1600, 1, 1), displayMode: "dialog"
-		}
-		function attachCalendar(className, type) {
-			$(className).each(function () {
-				let el = this;
-				if (!el.bulmaCalendar) {
-					let opts = { ...options, type: type };
-					let val = el.getAttribute('value');
-					if (val) {
-						el.type = 'text'; // Prevent browser from clearing non-ISO dates
-						el.value = val;
-						if (val.includes('-') && val.split('-')[0].length === 4) {
-							let parts = val.split(/[ T]/)[0].split('-');
-							opts.startDate = new Date(parts[0], parts[1] - 1, parts[2]);
-						}
-					}
-					bulmaCalendar.attach(el, opts);
-				}
-			});
 		}
 		attachCalendar('.dateinput', 'date');
 		attachCalendar('.datetimeinput', 'datetime');

@@ -47,18 +47,25 @@ To do so, modify the FEATURES_FLAGS variable based on the contents of the .env.e
 
 The default value of FEATURES_FLAGS is:
 ```
-FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=True;show_public_chats=True;show_private_chats=True;show_classified_ads=True;show_polls=True;show_event_planners=True;show_pages=True;show_treasures=True;show_site_stats=True;show_export_members=True;show_change_language=True;show_genealogy=True"`
+FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=True;show_public_chats=True;show_private_chats=True;show_classified_ads=True;show_polls=True;show_event_planners=True;show_pages=True;show_treasures=True;show_site_stats=True;show_export_members=True;show_change_language=True;show_genealogy=True"
 ```
 
-**WARNINGS:**
+**Available feature flags:**
 
-1. The variable INCLUDE_BIRTHDAYS_IN_HOMEPAGE has been replaced by the feature flag show_birthdays_in_homepage, as shown above.
-2. The FEATURES_FLAGS must stay on one line in the .env file. All flags are separated by semicolons. If you set this variable in your .env file and a flag is not present in the list, it is considered false.
-    "show_export_members": True,
-    "show_change_language": True,
-    "show_genealogy": True,
-  },"`
-```
+* `show_birthdays_in_homepage`: Display upcoming birthdays on the homepage for authenticated members
+* `show_galleries`: Enable photo and video galleries feature
+* `show_forums`: Enable forum discussions
+* `show_public_chats`: Enable public chat rooms
+* `show_private_chats`: Enable private chat rooms
+* `show_classified_ads`: Enable classified ads feature
+* `show_polls`: Enable polls feature
+* `show_event_planners`: Enable event planning surveys (date selection polls)
+* `show_pages`: Enable CMS pages feature
+* `show_treasures`: Enable troves (family treasures) feature
+* `show_site_stats`: Show site statistics page
+* `show_export_members`: Allow member directory export to PDF
+* `show_change_language`: Allow language switching in the interface
+* `show_genealogy`: Enable genealogy features (family trees, GEDCOM import/export)
 
 **WARNINGS:**
 
@@ -74,17 +81,18 @@ FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=
 * `SITE_FOOTER`: The optional footer of the site, e.g. "The Simpsons Family Social Network".
 * `SITE_LOGO`: The optional relative URL of your site logo (in the top left corner). Must have a 4:1 ratio. **MUST BE STORED IN** your site's media/public folder, so **the URL must start with '/media/public'** (e.g. SITE_LOGO='/media/public/my-own-logo.jpg')
 * `SITE_COPYRIGHT`: Your site copyright, e.g. 'Copyright © 2024 Cousins Matter'.
+* `DARK_MODE`: Enable dark mode theme. Default is False.
 
 ### Members
 
 * `ALLOW_MEMBERS_TO_CREATE_MEMBERS`: Default is True. To prevent members from creating and managing other members, set to False and only admins will be able to do this.
 * `ALLOW_MEMBERS_TO_INVITE_MEMBERS`: Default is True. To prevent members from inviting other members to join the site, set to False and only admins will be able to do this.
 * `BIRTHDAY_DAYS`: Number of days in the future to display birthdays, default is 50
-* `INCLUDE_BIRTHDAYS_IN_HOMEPAGE`: Should birthdays be included in the homepage for authenticated members? Default is True
+* ~~`INCLUDE_BIRTHDAYS_IN_HOMEPAGE`~~: **OBSOLETE** - Use `show_birthdays_in_homepage` in `FEATURES_FLAGS` instead
 * `PDF_SIZE`: PDF page size for printed directory. 'A4' or 'letter' size. Default is A4.
 * `MAX_CSV_FILE_SIZE`(*): Maximum size of CSV member import file, default is 2MB.
 * `LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP`: Enter here the external IP of your server. It is used for the login trace when the login comes from the internal network. Default is "8.8.8.8".
-* `LOGIN_HISTORY_PURGE_DAYS`: Number of days to keep login history, default is 365.
+* `LOGIN_HISTORY_PURGE_DAYS`: Number of days to keep login history (visible to administrators in Django admin), default is 365.
 
 ### Galleries
 
@@ -128,6 +136,32 @@ FEATURES_FLAGS="show_birthdays_in_homepage=True;show_galleries=True;show_forums=
 * `FAMILY_CHART_GENERATIONS`: Number of generations to show up and down the center person in the family chart, default is 4
 * `FAMILY_CHART_ROOT_PERSON_ID`: Default root person ID to show in the family chart if none is specified, default is if the id of the first person in the database
 * `GEDCOM_FILE`: GEDCOM file to use for exporting genealogy, default is 'genealogy.ged'
+
+## OAuth/SSO Authentication
+
+* `OAUTH_PROVIDERS`: Comma-separated list of OAuth providers to enable. Available providers: `google`, `facebook`, `apple`, `github`, `pocketid`, or any `openid_connect` provider. Default is empty (no OAuth enabled).
+* `SOCIALACCOUNT_AUTO_SIGNUP`: Whether to require confirmation when a user logs in with an OAuth provider. Default is False (confirmation required).
+
+For each provider, you need to set:
+* `<PROVIDER>_OAUTH_CLIENT_ID`: OAuth client ID for the provider
+* `<PROVIDER>_OAUTH_CLIENT_SECRET`: OAuth client secret for the provider
+
+For OpenID Connect providers (including PocketID):
+* `<PROVIDER>_SERVER_URL`: OpenID Connect server URL
+
+**Example configuration:**
+```
+OAUTH_PROVIDERS=google,github,pocketid
+GOOGLE_OAUTH_CLIENT_ID=your_google_client_id
+GOOGLE_OAUTH_CLIENT_SECRET=your_google_client_secret
+GITHUB_OAUTH_CLIENT_ID=your_github_client_id
+GITHUB_OAUTH_CLIENT_SECRET=your_github_client_secret
+POCKETID_SERVER_URL=https://pocketid.yourdomain.com
+POCKETID_OAUTH_CLIENT_ID=your_pocketid_client_id
+POCKETID_OAUTH_CLIENT_SECRET=your_pocketid_client_secret
+```
+
+See [OAuth Authentication](oauth-authentication.md) for detailed configuration instructions for each provider.
 
 ## Log levels
 

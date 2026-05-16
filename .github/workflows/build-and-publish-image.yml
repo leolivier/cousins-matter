@@ -372,6 +372,7 @@ jobs:
           path: release.txt
 
       - name: Build and push
+        id: build_push
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -381,3 +382,113 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+  # ──────────────────────────────────────────────────────────────────────────────
+  # Job 6 – Verify production image starts correctly (waits for job 5)
+  # RUNS ONLY FOR RELEASES
+  # ──────────────────────────────────────────────────────────────────────────────
+  verify-production-image:
+    needs: build-and-push
+    if: ${{ github.actor != 'dependabot[bot]' && needs.build-and-push.result == 'success' && github.event_name  == 'release' }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    env:
+      VERSION: ${{ github.event.release.tag_name }}
+    steps:
+
+      - name: Get minimum files
+        run: |
+          curl https://raw.githubusercontent.com/${{ github.actor }}/cousins-matter/refs/tags/${{env.VERSION}}/scripts/manage_cousins_matter.py
+          python manage_cousins_matter.py install -d cm_test_install -r ${{env.VERSION}} -n
+
+      - name: Login to GHCR.io
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: ${{ env.TAGS_DEF }}
+
+      - name: Update .env for production test
+        run: |
+          sed -i -e 's/^ADMIN=.*/ADMIN=admin/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/ADMIN_PASSWORD=.*/ADMIN_PASSWORD=admin/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/ADMIN_EMAIL=.*/ADMIN_EMAIL=admin@example.com/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/^ADMIN_BIRTHDATE=/.*ADMIN_BIRTHDATE=2000-01-01/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/^ADMIN_FIRSTNAME==/.*ADMIN_FIRSTNAME=Admin/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/ADMIN_LASTNAME=/ADMIN_LASTNAME=User$GITHUB_WORKSPACE/.env
+          sed -i -e 's/SITE_NAME=/SITE_NAME=Production Test Site/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/ALLOWED_HOSTS=/ALLOWED_HOSTS=127.0.0.1,localhost/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/LANGUAGE_CODE=/LANGUAGE_CODE=en/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/EMAIL_HOST=/EMAIL_HOST=smtp.gmail.com/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/EMAIL_PORT=/EMAIL_PORT=465/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/EMAIL_HOST_USER=/EMAIL_HOST_USER=test@example.com/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/EMAIL_HOST_PASSWORD=/EMAIL_HOST_PASSWORD=test-password/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/POSTGRES_PASSWORD=/POSTGRES_PASSWORD=test-postgres-password/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/Q_SYNC=/Q_SYNC=True/' $GITHUB_WORKSPACE/.env
+          sed -i -e 's/ENVIRONMENT=/ENVIRONMENT=production/' $GITHUB_WORKSPACE/.env
+          echo "COUSINS_MATTER_IMAGE=${{ fromJSON(steps.meta.outputs.json).tags[0] }}" >> $" GITHUB_WORKSPACE/.env
+
+      - name: Starts the production environment
+        run: |
+
+          # Start services with production environment
+          docker compose -f docker-compose.yml up -d --wait --wait-timeout 60
+
+          # Check that the main container is running
+          if ! docker ps | grep -q cousins-matter; then
+            echo "ERROR: cousins-matter container is not running"
+            exit 1
+          fi
+
+          # Check that the container is healthy
+          HEALTH_STATUS=$(docker inspect --format='{{.State.Health.Status}}' cousins-matter)
+          if [ "$HEALTH_STATUS" != "healthy" ]; then
+            echo "ERROR: cousins-matter container is not healthy (status: $HEALTH_STATUS)"
+            exit 1
+          fi
+
+          # Test that the application responds
+          MAX_RETRIES=10
+          RETRY_COUNT=0
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            if curl -f -s http://localhost:8000/ > /dev/null; then
+              echo "SUCCESS: Application is responding correctly"
+              exit 0
+            fi
+            echo "Waiting for application to respond... (attempt $((RETRY_COUNT + 1))/$MAX_RETRIES)"
+            sleep 5
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+          done
+
+          echo "ERROR: Application did not respond after $MAX_RETRIES attempts"
+          exit 1
+
+      - name: Show docker-compose services logs on failure
+        if: failure()
+        run: |
+          cat $GITHUB_WORKSPACE/.env
+          docker ps -a
+          echo "====================cousins-matter================================"
+          docker logs cousins-matter
+          echo "====================cousins-matter.qcluster======================="
+          docker logs cousins-matter.qcluster
+          echo "====================cousins-matter.db============================="
+          docker logs cousins-matter.db
+          echo "====================cousins-matter.redis=========================="
+          docker logs cousins-matter.redis
+          echo "====================cousins-matter.nginx=========================="
+          docker logs cousins-matter.nginx
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker compose -f docker-compose.yml down -v
+          docker volume prune -f

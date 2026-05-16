@@ -304,7 +304,6 @@ def search_members(request):
 
   else:
     if render_empty_query == "true":
-
       try:
         page = get_members_page(request, page_num)
       except PageOutOfBounds:

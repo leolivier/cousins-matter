@@ -127,9 +127,9 @@ class TestChatWithMemberFollower(ChatMessageSenderMixin, TestFollowersMixin, Tra
     self.client.login(username=followed.username, password=followed.password)
     reply_msg = "a reply to be superuser's message"
     async_to_sync(self.send_chat_message)(reply_msg, room_slug=room.slug, sender=followed)
-    print("follower email", follower.email)
-    print("followed email", followed.email)
-    print("superuser email", self.superuser.email)
+    # print("follower email", follower.email)
+    # print("followed email", followed.email)
+    # print("superuser email", self.superuser.email)
     message = ChatMessage.objects.get(room=room, content=reply_msg)
     self.check_new_content_email(
       follower=follower,

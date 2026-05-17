@@ -18,6 +18,7 @@
 * Managed members can be activated by their managing members (e.g. when a child is old enough to be active on the site).
 * Members can be imported in bulk via CSV files
 * Members can update their own profile and the profile of the members they manage
+* Members can be marked as deceased with a death date (useful for genealogy and family history)
 
 	![profile](assets/profile.webp)
 
@@ -28,6 +29,40 @@
 * Birthdays in the next 50 days can be displayed (50 can be changed in settings)
 
 	![birthdays](assets/birthdays.webp)
+
+### Authentication
+
+* Standard email/password authentication
+* OAuth/SSO authentication with multiple providers:
+	* Google
+	* Facebook
+	* Apple
+	* GitHub
+	* PocketID (self-hosted OpenID Connect)
+	* Any OpenID Connect compatible provider
+* See [OAuth Authentication](oauth-authentication.md) for detailed configuration
+
+### Security & Login History
+
+* All login attempts are automatically tracked with IP geolocation
+* Login history is stored for security auditing (visible to site administrators in Django admin)
+* Automatic purge of old login records after a configurable retention period
+* Helps administrators detect unauthorized access attempts
+
+### Followers & Notifications
+
+* Members can follow other members to be notified of their activities
+* Members can follow chat rooms, forums, galleries, and other content
+* Automatic email notifications when followed content is updated
+* Configurable notification frequency per member:
+	* **Immediate** - Receive notifications as soon as events occur
+	* **Hourly** - Receive a summary of events every hour
+	* **Daily** - Receive a daily digest of events
+	* **Weekly** - Receive a weekly summary
+	* **Monthly** - Receive a monthly summary
+	* **Never** - Disable notifications completely
+* Each member can configure their preferred notification frequency in their profile settings
+* Notification batching reduces email overload while keeping members informed
 
 ### Galleries
 

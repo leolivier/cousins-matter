@@ -13,7 +13,7 @@ class TestFollowersMixin:
   def check_new_follower_email(self, follower, owner, followed_object, followed_url, expected_emails_count=1):
     """Verifies that the owner or object followers receive an email notification for a new follower."""
 
-    if len(mail.outbox) != expected_emails_count:
+    if len(mail.outbox) != expected_emails_count:  # prints only in case of errors
       for m in mail.outbox:
         print(m.subject, "to", m.to, "bcc", m.bcc)
     self.assertEqual(len(mail.outbox), expected_emails_count)
@@ -78,7 +78,7 @@ class TestFollowersMixin:
     expected_emails_count=1,
   ):
     """Verifies the email notification sent to followers (in BCC) when new content is created."""
-    if len(mail.outbox) != expected_emails_count:
+    if len(mail.outbox) != expected_emails_count:  # prints only in case of errors
       for m in mail.outbox:
         print(m.subject, "to", m.to, "bcc", m.bcc)
     self.assertEqual(len(mail.outbox), expected_emails_count)

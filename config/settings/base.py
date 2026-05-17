@@ -2,11 +2,12 @@
 Django basic settings for cousinsmatter project.
 """
 
-import environ
-from typing import Any
 from pathlib import Path
-from django.utils.translation import gettext_lazy as _
+from typing import Any
+
+import environ
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -128,6 +129,7 @@ INSTALLED_APPS = [
   "django.contrib.staticfiles",
   "django.contrib.sites",
   "django.contrib.flatpages",
+  "django.contrib.postgres",
   "captcha",
   "channels",
   "django_q",

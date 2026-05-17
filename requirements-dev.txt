@@ -3,3 +3,4 @@ ruff>=0.15.12
 coverage>=7.14.0
 types-requests>=2.33.0.20260513
 django-debug-toolbar~=6.3.0
+factory-boy~=3.3.3

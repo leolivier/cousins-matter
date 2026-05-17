@@ -9,6 +9,8 @@ Cousins Matter is a web application designed to help you manage large family tre
 * chat rooms,
 * polls
 * classified ads
+* genealogy trees,
+* OAuth/SSO authentication (Google, Facebook, GitHub, PocketID, etc.)
 * ...
 
 It can also be used to manage small communities (i.e. no more than a few hundred people), such as sports clubs and gaming clubs.

@@ -6,6 +6,9 @@ See [Settings](settings.md) for customization by changing the settings.
 ### Features management
 Using the settings, you can also manage the features that will be offered to members as explained in [Features management](settings.md/#features-management)
 
+### Notification preferences
+Members can configure their email notification frequency in their profile settings. See [Features - Followers & Notifications](features.md#followers--notifications) for details.
+
 ## Creating pages
 Admin can create or update static pages using the "Edit Page" feature in the navigation bar. **Only Admins have access to this feature!**
 

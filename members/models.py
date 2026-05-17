@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from core.utils import create_thumbnail, remove_accents
+from core.utils import create_thumbnail
 
 from .managers import MemberManager
 
@@ -52,7 +52,12 @@ class Family(models.Model):
   name: CharField = models.CharField(_("Name"), max_length=72)
 
   parent: ForeignKey = models.ForeignKey(
-    to="members.Family", related_name="self", verbose_name=_("Parent family"), on_delete=models.CASCADE, null=True, blank=True
+    to="members.Family",
+    related_name="self",
+    verbose_name=_("Parent family"),
+    on_delete=models.DO_NOTHING,
+    null=True,
+    blank=True,
   )
 
   class Meta:
@@ -166,9 +171,6 @@ class Member(AbstractUser):
   followers = models.ManyToManyField(
     "self", verbose_name=_("Followers"), related_name="following", symmetrical=False, blank=True
   )
-  # issue #149: manage unaccent indexes
-  first_name_unaccent = models.CharField(max_length=150, null=True, blank=True)
-  last_name_unaccent = models.CharField(max_length=150, null=True, blank=True)
 
   # email preferences
   email_batch_frequency = models.CharField(
@@ -192,8 +194,8 @@ class Member(AbstractUser):
     ordering = ["last_name", "first_name"]
     indexes = [
       models.Index(fields=["birthdate"]),
-      models.Index(fields=["first_name_unaccent"]),
-      models.Index(fields=["last_name_unaccent"]),
+      models.Index(fields=["first_name"]),
+      models.Index(fields=["last_name"]),
     ]
 
   def get_absolute_url(self):
@@ -273,8 +275,6 @@ class Member(AbstractUser):
       # If no member manager and member is inactive, use admin member
       logger.info(f"Cleaning member {self.full_name}: setting member manager to admin for inactive member")
       self.member_manager = Member.objects.filter(is_superuser=True).first()
-    self.first_name_unaccent = remove_accents(self.first_name)
-    self.last_name_unaccent = remove_accents(self.last_name)
 
   def save(self, *args, **kwargs):
     self.clean()  # clean before save

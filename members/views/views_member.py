@@ -3,7 +3,7 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.db.models import Q
+from django.core.paginator import Page
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -16,7 +16,6 @@ from core.utils import (
   PageOutOfBounds,
   Paginator,
   confirm_delete_modal,
-  remove_accents,
 )
 
 from ..forms import MemberUpdateForm, NotifyDeathForm
@@ -52,19 +51,22 @@ def editable(request, member):
   return manager.id == request.user.id
 
 
-def member_manager_name(member):
+def member_manager_name(member) -> str | None:
   return member.member_manager.full_name if member and member.member_manager else None
 
 
-def get_members_page(request, page_num=1):
+def get_search_query(request) -> str | None:
+  """Get search query from request"""
+  q = request.GET.get("q", "").strip()
+  return q if len(q) > 2 else None  # return only if query is long enough
+
+
+def get_members_page(request, page_num: int) -> Page:
   members = Member.objects
   # print("request.GET", request.GET)
-  filters = {
-    f"{name}_unaccent__icontains": remove_accents(request.GET[f"{name}_filter"]).strip()
-    for name in ["first_name", "last_name"]
-    if request.GET.get(f"{name}_filter", "").strip()
-  }
-  members = members.filter(**filters) if filters else members.all()
+
+  q: str | None = get_search_query(request)
+  members = members.fuzzy_search(q) if q else members.all()
   sort_by = request.GET.get("member_sort")
   order = "-" if request.GET.get("toggle_slider") == "option2" else ""  # default is ascending
   sort_by = [sort_by] if sort_by else ["last_name", "first_name"]  # default order
@@ -288,23 +290,31 @@ def delete_member(request, pk):
 
 def search_members(request):
   assert request.htmx
-  query = request.GET.get("q", "").strip().lower()
+  query = get_search_query(request)
   render_with = request.GET.get("render_with", "members/members/members.html#members_content")
   page_num = request.GET.get("page_num", 1)
   render_empty_query = request.GET.get("render_empty_query", "true")
   logger.debug(f"search_members: query={query}, render_with={render_with}, page_num={page_num}")
-  if not query or len(query) < 3:
-    if render_empty_query == "false":
-      return render(request, render_with, {"members": None, "page": None, "page_num": None})
-    try:
-      page = get_members_page(request, page_num)
-      return render(request, render_with, {"page": page, "members": page.object_list, "page_num": page.number})
-    except PageOutOfBounds:
-      page = get_members_page(request, 1)
-      return render(request, render_with, {"page": page, "members": page.object_list, "page_num": page.number})
 
-  members = Member.objects.filter(Q(last_name__icontains=query) | Q(first_name__icontains=query)).distinct()[:12]
-  return render(request, render_with, {"members": members, "page": None, "page_num": page_num})
+  if query:
+    members = Member.objects.fuzzy_search(query)[:12]
+    # for m in list(members):
+    #   print(m.full_name, "similarity", m.similarity)
+    context = {"members": members, "page": None, "page_num": page_num}
+
+  else:
+    if render_empty_query == "true":
+      try:
+        page = get_members_page(request, page_num)
+      except PageOutOfBounds:
+        page = get_members_page(request, 1)
+
+      context = {"members": page.object_list, "page": page, "page_num": page.number}
+
+    else:
+      context = {"members": None, "page": None, "page_num": None}
+
+  return render(request, render_with, context)
 
 
 def notify_death(request, pk):

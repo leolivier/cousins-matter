@@ -1,9 +1,8 @@
 import factory
+import random
 from factory.django import DjangoModelFactory, ImageField
 from classified_ads.models import ClassifiedAd, AdPhoto
 from members.tests.factories import MemberFactory
-
-import random
 
 
 class ClassifiedAdFactory(DjangoModelFactory):
@@ -17,10 +16,23 @@ class ClassifiedAdFactory(DjangoModelFactory):
   price = factory.LazyAttribute(lambda o: f"{random.randint(10, 1000)} €")
   owner = factory.SubFactory(MemberFactory)
 
+  @factory.post_generation
+  def create_photos(self, create, extracted, **kwargs):
+    if not create or extracted is False:
+      return
+
+    # Generate 1 to 4 photos
+    for _ in range(random.randint(1, 4)):
+      AdPhotoFactory(ad=self)
+
 
 class AdPhotoFactory(DjangoModelFactory):
   class Meta:
     model = AdPhoto
 
   ad = factory.SubFactory(ClassifiedAdFactory)
-  image = ImageField(color="green", width=400, height=300)
+  image = ImageField(
+    color=factory.LazyFunction(lambda: f"#{random.randint(0, 0xffffff):06x}"),
+    width=400,
+    height=300,
+  )

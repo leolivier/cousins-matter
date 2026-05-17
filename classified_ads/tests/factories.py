@@ -32,7 +32,7 @@ class AdPhotoFactory(DjangoModelFactory):
 
   ad = factory.SubFactory(ClassifiedAdFactory)
   image = ImageField(
-    color=factory.LazyFunction(lambda: f"#{random.randint(0, 0xffffff):06x}"),
+    color=factory.LazyFunction(lambda: f"#{random.randint(0, 0xFFFFFF):06x}"),
     width=400,
     height=300,
   )

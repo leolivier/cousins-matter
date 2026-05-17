@@ -1,10 +1,7 @@
 import factory
 import random
 from factory.django import DjangoModelFactory
-from polls.models import (
-  Poll, Question, PollAnswer, YesNoAnswer,
-  TextAnswer, DateTimeAnswer, ChoiceAnswer, MultiChoiceAnswer
-)
+from polls.models import Poll, Question, PollAnswer, YesNoAnswer, TextAnswer, DateTimeAnswer, ChoiceAnswer, MultiChoiceAnswer
 from members.tests.factories import MemberFactory
 
 
@@ -23,9 +20,7 @@ class PollFactory(DjangoModelFactory):
 
     # 1. Yes/No Question
     QuestionFactory(
-      poll=self,
-      question_text="Est-ce que vous aimez cette fonctionnalité ?",
-      question_type=Question.YESNO_QUESTION
+      poll=self, question_text="Est-ce que vous aimez cette fonctionnalité ?", question_type=Question.YESNO_QUESTION
     )
 
     # 2. Choice Question (Single Choice)
@@ -33,7 +28,7 @@ class PollFactory(DjangoModelFactory):
       poll=self,
       question_text="Quelle est votre couleur préférée ?",
       question_type=Question.SINGLECHOICE_QUESTION,
-      possible_choices=["Rouge", "Vert", "Bleu", "Jaune"]
+      possible_choices=["Rouge", "Vert", "Bleu", "Jaune"],
     )
 
     # 3. Multiple Choice Question
@@ -41,21 +36,17 @@ class PollFactory(DjangoModelFactory):
       poll=self,
       question_text="Quels jours êtes-vous disponible ?",
       question_type=Question.MULTICHOICES_QUESTION,
-      possible_choices=["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+      possible_choices=["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"],
     )
 
     # 4. Open Text Question
     QuestionFactory(
-      poll=self,
-      question_text="Avez-vous des suggestions d'amélioration ?",
-      question_type=Question.OPENTEXT_QUESTION
+      poll=self, question_text="Avez-vous des suggestions d'amélioration ?", question_type=Question.OPENTEXT_QUESTION
     )
 
     # 5. Date Question
     QuestionFactory(
-      poll=self,
-      question_text="Quand devrions-nous organiser la prochaine réunion ?",
-      question_type=Question.DATE_QUESTION
+      poll=self, question_text="Quand devrions-nous organiser la prochaine réunion ?", question_type=Question.DATE_QUESTION
     )
 
 

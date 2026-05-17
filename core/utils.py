@@ -510,3 +510,8 @@ def confirm_delete_modal(request, title, msg, expected_value=None, hx_params=Non
     "core/common/confirm-delete-modal.html",
     {"ays_title": title, "ays_msg": msg, "expected_value": expected_value, "hx_params": hx_params},
   )
+
+# MakeDate not available in Django ?
+class MakeDate(models.Func):
+  function = "MAKE_DATE"
+  output_field = models.DateField()

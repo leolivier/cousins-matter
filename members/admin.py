@@ -27,8 +27,14 @@ class MemberAdmin(UserAdmin):
   filter_horizontal = ["groups", "user_permissions", "followers"]
 
   fieldsets = UserAdmin.fieldsets + (
-    (_("Extra Profile Info"), {"fields": ("avatar", "birthdate", "phone", "address", "family", "website", "description", "hobbies")}),
-    (_("Privacy & Management"), {"fields": ("privacy_consent", "member_manager", "is_dead", "deathdate", "email_batch_frequency")}),
+    (
+      _("Extra Profile Info"),
+      {"fields": ("avatar", "birthdate", "phone", "address", "family", "website", "description", "hobbies")},
+    ),
+    (
+      _("Privacy & Management"),
+      {"fields": ("privacy_consent", "member_manager", "is_dead", "deathdate", "email_batch_frequency")},
+    ),
   )
 
   def avatar_preview(self, obj):

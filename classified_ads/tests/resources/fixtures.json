@@ -1,0 +1,292 @@
+[
+{
+  "model": "members.member",
+  "pk": 682,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "user100_6125",
+    "first_name": "Jasmine",
+    "last_name": "Choi",
+    "email": "user100_5650@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-17T08:55:15.283Z",
+    "member_manager": null,
+    "avatar": "",
+    "address": 668,
+    "phone": "",
+    "birthdate": "1999-04-10",
+    "is_dead": false,
+    "deathdate": null,
+    "website": "",
+    "family": 660,
+    "description": null,
+    "hobbies": null,
+    "privacy_consent": true,
+    "email_batch_frequency": "immediate",
+    "groups": [],
+    "user_permissions": [],
+    "followers": []
+  }
+},
+{
+  "model": "members.member",
+  "pk": 683,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "user101_6840",
+    "first_name": "Karen",
+    "last_name": "Williams",
+    "email": "user101_3269@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-17T08:55:15.291Z",
+    "member_manager": null,
+    "avatar": "",
+    "address": 669,
+    "phone": "",
+    "birthdate": "1992-08-18",
+    "is_dead": false,
+    "deathdate": null,
+    "website": "",
+    "family": 661,
+    "description": null,
+    "hobbies": null,
+    "privacy_consent": true,
+    "email_batch_frequency": "immediate",
+    "groups": [],
+    "user_permissions": [],
+    "followers": []
+  }
+},
+{
+  "model": "members.member",
+  "pk": 684,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "user102_1725",
+    "first_name": "Katherine",
+    "last_name": "Ewing",
+    "email": "user102_6216@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-17T08:55:15.296Z",
+    "member_manager": null,
+    "avatar": "",
+    "address": 670,
+    "phone": "",
+    "birthdate": "2008-08-06",
+    "is_dead": false,
+    "deathdate": null,
+    "website": "",
+    "family": 662,
+    "description": null,
+    "hobbies": null,
+    "privacy_consent": true,
+    "email_batch_frequency": "immediate",
+    "groups": [],
+    "user_permissions": [],
+    "followers": []
+  }
+},
+{
+  "model": "members.member",
+  "pk": 685,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "user103_3455",
+    "first_name": "Jeffrey",
+    "last_name": "Rowe",
+    "email": "user103_6468@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-17T08:55:15.304Z",
+    "member_manager": null,
+    "avatar": "",
+    "address": 671,
+    "phone": "",
+    "birthdate": "1995-12-25",
+    "is_dead": false,
+    "deathdate": null,
+    "website": "",
+    "family": 663,
+    "description": null,
+    "hobbies": null,
+    "privacy_consent": true,
+    "email_batch_frequency": "immediate",
+    "groups": [],
+    "user_permissions": [],
+    "followers": []
+  }
+},
+{
+  "model": "members.member",
+  "pk": 686,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "user104_7580",
+    "first_name": "Mary",
+    "last_name": "Bradford",
+    "email": "user104_2420@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-17T08:55:15.310Z",
+    "member_manager": null,
+    "avatar": "",
+    "address": 672,
+    "phone": "",
+    "birthdate": "2020-07-18",
+    "is_dead": false,
+    "deathdate": null,
+    "website": "",
+    "family": 664,
+    "description": null,
+    "hobbies": null,
+    "privacy_consent": true,
+    "email_batch_frequency": "immediate",
+    "groups": [],
+    "user_permissions": [],
+    "followers": []
+  }
+},
+{
+  "model": "classified_ads.classifiedad",
+  "pk": 32,
+  "fields": {
+    "title": "Rock even hot present.",
+    "date_created": "2026-05-17T08:55:15.320Z",
+    "category": "home",
+    "subcategory": "furniture",
+    "description": "Door court but admit. Poor range set. Trip air develop.",
+    "shipping_method": "pickup",
+    "location": null,
+    "price": "504 €",
+    "item_status": "new",
+    "ad_status": "for_sale",
+    "owner": 687
+  }
+},
+{
+  "model": "classified_ads.classifiedad",
+  "pk": 33,
+  "fields": {
+    "title": "Age picture.",
+    "date_created": "2026-05-17T08:55:15.329Z",
+    "category": "home",
+    "subcategory": "furniture",
+    "description": "South provide join. Value protect give despite force one hot. Easy church safe thus billion arm boy. Market truth process civil final kind expert mean.",
+    "shipping_method": "pickup",
+    "location": null,
+    "price": "480 €",
+    "item_status": "new",
+    "ad_status": "for_sale",
+    "owner": 688
+  }
+},
+{
+  "model": "classified_ads.classifiedad",
+  "pk": 34,
+  "fields": {
+    "title": "Religious hand key go team.",
+    "date_created": "2026-05-17T08:55:15.339Z",
+    "category": "home",
+    "subcategory": "furniture",
+    "description": "Church evening rock administration. Reflect sing house land expert change example. Everyone chair admit old.",
+    "shipping_method": "pickup",
+    "location": null,
+    "price": "865 €",
+    "item_status": "new",
+    "ad_status": "for_sale",
+    "owner": 689
+  }
+},
+{
+  "model": "classified_ads.classifiedad",
+  "pk": 35,
+  "fields": {
+    "title": "Great modern interest wrong.",
+    "date_created": "2026-05-17T08:55:15.347Z",
+    "category": "home",
+    "subcategory": "furniture",
+    "description": "Production per challenge some happy. Participant sort media world threat thousand do stage. Box process explain always method support. Least firm wear institution challenge may away.",
+    "shipping_method": "pickup",
+    "location": null,
+    "price": "248 €",
+    "item_status": "new",
+    "ad_status": "for_sale",
+    "owner": 690
+  }
+},
+{
+  "model": "classified_ads.classifiedad",
+  "pk": 36,
+  "fields": {
+    "title": "Chair within artist tax.",
+    "date_created": "2026-05-17T08:55:15.357Z",
+    "category": "home",
+    "subcategory": "furniture",
+    "description": "Most might by amount not. Matter course magazine view part own fill. Experience type woman indicate. Painting interesting another red find accept mention.",
+    "shipping_method": "pickup",
+    "location": null,
+    "price": "689 €",
+    "item_status": "new",
+    "ad_status": "for_sale",
+    "owner": 691
+  }
+},
+{
+  "model": "classified_ads.adphoto",
+  "pk": 17,
+  "fields": {
+    "image": "classified_ads/37/example.jpg",
+    "thumbnail": "classified_ads/37/example.jpg",
+    "ad": 37
+  }
+},
+{
+  "model": "classified_ads.adphoto",
+  "pk": 18,
+  "fields": {
+    "image": "classified_ads/38/example.jpg",
+    "thumbnail": "classified_ads/38/example.jpg",
+    "ad": 38
+  }
+},
+{
+  "model": "classified_ads.adphoto",
+  "pk": 19,
+  "fields": {
+    "image": "classified_ads/39/example.jpg",
+    "thumbnail": "classified_ads/39/example.jpg",
+    "ad": 39
+  }
+},
+{
+  "model": "classified_ads.adphoto",
+  "pk": 20,
+  "fields": {
+    "image": "classified_ads/40/example.jpg",
+    "thumbnail": "classified_ads/40/example.jpg",
+    "ad": 40
+  }
+},
+{
+  "model": "classified_ads.adphoto",
+  "pk": 21,
+  "fields": {
+    "image": "classified_ads/41/example.jpg",
+    "thumbnail": "classified_ads/41/example.jpg",
+    "ad": 41
+  }
+}
+]

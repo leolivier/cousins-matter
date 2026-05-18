@@ -45,9 +45,9 @@ jobs:
         run: |
           docker load < /tmp/test-image.tar.gz
 
+      - name: Write .env
         env:
           S3_MEDIA_STORAGE_OPTIONS: '{\"access_key\":\"${{ secrets.ACCESS_KEY }}\",\"secret_key\":\"${{ secrets.SECRET_KEY }}\",\"bucket_name\":\"${{ secrets.BUCKET_NAME }}\",\"endpoint_url\":\"https://${{ secrets.ACCOUNT_ID }}.r2.cloudflarestorage.com\"}'
-      - name: Write .env
         run: |
           cp .github/workflows/test.env $GITHUB_WORKSPACE/.env
           echo "COUSINS_MATTER_IMAGE=ghcr.io/${{ github.repository }}:test-${{ github.sha }}" >> $GITHUB_WORKSPACE/.env

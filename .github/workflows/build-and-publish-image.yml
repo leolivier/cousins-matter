@@ -32,6 +32,8 @@ jobs:
   test-docker-image:
     needs: lint-and-build
     uses: ./.github/workflows/reusable-test-docker-image.yml
+    with:
+      s3: false
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────
@@ -49,7 +51,9 @@ jobs:
   test-s3:
     needs: lint-and-build
     if: ${{ github.actor != 'dependabot[bot]' }}
-    uses: ./.github/workflows/reusable-test-s3.yml
+    uses: ./.github/workflows/reusable-test-docker-image.yml
+    with:
+      s3: true
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────

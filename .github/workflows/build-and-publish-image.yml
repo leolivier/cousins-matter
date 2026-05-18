@@ -184,7 +184,7 @@ jobs:
           docker exec -u root cousins-matter apt-get update
           docker exec -u root cousins-matter apt-get install -y wget gnupg
           docker exec cousins-matter python -m pip install -r requirements-dev.txt
-          docker exec cousins-matter playwright install --with-deps chromium
+          docker exec cousins-matter python -m playwright install --with-deps chromium
           docker exec cousins-matter python manage.py test --failfast
 
       - name: Show docker-compose services logs on failure

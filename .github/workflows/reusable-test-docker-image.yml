@@ -1,0 +1,71 @@
+# Reusable workflow to run full test suite inside the test Docker image.
+name: Reusable Test Docker Image
+
+on:
+  workflow_call:
+
+jobs:
+  test-docker-image:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+
+      - name: Install dev dependencies
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+        run: |
+          python -m pip install -r requirements-dev.txt
+
+      - name: Install Playwright browsers
+        run: |
+          playwright install --with-deps
+
+      - name: Download test Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-docker-image
+          path: /tmp
+
+      - name: Load test Docker image
+        run: |
+          docker load < /tmp/test-image.tar.gz
+
+      - name: Write .env
+        run: |
+          cp .github/workflows/test.env $GITHUB_WORKSPACE/.env
+          echo "COUSINS_MATTER_IMAGE=ghcr.io/${{ github.repository }}:test-${{ github.sha }}" >> $GITHUB_WORKSPACE/.env
+
+      - name: Test Docker Image
+        run: |
+          python ./scripts/manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"
+          docker compose -f docker-compose.yml up --wait --wait-timeout 30
+          docker cp requirements-dev.txt cousins-matter:/app/
+          docker exec -u root cousins-matter apt-get update
+          docker exec -u root cousins-matter apt-get install -y wget gnupg
+          docker exec cousins-matter python -m pip install -r requirements-dev.txt
+          docker exec cousins-matter python -m playwright install --with-deps chromium
+          docker exec cousins-matter python manage.py test --failfast
+
+      - name: Show docker-compose services logs on failure
+        if: failure()
+        run: |
+          cat $GITHUB_WORKSPACE/.env
+          docker ps
+          echo "====================cousins-matter================================"
+          docker logs cousins-matter
+          echo "====================cousins-matter.qcluster======================="
+          docker logs cousins-matter.qcluster
+          echo "====================cousins-matter.db============================="
+          docker logs cousins-matter.db

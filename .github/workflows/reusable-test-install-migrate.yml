@@ -1,0 +1,62 @@
+# Reusable workflow to run installation and migration test scripts.
+name: Reusable Test Install & Migrate
+
+on:
+  workflow_call:
+
+jobs:
+  test-install-migrate:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Download test Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-docker-image
+          path: /tmp
+
+      - name: Load test Docker image
+        run: |
+          docker load < /tmp/test-image.tar.gz
+
+      - name: Write .env
+        run: |
+          cp .github/workflows/test.env $GITHUB_WORKSPACE/.env
+          echo "COUSINS_MATTER_IMAGE=ghcr.io/${{ github.repository }}:test-${{ github.sha }}" >> $GITHUB_WORKSPACE/.env
+
+      - name: test install script
+        run: |
+          # make sure no previous containers are running
+          docker compose down -v
+          # and no unused volumes are remaining
+          docker volume prune -f
+          # then run test
+          ./scripts/tests/test_install.sh -g
+
+      - name: test migrate v1 to v2 script
+        run: |
+          # make sure no previous containers are running
+          docker compose down -v
+          # and no unused volumes are remaining
+          docker volume prune -f
+          # then run test
+          ./scripts/tests/test_migrate_v1_v2.sh -g
+
+      - name: Show docker-compose services logs on failure
+        if: failure()
+        run: |
+          cat $GITHUB_WORKSPACE/.env
+          docker ps
+          echo "====================cousins-matter.db============================="
+          docker logs cousins-matter.db
+          echo "====================cousins-matter================================"
+          docker logs cousins-matter
+          echo "====================cousins-matter.qcluster======================="
+          docker logs cousins-matter.qcluster

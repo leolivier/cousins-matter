@@ -56,6 +56,7 @@ jobs:
             echo "MEDIA_STORAGE_OPTIONS='${{ env.S3_MEDIA_STORAGE_OPTIONS }}'" >> $GITHUB_WORKSPACE/.env
           fi
           cat $GITHUB_WORKSPACE/.env
+          echo "$GITHUB_WORKSPACE/.local/bin" >> $GITHUB_PATH
 
       - name: Test Docker Image
         run: |

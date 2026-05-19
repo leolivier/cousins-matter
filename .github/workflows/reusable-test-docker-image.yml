@@ -75,7 +75,7 @@ jobs:
           # Copy requirements
           docker cp requirements-dev.txt cousins-matter:/app/
           # Install dev requirements inside container
-          docker exec cousins-matter python -m pip install -r requirements-dev.txt
+          docker exec -u root cousins-matter python -m pip install -r requirements-dev.txt
 
           if [ "${{ inputs.s3 }}" = "false" ]; then
             # Install browser dependencies inside container only if not S3 (no UI tests in S3)

@@ -32,6 +32,8 @@ jobs:
           echo "COUSINS_MATTER_IMAGE=ghcr.io/${{ github.repository }}:test-${{ github.sha }}" >> $GITHUB_WORKSPACE/.env
 
       - name: test install script
+        env:
+          COUSINS_MATTER_IMAGE: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
         run: |
           # make sure no previous containers are running
           docker compose down -v
@@ -41,6 +43,8 @@ jobs:
           ./scripts/tests/test_install.sh -g
 
       - name: test migrate v1 to v2 script
+        env:
+          COUSINS_MATTER_IMAGE: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
         run: |
           # make sure no previous containers are running
           docker compose down -v

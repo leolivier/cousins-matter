@@ -34,6 +34,7 @@ jobs:
       - name: test install script
         env:
           COUSINS_MATTER_IMAGE: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
+          ENVIRONMENT: 'docker-test'
         run: |
           # make sure no previous containers are running
           docker compose down -v
@@ -45,6 +46,7 @@ jobs:
       - name: test migrate v1 to v2 script
         env:
           COUSINS_MATTER_IMAGE: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
+          ENVIRONMENT: 'docker-test'
         run: |
           # make sure no previous containers are running
           docker compose down -v

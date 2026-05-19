@@ -81,7 +81,7 @@ jobs:
             # Install browser dependencies inside container only if not S3 (no UI tests in S3)
             docker exec -u root cousins-matter apt-get update
             docker exec -u root cousins-matter apt-get install -y wget gnupg
-            docker exec cousins-matter python -m playwright install --with-deps chromium
+            docker exec -u root cousins-matter python -m playwright install --with-deps chromium
             # Run the test suite
             docker exec cousins-matter python manage.py test --failfast
           else

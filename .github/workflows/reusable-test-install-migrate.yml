@@ -20,20 +20,13 @@ jobs:
           fetch-depth: 0
           lfs: true
 
-      - name: Download test Docker image artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: test-docker-image
-          path: /tmp
-
       - name: Load test Docker image
-        run: |
-          docker load < /tmp/test-image.tar.gz
+        uses: ./.github/actions/load-docker-image
 
       - name: Write .env
-        run: |
-          cp .github/workflows/test.env $GITHUB_WORKSPACE/.env
-          echo "COUSINS_MATTER_IMAGE=ghcr.io/${{ github.repository }}:test-${{ github.sha }}" >> $GITHUB_WORKSPACE/.env
+        uses: ./.github/actions/write-test-env
+        with:
+          test_image_ref: ${{ env.COUSINS_MATTER_IMAGE }}
 
       - name: test install script
         run: |
@@ -55,12 +48,7 @@ jobs:
 
       - name: Show docker-compose services logs on failure
         if: failure()
-        run: |
-          cat $GITHUB_WORKSPACE/.env
-          docker ps
-          echo "====================cousins-matter.db============================="
-          docker logs cousins-matter.db
-          echo "====================cousins-matter================================"
-          docker logs cousins-matter
-          echo "====================cousins-matter.qcluster======================="
-          docker logs cousins-matter.qcluster
+        uses: ./.github/actions/show-logs-on-failure
+        with:
+          env_file_path: ${{ github.workspace }}/.env
+          containers: cousins-matter.db cousins-matter cousins-matter.qcluster

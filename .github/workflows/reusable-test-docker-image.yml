@@ -35,28 +35,23 @@ jobs:
           python -m pip install -r requirements-dev.txt
           playwright install --with-deps
 
-      - name: Download test Docker image artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: test-docker-image
-          path: /tmp
-
       - name: Load test Docker image
-        run: |
-          docker load < /tmp/test-image.tar.gz
+        uses: ./.github/actions/load-docker-image
 
-      - name: Write .env
+      - name: Write base test .env
+        uses: ./.github/actions/write-test-env
+        with:
+          test_image_ref: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
+
+      - name: Write additional .env
         env:
           S3_MEDIA_STORAGE_OPTIONS: '{\"access_key\":\"${{ secrets.ACCESS_KEY }}\",\"secret_key\":\"${{ secrets.SECRET_KEY }}\",\"bucket_name\":\"${{ secrets.BUCKET_NAME }}\",\"endpoint_url\":\"https://${{ secrets.ACCOUNT_ID }}.r2.cloudflarestorage.com\"}'
         run: |
-          cp .github/workflows/test.env $GITHUB_WORKSPACE/.env
-          echo "COUSINS_MATTER_IMAGE=ghcr.io/${{ github.repository }}:test-${{ github.sha }}" >> $GITHUB_WORKSPACE/.env
           if [ "${{ inputs.s3 }}" = "true" ]; then
             echo 'MEDIA_STORAGE=storages.backends.s3.S3Storage' >> $GITHUB_WORKSPACE/.env
             echo "MEDIA_STORAGE_OPTIONS='${{ env.S3_MEDIA_STORAGE_OPTIONS }}'" >> $GITHUB_WORKSPACE/.env
           fi
           cat $GITHUB_WORKSPACE/.env
-          echo "$GITHUB_WORKSPACE/.local/bin" >> $GITHUB_PATH
 
       - name: Start Docker Containers
         run: |
@@ -95,12 +90,6 @@ jobs:
 
       - name: Show docker-compose services logs on failure
         if: failure()
-        run: |
-          cat $GITHUB_WORKSPACE/.env
-          docker ps
-          echo "====================cousins-matter================================"
-          docker logs cousins-matter
-          echo "====================cousins-matter.qcluster======================="
-          docker logs cousins-matter.qcluster
-          echo "====================cousins-matter.db============================="
-          docker logs cousins-matter.db
+        uses: ./.github/actions/show-logs-on-failure
+        with:
+          env_file_path: ${{ github.workspace }}/.env

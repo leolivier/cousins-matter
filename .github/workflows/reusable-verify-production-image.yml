@@ -108,19 +108,10 @@ jobs:
 
       - name: Show docker-compose services logs on failure
         if: failure()
-        run: |
-          cat cm_test_install/.env
-          docker ps -a
-          echo "====================cousins-matter================================"
-          docker logs cousins-matter
-          echo "====================cousins-matter.qcluster======================="
-          docker logs cousins-matter.qcluster
-          echo "====================cousins-matter.db============================="
-          docker logs cousins-matter.db
-          echo "====================cousins-matter.redis=========================="
-          docker logs cousins-matter.redis
-          echo "====================cousins-matter.nginx=========================="
-          docker logs cousins-matter.nginx
+        uses: ./.github/actions/show-logs-on-failure
+        with:
+          env_file_path: cm_test_install/.env
+          containers: cousins-matter cousins-matter.qcluster cousins-matter.db cousins-matter.redis cousins-matter.nginx
 
       - name: Cleanup
         if: always()

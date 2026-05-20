@@ -1,0 +1,103 @@
+# Reusable workflow to lint code and build/upload the test docker image.
+name: Reusable Lint & Build
+
+on:
+  workflow_call:
+    inputs:
+      registry:
+        required: true
+        type: string
+      image_name:
+        required: true
+        type: string
+      tags_def:
+        required: true
+        type: string
+      test_tag:
+        required: true
+        type: string
+    outputs:
+      runner_id:
+        description: "The runner UID for docker build"
+        value: ${{ jobs.lint-and-build.outputs.runner_id }}
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    outputs:
+      runner_id: ${{ steps.get_runner_id.outputs.RUNNER_ID }}
+    steps:
+      - name: trace event trigger
+        env:
+          EVENT: ${{ toJson(github.event) }}
+        run: |
+          echo $EVENT
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required to get all tags
+          lfs: true
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+
+      - name: Install dev dependencies
+        run: |
+          python -m pip install -r requirements-dev.txt
+
+      - name: Lint with ruff
+        run: |
+          ruff check .
+
+      - name: Login to GHCR.io
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ inputs.registry }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ inputs.registry }}/${{ inputs.image_name }}
+          tags: ${{ inputs.tags_def }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: get runner id
+        id: get_runner_id
+        run: |
+          echo "RUNNER_ID=$(id -u)" >> $GITHUB_OUTPUT
+
+      - name: Build for test
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64
+          push: false
+          load: true
+          build-args: |
+            UID=${{ steps.get_runner_id.outputs.RUNNER_ID }}
+          tags: ${{ inputs.registry }}/${{ inputs.image_name }}:${{ inputs.test_tag }}
+          cache-from: type=registry,ref=${{ inputs.registry }}/${{ inputs.image_name }}:test-buildcache
+          cache-to: type=registry,ref=${{ inputs.registry }}/${{ inputs.image_name }}:test-buildcache,mode=max
+
+      - name: Save test Docker image as tarball
+        run: |
+          docker save ${{ inputs.registry }}/${{ inputs.image_name }}:${{ inputs.test_tag }} \
+            | gzip > /tmp/test-image.tar.gz
+
+      - name: Upload test Docker image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-docker-image
+          path: /tmp/test-image.tar.gz
+          retention-days: 1

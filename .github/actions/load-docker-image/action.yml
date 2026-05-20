@@ -1,0 +1,28 @@
+name: 'Load Docker Image'
+description: 'Download the Docker image artifact and load it'
+inputs:
+  artifact_name:
+    description: 'Name of the artifact to download'
+    required: false
+    default: 'test-docker-image'
+  artifact_path:
+    description: 'Path where the artifact should be downloaded'
+    required: false
+    default: '/tmp'
+  image_file:
+    description: 'Path of the docker image archive file'
+    required: false
+    default: '/tmp/test-image.tar.gz'
+runs:
+  using: 'composite'
+  steps:
+    - name: Download test Docker image artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact_name }}
+        path: ${{ inputs.artifact_path }}
+
+    - name: Load test Docker image
+      shell: bash
+      run: |
+        docker load < ${{ inputs.image_file }}

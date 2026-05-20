@@ -1,0 +1,121 @@
+# Reusable workflow to verify the production Docker image starts correctly.
+name: Reusable Verify Production Image
+
+on:
+  workflow_call:
+    inputs:
+      registry:
+        required: true
+        type: string
+      image_name:
+        required: true
+        type: string
+      tags_def:
+        required: true
+        type: string
+
+jobs:
+  verify-production-image:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    steps:
+      - name: Determine version
+        id: get_version
+        run: |
+          if [[ ${{ github.event_name }} == 'release' ]]; then
+            echo "VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref }} == refs/tags/* ]]; then
+            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION=$(git describe --tags --abbrev=0)+$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get minimum files
+        run: |
+          curl -LO https://raw.githubusercontent.com/${{ github.actor }}/cousins-matter/refs/tags/${{ steps.get_version.outputs.VERSION }}/scripts/manage_cousins_matter.py
+          python manage_cousins_matter.py install -d cm_test_install -r ${{ steps.get_version.outputs.VERSION }} -n
+
+      - name: Login to GHCR.io
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ inputs.registry }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ inputs.registry }}/${{ inputs.image_name }}
+          tags: ${{ inputs.tags_def }}
+
+      - name: Update .env for production test
+        run: |
+          sed -i -e 's/^ADMIN=.*/ADMIN=admin/' cm_test_install/.env
+          sed -i -e 's/^ADMIN_PASSWORD=.*/ADMIN_PASSWORD=admin/' cm_test_install/.env
+          sed -i -e 's/^ADMIN_EMAIL=.*/ADMIN_EMAIL=admin@example.com/' cm_test_install/.env
+          sed -i -e 's/^ADMIN_BIRTHDATE=.*/ADMIN_BIRTHDATE=2000-01-01/' cm_test_install/.env
+          sed -i -e 's/^ADMIN_FIRSTNAME=.*/ADMIN_FIRSTNAME=Admin/' cm_test_install/.env
+          sed -i -e 's/^ADMIN_LASTNAME=.*/ADMIN_LASTNAME=User/' cm_test_install/.env
+          sed -i -e 's/^SITE_NAME=.*/SITE_NAME=Production Test Site/' cm_test_install/.env
+          sed -i -e 's/^ALLOWED_HOSTS=.*/ALLOWED_HOSTS=127.0.0.1,localhost/' cm_test_install/.env
+          sed -i -e 's/^LANGUAGE_CODE=.*/LANGUAGE_CODE=en/' cm_test_install/.env
+          sed -i -e 's/^EMAIL_HOST=.*/EMAIL_HOST=smtp.gmail.com/' cm_test_install/.env
+          sed -i -e 's/^EMAIL_PORT=.*/EMAIL_PORT=465/' cm_test_install/.env
+          sed -i -e 's/^EMAIL_HOST_USER=.*/EMAIL_HOST_USER=test@example.com/' cm_test_install/.env
+          sed -i -e 's/^EMAIL_HOST_PASSWORD=.*/EMAIL_HOST_PASSWORD=test-password/' cm_test_install/.env
+          sed -i -e 's/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=test-postgres-password/' cm_test_install/.env
+          sed -i -e 's/^Q_SYNC=.*/Q_SYNC=True/' cm_test_install/.env
+          sed -i -e 's/^ENVIRONMENT=.*/ENVIRONMENT=production/' cm_test_install/.env
+          echo "COUSINS_MATTER_IMAGE=${{ fromJSON(steps.meta.outputs.json).tags[0] }}" >> cm_test_install/.env
+
+      - name: Starts the production environment
+        run: |
+          cd cm_test_install
+
+          # Start services with production environment
+          docker compose -f docker-compose.yml up -d --wait --wait-timeout 60
+
+          # Check that the main container is running
+          if ! docker ps | grep -q cousins-matter; then
+            echo "ERROR: cousins-matter container is not running"
+            exit 1
+          fi
+
+          # Check that the container is healthy
+          HEALTH_STATUS=$(docker inspect --format='{{.State.Health.Status}}' cousins-matter)
+          if [ "$HEALTH_STATUS" != "healthy" ]; then
+            echo "ERROR: cousins-matter container is not healthy (status: $HEALTH_STATUS)"
+            exit 1
+          fi
+
+          # Test that the application responds
+          MAX_RETRIES=10
+          RETRY_COUNT=0
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            if curl -f -s http://localhost:8000/ > /dev/null; then
+              echo "SUCCESS: Application is responding correctly"
+              exit 0
+            fi
+            echo "Waiting for application to respond... (attempt $((RETRY_COUNT + 1))/$MAX_RETRIES)"
+            sleep 5
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+          done
+
+          echo "ERROR: Application did not respond after $MAX_RETRIES attempts"
+          exit 1
+
+      - name: Show docker-compose services logs on failure
+        if: failure()
+        uses: ./.github/actions/show-logs-on-failure
+        with:
+          env_file_path: cm_test_install/.env
+          containers: cousins-matter cousins-matter.qcluster cousins-matter.db cousins-matter.redis cousins-matter.nginx
+
+      - name: Cleanup
+        if: always()
+        run: |
+          cd cm_test_install || true
+          docker compose -f docker-compose.yml down -v || true
+          docker volume prune -f

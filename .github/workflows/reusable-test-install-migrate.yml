@@ -1,0 +1,54 @@
+# Reusable workflow to run installation and migration test scripts.
+name: Reusable Test Install & Migrate
+
+on:
+  workflow_call:
+
+env:
+  COUSINS_MATTER_IMAGE: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
+  ENVIRONMENT: 'docker-test'
+
+jobs:
+  test-install-migrate:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Load test Docker image
+        uses: ./.github/actions/load-docker-image
+
+      - name: Write .env
+        uses: ./.github/actions/write-test-env
+        with:
+          test_image_ref: ${{ env.COUSINS_MATTER_IMAGE }}
+
+      - name: test install script
+        run: |
+          # make sure no previous containers are running
+          docker compose down -v
+          # and no unused volumes are remaining
+          docker volume prune -f
+          # then run test
+          ./scripts/tests/test_install.sh -g
+
+      - name: test migrate v1 to v2 script
+        run: |
+          # make sure no previous containers are running
+          docker compose down -v
+          # and no unused volumes are remaining
+          docker volume prune -f
+          # then run test
+          ./scripts/tests/test_migrate_v1_v2.sh -g
+
+      - name: Show docker-compose services logs on failure
+        if: failure()
+        uses: ./.github/actions/show-logs-on-failure
+        with:
+          env_file_path: ${{ github.workspace }}/.env
+          containers: cousins-matter.db cousins-matter cousins-matter.qcluster

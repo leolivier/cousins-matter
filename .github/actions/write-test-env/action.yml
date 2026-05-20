@@ -1,0 +1,36 @@
+name: Write test .env
+description: Writes the shared .env used by all test jobs
+
+inputs:
+  test_image_ref:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Write .env
+      shell: bash
+      run: |
+        echo "$GITHUB_WORKSPACE/.local/bin" >> $GITHUB_PATH
+
+        cat > "$GITHUB_WORKSPACE/.env" <<'EOF'
+        COUSINS_MATTER_IMAGE=${{ inputs.test_image_ref }}
+        SECRET_KEY=
+        SITE_NAME=My Beautiful Site
+        ALLOWED_HOSTS=127.0.0.1,localhost
+        LANGUAGE_CODE=fr
+        EMAIL_HOST=smtp.gmail.com
+        EMAIL_PORT=465
+        EMAIL_HOST_USER=nobody@gmail.com
+        EMAIL_HOST_PASSWORD=no matter
+        POSTGRES_PASSWORD=
+        Q_SYNC=True
+        ADMIN=admin
+        ADMIN_PASSWORD=admin
+        ADMIN_EMAIL=admin@example.com
+        ADMIN_BIRTHDATE=2000-01-01
+        ADMIN_FIRSTNAME=Ahd
+        ADMIN_LASTNAME=Mihn
+        ENVIRONMENT='docker-test'
+        EOF
+        cat $GITHUB_WORKSPACE/.env

@@ -19,6 +19,7 @@ help h:
 	@echo "  mkmig: create a migration"
 	@echo "  mig: migrate the database"
 	@echo "  test [t=test_name]: run test(s)"
+	@echo "  test-ui [o=test_options]: run automated UI test(s) with playwright"
 	@echo "  cover [a=application] [co=coverage_options] [to=test_options]: run test(s) with coverage. Default is all applications. If an application is given, the coverage result is stored in .coverage.<application>."
 	@echo "  minify [a=application]: minify the css and js files of an application. Default is all applications."
 	@echo "  shell: Run a django shell in devt mode"
@@ -58,7 +59,10 @@ mkmsg:
 	cd "$(a)" && ../manage.py makemessages -a
 
 test:
-	ENVIRONMENT="test" ./manage.py test $(t) $(o)
+	ENVIRONMENT="test" ./manage.py test --exclude-tag=ui $(t) $(o)
+
+test-ui:
+	ENVIRONMENT="test" ./manage.py test --tag=ui $(t) $(o)
 
 EXCLUDE_COVER = 'core/tasks_schedules.py,scripts/*,config/*,core/settings.py,manage.py,cousinsmatter/asgi.py,cousinsmatter/wsgi.py,core/htmlvalidator.py,*/views_test.py,*/migrations/*,*/tests/*'
 

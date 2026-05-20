@@ -1,0 +1,32 @@
+name: 'Show Logs on Failure'
+description: 'Show environment details, container status, and service logs on failure'
+inputs:
+  env_file_path:
+    description: 'Path of the env file to show'
+    required: false
+    default: '.env'
+  containers:
+    description: 'List of container/service names to show logs for (space-separated)'
+    required: false
+    default: 'cousins-matter cousins-matter.qcluster cousins-matter.db'
+runs:
+  using: 'composite'
+  steps:
+    - name: Show docker-compose services logs on failure
+      shell: bash
+      run: |
+        if [ -f "${{ inputs.env_file_path }}" ]; then
+          echo "==================== .env file contents ===================="
+          cat "${{ inputs.env_file_path }}"
+        else
+          echo "==================== .env file not found ==================="
+          echo "Path searched: ${{ inputs.env_file_path }}"
+        fi
+
+        echo "==================== docker ps -a =========================="
+        docker ps -a
+
+        for container in ${{ inputs.containers }}; do
+          echo "==================== $container logs ========================"
+          docker logs "$container" 2>&1 || echo "No logs or container does not exist"
+        done

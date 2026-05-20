@@ -58,7 +58,7 @@ jobs:
           cat $GITHUB_WORKSPACE/.env
           echo "$GITHUB_WORKSPACE/.local/bin" >> $GITHUB_PATH
 
-      - name: Test Docker Image
+      - name: Start Docker Containers
         run: |
           python ./scripts/manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"
 
@@ -72,20 +72,25 @@ jobs:
           # Verify container exists and is running
           docker ps | grep cousins-matter || (docker ps && exit 1)
 
-          # Copy requirements
+      - name: Install Python Dev Dependencies in Container
+        run: |
           docker cp requirements-dev.txt cousins-matter:/app/
-          # Install dev requirements inside container
           docker exec -u root cousins-matter python -m pip install -r requirements-dev.txt
 
-          if [ "${{ inputs.s3 }}" = "false" ]; then
-            # Install browser dependencies inside container only if not S3 (no UI tests in S3)
-            docker exec -u root cousins-matter apt-get update
-            docker exec -u root cousins-matter apt-get install -y wget gnupg
-            docker exec -u root cousins-matter python -m playwright install --with-deps chromium
-            # Run the test suite
-            docker exec cousins-matter python manage.py test --failfast
+      - name: Install Playwright & Browsers inside Container (non-S3 mode only)
+        if: ${{ !inputs.s3 }}
+        run: |
+          docker exec -u root cousins-matter apt-get update
+          docker exec -u root cousins-matter apt-get install -y wget gnupg
+          docker exec -u root cousins-matter python -m playwright install-deps chromium
+          docker exec cousins-matter python -m playwright install chromium
+
+      - name: Run Tests
+        run: |
+          if [ "${{ inputs.s3 }}" = "true" ]; then
+            docker exec cousins-matter python manage.py test --exclude-tag=ui
           else
-            docker exec cousins-matter python manage.py test --failfast --exclude-tag=ui
+            docker exec cousins-matter python manage.py test --failfast
           fi
 
       - name: Show docker-compose services logs on failure

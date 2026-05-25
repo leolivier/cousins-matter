@@ -2,10 +2,11 @@
 
 # to avoid install playwright in the container when running test without ui
 try:
-    from playwright.sync_api import sync_playwright, Page, BrowserContext
-    PLAYWRIGHT_AVAILABLE = True
+  from playwright.sync_api import sync_playwright, Page, BrowserContext
+
+  PLAYWRIGHT_AVAILABLE = True
 except ImportError:
-    PLAYWRIGHT_AVAILABLE = False
+  PLAYWRIGHT_AVAILABLE = False
 
 import unittest
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase

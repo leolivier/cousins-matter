@@ -47,7 +47,7 @@ class GallerySlideshowUITest(StaticLiveServerTestCase):
     self.page.click("button[type='submit']")
 
     # 2. Navigate to gallery
-    self.page.goto(f"{self.live_server_url}/galleries/{self.gallery.id}")
+    self.page.goto(f"{self.live_server_url}/galleries/{self.gallery.slug}")
 
     # 3. Wait for the page to load and find the slideshow toggle button
     # Based on the screenshot, it's a play/pause or "slideshow" button.

@@ -31,14 +31,6 @@ jobs:
           python-version: '3.14'
           cache: 'pip'
 
-      - name: Install dev dependencies and Install Playwright browsers (skipped in s3 test mode)
-        if: ${{ inputs.ui }}
-        env:
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-        run: |
-          python -m pip install -r requirements-dev.txt
-          playwright install --with-deps
-
       - name: Load test Docker image
         uses: ./.github/actions/load-docker-image
 
@@ -70,14 +62,16 @@ jobs:
           docker ps | grep cousins-matter || (docker ps && exit 1)
 
       - name: Install Python Dev Dependencies in Container (always)
-        if: ${{ inputs.ui }}
         run: |
           docker cp requirements-dev.txt cousins-matter:/app/
           docker exec -u root cousins-matter python -m pip install -r requirements-dev.txt
 
       - name: Install Playwright & Browsers inside Container (UI mode only)
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         if: ${{ inputs.ui }}
         run: |
+          playwright install --with-deps
           docker exec -u root cousins-matter apt-get update
           docker exec -u root cousins-matter apt-get install -y wget gnupg
           docker exec -u root cousins-matter python -m playwright install-deps chromium

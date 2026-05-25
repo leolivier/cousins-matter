@@ -59,7 +59,7 @@
 			</figure>
 			<div class="has-text-primary has-text-weight-bold has-text-centered mr-5">
 				{{message.author.get_full_name}}
-				<a href="{%url 'members:detail' message.author.id %}">
+				<a href="{%url 'members:detail' message.author.username %}">
 					{%icon "member-link" %}
 				</a>
 				<br>
@@ -131,7 +131,7 @@
 						</div>
 						<p class="content is-small">
 							{{reply.created}},
-							<a href="{%url 'members:detail' reply.author.id %}">{{reply.author.get_full_name}}</a>
+							<a href="{%url 'members:detail' reply.author.username %}">{{reply.author.get_full_name}}</a>
 						</p>
 					</div>
 				</div>

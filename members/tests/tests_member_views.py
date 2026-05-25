@@ -63,7 +63,7 @@ class TestDeleteMember(MemberTestCase):
     """Test GET delete of a managed member returns confirm modal."""
     managed = self.create_member()
     response = self.client.get(
-      reverse("members:delete", args=[managed.id]),
+      reverse("members:delete", args=[managed.username]),
       HTTP_HX_REQUEST="true",
     )
     self.assertEqual(response.status_code, 200)
@@ -72,7 +72,7 @@ class TestDeleteMember(MemberTestCase):
   def test_delete_member_get_confirm_modal_self(self):
     """Test GET delete of own account returns confirm modal with self-delete message."""
     response = self.client.get(
-      reverse("members:delete", args=[self.member.id]),
+      reverse("members:delete", args=[self.member.username]),
       HTTP_HX_REQUEST="true",
     )
     self.assertEqual(response.status_code, 200)
@@ -82,7 +82,7 @@ class TestDeleteMember(MemberTestCase):
     """Test deleting a member you don't manage is denied."""
     other_active = self.create_member(is_active=True)
     response = self.client.get(
-      reverse("members:delete", args=[other_active.id]),
+      reverse("members:delete", args=[other_active.username]),
       HTTP_HX_REQUEST="true",
       follow=True,
     )
@@ -118,7 +118,7 @@ class TestNotifyDeathEdgeCases(MemberTestCase):
     """Test POST without deathdate returns error and HX-Refresh."""
     other = self.create_member(is_active=True)
     response = self.client.post(
-      reverse("members:notify_death", args=[other.id]),
+      reverse("members:notify_death", args=[other.username]),
       {"deathdate": "", "message": "test"},
       HTTP_HX_REQUEST="true",
     )

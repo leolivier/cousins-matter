@@ -42,12 +42,12 @@
 					<span>{% translate "Change Password" %}</span>
 				</a>
 				{%elif member.member_manager and member.member_manager.id == request.user.id %} {# update managed member #}
-				<a class="button" href="{% url 'members:activate' pk %}">
+				<a class="button" href="{% url 'members:activate' member.username %}">
 					{%icon "activate-member" %}
 					<span>{% translate "Activate Account" %}</span>
 				</a>
 				{% endif %}
-				{% url 'members:delete' member.id as delete_url %}
+				{% url 'members:delete' member.username as delete_url %}
 				{%include "core/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete") button_class='is-warning' delete_url=delete_url %}
 			</div>
 		</div>

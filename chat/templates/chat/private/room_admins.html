@@ -44,12 +44,12 @@
 			</div>
 			<div class="has-text-primary has-text-weight-bold has-text-left is-flex-grow-1 mr-5">
 				{{admin.get_full_name}}
-				<a href="{%url 'members:detail' admin.id %}" aria-label="{%trans 'profile'%}">
+				<a href="{%url 'members:detail' admin.username %}" aria-label="{%trans 'profile'%}">
 					{%icon "member-link" %}
 				</a>
 			</div>
 			{%trans 'Remove Admin from Room' as leave_room%}
-			{%url 'chat:remove_admin_from_private_room' room.slug admin.id as remove_url %}
+			{%url 'chat:remove_admin_from_private_room' room.slug admin.username as remove_url %}
 			{%trans "Are you sure you want to remove this admin from the room?" as areyousure %}
 			<button class="button"
 				hx-post="{{remove_url}}"

@@ -19,11 +19,11 @@ class DeathNotificationTests(MemberTestCase):
   def test_deathdate_field_present_for_admin(self):
     self.client.login(username=self.superuser.username, password=self.superuser.password)
     # Admin editing other_member
-    response = self.client.get(reverse("members:member_edit", args=[self.other_member.id]), follow=True)
+    response = self.client.get(reverse("members:member_edit", args=[self.other_member.username]), follow=True)
     self.assertContains(response, 'name="deathdate"')
 
   def test_notify_death_view(self):
-    url = reverse("members:notify_death", args=[self.other_member.id])
+    url = reverse("members:notify_death", args=[self.other_member.username])
 
     # GET request
     response = self.client.get(url)
@@ -47,12 +47,12 @@ class DeathNotificationTests(MemberTestCase):
 
   def test_notify_death_button_visibility(self):
     # self.member is logged in
-    response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
-    self.assertContains(response, 'hx-get="/members/' + str(self.other_member.id) + '/notify-death"')
+    response = self.client.get(reverse("members:detail", args=[self.other_member.username]))
+    self.assertContains(response, 'hx-get="/members/' + str(self.other_member.username) + '/notify-death"')
 
     self.client.login(username=self.superuser.username, password=self.superuser.password)
-    response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
-    self.assertNotContains(response, 'hx-get="/members/' + str(self.other_member.id) + '/notify-death"')
+    response = self.client.get(reverse("members:detail", args=[self.other_member.username]))
+    self.assertNotContains(response, 'hx-get="/members/' + str(self.other_member.username) + '/notify-death"')
 
   def test_notify_death_button_hidden_if_already_dead(self):
     from datetime import date
@@ -60,5 +60,5 @@ class DeathNotificationTests(MemberTestCase):
     self.other_member.deathdate = date.today()
     self.other_member.save()
     # self.member is logged in
-    response = self.client.get(reverse("members:detail", args=[self.other_member.id]))
-    self.assertNotContains(response, 'hx-get="/members/' + str(self.other_member.id) + '/notify-death"')
+    response = self.client.get(reverse("members:detail", args=[self.other_member.username]))
+    self.assertNotContains(response, 'hx-get="/members/' + str(self.other_member.username) + '/notify-death"')

@@ -52,7 +52,7 @@ class PrivateChatRoomTestsMixin:
   </div>
   <div class="is-flex-shrink-1 has-text-primary has-text-weight-bold mr-5">
     {admin.full_name}
-    <a href="{reverse("members:detail", args=[admin.id])}" aria-label="{profile}">
+    <a href="{reverse("members:detail", args=[admin.username])}" aria-label="{profile}">
       {icon("member-link")}
     </a>
     <br>
@@ -87,11 +87,11 @@ class PrivateChatRoomTestsMixin:
     if is_admin:
       remove_member = _("Remove Admin from Room")
       areyousure = _("Are you sure you want to remove this admin from the room?")
-      remove_url = reverse("chat:remove_admin_from_private_room", args=[room.slug, member.id])
+      remove_url = reverse("chat:remove_admin_from_private_room", args=[room.slug, member.username])
     else:
       remove_member = _("Remove Member from Room")
       areyousure = _("Are you sure you want to remove this member from the room?")
-      remove_url = reverse("chat:remove_member_from_private_room", args=[room.slug, member.id])
+      remove_url = reverse("chat:remove_member_from_private_room", args=[room.slug, member.username])
 
     return f"""
 <button class="button"
@@ -112,7 +112,7 @@ class PrivateChatRoomTestsMixin:
   </div>
   <div class="has-text-primary has-text-weight-bold has-text-left is-flex-grow-1 mr-5">
     {member.full_name}
-    <a href="{reverse("members:detail", args=[member.id])}" aria-label="{_("profile")}">
+    <a href="{reverse("members:detail", args=[member.username])}" aria-label="{_("profile")}">
       {icon("member-link")}
     </a>
   </div>
@@ -131,7 +131,7 @@ class PrivateChatRoomTestsMixin:
   </div>
   <div class="has-text-primary has-text-weight-bold has-text-left is-flex-grow-1 mr-5">
     {admin.full_name}
-    <a href="{reverse("members:detail", args=[admin.id])}" aria-label="{_("profile")}">
+    <a href="{reverse("members:detail", args=[admin.username])}" aria-label="{_("profile")}">
       {icon("member-link")}
     </a>
   </div>
@@ -287,7 +287,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     response = self.client.post(
       reverse(
         "chat:remove_member_from_private_room",
-        args=[self.room.slug, self.created_members[1].id],
+        args=[self.room.slug, self.created_members[1].username],
       ),
       follow=True,
     )
@@ -364,7 +364,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     response = self.client.get(
       reverse(
         "chat:remove_member_from_private_room",
-        args=[self.room.slug, first_member.id],
+        args=[self.room.slug, first_member.username],
       ),
       follow=True,
     )
@@ -382,7 +382,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     response = self.client.get(
       reverse(
         "chat:remove_member_from_private_room",
-        args=[self.room.slug, second_member.id],
+        args=[self.room.slug, second_member.username],
       ),
       follow=True,
     )
@@ -516,20 +516,24 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.room.followers.add(member)
     other_member = self.created_members[1]
     self.client.login(username=other_member.username, password=other_member.password)
-    response = self.client.post(reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.id]), follow=True)
+    response = self.client.post(
+      reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.username]), follow=True
+    )
     self.assertContainsMessage(response, "error", _("You are not an admin of this private room"))
 
   def test_remove_member_from_private_room_not_member(self):
     member = self.created_members[0]
     # member is NOT in room followers
-    response = self.client.post(reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.id]), follow=True)
+    response = self.client.post(
+      reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.username]), follow=True
+    )
     self.assertContainsMessage(response, "warning", _("This user is not a member of this private room"))
 
   def test_remove_member_who_is_admin(self):
     member = self.created_members[0]
     self.room.followers.add(member)
     self.room.admins.add(member)
-    self.client.post(reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.id]), follow=True)
+    self.client.post(reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.username]), follow=True)
     self.assertNotIn(member, self.room.followers.all())
     self.assertNotIn(member, self.room.admins.all())
 
@@ -562,7 +566,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.room.followers.add(other_member)
     self.client.login(username=other_member.username, password=other_member.password)
     response = self.client.post(
-      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, self.member.id]), follow=True
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, self.member.username]), follow=True
     )
     self.assertContainsMessage(response, "error", _("You are not an admin of this private room"))
 
@@ -571,20 +575,20 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.room.followers.add(other_member)
     self.room.admins.add(other_member)
     response = self.client.post(
-      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, other_member.id]), follow=True
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, other_member.username]), follow=True
     )
     self.assertIn(other_member, self.room.followers.all())
     self.assertNotIn(other_member, self.room.admins.all())
 
     # Failure case (not an admin)
     response = self.client.post(
-      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, other_member.id]), follow=True
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, other_member.username]), follow=True
     )
     self.assertContainsMessage(response, "warning", _("This member is not an admin of this private room"))
 
     # Failure case (only one admin)
     response = self.client.post(
-      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, self.member.id]), follow=True
+      reverse("chat:remove_admin_from_private_room", args=[self.room.slug, self.member.username]), follow=True
     )
     self.assertContainsMessage(
       response,

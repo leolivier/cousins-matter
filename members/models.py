@@ -199,7 +199,7 @@ class Member(AbstractUser):
     ]
 
   def get_absolute_url(self):
-    return reverse("members:detail", kwargs={"pk": self.pk})
+    return reverse("members:detail", kwargs={"username": self.username})
 
   @property
   def avatar_url(self):

@@ -79,7 +79,7 @@
 		</div>
 		<div class="card-footer buttons is-centered">
 			<a class="button" 
-				{% if can_edit %} href="{% url 'members:member_edit' member.id %}"
+				{% if can_edit %} href="{% url 'members:member_edit' member.username %}"
 				{% else %} disabled
 				{% endif %}
 			>
@@ -91,11 +91,11 @@
 				{% blocktranslate with name=member_manager_name %}(Only {{name}} can manage this member){% endblocktranslate %}
 			</p>
 			{%else%}
-				{%url 'members:toggle_follow' member.id as toggle_follow_url %}
+				{%url 'members:toggle_follow' member.username as toggle_follow_url %}
 				{%include "core/followers/toggle-follow-button.html" with followed_object=object %}
 			{% endif %}
       {% if not request.user.is_superuser and member.is_active and not member.is_dead %}
-				<button hx-get="{% url 'members:notify_death' member.id%}"
+				<button hx-get="{% url 'members:notify_death' member.username%}"
 					hx-target="#modal"
 					hx-swap="innerHTML"
 					class="button is-danger is-light"

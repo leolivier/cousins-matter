@@ -31,7 +31,7 @@
 			<div class="cell">{% translate "Address used by:" %}</div>
     {% for member in object.address_of %}
       <div class="cell has-text-centered">
-        <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.id %}">
+        <a class="button {% cycle '' 'is-primary' 'is-link' %}" href="{% url 'members:detail' member.username %}">
           <strong>{{ member.first_name }} {{ member.last_name }}</strong>
         </a>
       </div>

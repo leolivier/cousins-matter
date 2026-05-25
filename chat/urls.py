@@ -55,12 +55,12 @@ urlpatterns = [
     name="add_admin_to_private_room",
   ),
   path(
-    "private/room/<str:room_slug>/remove_member/<int:member_id>",
+    "private/room/<str:room_slug>/remove_member/<str:username>",
     views_private_rooms.remove_member_from_private_room,
     name="remove_member_from_private_room",
   ),
   path(
-    "private/room/<str:room_slug>/remove_admin/<int:member_id>",
+    "private/room/<str:room_slug>/remove_admin/<str:username>",
     views_private_rooms.remove_admin_from_private_room,
     name="remove_admin_from_private_room",
   ),

@@ -100,6 +100,8 @@ class MembersView(generic.ListView):
 class MemberDetailView(generic.DetailView):
   model = Member
   template_name = "members/members/member_detail.html"
+  slug_field = "username"
+  slug_url_kwarg = "username"
 
   def get_queryset(self):
     return Member.objects.select_related("member_manager", "address", "family")
@@ -114,7 +116,7 @@ class MemberDetailView(generic.DetailView):
     }
 
   def get_absolute_url(self):
-    return reverse("members:detail", kwargs={"pk": self.pk})
+    return reverse("members:detail", kwargs={"username": self.object.username})
 
 
 class CreateManagedMemberView(generic.CreateView):
@@ -154,7 +156,7 @@ class CreateManagedMemberView(generic.CreateView):
       member.member_manager = Member.objects.get(id=request.user.id)
       member.save(update_fields=["is_active", "member_manager"])
       messages.success(request, _("Member successfully created"))
-      return redirect("members:detail", member.id)
+      return redirect("members:detail", username=member.username)
 
     return render(
       request,
@@ -181,28 +183,28 @@ class EditMemberView(generic.UpdateView):
   success_message = _("Member successfully updated")
   is_profile_view = False
 
-  def get(self, request, pk):
-    member = get_object_or_404(Member.objects.select_related("member_manager"), pk=pk)
+  def get(self, request, username):
+    member = get_object_or_404(Member.objects.select_related("member_manager"), username=username)
     if not _can_edit_member(request, member):
       messages.error(request, _("You do not have permission to edit this member."))
-      return redirect("members:detail", member.id)
+      return redirect("members:detail", username=member.username)
 
     return render(
       request,
       self.template_name,
       {
         "form": MemberUpdateForm(instance=member, is_profile=self.is_profile_view, user=request.user),
-        "pk": pk,
+        "pk": username,
         "title": self.title,
         "member_manager_name": member_manager_name(member),
       },
     )
 
-  def post(self, request, pk):
-    member = get_object_or_404(Member.objects.select_related("member_manager"), pk=pk)
+  def post(self, request, username):
+    member = get_object_or_404(Member.objects.select_related("member_manager"), username=username)
     if not _can_edit_member(request, member):
       messages.error(request, _("You do not have permission to edit this member."))
-      return redirect("members:detail", member.id)
+      return redirect("members:detail", username=member.username)
 
     # create a form instance and populate it with data from the request on existing member
     form = MemberUpdateForm(
@@ -232,13 +234,13 @@ class EditMemberView(generic.UpdateView):
             self.template_name,
             {
               "form": form,
-              "pk": pk,
+              "pk": username,
               "title": self.title,
               "member_manager_name": member_manager_name(member),
             },
           )
 
-      return redirect("members:detail", member.id)
+      return redirect("members:detail", username=member.username)
 
     else:
       logger.error(f"u_form error: {form.errors}")
@@ -247,7 +249,7 @@ class EditMemberView(generic.UpdateView):
         self.template_name,
         {
           "form": form,
-          "pk": pk,
+          "pk": username,
           "title": self.title,
           "member_manager_name": member_manager_name(member),
         },
@@ -263,18 +265,18 @@ class EditProfileView(EditMemberView):
   is_profile_view = True
 
   def get(self, request):
-    return super().get(request, request.user.id)
+    return super().get(request, request.user.username)
 
   def post(self, request):
-    return super().post(request, request.user.id)
+    return super().post(request, request.user.username)
 
 
-def delete_member(request, pk):
+def delete_member(request, username):
   assert request.htmx
-  member = get_object_or_404(Member, pk=pk)
+  member = get_object_or_404(Member, username=username)
   if not _can_edit_member(request, member):
     messages.error(request, _("You do not have permission to delete this member."))
-    return redirect("members:detail", member.id)
+    return redirect("members:detail", username=member.username)
   if request.method == "POST":
     member.delete()
     messages.info(request, _("Member deleted"))
@@ -317,8 +319,8 @@ def search_members(request):
   return render(request, render_with, context)
 
 
-def notify_death(request, pk):
-  member = get_object_or_404(Member, pk=pk)
+def notify_death(request, username):
+  member = get_object_or_404(Member, username=username)
   if request.method == "POST":
     deathdate = request.POST.get("deathdate")
     if not deathdate:

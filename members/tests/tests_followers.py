@@ -11,7 +11,7 @@ class TestMemberFollower(TestFollowersMixin, MemberTestCase):
     follower = self.member
     followed = self.create_member(is_active=True)
     # follower follows followed
-    url = reverse("members:toggle_follow", args=[followed.id])
+    url = reverse("members:toggle_follow", args=[followed.username])
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(followed.followers.first(), follower)
@@ -20,7 +20,7 @@ class TestMemberFollower(TestFollowersMixin, MemberTestCase):
   def do_test_toggle_unfollow_member(self, followed):
     # test unfollow
     self.client.login(username=self.member.username, password=self.member.password)  # login as follower (ie self.member)
-    url = reverse("members:toggle_follow", args=[followed.id])
+    url = reverse("members:toggle_follow", args=[followed.username])
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(followed.followers.count(), 0)
@@ -29,7 +29,7 @@ class TestMemberFollower(TestFollowersMixin, MemberTestCase):
     """Tests that the follow member view works correctly."""
     follower = self.member
     followed = self.do_test_toggle_follow_member()
-    followed_url = get_test_absolute_url(reverse("members:detail", args=[followed.id]))
+    followed_url = get_test_absolute_url(reverse("members:detail", args=[followed.username]))
     # now check the email to the owner to inform about the new follower
     self.check_new_follower_email(
       follower=follower,

@@ -20,7 +20,7 @@ class TestBirthdaysMixin:
     # self.print_response(response)
     common_chain = f"""<div class="cell has-background-{color}-light ml-2 pl-2 pr-1 is-flex
         is-align-items-center is-justify-content-right">
-      <a href="/members/{member.id}/" class="has-text-{color}">{member.full_name}</a>
+      <a href="{reverse("members:detail", args=[member.username])}" class="has-text-{color}">{member.full_name}</a>
   </div>"""
     tester = self.assertNotContains if reversed else self.assertContains
     tester(response, common_chain, html=True)

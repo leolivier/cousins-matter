@@ -12,9 +12,9 @@ from ..models import Member
 logger = logging.getLogger(__name__)
 
 
-def activate_member(request, pk):
-  """activate the member with id pk"""
-  member = get_object_or_404(Member, pk=pk)
+def activate_member(request, username):
+  """activate the member with username"""
+  member = get_object_or_404(Member, username=username)
   if member.is_dead:
     messages.error(request, _("Error: Cannot activate a dead member"))
   elif member.is_active:
@@ -35,4 +35,4 @@ def activate_member(request, pk):
     )
     logger.info(f"Member {member.username} activated by {request.user.username}")
 
-  return redirect(reverse("members:detail", args=[member.id]))
+  return redirect(reverse("members:detail", kwargs={"username": member.username}))

@@ -65,7 +65,7 @@
 					{{comment.content}}
 					<br class="mb-1"/>
 					{{comment.created}}
-					<a href="{%url 'members:detail' comment.author.id %}">
+					<a href="{%url 'members:detail' comment.author.username %}">
 						{{comment.author.get_full_name}}
 					</a>
 					<hr class="mt-0 mb-0">

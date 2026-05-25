@@ -70,6 +70,7 @@ jobs:
           docker ps | grep cousins-matter || (docker ps && exit 1)
 
       - name: Install Python Dev Dependencies in Container (always)
+        if: ${{ inputs.ui }}
         run: |
           docker cp requirements-dev.txt cousins-matter:/app/
           docker exec -u root cousins-matter python -m pip install -r requirements-dev.txt

@@ -180,8 +180,7 @@
 			</div>
 			{%else%}
 			{%url 'chat:toggle_follow' room.slug as toggle_follow_url %}
-			{%include "core/followers/toggle-follow-button.html" with followed_object=room toggle_follow_url=toggle_follow_url
-			%}
+			{%include "core/followers/toggle-follow-button.html" with followed_object=room toggle_follow_url=toggle_follow_url %}
 			{%endif%}
 			{%endif%}
 			{%endwith%}

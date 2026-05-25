@@ -197,7 +197,7 @@ class Gallery(models.Model):
     return f"{self.parent}/{self.name}" if self.parent else self.name
 
   def get_absolute_url(self):
-    return reverse("galleries:detail", kwargs={"pk": self.pk})
+    return reverse("galleries:detail", kwargs={"slug": self.slug})
 
   def clean(self):
     # check parent_id != id

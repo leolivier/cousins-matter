@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django_htmx.http import HttpResponseClientRedirect
+from django.http import Http404
 
 from core.utils import check_edit_permission, confirm_delete_modal
 from ..models import Gallery
@@ -22,7 +23,9 @@ class GalleryCreateView(generic.CreateView):
 
   def get(self, request, parent_gallery=None):
     if parent_gallery:
-      self.initial.update({"parent": parent_gallery})
+      # parent_gallery is a slug; fetch the actual object
+      parent_obj = get_object_or_404(Gallery, slug=parent_gallery)
+      self.initial.update({"parent": parent_obj.id})
     return super().get(request)
 
   def form_valid(self, form):
@@ -37,7 +40,11 @@ class GalleryUpdateView(generic.UpdateView):
   form_class = GalleryForm
 
   def get_object(self, **kwargs):
-    gallery = super().get_object(**kwargs)
+    # retrieve by slug from URL
+    slug = self.kwargs.get("slug", None)
+    if slug is None:
+      raise Http404("No gallery found matching the given slug.")
+    gallery = get_object_or_404(Gallery, slug=slug)
     if gallery.owner:
       check_edit_permission(self.request, gallery.owner)
     return gallery
@@ -48,15 +55,16 @@ class GalleryDetailView(generic.DetailView):
   model = Gallery
   fields = "__all__"
 
-  def get(self, request, pk, page=1):  # TODO manage slug instead of pk
+  def get(self, request, slug, page=1):
     gallery = (
       Gallery.objects
       .select_related("owner", "parent", "cover")
       .annotate(photo_count=Count("photo"))
       .prefetch_related(Prefetch("children", queryset=Gallery.objects.select_related("cover")))
-      .get(pk=pk)
+      .get(slug=slug)
     )
     page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_GALLERY_PAGE_SIZE
+
     return render(
       request,
       self.template_name,
@@ -88,8 +96,8 @@ class GalleryTreeView(generic.ListView):
     return {"galleries": roots}
 
 
-def delete_gallery(request, pk):
-  gallery = get_object_or_404(Gallery, pk=pk)
+def delete_gallery(request, slug):
+  gallery = get_object_or_404(Gallery, slug=slug)
   if request.method == "POST":
     if gallery.owner:
       check_edit_permission(request, gallery.owner)

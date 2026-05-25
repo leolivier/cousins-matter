@@ -66,7 +66,7 @@ class CreatePhotoTests(PhotoTestsBase):
 class CreatePhotoViewTests(PhotoTestsBase):
   def test_create_photo_view(self):
     """Tests creating a photo through the view."""
-    ap_url = reverse("galleries:add_photo", kwargs={"gallery": self.root_gallery.id})
+    ap_url = reverse("galleries:add_photo", kwargs={"gallery": self.root_gallery.slug})
     response = self.client.get(ap_url, follow=True)
     # print("response:", response)
     self.assertEqual(response.status_code, 200)
@@ -140,9 +140,9 @@ class CreatePhotoViewTests(PhotoTestsBase):
     last = min((page_size * page_num) + 1, nb_photos)
     photos = self.get_several_photos(nb_photos, page_num, first, last, gallery)
     if page_num > 1:
-      url = reverse("galleries:detail_page", kwargs={"pk": gallery.id, "page": page_num}) + f"?page_size={page_size}"
+      url = reverse("galleries:detail_page", kwargs={"slug": gallery.slug, "page": page_num}) + f"?page_size={page_size}"
     else:
-      url = reverse("galleries:detail", kwargs={"pk": gallery.id}) + f"?page_size={page_size}"
+      url = reverse("galleries:detail", kwargs={"slug": gallery.slug}) + f"?page_size={page_size}"
     response = self.client.get(url)
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)

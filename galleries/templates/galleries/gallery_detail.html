@@ -4,7 +4,7 @@
 {%block header %}
 {%url 'galleries:gallery_photo_url' gallery.id '1234567890' as image_url %}
 {%url 'galleries:photo' '1234567890' as photo_url%}
-<link rel="stylesheet" href="{% static 'galleries/css/galleries.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'galleries/css/galleries.min.css' %}" />
 <script src="{% static 'galleries/js/galleries.min.js' %}"></script>
 {% endblock header %}
 {% block content %}
@@ -12,7 +12,8 @@
 	<div class="level">
 		<div class="level-left">
 			<div class="container">
-				<figure class="image gallery-cover is-pulled-left mr-3 mb-3 is-flex is-align-items-center is-justify-content-center">
+				<figure
+					class="image gallery-cover is-pulled-left mr-3 mb-3 is-flex is-align-items-center is-justify-content-center">
 					<img src="{{gallery.cover_url}}">
 				</figure>
 				<span class="title is-4">{{gallery.name}}</span>
@@ -26,14 +27,14 @@
 			<div class="container">
 				<p class="content has-text-centered mr-3">{% translate "Children galleries" %}</p>
 				<div class="grid">
-				{% for subgal in sub_galleries %}
-					<a class="cell mr-2" href="{% url 'galleries:detail' subgal.id %}">
+					{% for subgal in sub_galleries %}
+					<a class="cell mr-2" href="{% url 'galleries:detail' subgal.slug %}">
 						<figure class="image sub-gallery-cover mx-auto">
 							<img src="{{subgal.cover_url}}">
 						</figure>
 						<p class="has-text-centered">{{subgal.name}}</p>
 					</a>
-				{%endfor%}
+					{%endfor%}
 				</div>
 			</div>
 		</div>
@@ -42,32 +43,29 @@
 		<div class="level-right">
 			<p class="buttons has-addons mt-0">
 				{% if gallery.parent %}
-				<a class="button" href="{% url 'galleries:detail' gallery.parent.id %}" 
+				<a class="button" href="{% url 'galleries:detail' gallery.parent.slug %}"
 					title="{% blocktranslate with gname=gallery.parent.name%}Back to {{gname}}{%endblocktranslate %}">
 					{%icon "back" %}
 				</a>
 				{%else%}
-				<a class="button" href="{% url 'galleries:galleries' %}" 
-					title="{%trans 'Back to galleries list' %}">
+				<a class="button" href="{% url 'galleries:galleries' %}" title="{%trans 'Back to galleries list' %}">
 					{%icon "back" %}
 				</a>
 				{%endif%}
-				<a class="button" href="{% url 'galleries:add_photo' gallery.id %}"
-					title="{% translate 'Add Photo' %}">
+				<a class="button" href="{% url 'galleries:add_photo' gallery.slug %}" title="{% translate 'Add Photo' %}">
 					{%icon "new-photo" %}
 				</a>
-				<a class="button" href="{% url 'galleries:create_sub' gallery.id %}"
+				<a class="button" href="{% url 'galleries:create_sub' gallery.slug %}"
 					title="{% translate 'Create Sub Gallery' %}">
 					{%icon "new-gallery" %}
 				</a>
-			{% if gallery.owner and gallery.owner == request.user or request.user.is_superuser %}
-				<a class="button" href="{% url 'galleries:edit' gallery.id %}"
-					title="{% trans 'Edit Gallery' %}">
+				{% if gallery.owner and gallery.owner == request.user or request.user.is_superuser %}
+				<a class="button" href="{% url 'galleries:edit' gallery.slug %}" title="{% trans 'Edit Gallery' %}">
 					{%icon "edit-gallery" %}
 				</a>
-				{% url 'galleries:delete_gallery' gallery.id as delete_url %}
+				{% url 'galleries:delete_gallery' gallery.slug as delete_url %}
 				{%include "core/common/confirm-delete-modal.html#delete_button" with button_text='' delete_url=delete_url %}
-			{% endif %}
+				{% endif %}
 			</p>
 		</div>
 	</div>

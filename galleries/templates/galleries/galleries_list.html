@@ -1,27 +1,27 @@
 {% load i18n cm_tags galleries_tags static %}
 {% block content %}
-  {% for gallery in galleries %}
-  <div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
-    {%for i in level|to_range%}
-      <div class="ml-6">{%if forloop.last %}{%icon "menu-right"%}{%else%}&nbsp;{%endif%}</div>
-    {%endfor%}
-    {% url 'galleries:detail' gallery.id as gallery_url %}
-    <figure class="image gallery-cover is-pulled-left mr-3">
-      <a href="{{gallery_url}}">
-        <img src="{{gallery.cover_url}}">
-      </a>
-    </figure>
-    <a class="content has-text-primary-dark" href="{{gallery_url}}">
-      <p>
-        <strong>{{gallery.name}}</strong>
-        {% include "galleries/photo_counter.html" %}
-        <br/>
-        {{ gallery.description|safe }}
-      </p>
+{% for gallery in galleries %}
+<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
+  {%for i in level|to_range%}
+  <div class="ml-6">{%if forloop.last %}{%icon "menu-right"%}{%else%}&nbsp;{%endif%}</div>
+  {%endfor%}
+  {% url 'galleries:detail' gallery.slug as gallery_url %}
+  <figure class="image gallery-cover is-pulled-left mr-3">
+    <a href="{{gallery_url}}">
+      <img src="{{gallery.cover_url}}">
     </a>
-  </div>
-  {% if recursive and gallery.cached_children %}
-    {% include_galleries gallery.cached_children recursive=recursive level=level|add:1 %}
-  {% endif %}
+  </figure>
+  <a class="content has-text-primary-dark" href="{{gallery_url}}">
+    <p>
+      <strong>{{gallery.name}}</strong>
+      {% include "galleries/photo_counter.html" %}
+      <br />
+      {{ gallery.description|safe }}
+    </p>
+  </a>
+</div>
+{% if recursive and gallery.cached_children %}
+{% include_galleries gallery.cached_children recursive=recursive level=level|add:1 %}
+{% endif %}
 {% endfor %}
 {% endblock %}

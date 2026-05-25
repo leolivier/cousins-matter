@@ -67,11 +67,11 @@ jobs:
           docker exec -u root cousins-matter python -m pip install -r requirements-dev.txt
 
       - name: Install Playwright & Browsers inside Container (UI mode only)
-        env:
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+        # env:
+        #   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         if: ${{ inputs.ui }}
         run: |
-          playwright install --with-deps
+          # playwright install --with-deps
           docker exec -u root cousins-matter apt-get update
           docker exec -u root cousins-matter apt-get install -y wget gnupg
           docker exec -u root cousins-matter python -m playwright install-deps chromium

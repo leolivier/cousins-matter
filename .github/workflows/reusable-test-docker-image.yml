@@ -76,11 +76,14 @@ jobs:
           docker exec -u root cousins-matter apt-get install -y wget gnupg
           docker exec -u root cousins-matter python -m playwright install-deps chromium
           docker exec cousins-matter python -m playwright install chromium
-          echo "EXCLUDE_UI=--exclude-tag=ui" >> $GITHUB_ENV
 
       - name: Run Tests (default or S3 mode)
         run: |
-          docker exec cousins-matter python manage.py test --failfast $EXCLUDE_UI
+          if [ ${{ inputs.ui }} == true ]; then
+            docker exec cousins-matter python manage.py test --failfast
+          else
+            docker exec cousins-matter python manage.py test --failfast --exclude-tag=ui
+          fi
 
       - name: Show docker-compose services logs on failure
         if: failure()

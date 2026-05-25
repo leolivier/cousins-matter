@@ -82,7 +82,7 @@ jobs:
           docker exec -u root cousins-matter apt-get install -y wget gnupg
           docker exec -u root cousins-matter python -m playwright install-deps chromium
           docker exec cousins-matter python -m playwright install chromium
-          echo "EXCLUDE_UI='--exclude-tag=ui'" >> $GITHUB_ENV
+          echo "EXCLUDE_UI=--exclude-tag=ui" >> $GITHUB_ENV
 
       - name: Run Tests (default or S3 mode)
         run: |

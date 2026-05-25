@@ -18,4 +18,4 @@ class MemberSearchTests(MemberTestCase):
     self.assertIn("text/html", response["Content-Type"])
     self.assertTemplateUsed(response, "members_content")
     self.assertContains(response, self.other_member.full_name)
-    self.assertContains(response, reverse("members:detail", args=[self.other_member.id]))
+    self.assertContains(response, reverse("members:detail", args=[self.other_member.username]))

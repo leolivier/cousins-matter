@@ -4,7 +4,7 @@
 	{% trans "Notify Death of" %} {{ member.full_name }}
 {% endblock modal_title %}
 {%block form_params %}
-	hx-post="{% url 'members:notify_death' member.id %}"
+	hx-post="{% url 'members:notify_death' member.username %}"
 {%endblock form_params %}
 {% block form %}
 		<div class="field">

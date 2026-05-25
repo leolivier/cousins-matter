@@ -9,10 +9,10 @@ from django.core.mail import send_mail
 from ..models import Member
 
 
-def toggle_follow(request, pk):
+def toggle_follow(request, username):
   follower = request.user
-  followed = get_object_or_404(Member, pk=pk)
-  followed_url = reverse("members:detail", args=[pk])
+  followed = get_object_or_404(Member, username=username)
+  followed_url = reverse("members:detail", kwargs={"username": followed.username})
   followed_name = followed.full_name
 
   if followed == follower:
@@ -36,7 +36,7 @@ def toggle_follow(request, pk):
     follower_name = follower.full_name
     title = _("You have a new follower!")
     message = _("%(follower_name)s is now following you!") % {"follower_name": follower_name}
-    follower_url = request.build_absolute_uri(reverse("members:detail", args=[follower.id]))
+    follower_url = request.build_absolute_uri(reverse("members:detail", kwargs={"username": follower.username}))
 
     send_mail(
       title,

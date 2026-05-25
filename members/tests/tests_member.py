@@ -127,7 +127,7 @@ class MemberDeleteTest(MemberTestCaseMixin, TestCase):
 class MemberDeleteTestByView(MemberViewTestMixin, MemberTestCase):
   def test_delete_member_by_view(self):
     member = self.create_member_by_view()
-    response = self.client.post(reverse("members:delete", args=[member.id]), HTTP_HX_REQUEST="true", follow=True)
+    response = self.client.post(reverse("members:delete", args=[member.username]), HTTP_HX_REQUEST="true", follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(Member.objects.filter(id=member.id).count(), 0)
     self.assertEqual(Member.objects.filter(username=member.username).count(), 0)
@@ -227,7 +227,7 @@ class ManagedMemberChangeTests(MemberViewTestMixin, MemberTestCase):
 
   def test_managed_change_view(self):
     # change the managed member data
-    edit_url = reverse("members:member_edit", kwargs={"pk": self.managed.id})
+    edit_url = reverse("members:member_edit", kwargs={"username": self.managed.username})
     new_data = modify_member_data(self.managed)
     response = self.client.post(edit_url, new_data, follow=True)
     # print(response.content.decode())
@@ -239,19 +239,19 @@ class ManagedMemberChangeTests(MemberViewTestMixin, MemberTestCase):
     self.assertEqual(self.managed.email, new_data["email"])
 
     # chack that active members can't be changed
-    edit_url = reverse("members:member_edit", kwargs={"pk": self.active.id})
+    edit_url = reverse("members:member_edit", kwargs={"username": self.active.username})
     new_data = modify_member_data(self.active)
     # for get
     response = self.client.get(edit_url, new_data, follow=True)
     self.assertEqual(response.status_code, 200)
     # self.print_response(response)
     self.assertContainsMessage(response, "error", _("You do not have permission to edit this member."))
-    self.assertRedirects(response, reverse("members:detail", kwargs={"pk": self.active.id}))
+    self.assertRedirects(response, reverse("members:detail", kwargs={"username": self.active.username}))
     # and post
     response = self.client.post(edit_url, new_data, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertContainsMessage(response, "error", _("You do not have permission to edit this member."))
-    self.assertRedirects(response, reverse("members:detail", kwargs={"pk": self.active.id}))
+    self.assertRedirects(response, reverse("members:detail", kwargs={"username": self.active.username}))
 
 
 class TestDisplayMembers(MemberTestCase):
@@ -264,7 +264,7 @@ class TestDisplayMembers(MemberTestCase):
 
   def test_view_one_member(self):
     member = self.members[3]
-    detail_url = reverse("members:detail", kwargs={"pk": member.id})
+    detail_url = reverse("members:detail", kwargs={"username": member.username})
     response = self.client.get(detail_url)
     self.assertEqual(response.status_code, 200)
     # pprint(vars(response))
@@ -301,7 +301,7 @@ class TestDisplayMembers(MemberTestCase):
       self.assertInHTML(
         f"""
   <div class="cell has-text-centered my-auto">
-    <a class="button button-wrap" href="/members/{self.members[i].id}/">
+    <a class="button button-wrap" href="/members/{self.members[i].username}/">
       {avatar}
       <strong>{self.members[i].full_name}</strong>
     </a>
@@ -314,7 +314,7 @@ class TestDisplayMembers(MemberTestCase):
     def check_is_in(content, member):
       self.assertInHTML(
         f"""<div class="cell has-text-centered my-auto">
-        <a class="button button-wrap" href="{reverse("members:detail", kwargs={"pk": member.id})}">
+        <a class="button button-wrap" href="{reverse("members:detail", kwargs={"username": member.username})}">
           <strong>{member.full_name}</strong></a></div>""",
         content,
       )
@@ -324,7 +324,7 @@ class TestDisplayMembers(MemberTestCase):
       self.assertNotIn(content, f"""<strong>{member.full_name}</strong>""")
       self.assertNotIn(
         content,
-        f"""href={reverse("members:detail", kwargs={"pk": member.id})}>""",
+        f"""href={reverse("members:detail", kwargs={"username": member.username})}>""",
       )
 
     def filter_member(member, first_name=False, last_name=False):
@@ -387,7 +387,7 @@ class TestDisplayMembers(MemberTestCase):
     html = response.content.decode("utf-8").replace("is-link", "").replace("is-primary", "").replace("is-dark", "")
     content = ""
     for m in members:
-      url = reverse("members:detail", kwargs={"pk": m.id})
+      url = reverse("members:detail", kwargs={"username": m.username})
       name = m.full_name
       content += f"""<div class="cell has-text-centered my-auto">
         <a class="button button-wrap" href="{url}">
@@ -431,7 +431,7 @@ class TestActivateManagedMember(MemberTestCase):
     self.assertFalse(managed.is_active)
     self.assertEqual(managed.member_manager, self.member)
     mail.outbox = []
-    response = self.client.post(reverse("members:activate", args=[managed.id]), follow=True)
+    response = self.client.post(reverse("members:activate", args=[managed.username]), follow=True)
     self.assertEqual(response.status_code, 200)
     managed.refresh_from_db()
     self.assertEqual(len(mail.outbox), 1)
@@ -470,7 +470,7 @@ class TestActivateManagedMember(MemberTestCase):
     active.is_active = True
     active.member_manager = self.member
     active.save()
-    response = self.client.post(reverse("members:activate", args=[active.id]), follow=True)
+    response = self.client.post(reverse("members:activate", args=[active.username]), follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertContainsMessage(response, "error", _("Error: Member already active"))
     active.refresh_from_db()
@@ -480,7 +480,7 @@ class TestActivateManagedMember(MemberTestCase):
     no_email = self.create_member()
     no_email.email = ""
     no_email.save()
-    response = self.client.post(reverse("members:activate", args=[no_email.id]), follow=True)
+    response = self.client.post(reverse("members:activate", args=[no_email.username]), follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertContainsMessage(response, "error", _("Error: Member without email cannot be activated"))
 
@@ -496,7 +496,7 @@ class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
     self.assertFalse(member.is_active)
     self.assertTrue(member.is_dead)
     # member manager can be self.member (ie member creator) or superuser
-    self.assertIn(member.member_manager.id, [self.member.id, self.superuser.id])
+    self.assertIn(member.member_manager.username, [self.member.username, self.superuser.username])
     self.assertIsNotNone(member.deathdate)
     self.assertGreater(member.deathdate, member.birthdate)
 
@@ -513,7 +513,7 @@ class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
   def test_update_dead_member(self):
     user = self.create_member()
     # change the managed member data
-    edit_url = reverse("members:member_edit", kwargs={"pk": user.id})
+    edit_url = reverse("members:member_edit", kwargs={"username": user.username})
     new_data = modify_member_data(user)
     # set deathdate
     new_data["deathdate"] = today_minus("5d")
@@ -524,18 +524,18 @@ class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
     self.check_dead_member(user)
 
     # check that dead members can't be activated
-    activate_url = reverse("members:activate", kwargs={"pk": user.id})
+    activate_url = reverse("members:activate", kwargs={"username": user.username})
     response = self.client.get(activate_url, follow=True)
     self.assertEqual(response.status_code, 200)
     # self.print_response(response)
     self.assertContainsMessage(response, "error", _("Error: Cannot activate a dead member "))
-    self.assertRedirects(response, reverse("members:detail", kwargs={"pk": user.id}))
+    self.assertRedirects(response, reverse("members:detail", kwargs={"username": user.username}))
 
   def test_display_dead_members(self):
     data = self.get_dead_member_data()
     dead = self.create_member(data)
     self.check_dead_member(dead)
-    dead_url = reverse("members:detail", kwargs={"pk": dead.id})
+    dead_url = reverse("members:detail", kwargs={"username": dead.username})
     response = self.client.get(dead_url, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertContains(

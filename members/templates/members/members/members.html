@@ -84,7 +84,7 @@
       {% for member in members %}
         <div class="cell has-text-centered my-auto">
           <a class="button {% cycle 'is-dark' 'is-primary' 'is-link' %} button-wrap"
-             href="{% url 'members:detail' member.id %}">
+             href="{% url 'members:detail' member.username %}">
             {% if member.avatar %}
             <figure class="image mini-avatar mr-2">
               <img class="is-rounded" src="{{member.avatar_mini_url}}">

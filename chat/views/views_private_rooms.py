@@ -137,7 +137,7 @@ def add_member_to_private_room(request, room_slug):
   return redirect(reverse("chat:private_room_members", args=[room.slug]))
 
 
-def remove_member_from_private_room(request, room_slug, member_id):
+def remove_member_from_private_room(request, room_slug, username):
   """
   Remove a member from a private chat room.
 
@@ -167,7 +167,7 @@ def remove_member_from_private_room(request, room_slug, member_id):
   if not room.admins.filter(pk=request.user.pk).exists():
     messages.error(request, _("You are not an admin of this private room"))
     return redirect(reverse("chat:private_chat_rooms"))
-  member = get_object_or_404(Member, id=member_id)
+  member = get_object_or_404(Member, username=username)
   if room.followers.filter(pk=member.pk).exists():
     if room.followers.count() < 2:
       messages.error(
@@ -310,7 +310,7 @@ def add_admin_to_private_room(request, room_slug):
   return redirect(reverse("chat:private_room_admins", args=[room.slug]))
 
 
-def remove_admin_from_private_room(request, room_slug, member_id):
+def remove_admin_from_private_room(request, room_slug, username):
   """
   Removes an admin from a private chat room.
 
@@ -342,7 +342,7 @@ def remove_admin_from_private_room(request, room_slug, member_id):
   if not room.admins.filter(pk=request.user.pk).exists():
     messages.error(request, _("You are not an admin of this private room"))
     return redirect(reverse("chat:private_chat_rooms"))
-  member = get_object_or_404(Member, id=member_id)
+  member = get_object_or_404(Member, username=username)
 
   if room.admins.filter(pk=member.pk).exists():
     if room.admins.count() < 2:

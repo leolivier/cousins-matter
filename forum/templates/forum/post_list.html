@@ -24,7 +24,7 @@
 				</div>
 				<div class="has-text-primary has-text-weight-bold has-text-right mr-5">
 					{{post.first_message.author.get_full_name}}
-					<a href="{%url 'members:detail' post.first_message.author.id %}" aria-label="{%trans 'profile'}">
+					<a href="{%url 'members:detail' post.first_message.author.username %}" aria-label="{%trans 'profile'}">
 						{%icon "member-link" %}
 					</a>
 					<br>

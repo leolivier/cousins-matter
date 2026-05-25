@@ -78,12 +78,12 @@
 			<div class="is-flex-shrink-1 has-text-primary has-text-weight-bold mr-5">
 			{%if private%}
 				{{admin.get_full_name}}
-				<a href="{%url 'members:detail' admin.id %}" aria-label="{%trans 'profile'%}">
+				<a href="{%url 'members:detail' admin.username %}" aria-label="{%trans 'profile'%}">
 					{%icon "member-link" %}
 				</a>
 			{%elif owner%}
 				{{owner.get_full_name}}
-				<a href="{%url 'members:detail' owner.id %}" aria-label="{%trans 'profile'%}">
+				<a href="{%url 'members:detail' owner.username %}" aria-label="{%trans 'profile'%}">
 					{%icon "member-link" %}
 				</a>
 			{%else%}

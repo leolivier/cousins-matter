@@ -35,7 +35,7 @@
 			{% for member in page.object_list %}
 			<tr>
 				<td class="has-text-centered">
-					<a class="button is-link is-light" href="{% url 'members:detail' member.id %}">
+					<a class="button is-link is-light" href="{% url 'members:detail' member.username %}">
 						<strong>{{ member.get_full_name }}</strong>
 					</a>
 				</td>

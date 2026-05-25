@@ -87,7 +87,7 @@ class ChatRoomTests(MemberTestCase):
   </div>
   <div class="is-flex-shrink-1 has-text-primary has-text-weight-bold mr-5">
     {self.member.full_name}
-    <a href="{reverse("members:detail", kwargs={"pk": self.member.id})}" aria-label="{profile}">
+    <a href="{reverse("members:detail", args=[self.member.username])}" aria-label="{profile}">
       <span class="icon is-large"><i class="mdi mdi-24px mdi-open-in-new" aria-hidden="true"></i></span>
     </a>
     <br>

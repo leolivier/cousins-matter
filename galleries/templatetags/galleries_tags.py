@@ -54,7 +54,7 @@ def complete_photos_data(page, page_num, num_pages):
 @register.inclusion_tag("galleries/photos_gallery.html")
 def include_photos(gallery, page_num, page_size):
   photos = get_gallery_photos(gallery)
-  ptor = Paginator(photos, page_size, compute_link=lambda page: reverse("galleries:detail_page", args=[gallery.id, page]))
+  ptor = Paginator(photos, page_size, compute_link=lambda page: reverse("galleries:detail_page", args=[gallery.slug, page]))
   if page_num > ptor.num_pages:
     page_num = ptor.num_pages
   page = ptor.get_page_data(page_num)

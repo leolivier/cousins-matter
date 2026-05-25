@@ -2,14 +2,14 @@ from datetime import date
 import logging
 from django.forms import ValidationError
 from django_htmx.http import HttpResponseClientRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.views import generic
 from django.utils.translation import gettext as _
 from core.utils import check_edit_permission, confirm_delete_modal
-from ..models import Photo
+from ..models import Photo, Gallery
 from ..forms import PhotoForm
 
 logger = logging.getLogger(__name__)
@@ -71,10 +71,13 @@ class PhotoAddView(generic.CreateView):
   form_class = PhotoForm
 
   def post(self, request, gallery, *args, **kwargs):
+    # "gallery" is a slug; fetch the Gallery object
+    gallery_obj = get_object_or_404(Gallery, slug=gallery)
     form = PhotoForm(request.POST, request.FILES)
     if form.is_valid():
       try:  # issue 120: if any exception during the thumbnail creation process, remove the photo from the database
         form.instance.uploaded_by = self.request.user
+        form.instance.gallery = gallery_obj
         photo = form.save()
         if "create-and-add" in request.POST:
           messages.success(request, _("Photo created"))
@@ -89,8 +92,9 @@ class PhotoAddView(generic.CreateView):
       return render(request, self.template_name, {"form": form})
 
   def get(self, request, gallery):
-    # initialize gallery to the value in the url and current date
-    form = PhotoForm(initial={"gallery": gallery, "date": date.today()})
+    # "gallery" is a slug; fetch the Gallery object
+    gallery_obj = get_object_or_404(Gallery, slug=gallery)
+    form = PhotoForm(initial={"gallery": gallery_obj.id, "date": date.today()})
     return render(request, self.template_name, {"form": form})
 
 

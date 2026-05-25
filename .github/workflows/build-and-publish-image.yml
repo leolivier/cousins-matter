@@ -27,17 +27,15 @@ jobs:
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────
-  # Job 2 – Test Docker Image (runs in parallel with jobs 3 & 4)
+  # Job 2 – Test Docker Image (runs in parallel with jobs 3, 4 & 5)
   # ──────────────────────────────────────────────────────────────────────────────
   test-docker-image:
     needs: lint-and-build
     uses: ./.github/workflows/reusable-test-docker-image.yml
-    with:
-      s3: false
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────
-  # Job 3 – Test install & migration scripts (runs in parallel with jobs 2 & 4)
+  # Job 3 – Test install & migration scripts (runs in parallel with jobs 2, 4 & 5)
   # ──────────────────────────────────────────────────────────────────────────────
   test-install-migrate:
     needs: lint-and-build
@@ -46,7 +44,7 @@ jobs:
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────
-  # Job 4 – Test S3 backend (runs in parallel with jobs 2 & 3)
+  # Job 4 – Test S3 backend (runs in parallel with jobs 2, 3 & 5)
   # ──────────────────────────────────────────────────────────────────────────────
   test-s3:
     needs: lint-and-build
@@ -57,10 +55,21 @@ jobs:
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────
-  # Job 5 – Final multiplatform build & push (waits for jobs 2, 3 & 4)
+  # Job 5 – Test UI (runs in parallel with jobs 2, 3 & 4)
+  # ──────────────────────────────────────────────────────────────────────────────
+  test-ui:
+    needs: lint-and-build
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    uses: ./.github/workflows/reusable-test-docker-image.yml
+    with:
+      ui: true
+    secrets: inherit
+
+  # ──────────────────────────────────────────────────────────────────────────────
+  # Job 6 – Final multiplatform build & push (waits for jobs 2, 3, 4 & 5)
   # ──────────────────────────────────────────────────────────────────────────────
   build-and-push:
-    needs: [test-docker-image, test-install-migrate, test-s3]
+    needs: [test-docker-image, test-install-migrate, test-s3, test-ui]
     if: ${{ github.actor != 'dependabot[bot]' && always() && needs.test-docker-image.result == 'success' && (needs.test-install-migrate.result == 'success' || needs.test-install-migrate.result == 'skipped') && (needs.test-s3.result == 'success' || needs.test-s3.result == 'skipped') }}
     uses: ./.github/workflows/reusable-build-and-push.yml
     with:
@@ -72,7 +81,7 @@ jobs:
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────
-  # Job 6 – Verify production image starts correctly (waits for job 5)
+  # Job 7 – Verify production image starts correctly (waits for job 6)
   # RUNS ONLY FOR RELEASES
   # ──────────────────────────────────────────────────────────────────────────────
   verify-production-image:

@@ -8,6 +8,10 @@ on:
         required: false
         type: boolean
         default: false
+      ui:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   test-docker-image:
@@ -28,7 +32,7 @@ jobs:
           cache: 'pip'
 
       - name: Install dev dependencies and Install Playwright browsers (skipped in s3 test mode)
-        if: ${{ !inputs.s3 }}
+        if: ${{ inputs.ui }}
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         run: |
@@ -43,15 +47,13 @@ jobs:
         with:
           test_image_ref: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
 
-      - name: Write additional .env
+      - name: Write additional .env for S3 integration tests
+        if: ${{ inputs.s3 }}
         env:
           S3_MEDIA_STORAGE_OPTIONS: '{\"access_key\":\"${{ secrets.ACCESS_KEY }}\",\"secret_key\":\"${{ secrets.SECRET_KEY }}\",\"bucket_name\":\"${{ secrets.BUCKET_NAME }}\",\"endpoint_url\":\"https://${{ secrets.ACCOUNT_ID }}.r2.cloudflarestorage.com\"}'
         run: |
-          if [ "${{ inputs.s3 }}" = "true" ]; then
-            echo 'MEDIA_STORAGE=storages.backends.s3.S3Storage' >> $GITHUB_WORKSPACE/.env
-            echo "MEDIA_STORAGE_OPTIONS='${{ env.S3_MEDIA_STORAGE_OPTIONS }}'" >> $GITHUB_WORKSPACE/.env
-          fi
-          cat $GITHUB_WORKSPACE/.env
+          echo 'MEDIA_STORAGE=storages.backends.s3.S3Storage' >> $GITHUB_WORKSPACE/.env
+          echo "MEDIA_STORAGE_OPTIONS='${{ env.S3_MEDIA_STORAGE_OPTIONS }}'" >> $GITHUB_WORKSPACE/.env
 
       - name: Start Docker Containers
         run: |
@@ -67,26 +69,23 @@ jobs:
           # Verify container exists and is running
           docker ps | grep cousins-matter || (docker ps && exit 1)
 
-      - name: Install Python Dev Dependencies in Container
+      - name: Install Python Dev Dependencies in Container (always)
         run: |
           docker cp requirements-dev.txt cousins-matter:/app/
           docker exec -u root cousins-matter python -m pip install -r requirements-dev.txt
 
-      - name: Install Playwright & Browsers inside Container (non-S3 mode only)
-        if: ${{ !inputs.s3 }}
+      - name: Install Playwright & Browsers inside Container (UI mode only)
+        if: ${{ inputs.ui }}
         run: |
           docker exec -u root cousins-matter apt-get update
           docker exec -u root cousins-matter apt-get install -y wget gnupg
           docker exec -u root cousins-matter python -m playwright install-deps chromium
           docker exec cousins-matter python -m playwright install chromium
+          echo "EXCLUDE_UI='--exclude-tag=ui'" >> $GITHUB_ENV
 
-      - name: Run Tests
+      - name: Run Tests (default or S3 mode)
         run: |
-          if [ "${{ inputs.s3 }}" = "true" ]; then
-            docker exec cousins-matter python manage.py test --exclude-tag=ui
-          else
-            docker exec cousins-matter python manage.py test --failfast
-          fi
+          docker exec cousins-matter python manage.py test --failfast $EXCLUDE_UI
 
       - name: Show docker-compose services logs on failure
         if: failure()

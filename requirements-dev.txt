@@ -4,4 +4,5 @@ coverage>=7.14.0
 types-requests>=2.33.0.20260518
 django-debug-toolbar~=6.3.0
 factory-boy~=3.3.3
+mypy==2.1.0
 playwright>=1.43.0

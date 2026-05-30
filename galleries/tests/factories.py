@@ -10,7 +10,7 @@ class GalleryFactory(DjangoModelFactory):
   class Meta:
     model = Gallery
 
-  name = factory.Faker("word")
+  name = factory.Sequence(lambda n: f"Gallery {n}")
   description = factory.Faker("paragraph")
   owner = factory.SubFactory(MemberFactory)
 
@@ -44,7 +44,7 @@ class PhotoFactory(DjangoModelFactory):
     width=800,
     height=600,
   )
-  name = factory.Faker("word")
+  name = factory.Sequence(lambda n: f"Photo {n}")
   description = factory.Faker("paragraph")
   date = factory.LazyFunction(datetime.date.today)
   gallery = factory.SubFactory(GalleryFactory)

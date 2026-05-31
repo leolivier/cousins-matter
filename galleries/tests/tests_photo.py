@@ -186,15 +186,7 @@ class CreatePhotoViewTests(PhotoTestsBase):
 	</div>
   <button id="prev-image" class="navigation-arrow">❮</button>
   <button id="next-image" class="navigation-arrow">❯</button>
-  <div id="swipe-container" class="swipe-container">
-    <div id="image-container" class="swipe-card"
-			hx-get=""
-			hx-target="#swipe-container"
-			data-pk=""
-      data-is-video="">
-			<img src="">
-		</div>
-	</div>
+  <div id="swipe-container" class="swipe-container"></div>
 </div>
 """,
       html=True,

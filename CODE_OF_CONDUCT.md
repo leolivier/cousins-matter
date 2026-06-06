@@ -1,4 +1,4 @@
-This project adheres to the Contibutor Covenant Code of Conduct with some very small amendments due to the possibility to enforce it totally.
+This project adheres to the Contributor Covenant Code of Conduct with some very small amendments due to the possibility to enforce it totally.
 
 # Contributor Covenant Code of Conduct
 

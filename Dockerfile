@@ -4,15 +4,15 @@ FROM python:3.14-slim AS builder
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-WORKDIR /build
+WORKDIR /app
 
-COPY requirements.txt .
-# Install dependencies in the system python of the builder
-RUN uv pip install --system --no-cache -r requirements.txt
+COPY pyproject.toml uv.lock ./
+# Install dependencies in a virtual environment at /app/.venv
+RUN uv sync --no-group dev
 
-# Optionnel: stripper les librairies partagées (.so) pour gagner un peu de place
+# Optional: strip shared libraries (.so) to save some space
 RUN apt-get update && apt-get install -y --no-install-recommends binutils && \
-    find /usr/local/lib/python3.14/site-packages -name "*.so" -exec strip --strip-unneeded {} +
+    find /app/.venv -name "*.so" -exec strip --strip-unneeded {} +
 
 # ----- Final Stage -----
 FROM python:3.14-slim
@@ -35,15 +35,16 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Copy python dependencies and binaries from builder
-COPY --from=builder /usr/local/lib/python3.14/site-packages /usr/local/lib/python3.14/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
+# Copy python dependencies from builder
+COPY --from=builder /app/.venv /app/.venv
 
+# Add virtual environment to PATH
+ENV PATH="/app/.venv/bin:$PATH"
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # This is the user that will run the application but through supervisord so 
 # we keep running as root for supervisord which will run things as cm_user
 RUN adduser --uid ${UID} --disabled-password --gecos "" cm_user && \
-		chown -R cm_user:cm_user /app
+    chown -R cm_user:cm_user /app
 
 # now copy all (but .dockerignore rules) with cm_user as proprietary
 COPY --chown=cm_user:cm_user . .

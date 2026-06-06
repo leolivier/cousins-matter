@@ -33,9 +33,9 @@ def createCustomFlatPage(apps, baseFlatPage, predefined, updated, pk=None):
   }
   if pk:
     fields["pk"] = pk
-    logger.info(f"creating custom and updating its base with fields={fields}")
+    logger.info(f"updating page with url {baseFlatPage.url}")
   else:
-    logger.info(f"creating custom and base with fields={fields}")
+    logger.info(f"creating page with url {baseFlatPage.url}")
   customFlatPage = CustomFlatPage(**fields)
   customFlatPage.save()
 
@@ -71,7 +71,7 @@ def createPredefinedCustomFlatPages(apps, deserialized_pages):
 
   for deserialized_page in deserialized_pages:
     base, custom = deserialized_page["base"], deserialized_page["custom"]
-    logger.info(f"looking at  page url={base.url}")
+    # logger.info(f"looking at  page url={base.url}")
     db_base = BaseFlatPage.objects.filter(url__iexact=base.url)
     if db_base.exists():
       pk = db_base.first().pk
@@ -88,7 +88,7 @@ def createPredefinedCustomFlatPages(apps, deserialized_pages):
           db_custom.content = custom.content
           db_custom.url = custom.url
           db_custom.predefined = True
-          logger.info(f"updating custom with info {db_custom.title} {db_custom.content} {db_custom.url} as predefined")
+          # logger.info(f"updating custom with info {db_custom.title} {db_custom.content} {db_custom.url} as predefined")
           db_custom.save()
       else:  # custom doesn't exist, create it as predefined and use the base pk, updating db_base with base data
         createCustomFlatPage(
@@ -117,7 +117,7 @@ def createNonPredefinedCustomFlatPages(apps):
       createCustomFlatPage(apps, basePage, predefined=False, updated=True, pk=basePage.pk)
 
 
-def migrateOrCreateCustomeFlatPages(apps, schema_editor):
+def migrateOrCreateCustomFlatPages(apps, schema_editor):
   # remove constraints check on atomicity
   # Open and load the fixture file
   with open("pages/fixtures/predefined_flatpages.json") as fixture_file:
@@ -161,7 +161,7 @@ class Migration(migrations.Migration):
 
   operations = [
     migrations.RunPython(
-      migrateOrCreateCustomeFlatPages,
+      migrateOrCreateCustomFlatPages,
       reverse_code=reverseMigrateOrCreateCustomeFlatPages,
     ),
   ]

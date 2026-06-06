@@ -9,6 +9,7 @@ except ImportError:
   PLAYWRIGHT_AVAILABLE = False
 
 import unittest
+from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import tag
 
@@ -61,10 +62,23 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     self.context: BrowserContext = self._browser.new_context()
     self.page: Page = self.context.new_page()
     self.page.set_default_timeout(self.default_timeout)
+    self.user = get_user_model().objects.create_superuser(
+      "admin",
+      "admin@example.com",
+      "password",
+      first_name="Admin",
+      last_name="User",
+      birthdate="2000-01-01",
+    )
+    # errors tracking
+    self.errors: list[str] = []
+    self.page.on("pageerror", lambda err: self.errors.append(str(err)))
+    # self.page.on("console", lambda msg: print(f"Console {msg.type}: {msg.text}"))
 
   def tearDown(self):
     self.page.close()
     self.context.close()
+    self.assertFalse(self.errors, f"Page errors: {self.errors}")
     super().tearDown()
 
   # ------------------------------------------------------------------ #

@@ -39,9 +39,11 @@ dev = [
     "css-html-js-minify>=2.5.5",
     "django-debug-toolbar~=6.3.0",
     "factory-boy~=3.3.3",
-    "headroom-ai[code,mcp,memory,proxy]>=0.23.0",
     "mypy==2.1.0",
     "playwright>=1.43.0",
     "ruff>=0.15.13",
     "types-requests>=2.33.0.20260518",
+]
+ai = [
+    "headroom-ai[code,mcp,memory,proxy]>=0.23.0",
 ]

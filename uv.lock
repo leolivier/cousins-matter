@@ -492,12 +492,14 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
+ai = [
+    { name = "headroom-ai", extra = ["code", "mcp", "memory", "proxy"] },
+]
 dev = [
     { name = "coverage" },
     { name = "css-html-js-minify" },
     { name = "django-debug-toolbar" },
     { name = "factory-boy" },
-    { name = "headroom-ai", extra = ["code", "mcp", "memory", "proxy"] },
     { name = "mypy" },
     { name = "playwright" },
     { name = "ruff" },
@@ -535,12 +537,12 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
+ai = [{ name = "headroom-ai", extras = ["code", "mcp", "memory", "proxy"], specifier = ">=0.23.0" }]
 dev = [
     { name = "coverage", specifier = ">=7.14.0" },
     { name = "css-html-js-minify", specifier = ">=2.5.5" },
     { name = "django-debug-toolbar", specifier = "~=6.3.0" },
     { name = "factory-boy", specifier = "~=3.3.3" },
-    { name = "headroom-ai", extras = ["code", "mcp", "memory", "proxy"], specifier = ">=0.23.0" },
     { name = "mypy", specifier = "==2.1.0" },
     { name = "playwright", specifier = ">=1.43.0" },
     { name = "ruff", specifier = ">=0.15.13" },

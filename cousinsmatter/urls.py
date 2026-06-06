@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
-from core.views.views_general import download_protected_media, health, qhealth
+from core.views.views_general import download_protected_media, download_public_media, health, qhealth
 from core.views.views_general import PasswordResetView
 
 # from django.utils.translation import gettext_lazy as _
@@ -76,9 +76,14 @@ urlpatterns = [
   ),
   path("captcha/", include("captcha.urls")),
   path(
-    "protected_media/<path:media>",
+    f"{settings.MEDIA_URL[1:]}<path:media>",
     download_protected_media,
     name="get_protected_media",
+  ),
+  path(
+    f"{settings.PUBLIC_MEDIA_URL[1:]}<path:media>",
+    download_public_media,
+    name="get_public_media",
   ),
   path(settings.PAGES_URL_PREFIX, include("django.contrib.flatpages.urls")),
   path("pages-edit/", include("pages.urls")),
@@ -88,7 +93,8 @@ urlpatterns = [
   path("accounts/", include("allauth.urls")),
   path("health/", health, name="health"),
   path("qhealth/", qhealth, name="qhealth"),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
+  + static(settings.PUBLIC_MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG_TOOLBAR:
   from debug_toolbar.toolbar import debug_toolbar_urls

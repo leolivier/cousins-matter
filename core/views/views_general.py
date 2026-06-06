@@ -1,3 +1,4 @@
+from pathlib import Path
 import logging
 import mimetypes
 import os
@@ -35,31 +36,31 @@ class HomeView(LoginNotRequiredMixin, generic.TemplateView):
   template_name = "core/base.html"
 
 
-def download_protected_media(request, media) -> StreamingHttpResponse | HttpResponseNotModified:
+def _download_media(request, media) -> StreamingHttpResponse | HttpResponseNotModified:
   """
-  View to download a protected media file.
+  Internal helper function to download a media file.
 
   The file is streamed in chunks of 8KB to avoid loading the whole file into memory.
-  The file must be stored in the MEDIA_ROOT directory in the media backend storage as defined in the settings (e.g. S3).
   :param request: The request object (unused)
   :param media: The name of the media file to download
   :return: A StreamingHttpResponse object containing the media file
   :raises Http404: If the file is not found, or if the path is invalid
   """
-  logger.debug(f"Downloading protected media {media}")
+  logger.debug(f"Downloading media {media}")
 
   hasher = blake2b()
   tbh = bytes(f"{request.user.username}@{media}", "utf-8")
   hasher.update(tbh)
   media_etag = hasher.hexdigest()
-
   request_etag = request.headers.get("If-None-Match", None)
+  logger.debug(f"File modified: {media_etag != request_etag}")
   if request_etag and request_etag == media_etag:
     return HttpResponseNotModified()
 
   chunk_size = 64 * 1024
   try:
     media_file = default_storage.open(media, "rb")
+    logger.debug(f"File size: {media_file.size}")
     response = StreamingHttpResponse(
       FileWrapper(media_file, chunk_size),
       content_type=mimetypes.guess_type(media)[0],
@@ -75,6 +76,23 @@ def download_protected_media(request, media) -> StreamingHttpResponse | HttpResp
   response["ETag"] = media_etag
 
   return response
+
+
+def download_protected_media(request, media) -> StreamingHttpResponse | HttpResponseNotModified:
+  """
+  View to download a protected media file. Login required
+  The file must be stored in the MEDIA_ROOT directory in the media backend storage as defined in the settings (e.g. S3).
+  """
+  return _download_media(request, media)
+
+
+@login_not_required
+def download_public_media(request, media) -> StreamingHttpResponse | HttpResponseNotModified:
+  """
+  View to download a public media file. No login required
+  The file must be stored in the PUBLIC_MEDIA_ROOT directory in the media backend storage as defined in the settings (e.g. S3).
+  """
+  return _download_media(request, Path("public") / media)
 
 
 redis_client = redis.Redis(

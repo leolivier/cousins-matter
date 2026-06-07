@@ -17,7 +17,7 @@ Always check first that the `playwright` module is available in the project's vi
 source .venv/bin/activate && python -c "from playwright.sync_api import sync_playwright; print('OK')"
 ```
 
-If Playwright is not installed, the `PlaywrightTestCase` class is disabled via `@unittest.skipUnless` and tests will be silently skipped. Ask the user to install it with `pip install playwright && playwright install chromium` before continuing.
+If Playwright is not installed, the `PlaywrightTestCase` class is disabled via `@unittest.skipUnless` and tests will be silently skipped. Ask the user to install it with `uv add playwright` followed by `playwright install chromium` before continuing.
 
 ---
 
@@ -28,7 +28,7 @@ Before writing any test, explore the target app to understand WHAT to test:
 1. **Read the models**: `{app}/models.py` — understand the entities and their relationships, field choices, constraints.
 2. **Read the URLs**: `{app}/urls.py` — identify all routes and their names (e.g., `forum:list`, `forum:create`).
 3. **Read the views**: `{app}/views*.py` or `{app}/views/*.py` — understand permissions, context data, forms used.
-4. **Read the templates**: `{app}/templates/{app}/*.html` — identify relevant CSS selectors:
+4. **Read the templates**: `{app}/templates/{app}/*.html` or `{app}/templates/{app}/**/*.html` — identify relevant CSS selectors:
    - Titles: `h1.title`, `.title`, `.subtitle`
    - Containers: `.container`, `.panel`, `.card`, `.box`, `.cell`
    - Forms: `form`, `input[name='...']`, `select[name='...']`, `textarea[name='...']`
@@ -60,11 +60,6 @@ File structure:
 
 Each test file starts with:
 ```python
-import os
-os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
-
-from django.urls import reverse
-
 from core.tests.ui import PlaywrightTestCase
 ```
 
@@ -82,12 +77,6 @@ File structure:
 
 `base.py` template:
 ```python
-import os
-
-os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
-
-from django.contrib.auth import get_user_model
-
 from core.tests.ui import PlaywrightTestCase
 from {app}.tests.factories import XxxFactory, YyyFactory
 
@@ -97,15 +86,16 @@ class {App}UITestBase(PlaywrightTestCase):
 
     def setUp(self):
         super().setUp()
+        # self.user is already created by PlaywrightTestCase.setUp()
+
         # Create test objects via factories
         self.obj1 = XxxFactory(...)
         self.obj2 = YyyFactory(...)
-
 ```
 
 **Decision rule**: Use Pattern B if and only if the tests need objects created via factories beyond just the admin user. Pattern B is needed for: `members`, `chat`, `forum`, `polls`, `classified_ads`, `genealogy`. Pattern A is sufficient for: `pages` (admin-only, simple CRUD).
 
-**Important for Pattern B**: The `setUp` method MUST re-create the user, `self.errors`, and the `pageerror` listener. The parent `PlaywrightTestCase.setUp()` does this too, but because `setUp` is overridden, both are lost unless explicitly re-created here.
+**Important for Pattern B**: The `setUp` method should NOT re-create `self.errors` and the `pageerror` listener. The parent `PlaywrightTestCase.setUp()` does this too, and is called in the setup. Do NOT re-create the user — `self.user` is already created by `PlaywrightTestCase.setUp()`, and re-creating it causes a duplicate key error.
 
 ---
 
@@ -133,136 +123,125 @@ Organize tests by feature/logic in separate files (following `core`'s pattern: `
 
 ### Standard test patterns
 
+Don't add assertion on No JS errors at the end of each test execpt case D, this is already done by PlaywrightTestCase.teardown().
+
 #### A. Authentication required test
 
 ```python
 def test_members_page_requires_auth(self):
-    """The members page should redirect to login when not authenticated."""
-    self.page.goto(self.url(reverse("members:members")))
-    self.assertIn("/login/", self.page.url,
-                  "Unauthenticated user should be redirected to login")
+  """The members page should redirect to login when not authenticated."""
+  self.goto_page("members:members")
+  self.assert_url_contains("/login/", "Unauthenticated user should be redirected to login")
 ```
 
 #### B. Page display test
 
 ```python
 def test_members_list_display(self):
-    """The members list should display the title and members for authenticated users."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("members:members")))
+  """The members list should display the title and members for authenticated users."""
+  self.login_and_goto_page("members:members")
 
-    # Title visible
-    self.assert_visible("h1.title", "Page title should be visible")
+  # Title visible
+  self.assert_visible("h1.title", "Page title should be visible")
 
-    # Content present
-    cells = self.page.locator(".cell")
-    self.assertGreaterEqual(cells.count(), 1,
-                            "At least one member should be displayed")
-
-    # No JS errors
-    self.assertEqual(len(self.errors), 0, f"JS errors: {self.errors}")
+  # Content present
+  cells = self.page.locator(".cell")
+  self.assertGreaterEqual(cells.count(), 1, "At least one member should be displayed")
 ```
 
 #### C. Form display test
 
+If the form has no id, create one in the template and use it for the CSRF token check, otherwise the test will complain of several tokens. In some cases, the used CSRF is the one on the html body, not in the form.
+
 ```python
 def test_create_post_form_display(self):
-    """The create post form should display all expected fields."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("forum:create")))
+  """The create post form should display all expected fields."""
+  self.login_and_goto_page("forum:create")
 
-    # Title
-    self.assert_visible("h1.title", "Form title should be visible")
+  # Title
+  self.assert_visible("h1.title", "Form title should be visible")
 
-    # Form fields
-    self.assert_visible("input[name='title']", "Title input should be visible")
-    self.assert_visible("textarea[name='content']", "Content textarea should be visible")
+  # Form fields
+  self.assert_visible("input[name='title']", "Title input should be visible")
+  self.assert_visible("textarea[name='content']", "Content textarea should be visible")
 
-    # Buttons
-    submit_btn = self.page.locator("button[type='submit']")
-    self.assertTrue(submit_btn.is_visible(), "Submit button should be visible")
+  # Buttons
+  self.assert_visible("button[type='submit']", "Submit button should be visible")
 
-    # CSRF token
-    self.assert_visible("input[name='csrfmiddlewaretoken']",
-                        "CSRF token should be present")
+  # if CSRF token on the form
+  self.assert_hidden("form#contact_form input[name='csrfmiddlewaretoken']", "CSRF token should be present")
 ```
 
 #### D. No JS errors test
 
 ```python
 def test_members_list_no_js_errors(self):
-    """The members list should not produce JavaScript errors."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("members:members")))
-    self.page.wait_for_timeout(1000)
-    self.assertEqual(len(self.errors), 0, f"JS errors: {self.errors}")
+  """The members list should not produce JavaScript errors."""
+  self.login_and_goto_page("members:members")
+  self.page.wait_for_timeout(1000)
+  self.assertEqual(len(self.errors), 0, f"JS errors: {self.errors}")
 ```
 
 #### E. Navigation test
 
 ```python
 def test_navigate_to_member_detail(self):
-    """Clicking a member in the list should navigate to their detail page."""
-    self.login("admin", "password")
+  """Clicking a member in the list should navigate to their detail page."""
+  # Go to list
+  self.login_and_goto_page("members:members")
+  self.page.wait_for_selector(".cell")
 
-    # Go to list
-    self.page.goto(self.url(reverse("members:members")))
-    self.page.wait_for_selector(".cell")
+  # Click first member link
+  first_member_link = self.page.locator(".cell a").first
+  first_member_link.click()
+  self.page.wait_for_timeout(500)
 
-    # Click first member link
-    first_member_link = self.page.locator(".cell a").first
-    first_member_link.click()
-    self.page.wait_for_timeout(500)
-
-    # Verify we're on a detail page
-    self.assertIn("/members/", self.page.url)
-    self.assert_visible(".card", "Member detail card should be visible")
+  # Verify we're on a detail page
+  self.assertIn("/members/", self.page.url)
+  self.assert_visible(".card", "Member detail card should be visible")
 ```
 
 #### F. HTMX interaction test
 
 ```python
 def test_delete_via_htmx(self):
-    """The HTMX delete button should remove the element from the DOM."""
-    self.login("admin", "password")
-    obj = self.my_objects[0]
+  """The HTMX delete button should remove the element from the DOM."""
+  obj = self.my_objects[0]
+  self.login_and_goto_page("app:list")
+  self.page.wait_for_selector(f"#item-{obj.id}")
 
-    self.page.goto(self.url(reverse("app:list")))
-    self.page.wait_for_selector(f"#item-{obj.id}")
+  # Handle hx-confirm dialog
+  self.page.on("dialog", lambda dialog: dialog.accept())
 
-    # Handle hx-confirm dialog
-    self.page.on("dialog", lambda dialog: dialog.accept())
+  # Click the HTMX delete button
+  delete_button = self.page.locator(f"#item-{obj.id} [hx-delete]")
+  self.assertTrue(delete_button.is_visible(), "Delete button should be visible")
+  delete_button.click()
 
-    # Click the HTMX delete button
-    delete_button = self.page.locator(f"#item-{obj.id} [hx-delete]")
-    self.assertTrue(delete_button.is_visible(), "Delete button should be visible")
-    delete_button.click()
-
-    # Element should be removed from DOM
-    self.page.wait_for_selector(f"#item-{obj.id}", state="detached", timeout=3000)
-    self.assertTrue(
-        self.page.locator(f"#item-{obj.id}").count() == 0,
-        "Deleted element should no longer be in the DOM",
-    )
+  # Element should be removed from DOM
+  self.page.wait_for_selector(f"#item-{obj.id}", state="detached", timeout=3000)
+  self.assertTrue(
+    self.page.locator(f"#item-{obj.id}").count() == 0,
+    "Deleted element should no longer be in the DOM",
+  )
 ```
 
 #### G. Dropdown / filter test
 
 ```python
 def test_filter_by_category(self):
-    """The category dropdown should filter items."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("app:list")))
-    self.page.wait_for_selector(".cell")
+  """The category dropdown should filter items."""
+  self.login_and_goto_page("app:list")
+  self.page.wait_for_selector(".cell")
 
-    # Select a category
-    dropdown = self.page.locator('select[name="category"]')
-    dropdown.select_option("my-category")
-    self.page.wait_for_timeout(500)
+  # Select a category
+  dropdown = self.page.locator('select[name="category"]')
+  dropdown.select_option("my-category")
+  self.page.wait_for_timeout(500)
 
-    # Verify filtering happened
-    cells = self.page.locator(".cell")
-    self.assertGreaterEqual(cells.count(), 0, "Filtered results should be shown")
+  # Verify filtering happened
+  cells = self.page.locator(".cell")
+  self.assertGreaterEqual(cells.count(), 0, "Filtered results should be shown")
 ```
 
 ---
@@ -271,14 +250,11 @@ def test_filter_by_category(self):
 
 For each test file produced, verify:
 
-1. [ ] `os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"` is the first line after the `import os` statement.
-2. [ ] Imports are correct: `from django.urls import reverse` + the appropriate base class import.
-3. [ ] `self.login("admin", "password")` precedes every access to a page requiring authentication.
-4. [ ] Every `self.page.goto()` uses `self.url()` to prefix with `live_server_url`.
-5. [ ] URLs are built with `reverse("namespace:name")`, never hardcoded.
-6. [ ] CSS selectors match exactly what is in the templates.
-7. [ ] JS error tracking (`self.errors`, `self.page.on("pageerror", ...)`) is present in the `setUp` if using Pattern B.
-8. [ ] Factory field values match the model's `choices` definitions (verify with `{app}/models.py`).
+1. [ ] Imports are correct: the appropriate base class import.
+2. [ ] `self.goto_page("namespace:name")` precedes every access to a page not requiring authentication.
+3. [ ] `self.login_and_goto_page("namespace:name")` precedes every access to a page requiring authentication.
+4. [ ] CSS selectors match exactly what is in the templates.
+5. [ ] Factory field values match the model's `choices` definitions (verify with `{app}/models.py`).
 
 ---
 
@@ -352,3 +328,9 @@ make test-ui o="--keepdb" t=chat.tests.ui.tests_ui_rooms.ChatRoomsUITest
 9. **Skip expensive post-generation hooks** in factories. Pass `create_photos=False`, `create_messages=False`, `create_children=False` etc. to keep tests fast.
 
 10. **`page.wait_for_timeout()` is acceptable in UI tests**. Unlike unit tests, a 500-1000ms delay is sometimes needed for the DOM to stabilize after an operation.
+
+11. **Avoid `aria-label` selectors in translated apps**. This project uses i18n, so `aria-label` values are translated. Prefer CSS class selectors (`.button.is-primary`) or `href`-based selectors (`a[href*="/vote/"]`) that don't change with the locale.
+
+12. **Form pages may produce 404 errors for external JS assets** (bulma-calendar, summernote, etc.) in `StaticLiveServerTestCase`. These are not real bugs — they happen because the test server doesn't serve all static assets. If form page tests fail due to JS errors in teardown, reset `self.errors = []` at the end of the test method (after all assertions) to prevent `PlaywrightTestCase.tearDown()` from failing on them.
+
+13. **Do NOT re-create the admin user in Pattern B `setUp()`**. `PlaywrightTestCase.setUp()` already creates `self.user` with username `"admin"`. Re-creating it causes `IntegrityError: duplicate key value violates unique constraint "members_member_username_key"`. Use `self.user` directly in factory calls.

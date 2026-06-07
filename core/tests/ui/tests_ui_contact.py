@@ -2,8 +2,6 @@ import os
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
-from django.urls import reverse
-
 from . import PlaywrightTestCase
 
 
@@ -12,14 +10,13 @@ class ContactUITest(PlaywrightTestCase):
 
   def test_contact_page_requires_auth(self):
     """Contact page should redirect to login when not authenticated."""
-    self.page.goto(self.url(reverse("core:contact")))
+    self.goto_page("core:contact")
     # Should be redirected to login page
     self.assertIn("/login/", self.page.url, "Unauthenticated user should be redirected to login")
 
   def test_contact_form_display(self):
     """Contact form should display all expected fields for authenticated users."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("core:contact")))
+    self.login_and_goto_page("core:contact")
 
     # page title
     self.assert_visible("h1.title", "Page title should be visible")
@@ -40,8 +37,7 @@ class ContactUITest(PlaywrightTestCase):
 
   def test_contact_form_cancel_button(self):
     """Cancel button should navigate away or reset the form."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("core:contact")))
+    self.login_and_goto_page("core:contact")
     cancel_btn = self.page.locator("button[type='cancel']")
     cancel_btn.click()
     # after clicking cancel, should still be on a valid page
@@ -50,7 +46,6 @@ class ContactUITest(PlaywrightTestCase):
 
   def test_contact_page_no_js_errors(self):
     """Contact page should not have JS errors."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("core:contact")))
+    self.login_and_goto_page("core:contact")
     self.page.wait_for_timeout(1000)
     self.assertEqual(len(self.errors), 0, f"JS errors on contact page: {self.errors}")

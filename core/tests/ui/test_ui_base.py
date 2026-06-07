@@ -17,6 +17,7 @@ from django.urls import reverse
 
 os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "True")
 
+
 @tag("ui")
 @unittest.skipUnless(PLAYWRIGHT_AVAILABLE, "playwright not installed")
 class PlaywrightTestCase(StaticLiveServerTestCase):

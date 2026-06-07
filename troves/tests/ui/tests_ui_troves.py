@@ -1,9 +1,4 @@
-import os
-
-os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
-
 from django.urls import reverse
-
 from .base import TroveUITestBase
 
 
@@ -20,8 +15,7 @@ class TroveAppUITest(TroveUITestBase):
 
   def test_trove_cave_lists_all_troves(self):
     """The trove cave should display all created troves."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("troves:list")))
+    self.login_and_goto_page("troves:list")
     self.page.wait_for_selector(".cell")
 
     cells = self.page.locator(".cell")
@@ -33,8 +27,7 @@ class TroveAppUITest(TroveUITestBase):
 
   def test_trove_cave_filter_by_category(self):
     """The category dropdown should filter troves."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("troves:list")))
+    self.login_and_goto_page("troves:list")
     self.page.wait_for_selector(".cell")
 
     # Select "history" category
@@ -64,17 +57,14 @@ class TroveAppUITest(TroveUITestBase):
 
   def test_trove_cave_shows_add_button_for_logged_user(self):
     """The 'Add a treasure' button should be visible for logged-in users."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("troves:list")))
+    self.login_and_goto_page("troves:list")
     self.page.wait_for_selector(".cell")
 
-    add_button = self.page.locator(f'a[href="{reverse("troves:create")}"]')
-    self.assertTrue(add_button.is_visible(), "Add treasure button should be visible")
+    self.assert_visible(f'a[href="{reverse("troves:create")}"]', "Add treasure button should be visible")
 
   def test_create_treasure_form_display(self):
     """The creation form should be accessible and display correctly."""
-    self.login("admin", "password")
-    self.page.goto(self.url(reverse("troves:create")))
+    self.login_and_goto_page("troves:create")
     self.page.wait_for_selector("#treasure-form")
 
     # The form should have the expected fields
@@ -91,9 +81,8 @@ class TroveAppUITest(TroveUITestBase):
 
   def test_update_treasure_form_display(self):
     """The update form should load with existing treasure data."""
-    self.login("admin", "password")
     trove = self.troves[0]
-    self.page.goto(self.url(reverse("troves:update", args=[trove.id])))
+    self.login_and_goto_page("troves:update", args=[trove.id])
     self.page.wait_for_selector("#treasure-form")
 
     # The title input should be pre-filled
@@ -108,9 +97,8 @@ class TroveAppUITest(TroveUITestBase):
 
   def test_treasure_detail_page(self):
     """The detail page should display all treasure information."""
-    self.login("admin", "password")
     trove = self.troves[0]
-    self.page.goto(self.url(reverse("troves:detail", args=[trove.id])))
+    self.login_and_goto_page("troves:detail", args=[trove.id])
     self.page.wait_for_selector(".card")
 
     # The card should contain the trove title
@@ -124,9 +112,8 @@ class TroveAppUITest(TroveUITestBase):
 
   def test_delete_treasure_via_htmx(self):
     """Clicking the delete button should remove the trove cell via HTMX."""
-    self.login("admin", "password")
+    self.login_and_goto_page("troves:list")
     trove = self.troves[0]
-    self.page.goto(self.url(reverse("troves:list")))
     self.page.wait_for_selector(f"#trove-{trove.id}")
 
     # Auto-accept the confirm dialog triggered by hx-confirm
@@ -146,9 +133,8 @@ class TroveAppUITest(TroveUITestBase):
 
   def test_navigation_from_list_to_detail(self):
     """Clicking a trove link in the list should navigate to the detail page."""
-    self.login("admin", "password")
+    self.login_and_goto_page("troves:list")
     trove = self.troves[0]
-    self.page.goto(self.url(reverse("troves:list")))
     self.page.wait_for_selector(f"#trove-{trove.id}")
 
     # Click the link to the detail page
@@ -157,5 +143,7 @@ class TroveAppUITest(TroveUITestBase):
     detail_link.click()
 
     # Should now be on the detail page
-    self.page.wait_for_selector(".card-image", state="visible")
+    # print(self.page.content())
+    self.page.wait_for_selector(".card-image")
+    self.assert_visible(".card-image", "Card image should be visible")
     self.assert_url_contains(reverse("troves:detail", args=[trove.id]))

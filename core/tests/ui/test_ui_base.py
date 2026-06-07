@@ -27,6 +27,9 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
               ...
   """
 
+  # needed to avoid unauthenticated flatpage errors
+  fixtures = ["predefined_flatpages.json"]
+
   # -- Overridable by subclasses --
   headless: bool = True
   browser_type: str = "chromium"  # "chromium" | "firefox" | "webkit"

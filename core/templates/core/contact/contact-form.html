@@ -8,12 +8,14 @@
 <div class="container px-2">
 	<h1 class="title has-text-centered">{% title _("Contact Form") %}</h1>
 	<p class="content">{% trans "Please fill out the form below to contact the admin of this site:" %} {{site_admin}}</p>
-	<form method="post" enctype="multipart/form-data">
+	<form method="post" enctype="multipart/form-data" id="contact_form">
 		{% csrf_token %}
 		{{ form|crispy }}
 		<div class="buttons is-centered">
-			<button type="submit" class="button is-dark" name="create">{%icon "send"%} <span>{%translate "Send" %}</span></button>
-			<button type="cancel" class="button is-light" name="cancel">{%icon "cancel"%} <span>{%translate "Cancel" %}</span></button>
+			<button type="submit" class="button is-dark" name="create">{%icon "send"%} <span>{%translate "Send"
+					%}</span></button>
+			<button type="cancel" class="button is-light" name="cancel">{%icon "cancel"%} <span>{%translate "Cancel"
+					%}</span></button>
 		</div>
 	</form>
 </div>

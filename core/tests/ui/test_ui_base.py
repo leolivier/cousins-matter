@@ -8,11 +8,14 @@ try:
 except ImportError:
   PLAYWRIGHT_AVAILABLE = False
 
+import os
 import unittest
 from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import tag
+from django.urls import reverse
 
+os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "True")
 
 @tag("ui")
 @unittest.skipUnless(PLAYWRIGHT_AVAILABLE, "playwright not installed")
@@ -124,3 +127,39 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
   def take_screenshot(self, name: str = "screenshot") -> None:
     """Capture useful in case of debug or failure."""
     self.page.screenshot(path=f"/tmp/{name}.png", full_page=True)
+
+  def js_click(self, selector):
+    self.page.locator(selector).scroll_into_view_if_needed()
+    # self.page.evaluate(f"$('{selector}').trigger('click')")
+    self.page.evaluate(
+      """
+        (selector) => {
+          const el = document.querySelector(selector);
+          if (el) {
+            const event = new MouseEvent('click', {
+              bubbles: true,
+              cancelable: true,
+              view: window,
+            });
+            el.dispatchEvent(event);
+          }
+        }
+        """,
+      selector,
+    )
+
+  def capture_screenshot_if_errors(self, test_name: str) -> None:
+    """Capture screenshot on failure if errors were collected."""
+    if self.errors:
+      self.take_screenshot(f"failure_{test_name}")
+
+  def goto_page(self, name: str, args={}, kwargs={}) -> None:
+    self.page.goto(self.url(reverse(name, args=args, kwargs=kwargs)))
+
+  def login_and_goto_page(self, name: str, args={}, kwargs={}) -> None:
+    self.login("admin", "password")
+    self.goto_page(name, args, kwargs)
+
+  # Helper assertion to compare element counts – Playwright's locator.count() returns an int
+  def assertEqual(self, first, second, msg=None):
+    self.assertTrue(first == second, msg or f"{first!r} != {second!r}")

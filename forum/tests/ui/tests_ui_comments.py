@@ -20,9 +20,7 @@ class CommentUITest(ForumUITestBase):
     self.login_and_goto_page("forum:display", kwargs={"pk": self.post.id})
 
     first_message_id = self.post.first_message.id
-    add_link = self.page.locator(
-      f"a[hx-get*='/comments'][hx-target='#create-comment-{first_message_id}']"
-    )
+    add_link = self.page.locator(f"a[hx-get*='/comments'][hx-target='#create-comment-{first_message_id}']")
     add_link.click()
     self.page.wait_for_timeout(500)
 
@@ -39,21 +37,13 @@ class CommentUITest(ForumUITestBase):
     initial_count = self.page.locator("[id^='comment-level-']").count()
 
     # Click the "Add comment" link
-    add_link = self.page.locator(
-      f"a[hx-get*='/comments'][hx-target='#create-comment-{first_message_id}']"
-    )
+    add_link = self.page.locator(f"a[hx-get*='/comments'][hx-target='#create-comment-{first_message_id}']")
     add_link.click()
-    self.page.wait_for_selector(
-      f"#create-comment-{first_message_id} form.comment-form", timeout=2000
-    )
+    self.page.wait_for_selector(f"#create-comment-{first_message_id} form.comment-form", timeout=2000)
 
     # Fill and submit
-    self.page.locator(
-      f"#create-comment-{first_message_id} input#id_comment_content"
-    ).fill("A new HTMX comment from the test.")
-    self.page.locator(
-      f"#create-comment-{first_message_id} input[type='submit']"
-    ).click()
+    self.page.locator(f"#create-comment-{first_message_id} input#id_comment_content").fill("A new HTMX comment from the test.")
+    self.page.locator(f"#create-comment-{first_message_id} input[type='submit']").click()
     self.page.wait_for_timeout(1000)
 
     # The new comment should appear (as comment-level-{id}, not comment-div-{id})
@@ -83,17 +73,13 @@ class CommentUITest(ForumUITestBase):
     self.page.wait_for_selector(f"#comment-div-{self.comment.id}")
 
     # Verify edit button is visible inside the comment div
-    edit_btn = self.page.locator(
-      f"#comment-div-{self.comment.id} button[hx-get$='/edit']"
-    )
+    edit_btn = self.page.locator(f"#comment-div-{self.comment.id} button[hx-get$='/edit']")
     self.assertTrue(edit_btn.is_visible(), "Edit button should be visible for own comment")
     edit_btn.click()
     self.page.wait_for_selector(f"#edit-comment-{self.comment.id}", timeout=2000)
 
     # Edit the content
-    self.page.locator(f"#edit-comment-{self.comment.id} input#id_comment_content").fill(
-      "Edited comment content."
-    )
+    self.page.locator(f"#edit-comment-{self.comment.id} input#id_comment_content").fill("Edited comment content.")
     self.page.locator(f"#edit-comment-{self.comment.id} button[type='submit']").click()
     self.page.wait_for_timeout(1000)
 
@@ -107,9 +93,7 @@ class CommentUITest(ForumUITestBase):
     self.page.wait_for_selector(f"#comment-div-{self.comment.id}")
 
     # Verify delete button is visible
-    delete_btn = self.page.locator(
-      f"#comment-div-{self.comment.id} button[hx-post$='/delete']"
-    )
+    delete_btn = self.page.locator(f"#comment-div-{self.comment.id} button[hx-post$='/delete']")
     self.assertTrue(delete_btn.is_visible(), "Delete button should be visible for own comment")
 
     # Handle confirm dialog
@@ -117,9 +101,7 @@ class CommentUITest(ForumUITestBase):
     delete_btn.click()
 
     # The comment div should be removed
-    self.page.wait_for_selector(
-      f"#comment-div-{self.comment.id}", state="detached", timeout=3000
-    )
+    self.page.wait_for_selector(f"#comment-div-{self.comment.id}", state="detached", timeout=3000)
     self.assertEqual(
       self.page.locator(f"#comment-div-{self.comment.id}").count(),
       0,

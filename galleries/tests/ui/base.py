@@ -56,7 +56,7 @@ class GalleryUITestBase(PlaywrightTestCase):
     self.assert_visible(".image-gallery", "Gallery grid should be visible")
     # Inject the galleries JS explicitly if not already loaded
     if not self.page.evaluate("typeof openFullscreen === 'function'"):
-      self.page.add_script_tag(path="/home/olivier/devt/cousins-matter/galleries/static/galleries/js/galleries.min.js")
+      self.page.add_script_tag(path="galleries/static/galleries/js/galleries.min.js")
     # Wait for the JS function to be available
     self.page.wait_for_function("typeof openFullscreen === 'function'", timeout=3000)
     self.errors.clear()

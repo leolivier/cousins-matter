@@ -104,8 +104,7 @@ class GenealogyPersonDetailUITest(GenealogyUITestBase):
 
     # Should show partner (person2 is the partner of person1 via the family)
     partner_link = self.page.locator(f"a[href*='/{self.person2.pk}']")
-    # The partner may or may not be displayed depending on test data
-    # Just check that the family box exists
+    self.assertGreaterEqual(partner_link.count(), 1, "Partner link should be visible")
     family_box = self.page.locator(".box")
     self.assertGreaterEqual(family_box.count(), 1, "Family info box should be visible")
 

@@ -50,8 +50,12 @@ class GalleryUITestBase(PlaywrightTestCase):
       return True
     return False
 
-  def _goto_gallery_details(self):
-    self.login_and_goto_page("galleries:detail", args=[self.gallery.slug])
+  def _goto_gallery_details(self, page_size=None):
+    url = self.url(reverse("galleries:detail", args=[self.gallery.slug]))
+    if page_size:
+      url += f"?page_size={page_size}"
+    self.login("admin", "password")
+    self.page.goto(url)
     # Wait for the gallery grid to be rendered
     self.assert_visible(".image-gallery", "Gallery grid should be visible")
     # Inject the galleries JS explicitly if not already loaded

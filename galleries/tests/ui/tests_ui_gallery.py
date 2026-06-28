@@ -59,9 +59,9 @@ class GalleryDetailUITest(GalleryUITestBase):
 
   def test_gallery_detail_pagination(self):
     """The gallery detail should paginate photos."""
-    self._goto_gallery_details()
+    self._goto_gallery_details(page_size=10)
 
-    # With 12 photos and DEFAULT_GALLERY_PAGE_SIZE (likely 10), we get 2 pages
+    # With 12 photos and page_size=10, we get 2 pages (10 + 2)
     cards = self.page.locator(".gallery-image")
     self.assertEqual(cards.count(), 10, "First page should contain 10 gallery cards")
 

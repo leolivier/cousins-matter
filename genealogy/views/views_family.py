@@ -14,7 +14,8 @@ def family_list(request, page_num=1):
   query = request.GET.get("q")
   if query:
     families = (
-      Family.objects.select_related("partner1", "partner2")
+      Family.objects
+      .select_related("partner1", "partner2")
       .filter(
         Q(partner1__first_name__icontains=query)
         | Q(partner2__first_name__icontains=query)

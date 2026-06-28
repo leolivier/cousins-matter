@@ -12,6 +12,11 @@ class GallerySlideshowUITest(GalleryUITestBase):
     """Open the first image in fullscreen directly via openFullscreen()."""
     self.page.evaluate("openFullscreen($('.gallery-image').first())")
     self._wait_for_swipe_container(self.photos[0].pk)
+    # Wait for the fadeIn animation to complete so subsequent calls don't queue
+    self.page.wait_for_function(
+      "document.querySelector('#fullscreen-overlay').style.display === 'flex'",
+      timeout=5000,
+    )
 
   def _activate_slideshow_state(self):
     """Manually set the slideshow UI state to active."""
@@ -79,12 +84,14 @@ class GallerySlideshowUITest(GalleryUITestBase):
 
     # Close it
     self.page.evaluate("closeFullScreen()")
-    self.page.wait_for_timeout(500)
-
-    # Verify overlay is hidden after closeFullScreen + fadeOut (300ms)
-    display = self.page.evaluate(
-      "const el = document.querySelector('#fullscreen-overlay');el.style.display || getComputedStyle(el).display"
+    # Wait for the fadeOut animation to complete (300ms) and display to become "none"
+    self.page.wait_for_function(
+      "document.querySelector('#fullscreen-overlay').style.display === 'none'",
+      timeout=5000,
     )
+
+    # Verify overlay is hidden
+    display = self.page.evaluate("document.querySelector('#fullscreen-overlay').style.display")
     self.assertEqual(display, "none", "Fullscreen overlay should be hidden after closing")
     self.assert_visible(".image-gallery", "Gallery grid should still be visible after closing fullscreen")
     self.errors.clear()

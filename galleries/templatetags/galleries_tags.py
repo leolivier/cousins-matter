@@ -58,8 +58,10 @@ def include_photos(gallery, page_num, page_size):
   ptor = Paginator(
     photos,
     page_size,
-    compute_link=lambda page: reverse("galleries:detail_page", args=[gallery.slug, page])
-    + (f"?page_size={page_size}" if page_size != settings.DEFAULT_GALLERY_PAGE_SIZE else ""),
+    compute_link=lambda page: (
+      reverse("galleries:detail_page", args=[gallery.slug, page])
+      + (f"?page_size={page_size}" if page_size != settings.DEFAULT_GALLERY_PAGE_SIZE else "")
+    ),
   )
   if page_num > ptor.num_pages:
     page_num = ptor.num_pages

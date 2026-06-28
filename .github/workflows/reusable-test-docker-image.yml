@@ -28,8 +28,8 @@ jobs:
       - name: Set up Python 3.14
         uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
-          cache: 'pip'
+          python-version: "3.14"
+          cache: "pip"
 
       - name: Load test Docker image
         uses: ./.github/actions/load-docker-image
@@ -63,8 +63,9 @@ jobs:
 
       - name: Install Python Dev Dependencies in Container (always)
         run: |
-          docker cp requirements-dev.txt cousins-matter:/app/
-          docker exec -u root cousins-matter python -m pip install -r requirements-dev.txt
+          docker cp pyproject.toml cousins-matter:/app/
+          docker exec -u root cousins-matter pip install uv
+          docker exec -u root cousins-matter uv sync --dev
 
       - name: Install Playwright & Browsers inside Container (UI mode only)
         # env:

@@ -5,18 +5,18 @@ description = "A family social network"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "av~=17.0.1",
-    "blessed~=1.40.0",
+    "av~=17.1.0",
+    "blessed~=1.44.0",
     "channels~=4.3.2",
     "channels-redis~=4.3.0",
     "crispy-bulma~=0.12.0",
-    "daphne~=4.2.1",
-    "django~=6.0.5",
-    "django-allauth[socialaccount]~=65.16.1",
+    "daphne~=4.2.2",
+    "django~=6.0.6",
+    "django-allauth[socialaccount]~=65.18.0",
     "django-cors-headers~=4.9.0",
     "django-crispy-forms~=2.6",
     "django-email-validation~=2.1.1",
-    "django-environ~=0.13.0",
+    "django-environ~=0.14.0",
     "django-htmx~=1.27.0",
     "django-ipware~=7.0.1",
     "django-q2~=1.10.0",
@@ -29,19 +29,18 @@ dependencies = [
     "psycopg[binary]~=3.3.4",
     "python-gedcom~=1.1.0",
     "requests~=2.34.2",
-    "supervisor~=4.3.0",
     "whitenoise~=6.12.0",
 ]
 
 [dependency-groups]
 dev = [
-    "coverage>=7.14.0",
+    "coverage>=7.14.2",
     "css-html-js-minify>=2.5.5",
-    "django-debug-toolbar~=6.3.0",
+    "django-debug-toolbar~=7.0.0",
     "factory-boy~=3.3.3",
     "mypy==2.1.0",
-    "playwright>=1.43.0",
-    "ruff>=0.15.13",
+    "playwright>=1.60.0",
+    "ruff>=0.15.18",
     "types-requests>=2.33.0.20260518",
 ]
 ai = [

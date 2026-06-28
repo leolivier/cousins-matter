@@ -41,8 +41,6 @@ COPY --from=builder /app/.venv /app/.venv
 # Add virtual environment to PATH
 ENV PATH="/app/.venv/bin:$PATH"
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# This is the user that will run the application but through supervisord so 
-# we keep running as root for supervisord which will run things as cm_user
 RUN adduser --uid ${UID} --disabled-password --gecos "" cm_user && \
     chown -R cm_user:cm_user /app
 

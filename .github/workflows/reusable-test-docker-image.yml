@@ -81,7 +81,7 @@ jobs:
       - name: Run Tests (default or S3 mode)
         run: |
           if [ ${{ inputs.ui }} == true ]; then
-            docker exec cousins-matter python manage.py test --failfast
+            docker exec cousins-matter python manage.py test --failfast --tag=ui
           else
             docker exec cousins-matter python manage.py test --failfast --exclude-tag=ui
           fi

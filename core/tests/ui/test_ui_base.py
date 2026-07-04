@@ -2,7 +2,7 @@
 
 # to avoid install playwright in the container when running test without ui
 try:
-  from playwright.sync_api import sync_playwright, Page, BrowserContext
+  from playwright.sync_api import BrowserContext, Page, sync_playwright
 
   PLAYWRIGHT_AVAILABLE = True
 except ImportError:
@@ -10,6 +10,7 @@ except ImportError:
 
 import os
 import unittest
+
 from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import tag
@@ -109,7 +110,7 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     # reliable than wait_for_url in CI, where slow CDN resources can delay the
     # 'load' event beyond the default timeout).
     self.page.wait_for_selector("input[name='login']", state="detached", timeout=self.default_timeout)
-    assert "/login/" not in self.page.url, f"Login failed, still on {self.page.url}"
+    self.assert_url_not_contains("/login/")
 
   def assert_visible(self, selector: str, message: str | None = None) -> None:
     """Asserts that an element is visible (fails cleanly)."""
@@ -126,8 +127,11 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
       message or f"Element '{selector}' should be hidden.",
     )
 
-  def assert_url_contains(self, fragment: str) -> None:
-    self.assertIn(fragment, self.page.url)
+  def assert_url_contains(self, fragment: str, message: str | None = None) -> None:
+    self.assertIn(fragment, self.page.url, message or f"URL should contain '{fragment}'")
+
+  def assert_url_not_contains(self, fragment: str, message: str | None = None) -> None:
+    self.assertNotIn(fragment, self.page.url, message or f"URL should not contain '{fragment}'")
 
   def take_screenshot(self, name: str = "screenshot") -> None:
     """Capture useful in case of debug or failure."""

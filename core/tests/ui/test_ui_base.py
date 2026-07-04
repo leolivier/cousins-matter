@@ -102,14 +102,29 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     Authenticates the user via the allauth login form.
     Override if your form uses different selectors.
     """
-    self.page.goto(self.url("/accounts/login/"))
+    self.page.goto(self.url(f"/accounts/login/?next={next}"))
+    # Ensure the login form is fully loaded before filling
+    self.page.wait_for_selector("input[name='login']", state="visible", timeout=self.default_timeout)
     self.page.fill("input[name='login']", username)
     self.page.fill("input[name='password']", password)
     self.page.click("button[type='submit']")
-    # Wait for navigation away from the login page (detached element is more
-    # reliable than wait_for_url in CI, where slow CDN resources can delay the
-    # 'load' event beyond the default timeout).
-    self.page.wait_for_selector("input[name='login']", state="detached", timeout=self.default_timeout)
+    # Wait for the URL to navigate away from the login page.
+    # Use "domcontentloaded" instead of the default "load" to avoid timeouts
+    # from slow CDN sub-resources (images, fonts) that delay the "load" event.
+    try:
+      self.page.wait_for_url(
+        lambda url: "/login/" not in url,
+        timeout=self.default_timeout,
+        wait_until="domcontentloaded",
+      )
+    except Exception:
+      # Diagnostic : capture the error message if login failed
+      error_el = self.page.locator(".message.is-danger, .alert-danger, .errorlist.nonfield")
+      if error_el.count() > 0:
+        self.take_screenshot("login_failure")
+        raise AssertionError(f"Login failed: {error_el.first.inner_text()}") from None
+      self.take_screenshot("login_timeout")
+      raise AssertionError(f"Login form submission did not navigate away from {self.page.url}") from None
     self.assert_url_not_contains("/login/")
 
   def assert_visible(self, selector: str, message: str | None = None) -> None:

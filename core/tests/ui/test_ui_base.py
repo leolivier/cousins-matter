@@ -105,7 +105,11 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     self.page.fill("input[name='login']", username)
     self.page.fill("input[name='password']", password)
     self.page.click("button[type='submit']")
-    self.page.wait_for_url(lambda u: "/login/" not in u, timeout=self.default_timeout)
+    # Wait for navigation away from the login page (detached element is more
+    # reliable than wait_for_url in CI, where slow CDN resources can delay the
+    # 'load' event beyond the default timeout).
+    self.page.wait_for_selector("input[name='login']", state="detached", timeout=self.default_timeout)
+    assert "/login/" not in self.page.url, f"Login failed, still on {self.page.url}"
 
   def assert_visible(self, selector: str, message: str | None = None) -> None:
     """Asserts that an element is visible (fails cleanly)."""

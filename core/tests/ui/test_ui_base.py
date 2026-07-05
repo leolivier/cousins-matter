@@ -40,6 +40,10 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
   browser_type: str = "chromium"  # "chromium" | "firefox" | "webkit"
   slow_mo: int = 0  # ms between each action (useful for debugging)
   default_timeout: int = 5_000  # ms, Playwright default timeout
+  # Login involves a PBKDF2 password check + 302 redirect + target page render.
+  # On slow CI containers (GitHub Actions, shared CPU) this can take several
+  # seconds, so we use a generous timeout here rather than default_timeout.
+  login_timeout: int = 30_000  # ms
 
   # ------------------------------------------------------------------ #
   #  Browser lifecycle (one instance per test class)                   #
@@ -104,17 +108,22 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     """
     self.page.goto(self.url(f"/accounts/login/?next={next}"))
     # Ensure the login form is fully loaded before filling
-    self.page.wait_for_selector("input[name='login']", state="visible", timeout=self.default_timeout)
+    self.page.wait_for_selector("input[name='login']", state="visible", timeout=self.login_timeout)
     self.page.fill("input[name='login']", username)
     self.page.fill("input[name='password']", password)
-    self.page.click("button[type='submit']")
+    # Click the login form's own submit button (the allauth template may render
+    # additional submit buttons for passkey/code login; scope to the main form).
+    self.page.click("form[action*='/accounts/login/'] button[type='submit']")
     # Wait for the URL to navigate away from the login page.
     # Use "domcontentloaded" instead of the default "load" to avoid timeouts
     # from slow CDN sub-resources (images, fonts) that delay the "load" event.
+    # Use login_timeout (not default_timeout): the POST triggers a PBKDF2
+    # check_password + 302 redirect + target page render, which can take several
+    # seconds on slow CI containers (GitHub Actions) — well beyond 5s.
     try:
       self.page.wait_for_url(
         lambda url: "/login/" not in url,
-        timeout=self.default_timeout,
+        timeout=self.login_timeout,
         wait_until="domcontentloaded",
       )
     except Exception:

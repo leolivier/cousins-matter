@@ -91,3 +91,11 @@ jobs:
         uses: ./.github/actions/show-logs-on-failure
         with:
           env_file_path: ${{ github.workspace }}/.env
+
+      - name: Upload screenshots
+        if: failure() and ${{ inputs.ui }} == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-screenshots
+          path: /tmp/*.png
+          retention-days: 7

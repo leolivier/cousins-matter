@@ -15,7 +15,7 @@ You will also need a Python 3.14+ environment to run the Cousins Matter admin sc
 
 ### Download and run the Cousins Matter admin script
 
-Please replace in the link below the <release\> placeholder with the current release of Cousins Matter:
+Please replace in the link below the **<release\>** placeholder with the current release of Cousins Matter:
 ![GitHub Release](https://img.shields.io/github/v/release/leolivier/cousins-matter?style=for-the-badge&label=current%20release&labelColor=%23f00&color=%23ffff)
 
 ```
@@ -59,29 +59,30 @@ __The first time__, go to http://127.0.0.1:8000/members/profile, log in using th
 
 ## Build from source
 
-* Install Docker
+* Install Docker and uv if not yet done
 
 	```
 	curl https://get.docker.com | sh
+  pip install uv
 	```
 
 * Clone the git repo:
 
 	```
-	git clone https://github.com/mariocesar/cousins-matter.git
+	git clone https://github.com/leolivier/cousins-matter.git
 	cd cousins-matter
 	```
 
-* Install the dependencies:
+**Note for contributors:** if you want to contribute to the cousins-matter development, first fork the project on github and clone your own repo.
 
+* Create and sync your python virtual environment:
+  ```
+  uv sync
 	```
-	pip install -r requirements.txt
-	```
-
-	> __It is advised to do this in a virtual environment (using pip env, uv or conda).__
 
 * Update your settings:
 	Copy `.env.example` to `.env` and edit `.env` to set the properties according to your needs, see the [Settings](settings.md) page.
+
 	You can automatically create the SECRET_KEY by running the following command:
 
 	```
@@ -91,10 +92,10 @@ __The first time__, go to http://127.0.0.1:8000/members/profile, log in using th
 * build the docker image:
 
 	```
-	docker build -t cousins-matter:local .
+	make build t=cousins-matter:local
 	```
 
-* Update the docker-compose.yml file to use the local image by adding the following line to the .env file:
+* Use your local image by adding the following line to the .env file:
 	```
 	COUSINS_MATTER_IMAGE=cousins-matter:local
 	```
@@ -102,29 +103,23 @@ __The first time__, go to http://127.0.0.1:8000/members/profile, log in using th
 * Start everything:
 
 	```
-	docker compose up -d
+	make up
 	```
 
 ### Run it outside Docker
 
-if you want to debug your installation, you can run it outside Docker.
+If you want to debug your installation, you can run it outside Docker.
 
-For this, you'll need to start postgresql and redis using the docker-compose.yml file:
-
+For this, instead of starting `make up`, use:
 ```
-docker compose up -d postgres redis
+make up4run  # will start the needed containers: postgres, redis, and qcluster (using the image built previously)
+# to start cousins-matter in dev mode
+make run  # will reload automatically after each code modification
+# to run tests (no UI tests)
+make test [t=<test name>]
+# to run UI tests
+make test-ui [t=<test name>]
+# get all other make command by just running
+make
 ```
-
-To allow the app to use redis and postgres, you'll need to set the following environment variables:
-
-```
-export POSTGRES_HOST=localhost
-export REDIS_HOST=localhost
-```
-
-Then, run the following commands:
-```
-python manage.py runserver
-```
-
 or start debugging from your IDE (the project is already configured for Visual Studio Code in the .vscode/launch.json file)

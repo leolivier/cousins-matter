@@ -17,13 +17,13 @@ Cousins Matter is a self-hosted Django application for managing large families. 
 - **Static Files**: WhiteNoise (CompressedManifestStaticFilesStorage)
 - **Container**: Docker with Docker Compose
 
-## Development Commands
+## Development and Test Commands
 
 Activate the virtual environment first:
 ```bash
 source .venv/bin/activate
 ```
-
+**Always** use the make commands for the below tasks.
 All common commands are available via the Makefile:
 
 ```bash
@@ -39,7 +39,8 @@ make logs            # Show container logs
 
 # Testing
 make test            # Run all tests
-make test t=<test>   # Run specific test (e.g., make test t=members.tests.tests_member)
+make test t=<test>   # Run non UI specific test (e.g., make test t=members.tests.tests_member)
+make test-ui t=<test> # Run specific UI test using playwright (e.g., make test-ui t=galleries.tests.tests_ui_galleries)
 make cover           # Run tests with coverage report (80% minimum)
 make cover a=<app>   # Coverage for specific app only
 

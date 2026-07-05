@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.template import Library
 from django.urls import reverse
 from core.utils import Paginator, is_video_file, protected_media_url
@@ -54,7 +55,14 @@ def complete_photos_data(page, page_num, num_pages):
 @register.inclusion_tag("galleries/photos_gallery.html")
 def include_photos(gallery, page_num, page_size):
   photos = get_gallery_photos(gallery)
-  ptor = Paginator(photos, page_size, compute_link=lambda page: reverse("galleries:detail_page", args=[gallery.slug, page]))
+  ptor = Paginator(
+    photos,
+    page_size,
+    compute_link=lambda page: (
+      reverse("galleries:detail_page", args=[gallery.slug, page])
+      + (f"?page_size={page_size}" if page_size != settings.DEFAULT_GALLERY_PAGE_SIZE else "")
+    ),
+  )
   if page_num > ptor.num_pages:
     page_num = ptor.num_pages
   page = ptor.get_page_data(page_num)

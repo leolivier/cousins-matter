@@ -9,13 +9,17 @@ docker compose pull
 docker compose up -d
 ```
 
-### From source
-Refresh sources from github, reinstall packages, migrate the database
+### Rebuild image from source
+See how to build from source for the 1rst time [here](installation.md#build-from-source).
+To update your image from source, just do:
 ```
-git pull
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
+git pull        # refresh sources
+uv sync         # sync dependencies
+make build      # build the image
+make up         # restart the services (this rebuild the image before restarting)
+# alternatively to the last line:
+make up4run     # restart the other services, but cousins-matter
+make run        # start cousins-matter only outside docker (useful for debugging)
 ```
 
 ## Rotate your secret key

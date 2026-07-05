@@ -56,12 +56,12 @@ class GalleryDetailView(generic.DetailView):
   fields = "__all__"
 
   def get(self, request, slug, page=1):
-    gallery = (
+    gallery = get_object_or_404(
       Gallery.objects
       .select_related("owner", "parent", "cover")
       .annotate(photo_count=Count("photo"))
-      .prefetch_related(Prefetch("children", queryset=Gallery.objects.select_related("cover")))
-      .get(slug=slug)
+      .prefetch_related(Prefetch("children", queryset=Gallery.objects.select_related("cover"))),
+      slug=slug,
     )
     page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_GALLERY_PAGE_SIZE
 

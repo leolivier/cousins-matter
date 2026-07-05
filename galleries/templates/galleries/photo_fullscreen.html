@@ -2,13 +2,13 @@
 <div id="fullscreen-overlay">
 	<div id="fullscreen-top-right-actions">
 		<button id="fullscreen-slideshow-toggle" class="button is-ghost has-text-white"
-				title="{% trans 'Play/Pause slideshow' %}">
+			title="{% trans 'Play/Pause slideshow' %}">
 			<span class="icon is-large">
 				<i class="mdi mdi-play mdi-48px" id="fullscreen-slideshow-icon"></i>
 			</span>
 		</button>
-		<a class="button has-text-link-invert has-background-link is-ghost"
-			id="detail-fullscreen" href="{{photo_detail_url}}">
+		<a class="button has-text-link-invert has-background-link is-ghost" id="detail-fullscreen"
+			href="{{photo_detail_url}}">
 			{%trans "Detail"%}
 		</a>
 		<button class="button has-text-link-invert has-background-link is-ghost" id="close-fullscreen">
@@ -20,18 +20,14 @@
 	<div id="swipe-container" class="swipe-container">
 		{%partialdef image inline %}
 		{% if request.htmx %}
-		<a class="button has-text-link-invert has-background-link is-ghost"
-				id="detail-fullscreen" hx-swap-oob="true" href="{{photo_detail_url}}">
+		<a class="button has-text-link-invert has-background-link is-ghost" id="detail-fullscreen" hx-swap-oob="true"
+			href="{{photo_detail_url}}">
 			{%trans "Detail"%}
 		</a>
 		{% endif %}
-
-		<div id="image-container" class="swipe-card"
-			hx-get="{{swipe_url}}"
-			hx-target="#swipe-container"
-			data-pk="{{pk}}"
-			data-is-video="{{is_video}}"
-		>
+		{%if swipe_url %}
+		<div id="image-container" class="swipe-card" hx-get="{{swipe_url}}" hx-target="#swipe-container"
+			data-is-video="{{is_video}}">
 			{% if is_video %}
 			<video controls playsinline autoplay>
 				<source src="{{fullscreen_url}}">
@@ -40,6 +36,7 @@
 			<img src="{{fullscreen_url}}">
 			{% endif %}
 		</div>
+		{%endif%}
 		{%endpartialdef%}
 	</div>
 </div>

@@ -37,7 +37,7 @@ MEDIA_ROOT = BASE_DIR / MEDIA_REL
 MEDIA_URL = f"/protected_{MEDIA_REL}/"
 
 PUBLIC_MEDIA_ROOT = MEDIA_ROOT / "public"
-PUBLIC_MEDIA_URL = f"/{MEDIA_REL}/public/"
+PUBLIC_MEDIA_URL = f"/public_{MEDIA_REL}/"
 
 SITE_NAME = env.str("SITE_NAME", default="Cousins Matter")
 SITE_DOMAIN = env.str("SITE_DOMAIN", None)
@@ -90,6 +90,13 @@ STORAGES = {
     "OPTIONS": {
       "location": MEDIA_ROOT,
       "base_url": MEDIA_URL,
+    },
+  },
+  "public": {
+    "BACKEND": "django.core.files.storage.FileSystemStorage",
+    "OPTIONS": {
+      "location": PUBLIC_MEDIA_ROOT,
+      "base_url": PUBLIC_MEDIA_URL,
     },
   }
   if env.str("MEDIA_STORAGE", default=None) is None

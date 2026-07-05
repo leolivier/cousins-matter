@@ -1,14 +1,14 @@
 {% extends "core/base.html" %}
 {% load i18n crispy_forms_tags cm_tags %}
 {% block header %}
-	{%include "core/common/include-summernote.html" with maxsize=settings.TROVE_DESCRIPTION_MAX_SIZE %}
+{%include "core/common/include-summernote.html" with maxsize=settings.TROVE_DESCRIPTION_MAX_SIZE %}
 {%endblock%}
 {% block title %}
-  {% if form.instance.pk %}
-    {% title _("Modify treasure") %}
-  {%else%}
-		{% title _("Add a treasure") %}
-	{%endif%}
+{% if form.instance.pk %}
+{% title _("Modify treasure") %}
+{%else%}
+{% title _("Add a treasure") %}
+{%endif%}
 {% endblock %}
 
 {% block content %}
@@ -16,25 +16,24 @@
   <div class="card">
     <header class="card-header">
       <p class="card-header-title has-text-centered is-centered">
-      {% if form.instance.pk %}
+        {% if form.instance.pk %}
         {% title _("Modify treasure") %}
-      {%else%}
+        {%else%}
         {% title _("Add a treasure") %}
-      {%endif%}
+        {%endif%}
       </p>
     </header>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="treasure-form">
       {% csrf_token %}
       <section class="card-content">
-          {{ form | crispy}}
+        {{ form | crispy}}
       </section>
       <footer class="card-footer">
         <div class="buttons mx-auto">
           <button type="submit" class="button is-dark">
             {%icon "new" %} <span>{%translate "Submit" %}</span>
           </button>
-          <a type="reset" class="button" aria-label="close" 
-            href="{%url 'troves:list'%}">
+          <a type="reset" class="button" aria-label="close" href="{%url 'troves:list'%}">
             {%icon "cancel" %} <span>{%translate "Cancel" %}</span>
           </a>
         </div>

@@ -159,7 +159,7 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
 
   def take_screenshot(self, name: str = "screenshot") -> None:
     """Capture useful in case of debug or failure."""
-    self.page.screenshot(path=f"/tmp/{name}.png", full_page=True)
+    self.page.screenshot(path=f"/tmp/screenshots/{name}.png", full_page=True)
 
   def js_click(self, selector):
     self.page.locator(selector).scroll_into_view_if_needed()

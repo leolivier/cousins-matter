@@ -93,7 +93,7 @@ jobs:
           env_file_path: ${{ github.workspace }}/.env
 
       - name: Upload screenshots
-        if: failure() and ${{ inputs.ui }} == true
+        if: failure() && inputs.ui
         uses: actions/upload-artifact@v4
         with:
           name: playwright-screenshots

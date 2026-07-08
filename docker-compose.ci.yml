@@ -1,0 +1,5 @@
+# specific for CI, mount /tmp/screenshots
+services:
+  django-tests:
+    volumes:
+      - ./artifacts/screenshots:/tmp/screenshots

@@ -11,11 +11,9 @@ class ChatRoomAdmin(admin.ModelAdmin):
   prepopulated_fields = {"slug": ("name",)}
   date_hierarchy = "date_added"
 
+  @admin.display(description=_("public"), boolean=True)
   def is_public_room(self, obj):
     return obj.is_public
-
-  is_public_room.boolean = True
-  is_public_room.short_description = _("public")
 
 
 @admin.register(PrivateChatRoom)
@@ -35,7 +33,6 @@ class ChatMessageAdmin(admin.ModelAdmin):
   readonly_fields = ["date_added"]
   date_hierarchy = "date_added"
 
+  @admin.display(description=_("content"))
   def short_content(self, obj):
     return obj.content[:50] + "..." if len(obj.content) > 50 else obj.content
-
-  short_content.short_description = _("content")

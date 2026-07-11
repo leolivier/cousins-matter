@@ -12,10 +12,9 @@ class GalleryAdmin(admin.ModelAdmin):
   prepopulated_fields = {"slug": ("name",)}
   raw_id_fields = ["cover", "owner"]
 
+  @admin.display(description=_("description"))
   def short_description(self, obj):
     return obj.description[:50] + "..." if len(obj.description) > 50 else obj.description
-
-  short_description.short_description = _("description")
 
 
 @admin.register(Photo)
@@ -27,9 +26,8 @@ class PhotoAdmin(admin.ModelAdmin):
   raw_id_fields = ["gallery", "uploaded_by"]
   date_hierarchy = "date"
 
+  @admin.display(description=_("preview"))
   def image_preview(self, obj):
     if obj.thumbnail:
       return format_html('<img src="{}" style="max-height: 50px;"/>', obj.thumbnail.url)
     return ""
-
-  image_preview.short_description = _("preview")

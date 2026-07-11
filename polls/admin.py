@@ -64,17 +64,13 @@ class AnswerAdmin(admin.ModelAdmin):
   search_fields = ["question__question_text", "poll_answer__member__username"]
   raw_id_fields = ["poll_answer", "question"]
 
+  @admin.display(description=_("Poll"), ordering="poll_answer__poll")
   def get_poll(self, obj):
     return obj.poll_answer.poll.title
 
-  get_poll.short_description = _("Poll")
-  get_poll.admin_order_field = "poll_answer__poll"
-
+  @admin.display(description=_("Member"), ordering="poll_answer__member")
   def get_member(self, obj):
     return obj.poll_answer.member
-
-  get_member.short_description = _("Member")
-  get_member.admin_order_field = "poll_answer__member"
 
 
 admin.site.register(YesNoAnswer, AnswerAdmin)

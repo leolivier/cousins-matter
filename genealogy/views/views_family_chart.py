@@ -1,4 +1,6 @@
 import uuid
+from itertools import chain
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.utils import formats
@@ -7,7 +9,9 @@ from django.conf import settings
 from ..models import Person, Family
 from ..utils import register_genealogy_cache
 
-CACHE_KEY_FAMILY_CHART_DATA = "genealogy_family_chart_data"
+# Versioned cache key: bump the suffix whenever the serialized data shape changes
+# so that stale entries (older schema) are orphaned and allowed to expire.
+CACHE_KEY_FAMILY_CHART_DATA = "genealogy_family_chart_data_v2"
 register_genealogy_cache(CACHE_KEY_FAMILY_CHART_DATA)
 
 
@@ -65,9 +69,24 @@ def _get_bounded_family_graph(main_person_id, max_gen):
   return included_ids
 
 
+def _gender_code(person):
+  return "M" if person.sex == "M" else "F" if person.sex == "F" else "O"
+
+
+def _person_brief(person):
+  """Compact, JSON-serializable summary of a related person, for the hover tooltip."""
+  return {
+    "id": str(person.id),
+    "name": f"{person.first_name} {person.last_name}",
+    "birth": formats.date_format(person.birth_date, "SHORT_DATE_FORMAT") if person.birth_date else "",
+    "death": formats.date_format(person.death_date, "SHORT_DATE_FORMAT") if person.death_date else "",
+    "gender": _gender_code(person),
+  }
+
+
 def _format_person_data(person, included_ids):
   # Determine gender for display
-  gender = "M" if person.sex == "M" else "F" if person.sex == "F" else "O"
+  gender = _gender_code(person)
 
   # Relationships
   rels = {}
@@ -97,6 +116,7 @@ def _format_person_data(person, included_ids):
   if children:
     rels["children"] = list(set(children))
 
+  # --- Tooltip data (independent of the bounded graph, for the hover popover) ---
   return {
     "id": str(person.id),
     "data": {
@@ -106,9 +126,52 @@ def _format_person_data(person, included_ids):
       "deathday": formats.date_format(person.death_date, "SHORT_DATE_FORMAT") if person.death_date else "",
       "avatar": "",
       "gender": gender,
+      # Person.age already returns age at death (if deceased) or current age (if living).
+      "age": person.age,
+      "birth_place": person.birth_place or "",
+      "death_place": person.death_place or "",
+      "parents": _tooltip_parents(person),
+      "children": _tooltip_children(person),
+      "marriages": _tooltip_marriages(person),
     },
     "rels": rels,
   }
+
+
+def _tooltip_parents(person):
+  """Parents of a person, for the hover tooltip (regardless of chart bounds)."""
+  parents = []
+  if person.child_of_family:
+    if person.child_of_family.partner1:
+      parents.append(_person_brief(person.child_of_family.partner1))
+    if person.child_of_family.partner2:
+      parents.append(_person_brief(person.child_of_family.partner2))
+  return parents
+
+
+def _tooltip_children(person):
+  """Children of a person (deduplicated by id), for the hover tooltip."""
+  children_by_id = {}
+  for union in chain(person.unions_as_p1.all(), person.unions_as_p2.all()):
+    for child in union.children.all():
+      children_by_id[str(child.id)] = _person_brief(child)
+  return list(children_by_id.values())
+
+
+def _tooltip_marriages(person):
+  """Unions of a person (spouse + date/place/type), for the hover tooltip."""
+  marriages = []
+  for union in chain(person.unions_as_p1.all(), person.unions_as_p2.all()):
+    spouse = union.partner2 if union.partner1_id == person.id else union.partner1
+    marriages.append({
+      "spouse": _person_brief(spouse) if spouse else None,
+      "date": formats.date_format(union.union_date, "SHORT_DATE_FORMAT") if union.union_date else "",
+      "place": union.union_place or "",
+      # str() is required: get_union_type_display() returns a lazy proxy that
+      # JsonResponse/json.dumps cannot serialize.
+      "type": str(union.get_union_type_display()),
+    })
+  return marriages
 
 
 def family_chart_data(request):
@@ -137,6 +200,10 @@ def family_chart_data(request):
   people = Person.objects.prefetch_related(
     "unions_as_p1",
     "unions_as_p2",
+    "unions_as_p1__partner1",
+    "unions_as_p1__partner2",
+    "unions_as_p2__partner1",
+    "unions_as_p2__partner2",
     "unions_as_p1__children",
     "unions_as_p2__children",
     "child_of_family",

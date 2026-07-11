@@ -57,6 +57,48 @@ class PersonViewsTest(MemberTestCase):
     response = self.client.get(reverse("genealogy:person_list_page", args=[9999]))
     self.assertEqual(response.status_code, 302)
 
+  def _make_sortable_people(self):
+    Person.objects.create(first_name="Bob", last_name="Anderson", birth_date=date(2000, 1, 1))
+    Person.objects.create(first_name="Carol", last_name="Brown", birth_date=date(1980, 1, 1))
+
+  def test_person_list_default_sort_is_name_asc(self):
+    self._make_sortable_people()
+    response = self.client.get(reverse("genealogy:person_list"))
+    self.assertEqual(response.status_code, 200)
+    last_names = [p.last_name for p in response.context["page"].object_list]
+    self.assertEqual(last_names, sorted(last_names))
+    self.assertEqual(response.context["sort"], "name")
+    self.assertEqual(response.context["dir"], "asc")
+
+  def test_person_list_sort_by_name_desc(self):
+    self._make_sortable_people()
+    response = self.client.get(reverse("genealogy:person_list"), {"sort": "name", "dir": "desc"})
+    self.assertEqual(response.status_code, 200)
+    last_names = [p.last_name for p in response.context["page"].object_list]
+    self.assertEqual(last_names, sorted(last_names, reverse=True))
+    self.assertEqual(response.context["sort"], "name")
+    self.assertEqual(response.context["dir"], "desc")
+
+  def test_person_list_sort_by_birth_date(self):
+    self._make_sortable_people()
+    response = self.client.get(reverse("genealogy:person_list"), {"sort": "birth_date", "dir": "asc"})
+    self.assertEqual(response.status_code, 200)
+    dates = [p.birth_date for p in response.context["page"].object_list]
+    self.assertEqual(dates, sorted(dates))
+    self.assertEqual(response.context["sort"], "birth_date")
+
+  def test_person_list_invalid_sort_falls_back_to_default(self):
+    self._make_sortable_people()
+    # An unknown sort value must not crash nor leak into order_by (injection guard).
+    response = self.client.get(reverse("genealogy:person_list"), {"sort": "bogus;DROP TABLE"})
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.context["sort"], "name")
+
+  def test_person_list_invalid_dir_falls_back_to_asc(self):
+    response = self.client.get(reverse("genealogy:person_list"), {"sort": "name", "dir": "sideways"})
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.context["dir"], "asc")
+
   # ── person_detail ─────────────────────────────────────────────
 
   def test_person_detail(self):

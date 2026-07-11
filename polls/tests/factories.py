@@ -57,7 +57,7 @@ class QuestionFactory(DjangoModelFactory):
   poll = factory.SubFactory(PollFactory)
   question_text = factory.Faker("sentence", nb_words=6)
   question_type = Question.YESNO_QUESTION
-  possible_choices = []
+  possible_choices: list[str] = []
 
 
 class PollAnswerFactory(DjangoModelFactory):

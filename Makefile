@@ -23,6 +23,7 @@ help h:
 	@echo "  cover [a=application] [co=coverage_options] [to=test_options]: run test(s) with coverage. Default is all applications. If an application is given, the coverage result is stored in .coverage.<application>."
 	@echo "  minify [a=application]: minify the css and js files of an application. Default is all applications."
 	@echo "  shell: Run a django shell in devt mode"
+	@echo "  check: Run ruff checks, pip-audit vuln scan and bandit security checks. Bandit results are stored in bandit.out"
 
 build:
 	t=$(if $(t),$(t),local); \
@@ -95,6 +96,8 @@ minify:
 check:
 	ruff format -q .
 	ruff check . --fix
+	bandit -r . -c pyproject.toml -f txt -o bandit.out
+	pip-audit .
 	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
 
 shell:

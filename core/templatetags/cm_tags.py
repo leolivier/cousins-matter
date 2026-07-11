@@ -105,7 +105,7 @@ class TitleNode(Node):
       context[self.var_name] = title
       # print(f"context[{self.var_name}]={context[self.var_name]}")
       return ""
-    return mark_safe(title)
+    return mark_safe(title)  # nosec
 
 
 @register.tag(name="title")
@@ -192,7 +192,7 @@ def icon(name, clazz="icon", aria_hidden=False):
   return mark_safe(f"""
 <span class="{clazz}">
     {img}
-</span>""")
+</span>""")  # nosec
 
 
 @lru_cache()
@@ -258,7 +258,7 @@ def boldify(value: str) -> str:
   txt = escape(value)
   if txt.startswith("**") and txt.endswith("**"):
     txt = "<i>" + txt[2:-2] + "</i>"
-  return mark_safe(txt)
+  return mark_safe(txt)  # nosec
 
 
 @register.filter

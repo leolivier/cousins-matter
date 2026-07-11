@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 import logging
 import os
-import random
+import secrets
 import string
 from typing import Literal
 from django.conf import settings
@@ -24,7 +24,6 @@ from .models import (
 )
 
 logger = logging.getLogger(__name__)
-random.seed()
 
 
 def t(field: str) -> str:
@@ -32,7 +31,9 @@ def t(field: str) -> str:
 
 
 def generate_random_string(length: int) -> str:
-  return "".join(random.choice(string.printable) for _ in range(length))
+  # used to generate a temporary password for imported members: use secrets for cryptographic randomness
+  alphabet = string.ascii_letters + string.digits
+  return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 @dataclass

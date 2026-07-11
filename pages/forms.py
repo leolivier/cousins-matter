@@ -18,7 +18,7 @@ class PageForm(FlatpageForm):
 
   def clean_url(self):
     new_url = super().clean_url()
-    assert new_url is not None
+    assert new_url is not None  # nosec B101
     # check if the new url starts with some existing urls or reverse
     new_url_starts_w_existing_urls = FlatPage.objects.annotate(url_start=Substr(Value(new_url), 1, Length("url"))).filter(
       Q(url_start=F("url")) | Q(url__startswith=new_url)

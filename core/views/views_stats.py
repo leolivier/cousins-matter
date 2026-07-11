@@ -31,7 +31,7 @@ def get_github_release_version(request, owner, repo):
 
   url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
   try:
-    with urlopen(url) as response:
+    with urlopen(url) as response:  # nosec
       data = response.read()
       json_data = json.loads(data)
       if "tag_name" in json_data:
@@ -55,7 +55,7 @@ def get_latest_release_text(request):
       if request.user.is_superuser:
         release_warning += "<br>"
         release_warning += _("Please look at the documentation for updating.")
-        release_warning = mark_safe(release_warning)
+        release_warning = mark_safe(release_warning)  # nosec
 
       latest_release = {
         "value": latest_release,

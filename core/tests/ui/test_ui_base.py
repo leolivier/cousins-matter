@@ -69,7 +69,7 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
   #  Context / page lifecycle (one instance per test)                 #
   # ------------------------------------------------------------------ #
 
-  def setUp(self):
+  def setUp(self) -> None:
     super().setUp()
     self.context: BrowserContext = self._browser.new_context()
     self.page: Page = self.context.new_page()

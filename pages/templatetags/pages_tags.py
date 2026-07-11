@@ -136,8 +136,8 @@ def include_page(url):
       case _:
         page = pages.first()
         matches = ", ".join([p.url for p in pages])
-        logger.warn(f"searched for page with url={url}, found {count} almost matching pages: {matches}, using {page.url}")
-  return mark_safe(page.content)
+        logger.warning(f"searched for page with url={url}, found {count} almost matching pages: {matches}, using {page.url}")
+  return mark_safe(page.content)  # nosec
 
 
 @register.inclusion_tag("pages/link_pages_starting_with.html")

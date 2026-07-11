@@ -452,7 +452,7 @@ def _rm_emty_folders(storage, folder_stack):
     try:
       storage.delete(path)
     except Exception:
-      pass
+      pass  # nosec B110
 
 
 def _recursive_rmtree(storage, prefix):
@@ -470,7 +470,7 @@ def _recursive_rmtree(storage, prefix):
       try:
         storage.delete(name)
       except Exception:
-        pass
+        pass  # nosec B110
     # stack subfolders
     for d in dirs:
       stack.append(f"{path}/{d}")

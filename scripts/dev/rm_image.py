@@ -13,11 +13,11 @@ api = "https://api.github.com/users/leolivier/packages/container/cousins-matter/
 headers = {
   "Accept": "application/vnd.github+json",
   "X-GitHub-Api-Version": "2022-11-28",
-  "Authorization": "Bearer " + os.getenv("GITHUB_TOKEN"),
+  "Authorization": "Bearer " + str(os.getenv("GITHUB_TOKEN")),
 }
 get_url = f"{api}?state=active&per_page=100"
 while True:
-  response = requests.get(get_url, headers=headers)
+  response = requests.get(get_url, headers=headers, timeout=10)
   if response.status_code != 200:
     print(response.json())
     sys.exit(1)
@@ -39,7 +39,7 @@ while True:
       if not removed:
         continue
     print(f"removing {api}/{image['id']} {metadata['container']['tags']}")
-    requests.delete(f"{api}/{image['id']}", headers=headers)
+    requests.delete(f"{api}/{image['id']}", headers=headers, timeout=10)
   links = response.links
   if "next" in links:
     get_url = links["next"]["url"]

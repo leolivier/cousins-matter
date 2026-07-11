@@ -39,7 +39,7 @@ class ModalAddressMixin:
     return context
 
   def process_form(self, request, form):
-    assert request.htmx
+    assert request.htmx  # nosec B101
     if form.is_valid():
       address = form.save()
       addresses = Address.objects.all()

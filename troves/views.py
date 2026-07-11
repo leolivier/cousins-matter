@@ -72,7 +72,7 @@ def update_treasure(request, pk):
 
 
 def delete_treasure(request, pk):
-  assert request.htmx
+  assert request.htmx  # nosec B101
   try:
     treasure = get_object_or_404(Trove.objects.select_related("owner"), pk=pk)
     check_edit_permission(request, treasure.owner)

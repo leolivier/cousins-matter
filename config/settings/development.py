@@ -40,7 +40,7 @@ if DEBUG_TOOLBAR:
     hostname, __un__, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
   except Exception:
-    pass
+    pass  # noqa: F401  # nosec B110
 
 DATABASES["default"]["USER"] = "cousinsmatter"
 

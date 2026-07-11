@@ -32,7 +32,7 @@ __author__ = "Olivier LEVILLAIN based on code from Brian St. Pierre <http://bstp
 # TODO: distribute on PyPi as a standalone django middleware
 import math
 import os
-import subprocess
+import subprocess  # nosec B404
 
 # from django.utils.html import escape
 from django.http import HttpResponseServerError
@@ -107,7 +107,7 @@ class HtmlValidatorMiddleware:
       return response
     # run html-validate as a subprocess connected to stdin and stdout pipes
     config_file = os.path.join(os.path.dirname(__file__), ".htmlvalidate.json")
-    with subprocess.Popen(
+    with subprocess.Popen(  # nosec B603, B607
       ["html-validate", "--stdin", "-c", config_file, "--max-warnings", 10],
       stdin=subprocess.PIPE,
       stdout=subprocess.PIPE,

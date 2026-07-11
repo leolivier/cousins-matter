@@ -866,8 +866,6 @@ msgstr "Pedir um link de convite"
 
 #: templates/members/login/login.html:21
 #: templates/members/login/password_change.html:17
-#, fuzzy
-#| msgid "Password Forgotten?"
 msgid "Password Forgotten or First Connexion?"
 msgstr "Senha esquecida ou primeiro login?"
 

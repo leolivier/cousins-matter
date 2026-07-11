@@ -271,7 +271,7 @@ def exec_docker_cmd():
   logger.info(f"starting: {' '.join(args)}")
   # Replace current process with the target command
   try:
-    os.execvp(args[0], args)
+    os.execvp(args[0], args)  # nosec B606
   except FileNotFoundError:
     logger.error(f"Command not found: {args[0]}")
     sys.exit(127)

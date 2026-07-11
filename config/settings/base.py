@@ -431,6 +431,7 @@ EMAIL_FIELD_NAME = "email"  # force name to bypass translation
 
 LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP = env.str("LOGIN_HISTORY_GEOLOCATION_PLACEHOLDER_IP", default=None)
 LOGIN_HISTORY_PURGE_DAYS = env.int("LOGIN_HISTORY_PURGE_DAYS", 365)
+LOGIN_HISTORY_GEOLOCATION_TIMEOUT = env.int("LOGIN_HISTORY_GEOLOCATION_TIMEOUT", default=5)
 
 MAX_PHOTO_PER_AD = env.int("MAX_PHOTO_PER_AD", 10)
 
@@ -507,7 +508,7 @@ for provider in OAUTH_PROVIDERS_CONFIG:
     app_config.update({
       "settings": {
         "server_url": env.str(f"{provider_prefix}_SERVER_URL"),
-        "token_auth_method": "client_secret_post",
+        "token_auth_method": "client_secret_post",  # nosec
         "issuer": env.str(f"{provider_prefix}_SERVER_URL"),
         "oauth_pkce_enabled": True,
       },

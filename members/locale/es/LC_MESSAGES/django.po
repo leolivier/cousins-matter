@@ -871,8 +871,6 @@ msgstr "Demandar una invitación"
 
 #: templates/members/login/login.html:21
 #: templates/members/login/password_change.html:17
-#, fuzzy
-#| msgid "Password Forgotten?"
 msgid "Password Forgotten or First Connexion?"
 msgstr "¿Contraseña olvidada o primer inicio de sesión?"
 

@@ -36,7 +36,7 @@ def post_login(sender, user, request, **kwargs):
     else {"error": True, "reason": "Address not routable"}
   )
 
-  assert isinstance(result, dict)
+  assert isinstance(result, dict)  # nosec B101
   for key, value in result.items():
     if key in ["user", "ip", "user_agent", "ip_info", "created_at"]:
       continue
@@ -65,7 +65,7 @@ def post_logout(sender, user, **kwargs):
 @lru_cache(maxsize=128)
 def get_geolocation_data(ip: str):
   try:
-    response = requests.get(f"https://ipapi.co/{ip}/json/")
+    response = requests.get(f"https://ipapi.co/{ip}/json/", timeout=settings.LOGIN_HISTORY_GEOLOCATION_TIMEOUT)
     response.raise_for_status()  # Checks if the request was successful
     return response.json()  # Try to decode the JSON response
   except requests.exceptions.RequestException as e:

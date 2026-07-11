@@ -9,12 +9,28 @@ from ..forms import PersonForm
 from ..models import Person
 from ..utils import clear_genealogy_caches
 
+# Allowlist of sortable columns: maps the GET `sort` value to the model fields
+# used for ordering. Also guards against arbitrary order_by injection.
+PERSON_SORT_FIELDS = {
+  "name": ["last_name", "first_name"],
+  "birth_date": ["birth_date"],
+  "birth_place": ["birth_place"],
+}
+
 
 def person_list(request, page_num=1):
   query = request.GET.get("q")
   people = (
     Person.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query)) if query else Person.objects.all()
   )
+
+  sort = request.GET.get("sort") or "name"
+  if sort not in PERSON_SORT_FIELDS:
+    sort = "name"
+  direction = "desc" if request.GET.get("dir") == "desc" else "asc"
+  order_fields = PERSON_SORT_FIELDS[sort]
+  prefix = "-" if direction == "desc" else ""
+  people = people.order_by(*(prefix + field for field in order_fields))
 
   cache_key_suffix = (request.GET.urlencode() or "default") + str(page_num)
 
@@ -31,7 +47,11 @@ def person_list(request, page_num=1):
       reverse_link="genealogy:person_list_page",
       default_page_size=50,
     )
-    return render(request, template, {"page": page, "cache_key_suffix": cache_key_suffix})
+    return render(
+      request,
+      template,
+      {"page": page, "cache_key_suffix": cache_key_suffix, "sort": sort, "dir": direction},
+    )
   except PageOutOfBounds as exc:
     return redirect(exc.redirect_to)
 

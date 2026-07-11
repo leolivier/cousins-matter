@@ -39,7 +39,7 @@ class ModalFamilyUpsertMixin(generic.View):
     return context
 
   def process_form(self, request, form):
-    assert request.htmx
+    assert request.htmx  # nosec B101
     if form.is_valid():
       family = form.save()
       families = Family.objects.all()

@@ -1,0 +1,5 @@
+# specific for CI, mount /tmp/screenshots
+services:
+  cousins-matter:
+    volumes:
+      - ./artifacts/screenshots:/tmp/screenshots

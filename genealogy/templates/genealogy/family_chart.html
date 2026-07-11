@@ -13,13 +13,91 @@
 			background-color:rgb(33,33,33);
 			color:#fff;
 		}
+		/* Hover tooltip for person cards */
+		.person-tooltip {
+			position: fixed;
+			z-index: 10000;
+			visibility: hidden;
+			opacity: 0;
+			transition: opacity 0.12s ease-in-out;
+			max-width: 320px;
+			min-width: 180px;
+			padding: 0.6rem 0.8rem;
+			background-color: rgb(33,33,33);
+			color: #fff;
+			border: 1px solid rgba(255,255,255,0.25);
+			border-radius: 6px;
+			box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+			font-size: 0.85rem;
+			line-height: 1.35;
+			/* let mouse events reach the card underneath, avoiding flicker */
+			pointer-events: none;
+		}
+		.person-tooltip.is-visible {
+			visibility: visible;
+			opacity: 1;
+		}
+		.person-tooltip .tt-header {
+			font-weight: bold;
+			font-size: 1rem;
+			margin-bottom: 0.35rem;
+			padding-bottom: 0.3rem;
+			border-bottom: 1px solid rgba(255,255,255,0.2);
+		}
+		.person-tooltip .tt-gender { font-weight: normal; opacity: 0.8; font-size: 0.8rem; }
+		.person-tooltip .tt-life { margin-bottom: 0.15rem; }
+		.person-tooltip .tt-label { font-weight: bold; opacity: 0.85; }
+		.person-tooltip .tt-dates { opacity: 0.7; font-size: 0.78rem; }
+		.person-tooltip .tt-section { margin-top: 0.3rem; }
+		.person-tooltip ul { margin: 0; padding-left: 1.1rem; }
+		.person-tooltip li { margin-bottom: 0.1rem; }
+		/* Extra info injected into the top-right edit/info form (inherits the form's text color) */
+		.f3-form .f3-extra-info {
+			margin-top: 0.6rem;
+			padding-top: 0.5rem;
+			border-top: 1px solid rgba(128,128,128,0.4);
+			font-size: 0.85rem;
+			max-height: 40vh;
+			overflow-y: auto;
+		}
+		.f3-form .f3-extra-info .tt-life { margin-bottom: 0.15rem; }
+		.f3-form .f3-extra-info .tt-label { font-weight: bold; }
+		.f3-form .f3-extra-info .tt-section { margin-top: 0.4rem; }
+		.f3-form .f3-extra-info ul { margin: 0.2rem 0 0; padding-left: 1.1rem; }
+		.f3-form .f3-extra-info li { margin-bottom: 0.15rem; }
+		.f3-form .f3-extra-info .tt-dates { opacity: 0.75; }
 	</style>
 	{% endblock %}
 {% block genealogy_content %}
 <div id="FamilyChart" class="f3"></div>
+<div id="personTooltip" class="person-tooltip" role="tooltip" aria-hidden="true"></div>
 <script type="module">
 
 		const mainPersonId = '{{ main_person_id|default_if_none:"" }}';
+		const tooltipEl = document.getElementById('personTooltip');
+
+		// Translated labels rendered server-side (reuse existing translation strings).
+		const I18N = {
+			male: "{% trans 'Male' %}",
+			female: "{% trans 'Female' %}",
+			other: "{% trans 'Other' %}",
+			born: "{% trans 'Born:' %}",
+			died: "{% trans 'Died:' %}",
+			parents: "{% trans 'Parents' %}",
+			children: "{% trans 'Children' %}",
+			marriage: "{% trans 'Marriage' %}",
+			age: "{% trans 'Age' %}",
+			ageAtDeath: "{% trans 'Age at death' %}",
+			// Edit/info form field labels (reuse model verbose_names, already translated).
+			firstName: "{% trans 'First Name' %}",
+			lastName: "{% trans 'Last Name' %}",
+			birthDate: "{% trans 'Birth Date' %}",
+			deathDate: "{% trans 'Death Date' %}",
+			birthPlace: "{% trans 'Birth Place' %}",
+			deathPlace: "{% trans 'Death Place' %}",
+		};
+		const GENDER_LABELS = { M: I18N.male, F: I18N.female, O: I18N.other };
+
 		let dataUrl = "{% url 'genealogy:family_chart_data' %}";
 		if (mainPersonId) {
 			dataUrl += `?main_person_id=${mainPersonId}`;
@@ -31,6 +109,8 @@
 
 		function create(data) {
 			console.log(data)
+			// Lookup by person id (form_creator only exposes datum_id, not the full datum).
+			const dataById = Object.fromEntries(data.map(d => [d.id, d]));
 			const f3Chart = f3.createChart('#FamilyChart', data)
 				.setTransitionTime(1000)
 				.setCardXSpacing(250)
@@ -38,17 +118,44 @@
 				.setSingleParentEmptyCard(true, {label: 'Unknown'})
 
 			const f3Card = f3Chart.setCardHtml()
-				.setCardDisplay([["first name","last name"],["birthday", "deathday"]])
+				.setCardDisplay([["first name","last name"],["birthday","deathday"]])
 				.setDefaultPersonIcon(d => {
 					if (d.data.data.gender === 'F') return femaleIcon()
 					else return maleIcon()
 				})
 
+			// Hover tooltip hooks — re-bound by the library on every render,
+			// so they survive zoom/pan. d.data.data is the person's data bag.
+			f3Card.onCardMouseenter = (e, d) => showTooltip(e, d);
+			f3Card.onCardMouseleave = () => hideTooltip();
+
 			const f3EditTree = f3Chart.editTree()
-				.setFields(["first name","last name","birthday","deathday"])
+				// Field objects so we control the (translated) label shown in the
+				// read-only info form. birth_place / death_place are added as fields
+				// here so the form shows them natively; their values come from the
+				// server-side data bag (datum.data[id]).
+				.setFields([
+					{type: 'text', label: I18N.firstName, id: 'first name'},
+					{type: 'text', label: I18N.lastName, id: 'last name'},
+					{type: 'text', label: I18N.birthDate, id: 'birthday'},
+					{type: 'text', label: I18N.deathDate, id: 'deathday'},
+					{type: 'text', label: I18N.birthPlace, id: 'birth_place'},
+					{type: 'text', label: I18N.deathPlace, id: 'death_place'},
+				])
 				.setEditFirst(true)  // true = open form on click, false = open info in click
 				.setCardClickOpen(f3Card)
 				.setNoEdit()  // if you want to just see info form
+			// Inject extra read-only info (places, age, parents, children, marriages)
+			// into the top-right info form whenever it (re)renders. The form is fully
+			// rebuilt on each open/toggle, so re-injecting here is required.
+			// form_creator exposes only datum_id (not the full datum), so we resolve
+			// the datum via the store / our own id map, then pass its field bag.
+			f3EditTree.setOnFormCreation(({cont, form_creator}) => {
+				const did = form_creator && form_creator.datum_id;
+				const store = f3Chart.store;
+				const datum = (did != null && store && store.getDatum) ? store.getDatum(did) : dataById[did];
+				injectInfo(cont, datum && datum.data);
+			});
 
 			if (mainPersonId) {
 				f3Chart.updateMainId(mainPersonId)
@@ -57,6 +164,148 @@
 			f3Chart.updateTree({initial: true})
 //			f3EditTree.open(f3Chart.getMainDatum())
 //			f3Chart.updateTree({initial: true})
+		}
+
+		// --- Tooltip helpers ---
+
+		function esc(value) {
+			// Escape user-provided text (names, places) to avoid breaking HTML / XSS.
+			const div = document.createElement('div');
+			div.textContent = value == null ? '' : String(value);
+			return div.innerHTML;
+		}
+
+		function briefLine(brief) {
+			let line = esc(brief.name);
+			const dates = [];
+			if (brief.birth) dates.push(`°${brief.birth}`);
+			if (brief.death) dates.push(`†${brief.death}`);
+			if (dates.length) line += ` <span class="tt-dates">(${dates.join(' - ')})</span>`;
+			return line;
+		}
+
+		function lifeRow(label, dateVal, placeVal) {
+			if (!dateVal && !placeVal) return '';
+			const parts = [];
+			if (dateVal) parts.push(esc(dateVal));
+			if (placeVal) parts.push(esc(placeVal));
+			return `<div class="tt-life"><span class="tt-label">${esc(label)}</span> ${parts.join(' — ')}</div>`;
+		}
+
+		// A labelled list of related persons (parents or children).
+		function relSection(label, briefs) {
+			return `<div class="tt-section"><div class="tt-label">${esc(label)}</div><ul>` +
+				briefs.map(b => `<li>${briefLine(b)}</li>`).join('') + `</ul></div>`;
+		}
+
+		// Marriage list: spouse + union type/date/place.
+		function marriageSection(marriages) {
+			const items = marriages.map(m => {
+				let text = briefLine(m.spouse);
+				const details = [];
+				if (m.type) details.push(esc(m.type));
+				if (m.date) details.push(esc(m.date));
+				if (m.place) details.push(esc(m.place));
+				if (details.length) text += ` <span class="tt-dates">(${details.join(', ')})</span>`;
+				return `<li>${text}</li>`;
+			});
+			return `<div class="tt-section"><div class="tt-label">${esc(I18N.marriage)}</div><ul>${items.join('')}</ul></div>`;
+		}
+
+		// Shared body for the hover tooltip and the info form's extra section.
+		// withDates=true (tooltip): full "Born: date — place" / "Died: date — place" rows,
+		// since the tooltip is standalone.
+		// withDates=false (info form): no birth/death rows at all — the form already
+		// shows birthday / deathday / birth_place / death_place as native fields, so
+		// listing them again here would only duplicate. Only age + relations remain.
+		function buildInfoBody(p, withDates) {
+			const rows = [];
+			const deceased = !!(p.deathday || p.death_place);
+			if (withDates) {
+				rows.push(lifeRow(I18N.born, p.birthday, p.birth_place));
+				if (deceased) rows.push(lifeRow(I18N.died, p.deathday, p.death_place));
+			}
+
+			// Age: "Age at death" if deceased, current "Age" otherwise (Person.age
+			// already computes the right value server-side).
+			const age = typeof p.age === 'number' ? p.age : null;
+			if (age !== null) {
+				const label = deceased ? I18N.ageAtDeath : I18N.age;
+				rows.push(`<div class="tt-life"><span class="tt-label">${esc(label)}</span> ${age}</div>`);
+			}
+
+			if (Array.isArray(p.parents) && p.parents.length) rows.push(relSection(I18N.parents, p.parents));
+			if (Array.isArray(p.children) && p.children.length) rows.push(relSection(I18N.children, p.children));
+			const marriages = (Array.isArray(p.marriages) ? p.marriages : []).filter(m => m && m.spouse);
+			if (marriages.length) rows.push(marriageSection(marriages));
+			return rows;
+		}
+
+		function showTooltip(e, d) {
+			const p = d.data.data;
+			if (!p) return;
+
+			// Header: full name + gender
+			const genderLabel = GENDER_LABELS[p.gender];
+			const header = `<div class="tt-header">${esc(p['first name'])} ${esc(p['last name'])}` +
+				(genderLabel ? ` <span class="tt-gender">${esc(genderLabel)}</span>` : '') + `</div>`;
+
+			tooltipEl.innerHTML = [header, ...buildInfoBody(p, true)].join('');
+			positionTooltip(e);
+			tooltipEl.classList.add('is-visible');
+			tooltipEl.setAttribute('aria-hidden', 'false');
+		}
+
+		// Inject the extra read-only info into the top-right edit/info form.
+		// `p` is the person's field bag (the data.data of the form's datum).
+		function injectInfo(cont, p) {
+			if (!p) return;
+			const form = cont && cont.querySelector ? cont.querySelector('.f3-form') : null;
+			if (!form) return;
+			let slot = form.querySelector('.f3-extra-info');
+			if (!slot) {
+				slot = document.createElement('div');
+				slot.className = 'f3-extra-info';
+				form.appendChild(slot);
+			}
+			slot.innerHTML = buildInfoBody(p, false).join('');
+		}
+
+		function positionTooltip(e) {
+			const offset = 16;
+			const cardEl = (e.currentTarget && e.currentTarget.classList && e.currentTarget.classList.contains('card'))
+				? e.currentTarget
+				: (e.target && e.target.closest ? e.target.closest('.card') : null);
+			const rect = tooltipEl.getBoundingClientRect();
+
+			let x, y;
+			if (cardEl) {
+				const r = cardEl.getBoundingClientRect();
+				y = r.top;
+				// Default to the right of the card; flip to the left if it would overflow.
+				if (r.right + offset + rect.width < window.innerWidth) {
+					x = r.right + offset;
+				} else {
+					x = Math.max(offset, r.left - offset - rect.width);
+				}
+			} else {
+				// Fallback: near the cursor.
+				x = (e.clientX || 0) + offset;
+				y = (e.clientY || 0) + offset;
+			}
+			// Clamp vertically into the viewport.
+			if (y + rect.height > window.innerHeight) {
+				y = Math.max(offset, window.innerHeight - rect.height - offset);
+			}
+			if (y < offset) y = offset;
+
+			tooltipEl.style.left = `${x}px`;
+			tooltipEl.style.top = `${y}px`;
+		}
+
+		function hideTooltip() {
+			tooltipEl.classList.remove('is-visible');
+			tooltipEl.setAttribute('aria-hidden', 'true');
 		}
 
 		function femaleIcon() {
@@ -81,6 +330,6 @@
 							19.67,9.74C19.88,10.45 20,11.21 20,12C20,16.41 16.41,20 12,20Z" />
 					</svg>
 				`)
-				}
+			}
 </script>
 {% endblock %}

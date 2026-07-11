@@ -1,4 +1,5 @@
 from .base import *  # noqa: F403, F405
+from django.core.exceptions import ImproperlyConfigured
 
 DEBUG = False
 TESTING = False
@@ -12,7 +13,8 @@ SECRET_KEY_FALLBACKS = env.list("PREVIOUS_SECRET_KEYS", default=[])
 WHITENOISE_MANIFEST_STRICT = True
 
 SITE_DOMAIN = env.str("SITE_DOMAIN")
-assert SITE_DOMAIN
+if not SITE_DOMAIN:
+  raise ImproperlyConfigured("SITE_DOMAIN environment variable must be set and non-empty in production")
 SITE_PORT = env.int("SITE_PORT", default=0)
 SITE_PORT = f":{SITE_PORT}" if SITE_PORT else ""
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[SITE_DOMAIN, *ALLOWED_HOSTS])

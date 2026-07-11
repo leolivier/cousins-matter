@@ -13,3 +13,6 @@ backup/
 *.bak
 *.pyc
 *.db
+.zed/
+.codegraph/
+.headroom/

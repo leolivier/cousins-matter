@@ -178,6 +178,21 @@ wheels = [
 ]
 
 [[package]]
+name = "bandit"
+version = "1.9.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "pyyaml" },
+    { name = "rich" },
+    { name = "stevedore" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/aa/c3/0cb80dfe0f3076e5da7e4c5ad8e57bac6ac357ff4a6406205501cade4965/bandit-1.9.4.tar.gz", hash = "sha256:b589e5de2afe70bd4d53fa0c1da6199f4085af666fde00e8a034f152a52cd628", size = 4242677, upload-time = "2026-02-25T06:44:15.503Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/05/a4/a26d5b25671d27e03afb5401a0be5899d94ff8fab6a698b1ac5be3ec29ef/bandit-1.9.4-py3-none-any.whl", hash = "sha256:f89ffa663767f5a0585ea075f01020207e966a9c0f2b9ef56a57c7963a3f6f8e", size = 134741, upload-time = "2026-02-25T06:44:13.694Z" },
+]
+
+[[package]]
 name = "blessed"
 version = "1.44.0"
 source = { registry = "https://pypi.org/simple" }
@@ -420,6 +435,7 @@ ai = [
     { name = "headroom-ai", extra = ["code", "mcp", "memory", "proxy"] },
 ]
 dev = [
+    { name = "bandit" },
     { name = "coverage" },
     { name = "css-html-js-minify" },
     { name = "django-debug-toolbar" },
@@ -460,8 +476,9 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-ai = [{ name = "headroom-ai", extras = ["code", "mcp", "memory", "proxy"], specifier = ">=0.23.0" }]
+ai = [{ name = "headroom-ai", extras = ["code", "mcp", "memory", "proxy"], specifier = ">=0.31.0" }]
 dev = [
+    { name = "bandit", specifier = ">=1.9.4" },
     { name = "coverage", specifier = ">=7.14.3" },
     { name = "css-html-js-minify", specifier = ">=2.5.5" },
     { name = "django-debug-toolbar", specifier = "~=7.0.0" },
@@ -1014,7 +1031,7 @@ wheels = [
 
 [[package]]
 name = "headroom-ai"
-version = "0.30.0"
+version = "0.31.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ast-grep-cli" },
@@ -1024,12 +1041,13 @@ dependencies = [
     { name = "rich" },
     { name = "tiktoken" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fa/cf/61bc24c72c7c64a32f3d82a1193d1bd96892564160acfeb380ad381b34a0/headroom_ai-0.30.0.tar.gz", hash = "sha256:ede80f5a81f4d438301048a2123b266f1b2705d361018b172ad9f2487aca6c95", size = 1993582, upload-time = "2026-07-03T19:49:10.717Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ad/fd/fe59aa45a74ead7ce0faad8175b29f02e5ef81034a434ff2a0da7f59a0a6/headroom_ai-0.31.0.tar.gz", hash = "sha256:a13f9764be168e4d075fd80ff6ee5d47a9febe0152b82ad28bab0e949fcd9bd3", size = 2065012, upload-time = "2026-07-09T15:58:13.782Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d1/61/bd6495a33d1cb098da61c651f803fe309acaa5331e4b92381b825cf868b9/headroom_ai-0.30.0-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:9b10f4dec6451fce652fdb775e7dc7a999e98d3ee853d1eb569a7e2e550d79c5", size = 16512859, upload-time = "2026-07-03T19:49:00.816Z" },
-    { url = "https://files.pythonhosted.org/packages/67/d5/208f79315c1c83894ee226a42c2651ed2c7ab53fe7de4398e68023a02d33/headroom_ai-0.30.0-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:bd067a43485b65fd8d71956efbe43e2af2a8ce72dd68e4b48ee5cbfad03b2b91", size = 18571233, upload-time = "2026-07-03T19:49:03.674Z" },
-    { url = "https://files.pythonhosted.org/packages/1d/ea/b240a1ed4c0e2c92a39dc92db0b4038df41cd4e45600130084611ffbad27/headroom_ai-0.30.0-cp310-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:0e66a3241901ab62606ab0cf2b241f32d3a5ac9cf0cbda099fcc86519dd1700d", size = 17691948, upload-time = "2026-07-03T19:49:06.189Z" },
-    { url = "https://files.pythonhosted.org/packages/78/1b/560b313a45705fce7d39bd73175d50c1fd4e8dcf56236b6f3bf690677f85/headroom_ai-0.30.0-cp310-abi3-win_amd64.whl", hash = "sha256:88b8a7023163d7986fc25e175e026b68d7d84c61c6df1b488aa14a3e7981663e", size = 10340686, upload-time = "2026-07-03T19:49:08.541Z" },
+    { url = "https://files.pythonhosted.org/packages/74/42/f5a6e03aa313b97e84ec1a93e9a137c2bc5767bb007487ffddeb0b7615ec/headroom_ai-0.31.0-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:572abdfb6a77c1ec5f61ac1f186cb257376d09a49e5728eb8d73eb502aaeb7d7", size = 10319875, upload-time = "2026-07-09T15:57:57.704Z" },
+    { url = "https://files.pythonhosted.org/packages/93/eb/2abb3553f3a5c9321b2ebb64d11eec79a3cf0c0956698f1e0a33181e2f4c/headroom_ai-0.31.0-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:cc342c55b1b148931ead076a4eede5528b4afadd09475f68292619eeb3237553", size = 16582397, upload-time = "2026-07-09T15:58:01.263Z" },
+    { url = "https://files.pythonhosted.org/packages/51/95/8461f89b666838ab0c8853484ee23f408e6312e5649f9c2a0f0b43ac3582/headroom_ai-0.31.0-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:c06b756cccca3ba1a92c4d4ad878a62ce1168052aadfe2079a99a5fa4c792783", size = 18642952, upload-time = "2026-07-09T15:58:04.691Z" },
+    { url = "https://files.pythonhosted.org/packages/ac/40/6e41e7e4c38867bd9343ba1346732c82ed9bb3e4402665045394350261ec/headroom_ai-0.31.0-cp310-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:faa1fbf65a308955219975b79d7d1629f580ce46278ac70b6a68e9732b2a6b76", size = 17764670, upload-time = "2026-07-09T15:58:08.297Z" },
+    { url = "https://files.pythonhosted.org/packages/a3/44/cf8c834274e3ede6b3a943c5c6cefd595a47bf30dbe6cd9953e2e1898d01/headroom_ai-0.31.0-cp310-abi3-win_amd64.whl", hash = "sha256:1291fec8693a6db2cd088fbb744de9f29cbb0269a82e5831cf0edcac9d1398d9", size = 10412793, upload-time = "2026-07-09T15:58:11.31Z" },
 ]
 
 [package.optional-dependencies]
@@ -2510,6 +2528,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/eb/e3/7c1dc7381d9f8ab7d854328ebfa884e62cb3f3d8549ddfd37c7814f42afa/starlette-1.3.1.tar.gz", hash = "sha256:05d0213193f2fbaae60e2ecb593b4add4262ad4e46536b54abe36f11a71724e0", size = 2703240, upload-time = "2026-06-12T09:23:11.602Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ec/bb/2799cc2ede3ed41131f8975621e7213dfc7ef4acbbaadfa440f32500c370/starlette-1.3.1-py3-none-any.whl", hash = "sha256:c7372aae11c3c3f26a42df7bd626cec2f47d03483d261d369516a615a53714c6", size = 73632, upload-time = "2026-06-12T09:23:10.017Z" },
+]
+
+[[package]]
+name = "stevedore"
+version = "5.9.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d7/dd/04d56c2a5232358df41f3d0f0e31833d378b6c8ed7803a6b1b7867b0eba6/stevedore-5.9.0.tar.gz", hash = "sha256:abbd0af7a38a8bbb1d6adea2e35b17609cf004eaac323e88a8d8963640dd2b3c", size = 514850, upload-time = "2026-07-02T11:38:08.509Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/62/8d/008761f6e1000600e5303db30d05724bdcf3d2d186cbb59fac79b52e39ed/stevedore-5.9.0-py3-none-any.whl", hash = "sha256:e520945d4c257700eddc1eb1d79df04b2ea578eef185e0e3fa5b442fc848d3f7", size = 54463, upload-time = "2026-07-02T11:38:07.43Z" },
 ]
 
 [[package]]

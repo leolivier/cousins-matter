@@ -17,10 +17,9 @@ class PostAdmin(admin.ModelAdmin):
   raw_id_fields = ["first_message"]
   filter_horizontal = ["followers"]
 
+  @admin.display(description=_("created"))
   def created_date(self, obj):
     return obj.first_message.created if obj.first_message else None
-
-  created_date.short_description = _("created")
 
 
 @admin.register(Message)
@@ -30,10 +29,9 @@ class MessageAdmin(admin.ModelAdmin):
   search_fields = ["content", "author__username", "post__title"]
   date_hierarchy = "created"
 
+  @admin.display(description=_("content"))
   def short_content(self, obj):
     return obj.content[:50] + "..." if len(obj.content) > 50 else obj.content
-
-  short_content.short_description = _("content")
 
 
 @admin.register(Comment)
@@ -43,7 +41,6 @@ class CommentAdmin(admin.ModelAdmin):
   search_fields = ["content", "author__username"]
   date_hierarchy = "created"
 
+  @admin.display(description=_("content"))
   def short_content(self, obj):
     return obj.content[:50] + "..." if len(obj.content) > 50 else obj.content
-
-  short_content.short_description = _("content")

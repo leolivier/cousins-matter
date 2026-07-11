@@ -42,9 +42,12 @@
     <table class="table is-fullwidth is-striped is-hoverable">
         <thead>
             <tr>
-                <th>{% trans "Name" %}</th>
-                <th>{% trans "Birth Date" %}</th>
-                <th>{% trans "Birth Place" %}</th>
+                {% trans "Name" as t_name %}
+                {% trans "Birth Date" as t_birth_date %}
+                {% trans "Birth Place" as t_birth_place %}
+                <th>{% include "genealogy/_sortable_header.html" with label=t_name field="name" sort=sort dir=dir %}</th>
+                <th>{% include "genealogy/_sortable_header.html" with label=t_birth_date field="birth_date" sort=sort dir=dir %}</th>
+                <th>{% include "genealogy/_sortable_header.html" with label=t_birth_place field="birth_place" sort=sort dir=dir %}</th>
                 <th>{% trans "Actions" %}</th>
             </tr>
         </thead>

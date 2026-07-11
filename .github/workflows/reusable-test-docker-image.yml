@@ -56,7 +56,8 @@ jobs:
           docker volume prune -f || true
 
           # Start containers
-          docker compose -f docker-compose.yml up -d --wait --wait-timeout 30
+          mkdir -p ${{ github.workspace }}/artifacts/screenshots
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d --wait --wait-timeout 30
 
           # Verify container exists and is running
           docker ps | grep cousins-matter || (docker ps && exit 1)
@@ -81,7 +82,10 @@ jobs:
       - name: Run Tests (default or S3 mode)
         run: |
           if [ ${{ inputs.ui }} == true ]; then
-            docker exec cousins-matter python manage.py test --failfast --tag=ui
+            # TEMPORARY: --failfast removed to diagnose flaky login in UI tests.
+            # It stops at the first failure, masking whether other tests fail too
+            # (accumulation). Restore --failfast once the root cause is fixed.
+            docker exec cousins-matter python manage.py test --tag=ui
           else
             docker exec cousins-matter python manage.py test --failfast --exclude-tag=ui
           fi
@@ -91,3 +95,11 @@ jobs:
         uses: ./.github/actions/show-logs-on-failure
         with:
           env_file_path: ${{ github.workspace }}/.env
+
+      - name: Upload screenshots
+        if: failure() && inputs.ui
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-screenshots
+          path: ${{ github.workspace }}/artifacts/screenshots/*.png
+          retention-days: 7

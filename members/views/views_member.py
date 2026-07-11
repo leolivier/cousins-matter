@@ -272,7 +272,7 @@ class EditProfileView(EditMemberView):
 
 
 def delete_member(request, username):
-  assert request.htmx
+  assert request.htmx  # nosec B101
   member = get_object_or_404(Member, username=username)
   if not _can_edit_member(request, member):
     messages.error(request, _("You do not have permission to delete this member."))
@@ -291,7 +291,7 @@ def delete_member(request, username):
 
 
 def search_members(request):
-  assert request.htmx
+  assert request.htmx  # nosec B101
   query = get_search_query(request)
   render_with = request.GET.get("render_with", "members/members/members.html#members_content")
   page_num = request.GET.get("page_num", 1)

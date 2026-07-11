@@ -1,8 +1,10 @@
+from typing import Any
+
 from django.conf import settings as django_settings
 from django.test import override_settings as django_override_settings
 
 # Write here the settings you want to expose to the templates.
-EXPOSED_SETTINGS = [
+EXPOSED_SETTINGS: list[str] = [
   "DATA_UPLOAD_MAX_MEMORY_SIZE",
   # 'BASE_DIR',
   "SITE_NAME",
@@ -51,7 +53,7 @@ EXPOSED_SETTINGS = [
 ]
 
 
-_settings_in_templates = {}
+_settings_in_templates: dict[str, Any] = {}
 
 
 def recompute_settings_in_templates():

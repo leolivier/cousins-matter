@@ -10,7 +10,7 @@ for path in ["health", "qhealth"]:
   url = f"http://127.0.0.1:{port}/{path}/"
   logger.info(f"url = {url}")
   # test the health check
-  r = urllib.request.urlopen(url, timeout=5)
+  r = urllib.request.urlopen(url, timeout=5)  # nosec
   if r.getcode() != 200:
     logger.error(f"url= {url} code= {r.getcode()} msg= {r.read().decode('utf-8')}")
     sys.exit(1)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: genealogy 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 17:54+0100\n"
+"POT-Creation-Date: 2026-07-11 10:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Olivier Levillain <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -18,371 +18,399 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: genealogy/forms.py:56
+#: forms.py:56
 msgid "GEDCOM File"
 msgstr "Fichier GEDCOM"
 
-#: genealogy/forms.py:57
+#: forms.py:57
 msgid "Upload a .ged file to import your genealogy data."
 msgstr "Transférez un fichier .ged pour importer vos données de famille."
 
-#: genealogy/models.py:10 genealogy/templates/genealogy/statistics.html:46
+#: models.py:11 templates/genealogy/family_chart.html:81
+#: templates/genealogy/statistics.html:46
 msgid "Male"
 msgstr "Homme"
 
-#: genealogy/models.py:11 genealogy/templates/genealogy/statistics.html:47
+#: models.py:12 templates/genealogy/family_chart.html:82
+#: templates/genealogy/statistics.html:47
 msgid "Female"
 msgstr "Femme"
 
-#: genealogy/models.py:12 genealogy/models.py:95
-#: genealogy/templates/genealogy/statistics.html:48
+#: models.py:13 models.py:96 templates/genealogy/family_chart.html:83
+#: templates/genealogy/statistics.html:48
 msgid "Other"
 msgstr "Autre"
 
-#: genealogy/models.py:21
+#: models.py:22
 msgid "Linked Member"
 msgstr "Membre lié"
 
-#: genealogy/models.py:24
+#: models.py:25 templates/genealogy/family_chart.html:92
 msgid "First Name"
 msgstr "Prénom"
 
-#: genealogy/models.py:25
+#: models.py:26 templates/genealogy/family_chart.html:93
 msgid "Last Name"
 msgstr "Nom"
 
-#: genealogy/models.py:26
+#: models.py:27
 msgid "Gender"
 msgstr "Genre"
 
-#: genealogy/models.py:28 genealogy/templates/genealogy/person_list.html:46
+#: models.py:29 templates/genealogy/family_chart.html:94
+#: templates/genealogy/person_list.html:46
 msgid "Birth Date"
 msgstr "Date de naissance"
 
-#: genealogy/models.py:29 genealogy/templates/genealogy/person_list.html:47
+#: models.py:30 templates/genealogy/family_chart.html:96
+#: templates/genealogy/person_list.html:47
 msgid "Birth Place"
 msgstr "Lieu de naissance"
 
-#: genealogy/models.py:31
+#: models.py:32 templates/genealogy/family_chart.html:95
 msgid "Death Date"
 msgstr "Date de décès"
 
-#: genealogy/models.py:32
+#: models.py:33 templates/genealogy/family_chart.html:97
 msgid "Death Place"
 msgstr "Lieu de décès"
 
-#: genealogy/models.py:34
+#: models.py:35
 msgid "Notes"
 msgstr "Notes"
 
-#: genealogy/models.py:36
+#: models.py:37
 msgid "GedCom UUID"
 msgstr "UUID GEDCOM"
 
-#: genealogy/models.py:44
+#: models.py:45
 msgid "Child of Family"
 msgstr "Enfant de la famille"
 
-#: genealogy/models.py:48
+#: models.py:49
 msgid "Person"
 msgstr "Personne"
 
-#: genealogy/models.py:49 genealogy/templates/genealogy/base_genealogy.html:21
-#: genealogy/templates/genealogy/person_list.html:10
+#: models.py:50 templates/genealogy/base_genealogy.html:21
+#: templates/genealogy/person_list.html:10
 msgid "People"
 msgstr "Personnes"
 
-#: genealogy/models.py:92
+#: models.py:93 templates/genealogy/family_chart.html:88
 msgid "Marriage"
 msgstr "Mariage"
 
-#: genealogy/models.py:93
+#: models.py:94
 msgid "Civil union"
 msgstr "PACS"
 
-#: genealogy/models.py:94
+#: models.py:95
 msgid "Cohabitation"
 msgstr "Cohabitation"
 
-#: genealogy/models.py:102 genealogy/templates/genealogy/family_list.html:45
+#: models.py:103 templates/genealogy/family_list.html:45
 msgid "Partner 1"
 msgstr "Partenaire 1"
 
-#: genealogy/models.py:110 genealogy/templates/genealogy/family_list.html:46
+#: models.py:111 templates/genealogy/family_list.html:46
 msgid "Partner 2"
 msgstr "Partenaires 2"
 
-#: genealogy/models.py:115
+#: models.py:116
 msgid "Union Type"
 msgstr "Type d'union"
 
-#: genealogy/models.py:116
+#: models.py:117
 msgid "Union Date"
 msgstr "Date d'union"
 
-#: genealogy/models.py:117
+#: models.py:118
 msgid "Union Place"
 msgstr "Lieu d'union"
 
-#: genealogy/models.py:119
+#: models.py:120
 msgid "Separation Date"
 msgstr "Date de separation"
 
-#: genealogy/models.py:122 genealogy/templates/genealogy/person_detail.html:62
+#: models.py:123 templates/genealogy/person_detail.html:62
 msgid "Family"
 msgstr "Famille"
 
-#: genealogy/models.py:123 genealogy/templates/genealogy/base_genealogy.html:27
-#: genealogy/templates/genealogy/family_list.html:10
+#: models.py:124 templates/genealogy/base_genealogy.html:27
+#: templates/genealogy/family_list.html:10
 msgid "Families"
 msgstr "Familles"
 
-#: genealogy/templates/genealogy/base_genealogy.html:4
-#: genealogy/templates/genealogy/base_genealogy.html:8
+#: templates/genealogy/base_genealogy.html:4
+#: templates/genealogy/base_genealogy.html:8
 msgid "Genealogy"
 msgstr "Généalogie"
 
-#: genealogy/templates/genealogy/base_genealogy.html:15
+#: templates/genealogy/base_genealogy.html:15
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-#: genealogy/templates/genealogy/base_genealogy.html:33
+#: templates/genealogy/base_genealogy.html:33
 msgid "Family Tree"
 msgstr "Arbre généalogique"
 
-#: genealogy/templates/genealogy/base_genealogy.html:39
+#: templates/genealogy/base_genealogy.html:39
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: genealogy/templates/genealogy/base_genealogy.html:52
+#: templates/genealogy/base_genealogy.html:52
 msgid "Force refresh"
 msgstr "Forcer le rafraîchissement"
 
-#: genealogy/templates/genealogy/dashboard.html:9
+#: templates/genealogy/dashboard.html:9
 msgid "Overview"
 msgstr "Aperçu"
 
-#: genealogy/templates/genealogy/dashboard.html:17
-#: genealogy/templates/genealogy/import_gedcom.html:8
+#: templates/genealogy/dashboard.html:17
+#: templates/genealogy/import_gedcom.html:8
 msgid "Import GEDCOM"
 msgstr "Importer un fichier GEDCOM"
 
-#: genealogy/templates/genealogy/dashboard.html:21
+#: templates/genealogy/dashboard.html:21
 msgid "Export GEDCOM"
 msgstr "Exporter un fichier GEDCOM"
 
-#: genealogy/templates/genealogy/dashboard.html:30
+#: templates/genealogy/dashboard.html:30
 msgid "Total People"
 msgstr "Nombre total de personnes"
 
-#: genealogy/templates/genealogy/dashboard.html:36
+#: templates/genealogy/dashboard.html:36
 msgid "Total Families"
 msgstr "Nombre total de familles"
 
-#: genealogy/templates/genealogy/family_confirm_delete.html:8
-#: genealogy/templates/genealogy/person_confirm_delete.html:8
+#: templates/genealogy/family_chart.html:84
+#: templates/genealogy/person_detail.html:28
+msgid "Born:"
+msgstr "Naissance:"
+
+#: templates/genealogy/family_chart.html:85
+#: templates/genealogy/person_detail.html:35
+msgid "Died:"
+msgstr "Décès:"
+
+#: templates/genealogy/family_chart.html:86
+#: templates/genealogy/person_detail.html:66
+msgid "Parents"
+msgstr "Parents"
+
+#: templates/genealogy/family_chart.html:87
+#: templates/genealogy/person_detail.html:105
+msgid "Children"
+msgstr "Enfants"
+
+#: templates/genealogy/family_chart.html:89
+msgid "Age"
+msgstr "Âge"
+
+#: templates/genealogy/family_chart.html:90
+msgid "Age at death"
+msgstr "Âge au décès"
+
+#: templates/genealogy/family_confirm_delete.html:8
+#: templates/genealogy/person_confirm_delete.html:8
 msgid "Confirm Deletion"
 msgstr "Confirmer la suppression"
 
-#: genealogy/templates/genealogy/family_confirm_delete.html:10
+#: templates/genealogy/family_confirm_delete.html:10
 #, python-format
 msgid "Are you sure you want to delete the family \"%(name)s\"?"
 msgstr "Es-tu sûr de vouloir supprimer la famille « %(name)s »?"
 
-#: genealogy/templates/genealogy/family_confirm_delete.html:13
-#: genealogy/templates/genealogy/person_confirm_delete.html:13
+#: templates/genealogy/family_confirm_delete.html:13
+#: templates/genealogy/person_confirm_delete.html:13
 msgid "This action cannot be undone."
 msgstr "Cette action ne peut pas être annulée."
 
-#: genealogy/templates/genealogy/family_confirm_delete.html:19
-#: genealogy/templates/genealogy/person_confirm_delete.html:19
+#: templates/genealogy/family_confirm_delete.html:19
+#: templates/genealogy/person_confirm_delete.html:19
 msgid "Yes, delete"
 msgstr "Oui, supprimer"
 
-#: genealogy/templates/genealogy/family_confirm_delete.html:22
-#: genealogy/templates/genealogy/family_form.html:17
-#: genealogy/templates/genealogy/import_gedcom.html:20
-#: genealogy/templates/genealogy/person_confirm_delete.html:22
-#: genealogy/templates/genealogy/person_form.html:18
+#: templates/genealogy/family_confirm_delete.html:22
+#: templates/genealogy/family_form.html:17
+#: templates/genealogy/import_gedcom.html:20
+#: templates/genealogy/person_confirm_delete.html:22
+#: templates/genealogy/person_form.html:18
 msgid "Cancel"
 msgstr "Annuler"
 
-#: genealogy/templates/genealogy/family_form.html:14
-#: genealogy/templates/genealogy/person_form.html:15
+#: templates/genealogy/family_form.html:14
+#: templates/genealogy/person_form.html:15
 msgid "Save"
 msgstr "Enregistrer"
 
-#: genealogy/templates/genealogy/family_list.html:17
-#: genealogy/templates/genealogy/person_list.html:17
-#: genealogy/templates/genealogy/family_list.html:25
-#: genealogy/templates/genealogy/person_list.html:25
+#: templates/genealogy/family_list.html:17
+#: templates/genealogy/family_list.html:25
+#: templates/genealogy/person_list.html:25
 msgid "Search"
 msgstr "Chercher"
 
-#: genealogy/templates/genealogy/family_list.html:33
-#: genealogy/views/views_family.py:57
+#: templates/genealogy/family_list.html:33 views/views_family.py:61
 msgid "Add Family"
 msgstr "Ajouter une famille"
 
-#: genealogy/templates/genealogy/family_list.html:47
+#: templates/genealogy/family_list.html:47
 msgid "Type"
 msgstr "Type"
 
-#: genealogy/templates/genealogy/family_list.html:48
+#: templates/genealogy/family_list.html:48
 msgid "Date"
 msgstr "Date"
 
-#: genealogy/templates/genealogy/family_list.html:49
-#: genealogy/templates/genealogy/person_list.html:48
+#: templates/genealogy/family_list.html:49
+#: templates/genealogy/person_list.html:48
 msgid "Actions"
 msgstr "Actions"
 
-#: genealogy/templates/genealogy/family_list.html:89
+#: templates/genealogy/family_list.html:89
 msgid "No families found."
 msgstr "Aucune famille trouvée."
 
-#: genealogy/templates/genealogy/import_gedcom.html:10
-msgid "Upload a GEDCOM (.ged) file to import your genealogy data. This will create people and families in the database."
-msgstr "Transfère un fichier GEDCOM (.ged) pour importer vos données de famille. Cela créera des personnes et des familles dans la base de données."
+#: templates/genealogy/import_gedcom.html:10
+msgid ""
+"Upload a GEDCOM (.ged) file to import your genealogy data. This will create "
+"people and families in the database."
+msgstr ""
+"Transfère un fichier GEDCOM (.ged) pour importer vos données de famille. "
+"Cela créera des personnes et des familles dans la base de données."
 
-#: genealogy/templates/genealogy/import_gedcom.html:17
+#: templates/genealogy/import_gedcom.html:17
 msgid "Import"
 msgstr "Importer"
 
-#: genealogy/templates/genealogy/person_confirm_delete.html:10
+#: templates/genealogy/person_confirm_delete.html:10
 #, python-format
 msgid "Are you sure you want to delete \"%(name)s\"?"
 msgstr "Es-tu sûr de vouloir supprimer « %(name)s »?"
 
-#: genealogy/templates/genealogy/person_detail.html:28
-msgid "Born:"
-msgstr "Naissance:"
-
-#: genealogy/templates/genealogy/person_detail.html:35
-msgid "Died:"
-msgstr "Décès:"
-
-#: genealogy/templates/genealogy/person_detail.html:43
+#: templates/genealogy/person_detail.html:43
 msgid "Age:"
 msgstr "Age:"
 
-#: genealogy/templates/genealogy/person_detail.html:53
+#: templates/genealogy/person_detail.html:53
 msgid "Edit"
 msgstr "Editer"
 
-#: genealogy/templates/genealogy/person_detail.html:54
+#: templates/genealogy/person_detail.html:54
 msgid "Delete"
 msgstr "Supprimer"
 
-#: genealogy/templates/genealogy/person_detail.html:55
-#: genealogy/templates/genealogy/person_list.html:64
+#: templates/genealogy/person_detail.html:55
+#: templates/genealogy/person_list.html:64
 msgid "View family tree"
 msgstr "Voir l'arbre généalogique"
 
-#: genealogy/templates/genealogy/person_detail.html:66
-msgid "Parents"
-msgstr "Parents"
-
-#: genealogy/templates/genealogy/person_detail.html:85
+#: templates/genealogy/person_detail.html:85
 msgid "Unknown parents"
 msgstr "Parents inconnus"
 
-#: genealogy/templates/genealogy/person_detail.html:90
+#: templates/genealogy/person_detail.html:90
 msgid "Partners"
 msgstr "Partenaires"
 
-#: genealogy/templates/genealogy/person_detail.html:99
+#: templates/genealogy/person_detail.html:99
 msgid "No partners recorded"
 msgstr "Aucun partenaire enregistré"
 
-#: genealogy/templates/genealogy/person_detail.html:105
-msgid "Children"
-msgstr "Enfants"
+#: templates/genealogy/person_list.html:17
+#, fuzzy
+#| msgid "Search"
+msgid "Search..."
+msgstr "Chercher"
 
-#: genealogy/templates/genealogy/person_list.html:33
-#: genealogy/views/views_person.py:56
+#: templates/genealogy/person_list.html:33 views/views_person.py:59
 msgid "Add Person"
 msgstr "Ajouter une personne"
 
-#: genealogy/templates/genealogy/person_list.html:45
+#: templates/genealogy/person_list.html:45
 msgid "Name"
 msgstr "Nom"
 
-#: genealogy/templates/genealogy/person_list.html:78
+#: templates/genealogy/person_list.html:78
 msgid "No people found."
 msgstr "Aucune personne trouvée."
 
-#: genealogy/templates/genealogy/statistics.html:10
+#: templates/genealogy/statistics.html:10
 msgid "Gender Distribution"
 msgstr "Distribution des genres"
 
-#: genealogy/templates/genealogy/statistics.html:18
+#: templates/genealogy/statistics.html:18
 msgid "Births per Decade"
 msgstr "Naissances par décennies"
 
-#: genealogy/templates/genealogy/statistics.html:26
+#: templates/genealogy/statistics.html:26
 msgid "Top First Names"
 msgstr "Prénoms les plus courants"
 
-#: genealogy/templates/genealogy/statistics.html:34
+#: templates/genealogy/statistics.html:34
 msgid "Top Last Names"
 msgstr "Noms de famille les plus courants"
 
-#: genealogy/templates/genealogy/statistics.html:70
+#: templates/genealogy/statistics.html:70
 msgid "Births"
 msgstr "Naissances"
 
-#: genealogy/templates/genealogy/statistics.html:86
-#: genealogy/templates/genealogy/statistics.html:102
+#: templates/genealogy/statistics.html:86
+#: templates/genealogy/statistics.html:102
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: genealogy/templates/genealogy/statistics.html:88
-#: genealogy/templates/genealogy/statistics.html:104
+#: templates/genealogy/statistics.html:88
+#: templates/genealogy/statistics.html:104
 msgid "Count"
 msgstr "Nombre"
 
-#: genealogy/views/views_dashboard_stats.py:55
+#: tests/tests_views_dashboard_stats.py:83 views/views_dashboard_stats.py:53
 msgid "Genealogy data refreshed successfully."
 msgstr "Données genealogiques actualisées avec succès."
 
-#: genealogy/views/views_family.py:52
-msgid "Family created successfully."
-msgstr "Famille crée avec succès."
-
-#: genealogy/views/views_family.py:67
-msgid "Family updated successfully."
-msgstr "Famille mise à jour avec succès."
-
-#: genealogy/views/views_family.py:72
-msgid "Edit Family"
-msgstr "Editer famille"
-
-#: genealogy/views/views_family.py:80
-msgid "Family deleted successfully."
-msgstr "Famille supprimée avec succès."
-
-#: genealogy/views/views_gedcom.py:27
+#: tests/tests_views_gedcom.py:32 tests/tests_views_gedcom.py:49
+#: views/views_gedcom.py:22
 msgid "GEDCOM imported successfully."
 msgstr "GEDCOM importé avec succès."
 
-#: genealogy/views/views_gedcom.py:30
+#: tests/tests_views_gedcom.py:57
+msgid "This field is required."
+msgstr ""
+
+#: tests/tests_views_gedcom.py:72 views/views_gedcom.py:25
 #, python-format
 msgid "Error importing GEDCOM: %(error)s"
 msgstr "Erreur lors de l'importation du GEDCOM: %(error)s"
 
-#: genealogy/views/views_person.py:51
+#: views/views_family.py:56
+msgid "Family created successfully."
+msgstr "Famille crée avec succès."
+
+#: views/views_family.py:70
+msgid "Family updated successfully."
+msgstr "Famille mise à jour avec succès."
+
+#: views/views_family.py:75
+msgid "Edit Family"
+msgstr "Editer famille"
+
+#: views/views_family.py:82
+msgid "Family deleted successfully."
+msgstr "Famille supprimée avec succès."
+
+#: views/views_person.py:54
 msgid "Person created successfully."
 msgstr "Personne crée avec succès."
 
-#: genealogy/views/views_person.py:66
+#: views/views_person.py:68
 msgid "Person updated successfully."
 msgstr "Personne mise à jour avec succès."
 
-#: genealogy/views/views_person.py:71
+#: views/views_person.py:73
 msgid "Edit Person"
 msgstr "Editer personne"
 
-#: genealogy/views/views_person.py:79
+#: views/views_person.py:80
 msgid "Person deleted successfully."
 msgstr "Personne supprimée avec succès."

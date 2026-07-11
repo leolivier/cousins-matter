@@ -13,9 +13,8 @@ class TroveAdmin(admin.ModelAdmin):
   readonly_fields = ["thumbnail"]
   raw_id_fields = ["owner"]
 
+  @admin.display(description=_("preview"))
   def picture_preview(self, obj):
     if obj.thumbnail:
       return format_html('<img src="{}" style="max-height: 50px;"/>', obj.thumbnail.url)
     return ""
-
-  picture_preview.short_description = _("preview")

@@ -2,6 +2,7 @@ import logging
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -50,7 +51,8 @@ def search_private_members(request, room_slug):
   - `ValidationError`: If the request is not an HTMX request.
 
   """
-  assert request.htmx
+  if not request.htmx:
+    return HttpResponseBadRequest("This view requires an HTMX request")
   room = get_object_or_404(PrivateChatRoom, slug=room_slug)
   query = request.GET.get("q", "")
   members = (  # fmt: skip

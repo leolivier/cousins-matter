@@ -37,12 +37,11 @@ class MemberAdmin(UserAdmin):
     ),
   )
 
+  @admin.display(description=_("avatar"))
   def avatar_preview(self, obj):
     if obj.avatar:
       return format_html('<img src="{}" style="max-height: 30px; border-radius: 50%;"/>', obj.avatar.url)
     return ""
-
-  avatar_preview.short_description = _("avatar")
 
 
 @admin.register(Family)

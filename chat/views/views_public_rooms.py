@@ -2,7 +2,7 @@ import logging
 from django.contrib import messages
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
-from django.http import QueryDict
+from django.http import QueryDict, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -40,7 +40,8 @@ def toggle_follow(request, room_slug):
 
 @require_http_methods(["GET", "PUT"])
 def edit_room(request, room_slug):
-  assert request.htmx
+  if not request.htmx:
+    return HttpResponseBadRequest("This view requires an HTMX request")
   room = get_object_or_404(ChatRoom, slug=room_slug)
   owner = room.owner
   if owner is not None:  # if the room has no first message, there is no owner

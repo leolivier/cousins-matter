@@ -1,0 +1,11 @@
+{% load i18n %}
+{% comment %}Reusable sortable column header. Toggles direction when the column
+is active, otherwise links to ascending order. Preserves the current search `q`. {% endcomment %}
+<a href="{% url 'genealogy:person_list' %}?sort={{ field }}&dir={% if sort == field and dir == 'asc' %}desc{% else %}asc{% endif %}{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}">
+  {{ label }}
+  {% if sort == field %}
+    <span class="icon is-small" style="vertical-align: middle;">
+      <i class="mdi mdi-18px mdi-{% if dir == 'asc' %}arrow-up{% else %}arrow-down{% endif %}" aria-hidden="true"></i>
+    </span>
+  {% endif %}
+</a>

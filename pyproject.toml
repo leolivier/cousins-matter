@@ -34,6 +34,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "bandit>=1.9.4",
     "coverage>=7.14.3",
     "css-html-js-minify>=2.5.5",
     "django-debug-toolbar~=7.0.0",
@@ -44,5 +45,7 @@ dev = [
     "types-requests>=2.33.0.20260518",
 ]
 ai = [
-    "headroom-ai[code,mcp,memory,proxy]>=0.23.0",
+    "headroom-ai[code,mcp,memory,proxy]>=0.31.0",
 ]
+[tool.bandit]
+exclude_dirs = [".venv", "tests", "__pycache__", ".git", "static", "media", "docs"]

@@ -45,7 +45,7 @@ class PhotoDetailView(generic.DetailView):
 
 
 def get_fullscreen_photo(request, pk):
-  assert request.htmx
+  assert request.htmx  # nosec B101
   try:
     photo = get_next_prev_photo(pk, request.GET.get("side"))
   except Photo.DoesNotExist:

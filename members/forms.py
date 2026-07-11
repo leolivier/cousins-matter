@@ -93,7 +93,7 @@ class MemberFormMixin:
     self.fields["privacy_consent"].label = mark_safe(
       _("By checking this box, you agree to this site's <a target='blank' href='%(privacy_url)s'>privacy policy</a>")
       % {"privacy_url": privacy_url}
-    )
+    )  # nosec
     self.fields["privacy_consent"].required = True
 
 

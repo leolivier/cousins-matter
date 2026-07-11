@@ -7,7 +7,7 @@ import re
 import secrets
 import shutil
 import string
-import subprocess
+import subprocess  # nosec B404
 import stat
 import sys
 import time
@@ -107,7 +107,7 @@ def run(
 ):
   """Will run the given shell command and return the result"""
   verbose("$", " ".join(cmd))
-  return subprocess.run(
+  return subprocess.run(  # nosec B603
     [clean_secret_mark(c) for c in cmd],
     check=check,
     capture_output=capture_output,
@@ -119,7 +119,7 @@ def run(
 def require_docker():
   """Will check if docker is installed and raise an error if not"""
   try:
-    subprocess.run(["docker", "--version"], check=True, capture_output=True, text=True)
+    subprocess.run(["docker", "--version"], check=True, capture_output=True, text=True)  # nosec B603, B607
   except Exception:
     error(1, "docker is not installed, please install it and restart the command")
 
@@ -147,7 +147,7 @@ def write_env(content: str) -> None:
 def docker_logs(container: str) -> str:
   """Will return the logs of the given container"""
   try:
-    res = subprocess.run(["docker", "logs", container], check=False, capture_output=True, text=True)
+    res = subprocess.run(["docker", "logs", container], check=False, capture_output=True, text=True)  # nosec B603, B607
     return res.stdout + (res.stderr or "")
   except Exception as ex:
     return str(ex)
@@ -156,7 +156,7 @@ def docker_logs(container: str) -> str:
 def github_latest_release(repo: str) -> str:
   """Will return the latest release tag of the given repo from GitHub API"""
   url = f"https://api.github.com/repos/{repo}/releases/latest"
-  with urlopen(url) as resp:
+  with urlopen(url) as resp:  # nosec
     data = json.load(resp)
   tag = data.get("tag_name")
   if not tag:
@@ -191,7 +191,7 @@ def download_github_file(file: str, dest: Path, base_url: str):
   try:
     dest.parent.mkdir(parents=True, exist_ok=True)
     # download url to dest file
-    with urlopen(url) as resp, open(dest, "wb") as f:
+    with urlopen(url) as resp, open(dest, "wb") as f:  # nosec
       shutil.copyfileobj(resp, f)
   except Exception as ex:
     error(1, f"Downloading {file} failed: {ex}")
@@ -310,7 +310,7 @@ def rotate_secrets(args: argparse.Namespace | None = None) -> int:
 
   # Load .env
   env = read_env()
-  assert env is not None
+  assert env is not None  # nosec B101
   # If SECRET_KEY missing: create and append comment + keys, then exit 1
   secret_match = SEC_REGEX.search(env)
   if secret_match is None:
@@ -454,7 +454,7 @@ def migrate_sqlite3_to_postgres(pg_pwd: str):
     )
 
   verbose("Database migration done, removing pgloader container...")
-  subprocess.run(["docker", "container", "rm", "cousins-matter-pgloader"], check=False)
+  subprocess.run(["docker", "container", "rm", "cousins-matter-pgloader"], check=False)  # nosec B603, B607
 
   print(f"""
 {ON_GREEN}Your database has now been migrated to postgres, you can start Cousins Matter with 'docker compose up -d'{NC}

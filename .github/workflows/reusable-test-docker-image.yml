@@ -82,7 +82,10 @@ jobs:
       - name: Run Tests (default or S3 mode)
         run: |
           if [ ${{ inputs.ui }} == true ]; then
-            docker exec cousins-matter python manage.py test --failfast --tag=ui
+            # TEMPORARY: --failfast removed to diagnose flaky login in UI tests.
+            # It stops at the first failure, masking whether other tests fail too
+            # (accumulation). Restore --failfast once the root cause is fixed.
+            docker exec cousins-matter python manage.py test --tag=ui
           else
             docker exec cousins-matter python manage.py test --failfast --exclude-tag=ui
           fi

@@ -54,7 +54,12 @@ jobs:
 
       - name: Lint with ruff
         run: |
-          uv run ruff check .
+          uv run ruff format -q .
+          uv run ruff check --fix .
+          uv run bandit -r . -c pyproject.toml
+          uv run pip-audit .
+          uv run mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
+
 
       - name: Login to GHCR.io
         uses: docker/login-action@v4

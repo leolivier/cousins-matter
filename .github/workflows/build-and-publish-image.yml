@@ -70,7 +70,7 @@ jobs:
   # ──────────────────────────────────────────────────────────────────────────────
   build-and-push:
     needs: [test-docker-image, test-install-migrate, test-s3, test-ui]
-    if: ${{ github.actor != 'dependabot[bot]' && always() && needs.test-docker-image.result == 'success' && (needs.test-install-migrate.result == 'success' || needs.test-install-migrate.result == 'skipped') && (needs.test-s3.result == 'success' || needs.test-s3.result == 'skipped') }}
+    if: ${{ github.actor != 'dependabot[bot]' }}
     uses: ./.github/workflows/reusable-build-and-push.yml
     with:
       registry: 'ghcr.io'
@@ -86,10 +86,10 @@ jobs:
   # ──────────────────────────────────────────────────────────────────────────────
   verify-production-image:
     needs: build-and-push
-    if: ${{ github.actor != 'dependabot[bot]' && needs.build-and-push.result == 'success' && github.event_name == 'release' }}
+    if: ${{ github.event_name == 'release' }}
     uses: ./.github/workflows/reusable-verify-production-image.yml
     with:
       registry: 'ghcr.io'
       image_name: ${{ github.repository }}
-      tags_def: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'push' && 'type=ref,event=branch' || 'type=sha' }}
+      tags_def: ${{ 'type=semver,pattern={{version}}' }}
     secrets: inherit

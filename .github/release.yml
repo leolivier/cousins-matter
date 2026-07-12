@@ -10,6 +10,9 @@ changelog:
     - title: '🐛 Bug fixes'
       labels:
         - bug
+    - title: '⬆️ Bump Dependencies'
+      labels:
+        - dependencies
     - title: '📦 Other changes'
       labels:
         - '*'

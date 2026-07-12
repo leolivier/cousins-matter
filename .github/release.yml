@@ -10,6 +10,9 @@ changelog:
     - title: '🐛 Bug fixes'
       labels:
         - bug
+    - title: '📦 Other changes'
+      labels:
+        - '*'
 
 append_body: |
   ---

@@ -106,6 +106,13 @@ jobs:
           echo "ERROR: Application did not respond after $MAX_RETRIES attempts"
           exit 1
 
+      - name: Checkout
+        uses: actions/checkout@v7
+        if: failure()
+        with:
+          fetch-depth: 0  # Required to get all tags
+          lfs: true
+
       - name: Show docker-compose services logs on failure
         if: failure()
         uses: ./.github/actions/show-logs-on-failure

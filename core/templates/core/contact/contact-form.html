@@ -12,10 +12,8 @@
 		{% csrf_token %}
 		{{ form|crispy }}
 		<div class="buttons is-centered">
-			<button type="submit" class="button is-dark" name="create">{%icon "send"%} <span>{%translate "Send"
-					%}</span></button>
-			<button type="cancel" class="button is-light" name="cancel">{%icon "cancel"%} <span>{%translate "Cancel"
-					%}</span></button>
+			<button type="submit" class="button is-dark" name="create">{%icon "send"%} <span>{%translate "Send" %}</span></button>
+			<button type="cancel" class="button is-light" name="cancel">{%icon "cancel"%} <span>{%translate "Cancel" %}</span></button>
 		</div>
 	</form>
 </div>

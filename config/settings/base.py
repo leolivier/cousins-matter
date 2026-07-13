@@ -67,13 +67,13 @@ CSRF_TRUSTED_ORIGINS = env.list(
 # policy is restricted to 'self' (+ a per-request nonce for inline
 # <script>/<style>). See core/templates/core/base.html.
 #
-# SECURE_CSP is the *enforced* policy; left empty (no header emitted) until
-# SECURE_CSP_REPORT_ONLY runs clean (browser console / reporting endpoint).
-# Copy the report-only mapping into SECURE_CSP once nothing is flagged.
-SECURE_CSP: dict[str, list[str]] = {}
-
-# Report-only policy: violations are reported but nothing is blocked.
-SECURE_CSP_REPORT_ONLY: dict[str, list[str]] = {
+# The enforced policy (SECURE_CSP, which blocks violations) and the report-only
+# policy (SECURE_CSP_REPORT_ONLY, which logs them to the browser console without
+# blocking) share the same mapping below. Report-only is kept during the rollout
+# transition so that any regression is surfaced in the console even though it is
+# already blocked — drop SECURE_CSP_REPORT_ONLY once the policy has run clean in
+# production for a while.
+_CSP_POLICY: dict[str, list[str]] = {
   "default-src": [CSP.SELF],
   # 'unsafe-eval' is required by the JS stack: htmx trigger filters
   # (input[cond]), hyperscript, and jQuery all evaluate dynamic code. A nonce
@@ -95,6 +95,12 @@ SECURE_CSP_REPORT_ONLY: dict[str, list[str]] = {
   "base-uri": [CSP.SELF],
   "object-src": [CSP.NONE],
 }
+
+# Enforced policy: violations are blocked by the browser.
+SECURE_CSP: dict[str, list[str]] = _CSP_POLICY
+
+# Report-only (kept during the transition; see comment above). Remove once stable.
+SECURE_CSP_REPORT_ONLY: dict[str, list[str]] = _CSP_POLICY
 
 LANGUAGES = [
   ("fr", "Français"),

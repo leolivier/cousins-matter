@@ -15,7 +15,7 @@
                    hx-indicator=".htmx-indicator"
                    autocomplete="off"
                    id="member-search-input"
-                   oninput="check_search_length(this, 3)"
+                   data-min-length="3"
                    >
             {%icon "search" "is-small is-left"%}
             <div class="dropdown-menu full-width" id="dropdown-menu" role="menu">
@@ -74,7 +74,7 @@ $(document).on('click', function(event) {
 <div class="dropdown-content">
   {% for member in members %}
   <a href="#" class="dropdown-item member-result"
-     onclick="selectMember('{{member.id}}', '{{member.full_name|escapejs}}'); return false;">
+     data-select-member-id="{{member.id}}" data-select-member-name="{{member.full_name}}">
     {{ member.full_name }}
   </a>
   {% empty %}

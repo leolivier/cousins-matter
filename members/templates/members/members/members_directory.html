@@ -8,7 +8,7 @@
 			<h1 class="title has-text-centered printable">{% title _("Members Directory") %}</h1>
 		</div>
 		<div class="level-right buttons">
-			<button class="button" onclick="printSection($('.printable'))">
+			<button class="button" data-print-section=".printable">
 				{%icon "print" %}
 				<span>{% translate "Print"%}</span>
 			</button>

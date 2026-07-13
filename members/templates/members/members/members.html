@@ -46,7 +46,7 @@
                   hx-vals='{"page_num": {{page.number|default:1}} }'
                   autocomplete="off"
                   id="member-search-input"
-                  oninput="check_search_length(this, 3)"
+                  data-min-length="3"
                   >
             {%icon "search" "is-small is-left"%}
         </div>
@@ -59,7 +59,7 @@
           <div class="control">
             <div class="select">
               {%with member_sort=request.GET.member_sort|default:"last_name" %}
-              <select name="member_sort" onchange="this.form.submit()">
+              <select name="member_sort" data-autosubmit>
                 <option value="first_name" {%if member_sort == 'first_name' %}selected{%endif%}>{% translate "First name" %}</option>
                 <option value="last_name" {%if member_sort == 'last_name' %}selected{%endif%}>{% translate "Last name" %}</option>
                 <option value="birthdate" {%if member_sort == 'birthdate' %}selected{%endif%}>{% translate "Birthdate" %}</option>

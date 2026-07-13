@@ -325,6 +325,7 @@ LOGIN_REQUIRED_IGNORE_PATHS = [
   "/accounts/confirm-email/",  # Email confirmation
   "/robots.txt",
   "/jsi18n/",
+  "/i18n/",  # set_language (language switcher) — must work unauthenticated, e.g. on the login page
   "/static/",
 ]
 

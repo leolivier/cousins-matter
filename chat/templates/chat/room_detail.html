@@ -1,7 +1,7 @@
 {% extends "core/base.html" %}
 {% load i18n cm_tags static crispy_forms_tags %}
 {%block header %}
-<script>
+<script nonce="{{ csp_nonce }}">
 	function escapeHtml(str) {
 		return new Option(str).innerHTML;
 	}
@@ -148,13 +148,30 @@
 			{%endpartialdef room_name_display %}
 
 			{%partialdef room_edit_form %}
-			<form hx-put="{%url 'chat:room-edit' room.slug %}" hx-target="this" hx-swap="outerHTML"
-				hx-trigger="submit, keyup[key=='Escape']" hx-vals="js:{trigger: event.key}">
+			<form id="room-edit-form" hx-put="{%url 'chat:room-edit' room.slug %}" hx-target="this" hx-swap="outerHTML"
+				hx-trigger="submit">
 				<span class="control">
+					<input type="hidden" name="trigger" value="">
 					<input class="input" class="is-flex-grow-1" type="text" placeholder="{%trans 'Room name'%}" name="room-name"
 						title="{%trans 'hit return to submit, escape to give up'%}" value="{{room.name}}" autofocus>
 				</span>
 			</form>
+			{# CSP-safe replacement for hx-vals="js:{trigger: event.key}" (which needs
+			   'unsafe-eval'): a nonced script sets the hidden `trigger` input and
+			   submits the form on Escape, so the server still receives trigger=Escape. #}
+			<script nonce="{{ csp_nonce }}">
+				(function () {
+					const form = document.getElementById('room-edit-form');
+					if (!form) return;
+					const trigger = form.querySelector('input[name="trigger"]');
+					form.querySelector('input[name="room-name"]').addEventListener('keyup', function (e) {
+						if (e.key === 'Escape') {
+							trigger.value = 'Escape';
+							htmx.trigger(form, 'submit');
+						}
+					});
+				})();
+			</script>
 			{%endpartialdef room_edit_form %}
 
 			{%with followed_object=room extra_class="ml-auto mr-5" %}

@@ -73,10 +73,6 @@ CSRF_TRUSTED_ORIGINS = env.list(
 SECURE_CSP: dict[str, list[str]] = {}
 
 # Report-only policy: violations are reported but nothing is blocked.
-#
-# NB. inline style="..." element attributes are NOT covered by a nonce and will
-# show up as reports under style-src; resolve them (move to a CSS file) before
-# switching to enforcement.
 SECURE_CSP_REPORT_ONLY: dict[str, list[str]] = {
   "default-src": [CSP.SELF],
   # 'unsafe-eval' is required by the JS stack: htmx trigger filters
@@ -84,7 +80,13 @@ SECURE_CSP_REPORT_ONLY: dict[str, list[str]] = {
   # cannot cover Function()/eval, so we allow it explicitly rather than rewrite
   # every trigger/handler. See memory:csp-django6-rollout for the trade-off.
   "script-src": [CSP.SELF, CSP.NONCE, CSP.UNSAFE_EVAL],
-  "style-src": [CSP.SELF, CSP.NONCE],
+  # 'unsafe-inline' (NOT a nonce) for styles: CSP3 ignores 'unsafe-inline' when a
+  # nonce is present, so we must choose one. We need 'unsafe-inline' because
+  # jQuery plugins (select2, summernote, bulma-calendar) inject style="" attrs at
+  # runtime via .html()/.innerHTML — not coverable by a nonce or static hashes.
+  # External sheets are still restricted to 'self'. The nonce="{{csp_nonce}}"
+  # attributes left on <style> tags become no-ops but are harmless.
+  "style-src": [CSP.SELF, CSP.UNSAFE_INLINE],
   "img-src": [CSP.SELF, "data:"],
   "font-src": [CSP.SELF],
   # ws/wss for the chat WebSocket (chat/consumers.py); htmx requests are same-origin

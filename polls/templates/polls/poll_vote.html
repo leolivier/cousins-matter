@@ -3,7 +3,7 @@
 {% block header %}
 	{%include "core/common/include-bulma-calendar.html" %}
 	{%include "core/common/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
-	<style>
+	<style nonce="{{ csp_nonce }}">
 	.helptext {
 		font-size: 0.8em;
 		font-style: italic;

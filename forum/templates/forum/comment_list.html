@@ -3,7 +3,7 @@
 <div class="container px-2">
 	{%if comments %}
 	<h2 class="is-5 mt-1">{% trans "comments" %}</h2>
-	<hr style="margin: 0 0;">
+	<hr class="my-0">
 	{% for comment in comments %}
 	{%partialdef forum_comment inline %}
 	<div class="container" id="comment-div-{{comment.id}}">

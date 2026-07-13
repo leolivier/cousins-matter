@@ -52,8 +52,8 @@ def complete_photos_data(page, page_num, num_pages):
   page.object_list = photos_dict
 
 
-@register.inclusion_tag("galleries/photos_gallery.html")
-def include_photos(gallery, page_num, page_size):
+@register.inclusion_tag("galleries/photos_gallery.html", takes_context=True)
+def include_photos(context, gallery, page_num, page_size):
   photos = get_gallery_photos(gallery)
   ptor = Paginator(
     photos,
@@ -67,7 +67,10 @@ def include_photos(gallery, page_num, page_size):
     page_num = ptor.num_pages
   page = ptor.get_page_data(page_num)
   complete_photos_data(page, page_num, ptor.num_pages)
-  return {"page": page}
+  # takes_context=True so csp_nonce (set by the csp context processor) reaches
+  # photos_gallery.html's {% paginate %} (whose inline <script nonce> would
+  # otherwise render an empty nonce). Same pattern as the paginate tag.
+  return {"page": page, "csp_nonce": context.get("csp_nonce", "")}
 
 
 @register.inclusion_tag("galleries/galleries_list.html")

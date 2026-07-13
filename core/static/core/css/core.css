@@ -350,3 +350,24 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 		flex-basis: 75% !important;
 	}
 }
+
+/* CSP: styles moved out of inline style="" attributes. CSP 'style-src' allows a
+   nonce (or 'self') only on <style> blocks and external stylesheets, never on
+   style="" attributes, so these rules replace the former inline declarations. */
+.align-middle {
+	vertical-align: middle;
+}
+
+.full-width {
+	width: 100%;
+}
+
+.pagination-previous.is-plain {
+	box-shadow: unset;
+	border-style: hidden;
+}
+
+.hr-link-dashed {
+	border: 1px dashed hsl(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l));
+	border-radius: 5px;
+}

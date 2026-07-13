@@ -24,7 +24,7 @@
               {% endfor %}
             </select>
             {# Submit "select category" form automatically #}
-            <script>
+            <script nonce="{{ csp_nonce }}">
               $(document).ready(function() {
                 $('select[name="category"]').val('{{request.GET.category|default:"all"}}');
                 $('select[name="category"]').change(function() {

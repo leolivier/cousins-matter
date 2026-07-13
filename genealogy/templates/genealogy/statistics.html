@@ -36,8 +36,11 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
+{% endcache %}
+{# chart.js + inline init live OUTSIDE the cache block: the per-request CSP nonce
+   must not be frozen in the cached fragment. #}
+<script src="{% static 'core/vendor/chart.umd.min.js' %}"></script>
+<script nonce="{{ csp_nonce }}">
     // Gender Chart
     const genderCtx = $('#genderChart')[0].getContext('2d');
 ;
@@ -109,5 +112,4 @@
         options: { indexAxis: 'y' }
     });
 </script>
-{% endcache %}
 {% endblock %}

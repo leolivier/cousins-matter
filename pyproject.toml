@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "av>=17.1,<18.1",
-    "blessed>=1.44,<1.47",
+    "blessed>=1.44,<1.48",
     "channels~=4.3.2",
     "channels-redis~=4.3.0",
     "crispy-bulma~=0.12.0",

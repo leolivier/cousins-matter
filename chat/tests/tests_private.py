@@ -209,9 +209,9 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
       "render_with": "chat/private/add-member.html#member_search_results",
       "render_empty_query": "false",
     }
-    return f"""<form style="width: 100%">
-    <div class="dropdown" id="member-search-dropdown" style="width: 100%">
-      <div class="dropdown-trigger" style="width: 100%">
+    return f"""<form class="full-width">
+    <div class="dropdown full-width" id="member-search-dropdown">
+      <div class="dropdown-trigger full-width">
         <div class="field has-addons">
           <div class="control is-expanded has-icons-left is-relative">
             <span class="htmx-indicator">
@@ -229,10 +229,10 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
                    hx-indicator=".htmx-indicator"
                    autocomplete="off"
                    id="member-search-input"
-                   oninput="check_search_length(this, 3)"
+                   data-min-length="3"
                    >
             {icon("search", "is-small is-left")}
-            <div class="dropdown-menu" id="dropdown-menu" role="menu" style="width: 100%">
+            <div class="dropdown-menu full-width" id="dropdown-menu" role="menu">
                 <div class="dropdown-content" id="search-results">
                 </div>
             </div>

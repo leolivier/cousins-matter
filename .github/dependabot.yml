@@ -6,6 +6,10 @@
 version: 2
 updates:
   - package-ecosystem: "pip" # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: "/" # Location of pyproject.toml
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/"  # Location of package.json
     schedule:
       interval: "weekly"

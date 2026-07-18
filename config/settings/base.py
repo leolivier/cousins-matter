@@ -124,7 +124,7 @@ DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="cousinsmatter@localh
 DJANGO_LOG_LEVEL = env.str("DJANGO_LOG_LEVEL", default="INFO")
 CM_LOG_LEVEL = env.str("CM_LOG_LEVEL", default="INFO")
 
-STORAGES = {
+STORAGES: dict[str, Any] = {
   "staticfiles": {
     "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
   },

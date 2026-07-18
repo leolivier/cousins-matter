@@ -236,18 +236,19 @@ CHANNEL_LAYERS: dict[str, Any] = {
   "default": {
     "BACKEND": "channels_redis.core.RedisChannelLayer",
     "CONFIG": {
-      "hosts": [{
-          "address": f"redis://{env.str("REDIS_HOST", default="redis")}:{env.int("REDIS_PORT", default=6379)}",
+      "hosts": [
+        {
+          "address": f"redis://{env.str('REDIS_HOST', default='redis')}:{env.int('REDIS_PORT', default=6379)}",
           "socket_connect_timeout": 5,
           "socket_timeout": 5,
           "socket_keepalive": True,
-          "health_check_interval": 30,   # periodic ping to detect dead connections
+          "health_check_interval": 30,  # periodic ping to detect dead connections
           "retry_on_timeout": True,
           "retry_on_error": [ConnectionError, TimeoutError],
-      }],
+        }
+      ],
       "capacity": 1500,
       "expiry": 10,
-
     },
   },
 }
@@ -269,10 +270,10 @@ DATABASES: dict[str, Any] = {
         "max_size": 20,
         "timeout": 30,
         # harden connection pooling
-        "max_lifetime": 300,       # close and recreate connections after 5 minutes max
-        "max_idle": 60,            # close idle connections after 60s
+        "max_lifetime": 300,  # close and recreate connections after 5 minutes max
+        "max_idle": 60,  # close idle connections after 60s
         "reconnect_timeout": 300,  # retry connection if PostgreSQL is down for 5 minutes max
-        "num_workers": 3,          # workers in the background to maintain the pool (reconnect, health checks)
+        "num_workers": 3,  # workers in the background to maintain the pool (reconnect, health checks)
       },
     },
   }

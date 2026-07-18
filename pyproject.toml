@@ -46,7 +46,7 @@ dev = [
     "types-requests>=2.33.0.20260518",
 ]
 ai = [
-    "headroom-ai[code,mcp,memory,proxy]>=0.31.0",
+    "headroom-ai[code,mcp,memory,proxy,ml]>=0.32.0",
 ]
 [tool.bandit]
 exclude_dirs = [".venv", "tests", "__pycache__", ".git", "static", "media", "docs"]

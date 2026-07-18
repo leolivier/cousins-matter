@@ -16,3 +16,4 @@ backup/
 .zed/
 .codegraph/
 .headroom/
+.playwright-mcp/

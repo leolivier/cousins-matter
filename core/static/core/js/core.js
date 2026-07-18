@@ -156,7 +156,15 @@ function add_info_message(message) {
 function printSection(el) {
   var $body = $('body');
   var $children = $body.children().detach();
-  $body.append($(el).clone());
+  var section = null;
+  try {
+    section = document.querySelector(el);
+  } catch (e) {
+    section = null;
+  }
+  if (section) {
+    $body.append($(section).clone());
+  }
   window.print();
   $body.empty().append($children);
 }

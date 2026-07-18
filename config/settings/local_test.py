@@ -4,7 +4,16 @@ DEBUG = env.bool("DEBUG", False)
 TESTING = True
 DEBUG_TOOLBAR = False
 DEBUG_HTMX = False
-WHITENOISE_MANIFEST_STRICT = True
+# Tests must run WITHOUT collectstatic. Django's test runner forces DEBUG=False
+# (DiscoverRunner -> setup_test_environment(debug=False)), which disables
+# HashedFilesMixin._url's DEBUG shortcut. With CompressedManifestStaticFilesStorage
+# every {% static %} call then hits stored_name() -> either "Missing staticfiles
+# manifest entry" (no collectstatic) or hashed URLs that StaticLiveServerTestCase
+# can't serve (404 -> 'htmx is not defined'). Use the plain storage so URLs stay
+# unhashed and StaticLiveServerTestCase serves them from source files via the
+# staticfiles finders. (The production storage is still exercised by the
+# collectstatic CI job.)
+STORAGES["staticfiles"]["BACKEND"] = "django.contrib.staticfiles.storage.StaticFilesStorage"
 # Email in memory
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 

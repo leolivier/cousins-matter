@@ -4,7 +4,11 @@ DEBUG = env.bool("DEBUG", False)
 TESTING = True
 DEBUG_TOOLBAR = False
 DEBUG_HTMX = False
-WHITENOISE_MANIFEST_STRICT = True
+# See local_test.py: tests run WITHOUT collectstatic, so use the plain storage
+# (DEBUG is forced to False by the test runner, which would otherwise make the
+# manifest storage raise "Missing staticfiles manifest entry" or return hashed
+# URLs StaticLiveServerTestCase can't serve).
+STORAGES["staticfiles"]["BACKEND"] = "django.contrib.staticfiles.storage.StaticFilesStorage"
 # Email in memory
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 # allauth ships a default "login: 30/m/ip" rate limit. The UI suite performs

@@ -2,10 +2,10 @@
 {% load i18n static %}
 {%block header%}
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-	<script src="https://unpkg.com/d3@7"></script>
-  <script type="module" src="https://unpkg.com/family-chart@0.9.0"></script>
-  <link rel="stylesheet" href="https://unpkg.com/family-chart@0.9.0/dist/styles/family-chart.css">
-	<style>
+	<script src="{% static 'core/vendor/d3.min.js' %}"></script>
+  <script type="module" src="{% static 'core/vendor/family-chart.min.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'core/vendor/family-chart.css' %}">
+	<style nonce="{{ csp_nonce }}">
 		.f3 {
 			width:100%;
 			height:900px;
@@ -71,7 +71,7 @@
 {% block genealogy_content %}
 <div id="FamilyChart" class="f3"></div>
 <div id="personTooltip" class="person-tooltip" role="tooltip" aria-hidden="true"></div>
-<script type="module">
+<script type="module" nonce="{{ csp_nonce }}">
 
 		const mainPersonId = '{{ main_person_id|default_if_none:"" }}';
 		const tooltipEl = document.getElementById('personTooltip');

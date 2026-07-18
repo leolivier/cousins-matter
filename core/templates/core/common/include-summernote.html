@@ -1,18 +1,18 @@
 {% load static i18n cm_tags %}
-<!-- include summernote lite css/js -->
-<link	rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-lite.min.css"
-	integrity="sha384-ujmZ40iFsxEHUq6QCcxwjfGi1W9lk9SkvB4Kz6ZCDGh5G1LF41x7qOfDJnBo82CS"
-	crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-lite.min.js"
-	integrity="sha384-PIcWJ29rkVSUGtsk8A9iQDkUN50LgPkoQkzKDBEgwZsyiCnqx/L7Y3JHT+aeKw86"
-	crossorigin="anonymous"></script>
-{# can't add SRI to this one as it is dynamic #}
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-{%normalized_language_code%}.min.js"></script>
+<!-- include summernote lite css/js (vendored under core/vendor/summernote/) -->
+<link rel="stylesheet" href="{% static 'core/vendor/summernote/summernote-lite.min.css' %}">
+<script src="{% static 'core/vendor/summernote/summernote-lite.min.js' %}"></script>
+{# language pack: skip for English (en is summernote's built-in default, no pack file) #}
+{% normalized_language_code as lang_code %}
+{% if lang_code != 'en-EN' %}
+{% with sn_lang='core/vendor/summernote/lang/summernote-'|add:lang_code|add:'.min.js' %}
+<script src="{% static sn_lang %}"></script>
+{% endwith %}
+{% endif %}
 {%trans "Toggle Note Editor Toolbar" as trtoggle%}
 {%trans "Remaining characters:" as trchar%}
 {% get_current_language as LANGUAGE_CODE %}
-<script>
+<script nonce="{{ csp_nonce }}">
 	maxsize=('{{maxsize}}' == '' ? '{{settings.DATA_UPLOAD_MAX_MEMORY_SIZE}}' : '{{maxsize}}');
 	summernoteMaxSize = parseInt(maxsize);
 	// alert('summernoteMaxSize='+summernoteMaxSize);
@@ -86,7 +86,7 @@
 		init_summernote(evt.detail.elt);
 	});
 </script>
-<style>
+<style nonce="{{ csp_nonce }}">
 	@media (max-width: 768px) {
 			.note-editor > .note-toolbar {
 					display: none;

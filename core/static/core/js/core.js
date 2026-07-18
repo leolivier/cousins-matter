@@ -147,15 +147,26 @@ function add_info_message(message) {
   add_message('info', message);
 }
 
-// function to print only a section of the page
-// to be used eg as <button onclick="printSection($('.printable')">
+// function to print only a section of the page.
+// Invoked via the delegated [data-print-section] click handler (see below).
+// CSP-safe: detach the live DOM nodes (preserving their jQuery data/listeners),
+// print a clone of the target section, then re-attach the originals. This avoids
+// $('body').html(originalContent), which would re-parse the HTML and make jQuery
+// re-execute every inline <script> via DOMEval — losing the nonce and tripping CSP.
 function printSection(el) {
-  var originalContent = $('body').html();
-  var printedContent = $(el).clone();
-
-  $('body').empty().html(printedContent);
+  var $body = $('body');
+  var $children = $body.children().detach();
+  var section = null;
+  try {
+    section = document.querySelector(el);
+  } catch (e) {
+    section = null;
+  }
+  if (section) {
+    $body.append($(section).clone());
+  }
   window.print();
-  $('body').html(originalContent);
+  $body.empty().append($children);
 }
 
 function check_search_length(el, min_length) {
@@ -168,6 +179,34 @@ function check_search_length(el, min_length) {
     el.setCustomValidity('');
   }
 }
+
+// --- CSP-safe replacements for inline on*= handlers (delegated via data-*) ---
+// A nonce cannot cover inline event-handler attributes, so they are replaced by
+// data-* attributes handled here. Delegation on document keeps them working on
+// htmx/AJAX-injected content (pagination, modals).
+//   onchange="this.form.submit()"                  → <select data-autosubmit>
+//   oninput="check_search_length(this, N)"         → <input data-min-length="N">
+//   onclick="goto_page_url(url)"                   → <a data-goto-url="url">
+//   onclick="selectMember(id, name); return false" → <a data-select-member-id data-select-member-name>
+//   onclick="printSection($(sel))"                 → <button data-print-section="sel">
+$(document).on('change', '[data-autosubmit]', function() {
+  this.form.submit();
+});
+$(document).on('input', '[data-min-length]', function() {
+  check_search_length(this, Number($(this).attr('data-min-length')));
+});
+$(document).on('click', '[data-goto-url]', function(e) {
+  e.preventDefault();
+  goto_page_url($(this).attr('data-goto-url'));
+});
+$(document).on('click', '[data-select-member-id]', function(e) {
+  e.preventDefault();
+  selectMember($(this).attr('data-select-member-id'), $(this).attr('data-select-member-name'));
+  return false;
+});
+$(document).on('click', '[data-print-section]', function() {
+  printSection($(this).attr('data-print-section'));
+});
 
 $(document).on('htmx:load', () => {
 	 // Add a click event on various modal child elements to close the parent modal

@@ -2,7 +2,7 @@
 {% load i18n cm_tags crispy_forms_tags static %}
 {% block header %}
 	{%include "core/common/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
-	<script>
+	<script nonce="{{ csp_nonce }}">
 		$(document).ready(()=>{  // is this still needed?
 			$('.comment-form').hide();
 			$('.reply-form').hide()

@@ -18,8 +18,8 @@ class DirectoryUITest(MembersUITestBase):
     # Header row + at least the admin user
     self.assertGreaterEqual(rows.count(), 2, "Table should have header row and at least one member row")
 
-    # Print button (onclick uses printSection)
-    print_btn = self.page.locator("button[onclick*='printSection']")
+    # Print button (uses data-print-section, delegated in core.js)
+    print_btn = self.page.locator("button[data-print-section]")
     self.assertTrue(print_btn.is_visible(), "Print button should be visible")
 
   def test_directory_pdf_link(self):

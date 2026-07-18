@@ -125,9 +125,12 @@ def do_title(parser, token):
   return TitleNode(title, var_name)
 
 
-@register.inclusion_tag("core/common/paginate_template.html")
-def paginate(page, request=None, no_per_page=False):
+@register.inclusion_tag("core/common/paginate_template.html", takes_context=True)
+def paginate(context, page, request=None, no_per_page=False):
   # print("page=", page)
+  # takes_context=True so we can propagate csp_nonce (set by the csp context
+  # processor) into the inclusion tag's isolated render context; without it the
+  # inline <script nonce="{{ csp_nonce }}"> would render an empty nonce.
   return {
     "page_urls": page.page_links,
     "page_range": page.page_range,
@@ -140,7 +143,8 @@ def paginate(page, request=None, no_per_page=False):
     "page_size": page.paginator.per_page,
     "num_pages": page.num_pages,
     "no_per_page": no_per_page,
-    "request": request,
+    "request": request or context.get("request"),
+    "csp_nonce": context.get("csp_nonce", ""),
   }
 
 

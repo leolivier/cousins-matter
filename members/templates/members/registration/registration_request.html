@@ -16,7 +16,7 @@
 		<button class='js-captcha-refresh'></button>
 	</form>
 </div>
-<script>
+<script nonce="{{ csp_nonce }}">
 	$(document).ready(function () {
 		$('.js-captcha-refresh').click(function(){
 	    $form = $(this).parents('form');

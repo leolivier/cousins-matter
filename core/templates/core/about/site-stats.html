@@ -43,7 +43,7 @@
 		{% endfor %}
 	</section>
 </div>
-<script>
+<script nonce="{{ csp_nonce }}">
 	$(document).ready(() => {
 		$('.stat-category').on('click', function(event) {
 			$('.stat-category').removeClass('is-active');

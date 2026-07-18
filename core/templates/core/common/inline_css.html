@@ -1,3 +1,5 @@
+{# Email-only inclusion tag (see core/templatetags/cm_tags.py:inline_css): emails
+   are not served through the CSP middleware and have no csp_nonce, so no nonce. #}
 <style>
 	{{css}}
 </style>

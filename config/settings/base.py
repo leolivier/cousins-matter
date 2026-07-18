@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 import environ
+from django.utils.csp import CSP
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
@@ -59,6 +60,48 @@ CSRF_TRUSTED_ORIGINS = env.list(
   ],
 )
 
+# --- Content Security Policy (Django 6 built-in) ---
+# All third-party libraries (jQuery, htmx, hyperscript, Bulma, MDI, Summernote,
+# Chart.js, Select2, d3, family-chart) are vendored locally under
+# core/static/core/vendor/, so no external origin needs to be allowlisted: the
+# policy is restricted to 'self' (+ a per-request nonce for inline
+# <script>/<style>). See core/templates/core/base.html.
+#
+# The enforced policy (SECURE_CSP, which blocks violations) and the report-only
+# policy (SECURE_CSP_REPORT_ONLY, which logs them to the browser console without
+# blocking) share the same mapping below. Report-only is kept during the rollout
+# transition so that any regression is surfaced in the console even though it is
+# already blocked — drop SECURE_CSP_REPORT_ONLY once the policy has run clean in
+# production for a while.
+_CSP_POLICY: dict[str, list[str]] = {
+  "default-src": [CSP.SELF],
+  # 'unsafe-eval' is required by the JS stack: htmx trigger filters
+  # (input[cond]), hyperscript, and jQuery all evaluate dynamic code. A nonce
+  # cannot cover Function()/eval, so we allow it explicitly rather than rewrite
+  # every trigger/handler. See memory:csp-django6-rollout for the trade-off.
+  "script-src": [CSP.SELF, CSP.NONCE, CSP.UNSAFE_EVAL],
+  # 'unsafe-inline' (NOT a nonce) for styles: CSP3 ignores 'unsafe-inline' when a
+  # nonce is present, so we must choose one. We need 'unsafe-inline' because
+  # jQuery plugins (select2, summernote, bulma-calendar) inject style="" attrs at
+  # runtime via .html()/.innerHTML — not coverable by a nonce or static hashes.
+  # External sheets are still restricted to 'self'. The nonce="{{csp_nonce}}"
+  # attributes left on <style> tags become no-ops but are harmless.
+  "style-src": [CSP.SELF, CSP.UNSAFE_INLINE],
+  "img-src": [CSP.SELF, "data:"],
+  "font-src": [CSP.SELF],
+  # ws/wss for the chat WebSocket (chat/consumers.py); htmx requests are same-origin
+  "connect-src": [CSP.SELF, "ws:", "wss:"],
+  "frame-ancestors": [CSP.NONE],
+  "base-uri": [CSP.SELF],
+  "object-src": [CSP.NONE],
+}
+
+# Enforced policy: violations are blocked by the browser.
+SECURE_CSP: dict[str, list[str]] = _CSP_POLICY
+
+# Report-only (kept during the transition; see comment above). Remove once stable.
+SECURE_CSP_REPORT_ONLY: dict[str, list[str]] = _CSP_POLICY
+
 LANGUAGES = [
   ("fr", "Français"),
   ("en", "English"),
@@ -81,7 +124,7 @@ DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="cousinsmatter@localh
 DJANGO_LOG_LEVEL = env.str("DJANGO_LOG_LEVEL", default="INFO")
 CM_LOG_LEVEL = env.str("CM_LOG_LEVEL", default="INFO")
 
-STORAGES = {
+STORAGES: dict[str, Any] = {
   "staticfiles": {
     "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
   },
@@ -148,6 +191,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
   "django.middleware.security.SecurityMiddleware",
+  "django.middleware.csp.ContentSecurityPolicyMiddleware",
   "whitenoise.middleware.WhiteNoiseMiddleware",
   "django.contrib.sessions.middleware.SessionMiddleware",
   "django.middleware.locale.LocaleMiddleware",
@@ -177,6 +221,7 @@ TEMPLATES = [
         "django.contrib.auth.context_processors.auth",
         "django.contrib.messages.context_processors.messages",
         "django.template.context_processors.media",
+        "django.template.context_processors.csp",
         "core.context_processors.settings",
       ],
     },
@@ -286,6 +331,7 @@ LOGIN_REQUIRED_IGNORE_PATHS = [
   "/accounts/confirm-email/",  # Email confirmation
   "/robots.txt",
   "/jsi18n/",
+  "/i18n/",  # set_language (language switcher) — must work unauthenticated, e.g. on the login page
   "/static/",
 ]
 

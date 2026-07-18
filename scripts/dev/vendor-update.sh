@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_DIR="core/static/vendor"
+APP_DIR="core/static/core/vendor"
+mkdir -p "$APP_DIR"
 
 npm install
 

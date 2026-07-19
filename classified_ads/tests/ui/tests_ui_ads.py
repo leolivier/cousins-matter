@@ -272,8 +272,10 @@ class ClassifiedAdsDeleteUITest(ClassifiedAdsUITestBase):
 
     # Should be redirected to the classified ads list
     self.assertIn("/classified-ads/", self.page.url)
-    # The list URL should not contain the deleted ad's pk
-    self.assertNotIn(str(delete_ad.pk), self.page.url)
+    # The list URL should not be the deleted ad's own page (detail/delete).
+    # Check the path fragment, not the bare pk — the live-server port can
+    # otherwise contain the pk digit and produce a false positive.
+    self.assertNotIn(f"/classified-ads/{delete_ad.pk}/", self.page.url)
 
     self.errors.clear()
 

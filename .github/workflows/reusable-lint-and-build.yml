@@ -43,6 +43,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: ${{ steps.branch.outputs.ref }}
+          token: ${{ secrets.VENDOR_PUSH_PAT }}
           fetch-depth: 0  # Required to get all tags
           lfs: true
 

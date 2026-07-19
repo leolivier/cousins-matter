@@ -44,6 +44,27 @@
 						$('#message-div-' + $data.args.msgid + ' span.content').html(txt)
 					}
 					break
+				case 'read_status_update': {
+					const updates = $data.args.updates || [];
+					updates.forEach((u) => {
+						const span = document.querySelector('#message-div-' + u.msg_id + ' .read-receipt');
+						if (!span) return;  // only the sender's own messages carry a receipt
+						const status = u.status;
+						let iconClass, colorClass, title;
+						if (status === 'read') {
+							iconClass = 'mdi-check-all'; colorClass = 'has-text-link'; title = gettext('Read');
+						} else if (status === 'partially') {
+							iconClass = 'mdi-check-all'; colorClass = 'has-text-info'; title = gettext('Partially read');
+						} else {
+							iconClass = 'mdi-check'; colorClass = 'has-text-grey-light'; title = gettext('Sent');
+						}
+						span.dataset.status = status;
+						span.className = 'read-receipt is-size-7 my-auto ml-1 ' + colorClass;
+						span.title = title;
+						span.innerHTML = '<i class="mdi mdi-18px ' + iconClass + '"></i>';
+					});
+					break;
+				}
 				case 'error':
 					alert($data.error)
 					break
@@ -210,6 +231,7 @@
 			{% with user_id=request.user.id member_id=msg.member.id member_name=msg.member.username msg_id=msg.id %}
 			{% with member_fullname=msg.member.get_full_name date_added=msg.date_added date_modified=msg.date_modified %}
 			{% with content=msg.content member_changed=True date_changed=True %}
+			{% message_read_status msg read_status_map as read_status %}
 
 			{% partialdef message_div inline %}
 			{% ifchanged date_added.date %}
@@ -250,6 +272,20 @@
 							{%else%}{{date_added|date:"TIME_FORMAT"}}
 							{%endif%}
 						</span>
+						{% if private and user_id == member_id %}
+						 <span class="read-receipt is-size-7 my-auto ml-1"
+							data-status="{{ read_status|default:'unread' }}"
+							data-msgid="{{ msg_id }}"
+							title="{% if read_status == 'read' %}{% trans 'Read' %}{% elif read_status == 'partially' %}{% trans 'Partially read' %}{% else %}{% trans 'Sent' %}{% endif %}">
+							    {% if read_status == 'read' %}
+								<i class="mdi mdi-18px mdi-check-all has-text-link"></i>
+								{% elif read_status == 'partially' %}
+								<i class="mdi mdi-18px mdi-check has-text-info"></i>
+								{% else %}
+								<i class="mdi mdi-18px mdi-check has-text-grey-light"></i>
+								{% endif %}
+						</span>
+						{% endif %}
 						{%if user_id == member_id %} {# add menu to edit or delete the message #}
 					<div class="dropdown is-hoverable">
 						<div class="dropdown-trigger">

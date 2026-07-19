@@ -268,3 +268,18 @@ def boldify(value: str) -> str:
 @register.filter
 def protected_media_url(value: str) -> str:
   return _protected_media_url(value)
+
+
+@register.simple_tag
+def message_read_status(msg, read_status_map=None):
+  """Aggregate read status of a chat message (sender's view), as a lowercase string.
+
+  Returns 'unread', 'partially' or 'read' (or ``None`` for public rooms / unknown message).
+  Uses the precomputed ``read_status_map`` when provided (no DB hit, see
+  ``chat.views.views_room_common.display_chat_room``); otherwise falls back to the
+  message's own ``read_status()``.
+  """
+  if read_status_map and msg.id in read_status_map:
+    return read_status_map.get(msg.id)
+  status = msg.read_status()
+  return status.value if status else None

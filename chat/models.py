@@ -79,7 +79,12 @@ class ChatRoom(models.Model):
     return not hasattr(self, "privatechatroom")
 
   async def ais_public(self):
-    return await sync_to_async(self.is_public)()
+    # `is_public` is a @property whose `hasattr(self, "privatechatroom")` resolves
+    # the multi-table-inheritance relation with a DB query, so it must run off the
+    # event loop. Wrap the attribute access in a lambda: passing `self.is_public`
+    # directly to sync_to_async would resolve the @property to a bool before the
+    # call and raise "sync_to_async can only be applied to sync functions".
+    return await sync_to_async(lambda: self.is_public)()
 
   @classmethod
   def FlaggedRooms(cls, *filters):
@@ -100,6 +105,9 @@ class ChatMessage(models.Model):
   content = models.TextField(_("message"), max_length=2 * 1024 * 1024)
   date_added = models.DateTimeField(auto_now_add=True)
   date_modified = models.DateTimeField(null=True, blank=True)
+  # Recipients (private-room members) who have read this message.
+  # The sender is NEVER added here. Used to derive the aggregate read status.
+  read_by = models.ManyToManyField(Member, related_name="read_chat_messages", blank=True)
 
   class Meta:
     ordering = ("date_added",)
@@ -112,6 +120,44 @@ class ChatMessage(models.Model):
     # msg = self.content if len(self.content) < 100 else f'{self.content[:100]}...'
     # return f'{room}:{msg}'
     return f"{self.room}:{self.content}"
+
+  @staticmethod
+  def compute_status(is_public, room_members_count, read_count, sender_is_member):
+    """Aggregate read status of a message, as seen by its sender.
+
+    Returns a :class:`MessageStatus` value, or ``None`` outside private rooms.
+    Recipients = private-room members excluding the sender.
+
+    Pure function (no DB access) shared between sync and async code paths so the
+    derivation stays identical whether computed in a view, a consumer or a test.
+    """
+    if is_public:
+      return None
+    # denominator = recipients = members minus the sender (if still a member)
+    denom = max(room_members_count - 1, 0) if sender_is_member else room_members_count
+    if denom <= 0 or read_count <= 0:
+      return MessageStatus.UNREAD
+    if read_count >= denom:
+      return MessageStatus.READ
+    return MessageStatus.PARTIALLY_READ
+
+  def read_status(self):
+    """Aggregate :class:`MessageStatus` of this message (sender's view).
+
+    Returns ``None`` for public rooms. Queries the DB; when batching a page of
+    messages, call :meth:`compute_status` directly with prefetched values to
+    avoid N+1 queries (see ``display_chat_room``).
+    """
+    room = self.room
+    if room.is_public:
+      return None
+    member_ids = set(room.followers.values_list("id", flat=True))
+    return ChatMessage.compute_status(
+      is_public=False,
+      room_members_count=len(member_ids),
+      read_count=self.read_by.filter(id__in=member_ids).count(),
+      sender_is_member=self.member_id in member_ids,
+    )
 
 
 class PrivateChatRoom(ChatRoom):

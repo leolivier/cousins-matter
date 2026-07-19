@@ -5,13 +5,29 @@ on:
       - 'package.json'
 
 jobs:
-  vendor:
+  vendor-update:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: ./scripts/dev/vendor-update.sh
-      - run: |
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+
+      - name: Install dev dependencies
+        run: |
+          pip install uv
+          uv sync --dev  # needed for css-html-js-minify
+
+      - name: Update vendor scripts
+        run: ./scripts/dev/vendor-update.sh
+
+      - name: Commit
+        run: |
           git config user.name "github-actions"
           git add core/static/vendor
           git commit -m "chore: update vendored assets" || echo "no changes"

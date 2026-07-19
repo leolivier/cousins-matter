@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "jquery": "3.7.1",
-    "htmx.org": "2.0.4",
+    "htmx.org": "2.0.10",
     "summernote": "0.9.1",
     "bulma": "1.0.4",
     "@mdi/font": "7.4.47",

@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "jquery": "3.7.1",
+    "jquery": "4.0.0",
     "htmx.org": "2.0.4",
     "summernote": "0.9.1",
     "bulma": "1.0.4",

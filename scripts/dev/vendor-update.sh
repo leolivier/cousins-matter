@@ -35,7 +35,8 @@ cp node_modules/d3/dist/d3.min.js "$APP_DIR/"
 
 echo "==> family-chart"
 cp node_modules/family-chart/dist/family-chart.min.js "$APP_DIR/"
-cp node_modules/family-chart/dist/family-chart.min.css "$APP_DIR/"
+cp node_modules/family-chart/dist/styles/family-chart.css "$APP_DIR/"
+.venv/bin/css-html-js-minify "$APP_DIR/family-chart.css"
 
 echo "==> hyperscript"
 cp node_modules/hyperscript.org/dist/_hyperscript.min.js "$APP_DIR/"

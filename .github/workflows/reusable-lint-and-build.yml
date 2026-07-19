@@ -29,15 +29,20 @@ jobs:
     outputs:
       runner_id: ${{ steps.get_runner_id.outputs.RUNNER_ID }}
     steps:
-      - name: trace event trigger
-        env:
-          EVENT: ${{ toJson(github.event) }}
+
+      - name: Determine branch ref
+        id: branch
         run: |
-          echo $EVENT
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "ref=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Checkout
         uses: actions/checkout@v7
         with:
+          ref: ${{ steps.branch.outputs.ref }}
           fetch-depth: 0  # Required to get all tags
           lfs: true
 
@@ -51,6 +56,35 @@ jobs:
         run: |
           pip install uv
           uv sync --dev
+
+      - name: Check if package.json changed
+        id: pkgjson
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+            CHANGED=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD -- package.json)
+          else
+            CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- package.json)
+          fi
+          if [ -n "$CHANGED" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update vendor scripts
+        if: steps.pkgjson.outputs.changed == 'true'
+        run: ./scripts/dev/vendor-update.sh
+
+
+      - name: Commit vendored assets (package.json changed only)
+        if: steps.pkgjson.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add core/static/core/vendor
+          git diff --cached --quiet || git commit -m "chore: update vendored assets"
+          git push origin HEAD:${{ steps.branch.outputs.ref }}
 
       - name: Lint with ruff
         run: |

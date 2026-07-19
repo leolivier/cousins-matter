@@ -28,10 +28,11 @@ echo "==> mdi (Material Design Icons) - css + fonts ensemble (chemins relatifs)"
 mkdir -p "$APP_DIR/mdi/css" "$APP_DIR/mdi/fonts"
 cp node_modules/@mdi/font/css/materialdesignicons.min.css "$APP_DIR/mdi/css/"
 cp node_modules/@mdi/font/fonts/materialdesignicons-webfont.* "$APP_DIR/mdi/fonts/"
+sed -i '/\/\*# sourceMappingURL=materialdesignicons.css.map \*\//d' "$APP_DIR/mdi/css/materialdesignicons.min.css"
 
 echo "==> chart.js"
 cp node_modules/chart.js/dist/chart.umd.min.js "$APP_DIR/"
-sed -i '/# sourceMappingURL=chart\.umd\.js\.map/d' "$APP_DIR/chart.umd.min.js"
+sed -i '/\/\/# sourceMappingURL=chart\.umd\.min\.js\.map/d' "$APP_DIR/chart.umd.min.js"
 
 echo "==> d3"
 cp node_modules/d3/dist/d3.min.js "$APP_DIR/"

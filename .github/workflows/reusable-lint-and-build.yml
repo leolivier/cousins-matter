@@ -65,8 +65,20 @@ jobs:
             git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
             CHANGED=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD -- package.json)
           else
-            CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- package.json)
-          fi
+              BEFORE="${{ github.event.before }}"
+              if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$BEFORE" 2>/dev/null; then
+                # First push on the branch, or history rewritten (force-push/rebase) :
+                # we compare against the parent commit if possible, otherwise we
+                # consider that package.json is "changed" by default.
+                if git cat-file -e "${{ github.sha }}^" 2>/dev/null; then
+                  CHANGED=$(git diff --name-only "${{ github.sha }}^" "${{ github.sha }}" -- package.json)
+                else
+                  CHANGED="package.json"
+                fi
+              else
+                CHANGED=$(git diff --name-only "$BEFORE" "${{ github.sha }}" -- package.json)
+              fi
+            fi
           if [ -n "$CHANGED" ]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else

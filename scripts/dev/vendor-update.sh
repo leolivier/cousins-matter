@@ -17,7 +17,9 @@ mkdir -p "$APP_DIR/summernote/font" "$APP_DIR/summernote/lang"
 cp node_modules/summernote/dist/summernote-lite.min.js "$APP_DIR/summernote/"
 cp node_modules/summernote/dist/summernote-lite.min.css "$APP_DIR/summernote/"
 cp node_modules/summernote/dist/font/summernote.* "$APP_DIR/summernote/font/"
-cp node_modules/summernote/dist/lang/summernote-*.js "$APP_DIR/summernote/lang/"
+for lang in fr-FR de-DE pt-PT es-ES it-IT; do
+    cp "node_modules/summernote/dist/lang/summernote-$lang.min.js" "$APP_DIR/summernote/lang/"
+done
 
 echo "==> bulma"
 cp node_modules/bulma/css/bulma.min.css "$APP_DIR/"
@@ -29,6 +31,7 @@ cp node_modules/@mdi/font/fonts/materialdesignicons-webfont.* "$APP_DIR/mdi/font
 
 echo "==> chart.js"
 cp node_modules/chart.js/dist/chart.umd.min.js "$APP_DIR/"
+sed -i '/# sourceMappingURL=chart\.umd\.js\.map/d' "$APP_DIR/chart.umd.min.js"
 
 echo "==> d3"
 cp node_modules/d3/dist/d3.min.js "$APP_DIR/"
@@ -36,13 +39,12 @@ cp node_modules/d3/dist/d3.min.js "$APP_DIR/"
 echo "==> family-chart"
 cp node_modules/family-chart/dist/family-chart.min.js "$APP_DIR/"
 cp node_modules/family-chart/dist/styles/family-chart.css "$APP_DIR/"
-uv run css-html-js-minify --quiet "$APP_DIR/family-chart.css"
 
 echo "==> hyperscript"
-cp node_modules/hyperscript.org/dist/_hyperscript.min.js "$APP_DIR/"
+cp node_modules/hyperscript.org/dist/_hyperscript.min.js "$APP_DIR/hyperscript.min.js"
 
 echo "==> select2"
-cp node_modules/select2/dist/js/select2.full.min.js "$APP_DIR/"
+cp node_modules/select2/dist/js/select2.min.js "$APP_DIR/"
 cp node_modules/select2/dist/css/select2.min.css "$APP_DIR/"
 
 echo "Vendoring terminé."

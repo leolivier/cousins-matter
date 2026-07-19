@@ -29,6 +29,6 @@ jobs:
       - name: Commit
         run: |
           git config user.name "github-actions"
-          git add core/static/vendor
+          git add core/static/core/vendor
           git commit -m "chore: update vendored assets" || echo "no changes"
           git push

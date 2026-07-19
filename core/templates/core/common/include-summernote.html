@@ -1,6 +1,17 @@
 {% load static i18n cm_tags %}
 <!-- include summernote lite css/js (vendored under core/vendor/summernote/) -->
 <link rel="stylesheet" href="{% static 'core/vendor/summernote/summernote-lite.min.css' %}">
+<script nonce="{{ csp_nonce }}">
+// jQuery v4 compatibility shim for Summernote 0.9.x (before init Summernote).
+// jQuery 4.0 removed jQuery.type() and jQuery.now(); Summernote still calls both.
+// Source: Summernote GitHub. Drop this block once Summernote ships a jQuery-4-compatible release.
+if (typeof jQuery !== 'undefined' && typeof jQuery.type === 'undefined') {
+  jQuery.type = function(obj) {
+    return obj == null ? obj + "" : Object.prototype.toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+  };
+  jQuery.now = Date.now;
+}
+</script>
 <script src="{% static 'core/vendor/summernote/summernote-lite.min.js' %}"></script>
 {# language pack: skip for English (en is summernote's built-in default, no pack file) #}
 {% normalized_language_code as lang_code %}

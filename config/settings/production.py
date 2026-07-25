@@ -56,19 +56,11 @@ INSTALLED_APPS = [
   "corsheaders",
 ]
 
-CHANNEL_LAYERS = {
-  "default": {
-    "BACKEND": "channels_redis.core.RedisChannelLayer",
-    "CONFIG": {
-      "hosts": [
-        (
-          env.str("REDIS_HOST", default="redis"),
-          env.int("REDIS_PORT", default=6379),
-        )
-      ],
-    },
-  },
-}
+# CHANNEL_LAYERS is inherited from base.py, which defines a robust dict-format
+# config (socket_timeout, socket_keepalive, health_check_interval, retry_on_error).
+# Do NOT override it here with a plain (host, port) tuple: that drops all connection
+# options and leaves Channels vulnerable to "Timeout reading" errors when pooled
+# connections go dead (same default REDIS_HOST="redis", so inheriting is equivalent).
 
 CRISPY_FAIL_SILENTLY = True
 

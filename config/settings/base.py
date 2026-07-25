@@ -244,10 +244,18 @@ CHANNEL_LAYERS: dict[str, Any] = {
         {
           "address": f"redis://{env.str('REDIS_HOST', default='redis')}:{env.int('REDIS_PORT', default=6379)}",
           "socket_connect_timeout": 5,
-          "socket_timeout": 5,
+          # socket_timeout MUST be explicitly None. redis-py's DEFAULT_SOCKET_TIMEOUT
+          # is 5s, which races with channels-redis' BZPOPMIN (brpop_timeout=5s) and
+          # aborts every idle receive with "Timeout reading from <host>". Merely
+          # omitting the key keeps the 5s default; None disables it so blocking
+          # reads can wait for messages. Dead connections are still detected via
+          # health_check_interval below.
+          "socket_timeout": None,
           "socket_keepalive": True,
           "health_check_interval": 30,  # periodic ping to detect dead connections
-          "retry_on_timeout": True,
+          # NOTE: no retry_on_timeout — deprecated and silently ignored in
+          # redis-py 8.0 (it just emits a DeprecationWarning). TimeoutError is
+          # still retried via retry_on_error below.
           "retry_on_error": [ConnectionError, TimeoutError],
         }
       ],

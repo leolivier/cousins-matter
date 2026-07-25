@@ -211,6 +211,40 @@ class MemberAvatarTest(MemberTestCaseMixin, TestCase):
     self.assertEqual(test_ext, test_ext)
     self.assertTrue(avatar_prefix.startswith(testbn_prefix))
 
+  def test_avatar_not_regenerated_on_unchanged_save(self):
+    # A plain re-save (e.g. allauth updating last_login on login triggers save())
+    # must NOT regenerate thumbnails when the avatar hasn't changed.
+    from django.core.files.uploadedfile import InMemoryUploadedFile
+    from io import BytesIO
+    from PIL import Image
+    from unittest.mock import patch
+    import sys
+    from members.models import create_thumbnail as real_create_thumbnail
+
+    self.member = self.create_member()
+    avatar_file = os.path.join(os.path.dirname(__file__), "resources", self.base_avatar)
+    membuf = BytesIO()
+    with Image.open(avatar_file) as img:
+      img.save(membuf, format="JPEG", quality=90)
+    size = sys.getsizeof(membuf)
+    self.member.avatar = InMemoryUploadedFile(membuf, "ImageField", self.base_avatar, "image/jpeg", size, None)
+    self.member.save()
+    self.assertTrue(default_storage.exists(self.member.avatar.name))
+
+    with patch("members.models.create_thumbnail", side_effect=real_create_thumbnail) as mock_thumb:
+      self.member.save()
+      mock_thumb.assert_not_called()
+
+  def test_create_thumbnail_skips_missing_file(self):
+    # create_thumbnail must not raise when the referenced file is missing from storage
+    # (orphan avatar reference); it returns the image unchanged instead.
+    from core.utils import create_thumbnail
+
+    member = self.create_member()
+    member.avatar.name = "avatars/does_not_exist.webp"  # orphan reference, no physical file
+    result = create_thumbnail(member.avatar, settings.AVATARS_SIZE)
+    self.assertIs(result, member.avatar)
+
 
 class ManagedMemberChangeTests(MemberViewTestMixin, MemberTestCase):
   def setUp(self):

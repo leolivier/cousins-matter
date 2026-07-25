@@ -253,6 +253,12 @@ class Member(AbstractUser):
   def get_manager(self):
     return self.member_manager if self.member_manager else self
 
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    # Track avatar name so save() regenerates thumbnails only when the avatar actually
+    # changes, not on every save (e.g. allauth updating last_login on login triggers save()).
+    self._original_avatar_name = self.avatar.name if self.avatar else None
+
   def clean(self):
     if self.deathdate:
       if self.deathdate < self.birthdate:
@@ -278,12 +284,18 @@ class Member(AbstractUser):
 
   def save(self, *args, **kwargs):
     self.clean()  # clean before save
-    if self.avatar:
+    # Only regenerate thumbnails when the avatar actually changed, so a plain save
+    # (e.g. login updating last_login) doesn't read/rewrite the avatar file.
+    original_avatar_name = getattr(self, "_original_avatar_name", None)
+    current_avatar_name = self.avatar.name if self.avatar else None
+    avatar_changed = current_avatar_name != original_avatar_name
+
+    if avatar_changed and self.avatar:
       # resize avatar itself
       self.avatar = create_thumbnail(self.avatar, settings.AVATARS_SIZE)
     super().save(*args, **kwargs)
 
-    if self.avatar:
+    if avatar_changed and self.avatar:
       # generate minified for post/ads/chat
       mini = create_thumbnail(self.avatar, settings.AVATARS_MINI_SIZE)
       mini.seek(0)
@@ -295,14 +307,19 @@ class Member(AbstractUser):
         logger.error(f"ERROR: saved_path != self.avatar_mini_name: {saved_path} != {self.avatar_mini_name}")
       logger.debug(f"Resized and saved avatar for {self.full_name} in {saved_path}, size: {settings.AVATARS_MINI_SIZE}")
 
+    # Refresh tracking so a subsequent save without change skips thumbnail regeneration
+    self._original_avatar_name = self.avatar.name if self.avatar else None
+
   def delete(self, *args, **kwargs):
     self.delete_avatar()
     super().delete(*args, **kwargs)
 
   def delete_avatar(self):
     if self.avatar:
-      default_storage.delete(self.avatar.file.name)
-      default_storage.delete(self.avatar_mini_name)
+      if self.avatar.storage.exists(self.avatar.name):
+        default_storage.delete(self.avatar.name)
+      if self.avatar.storage.exists(self.avatar_mini_name):
+        default_storage.delete(self.avatar_mini_name)
       self.avatar = None
 
 

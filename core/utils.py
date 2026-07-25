@@ -401,6 +401,9 @@ def create_thumbnail(image: models.FileField, size: int) -> InMemoryUploadedFile
       than this, it is resized.
   :return: An InMemoryUploadedFile representing the thumbnail.
   """
+  if not image.storage.exists(image.name):
+    logger.warning(f"create_thumbnail: file '{image.name}' not found in storage, skipping thumbnail generation")
+    return image
   if image.file.closed:
     image.file = default_storage.open(image.name, "rb")
   with Image.open(image.file) as imgf:

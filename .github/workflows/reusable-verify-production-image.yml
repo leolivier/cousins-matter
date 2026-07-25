@@ -58,6 +58,7 @@ jobs:
           sed -i -e 's/^ADMIN_BIRTHDATE=.*/ADMIN_BIRTHDATE=2000-01-01/' cm_test_install/.env
           sed -i -e 's/^ADMIN_FIRSTNAME=.*/ADMIN_FIRSTNAME=Admin/' cm_test_install/.env
           sed -i -e 's/^ADMIN_LASTNAME=.*/ADMIN_LASTNAME=User/' cm_test_install/.env
+          sed -i -e 's/^SITE_DOMAIN=.*/SITE_DOMAIN=localhost/' cm_test_install/.env
           sed -i -e 's/^SITE_NAME=.*/SITE_NAME=Production Test Site/' cm_test_install/.env
           sed -i -e 's/^ALLOWED_HOSTS=.*/ALLOWED_HOSTS=127.0.0.1,localhost/' cm_test_install/.env
           sed -i -e 's/^LANGUAGE_CODE=.*/LANGUAGE_CODE=en/' cm_test_install/.env

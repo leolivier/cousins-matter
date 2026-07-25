@@ -24,12 +24,10 @@ DATABASES["default"]["TEST"] = {
   "CHARSET": None,
 }
 
-CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [
-  (
-    env.str("REDIS_HOST", default="redis"),
-    env.int("REDIS_PORT", default=6379),
-  )
-]
+# Keep the robust dict-format config from base.py; only retarget the address.
+CHANNEL_LAYERS["default"]["CONFIG"]["hosts"][0]["address"] = (
+  f"redis://{env.str('REDIS_HOST', default='redis')}:{env.int('REDIS_PORT', default=6379)}"
+)
 
 # Django Q2 settings for tests
 Q_CLUSTER["sync"] = True

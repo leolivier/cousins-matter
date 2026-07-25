@@ -6,7 +6,12 @@ DEBUG = env.bool("DEBUG", True)
 
 TESTING = False
 
-DEBUG_TOOLBAR = env.bool("DEBUG_TOOLBAR", default=True)
+# debug_toolbar is a dev-group dependency; the Dockerfile installs deps with
+# `uv sync --no-group dev`, so the package is absent from the container and
+# importing it crashes the qcluster (and any docker service) on startup.
+# Default off here, matching docker_test.py; enable via DEBUG_TOOLBAR=true only
+# if the package is installed in the image.
+DEBUG_TOOLBAR = env.bool("DEBUG_TOOLBAR", default=False)
 DEBUG_HTMX = env.bool("DEBUG_HTMX", default=DEBUG)
 
 

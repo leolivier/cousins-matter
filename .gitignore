@@ -18,3 +18,4 @@ backup/
 .headroom/
 .playwright-mcp/
 node_modules/
+bandit.out

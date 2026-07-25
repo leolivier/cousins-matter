@@ -73,6 +73,7 @@ CSRF_TRUSTED_ORIGINS = env.list(
 # transition so that any regression is surfaced in the console even though it is
 # already blocked — drop SECURE_CSP_REPORT_ONLY once the policy has run clean in
 # production for a while.
+
 _CSP_POLICY: dict[str, list[str]] = {
   "default-src": [CSP.SELF],
   # 'unsafe-eval' is required by the JS stack: htmx trigger filters
@@ -101,6 +102,9 @@ SECURE_CSP: dict[str, list[str]] = _CSP_POLICY
 
 # Report-only (kept during the transition; see comment above). Remove once stable.
 SECURE_CSP_REPORT_ONLY: dict[str, list[str]] = _CSP_POLICY
+CSP_REPORT_URL = env("CSP_REPORT_URL", default="")
+if CSP_REPORT_URL:
+    SECURE_CSP_REPORT_ONLY["report-uri"] = [CSP_REPORT_URL]
 
 LANGUAGES = [
   ("fr", "Français"),

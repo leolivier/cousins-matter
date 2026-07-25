@@ -39,11 +39,12 @@ if DEBUG_TOOLBAR:
     pass  # noqa: F401  # nosec B110
 
 DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="postgres")
-CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [
-  (
-    env.str("REDIS_HOST", default="redis"),
-    env.int("REDIS_PORT", default=6379),
-  )
-]
+# Keep the robust dict-format config from base.py; only retarget the address.
+# A plain (host, port) tuple would drop all connection options (socket_timeout,
+# socket_keepalive, health_check_interval) and leave Channels vulnerable to
+# "Timeout reading" errors when pooled connections go dead.
+CHANNEL_LAYERS["default"]["CONFIG"]["hosts"][0]["address"] = (
+  f"redis://{env.str('REDIS_HOST', default='redis')}:{env.int('REDIS_PORT', default=6379)}"
+)
 
 CRISPY_FAIL_SILENTLY = False

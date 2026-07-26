@@ -19,3 +19,4 @@ backup/
 .playwright-mcp/
 node_modules/
 bandit.out
+.tokensave/

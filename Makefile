@@ -24,6 +24,7 @@ help h:
 	@echo "  minify [a=application]: minify the css and js files of an application. Default is all applications."
 	@echo "  shell: Run a django shell in devt mode"
 	@echo "  check: Run ruff checks, pip-audit vuln scan and bandit security checks. Bandit results are stored in bandit.out"
+	@echo "  count: Count lines of code using cloc (which must be installed, eg via sudo apt-get install cloc)"
 
 build:
 	t=$(if $(t),$(t),local); \
@@ -102,3 +103,7 @@ check:
 
 shell:
 	./manage.py shell
+
+count:
+	if [ ! command -v cloc >/dev/null 2>&1 ]; then echo "cloc is not installed"; exit 1; fi
+	cloc . -vcs git --exclude-dir=node_modules,.venv,venv,migrations,staticfiles,vendor,dist,build --exclude-ext=min.js,min.css

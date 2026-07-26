@@ -104,7 +104,7 @@ SECURE_CSP: dict[str, list[str]] = _CSP_POLICY
 SECURE_CSP_REPORT_ONLY: dict[str, list[str]] = _CSP_POLICY
 CSP_REPORT_URL = env("CSP_REPORT_URL", default="")
 if CSP_REPORT_URL:
-    SECURE_CSP_REPORT_ONLY["report-uri"] = [CSP_REPORT_URL]
+  SECURE_CSP_REPORT_ONLY["report-uri"] = [CSP_REPORT_URL]
 
 LANGUAGES = [
   ("fr", "Français"),

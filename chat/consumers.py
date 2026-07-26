@@ -93,6 +93,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     await self.accept()
 
+    # In private rooms, mark all previously received messages as read by the
+    # connecting user and broadcast the updated receipts to the room group.
+    user = self.scope.get("user")
+    if user is not None and not user.is_anonymous:
+      try:
+        room = await ChatRoom.objects.aget(slug=self.room_slug)
+      except ChatRoom.DoesNotExist:
+        room = None
+      if room is not None and not await room.ais_public():
+        newly_marked = await self._mark_room_read(user, room)
+        if newly_marked:
+          await self._broadcast_read_status(room, newly_marked)
+
   async def disconnect(self, close_code):
     """
     Handles the disconnection of a websocket for the given room.
@@ -201,19 +214,33 @@ class ChatConsumer(AsyncWebsocketConsumer):
       "date_added": date_format(local_date_added, "DATE_FORMAT"),
       "time_added": date_format(local_date_added, "TIME_FORMAT"),
     }
-    # print(f"websocket send: {context} to {self.room_group_name},
-    # prev_msg_author_id: {prev_msg_author_id}, member_id: {member_id}")
+    # Read-receipt context: a freshly created message is unread by recipients,
+    # and receipts only show in private rooms (the fragment template gates on `private`).
+    room = await ChatRoom.objects.aget(slug=room_slug)
+    context["private"] = not await room.ais_public()
+    context["read_status"] = "unread"
     await self.channel_layer.group_send(self.room_group_name, context)
 
   async def create_chat_message(self, event):
     """
     Sends a creation message to the WebSocket for each connected member of the room.
     """
-    user_id = self.scope.get("user").id
+    user = self.scope.get("user")
+    user_id = user.id if user and not user.is_anonymous else None
     context = {"user_id": str(user_id), **event}
     rendered_message = render_to_string("chat/room_detail.html#message_div", context)
     await self.send(text_data=json.dumps({"action": "create_chat_message", "args": {"rendered_message": rendered_message}}))
     # print('create_chat_message', args)
+
+    # In a private room, the recipient (any connected member other than the
+    # sender) reads the message as soon as it is delivered: mark it read and
+    # broadcast the updated receipt so the sender's check flips ✓ → ✓✓.
+    if not event.get("private") or user_id is None or str(user_id) == str(event.get("member_id")):
+      return
+    room = await ChatRoom.objects.aget(slug=self.room_slug)
+    newly = await self._mark_room_read(user, room, only_msg_id=event.get("msg_id"))
+    if newly:
+      await self._broadcast_read_status(room, newly)
 
   async def check_user_permission(self, msgid):
     """Checks whether the logged-in user is the owner of the message
@@ -332,3 +359,60 @@ class ChatConsumer(AsyncWebsocketConsumer):
           "error": f'_("An error occurred while deleting the message"): {str(e)}',
         })
       )
+
+  async def _mark_room_read(self, member, room, only_msg_id=None):
+    """Marks messages in ``room`` as read by ``member``.
+
+    Targets messages received by ``member`` (sender != member) not yet marked read.
+    ``only_msg_id`` restricts the marking to one message (real-time delivery);
+    when ``None`` all eligible messages are marked (room just opened).
+
+    Returns the list of message ids newly marked, so callers can recompute and
+    broadcast their aggregate read status. No-op for public rooms.
+    """
+    if await room.ais_public():
+      return []
+    qs = ChatMessage.objects.filter(room=room).exclude(member=member).exclude(read_by=member)
+    if only_msg_id is not None:
+      qs = qs.filter(pk=only_msg_id)
+    msg_ids = await sync_to_async(list)(qs.values_list("id", flat=True))
+    if not msg_ids:
+      return []
+    # Bulk-insert the read receipts via the auto M2M `through` table; ignore
+    # conflicts so concurrent reads (a race between two members) don't raise.
+    read_through = ChatMessage.read_by.through
+    await read_through.objects.abulk_create(
+      [read_through(chatmessage_id=mid, member_id=member.id) for mid in msg_ids],
+      ignore_conflicts=True,
+    )
+    return msg_ids
+
+  async def _broadcast_read_status(self, room, msg_ids):
+    """Recomputes the aggregate read status of ``msg_ids`` and broadcasts a single
+    grouped ``read_status_update`` event to the room group.
+
+    The status is recomputed from the DB (not derived locally) so reads by other
+    members between the marking and the broadcast are reflected.
+    """
+    member_ids = set(await sync_to_async(list)(room.followers.values_list("id", flat=True)))
+    member_count = len(member_ids)
+    updates = []
+    async for msg in ChatMessage.objects.filter(pk__in=msg_ids):
+      read_count = await msg.read_by.filter(id__in=member_ids).acount()
+      status = ChatMessage.compute_status(
+        is_public=False,
+        room_members_count=member_count,
+        read_count=read_count,
+        sender_is_member=msg.member_id in member_ids,
+      )
+      updates.append({"msg_id": msg.id, "status": status.value})
+    if not updates:
+      return
+    await self.channel_layer.group_send(
+      self.room_group_name,
+      {"type": "read_status_update", "updates": updates},
+    )
+
+  async def read_status_update(self, event):
+    """Channel handler: forwards the read-receipt updates to the client."""
+    await self.send(text_data=json.dumps({"action": "read_status_update", "args": {"updates": event["updates"]}}))

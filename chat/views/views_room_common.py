@@ -192,7 +192,9 @@ def display_chat_room(request, room_slug, private=False, page_num=None):
   if private and not room.followers.filter(pk=request.user.pk).exists():
     messages.error(request, _("You are not a member of this private room"))
     return redirect(reverse("chat:private_chat_rooms"))
-  message_list = ChatMessage.objects.filter(room=room.id).order_by("date_added", "id").select_related("member")
+  message_list = (
+    ChatMessage.objects.filter(room=room.id).order_by("date_added", "id").select_related("member").prefetch_related("read_by")
+  )
   try:
     page = Paginator.get_page(
       request,
@@ -208,6 +210,20 @@ def display_chat_room(request, room_slug, private=False, page_num=None):
     first_msg = message_list.first()
     room_owner = first_msg.member if first_msg else None
     num_followers = room.followers.count()
+    # Precompute each displayed message's aggregate read status (private rooms only)
+    # so the read receipts render without N+1 queries. ``read_by`` is prefetched on
+    # ``message_list``, so ``msg.read_by.all()`` below hits the prefetch cache.
+    read_status_map = {}
+    if private:
+      room_member_ids = set(room.followers.values_list("id", flat=True))
+      room_members_count = len(room_member_ids)
+      for msg in page.object_list:
+        read_status_map[msg.id] = ChatMessage.compute_status(
+          is_public=False,
+          room_members_count=room_members_count,
+          read_count=sum(1 for m in msg.read_by.all() if m.id in room_member_ids),
+          sender_is_member=msg.member_id in room_member_ids,
+        ).value
     return render(
       request,
       "chat/room_detail.html",
@@ -219,6 +235,7 @@ def display_chat_room(request, room_slug, private=False, page_num=None):
         "private": private,
         "last_date": last_date,
         "last_sender": last_sender,
+        "read_status_map": read_status_map,
       },
     )
   except PageOutOfBounds as exc:

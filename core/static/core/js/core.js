@@ -180,6 +180,26 @@ function check_search_length(el, min_length) {
   }
 }
 
+// Go to a pagination URL, preserving the current query string (page_size, search
+// filters...) and an optional ?fullscreen=true flag. Defined in static JS (served
+// as 'self', no CSP nonce needed) so it is ALWAYS available — previously it lived
+// in a per-page inline <script nonce> whose nonce did not reliably reach every
+// paginate() render context; under CSP enforcement that script was blocked and
+// goto_page_url stayed undefined (issue #440). Query string read client-side.
+function goto_page_url(url, fullscreen=false) {
+  var new_location = url;
+  var query_string = window.location.search.slice(1);
+  var next_par = '?';
+  if (query_string) {
+    new_location += '?' + query_string;
+    next_par = '&';
+  }
+  if (fullscreen) {
+    new_location += next_par + 'fullscreen=true';
+  }
+  window.location = new_location;
+}
+
 // --- CSP-safe replacements for inline on*= handlers (delegated via data-*) ---
 // A nonce cannot cover inline event-handler attributes, so they are replaced by
 // data-* attributes handled here. Delegation on document keeps them working on

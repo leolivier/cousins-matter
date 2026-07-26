@@ -69,20 +69,22 @@ class PublicRoomDetailUITest(ChatUITestBase):
     self.errors.clear()
 
   def test_public_room_pagination(self):
-    """The room with many messages should display pagination links."""
+    """The room with many messages should paginate via data-goto-url (issue #440)."""
     self.login_and_goto_page("chat:room", args=[self.big_room.slug])
 
-    # Should see pagination links (30 messages, 25 per page = 2 pages)
-    self.page.wait_for_selector(".pagination")
-
-    # Navigate to page 2
+    # 30 messages, 25 per page = 2 pages → pagination MUST be present. The old
+    # test guarded everything with `if page_links.count() > 1`, so a totally
+    # inert pagination (issue #440) passed silently.
+    self.page.wait_for_selector("a.pagination-link")
     page_links = self.page.locator("a.pagination-link")
-    if page_links.count() > 1:
-      page_links.last.click()
-      self.page.wait_for_timeout(500)
-      # URL should contain page number
-      self.assertIn("/2", self.page.url, "Should navigate to page 2")
+    self.assertGreaterEqual(page_links.count(), 2, "Pagination links should be present for 2 pages")
 
+    # Clicking page 2 must actually navigate — proves goto_page_url ran without
+    # throwing (issue #440: a CSP-blocked inline def made links inert).
+    page_links.last.click()
+    self.page.wait_for_timeout(500)
+    self.assertIn("/2", self.page.url, "Should navigate to page 2")
+    self.assertEqual(len(self.errors), 0, f"JS errors during pagination: {self.errors}")
     self.errors.clear()
 
   def test_toggle_follow(self):

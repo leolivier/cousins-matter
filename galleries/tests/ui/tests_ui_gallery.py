@@ -58,23 +58,27 @@ class GalleryDetailUITest(GalleryUITestBase):
     self.errors.clear()
 
   def test_gallery_detail_pagination(self):
-    """The gallery detail should paginate photos."""
+    """The gallery detail should paginate photos via data-goto-url (issue #440)."""
     self._goto_gallery_details(page_size=10)
 
     # With 12 photos and page_size=10, we get 2 pages (10 + 2)
     cards = self.page.locator(".gallery-image")
     self.assertEqual(cards.count(), 10, "First page should contain 10 gallery cards")
 
-    # Check pagination is present (second pagination at bottom of page)
-    # The paginate template uses nav.paginate
+    # Pagination MUST be present (2 pages) — issue #440: a broken goto_page_url
+    # left every pagination link inert, but this only failed silently because the
+    # old assertion was guarded by `if page_links.count() > 0`.
+    self.page.wait_for_selector("a.pagination-link")
     page_links = self.page.locator("a.pagination-link")
-    if page_links.count() > 0:
-      page_link = page_links.get_by_text("2", exact=True).first
-      if page_link.is_visible():
-        page_link.click()
-        self.page.wait_for_timeout(500)
-        self.assertIn("/2", self.page.url, "Should navigate to page 2")
+    self.assertGreaterEqual(page_links.count(), 2, "Pagination links should be present for 2 pages")
 
+    # Clicking page 2 must actually navigate — proves goto_page_url ran without
+    # throwing. A CSP-blocked inline def surfaces here as a pageerror (see below).
+    page_link = page_links.get_by_text("2", exact=True).first
+    page_link.click()
+    self.page.wait_for_timeout(500)
+    self.assertIn("/2", self.page.url, "Should navigate to page 2")
+    self.assertEqual(len(self.errors), 0, f"JS errors during pagination: {self.errors}")
     self.errors.clear()
 
   def test_gallery_detail_no_js_errors(self):

@@ -594,8 +594,10 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.assertContainsMessage(
       response,
       "error",
-      _("You are the only admin in this private room. If you leave the room, no one " +
-      "will be left. Please add another admin from the members before you remove yourself."),
+      _(
+        "You are the only admin in this private room. If you leave the room, no one "
+        + "will be left. Please add another admin from the members before you remove yourself."
+      ),
     )
 
   def test_leave_private_room_admins(self):
@@ -613,8 +615,10 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
       response,
       "error",
       # I am trying to leave the room but am the only admin, so should not be able to leave
-      _("You are the only admin in this private room. If you leave the room, no one " +
-      "will be left. Please add another admin from the members before you remove yourself."),
+      _(
+        "You are the only admin in this private room. If you leave the room, no one "
+        + "will be left. Please add another admin from the members before you remove yourself."
+      ),
     )
 
     # Success case

@@ -1,7 +1,5 @@
 from django.conf import settings
 from django.core.exceptions import RequestDataTooBig
-from django.db import transaction
-from django.db.models import Count, Prefetch
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -21,24 +19,18 @@ from forum.views.views_follow import (
 from members.models import Member
 
 from ..forms import MessageForm, PostForm
-from ..models import Comment, Message, Post
+from ..models import Post
+from ..services import do_create_post, get_post_replies_queryset, get_posts_list_queryset
 
 
 class PostsListView(generic.ListView):
   model = Post
 
   def get(self, request, page=1):
-    posts = (  # fmt: skip
-      Post.objects
-      .select_related("first_message__author")  # fmt: skip
-      .annotate(num_messages=Count("message"), num_followers=Count("followers"))
-      .all()
-      .order_by("-first_message__created")
-    )
     try:
       page = Paginator.get_page(
         request,
-        object_list=posts,
+        object_list=get_posts_list_queryset(),
         page_num=page,
         reverse_link="forum:page",
         default_page_size=settings.DEFAULT_POSTS_PER_PAGE,
@@ -56,13 +48,7 @@ class PostDisplayView(generic.DetailView):
       post = Post.objects.select_related("first_message__author").get(pk=pk)
     except Post.DoesNotExist:
       return HttpResponseNotFound()
-    replies = (
-      Message.objects
-      .filter(post=post, first_of_post=None)
-      .select_related("author")
-      .prefetch_related(Prefetch("comment_set", queryset=Comment.objects.select_related("author")))
-      .all()
-    )
+    replies = get_post_replies_queryset(post)
     try:
       page = Paginator.get_page(
         request,
@@ -112,13 +98,7 @@ class PostCreateView(generic.CreateView):
     if post_form.is_valid() and message_form.is_valid():
       try:
         author = Member.objects.only("id").get(id=request.user.id)
-        message_form.instance.author_id = author.id
-        with transaction.atomic():
-          message = message_form.save()
-          post_form.instance.first_message = message
-          post = post_form.save()
-          message.post = post
-          message.save()
+        post, message = do_create_post(author, post_form, message_form)
         # send notifications to followers
         check_followers_on_new_post(request, post)
         return redirect("forum:display", post.id)

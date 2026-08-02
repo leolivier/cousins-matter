@@ -42,6 +42,7 @@ dev = [
     "mypy==2.3.0",
     "pip-audit>=2.10.1",
     "playwright>=1.61.0",
+    "pre-commit>=4.6.1",
     "ruff>=0.15.20",
     "types-requests>=2.33.0.20260518",
 ]

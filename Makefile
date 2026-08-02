@@ -1,4 +1,4 @@
-.PHONY: build run cpmsg mkmsg up down clean ps logs stop up4run help h u4r test mig mkmig cover minify shell
+.PHONY: build run cpmsg mkmsg up down clean ps logs stop up4run help h u4r test mig mkmig cover minify shell install-hooks
 .EXPORT_ALL_VARIABLES:
 ENVIRONMENT ?= development
 
@@ -100,6 +100,9 @@ check:
 	bandit -r . -c pyproject.toml -f txt -o bandit.out
 	pip-audit .
 	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
+
+install-hooks:
+	pre-commit install
 
 shell:
 	./manage.py shell

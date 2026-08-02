@@ -477,8 +477,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "av", specifier = ">=17.1,<18.1" },
-    { name = "blessed", specifier = ">=1.44,<1.48" },
+    { name = "av", specifier = ">=17.1" },
+    { name = "blessed", specifier = ">=1.44" },
     { name = "channels", specifier = "~=4.3.2" },
     { name = "channels-redis", specifier = "~=4.3.0" },
     { name = "crispy-bulma", specifier = "~=0.12.0" },
@@ -489,14 +489,14 @@ requires-dist = [
     { name = "django-crispy-forms", specifier = "~=2.6" },
     { name = "django-email-validation", specifier = "~=2.1.1" },
     { name = "django-environ", specifier = "~=0.14.0" },
-    { name = "django-htmx", specifier = ">=1.27,<1.29" },
+    { name = "django-htmx", specifier = ">=1.27" },
     { name = "django-ipware", specifier = "~=7.0.1" },
     { name = "django-q2", specifier = "~=1.10.0" },
     { name = "django-simple-captcha", specifier = "~=0.6.3" },
     { name = "django-storages", extras = ["dropbox", "s3"], specifier = "~=1.14.6" },
     { name = "fpdf", specifier = "~=1.7.2" },
     { name = "packaging", specifier = "~=26.2" },
-    { name = "pillow", specifier = ">=12.3.0,<12.4" },
+    { name = "pillow", specifier = ">=12.2" },
     { name = "psycopg", extras = ["binary"], specifier = "~=3.3.4" },
     { name = "psycopg-pool", specifier = "~=3.3.1" },
     { name = "python-gedcom", specifier = "~=1.1.0" },

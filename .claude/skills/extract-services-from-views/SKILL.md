@@ -142,12 +142,16 @@ return redirect(room_url)
 
 ```bash
 source .venv/bin/activate
-ruff check <app>/services.py <app>/views/          # no unused imports, no `request` leaks flagged by eye
-ENVIRONMENT="test" ./manage.py test --exclude-tag=ui <app>.tests.<test_module>   # e.g. chat.tests.tests_private
+ruff check <app>/services.py <app>/views/          # no unused imports; eyeball that no service takes `request`
+# `--noinput` avoids the test-DB "Type 'yes'" prompt on re-runs (EOFError in a pipe — see Gotchas)
+ENVIRONMENT="test" ./manage.py test --noinput --exclude-tag=ui <app>.tests.<module>   # e.g. chat.tests.tests_private
+ENVIRONMENT="test" ./manage.py test --noinput --tag=ui <app>.tests.ui.<module>        # e.g. forum.tests.ui.tests_ui_posts
 ```
 
-Expected: `ruff` clean, tests green. If a message string or its level changed, update the test's
-`assertContainsMessage` — don't silently change user-facing wording.
+Expected: `ruff` clean, non-UI **and** UI tests green. If a message string or its level changed,
+update the test's `assertContainsMessage` — don't silently change user-facing wording. (A `429`
+from `ipapi.co` during UI runs is an external geolocation API rate-limiting — non-fatal; trust the
+final `Ran N tests … OK` line.)
 
 ## Gotchas
 
@@ -166,3 +170,7 @@ Expected: `ruff` clean, tests green. If a message string or its level changed, u
 - **`@.EXPORT_ALL_VARIABLES` Makefile needs the venv active** — `make test`/`make check` fail with
   `No module named django` if you forget `source .venv/bin/activate`. (Run `./manage.py` directly as
   above to sidestep.)
+- **Pass `--noinput` to `./manage.py test`.** A second run in the same session finds the test DB
+  already created and prompts "Type 'yes' to delete it" — in a non-interactive (piped) shell that's
+  an `EOFError` and the run aborts before any test. `--noinput` autoclobbers; `--keepdb` reuses the
+  DB (faster, but masks migration changes).

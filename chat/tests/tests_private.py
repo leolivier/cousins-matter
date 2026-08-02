@@ -371,7 +371,8 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.assertContainsMessage(
       response,
       "error",
-      _("This member is the only one in this private room. Please add another one before removing this one."),
+      # actually, we remove ourselves
+      _("You are the only member in this private room. Please add another one before removing yourself."),
     )
     # now, add a random member to self.room
     second_member = random.choice(self.created_members)
@@ -509,7 +510,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     response = self.client.post(
       reverse("chat:add_member_to_private_room", args=[self.room.slug]), {"member-id": member.id}, follow=True
     )
-    self.assertContainsMessage(response, "warning", _("This user is already a member of this private room"))
+    self.assertContainsMessage(response, "error", _("This user is already a member of this private room"))
 
   def test_remove_member_from_private_room_not_admin(self):
     member = self.created_members[0]
@@ -527,7 +528,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     response = self.client.post(
       reverse("chat:remove_member_from_private_room", args=[self.room.slug, member.username]), follow=True
     )
-    self.assertContainsMessage(response, "warning", _("This user is not a member of this private room"))
+    self.assertContainsMessage(response, "error", _("This user is not a member of this private room"))
 
   def test_remove_member_who_is_admin(self):
     member = self.created_members[0]
@@ -558,7 +559,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     response = self.client.post(
       reverse("chat:add_admin_to_private_room", args=[self.room.slug]), {"member-id": self.member.id}, follow=True
     )
-    self.assertContainsMessage(response, "warning", _("This user is already a member of this private room"))
+    self.assertContainsMessage(response, "error", _("This user is already an admin of this private room"))
 
   def test_remove_admin_from_private_room(self):
     # Permission check
@@ -584,7 +585,7 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     response = self.client.post(
       reverse("chat:remove_admin_from_private_room", args=[self.room.slug, other_member.username]), follow=True
     )
-    self.assertContainsMessage(response, "warning", _("This member is not an admin of this private room"))
+    self.assertContainsMessage(response, "error", _("This member is not an admin of this private room"))
 
     # Failure case (only one admin)
     response = self.client.post(
@@ -593,7 +594,8 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.assertContainsMessage(
       response,
       "error",
-      _("There must be at least one admin in a private room. Please add another one before removing this one."),
+      _("You are the only admin in this private room. If you leave the room, no one " +
+      "will be left. Please add another admin from the members before you remove yourself."),
     )
 
   def test_leave_private_room_admins(self):
@@ -610,7 +612,9 @@ class TestPrivateMembersAndAdmins(PrivateChatRoomTestsMixin, MemberTestCase):
     self.assertContainsMessage(
       response,
       "error",
-      _("There must be at least one admin in a private room. Please add another one before removing yourself."),
+      # I am trying to leave the room but am the only admin, so should not be able to leave
+      _("You are the only admin in this private room. If you leave the room, no one " +
+      "will be left. Please add another admin from the members before you remove yourself."),
     )
 
     # Success case

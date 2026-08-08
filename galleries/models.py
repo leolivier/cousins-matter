@@ -219,7 +219,69 @@ class Gallery(models.Model):
 
   def save(self, *args, **kwargs):
     self.full_clean()
-    return super().save(*args, **kwargs)
+    is_new = self.pk is None
+    old_parent_id = None
+    if not is_new:
+      try:
+        old_parent_id = Gallery.objects.get(pk=self.pk).parent_id
+      except Gallery.DoesNotExist:
+        old_parent_id = None
+    result = super().save(*args, **kwargs)
+    if not is_new and old_parent_id != self.parent_id:
+      self._move_subtree_photos()
+    return result
+
+  def _move_file(self, storage, old_name, new_name):
+    """Move a single file using Django Storage API. Returns True on success."""
+    try:
+      if not storage.exists(old_name):
+        return False
+      if storage.exists(new_name):
+        storage.delete(new_name)
+      with storage.open(old_name, "rb") as f:
+        content = f.read()
+      storage.save(new_name, ContentFile(content))
+      try:
+        storage.delete(old_name)
+      except Exception:
+        pass
+      return True
+    except Exception as e:
+      logger.warning(f"Failed to move file {old_name} -> {new_name}: {e}")
+      return False
+
+  def _move_subtree_photos(self):  # noqa: C901
+    """Move all photos in this gallery subtree to their new storage paths.
+    Works with any Django Storage backend via open/save/delete.
+    """
+    try:
+      gallery_ids = self.rec_children_list()
+    except Exception:
+      return
+    photos = Photo.objects.filter(gallery_id__in=gallery_ids).select_related("gallery")
+    for photo in photos:
+      old_image = photo.image.name if photo.image else None
+      old_thumb = photo.thumbnail.name if photo.thumbnail and photo.thumbnail.name else None
+      new_image = photo_path(photo, os.path.basename(old_image)) if old_image else None
+      if old_thumb:
+        new_thumb = new_image if old_thumb == old_image else thumbnail_path(photo, os.path.basename(old_thumb))
+      else:
+        new_thumb = None
+      updates = {}
+      if old_image and new_image and old_image != new_image:
+        if self._move_file(photo.image.storage, old_image, new_image):
+          updates["image"] = new_image
+        else:
+          continue
+      if old_thumb and new_thumb and old_thumb != new_thumb:
+        if old_thumb == old_image:
+          updates["thumbnail"] = new_thumb
+        elif self._move_file(photo.thumbnail.storage, old_thumb, new_thumb):
+          updates["thumbnail"] = new_thumb
+      elif old_thumb == old_image and "image" in updates:
+        updates["thumbnail"] = new_thumb
+      if updates:
+        Photo.objects.filter(pk=photo.pk).update(**updates)
 
   def full_path(self):
     return os.path.join(self.parent.full_path(), self.slug) if self.parent else self.slug

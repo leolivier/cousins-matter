@@ -243,7 +243,8 @@ class Gallery(models.Model):
       storage.save(new_name, ContentFile(content))
       try:
         storage.delete(old_name)
-      except Exception:
+      except Exception as e:
+        logger.warning(f"Failed to delete old file {old_name}: {e}")
         pass
       return True
     except Exception as e:

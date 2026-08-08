@@ -1,14 +1,7 @@
 import logging
 import shutil
-import zipfile
-import os
-import mimetypes
-import tempfile
-import pathlib
 import uuid
 
-from django.core.exceptions import SuspiciousFileOperation
-from django.db.models import ObjectDoesNotExist
 from django.forms import ValidationError
 from django_htmx.http import HttpResponseClientRefresh
 from django.http import Http404
@@ -18,105 +11,13 @@ from django.contrib import messages
 from django.views import generic
 from django.utils.translation import gettext as _
 
-from django_q.tasks import async_task, result_group, count_group
-from django_q.brokers import get_broker
+from django_q.tasks import result_group, count_group
 
-from ..models import Gallery
 from ..forms import BulkUploadPhotosForm
-from ..tasks import ZipImport, handle_photo_file, post_create_photo
+from ..tasks import ZipImport
+from ..services import handle_zip
 
 logger = logging.getLogger(__name__)
-
-
-def _get_parent_gallery(path: str, zimport: ZipImport):  # path should be directory
-  """
-  Returns the gallery inside which the gallery denoted by path is to be created.
-  args: "path" should be one of a folder
-  """
-  parent_dir = os.path.dirname(os.path.normpath(path))
-  return _get_or_create_gallery(parent_dir, zimport) if parent_dir != "" else zimport.root_gallery
-
-
-def _get_or_create_gallery(path: str, zimport: ZipImport):
-  """
-  Creates a Gallery object based on the path. The path should denote a folder.
-  If the path is made of several embedded folders, all Galleries are created
-  recursively and the parent relationship between galleries is built based on
-  that. Paths are cleaned and checked before creating galleries.
-  Throws SuspiciousFileOperation if a path traversal attempt is detected.
-  If gallery with the same name and same parent already exists, it is simply
-  returned and not updated to avoid overwriting handwritten description
-  """
-  # remove leading './', trailing slash and dots inside the path
-  path = path.rstrip("/").removeprefix("./").replace("/./", "/")
-
-  # check possible path traversal attempt (code from django internals)
-  if ".." in pathlib.PurePath(path).parts:
-    raise SuspiciousFileOperation(_("Detected path traversal attempt, '..' is not allowed in paths inside the zip file"))
-
-  if path == ".":
-    if zimport.root_gallery is None:
-      raise ValidationError(_("Root gallery not found. Please select a root gallery. Create it first if necessary."))
-    return zimport.root_gallery
-
-  if path in zimport.galleries:  # gallery in cache
-    return zimport.galleries[path]
-
-  name = os.path.basename(os.path.normpath(path))
-  description = _("Imported from zipfile directory %(path)s") % {"path": path}
-  parent = _get_parent_gallery(path, zimport)
-
-  # Create gallery if it does not already exists.
-  # Don't update it otherwise as we might overwrite handwritten description.
-  try:
-    gallery = Gallery.objects.get(name=name, parent=parent)
-  except ObjectDoesNotExist:
-    gallery = Gallery.objects.create(name=name, parent=parent, description=description, owner_id=zimport.owner_id)
-    zimport.nbGalleries += 1
-  # store gallery in the cache
-  zimport.galleries[path] = gallery
-  return gallery
-
-
-def handle_zip(zip_file, task_group, owner_id, root_gallery=None):
-  """
-  reads a zip file and creates galleries for each folder
-  and create tasks to create photos inside these galleries for each image in the folder.
-  Galleries are named by the folder names and photos by the image file names.
-  Files which are not photos are simply ignored.
-  """
-  if not zipfile.is_zipfile(zip_file):
-    raise zipfile.BadZipFile(f"{zip_file} is not a zip file")
-
-  tmpdir = tempfile.mkdtemp()
-  zimport = ZipImport(owner_id=owner_id, root=tmpdir, group=task_group, root_gallery=root_gallery)
-  zimport.register()
-  broker = get_broker()
-  # extract the zip file to a temporary directory
-  with zipfile.ZipFile(zip_file, "r") as zip_ref:
-    zip_ref.extractall(tmpdir)
-  for dir, subdirs, files in os.walk(tmpdir):
-    images = [file for file in files if mimetypes.guess_type(file)[0].startswith("image/")]
-    if len(images) == 0:  # create galleries only if there are photos inside
-      continue
-    gallery_path = os.path.relpath(dir, tmpdir)  # get relative path from temp to see the galleries path
-    gallery = _get_or_create_gallery(gallery_path, zimport)
-    for image in images:
-      async_task(
-        handle_photo_file,
-        zimport,
-        dir,
-        image,
-        gallery.id,
-        group=task_group,
-        cached=False,
-        hook=post_create_photo,
-        broker=broker,
-      )
-      zimport.nbPhotos += 1
-      logger.debug(f"created task for {image} group: {task_group}")
-
-  return zimport
 
 
 class BulkUploadPhotosView(generic.FormView):

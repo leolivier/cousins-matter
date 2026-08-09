@@ -1,10 +1,8 @@
-from django.template.loader import render_to_string
-from django.conf import settings
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from django.core.mail import send_mail
+
+from ..services.members import do_toggle_follow
 
 from ..models import Member
 
@@ -12,46 +10,12 @@ from ..models import Member
 def toggle_follow(request, username):
   follower = request.user
   followed = get_object_or_404(Member, username=username)
-  followed_url = reverse("members:detail", kwargs={"username": followed.username})
-  followed_name = followed.full_name
+  # use absolute URL for follower to avoid relative URLs in email
+  follower_url = request.build_absolute_uri(reverse("members:detail", kwargs={"username": follower.username}))
 
-  if followed == follower:
-    messages.error(request, _("You can't follow yourself!"))
-  elif followed.followers.filter(id=follower.id).exists():
-    followed.followers.remove(follower)
-    messages.success(
-      request,
-      _("You are no longer following %(followed_name)s") % {"followed_name": followed_name},
-    )
-  elif followed.is_dead:
-    messages.error(request, _("Error: You can't follow dead people"))
+  result, message = do_toggle_follow(followed, follower, follower_url)
+  if result == "success":
+    messages.success(request, message)
   else:
-    followed.followers.add(follower)
-    messages.success(
-      request,
-      _("You are now following %(followed_name)s") % {"followed_name": followed_name},
-    )
-    # send email to followed to tell him/her someone is following him/her
-    followed_url = followed_url
-    follower_name = follower.full_name
-    title = _("You have a new follower!")
-    message = _("%(follower_name)s is now following you!") % {"follower_name": follower_name}
-    follower_url = request.build_absolute_uri(reverse("members:detail", kwargs={"username": follower.username}))
-
-    send_mail(
-      title,
-      message,
-      settings.DEFAULT_FROM_EMAIL,
-      [followed.email],
-      html_message=render_to_string(
-        "members/email/new_follower.html",
-        {
-          "title": title,
-          "follower_name": follower_name,
-          "followed_name": followed_name,
-          "follower_url": follower_url,
-          "site_name": settings.SITE_NAME,
-        },
-      ),
-    )
-  return redirect(followed_url)
+    messages.error(request, message)
+  return redirect(reverse("members:detail", kwargs={"username": followed.username}))

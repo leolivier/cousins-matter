@@ -42,6 +42,7 @@ class ModalFamilyUpsertMixin(generic.View):
     assert request.htmx  # nosec B101
     if form.is_valid():
       family = form.save()
+      # TODO: very inefficient! refactor to add a search field
       families = Family.objects.all()
       child_family_id = request.GET.get("current_family_id", "")
       if child_family_id:

@@ -86,10 +86,10 @@ def get_birthdays(ndays):
 def get_members_page_queryset(query, sort_by: str | None, order: str):
   members = Member.objects
   members = members.fuzzy_search(query) if query else members.all()
-  sort_by = [sort_by] if sort_by else ["last_name", "first_name"]  # default sort
+  lsort_by = [sort_by] if sort_by else ["last_name", "first_name"]  # default sort
   if order:
-    sort_by = [order + s for s in sort_by]
-  return members.order_by(*sort_by)
+    lsort_by = [order + s for s in lsort_by]
+  return members.order_by(*lsort_by)
 
 
 def do_init_member(member: Member, user_id: int):

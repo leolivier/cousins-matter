@@ -10,9 +10,11 @@ class RichTextarea(Textarea):
 class BulmaCalendar(DateInput):
   def __init__(self, attrs=None, format=None):
     if attrs is None:
-      attrs = {"type": "date"}
+      attrs = {"type": "date", "class": "dateinput"}
     else:
       attrs["type"] = "date"
+      if "class" not in attrs:
+        attrs["class"] = "dateinput"
     if format is None:
       format = "%Y-%m-%d"
     super().__init__(attrs, format)

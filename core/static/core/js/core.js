@@ -172,7 +172,12 @@ function printSection(el) {
 function check_search_length(el, min_length) {
   if (el.value.length > 0 && el.value.length < min_length) {
     // try to use gettext if available
-    var message = (typeof gettext === 'function') ? gettext('Please enter at least ') + min_length + gettext(' characters') : 'Please enter at least ' + min_length + ' characters';
+    if (typeof gettext === 'function') {
+      var msg = gettext('Please enter at least %(min_length)s characters');
+      var message = interpolate(msg, {min_length: min_length}, true);
+    } else {
+      var message = 'Please enter at least ' + min_length + ' characters';
+    }
     el.setCustomValidity(message);
     el.reportValidity();
   } else {

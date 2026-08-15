@@ -80,3 +80,18 @@ msgstr "profilo"
 
 msgid "Are you sure you want to delete this treasure?"
 msgstr "Sei sicuro/a di voler eliminare questo tesoro?"
+
+msgid "Please enter at least %(min_length)s characters"
+msgstr "Per favore, inserisci almeno %(min_length)s caratteri"
+
+msgid "Max size reached!"
+msgstr "Tamaño máximo alcanzado!"
+
+msgid "Read"
+msgstr "Letto"
+
+msgid "Partially read"
+msgstr "Letto parzialmente"
+
+msgid "Sent"
+msgstr "Inviato"

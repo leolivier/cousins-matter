@@ -79,3 +79,18 @@ msgstr "perfil"
 
 msgid "Are you sure you want to delete this treasure?"
 msgstr "Você está seguro de querer apagar esse tesouro?"
+
+msgid "Please enter at least %(min_length)s characters"
+msgstr "Por favor, insira pelo menos %(min_length)s caracteres"
+
+msgid "Max size reached!"
+msgstr "Tamanho máximo alcançado!"
+
+msgid "Read"
+msgstr "Lido"
+
+msgid "Partially read"
+msgstr "Lido parcialmente"
+
+msgid "Sent"
+msgstr "Enviado"

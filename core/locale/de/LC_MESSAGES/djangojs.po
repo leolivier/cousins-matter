@@ -79,3 +79,18 @@ msgstr "Profil"
 
 msgid "Are you sure you want to delete this treasure?"
 msgstr "Bist du sicher, dass du diesen Schatz löschen möchtest?"
+
+msgid "Please enter at least %(min_length)s characters"
+msgstr "Bitte geben Sie mindestens %(min_length)s Zeichen ein"
+
+msgid "Max size reached!"
+msgstr "Maximale Größe erreicht!"
+
+msgid "Read"
+msgstr "Lesen"
+
+msgid "Partially read"
+msgstr "Teilweise gelesen"
+
+msgid "Sent"
+msgstr "Gesendet"

@@ -13,7 +13,7 @@ def get_filtered_polls(model, only_published: bool, show_closed: bool, only_clos
     filter &= Q(close_date__gte=timezone.now()) | Q(close_date__isnull=True)
   if only_closed:
     filter &= Q(close_date__lte=timezone.now())
-  if Poll == Poll:  # Exclude EventPlanners
+  if model == Poll:  # Exclude EventPlanners
     filter &= Q(eventplanner__isnull=True)
   return model.objects.filter(filter).select_related("owner").order_by(ordering)
 

@@ -97,7 +97,7 @@ minify:
 check:
 	ruff format -q .
 	ruff check . --fix
-	bandit -r . -c pyproject.toml -f txt -o bandit.out
+	bandit -r . -c pyproject.toml -f txt -o bandit.out -x ./.claude
 	pip-audit .
 	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
 

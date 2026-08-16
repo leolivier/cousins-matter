@@ -15,7 +15,7 @@ class MembersListUITest(MembersUITestBase):
     self.assertGreaterEqual(cells.count(), 1, "At least one member should be displayed")
 
     # The search input should be visible
-    self.assert_visible("#member-search-input", "Search input should be visible")
+    self.assert_visible("#members-search-input", "Search input should be visible")
 
     # Sort dropdown should be visible
     self.assert_visible("select[name='member_sort']", "Sort dropdown should be visible")
@@ -24,7 +24,7 @@ class MembersListUITest(MembersUITestBase):
     """Searching for a member by name should filter results."""
     self.login_and_goto_page("members:members")
 
-    search_input = self.page.locator("#member-search-input")
+    search_input = self.page.locator("#members-search-input")
     search_input.fill(self.member1.first_name)
     # HTMX triggers on keyup with Enter when length >= 3
     search_input.press("Enter")

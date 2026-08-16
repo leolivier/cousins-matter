@@ -249,7 +249,11 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
     if not filter:  # can be None or {}
       return False
 
-    map = {"city-id": ALL_FIELD_NAMES["city"], "family-id": ALL_FIELD_NAMES["family"], "name-id": ALL_FIELD_NAMES["last_name"]}
+    map = {
+      "city-select-id": ALL_FIELD_NAMES["city"],
+      "family-select-id": ALL_FIELD_NAMES["family"],
+      "name-select-id": ALL_FIELD_NAMES["last_name"],
+    }
 
     # print("check filters for row=%s filter=%s" % (row, filter))
     for filter_key, filter_val in filter.items():
@@ -347,9 +351,9 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
   @translation.override("en")
   def test_export_en_with_filter(self):
     self.do_test_import("import_members.csv", "en", 4)
-    self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
-    self.do_test_export("import_members.csv", "en", {"city-id": "Liverpool"})
-    self.do_test_export("import_members.csv", "en", {"name-id": "Doe"})
+    self.do_test_export("import_members.csv", "en", {"name-select-id": "Doe"})
+    self.do_test_export("import_members.csv", "en", {"city-select-id": "Liverpool"})
+    self.do_test_export("import_members.csv", "en", {"name-select-id": "Doe"})
 
 
 class TestSelectViews(TestMemberImport):
@@ -359,16 +363,18 @@ class TestSelectViews(TestMemberImport):
     response = self.client.get(
       reverse("members:select_name"),
       {"q": self.member.last_name[:3]},
-      HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+      HTTP_HX_REQUEST="true",
     )
     self.assertEqual(response.status_code, 200)
-    data = response.json()
-    self.assertIn("results", data)
-    results = data["results"]
-    self.assertIsInstance(results, list)
-    self.assertTrue(len(results) > 0)
-    for n in ["text", "id"]:
-      self.assertIn(results[0][n].lower(), [self.member.last_name, self.superuser.last_name])
+    self.assertContains(
+      response,
+      f'''
+        <a href="#" class="dropdown-item select-result"
+           data-select-result-id="{self.member.last_name}">
+          {self.member.last_name}
+        </a>''',
+      html=True,
+    )
 
   def test_select_family(self):
     from ..models import Family
@@ -377,14 +383,18 @@ class TestSelectViews(TestMemberImport):
     response = self.client.get(
       reverse("members:select_family"),
       {"q": "Test"},
-      HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+      HTTP_HX_REQUEST="true",
     )
     self.assertEqual(response.status_code, 200)
-    data = response.json()
-    self.assertIn("results", data)
-    self.assertTrue(len(data["results"]) > 0)
-    result = data["results"][0]
-    self.assertDictEqual(result, {"text": "Testfamily", "id": "Testfamily"})
+    self.assertContains(
+      response,
+      """
+        <a href="#" class="dropdown-item select-result"
+           data-select-result-id="TestFamily">
+           TestFamily
+        </a>""",
+      html=True,
+    )
 
   def test_select_city(self):
     from ..models import Address
@@ -393,17 +403,19 @@ class TestSelectViews(TestMemberImport):
     response = self.client.get(
       reverse("members:select_city"),
       {"q": "Test"},
-      HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+      HTTP_HX_REQUEST="true",
       follow=True,
     )
     self.assertEqual(response.status_code, 200)
-    data = response.json()
-    self.assertIn("results", data)
-    results = data["results"]
-    self.assertIsInstance(results, list)
-    self.assertTrue(len(results) > 0)
-    self.assertEqual(results[0]["text"], "Testcity")
-    self.assertEqual(results[0]["id"], "Testcity")
+    self.assertContains(
+      response,
+      """
+        <a href="#" class="dropdown-item select-result"
+           data-select-result-id="TestCity">
+          TestCity
+        </a>""",
+      html=True,
+    )
 
   def test_select_members_to_export(self):
     response = self.client.get(reverse("members:select_members_to_export"))
@@ -474,8 +486,7 @@ class TestSelectViews(TestMemberImport):
     url = reverse("members:export_members_to_csv")
     response = self.client.post(url, {"city-id": "Blackpool"}, follow=True)
     self.assertEqual(response.status_code, 200)
-    content = response.content.decode()
-    self.assertIn("Blackpool", content)
+    self.assertContains(response, "Blackpool")
 
   def test_t_function(self):
     from members.views.views_import_export import t

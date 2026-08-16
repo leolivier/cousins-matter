@@ -198,7 +198,7 @@ def count_selected(request) -> HttpResponse:
   if name:
     qs = qs.filter(last_name=name)
 
-  print("qs: ", qs.query, "count: ", qs.count())
+  # print("qs: ", qs.query, "count: ", qs.count())
 
   return HttpResponse(content=str(qs.count()))
 

@@ -32,25 +32,11 @@
       </div>
     </div>
     <div class="level-item">
-      <form>
-        {%url 'members:search_members' as search_url %}
-        <div class="control is-expanded has-icons-left is-relative">
-          <span class="htmx-indicator">{%icon "loading" %}</span>
-          <input class="input" type="search"
-                  name="q"
-                  placeholder="{%trans 'Search...' %}"
-                  hx-get="{{search_url}}"
-                  hx-trigger="input[this.value.length == 0 || this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= 3)]"
-                  hx-target="#members-content-container"
-                  hx-indicator=".htmx-indicator"
-                  hx-vals='{"page_num": {{page.number|default:1}} }'
-                  autocomplete="off"
-                  id="member-search-input"
-                  data-min-length="3"
-                  >
-            {%icon "search" "is-small is-left"%}
-        </div>
-      </form>
+      {%url 'members:search_members' as search_url %}
+      {%trans "Search..." as placeholder %}
+      {% with page_num=page.number|default:1 %}
+      {% include 'core/common/htmx_search.html#select_page_content' with id="members-search" search_url=search_url target="#members-content-container" placeholder=placeholder extra_vals='{"page_num": '|add:page_num|add:' }' %}
+      {% endwith %}
     </div>
     <div class="level-item">
       <form>

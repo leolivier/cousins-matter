@@ -1599,5 +1599,5 @@ msgid "Unable to send mail, please contact your administrator"
 msgstr ""
 "Impossível enviar e-mail, por favor entre em contato com seu administrador."
 
-#~ msgid "Receive email notifications"
-#~ msgstr "Receber notificações por e-mail"
+msgid "Number of selected members"
+msgstr "Número de membros selecionados"

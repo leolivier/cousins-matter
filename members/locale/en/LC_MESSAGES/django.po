@@ -1477,3 +1477,6 @@ msgstr ""
 #: views/views_registration.py:262
 msgid "Unable to send mail, please contact your administrator"
 msgstr ""
+
+msgid "Number of selected members"
+msgstr ""

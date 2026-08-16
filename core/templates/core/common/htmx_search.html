@@ -1,0 +1,106 @@
+{% load cm_tags i18n %}
+
+{%partialdef select_page_content %}
+<form>
+  <div class="control is-expanded has-icons-left is-relative">
+    <span class="htmx-indicator">{%icon "loading" %}</span>
+    <input class="input" type="search"
+        name="q"
+        placeholder={{placeholder}}
+        hx-get="{{search_url}}"
+        hx-trigger="input[this.value.length == 0 || this.value.length >= {{min_length|default:3}}] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= {{min_length|default:3}})]"
+        hx-target="{{target}}"
+        hx-indicator=".htmx-indicator"
+        {%if extra_vals %}hx-vals='{{extra_vals}}'{%endif%}
+        autocomplete="off"
+        id="{{id}}-input"
+        data-min-length="{{min_length|default:3}}"
+        >
+    {%icon "search" "is-small is-left"%}
+  </div>
+</form>
+{% endpartialdef %}
+
+{%partialdef dropdown_select %}  {# need a form around the dropdown to submit on enter #}
+<div class="control">
+    <div class="dropdown full-width" id="{{id}}-dropdown">
+        <div class="dropdown-trigger full-width">
+        {%if label %}<label class="label" for="{{id}}-input">{{label}}</label>{%endif%}
+        <div class="field has-addons">
+            <div class="control is-expanded has-icons-left is-relative">
+                <span class="htmx-indicator">{%icon "loading" %}</span>
+                <input class="input" type="text"
+                        name="q"
+                        placeholder="{{placeholder}}"
+                        hx-get="{{search_url}}"
+                        hx-vals='{"render_with": "core/common/htmx_search.html#select_dropdown_results", "render_empty_query": "false"}'
+                        hx-trigger="input[this.value.length == 0 || this.value.length >= {{min_length|default:3}}] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= {{min_length|default:3}})]"
+                        hx-target="#{{id}}-results"
+                        hx-indicator=".htmx-indicator"
+                        autocomplete="off"
+                        id="{{id}}-input"
+                        data-min-length="{{min_length|default:3}}"
+                        >
+                {%icon "search" "is-small is-left"%}
+                {%icon "clear" "is-small is-right clear-field" %}
+                <div class="dropdown-menu full-width" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content" id="{{id}}-results"></div>
+                </div>
+            </div>
+            <input type="hidden" name="{{id}}-id" id="{{id}}-id"
+                {%if count_selected_url %}
+                hx-get="{{count_selected_url}}"
+                hx-trigger="change"
+                hx-include="[name$='-select-id']" {# include all select-id inputs #}
+                hx-target="#selected-count"
+                hx-swap="innerHTML"
+                {%endif %}>
+            {%if action_url %}  {# useful when only one select in the form #}
+            {%include "core/common/htmx_search.html#submit_button" %}
+            {%endif %}
+        </div>
+        </div>
+    </div>
+</div>
+
+{%endpartialdef %}
+
+{%partialdef submit_button %}
+<div class="control">
+  <button class="button" type="button" disabled="true" id="{{id}}-button"
+    hx-post="{{action_url}}"
+    hx-include="#{{id}}-id">
+    {%icon "new" %} {{action_text}}
+  </button>
+</div>
+{%endpartialdef %}
+
+{%partialdef select_dropdown_results %}
+{% if results is not None %}
+<div class="dropdown-content">
+  {% for item in results %}
+  <a href="#" class="dropdown-item select-result"
+     data-select-result-id="{{item.id}}">
+    {{ item.text }}
+  </a>
+  {% empty %}
+    {% trans "No results found" %}
+  {% endfor %}
+</div>
+{% endif %}
+{% endpartialdef %}
+
+{%partialdef results_nb %}
+<p class="content is-medium">
+    {% trans "Number of selected members" %}:
+    <span id="selected-count"
+        class="notification is-info ml-3"
+        hx-get="{{count_selected_url}}"
+        hx-trigger="load{% for field in fields %}, change from:[name='{{ field }}-select-id']{% endfor %}"
+        hx-include="{% for field in fields %}[name='{{ field }}-select-id']{% if not forloop.last %},{% endif %}{% endfor %}"
+        hx-target="this"
+        hx-swap="innerHTML">
+        0
+    </span>
+</p>
+{% endpartialdef %}

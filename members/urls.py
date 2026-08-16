@@ -58,6 +58,7 @@ urlpatterns = [
   path("select-name/", views_import_export.select_name, name="select_name"),
   path("select-city/", views_import_export.select_city, name="select_city"),
   path("select-family/", views_import_export.select_family, name="select_family"),
+  path("count-selected/", views_import_export.count_selected, name="count_selected"),
   path(
     "import-progress/<str:id>/",
     views_import_export.import_progress,

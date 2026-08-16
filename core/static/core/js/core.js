@@ -259,3 +259,49 @@ $(document).on('keyup', '.confirmation_check', function(event) {
     not_possible.removeClass('is-hidden');
   }
 });
+
+////////////////// htmx select / search
+// all ids below must match the ones used in the template htmx_search.html#dropdown_select
+
+function setDropdownValue(input, hiddenInput, id, val) {
+  // console.log('setDropdownValue', id, val);
+  hiddenInput.val(id);
+  hiddenInput[0].dispatchEvent(new Event('change', { bubbles: true }));
+  input.val(val);
+}
+
+// Show dropdown when results are loaded
+$(document).on('htmx:afterSwap', '.dropdown-content', function(evt) {
+  if (evt.target.id.endsWith('-results')) {
+    const select_id = evt.target.id.replace('-results', '');
+    const dropdown = $(`#${select_id}-dropdown`);
+    if (evt.target.innerHTML.trim() !== "") {
+      dropdown.addClass('is-active');
+    } else {
+      dropdown.removeClass('is-active');
+    }
+  }
+});
+
+// Close dropdown when clicking outside
+$(document).on('click', '.dropdown-item.select-result', function (event) {
+  event.preventDefault();
+  const dropdown = $(this).closest('.dropdown');
+  const select_id = dropdown.attr('id').replace('-dropdown', '');
+  const val = $(this).text().trim()
+  const id = $(this).data('select-result-id');
+  const hiddenInput = $(`#${select_id}-id`);
+  const input = $(`#${select_id}-input`)
+  setDropdownValue(input, hiddenInput, id, val);
+  dropdown.removeClass('is-active');
+});
+
+// Clear search input and dropdown when clear button is clicked
+$(document).on('click', '.clear-field', function (event) {
+    event.preventDefault();
+    const field = $(this).closest('.field');
+    const searchInput = field.find('input[type="text"]');
+    const hiddenInput = field.find('input[type="hidden"]');
+    setDropdownValue(searchInput, hiddenInput, '', '');
+    searchInput.trigger('focus');
+});

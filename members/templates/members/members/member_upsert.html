@@ -51,7 +51,7 @@
 				{%include "core/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete") button_class='is-warning' delete_url=delete_url %}
 			</div>
 		</div>
-  </div>
+    </div>
 	{% endif %}
 	<div class="container px-2">
 		<form enctype="multipart/form-data" method="post">
@@ -71,7 +71,7 @@
 		</form>
 	</div>
 	<div class="container mt-4 has-text-centered">
-			{% translate 'Lost your verification email?' %} 
+			{% translate 'Lost your verification email?' %}
 			<a href="{% url 'request-new-link-from-email' %}" class="is-small">
 					{% translate "Request a new link" %}
 			</a>

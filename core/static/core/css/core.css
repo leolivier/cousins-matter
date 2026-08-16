@@ -371,3 +371,8 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 	border: 1px dashed hsl(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l));
 	border-radius: 5px;
 }
+
+.icon.clear-field {
+    pointer-events: auto !important;
+    cursor: pointer;
+}

@@ -1607,5 +1607,5 @@ msgstr "Seuls les superutilisateurs peuvent inviter des membres"
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossible d'envoyer un mail. Merci de contacter l'administrateur."
 
-#~ msgid "Receive email notifications"
-#~ msgstr "Recevoir des notifications par email"
+msgid "Number of selected members"
+msgstr "Nombre de membres sélectionnés"

@@ -3,7 +3,7 @@ import csv
 import io
 import uuid
 from django.core.exceptions import ValidationError
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
@@ -12,7 +12,6 @@ from django.utils.translation import gettext_lazy as _, get_language
 from django_q.tasks import async_task, count_group, result_group
 from django_q.brokers import get_broker
 
-from core.utils import assert_request_is_ajax
 from members.tasks import ImportContext
 
 from ..models import Address, Member, Family
@@ -154,51 +153,64 @@ def import_progress(request, id):
   return render(request, "core/common/progress-bar.html", context)
 
 
-def select_name(request):
-  assert_request_is_ajax(request)
+def select_by_model_field(request, model, field) -> HttpResponse:
+  assert request.htmx  # nosec B101
   query = request.GET.get("q", "")
+  # print("query", query, "model", model, "field", field)
   # List of matching names, case insensitive, limited to 12 results
-  names = (
-    Member.objects.filter(last_name__icontains=query).values_list("last_name", flat=True).distinct().order_by("last_name")[:12]
+  items: set[str] = set(
+    model.objects.filter(**{f"{field}__icontains": query}).values_list(field, flat=True).distinct().order_by(field)[:12]
   )
-  t_names = set(name.title() for name in names)
-  data = [{"id": name, "text": name} for name in t_names]
-  return JsonResponse({"results": data})
+  data: list[dict[str, str]] = [{"id": item, "text": item} for item in items]
+  return render(request, template_name="core/common/htmx_search.html#select_dropdown_results", context={"results": data})
 
 
-def select_family(request):
-  assert_request_is_ajax(request)
-  query = request.GET.get("q", "")
-  # List of matching familynames, case insensitive, limited to 12 results
-  families = Family.objects.filter(name__icontains=query).values_list("name", flat=True).distinct().order_by("name")[:12]
-  t_families = set(family.title() for family in families)
-  data = [{"id": family, "text": family} for family in t_families]
-  return JsonResponse({"results": data})
+def select_name(request) -> HttpResponse:
+  return select_by_model_field(request, Member, "last_name")
 
 
-def select_city(request):
-  assert_request_is_ajax(request)
-  query = request.GET.get("q", "")
-  # List of matching city names, case insensitive, limited to 12 results
-  cities = Address.objects.filter(city__icontains=query).values_list("city", flat=True).distinct().order_by("city")[:12]
-  t_cities = set(city.title() for city in cities)
-  data = [{"id": city, "text": city} for city in t_cities]
-
-  return JsonResponse({"results": data})
+def select_family(request) -> HttpResponse:
+  return select_by_model_field(request, Family, "name")
 
 
-def select_members_to_export(request):
-  return render(request, "members/members/export_members.html")
+def select_city(request) -> HttpResponse:
+  return select_by_model_field(request, Address, "city")
 
 
-def export_members_to_csv(request):
+def select_members_to_export(request) -> HttpResponse:
+  return render(
+    request,
+    template_name="members/members/export_members.html",
+    context={"fields": ["family", "city", "name"], "initial_count": Member.objects.count()},
+  )
+
+
+def count_selected(request) -> HttpResponse:
+  family = request.GET.get("family-select-id")
+  city = request.GET.get("city-select-id")
+  name = request.GET.get("name-select-id")
+
+  qs = Member.objects.all().only("id")
+  if family:
+    qs = qs.filter(family__name=family)
+  if city:
+    qs = qs.filter(address__city=city)
+  if name:
+    qs = qs.filter(last_name=name)
+
+  print("qs: ", qs.query, "count: ", qs.count())
+
+  return HttpResponse(content=str(qs.count()))
+
+
+def export_members_to_csv(request) -> HttpResponse:
   if request.method != "POST":
     raise ValidationError(_("Method not allowed"))
 
-  city = request.POST.get("city-id")
-  family = request.POST.get("family-id")
-  name = request.POST.get("name-id")
-  # print('city: ', city, ' family: ', family, ' name: ', name)
+  city = request.POST.get("city-select-id")
+  family = request.POST.get("family-select-id")
+  name = request.POST.get("name-select-id")
+  print("city: ", city, " family: ", family, " name: ", name)
 
   members = Member.objects.all()
   if city:

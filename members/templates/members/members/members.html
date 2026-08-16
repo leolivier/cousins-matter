@@ -35,7 +35,7 @@
       {%url 'members:search_members' as search_url %}
       {%trans "Search..." as placeholder %}
       {% with page_num=page.number|default:1 %}
-      {% include 'core/common/htmx_search.html#select_page_content' with id="members-search" search_url=search_url target="#members-content-container" placeholder=placeholder extra_vals='{"page_num": '|add:page_num|add:' }' %}
+      {% include 'core/common/htmx_search.html#select_page_content' with id="members-search" target="#members-content-container" extra_vals='{"page_num": '|add:page_num|add:' }' %}
       {% endwith %}
     </div>
     <div class="level-item">

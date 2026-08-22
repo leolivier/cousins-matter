@@ -78,7 +78,7 @@ def _get_or_create_gallery(path: str, zimport: ZipImport):
   return gallery
 
 
-def handle_zip(zip_file, task_group, owner_id, root_gallery=None):
+def handle_zip(zip_file, task_group, owner_id, root_gallery=None, tenant_id=None):
   """
   reads a zip file and creates galleries for each folder
   and create tasks to create photos inside these galleries for each image in the folder.
@@ -108,6 +108,7 @@ def handle_zip(zip_file, task_group, owner_id, root_gallery=None):
         dir,
         image,
         gallery.id,
+        tenant_id,
         group=task_group,
         cached=False,
         hook=post_create_photo,
@@ -132,7 +133,9 @@ class BulkUploadPhotosView(generic.FormView):
         zip_file = request.FILES["zipfile"]
         # task_group = request.POST.get("csrfmiddlewaretoken")  # not generated in test context
         task_group = uuid.uuid4().hex
-        zimport = handle_zip(zip_file, task_group, request.user.id, form.cleaned_data.get("gallery"))
+        zimport = handle_zip(
+          zip_file, task_group, request.user.id, form.cleaned_data.get("gallery"), request.user.tenant_id
+        )
         hx_get_url = reverse("galleries:upload_progress", args=(task_group,))
         logger.debug(f"rendering first progress-bar url: {hx_get_url}")
         return render(

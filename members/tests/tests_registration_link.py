@@ -68,30 +68,23 @@ class RegistrationLinkManagerTests(TestCase):
     encoded_email = parts[reg_idx + 1]
     token = parts[reg_idx + 2]
 
-    decrypted_email = self.manager.decrypt_link(encoded_email, token)
+    tenant_id, decrypted_email = self.manager.decrypt_link(encoded_email, token)
     self.assertEqual(decrypted_email, self.email)
+    self.assertIsNone(tenant_id)  # link generated without a tenant
 
   def test_decrypt_link_invalid_token(self):
     encoded_email = urlsafe_b64encode(self.email.encode("utf-8")).decode("utf-8")
-    self.assertFalse(self.manager.decrypt_link(encoded_email, "invalid-token"))
+    tenant_id, decrypted_email = self.manager.decrypt_link(encoded_email, "invalid-token")
+    self.assertIsNone(decrypted_email)
 
   def test_decrypt_link_missing_data(self):
     # decrypt_link(self, encoded_email, encoded_token)
-    # If either is empty it should return False (line 117)
-    self.assertFalse(self.manager.decrypt_link("", "token"))
-
-    # Test line 115-117 branch if we can reach it
-    # Actually decoded_email and decoded_token check is AFTER b64decode
-    # So it's more about truthiness.
+    # If either is empty it should return (None, None)
+    tenant_id, decrypted_email = self.manager.decrypt_link("", "token")
+    self.assertIsNone(decrypted_email)
 
   def test_decrypt_link_failure_cases(self):
-    # Test line 116-117
-    # We need decoded_email or decoded_token to be falsy AFTER potential decoding
-    # But b64decode of empty string is empty bytes.
-
-    # To hit line 117 with logger.error
-    # We need (decoded_email AND decoded_token) to be False.
-    # This is tricky because b64decode('') is b'', which is falsy.
+    # b64decode('') is b'', which is falsy -> failure -> (None, None)
     encoded_email = urlsafe_b64encode(b"").decode("utf-8")
-    result = self.manager.decrypt_link(encoded_email, "some-token")
-    self.assertFalse(result)
+    tenant_id, decrypted_email = self.manager.decrypt_link(encoded_email, "some-token")
+    self.assertIsNone(decrypted_email)

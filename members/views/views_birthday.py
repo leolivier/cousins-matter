@@ -1,6 +1,5 @@
 from datetime import date, timedelta
 
-from django.conf import settings
 from django.db.models import Case, DateField, F, IntegerField, Value, When
 from django.db.models.functions import Cast, ExtractDay, ExtractMonth
 from django.http import HttpResponse
@@ -8,6 +7,7 @@ from django.template.response import TemplateResponse
 
 from ..models import Member
 from core.utils import MakeDate
+from tenants.settings_overrides import tenant_setting
 
 
 def _birthdays(request, template_name) -> HttpResponse:
@@ -17,7 +17,7 @@ def _birthdays(request, template_name) -> HttpResponse:
   """
   today = date.today()
   beg_date = today  # - timedelta(days=1)
-  end_date = today + timedelta(days=settings.BIRTHDAY_DAYS)
+  end_date = today + timedelta(days=tenant_setting("birthday_days"))
   current_year = today.year
 
   members = (
@@ -53,7 +53,7 @@ def _birthdays(request, template_name) -> HttpResponse:
   for m in members:
     delta = (m.this_year_birthday - today).days
     bdays.append((m, delta))
-  context = {"birthdays_list": bdays, "ndays": settings.BIRTHDAY_DAYS}
+  context = {"birthdays_list": bdays, "ndays": tenant_setting("birthday_days")}
   # based on https://stackoverflow.com/questions/17178525/django-how-to-include-a-view-from-within-a-template#56476932
   #  Whitney's and Olivier's (me ;-) comments, replace the standard rendering by a TemplateResponse rendering to allow
   # including this view in the home view

@@ -10,6 +10,7 @@ from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from core.utils import check_file_size, create_thumbnail, create_video_thumbnail, is_video_file, protected_media_url
+from tenants.scoping import TenantModel
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +48,7 @@ def check_image_size(file):
   return check_file_size(file, limit)
 
 
-class Photo(models.Model):
+class Photo(TenantModel):
   image = models.FileField(
     _("Photo or Video"),
     upload_to=photo_path,
@@ -80,13 +81,13 @@ class Photo(models.Model):
   class Meta:
     ordering = ["id"]
     indexes = [
-      models.Index(fields=["gallery"]),
-      models.Index(fields=["name"]),
-      models.Index(fields=["gallery", "id"]),
+      models.Index(fields=["tenant", "gallery"]),
+      models.Index(fields=["tenant", "name"]),
+      models.Index(fields=["tenant", "gallery", "id"]),
     ]
     constraints = [
       models.UniqueConstraint(
-        fields=("slug", "gallery"),
+        fields=("tenant", "slug", "gallery"),
         name="slugs must be unique inside their gallery",
       ),
     ]
@@ -108,6 +109,7 @@ class Photo(models.Model):
     self.slug = self.slug or slugify(self.name)
 
   def save(self, *args, **kwargs):
+    self.ensure_tenant()
     self.full_clean()
 
     is_new = self.pk is None
@@ -151,7 +153,7 @@ class Photo(models.Model):
       raise ValidationError(f"Error during saving photo: {e}")
 
 
-class Gallery(models.Model):
+class Gallery(TenantModel):
   name = models.CharField(_("Name"), max_length=70)
   description = models.TextField(_("Description"), max_length=3000, blank=True)
   cover = models.ForeignKey(
@@ -184,11 +186,12 @@ class Gallery(models.Model):
 
     ordering = ["name"]
     indexes = [
-      models.Index(fields=["parent", "name"]),
+      models.Index(fields=["tenant", "slug"]),
+      models.Index(fields=["tenant", "parent", "name"]),
     ]
     constraints = [
       models.UniqueConstraint(
-        fields=("slug", "parent"),
+        fields=("tenant", "slug", "parent"),
         name="slugs must be unique inside a parent gallery",
       ),
     ]
@@ -218,6 +221,7 @@ class Gallery(models.Model):
       self.slug = slug
 
   def save(self, *args, **kwargs):
+    self.ensure_tenant()
     self.full_clean()
     return super().save(*args, **kwargs)
 

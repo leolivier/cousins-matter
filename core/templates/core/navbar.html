@@ -106,14 +106,26 @@
 					</div>
 
 				{% endif %}
-				{% if user.is_superuser %}
+				{% if user.is_superuser or user.is_tenant_admin %}
 					{% url 'pages-edit:edit_list' as page_url%}
 					{%navbar_item page_url _("Edit Pages") "edit-page" %}
 
 					{% url 'members:csv_import' as import_url%}
 					{%navbar_item import_url _("Import members from CSV") "import-members" %}
 
-					{%navbar_item "/admin" _("Admin site") "admin" %}
+					{% if settings.MULTI_TENANT_ENABLED %}
+						{% if user.is_superuser %}
+							{% url 'tenants:list' as tenants_url %}
+							{%navbar_item tenants_url _("Manage families") "family-tree" %}
+						{% endif %}
+						{% if user.is_tenant_admin %}
+							{% url 'tenants:settings' as tenant_settings_url %}
+							{%navbar_item tenant_settings_url _("Family settings") "family-tree" %}
+						{% endif %}
+					{% endif %}
+					{% if user.is_superuser %}
+						{%navbar_item "/admin" _("Admin site") "admin" %}
+					{% endif %}
 				{% endif %}
 				{%if 'show_export_members'|featured%}
 					{% url 'members:select_members_to_export' as export_url%}

@@ -3,6 +3,8 @@ import random
 import logging
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
+from tenants.models import Tenant
+from tenants.scoping import set_current_tenant
 from urllib.parse import unquote
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -97,6 +99,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # connecting user and broadcast the updated receipts to the room group.
     user = self.scope.get("user")
     if user is not None and not user.is_anonymous:
+      # Defensive: activate the member's tenant for this connection. Inert today
+      # (chat is not yet a TenantModel). Use tenant_id (NOT user.tenant: the FK
+      # descriptor runs a query, illegal in async context) and a shallow Tenant
+      # instance — the scoping layer only reads .pk. When chat is scoped, the
+      # global group name must become tenant-prefixed ("chat_<tenant>_<slug>")
+      # and each DB touch wrapped in tenant_context() (plan Phase J).
+      if not getattr(user, "is_superuser", False):
+        tenant_id = getattr(user, "tenant_id", None)
+        if tenant_id is not None:
+          set_current_tenant(Tenant(pk=tenant_id))
       try:
         room = await ChatRoom.objects.aget(slug=self.room_slug)
       except ChatRoom.DoesNotExist:
@@ -118,6 +130,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     :param close_code: The close code of the websocket connection.
     :type close_code: int
     """
+    set_current_tenant(None)
     await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
     logger.debug(f"websocket disconnected: {close_code}")
     await super().disconnect(close_code)

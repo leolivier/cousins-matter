@@ -8,8 +8,29 @@ from django.utils.translation import gettext_lazy as _
 
 class MemberManager(BaseUserManager):
   """
-  Member model manager where first_name, last_name are mandatory
+  Member model manager where first_name, last_name are mandatory.
+
+  Tenant-aware: ``get_queryset`` filters by the current tenant when one is
+  active, and is left unfiltered otherwise (anonymous request, management
+  command, platform superuser) so authentication lookups and createsuperuser
+  keep working. Use ``Member.unscoped`` for explicit cross-tenant access.
   """
+
+  def get_queryset(self):
+    from tenants.scoping import get_current_tenant
+
+    qs = super().get_queryset()
+    tenant = get_current_tenant()
+    return qs.filter(tenant=tenant) if tenant is not None else qs
+
+  def _resolve_tenant(self, extra_fields):
+    """Ensure a tenant is present: explicit > current request > default."""
+    if extra_fields.get("tenant") is not None:
+      return
+    from tenants.models import Tenant
+    from tenants.scoping import get_current_tenant
+
+    extra_fields["tenant"] = get_current_tenant() or Tenant.get_default()
 
   def create_member(self, username: str, email: str, password: str, first_name: str, last_name: str, **extra_fields):
     """
@@ -19,6 +40,7 @@ class MemberManager(BaseUserManager):
       raise ValueError(_("The username must be set"))
 
     extra_fields.setdefault("is_active", False)
+    self._resolve_tenant(extra_fields)
 
     if email:
       email = self.normalize_email(email)
@@ -41,6 +63,7 @@ class MemberManager(BaseUserManager):
       raise ValueError(_("The username must be set"))
 
     extra_fields.setdefault("is_active", False)
+    self._resolve_tenant(extra_fields)
 
     if email:
       email = self.normalize_email(email)
@@ -58,10 +81,16 @@ class MemberManager(BaseUserManager):
   def create_superuser(self, username: str, email: str, password: str, first_name: str, last_name: str, **extra_fields):
     """
     Create and save a SuperUser with the given email and password.
+
+    A superuser is a cross-tenant platform admin living on the system tenant.
     """
     extra_fields.setdefault("is_staff", True)
     extra_fields.setdefault("is_superuser", True)
     extra_fields.setdefault("is_active", True)
+    extra_fields.setdefault("role", "admin")
+    from tenants.models import Tenant
+
+    extra_fields.setdefault("tenant", Tenant.get_system())
 
     if extra_fields.get("is_staff") is not True:
       raise ValueError(_("Superuser must have is_staff=True."))

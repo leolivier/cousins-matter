@@ -9,6 +9,10 @@ from django.utils.translation import gettext as _
 from django.views import generic
 
 from ..registration_link_manager import RegistrationLinkManager
+from tenants.models import Tenant
+from tenants.scoping import tenant_context
+from tenants.authz import admin_or_superusers
+from tenants.settings_overrides import tenant_setting
 from ..forms import (
   MemberInvitationForm,
   RegistrationRequestForm,
@@ -27,7 +31,7 @@ class RegistrationCheckingView(LoginNotRequiredMixin, generic.CreateView):
   template_name = "members/members/member_upsert.html"
 
   def check_before_register(self, request, encoded_email, token):
-    decoded_email = RegistrationLinkManager().decrypt_link(encoded_email, token)
+    invitation_tenant_id, decoded_email = RegistrationLinkManager().decrypt_link(encoded_email, token)
     if not decoded_email:
       messages.error(request, _("Invalid link. Please contact the administrator."))
       return False
@@ -61,9 +65,10 @@ class RegistrationCheckingView(LoginNotRequiredMixin, generic.CreateView):
       return redirect("/")
 
     # Store invitation info in session for potential social login
-    decoded_email = RegistrationLinkManager().decrypt_link(encoded_email, token)
+    invitation_tenant_id, decoded_email = RegistrationLinkManager().decrypt_link(encoded_email, token)
     request.session["invitation_token"] = token
     request.session["invitation_email"] = decoded_email
+    request.session["invitation_tenant_id"] = invitation_tenant_id
 
     return render(
       request,
@@ -83,7 +88,11 @@ class RegistrationCheckingView(LoginNotRequiredMixin, generic.CreateView):
     form = MemberRegistrationForm(request.POST, request.FILES)
 
     if form.is_valid():
-      send_verification_email(request, form)  # also saves the member
+      # Create the new member on the invitation's tenant. The request is anonymous,
+      # so the middleware hasn't set a current tenant; activate it explicitly.
+      invitation_tenant_id = request.session.get("invitation_tenant_id")
+      with tenant_context(Tenant(pk=invitation_tenant_id) if invitation_tenant_id else None):
+        send_verification_email(request, form)  # also saves the member
       username = form.cleaned_data.get("username")
       messages.success(
         request,
@@ -111,8 +120,8 @@ class MemberInvitationView(generic.View):
   template_name = "members/registration/registration_invite.html"
 
   def check_before_invitation(self, request):
-    if not request.user.is_superuser and not settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS:
-      raise PermissionDenied(_("Only superusers can invite members"))
+    if not (request.user.is_superuser or request.user.is_tenant_admin or tenant_setting("allow_members_to_invite_members")):
+      raise PermissionDenied(_("Only tenant admins can invite members"))
 
   def post(self, request):
     """
@@ -136,10 +145,11 @@ class MemberInvitationView(generic.View):
       messages.error(request, _("A member with this email already exists."))
       return render(request, self.template_name, {"form": form})
 
-    invitation_url = RegistrationLinkManager().generate_link(request, email)
-    site_name = settings.SITE_NAME
+    invitation_url = RegistrationLinkManager().generate_link(request, email, tenant_id=request.user.tenant_id)
+    site_name = tenant_setting("site_name")
     inviter = request.user
-    admin = Member.objects.filter(is_superuser=True).first()
+    admins = admin_or_superusers(request.user.tenant)
+    admin = admins[0] if admins else inviter
     admin_name = admin.full_name
     from_email = settings.DEFAULT_FROM_EMAIL  # always use the default from email
 
@@ -218,7 +228,7 @@ class RegistrationRequestView(LoginNotRequiredMixin, generic.View):
     # Validate the form: the captcha field will automatically
     # check the input
     if form.is_valid():  # Captcha OK
-      site_name = settings.SITE_NAME
+      site_name = tenant_setting("site_name")
       requester_email = request.POST.get("email")
       if Member.objects.filter(email=requester_email).exists():
         messages.error(request, _("A member with this email already exists."))
@@ -243,7 +253,11 @@ class RegistrationRequestView(LoginNotRequiredMixin, generic.View):
           context,
           request=request,
         )
-        admin = Member.objects.filter(is_superuser=True).first()
+        # anonymous request: tenant unknown pre-login, so route to a platform admin
+        admin = Member.unscoped.filter(is_superuser=True, is_active=True).first()
+        if not admin:
+          messages.error(request, _("Unable to send mail, please contact your administrator"))
+          return render(request, self.template_name, {"form": form})
         if (
           send_mail(
             _("Registration request for %(site_name)s") % {"site_name": site_name},

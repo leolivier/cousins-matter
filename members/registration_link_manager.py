@@ -83,12 +83,21 @@ class TokenManager:
 
 
 class RegistrationLinkManager(TokenManager):
-  def generate_link(self, request, text):
+  @staticmethod
+  def _payload(email, tenant_id=None):
+    """The signed string. Tenant-prefixed (``"<id>:<email>"``) when a tenant is
+    bound to the invitation, so it is covered by the HMAC and tamper-evident."""
+    return f"{tenant_id}:{email}" if tenant_id else email
+
+  def generate_link(self, request, email, tenant_id=None):
+    """Generates an absolute registration/invitation link for ``email``.
+
+    When ``tenant_id`` is given it is bound into the signed token, so the invitee
+    is created on that tenant (and the tenant cannot be swapped in the URL).
     """
-    Generates link for the text.
-    """
-    token = self.make_token(text)
-    encoded_text = urlsafe_b64encode(str(text).encode("utf-8")).decode("utf-8")
+    payload = self._payload(email, tenant_id)
+    token = self.make_token(payload)
+    encoded_text = urlsafe_b64encode(payload.encode("utf-8")).decode("utf-8")
 
     link = reverse(
       "members:register",
@@ -97,21 +106,35 @@ class RegistrationLinkManager(TokenManager):
         token,
       ),
     )
-    absolute_link = request.build_absolute_uri(link)
-    return absolute_link
+    return request.build_absolute_uri(link)
 
   def decrypt_link(self, encoded_email, encoded_token):
-    """
-    main verification and decryption happens here.
+    """Verifies the token and returns ``(tenant_id, email)``.
+
+    ``tenant_id`` is ``None`` for links that carry no tenant. On any failure
+    (bad base64, missing data, invalid token) returns ``(None, None)``.
     """
     logger.debug(f"\n{'~' * 40}\nDecoding the link {encoded_email}/{encoded_token}\n{'~' * 40}\n")
-    decoded_email = urlsafe_b64decode(encoded_email).decode("UTF-8")
-    # decoded_token = urlsafe_b64decode(encoded_token).decode('UTF-8')
+    try:
+      payload = urlsafe_b64decode(encoded_email).decode("UTF-8")
+    except Exception:  # malformed base64
+      payload = ""
     decoded_token = encoded_token
 
-    if decoded_email and decoded_token:
-      if self.check_token(decoded_email, decoded_token):
-        return decoded_email
-    else:
-      logger.error(f"\n{'~' * 40}\nError occurred in decoding the link!\n{'~' * 40}\n")
-      return False
+    if payload and decoded_token and self.check_token(payload, decoded_token):
+      # optional tenant prefix "<int>:<email>"
+      if ":" in payload:
+        head, rest = payload.split(":", 1)
+        if head.isdigit():
+          return int(head), rest
+      return None, payload
+
+    logger.error(f"\n{'~' * 40}\nError occurred in decoding the link!\n{'~' * 40}\n")
+    return None, None
+
+  def check_invitation(self, email, tenant_id, token):
+    """Validate an ``(email, tenant_id, token)`` triple (e.g. stored in session).
+
+    Used by the social-login adapter, which keeps the three pieces separately.
+    """
+    return bool(token and self.check_token(self._payload(email, tenant_id), token))

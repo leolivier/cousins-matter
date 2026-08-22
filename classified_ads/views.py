@@ -1,4 +1,6 @@
 from django.conf import settings
+from tenants.settings_overrides import tenant_setting
+
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render
@@ -188,7 +190,7 @@ The %(site_name)s admin team
       "username": request.user.full_name,
       "title": ad.title,
       "message": request.POST.get("message"),
-      "site_name": settings.SITE_NAME,
+      "site_name": tenant_setting("site_name"),
       "site_url": settings.SITE_DOMAIN,
       "email": request.user.email,
     }

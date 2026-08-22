@@ -20,6 +20,7 @@ from core.utils import (
 
 from ..forms import MemberUpdateForm, NotifyDeathForm
 from ..models import Family, Member
+from tenants.settings_overrides import tenant_setting
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ def logout_member(request):
 
 
 def editable(request, member):
-  if request.user.is_superuser:
+  if request.user.is_superuser or getattr(request.user, "is_tenant_admin", False):
     return True
   manager = member.member_manager or member
   return manager.id == request.user.id
@@ -126,9 +127,10 @@ class CreateManagedMemberView(generic.CreateView):
   template_name = "members/members/member_upsert.html"
 
   def check_before_creation(self, request):
-    if request.user.is_superuser or settings.ALLOW_MEMBERS_TO_CREATE_MEMBERS:
+    is_admin = request.user.is_superuser or getattr(request.user, "is_tenant_admin", False)
+    if is_admin or tenant_setting("allow_members_to_create_members"):
       return None
-    return HttpResponseForbidden(_("Only superusers can create members"))
+    return HttpResponseForbidden(_("Only admins can create members"))
 
   def get(self, request, *args, **kwargs):
     ko = self.check_before_creation(request)
@@ -169,7 +171,7 @@ class CreateManagedMemberView(generic.CreateView):
 
 
 def _can_edit_member(request, member):
-  if request.user.is_superuser:
+  if request.user.is_superuser or getattr(request.user, "is_tenant_admin", False):
     return True
   if member.member_manager is None:
     return member.id == request.user.id
@@ -329,10 +331,10 @@ def notify_death(request, username):
 
     message = request.POST.get("message")
 
-    # Send email to admins
-    emails = list(
-      Member.objects.filter(is_superuser=True, email__isnull=False).exclude(email="").values_list("email", flat=True)
-    )
+    # Send email to the member's tenant admins (fallback: platform superusers).
+    from tenants.authz import admin_or_superusers
+
+    emails = [a.email for a in admin_or_superusers(member.tenant) if a.email]
 
     if emails:
       from django.core.mail import send_mail
@@ -344,7 +346,7 @@ def notify_death(request, username):
         "sender": request.user,
         "deathdate": deathdate,
         "message": message,
-        "site_name": settings.SITE_NAME,
+        "site_name": tenant_setting("site_name"),
       }
 
       html_message = render_to_string("members/email/notify_death_email.html", email_context)

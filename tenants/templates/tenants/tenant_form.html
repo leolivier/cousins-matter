@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block title %}{% title title %} {% endblock %}
+{% block content %}
+<div class="container px-2">
+	<h1 class="title has-text-centered is-2">{{title}}</h1>
+	<form method="POST">
+		{% csrf_token %}
+		<fieldset class="container">
+			{{ form|crispy }}
+			<div class="field">
+				<label class="label" for="id_admin_email">{% translate "First admin email (optional)" %}</label>
+				<div class="control">
+					<input class="input" type="email" name="admin_email" id="id_admin_email"
+						placeholder="admin@example.com">
+				</div>
+				<p class="help">{% translate "If provided, an invitation to administer this family will be sent to this address." %}</p>
+			</div>
+		</fieldset>
+		<div class="container mt-4">
+			<button class="button is-primary" type="submit">{% translate "Create the family" %}</button>
+			<a class="button" href="{% url 'tenants:list' %}">{% translate "Cancel" %}</a>
+		</div>
+	</form>
+</div>
+{% endblock content %}

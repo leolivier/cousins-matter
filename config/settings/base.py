@@ -154,8 +154,19 @@ STORAGES: dict[str, Any] = {
 }
 
 SITE_ID = 1
+
+# --- Multi-tenancy (shared-schema) ---
+# The tenant assigned when none can be resolved (legacy data, management
+# commands) and the tenant that hosts the cross-tenant platform superusers.
+DEFAULT_TENANT_SLUG = env.str("DEFAULT_TENANT_SLUG", default="default")
+SYSTEM_TENANT_SLUG = env.str("SYSTEM_TENANT_SLUG", default="system")
+# Product feature flag: when False the deployment behaves exactly like the
+# pre-multi-tenant single-family app (no /tenants/ URLs, no family signup).
+MULTI_TENANT_ENABLED = env.bool("MULTI_TENANT_ENABLED", default=False)
+
 LOCAL_APPS = [
   "core",
+  "tenants",
   "members",
   "chat",
   "galleries",
@@ -204,8 +215,9 @@ MIDDLEWARE = [
   "django.middleware.csrf.CsrfViewMiddleware",
   "django.contrib.auth.middleware.AuthenticationMiddleware",
   "allauth.account.middleware.AccountMiddleware",
-  "core.middleware.LoginRequiredMiddleware",
   "django.contrib.messages.middleware.MessageMiddleware",
+  "tenants.middleware.TenantMiddleware",
+  "core.middleware.LoginRequiredMiddleware",
   "django.middleware.clickjacking.XFrameOptionsMiddleware",
   "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
   "django_htmx.middleware.HtmxMiddleware",
@@ -268,8 +280,23 @@ CHANNEL_LAYERS: dict[str, Any] = {
 DATABASES: dict[str, Any] = {
   "default": {
     "ENGINE": "django.db.backends.postgresql",
-    "USER": env.str("POSTGRES_USER", default="cousinsmatter"),
-    "PASSWORD": env.str("POSTGRES_PASSWORD"),
+    # RLS hardening: when a non-owner runtime role is configured AND the
+    # multi-tenant feature is on, the app (web + qcluster) connects with it;
+    # migrations always run as the owner (see scripts/entrypoint.py), which
+    # bypasses row-level security by table ownership.
+    "USER": env.str(
+      "POSTGRES_RUNTIME_USER", default=env.str("POSTGRES_USER", default="cousinsmatter")
+    )
+    if env.bool("MULTI_TENANT_ENABLED", default=False) and env.str("POSTGRES_RUNTIME_USER", default=None)
+    else env.str("POSTGRES_USER", default="cousinsmatter"),
+    "PASSWORD": env.str(
+      "POSTGRES_RUNTIME_PASSWORD",
+      default=env.str("POSTGRES_PASSWORD"),
+    )
+    if env.bool("MULTI_TENANT_ENABLED", default=False)
+    and env.str("POSTGRES_RUNTIME_USER", default=None)
+    and env.str("POSTGRES_RUNTIME_PASSWORD", default=None)
+    else env.str("POSTGRES_PASSWORD"),
     "HOST": env.str("POSTGRES_HOST", default="postgres"),
     "PORT": env.int("POSTGRES_PORT", default=5432),
     "NAME": env.str("POSTGRES_DB", default="cousinsmatter"),
@@ -542,7 +569,13 @@ AUTHENTICATION_BACKENDS = [
 
 SOCIALACCOUNT_AUTO_SIGNUP = env.bool("SOCIALACCOUNT_AUTO_SIGNUP", False)
 ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_LOGIN_METHODS = {"email", "username"}
+# Login by email only: username uniqueness is now (tenant, username), so a
+# username is not a globally unique login key.
+ACCOUNT_LOGIN_METHODS = {"email"}
+
+# auth.W004 expects USERNAME_FIELD to be globally unique; we intentionally use
+# (tenant, username) uniqueness with login-by-email, so silence it.
+SILENCED_SYSTEM_CHECKS = ["auth.W004"]
 ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
 SOCIALACCOUNT_ADAPTER = "members.adapter.CustomSocialAccountAdapter"
 SOCIALACCOUNT_FORMS = {"signup": "members.forms.MemberSocialSignupForm"}

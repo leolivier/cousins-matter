@@ -48,7 +48,12 @@ def check_fields(fieldnames: list[str]):
 def import_csv(csv_file, task_group, user_id, activate_users):
   default_manager = Member.objects.get(id=user_id)
   import_context = ImportContext(
-    default_manager=default_manager, activate_users=activate_users, group=task_group, lang=get_language()
+    default_manager=default_manager,
+    activate_users=activate_users,
+    group=task_group,
+    lang=get_language(),
+    # carry the importer's tenant into the Q worker (no request/middleware there)
+    tenant_id=default_manager.tenant_id,
   )
   import_context.register()
   csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")

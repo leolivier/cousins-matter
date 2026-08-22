@@ -16,13 +16,13 @@
             title="{% translate 'Show directory' %}">
             {%icon "directory" %}
           </a>
-          {%if user.is_superuser or settings.ALLOW_MEMBERS_TO_CREATE_MEMBERS%}
+          {%if user.is_superuser or user.is_tenant_admin or settings.ALLOW_MEMBERS_TO_CREATE_MEMBERS%}
           <a class="button" href="{% url 'members:create' %}"
             title="{% translate 'Create Member' %}">
             {%icon "new-member" %}
           </a>
           {%endif%}
-          {%if user.is_superuser or settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS%}
+          {%if user.is_superuser or user.is_tenant_admin or settings.ALLOW_MEMBERS_TO_INVITE_MEMBERS%}
           <a class="button" href="{% url 'members:invite' %}"
             title="{% translate 'Invite Member' %}">
             {%icon "invite" %}

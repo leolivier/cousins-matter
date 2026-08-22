@@ -14,5 +14,9 @@ class LoginNotRequiredMixin:
 
 
 class OnlyAdminMixin(PermissionRequiredMixin):
+  """Allows platform superusers and tenant admins; denies everyone else."""
   raise_exception = True
-  permission_required = "is_superuser"
+
+  def has_permission(self):
+    user = self.request.user
+    return user.is_authenticated and (user.is_superuser or getattr(user, "is_tenant_admin", False))

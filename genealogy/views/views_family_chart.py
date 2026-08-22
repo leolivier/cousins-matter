@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from django.utils import formats
 from django.core.cache import cache
 from django.conf import settings
+from tenants.settings_overrides import tenant_setting
+
 from ..models import Person, Family
 from ..utils import register_genealogy_cache
 
@@ -22,7 +24,7 @@ def family_chart_view(request, main_person_id=None):
 def _get_main_person_id(request):
   main_person_id = request.GET.get("main_person_id")
   if not main_person_id:
-    main_person_id = getattr(settings, "FAMILY_CHART_ROOT_PERSON_ID", None)
+    main_person_id = tenant_setting("family_chart_root_person_id")
 
   if not main_person_id:
     first_person = Person.objects.first()

@@ -81,7 +81,11 @@ def get_latest_release_text(request):
 
 
 def statistics(request):
-  admin = Member.objects.filter(is_superuser=True).first()
+  from tenants.authz import admin_or_superusers
+  from tenants.scoping import get_current_tenant
+
+  _admins = admin_or_superusers(get_current_tenant())
+  admin = _admins[0] if _admins else None
   all_messages_count = ChatMessage.objects.count()
   public_chat_rooms = ChatRoom.objects.public()
   public_chat_messages_count = ChatMessage.objects.filter(room__in=public_chat_rooms).count()

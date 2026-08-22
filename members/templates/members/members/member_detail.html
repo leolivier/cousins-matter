@@ -94,7 +94,7 @@
 				{%url 'members:toggle_follow' member.username as toggle_follow_url %}
 				{%include "core/followers/toggle-follow-button.html" with followed_object=object %}
 			{% endif %}
-      {% if not request.user.is_superuser and member.is_active and not member.is_dead %}
+      {% if not request.user.is_superuser and not request.user.is_tenant_admin and member.is_active and not member.is_dead %}
 				<button hx-get="{% url 'members:notify_death' member.username%}"
 					hx-target="#modal"
 					hx-swap="innerHTML"

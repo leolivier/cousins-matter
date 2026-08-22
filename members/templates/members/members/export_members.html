@@ -8,7 +8,7 @@
 	<p class="content has-text-justified">
 		{% trans "You can export members to a CSV file. The first line of the file contains the field names. " %}
 		{% trans "All fields are present and empty if not present in the database. "%}
-		{%if user.is_superuser%}
+		{%if user.is_superuser or user.is_tenant_admin%}
 			<br>
 			{% trans "Admins can re-import the files after modification with any CSV editor."%}
 		{%endif%}

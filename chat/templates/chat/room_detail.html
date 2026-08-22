@@ -155,7 +155,7 @@
 			{%partialdef room_name_display inline %}
 			<div hx-target="this" hx-swap="outerHTML">
 				<span>{{room.name}}</span>
-				{%if room_owner == request.user or request.user.is_superuser %}
+				{%if room_owner == request.user or request.user.is_superuser or request.user.is_tenant_admin %}
 				<button class="button is-responsive is-small ml-1" hx-get="{%url 'chat:room-edit' room.slug %}"
 					title="{%trans 'Edit' %}">
 					{%icon "edit"%}

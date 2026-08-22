@@ -15,6 +15,10 @@ logger = logging.getLogger(__name__)
 def activate_member(request, username):
   """activate the member with username"""
   member = get_object_or_404(Member, username=username)
+  # Activation just (re)sends the email-verification link — a benign action. The
+  # boundary is the tenant: get_object_or_404 scopes the lookup to the request's
+  # tenant, so a cross-tenant member simply 404s. (Member managers, tenant admins
+  # and platform superusers all reach this view like any authenticated member.)
   if member.is_dead:
     messages.error(request, _("Error: Cannot activate a dead member"))
   elif member.is_active:

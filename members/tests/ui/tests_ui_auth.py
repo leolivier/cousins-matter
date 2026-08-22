@@ -15,7 +15,7 @@ class AuthUITest(MembersUITestBase):
 
   def test_login_success(self):
     """Login with valid credentials should succeed and show the navbar."""
-    self.login("admin", "password")
+    self.login("admin@example.com", "password")
     self.assert_visible("nav.navbar", "Navbar should be visible after login")
     self.assertNotIn("/login/", self.page.url, "Should not be on login page after login")
 

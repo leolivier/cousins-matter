@@ -19,6 +19,13 @@ from django.db import models
 _thread_locals = threading.local()
 
 
+def _default_tenant():
+  """The seeded default tenant (local import: models import this module)."""
+  from .models import Tenant
+
+  return Tenant.get_default()
+
+
 def get_current_tenant():
   """Return the tenant active for the current thread, or None when unset."""
   return getattr(_thread_locals, "tenant", None)
@@ -94,18 +101,14 @@ class TenantModel(models.Model):
   def ensure_tenant(self):
     """Resolve and set the tenant from the current thread if not already set.
 
-    Raises if no tenant can be resolved. Subclasses that override ``save`` and
+    Falls back to the default tenant when no tenant is active (platform
+    superusers are unscoped by design, management commands, factories) — the
+    same policy as ``Member.save()``. Subclasses that override ``save`` and
     call ``full_clean()`` before ``super().save()`` should call this first, so
     the (non-nullable) tenant passes field validation.
     """
     if self.tenant_id is None:
-      tenant = get_current_tenant()
-      if tenant is None:
-        raise ValueError(
-          "Cannot save a tenant-scoped model without a current tenant; "
-          "wrap the call in tenant_context(...) or set an explicit tenant."
-        )
-      self.tenant = tenant
+      self.tenant = get_current_tenant() or _default_tenant()
 
   def save(self, *args, **kwargs):
     self.ensure_tenant()

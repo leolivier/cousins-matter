@@ -50,7 +50,9 @@ class GalleryTenantIsolationTests(TestCase):
       g = Gallery.objects.create(name="Private B")
     self.assertEqual(g.tenant_id, self.tenant_b.id)
 
-  def test_save_without_tenant_raises(self):
+  def test_save_without_tenant_falls_back_to_default(self):
+    # no tenant active (e.g. a platform superuser or a management command):
+    # the row lands on the seeded default tenant, like Member.save()
     g = Gallery(name="Orphan")
-    with self.assertRaises(ValueError):
-      g.save()
+    g.save()
+    self.assertEqual(g.tenant.slug, "default")

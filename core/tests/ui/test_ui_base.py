@@ -101,15 +101,16 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     """Builds an absolute URL from a relative path."""
     return f"{self.live_server_url}{path}"
 
-  def login(self, username: str, password: str, *, next: str = "/") -> None:
+  def login(self, login: str, password: str, *, next: str = "/") -> None:
     """
-    Authenticates the user via the allauth login form.
+    Authenticates the user via the allauth login form (login is the EMAIL:
+    ACCOUNT_LOGIN_METHODS is email-only since multi-tenancy).
     Override if your form uses different selectors.
     """
     self.page.goto(self.url(f"/accounts/login/?next={next}"))
     # Ensure the login form is fully loaded before filling
     self.page.wait_for_selector("input[name='login']", state="visible", timeout=self.login_timeout)
-    self.page.fill("input[name='login']", username)
+    self.page.fill("input[name='login']", login)
     self.page.fill("input[name='password']", password)
     # Click the login form's own submit button (the allauth template may render
     # additional submit buttons for passkey/code login; scope to the main form).
@@ -190,7 +191,7 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     self.page.goto(self.url(reverse(name, args=args, kwargs=kwargs)))
 
   def login_and_goto_page(self, name: str, args={}, kwargs={}) -> None:
-    self.login("admin", "password")
+    self.login("admin@example.com", "password")
     self.goto_page(name, args, kwargs)
 
   # Helper assertion to compare element counts – Playwright's locator.count() returns an int

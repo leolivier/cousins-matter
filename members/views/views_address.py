@@ -1,9 +1,11 @@
 import logging
 from django.views import generic
-from django_htmx.http import HttpResponseClientRefresh
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
+
+from core.htmx import htmx_refresh
+from core.decorators import require_htmx
 
 from ..models import Address
 from ..forms import AddressUpdateForm
@@ -38,8 +40,8 @@ class ModalAddressMixin:
     context["title"] = self.title
     return context
 
+  @require_htmx()
   def process_form(self, request, form):
-    assert request.htmx  # nosec B101
     if form.is_valid():
       address = form.save()
       addresses = Address.objects.all()
@@ -48,7 +50,7 @@ class ModalAddressMixin:
       )
     else:
       messages.error(request, form.errors)
-      return HttpResponseClientRefresh()
+      return htmx_refresh()
 
 
 class ModalAddressCreateView(ModalAddressMixin, generic.CreateView):

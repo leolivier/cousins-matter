@@ -7,7 +7,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import generic
-from django_htmx.http import HttpResponseClientRedirect
+
+from core.htmx import htmx_redirect
 
 from core.utils import (
   PageOutOfBounds,
@@ -185,7 +186,7 @@ def delete_post(request, pk):
   if request.method == "POST":
     check_edit_permission(request, post.first_message.author)
     post.delete()
-    return HttpResponseClientRedirect(reverse("forum:list"))
+    return htmx_redirect(reverse("forum:list"))
   return confirm_delete_modal(
     request,
     _("Delete post"),

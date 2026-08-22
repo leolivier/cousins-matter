@@ -34,10 +34,9 @@ def person_list(request, page_num=1):
 
   cache_key_suffix = (request.GET.urlencode() or "default") + str(page_num)
 
+  template = "genealogy/person_list.html"
   if request.htmx:
-    template = "genealogy/person_list.html#person_list_table"
-  else:
-    template = "genealogy/person_list.html"
+    template += "#person_list_table"
 
   try:
     page = Paginator.get_page(

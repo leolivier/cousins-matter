@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from django_htmx.http import HttpResponseClientRedirect
+
+from core.htmx import htmx_redirect
 
 from core.utils import check_edit_permission, confirm_delete_modal
 from polls.views.upsert_views import (
@@ -134,4 +135,4 @@ class EventPlannerDeleteView(PollDeleteView):
     planner = get_object_or_404(self.model, pk=pk)
     check_edit_permission(request, planner.owner)
     planner.delete()
-    return HttpResponseClientRedirect(reverse("polls:all_event_planners"))
+    return htmx_redirect(reverse("polls:all_event_planners"))

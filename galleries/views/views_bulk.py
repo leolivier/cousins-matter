@@ -10,7 +10,6 @@ import uuid
 from django.core.exceptions import SuspiciousFileOperation
 from django.db.models import ObjectDoesNotExist
 from django.forms import ValidationError
-from django_htmx.http import HttpResponseClientRefresh
 from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
@@ -20,6 +19,8 @@ from django.utils.translation import gettext as _
 
 from django_q.tasks import async_task, result_group, count_group
 from django_q.brokers import get_broker
+
+from core.htmx import htmx_refresh
 
 from ..models import Gallery
 from ..forms import BulkUploadPhotosForm
@@ -146,14 +147,12 @@ class BulkUploadPhotosView(generic.FormView):
       except ValidationError as e:
         for err in e.messages:
           messages.error(request, err)
-        return HttpResponseClientRefresh()
       except Exception as e:
         messages.error(request, e.__str__())
-        return HttpResponseClientRefresh()
     else:
       for code, error in form.errors.items():
         messages.error(request, ": ".join(code, error))
-      return HttpResponseClientRefresh()
+    return htmx_refresh()
 
 
 def upload_progress(request, id):

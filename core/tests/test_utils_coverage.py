@@ -9,11 +9,11 @@ from django.forms import ValidationError
 from django.test import TestCase, RequestFactory
 from django.utils import translation
 
+from core.decorators import temporary_log_level
 from core.utils import (
   assert_request_is_ajax,
   parse_locale_date,
   storage_rmtree,
-  temporary_log_level,
   translate_date_format,
   _fs_rmtree,
   _recursive_rmtree,

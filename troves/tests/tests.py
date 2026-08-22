@@ -1,7 +1,8 @@
 from django.urls import reverse
+
+from core.decorators import test_media_root_decorator
 from core.utils import (
   create_test_image,
-  test_media_root_decorator,
   protected_media_url,
 )
 from members.tests.tests_member_base import MemberTestCase

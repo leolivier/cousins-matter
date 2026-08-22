@@ -2,16 +2,19 @@ import logging
 from django.contrib import messages
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
-from django.http import QueryDict, HttpResponseBadRequest
+from django.http import QueryDict
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from django_htmx.http import HttpResponseClientRedirect
 from django.views.decorators.http import require_http_methods
 from django.utils.text import slugify
+
 from ..models import ChatRoom
 from .views_room_common import display_chat_room, list_chat_rooms, create_chat_room
 from core import followers
+
+from core.decorators import require_htmx
+from core.htmx import htmx_redirect
 from core.utils import check_edit_permission, confirm_delete_modal
 
 logger = logging.getLogger(__name__)
@@ -39,9 +42,8 @@ def toggle_follow(request, room_slug):
 
 
 @require_http_methods(["GET", "PUT"])
+@require_htmx()
 def edit_room(request, room_slug):
-  if not request.htmx:
-    return HttpResponseBadRequest("This view requires an HTMX request")
   room = get_object_or_404(ChatRoom, slug=room_slug)
   owner = room.owner
   if owner is not None:  # if the room has no first message, there is no owner
@@ -60,7 +62,7 @@ def edit_room(request, room_slug):
   room.save(update_fields=["name", "slug"])
   # return render(request, "chat/room_detail.html#room_name_display", {"room": room})
   # must return a redirect to update the url as the slug has changed
-  return HttpResponseClientRedirect(reverse("chat:room", args=[room.slug]))
+  return htmx_redirect(reverse("chat:room", args=[room.slug]))
 
 
 def delete_room(request, room_slug):
@@ -71,7 +73,7 @@ def delete_room(request, room_slug):
       check_edit_permission(request, owner)
     room.delete()
     messages.success(request, f"Chat room {room.name} deleted")
-    return HttpResponseClientRedirect(reverse("chat:chat_rooms"))
+    return htmx_redirect(reverse("chat:chat_rooms"))
   else:
     return confirm_delete_modal(
       request,

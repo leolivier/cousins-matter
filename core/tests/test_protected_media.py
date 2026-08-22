@@ -13,7 +13,8 @@ from core.utils import (
   protected_media_url,
 )
 from members.tests.tests_member_base import MemberTestCase
-from core.utils import storage_rmtree, test_media_root_decorator
+from core.utils import storage_rmtree
+from core.decorators import test_media_root_decorator
 
 
 class TestMediaResourceMixin:

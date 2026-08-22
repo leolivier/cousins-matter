@@ -1,13 +1,16 @@
 from datetime import date
 import logging
 from django.forms import ValidationError
-from django_htmx.http import HttpResponseClientRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.views import generic
 from django.utils.translation import gettext as _
+
+from core.decorators import require_htmx
+from core.htmx import htmx_redirect
+
 from core.utils import check_edit_permission, confirm_delete_modal
 from ..models import Photo, Gallery
 from ..forms import PhotoForm
@@ -44,13 +47,13 @@ class PhotoDetailView(generic.DetailView):
   queryset = Photo.objects.select_related("gallery__owner", "uploaded_by")
 
 
+@require_htmx()
 def get_fullscreen_photo(request, pk):
-  assert request.htmx  # nosec B101
   try:
     photo = get_next_prev_photo(pk, request.GET.get("side"))
   except Photo.DoesNotExist:
     messages.error(request, _("Photo not found"))
-    return HttpResponseClientRedirect(reverse("galleries:galleries"))
+    return htmx_redirect(reverse("galleries:galleries"))
 
   return render(
     request,
@@ -117,7 +120,7 @@ def delete_photo(request, pk):
   try:
     photo = Photo.objects.select_related("gallery").get(pk=pk)
   except Photo.DoesNotExist:
-    return HttpResponseClientRedirect(reverse("galleries:galleries"), status=404)
+    return htmx_redirect(reverse("galleries:galleries"), status=404)
   if not (
     request.user.is_superuser
     or (photo.uploaded_by and request.user == photo.uploaded_by)
@@ -127,7 +130,7 @@ def delete_photo(request, pk):
   if request.method == "POST":
     photo.delete()
     messages.success(request, _("Photo deleted"))
-    return HttpResponseClientRedirect(reverse("galleries:detail", args=[photo.gallery.id]))
+    return htmx_redirect(reverse("galleries:detail", args=[photo.gallery.id]))
   delete_title = _("Delete photo")
   delete_msg = _('Are you sure you want to delete "%(object)s"?') % {"object": photo.name}
   return confirm_delete_modal(

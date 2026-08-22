@@ -2,8 +2,11 @@ from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
 from django.http import HttpResponse
-from django_htmx.http import HttpResponseClientRefresh, trigger_client_event
+from django_htmx.http import trigger_client_event
 from django.utils.translation import gettext as _
+
+from core.htmx import htmx_refresh
+
 from core.utils import (
   check_edit_permission,
 )
@@ -26,7 +29,7 @@ def add_reply(request, pk):
   else:
     errors = replyForm.errors.as_text()
     messages.error(request, _("Errors: ") + errors)
-    return HttpResponseClientRefresh()
+    return htmx_refresh()
 
 
 def edit_reply(request, reply):
@@ -40,7 +43,7 @@ def edit_reply(request, reply):
     else:
       errors = form.errors.as_json()
       messages.error(request, _("Errors: ") + errors)
-      return HttpResponseClientRefresh()
+      return htmx_refresh()
   else:
     form = MessageForm(instance=reply, auto_id=False)
     form.fields["content"].label = False

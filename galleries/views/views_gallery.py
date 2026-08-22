@@ -6,9 +6,9 @@ from django.views import generic
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from django_htmx.http import HttpResponseClientRedirect
 from django.http import Http404
 
+from core.htmx import htmx_redirect
 from core.utils import check_edit_permission, confirm_delete_modal
 from ..models import Gallery
 from ..forms import GalleryForm
@@ -103,7 +103,7 @@ def delete_gallery(request, slug):
       check_edit_permission(request, gallery.owner)
     gallery.delete()
     messages.success(request, _("Gallery deleted successfully"))
-    return HttpResponseClientRedirect(reverse("galleries:galleries"))
+    return htmx_redirect(reverse("galleries:galleries"))
   return confirm_delete_modal(
     request,
     _("Delete gallery"),

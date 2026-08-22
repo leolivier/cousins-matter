@@ -3,7 +3,6 @@ import logging
 import math
 import os
 import shutil
-from contextlib import contextmanager
 from datetime import datetime
 from io import BytesIO
 from PIL import Image, ImageOps, ImageFile
@@ -24,8 +23,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import formats
 from django.utils.translation import gettext as _, get_language, gettext_lazy
-
-from core.context_processors import override_settings
 
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".webm", ".avi", ".mkv", ".m4v", ".ogv"}
 
@@ -137,16 +134,6 @@ class Paginator(paginator.Paginator):
     return ptor.get_page_data(page_num, group_by=group_by)
 
 
-@contextmanager
-def temporary_log_level(logger, level):
-  original_level = logger.level
-  logger.setLevel(level)
-  try:
-    yield
-  finally:
-    logger.setLevel(original_level)
-
-
 def remove_accents(input_str):
   """remove accents from a string, including diacritical marks"""
   nfkd_form = unicodedata.normalize("NFKD", input_str)
@@ -179,70 +166,6 @@ def test_resource_full_path(image_file_basename, file__):
 def create_test_image(file__, image_file_basename, content_type="image/jpeg"):
   image_file = test_resource_full_path(image_file_basename, file__)
   return create_image(image_file, content_type)
-
-
-@contextmanager
-def set_test_media_root(test_file):
-  """
-  Context manager to set the MEDIA_ROOT to a temporary directory
-  within the test file's directory. This is useful for tests that
-  need to write files to the media directory. The temporary
-  directory is automatically deleted after the test is complete.
-
-  Args:
-      test_file: The current test file.
-
-  Yields:
-      None
-  """
-  test_file = os.path.relpath(test_file, settings.BASE_DIR)
-  # test_media_root = os.path.join(os.path.dirname(test_file), "media")
-  # os.makedirs(test_media_root, exist_ok=True)
-  submedia_reltestdir = "test_cfyguihjknmlnjbhg"
-  test_media_root = os.path.join(settings.MEDIA_REL, submedia_reltestdir)
-  dst = default_storage
-  if "location" in dst.__dict__:
-    old_storage_location = dst.location
-  try:
-    with override_settings(MEDIA_ROOT=test_media_root):
-      if "location" in dst.__dict__:
-        dst.location = test_media_root
-      yield
-  finally:
-    # storage_rmtree(dst, submedia_reltestdir)
-    if "location" in dst.__dict__:
-      dst.location = old_storage_location
-    if os.path.isdir(test_media_root):
-      shutil.rmtree(test_media_root)
-
-
-def test_media_root_decorator(test_file):
-  """
-  Decorator that sets the MEDIA_ROOT to a temporary directory
-  within the test file's directory during the test. This is useful
-  for tests that need to write files to the media directory. The
-  temporary directory is automatically deleted after the test is
-  complete.
-  """
-
-  def decorator(cls):
-    orig_setUp = cls.setUp
-    orig_tearDown = cls.tearDown
-
-    def setUp(self, *args, **kwargs):
-      self.test_media_root_context = set_test_media_root(test_file)
-      self.test_media_root_context.__enter__()
-      orig_setUp(self, *args, **kwargs)
-
-    def tearDown(self, *args, **kwargs):
-      orig_tearDown(self, *args, **kwargs)
-      self.test_media_root_context.__exit__(None, None, None)
-
-    cls.setUp = setUp
-    cls.tearDown = tearDown
-    return cls
-
-  return decorator
 
 
 def allowed_date_formats():

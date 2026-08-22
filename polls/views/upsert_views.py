@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import generic
-from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
+
+from core.htmx import htmx_refresh, htmx_redirect
 from core.utils import check_edit_permission, confirm_delete_modal
 from ..models import Poll, Question
 from ..forms.upsert_forms import PollUpsertForm, QuestionUpsertForm
@@ -100,7 +101,7 @@ class PollDeleteView(generic.DeleteView):
     poll = get_object_or_404(self.model, pk=pk)
     check_edit_permission(request, poll.owner)
     poll.delete()
-    return HttpResponseClientRedirect(reverse("polls:all_polls"))
+    return htmx_redirect(reverse("polls:all_polls"))
 
 
 class QuestionUpsertMixin:
@@ -125,7 +126,7 @@ class QuestionCreateView(QuestionUpsertMixin, generic.CreateView):
       form.save()
     else:
       messages.error(request, _("Error creating question:%s" % form.errors))
-    return HttpResponseClientRefresh()
+    return htmx_refresh()
 
 
 class QuestionUpdateView(QuestionUpsertMixin, generic.UpdateView):
@@ -147,7 +148,7 @@ class QuestionUpdateView(QuestionUpsertMixin, generic.UpdateView):
       # print("After save", question.__dict__)
     else:
       messages.error(request, _("Error creating question:%s" % form.errors))
-    return HttpResponseClientRefresh()
+    return htmx_refresh()
 
 
 class QuestionDeleteView(QuestionUpsertMixin, generic.DeleteView):
@@ -165,4 +166,4 @@ class QuestionDeleteView(QuestionUpsertMixin, generic.DeleteView):
     question = get_object_or_404(self.model, pk=pk)
     check_edit_permission(request, question.poll.owner)
     question.delete()
-    return HttpResponseClientRefresh()
+    return htmx_refresh()

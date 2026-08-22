@@ -5,8 +5,8 @@ from django.shortcuts import get_object_or_404, render
 from django.test import tag
 from django.utils.translation import gettext as _
 from django.views import generic
-from django_htmx.http import trigger_client_event, HttpResponseClientRefresh
 
+from core.htmx import htmx_refresh, htmx_trigger_event
 from core.utils import check_edit_permission
 from forum.views.views_follow import check_followers_on_comment
 from ..models import Message, Comment
@@ -37,10 +37,10 @@ class CommentCreateView(generic.CreateView):
       comment = form.save()
       check_followers_on_comment(request, comment)
       response = render(request, "forum/comment_list.html#display_comment", {"comment": comment})
-      return trigger_client_event(response, "updateCommentCount", {"delta": 1, "message_id": message_id})
+      return htmx_trigger_event(response, "updateCommentCount", {"delta": 1, "message_id": message_id})
     else:
       messages.error(request, form.errors)
-      return HttpResponseClientRefresh()
+      return htmx_refresh()
 
 
 class CommentEditView(generic.UpdateView):
@@ -85,5 +85,5 @@ def delete_comment(request, pk):
   check_edit_permission(request, comment.author)
   id = comment.id
   comment.delete()
-  response = JsonResponse({"comment_id": id}, status=200)
-  return trigger_client_event(response, "updateCommentCount", {"delta": -1})
+
+  return htmx_trigger_event(JsonResponse({"comment_id": id}, status=200), "updateCommentCount", {"delta": -1})

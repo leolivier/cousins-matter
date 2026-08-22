@@ -12,6 +12,8 @@ from django.utils.translation import gettext_lazy as _, get_language
 from django_q.tasks import async_task, count_group, result_group
 from django_q.brokers import get_broker
 
+from core.decorators import require_htmx
+
 from members.tasks import ImportContext
 
 from ..models import Address, Member, Family
@@ -153,8 +155,8 @@ def import_progress(request, id):
   return render(request, "core/common/progress-bar.html", context)
 
 
+@require_htmx()
 def select_by_model_field(request, model, field) -> HttpResponse:
-  assert request.htmx  # nosec B101
   query = request.GET.get("q", "")
   # print("query", query, "model", model, "field", field)
   # List of matching names, case insensitive, limited to 12 results

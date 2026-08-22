@@ -9,8 +9,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
-from django_htmx.http import HttpResponseClientRedirect, HttpResponseClientRefresh
 from verify_email.email_handler import send_verification_email
+
+from core.decorators import require_htmx
+from core.htmx import htmx_redirect, htmx_refresh
 
 from core.utils import (
   PageOutOfBounds,
@@ -90,9 +92,8 @@ class MembersView(generic.ListView):
   def get(self, request, page_num=1):
     try:
       page = get_members_page(request, page_num)
-      if request.htmx:
-        return render(request, self.template_name + "#members_list", {"page": page, "members": page.object_list})
-      return render(request, self.template_name, {"page": page, "members": page.object_list})
+      template_name = self.template_name + "#members_list" if request.htmx else self.template_name
+      return render(request, template_name, {"page": page, "members": page.object_list})
     except PageOutOfBounds as exc:
       return redirect(exc.redirect_to)
 
@@ -271,8 +272,8 @@ class EditProfileView(EditMemberView):
     return super().post(request, request.user.username)
 
 
+@require_htmx()
 def delete_member(request, username):
-  assert request.htmx  # nosec B101
   member = get_object_or_404(Member, username=username)
   if not _can_edit_member(request, member):
     messages.error(request, _("You do not have permission to delete this member."))
@@ -280,7 +281,7 @@ def delete_member(request, username):
   if request.method == "POST":
     member.delete()
     messages.info(request, _("Member deleted"))
-    return HttpResponseClientRedirect(reverse("members:members"))
+    return htmx_redirect(reverse("members:members"))
   if member.id == request.user.id:
     delete_title = _("Delete my account")
     delete_msg = _("Are you sure you want to delete your account and all associated data? This is irrecoverable!")
@@ -325,7 +326,7 @@ def notify_death(request, username):
     deathdate = request.POST.get("deathdate")
     if not deathdate:
       messages.error(request, _("Please provide a death date."))
-      return HttpResponseClientRefresh()
+      return htmx_refresh()
 
     message = request.POST.get("message")
 
@@ -365,6 +366,6 @@ def notify_death(request, username):
       )
 
     messages.success(request, _("The administrator has been notified."))
-    return HttpResponseClientRefresh()
+    return htmx_refresh()
 
   return render(request, "members/members/notify_death_form.html", {"member": member})

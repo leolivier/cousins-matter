@@ -169,15 +169,12 @@ function printSection(el) {
   $body.empty().append($children);
 }
 
+const __check_search_length_msg__ = 'Please enter at least %(min_length)s characters';
+const __check_search_length_msg__gettext = (typeof gettext === 'function') ? gettext(__check_search_length_msg__) : __check_search_length_msg__;
+
 function check_search_length(el, min_length) {
   if (el.value.length > 0 && el.value.length < min_length) {
-    // try to use gettext if available
-    if (typeof gettext === 'function') {
-      var msg = gettext('Please enter at least %(min_length)s characters');
-      var message = interpolate(msg, {min_length: min_length}, true);
-    } else {
-      var message = 'Please enter at least ' + min_length + ' characters';
-    }
+    var message = interpolate(__check_search_length_msg__gettext, {min_length: min_length}, true);
     el.setCustomValidity(message);
     el.reportValidity();
   } else {
@@ -217,8 +214,10 @@ function goto_page_url(url, fullscreen=false) {
 $(document).on('change', '[data-autosubmit]', function() {
   this.form.submit();
 });
-$(document).on('input', '[data-min-length]', function() {
-  check_search_length(this, Number($(this).attr('data-min-length')));
+$(document).on('input', '[data-min-length]', function () {
+  var min_length = $(this).data('min-length')
+  if (min_length) min_length = Number(min_length)
+  if (min_length > 0) check_search_length(this, min_length);
 });
 $(document).on('click', '[data-goto-url]', function(e) {
   e.preventDefault();
@@ -294,6 +293,10 @@ $(document).on('click', '.dropdown-item.select-result', function (event) {
   const input = $(`#${select_id}-input`)
   setDropdownValue(input, hiddenInput, id, val);
   dropdown.removeClass('is-active');
+  const button = $(`#${select_id}-button`);
+  if (button) {
+    button.prop('disabled', false);
+  }
 });
 
 // Clear search input and dropdown when clear button is clicked
@@ -304,4 +307,30 @@ $(document).on('click', '.clear-field', function (event) {
     const hiddenInput = field.find('input[type="hidden"]');
     setDropdownValue(searchInput, hiddenInput, '', '');
     searchInput.trigger('focus');
+});
+// Close search results when clicking outside
+$(document).on('click', function (e) {
+    $('[id$="-results"]').each(function () {
+        var $results = $(this);
+        if (!$results.html().trim()) return; // already closed, nothing to do
+
+        var inputId = this.id.replace(/-results$/, '-input');
+        var $input = $('#' + inputId);
+        var clickedInside = $results.is(e.target) || $results.has(e.target).length
+                          || $input.is(e.target) || $input.has(e.target).length;
+
+        if (!clickedInside) {
+            $results.empty();
+        }
+    });
+});
+// Close search results when pressing Escape
+$(document).on('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+
+    $('[id$="-results"]').each(function () {
+        $(this).empty().data('closed', true);
+    });
+
+    $('input[id$="-input"]:focus').trigger('blur');
 });

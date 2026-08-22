@@ -80,7 +80,7 @@ msgid "Are you sure you want to delete this treasure?"
 msgstr "Es-tu sûr(e) de vouloir supprimer ce trésor?"
 
 msgid "Please enter at least %(min_length)s characters"
-msgstr "Veuillez entrer au moins %(min_length)s caractères"
+msgstr "Merci d'entrer au moins %(min_length)s caractères"
 
 msgid "Max size reached!"
 msgstr "Taille maximale atteinte!"

@@ -32,15 +32,18 @@
 		</div>
 		{%if user in room.admins.all %}
 		<div class="panel-block is-flex is-align-items-center is-justify-content-center">
-			{%trans "Add admin to the room" as tr_add_member%}
-			{% url "chat:search_private_members" room_slug as search_url %}
-			{%include "chat/private/add-member.html" with add_url='chat:add_admin_to_private_room'%}
+		    {% url "chat:search_private_members" room.slug as search_url %}
+		    {%trans 'Search....' as placeholder %}
+		    {%trans "Add admin" as action_text %}
+		    {%url 'chat:add_admin_to_private_room' room.slug as action_url %}
+		    {% include 'core/common/htmx_search.html#dropdown_select' with id="add-admin-select" action_target='hx_target=".panel .panel_block:last-of-type" hx_swap="afterend"' min_length=0 %}
 		</div>
 		{%endif%}
+
 		{% for admin in room.admins.all %}
 		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
 			<div class="panel-icon mini-avatar is-flex is-align-items-center is-justify-content-center is-flex-shrink-5 image">
-				<img class="is-rounded" src="{{admin.avatar_mini_url}}"	alt="{{admin.username}}">
+    			<img class="is-rounded" src="{{admin.avatar_mini_url}}"	alt="{{admin.username}}">
 			</div>
 			<div class="has-text-primary has-text-weight-bold has-text-left is-flex-grow-1 mr-5">
 				{{admin.get_full_name}}

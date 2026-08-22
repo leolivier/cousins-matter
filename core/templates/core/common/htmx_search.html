@@ -27,19 +27,23 @@
         <div class="dropdown-trigger full-width">
         {%if label %}<label class="label" for="{{id}}-input">{{label}}</label>{%endif%}
         <div class="field has-addons">
-            <div class="control is-expanded has-icons-left is-relative">
+            <div class="control is-expanded has-icons-left has-icons-right is-relative">
                 <span class="htmx-indicator">{%icon "loading" %}</span>
                 <input class="input" type="text"
                         name="q"
                         placeholder="{{placeholder}}"
                         hx-get="{{search_url}}"
                         hx-vals='{"render_with": "core/common/htmx_search.html#select_dropdown_results", "render_empty_query": "false"}'
+                    {%if min_length == 0 %}
+                        hx-trigger="focus, input[this.value.length != 0] changed delay:300ms, keyup[key=='Enter' && (this.value.length >= 0) changed delay:300ms"
+                    {%else%}
                         hx-trigger="input[this.value.length == 0 || this.value.length >= {{min_length|default:3}}] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= {{min_length|default:3}})]"
+                    {%endif%}
                         hx-target="#{{id}}-results"
                         hx-indicator=".htmx-indicator"
                         autocomplete="off"
                         id="{{id}}-input"
-                        data-min-length="{{min_length|default:3}}"
+                        data-min-length="{{min_length|default_if_none:3}}"
                         >
                 {%icon "search" "is-small is-left"%}
                 {%icon "clear" "is-small is-right clear-field" %}
@@ -69,8 +73,10 @@
 <div class="control">
   <button class="button" type="button" disabled="true" id="{{id}}-button"
     hx-post="{{action_url}}"
-    hx-include="#{{id}}-id">
-    {%icon "new" %} {{action_text}}
+    hx-include="#{{id}}-id"
+    {{action_target}}
+  >
+    <span class="icon-text">{%icon "new" %} <span>{{action_text}}</span></span>
   </button>
 </div>
 {%endpartialdef %}

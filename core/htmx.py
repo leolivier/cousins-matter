@@ -1,4 +1,8 @@
-from django_htmx.http import HttpResponseClientRedirect, HttpResponseClientRefresh, trigger_client_event
+from django_htmx.http import (
+  HttpResponseClientRedirect,
+  HttpResponseClientRefresh,
+  trigger_client_event,
+)
 
 
 def htmx_refresh():

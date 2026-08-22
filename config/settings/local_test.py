@@ -1,3 +1,4 @@
+import random
 from .dev_base import *  # noqa: F403, F405
 
 DEBUG = env.bool("DEBUG", False)
@@ -26,8 +27,10 @@ ACCOUNT_RATE_LIMITS = False
 # MIDDLEWARE.append("core.htmlvalidator.HtmlValidatorMiddleware")
 
 # Database
+# allow 20 test runs in parallel
+_test_db_num = random.randint(0, 20)  # nosec B311
 DATABASES["default"]["TEST"] = {
-  "NAME": "test_cousinsmatter",
+  "NAME": f"test_cousinsmatter_{_test_db_num}",
   "MIRROR": None,
   "CHARSET": None,
 }

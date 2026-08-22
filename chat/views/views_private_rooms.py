@@ -9,6 +9,13 @@ from django.utils.translation import gettext as _
 
 from members.models import Member
 from ..models import PrivateChatRoom
+from ..services import (
+  do_remove_member_from_private_room,
+  do_add_member_to_private_room,
+  do_add_admin_to_private_room,
+  do_remove_admin_from_private_room,
+)
+
 from .views_room_common import display_chat_room, list_chat_rooms, create_chat_room
 
 
@@ -28,6 +35,27 @@ def new_private_room(request):
 def display_private_chat_room(request, room_slug, page_num=None):
   "See display_chat_room in views_room_common"
   return display_chat_room(request, room_slug, private=True, page_num=page_num)
+
+
+def not_is_private_member(request, room):
+  if not room.followers.filter(pk=request.user.pk).exists():
+    messages.error(request, _("You are not a member of this private room"))
+    return redirect(reverse("chat:private_chat_rooms"))
+  return None
+
+
+def not_is_private_admin(request, room):
+  if not room.admins.filter(pk=request.user.pk).exists():
+    messages.error(request, _("You are not an admin of this private room"))
+    return redirect(reverse("chat:private_chat_rooms"))
+  return None
+
+
+def message_result(request, success, message):
+  if success:
+    messages.success(request, message)
+  else:
+    messages.error(request, message)
 
 
 def search_private_members(request, room_slug):
@@ -89,10 +117,7 @@ def list_private_room_members(request, room_slug):
         redirected to the 'chat:private_chat_rooms' view.
   """
   room = get_object_or_404(PrivateChatRoom.objects.prefetch_related("followers"), slug=room_slug)
-  if not room.followers.filter(pk=request.user.pk).exists():
-    messages.error(request, _("You are not a member of this private room"))
-    return redirect(reverse("chat:private_chat_rooms"))
-  return render(request, "chat/private/room_members.html", {"room": room})
+  return not_is_private_member(request, room) or render(request, "chat/private/room_members.html", {"room": room})
 
 
 def add_member_to_private_room(request, room_slug):
@@ -122,20 +147,13 @@ def add_member_to_private_room(request, room_slug):
   if request.method != "POST":
     raise ValidationError(_("Method not allowed"))
 
-  room = get_object_or_404(PrivateChatRoom, slug=room_slug)
+  room = get_object_or_404(PrivateChatRoom.objects.prefetch_related("followers").prefetch_related("admins"), slug=room_slug)
 
-  if not room.admins.filter(pk=request.user.pk).exists():
-    messages.error(request, _("You are not an admin of this private room"))
-    return redirect(reverse("chat:private_chat_rooms"))
+  if not_admin := not_is_private_admin(request, room):
+    return not_admin
 
   member_id = request.POST.get("member-id")
-  member = get_object_or_404(Member, id=member_id)
-
-  if not room.followers.filter(pk=member.pk).exists():
-    room.followers.add(member)
-    room.save()
-  else:
-    messages.warning(request, _("This user is already a member of this private room"))
+  message_result(request, *do_add_member_to_private_room(room, member_id))
   return redirect(reverse("chat:private_room_members", args=[room.slug]))
 
 
@@ -166,24 +184,10 @@ def remove_member_from_private_room(request, room_slug, username):
       - If the member is not a member of the private chat room, a warning message is displayed.
   """
   room = get_object_or_404(PrivateChatRoom, slug=room_slug)
-  if not room.admins.filter(pk=request.user.pk).exists():
-    messages.error(request, _("You are not an admin of this private room"))
-    return redirect(reverse("chat:private_chat_rooms"))
-  member = get_object_or_404(Member, username=username)
-  if room.followers.filter(pk=member.pk).exists():
-    if room.followers.count() < 2:
-      messages.error(
-        request,
-        _("This member is the only one in this private room. Please add another one before removing this one."),
-      )
-    else:
-      room.followers.remove(member)
-      if room.admins.filter(pk=member.pk).exists():
-        room.admins.remove(member)
-      room.save()
-      messages.success(request, _("%s has been removed from the room") % member.full_name)
-  else:
-    messages.warning(request, _("This user is not a member of this private room"))
+  if not_admin := not_is_private_admin(request, room):
+    return not_admin
+
+  message_result(request, *do_remove_member_from_private_room(room, request.user, username))
   return redirect(reverse("chat:private_room_members", args=[room.slug]))
 
 
@@ -214,31 +218,11 @@ def leave_private_room(request, room_slug):
       - The private chat room is saved after the user is removed.
   """
   room = get_object_or_404(PrivateChatRoom, slug=room_slug)
-  if not room.followers.filter(pk=request.user.pk).exists():
-    messages.error(request, _("You are not a member of this private room"))
-    return redirect(reverse("chat:private_chat_rooms"))
+  if not_admin := not_is_private_member(request, room):
+    return not_admin
   else:
-    if room.followers.count() == 1:
-      messages.error(
-        request,
-        _("You are the only member in this private room. Please add another one before removing yourself."),
-      )
-    elif room.admins.filter(pk=request.user.pk).exists() and room.admins.count() == 1:
-      messages.error(
-        request,
-        _(
-          "You are the only admin in this private room. "
-          "If you leave the room, no one will be left. "
-          "Please add another admin from the members before you remove yourself."
-        ),
-      )
-    else:
-      room.followers.remove(request.user)
-      if room.admins.filter(pk=request.user.pk).exists():
-        room.admins.remove(request.user)
-      room.save()
-      messages.success(request, _("You have left the room"))
-  return redirect(reverse("chat:private_chat_rooms"))
+    message_result(request, *do_remove_member_from_private_room(room, requester=request.user))
+    return redirect(reverse("chat:private_chat_rooms"))
 
 
 def list_private_room_admins(request, room_slug):
@@ -261,10 +245,8 @@ def list_private_room_admins(request, room_slug):
         to the 'chat:private_chat_rooms' view.
   """
   room = get_object_or_404(PrivateChatRoom.objects.prefetch_related("admins"), slug=room_slug)
-  if not room.followers.filter(pk=request.user.pk).exists():
-    messages.error(request, _("You are not a member of this private room"))
-    return redirect(reverse("chat:private_chat_rooms"))
-  return render(request, "chat/private/room_admins.html", {"room": room})
+
+  return not_is_private_member(request, room) or render(request, "chat/private/room_admins.html", {"room": room})
 
 
 def add_admin_to_private_room(request, room_slug):
@@ -294,21 +276,11 @@ def add_admin_to_private_room(request, room_slug):
     raise ValidationError(_("Method not allowed"))
 
   room = get_object_or_404(PrivateChatRoom, slug=room_slug)
-  if not room.admins.filter(pk=request.user.pk).exists():
-    messages.error(request, _("You are not an admin of this private room"))
-    return redirect(reverse("chat:private_chat_rooms"))
+  if not_admin := not_is_private_admin(request, room):
+    return not_admin
 
   member_id = request.POST.get("member-id")
-  member = get_object_or_404(Member, id=member_id)
-
-  if not room.followers.filter(pk=member.pk).exists():
-    messages.error(request, _("Only members of this private room can become admins"))
-  elif not room.admins.filter(pk=member.pk).exists():
-    room.admins.add(member)
-    room.save()
-  else:
-    messages.warning(request, _("This user is already a member of this private room"))
-
+  message_result(request, *do_add_admin_to_private_room(room, member_id))
   return redirect(reverse("chat:private_room_admins", args=[room.slug]))
 
 
@@ -341,22 +313,11 @@ def remove_admin_from_private_room(request, room_slug, username):
         page.
   """
   room = get_object_or_404(PrivateChatRoom, slug=room_slug)
-  if not room.admins.filter(pk=request.user.pk).exists():
-    messages.error(request, _("You are not an admin of this private room"))
-    return redirect(reverse("chat:private_chat_rooms"))
-  member = get_object_or_404(Member, username=username)
 
-  if room.admins.filter(pk=member.pk).exists():
-    if room.admins.count() < 2:
-      messages.error(
-        request,
-        _("There must be at least one admin in a private room. Please add another one before removing this one."),
-      )
-    else:
-      room.admins.remove(member)
-      room.save()
-  else:
-    messages.warning(request, _("This member is not an admin of this private room"))
+  if not_admin := not_is_private_admin(request, room):
+    return not_admin
+
+  message_result(request, *do_remove_admin_from_private_room(room, request.user, username))
   return redirect(reverse("chat:private_room_admins", args=[room.slug]))
 
 
@@ -383,20 +344,8 @@ def leave_private_room_admins(request, room_slug):
       - If the user is successfully removed from the admins, a success message is displayed.
   """
   room = get_object_or_404(PrivateChatRoom, slug=room_slug)
-  if not room.admins.filter(pk=request.user.pk).exists():
-    messages.error(request, _("You are not an admin of this private room"))
-    return redirect(reverse("chat:private_chat_rooms"))
-  else:
-    if room.admins.count() < 2:
-      messages.error(
-        request,
-        _("There must be at least one admin in a private room. Please add another one before removing yourself."),
-      )
-    else:
-      room.admins.remove(request.user)
-      room.save()
-      messages.success(
-        request,
-        _("You have been removed from the admins of this private room."),
-      )
+  if not_admin := not_is_private_admin(request, room):
+    return not_admin
+
+  message_result(request, *do_remove_admin_from_private_room(room, request.user))
   return redirect(reverse("chat:private_chat_rooms"))

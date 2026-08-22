@@ -13,8 +13,8 @@ class GedcomViewsTest(MemberTestCase):
     self.assertTemplateUsed(response, "genealogy/import_gedcom.html")
     self.assertIn("form", response.context)
 
-  @patch("genealogy.views.views_gedcom.GedcomParser")
-  @patch("genealogy.views.views_gedcom.clear_genealogy_caches")
+  @patch("genealogy.services.GedcomParser")
+  @patch("genealogy.services.clear_genealogy_caches")
   def test_import_gedcom_post_success(self, mock_clear_caches, mock_parser_class):
     mock_parser = mock_parser_class.return_value
     gedcom_content = b"0 HEAD\n1 CHAR UTF-8\n0 TRLR"
@@ -56,7 +56,7 @@ class GedcomViewsTest(MemberTestCase):
 
     self.assertFormError(response.context["form"], "gedcom_file", _("This field is required."))
 
-  @patch("genealogy.views.views_gedcom.GedcomParser")
+  @patch("genealogy.services.GedcomParser")
   def test_import_gedcom_post_parser_error(self, mock_parser_class):
     mock_parser = mock_parser_class.return_value
     mock_parser.parse.side_effect = Exception("Parsing error")

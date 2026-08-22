@@ -1,6 +1,5 @@
 import logging
 from django.conf import settings
-from django.db.models import Count, Prefetch
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from django.contrib import messages
@@ -12,6 +11,7 @@ from django.http import Http404
 from core.utils import check_edit_permission, confirm_delete_modal
 from ..models import Gallery
 from ..forms import GalleryForm
+from ..services import build_gallery_tree, get_gallery_detail_queryset
 
 logger = logging.getLogger(__name__)
 
@@ -56,13 +56,7 @@ class GalleryDetailView(generic.DetailView):
   fields = "__all__"
 
   def get(self, request, slug, page=1):
-    gallery = get_object_or_404(
-      Gallery.objects
-      .select_related("owner", "parent", "cover")
-      .annotate(photo_count=Count("photo"))
-      .prefetch_related(Prefetch("children", queryset=Gallery.objects.select_related("cover"))),
-      slug=slug,
-    )
+    gallery = get_object_or_404(get_gallery_detail_queryset(), slug=slug)
     page_size = int(request.GET["page_size"]) if "page_size" in request.GET else settings.DEFAULT_GALLERY_PAGE_SIZE
 
     return render(
@@ -79,21 +73,8 @@ class GalleryTreeView(generic.ListView):
   model = Gallery
 
   def get_context_data(self, **kwargs):
-    # Fetch all galleries in a single query with cover prefetched and photo count annotated
-    all_galleries = list(Gallery.objects.select_related("cover").annotate(photo_count=Count("photo")).order_by("name"))
-
-    # Build the tree in Python to avoid recursive N+1 queries
-    by_id = {g.pk: g for g in all_galleries}
-    for g in all_galleries:
-      g.cached_children = []
-    roots = []
-    for g in all_galleries:
-      if g.parent_id and g.parent_id in by_id:
-        by_id[g.parent_id].cached_children.append(g)
-      elif not g.parent_id:
-        roots.append(g)
-
-    return {"galleries": roots}
+    # Gallery tree: fetched and assembled in services to avoid recursive N+1 queries
+    return {"galleries": build_gallery_tree()}
 
 
 def delete_gallery(request, slug):

@@ -11,10 +11,7 @@ from django.utils.translation import gettext as _
 import json
 from packaging import version
 
-from chat.models import ChatMessage, ChatRoom, PrivateChatRoom
-from forum.models import Comment, Message, Post
-from galleries.models import Gallery, Photo
-from members.models import Member
+from core.services import build_site_stats
 
 logger = logging.getLogger(__name__)
 
@@ -81,82 +78,7 @@ def get_latest_release_text(request):
 
 
 def statistics(request):
-  admin = Member.objects.filter(is_superuser=True).first()
-  all_messages_count = ChatMessage.objects.count()
-  public_chat_rooms = ChatRoom.objects.public()
-  public_chat_messages_count = ChatMessage.objects.filter(room__in=public_chat_rooms).count()
-
-  stats = {
-    "site": {
-      "key": _("Site"),
-      "stats": [
-        {"key": _("Site name"), "value": settings.SITE_NAME},
-        {"key": _("Site URL"), "value": request.build_absolute_uri("/")},
-        {"key": _("Application Version"), "value": settings.APP_VERSION},
-        {"key": _("Latest release"), "value": get_latest_release_text(request)},
-      ],
-    },
-    "members": {
-      "key": _("Members"),
-      "stats": [
-        {"key": _("Total number of members"), "value": Member.objects.count()},
-        {
-          "key": _("Number of active members"),
-          "value": Member.objects.filter(is_active=True).count(),
-        },
-        {
-          "key": _("Number of managed members"),
-          "value": Member.objects.filter(is_active=False).count(),
-        },
-      ],
-    },
-    "galleries": {
-      "key": _("Galleries"),
-      "stats": [
-        {"key": _("Number of galleries"), "value": Gallery.objects.count()},
-        {"key": _("Number of photos"), "value": Photo.objects.count()},
-      ],
-    },
-    "forums": {
-      "key": _("Forums"),
-      "stats": [
-        {"key": _("Number of posts"), "value": Post.objects.count()},
-        {"key": _("Number of post messages"), "value": Message.objects.count()},
-        {
-          "key": _("Number of message comments"),
-          "value": Comment.objects.count(),
-        },
-      ],
-    },
-    "chats": {
-      "key": _("Chats"),
-      "stats": [
-        {"key": _("Number of chat rooms"), "value": ChatRoom.objects.count()},
-        {
-          "key": _("Number of public chat rooms"),
-          "value": ChatRoom.objects.public().count(),
-        },
-        {
-          "key": _("Number of private chat rooms"),
-          "value": PrivateChatRoom.objects.count(),
-        },
-        {"key": _("Number of chat messages"), "value": all_messages_count},
-        {
-          "key": _("Number of private chat messages"),
-          "value": all_messages_count - public_chat_messages_count,
-        },
-        {
-          "key": _("Number of public chat messages"),
-          "value": public_chat_messages_count,
-        },
-      ],
-    },
-    "admin": {
-      "key": _("Administrator"),
-      "stats": [
-        {"key": _("This site is managed by"), "value": admin.full_name},
-        {"key": _("Administrator email"), "value": admin.email},
-      ],
-    },
-  }
+  site_url = request.build_absolute_uri("/")
+  release_text = get_latest_release_text(request)
+  stats = build_site_stats(site_url, release_text)
   return render(request, "core/about/site-stats.html", {"stats": stats})

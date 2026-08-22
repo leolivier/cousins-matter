@@ -1,11 +1,10 @@
 from django.contrib import messages
-from django.db.models import Count
-from django.db.models.functions import ExtractYear
 from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 
 from ..models import Family, Person
+from ..services import build_statistics_context
 from ..utils import clear_genealogy_caches, register_genealogy_cache
 
 register_genealogy_cache("genealogy_statistics")
@@ -22,30 +21,7 @@ def dashboard(request):
 
 
 def statistics(request):
-  # Gender Distribution
-  gender_data = Person.objects.values("sex").annotate(count=Count("sex"))
-
-  # Top Names
-  top_first_names = Person.objects.values("first_name").annotate(count=Count("first_name")).order_by("-count")[:10]
-  top_last_names = Person.objects.values("last_name").annotate(count=Count("last_name")).order_by("-count")[:10]
-
-  # Births per Decade
-  birth_years = Person.objects.filter(birth_date__isnull=False).annotate(year=ExtractYear("birth_date")).values("year")
-  decades = {}
-  for entry in birth_years:
-    decade = (entry["year"] // 10) * 10
-    decades[decade] = decades.get(decade, 0) + 1
-
-  sorted_decades = dict(sorted(decades.items()))
-
-  context = {
-    "gender_data": list(gender_data),
-    "top_first_names": list(top_first_names),
-    "top_last_names": list(top_last_names),
-    "decades": list(sorted_decades.keys()),
-    "births_per_decade": list(sorted_decades.values()),
-  }
-  return render(request, "genealogy/statistics.html", context)
+  return render(request, "genealogy/statistics.html", build_statistics_context())
 
 
 def refresh(request):

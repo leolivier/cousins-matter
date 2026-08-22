@@ -20,11 +20,34 @@ Notes:
   dead letters for the owner).
 * Idempotent: every statement is DROP IF EXISTS / CREATE ROLE guarded.
 """
+"""PostgreSQL row-level security hardening (defense-in-depth backstop).
+...
+"""
+
+import re
 
 from django.conf import settings
 from django.db import migrations
 
 from tenants.rls import TENANT_RLS_STRICT_TABLES, _TENANT_PREDICATE
+
+_IDENTIFIER_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+
+def qi(identifier: str) -> str:
+    """Validate and quote a PostgreSQL identifier (role/table/schema name).
+
+    Raises early on anything that isn't a plain [A-Za-z_][A-Za-z0-9_]* token,
+    rather than silently building broken/dangerous SQL.
+    """
+    if not identifier or not _IDENTIFIER_RE.match(identifier):
+        raise ValueError(f"Refusing to use invalid Postgres identifier: {identifier!r}")
+    return '"' + identifier + '"'
+
+
+def ql(value: str) -> str:
+    """Quote a literal for embedding in DDL (no bind parameters there)."""
+    return "'" + value.replace("'", "''") + "'"
 
 
 def _build_sql() -> list[tuple[str, str | None]]:
@@ -35,72 +58,72 @@ def _build_sql() -> list[tuple[str, str | None]]:
     sqls: list[tuple[str, str | None]] = []
 
     if runtime_user and runtime_password:
+        user_ident = qi(runtime_user)
+        owner_ident = qi(owner)
+
         # --- runtime role (idempotent) ---
         sqls.append((
             f"""
             DO $$
             BEGIN
-              IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = '{runtime_user}') THEN
-                CREATE ROLE {runtime_user} LOGIN PASSWORD {ql(runtime_password)} NOSUPERUSER NOCREATEDB NOCREATEROLE;
+              IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = {ql(runtime_user)}) THEN
+                CREATE ROLE {user_ident} LOGIN PASSWORD {ql(runtime_password)} NOSUPERUSER NOCREATEDB NOCREATEROLE;
               ELSE
-                ALTER ROLE {runtime_user} LOGIN PASSWORD {ql(runtime_password)} NOSUPERUSER NOCREATEDB NOCREATEROLE;
+                ALTER ROLE {user_ident} LOGIN PASSWORD {ql(runtime_password)} NOSUPERUSER NOCREATEDB NOCREATEROLE;
               END IF;
             END
             $$;
-            """,
-            f"DROP ROLE IF EXISTS {runtime_user};",
+            """,  # nosec B608 -- user_ident is validated against ^[A-Za-z_][A-Za-z0-9_]*$ by qi(); ql() escapes the literal
+            f"DROP ROLE IF EXISTS {user_ident};",
         ))
         # --- grants (DML only: never CREATE/ALTER, DDL stays owner-only) ---
         grants = f"""
-            GRANT USAGE ON SCHEMA public TO {runtime_user};
-            GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO {runtime_user};
-            GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO {runtime_user};
-            ALTER DEFAULT PRIVILEGES IN SCHEMA public FOR ROLE {owner}
-              GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO {runtime_user};
-            ALTER DEFAULT PRIVILEGES IN SCHEMA public FOR ROLE {owner}
-              GRANT USAGE, SELECT ON SEQUENCES TO {runtime_user};
+            GRANT USAGE ON SCHEMA public TO {user_ident};
+            GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO {user_ident};
+            GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO {user_ident};
+            ALTER DEFAULT PRIVILEGES IN SCHEMA public FOR ROLE {owner_ident}
+              GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO {user_ident};
+            ALTER DEFAULT PRIVILEGES IN SCHEMA public FOR ROLE {owner_ident}
+              GRANT USAGE, SELECT ON SEQUENCES TO {user_ident};
         """
-        sqls.append((grants, f"REVOKE ALL ON SCHEMA public FROM {runtime_user};"))
+        sqls.append((grants, f"REVOKE ALL ON SCHEMA public FROM {user_ident};"))
 
     # --- RLS policies (inert for the owner; active for the runtime role) ---
     for table in TENANT_RLS_STRICT_TABLES:
+        table_ident = qi(table)
         sqls.append((
             f"""
-            ALTER TABLE {table} ENABLE ROW LEVEL SECURITY;
-            DROP POLICY IF EXISTS tenant_isolation ON {table};
-            CREATE POLICY tenant_isolation ON {table} FOR ALL
+            ALTER TABLE {table_ident} ENABLE ROW LEVEL SECURITY;
+            DROP POLICY IF EXISTS tenant_isolation ON {table_ident};
+            CREATE POLICY tenant_isolation ON {table_ident} FOR ALL
               USING {_TENANT_PREDICATE}
               WITH CHECK {_TENANT_PREDICATE};
             """,
-            f"DROP POLICY IF EXISTS tenant_isolation ON {table}; ALTER TABLE {table} DISABLE ROW LEVEL SECURITY;",
+            f"DROP POLICY IF EXISTS tenant_isolation ON {table_ident}; ALTER TABLE {table_ident} DISABLE ROW LEVEL SECURITY;",
         ))
 
     for table in ("members_member",):
+        table_ident = qi(table)
         sqls.append((
             f"""
-            ALTER TABLE {table} ENABLE ROW LEVEL SECURITY;
-            DROP POLICY IF EXISTS tenant_read ON {table};
-            DROP POLICY IF EXISTS tenant_write ON {table};
-            CREATE POLICY tenant_read ON {table} FOR SELECT USING (true);
-            CREATE POLICY tenant_write ON {table} FOR INSERT WITH CHECK {_TENANT_PREDICATE};
-            CREATE POLICY tenant_update ON {table} FOR UPDATE
+            ALTER TABLE {table_ident} ENABLE ROW LEVEL SECURITY;
+            DROP POLICY IF EXISTS tenant_read ON {table_ident};
+            DROP POLICY IF EXISTS tenant_write ON {table_ident};
+            CREATE POLICY tenant_read ON {table_ident} FOR SELECT USING (true);
+            CREATE POLICY tenant_write ON {table_ident} FOR INSERT WITH CHECK {_TENANT_PREDICATE};
+            CREATE POLICY tenant_update ON {table_ident} FOR UPDATE
               USING {_TENANT_PREDICATE} WITH CHECK {_TENANT_PREDICATE};
-            CREATE POLICY tenant_delete ON {table} FOR DELETE USING {_TENANT_PREDICATE};
+            CREATE POLICY tenant_delete ON {table_ident} FOR DELETE USING {_TENANT_PREDICATE};
             """,
             f"""
-            DROP POLICY IF EXISTS tenant_read ON {table};
-            DROP POLICY IF EXISTS tenant_write ON {table};
-            DROP POLICY IF EXISTS tenant_update ON {table};
-            DROP POLICY IF EXISTS tenant_delete ON {table};
-            ALTER TABLE {table} DISABLE ROW LEVEL SECURITY;
+            DROP POLICY IF EXISTS tenant_read ON {table_ident};
+            DROP POLICY IF EXISTS tenant_write ON {table_ident};
+            DROP POLICY IF EXISTS tenant_update ON {table_ident};
+            DROP POLICY IF EXISTS tenant_delete ON {table_ident};
+            ALTER TABLE {table_ident} DISABLE ROW LEVEL SECURITY;
             """,
         ))
     return sqls
-
-
-def ql(value: str) -> str:
-    """Quote a literal for embedding in DDL (no bind parameters there)."""
-    return "'" + value.replace("'", "''") + "'"
 
 
 def apply_rls(apps, schema_editor):

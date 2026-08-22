@@ -37,9 +37,7 @@ class Command(BaseCommand):
       raise CommandError(str(e))
 
     if not options["yes"]:
-      confirm = input(
-        f"This will PERMANENTLY delete tenant {slug!r} and ALL its data. Type the slug to confirm: "
-      )
+      confirm = input(f"This will PERMANENTLY delete tenant {slug!r} and ALL its data. Type the slug to confirm: ")
       if confirm.strip() != slug:
         raise CommandError("Confirmation did not match. Aborting.")
 
@@ -47,6 +45,4 @@ class Command(BaseCommand):
       member_count = delete_tenant_service(tenant)
     except PermissionDenied as e:
       raise CommandError(str(e))
-    self.stdout.write(
-      self.style.SUCCESS(f"Deleted tenant {name!r} ({slug!r}) and {member_count} member(s).")
-    )
+    self.stdout.write(self.style.SUCCESS(f"Deleted tenant {name!r} ({slug!r}) and {member_count} member(s)."))

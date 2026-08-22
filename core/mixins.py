@@ -15,6 +15,7 @@ class LoginNotRequiredMixin:
 
 class OnlyAdminMixin(PermissionRequiredMixin):
   """Allows platform superusers and tenant admins; denies everyone else."""
+
   raise_exception = True
 
   def has_permission(self):

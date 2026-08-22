@@ -284,9 +284,7 @@ DATABASES: dict[str, Any] = {
     # multi-tenant feature is on, the app (web + qcluster) connects with it;
     # migrations always run as the owner (see scripts/entrypoint.py), which
     # bypasses row-level security by table ownership.
-    "USER": env.str(
-      "POSTGRES_RUNTIME_USER", default=env.str("POSTGRES_USER", default="cousinsmatter")
-    )
+    "USER": env.str("POSTGRES_RUNTIME_USER", default=env.str("POSTGRES_USER", default="cousinsmatter"))
     if env.bool("MULTI_TENANT_ENABLED", default=False) and env.str("POSTGRES_RUNTIME_USER", default=None)
     else env.str("POSTGRES_USER", default="cousinsmatter"),
     "PASSWORD": env.str(

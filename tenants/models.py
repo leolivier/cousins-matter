@@ -73,9 +73,7 @@ class Tenant(models.Model):
 
 
 class TenantSettings(models.Model):
-  tenant = models.OneToOneField(
-    Tenant, on_delete=models.CASCADE, related_name="settings_row", verbose_name=_("Tenant")
-  )
+  tenant = models.OneToOneField(Tenant, on_delete=models.CASCADE, related_name="settings_row", verbose_name=_("Tenant"))
   # Feature-flag / branding overrides merged on top of the global defaults.
   overrides = models.JSONField(_("Overrides"), default=dict, blank=True)
 

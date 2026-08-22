@@ -30,8 +30,13 @@ def _skip_if_off(testcase):
 def _make_admin(tenant, username):
   with tenant_context(tenant):
     m = Member.objects.create_member(
-      username=username, password=_PWD, email=f"{username}@example.com",
-      first_name=username, last_name="x", is_active=True, role=Member.Role.ADMIN,
+      username=username,
+      password=_PWD,
+      email=f"{username}@example.com",
+      first_name=username,
+      last_name="x",
+      is_active=True,
+      role=Member.Role.ADMIN,
     )
   return m
 
@@ -79,8 +84,12 @@ class FamilySignupTests(TestCase):
     default = T.get_default()
     with tenant_context(default):
       Member.objects.create_member(
-        username="taken", password=_PWD, email="founder@example.com",
-        first_name="t", last_name="k", is_active=True,
+        username="taken",
+        password=_PWD,
+        email="founder@example.com",
+        first_name="t",
+        last_name="k",
+        is_active=True,
       )
     before = Tenant.objects.filter(slug="smith").count()
     resp = self._post_signup()
@@ -140,9 +149,7 @@ class TenantManageTests(MemberTestCase):
 
   def test_create_with_admin_invitation(self):
     self._login_superuser()
-    resp = self.client.post(
-      reverse("tenants:create"), {"name": "New Family", "admin_email": "first@example.com"}, follow=True
-    )
+    resp = self.client.post(reverse("tenants:create"), {"name": "New Family", "admin_email": "first@example.com"}, follow=True)
     self.assertEqual(resp.status_code, 200)
     self.assertTrue(Tenant.objects.filter(slug="new-family").exists())
 
@@ -184,9 +191,14 @@ class TenantSettingsTests(MemberTestCase):
 
   def _base_data(self):
     return {
-      "site_name": "", "site_logo": "", "site_copyright": "", "site_footer": "",
-      "pdf_size": "A4", "dark_mode": False,
-      "language_code": "en", "time_zone": "Europe/Paris",
+      "site_name": "",
+      "site_logo": "",
+      "site_copyright": "",
+      "site_footer": "",
+      "pdf_size": "A4",
+      "dark_mode": False,
+      "language_code": "en",
+      "time_zone": "Europe/Paris",
       "birthday_days": 50,
       "allow_members_to_create_members": False,
       "allow_members_to_invite_members": False,

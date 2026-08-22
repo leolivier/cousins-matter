@@ -11,7 +11,7 @@ from django.conf import settings as django_settings
 from tenants.models import tenant_settings_overrides
 
 # key -> name of the global Django setting used as the default value.
-TENANT_SETTINGS_SPEC: dict[str, str | None] = {
+TENANT_SETTINGS_SPEC: dict[str, str] = {
   "site_name": "SITE_NAME",
   "site_logo": "SITE_LOGO",
   "site_copyright": "SITE_COPYRIGHT",

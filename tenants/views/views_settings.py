@@ -5,7 +5,6 @@ the deltas vs the global defaults so a later global flip still propagates to
 families that never overrode a key.
 """
 
-
 from django import forms
 from django.conf import settings as django_settings
 from django.contrib import messages
@@ -36,12 +35,8 @@ class TenantSettingsForm(forms.Form):
   language_code = forms.ChoiceField(label=_("Language"), choices=getattr(django_settings, "LANGUAGES", []))
   time_zone = forms.CharField(label=_("Time zone (IANA, e.g. Europe/Paris)"), max_length=64)
   birthday_days = forms.IntegerField(label=_("Birthday lookahead (days)"), min_value=-365, max_value=365)
-  allow_members_to_create_members = forms.BooleanField(
-    label=_("Members can create members"), required=False
-  )
-  allow_members_to_invite_members = forms.BooleanField(
-    label=_("Members can invite members"), required=False
-  )
+  allow_members_to_create_members = forms.BooleanField(label=_("Members can create members"), required=False)
+  allow_members_to_invite_members = forms.BooleanField(label=_("Members can invite members"), required=False)
   family_chart_root_person_id = forms.IntegerField(
     label=_("Genealogy chart root member id (optional)"), required=False, min_value=1
   )
@@ -108,12 +103,9 @@ class TenantSettingsForm(forms.Form):
     clear_flags_cache()
     clear_tenant_settings_cache()
     if "family_chart_root_person_id" in self.changed_data:
-      try:
-        from genealogy.utils import clear_genealogy_caches
+      from genealogy.utils import clear_genealogy_caches
 
-        clear_genealogy_caches()
-      except Exception:  # genealogy optional in some deployments
-        pass
+      clear_genealogy_caches()
     return row
 
 

@@ -34,8 +34,7 @@ TENANT_RLS_SPLIT_TABLES: list[str] = [
 ]
 
 _TENANT_PREDICATE = (
-  "(tenant_id = NULLIF(current_setting('app.current_tenant_id', true), '')::int"
-  " OR current_setting('app.bypass', true) = 'on')"
+  "(tenant_id = NULLIF(current_setting('app.current_tenant_id', true), '')::int OR current_setting('app.bypass', true) = 'on')"
 )
 
 

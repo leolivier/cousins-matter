@@ -44,9 +44,7 @@ class TenantListView(OnlySuperuserMixin, generic.View):
   template_name = "tenants/tenant_list.html"
 
   def get(self, request):
-    tenants = (
-      Tenant.objects.annotate(num_members=Count("members", distinct=True)).order_by("name")
-    )
+    tenants = Tenant.objects.annotate(num_members=Count("members", distinct=True)).order_by("name")
     return render(request, self.template_name, {"tenants": tenants, "title": _("Families")})
 
 
@@ -56,9 +54,7 @@ class TenantCreateView(OnlySuperuserMixin, generic.View):
   template_name = "tenants/tenant_form.html"
 
   def get(self, request):
-    return render(
-      request, self.template_name, {"form": TenantCreationForm(), "title": _("Create a family")}
-    )
+    return render(request, self.template_name, {"form": TenantCreationForm(), "title": _("Create a family")})
 
   def post(self, request):
     form = TenantCreationForm(request.POST)

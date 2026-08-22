@@ -39,11 +39,7 @@ class TenantMiddleware:
     # a tenant via tenant_context() does not lose it across a client request).
     previous_tenant = get_current_tenant()
     try:
-      if (
-        user is not None
-        and getattr(user, "is_authenticated", False)
-        and not getattr(user, "is_superuser", False)
-      ):
+      if user is not None and getattr(user, "is_authenticated", False) and not getattr(user, "is_superuser", False):
         tenant = getattr(user, "tenant", None)
         if tenant is not None:
           if not getattr(tenant, "is_active", True):

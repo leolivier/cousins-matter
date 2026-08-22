@@ -133,9 +133,7 @@ class BulkUploadPhotosView(generic.FormView):
         zip_file = request.FILES["zipfile"]
         # task_group = request.POST.get("csrfmiddlewaretoken")  # not generated in test context
         task_group = uuid.uuid4().hex
-        zimport = handle_zip(
-          zip_file, task_group, request.user.id, form.cleaned_data.get("gallery"), request.user.tenant_id
-        )
+        zimport = handle_zip(zip_file, task_group, request.user.id, form.cleaned_data.get("gallery"), request.user.tenant_id)
         hx_get_url = reverse("galleries:upload_progress", args=(task_group,))
         logger.debug(f"rendering first progress-bar url: {hx_get_url}")
         return render(

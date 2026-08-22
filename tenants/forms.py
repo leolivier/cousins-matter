@@ -10,9 +10,15 @@ from .models import Tenant
 
 # Slugs a family may never take (they collide with the seeded/special tenants
 # and would break slug-based routing).
-RESERVED_TENANT_SLUGS = frozenset(
-    {settings.DEFAULT_TENANT_SLUG, settings.SYSTEM_TENANT_SLUG, "admin", "admins", "manage", "settings", "signup"}
-)
+RESERVED_TENANT_SLUGS = frozenset({
+  settings.DEFAULT_TENANT_SLUG,
+  settings.SYSTEM_TENANT_SLUG,
+  "admin",
+  "admins",
+  "manage",
+  "settings",
+  "signup",
+})
 
 
 def uniquify_tenant_slug(name: str) -> str:

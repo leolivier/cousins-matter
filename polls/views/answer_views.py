@@ -6,6 +6,7 @@ from django.views import generic
 
 from ..forms.answer_forms import get_answerform_class_for_question_type
 from ..models import Answer, EventPlanner, Poll, PollAnswer
+from ..services import get_poll_answer
 
 
 class PollsVoteView(generic.View):
@@ -15,29 +16,14 @@ class PollsVoteView(generic.View):
   redirect_to = "polls:poll_detail"
 
   def get_question_forms(self, poll):
-    # is there an existing answer for that poll and that user?
-    poll_answer = PollAnswer.objects.filter(poll=poll, member=self.request.user).first()
-
-    # Prefetch all questions to avoid N+1
-    questions = poll.questions.all()
-
-    # Prefetch all existing answers if poll_answer exists to avoid N+1 queries
-    if poll_answer:
-      Answer.set_subclasses()
-      # Build a cache of existing answers by question_id
-      answers_cache = {}
-      for subclass in Answer.subclasses:
-        for answer in subclass.objects.filter(poll_answer=poll_answer, question__in=questions):
-          answers_cache[answer.question_id] = answer
-    else:
-      answers_cache = {}
+    poll_answer = get_poll_answer(poll, self.request.user)
 
     return [
       {
-        "question": question,
-        "form": self.get_question_form_cached(poll_answer, question, answers_cache),
+        "question": item["question"],
+        "form": self.get_question_form_cached(item["answer"], item["question"], item["cache"]),
       }
-      for question in questions
+      for item in poll_answer
     ]
 
   def get_question_form_cached(self, poll_answer, question, answers_cache):

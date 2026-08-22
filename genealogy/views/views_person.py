@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext as _
 
@@ -7,30 +6,20 @@ from core.utils import PageOutOfBounds, Paginator
 
 from ..forms import PersonForm
 from ..models import Person
+from ..services import PERSON_SORT_FIELDS, get_people_queryset
 from ..utils import clear_genealogy_caches
-
-# Allowlist of sortable columns: maps the GET `sort` value to the model fields
-# used for ordering. Also guards against arbitrary order_by injection.
-PERSON_SORT_FIELDS = {
-  "name": ["last_name", "first_name"],
-  "birth_date": ["birth_date"],
-  "birth_place": ["birth_place"],
-}
 
 
 def person_list(request, page_num=1):
   query = request.GET.get("q")
-  people = (
-    Person.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query)) if query else Person.objects.all()
-  )
-
+  # Normalize sort for both the template context and the service call; the service
+  # re-validates defensively. PERSON_SORT_FIELDS guards against order_by injection.
   sort = request.GET.get("sort") or "name"
   if sort not in PERSON_SORT_FIELDS:
     sort = "name"
   direction = "desc" if request.GET.get("dir") == "desc" else "asc"
-  order_fields = PERSON_SORT_FIELDS[sort]
-  prefix = "-" if direction == "desc" else ""
-  people = people.order_by(*(prefix + field for field in order_fields))
+
+  people = get_people_queryset(query, sort, direction)
 
   cache_key_suffix = (request.GET.urlencode() or "default") + str(page_num)
 

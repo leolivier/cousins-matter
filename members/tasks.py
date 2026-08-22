@@ -4,6 +4,8 @@ import os
 import secrets
 import string
 from typing import Literal
+
+
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.utils.text import slugify
@@ -88,6 +90,12 @@ class ImportContext:
   rows_num: int = 0
   group: str = ""  # id of the group of tasks
   lang: str = "en"  # language of the file
+
+  # errors, warnings and users processed
+  warnings: list[str] = field(default_factory=list)
+  errors: list[str] = field(default_factory=list)
+  users: list[str] = field(default_factory=list)
+  current_count: int = 0
 
   def register(self):
     MEMBER_IMPORTS[self.group] = self

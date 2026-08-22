@@ -10,14 +10,14 @@ from polls.views.upsert_views import (
   PollCreateView,
   PollDeleteView,
   PollUpdateView,
-  managed_closed_list,
 )
 
 from ..forms.upsert_forms import (
   EventPlannerUpsertForm,
   QuestionUpsertForm,
 )
-from ..models import Answer, EventPlanner, Question
+from ..models import EventPlanner
+from ..services import create_event_planner, update_event_planner, manage_closed_list
 
 
 class EventPlannerCreateView(PollCreateView):
@@ -32,18 +32,13 @@ class EventPlannerCreateView(PollCreateView):
     form = self.form_class(request.POST)
     form.instance.owner = request.user
     if form.is_valid():
-      if not form.cleaned_data["possible_dates"]:
+      possible_choices = form.cleaned_data["possible_dates"]
+      if not possible_choices:
         raise ValueError("No possible dates")
-      multichoices_planner = form.cleaned_data["multichoices_planner"]
       planner = form.save()
-      managed_closed_list(planner, form)
-      question_text = _("Choose dates") if multichoices_planner else _("Choose one date")
-      Question.objects.create(
-        question_type=Question.MULTIEVENTPLANNING_QUESTION if multichoices_planner else Question.SINGLEEVENTPLANNING_QUESTION,
-        question_text=question_text,
-        poll=planner,
-        possible_choices=form.cleaned_data["possible_dates"],
-      )
+      multichoices_planner = form.cleaned_data["multichoices_planner"]
+      closed_list = form.cleaned_data.get("closed_list")
+      create_event_planner(planner, multichoices_planner, closed_list, possible_choices)
 
       messages.success(request, self.success_message)
       return redirect(reverse(self.redirect_to, args=(planner.pk,)))
@@ -71,48 +66,18 @@ class EventPlannerUpdateView(PollUpdateView):
       if not form.cleaned_data["possible_dates"]:
         raise ValueError("No possible dates")
       form.save()
-      managed_closed_list(planner, form)
+      manage_closed_list(planner, form.cleaned_data.get("closed_list"))
       multichoices_planner = form.cleaned_data["multichoices_planner"]
-      possible_dates = Question.objects.filter(poll=planner, question_type__in=Question.EVENT_TYPES).first()
-      if possible_dates:
-        # Use the specific answer class based on question type to avoid iterating all subclasses
-        answer_class = Answer.get_answer_class_for_question_type(possible_dates.question_type)
-        answers = answer_class.objects.filter(question=possible_dates)
-        if answers.exists():
-          if (multichoices_planner and possible_dates.question_type == Question.SINGLEEVENTPLANNING_QUESTION) or (
-            not multichoices_planner and possible_dates.question_type == Question.MULTIEVENTPLANNING_QUESTION
-          ):
-            messages.error(
-              request,
-              _("This question has already been answered. You can't change its type anymore."),
-            )
-            return render(request, self.template_name, {"form": form})
-          else:
-            messages.warning(
-              request,
-              _("This question has already been answered. Previous answers might be ignored."),
-            )
-        possible_dates.possible_choices = form.cleaned_data["possible_dates"]
-        possible_dates.question_type = (
-          Question.MULTIEVENTPLANNING_QUESTION if multichoices_planner else Question.SINGLEEVENTPLANNING_QUESTION
-        )
-        if multichoices_planner and possible_dates.question_text == _("Choose one date"):
-          possible_dates.question_text = _("Choose dates")
-        elif not multichoices_planner and possible_dates.question_text == _("Choose dates"):
-          possible_dates.question_text = _("Choose one date")
-        possible_dates.save()
+      (status, message) = update_event_planner(
+        planner, multichoices_planner, possible_choices=form.cleaned_data["possible_dates"]
+      )
+      if status == "error":
+        messages.error(request, message)
+        return render(request, self.template_name, {"form": form})
+      elif status == "warning":
+        messages.warning(request, message)
       else:
-        question_text = _("Choose dates") if multichoices_planner else _("Choose one date")
-        Question.objects.create(
-          question_type=Question.MULTIEVENTPLANNING_QUESTION
-          if multichoices_planner
-          else Question.SINGLEEVENTPLANNING_QUESTION,  # noqa
-          question_text=question_text,
-          poll=planner,
-          possible_choices=form.cleaned_data["possible_dates"],
-        )
-
-      messages.success(request, self.success_message)
+        messages.success(request, self.success_message)
       return redirect(reverse(self.redirect_to, args=(planner.pk,)))
     else:
       return render(request, self.template_name, {"form": form})

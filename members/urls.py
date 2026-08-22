@@ -2,7 +2,6 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import (
   views_address,
-  views_activate,
   views_family,
   views_import_export,
   views_member,
@@ -84,7 +83,7 @@ urlpatterns = [
   path("<str:username>/delete", views_member.delete_member, name="delete"),
   path("<str:username>/notify-death", views_member.notify_death, name="notify_death"),
   path("<str:username>/toggle-follow", views_followers.toggle_follow, name="toggle_follow"),
-  path("<str:username>/activate/", views_activate.activate_member, name="activate"),
+  path("<str:username>/activate/", views_member.activate_member, name="activate"),
   path(
     "address/<int:pk>/",
     views_address.AddressDetailView.as_view(),

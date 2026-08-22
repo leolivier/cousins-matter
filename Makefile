@@ -97,9 +97,9 @@ minify:
 check:
 	ruff format -q .
 	ruff check . --fix
+	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
 	bandit -r . -c pyproject.toml -f txt -o bandit.out -x ./.claude
 	pip-audit .
-	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
 
 install-hooks:
 	pre-commit install

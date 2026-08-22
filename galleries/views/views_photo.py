@@ -14,31 +14,9 @@ from core.htmx import htmx_redirect
 from core.utils import check_edit_permission, confirm_delete_modal
 from ..models import Photo, Gallery
 from ..forms import PhotoForm
+from ..services import get_next_prev_photo
 
 logger = logging.getLogger(__name__)
-
-
-def get_next_prev_photo(pk, side):
-  # this raises an exception Photo.DoesNotExist if the photo doesn't exist
-  if side is None:
-    return Photo.objects.get(pk=pk)
-
-  gallery_id = Photo.objects.only("gallery_id").get(pk=pk).gallery_id
-  photos = Photo.objects.filter(gallery=gallery_id).order_by("id")
-
-  match side:
-    case "prev":
-      photo = photos.filter(id__lt=pk).last()
-      if not photo:
-        photo = photos.last()
-    case "next":
-      photo = photos.filter(id__gt=pk).first()
-      if not photo:
-        photo = photos.first()
-    case _:
-      raise ValueError("Invalid side: %s" % side)
-
-  return photo or Photo.objects.get(id=pk)
 
 
 class PhotoDetailView(generic.DetailView):

@@ -1,31 +1,22 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import messages
-from django.utils.translation import gettext as _
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
+
 from ..forms import GedcomImportForm
-from ..utils import GedcomParser, GedcomExporter, clear_genealogy_caches
+from ..services import do_import_gedcom
+from ..utils import GedcomExporter
 
 
 def import_gedcom(request):
   if request.method == "POST":
     form = GedcomImportForm(request.POST, request.FILES)
     if form.is_valid():
-      gedcom_file = request.FILES["gedcom_file"]
-      # Save temporary file
-      path = default_storage.save("tmp/" + gedcom_file.name, ContentFile(gedcom_file.read()))
-      try:
-        parser = GedcomParser(path)
-        parser.parse()
-        messages.success(request, _("GEDCOM imported successfully."))
-        clear_genealogy_caches()
-      except Exception as e:
-        messages.error(request, _("Error importing GEDCOM: %(error)s") % {"error": str(e)})
-      finally:
-        default_storage.delete(path)
-
+      success, message = do_import_gedcom(request.FILES["gedcom_file"])
+      if success:
+        messages.success(request, message)
+      else:
+        messages.error(request, message)
       return redirect("genealogy:dashboard")
   else:
     form = GedcomImportForm()

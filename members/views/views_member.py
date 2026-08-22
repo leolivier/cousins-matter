@@ -22,6 +22,12 @@ from core.utils import (
 
 from ..forms import MemberUpdateForm, NotifyDeathForm
 from ..models import Family, Member
+from ..services.members import (
+  do_activate_member,
+  get_members_page_queryset,
+  do_init_member,
+  do_notify_death,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -46,13 +52,6 @@ def logout_member(request):
   return redirect("members:login")
 
 
-def editable(request, member):
-  if request.user.is_superuser:
-    return True
-  manager = member.member_manager or member
-  return manager.id == request.user.id
-
-
 def member_manager_name(member) -> str | None:
   return member.member_manager.full_name if member and member.member_manager else None
 
@@ -64,16 +63,12 @@ def get_search_query(request) -> str | None:
 
 
 def get_members_page(request, page_num: int) -> Page:
-  members = Member.objects
   # print("request.GET", request.GET)
 
   q: str | None = get_search_query(request)
-  members = members.fuzzy_search(q) if q else members.all()
   sort_by = request.GET.get("member_sort")
   order = "-" if request.GET.get("toggle_slider") == "option2" else ""  # default is ascending
-  sort_by = [sort_by] if sort_by else ["last_name", "first_name"]  # default order
-  sort_by = [order + s for s in sort_by]
-  members = members.order_by(*sort_by)
+  members = get_members_page_queryset(q, sort_by, order)
   page_size = request.GET.get("page_size", settings.DEFAULT_MEMBERS_PAGE_SIZE)
   # print(f"page_size: {page_size}, page_num: {page_num}, sort_by: {sort_by}, filters: {filters}")
   return Paginator.get_page(
@@ -110,7 +105,7 @@ class MemberDetailView(generic.DetailView):
   def get_context_data(self, **kwargs):
     member = self.object
     return super().get_context_data(**kwargs) | {
-      "can_edit": editable(self.request, member),
+      "can_edit": _can_edit_member(self.request, member),
       "member_manager_name": member.member_manager.username if member.member_manager else None,
       "hobbies_list": [s.strip() for s in member.hobbies.split(",")] if member.hobbies else [],
       "notify_death_form": NotifyDeathForm(),
@@ -132,8 +127,7 @@ class CreateManagedMemberView(generic.CreateView):
     return HttpResponseForbidden(_("Only superusers can create members"))
 
   def get(self, request, *args, **kwargs):
-    ko = self.check_before_creation(request)
-    if ko:
+    if (ko := self.check_before_creation(request)) is not None:
       return ko
     return render(
       request,
@@ -145,17 +139,12 @@ class CreateManagedMemberView(generic.CreateView):
     )
 
   def post(self, request, *args, **kwargs):
-    ko = self.check_before_creation(request)
-    if ko:
+    if (ko := self.check_before_creation(request)) is not None:
       return ko
     form = MemberUpdateForm(request.POST, request.FILES)
     if form.is_valid():
       member = form.save()
-      # if new managed member is created, it must be inactivated
-      member.is_active = False
-      # force member_manager to the logged in user
-      member.member_manager = Member.objects.get(id=request.user.id)
-      member.save(update_fields=["is_active", "member_manager"])
+      do_init_member(member, request.user.id)
       messages.success(request, _("Member successfully created"))
       return redirect("members:detail", username=member.username)
 
@@ -172,10 +161,8 @@ class CreateManagedMemberView(generic.CreateView):
 def _can_edit_member(request, member):
   if request.user.is_superuser:
     return True
-  if member.member_manager is None:
-    return member.id == request.user.id
-  else:
-    return member.member_manager.id == request.user.id
+  authorized_editor = member.member_manager or member
+  return request.user.id == authorized_editor.id
 
 
 class EditMemberView(generic.UpdateView):
@@ -288,7 +275,7 @@ def delete_member(request, username):
   else:
     delete_title = _("Delete member")
     delete_msg = _("Are you sure you want to delete %(name)s's account and all associated data?") % {"name": member.full_name}
-  return confirm_delete_modal(request, delete_title, delete_msg)
+  return confirm_delete_modal(request, delete_title, delete_msg, member.full_name)
 
 
 def search_members(request):
@@ -330,42 +317,21 @@ def notify_death(request, username):
 
     message = request.POST.get("message")
 
-    # Send email to admins
-    emails = list(
-      Member.objects.filter(is_superuser=True, email__isnull=False).exclude(email="").values_list("email", flat=True)
-    )
-
-    if emails:
-      from django.core.mail import send_mail
-      from django.template.loader import render_to_string
-
-      subject = _("Death notification for %(member)s") % {"member": member.full_name}
-      email_context = {
-        "member": member,
-        "sender": request.user,
-        "deathdate": deathdate,
-        "message": message,
-        "site_name": settings.SITE_NAME,
-      }
-
-      html_message = render_to_string("members/email/notify_death_email.html", email_context)
-      plain_message = render_to_string(
-        "members/email/notify_death_email.html", email_context
-      )  # simplify for now, or strip tags
-
-      from django.utils.html import strip_tags
-
-      plain_message = strip_tags(html_message)
-
-      send_mail(
-        subject,
-        plain_message,
-        settings.DEFAULT_FROM_EMAIL,
-        emails,
-        html_message=html_message,
-      )
+    do_notify_death(member, request.user, deathdate, message)
 
     messages.success(request, _("The administrator has been notified."))
     return htmx_refresh()
 
   return render(request, "members/members/notify_death_form.html", {"member": member})
+
+
+def activate_member(request, username):
+  """activate the member with username"""
+  member = get_object_or_404(Member, username=username)
+  (status, message) = do_activate_member(member, request)
+  if status == "error":
+    messages.error(request, message)
+  elif status == "success":
+    messages.success(request, message)
+
+  return redirect(reverse("members:detail", kwargs={"username": member.username}))

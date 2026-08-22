@@ -8,14 +8,7 @@ from core.htmx import htmx_refresh, htmx_redirect
 from core.utils import check_edit_permission, confirm_delete_modal
 from ..models import Poll, Question
 from ..forms.upsert_forms import PollUpsertForm, QuestionUpsertForm
-
-
-def managed_closed_list(poll, form):
-  if poll.open_to == Poll.OPEN_TO_CLOSED:
-    poll.closed_list.set(form.cleaned_data.get("closed_list"))
-    poll.save()
-  elif poll.closed_list.count() > 0:
-    raise ValueError("Closed list must be empty for this type of Poll")
+from ..services import manage_closed_list
 
 
 class PollCreateView(generic.CreateView):
@@ -39,7 +32,7 @@ class PollCreateView(generic.CreateView):
     form.instance.owner = request.user
     if form.is_valid():
       poll = form.save()
-      managed_closed_list(poll, form)
+      manage_closed_list(poll, form.cleaned_data.get("closed_list"))
       messages.success(request, self.success_message)
       return redirect(reverse(self.redirect_to, args=(poll.pk,)))
     else:
@@ -78,7 +71,7 @@ class PollUpdateView(generic.UpdateView):
     form = self.form_class(request.POST, instance=poll)
     if form.is_valid():
       form.save()
-      managed_closed_list(poll, form)
+      manage_closed_list(poll, form)
       messages.success(request, self.success_message)
       return redirect(reverse(self.redirect_to, args=(poll.pk,)))
     else:

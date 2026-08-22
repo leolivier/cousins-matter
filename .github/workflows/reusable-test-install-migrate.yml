@@ -37,14 +37,14 @@ jobs:
           # then run test
           ./scripts/tests/test_install.sh -g
 
-      - name: test migrate v1 to v2 script
-        run: |
-          # make sure no previous containers are running
-          docker compose down -v
-          # and no unused volumes are remaining
-          docker volume prune -f
-          # then run test
-          ./scripts/tests/test_migrate_v1_v2.sh -g
+      # Migration from v1 is not supported anymore for tenants version      # - name: test migrate v1 to v2 script
+      #   run: |
+      #     # make sure no previous containers are running
+      #     docker compose down -v
+      #     # and no unused volumes are remaining
+      #     docker volume prune -f
+      #     # then run test
+      #     ./scripts/tests/test_migrate_v1_v2.sh -g
 
       - name: Show docker-compose services logs on failure
         if: failure()

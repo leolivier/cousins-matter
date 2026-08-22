@@ -91,8 +91,11 @@ mkmig:
 
 minify:
 	app="$(a)"; \
-	if [ -z "$$app" ]; then app="."; fi; \
-	css-html-js-minify $$app
+	if [ -z "$$app" ]; then \
+	  for d in $$(ls -d */); do if [ "$$d" != node_modules/ ]; then css-html-js-minify --quiet $$d; fi; done; \
+	else \
+	  css-html-js-minify --quiet $$app; \
+	fi
 
 check:
 	ruff format -q .

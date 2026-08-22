@@ -530,8 +530,8 @@ requires-dist = [
     { name = "channels-redis", specifier = "~=4.3.0" },
     { name = "crispy-bulma", specifier = "~=0.12.0" },
     { name = "daphne", specifier = "~=4.2.2" },
-    { name = "django", specifier = "~=6.0.6" },
-    { name = "django-allauth", extras = ["socialaccount"], specifier = "~=65.18.0" },
+    { name = "django", specifier = ">=6.0.7,<6.2.0" },
+    { name = "django-allauth", extras = ["socialaccount"], specifier = ">=65.18,<65.20" },
     { name = "django-cors-headers", specifier = "~=4.9.0" },
     { name = "django-crispy-forms", specifier = "~=2.6" },
     { name = "django-email-validation", specifier = "~=2.1.1" },
@@ -539,7 +539,7 @@ requires-dist = [
     { name = "django-htmx", specifier = ">=1.27" },
     { name = "django-ipware", specifier = "~=7.0.1" },
     { name = "django-q2", specifier = "~=1.10.0" },
-    { name = "django-simple-captcha", specifier = "~=0.6.3" },
+    { name = "django-simple-captcha", specifier = ">=0.6.3,<0.8.0" },
     { name = "django-storages", extras = ["dropbox", "s3"], specifier = "~=1.14.6" },
     { name = "fpdf", specifier = "~=1.7.2" },
     { name = "packaging", specifier = "~=26.2" },
@@ -557,7 +557,7 @@ dev = [
     { name = "bandit", specifier = ">=1.9.4" },
     { name = "coverage", specifier = ">=7.14.3" },
     { name = "css-html-js-minify", specifier = ">=2.5.5" },
-    { name = "django-debug-toolbar", specifier = "~=7.0.0" },
+    { name = "django-debug-toolbar", specifier = ">=7.0,<7.2" },
     { name = "factory-boy", specifier = "~=3.3.3" },
     { name = "mypy", specifier = "==2.3.0" },
     { name = "pip-audit", specifier = ">=2.10.1" },
@@ -751,7 +751,7 @@ cufft = [
     { name = "nvidia-nvjitlink", marker = "(platform_machine == 'AMD64' and platform_python_implementation != 'PyPy' and sys_platform == 'win32') or (platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine == 'x86_64' and sys_platform == 'linux')" },
 ]
 cufile = [
-    { name = "nvidia-cufile", marker = "(platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine == 'x86_64' and sys_platform == 'linux')" },
+    { name = "nvidia-cufile", marker = "platform_machine == 'aarch64' or platform_machine == 'x86_64'" },
 ]
 cupti = [
     { name = "nvidia-cuda-cupti", marker = "(platform_machine == 'AMD64' and platform_python_implementation != 'PyPy' and sys_platform == 'win32') or (platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine == 'x86_64' and sys_platform == 'linux')" },
@@ -2880,11 +2880,11 @@ wheels = [
 
 [[package]]
 name = "sqlparse"
-version = "0.5.5"
+version = "0.6.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/90/76/437d71068094df0726366574cf3432a4ed754217b436eb7429415cf2d480/sqlparse-0.5.5.tar.gz", hash = "sha256:e20d4a9b0b8585fdf63b10d30066c7c94c5d7a7ec47c889a2d83a3caa93ff28e", size = 120815, upload-time = "2025-12-19T07:17:45.073Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/5f/d3/3f06a1006f2261d1342aefb3c71eed02f5d4ca5bdbecd86ebc12ad38306e/sqlparse-0.6.0.tar.gz", hash = "sha256:113c35c75365ab9cc9c7231d68c6428fb11c085fc8e9eb1ad659b7ddbf6cd2b9", size = 178477, upload-time = "2026-08-13T19:16:06.396Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/49/4b/359f28a903c13438ef59ebeee215fb25da53066db67b305c125f1c6d2a25/sqlparse-0.5.5-py3-none-any.whl", hash = "sha256:12a08b3bf3eec877c519589833aed092e2444e68240a3577e8e26148acc7b1ba", size = 46138, upload-time = "2025-12-19T07:17:46.573Z" },
+    { url = "https://files.pythonhosted.org/packages/d9/50/f00935da0ec7cbf325f8dc4f772ae46fbc7b672dd62876e73f0a94adda57/sqlparse-0.6.0-py3-none-any.whl", hash = "sha256:b861c0288ce2fa56209a9a6412d2e066ac664b3873b89c26c9d8415e8e32996f", size = 50070, upload-time = "2026-08-13T19:16:04.062Z" },
 ]
 
 [[package]]

@@ -55,11 +55,11 @@
     <div class="level-item">
       <form>
         <div class="field has-addons">
-          <label class="label my-auto mr-2">{%trans "Sort by"%} </label>
+          <label class="label my-auto mr-2" for="member_sort">{%trans "Sort by"%} </label>
           <div class="control">
             <div class="select">
               {%with member_sort=request.GET.member_sort|default:"last_name" %}
-              <select name="member_sort" data-autosubmit>
+              <select name="member_sort" id="member_sort" data-autosubmit>
                 <option value="first_name" {%if member_sort == 'first_name' %}selected{%endif%}>{% translate "First name" %}</option>
                 <option value="last_name" {%if member_sort == 'last_name' %}selected{%endif%}>{% translate "Last name" %}</option>
                 <option value="birthdate" {%if member_sort == 'birthdate' %}selected{%endif%}>{% translate "Birthdate" %}</option>

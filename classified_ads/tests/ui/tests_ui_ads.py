@@ -150,7 +150,7 @@ class ClassifiedAdsDetailUITest(ClassifiedAdsUITestBase):
   def test_detail_non_owner_buttons(self):
     """A non-owner user should see the send message button instead of edit/delete."""
     # Login as the other user
-    self.login("otheruser", "password")
+    self.login_as(self.other_user)
     self.goto_page("classified_ads:detail", args=[self.ad.pk])
 
     # Send message button should be visible for non-owner
@@ -320,7 +320,7 @@ class ClassifiedAdsMessageUITest(ClassifiedAdsUITestBase):
   def test_send_message_modal_for_non_owner(self):
     """A non-owner should be able to open the send message modal."""
     # Login as the other user
-    self.login("otheruser", "password")
+    self.login_as(self.other_user)
     self.goto_page("classified_ads:detail", args=[self.ad.pk])
 
     # Click the send message button

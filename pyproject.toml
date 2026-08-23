@@ -39,7 +39,7 @@ dev = [
     "css-html-js-minify>=2.5.5",
     "django-debug-toolbar>=7.0,<7.2",
     "factory-boy~=3.3.3",
-    "mypy==2.3.0",
+    "mypy==2.3.1",
     "pip-audit>=2.10.1",
     "playwright>=1.61.0",
     "pre-commit>=4.6.1",

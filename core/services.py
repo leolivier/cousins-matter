@@ -60,6 +60,7 @@ def build_site_stats(site_url: str, release_text: dict) -> dict:
   """
   from tenants.authz import admin_or_superusers
   from tenants.scoping import get_current_tenant
+
   _admins = admin_or_superusers(get_current_tenant())
   admin = _admins[0] if _admins else None
   all_messages_count = ChatMessage.objects.count()
@@ -134,8 +135,8 @@ def build_site_stats(site_url: str, release_text: dict) -> dict:
     "admin": {
       "key": _("Administrator"),
       "stats": [
-        {"key": _("This site is managed by"), "value": admin.full_name},
-        {"key": _("Administrator email"), "value": admin.email},
+        {"key": _("This site is managed by"), "value": admin.full_name if admin else _("(no admin yet)")},
+        {"key": _("Administrator email"), "value": admin.email if admin else ""},
       ],
     },
   }

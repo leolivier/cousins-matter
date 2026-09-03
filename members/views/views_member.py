@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.core.paginator import Page
 from django.http import HttpResponseForbidden, JsonResponse
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -142,8 +143,10 @@ class CreateManagedMemberView(generic.CreateView):
       return ko
     form = MemberUpdateForm(request.POST, request.FILES)
     if form.is_valid():
-      member = form.save()
-      do_init_member(member, request.user.id)
+      # atomic: a managed member is never left active without its member_manager
+      with transaction.atomic():
+        member = form.save()
+        do_init_member(member, request.user.id)
       messages.success(request, _("Member successfully created"))
       return redirect("members:detail", username=member.username)
 

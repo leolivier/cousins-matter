@@ -6,6 +6,7 @@ import tempfile
 import zipfile
 
 from django.core.exceptions import SuspiciousFileOperation
+from django.db import transaction
 from django.db.models import Count, ObjectDoesNotExist, Prefetch
 from django.forms import ValidationError
 from django.utils.translation import gettext as _
@@ -137,15 +138,18 @@ def _get_or_create_gallery(path: str, zimport: ZipImport):
 
   name = os.path.basename(os.path.normpath(path))
   description = _("Imported from zipfile directory %(path)s") % {"path": path}
-  parent = _get_parent_gallery(path, zimport)
+  # Create the gallery and its not-yet-existing ancestors in a single transaction, so a
+  # failure mid-chain never leaves a half-built gallery tree behind.
+  with transaction.atomic():
+    parent = _get_parent_gallery(path, zimport)
 
-  # Create gallery if it does not already exists.
-  # Don't update it otherwise as we might overwrite handwritten description.
-  try:
-    gallery = Gallery.objects.get(name=name, parent=parent)
-  except ObjectDoesNotExist:
-    gallery = Gallery.objects.create(name=name, parent=parent, description=description, owner_id=zimport.owner_id)
-    zimport.nbGalleries += 1
+    # Create gallery if it does not already exists.
+    # Don't update it otherwise as we might overwrite handwritten description.
+    try:
+      gallery = Gallery.objects.get(name=name, parent=parent)
+    except ObjectDoesNotExist:
+      gallery = Gallery.objects.create(name=name, parent=parent, description=description, owner_id=zimport.owner_id)
+      zimport.nbGalleries += 1
   # store gallery in the cache
   zimport.galleries[path] = gallery
   return gallery

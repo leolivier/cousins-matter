@@ -3,6 +3,7 @@ from itertools import chain
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db import transaction
 from django.db.models import Count, Q
 from django.db.models.functions import ExtractYear
 from django.utils import formats
@@ -287,7 +288,10 @@ def do_import_gedcom(gedcom_file):
   path = default_storage.save("tmp/" + gedcom_file.name, ContentFile(gedcom_file.read()))
   try:
     parser = GedcomParser(path)
-    parser.parse()
+    # Parse + DB writes as one transaction: a failure mid-import rolls back the partially
+    # imported persons/families instead of leaving a broken genealogy.
+    with transaction.atomic():
+      parser.parse()
     clear_genealogy_caches()
     return (True, _("GEDCOM imported successfully."))
   except Exception as e:

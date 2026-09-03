@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -63,6 +64,24 @@ class PollsVoteView(generic.View):
     questions = list(poll.questions.all())
     question_form_classes = self.get_question_form_classes(questions)
 
+    # Validate all forms BEFORE touching the database, so that an invalid submission
+    # never destroys the member's previous answers.
+    question_forms = []
+    answers = []
+    has_errors = False
+    for question_data in question_form_classes:
+      question = question_data["question"]
+      form = question_data["form"](request.POST, question=question, prefix=f"q{question.id}")
+      if form.is_valid():
+        answer = form.save(commit=False)
+        answer.question = question
+        answers.append(answer)
+      else:
+        has_errors = True
+      question_forms.append({"question": question, "form": form})
+    if has_errors:
+      return render(request, self.template_name, {"poll": poll, "questions": question_forms})
+
     # are we modifyning an existing answer for that poll and that user?
     poll_answer = PollAnswer.objects.filter(poll=poll, member=request.user)
     if poll_answer.exists():
@@ -72,29 +91,18 @@ class PollsVoteView(generic.View):
       poll_answer = PollAnswer(poll=poll, member=request.user)
       poll_answer.save()
 
-    # Delete all previous answers in bulk to avoid N+1 queries
-    # Note: We iterate through subclasses because Django's multi-table inheritance
-    # requires deleting from each concrete table separately to maintain referential integrity
-    Answer.set_subclasses()
-    for subclass in Answer.subclasses:
-      subclass.objects.filter(poll_answer=poll_answer, question__in=questions).delete()
-
-    has_errors = False
-    question_forms = []
-    for question_data in question_form_classes:
-      question = question_data["question"]
-      form_class = question_data["form"]
-      form = form_class(request.POST, question=question, prefix=f"q{question.id}")
-      if form.is_valid():
-        answer = form.save(commit=False)
-        answer.question = question
+    # Replace the ballot atomically: the delete of the previous answers and the save of
+    # the new ones commit together or not at all.
+    with transaction.atomic():
+      # Delete all previous answers in bulk to avoid N+1 queries
+      # Note: We iterate through subclasses because Django's multi-table inheritance
+      # requires deleting from each concrete table separately to maintain referential integrity
+      Answer.set_subclasses()
+      for subclass in Answer.subclasses:
+        subclass.objects.filter(poll_answer=poll_answer, question__in=questions).delete()
+      for answer in answers:
         answer.poll_answer = poll_answer
         answer.save()
-      else:
-        has_errors = True
-      question_forms.append({"question": question, "form": form})
-    if has_errors:
-      return render(request, self.template_name, {"poll": poll, "questions": question_forms})
     messages.success(request, _("Your answers have been saved"))
     return redirect(reverse(self.redirect_to, args=(poll.id,)))
 

@@ -8,6 +8,7 @@ from typing import Literal
 
 from django.conf import settings
 from django.core.files.storage import default_storage
+from django.db import transaction
 from django.utils.text import slugify
 from django.utils.translation import (
   gettext as _,
@@ -298,7 +299,10 @@ def create_member(context: ImportContext, row_data: MemberImportData):
   row_data.current_member.password = generate_random_string(16)
 
 
+@transaction.atomic
 def import_row(context: ImportContext, csv_row: dict):
+  # the whole row (member create/update, address, final save) commits together or not at all,
+  # so a failing row never leaves a member without its address or half-updated fields
   if context.lang:
     translation_activate(context.lang)
   logger.debug(f"start effectively importing row for username {csv_row[t('username')]}. lang: {context.lang}")

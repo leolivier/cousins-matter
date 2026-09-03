@@ -156,6 +156,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     is absent, so the lookup runs in a sync helper that enters tenant_context
     itself. Returns None when the room does not exist in this tenant.
     """
+
     def _get():
       with tenant_context(self._tenant()):
         return ChatRoom.objects.filter(slug=room_slug).first()
@@ -201,9 +202,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     member = await Member.objects.aget(pk=member_id)
     # explicit tenant: acreate evaluates on another thread where the
     # thread-local fallback would land the message on the default tenant
-    message = await ChatMessage.objects.acreate(
-      member=member, room=room, content=msg_content, tenant_id=room.tenant_id
-    )
+    message = await ChatMessage.objects.acreate(member=member, room=room, content=msg_content, tenant_id=room.tenant_id)
     url = self._build_absolute_url(reverse("chat:room", args=[room_slug]))
     await sync_to_async(check_followers)(None, room, await room.aowner(), url, new_internal_object=message, author=member)
     return message

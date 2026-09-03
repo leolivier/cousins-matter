@@ -8,6 +8,7 @@ from tenants.models import Tenant
 class ChatRoomFactory(DjangoModelFactory):
   class Meta:
     model = ChatRoom
+
   tenant = factory.LazyFunction(Tenant.get_default)
 
   name = factory.Sequence(lambda n: f"Room {n}")

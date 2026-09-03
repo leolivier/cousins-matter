@@ -125,8 +125,7 @@ class ChatTenantWSTests(TransactionTestCase):
     communicator = self._comm()
     await communicator.connect()
     await communicator.send_to(
-      text_data='{"action": "update_chat_message", "args": {"msgid": "%s", "message": "hacked"}}'
-      % self.msg_a.pk
+      text_data='{"action": "update_chat_message", "args": {"msgid": "%s", "message": "hacked"}}' % self.msg_a.pk
     )
     await communicator.disconnect()
     message = await ChatMessage.unscoped.aget(pk=self.msg_a.pk)

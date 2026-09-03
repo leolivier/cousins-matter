@@ -53,10 +53,7 @@ class ChatRoom(TenantModel):
     self.slug = slugify(self.name)
     # slug uniqueness is now per-tenant (constraint instead of unique=True);
     # raise the same coded ValidationError the create flow expects.
-    if (
-      self.slug
-      and self.__class__.objects.exclude(pk=self.pk).filter(slug=self.slug).exists()
-    ):
+    if self.slug and self.__class__.objects.exclude(pk=self.pk).filter(slug=self.slug).exists():
       raise ValidationError(
         {"slug": _("A room with a similar name already exists.")},
         code="slug",

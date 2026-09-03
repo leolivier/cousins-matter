@@ -128,10 +128,10 @@ class MemberEditRolesUITest(RoleAwareUITestBase):
   def test_regular_member_cannot_edit_other_member(self):
     # Create an extra member
     self.other_member = MemberFactory(
-        username="othermember",
-        first_name="Other",
-        last_name="Member",
-        birthdate="1990-01-01",
+      username="othermember",
+      first_name="Other",
+      last_name="Member",
+      birthdate="1990-01-01",
     )
 
     self.login_as_regular_member()

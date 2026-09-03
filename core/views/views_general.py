@@ -7,11 +7,9 @@ import zipfile
 from hashlib import blake2b
 from wsgiref.util import FileWrapper
 
-import redis
 from django.contrib.auth.decorators import login_not_required
 from django.contrib.auth.views import PasswordResetView as DefaultPasswordResetView
 from django.core.files.storage import default_storage
-from django.db import DatabaseError, connections
 from django.http import (
   Http404,
   HttpResponseNotModified,
@@ -24,6 +22,7 @@ from django_q.tasks import async_task, result
 
 from core.forms import PasswordResetForm
 from core.mixins import LoginNotRequiredMixin
+from core.services import health_check
 
 logger = logging.getLogger(__name__)
 
@@ -95,30 +94,6 @@ def download_public_media(request, media) -> StreamingHttpResponse | HttpRespons
   return _download_media(request, Path("public") / media)
 
 
-redis_client = redis.Redis(
-  host=os.getenv("REDIS_HOST", "redis"),
-  port=int(os.getenv("REDIS_PORT", "6379")),
-  decode_responses=True,
-)
-
-
-@login_not_required
-def health_check() -> dict[str, str]:
-  try:
-    with connections["default"].cursor() as cursor:
-      cursor.execute("SELECT 1")
-      cursor.fetchone()
-  except DatabaseError as e:
-    logger.error(f"Database error: {e}")
-    return {"status": "db_error", "msg": "database error, see logs"}
-  try:
-    redis_client.ping()
-  except redis.exceptions.ConnectionError as e:
-    logger.error(f"Redis error: {e}")
-    return {"status": "redis_error", "msg": "redis error, see logs"}
-  return {"status": "ok"}
-
-
 @login_not_required
 def health(request) -> JsonResponse:
   """
@@ -149,7 +124,7 @@ def qhealth(request) -> JsonResponse:
   :rtype: JsonResponse
   :status: 200 (OK) or 503 (Service Unavailable)
   """
-  task_id = async_task("core.views.views_general.health_check")
+  task_id = async_task("core.services.health_check")
   check = result(task_id, 1000)
   status = 200 if check and "status" in check and check["status"] == "ok" else 503
   return JsonResponse(check, status=status, safe=False)

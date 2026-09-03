@@ -42,6 +42,7 @@ class ModalAddressMixin:
     assert request.htmx  # nosec B101
     if form.is_valid():
       address = form.save()
+      # TODO: very inefficient! refactor to add a search field
       addresses = Address.objects.all()
       return render(
         request, "members/address/address_form.html#set_address", {"selected_address": address, "addresses": addresses}

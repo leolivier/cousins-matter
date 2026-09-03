@@ -1,8 +1,4 @@
-from django.conf import settings
-from tenants.settings_overrides import tenant_setting
-
 from django.contrib import messages
-from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -13,6 +9,7 @@ from classified_ads.forms import AdPhotoForm, ClassifiedAdForm, MessageForm
 from core.utils import check_edit_permission, confirm_delete_modal
 
 from .models import AdPhoto, Categories, ClassifiedAd
+from .services import do_send_ad_message, get_next_prev_photo
 
 
 class CreateAdView(generic.CreateView):
@@ -111,24 +108,6 @@ class AdPhotoAddView(generic.View):
       return HttpResponseClientRefresh()
 
 
-def get_next_prev_photo(pk, side):
-  # this raises an exception Photo.DoesNotExist if the photo doesn't exist
-  ad_id = AdPhoto.objects.only("ad_id").get(pk=pk).ad_id
-  photo = AdPhoto.objects.filter(ad=ad_id).order_by("id")
-
-  match side:
-    case "prev":
-      photo = photo.filter(id__lt=pk).last()
-    case "next":
-      photo = photo.filter(id__gt=pk).first()
-    case None:
-      photo = photo.get(id=pk)
-    case _:
-      raise ValueError("Invalid side: %s" % side)
-
-  return photo or AdPhoto.objects.get(id=pk)
-
-
 def get_fullscreen_photo(request, pk):
   assert request.htmx  # nosec B101
   try:
@@ -169,32 +148,7 @@ def delete_photo(request, pk):
 def send_message(request, pk):
   ad = get_object_or_404(ClassifiedAd, pk=pk)
   if request.method == "POST":
-    # Send a message to the ad owner by email
-    email = ad.owner.email
-    subject = _("Message from %(username)s about ad %(title)s") % {
-      "username": request.user.full_name,
-      "title": ad.title,
-    }
-    message = _("""Hello %(recipient)s,
-%(username)s sent you the following message about ad %(title)s:
-==========
-%(message)s
-==========
-You can reply to him/her directly at this address: %(email)s.
-Best,
-The %(site_name)s admin team
-
-%(site_url)s
-""") % {
-      "recipient": ad.owner.full_name,
-      "username": request.user.full_name,
-      "title": ad.title,
-      "message": request.POST.get("message"),
-      "site_name": tenant_setting("site_name"),
-      "site_url": settings.SITE_DOMAIN,
-      "email": request.user.email,
-    }
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
+    do_send_ad_message(request.user, ad, request.POST.get("message"))
     messages.success(request, _("Message sent successfully"))
     return HttpResponseClientRefresh()
   return render(request, "classified_ads/send-message.html", {"form": MessageForm(), "ad": ad})

@@ -1,5 +1,5 @@
-# Reusable workflow to run installation and migration test scripts.
-name: Reusable Test Install & Migrate
+# Reusable workflow to run installation test scripts.
+name: Reusable Test Install
 
 on:
   workflow_call:
@@ -9,7 +9,7 @@ env:
   ENVIRONMENT: 'docker-test'
 
 jobs:
-  test-install-migrate:
+  test-install:
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -36,15 +36,6 @@ jobs:
           docker volume prune -f
           # then run test
           ./scripts/tests/test_install.sh -g
-
-      # Migration from v1 is not supported anymore for tenants version      # - name: test migrate v1 to v2 script
-      #   run: |
-      #     # make sure no previous containers are running
-      #     docker compose down -v
-      #     # and no unused volumes are remaining
-      #     docker volume prune -f
-      #     # then run test
-      #     ./scripts/tests/test_migrate_v1_v2.sh -g
 
       - name: Show docker-compose services logs on failure
         if: failure()

@@ -40,7 +40,7 @@ jobs:
   test-install-migrate:
     needs: lint-and-build
     if: ${{ github.actor != 'dependabot[bot]' }}
-    uses: ./.github/workflows/reusable-test-install-migrate.yml
+    uses: ./.github/workflows/reusable-test-install.yml
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────

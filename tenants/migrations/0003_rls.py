@@ -144,6 +144,9 @@ def revert_rls(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ("tenants", "0002_seed_tenants"),
+        # The RLS policies reference these tables: they must exist first.
+        ("members", "0017_member_tenant_role"),
+        ("galleries", "0007_tenant"),
     ]
 
     operations = [

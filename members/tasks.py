@@ -4,6 +4,8 @@ import os
 import secrets
 import string
 from typing import Literal
+
+
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.utils.text import slugify
@@ -93,6 +95,12 @@ class ImportContext:
   # tenant the imported members belong to (the importer's tenant); set on the
   # request side so the Q worker can activate it via tenant_context().
   tenant_id: int | None = None
+
+  # errors, warnings and users processed
+  warnings: list[str] = field(default_factory=list)
+  errors: list[str] = field(default_factory=list)
+  users: list[str] = field(default_factory=list)
+  current_count: int = 0
 
   def register(self):
     MEMBER_IMPORTS[self.group] = self

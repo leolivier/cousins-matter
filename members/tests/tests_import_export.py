@@ -414,8 +414,8 @@ class TestSelectViews(TestMemberImport):
     response = self.client.get(reverse("members:import_progress", args=["non-existent-id"]))
     self.assertEqual(response.status_code, 404)
 
-  @patch("members.views.views_import_export.result_group")
-  @patch("members.views.views_import_export.count_group")
+  @patch("members.services.import_export.result_group")
+  @patch("members.services.import_export.count_group")
   def test_import_progress_success(self, mock_count, mock_result):
     from members.tasks import ImportContext, MemberImportData
 
@@ -453,7 +453,7 @@ class TestSelectViews(TestMemberImport):
     with self.assertRaises(ValidationError):
       self.client.get(reverse("members:export_members_to_csv"))
 
-  @patch("members.views.views_import_export.import_csv")
+  @patch("members.views.views_import_export.do_import_members_from_csv")
   def test_import_csv_exception(self, mock_import):
     mock_import.side_effect = Exception("Major Fail")
     csv_file = get_test_file("import_members.csv")
@@ -476,8 +476,3 @@ class TestSelectViews(TestMemberImport):
     self.assertEqual(response.status_code, 200)
     content = response.content.decode()
     self.assertIn("Blackpool", content)
-
-  def test_t_function(self):
-    from members.views.views_import_export import t
-
-    self.assertEqual(t("username"), ALL_FIELD_NAMES["username"])

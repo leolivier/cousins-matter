@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Case, When, Value, BooleanField
 from django.template.defaultfilters import slugify
@@ -6,9 +7,10 @@ from asgiref.sync import sync_to_async
 from enum import Enum
 
 from members.models import Member
+from tenants.scoping import TenantManager, TenantModel
 
 
-class ChatRoomManager(models.Manager):
+class ChatRoomManager(TenantManager):
   def public(self):
     return self.filter(privatechatroom__isnull=True)
 
@@ -22,12 +24,12 @@ class ChatRoomManager(models.Manager):
     return await self.afilter(privatechatroom__isnull=False)
 
 
-class ChatRoom(models.Model):
+class ChatRoom(TenantModel):
   # use ChatRoomManager when using ChatRoom.objects
   objects = ChatRoomManager()
 
   name = models.CharField(max_length=255)
-  slug = models.CharField(max_length=255, blank=True, unique=True)
+  slug = models.CharField(max_length=255, blank=True)
   date_added = models.DateTimeField(auto_now_add=True)
   followers = models.ManyToManyField(
     Member, related_name="followed_chat_rooms", blank=True, limit_choices_to={"is_active": True}
@@ -38,7 +40,10 @@ class ChatRoom(models.Model):
     verbose_name_plural = _("chat rooms")
     ordering = ("date_added",)
     indexes = [
-      models.Index(fields=["slug"]),
+      models.Index(fields=["tenant", "slug"]),
+    ]
+    constraints = [
+      models.UniqueConstraint(fields=("tenant", "slug"), name="chat room slugs are unique inside a tenant"),
     ]
 
   def __str__(self):
@@ -46,6 +51,16 @@ class ChatRoom(models.Model):
 
   def clean(self):
     self.slug = slugify(self.name)
+    # slug uniqueness is now per-tenant (constraint instead of unique=True);
+    # raise the same coded ValidationError the create flow expects.
+    if (
+      self.slug
+      and self.__class__.objects.exclude(pk=self.pk).filter(slug=self.slug).exists()
+    ):
+      raise ValidationError(
+        {"slug": _("A room with a similar name already exists.")},
+        code="slug",
+      )
 
   def save(self, *args, **kwargs):
     self.full_clean()
@@ -99,7 +114,7 @@ class MessageStatus(Enum):
   READ = "read"
 
 
-class ChatMessage(models.Model):
+class ChatMessage(TenantModel):
   member = models.ForeignKey(Member, on_delete=models.CASCADE)
   room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
   content = models.TextField(_("message"), max_length=2 * 1024 * 1024)
@@ -112,7 +127,7 @@ class ChatMessage(models.Model):
   class Meta:
     ordering = ("date_added",)
     indexes = [
-      models.Index(fields=["room"]),
+      models.Index(fields=["tenant", "room"]),
     ]
 
   def __str__(self):
@@ -161,6 +176,10 @@ class ChatMessage(models.Model):
 
 
 class PrivateChatRoom(ChatRoom):
+  # MTI child: redeclare the scoped manager, else Django falls back to a plain
+  # (unscoped) Manager and private-room lookups would cross tenants.
+  objects = ChatRoomManager()
+
   admins = models.ManyToManyField(Member, related_name="group_chat_rooms_admins", blank=True)
 
   class Meta:

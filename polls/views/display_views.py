@@ -1,9 +1,8 @@
-from django.db.models import Q
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ..models import EventPlanner, Poll
+from ..services import get_filtered_polls
 
 
 class PollsListView(generic.ListView):
@@ -31,16 +30,7 @@ class PollsListView(generic.ListView):
     If only_closed is True, only polls with close_date less than or equal to the current time are included.
     The list is ordered by the ordering class attribute, and only the first show_last items are returned.
     """
-    filter = Q()
-    if self.only_published:
-      filter &= Q(pub_date__lte=timezone.now())
-    if not self.show_closed:
-      filter &= Q(close_date__gte=timezone.now()) | Q(close_date__isnull=True)
-    if self.only_closed:
-      filter &= Q(close_date__lte=timezone.now())
-    if self.model == Poll:  # Exclude EventPlanners
-      filter &= Q(eventplanner__isnull=True)
-    query_set = self.model.objects.filter(filter).select_related("owner").order_by(self.ordering)
+    query_set = get_filtered_polls(self.model, self.only_published, self.show_closed, self.only_closed, self.ordering)
     result = query_set[: (self.show_last or 250)]
     # print(filter, result, self.__dict__)
     return result

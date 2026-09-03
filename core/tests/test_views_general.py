@@ -70,7 +70,7 @@ class GeneralViewsTestCase(MemberTestCase):
 class HealthCheckTestCase(TestCase):
   def test_health_ok(self):
     """Test health view returns 200 status when everything is OK."""
-    with patch("core.views.views_general.redis_client") as mock_redis:
+    with patch("core.services.redis_client") as mock_redis:
       mock_redis.ping.return_value = True
       response = self.client.get(reverse("health"))
       self.assertEqual(response.status_code, 200)
@@ -86,7 +86,7 @@ class HealthCheckTestCase(TestCase):
 
   def test_health_redis_error(self):
     """Test health view returns 503 status when redis is down."""
-    with patch("core.views.views_general.redis_client") as mock_redis:
+    with patch("core.services.redis_client") as mock_redis:
       mock_redis.ping.side_effect = redis.exceptions.ConnectionError("Redis Down")
       response = self.client.get(reverse("health"))
       self.assertEqual(response.status_code, 503)

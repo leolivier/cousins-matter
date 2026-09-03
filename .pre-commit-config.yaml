@@ -1,0 +1,19 @@
+# Git hooks, versioned. Activate once per clone:
+#   make install-hooks      (runs `pre-commit install`)
+#
+# Hooks run in pre-commit-managed, isolated envs pinned by `rev` below, so the
+# tool versions are reproducible and independent of the project venv (no more
+# ./.venv vs ./venv path drift).
+minimum_pre_commit_version: '4.0.0'
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.20
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.9.4
+    hooks:
+      - id: bandit
+        args: [-c, pyproject.toml]

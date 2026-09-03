@@ -11,7 +11,7 @@ is introduced.
 """
 
 import threading
-from collections.abc import Iterator
+from collections.abc import Generator
 from contextlib import contextmanager
 
 from django.db import models
@@ -37,7 +37,7 @@ def set_current_tenant(tenant) -> None:
 
 
 @contextmanager
-def tenant_context(tenant) -> Iterator[None]:
+def tenant_context(tenant) -> Generator[None]:
   """Activate ``tenant`` within a block, restoring the previous value on exit.
 
   Use in Django-Q workers, management commands and tests where no request

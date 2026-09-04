@@ -1,6 +1,7 @@
 import logging
 
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.db.models import Count, Exists, OuterRef, Subquery
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
@@ -53,10 +54,12 @@ def do_remove_member_from_private_room(room, requester, member_name=None):
       ),
     )
   else:
-    room.followers.remove(member)
-    if is_admin:
-      room.admins.remove(member)
-    room.save()
+    # atomic: the member and admin removals commit together or not at all
+    with transaction.atomic():
+      room.followers.remove(member)
+      if is_admin:
+        room.admins.remove(member)
+      room.save()
     return (
       True,
       (_("You have left the room") if member == requester else _("%s has been removed from the room") % member.full_name),
@@ -179,23 +182,25 @@ def do_create_chat_room(user, room_name, private=False):
   """
   room_class = PrivateChatRoom if private else ChatRoom
   try:
-    new_room, created = room_class.objects.get_or_create(name=room_name)
-    if created:
-      if private:
-        # if room was created, add user who created it as member (ie followers which is reused for that) and admins
-        logger.debug("private room created, adding user who created it as member and admin")
-        new_room.followers.add(user)
-        new_room.admins.add(user)
-        new_room.save()
+    # atomic: a private room is never left orphaned without its creator as member/admin
+    with transaction.atomic():
+      new_room, created = room_class.objects.get_or_create(name=room_name)
+      if created:
+        if private:
+          # if room was created, add user who created it as member (ie followers which is reused for that) and admins
+          logger.debug("private room created, adding user who created it as member and admin")
+          new_room.followers.add(user)
+          new_room.admins.add(user)
+          new_room.save()
         # even if room was created, we don't check user followers because:
         # IT MIGHT NOT BE ADAPTED; IF SOMEONE CREATES A PRIVATE ROOM AND DOES NOT WANT TO INVITE HIS/HER FOLLOWERS,
         # NO NEED TO TELL THE FOLLOWERS THAT HE/SHE CREATED THE ROOM WHERE THE FOLLOWER WON'T BE ADDED
       # public room: follower notification is wired by the caller (needs the request)
-    else:
-      if not private and not new_room.is_public:
-        raise ValidationError(_("A private room with almost the same name already exists: %s") % new_room.name)
-      elif private and new_room.is_public:
-        raise ValidationError(_("A public room with almost the same name already exists: %s") % new_room.name)
+      else:
+        if not private and not new_room.is_public:
+          raise ValidationError(_("A private room with almost the same name already exists: %s") % new_room.name)
+        elif private and new_room.is_public:
+          raise ValidationError(_("A public room with almost the same name already exists: %s") % new_room.name)
     return (new_room, created, [])
   except ValidationError as ve:
     errors = []

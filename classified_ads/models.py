@@ -1,6 +1,6 @@
 # import json
 import os
-from django.db import models
+from django.db import models, transaction
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -136,20 +136,25 @@ class AdPhoto(models.Model):
     ]
 
   def save(self, *args, **kwargs):
-    # need to save first to upload the image
-    super().save(*args, **kwargs)
+    is_new = self.pk is None
     try:
-      self.thumbnail = create_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
-      super().save(force_update=True, update_fields=["thumbnail"])
+      # the row and its thumbnail commit together or not at all
+      with transaction.atomic():
+        # need to save first to upload the image
+        super().save(*args, **kwargs)
+        self.thumbnail = create_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
+        super().save(force_update=True, update_fields=["thumbnail"])
     except Exception as e:
-      # issue #120: if any exception during the thumbnail creation process, remove the photo from the database
-      self.delete()
+      # issue #120: if any exception during the thumbnail creation process, the transaction rolls
+      # the row back; on a new photo, also drop the image file left behind on storage
+      if is_new and self.image and self.image.storage.exists(self.image.name):
+        self.image.storage.delete(self.image.name)
       raise ValidationError(f"Error during saving photo: {e}")
 
   def delete(self, *args, **kwargs):
-    # delete the image and the thumbnail if they exist
+    super().delete(*args, **kwargs)
+    # delete the image and the thumbnail only once the row deletion succeeded
     if self.thumbnail and self.thumbnail != self.image:
       self.thumbnail.delete(False)
     if self.image:
       self.image.delete(False)
-    super().delete(*args, **kwargs)

@@ -3,7 +3,7 @@ import os
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 from core.utils import create_thumbnail
 
@@ -72,20 +72,27 @@ class Trove(models.Model):
 
   def save(self, *args, **kwargs):
     self.full_clean()  # clean before save
-    super().save(*args, **kwargs)
+    is_new = self.pk is None
     try:
-      self.thumbnail = create_thumbnail(self.picture, settings.TROVE_THUMBNAIL_SIZE)
+      # the row and its thumbnail commit together or not at all
+      with transaction.atomic():
+        super().save(*args, **kwargs)
+        self.thumbnail = create_thumbnail(self.picture, settings.TROVE_THUMBNAIL_SIZE)
 
-      super().save(force_update=True, update_fields=["thumbnail"])
+        super().save(force_update=True, update_fields=["thumbnail"])
 
     except Exception as e:
-      # issue #120: if any exception during the thumbnail creation process, remove the photo from the database
-      self.delete()
+      # issue #120: if any exception during the thumbnail creation process, the transaction rolls
+      # the row back; on a new treasure, also drop the picture file left behind on storage
+      if is_new and self.picture and default_storage.exists(self.picture.name):
+        default_storage.delete(self.picture.name)
       raise ValidationError(f"Error during saving picture: {e}")
 
   def delete(self, *args, **kwargs):
-    self.delete_picture()
     super().delete(*args, **kwargs)
+    # remove the files only once the row deletion succeeded, so a failed delete never
+    # leaves a row pointing at deleted files
+    self.delete_picture()
 
   def delete_picture(self):
     default_storage.delete(self.picture.name)

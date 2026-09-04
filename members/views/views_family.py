@@ -1,4 +1,5 @@
 import logging
+from django.db import transaction
 from django.views import generic
 from django_htmx.http import HttpResponseClientRefresh
 from django.shortcuts import get_object_or_404, render
@@ -41,14 +42,16 @@ class ModalFamilyUpsertMixin(generic.View):
   def process_form(self, request, form):
     assert request.htmx  # nosec B101
     if form.is_valid():
-      family = form.save()
-      # TODO: very inefficient! refactor to add a search field
-      families = Family.objects.all()
-      child_family_id = request.GET.get("current_family_id", "")
-      if child_family_id:
-        child_family = get_object_or_404(Family, pk=child_family_id)
-        child_family.parent = family
-        child_family.save(update_fields=["parent"])
+      # atomic: the family and the child link commit together or not at all
+      with transaction.atomic():
+        family = form.save()
+        # TODO: very inefficient! refactor to add a search field
+        families = Family.objects.all()
+        child_family_id = request.GET.get("current_family_id", "")
+        if child_family_id:
+          child_family = get_object_or_404(Family, pk=child_family_id)
+          child_family.parent = family
+          child_family.save(update_fields=["parent"])
       return render(request, "members/family/family_form.html#set_family", {"selected_family": family, "families": families})
     else:
       messages.error(request, form.errors)

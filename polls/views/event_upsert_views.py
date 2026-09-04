@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -34,10 +35,11 @@ class EventPlannerCreateView(PollCreateView):
       possible_choices = form.cleaned_data["possible_dates"]
       if not possible_choices:
         raise ValueError("No possible dates")
-      planner = form.save()
-      multichoices_planner = form.cleaned_data["multichoices_planner"]
-      closed_list = form.cleaned_data.get("closed_list")
-      create_event_planner(planner, multichoices_planner, closed_list, possible_choices)
+      with transaction.atomic():
+        planner = form.save()
+        multichoices_planner = form.cleaned_data["multichoices_planner"]
+        closed_list = form.cleaned_data.get("closed_list")
+        create_event_planner(planner, multichoices_planner, closed_list, possible_choices)
 
       messages.success(request, self.success_message)
       return redirect(reverse(self.redirect_to, args=(planner.pk,)))
@@ -64,12 +66,13 @@ class EventPlannerUpdateView(PollUpdateView):
     if form.is_valid():
       if not form.cleaned_data["possible_dates"]:
         raise ValueError("No possible dates")
-      form.save()
-      manage_closed_list(planner, form.cleaned_data.get("closed_list"))
-      multichoices_planner = form.cleaned_data["multichoices_planner"]
-      (status, message) = update_event_planner(
-        planner, multichoices_planner, possible_choices=form.cleaned_data["possible_dates"]
-      )
+      with transaction.atomic():
+        form.save()
+        manage_closed_list(planner, form.cleaned_data.get("closed_list"))
+        multichoices_planner = form.cleaned_data["multichoices_planner"]
+        (status, message) = update_event_planner(
+          planner, multichoices_planner, possible_choices=form.cleaned_data["possible_dates"]
+        )
       if status == "error":
         messages.error(request, message)
         return render(request, self.template_name, {"form": form})

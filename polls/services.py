@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -46,6 +47,7 @@ def get_poll_answer(poll, user):
   ]
 
 
+@transaction.atomic
 def manage_closed_list(poll, closed_list):
   if poll.open_to == Poll.OPEN_TO_CLOSED:
     poll.closed_list.set(closed_list)
@@ -54,6 +56,7 @@ def manage_closed_list(poll, closed_list):
     raise ValueError("Closed list must be empty for this type of Poll")
 
 
+@transaction.atomic
 def create_event_planner(planner, multichoices_planner, closed_list, possible_choices):
   manage_closed_list(planner, closed_list)
   question_text = _("Choose dates") if multichoices_planner else _("Choose one date")

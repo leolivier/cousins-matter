@@ -538,7 +538,7 @@ requires-dist = [
     { name = "django-environ", specifier = "~=0.14.0" },
     { name = "django-htmx", specifier = ">=1.27" },
     { name = "django-ipware", specifier = "~=7.0.1" },
-    { name = "django-q2", specifier = "~=1.10.0" },
+    { name = "django-q2", specifier = ">=1.10,<1.12" },
     { name = "django-simple-captcha", specifier = ">=0.6.3,<0.8.0" },
     { name = "django-storages", extras = ["dropbox", "s3"], specifier = "~=1.14.6" },
     { name = "fpdf", specifier = "~=1.7.2" },

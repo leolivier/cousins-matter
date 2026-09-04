@@ -50,4 +50,4 @@ ai = [
     "headroom-ai[code,mcp,memory,proxy,ml]>=0.32.0",
 ]
 [tool.bandit]
-exclude_dirs = [".venv", "tests", "__pycache__", ".git", "static", "media", "docs"]
+exclude_dirs = [".venv", "tests", "__pycache__", ".git", "static", "media", "user-manual"]

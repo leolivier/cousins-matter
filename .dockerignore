@@ -14,7 +14,7 @@ backup/
 **/*.rdb
 **/.env.example
 **/.github
-**/docs
+**/user-manual
 *.yaml
 *.yml
 **/.vscode

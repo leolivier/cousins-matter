@@ -4,7 +4,7 @@ name: Image Build & Push
 on:
   push:
     paths-ignore:
-      - 'docs/**'
+      - 'user-manual/**'
       - '**/*.md'
 
   release:

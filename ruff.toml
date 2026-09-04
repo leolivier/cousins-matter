@@ -23,7 +23,7 @@ exclude = [
     "buck-out",
     "build",
     "dist",
-		"docs",
+		"user-manual",
     "migrations",
     "node_modules",
     "site-packages",

@@ -1,111 +1,111 @@
-# Design — Documentation du repo au format OKF
+# Design — Repo Documentation in OKF Format
 
-- **Date** : 2026-09-04
-- **Statut** : approuvé par l'utilisateur (design présenté en session, section 7 ajoutée à sa demande)
-- **Spec de référence** : [Open Knowledge Format v0.2](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) (GoogleCloudPlatform/knowledge-catalog)
+- **Date**: 2026-09-04
+- **Status**: Approved by the user (design presented during the session; Section 7 added at the user’s request)
+- **Reference Spec**: [Open Knowledge Format v0.2](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) (GoogleCloudPlatform/knowledge-catalog)
 
-## 1. Objectif
+## 1. Objective
 
-Créer, dans `docs/`, un bundle OKF v0.2 documentant le repo Cousins Matter pour
-**développeurs et agents IA**. Chaque fichier `.md` du bundle porte un frontmatter
-YAML dont le seul champ requis par la spec est `type`. Un seul bundle
-(approche A retenue, alternatives B « multi-bundles » et C « plat » écartées).
+Create, in `docs/`, an OKF v0.2 bundle documenting the Cousins Matter repository for
+**developers and AI agents**. Each `.md` file in the bundle includes YAML frontmatter
+where the only field required by the spec is `type`. A single bundle
+(approach A selected; alternatives B “multi-bundles” and C “flat” rejected).
 
-Le bundle ne duplique pas le manuel utilisateur existant (`user-manual/`, MkDocs
-sur readthedocs) : il le référence.
+The bundle does not duplicate the existing user manual (`user-manual/`, MkDocs
+on ReadTheDocs): it references it.
 
-## 2. Arborescence (~34 fichiers)
+## 2. Directory Structure (~34 files)
 
 ```
 docs/
-  index.md              # répertoire : liens vers toutes les fiches
-  log.md                # historique chronologique (plus récent d'abord)
+  index.md              # directory: links to all documentation pages
+  log.md                # chronological history (most recent first)
   architecture.md       # settings/ENVIRONMENT, ASGI+Channels, Docker, WhiteNoise
   conventions.md        # services pattern, followers, feature flags, i18n, Q_SYNC
   setup-dev.md          # uv, make up4run/run/test/cover/check, ENVIRONMENT
-  testing.md            # MemberTestCase, tests UI Playwright, couverture 80 %
-  apps/                 # 12 fiches, une par app Django
+  testing.md            # MemberTestCase, Playwright UI tests, 80% coverage
+  apps/                 # 12 files, one per Django app
     members.md core.md tenants.md galleries.md forum.md chat.md
     polls.md classified-ads.md pages.md troves.md genealogy.md backup.md
-  modules/              # 6 fiches transverses
+  modules/              # 6 files, one per module
     followers.md notifications.md protected-media.md
     feature-flags.md themes.md management-commands.md
-  flows/                # 4 flux métier bout-en-bout
+  flows/                # 4 files, one per flow
     member-invitation.md gedcom-import-export.md
     gallery-bulk-import.md oauth-login.md
-  specs/                # 3 specs techniques initiales (niveau dev)
+  specs/                # 3 technical specs (dev level)
     multi-tenancy.md oauth-authentication.md media-storage.md
   plan/
-    roadmap.md          # travaux en cours / à venir
-    debt.md             # raccourcis connus (dont classified_ads_n+1_analysis.md)
-  superpowers/          # hors bundle OKF (voir §5), specs de design superpowers
+    roadmap.md          # work in progress / to do
+    debt.md             # known shortcuts (dont classified_ads_n+1_analysis.md)
+  superpowers/          # outside bundle OKF (see §5), superpowers design specs
 ```
 
-## 3. Frontmatter commun
+## 3. Common Frontmatter
 
-Champ **requis** (spec §2) : `type`.
+**Required** field (spec §2): `type`.
 
-Vocabulaire `type` du bundle : `Architecture`, `Conventions`, `Setup`,
+Bundle `type` vocabulary: `Architecture`, `Conventions`, `Setup`,
 `Testing`, `App Reference`, `Module Reference`, `Flow`, `Feature Spec`,
 `Plan`, `Directory`.
 
-Champs **recommandés** remplis systématiquement : `title`, `description`,
-`tags` (liste YAML).
+**Recommended** fields that must always be filled in: `title`, `description`,
+`tags` (YAML list).
 
-Cas des fichiers réservés (spec §8-9) : `index.md` porte un frontmatter
-`type: Directory` (homogène, vérifié par le check) ; `log.md` n'a pas de
-frontmatter — le check l'exclut comme les autres fichiers réservés, sa
-structure étant imposée par la spec.
+Special cases for reserved files (spec §8-9): `index.md` has frontmatter
+`type: Directory` (consistent, verified by the check); `log.md` has no
+frontmatter—the check excludes it like other reserved files, as its
+structure is dictated by the spec.
 
-Cycle de vie : `status: draft` tant que la fiche n'est pas relue par un humain ;
-`stale_after` rempli à +6 mois (voir §7). `generated: {by: claude-code,
-at: <ISO 8601 Z>}` à chaque création **et** réécriture. `verified` laissé vide
-(services de confiance OKF : *unverified* par défaut, *human-reviewed* plus tard).
+Lifecycle: `status: draft` until the file is reviewed by a human;
+`stale_after` set to +6 months (see §7). `generated: {by: claude-code,
+at: <ISO 8601 Z>}` on every creation **and** rewrite. `verified` left blank
+(OKF trusted services: *unverified* by default, *human-reviewed* later).
 
-Liens internes relatifs à la racine du bundle : `[members](/apps/members.md)`.
+Internal links relative to the bundle root: `[members](/apps/members.md)`.
 
-## 4. Contenu des fiches
+## 4. Content of the documentation files
 
-- Chaque fiche cite les fichiers et symboles clés avec leurs chemins
+- Each documentation file lists the key files and symbols along with their paths
   (`members/models.py`, `<app>/services.py`…).
-- Section finale `# See also` : liens croisés apps/modules/flows connexes et
-  vers les pages du user-manual quand elles existent.
-- `index.md` liste toutes les fiches par sous-dossier ; `log.md` suit le format
-  imposé par la spec (titres de date `YYYY-MM-DD`, plus récent d'abord).
-- Les fiches reposent sur le code réel (collecte via codegraph/lectures), pas
-  sur la mémoire des sessions.
+- Final section `# See also`: cross-references to related apps, modules, and flows, and
+  to pages in the user manual when they exist.
+- `index.md` lists all documentation pages by subfolder; `log.md` follows the format
+  specified by the spec (date titles `YYYY-MM-DD`, most recent first).
+- The documentation pages are based on actual code (collected via codegraph/readings), not
+  on session history.
 
-## 5. Garde-fou de conformité
+## 5. Compliance Guardrails
 
-`make check-docs` : script Python (~15 lignes, stdlib uniquement) qui vérifie
-que chaque `.md` non réservé de `docs/` a un frontmatter YAML analysable avec un
-`type` non vide, que `index.md`/`log.md` ne sont pas réutilisés comme fiches,
-que `stale_after` (s'il est présent) est une date, et **liste les fiches
-dépassées**. La conformité OKF se réduit à ces règles (spec §11) ; aucun autre
-outillage. Le check exclut `docs/superpowers/` (specs de design superpowers,
-frontmatter OKF non applicable). Cible ajoutée au `check` existant.
+`make check-docs`: a Python script (~15 lines, stdlib only) that verifies
+that every non-reserved `.md` file in `docs/` has YAML frontmatter that can be parsed with a
+non-empty `type`, that `index.md`/`log.md` are not reused as documentation files,
+that `stale_after` (if present) is a date, and **lists the outdated documentation files**.
+OKF compliance boils down to these rules (spec §11); no other
+tools are required. The check excludes `docs/superpowers/` (superpowers design specs,
+OKF frontmatter not applicable). Target added to the existing `check`.
 
 ## 6. Production
 
-Collecte des faits par app (codegraph + lectures ciblées), rédaction fiche par
-fiche, `log.md` tenu à jour au fil de l'eau. Détails (découpage, parallélisation,
-ordre) dans le plan d'implémentation écrit par le skill writing-plans.
+Fact gathering per app (codegraph + targeted readings), drafting one page at a
+time, `log.md` kept up to date as work progresses. Details (breakdown, parallelization,
+order) in the implementation plan written by the `writing-plans` skill.
 
-## 7. Maintien à jour
+## 7. Keeping Records Up to Date
 
-- **`stale_after` sur chaque fiche** : date ISO à partir de laquelle la fiche
-  est suspecte (défaut +6 mois) ; `make check-docs` liste les fiches dépassées.
-- **`generated: {by, at}` mis à jour à chaque réécriture** : l'âge réel de
-  chaque fiche se lit dans son frontmatter.
-- **Règle de workflow** (2 lignes dans `CLAUDE.md`) : toute PR qui modifie une
-  app met à jour sa fiche (`members/` → `docs/apps/members.md`) et avance son
-  `stale_after`, comme on écrit la migration.
-- **`log.md`** : une entrée datée par mise à jour substantielle.
-- **Point de passage à la release** : à chaque tag, traiter les fiches
-  dépassées — accroché au process de release existant, pas de CI dédiée.
+- **`stale_after` on each record**: ISO date after which the record
+  is considered suspect (default: +6 months); `make check-docs` lists expired records.
+- **`generated: {by, at}` updated with each rewrite**: the actual age of
+  each entry can be found in its frontmatter.
+- **Workflow rule** (2 lines in `CLAUDE.md`): any PR that modifies an
+  app updates its entry (`members/` → `docs/apps/members.md`) and advances its
+  `stale_after`, as specified in the migration.
+- **`log.md`**: an entry dated by each substantial update.
+- **Release milestone**: For each tag, process the
+  outdated documentation pages—integrated into the existing release process, no dedicated CI.
 
-## 8. Hors périmètre
+## 8. Out of Scope
 
-- Traduction du bundle (i18n) — le bundle est en anglais comme le code/user-manual.
-- Génération automatique des fiches par CI ou agent périodique.
-- Migration des contenus `user-manual/` (ils restent la référence utilisateur).
+- Bundle translation (i18n)—the bundle is in English, as are the code and user manual.
+- Automatic generation of documentation files via CI or a periodic task.
+- Migration of `user-manual/` content (these remain the user reference).

@@ -66,7 +66,7 @@ config/settings/base.py); the protected one requires login through
 
 Generic following of *any* model lives in core/followers.py:
 
-- `check_followers(request, followed_object, owner, url, new_object, author)`
+- `check_followers(request, followed_object, owner, url, new_internal_object, author)`
   makes the URL absolute and dispatches `do_check_followers` as a Django-Q
   task (`async_task`), passing `tenant_id` explicitly because the worker has
   no request/middleware; `post_check_followers` is the hook.

@@ -100,7 +100,9 @@ login (and tenant) per request. Templates must build URLs with the
    (paths are normalized and checked for `..`, raising
    `SuspiciousFileOperation` on traversal attempts; existing galleries
    are reused untouched so hand-written descriptions survive).
-   Folders without images create galleries too.
+   Folders without images are skipped; only their ancestor galleries
+   that contain images get created, via `_get_parent_gallery()` on
+   the image-bearing folders' paths.
 3. One Django-Q task per image: `handle_photo_file()` →
    `create_photo()`, wrapped in `tenant_context(...)` because the
    Q worker has no request/middleware

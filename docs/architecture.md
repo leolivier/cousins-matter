@@ -47,9 +47,13 @@ Facts that hold in every environment:
 
 ## Middleware
 
-Order from `MIDDLEWARE` in `config/settings/base.py` (test settings append
-`core.htmlvalidator.HtmlValidatorMiddleware`, development/docker-devt add it and optionally
-`debug_toolbar.middleware.DebugToolbarMiddleware` at the front):
+Order from `MIDDLEWARE` in `config/settings/base.py`. Development and docker-devt prepend
+`debug_toolbar.middleware.DebugToolbarMiddleware` when `DEBUG_TOOLBAR` is enabled (default on
+in `config/settings/development.py`, opt-in in `config/settings/docker_devt.py`).
+`core.htmlvalidator.HtmlValidatorMiddleware` is available but NOT wired in: the
+`MIDDLEWARE.append(...)` lines for it are commented out in `config/settings/local_test.py`,
+`config/settings/development.py` and `config/settings/docker_devt.py`, so it appears in no
+active chain:
 
 1. `django.middleware.security.SecurityMiddleware`
 2. `django.middleware.csp.ContentSecurityPolicyMiddleware` (policy built in

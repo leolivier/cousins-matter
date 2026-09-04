@@ -67,13 +67,15 @@ make cpmsg a=<app>   # compilemessages inside the app
 `core/settings.py` maps `ENVIRONMENT` to a module in `config/settings/`; the default is
 `production`, and an unknown value raises `ValueError`.
 
-- `development` — local dev: console email backend, `.ngrok-free.dev` hosts allowed,
-  `DEBUG_TOOLBAR` opt-in, HTML validator middleware.
+- `development` — local dev: console email backend, `.ngrok-free.dev` hosts allowed, debug
+  toolbar on by default (`DEBUG_TOOLBAR`, default `True` in
+  `config/settings/development.py` — set `DEBUG_TOOLBAR=false` to opt out).
 - `test` — `config/settings/local_test.py`, used by `make test`/`make cover`/`make check`:
   `TESTING=True`, in-memory email, allauth rate limits disabled, plain static storage (no
   `collectstatic` needed), a pool of 20 interchangeable test databases.
 - `docker-devt` — same as development but for containers (DB/Redis hosts default to
-  `postgres`/`redis`).
+  `postgres`/`redis`); debug toolbar opt-in only (`DEBUG_TOOLBAR`, default `False` in
+  `config/settings/docker_devt.py`).
 - `docker-test` — test settings inside the container (`make dtest`).
 - `production` — requires `SECRET_KEY` and `SITE_DOMAIN`, SMTP email, strict WhiteNoise
   manifest.

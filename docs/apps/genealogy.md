@@ -70,8 +70,9 @@ a different ancestor even though the records themselves are shared.
   `0 @I<pk>@ INDI` record per person (name, sex, `_UID`, BIRT/DEAT,
   FAMS/FAMC pointers) and one `0 @F<pk>@ FAM` record per union; the
   pointer uses `person.gedcom_id` when present and falls back to
-  `@I{pk}@`. Endpoint writes `settings.GEDCOM_FILE`
-  (`genealogy.ged`).
+  `@I{pk}@`. Export is built **in memory** — nothing is written to
+  disk; `settings.GEDCOM_FILE` (`genealogy.ged`) only names the
+  attachment (`Content-Disposition`) and the `1 FILE` header line.
 - `do_import_gedcom` (genealogy/services.py) is the service the view
   calls: save upload to `tmp/` in default storage →
   `transaction.atomic()` around parse (a failure mid-import rolls back

@@ -26,7 +26,7 @@ generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T12:00:00Z }
 ---
 ```
 
-- `stale_after` = writing date + 6 months (all fiches written 2026-09-04 → `2027-03-04`). `status: draft` everywhere (no human review yet).
+- `stale_after` = writing date + 6 months (fiches written 2026-09-04 → `2027-03-04`; fiches written later use their real writing date + 6 months). `status: draft` everywhere (no human review yet). Per design §7, `generated.at` carries the REAL generation timestamp — the `2026-09-04T12:00:00Z` in the template is the format exemplar, not a frozen value.
 - **Fiche body rules:** English; every factual claim derived from code actually read in the listed sources; cite real paths (`members/models.py`, `<app>/services.py`) inline; end with a `# See also` section of bundle-root-relative links + user-manual page links where one exists; never duplicate user-manual content (link to it).
 - **Type vocabulary:** `Architecture`, `Conventions`, `Setup`, `Testing`, `App Reference`, `Module Reference`, `Flow`, `Feature Spec`, `Plan`, `Directory`.
 - **Local apps** (`config/settings/base.py` `LOCAL_APPS`): core, tenants, members, chat, galleries, classified_ads, cousinsmatter, forum, genealogy, pages, polls, troves. `cousinsmatter` is the project module (settings/ASGI) — covered by `architecture.md`, no app fiche.

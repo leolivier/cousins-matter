@@ -8,9 +8,20 @@ Cousins Matter is a self-hosted Django application for managing large families: 
 
 Stack: Django 6 + Channels (Daphne), PostgreSQL, Redis (cache + Django-Q2 tasks), Bulma/HTMX/crispy-forms, WhiteNoise, Docker Compose. Python 3.14+.
 
-## Development and Test Commands
+## Standard Workflow
+End of session workflow: before committing, run `make check` (ruff + pyright), the unit test suite, and the Playwright UI suite (190 tests) if UI files changed. Only then `git add`, commit with a descriptive message, and push to origin.
 
-Activate the venv first: `source .venv/bin/activate` (provisioned by `uv sync`; a fresh git worktree has no `.venv` — run `uv init && uv sync --dev` there).
+
+## Communication
+Always respond and write in English whatever the user is writing in (French or English) and never switch languages mid-session.
+
+## Refactoring Conventions
+Services-layer extraction pattern: keep views thin, move business logic into <app>/services.py, preserve existing return shapes, keep `ruff check` clean, and run that app's test suite before committing.
+
+## Git & Environment
+Never work directly on main: create a feature branch or git worktree before substantive changes. New worktrees are NOT broken — run `uv init && uv sync --dev` in the worktree before using ruff, pyright, or pytest.
+Activate the venv before running any commands: `source .venv/bin/activate`.
+Always use the make commands — see the Makefile for the full list.
 
 **Always** use the make commands — see the Makefile for the full list:
 

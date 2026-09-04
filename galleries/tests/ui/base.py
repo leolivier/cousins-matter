@@ -54,7 +54,7 @@ class GalleryUITestBase(PlaywrightTestCase):
     url = self.url(reverse("galleries:detail", args=[self.gallery.slug]))
     if page_size:
       url += f"?page_size={page_size}"
-    self.login("admin", "password")
+    self.login_as_admin()
     self.page.goto(url)
     # Wait for the gallery grid to be rendered
     self.assert_visible(".image-gallery", "Gallery grid should be visible")

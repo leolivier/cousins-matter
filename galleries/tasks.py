@@ -13,6 +13,8 @@ from django.utils.translation import gettext as _, gettext_lazy
 from django_q.tasks import Task
 
 from .models import Gallery, Photo
+from tenants.models import Tenant
+from tenants.scoping import tenant_context
 
 logger = logging.getLogger(__name__)
 
@@ -101,13 +103,16 @@ def create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
   return os.path.relpath(filepath, zimport.root)
 
 
-def handle_photo_file(zimport: ZipImport, dir: str, image: str, gallery_id: str):
+def handle_photo_file(zimport: ZipImport, dir: str, image: str, gallery_id: str, tenant_id=None):
   errors = []
   filepath = os.path.join(dir, image)
   photo_path = None
   try:
     # time.sleep(4)  # artificially slow down fo testing
-    photo_path = create_photo(image, filepath, zimport, gallery_id)
+    # The Q worker has no request/middleware, so activate the importer's tenant
+    # for the tenant-scoped Photo/Gallery queries inside create_photo().
+    with tenant_context(Tenant(pk=tenant_id) if tenant_id else None):
+      photo_path = create_photo(image, filepath, zimport, gallery_id)
   except OSError as oserror:
     # print an error but continue with next photo
     error_msg = _("Unable to import photo '%(path)s', it was ignored") % {"path": os.path.relpath(filepath, zimport.root)}

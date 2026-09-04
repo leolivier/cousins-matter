@@ -155,12 +155,15 @@ def _get_or_create_gallery(path: str, zimport: ZipImport):
   return gallery
 
 
-def handle_zip(zip_file, task_group, owner_id, root_gallery=None):
+def handle_zip(zip_file, task_group, owner_id, root_gallery=None, tenant_id=None):
   """
   reads a zip file and creates galleries for each folder
   and create tasks to create photos inside these galleries for each image in the folder.
   Galleries are named by the folder names and photos by the image file names.
   Files which are not photos are simply ignored.
+
+  ``tenant_id`` activates the importer's tenant for the galleries created here and
+  for the per-photo Q-worker tasks (which run with no request/middleware).
   """
   if not zipfile.is_zipfile(zip_file):
     raise zipfile.BadZipFile(f"{zip_file} is not a zip file")
@@ -185,6 +188,7 @@ def handle_zip(zip_file, task_group, owner_id, root_gallery=None):
         dir,
         image,
         gallery.id,
+        tenant_id,
         group=task_group,
         cached=False,
         hook=post_create_photo,

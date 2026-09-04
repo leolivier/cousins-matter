@@ -4,6 +4,8 @@ from fpdf import FPDF
 from typing import Generator
 
 from django.conf import settings
+
+from tenants.settings_overrides import tenant_setting
 from django.contrib.staticfiles import finders
 from django.utils.translation import gettext as _
 
@@ -24,7 +26,7 @@ class DirectoryPDF(FPDF):
 
   def __init__(self, orientation, unit, format):
     super().__init__(orientation, unit, format)
-    self.set_title(_("%(site_name)s directory") % {"site_name": settings.SITE_NAME})
+    self.set_title(_("%(site_name)s directory") % {"site_name": tenant_setting("site_name")})
     self.alias_nb_pages()
     self.add_page()
     usable_width = self.w - self.l_margin - self.r_margin
@@ -33,9 +35,8 @@ class DirectoryPDF(FPDF):
 
   def header(self):
     # Logo
-    logo = (
-      settings.SITE_LOGO if settings.SITE_LOGO.startswith(settings.PUBLIC_MEDIA_URL) else get_static_path(settings.SITE_LOGO)
-    )
+    site_logo = tenant_setting("site_logo")
+    logo = site_logo if site_logo.startswith(settings.PUBLIC_MEDIA_URL) else get_static_path(site_logo)
     self.image(logo, 10, 8, 33)
     # Arial bold 15
     self.set_font("Arial", "B", 8)
@@ -131,7 +132,7 @@ def _get_directory_data() -> Generator[list, None, None]:
 
 
 def generate_directory_pdf() -> DirectoryPDF:
-  pdf = DirectoryPDF("P", "mm", settings.PDF_SIZE)
+  pdf = DirectoryPDF("P", "mm", tenant_setting("pdf_size"))
   pdf.draw_table_header()
   for member in _get_directory_data():
     pdf.draw_table_row(member)

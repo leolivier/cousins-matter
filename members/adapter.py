@@ -32,7 +32,8 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         return
 
       # Check for invitation in session
-      if self._check_invitation(request, email, clear=True):
+      ok, _tenant_id = self._check_invitation(request, email, clear=True)
+      if ok:
         # Valid invitation found! Link and activate.
         sociallogin.connect(request, member)
         member.is_active = True
@@ -49,9 +50,13 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
     except Member.DoesNotExist:
       # Case: No such member in DB yet.
       # If they have a valid invitation in session, we allow the signup.
-      if self._check_invitation(request, email, clear=True):
-        # Mark the new user as active so allauth creates it as such
+      ok, tenant_id = self._check_invitation(request, email, clear=True)
+      if ok:
+        # Mark the new user as active so allauth creates it as such, and place
+        # it on the invitation's tenant (the request is anonymous).
         sociallogin.user.is_active = True
+        if tenant_id:
+          sociallogin.user.tenant_id = tenant_id
         logger.info(f"New member signup allowed via social login with invitation ({email})")
         return
       else:
@@ -59,17 +64,23 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         raise ImmediateHttpResponse(redirect("members:login"))
 
   def _check_invitation(self, request, email, clear=False):
-    """Checks if there's a valid invitation for the given email in the session."""
+    """Checks for a valid invitation for ``email`` in the session.
+
+    Returns ``(ok, tenant_id)``: ``ok`` when the (email, tenant, token) triple
+    validates; ``tenant_id`` is the invitation's tenant (or ``None``).
+    """
     invitation_token = request.session.get("invitation_token")
     invitation_email = request.session.get("invitation_email")
+    invitation_tenant_id = request.session.get("invitation_tenant_id")
 
     if invitation_token and invitation_email == email:
-      if RegistrationLinkManager().check_token(email, invitation_token):
+      if RegistrationLinkManager().check_invitation(email, invitation_tenant_id, invitation_token):
         if clear:
-          del request.session["invitation_token"]
-          del request.session["invitation_email"]
-        return True
-    return False
+          request.session.pop("invitation_token", None)
+          request.session.pop("invitation_email", None)
+          request.session.pop("invitation_tenant_id", None)
+        return True, invitation_tenant_id
+    return False, None
 
   def list_providers(self, request):
     providers = super().list_providers(request)

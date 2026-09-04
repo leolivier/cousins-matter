@@ -2,11 +2,14 @@ import factory
 from factory.django import DjangoModelFactory
 from chat.models import ChatRoom, ChatMessage
 from members.tests.factories import MemberFactory
+from tenants.models import Tenant
 
 
 class ChatRoomFactory(DjangoModelFactory):
   class Meta:
     model = ChatRoom
+
+  tenant = factory.LazyFunction(Tenant.get_default)
 
   name = factory.Sequence(lambda n: f"Room {n}")
   # slug is handled in clean/save
@@ -37,3 +40,4 @@ class ChatMessageFactory(DjangoModelFactory):
   member = factory.SubFactory(MemberFactory)
   room = factory.SubFactory(ChatRoomFactory)
   content = factory.Faker("text")
+  tenant_id = factory.LazyAttribute(lambda o: o.room.tenant_id)

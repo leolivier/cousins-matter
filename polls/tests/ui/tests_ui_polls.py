@@ -54,7 +54,7 @@ class PollsListUITest(PollsUITestBase):
 
   def test_polls_list_no_js_errors(self):
     """The polls list page should not have JS errors."""
-    self.login("admin", "password")
+    self.login_as_admin()
     self.page.goto(self.url(reverse("polls:list_polls")))
     self.page.wait_for_timeout(1000)
     self.assertEqual(len(self.errors), 0, f"JS errors on polls list: {self.errors}")
@@ -65,7 +65,7 @@ class PollDetailUITest(PollsUITestBase):
 
   def test_poll_detail_page_display(self):
     """The poll detail page should display poll information."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:poll_detail", args=[poll.id])))
 
@@ -80,7 +80,7 @@ class PollDetailUITest(PollsUITestBase):
 
   def test_poll_detail_back_button(self):
     """The detail page should have a back button linking to polls list."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:poll_detail", args=[poll.id])))
 
@@ -90,7 +90,7 @@ class PollDetailUITest(PollsUITestBase):
 
   def test_poll_detail_vote_button(self):
     """The detail page should have a Vote button."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:poll_detail", args=[poll.id])))
 
@@ -99,7 +99,7 @@ class PollDetailUITest(PollsUITestBase):
 
   def test_poll_detail_update_button_for_owner(self):
     """The detail page should show Update button for the poll owner."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:poll_detail", args=[poll.id])))
 
@@ -108,7 +108,7 @@ class PollDetailUITest(PollsUITestBase):
 
   def test_poll_detail_no_js_errors(self):
     """The poll detail page should not have JS errors."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:poll_detail", args=[poll.id])))
     self.page.wait_for_timeout(1000)
@@ -120,7 +120,7 @@ class PollCreateUITest(PollsUITestBase):
 
   def test_create_poll_form_display(self):
     """The create poll form should display all expected fields."""
-    self.login("admin", "password")
+    self.login_as_admin()
     self.page.goto(self.url(reverse("polls:create_poll")))
 
     # Title
@@ -148,7 +148,7 @@ class PollUpdateUITest(PollsUITestBase):
 
   def test_update_poll_form_display(self):
     """The update poll form should display with pre-filled data."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:update_poll", args=[poll.id])))
 
@@ -174,7 +174,7 @@ class PollUpdateUITest(PollsUITestBase):
 
   def test_update_poll_form_questions_section(self):
     """The update form should show the questions management panel."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:update_poll", args=[poll.id])))
 
@@ -191,7 +191,7 @@ class PollVoteUITest(PollsUITestBase):
 
   def test_vote_page_display(self):
     """The vote page should display poll info and a card."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:vote", args=[poll.id])))
 
@@ -210,7 +210,7 @@ class PollNavigationUITest(PollsUITestBase):
 
   def test_navigate_from_list_to_detail(self):
     """Clicking a poll in the list should navigate to its detail page."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:list_polls")))
     self.page.wait_for_selector(".panel-block a.subtitle")
@@ -227,7 +227,7 @@ class PollNavigationUITest(PollsUITestBase):
 
   def test_navigate_from_detail_to_vote(self):
     """Clicking Vote on the detail page should navigate to the vote page."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:poll_detail", args=[poll.id])))
 
@@ -243,7 +243,7 @@ class PollNavigationUITest(PollsUITestBase):
 
   def test_navigate_from_list_to_vote(self):
     """Clicking Vote on the list should navigate to the vote page."""
-    self.login("admin", "password")
+    self.login_as_admin()
     poll = self.poll1
     self.page.goto(self.url(reverse("polls:list_polls")))
     self.page.wait_for_selector(".panel-block")

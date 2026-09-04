@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% load i18n crispy_forms_tags cm_tags %}
+{% block title %}{% title title %} {% endblock %}
+{% block content %}
+<div class="container px-2">
+	<h1 class="title has-text-centered is-2">{{title}}{% if tenant %} — {{tenant.name}}{% endif %}</h1>
+	<p class="has-text-centered is-size-7">
+		{% translate "Values left equal to the global defaults are not stored: a global change will still apply to your family." %}
+	</p>
+	<form method="POST">
+		{% csrf_token %}
+		<fieldset class="container">
+			{{ form|crispy }}
+		</fieldset>
+		<div class="container mt-4">
+			<button class="button is-primary" type="submit">{% translate "Save" %}</button>
+		</div>
+	</form>
+</div>
+{% endblock content %}

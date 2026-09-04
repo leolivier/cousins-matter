@@ -47,8 +47,13 @@ def do_import_members_from_csv(csv_file, user_id, activate_users):
   # task_group = request.POST.get("csrfmiddlewaretoken")  # not generated in test context
   task_group = uuid.uuid4().hex
 
+  # carry the importer's tenant into the Q worker (no request/middleware there)
   import_context = ImportContext(
-    default_manager=default_manager, activate_users=activate_users, group=task_group, lang=get_language()
+    default_manager=default_manager,
+    activate_users=activate_users,
+    group=task_group,
+    lang=get_language(),
+    tenant_id=default_manager.tenant_id,
   )
   import_context.register()
   csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")

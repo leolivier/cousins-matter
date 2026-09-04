@@ -13,6 +13,7 @@ from functools import lru_cache
 
 from core.icons import DJANGO_ICONS
 from core.utils import protected_media_url as _protected_media_url
+from tenants.scoping import get_current_tenant
 
 register = Library()
 logger = logging.getLogger(__name__)
@@ -249,12 +250,44 @@ def to_range(value: int) -> range:
   return range(value)
 
 
+# Per-process memo of merged feature flags. Keyed by (tenant pk, global flags
+# tuple) so that `override_settings(FEATURES_FLAGS=...)` in tests invalidates
+# naturally — a new global dict produces a new key.
+_tenant_flags_cache: dict[tuple, dict[str, bool]] = {}
+
+
+def _feature_flags(tenant) -> dict[str, bool]:
+  """Feature flags for ``tenant``: per-tenant overrides over the global defaults."""
+  global_flags = dict(getattr(settings, "FEATURES_FLAGS", {}))
+  cache_key = (tenant.pk if tenant is not None else None, tuple(sorted(global_flags.items())))
+  cached = _tenant_flags_cache.get(cache_key)
+  if cached is not None:
+    return cached
+  flags = dict(global_flags)
+  if tenant is not None:
+    from tenants.models import TenantSettings
+
+    ts = TenantSettings.objects.filter(tenant=tenant).first()
+    if ts is not None and ts.overrides:
+      flags.update(ts.overrides)
+  _tenant_flags_cache[cache_key] = flags
+  return flags
+
+
+def clear_flags_cache():
+  """Drop the memoized feature flags (call after editing TenantSettings.overrides)."""
+  _tenant_flags_cache.clear()
+
+
 @register.filter
 def featured(value: str) -> bool:
+  """Returns the value of a feature flag, honoring per-tenant overrides.
+
+  The tenant is resolved from the current thread (set by TenantMiddleware);
+  template rendering runs on the request thread, so this is correct without
+  needing template context (Django filters cannot take context).
   """
-  Returns the value of a feature flag.
-  """
-  return settings.FEATURES_FLAGS.get(value, False)
+  return _feature_flags(get_current_tenant()).get(value, False)
 
 
 @register.filter

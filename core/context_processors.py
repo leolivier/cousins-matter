@@ -8,6 +8,7 @@ EXPOSED_SETTINGS: list[str] = [
   "DATA_UPLOAD_MAX_MEMORY_SIZE",
   # 'BASE_DIR',
   "SITE_NAME",
+  "MULTI_TENANT_ENABLED",
   "SITE_DOMAIN",
   "SITE_FOOTER",
   "SITE_LOGO",
@@ -67,11 +68,28 @@ def recompute_settings_in_templates():
 
 
 def settings(request):
-  """expose settings to templates"""
+  """expose settings to templates, with per-tenant overrides layered on top.
+
+  The memoized dict of EXPOSED_SETTINGS is copied and any TenantSettings
+  override of the request's tenant is applied (e.g. site_name, dark_mode,
+  birthday_days), so a family admin's branding shows immediately. The shared
+  dict is never mutated (it would leak overrides across tenants).
+  """
   # settings are pre computed in global variable
   if not _settings_in_templates:
     recompute_settings_in_templates()
-  return {"settings": _settings_in_templates}
+  result = dict(_settings_in_templates)
+  tenant = getattr(request, "tenant", None)
+  if tenant is not None:
+    from tenants.settings_overrides import effective_overrides
+
+    overrides = effective_overrides(tenant)
+    if overrides:
+      for key, value in overrides.items():
+        attr = key.upper()  # "site_name" -> "SITE_NAME"
+        if attr in result and value is not None:
+          result[attr] = value
+  return {"settings": result}
 
 
 class override_settings(django_override_settings):

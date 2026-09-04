@@ -1,8 +1,13 @@
 import factory
 from factory.django import DjangoModelFactory
 from members.models import Member, Family, Address
+from tenants.models import Tenant
 import datetime
 import random
+
+# Members belong to a tenant: default to the seeded default tenant so the
+# factory works with no ambient tenant_context (e.g. UI tests).
+DEFAULT_TENANT = factory.LazyFunction(Tenant.get_default)
 
 
 class FamilyFactory(DjangoModelFactory):
@@ -32,6 +37,7 @@ class MemberFactory(DjangoModelFactory):
   email = factory.Sequence(lambda n: f"user{n}_{random.randint(1000, 9999)}@example.com")
   birthdate = factory.LazyFunction(lambda: datetime.date(1980, 1, 1) + datetime.timedelta(days=random.randint(0, 15000)))
   is_active = True
+  tenant = DEFAULT_TENANT
   family = factory.SubFactory(FamilyFactory)
   address = factory.SubFactory(AddressFactory)
   privacy_consent = True

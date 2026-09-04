@@ -1,0 +1,4 @@
+{% load i18n %}
+<p>{% blocktranslate trimmed with name=tenant.name %}You are invited to administer the family "{{ name }}" on {{ site_name }}.{% endblocktranslate %}</p>
+<p>{% translate "Click on the link below to create your account:" %}</p>
+<p><a href="{{ link }}">{{ link }}</a></p>

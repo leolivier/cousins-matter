@@ -9,6 +9,7 @@ from django.utils.translation import gettext as _
 from verify_email.email_handler import send_verification_email
 
 from core.utils import MakeDate
+from tenants.settings_overrides import tenant_setting
 from ..models import Member
 
 logger = logging.getLogger(__name__)
@@ -101,10 +102,10 @@ def do_init_member(member: Member, user_id: int):
 
 
 def do_notify_death(dead_member: Member, sender: Member, deathdate: date, message: str):
-  # Send email to admins
-  emails = list(
-    Member.objects.filter(is_superuser=True, email__isnull=False).exclude(email="").values_list("email", flat=True)
-  )
+  # Send email to the member's tenant admins (fallback: platform superusers).
+  from tenants.authz import admin_or_superusers
+
+  emails = [a.email for a in admin_or_superusers(dead_member.tenant) if a.email]
 
   if emails:
     from django.core.mail import send_mail
@@ -116,7 +117,7 @@ def do_notify_death(dead_member: Member, sender: Member, deathdate: date, messag
       "sender": sender,
       "deathdate": deathdate,
       "message": message,
-      "site_name": settings.SITE_NAME,
+      "site_name": tenant_setting("site_name"),
     }
 
     html_message = render_to_string("members/email/notify_death_email.html", email_context)

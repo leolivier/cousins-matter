@@ -3,6 +3,7 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models.fields import CharField
@@ -13,6 +14,9 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
 from core.utils import create_thumbnail
+
+from tenants.models import Tenant
+from tenants.scoping import get_current_tenant
 
 from .managers import MemberManager
 
@@ -128,6 +132,19 @@ class Member(AbstractUser):
     (FREQUENCY_MONTHLY, _("Monthly")),
   ]
 
+  class Role(models.TextChoices):
+    MEMBER = "member", _("Member")
+    ADMIN = "admin", _("Tenant admin")
+
+  role = models.CharField(_("Role"), max_length=16, choices=Role.choices, default=Role.MEMBER)
+  tenant = models.ForeignKey(
+    "tenants.Tenant",
+    verbose_name=_("Tenant"),
+    on_delete=models.PROTECT,
+    related_name="members",
+    editable=False,
+  )
+
   member_manager = models.ForeignKey(
     "self",
     verbose_name=_("Member manager"),
@@ -183,10 +200,23 @@ class Member(AbstractUser):
     ),
   )
 
+  # Override AbstractUser.username: uniqueness becomes (tenant, username) so the
+  # same username may exist in different tenants. Login is by email, so username
+  # is a display-only identifier.
+  username = models.CharField(
+    _("username"),
+    max_length=150,
+    unique=False,
+    help_text=_("Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."),
+    validators=[UnicodeUsernameValidator()],
+    error_messages={"unique": _("A user with that username already exists.")},
+  )
+
   USERNAME_FIELD = "username"
   REQUIRED_FIELDS = ["first_name", "last_name", "birthdate", "email"]
 
   objects = MemberManager()
+  unscoped = models.Manager()
 
   class Meta:
     verbose_name = _("member")
@@ -196,6 +226,10 @@ class Member(AbstractUser):
       models.Index(fields=["birthdate"]),
       models.Index(fields=["first_name"]),
       models.Index(fields=["last_name"]),
+      models.Index(fields=["tenant", "last_name", "first_name"]),
+    ]
+    constraints = [
+      models.UniqueConstraint(fields=["tenant", "username"], name="member_tenant_username_uniq"),
     ]
 
   def get_absolute_url(self):
@@ -253,6 +287,11 @@ class Member(AbstractUser):
   def get_manager(self):
     return self.member_manager if self.member_manager else self
 
+  @property
+  def is_tenant_admin(self) -> bool:
+    """A tenant admin (role=admin); platform superusers are is_superuser."""
+    return self.role == self.Role.ADMIN
+
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     # Track avatar name so save() regenerates thumbnails only when the avatar actually
@@ -278,11 +317,32 @@ class Member(AbstractUser):
       logger.info(f"Cleaning member {self.full_name}: removing member manager of active member")
       self.member_manager = None
     elif not self.is_active and self.member_manager is None:
-      # If no member manager and member is inactive, use admin member
+      # If no member manager and member is inactive, default to a tenant admin of
+      # this member's tenant (fallback to any platform superuser). Use `unscoped`
+      # because `objects` is tenant-filtered and would miss admins/superusers that
+      # live on another tenant.
       logger.info(f"Cleaning member {self.full_name}: setting member manager to admin for inactive member")
-      self.member_manager = Member.objects.filter(is_superuser=True).first()
+      # Use tenant_id (not the .tenant FK accessor) because clean() can run before
+      # save() assigns a tenant (e.g. during form full_clean), when self.tenant
+      # would raise RelatedObjectDoesNotExist. Fall back to the current request's
+      # tenant, then to any platform superuser.
+      tenant_id = self.tenant_id
+      if tenant_id is None:
+        current = get_current_tenant()
+        tenant_id = current.pk if current is not None else None
+      admin = (
+        Member.unscoped.filter(tenant_id=tenant_id, role=Member.Role.ADMIN, is_active=True).first()
+        if tenant_id is not None
+        else None
+      )
+      self.member_manager = admin or Member.unscoped.filter(is_superuser=True, is_active=True).first()
 
   def save(self, *args, **kwargs):
+    # Assign the tenant before clean()/super().save(): a Member always belongs to
+    # a tenant. Prefer the current request tenant; fall back to the default tenant
+    # (management commands, createsuperuser, allauth signup outside a tenant).
+    if self.tenant_id is None:
+      self.tenant = get_current_tenant() or Tenant.get_default()
     self.clean()  # clean before save
     # Only regenerate thumbnails when the avatar actually changed, so a plain save
     # (e.g. login updating last_login) doesn't read/rewrite the avatar file.

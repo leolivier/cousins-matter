@@ -1,0 +1,69 @@
+{% extends "core/base.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title title %} {% endblock %}
+{% block content %}
+<div class="container px-2">
+	<div class="level">
+		<h1 class="title has-text-centered is-2">{{title}}</h1>
+		<div class="level-right">
+			<a class="button is-primary" href="{% url 'tenants:create' %}">
+				{%icon "new-family"%} <span>{% translate "Create a family" %}</span>
+			</a>
+		</div>
+	</div>
+	<div class="table-container">
+		<table class="table is-striped is-fullwidth is-hoverable">
+			<thead>
+				<tr>
+					<th>{% translate "Family" %}</th>
+					<th>{% translate "Identifier" %}</th>
+					<th>{% translate "Members" %}</th>
+					<th>{% translate "Status" %}</th>
+					<th>{% translate "Created" %}</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for tenant in tenants %}
+				<tr>
+					<td>{{ tenant.name }}</td>
+					<td><code>{{ tenant.slug }}</code></td>
+					<td>{{ tenant.num_members }}</td>
+					<td>
+						{% if tenant.is_system %}
+						<span class="tag is-dark">{% translate "system" %}</span>
+						{% elif tenant.is_active %}
+						<span class="tag is-success">{% translate "active" %}</span>
+						{% else %}
+						<span class="tag is-warning">{% translate "deactivated" %}</span>
+						{% endif %}
+					</td>
+					<td>{{ tenant.created_at|date:"DATE_FORMAT" }}</td>
+					<td>
+						<div class="buttons has-addons">
+							{% if not tenant.is_system %}
+							<form method="post" action="{% url 'tenants:toggle_active' tenant.slug %}">
+								{% csrf_token %}
+								<button class="button is-small" type="submit"
+									{% if tenant.is_active %} title="{% translate 'Deactivate this family' %}"
+									{% else %} title="{% translate 'Reactivate this family' %}" {% endif %}>
+									{% if tenant.is_active %}{% translate "Deactivate" %}{% else %}{% translate "Reactivate" %}{% endif %}
+								</button>
+							</form>
+							{% if not tenant.is_active %}
+							<a class="button is-small is-danger" href="{% url 'tenants:delete' tenant.slug %}" title="{% translate 'Delete' %}">
+								{% translate "Delete" %}
+							</a>
+							{% endif %}
+							{% endif %}
+						</div>
+					</td>
+				</tr>
+				{% empty %}
+				<tr><td colspan="6">{% translate "No families yet." %}</td></tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock content %}

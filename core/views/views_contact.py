@@ -19,7 +19,12 @@ class ContactView(generic.FormView):
 
   def admin(self):
     if self._admin is None:
-      self._admin = get_user_model().objects.filter(is_superuser=True).first()
+      from tenants.authz import admin_or_superusers
+      from tenants.scoping import get_current_tenant
+
+      tenant = get_current_tenant()
+      users = admin_or_superusers(tenant) if tenant is not None else list(get_user_model().unscoped.filter(is_superuser=True))
+      self._admin = users[0] if users else None
     return self._admin
 
   def get_context_data(self, **kwargs):

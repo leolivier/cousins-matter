@@ -28,6 +28,7 @@ class ClassifiedAdsUITestBase(PlaywrightTestCase):
     # Create a non-owner user for permission tests
     self.other_user = MemberFactory(
       username="otheruser",
+      email="otheruser@example.com",
       first_name="Other",
       last_name="User",
       birthdate="1995-05-15",

@@ -98,6 +98,7 @@ def delete_photo(request, pk):
     return HttpResponseClientRedirect(reverse("galleries:galleries"), status=404)
   if not (
     request.user.is_superuser
+    or getattr(request.user, "is_tenant_admin", False)
     or (photo.uploaded_by and request.user == photo.uploaded_by)
     or (photo.gallery.owner and request.user == photo.gallery.owner)
   ):

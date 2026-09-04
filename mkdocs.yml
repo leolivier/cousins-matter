@@ -29,6 +29,7 @@ nav:
   - Installation: installation.md
   - Migrate from Version 1 to Version 2: migrate-from-v1-to-v2.md
   - Customization: customizing.md
+  - Multi-tenancy: multi-tenancy.md
   - Reverse Proxying: reverse-proxying.md
   - Settings: settings.md
   - Translations: translations.md

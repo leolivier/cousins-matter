@@ -69,15 +69,21 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
   #  Context / page lifecycle (one instance per test)                 #
   # ------------------------------------------------------------------ #
 
+  # Credentials of the superuser created in setUp(); login is by EMAIL
+  # (ACCOUNT_LOGIN_METHODS is email-only since multi-tenancy).
+  ADMIN_USERNAME = "admin"
+  ADMIN_EMAIL = "admin@example.com"
+  ADMIN_PASSWORD = "password"
+
   def setUp(self) -> None:
     super().setUp()
     self.context: BrowserContext = self._browser.new_context()
     self.page: Page = self.context.new_page()
     self.page.set_default_timeout(self.default_timeout)
     self.user = get_user_model().objects.create_superuser(
-      "admin",
-      "admin@example.com",
-      "password",
+      self.ADMIN_USERNAME,
+      self.ADMIN_EMAIL,
+      self.ADMIN_PASSWORD,
       first_name="Admin",
       last_name="User",
       birthdate="2000-01-01",
@@ -101,15 +107,16 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     """Builds an absolute URL from a relative path."""
     return f"{self.live_server_url}{path}"
 
-  def login(self, username: str, password: str, *, next: str = "/") -> None:
+  def login(self, login: str, password: str, *, next: str = "/") -> None:
     """
-    Authenticates the user via the allauth login form.
+    Authenticates the user via the allauth login form (login is the EMAIL:
+    ACCOUNT_LOGIN_METHODS is email-only since multi-tenancy).
     Override if your form uses different selectors.
     """
     self.page.goto(self.url(f"/accounts/login/?next={next}"))
     # Ensure the login form is fully loaded before filling
     self.page.wait_for_selector("input[name='login']", state="visible", timeout=self.login_timeout)
-    self.page.fill("input[name='login']", username)
+    self.page.fill("input[name='login']", login)
     self.page.fill("input[name='password']", password)
     # Click the login form's own submit button (the allauth template may render
     # additional submit buttons for passkey/code login; scope to the main form).
@@ -189,8 +196,16 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
   def goto_page(self, name: str, args={}, kwargs={}) -> None:
     self.page.goto(self.url(reverse(name, args=args, kwargs=kwargs)))
 
+  def login_as_admin(self, *, next: str = "/") -> None:
+    """Log in as the superuser created by setUp()."""
+    self.login(self.ADMIN_EMAIL, self.ADMIN_PASSWORD, next=next)
+
+  def login_as(self, user, password: str = "password", *, next: str = "/") -> None:
+    """Log in as an arbitrary member (email-based login)."""
+    self.login(user.email, password, next=next)
+
   def login_and_goto_page(self, name: str, args={}, kwargs={}) -> None:
-    self.login("admin", "password")
+    self.login_as_admin()
     self.goto_page(name, args, kwargs)
 
   # Helper assertion to compare element counts – Playwright's locator.count() returns an int

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.exceptions import RequestDataTooBig
+from django.db import transaction
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -146,8 +147,10 @@ class PostEditView(generic.UpdateView):
     post_form = PostForm(request.POST, instance=instance)
     message_form = MessageForm(request.POST, instance=instance.first_message)
     if post_form.is_valid() and message_form.is_valid():
-      message_form.save()
-      post = post_form.save()
+      # atomic: the post and its first message are edited together or not at all
+      with transaction.atomic():
+        message_form.save()
+        post = post_form.save()
       return redirect("forum:display", post.id)
     return render(
       request,

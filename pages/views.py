@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -25,10 +26,12 @@ class PageCreateView(OnlyAdminMixin, generic.CreateView):
       raise PermissionDenied
     form = PageForm(request.POST)
     if form.is_valid():
-      page = form.save()
-      page.sites.set([Site.objects.get(pk=settings.SITE_ID)])
-      page.updated = True
-      page.save()
+      # atomic: the page is never left created without its site association
+      with transaction.atomic():
+        page = form.save()
+        page.sites.set([Site.objects.get(pk=settings.SITE_ID)])
+        page.updated = True
+        page.save()
       if "save" in request.POST:
         return redirect(page.url)
       elif "save-and-continue" in request.POST:
@@ -49,9 +52,12 @@ class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
     page = get_object_or_404(FlatPage, pk=pk)
     form = PageForm(request.POST, instance=page)
     if form.is_valid():
-      page = form.save()
-      page.updated = True
-      page.save(update_fields=["updated"])
+      # atomic: the content and the "updated" flag commit together, so a later import of
+      # predefined pages can never silently overwrite an unflagged edit
+      with transaction.atomic():
+        page = form.save()
+        page.updated = True
+        page.save(update_fields=["updated"])
       if "save" in request.POST:
         return redirect(page.url)
       elif "save-and-continue" in request.POST:

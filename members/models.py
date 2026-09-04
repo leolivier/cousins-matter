@@ -371,8 +371,10 @@ class Member(AbstractUser):
     self._original_avatar_name = self.avatar.name if self.avatar else None
 
   def delete(self, *args, **kwargs):
-    self.delete_avatar()
     super().delete(*args, **kwargs)
+    # remove the avatar files only once the row deletion succeeded, so a failed delete
+    # never leaves a row pointing at deleted files
+    self.delete_avatar()
 
   def delete_avatar(self):
     if self.avatar:

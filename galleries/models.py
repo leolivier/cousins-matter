@@ -1,6 +1,6 @@
 import logging
 import os
-from django.db import models
+from django.db import models, transaction
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
@@ -122,34 +122,40 @@ class Photo(TenantModel):
       old_image_name = old_photo.image.name if old_photo.image else None
       old_thumbnail_name = old_photo.thumbnail.name if old_photo.thumbnail else None
 
-    # need to save first to upload the image
-    super().save(*args, **kwargs)
-
-    gallery_changed = not is_new and old_gallery_id != self.gallery_id
-
-    if gallery_changed and self.image and old_image_name:
-      new_image_name = photo_path(self, os.path.basename(old_image_name))
-      if old_image_name != new_image_name:
-        content = self.image.storage.open(old_image_name).read()
-        self.image.storage.save(new_image_name, ContentFile(content))
-        self.image.name = new_image_name
-        super().save(force_update=True, update_fields=["image"])
-        self.image.storage.delete(old_image_name)
-
     try:
-      if self.is_video:
-        self.thumbnail = create_video_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
-      else:
-        self.thumbnail = create_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
-      super().save(force_update=True, update_fields=["thumbnail"])
+      # The row insert/update and the thumbnail save commit together or not at all: a failure
+      # during thumbnail creation rolls back the photo instead of leaving it without thumbnail.
+      with transaction.atomic():
+        # need to save first to upload the image
+        super().save(*args, **kwargs)
 
-      if gallery_changed and old_thumbnail_name:
-        if not self.thumbnail or self.thumbnail.name != old_thumbnail_name:
-          self.image.storage.delete(old_thumbnail_name)
+        gallery_changed = not is_new and old_gallery_id != self.gallery_id
+
+        if gallery_changed and self.image and old_image_name:
+          new_image_name = photo_path(self, os.path.basename(old_image_name))
+          if old_image_name != new_image_name:
+            content = self.image.storage.open(old_image_name).read()
+            self.image.storage.save(new_image_name, ContentFile(content))
+            self.image.name = new_image_name
+            super().save(force_update=True, update_fields=["image"])
+            self.image.storage.delete(old_image_name)
+
+        if self.is_video:
+          self.thumbnail = create_video_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
+        else:
+          self.thumbnail = create_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
+        super().save(force_update=True, update_fields=["thumbnail"])
+
+        if gallery_changed and old_thumbnail_name:
+          if not self.thumbnail or self.thumbnail.name != old_thumbnail_name:
+            self.image.storage.delete(old_thumbnail_name)
 
     except Exception as e:
-      # issue #120: if any exception during the thumbnail creation process, remove the photo from the database
-      self.delete()
+      # issue #120: if any exception during the save/thumbnail process, the transaction rolls
+      # back the row; on a new photo, also remove the image file left behind on storage.
+      # ponytail: files copied during a gallery move on failure are not cleaned up (rare, harmless orphans)
+      if is_new and self.image and self.image.storage.exists(self.image.name):
+        self.image.storage.delete(self.image.name)
       raise ValidationError(f"Error during saving photo: {e}")
 
 
@@ -317,7 +323,13 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
   Deletes photo files from filesystem
   when corresponding `Photo` object is deleted.
   """
-  if getattr(instance, "image", None):
-    instance.image.delete(save=False)
-  if getattr(instance, "thumbnail", None):
-    instance.thumbnail.delete(save=False)
+
+  # deferred to commit time: if the deletion transaction rolls back (e.g. a failure while
+  # cascading a gallery delete), the files must survive along their rows
+  def _delete_photo_files():
+    if getattr(instance, "image", None):
+      instance.image.delete(save=False)
+    if getattr(instance, "thumbnail", None):
+      instance.thumbnail.delete(save=False)
+
+  transaction.on_commit(_delete_photo_files)

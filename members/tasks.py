@@ -8,6 +8,7 @@ from typing import Literal
 
 from django.conf import settings
 from django.core.files.storage import default_storage
+from django.db import transaction
 from django.utils.text import slugify
 from django.utils.translation import (
   gettext as _,
@@ -303,6 +304,7 @@ def create_member(context: ImportContext, row_data: MemberImportData):
   row_data.current_member.password = generate_random_string(16)
 
 
+@transaction.atomic
 def import_row(context: ImportContext, csv_row: dict):
   with tenant_context(Tenant(pk=context.tenant_id)):
     if context.lang:

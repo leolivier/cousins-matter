@@ -230,7 +230,10 @@ class DeletePhotoViewTest(PhotoTestsBase):
     if thumbnail_name:
       self.assertTrue(storage.exists(thumbnail_name))
 
-    response = self.client.post(self.url, follow=True)
+    # file deletion is deferred to transaction commit (auto_delete_file_on_delete), so the
+    # test must simulate the commit for the callbacks to run
+    with self.captureOnCommitCallbacks(execute=True):
+      response = self.client.post(self.url, follow=True)
 
     self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
     self.assertEqual(response.status_code, 200)

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -30,8 +31,9 @@ class PollCreateView(generic.CreateView):
     form = self.form_class(request.POST)
     form.instance.owner = request.user
     if form.is_valid():
-      poll = form.save()
-      manage_closed_list(poll, form.cleaned_data.get("closed_list"))
+      with transaction.atomic():
+        poll = form.save()
+        manage_closed_list(poll, form.cleaned_data.get("closed_list"))
       messages.success(request, self.success_message)
       return redirect(reverse(self.redirect_to, args=(poll.pk,)))
     else:
@@ -69,8 +71,9 @@ class PollUpdateView(generic.UpdateView):
     # create a form instance from the request and save it
     form = self.form_class(request.POST, instance=poll)
     if form.is_valid():
-      form.save()
-      manage_closed_list(poll, form)
+      with transaction.atomic():
+        form.save()
+        manage_closed_list(poll, form.cleaned_data.get("closed_list"))
       messages.success(request, self.success_message)
       return redirect(reverse(self.redirect_to, args=(poll.pk,)))
     else:

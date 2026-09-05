@@ -14,9 +14,9 @@ generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T12:00:00Z }
 first `Message`, other members reply with further `Message`s, and
 replies can be commented. Subscribing to a post ("follow") drives
 email/in-app notifications through the generic
-[followers machinery](/apps/core.md#followers-notification-batching).
+[followers machinery](/apps/core.md#followers-and-notification-batching).
 Navbar visibility is gated by the `show_forums`
-[feature flag](/apps/core.md#feature-flags).
+[feature flag](/apps/core.md#feature-flags-and-context-processors).
 
 **Tenant note:** unlike most content apps, `Post`, `Message` and
 `Comment` inherit `models.Model` directly — they are **not**

@@ -38,3 +38,4 @@ Test base class for auth/members: `members/tests/tests_member_base.py::MemberTes
 - **Followers**: members follow each other via `core.followers` utilities (drives notifications).
 - **Services pattern**: business logic lives in `<app>/services.py`, extracted from views.
 - Docker: `scripts/entrypoint.py` initializes containers; `scripts/manage_cousins_matter.py` is the install/management CLI; ASGI + Channels routing in `cousinsmatter/asgi.py`.
+- **docs/ OKF bundle**: any PR touching an app or module must update its fiche (e.g. `docs/apps/members.md`) and run `make check-docs` (`manage.py check_okf docs` must stay green); list new fiches in `docs/index.md` and record notable changes in `docs/log.md`.

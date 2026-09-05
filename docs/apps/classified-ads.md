@@ -15,7 +15,7 @@ keeps the underscore: `classified_ads`; this fiche file uses a hyphen).
 A member creates an ad with category, price and photos; other members
 browse it and contact the **owner by email through a relay** — the
 owner's address is never exposed. Navbar visibility is gated by the
-`show_classified_ads` [feature flag](/apps/core.md#feature-flags).
+`show_classified_ads` [feature flag](/apps/core.md#feature-flags-and-context-processors).
 
 **Tenant note:** `ClassifiedAd` and `AdPhoto` inherit `models.Model`
 directly — **not** [TenantModel](/apps/tenants.md)-scoped (same as

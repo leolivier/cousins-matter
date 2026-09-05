@@ -15,7 +15,7 @@ generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T12:00:00Z }
 and automatic thumbnail generation. Both models inherit
 [TenantModel](/apps/tenants.md) so every query is tenant-scoped through
 `TenantManager`. Entry in the navbar is gated by the `show_galleries`
-[feature flag](/apps/core.md#feature-flags).
+[feature flag](/apps/core.md#feature-flags-and-context-processors).
 
 ## Models (galleries/models.py)
 

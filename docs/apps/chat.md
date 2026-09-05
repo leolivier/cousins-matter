@@ -16,7 +16,7 @@ views list/create rooms and render history, while a websocket consumer
 everyone in a room. Rooms and messages are
 [TenantModel](/apps/tenants.md)-scoped. Navbar visibility is gated by
 the `show_public_chats` / `show_private_chats`
-[feature flags](/apps/core.md#feature-flags).
+[feature flags](/apps/core.md#feature-flags-and-context-processors).
 
 ## Models (chat/models.py)
 

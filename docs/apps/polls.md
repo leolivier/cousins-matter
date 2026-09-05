@@ -16,7 +16,7 @@ and **Event Planners** — an event-planning survey subclass used to pick
 a date for an event. Both live in the same app and share models, forms
 and vote machinery; the navbar exposes them as separate tabs, gated by
 the `show_polls` and `show_event_planners`
-[feature flags](/apps/core.md#feature-flags).
+[feature flags](/apps/core.md#feature-flags-and-context-processors).
 
 **Tenant note:** like [forum](/apps/forum.md), `Poll`, `Question`,
 `Answer` subclasses and `EventPlanner` inherit `models.Model` directly —

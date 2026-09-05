@@ -46,8 +46,15 @@ environment. The shipped keys, all `True` by default:
 - The family settings UI (`tenants:settings` →
   tenants/views/views_settings.py) only exposes the branding/behavior keys of
   `TENANT_SETTINGS_SPEC`, not flags: per-family flag overrides are set
-  through the Django admin on the `TenantSettings` row (then they take effect
-  on the next request of that family).
+  through the Django admin on the `TenantSettings` row. They take effect only
+  once the flags cache is invalidated — today the *only* code path calling
+  `clear_flags_cache()` is the family-settings form save
+  (tenants/views/views_settings.py); `TenantSettingsAdmin` and
+  `TenantSettings.save()` do not. And because `_tenant_flags_cache` is a
+  plain per-process dict keyed without the overrides content, other worker
+  processes (multi-worker app servers, the qcluster worker) keep serving the
+  stale flags until they restart or a family-settings save happens in that
+  same process.
 
 ## Adding a flag
 

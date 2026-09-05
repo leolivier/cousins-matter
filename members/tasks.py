@@ -306,31 +306,32 @@ def create_member(context: ImportContext, row_data: MemberImportData):
 
 @transaction.atomic
 def import_row(context: ImportContext, csv_row: dict):
-  with tenant_context(Tenant(pk=context.tenant_id)):
-    if context.lang:
-      translation_activate(context.lang)
-    logger.debug(f"start effectively importing row for username {csv_row[t('username')]}. lang: {context.lang}")
-    # normalize username using slugify
-    csv_row[t("username")] = slugify(csv_row[t("username")])
-    # search for an existing member with this username
-    current_member = Member.objects.filter(username=csv_row[t("username")]).first()
-    row_data = MemberImportData(row=csv_row, current_member=current_member)
-    if current_member:  # found, update it
-      logger.debug(f"found member: {current_member}, updating it")
-      update_member(context, row_data)
-    else:  # not found, create it
-      logger.debug("Member not found, creating it")
-      create_member(context, row_data)
+  # the whole row (member create/update, address, final save) commits together or not at all,
+  # so a failing row never leaves a member without its address or half-updated fields
+  if context.lang:
+    translation_activate(context.lang)
+  logger.debug(f"start effectively importing row for username {csv_row[t('username')]}. lang: {context.lang}")
+  # normalize username using slugify
+  csv_row[t("username")] = slugify(csv_row[t("username")])
+  # search for an existing member with this username
+  current_member = Member.objects.filter(username=csv_row[t("username")]).first()
+  row_data = MemberImportData(row=csv_row, current_member=current_member)
+  if current_member:  # found, update it
+    logger.debug(f"found member: {current_member}, updating it")
+    update_member(context, row_data)
+  else:  # not found, create it
+    logger.debug("Member not found, creating it")
+    create_member(context, row_data)
 
-    if not row_data.activation_managed:  # no "managed_by" column in the file or not filled for that member
-      handle_no_manager_case(context, row_data)
+  if not row_data.activation_managed:  # no "managed_by" column in the file or not filled for that member
+    handle_no_manager_case(context, row_data)
 
-    update_address(row_data)
+  update_address(row_data)
 
-    if row_data.is_created_or_updated():
-      logger.debug(f"Saving member {row_data.current_member.__dict__}")
-      row_data.current_member.save()
+  if row_data.is_created_or_updated():
+    logger.debug(f"Saving member {row_data.current_member.__dict__}")
+    row_data.current_member.save()
 
-    if context.lang:
-      translation_deactivate()
-    return row_data  # this will the result retrieved by result_group
+  if context.lang:
+    translation_deactivate()
+  return row_data  # this will the result retrieved by result_group

@@ -70,9 +70,10 @@ debt items in [Known Debt](/plan/debt.md) with code anchors:
    ([what is not tenant-scoped](/specs/multi-tenancy.md#what-is-not-tenant-scoped)).
    Converting an app means extending `TENANT_RLS_TABLES`
    (tenants/rls.py:21) in the same change.
-3. **Remote media storage** — the `public` storage alias disappears as
-   soon as `MEDIA_STORAGE` is set, so S3-style backends have no public
-   alias to use ([details](/plan/debt.md#the-public-storage-alias-disappears-when-media_storage-is-set)).
+3. **Remote media storage** — member uploads never leave local disk:
+   `MEDIA_STORAGE` configures only the `public` alias, which nothing
+   selects — suspected misplaced-key bug vs the user-manual promise
+   ([details](/plan/debt.md#the-public-storage-alias-disappears-when-media_storage-is-set)).
 4. **Cross-worker flag invalidation** — the per-tenant flags cache is a
    per-process dict; see [feature flags](/modules/feature-flags.md)
    and [debt](/plan/debt.md#per-tenant-flags-cache-invalidation).

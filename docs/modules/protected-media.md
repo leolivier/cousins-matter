@@ -53,8 +53,10 @@ Both views funnel into `_download_media`:
 `STORAGES` (config/settings/base.py) defines two file storages: `"default"`
 (rooted at `MEDIA_ROOT`, base_url `MEDIA_URL`) and `"public"` (rooted at
 `PUBLIC_MEDIA_ROOT`). Setting `MEDIA_STORAGE` (plus `MEDIA_STORAGE_OPTIONS`)
-swaps the default storage to any Django storage backend, e.g. S3 — the
-download views keep working because they go through `default_storage`.
+reconfigures **only the `public` alias** to any Django storage backend, e.g.
+S3; `default` is deliberately left untouched (still FileSystemStorage on
+`MEDIA_ROOT`), which is why the download views keep working — they go
+through `default_storage`.
 Static files are separate (WhiteNoise) —
 [Architecture](/architecture.md#static-and-media).
 

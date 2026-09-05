@@ -5,7 +5,7 @@ description: Repo-wide coding conventions — services pattern, custom user mode
 tags: [conventions, services, followers, feature-flags, i18n]
 status: draft
 stale_after: 2027-03-04
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T12:00:00Z }
+generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T21:36:13Z }
 ---
 
 # Conventions

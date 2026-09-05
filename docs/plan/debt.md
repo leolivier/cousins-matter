@@ -69,6 +69,10 @@ setting `MEDIA_STORAGE` replaces that entry wholesale. Nothing selects
 silently vanishes exactly when someone moves media to S3. See the
 [media-storage spec](/specs/media-storage.md).
 
+Suspected misplaced-key bug on top: `MEDIA_STORAGE` reconfigures `public`
+where an operator would expect `default` — see the remote media storage
+item in the [roadmap](/plan/roadmap.md).
+
 ## Trove size limits are unenforced
 
 `TROVE_FILE_MAX_SIZE` (20 MB) and `TROVE_PICTURE_FILE_MAX_SIZE`
@@ -91,7 +95,7 @@ owns this analysis — do not fix it in a second place.
 `classified_ads_n+1_analysis.md` (repo root, kept on purpose) found two
 N+1 query paths. Both fixes **are already in the code**:
 `ListAdsView` uses `select_related("owner")` and `AdDetailView` adds
-`prefetch_related("photos")` (classified_ads/views.py:75-86), and both
+`prefetch_related("photos")` (classified_ads/views.py:75-90), and both
 admins carry `list_select_related` (classified_ads/admin.py). The file
 stays as the historical analysis; the user-facing summary is in
 [apps/classified-ads.md](/apps/classified-ads.md#known-performance-issue).

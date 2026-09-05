@@ -29,17 +29,19 @@ This fiche is the contract and the invariants.
 
 - **`MEDIA_STORAGE` unset (default):** two FileSystemStorage aliases —
   `"default"` on `MEDIA_ROOT` and `"public"` on `PUBLIC_MEDIA_ROOT`.
-- **`MEDIA_STORAGE` set:** the `"default"` alias becomes
-  `{"BACKEND": env.str("MEDIA_STORAGE"),
-  "OPTIONS": env.json("MEDIA_STORAGE_OPTIONS", default={})}`
-  and **the `"public"` alias disappears entirely** — public files become
-  objects under the `public/` prefix *inside the remote backend*.
+- **`MEDIA_STORAGE` set:** the `"public"` alias entry is replaced wholesale
+  by `{"BACKEND": env.str("MEDIA_STORAGE"),
+  "OPTIONS": env.json("MEDIA_STORAGE_OPTIONS", default={})}`. The
+  `"default"` alias is **not** touched — it stays FileSystemStorage on
+  `MEDIA_ROOT`, so member uploads remain local.
 
-Nothing in the codebase currently selects `storage="public"`; public files
-are simply files under `media/public/` reached through `default_storage`
-(`download_public_media` re-prefixes `Path("public")`). So the whole public
-mechanism is a directory convention, not a storage routing decision — keep it
-that way unless both aliases are migrated together.
+Nothing in the codebase currently selects `storage="public"`, so with
+`MEDIA_STORAGE` set the remote backend is effectively inert until something
+is wired to it; public files are simply files under `media/public/` reached
+through `default_storage` (`download_public_media` re-prefixes
+`Path("public")`). So the whole public mechanism is a directory convention,
+not a storage routing decision — keep it that way unless both aliases are
+migrated together.
 
 ## Backend contract
 

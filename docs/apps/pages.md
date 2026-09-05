@@ -5,7 +5,7 @@ description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpa
 tags: ["app", "pages"]
 status: draft
 stale_after: 2027-03-05
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T00:00:00Z }
+generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:42:30Z }
 ---
 
 # Pages

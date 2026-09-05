@@ -1,7 +1,9 @@
 import tempfile
 from datetime import date, timedelta
+from io import StringIO
 from pathlib import Path
 
+from django.core.management import CommandError, call_command
 from django.test import SimpleTestCase
 
 from core.management.commands.check_okf import check_bundle
@@ -58,3 +60,9 @@ class CheckBundleTests(SimpleTestCase):
     errors, stale = check_bundle(self._bundle(**{"a.md": "---\ntype: Plan\nstale_after: not-a-date\n---\n\n# A\n"}))
     self.assertEqual(errors, ["a.md: bad `stale_after` (want ISO date)"])
     self.assertEqual(stale, [])
+
+  def test_missing_bundle_dir_raises_command_error(self) -> None:
+    missing = "/tmp/definitely-missing-xyz"
+    self.assertEqual(check_bundle(Path(missing)), ([], []))
+    with self.assertRaises(CommandError):
+      call_command("check_okf", missing, stdout=StringIO())

@@ -1,6 +1,6 @@
 """Check OKF v0.2 conformance of a documentation bundle (default: docs/).
 
-Every non-resorted ``.md`` file must have a YAML frontmatter with a non-empty
+Every non-reserved ``.md`` file must have a YAML frontmatter with a non-empty
 ``type``. ``log.md`` and ``docs/superpowers/`` are excluded. Files whose
 ``stale_after`` date has passed are listed as warnings (not errors).
 """
@@ -10,7 +10,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 
 RESERVED = {"log.md"}
 EXCLUDED_DIRS = {"superpowers"}
@@ -57,7 +57,10 @@ class Command(BaseCommand):
     parser.add_argument("bundle", nargs="?", default="docs", type=str)
 
   def handle(self, *args: str, **options: Any) -> None:
-    errors, stale = check_bundle(Path(str(options["bundle"])))
+    bundle = Path(str(options["bundle"]))
+    if not bundle.is_dir():
+      raise CommandError(f"bundle not found: {bundle}")
+    errors, stale = check_bundle(bundle)
     for e in errors:
       self.stdout.write(self.style.ERROR(f"ERROR {e}"))
     for s in stale:

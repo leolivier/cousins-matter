@@ -27,6 +27,7 @@ from ..services.members import (
   do_init_member,
   do_notify_death,
 )
+from tenants.settings_overrides import tenant_setting
 
 logger = logging.getLogger(__name__)
 
@@ -122,9 +123,10 @@ class CreateManagedMemberView(generic.CreateView):
   template_name = "members/members/member_upsert.html"
 
   def check_before_creation(self, request):
-    if request.user.is_superuser or settings.ALLOW_MEMBERS_TO_CREATE_MEMBERS:
+    is_admin = request.user.is_superuser or getattr(request.user, "is_tenant_admin", False)
+    if is_admin or tenant_setting("allow_members_to_create_members"):
       return None
-    return HttpResponseForbidden(_("Only superusers can create members"))
+    return HttpResponseForbidden(_("Only admins can create members"))
 
   def get(self, request, *args, **kwargs):
     if (ko := self.check_before_creation(request)) is not None:
@@ -161,7 +163,7 @@ class CreateManagedMemberView(generic.CreateView):
 
 
 def _can_edit_member(request, member):
-  if request.user.is_superuser:
+  if request.user.is_superuser or getattr(request.user, "is_tenant_admin", False):
     return True
   authorized_editor = member.member_manager or member
   return request.user.id == authorized_editor.id

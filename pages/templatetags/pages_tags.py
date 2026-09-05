@@ -80,16 +80,26 @@ def pages_menu():
   return {"page_tree": build_pages_tree(prefix=settings.MENU_PAGE_URL_PREFIX)}
 
 
-@register.inclusion_tag("pages/page_subtree.html")
-def pages_tree(is_superuser=False):
+@register.inclusion_tag("pages/page_subtree.html", takes_context=True)
+def pages_tree(context):
   """
-  Creates a nested tree structure from all flat pages and pass it to
-  the "pages/page_tree.html" template for rendering.
+  Creates a nested tree structure from all flat pages and pass it to the
+  "pages/page_tree.html" template for rendering.
+
+  Predefined/private pages are included for platform superusers and tenant
+  admins (resolved from the context user; template tag calls cannot take
+  boolean `or` expressions, so the privilege check lives here).
   """
-  publish_tree = build_pages_tree(include_predefined=is_superuser, prefix=settings.MENU_PAGE_URL_PREFIX)
-  private_tree = build_pages_tree(include_predefined=is_superuser, prefix=settings.PRIVATE_PAGE_URL_PREFIX)
+  user = context.get("user")
+  is_privileged = bool(
+    user is not None
+    and getattr(user, "is_authenticated", False)
+    and (getattr(user, "is_superuser", False) or getattr(user, "is_tenant_admin", False))
+  )
+  publish_tree = build_pages_tree(include_predefined=is_privileged, prefix=settings.MENU_PAGE_URL_PREFIX)
+  private_tree = build_pages_tree(include_predefined=is_privileged, prefix=settings.PRIVATE_PAGE_URL_PREFIX)
   tree = {_("Public"): publish_tree, _("Private"): private_tree}
-  return {"page_tree": tree, "superuser": is_superuser}
+  return {"page_tree": tree, "superuser": is_privileged}
 
 
 @register.filter

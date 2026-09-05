@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 from django.utils.translation import gettext as _
 
 from .models import AdPhoto
+from tenants.settings_overrides import tenant_setting
 
 
 def get_next_prev_photo(pk, side):
@@ -48,7 +49,7 @@ The %(site_name)s admin team
     "username": sender.full_name,
     "title": ad.title,
     "message": message_text,
-    "site_name": settings.SITE_NAME,
+    "site_name": tenant_setting("site_name"),
     "site_url": settings.SITE_DOMAIN,
     "email": sender.email,
   }

@@ -25,6 +25,8 @@ from .models import (
   Family,
   Address,
 )
+from tenants.models import Tenant
+from tenants.scoping import tenant_context
 
 logger = logging.getLogger(__name__)
 
@@ -91,6 +93,9 @@ class ImportContext:
   rows_num: int = 0
   group: str = ""  # id of the group of tasks
   lang: str = "en"  # language of the file
+  # tenant the imported members belong to (the importer's tenant); set on the
+  # request side so the Q worker can activate it via tenant_context().
+  tenant_id: int | None = None
 
   # errors, warnings and users processed
   warnings: list[str] = field(default_factory=list)

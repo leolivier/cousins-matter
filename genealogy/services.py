@@ -11,6 +11,7 @@ from django.utils.translation import gettext as _
 
 from .models import Family, Person
 from .utils import GedcomParser, clear_genealogy_caches
+from tenants.settings_overrides import tenant_setting
 
 # --------------------------------------------------------------------------------------
 # dashboard / statistics
@@ -56,10 +57,12 @@ def resolve_main_person_id(explicit_id):
   the first person in the DB. Returns None when there is nobody to chart."""
   if explicit_id:
     return explicit_id
-  configured = getattr(settings, "FAMILY_CHART_ROOT_PERSON_ID", None)
-  if configured:
-    return configured
-  first_person = Person.objects.first()
+  main_person_id = tenant_setting("family_chart_root_person_id")
+  if main_person_id:
+    return main_person_id
+
+  first_person = Person.objects.first()  # tenant autofiltered
+
   return first_person.id if first_person else None
 
 

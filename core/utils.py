@@ -438,7 +438,7 @@ def protected_media_url(media):
 
 
 def check_edit_permission(request, owner):
-  if request.user.is_superuser or owner.id == request.user.id:
+  if request.user.is_superuser or request.user.is_tenant_admin or owner.id == request.user.id:
     return True
   raise PermissionDenied(_("You do not have permission to edit/delete this object."))
 

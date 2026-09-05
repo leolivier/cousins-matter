@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Delete family") %} {% endblock %}
+{% block content %}
+<div class="container px-2">
+	<h1 class="title has-text-centered is-2">{% translate "Delete family" %}</h1>
+	<form method="POST" class="box">
+		{% csrf_token %}
+		<p class="content">
+			{% blocktranslate trimmed with name=tenant.name slug=tenant.slug %}
+				You are about to PERMANENTLY delete the family "{{ name }}" and ALL its data
+				(members, galleries, photos). This cannot be undone.
+			{% endblocktranslate %}
+		</p>
+		<div class="field">
+			<label class="label" for="id_confirmation">
+				{% blocktranslate trimmed with slug=tenant.slug %}Type "{{ slug }}" to confirm{% endblocktranslate %}
+			</label>
+			<div class="control">
+				<input class="input" type="text" name="confirmation" id="id_confirmation" autocomplete="off">
+			</div>
+		</div>
+		<div class="container mt-4">
+			<button class="button is-danger" type="submit">{% translate "Permanently delete" %}</button>
+			<a class="button" href="{% url 'tenants:list' %}">{% translate "Cancel" %}</a>
+		</div>
+	</form>
+</div>
+{% endblock content %}

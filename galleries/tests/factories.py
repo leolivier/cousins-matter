@@ -3,7 +3,12 @@ import random
 from factory.django import DjangoModelFactory, ImageField
 from galleries.models import Photo, Gallery
 from members.tests.factories import MemberFactory
+from tenants.models import Tenant
 import datetime
+
+# Gallery/Photo are tenant-scoped: give factories an explicit default tenant so
+# they work with no ambient tenant_context (e.g. UI tests).
+DEFAULT_TENANT = factory.LazyFunction(Tenant.get_default)
 
 
 class GalleryFactory(DjangoModelFactory):
@@ -13,6 +18,7 @@ class GalleryFactory(DjangoModelFactory):
   name = factory.Sequence(lambda n: f"Gallery {n}")
   description = factory.Faker("paragraph")
   owner = factory.SubFactory(MemberFactory)
+  tenant = DEFAULT_TENANT
 
   @factory.post_generation
   def create_photos(self, create, extracted, **kwargs):
@@ -48,4 +54,5 @@ class PhotoFactory(DjangoModelFactory):
   description = factory.Faker("paragraph")
   date = factory.LazyFunction(datetime.date.today)
   gallery = factory.SubFactory(GalleryFactory)
+  tenant = DEFAULT_TENANT
   uploaded_by = factory.SubFactory(MemberFactory)

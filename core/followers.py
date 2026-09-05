@@ -7,6 +7,8 @@ from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from django_q.tasks import async_task
+from tenants.models import Tenant
+from tenants.scoping import tenant_context
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +38,8 @@ def check_followers(
   if request:  # otherwise, must be an absolute url!
     followed_object_url = request.build_absolute_uri(followed_object_url)
 
+  # carry the object's tenant into the Q worker (no request/middleware there)
+  tenant_id = followed_object_owner.tenant_id if followed_object_owner else None
   async_task(
     "core.followers.do_check_followers",
     followed_object,
@@ -43,6 +47,7 @@ def check_followers(
     followed_object_url,
     new_internal_object=new_internal_object,
     author=author,
+    tenant_id=tenant_id,
     hook="core.followers.post_check_followers",
   )
 
@@ -57,76 +62,78 @@ def do_check_followers(
   followed_object_url,
   new_internal_object=None,
   author=None,
+  tenant_id=None,
 ):
   "see check_followers. Really implement the check"
-  if new_internal_object is None:
-    new_internal_object = followed_object
+  with tenant_context(Tenant(pk=tenant_id) if tenant_id else None):
+    if new_internal_object is None:
+      new_internal_object = followed_object
 
-  # get all potential recipients (Member objects)
-  # Optimize by only loading necessary fields
-  recipients = set(followed_object.followers.only("id", "email", "email_batch_frequency", "first_name", "last_name").all())
-  if followed_object_owner:
-    recipients.update(
-      followed_object_owner.followers.only("id", "email", "email_batch_frequency", "first_name", "last_name").all()
-    )
-    recipients.add(followed_object_owner)
-  if author:  # add author's followers to the list
-    recipients.update(author.followers.only("id", "email", "email_batch_frequency", "first_name", "last_name").all())
+    # get all potential recipients (Member objects)
+    # Optimize by only loading necessary fields
+    recipients = set(followed_object.followers.only("id", "email", "email_batch_frequency", "first_name", "last_name").all())
+    if followed_object_owner:
+      recipients.update(
+        followed_object_owner.followers.only("id", "email", "email_batch_frequency", "first_name", "last_name").all()
+      )
+      recipients.add(followed_object_owner)
+    if author:  # add author's followers to the list
+      recipients.update(author.followers.only("id", "email", "email_batch_frequency", "first_name", "last_name").all())
 
-  logger.debug(f"recipients before author discard: {recipients}")
-  # Filter out author and members who opted out of emails
-  if author:
-    recipients.discard(author)
-  else:
-    author = followed_object_owner
-  logger.debug(f"recipients after author discard: {recipients}")
-
-  immediate_recipients = []
-  interested_count = 0
-
-  from members.models import Member
-
-  from .models import NotificationEvent
-
-  for member in recipients:
-    if member.email_batch_frequency == Member.FREQUENCY_NEVER:
-      logger.debug(f"member {member} has email_batch_frequency == Member.FREQUENCY_NEVER")
-      continue
-
-    interested_count += 1
-    if member.email_batch_frequency == Member.FREQUENCY_IMMEDIATE:
-      logger.debug(f"member {member} has email_batch_frequency == Member.FREQUENCY_IMMEDIATE")
-      immediate_recipients.append(member)
+    logger.debug(f"recipients before author discard: {recipients}")
+    # Filter out author and members who opted out of emails
+    if author:
+      recipients.discard(author)
     else:
-      # Store event for batching
-      logger.debug(f"member {member} has email_batch_frequency == Member.FREQUENCY_BATCH")
-      NotificationEvent.objects.create(
-        member=member,
-        followed_object=followed_object,
-        new_object=new_internal_object,
-        author=author,
-        followed_object_url=followed_object_url,
+      author = followed_object_owner
+    logger.debug(f"recipients after author discard: {recipients}")
+
+    immediate_recipients = []
+    interested_count = 0
+
+    from members.models import Member
+
+    from .models import NotificationEvent
+
+    for member in recipients:
+      if member.email_batch_frequency == Member.FREQUENCY_NEVER:
+        logger.debug(f"member {member} has email_batch_frequency == Member.FREQUENCY_NEVER")
+        continue
+
+      interested_count += 1
+      if member.email_batch_frequency == Member.FREQUENCY_IMMEDIATE:
+        logger.debug(f"member {member} has email_batch_frequency == Member.FREQUENCY_IMMEDIATE")
+        immediate_recipients.append(member)
+      else:
+        # Store event for batching
+        logger.debug(f"member {member} has email_batch_frequency == Member.FREQUENCY_BATCH")
+        NotificationEvent.objects.create(
+          member=member,
+          followed_object=followed_object,
+          new_object=new_internal_object,
+          author=author,
+          followed_object_url=followed_object_url,
+        )
+
+    obj_type = new_internal_object._meta.verbose_name
+    obj_str = str(new_internal_object)
+    follower_emails = [m.email for m in immediate_recipients if m.email]
+
+    if interested_count == 0:
+      logger.debug(f"{obj_type}:'{obj_str}' change is not interesting anyone")
+      return 0
+    else:
+      logger.debug(
+        f"""{obj_type}:'{obj_str}' change is interesting for {interested_count} people.
+        Sending {len(immediate_recipients)} immediate emails."""
       )
 
-  obj_type = new_internal_object._meta.verbose_name
-  obj_str = str(new_internal_object)
-  follower_emails = [m.email for m in immediate_recipients if m.email]
+    if not follower_emails:
+      return 0
 
-  if interested_count == 0:
-    logger.debug(f"{obj_type}:'{obj_str}' change is not interesting anyone")
-    return 0
-  else:
-    logger.debug(
-      f"""{obj_type}:'{obj_str}' change is interesting for {interested_count} people.
-      Sending {len(immediate_recipients)} immediate emails."""
+    return generate_emails(
+      followed_object, followed_object_owner, new_internal_object, author, followed_object_url, follower_emails
     )
-
-  if not follower_emails:
-    return 0
-
-  return generate_emails(
-    followed_object, followed_object_owner, new_internal_object, author, followed_object_url, follower_emails
-  )
 
 
 def generate_emails(followed_object, followed_object_owner, new_internal_object, author, followed_object_url, follower_emails):

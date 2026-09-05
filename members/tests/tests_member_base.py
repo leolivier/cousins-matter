@@ -7,6 +7,7 @@ from django.test import RequestFactory, TestCase, TransactionTestCase, AsyncClie
 from asgiref.sync import async_to_sync
 
 from ..models import Member
+from tenants.models import Tenant
 
 COUNTER: int = -1  # -1 for superuser and 0 for member
 
@@ -156,7 +157,12 @@ class MemberTestCase(MemberTestCaseMixin, TestCase):
     # force username
     superuser_data["username"] = "superuser"
     pwd = superuser_data["password"]
-    cls.superuser = Member.objects.create_superuser(**superuser_data)
+    # Put the test superuser on the DEFAULT tenant (not the system tenant) so it
+    # appears in the tenant-scoped member list alongside the test members. It
+    # keeps is_superuser=True, so permission gates ("superuser OR tenant-admin")
+    # still pass. (Cross-tenant platform-admin behavior is covered by
+    # tests_tenant_isolation; the system-tenant default is the prod behavior.)
+    cls.superuser = Member.objects.create_superuser(**superuser_data, tenant=Tenant.get_default())
     cls.superuser.password = pwd  # keep unhashed password in memory for login
 
     # create a member for testing
@@ -184,7 +190,7 @@ class TransactionMemberTestCase(MemberTestCaseMixin, TransactionTestCase):
     # force username
     superuser_data["username"] = "superuser"
     pwd = superuser_data["password"]
-    self.superuser = Member.objects.create_superuser(**superuser_data)
+    self.superuser = Member.objects.create_superuser(**superuser_data, tenant=Tenant.get_default())
     self.superuser.password = pwd  # keep unhashed password in memory for login
 
     # create a member for testing

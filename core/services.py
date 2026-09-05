@@ -58,7 +58,11 @@ def build_site_stats(site_url: str, release_text: dict) -> dict:
   in the view, since they need the HTTP request (the version lookup reports errors through the
   messages framework, and the URL comes from ``request.build_absolute_uri``).
   """
-  admin = Member.objects.filter(is_superuser=True).first()
+  from tenants.authz import admin_or_superusers
+  from tenants.scoping import get_current_tenant
+
+  _admins = admin_or_superusers(get_current_tenant())
+  admin = _admins[0] if _admins else None
   all_messages_count = ChatMessage.objects.count()
   public_chat_rooms = ChatRoom.objects.public()
   public_chat_messages_count = ChatMessage.objects.filter(room__in=public_chat_rooms).count()
@@ -131,8 +135,8 @@ def build_site_stats(site_url: str, release_text: dict) -> dict:
     "admin": {
       "key": _("Administrator"),
       "stats": [
-        {"key": _("This site is managed by"), "value": admin.full_name},
-        {"key": _("Administrator email"), "value": admin.email},
+        {"key": _("This site is managed by"), "value": admin.full_name if admin else _("(no admin yet)")},
+        {"key": _("Administrator email"), "value": admin.email if admin else ""},
       ],
     },
   }

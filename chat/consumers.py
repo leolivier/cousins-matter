@@ -3,6 +3,8 @@ import random
 import logging
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
+from tenants.models import Tenant
+from tenants.scoping import set_current_tenant, tenant_context
 from urllib.parse import unquote
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -86,7 +88,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
     """
     logger.debug("websocket connected")
     self.room_slug = self.scope["url_route"]["kwargs"]["room_slug"]
-    self.room_group_name = "chat_%s" % self.room_slug
+    user = self.scope.get("user")
+    # Rooms are tenant-scoped and slugs are only unique per tenant: the Redis
+    # group must be tenant-prefixed or two families' rooms with the same slug
+    # would broadcast into each other. Platform superusers are unscoped.
+    self.tenant_id = None if getattr(user, "is_superuser", False) else getattr(user, "tenant_id", None)
+    self.room_group_name = "chat_%s_%s" % (self.tenant_id, self.room_slug)
 
     # Join room group
     await self.channel_layer.group_add(self.room_group_name, self.channel_name)
@@ -97,10 +104,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # connecting user and broadcast the updated receipts to the room group.
     user = self.scope.get("user")
     if user is not None and not user.is_anonymous:
-      try:
-        room = await ChatRoom.objects.aget(slug=self.room_slug)
-      except ChatRoom.DoesNotExist:
-        room = None
+      # Tenant-scoped lookup. The thread-local does NOT cross the threads the
+      # async ORM uses, so resolve the room in a sync helper that enters
+      # tenant_context() itself (superusers stay unscoped: cross-tenant admins).
+      room = await self._aget_room(self.room_slug)
       if room is not None and not await room.ais_public():
         newly_marked = await self._mark_room_read(user, room)
         if newly_marked:
@@ -118,6 +125,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     :param close_code: The close code of the websocket connection.
     :type close_code: int
     """
+    set_current_tenant(None)
     await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
     logger.debug(f"websocket disconnected: {close_code}")
     await super().disconnect(close_code)
@@ -137,6 +145,42 @@ class ChatConsumer(AsyncWebsocketConsumer):
     logger.debug(f"websocket closed connection: {code} {reason}")
     await super().close(code, reason)
 
+  def _tenant(self):
+    """Shallow Tenant for the connection's scope (None = unscoped superuser)."""
+    return Tenant(pk=self.tenant_id) if self.tenant_id else None
+
+  async def _aget_room(self, room_slug):
+    """Resolve a room scoped to the connection's tenant.
+
+    The async ORM evaluates queries on threads where the request thread-local
+    is absent, so the lookup runs in a sync helper that enters tenant_context
+    itself. Returns None when the room does not exist in this tenant.
+    """
+
+    def _get():
+      with tenant_context(self._tenant()):
+        return ChatRoom.objects.filter(slug=room_slug).first()
+
+    return await sync_to_async(_get)()
+
+  async def _aget_message(self, message_id):
+    """Resolve a message for update/delete, tenant-checked.
+
+    Returns (message, allowed): allowed is False when the message belongs to
+    another tenant (the caller sends an error instead of mutating it).
+    """
+
+    def _get():
+      with tenant_context(self._tenant()):
+        message = ChatMessage.objects.filter(pk=message_id).select_related("room").first()
+        if message is None:
+          return None, True  # unknown id: let the caller 404 as before
+        if self.tenant_id and message.tenant_id != self.tenant_id:
+          return None, False
+        return message, True
+
+    return await sync_to_async(_get)()
+
   def _build_absolute_url(self, relative_url):
     # big hack...
     headers = dict(self.scope["headers"])
@@ -152,16 +196,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
       return f"{origin}{relative_url}"
 
   async def acreate_message(self, member_id, room_slug, msg_content):
-    # print('room slug: ', room_slug)
-    room = await ChatRoom.objects.aget(slug=room_slug)
+    room = await self._aget_room(room_slug)
+    if room is None:
+      return None  # room not visible from this tenant
     member = await Member.objects.aget(pk=member_id)
-    message = await ChatMessage.objects.acreate(member=member, room=room, content=msg_content)
+    # explicit tenant: acreate evaluates on another thread where the
+    # thread-local fallback would land the message on the default tenant
+    message = await ChatMessage.objects.acreate(member=member, room=room, content=msg_content, tenant_id=room.tenant_id)
     url = self._build_absolute_url(reverse("chat:room", args=[room_slug]))
     await sync_to_async(check_followers)(None, room, await room.aowner(), url, new_internal_object=message, author=member)
     return message
 
   async def aupdate_message(self, message_id, msg_content):
-    message = await ChatMessage.objects.aget(pk=message_id)
+    message, allowed = await self._aget_message(message_id)
+    if message is None or not allowed:
+      return None
     message.content = msg_content
     message.date_modified = timezone.now()
     await message.asave()
@@ -193,13 +242,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
     message = data["message"]
     member_id = str(data["member"])
     room_slug = unquote(data["room"])
-    # retrieve previous message author
-    prev_msg = await ChatMessage.objects.filter(room__slug=room_slug).order_by("-date_added").afirst()
+    # retrieve previous message author (tenant-scoped: slugs repeat per tenant)
+
+    def _prev():
+      with tenant_context(self._tenant()):
+        return ChatMessage.objects.filter(room__slug=room_slug).order_by("-date_added").first()
+
+    prev_msg = await sync_to_async(_prev)()
     prev_msg_author_id = str(prev_msg.member_id) if prev_msg else None
     prev_msg_date_added = prev_msg.date_added if prev_msg else None
     mbr = await Member.objects.aget(pk=member_id)
     # Save the new message
     msg = await self.acreate_message(member_id, room_slug, message)
+    if msg is None:
+      await self.send(text_data=json.dumps({"action": "error", "error": _("Room not found in your family.")}))
+      return
     local_date_added = timezone.localtime(msg.date_added)
     # Then send it to room group so each member can receive it and display it in its own browser
     context = {
@@ -216,7 +273,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     }
     # Read-receipt context: a freshly created message is unread by recipients,
     # and receipts only show in private rooms (the fragment template gates on `private`).
-    room = await ChatRoom.objects.aget(slug=room_slug)
+    room = await self._aget_room(room_slug)
     context["private"] = not await room.ais_public()
     context["read_status"] = "unread"
     await self.channel_layer.group_send(self.room_group_name, context)
@@ -237,7 +294,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # broadcast the updated receipt so the sender's check flips ✓ → ✓✓.
     if not event.get("private") or user_id is None or str(user_id) == str(event.get("member_id")):
       return
-    room = await ChatRoom.objects.aget(slug=self.room_slug)
+    room = await self._aget_room(self.room_slug)
+    if room is None:
+      return
     newly = await self._mark_room_read(user, room, only_msg_id=event.get("msg_id"))
     if newly:
       await self._broadcast_read_status(room, newly)
@@ -253,7 +312,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     """
     try:
-      message = await ChatMessage.objects.aget(pk=msgid)
+      message, allowed = await self._aget_message(msgid)
+      if message is None:
+        return not allowed  # cross-tenant message: refuse
       user = self.scope.get("user")
 
       if not user or user.is_anonymous:

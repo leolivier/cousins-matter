@@ -1,0 +1,32 @@
+{% extends "core/base.html" %}
+{% load i18n crispy_forms_tags cm_tags static %}
+{% block title %}{% title title %} {% endblock %}
+{% block header %}
+	{%include "core/common/include-bulma-calendar.html" %}
+	{%include "core/common/include-summernote.html" with maxsize=settings.MESSAGE_MAX_SIZE %}
+{%endblock%}
+{% block content %}
+<div class="container px-2">
+	<h1 class="title has-text-centered is-2">{{title}}</h1>
+	<p class="has-text-centered">
+		{% blocktranslate trimmed %}
+			You will create a new family space and become its administrator.
+			After signing up, you will receive an email to verify your address and activate your account.
+		{% endblocktranslate %}
+	</p>
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		<fieldset class="container">
+			<legend class="title is-4">{% translate "Your family" %}</legend>
+			{{ tenant_form|crispy }}
+		</fieldset>
+		<fieldset class="container">
+			<legend class="title is-4">{% translate "You" %}</legend>
+			{{ form|crispy }}
+		</fieldset>
+		<div class="container mt-4">
+			<button class="button is-primary" type="submit">{% translate "Create the family" %}</button>
+		</div>
+	</form>
+</div>
+{% endblock content %}

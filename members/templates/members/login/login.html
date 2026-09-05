@@ -16,6 +16,10 @@
         <div class="container is-small">
             {% translate "Need An Account?" %}
             <a class="is-2" href="{% url 'members:register_request' %}">{% translate "Request invitation link" %}</a>
+            {% if settings.MULTI_TENANT_ENABLED %}
+                {% translate "or" %}
+                <a class="is-2" href="{% url 'tenants:family_signup' %}">{% translate "Create a new family" %}</a>
+            {% endif %}
         </div>
         <div class="container is-small">
             {% translate "Password Forgotten or First Connexion?" %}

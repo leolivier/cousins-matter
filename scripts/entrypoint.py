@@ -197,7 +197,8 @@ def run_create_superuser():
       sys.exit(1)
 
     try:
-      su = Member.objects.get(username=username)
+      # Look up by email (globally unique); username is now only (tenant, username)-unique.
+      su = Member.objects.get(email=email)
       if not su.is_superuser:
         logger.error(
           f"Superuser creation failed: user {username} was created but is not a superuser",
@@ -305,9 +306,18 @@ def main():
     # Initialize Django
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
     # settings.configure(default_settings=cousinsmatter_defaults, DEBUG=True)
+    # RLS hardening: initialization (migrate, collectstatic, create superuser)
+    # must run as the table OWNER — it bypasses row-level security and may
+    # create policies. The runtime (non-owner) role only applies to the
+    # long-running server process exec'd at the end.
+    _runtime_db = os.environ.pop("POSTGRES_RUNTIME_USER", None)
+    _runtime_pw = os.environ.pop("POSTGRES_RUNTIME_PASSWORD", None)
     django.setup()
     check_environment()
     initialize_environment()
+    if _runtime_db:
+      os.environ["POSTGRES_RUNTIME_USER"] = _runtime_db
+      os.environ["POSTGRES_RUNTIME_PASSWORD"] = _runtime_pw or ""
     exec_docker_cmd()
   except InitException as e:
     logger.error(f"Error during initialization: {e.message}")

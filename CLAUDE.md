@@ -4,146 +4,48 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Cousins Matter is a self-hosted Django application for managing large families. It provides member management, photo galleries, forums, chat rooms, polls, classified ads, genealogy tracking, and a basic CMS.
+Cousins Matter is a self-hosted Django application for managing large families: member management, photo galleries, forums, chat rooms, polls, classified ads, genealogy (GEDCOM import/export), and a basic CMS.
 
-## Tech Stack
+Stack: Django 6 + Channels (Daphne), PostgreSQL, Redis (cache + Django-Q2 tasks), Bulma/HTMX/crispy-forms, WhiteNoise, Docker Compose. Python 3.14+.
 
-- **Framework**: Django 6.x with Django Channels for WebSockets
-- **Python**: 3.14+
-- **Database**: PostgreSQL (production)
-- **Cache/Task Queue**: Redis with Django-Q2 and caching
-- **Frontend**: Bulma CSS framework, HTMX, crispy-forms
-- **ASGI Server**: Daphne
-- **Static Files**: WhiteNoise (CompressedManifestStaticFilesStorage)
-- **Container**: Docker with Docker Compose
+## Standard Workflow
+End of session workflow: before committing, run `make check` (ruff + pyright), the unit test suite, and the Playwright UI suite (190 tests) if UI files changed. Only then `git add`, commit with a descriptive message, and push to origin.
 
-## Development and Test Commands
 
-Activate the virtual environment first:
+## Communication
+Always respond and write in English whatever the user is writing in (French or English) and never switch languages mid-session.
+
+## Refactoring Conventions
+Services-layer extraction pattern: keep views thin, move business logic into <app>/services.py, preserve existing return shapes, keep `ruff check` clean, and run that app's test suite before committing.
+
+## Git & Environment
+Never work directly on main: create a feature branch or git worktree before substantive changes. New worktrees are NOT broken — run `uv init && uv sync --dev` in the worktree before using ruff, pyright, or pytest.
+Activate the venv before running any commands: `source .venv/bin/activate`.
+Always use the make commands — see the Makefile for the full list.
+
+**Always** use the make commands — see the Makefile for the full list:
+
 ```bash
-source .venv/bin/activate
-```
-**Always** use the make commands for the below tasks.
-All common commands are available via the Makefile:
-
-```bash
-# Setup and run locally (requires postgres/redis running)
-make up4run          # Start postgres, redis, qcluster containers
-make run             # Run Django dev server on port 8000
-
-# Docker operations
-make up              # Start all containers with docker-compose
-make down            # Stop containers
-make clean           # Stop and remove volumes
-make logs            # Show container logs
-
-# Testing
-make test            # Run all tests
-make test t=<test>   # Run non UI specific test (e.g., make test t=members.tests.tests_member)
-make test-ui t=<test> # Run specific UI test using playwright (e.g., make test-ui t=galleries.tests.tests_ui_galleries)
-make cover           # Run tests with coverage report (80% minimum)
-make cover a=<app>   # Coverage for specific app only
-
-# Database
-make mkmig           # Create migrations
-make mig             # Apply migrations
-
-# Code quality, use it before every commit
-make check           # Run ruff format, ruff check, and mypy
-
-# Translations
-make mkmsg a=<app>   # Make messages for an app
-make cpmsg a=<app>   # Compile messages for an app
-
-# Other
-make shell           # Django shell
-make minify          # Minify CSS/JS files
+make up4run                # start postgres/redis/qcluster containers for local dev
+make run                   # Django dev server on port 8000
+make test t=<module>       # tests, e.g. make test t=members.tests.tests_member
+make test-ui t=<module>    # Playwright UI tests
+make cover                 # coverage report, 80% minimum enforced
+make check                 # ruff format + ruff check + mypy — run before every commit
+make mkmig / make mig      # create / apply migrations
+make mkmsg a=<app> / make cpmsg a=<app>   # translations (en, fr, es, de, it, pt)
 ```
 
-## Project Architecture
+Test base class for auth/members: `members/tests/tests_member_base.py::MemberTestCase`.
 
-### Settings Structure
+## Architecture Notes (not obvious from the code)
 
-Settings are split by environment in `config/settings/`:
-- `base.py` - Common settings loaded by all environments
-- `development.py` - Local development (DEBUG=True, console email backend)
-- `production.py` - Production settings
-- `local_test.py` - Local test running
-- `docker_devt.py` / `docker_test.py` - Docker-based development/testing
-
-The active environment is controlled by the `ENVIRONMENT` env variable (defaults to "production").
-
-### Application Structure
-
-The project follows standard Django multi-app architecture:
-
-- **core** - Base utilities, shared templates, context processors, middleware
-- **members** - User management (custom Member model replacing User), profiles, authentication, CSV import/export
-- **chat** - WebSocket-based chat (public/private rooms) using Django Channels
-- **forum** - Forum posts and replies with notifications
-- **galleries** - Photo/video galleries with bulk upload
-- **polls** - Polls and event planning surveys
-- **classified_ads** - Classified advertisements
-- **pages** - CMS flatpages with custom editing
-- **troves** - Family treasures (texts, music, videos)
-- **genealogy** - GEDCOM import/export, family charts
-
-### Key Architectural Patterns
-
-1. **Custom User Model**: `members.models.Member` extends AbstractUser with family-related fields. Always use `get_user_model()` or `Member` directly.
-
-2. **Feature Flags**: Features can be enabled/disabled via `FEATURES_FLAGS` dict in settings. Check `core.context_processors.features`.
-
-3. **Protected Media**: Media files are served through a protected endpoint (`/protected_media/`) with access control, not directly. Public media goes in `/media/public/`.
-
-4. **Followers System**: Members can follow each other via `core.followers` utilities for notifications.
-
-5. **Async Tasks**: Background tasks (emails, notifications) use Django-Q2 configured to run synchronously in dev (`Q_SYNC=True`).
-
-6. **WebSockets**: Chat uses Django Channels with Redis as the channel layer. See `chat/consumers.py` and `chat/routing.py`.
-
-7. **OAuth**: django-allauth is configured for Google, Facebook, Apple, GitHub, PocketID, and generic OpenID Connect.
-
-## Testing
-
-- Tests are in `<app>/tests/` directories
-- Base test classes in `members/tests/tests_member_base.py` provide `MemberTestCase` with helper methods for creating test users
-- Tests require postgres and redis running (use `make up4run`)
-- Coverage minimum is 80%
-- Run specific tests: `make test t=members.tests.tests_member.UsersManagersTests.test_create_member`
-
-## Docker Architecture
-
-Static files are served via WhiteNoise in the Django container (no separate web server needed for statics in development).
-
-The Docker Compose setup includes:
-- `cousins-matter` - Main Django/Daphne application (port 9005:9001)
-- `qcluster` - Django-Q2 task worker
-- `postgres` - PostgreSQL database (port 5432)
-- `redis` - Redis for cache and channels (port 6379)
-- `nginx` - Reverse proxy for static/media files (port 8000)
-
-## Important Files
-
-- `.env` - Environment configuration (copy from `.env.example`)
-- `manage.py` - Points to `core.settings` (not cousinsmatter.settings)
-- `cousinsmatter/asgi.py` - ASGI application with Channels routing
-- `scripts/entrypoint.py` - Docker container initialization
-- `scripts/manage_cousins_matter.py` - Installation/management CLI
-
-## Code Style
-
-- Line length: 127 characters
-- Indent: 2 spaces
-- Linting: ruff (configured in `ruff.toml`)
-- Type checking: mypy (excludes migrations)
-
-## Translations
-
-Supported languages: English, French, Spanish, German, Italian, Portuguese.
-Translation files in each app's `locale/` directory.
-
-## Documentation
-
-MkDocs documentation in `docs/` directory.
-Build/serve: `mkdocs serve` / `mkdocs build`
+- **Active settings** are picked by the `ENVIRONMENT` env var (default "production"): `config/settings/{base,development,production,local_test,docker_devt,docker_test}.py`.
+- `manage.py` points to `core.settings` (non-standard module name).
+- **Custom user model**: `members.models.Member` (extends AbstractUser) — always use `get_user_model()` or `Member`.
+- **Feature flags**: `FEATURES_FLAGS` dict in settings, surfaced by `core.context_processors.features`.
+- **Protected media** is served through `/protected_media/` with access control — never link media files directly; public media lives under `/media/public/`.
+- **Async tasks** (emails, notifications) run via Django-Q2; `Q_SYNC=True` in dev executes them synchronously.
+- **Followers**: members follow each other via `core.followers` utilities (drives notifications).
+- **Services pattern**: business logic lives in `<app>/services.py`, extracted from views.
+- Docker: `scripts/entrypoint.py` initializes containers; `scripts/manage_cousins_matter.py` is the install/management CLI; ASGI + Channels routing in `cousinsmatter/asgi.py`.

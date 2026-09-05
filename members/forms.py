@@ -210,8 +210,8 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
     super().__init__(*args, **kwargs)
     self.initialize_fields(*args, **kwargs)
     self.init_privacy_field()
-    # restrict deathdate to superusers or managed members
-    if self.user and self.instance.is_active and not self.user.is_superuser:
+    # restrict deathdate to admins (platform superuser or tenant admin)
+    if self.user and self.instance.is_active and not (self.user.is_superuser or getattr(self.user, "is_tenant_admin", False)):
       if "deathdate" in self.fields:
         del self.fields["deathdate"]
       if "is_dead" in self.fields:

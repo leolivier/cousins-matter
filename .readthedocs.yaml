@@ -10,7 +10,7 @@ mkdocs:
 
 python:
   install:
-    - requirements: docs/requirements.txt
+    - requirements: user-manual/requirements.txt
 
 formats: []
 

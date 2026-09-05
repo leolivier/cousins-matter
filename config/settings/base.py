@@ -132,18 +132,14 @@ STORAGES: dict[str, Any] = {
   "staticfiles": {
     "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
   },
+  # MEDIA_STORAGE moves ALL media (protected and public, see
+  # download_public_media) to a remote backend via the "default" alias;
+  # public files are read through default_storage with a "public/" prefix.
   "default": {
     "BACKEND": "django.core.files.storage.FileSystemStorage",
     "OPTIONS": {
       "location": MEDIA_ROOT,
       "base_url": MEDIA_URL,
-    },
-  },
-  "public": {
-    "BACKEND": "django.core.files.storage.FileSystemStorage",
-    "OPTIONS": {
-      "location": PUBLIC_MEDIA_ROOT,
-      "base_url": PUBLIC_MEDIA_URL,
     },
   }
   if env.str("MEDIA_STORAGE", default=None) is None

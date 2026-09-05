@@ -60,62 +60,56 @@ from core.management.commands.check_okf import check_bundle
 
 
 def _write(base: Path, rel: str, text: str) -> None:
-    p = base / rel
-    p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(text, encoding="utf-8")
+  p = base / rel
+  p.parent.mkdir(parents=True, exist_ok=True)
+  p.write_text(text, encoding="utf-8")
 
 
 class CheckBundleTests(SimpleTestCase):
-    def _bundle(self, **files: str) -> Path:
-        d = tempfile.TemporaryDirectory()
-        self.addCleanup(d.cleanup)
-        b = Path(d.name)
-        for name, text in files.items():
-            _write(b, name, text)
-        return b
+  def _bundle(self, **files: str) -> Path:
+    d = tempfile.TemporaryDirectory()
+    self.addCleanup(d.cleanup)
+    b = Path(d.name)
+    for name, text in files.items():
+      _write(b, name, text)
+    return b
 
-    def test_conformant_bundle_passes(self) -> None:
-        b = self._bundle(
-            **{
-                "index.md": "---\ntype: Directory\ntitle: Index\n---\n\n# Index\n",
-                "apps/members.md": "---\ntype: App Reference\ntitle: Members\n---\n\n# Members\n",
-            }
-        )
-        self.assertEqual(check_bundle(b), ([], []))
+  def test_conformant_bundle_passes(self) -> None:
+    b = self._bundle(**{
+      "index.md": "---\ntype: Directory\ntitle: Index\n---\n\n# Index\n",
+      "apps/members.md": "---\ntype: App Reference\ntitle: Members\n---\n\n# Members\n",
+    })
+    self.assertEqual(check_bundle(b), ([], []))
 
-    def test_missing_frontmatter_fails(self) -> None:
-        errors, stale = check_bundle(self._bundle(**{"bad.md": "# no frontmatter\n"}))
-        self.assertEqual(errors, ["bad.md: missing frontmatter"])
-        self.assertEqual(stale, [])
+  def test_missing_frontmatter_fails(self) -> None:
+    errors, stale = check_bundle(self._bundle(**{"bad.md": "# no frontmatter\n"}))
+    self.assertEqual(errors, ["bad.md: missing frontmatter"])
+    self.assertEqual(stale, [])
 
-    def test_empty_type_fails(self) -> None:
-        errors, _ = check_bundle(self._bundle(**{"a.md": "---\ntitle: X\n---\n\n# X\n"}))
-        self.assertEqual(errors, ["a.md: empty `type`"])
+  def test_empty_type_fails(self) -> None:
+    errors, _ = check_bundle(self._bundle(**{"a.md": "---\ntitle: X\n---\n\n# X\n"}))
+    self.assertEqual(errors, ["a.md: empty `type`"])
 
-    def test_reserved_and_superpowers_excluded(self) -> None:
-        b = self._bundle(
-            **{
-                "log.md": "# Log\n\n## 2026-09-04\n- init\n",
-                "superpowers/spec.md": "# spec\n",
-                "index.md": "---\ntype: Directory\n---\n",
-            }
-        )
-        self.assertEqual(check_bundle(b), ([], []))
+  def test_reserved_and_superpowers_excluded(self) -> None:
+    b = self._bundle(**{
+      "log.md": "# Log\n\n## 2026-09-04\n- init\n",
+      "superpowers/spec.md": "# spec\n",
+      "index.md": "---\ntype: Directory\n---\n",
+    })
+    self.assertEqual(check_bundle(b), ([], []))
 
-    def test_stale_listed_but_not_failing(self) -> None:
-        past = (date.today() - timedelta(days=1)).isoformat()
-        errors, stale = check_bundle(
-            self._bundle(**{"plan/roadmap.md": f"---\ntype: Plan\nstale_after: {past}\n---\n\n# Roadmap\n"})
-        )
-        self.assertEqual(errors, [])
-        self.assertEqual(stale, [f"plan/roadmap.md: stale since {past}"])
+  def test_stale_listed_but_not_failing(self) -> None:
+    past = (date.today() - timedelta(days=1)).isoformat()
+    errors, stale = check_bundle(
+      self._bundle(**{"plan/roadmap.md": f"---\ntype: Plan\nstale_after: {past}\n---\n\n# Roadmap\n"})
+    )
+    self.assertEqual(errors, [])
+    self.assertEqual(stale, [f"plan/roadmap.md: stale since {past}"])
 
-    def test_bad_stale_after_fails(self) -> None:
-        errors, stale = check_bundle(
-            self._bundle(**{"a.md": "---\ntype: Plan\nstale_after: not-a-date\n---\n\n# A\n"})
-        )
-        self.assertEqual(errors, ["a.md: bad `stale_after` (want ISO date)"])
-        self.assertEqual(stale, [])
+  def test_bad_stale_after_fails(self) -> None:
+    errors, stale = check_bundle(self._bundle(**{"a.md": "---\ntype: Plan\nstale_after: not-a-date\n---\n\n# A\n"}))
+    self.assertEqual(errors, ["a.md: bad `stale_after` (want ISO date)"])
+    self.assertEqual(stale, [])
 ```
 
 - [ ] **Step 2: Run the test, verify it fails with ImportError**
@@ -134,6 +128,7 @@ Every non-resorted ``.md`` file must have a YAML frontmatter with a non-empty
 ``type``. ``log.md`` and ``docs/superpowers/`` are excluded. Files whose
 ``stale_after`` date has passed are listed as warnings (not errors).
 """
+
 import re
 from datetime import date
 from pathlib import Path
@@ -147,52 +142,52 @@ FM_RE = re.compile(r"\A---\s*\n(.*?)\n---\s*\n", re.DOTALL)
 
 
 def frontmatter(text: str) -> str | None:
-    m = FM_RE.match(text)
-    return m.group(1) if m else None
+  m = FM_RE.match(text)
+  return m.group(1) if m else None
 
 
 def field(fm: str, name: str) -> str | None:
-    m = re.search(rf"^{name}:\s*(.+)$", fm, re.MULTILINE)
-    return m.group(1).strip() if m else None
+  m = re.search(rf"^{name}:\s*(.+)$", fm, re.MULTILINE)
+  return m.group(1).strip() if m else None
 
 
 def check_bundle(bundle: Path) -> tuple[list[str], list[str]]:
-    errors: list[str] = []
-    stale: list[str] = []
-    for md in sorted(bundle.rglob("*.md")):
-        rel = md.relative_to(bundle)
-        if md.name in RESERVED or rel.parts[0] in EXCLUDED_DIRS:
-            continue
-        fm = frontmatter(md.read_text(encoding="utf-8"))
-        if fm is None:
-            errors.append(f"{rel}: missing frontmatter")
-            continue
-        if not field(fm, "type"):
-            errors.append(f"{rel}: empty `type`")
-        sa = field(fm, "stale_after")
-        if sa:
-            try:
-                if date.fromisoformat(sa[:10]) < date.today():
-                    stale.append(f"{rel}: stale since {sa[:10]}")
-            except ValueError:
-                errors.append(f"{rel}: bad `stale_after` (want ISO date)")
-    return errors, stale
+  errors: list[str] = []
+  stale: list[str] = []
+  for md in sorted(bundle.rglob("*.md")):
+    rel = md.relative_to(bundle)
+    if md.name in RESERVED or rel.parts[0] in EXCLUDED_DIRS:
+      continue
+    fm = frontmatter(md.read_text(encoding="utf-8"))
+    if fm is None:
+      errors.append(f"{rel}: missing frontmatter")
+      continue
+    if not field(fm, "type"):
+      errors.append(f"{rel}: empty `type`")
+    sa = field(fm, "stale_after")
+    if sa:
+      try:
+        if date.fromisoformat(sa[:10]) < date.today():
+          stale.append(f"{rel}: stale since {sa[:10]}")
+      except ValueError:
+        errors.append(f"{rel}: bad `stale_after` (want ISO date)")
+  return errors, stale
 
 
 class Command(BaseCommand):
-    help = "Check OKF v0.2 conformance of the docs/ bundle"
+  help = "Check OKF v0.2 conformance of the docs/ bundle"
 
-    def add_arguments(self, parser: Any) -> None:
-        parser.add_argument("bundle", nargs="?", default="docs", type=str)
+  def add_arguments(self, parser: Any) -> None:
+    parser.add_argument("bundle", nargs="?", default="docs", type=str)
 
-    def handle(self, *args: str, **options: Any) -> None:
-        errors, stale = check_bundle(Path(str(options["bundle"])))
-        for e in errors:
-            self.stdout.write(self.style.ERROR(f"ERROR {e}"))
-        for s in stale:
-            self.stdout.write(self.style.WARNING(f"STALE  {s}"))
-        if errors:
-            raise SystemExit(1)
+  def handle(self, *args: str, **options: Any) -> None:
+    errors, stale = check_bundle(Path(str(options["bundle"])))
+    for e in errors:
+      self.stdout.write(self.style.ERROR(f"ERROR {e}"))
+    for s in stale:
+      self.stdout.write(self.style.WARNING(f"STALE  {s}"))
+    if errors:
+      raise SystemExit(1)
 ```
 
 - [ ] **Step 4: Run the test, verify it passes**

@@ -25,9 +25,14 @@ single-photo upload are covered in [Galleries](/apps/galleries.md).
    (parent gallery `ModelChoiceField`). Login required via
    `core/middleware.py: LoginRequiredMiddleware`.
 2. **Submit.** `POST /galleries/bulk_upload` →
-   `galleries/views/views_bulk.py: BulkUploadPhotosView.post`. On form
-   validation errors it flashes the errors and returns
-   `HttpResponseClientRefresh` (HTMX re-render of the page).
+   `galleries/views/views_bulk.py: BulkUploadPhotosView.post`. Field-level
+   validation failures (wrong extension, oversize — `galleries/forms.py`
+   validators on the `zipfile` field) take the invalid-form branch, which is
+   **broken**: `": ".join(code, error)` (views_bulk.py, `else` branch) calls
+   `str.join` with two arguments and raises `TypeError` → HTTP 500 instead of
+   an error flash. Only non-form exceptions (a file that is not a zip at all,
+   `BadZipFile` raised by `handle_zip`) are caught by the generic `except`
+   and flashed, followed by `HttpResponseClientRefresh` (HTMX re-render).
 3. **Scheduling.** A fresh `task_group = uuid4().hex` is generated and
    `galleries/services.py: handle_zip(zip_file, task_group, owner_id,
    root_gallery, tenant_id)` runs synchronously:
@@ -76,8 +81,10 @@ single-photo upload are covered in [Galleries](/apps/galleries.md).
 
 ## Failure modes visible to the user
 
-- Not a zip / oversized zip / wrong extension: flashed error, nothing
-  imported.
+- Not a zip at all (`BadZipFile`): flashed error, nothing imported.
+- Oversized zip / non-zip extension: **HTTP 500** — the invalid-form branch
+  crashes on the `": ".join(code, error)` bug (see step 2); nothing is
+  imported. Fixing that one line is the whole fix.
 - `..` inside zip paths: `SuspiciousFileOperation` flashed, import aborted
   (galleries already created in earlier iterations remain).
 - Root-level photos without a selected parent gallery: "Root gallery not
@@ -90,7 +97,7 @@ single-photo upload are covered in [Galleries](/apps/galleries.md).
   fails with an error (`Q_SYNC=True` avoids this by running the tasks
   synchronously).
 
-## Related
+## See also
 
 - [Galleries app](/apps/galleries.md) — models, single upload, tree view.
 - No follower notifications are emitted by this flow; the `post_create_photo`

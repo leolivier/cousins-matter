@@ -84,7 +84,7 @@ back to GEDCOM 5.5.1. The data model (`Person`, `Family`) is covered in
 - Import and export are synchronous requests: a very large file blocks the
   worker (unlike the gallery zip import, there is no progress bar).
 
-## Related
+## See also
 
 - [Genealogy app](/apps/genealogy.md) — Person/Family model, chart, statistics.
 - [Tenants app](/apps/tenants.md) — why genealogy is *not* tenant-scoped.

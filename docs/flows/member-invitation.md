@@ -98,7 +98,7 @@ the invite URL).
   Django-Q2 tasks — unlike follower notifications): a broken SMTP config
   raises inside the request.
 
-## Related
+## See also
 
 - [Members app](/apps/members.md) — model, forms, CSV import as a bulk alternative.
 - [Tenants app](/apps/tenants.md) — tenant scoping and `tenant_context`.

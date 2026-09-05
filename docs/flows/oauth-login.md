@@ -106,7 +106,7 @@ described in [Modules/Feature flags](/modules/feature-flags.md).
   uniqueness is `(tenant, username)` (`member_tenant_username_uniq`), scoped
   to the invitation's tenant.
 
-## Related
+## See also
 
 - [Member Invitation flow](/flows/member-invitation.md) — where the session
   invitation comes from.

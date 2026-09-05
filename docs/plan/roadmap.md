@@ -5,7 +5,7 @@ description: In-flight and planned work — open GitHub issues, multi-tenancy fo
 tags: ["plan"]
 status: draft
 stale_after: 2026-12-04
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T00:00:00Z }
+generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T12:27:11Z }
 ---
 
 # Roadmap

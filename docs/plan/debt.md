@@ -5,7 +5,7 @@ description: Known shortcuts, latent bugs and unenforced settings, each anchored
 tags: ["plan", "debt"]
 status: draft
 stale_after: 2026-12-04
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T00:00:00Z }
+generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T12:28:11Z }
 ---
 
 # Known Debt

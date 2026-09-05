@@ -63,6 +63,9 @@ mkmsg:
 test:
 	ENVIRONMENT="test" ./manage.py test --exclude-tag=ui $(t) $(o)
 
+check-docs:
+	ENVIRONMENT="test" ./manage.py check_okf docs
+
 test-ui:
 	ENVIRONMENT="test" ./manage.py test --tag=ui $(t) $(o)
 
@@ -100,6 +103,7 @@ check:
 	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
 	bandit -r . -c pyproject.toml -f txt -o bandit.out
 	pip-audit .
+	ENVIRONMENT="test" ./manage.py check_okf docs
 
 install-hooks:
 	pre-commit install

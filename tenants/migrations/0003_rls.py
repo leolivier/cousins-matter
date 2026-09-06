@@ -73,7 +73,8 @@ def _build_sql() -> list[tuple[str, str | None]]:
               END IF;
             END
             $$;
-            """,  # nosec B608 -- user_ident is validated against ^[A-Za-z_][A-Za-z0-9_]*$ by qi(); ql() escapes the literal
+            """,  # nosec B608
+                  #  -- user_ident is validated against ^[A-Za-z_][A-Za-z0-9_]*$ by qi(); ql() escapes the literal
             f"DROP ROLE IF EXISTS {user_ident};",
         ))
         # --- grants (DML only: never CREATE/ALTER, DDL stays owner-only) ---

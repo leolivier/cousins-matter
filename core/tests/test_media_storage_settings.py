@@ -2,7 +2,6 @@ import importlib
 import os
 from unittest import mock
 
-from django.conf import settings
 from django.test import SimpleTestCase
 
 from config.settings import base
@@ -14,11 +13,20 @@ class MediaStorageSettingsTest(SimpleTestCase):
   not the unused "public" alias."""
 
   def test_default_is_local_filesystem_when_media_storage_unset(self):
-    self.assertEqual(
-      settings.STORAGES["default"]["BACKEND"],
-      "django.core.files.storage.FileSystemStorage",
-    )
-    self.assertEqual(settings.STORAGES["default"]["OPTIONS"]["location"], settings.MEDIA_ROOT)
+    # Hermetic: purge MEDIA_STORAGE even if the CI environment exports it
+    # (e.g. the S3-mode CI job) instead of relying on it being unset.
+    with mock.patch.dict(os.environ):
+      os.environ.pop("MEDIA_STORAGE", None)
+      os.environ.pop("MEDIA_STORAGE_OPTIONS", None)
+      try:
+        importlib.reload(base)
+        self.assertEqual(
+          base.STORAGES["default"]["BACKEND"],
+          "django.core.files.storage.FileSystemStorage",
+        )
+        self.assertEqual(base.STORAGES["default"]["OPTIONS"]["location"], base.MEDIA_ROOT)
+      finally:
+        importlib.reload(base)
 
   def test_media_storage_configures_default_backend(self):
     env = {

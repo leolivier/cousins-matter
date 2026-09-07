@@ -125,6 +125,8 @@
 					{% endif %}
 					{% if user.is_superuser %}
 						{%navbar_item "/admin" _("Admin site") "admin" %}
+						{% url 'core:env_check' as env_check_url%}
+						{%navbar_item env_check_url _("Environment check") "heart-pulse" %}
 					{% endif %}
 				{% endif %}
 				{%if 'show_export_members'|featured%}

@@ -4,7 +4,7 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-03-04
+stale_after: 2027-03-07
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -162,6 +162,15 @@ Deletion goes through `tenants.services.delete_tenant`, which refuses the
 system tenant and still-active tenants (deactivate first), deletes the
 tenant's members explicitly (`Member.tenant` is `PROTECT`) and lets
 tenant-scoped rows cascade; it returns the number of members removed.
+
+## Internationalization
+
+The app ships its own per-app catalogues
+(`tenants/locale/{en,fr,es,de,it,pt}/LC_MESSAGES/django.{po,mo}`), generated
+with `make mkmsg a=tenants` and compiled with `make cpmsg a=tenants`, like
+every other app. `en` is the source language and stays untranslated; user-facing
+strings uniformly say "family" (fr « famille ») even where the code says
+`tenant`. Both `.po` and `.mo` are committed.
 
 # See also
 

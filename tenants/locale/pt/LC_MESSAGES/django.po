@@ -1,0 +1,367 @@
+# Portuguese Translations for Tenants app.
+# Copyright (C) 2026 Olivier LEVILLAIN
+# This file is distributed under the same license as the Tenants package.
+# Olivier LEVILLAIN <olivier@levillain.eu>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: CousinsMatter 1.6.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-07 15:31+0200\n"
+"PO-Revision-Date: 2026-09-07 15:31+0200\n"
+"Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
+"Language-Team: Português <LL@li.org>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+#: apps.py:8
+msgid "Tenants"
+msgstr "Famílias"
+
+#: forms.py:32
+msgid "This family name cannot be turned into a valid identifier."
+msgstr "Este nome de família não pode ser convertido em um identificador válido."
+
+#: forms.py:34
+msgid "This family name is reserved, please choose another one."
+msgstr "Este nome de família é reservado, escolha outro."
+
+#: forms.py:41
+msgid "Too many families already use this name, please choose another one."
+msgstr "Muitas famílias já usam este nome, escolha outro."
+
+#: forms.py:48
+msgid "Family name"
+msgstr "Nome da família"
+
+#: forms.py:53
+msgid "This field is required."
+msgstr "Este campo é obrigatório."
+
+#: middleware.py:49
+msgid "This space has been deactivated and can no longer be accessed."
+msgstr "Este espaço foi desativado e não pode mais ser acessado."
+
+#: models.py:36
+msgid "Name"
+msgstr "Nome"
+
+#: models.py:37
+msgid "Slug"
+msgstr "Slug"
+
+#: models.py:38
+msgid "Active"
+msgstr "Ativa"
+
+#: models.py:39
+msgid "Created at"
+msgstr "Data de criação"
+
+#: models.py:40
+msgid "Updated at"
+msgstr "Data de atualização"
+
+#: models.py:43
+msgid "tenant"
+msgstr "família"
+
+#: models.py:44
+msgid "tenants"
+msgstr "famílias"
+
+#: models.py:76
+msgid "Tenant"
+msgstr "Família"
+
+#: models.py:78
+msgid "Overrides"
+msgstr "Sobrescritas"
+
+#: models.py:81 models.py:82
+msgid "tenant settings"
+msgstr "configurações da família"
+
+#: services.py:24
+msgid "The system tenant cannot be deleted."
+msgstr "A família do sistema não pode ser excluída."
+
+#: services.py:26
+msgid "This family is still active. Deactivate it before deleting it."
+msgstr "Esta família ainda está ativa. Desative-a antes de excluí-la."
+
+#: templates/tenants/email/tenant_admin_invitation.html:2
+#, python-format
+msgid "You are invited to administer the family \"%(name)s\" on %(site_name)s."
+msgstr "Você foi convidado/a para administrar a família \"%(name)s\" em %(site_name)s."
+
+#: templates/tenants/email/tenant_admin_invitation.html:3
+msgid "Click on the link below to create your account:"
+msgstr "Clique no link abaixo para criar sua conta:"
+
+#: templates/tenants/family_signup.html:12
+msgid ""
+"You will create a new family space and become its administrator. After "
+"signing up, you will receive an email to verify your address and activate "
+"your account."
+msgstr "Você criará um novo espaço familiar e se tornará o/a administrador/a. Após o cadastro, você receberá um e-mail para verificar seu endereço e ativar sua conta."
+
+#: templates/tenants/family_signup.html:20
+msgid "Your family"
+msgstr "Sua família"
+
+#: templates/tenants/family_signup.html:24
+msgid "You"
+msgstr "Você"
+
+#: templates/tenants/family_signup.html:28
+#: templates/tenants/tenant_form.html:21
+msgid "Create the family"
+msgstr "Criar a família"
+
+#: templates/tenants/tenant_confirm_delete.html:3
+#: templates/tenants/tenant_confirm_delete.html:6
+msgid "Delete family"
+msgstr "Excluir a família"
+
+#: templates/tenants/tenant_confirm_delete.html:10
+#, python-format
+msgid ""
+"You are about to PERMANENTLY delete the family \"%(name)s\" and ALL its data "
+"(members, galleries, photos). This cannot be undone."
+msgstr "Você está prestes a excluir PERMANENTEMENTE a família \"%(name)s\" e TODOS os seus dados (membros, galerias, fotos). Isso não pode ser desfeito."
+
+#: templates/tenants/tenant_confirm_delete.html:17
+#, python-format
+msgid "Type \"%(slug)s\" to confirm"
+msgstr "Digite \"%(slug)s\" para confirmar"
+
+#: templates/tenants/tenant_confirm_delete.html:24
+msgid "Permanently delete"
+msgstr "Excluir permanentemente"
+
+#: templates/tenants/tenant_confirm_delete.html:25
+#: templates/tenants/tenant_form.html:22
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/tenants/tenant_form.html:12
+msgid "First admin email (optional)"
+msgstr "E-mail do primeiro administrador (opcional)"
+
+#: templates/tenants/tenant_form.html:17
+msgid ""
+"If provided, an invitation to administer this family will be sent to this "
+"address."
+msgstr "Se informado, um convite para administrar esta família será enviado a este endereço."
+
+#: templates/tenants/tenant_list.html:10 views/views_manage.py:57
+#: views/views_manage.py:62
+msgid "Create a family"
+msgstr "Criar uma família"
+
+#: templates/tenants/tenant_list.html:18
+msgid "Family"
+msgstr "Família"
+
+#: templates/tenants/tenant_list.html:19
+msgid "Identifier"
+msgstr "Identificador"
+
+#: templates/tenants/tenant_list.html:20
+msgid "Members"
+msgstr "Membros"
+
+#: templates/tenants/tenant_list.html:21
+msgid "Status"
+msgstr "Status"
+
+#: templates/tenants/tenant_list.html:22
+msgid "Created"
+msgstr "Criada"
+
+#: templates/tenants/tenant_list.html:34
+msgid "system"
+msgstr "sistema"
+
+#: templates/tenants/tenant_list.html:36
+msgid "active"
+msgstr "ativa"
+
+#: templates/tenants/tenant_list.html:38
+msgid "deactivated"
+msgstr "desativada"
+
+#: templates/tenants/tenant_list.html:48
+msgid "Deactivate this family"
+msgstr "Desativar esta família"
+
+#: templates/tenants/tenant_list.html:49
+msgid "Reactivate this family"
+msgstr "Reativar esta família"
+
+#: templates/tenants/tenant_list.html:50
+msgid "Deactivate"
+msgstr "Desativar"
+
+#: templates/tenants/tenant_list.html:50
+msgid "Reactivate"
+msgstr "Reativar"
+
+#: templates/tenants/tenant_list.html:54 templates/tenants/tenant_list.html:55
+msgid "Delete"
+msgstr "Excluir"
+
+#: templates/tenants/tenant_list.html:63
+msgid "No families yet."
+msgstr "Ainda não há famílias."
+
+#: templates/tenants/tenant_settings.html:8
+msgid ""
+"Values left equal to the global defaults are not stored: a global change "
+"will still apply to your family."
+msgstr "Os valores deixados iguais aos padrões globais não são armazenados: uma alteração global ainda se aplicará à sua família."
+
+#: templates/tenants/tenant_settings.html:16
+msgid "Save"
+msgstr "Salvar"
+
+#: views/views_manage.py:39
+msgid "Only platform administrators can manage families."
+msgstr "Somente administradores da plataforma podem gerenciar famílias."
+
+#: views/views_manage.py:48
+msgid "Families"
+msgstr "Famílias"
+
+#: views/views_manage.py:66
+#, python-format
+msgid "Family %(name)s created."
+msgstr "Família %(name)s criada."
+
+#: views/views_manage.py:71
+msgid "A member with this email already exists; invitation not sent."
+msgstr "Já existe um membro com este e-mail; convite não enviado."
+
+#: views/views_manage.py:93
+#, python-format
+msgid "You are invited to administer the family %(name)s"
+msgstr "Você foi convidado/a para administrar a família %(name)s"
+
+#: views/views_manage.py:99
+#, python-format
+msgid "Invitation sent to %(email)s."
+msgstr "Convite enviado para %(email)s."
+
+#: views/views_manage.py:109
+msgid "The system family cannot be deactivated."
+msgstr "A família do sistema não pode ser desativada."
+
+#: views/views_manage.py:114
+#, python-format
+msgid "Family %(name)s reactivated."
+msgstr "Família %(name)s reativada."
+
+#: views/views_manage.py:116
+#, python-format
+msgid "Family %(name)s deactivated."
+msgstr "Família %(name)s desativada."
+
+#: views/views_manage.py:133
+msgid "Confirmation did not match the family identifier. Aborting."
+msgstr "A confirmação não corresponde ao identificador da família. Abortando."
+
+#: views/views_manage.py:141
+#, python-format
+msgid "Family %(name)s permanently deleted."
+msgstr "Família %(name)s excluída permanentemente."
+
+#: views/views_settings.py:29
+msgid "Family site name"
+msgstr "Nome do site da família"
+
+#: views/views_settings.py:30
+msgid "Site logo (static/media path)"
+msgstr "Logo do site (caminho static/media)"
+
+#: views/views_settings.py:31
+msgid "Copyright line"
+msgstr "Linha de copyright"
+
+#: views/views_settings.py:32
+msgid "Footer text"
+msgstr "Texto do rodapé"
+
+#: views/views_settings.py:33
+msgid "PDF page size"
+msgstr "Tamanho da página PDF"
+
+#: views/views_settings.py:34
+msgid "Dark mode by default"
+msgstr "Modo escuro por padrão"
+
+#: views/views_settings.py:35
+msgid "Language"
+msgstr "Idioma"
+
+#: views/views_settings.py:36
+msgid "Time zone (IANA, e.g. Europe/Paris)"
+msgstr "Fuso horário (IANA, ex. Europe/Paris)"
+
+#: views/views_settings.py:37
+msgid "Birthday lookahead (days)"
+msgstr "Antecedência de aniversários (dias)"
+
+#: views/views_settings.py:38
+msgid "Members can create members"
+msgstr "Membros podem criar membros"
+
+#: views/views_settings.py:39
+msgid "Members can invite members"
+msgstr "Membros podem convidar membros"
+
+#: views/views_settings.py:41
+msgid "Genealogy chart root member id (optional)"
+msgstr "ID do membro raiz da árvore genealógica (opcional)"
+
+#: views/views_settings.py:60
+msgid "This member does not belong to your family."
+msgstr "Este membro não pertence à sua família."
+
+#: views/views_settings.py:70
+msgid "Unknown time zone."
+msgstr "Fuso horário desconhecido."
+
+#: views/views_settings.py:132
+msgid "Family settings"
+msgstr "Configurações da família"
+
+#: views/views_settings.py:146
+msgid "Only family administrators can edit family settings."
+msgstr "Somente administradores da família podem editar as configurações."
+
+#: views/views_settings.py:159
+msgid "Family settings updated."
+msgstr "Configurações da família atualizadas."
+
+#: views/views_signup.py:53
+msgid "Create a new family"
+msgstr "Criar uma nova família"
+
+#: views/views_signup.py:66
+msgid "Too many signup attempts, please try again later."
+msgstr "Tentativas de cadastro demais, tente novamente mais tarde."
+
+#: views/views_signup.py:77
+msgid "A member with this email address already exists."
+msgstr "Já existe um membro com este endereço de e-mail."
+
+#: views/views_signup.py:94
+msgid ""
+"Your family has been created! You will now receive an email to verify your "
+"email address. Click in the link inside the mail to finish the registration."
+msgstr "Sua família foi criada! Você receberá agora um e-mail para verificar seu endereço. Clique no link dentro da mensagem para concluir o cadastro."

@@ -1,0 +1,66 @@
+{% extends "core/base.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Your family site, ready in minutes") %}{% endblock %}
+{% block content %}
+<section class="hero is-medium is-primary">
+  <div class="hero-body has-text-centered">
+    <p class="title">{% translate "Keep your big family organized, together" %}</p>
+    <p class="subtitle mt-3">
+      {% translate "Cousins Matter is a free web application for large families: a private site for your family with a member directory, birthdays, photo galleries, forums, polls, genealogy and much more." %}
+    </p>
+    <a class="button is-warning is-large mt-4" href="{% url 'saas:signup' %}">{% translate "Create my family site" %}</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="title is-4 has-text-centered">{% translate "Everything your family needs" %}</h2>
+    <div class="columns is-multiline is-centered mt-4">
+      <div class="column is-one-third">
+        <div class="box has-text-centered">
+          <p class="title is-5">{% translate "Member directory" %}</p>
+          <p>{% translate "All the family, with contact details, addresses and relationships." %}</p>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="box has-text-centered">
+          <p class="title is-5">{% translate "Birthdays &amp; galleries" %}</p>
+          <p>{% translate "Never miss a birthday again, and share photos of the reunions." %}</p>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="box has-text-centered">
+          <p class="title is-5">{% translate "Forums, polls &amp; more" %}</p>
+          <p>{% translate "Organize the next cousinade: forums, polls, classified ads and genealogy." %}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section has-background-light">
+  <div class="container has-text-centered">
+    <h2 class="title is-4">{% translate "Try it now" %}</h2>
+    <p>
+      {% blocktranslate with demo_url=settings.SAAS_DEMO_URL docs_url=settings.SAAS_DOCS_URL %}
+      Play with the <a href="{{ demo_url }}">demo site</a> or read the <a href="{{ docs_url }}">documentation</a>
+      before creating your own family site.
+      {% endblocktranslate %}
+    </p>
+    <p class="is-size-7 mt-2">
+      {% blocktranslate %}You prefer hosting it yourself? Cousins Matter is open source and can be self-hosted, see the <a href="{{ docs_url }}">installation guide</a>.{% endblocktranslate %}
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container has-text-centered">
+    <h2 class="title is-4">{% translate "Free plan" %}</h2>
+    <p>
+      {% blocktranslate %}Creating a family site is free. Usage limits apply and are displayed when you sign up;
+      a paid plan with more room and extras is planned for later.{% endblocktranslate %}
+    </p>
+    <a class="button is-primary is-large mt-3" href="{% url 'saas:signup' %}">{% translate "Create my family site" %}</a>
+  </div>
+</section>
+{% endblock %}

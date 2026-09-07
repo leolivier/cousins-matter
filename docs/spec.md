@@ -1,3 +1,12 @@
+---
+type: Product Spec
+title: SaaS cousins-matter.net
+description: Spécification produit du SaaS (création de tenants depuis un site public) — implémentée par l'app saas/
+tags: ["spec", "saas"]
+status: implemented
+stale_after: 2027-03-07
+---
+
 # création d'un tenant par une personne:
 
 Ceci est un projet parallèle et complémentaire du projet cousins-matter. Il doit être développé dans un repo gothub **privé** à côté de cousins-matter

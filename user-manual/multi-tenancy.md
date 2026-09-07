@@ -90,3 +90,14 @@ Today `members` and `galleries` are tenant-scoped. Converting the remaining
 apps (chat, forum, polls, classified ads, pages, troves, genealogy) follows
 the same pattern (`TenantModel` base + composite indexes); until then those
 apps' data is shared across families of a deployment.
+
+## SaaS hosting (cmm fork)
+
+The `cmm` fork adds a public, SaaS-style front door on top of this feature
+(see [the saas app](/apps/saas.md)): with `SAAS_LANDING_ENABLED=True`
+anonymous visitors of the home page get a landing page and can request a
+family site with just an email + family name (protected by an optional
+Cloudflare Turnstile captcha). They confirm from a signed email link valid
+24 h: the family, its settings and its admin account are created and they
+land on a welcome screen (password choice + getting-started checklist).
+The classic self-service `/tenants/signup/` flow remains available.

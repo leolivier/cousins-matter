@@ -80,7 +80,8 @@ _CSP_POLICY: dict[str, list[str]] = {
   # (input[cond]), hyperscript, and jQuery all evaluate dynamic code. A nonce
   # cannot cover Function()/eval, so we allow it explicitly rather than rewrite
   # every trigger/handler. See memory:csp-django6-rollout for the trade-off.
-  "script-src": [CSP.SELF, CSP.NONCE, CSP.UNSAFE_EVAL],
+  # challenges.cloudflare.com: Turnstile widget on the SaaS signup
+  "script-src": [CSP.SELF, CSP.NONCE, CSP.UNSAFE_EVAL, "https://challenges.cloudflare.com"],
   # 'unsafe-inline' (NOT a nonce) for styles: CSP3 ignores 'unsafe-inline' when a
   # nonce is present, so we must choose one. We need 'unsafe-inline' because
   # jQuery plugins (select2, summernote, bulma-calendar) inject style="" attrs at
@@ -91,7 +92,9 @@ _CSP_POLICY: dict[str, list[str]] = {
   "img-src": [CSP.SELF, "data:"],
   "font-src": [CSP.SELF],
   # ws/wss for the chat WebSocket (chat/consumers.py); htmx requests are same-origin
-  "connect-src": [CSP.SELF, "ws:", "wss:"],
+  # Turnstile widget runs in an iframe and phones home to Cloudflare
+  "frame-src": ["https://challenges.cloudflare.com"],
+  "connect-src": [CSP.SELF, "ws:", "wss:", "https://challenges.cloudflare.com"],
   "frame-ancestors": [CSP.NONE],
   "base-uri": [CSP.SELF],
   "object-src": [CSP.NONE],
@@ -160,6 +163,19 @@ SYSTEM_TENANT_SLUG = env.str("SYSTEM_TENANT_SLUG", default="system")
 # pre-multi-tenant single-family app (no /tenants/ URLs, no family signup).
 MULTI_TENANT_ENABLED = env.bool("MULTI_TENANT_ENABLED", default=False)
 
+# --- SaaS (cmm fork): public landing + self-service tenant requests ---
+# Landing/home takeover for anonymous visitors + /saas/ URL surface.
+SAAS_LANDING_ENABLED = env.bool("SAAS_LANDING_ENABLED", default=False)
+# validity window of the signed tenant-request link (and of the stored request)
+SAAS_TENANT_REQUEST_MAX_AGE = env.int("SAAS_TENANT_REQUEST_MAX_AGE", default=24 * 3600)
+SAAS_DEMO_URL = env.str("SAAS_DEMO_URL", default="https://cousins-matter.levillain.eu/")
+SAAS_DOCS_URL = env.str("SAAS_DOCS_URL", default="https://cousins-matter.readthedocs.io/")
+# Cloudflare Turnstile captcha on the SaaS signup (off unless keys provided:
+# dev/test run without network calls).
+TURNSTILE_SITE_KEY = env.str("TURNSTILE_SITE_KEY", default="")
+TURNSTILE_SECRET_KEY = env.str("TURNSTILE_SECRET_KEY", default="")
+TURNSTILE_ENABLED = env.bool("TURNSTILE_ENABLED", default=bool(TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY))
+
 LOCAL_APPS = [
   "core",
   "tenants",
@@ -173,6 +189,7 @@ LOCAL_APPS = [
   "pages",
   "polls",
   "troves",
+  "saas",
 ]
 
 # Application definition
@@ -379,6 +396,8 @@ LOGIN_REQUIRED_IGNORE_PATHS = [
   "/jsi18n/",
   "/i18n/",  # set_language (language switcher) — must work unauthenticated, e.g. on the login page
   "/static/",
+  # SaaS public surface (landing links, signup, signed-link validation)
+  "/saas/",
 ]
 
 LOGGING: dict[str, Any] = {

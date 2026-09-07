@@ -98,6 +98,8 @@ urlpatterns = (
   # Multi-tenancy is an opt-in product feature: the whole /tenants/ surface
   # (family signup + management UI) 404s at URL resolution when the flag is off.
   + ([path("tenants/", include("tenants.urls"))] if settings.MULTI_TENANT_ENABLED else [])
+  # SaaS opt-in: public landing + self-service tenant requests (cmm fork)
+  + ([path("saas/", include("saas.urls"))] if settings.SAAS_LANDING_ENABLED else [])
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
   + static(settings.PUBLIC_MEDIA_URL, document_root=settings.MEDIA_ROOT)
 )

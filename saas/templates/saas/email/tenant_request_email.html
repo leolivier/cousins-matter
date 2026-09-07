@@ -1,0 +1,45 @@
+{% load i18n cm_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% blocktranslate %}Confirm your "{{tenant_name}}" family site{% endblocktranslate %}</title>
+    {% inline_css "core/css/email_msg_css.css" %}
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="green">
+            <h1 class="center" style="padding:2px">
+              {% blocktranslate %}Your "{{tenant_name}}" family site on {{site_name}}{% endblocktranslate %}
+            </h1>
+        </div>
+
+        <h2 class="center">
+            {% translate "Hello!" %}
+        </h2>
+        <hr>
+        <div class="center">
+            <p class="mt-3 center">
+            {% blocktranslate %}We received a request to create the family site "{{tenant_name}}" with this email address on {{site_name}}.{% endblocktranslate %}
+            </p>
+            <p class="mt-2">
+            {% translate "Click on the link below to confirm and create your site with your administrator account." %}
+            </p>
+            <p class="small mt-3 center">
+            {% blocktranslate %}If you don't know where this email comes from, just ignore it: nothing will be created without confirmation.{% endblocktranslate %}
+            </p>
+        </div>
+        <div class="center mt-3">
+            <hr>
+            <a href="{{link}}" class="button green">{% translate "Create my site" %}</a>
+            <p class="small mt-3">
+            {% blocktranslate %}This link is valid for {{max_age_hours}} hours.{% endblocktranslate %}
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -42,13 +42,16 @@
   <div class="container has-text-centered">
     <h2 class="title is-4">{% translate "Try it now" %}</h2>
     <p>
-      {% blocktranslate with demo_url=settings.SAAS_DEMO_URL docs_url=settings.SAAS_DOCS_URL %}
+      {% blocktranslate with demo_url=settings.SAAS_DEMO_URL docs_url=settings.SAAS_DOCS_URL trimmed %}
       Play with the <a href="{{ demo_url }}">demo site</a> or read the <a href="{{ docs_url }}">documentation</a>
       before creating your own family site.
       {% endblocktranslate %}
     </p>
     <p class="is-size-7 mt-2">
-      {% blocktranslate %}You prefer hosting it yourself? Cousins Matter is open source and can be self-hosted, see the <a href="{{ docs_url }}">installation guide</a>.{% endblocktranslate %}
+      {% blocktranslate trimmed %}
+      You prefer hosting it yourself? Cousins Matter is open source and can be self-hosted,
+      see the <a href="{{ docs_url }}">installation guide</a>.
+      {% endblocktranslate %}
     </p>
   </div>
 </section>
@@ -57,7 +60,8 @@
   <div class="container has-text-centered">
     <h2 class="title is-4">{% translate "Free plan" %}</h2>
     <p>
-      {% blocktranslate %}Creating a family site is free. Usage limits apply and are displayed when you sign up;
+      {% blocktranslate trimmed %}Creating a family site is free.
+      Usage limits apply and are displayed when you sign up;
       a paid plan with more room and extras is planned for later.{% endblocktranslate %}
     </p>
     <a class="button is-primary is-large mt-3" href="{% url 'saas:signup' %}">{% translate "Create my family site" %}</a>

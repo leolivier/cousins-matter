@@ -5,12 +5,16 @@
 <div class="box has-text-centered">
   <h1 class="title is-3">{% translate "Check your mailbox!" %}</h1>
   <p>
-    {% blocktranslate %}We just sent you a verification link. Click it to create your family site
-    and your administrator account.{% endblocktranslate %}
+    {% blocktranslate trimmed %}
+    We just sent you a verification link. Click it to create your family site
+    and your administrator account.
+    {% endblocktranslate %}
   </p>
   <p class="has-text-grey">
-    {% blocktranslate %}The link is valid for {{ max_age_hours }} hours. If you don't receive it,
-    check your spam folder or submit a new request.{% endblocktranslate %}
+    {% blocktranslate trimmed %}
+    The link is valid for {{ max_age_hours }} hours. If you don't receive it,
+    check your spam folder or submit a new request.
+    {% endblocktranslate %}
   </p>
   <a class="button is-link mt-3" href="{% url 'saas:signup' %}">{% translate "New request" %}</a>
 </div>

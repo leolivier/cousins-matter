@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 13:43+0200\n"
+"POT-Creation-Date: 2026-09-08 20:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: forms.py:8 models.py:23 tests/tests_i18n.py:18
 msgid "Family name"
 msgstr ""
@@ -160,7 +161,7 @@ msgid ""
 "polls, genealogy and much more."
 msgstr ""
 
-#: templates/saas/landing.html:11 templates/saas/landing.html:63
+#: templates/saas/landing.html:11 templates/saas/landing.html:67
 #: tests/tests_i18n.py:19
 msgid "Create my family site"
 msgstr ""
@@ -201,11 +202,8 @@ msgstr ""
 #: templates/saas/landing.html:45
 #, python-format
 msgid ""
-"\n"
-"      Play with the <a href=\"%(demo_url)s\">demo site</a> or read the <a "
-"href=\"%(docs_url)s\">documentation</a>\n"
-"      before creating your own family site.\n"
-"      "
+"Play with the <a href=\"%(demo_url)s\">demo site</a> or read the <a "
+"href=\"%(docs_url)s\">documentation</a> before creating your own family site."
 msgstr ""
 
 #: templates/saas/landing.html:51
@@ -215,15 +213,14 @@ msgid ""
 "self-hosted, see the <a href=\"%(docs_url)s\">installation guide</a>."
 msgstr ""
 
-#: templates/saas/landing.html:58
+#: templates/saas/landing.html:61
 msgid "Free plan"
 msgstr ""
 
-#: templates/saas/landing.html:60
+#: templates/saas/landing.html:63
 msgid ""
 "Creating a family site is free. Usage limits apply and are displayed when "
-"you sign up;\n"
-"      a paid plan with more room and extras is planned for later."
+"you sign up; a paid plan with more room and extras is planned for later."
 msgstr ""
 
 #: templates/saas/signup_form.html:3 templates/saas/signup_form.html:6
@@ -250,18 +247,18 @@ msgstr ""
 
 #: templates/saas/signup_sent.html:8
 msgid ""
-"We just sent you a verification link. Click it to create your family site\n"
-"    and your administrator account."
+"We just sent you a verification link. Click it to create your family site "
+"and your administrator account."
 msgstr ""
 
-#: templates/saas/signup_sent.html:12
+#: templates/saas/signup_sent.html:14
 #, python-format
 msgid ""
-"The link is valid for %(max_age_hours)s hours. If you don't receive it,\n"
-"    check your spam folder or submit a new request."
+"The link is valid for %(max_age_hours)s hours. If you don't receive it, "
+"check your spam folder or submit a new request."
 msgstr ""
 
-#: templates/saas/signup_sent.html:15
+#: templates/saas/signup_sent.html:19
 msgid "New request"
 msgstr ""
 

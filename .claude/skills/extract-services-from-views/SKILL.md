@@ -93,12 +93,14 @@ def not_is_private_admin(request, room):
     return redirect(reverse("chat:private_chat_rooms"))
   return None
 
+
 # apply a (success, message) service result in one line
 def message_result(request, success, message):
   if success:
     messages.success(request, message)
   else:
     messages.error(request, message)
+
 
 # a mutation view, end to end
 room = get_object_or_404(PrivateChatRoom.objects.prefetch_related("followers"), slug=room_slug)

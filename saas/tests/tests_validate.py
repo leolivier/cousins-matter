@@ -44,7 +44,7 @@ class ValidateTests(ValidateTestsBase):
     self.assertFalse(member.has_usable_password())
     self.assertEqual(get_user(self.client), member)
     tr.refresh_from_db()
-    self.assertEqual(tr.status, TenantRequest.Status.VALIDATED)
+    self.assertTrue(tr.is_validated)
     self.assertIsNotNone(tr.validated_at)
 
   def test_slug_suffixed_on_collision(self):
@@ -59,7 +59,7 @@ class ValidateTests(ValidateTestsBase):
     resp = self.client.get(self._link_path(tr))
     self.assertRedirects(resp, reverse("saas:signup"))
     tr.refresh_from_db()
-    self.assertEqual(tr.status, TenantRequest.Status.EXPIRED)
+    self.assertTrue(tr.is_expired)
     self.assertFalse(Tenant.objects.filter(slug="smith").exists())
 
   def test_replayed_link_refused(self):

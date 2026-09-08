@@ -32,9 +32,9 @@ class TenantValidateView(LoginNotRequiredMixin, generic.View):
     tenant_request = TenantRequestTokenManager().decrypt_link(encoded, token)
     if tenant_request is None:
       return self._invalid(request)
-    if tenant_request.status == TenantRequest.Status.PENDING and tenant_request.is_expired:
+    if tenant_request.is_pending and tenant_request.has_expired:
       tenant_request.mark_expired()
-    if tenant_request.status != TenantRequest.Status.PENDING or tenant_request.is_expired:
+    if not tenant_request.is_pending or tenant_request.has_expired:
       return self._invalid(request)
 
     try:

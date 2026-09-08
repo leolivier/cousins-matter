@@ -39,7 +39,20 @@ class TenantRequest(models.Model):
     return f"{self.tenant_name} <{self.email}> ({self.status})"
 
   @property
+  def is_pending(self) -> bool:
+    return self.status == self.Status.PENDING
+
+  @property
+  def is_validated(self) -> bool:
+    return self.status == self.Status.VALIDATED
+
+  @property
   def is_expired(self) -> bool:
+    return self.status == self.Status.EXPIRED
+
+  @property
+  def has_expired(self) -> bool:
+    """The link validity window has passed, whatever the stored status."""
     return timezone.now() >= self.expires_at
 
   @classmethod

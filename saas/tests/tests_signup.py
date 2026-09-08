@@ -1,6 +1,5 @@
 """Tenant request flow tests: form, throttle, member-email refusal (Turnstile off)."""
 
-
 from django.core import mail
 from django.core.cache import cache
 from django.test import TestCase
@@ -31,7 +30,7 @@ class SignupTests(TestCase):
     resp = self._post()
     self.assertRedirects(resp, reverse("saas:signup_sent"))
     tr = TenantRequest.objects.get(email="founder@example.com")
-    self.assertEqual(tr.status, TenantRequest.Status.PENDING)
+    self.assertTrue(tr.is_pending)
     self.assertEqual(tr.tenant_name, "Smith")
     delta = (tr.expires_at - timezone.now()).total_seconds()
     self.assertAlmostEqual(delta, 24 * 3600, delta=10)

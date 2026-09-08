@@ -12,6 +12,7 @@ jobs:
   test-install:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       packages: write
     steps:
       - name: Checkout

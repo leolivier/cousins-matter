@@ -1,6 +1,7 @@
 """Tests for the superuser-only environment check page (core:env_check)."""
 
 import redis
+from channels.layers import InMemoryChannelLayer
 from smtplib import SMTPException
 from unittest.mock import patch
 
@@ -13,6 +14,16 @@ from core.services import run_env_checks
 from members.tests.tests_member_base import MemberTestCase
 
 ENV_CHECK_URL_NAME = "core:env_check"
+
+
+class RecordingLayer(InMemoryChannelLayer):
+  """Records instantiations: the channels probe must build its own layer."""
+
+  created: list["RecordingLayer"] = []
+
+  def __init__(self, **kwargs):
+    super().__init__(**kwargs)
+    RecordingLayer.created.append(self)
 
 
 class EnvCheckAccessTests(MemberTestCase):
@@ -101,6 +112,16 @@ class RunEnvChecksTests(MemberTestCase):
     checks = run_env_checks()
     email = next(check for check in checks if check["name"] == _("Email"))
     self.assertEqual(email["status"], "warning")
+
+  def test_channels_probe_uses_dedicated_layer(self):
+    """The probe must not reuse the shared layer singleton: a connected websocket
+    pins the singleton's receive() loop and would break the roundtrip."""
+    RecordingLayer.created = []
+    with override_settings(CHANNEL_LAYERS={"default": {"BACKEND": "core.tests.test_env_check.RecordingLayer", "CONFIG": {}}}):
+      checks = run_env_checks()
+    channels_row = next(check for check in checks if check["name"] == _("Chat (Channels)"))
+    self.assertEqual(channels_row["status"], "ok")
+    self.assertEqual(len(RecordingLayer.created), 1)
 
   def test_redis_client_follows_settings(self):
     """redis_client must resolve REDIS_HOST through settings, not os.getenv defaults."""

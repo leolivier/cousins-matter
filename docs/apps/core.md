@@ -52,8 +52,10 @@ Django-Q to prove the broker works.
 ## Environment check
 
 `/env-check/` (`core:env_check`, core/views/views_stats.py `env_check`) is a
-platform-admin diagnostics page, superuser-only via `user_passes_test`
-(anonymous → login redirect, other members → 403). GET renders the probes;
+platform-admin diagnostics page, superuser-only via explicit checks in the
+view (anonymous → login redirect, other members → 403 — same semantics as
+`OnlySuperuserMixin`, without its multi-tenant requirement). GET renders the
+probes;
 POSTing `action=send_test_email` (the "send a test email to myself" button)
 sends a test email to the requesting superuser through
 `send_test_email(user)` (core/services.py) and redirects back (PRG + messages

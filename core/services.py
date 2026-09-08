@@ -5,7 +5,6 @@ from typing import Any
 from uuid import uuid4
 
 import redis
-from channels.layers import get_channel_layer
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import storages
@@ -16,6 +15,7 @@ from django.core.management.base import CommandError
 from django.db import DatabaseError, connections
 from django.db.migrations.exceptions import InconsistentMigrationHistory
 from django.template.loader import render_to_string
+from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
 from django_q.tasks import async_task, result
 
@@ -50,8 +50,7 @@ def health_check() -> dict[str, str]:
     redis_client.ping()
   except redis.exceptions.ConnectionError as e:
     logger.error(f"Redis error: {e}")
-    # the connection error text (host/port, no credentials) helps the env-check page
-    return {"status": "redis_error", "msg": f"redis error: {e}"}
+    return {"status": "redis_error", "msg": "redis error, see logs"}
   return {"status": "ok"}
 
 
@@ -221,9 +220,17 @@ def _probe_db_and_redis() -> list[dict[str, Any]]:
       _line(_("Redis"), "skipped", _("Not checked (database unreachable)")),
     ]
   if check["status"] == "redis_error":
+    # health_check's msg stays generic (it feeds the anonymous /health endpoint):
+    # re-ping here to capture the underlying error for this superuser-only page
+    try:
+      redis_client.ping()
+    except redis.exceptions.ConnectionError as e:
+      detail = str(e)
+    else:
+      detail = check["msg"]
     return [
       _line(_("Database"), "ok", _("SELECT 1 succeeded")),
-      _line(_("Redis"), "error", check["msg"]),
+      _line(_("Redis"), "error", detail),
     ]
   return [
     _line(_("Database"), "ok", _("SELECT 1 succeeded")),
@@ -252,8 +259,10 @@ def _probe_migrations() -> list[dict[str, Any]]:
   buf = io.StringIO()
   try:
     call_command("migrate", "--check", stdout=buf, stderr=buf)
-  except (CommandError, DatabaseError, LookupError, InconsistentMigrationHistory, SystemExit) as e:
-    # --check exits through sys.exit(1) when migrations are unapplied;
+  except SystemExit:
+    # --check exits through sys.exit(1) (with no output) when migrations are unapplied
+    return [_line(_("Migrations"), "warning", _("Unapplied migrations"))]
+  except (CommandError, DatabaseError, LookupError, InconsistentMigrationHistory) as e:
     # LookupError covers NodeNotFoundError (broken migration graph)
     detail = buf.getvalue().strip() or str(e) or _("Unapplied migrations")
     return [_line(_("Migrations"), "warning", detail)]
@@ -288,7 +297,7 @@ def _probe_media() -> list[dict[str, Any]]:
   return [_line(_("Media storage"), "ok", _("Write/read/delete roundtrip succeeded on %(backend)s") % {"backend": backend})]
 
 
-async def _channels_roundtrip(layer) -> Any:
+async def _channels_roundtrip(layer: Any) -> Any:
   channel = await layer.new_channel()
   await layer.send(channel, {"type": "env.check.ping"})
   # channels-redis receive() has no timeout parameter: use asyncio.wait_for
@@ -296,9 +305,13 @@ async def _channels_roundtrip(layer) -> Any:
 
 
 def _probe_channels() -> list[dict[str, Any]]:
-  layer = get_channel_layer()
-  if layer is None:
+  config = settings.CHANNEL_LAYERS.get("default")
+  if not config:
     return [_line(_("Chat (Channels)"), "error", _("No channel layer configured"))]
+  # dedicated instance: the shared layer singleton pins its event loop on the
+  # first receive(), so any connected websocket would make the probe raise
+  # "Two event loops are trying to receive() on one channel layer at once!"
+  layer = import_string(config["BACKEND"])(**config.get("CONFIG", {}))
   try:
     asyncio.run(_channels_roundtrip(layer))
   except TimeoutError:
@@ -379,7 +392,7 @@ def run_env_checks() -> list[dict[str, Any]]:
   return results
 
 
-def send_test_email(user) -> tuple[bool, str]:
+def send_test_email(user: Member) -> tuple[bool, str]:
   """Sends a test email to the given (super)user; returns (success, detail)."""
   if not user.email:
     return False, _("User %(username)s has no email address") % {"username": user.username}

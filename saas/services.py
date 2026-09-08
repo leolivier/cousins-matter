@@ -1,16 +1,22 @@
-"""Business logic for tenant requests: creation, email, purge, schedule."""
+"""Business logic for tenant requests: creation, validation, email, purge, schedule."""
 
 import sys
 from datetime import timedelta
 
 from django.conf import settings
 from django.core.mail import send_mail
+from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 
+from members.models import Member
+from tenants.forms import uniquify_tenant_slug
+from tenants.models import Tenant, TenantSettings
+
 from .models import TenantRequest
+from .tokens import TenantRequestTokenManager
 
 # resolved requests are kept that long for platform support, then purged
 RESOLVED_RETENTION = timedelta(days=30)
@@ -49,6 +55,51 @@ def send_tenant_request_email(tenant_request: TenantRequest, link: str) -> None:
     recipient_list=[tenant_request.email],
     html_message=msg,
   )
+
+
+def resolve_tenant_request(encoded: str, token: str) -> TenantRequest | None:
+  """Return the request of a valid, pending, unexpired signed link, else None.
+
+  A pending-but-expired request gets marked EXPIRED (the link was replayed
+  after the window); other failures leave the request untouched.
+  """
+  tenant_request = TenantRequestTokenManager().decrypt_link(encoded, token)
+  if tenant_request is None:
+    return None
+  if tenant_request.is_pending and tenant_request.has_expired:
+    tenant_request.mark_expired()
+  if not tenant_request.is_pending or tenant_request.has_expired:
+    return None
+  return tenant_request
+
+
+def create_tenant_from_request(tenant_request: TenantRequest) -> Member:
+  """Fulfil a pending request: Tenant + TenantSettings + active admin Member.
+
+  The slug is computed at creation time (automatic ``-2`` suffix on
+  collision) and the request is marked VALIDATED in the same transaction.
+  Raises on failure (no free slug, duplicate username, ...), rolling
+  everything back.
+  """
+  with transaction.atomic():
+    slug = uniquify_tenant_slug(tenant_request.tenant_name)
+    tenant = Tenant.objects.create(name=tenant_request.tenant_name, slug=slug)
+    TenantSettings.objects.create(tenant=tenant)
+    username = tenant_request.email.partition("@")[0]
+    member = Member.unscoped.create(
+      username=username,
+      email=tenant_request.email,
+      tenant=tenant,
+      role=Member.Role.ADMIN,
+      is_active=True,
+    )
+    # password chosen on the welcome screen right after auto-login
+    member.set_unusable_password()
+    member.save()
+    tenant_request.status = TenantRequest.Status.VALIDATED
+    tenant_request.validated_at = timezone.now()
+    tenant_request.save(update_fields=["status", "validated_at"])
+  return member
 
 
 def purge_tenant_requests() -> int:

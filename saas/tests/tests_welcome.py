@@ -19,7 +19,7 @@ class WelcomeTests(TestCase):
     tr = create_tenant_request(email="founder@example.com", tenant_name="Smith")
     request = RequestFactory().get("/")
     path = TenantRequestTokenManager().generate_link(request, tr).replace("http://testserver", "")
-    self.client.get(path)
+    self.client.post(path)
 
   def test_welcome_shows_and_sets_password(self):
     resp = self.client.get(reverse("saas:welcome"))

@@ -32,7 +32,14 @@ class ValidateTestsBase(TestCase):
 class ValidateTests(ValidateTestsBase):
   def test_link_creates_tenant_settings_admin_and_logs_in(self):
     tr = self._make_request()
-    resp = self.client.get(self._link_path(tr))
+    path = self._link_path(tr)
+    # GET only shows the confirmation page: nothing is created yet
+    resp = self.client.get(path)
+    self.assertEqual(resp.status_code, 200)
+    self.assertFalse(Tenant.objects.filter(slug="smith").exists())
+    self.assertContains(resp, "Smith")
+
+    resp = self.client.post(path)
     self.assertRedirects(resp, reverse("saas:welcome"), fetch_redirect_response=False)
 
     tenant = Tenant.objects.get(slug="smith")
@@ -51,7 +58,9 @@ class ValidateTests(ValidateTestsBase):
   def test_slug_suffixed_on_collision(self):
     Tenant.objects.create(name="Smith", slug="smith")
     tr = self._make_request()
-    self.client.get(self._link_path(tr))
+    path = self._link_path(tr)
+    self.client.get(path)
+    self.client.post(path)
     self.assertTrue(Tenant.objects.filter(slug="smith-2").exists())
 
   def test_expired_link_refused(self):
@@ -66,9 +75,9 @@ class ValidateTests(ValidateTestsBase):
   def test_replayed_link_refused(self):
     tr = self._make_request()
     path = self._link_path(tr)
-    self.client.get(path)
+    self.client.post(path)
     self.assertEqual(Tenant.objects.filter(slug="smith").count(), 1)
-    resp = self.client.get(path)
+    resp = self.client.post(path)
     self.assertRedirects(resp, reverse("saas:signup"))
     self.assertEqual(Tenant.objects.filter(slug="smith").count(), 1)
 

@@ -1,4 +1,4 @@
-"""Signed-link validation: create tenant + admin, auto-login, set password."""
+"""Signed-link validation: confirm page, then tenant + admin creation."""
 
 import logging
 
@@ -7,56 +7,45 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import update_session_auth_hash
-from django.db import transaction
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from core.mixins import LoginNotRequiredMixin
-from members.models import Member
-from tenants.forms import uniquify_tenant_slug
-from tenants.models import Tenant, TenantSettings
 
-from ..models import TenantRequest
-from ..tokens import TenantRequestTokenManager
+from ..services import create_tenant_from_request, resolve_tenant_request
 
 logger = logging.getLogger(__name__)
 
 
 class TenantValidateView(LoginNotRequiredMixin, generic.View):
-  """Creates tenant + settings + admin member from the signed link, then logs in."""
+  """Signed email link: GET shows the confirmation, POST creates the site."""
+
+  template_name = "saas/validate_confirm.html"
 
   def get(self, request, encoded, token):
-    tenant_request = TenantRequestTokenManager().decrypt_link(encoded, token)
+    tenant_request = resolve_tenant_request(encoded, token)
     if tenant_request is None:
       return self._invalid(request)
-    if tenant_request.is_pending and tenant_request.has_expired:
-      tenant_request.mark_expired()
-    if not tenant_request.is_pending or tenant_request.has_expired:
-      return self._invalid(request)
+    # a GET must not create anything: show the confirmation, POST decides
+    return render(
+      request,
+      self.template_name,
+      {
+        "tenant_name": tenant_request.tenant_name,
+        "email": tenant_request.email,
+        "encoded": encoded,
+        "token": token,
+      },
+    )
 
+  def post(self, request, encoded, token):
+    tenant_request = resolve_tenant_request(encoded, token)
+    if tenant_request is None:
+      return self._invalid(request)
     try:
-      with transaction.atomic():
-        # slug computed at validation time: automatic -2 suffix on collision
-        slug = uniquify_tenant_slug(tenant_request.tenant_name)
-        tenant = Tenant.objects.create(name=tenant_request.tenant_name, slug=slug)
-        TenantSettings.objects.create(tenant=tenant)
-        username = tenant_request.email.partition("@")[0]
-        member = Member.unscoped.create(
-          username=username,
-          email=tenant_request.email,
-          tenant=tenant,
-          role=Member.Role.ADMIN,
-          is_active=True,
-        )
-        # password chosen on the welcome screen right after auto-login
-        member.set_unusable_password()
-        member.save()
-        tenant_request.status = TenantRequest.Status.VALIDATED
-        tenant_request.validated_at = timezone.now()
-        tenant_request.save(update_fields=["status", "validated_at"])
+      member = create_tenant_from_request(tenant_request)
     except Exception:
       logger.exception("Tenant creation failed for request %s", tenant_request.pk)
       messages.error(request, _("Could not create the family site, please contact support."))

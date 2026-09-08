@@ -36,13 +36,17 @@ and the home page behaves normally.
    same policy as `tenants.views.views_signup`). Emails of existing
    members are refused (global email login). Creates a `TenantRequest`
    (platform table, not tenant-scoped) and sends a signed link.
-3. **Validation** — `TenantValidateView` (saas/views/views_validate.py)
-   verifies the stateless HMAC link (`saas/tokens.py`,
+3. **Validation** — `TenantValidateView` (saas/views/views_validate.py):
+   GET on the signed link (`saas/tokens.py`,
    `TenantRequestTokenManager` subclassing members' `TokenManager`, max
-   age `SAAS_TENANT_REQUEST_MAX_AGE`), then in one transaction creates
+   age `SAAS_TENANT_REQUEST_MAX_AGE`, via
+   `services.resolve_tenant_request`) shows a confirmation page — a GET
+   never mutates; POST re-checks the link and calls
+   `services.create_tenant_from_request`, which in one transaction creates
    `Tenant` (slug from `uniquify_tenant_slug`, `-2` suffix on collision),
    `TenantSettings` and the `Member` admin (active, unusable password,
-   `role="admin"`), marks the request `VALIDATED`, auto-logs the admin in
+   `role="admin"`), marks the request `VALIDATED`, then the view auto-logs
+   the admin in
    (explicit `ModelBackend`: multi-backend setup) and redirects to
    `saas:welcome`. Expired/played/tampered links mark the request
    `EXPIRED` and bounce to the signup.

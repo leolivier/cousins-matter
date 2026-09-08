@@ -1,7 +1,6 @@
 import asyncio
 import io
 import logging
-import os
 from typing import Any
 from uuid import uuid4
 
@@ -33,8 +32,8 @@ logger = logging.getLogger(__name__)
 # --------------------------------------------------------------------------------------
 
 redis_client = redis.Redis(
-  host=os.getenv("REDIS_HOST", "redis"),
-  port=int(os.getenv("REDIS_PORT", "6379")),
+  host=settings.REDIS_HOST,
+  port=settings.REDIS_PORT,
   decode_responses=True,
 )
 

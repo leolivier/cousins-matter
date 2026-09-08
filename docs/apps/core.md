@@ -67,7 +67,11 @@ never 500s. Probes:
 
 - **Database + Redis** — reuses `health_check()`; two rows, Redis is
   `skipped` when the database is unreachable, and the row detail carries the
-  underlying connection error.
+  underlying connection error. The Redis endpoint comes from
+  `settings.REDIS_HOST`/`REDIS_PORT` (base.py defaults to the docker service
+  name; dev_base retargets the default to `localhost` for host-run dev/tests,
+  docker_devt/docker_test retarget it back to the service name), so the
+  probe, Channels and the Django-Q broker all look at the same place.
 - **Django-Q2** — `async_task("core.services.health_check")` + `result(…,
   1000)` roundtrip; `skipped` when the database or Redis (its broker) is
   unreachable, no result (worker down) → `warning`. Caveat: with

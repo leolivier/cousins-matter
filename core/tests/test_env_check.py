@@ -102,6 +102,13 @@ class RunEnvChecksTests(MemberTestCase):
     email = next(check for check in checks if check["name"] == _("Email"))
     self.assertEqual(email["status"], "warning")
 
+  def test_redis_client_follows_settings(self):
+    """redis_client must resolve REDIS_HOST through settings, not os.getenv defaults."""
+    from core.services import redis_client
+    from django.conf import settings
+
+    self.assertEqual(redis_client.connection_pool.connection_kwargs.get("host"), settings.REDIS_HOST)
+
   def test_redis_down_reports_error_and_skips_django_q(self):
     with patch("core.services.redis_client") as mock_redis:
       mock_redis.ping.side_effect = redis.exceptions.ConnectionError("Error -2 connecting to redis:6379")

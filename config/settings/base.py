@@ -244,13 +244,20 @@ WSGI_APPLICATION = "cousinsmatter.wsgi.application"
 
 ASGI_APPLICATION = "cousinsmatter.asgi.application"
 
+# Redis endpoint, shared by the channel layer, the Django-Q broker and
+# core.services.redis_client. Defaults target a docker-compose deployment
+# (service name); dev_base.py retargets the default to localhost for
+# host-run dev/tests.
+REDIS_HOST = env.str("REDIS_HOST", default="redis")
+REDIS_PORT = env.int("REDIS_PORT", default=6379)
+
 CHANNEL_LAYERS: dict[str, Any] = {
   "default": {
     "BACKEND": "channels_redis.core.RedisChannelLayer",
     "CONFIG": {
       "hosts": [
         {
-          "address": f"redis://{env.str('REDIS_HOST', default='redis')}:{env.int('REDIS_PORT', default=6379)}",
+          "address": f"redis://{REDIS_HOST}:{REDIS_PORT}",
           "socket_connect_timeout": 5,
           # socket_timeout MUST be explicitly None. redis-py's DEFAULT_SOCKET_TIMEOUT
           # is 5s, which races with channels-redis' BZPOPMIN (brpop_timeout=5s) and
@@ -325,8 +332,8 @@ Q_CLUSTER: dict[str, Any] = {
   # 'queue_limit': 500,
   # 'label': 'Django Q2',
   "redis": {
-    "host": env.str("REDIS_HOST", default="redis"),
-    "port": env.int("REDIS_PORT", default=6379),
+    "host": REDIS_HOST,
+    "port": REDIS_PORT,
     # 'db': 0,
   },
   "sync": env.bool("Q_SYNC", False),  # set to True in development

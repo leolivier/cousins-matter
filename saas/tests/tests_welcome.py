@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from members.models import Member
 
-from ..models import TenantRequest
+from ..services import create_tenant_request
 from ..tokens import TenantRequestTokenManager
 from .utils import skip_if_saas_off
 
@@ -16,7 +16,7 @@ class WelcomeTests(TestCase):
   def setUp(self):
     skip_if_saas_off(self)
     # run the whole flow once: request -> link -> validated -> auto-login
-    tr = TenantRequest.create_pending(email="founder@example.com", tenant_name="Smith")
+    tr = create_tenant_request(email="founder@example.com", tenant_name="Smith")
     request = RequestFactory().get("/")
     path = TenantRequestTokenManager().generate_link(request, tr).replace("http://testserver", "")
     self.client.get(path)

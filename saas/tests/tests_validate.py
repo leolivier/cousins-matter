@@ -11,6 +11,7 @@ from members.models import Member
 from tenants.models import Tenant, TenantSettings
 
 from ..models import TenantRequest
+from ..services import create_tenant_request
 from ..tokens import TenantRequestTokenManager
 from .utils import skip_if_saas_off
 
@@ -20,7 +21,7 @@ class ValidateTestsBase(TestCase):
     skip_if_saas_off(self)
 
   def _make_request(self, email="founder@example.com", name="Smith", **kwargs):
-    return TenantRequest.create_pending(email=email, tenant_name=name, **kwargs)
+    return create_tenant_request(email=email, tenant_name=name, **kwargs)
 
   def _link_path(self, tenant_request):
     request = RequestFactory().get("/")

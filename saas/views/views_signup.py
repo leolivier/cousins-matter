@@ -5,10 +5,7 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.core.cache import cache
-from django.core.mail import send_mail
 from django.shortcuts import redirect, render
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
@@ -16,7 +13,7 @@ from core.mixins import LoginNotRequiredMixin
 from members.models import Member
 
 from ..forms import SignupRequestForm
-from ..models import TenantRequest
+from ..services import create_tenant_request, send_tenant_request_email
 from ..tokens import TenantRequestTokenManager
 from ..turnstile import verify_turnstile
 
@@ -65,34 +62,15 @@ class SignupRequestView(LoginNotRequiredMixin, generic.View):
       form.add_error("email", _("A member with this email address already exists."))
       return self._render(request, form)
 
-    tenant_request = TenantRequest.create_pending(
+    tenant_request = create_tenant_request(
       email=email,
       tenant_name=form.cleaned_data["tenant_name"],
       ip=request.META.get("REMOTE_ADDR"),
     )
-    self._send_email(request, tenant_request)
-    return redirect("saas:signup_sent")
-
-  def _send_email(self, request, tenant_request):
+    # the link needs the request (absolute URI); the service stays request-free
     link = TenantRequestTokenManager().generate_link(request, tenant_request)
-    msg = render_to_string(
-      "saas/email/tenant_request_email.html",
-      {
-        "link": link,
-        "tenant_name": tenant_request.tenant_name,
-        "site_name": settings.SITE_NAME,
-        "max_age_hours": settings.SAAS_TENANT_REQUEST_MAX_AGE // 3600,
-      },
-      request=request,
-    )
-    send_mail(
-      _('Your new "%(name)s" family site on %(site_name)s')
-      % {"name": tenant_request.tenant_name, "site_name": settings.SITE_NAME},
-      strip_tags(msg),
-      from_email=settings.DEFAULT_FROM_EMAIL,  # always use the default from email
-      recipient_list=[tenant_request.email],
-      html_message=msg,
-    )
+    send_tenant_request_email(tenant_request, link)
+    return redirect("saas:signup_sent")
 
   def _render(self, request, form):
     return render(request, self.template_name, {"form": form})

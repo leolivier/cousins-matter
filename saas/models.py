@@ -6,9 +6,6 @@ any tenant exists. The signed validation link is HMAC stateless (see
 tokens.py), so no token is stored.
 """
 
-from datetime import timedelta
-
-from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -54,16 +51,6 @@ class TenantRequest(models.Model):
   def has_expired(self) -> bool:
     """The link validity window has passed, whatever the stored status."""
     return timezone.now() >= self.expires_at
-
-  @classmethod
-  def create_pending(cls, email: str, tenant_name: str, ip: str | None = None) -> "TenantRequest":
-    """Store a new request whose expiry derives from SAAS_TENANT_REQUEST_MAX_AGE."""
-    return cls.objects.create(
-      email=email,
-      tenant_name=tenant_name,
-      ip=ip,
-      expires_at=timezone.now() + timedelta(seconds=settings.SAAS_TENANT_REQUEST_MAX_AGE),
-    )
 
   def mark_expired(self) -> None:
     self.status = self.Status.EXPIRED

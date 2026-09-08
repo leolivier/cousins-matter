@@ -95,9 +95,11 @@ Deployment note: cousins-matter.net is a deployment value (DNS +
 
 ## Internationalization
 
-User-facing strings are English with `gettext` like every other app;
-`fr`/`es`/... catalogues for `saas` are not generated yet (`make mkmsg
-a=saas && make cpmsg a=saas` when needed).
+User-facing strings are English with `gettext` like every other app; the
+app ships its own catalogues
+(`saas/locale/{fr,es,de,it,pt}/LC_MESSAGES/django.{po,mo}`, `en` is the
+untranslated source language), regenerated with `make mkmsg a=saas` and
+compiled with `make cpmsg a=saas`. Both `.po` and `.mo` are committed.
 
 # See also
 

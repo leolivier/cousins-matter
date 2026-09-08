@@ -1,5 +1,6 @@
 """Tests for the superuser-only environment check page (core:env_check)."""
 
+import redis
 from smtplib import SMTPException
 from unittest.mock import patch
 
@@ -100,3 +101,13 @@ class RunEnvChecksTests(MemberTestCase):
     checks = run_env_checks()
     email = next(check for check in checks if check["name"] == _("Email"))
     self.assertEqual(email["status"], "warning")
+
+  def test_redis_down_reports_error_and_skips_django_q(self):
+    with patch("core.services.redis_client") as mock_redis:
+      mock_redis.ping.side_effect = redis.exceptions.ConnectionError("Error -2 connecting to redis:6379")
+      checks = run_env_checks()
+    redis_row = next(check for check in checks if check["name"] == _("Redis"))
+    self.assertEqual(redis_row["status"], "error")
+    self.assertIn("redis:6379", redis_row["detail"])
+    q2 = next(check for check in checks if check["name"] == _("Django-Q2 task queue"))
+    self.assertEqual(q2["status"], "skipped")

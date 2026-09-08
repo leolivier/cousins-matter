@@ -66,9 +66,11 @@ try/except**, so a failing probe degrades to an "error" row and the page
 never 500s. Probes:
 
 - **Database + Redis** — reuses `health_check()`; two rows, Redis is
-  `skipped` when the database is unreachable.
+  `skipped` when the database is unreachable, and the row detail carries the
+  underlying connection error.
 - **Django-Q2** — `async_task("core.services.health_check")` + `result(…,
-  1000)` roundtrip; no result (worker down) → `warning`. Caveat: with
+  1000)` roundtrip; `skipped` when the database or Redis (its broker) is
+  unreachable, no result (worker down) → `warning`. Caveat: with
   `Q_SYNC=True` the task executes in-process, so the row explicitly states it
   proves nothing about a live qcluster worker.
 - **Migrations** — `migrate --check`; pending or inconsistent migrations →

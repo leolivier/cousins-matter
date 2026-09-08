@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-07 22:56+0200\n"
+"POT-Creation-Date: 2026-09-08 12:36+0200\n"
 "PO-Revision-Date: 2025-04-06 13:04+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Spanish <LL@li.org>\n"
@@ -93,280 +93,290 @@ msgstr "Atachar archivo"
 msgid "You can attach a file here if needed"
 msgstr "Puedes adjuntar un archivo aquí si es necesario"
 
-#: services.py:83
+#: services.py:84
 msgid "Site"
 msgstr "Sitio"
 
-#: services.py:85
+#: services.py:86
 msgid "Site name"
 msgstr "Nombre del sitio"
 
-#: services.py:86
+#: services.py:87
 msgid "Site URL"
 msgstr "URL del sitio"
 
-#: services.py:87
+#: services.py:88
 msgid "Application Version"
 msgstr "Versión de la aplicación"
 
-#: services.py:88
+#: services.py:89
 msgid "Latest release"
 msgstr "Ultimo lanzamiento"
 
-#: services.py:92 templates/core/navbar.html:27
+#: services.py:93 templates/core/navbar.html:27
 msgid "Members"
 msgstr "Miembros"
 
-#: services.py:94
+#: services.py:95
 msgid "Total number of members"
 msgstr "Nombre total de miembros"
 
-#: services.py:96
+#: services.py:97
 msgid "Number of active members"
 msgstr "Número de miembros activos"
 
-#: services.py:100
+#: services.py:101
 msgid "Number of managed members"
 msgstr "Nombre de miembros gestionados"
 
-#: services.py:106 templates/core/navbar.html:31 tests/test_featured.py:24
+#: services.py:107 templates/core/navbar.html:31 tests/test_featured.py:24
 msgid "Galleries"
 msgstr "Galerías"
 
-#: services.py:108
+#: services.py:109
 msgid "Number of galleries"
 msgstr "Número de galerías"
 
-#: services.py:109
+#: services.py:110
 msgid "Number of photos"
 msgstr "Número de fotos"
 
-#: services.py:113
+#: services.py:114
 msgid "Forums"
 msgstr "Foros"
 
-#: services.py:115
+#: services.py:116
 msgid "Number of posts"
 msgstr "Número de publicaciones"
 
-#: services.py:116
+#: services.py:117
 msgid "Number of post messages"
 msgstr "Número de mensajes en las discusiones"
 
-#: services.py:118
+#: services.py:119
 msgid "Number of message comments"
 msgstr "Número de comentarios de mensajes"
 
-#: services.py:124
+#: services.py:125
 msgid "Chats"
 msgstr "Salas de chat"
 
-#: services.py:126
+#: services.py:127
 msgid "Number of chat rooms"
 msgstr "Número de salas de chat"
 
-#: services.py:128
+#: services.py:129
 msgid "Number of public chat rooms"
 msgstr "Número de salas de chat públicas"
 
-#: services.py:132
+#: services.py:133
 msgid "Number of private chat rooms"
 msgstr "Número de salas de chat privadas"
 
-#: services.py:135
+#: services.py:136
 msgid "Number of chat messages"
 msgstr "Número de mensajes en los chats"
 
-#: services.py:137
+#: services.py:138
 msgid "Number of private chat messages"
 msgstr "Número de mensajes privados"
 
-#: services.py:141
+#: services.py:142
 msgid "Number of public chat messages"
 msgstr "Número de mensajes en los chats públicos"
 
-#: services.py:147
+#: services.py:148
 msgid "Administrator"
 msgstr "Administrador"
 
-#: services.py:149
+#: services.py:150
 msgid "This site is managed by"
 msgstr "Este sitio está gestionado por"
 
-#: services.py:149
+#: services.py:150
 msgid "(no admin yet)"
 msgstr ""
 
-#: services.py:150
+#: services.py:151
 msgid "Administrator email"
 msgstr "Correo electrónico del administrador"
 
-#: services.py:168 tests/test_contactform.py:39
+#: services.py:169 tests/test_contactform.py:39
 #, python-format
 msgid "You have a new message from %(name)s (%(email)s). "
 msgstr "Tienes un nuevo mensaje de %(name)s (%(email)s)."
 
-#: services.py:173 tests/test_contactform.py:32
+#: services.py:174 tests/test_contactform.py:32
 msgid "Contact form"
 msgstr "Formulario de contacto"
 
-#: services.py:174
+#: services.py:175
 msgid "But your mailer tools is too old to show it :'("
 msgstr "Más tu herramienta de correo es demasiado antigua para mostrarlo :'("
 
-#: services.py:200
+#: services.py:201
 msgid "This file type is not supported"
 msgstr "Este tipo de archivo no está soportado"
 
-#: services.py:220 services.py:225 services.py:229 tests/test_env_check.py:71
-#: tests/test_env_check.py:95
+#: services.py:221 services.py:226 services.py:230 tests/test_env_check.py:72
+#: tests/test_env_check.py:96
 msgid "Database"
 msgstr ""
 
-#: services.py:221 services.py:226 services.py:230 tests/test_env_check.py:72
+#: services.py:222 services.py:227 services.py:231 tests/test_env_check.py:73
+#: tests/test_env_check.py:109
 msgid "Redis"
 msgstr ""
 
-#: services.py:221
+#: services.py:222
 msgid "Not checked (database unreachable)"
 msgstr ""
 
-#: services.py:225 services.py:229
+#: services.py:226 services.py:230
 msgid "SELECT 1 succeeded"
 msgstr ""
 
-#: services.py:230
+#: services.py:231
 msgid "PING succeeded"
 msgstr ""
 
-#: services.py:240 services.py:241 services.py:242 services.py:355
-#: tests/test_env_check.py:73 tests/test_env_check.py:92
+#: services.py:239 services.py:241 services.py:247 services.py:248
+#: services.py:249 services.py:365 tests/test_env_check.py:74
+#: tests/test_env_check.py:93 tests/test_env_check.py:112
 msgid "Django-Q2 task queue"
 msgstr ""
 
-#: services.py:240
-msgid "Task roundtrip succeeded (sync mode: executed in-process)"
+#: services.py:239
+msgid "Skipped: Redis is unreachable"
 msgstr ""
 
 #: services.py:241
+msgid "Skipped: Database is unreachable"
+msgstr ""
+
+#: services.py:247
+msgid "Task roundtrip succeeded (sync mode: executed in-process)"
+msgstr ""
+
+#: services.py:248
 msgid "Task roundtrip through the worker succeeded"
 msgstr ""
 
-#: services.py:242
+#: services.py:249
 msgid "No task result within 1s: is the qcluster worker running?"
 msgstr ""
 
-#: services.py:252
+#: services.py:259
 msgid "Unapplied migrations"
 msgstr ""
 
-#: services.py:253 services.py:254 services.py:356 tests/test_env_check.py:74
+#: services.py:260 services.py:261 services.py:366 tests/test_env_check.py:75
 msgid "Migrations"
 msgstr ""
 
-#: services.py:254
+#: services.py:261
 msgid "All migrations applied"
 msgstr ""
 
-#: services.py:263 services.py:266 services.py:267 services.py:357
-#: tests/test_env_check.py:75
+#: services.py:270 services.py:273 services.py:274 services.py:367
+#: tests/test_env_check.py:76
 msgid "Deployment checks"
 msgstr ""
 
-#: services.py:267
+#: services.py:274
 msgid "No deployment issue found"
 msgstr ""
 
-#: services.py:281 services.py:282 services.py:358 tests/test_env_check.py:76
+#: services.py:288 services.py:289 services.py:368 tests/test_env_check.py:77
 msgid "Media storage"
 msgstr ""
 
-#: services.py:281
+#: services.py:288
 #, python-format
 msgid "Read-back mismatch on %(backend)s"
 msgstr ""
 
-#: services.py:282
+#: services.py:289
 #, python-format
 msgid "Write/read/delete roundtrip succeeded on %(backend)s"
 msgstr ""
 
-#: services.py:294 services.py:298 services.py:299 services.py:359
-#: tests/test_env_check.py:77
+#: services.py:302 services.py:306 services.py:308 services.py:369
+#: tests/test_env_check.py:78
 msgid "Chat (Channels)"
 msgstr ""
 
-#: services.py:294
+#: services.py:302
 msgid "No channel layer configured"
 msgstr ""
 
-#: services.py:298
+#: services.py:306
 msgid "No message echoed back within 5s"
 msgstr ""
 
-#: services.py:299
+#: services.py:308
 #, python-format
 msgid "Roundtrip succeeded on channel layer %(layer)s"
 msgstr ""
 
-#: services.py:307 services.py:313 services.py:323 services.py:331
-#: services.py:360 tests/test_env_check.py:78
+#: services.py:317 services.py:323 services.py:333 services.py:341
+#: services.py:370 tests/test_env_check.py:79
 msgid "Multi-tenancy"
 msgstr ""
 
-#: services.py:307
+#: services.py:317
 msgid "Multi-tenancy is disabled"
-msgstr ""
-
-#: services.py:315
-#, python-format
-msgid "Missing tenant with slug '%(slug)s' (DEFAULT_TENANT_SLUG)"
 msgstr ""
 
 #: services.py:325
 #, python-format
+msgid "Missing tenant with slug '%(slug)s' (DEFAULT_TENANT_SLUG)"
+msgstr ""
+
+#: services.py:335
+#, python-format
 msgid "Missing tenant with slug '%(slug)s' (SYSTEM_TENANT_SLUG)"
 msgstr ""
 
-#: services.py:333
+#: services.py:343
 #, python-format
 msgid "%(count)d tenant(s), current: %(current)s"
 msgstr ""
 
-#: services.py:334
+#: services.py:344
 msgid "none"
 msgstr ""
 
-#: services.py:342 services.py:343 services.py:361 tests/test_env_check.py:79
-#: tests/test_env_check.py:101
+#: services.py:352 services.py:353 services.py:371 tests/test_env_check.py:80
+#: tests/test_env_check.py:102
 msgid "Email"
 msgstr ""
 
-#: services.py:342
+#: services.py:352
 #, python-format
 msgid "Development backend %(backend)s: no real email is sent"
 msgstr ""
 
-#: services.py:354
+#: services.py:364
 msgid "Database & Redis"
 msgstr ""
 
-#: services.py:376
+#: services.py:386
 #, python-format
 msgid "User %(username)s has no email address"
 msgstr ""
 
-#: services.py:379
+#: services.py:389
 msgid "Cousins Matter - environment check"
 msgstr ""
 
-#: services.py:380
+#: services.py:390
 msgid ""
 "Congratulations! Your email backend works. This test email was sent from the "
 "environment check page."
 msgstr ""
 
-#: services.py:388
+#: services.py:398
 #, python-format
 msgid "Test email sent to %s"
 msgstr ""
@@ -834,22 +844,26 @@ msgstr "Média no encontrada"
 msgid "Error when retrieving media: %s"
 msgstr "Error al recuperar la media: %s"
 
-#: views/views_stats.py:38 views/views_stats.py:76
+#: views/views_stats.py:39 views/views_stats.py:77
 msgid "Version not found"
 msgstr "Versión no encontrada"
 
-#: views/views_stats.py:52
+#: views/views_stats.py:53
 msgid "Your version is not up-to-date."
 msgstr "Tu versión no está actualizada."
 
-#: views/views_stats.py:55
+#: views/views_stats.py:56
 msgid "Please look at the documentation for updating."
 msgstr "Por favor, consulta la documentación para actualizar."
 
-#: views/views_stats.py:66
+#: views/views_stats.py:67
 msgid "Your version is up-to-date."
 msgstr "Tu versión está actualizada."
 
-#: views/views_stats.py:72
+#: views/views_stats.py:73
 msgid "Your version is newer than the latest release (?!?)"
 msgstr "Tus versión es más reciente que la versión más reciente (?!?)"
+
+#: views/views_stats.py:102
+msgid "Only platform administrators can run the environment check."
+msgstr ""

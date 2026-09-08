@@ -51,7 +51,8 @@ def health_check() -> dict[str, str]:
     redis_client.ping()
   except redis.exceptions.ConnectionError as e:
     logger.error(f"Redis error: {e}")
-    return {"status": "redis_error", "msg": "redis error, see logs"}
+    # the connection error text (host/port, no credentials) helps the env-check page
+    return {"status": "redis_error", "msg": f"redis error: {e}"}
   return {"status": "ok"}
 
 
@@ -232,6 +233,12 @@ def _probe_db_and_redis() -> list[dict[str, Any]]:
 
 
 def _probe_django_q() -> list[dict[str, Any]]:
+  # the queue needs its broker (redis): skip with a clear reason when a dependency is down
+  infra = health_check()
+  if infra["status"] == "redis_error":
+    return [_line(_("Django-Q2 task queue"), "skipped", _("Skipped: Redis is unreachable"))]
+  if infra["status"] == "db_error":
+    return [_line(_("Django-Q2 task queue"), "skipped", _("Skipped: Database is unreachable"))]
   task_id = async_task("core.services.health_check")
   check = result(task_id, 1000)
   if check and isinstance(check, dict) and check.get("status") == "ok":

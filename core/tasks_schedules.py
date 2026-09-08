@@ -1,4 +1,5 @@
 import sys
+import json
 import logging
 from django_q.models import Schedule
 
@@ -28,12 +29,13 @@ def setup_notification_schedules():
         name="Monthly Notifications",
         defaults={
           "func": "core.tasks.process_batched_notifications",
-          "args": "monthly",
+          "args": json.dumps("monthly"),
           "schedule_type": Schedule.CRON,
           "cron": "0 0 1 * *",
           "repeats": -1,
         },
       )
+      _repair_args("Monthly Notifications", "monthly")
   except Exception as e:
     # This can happen if the database is not ready or migrations haven't run
     logger.debug(f"Could not setup schedules: {e}")
@@ -49,8 +51,21 @@ def _setup_schedule(frequency, name, schedule_type):
     name=name,
     defaults={
       "func": "core.tasks.process_batched_notifications",
-      "args": frequency,
+      # django-q2 parses Schedule.args with ast.literal_eval on every tick:
+      # it must be a Python literal (quoted string), not a bare word
+      "args": json.dumps(frequency),
       "schedule_type": schedule_type,
       "repeats": -1,  # Forever
     },
   )
+  _repair_args(name, frequency)
+
+
+def _repair_args(name, frequency):
+  """Fix schedules created before args were stored as literals.
+
+  Bare-word args ("hourly") made django-q2's scheduler fail with
+  "malformed node or string" and the notifications never ran. Only exact
+  bare-word matches are repaired, manual admin edits are left alone.
+  """
+  Schedule.objects.filter(name=name, args=frequency).update(args=json.dumps(frequency))

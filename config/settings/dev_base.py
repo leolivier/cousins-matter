@@ -16,11 +16,13 @@ Q_CLUSTER["sync"] = env.bool("Q_SYNC", True)
 # Default database host
 DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="localhost")
 
+# Default redis host: host-run dev/tests reach Redis through the port
+# published by docker-compose on localhost (REDIS_HOST is usually unset here)
+REDIS_HOST = env.str("REDIS_HOST", default="localhost")
+
 # Default redis host: keep the robust dict-format config from base.py
 # (socket_timeout, socket_keepalive, health_check_interval, retry_on_*) and only
 # retarget the address. Using a plain (host, port) tuple here would drop all
 # connection options and leave Channels vulnerable to "Timeout reading" errors
 # when pooled connections go dead.
-CHANNEL_LAYERS["default"]["CONFIG"]["hosts"][0]["address"] = (
-  f"redis://{env.str('REDIS_HOST', default='localhost')}:{env.int('REDIS_PORT', default=6379)}"
-)
+CHANNEL_LAYERS["default"]["CONFIG"]["hosts"][0]["address"] = f"redis://{REDIS_HOST}:{REDIS_PORT}"

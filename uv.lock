@@ -557,7 +557,7 @@ dev = [
     { name = "bandit", specifier = ">=1.9.4" },
     { name = "coverage", specifier = ">=7.14.3" },
     { name = "css-html-js-minify", specifier = ">=2.5.5" },
-    { name = "django-debug-toolbar", specifier = ">=7.0,<7.2" },
+    { name = "django-debug-toolbar", specifier = ">=7.0,<8.1" },
     { name = "factory-boy", specifier = "~=3.3.3" },
     { name = "mypy", specifier = "==2.3.1" },
     { name = "pip-audit", specifier = ">=2.10.1" },

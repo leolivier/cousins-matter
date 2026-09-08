@@ -1,0 +1,51 @@
+{% extends "core/base.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Environment check") %}{% endblock %}
+{% block content %}
+<div class="container px-2">
+	<h1 class="title has-text-centered">{% title _("Environment check") %}</h1>
+	<p class="content">{% trans "Diagnostics of this deployment: database, Redis, task queue, migrations, media storage, chat, tenants and email." %}</p>
+
+	<div class="block">
+		<form method="post" action="{% url 'core:env_check' %}">
+			{% csrf_token %}
+			<button class="button is-primary" type="submit" name="action" value="send_test_email">
+				{% icon "email" %}
+				<span>{% trans "Send a test email to myself" %} ({{ email_to }})</span>
+			</button>
+		</form>
+	</div>
+
+	<table class="table is-fullwidth is-striped is-hoverable">
+		<thead>
+			<tr>
+				<th>{% trans "Check" %}</th>
+				<th>{% trans "Status" %}</th>
+				<th>{% trans "Details" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for check in checks %}
+			<tr>
+				<td>{{ check.name }}</td>
+				<td>
+					<span class="tag {% if check.status == 'ok' %}is-success{% elif check.status == 'warning' %}is-warning{% elif check.status == 'error' %}is-danger{% else %}is-light{% endif %}">
+						{{ check.label }}
+					</span>
+				</td>
+				<td>
+					{% if check.long_output %}
+					<details>
+						<summary>{% trans "Show output" %}</summary>
+						<pre>{{ check.detail }}</pre>
+					</details>
+					{% else %}
+					{{ check.detail }}
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock content %}

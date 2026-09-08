@@ -91,6 +91,8 @@ class HealthCheckTestCase(TestCase):
       response = self.client.get(reverse("health"))
       self.assertEqual(response.status_code, 503)
       self.assertEqual(response.json()["status"], "redis_error")
+      # /health is anonymous: the message must stay generic (no internal host/port)
+      self.assertEqual(response.json()["msg"], "redis error, see logs")
 
 
 class QHealthCheckTestCase(TestCase):

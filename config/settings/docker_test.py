@@ -25,9 +25,10 @@ DATABASES["default"]["TEST"] = {
 }
 
 # Keep the robust dict-format config from base.py; only retarget the address.
-CHANNEL_LAYERS["default"]["CONFIG"]["hosts"][0]["address"] = (
-  f"redis://{env.str('REDIS_HOST', default='redis')}:{env.int('REDIS_PORT', default=6379)}"
-)
+# docker (CI): Redis is reachable through its compose service name (dev_base
+# retargets the default to localhost, which only holds on the host)
+REDIS_HOST = env.str("REDIS_HOST", default="redis")
+CHANNEL_LAYERS["default"]["CONFIG"]["hosts"][0]["address"] = f"redis://{REDIS_HOST}:{REDIS_PORT}"
 
 # Django Q2 settings for tests
 Q_CLUSTER["sync"] = True

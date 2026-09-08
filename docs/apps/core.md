@@ -4,7 +4,7 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-03-04
+stale_after: 2027-09-04
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -48,6 +48,57 @@ Infrastructure endpoints (cousinsmatter/urls.py): `health` and `qhealth`
 (login not required) both call `health_check` (core/services.py) — a
 `SELECT 1` on the database plus a Redis `PING` — the latter running it through
 Django-Q to prove the broker works.
+
+## Environment check
+
+`/env-check/` (`core:env_check`, core/views/views_stats.py `env_check`) is a
+platform-admin diagnostics page, superuser-only via explicit checks in the
+view (anonymous → login redirect, other members → 403 — same semantics as
+`OnlySuperuserMixin`, without its multi-tenant requirement). GET renders the
+probes;
+POSTing `action=send_test_email` (the "send a test email to myself" button)
+sends a test email to the requesting superuser through
+`send_test_email(user)` (core/services.py) and redirects back (PRG + messages
+framework).
+
+`run_env_checks()` (core/services.py) returns one row
+`{name, status, label, detail, long_output}` per probe, status
+`ok|warning|error|skipped`; **each probe is individually wrapped in
+try/except**, so a failing probe degrades to an "error" row and the page
+never 500s. Probes:
+
+- **Database + Redis** — reuses `health_check()`; two rows, Redis is
+  `skipped` when the database is unreachable, and the row detail carries the
+  underlying connection error. The Redis endpoint comes from
+  `settings.REDIS_HOST`/`REDIS_PORT` (base.py defaults to the docker service
+  name; dev_base retargets the default to `localhost` for host-run dev/tests,
+  docker_devt/docker_test retarget it back to the service name), so the
+  probe, Channels and the Django-Q broker all look at the same place.
+- **Django-Q2** — `async_task("core.services.health_check")` + `result(…,
+  1000)` roundtrip; `skipped` when the database or Redis (its broker) is
+  unreachable, no result (worker down) → `warning`. Caveat: with
+  `Q_SYNC=True` the task executes in-process, so the row explicitly states it
+  proves nothing about a live qcluster worker.
+- **Migrations** — `migrate --check`; pending or inconsistent migrations →
+  `warning` (the command exits via `sys.exit(1)`, which is caught alongside
+  `CommandError`/`DatabaseError`/`NodeNotFoundError`).
+- **Deployment checks** — `check --deploy`; any warning output or
+  `CommandError` → `warning`, full output shown collapsible
+  (`long_output` → `<details><pre>`).
+- **Media storage** — write/read/delete roundtrip of `env_check/<uuid>.txt`
+  through `storages["default"]` (the storage replaced by `MEDIA_STORAGE`),
+  reporting the backend class path — covers FileSystemStorage as well as
+  S3/dropbox backends in one probe.
+- **Chat (Channels)** — send/receive roundtrip on
+  `get_channel_layer().new_channel()` under `asyncio.wait_for(…, 5)`
+  (channels-redis `receive()` has no timeout parameter); missing layer →
+  `error`, timeout → `warning`.
+- **Multi-tenancy** — when `MULTI_TENANT_ENABLED`: `Tenant.get_default()` and
+  `get_system()` existence (missing slug → `error`), tenant count and current
+  tenant; otherwise a `skipped` row.
+- **Email (passive)** — reports `EMAIL_BACKEND`; `warning` for
+  console/locmem development backends (config only — `get_connection()`
+  would prove nothing since SMTP is lazy).
 
 ## Protected media
 

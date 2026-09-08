@@ -48,8 +48,9 @@ DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="postgres")
 # A plain (host, port) tuple would drop all connection options (socket_timeout,
 # socket_keepalive, health_check_interval) and leave Channels vulnerable to
 # "Timeout reading" errors when pooled connections go dead.
-CHANNEL_LAYERS["default"]["CONFIG"]["hosts"][0]["address"] = (
-  f"redis://{env.str('REDIS_HOST', default='redis')}:{env.int('REDIS_PORT', default=6379)}"
-)
+# docker: Redis is reachable through its compose service name (dev_base
+# retargets the default to localhost, which only holds on the host)
+REDIS_HOST = env.str("REDIS_HOST", default="redis")
+CHANNEL_LAYERS["default"]["CONFIG"]["hosts"][0]["address"] = f"redis://{REDIS_HOST}:{REDIS_PORT}"
 
 CRISPY_FAIL_SILENTLY = False

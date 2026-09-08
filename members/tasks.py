@@ -25,8 +25,6 @@ from .models import (
   Family,
   Address,
 )
-from tenants.models import Tenant
-from tenants.scoping import tenant_context
 
 logger = logging.getLogger(__name__)
 

@@ -121,6 +121,12 @@ to it.
     (test cleanup), core/views/views_general.py:145 (Windows paths), and
     3 in forum/tests (JS/HTMX interactions untestable server-side).
 
+## move TokenManager from Members.registration_link_manager?py to core/token_manager.py
+This will make it available to other parts of the codebase.
+
+## Review the link between Tenant name and Site name
+Why shouldn't the Tenant name be used as the Site name? (or the reverse)
+
 ## See also
 
 - [Roadmap](/plan/roadmap.md) — the work items behind these items

@@ -162,6 +162,7 @@
 {
   "model": "genealogy.person",
   "pk": 954,
+    "tenant": 1,
   "fields": {
     "member": 1213,
     "first_name": "Donna",
@@ -180,6 +181,7 @@
 {
   "model": "genealogy.person",
   "pk": 955,
+    "tenant": 1,
   "fields": {
     "member": 1214,
     "first_name": "Susan",
@@ -198,6 +200,7 @@
 {
   "model": "genealogy.person",
   "pk": 956,
+    "tenant": 1,
   "fields": {
     "member": 1215,
     "first_name": "David",
@@ -216,6 +219,7 @@
 {
   "model": "genealogy.person",
   "pk": 957,
+    "tenant": 1,
   "fields": {
     "member": 1216,
     "first_name": "Juan",
@@ -234,6 +238,7 @@
 {
   "model": "genealogy.person",
   "pk": 958,
+    "tenant": 1,
   "fields": {
     "member": 1217,
     "first_name": "Cindy",
@@ -252,6 +257,7 @@
 {
   "model": "genealogy.family",
   "pk": 425,
+    "tenant": 1,
   "fields": {
     "partner1": 959,
     "partner2": 960,
@@ -264,6 +270,7 @@
 {
   "model": "genealogy.family",
   "pk": 482,
+    "tenant": 1,
   "fields": {
     "partner1": 1073,
     "partner2": 1074,
@@ -276,6 +283,7 @@
 {
   "model": "genealogy.family",
   "pk": 483,
+    "tenant": 1,
   "fields": {
     "partner1": 1075,
     "partner2": 1076,
@@ -288,6 +296,7 @@
 {
   "model": "genealogy.family",
   "pk": 484,
+    "tenant": 1,
   "fields": {
     "partner1": 1077,
     "partner2": 1078,
@@ -300,6 +309,7 @@
 {
   "model": "genealogy.family",
   "pk": 485,
+    "tenant": 1,
   "fields": {
     "partner1": 1079,
     "partner2": 1080,

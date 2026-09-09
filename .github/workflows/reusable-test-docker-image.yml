@@ -12,6 +12,10 @@ on:
         required: false
         type: boolean
         default: false
+      multi_tenant:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   run-test:
@@ -80,13 +84,19 @@ jobs:
           docker exec -u root cousins-matter python -m playwright install-deps chromium
           docker exec cousins-matter python -m playwright install chromium
 
-      - name: Run Tests 
+      - name: Run Tests
+        if: ${{ !inputs.multi_tenant }}
         run: |
           if [ ${{ inputs.ui }} == true ]; then
             docker exec cousins-matter python manage.py test --tag=ui
           else
             docker exec cousins-matter python manage.py test --exclude-tag=ui
           fi
+
+      - name: Run Tests (multi-tenant)
+        if: ${{ inputs.multi_tenant }}
+        run: |
+          docker exec -e MULTI_TENANT_ENABLED=True cousins-matter python manage.py test --exclude-tag=ui --noinput
 
       - name: Show docker-compose services logs on failure
         if: failure()

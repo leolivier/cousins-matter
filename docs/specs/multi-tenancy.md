@@ -4,7 +4,7 @@ title: Multi-Tenancy
 description: Design rationale and invariants of shared-schema multi-tenancy — isolation layers (ORM scoping, RLS backstop), the default/system tenants, per-tenant settings, and the known gaps
 tags: ["spec", "multi-tenancy"]
 status: draft
-stale_after: 2027-03-05
+stale_after: 2027-03-10
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T12:02:12Z }
 ---
 
@@ -51,14 +51,15 @@ Neither layer alone is trusted: ORM scoping is bypassable by a forgotten
   the runtime role (`DATABASES["default"]["USER"]` in config/settings/base.py,
   and scripts/entrypoint.py which initializes as owner).
 - Two policy shapes: `TENANT_RLS_STRICT_TABLES` (`galleries_gallery`,
-  `galleries_photo`) get a strict `FOR ALL` policy — foreign rows invisible
-  *and* unwritable; `members_member` gets split policies with permissive
+  `galleries_photo`, `chat_chatroom`, `chat_chatmessage`) get a strict
+  `FOR ALL` policy — foreign rows invisible *and* unwritable;
+  `members_member` gets split policies with permissive
   `SELECT` (login-by-email and admin lookups must read before any tenant is
   known) but tenant-scoped `INSERT`/`UPDATE`/`DELETE`.
-- **Known gap:** the RLS table list lags `TenantModel` adoption. `chat`
-  (`ChatRoom`, `ChatMessage`) is ORM-scoped but has no RLS policy yet —
-  extend `TENANT_RLS_TABLES` in tenants/rls.py when hardening it (its own
-  comment still lists chat as "to convert", which is stale).
+- Each app converted to `TenantModel` after the initial pass adds its tables
+  to `TENANT_RLS_TABLES`/`TENANT_RLS_STRICT_TABLES` (`tenants/rls.py`, which
+  also hosts the shared `strict_policy_sql()` builder) and ships its own
+  idempotent RLS migration (`tenants.0004_rls_chat` was the first).
 
 ## Identity invariants
 

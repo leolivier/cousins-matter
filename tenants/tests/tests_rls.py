@@ -21,7 +21,8 @@ class RlsCatalogTests(TestCase):
     with connection.cursor() as c:
       c.execute(
         "SELECT relname, relrowsecurity, relforcerowsecurity FROM pg_class "
-        "WHERE relname IN ('members_member','galleries_gallery','galleries_photo')"
+        "WHERE relname IN ('members_member','galleries_gallery','galleries_photo',"
+        "'chat_chatroom','chat_chatmessage')"
       )
       rows = {r[0]: (r[1], r[2]) for r in c.fetchall()}
     for table in TENANT_RLS_STRICT_TABLES + TENANT_RLS_SPLIT_TABLES:

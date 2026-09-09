@@ -4,7 +4,7 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-03-07
+stale_after: 2027-03-10
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -93,15 +93,19 @@ Defense-in-depth behind the ORM layer. `rls_enabled()` requires
 PostgreSQL engine. When enabled, `set_rls_tenant` /
 `set_rls_bypass` / `reset_rls` manage the session variables
 `app.current_tenant_id` and `app.bypass` that the policies read. Policies are
-created by migration `tenants.0003_rls` for the non-owner runtime role:
+created by migration `tenants.0003_rls` for the non-owner runtime role, and
+extended per app by follow-up migrations (`tenants.0004_rls_chat` for the
+chat tables) that reuse the shared `strict_policy_sql()` builder:
 
-- `TENANT_RLS_STRICT_TABLES` (`galleries_gallery`, `galleries_photo`) — a
+- `TENANT_RLS_STRICT_TABLES` (`galleries_gallery`, `galleries_photo`,
+  `chat_chatroom`, `chat_chatmessage`) — a
   strict `FOR ALL` policy: rows outside the session tenant are invisible and
   unwritable;
 - `TENANT_RLS_SPLIT_TABLES` (`members_member`) — permissive `SELECT` (login by
   email must read cross-tenant before the tenant is known) but hard-scoped
   writes;
-- extend `TENANT_RLS_TABLES` when converting another app to `TenantModel`.
+- extend `TENANT_RLS_TABLES` + ship an idempotent RLS migration when
+  converting another app to `TenantModel`.
 
 The table owner (used for migrations, see scripts/entrypoint.py) always
 bypasses RLS — policies are therefore never `FORCE`d. When the feature is on,

@@ -35,17 +35,6 @@ than one app-server worker — or after a worker restart mid-upload — the
 progress poll hits a process that never saw the import and 404s. See
 [bulk zip import](/apps/galleries.md#bulk-zip-import).
 
-## Chat tables have no RLS policies
-
-`ChatRoom` and `ChatMessage` are `TenantModel`-scoped
-(chat/models.py:27,114), but `TENANT_RLS_TABLES`
-(tenants/rls.py:21) still lists only `members_member` and the two
-`galleries_*` tables, so the chat tables get **no row-level-security
-backstop**. The comment at tenants/rls.py:19-20 ("Extend this list when
-converting an app to TenantModel (chat, forum, polls, …)") is stale —
-chat is already converted. The [RLS spec](/specs/multi-tenancy.md#rls-enforcement-points-invariants)
-states the invariant this violates.
-
 ## Six apps are not tenant-scoped
 
 [forum](/apps/forum.md) (`Message`/`Post`/`Comment`),
@@ -120,6 +109,12 @@ to it.
     (post_migrate signal ordering), galleries/tests/tests_bulk_upload.py:88
     (test cleanup), core/views/views_general.py:145 (Windows paths), and
     3 in forum/tests (JS/HTMX interactions untestable server-side).
+
+## move TokenManager from Members.registration_link_manager?py to core/token_manager.py
+This will make it available to other parts of the codebase.
+
+## Review the link between Tenant name and Site name
+Why shouldn't the Tenant name be used as the Site name? (or the reverse)
 
 ## See also
 

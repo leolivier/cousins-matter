@@ -29,7 +29,12 @@ import re
 from django.conf import settings
 from django.db import migrations
 
-from tenants.rls import TENANT_RLS_STRICT_TABLES, _TENANT_PREDICATE
+from tenants.rls import _TENANT_PREDICATE
+
+# Frozen scope of this initial pass: the tables that had TenantModel rows when
+# 0003 was written. Later apps are hardened by their own RLS migration
+# (tenants.0004_rls_chat and friends) — never by growing this tuple.
+_STRICT_TABLES_AT_0003 = ("galleries_gallery", "galleries_photo")
 
 _IDENTIFIER_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
@@ -73,7 +78,8 @@ def _build_sql() -> list[tuple[str, str | None]]:
               END IF;
             END
             $$;
-            """,  # nosec B608 -- user_ident is validated against ^[A-Za-z_][A-Za-z0-9_]*$ by qi(); ql() escapes the literal
+            """,  # nosec B608
+                  #  -- user_ident is validated against ^[A-Za-z_][A-Za-z0-9_]*$ by qi(); ql() escapes the literal
             f"DROP ROLE IF EXISTS {user_ident};",
         ))
         # --- grants (DML only: never CREATE/ALTER, DDL stays owner-only) ---
@@ -89,7 +95,7 @@ def _build_sql() -> list[tuple[str, str | None]]:
         sqls.append((grants, f"REVOKE ALL ON SCHEMA public FROM {user_ident};"))
 
     # --- RLS policies (inert for the owner; active for the runtime role) ---
-    for table in TENANT_RLS_STRICT_TABLES:
+    for table in _STRICT_TABLES_AT_0003:
         table_ident = qi(table)
         sqls.append((
             f"""

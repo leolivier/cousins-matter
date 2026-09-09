@@ -19,10 +19,8 @@ Always respond and write in English whatever the user is writing in (French or E
 Services-layer extraction pattern: keep views thin, move business logic into <app>/services.py, preserve existing return shapes, keep `ruff check` clean, and run that app's test suite before committing.
 
 ## Git & Environment
-Never work directly on main: create a feature branch or git worktree before substantive changes. New worktrees are NOT broken — run `uv init && uv sync --dev` in the worktree before using ruff, pyright, or pytest.
+Never work directly on main: create a feature branch or git worktree before substantive changes. New worktrees are NOT broken — run `uv init && uv sync --dev && ln -s ../../../.env .env` in the worktree before using ruff, pyright, or pytest.
 Activate the venv before running any commands: `source .venv/bin/activate`.
-Always use the make commands — see the Makefile for the full list.
-
 **Always** use the make commands — see the Makefile for the full list:
 
 ```bash

@@ -4,7 +4,7 @@ title: Classified Ads
 description: Classified ads app (`classified_ads`, documented as apps/classified-ads.md) — member-to-member sale listings with photos and owner contact by email
 tags: ["app", "classified_ads"]
 status: draft
-stale_after: 2027-03-05
+stale_after: 2027-03-10
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:42:30Z }
 ---
 
@@ -17,9 +17,11 @@ browse it and contact the **owner by email through a relay** — the
 owner's address is never exposed. Navbar visibility is gated by the
 `show_classified_ads` [feature flag](/apps/core.md#feature-flags-and-context-processors).
 
-**Tenant note:** `ClassifiedAd` and `AdPhoto` inherit `models.Model`
-directly — **not** [TenantModel](/apps/tenants.md)-scoped (same as
-[forum](/apps/forum.md) and [polls](/apps/polls.md)).
+**Tenant note:** `ClassifiedAd` and `AdPhoto` inherit
+[TenantModel](/apps/tenants.md) — tenant-scoped (`tenant` FK +
+`TenantManager`, RLS backstop via `tenants.0007_rls_classified_ads`;
+conversion migration `classified_ads.0004_tenant` backfilled legacy ads
+and photos to the default tenant). Ads are invisible cross-tenant.
 
 ## Models (classified_ads/models.py)
 
@@ -88,4 +90,4 @@ here.
 
 - [Core](/apps/core.md) — `check_edit_permission`, modal confirm, feature flags
 - [Galleries](/apps/galleries.md) — thumbnail helper and fullscreen viewer
-- [Tenants](/apps/tenants.md) — scoping model this app does not use yet
+- [Tenants](/apps/tenants.md) — tenant scoping of the ads models

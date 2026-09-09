@@ -30,6 +30,8 @@ TENANT_RLS_TABLES: list[str] = [
   "forum_message",
   "forum_post",
   "forum_comment",
+  "classified_ads_classifiedad",
+  "classified_ads_adphoto",
 ]
 # Strict FOR ALL policy (read AND write scoped to the session tenant).
 TENANT_RLS_STRICT_TABLES: list[str] = [
@@ -41,6 +43,8 @@ TENANT_RLS_STRICT_TABLES: list[str] = [
   "forum_message",
   "forum_post",
   "forum_comment",
+  "classified_ads_classifiedad",
+  "classified_ads_adphoto",
 ]
 # Split policies: permissive SELECT + scoped writes.
 TENANT_RLS_SPLIT_TABLES: list[str] = [

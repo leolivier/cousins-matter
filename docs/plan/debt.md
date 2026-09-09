@@ -35,16 +35,16 @@ than one app-server worker — or after a worker restart mid-upload — the
 progress poll hits a process that never saw the import and 404s. See
 [bulk zip import](/apps/galleries.md#bulk-zip-import).
 
-## Two apps are not tenant-scoped
+## The pages app is not tenant-scoped
 
 [pages](/apps/pages.md)
-(`FlatPage` extends `django.contrib.flatpages`) and
-[genealogy](/apps/genealogy.md)
-(`Person`/`Family`) all inherit `models.Model` directly — their data is
-shared across tenants (see the
+(`FlatPage` is an MTI child of `django.contrib.flatpages`) still
+inherits `models.Model` directly — its data is shared across tenants
+(see the
 [multi-tenancy spec](/specs/multi-tenancy.md#what-is-not-tenant-scoped)).
-Scoping them is roadmap work; each conversion must also add its tables
-to `TENANT_RLS_TABLES`.
+Scoping it is the last step of the rollout; the conversion must also add
+its table to `TENANT_RLS_TABLES` and replace the global
+`django.contrib.flatpages.urls` include with a tenant-aware public view.
 
 ## The `public` storage alias disappears when `MEDIA_STORAGE` is set
 

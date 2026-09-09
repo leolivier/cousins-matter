@@ -19,7 +19,7 @@ import re
 from django.conf import settings
 
 # Tables carrying a tenant_id column that get RLS policies. Extend this list
-# when converting an app to TenantModel (forum, polls, ...).
+# when converting an app to TenantModel (polls, pages, genealogy, ...).
 TENANT_RLS_TABLES: list[str] = [
   "members_member",
   "galleries_gallery",
@@ -27,6 +27,9 @@ TENANT_RLS_TABLES: list[str] = [
   "chat_chatroom",
   "chat_chatmessage",
   "troves_trove",
+  "forum_message",
+  "forum_post",
+  "forum_comment",
 ]
 # Strict FOR ALL policy (read AND write scoped to the session tenant).
 TENANT_RLS_STRICT_TABLES: list[str] = [
@@ -35,6 +38,9 @@ TENANT_RLS_STRICT_TABLES: list[str] = [
   "chat_chatroom",
   "chat_chatmessage",
   "troves_trove",
+  "forum_message",
+  "forum_post",
+  "forum_comment",
 ]
 # Split policies: permissive SELECT + scoped writes.
 TENANT_RLS_SPLIT_TABLES: list[str] = [

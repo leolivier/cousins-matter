@@ -3,6 +3,7 @@
   "model": "members.member",
   "pk": 969,
   "fields": {
+    "tenant": 1,
     "password": "",
     "last_login": null,
     "is_superuser": false,
@@ -35,6 +36,7 @@
   "model": "members.member",
   "pk": 970,
   "fields": {
+    "tenant": 1,
     "password": "",
     "last_login": null,
     "is_superuser": false,
@@ -67,6 +69,7 @@
   "model": "members.member",
   "pk": 971,
   "fields": {
+    "tenant": 1,
     "password": "",
     "last_login": null,
     "is_superuser": false,
@@ -99,6 +102,7 @@
   "model": "members.member",
   "pk": 972,
   "fields": {
+    "tenant": 1,
     "password": "",
     "last_login": null,
     "is_superuser": false,
@@ -131,6 +135,7 @@
   "model": "members.member",
   "pk": 973,
   "fields": {
+    "tenant": 1,
     "password": "",
     "last_login": null,
     "is_superuser": false,
@@ -163,6 +168,7 @@
   "model": "troves.trove",
   "pk": 21,
   "fields": {
+    "tenant": 1,
     "title": "Allow reason.",
     "description": "Firm star civil back will end. Lot white moment area coach service choose. City trouble technology bring true officer institution.",
     "picture": "troves/pictures/example_CiY3kC2.jpg",
@@ -176,6 +182,7 @@
   "model": "troves.trove",
   "pk": 22,
   "fields": {
+    "tenant": 1,
     "title": "Week business.",
     "description": "Station age everything. Win exactly believe. Reality religious top.",
     "picture": "troves/pictures/example_W2hE5Qu.jpg",
@@ -189,6 +196,7 @@
   "model": "troves.trove",
   "pk": 23,
   "fields": {
+    "tenant": 1,
     "title": "Role work major.",
     "description": "Simply picture attention production various write three modern. Page college three program foreign pressure.",
     "picture": "troves/pictures/example_pGfKPVC.jpg",
@@ -202,6 +210,7 @@
   "model": "troves.trove",
   "pk": 24,
   "fields": {
+    "tenant": 1,
     "title": "Good ability.",
     "description": "National write news. Occur certainly stand.",
     "picture": "troves/pictures/example_cacjNz2.jpg",
@@ -215,6 +224,7 @@
   "model": "troves.trove",
   "pk": 25,
   "fields": {
+    "tenant": 1,
     "title": "Pay financial any.",
     "description": "Certainly foreign effect not stock your. Leave change room. Close believe alone.",
     "picture": "troves/pictures/example_qrffW0m.jpg",

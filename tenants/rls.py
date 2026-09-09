@@ -26,6 +26,7 @@ TENANT_RLS_TABLES: list[str] = [
   "galleries_photo",
   "chat_chatroom",
   "chat_chatmessage",
+  "troves_trove",
 ]
 # Strict FOR ALL policy (read AND write scoped to the session tenant).
 TENANT_RLS_STRICT_TABLES: list[str] = [
@@ -33,6 +34,7 @@ TENANT_RLS_STRICT_TABLES: list[str] = [
   "galleries_photo",
   "chat_chatroom",
   "chat_chatmessage",
+  "troves_trove",
 ]
 # Split policies: permissive SELECT + scoped writes.
 TENANT_RLS_SPLIT_TABLES: list[str] = [

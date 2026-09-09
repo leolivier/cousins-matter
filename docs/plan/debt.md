@@ -35,9 +35,9 @@ than one app-server worker — or after a worker restart mid-upload — the
 progress poll hits a process that never saw the import and 404s. See
 [bulk zip import](/apps/galleries.md#bulk-zip-import).
 
-## Three apps are not tenant-scoped
+## Two apps are not tenant-scoped
 
-[polls](/apps/polls.md), [pages](/apps/pages.md)
+[pages](/apps/pages.md)
 (`FlatPage` extends `django.contrib.flatpages`) and
 [genealogy](/apps/genealogy.md)
 (`Person`/`Family`) all inherit `models.Model` directly — their data is

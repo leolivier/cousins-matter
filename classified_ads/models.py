@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from core.utils import create_thumbnail
 from members.models import Member
+from tenants.scoping import TenantModel
 
 
 class Categories:
@@ -46,7 +47,7 @@ class Categories:
     return Categories.CATEGORIES
 
 
-class ClassifiedAd(models.Model):
+class ClassifiedAd(TenantModel):
   ITEM_STATUS_TYPES = (
     ("new", _("New")),
     ("like_new", _("Like New")),
@@ -87,7 +88,7 @@ class ClassifiedAd(models.Model):
     verbose_name = _("Classified Ad")
     verbose_name_plural = _("Classified Ads")
     indexes = [
-      models.Index(fields=["owner", "category", "subcategory"]),
+      models.Index(fields=["tenant", "owner", "category", "subcategory"]),
     ]
 
   def __str__(self) -> str:
@@ -122,7 +123,7 @@ def get_thumbnail_path(photo, filename):
   return get_photo_path(photo, os.path.join("thumbnails", filename))
 
 
-class AdPhoto(models.Model):
+class AdPhoto(TenantModel):
   image = models.ImageField(upload_to=get_photo_path)
   thumbnail = models.ImageField(upload_to=get_thumbnail_path, blank=True)
 
@@ -132,7 +133,7 @@ class AdPhoto(models.Model):
     verbose_name = _("Ad Photo")
     verbose_name_plural = _("Ad Photos")
     indexes = [
-      models.Index(fields=["ad"]),
+      models.Index(fields=["tenant", "ad"]),
     ]
 
   def save(self, *args, **kwargs):

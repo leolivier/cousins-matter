@@ -1,6 +1,7 @@
 import factory
 from factory.django import DjangoModelFactory
 from pages.models import FlatPage
+from members.tests.factories import DEFAULT_TENANT
 from django.contrib.sites.models import Site
 from django.conf import settings
 
@@ -9,6 +10,7 @@ class FlatPageFactory(DjangoModelFactory):
   class Meta:
     model = FlatPage
 
+  tenant = DEFAULT_TENANT
   url = factory.Sequence(lambda n: f"/page-{n}/")
   title = factory.Faker("sentence")
   content = factory.Faker("paragraph")

@@ -75,14 +75,17 @@ class Person(models.Model):
     }.get(self.sex, "question")
 
   def get_partners(self):
-    """Returns a list of partners from all unions."""
+    """Returns a list of partners from all unions.
+
+    Callers should prefetch ``unions_as_p1__partner2`` / ``unions_as_p2__partner1``
+    (re-chaining ``select_related`` here would defeat the prefetch cache)."""
     partners = []
     # As partner1
-    for family in self.unions_as_p1.select_related("partner2").all():
+    for family in self.unions_as_p1.all():
       if family.partner2:
         partners.append(family.partner2)
     # As partner2
-    for family in self.unions_as_p2.select_related("partner1").all():
+    for family in self.unions_as_p2.all():
       if family.partner1:
         partners.append(family.partner1)
     return partners

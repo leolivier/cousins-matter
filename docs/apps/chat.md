@@ -4,7 +4,7 @@ title: Chat
 description: Real-time chat rooms over Django Channels — public and private rooms, websocket consumer, read receipts, follower notifications
 tags: ["app", "chat"]
 status: draft
-stale_after: 2027-03-04
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
 ---
 
@@ -133,6 +133,12 @@ membership management (`add_member/`, `add_admin/`,
 `remove_member/<username>`, `remove_admin/<username>`, `leave/`,
 `admin_leave/`, `members/`, `admins/`, `search_members`).
 `settings.DEBUG`-only `test/` endpoints generate rooms/messages.
+
+## Performance
+
+Read-receipt broadcast goes through `chat/services.py::compute_read_updates`: one aggregate
+query on the `read_by` through table per broadcast instead of one query per message.
+`ChatMessageAdmin` uses `list_select_related`.
 
 ## See also
 

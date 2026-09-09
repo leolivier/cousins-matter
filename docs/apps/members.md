@@ -4,7 +4,7 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-03-04
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -165,6 +165,11 @@ helpers (`is_platform_admin`, `is_tenant_admin`, `tenant_admins`,
 `admin_or_superusers`) live in tenants/authz.py and are documented in
 [Tenants](/apps/tenants.md). View-level checks (`_can_edit_member`) are in
 members/views/views_member.py.
+
+## Performance
+
+`FamilyDetailView` selects `parent`; `MemberAdmin`, `FamilyAdmin` and `LoginTraceAdmin` use
+`list_select_related` on their FK columns.
 
 # See also
 

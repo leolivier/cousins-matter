@@ -4,7 +4,7 @@ title: Polls
 description: Polls app (`polls`) — member polls and the event-planning survey submodule (event planners) for scheduling; documented in apps/polls.md
 tags: ["app", "polls"]
 status: draft
-stale_after: 2027-03-05
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:42:30Z }
 ---
 
@@ -106,6 +106,13 @@ or `ME` whose `possible_choices` are the candidate dates:
   questions via `question/create|update|delete` (HTMX
   `HttpResponseClientRefresh`), planners mirrored under
   `event-planners/` by polls/views/event_upsert_views.py subclasses.
+
+## Performance
+
+`Poll.get_results` computes results from the prefetched `answers_*` managers
+(`QuestionResult.build_result` consumes the related-manager caches; `compute_result` works on
+lists) so poll-detail queries do not scale with the question count. Guarded by the query-count
+test in `polls/tests/test_display.py`.
 
 ## See also
 

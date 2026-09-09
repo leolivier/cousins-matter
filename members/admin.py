@@ -21,6 +21,7 @@ class ReadOnlyModelAdmin(admin.ModelAdmin):
 @admin.register(Member)
 class MemberAdmin(UserAdmin):
   list_display = ["username", "tenant", "email", "first_name", "last_name", "birthdate", "is_active", "avatar_preview"]
+  list_select_related = ["tenant"]
   list_filter = ["tenant", "is_active", "is_staff", "is_superuser", "family", "birthdate"]
   search_fields = ["tenant__name", "username", "first_name", "last_name", "email"]
   raw_id_fields = ["address", "family", "member_manager"]
@@ -47,6 +48,7 @@ class MemberAdmin(UserAdmin):
 @admin.register(Family)
 class FamilyAdmin(admin.ModelAdmin):
   list_display = ["name", "parent"]
+  list_select_related = ["parent"]
   search_fields = ["name"]
   list_filter = ["parent"]
 
@@ -61,6 +63,7 @@ class AddressAdmin(admin.ModelAdmin):
 @admin.register(LoginTrace)
 class LoginTraceAdmin(ReadOnlyModelAdmin):
   list_display = ["user", "ip", "login_at", "logout_at", "country_code"]
+  list_select_related = ["user"]
   list_filter = ["login_at", "country_code"]
   search_fields = ["user__username", "ip"]
   date_hierarchy = "login_at"

@@ -31,7 +31,7 @@ class PostsListView(generic.ListView):
     try:
       page = Paginator.get_page(
         request,
-        object_list=get_posts_list_queryset(),
+        object_list=get_posts_list_queryset(request.user),
         page_num=page,
         reverse_link="forum:page",
         default_page_size=settings.DEFAULT_POSTS_PER_PAGE,

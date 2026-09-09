@@ -4,7 +4,7 @@ title: Genealogy
 description: Genealogy app (`genealogy`) — family-tree models (Person/Family), interactive family chart, statistics, and GEDCOM 5.5.1 import/export; documented in apps/genealogy.md
 tags: ["app", "genealogy"]
 status: draft
-stale_after: 2027-03-05
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:53:05Z }
 ---
 
@@ -118,6 +118,12 @@ template fragment key). `genealogy:refresh` clears them manually.
 `LoginRequiredMiddleware` (core/middleware.py) and nothing else — any
 logged-in member can import, export and edit the tree; there is no
 admin-only gate in this app.
+
+## Performance
+
+`Person.get_partners()` iterates the prefetched `unions_as_p1`/`unions_as_p2` relations
+(callers prefetch `unions_as_p?__partner?`); re-chaining `select_related` there would defeat
+the prefetch cache. Guarded by a query-count test in `tests_views_person.py`.
 
 ## See also
 

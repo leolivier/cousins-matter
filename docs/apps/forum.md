@@ -4,7 +4,7 @@ title: Forum
 description: Discussion forum — posts with replies (messages) and comments, follower subscriptions with notifications on new content
 tags: ["app", "forum"]
 status: draft
-stale_after: 2027-03-10
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
 ---
 
@@ -93,6 +93,13 @@ convention, so following a post is what subscribes you to it.
   creation paths call the matching `check_followers_on_*` helper.
 - `settings.DEBUG`-only test endpoints under `test/`
   (`views_test.py`) to generate posts/replies/comments.
+
+## Performance
+
+`get_posts_list_queryset(user)` (services.py) annotates `num_messages`, `num_followers` and
+`is_following`; `post_list.html` passes them to the followers tags, so the list page query
+count does not scale with the number of posts. Admins use `list_select_related`. Guarded by
+`forum/tests/tests_queries.py`.
 
 ## See also
 

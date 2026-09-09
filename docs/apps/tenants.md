@@ -4,7 +4,7 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-03-10
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -175,6 +175,10 @@ with `make mkmsg a=tenants` and compiled with `make cpmsg a=tenants`, like
 every other app. `en` is the source language and stays untranslated; user-facing
 strings uniformly say "family" (fr « famille ») even where the code says
 `tenant`. Both `.po` and `.mo` are committed.
+
+## Performance
+
+`TenantSettingsAdmin` uses `list_select_related` on `tenant`.
 
 # See also
 

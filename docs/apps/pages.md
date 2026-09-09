@@ -4,7 +4,7 @@ title: Pages
 description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpages, with publish/private URL conventions, menu/tree template tags and a predefined-pages import; documented in apps/pages.md
 tags: ["app", "pages"]
 status: draft
-stale_after: 2027-03-05
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:42:30Z }
 ---
 
@@ -87,6 +87,10 @@ imports them idempotently:
   `predefined=False, updated=True`.
 
 The same logic is what the `updated` flag protects on later re-imports.
+
+## Performance
+
+Pages menu tags no longer prefetch the unused `sites` relation on every navbar render.
 
 ## See also
 

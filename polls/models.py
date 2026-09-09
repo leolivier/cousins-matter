@@ -1,5 +1,7 @@
 import datetime
 
+from collections import Counter
+
 from django.apps import apps
 from django.db import models
 from django.utils import formats, timezone
@@ -228,11 +230,21 @@ class QuestionResult:
 
   def build_result(self, user=None):
     answer_class = Answer.get_answer_class_for_question_type(self.question.question_type)
-    answers = answer_class.objects.filter(question=self.question)
-    self.total_answers = answers.count()
+    # Consume the prefetched ``answers_*`` related manager (see Poll.get_results). For
+    # MTI subclasses (SingleEventAnswer, MultiEventAnswer) the manager lives on the
+    # first concrete ancestor in the MRO, hence the walk.
+    answers = None
+    for klass in answer_class.__mro__:
+      manager = getattr(self.question, f"answers_{klass.__name__.lower()}", None)
+      if manager is not None:
+        answers = list(manager.all())
+        break
+    if answers is None:
+      answers = list(answer_class.objects.filter(question=self.question))
+    self.total_answers = len(answers)
     self.result = answer_class.compute_result(answers, self)
     if user:
-      user_answer = answers.filter(poll_answer__member=user).first()
+      user_answer = next((answer for answer in answers if answer.poll_answer.member_id == user.pk), None)
       if user_answer:
         self.user_answer = str(user_answer)
 
@@ -252,7 +264,9 @@ class YesNoAnswer(Answer):
   @staticmethod
   def compute_result(answers, result):
     "Compute the result for a list of YesNoAnswers as a percentage of positive answers."
-    return [f"{(answers.filter(answer=True).count() / result.total_answers) * 100 if result.total_answers > 0 else 0}%"]
+    return [
+      f"{(sum(1 for answer in answers if answer.answer) / result.total_answers) * 100 if result.total_answers > 0 else 0}%"
+    ]
 
 
 class TextAnswer(Answer):
@@ -270,7 +284,7 @@ class TextAnswer(Answer):
   @staticmethod
   def compute_result(answers, result):
     "Compute the result for a list of TextAnswers."
-    return ["-"] if result.total_answers == 0 else list(answers.values_list("answer", flat=True))
+    return ["-"] if result.total_answers == 0 else [answer.answer for answer in answers]
 
 
 class DateTimeAnswer(Answer):
@@ -289,7 +303,7 @@ class DateTimeAnswer(Answer):
   @staticmethod
   def compute_result(answers, result):
     "Compute the result for a list of DateTimeAnswers."
-    return ["-"] if result.total_answers == 0 else list(answers.values_list("answer", flat=True))
+    return ["-"] if result.total_answers == 0 else [answer.answer for answer in answers]
 
 
 class ChoiceAnswer(Answer):
@@ -308,10 +322,11 @@ class ChoiceAnswer(Answer):
   @staticmethod
   def compute_result(answers, result):
     "Compute the result for a list of ChoiceAnswers."
-    choice_results = {}
-    for choice in result.question.possible_choices:
-      choice_answers = answers.filter(answer=choice).count()
-      choice_results[choice] = (choice_answers / result.total_answers) * 100 if result.total_answers > 0 else 0
+    choice_counts = Counter(answer.answer for answer in answers)
+    choice_results = {
+      choice: (choice_counts.get(choice, 0) / result.total_answers) * 100 if result.total_answers > 0 else 0
+      for choice in result.question.possible_choices
+    }
     return [f"{key}: {value}%" for key, value in choice_results.items()] if choice_results else ["-"]
 
 
@@ -346,9 +361,7 @@ class MultiChoiceAnswer(Answer):
     "Compute the result for a list of MultipleChoiceAnswers."
     choice_results = {}
     for choice in result.question.possible_choices:
-      # __contains not supported by sqlite3
-      choice_answers = answers.filter(answer__contains=choice).count()
-      # choice_answers = sum(1 for answer in answers if choice in answer.answer)
+      choice_answers = sum(1 for answer in answers if choice in answer.answer)
       choice_results[choice] = (choice_answers / result.total_answers) * 100 if result.total_answers > 0 else 0
     return [f"{key}: {value}%" for key, value in choice_results.items()] if choice_results else ["-"]
 

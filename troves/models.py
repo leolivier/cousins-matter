@@ -6,11 +6,12 @@ from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 from core.utils import create_thumbnail
+from tenants.scoping import TenantModel
 
 logger = logging.getLogger(__name__)
 
 
-class Trove(models.Model):
+class Trove(TenantModel):
   CATEGORY_CHOICES = [
     ("history", _("History & Stories")),
     ("recipes", _("Recipes")),
@@ -52,7 +53,7 @@ class Trove(models.Model):
     verbose_name_plural = _("troves")
     ordering = ["id"]
     indexes = [
-      models.Index(fields=["category"]),
+      models.Index(fields=["tenant", "category"]),
     ]
 
   def __str__(self):
@@ -71,6 +72,7 @@ class Trove(models.Model):
       raise ValidationError(_("A treasure must have an owner."))
 
   def save(self, *args, **kwargs):
+    self.ensure_tenant()  # before full_clean(): tenant is non-nullable
     self.full_clean()  # clean before save
     is_new = self.pk is None
     try:

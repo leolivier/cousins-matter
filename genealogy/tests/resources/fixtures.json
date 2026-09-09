@@ -162,8 +162,8 @@
 {
   "model": "genealogy.person",
   "pk": 954,
-    "tenant": 1,
   "fields": {
+    "tenant": 1,
     "member": 1213,
     "first_name": "Donna",
     "last_name": "Haas",
@@ -181,8 +181,8 @@
 {
   "model": "genealogy.person",
   "pk": 955,
-    "tenant": 1,
   "fields": {
+    "tenant": 1,
     "member": 1214,
     "first_name": "Susan",
     "last_name": "Powell",
@@ -200,8 +200,8 @@
 {
   "model": "genealogy.person",
   "pk": 956,
-    "tenant": 1,
   "fields": {
+    "tenant": 1,
     "member": 1215,
     "first_name": "David",
     "last_name": "Walters",
@@ -219,8 +219,8 @@
 {
   "model": "genealogy.person",
   "pk": 957,
-    "tenant": 1,
   "fields": {
+    "tenant": 1,
     "member": 1216,
     "first_name": "Juan",
     "last_name": "Mooney",
@@ -238,8 +238,8 @@
 {
   "model": "genealogy.person",
   "pk": 958,
-    "tenant": 1,
   "fields": {
+    "tenant": 1,
     "member": 1217,
     "first_name": "Cindy",
     "last_name": "Robinson",
@@ -257,8 +257,8 @@
 {
   "model": "genealogy.family",
   "pk": 425,
-    "tenant": 1,
   "fields": {
+    "tenant": 1,
     "partner1": 959,
     "partner2": 960,
     "union_type": "MARR",
@@ -270,8 +270,8 @@
 {
   "model": "genealogy.family",
   "pk": 482,
-    "tenant": 1,
   "fields": {
+    "tenant": 1,
     "partner1": 1073,
     "partner2": 1074,
     "union_type": "MARR",
@@ -283,8 +283,8 @@
 {
   "model": "genealogy.family",
   "pk": 483,
-    "tenant": 1,
   "fields": {
+    "tenant": 1,
     "partner1": 1075,
     "partner2": 1076,
     "union_type": "MARR",
@@ -296,8 +296,8 @@
 {
   "model": "genealogy.family",
   "pk": 484,
-    "tenant": 1,
   "fields": {
+    "tenant": 1,
     "partner1": 1077,
     "partner2": 1078,
     "union_type": "MARR",
@@ -309,8 +309,8 @@
 {
   "model": "genealogy.family",
   "pk": 485,
-    "tenant": 1,
   "fields": {
+    "tenant": 1,
     "partner1": 1079,
     "partner2": 1080,
     "union_type": "MARR",

@@ -16,6 +16,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from members.models import Member
+from pages.services import seed_tenant_pages
 
 from ..forms import TenantCreationForm
 from ..models import Tenant, TenantSettings
@@ -63,6 +64,8 @@ class TenantCreateView(OnlySuperuserMixin, generic.View):
 
     tenant = Tenant.objects.create(name=form.cleaned_data["name"], slug=form.cleaned_data["slug"])
     TenantSettings.objects.create(tenant=tenant)
+    # the family gets its own editable copy of the predefined pages
+    seed_tenant_pages(tenant)
     messages.success(request, _("Family %(name)s created.") % {"name": tenant.name})
 
     admin_email = request.POST.get("admin_email", "").strip()

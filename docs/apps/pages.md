@@ -4,7 +4,7 @@ title: Pages
 description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpages, with publish/private URL conventions, menu/tree template tags and a predefined-pages import; documented in apps/pages.md
 tags: ["app", "pages"]
 status: draft
-stale_after: 2027-03-05
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:42:30Z }
 ---
 
@@ -14,18 +14,24 @@ generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:42:30Z }
 `django.contrib.flatpages.FlatPage` and adds the bookkeeping needed to
 ship editable pages (menu entries, an "about" tree, homepage blocks)
 without losing admin-managed defaults. Pages are served by the
-flatpages `FlatpageFallbackMiddleware`
-(config/settings/base.py) — there is no per-page view in this app,
-only the editing UI and template tags.
+tenant-aware `pages.views.flatpage` view at
+`<PAGES_URL_PREFIX><url>` (cousinsmatter/urls.py) and, on 404s, by
+`pages.middleware.TenantFlatpageFallbackMiddleware`
+(config/settings/base.py) — both scoped replacements for
+django.contrib.flatpages' global-table versions.
 
-**Tenant note:** `FlatPage` extends the Django contrib model — **not**
-[TenantModel](/apps/tenants.md)-scoped. Per-tenant variation of pages
-goes through [tenant settings overrides](/apps/tenants.md), not
-separate page rows.
+**Tenant note:** `FlatPage` is a [TenantModel](/apps/tenants.md) (MTI
+child: the `tenant` column lives on `pages_flatpage`, the contrib
+parent table `django_flatpage` stays global). Its global `url` unique
+was dropped in `pages.0004_tenant` so every family can own
+`/home/authenticated/`; per-tenant URL uniqueness is enforced by the
+scoped `PageForm`. Each new tenant gets its own copy of the
+predefined pages via `pages.services.seed_tenant_pages`, called from
+the signup and `TenantCreateView` flows.
 
 ## Model (pages/models.py)
 
-- `FlatPage(_FlatPage)` — everything from contrib flatpages (`url`,
+- `FlatPage(TenantModel, _FlatPage)` — everything from contrib flatpages (`url`,
   `title`, `content`, `registration_required`, `sites` M2M), plus:
   - `predefined` — the page was imported from the predefined
     fixtures rather than created in the UI;
@@ -33,7 +39,7 @@ separate page rows.
     last import (defaults `True`, i.e. "treat as hand-edited").
 - `create_page(url, title, content)` helper: creates the page and
   attaches the current `SITE_ID` — a page not linked to a site is
-  never served by the flatpages middleware.
+  never served by the flatpages fallback.
 
 ## Publication workflow (URL conventions)
 
@@ -87,9 +93,15 @@ imports them idempotently:
   `predefined=False, updated=True`.
 
 The same logic is what the `updated` flag protects on later re-imports.
+The fixture stays tenant-free: migration 0002 creates the initial pages
+(`pages.0004_tenant` backfills them to the default tenant), while the
+UI test base and new tenants get their copies through
+`pages.services.seed_tenant_pages` — loaddata cannot resolve the
+tenant (fixture-pinned pks drift once the test-runner flush re-seeds
+tenants).
 
 ## See also
 
 - [Core](/apps/core.md) — `OnlyAdminMixin`, modal confirm, context processors
-- [Tenants](/apps/tenants.md) — per-tenant overrides vs shared pages
+- [Tenants](/apps/tenants.md) — TenantModel scoping, per-tenant seeding
 - [Dev setup](/setup-dev.md) — fixture loading in a dev environment

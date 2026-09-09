@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
 from core.views.views_general import download_protected_media, download_public_media, health, qhealth
+from pages.views import flatpage as tenant_flatpage
 from core.views.views_general import PasswordResetView
 
 # from django.utils.translation import gettext_lazy as _
@@ -86,7 +87,13 @@ urlpatterns = (
       download_public_media,
       name="get_public_media",
     ),
-    path(settings.PAGES_URL_PREFIX, include("django.contrib.flatpages.urls")),
+    # tenant-aware flatpage view — never include django.contrib.flatpages.urls,
+    # its fallback queries the global (unscoped) django_flatpage table
+    path(
+      f"{settings.PAGES_URL_PREFIX}<path:url>",
+      tenant_flatpage,
+      name="django.contrib.flatpages.views.flatpage",
+    ),
     path("pages-edit/", include("pages.urls")),
     path("troves/", include("troves.urls")),
     path("classified-ads/", include("classified_ads.urls")),

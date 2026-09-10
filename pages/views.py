@@ -7,6 +7,7 @@ from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import loader
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 from django.views import generic
@@ -37,7 +38,12 @@ def flatpage(request, url):
   except Http404:
     if not url.endswith("/") and settings.APPEND_SLASH:
       page = get_object_or_404(FlatPage, url=f"{url}/")
-      return HttpResponsePermanentRedirect(f"{request.path}/")
+      # request.path is user-controlled; a planted page (no url validator) with a
+      # protocol-relative url like "//host/x/" would make this a redirect off-site
+      target = f"{request.path}/"
+      if not url_has_allowed_host_and_scheme(target, allowed_hosts=None):
+        raise Http404
+      return HttpResponsePermanentRedirect(target)
     raise
   return render_flatpage(request, page)
 

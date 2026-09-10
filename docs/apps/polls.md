@@ -18,10 +18,14 @@ and vote machinery; the navbar exposes them as separate tabs, gated by
 the `show_polls` and `show_event_planners`
 [feature flags](/apps/core.md#feature-flags-and-context-processors).
 
-**Tenant note:** like [forum](/apps/forum.md), `Poll`, `Question`,
-`Answer` subclasses and `EventPlanner` inherit `models.Model` directly —
-they are **not** [TenantModel](/apps/tenants.md)-scoped. Polls are
-currently shared platform-wide.
+**Tenant note:** `Poll`, `Question`, `PollAnswer` and the abstract
+`Answer` (hence all its subclasses) inherit
+[TenantModel](/apps/tenants.md) — tenant-scoped (`tenant` FK +
+`TenantManager`, RLS backstop via `tenants.0008_rls_polls`; conversion
+migration `polls.0005_tenant` backfilled legacy rows to the default
+tenant). `EventPlanner` is an MTI child of `Poll`: the column lives on
+`polls_poll` and the child redeclares `objects = TenantManager()`.
+Polls are invisible cross-tenant.
 
 ## Models (polls/models.py)
 
@@ -118,4 +122,4 @@ test in `polls/tests/test_display.py`.
 
 - [Core](/apps/core.md) — `check_edit_permission`, modal confirm, feature flags
 - [Members](/apps/members.md) — `Member` as poll owner/ballot holder
-- [Tenants](/apps/tenants.md) — scoping model this app does not use yet
+- [Tenants](/apps/tenants.md) — tenant scoping of the polls models

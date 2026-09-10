@@ -18,27 +18,33 @@ genealogy/views/ are thin wrappers. The step-by-step GEDCOM round trip
 is described in [the GEDCOM flow](/flows/gedcom-import-export.md); this
 fiche stops at the moving parts.
 
-**Tenant note:** `Person` and `Family` inherit `models.Model` directly —
-**not** [TenantModel](/apps/tenants.md)-scoped. Tree data is shared
-platform-wide, like [troves](/apps/troves.md) and
-[forum](/apps/forum.md). One tenant knob does exist: the chart root
-person is read through `tenant_setting("family_chart_root_person_id")`
+**Tenant note:** `Person` and `Family` are
+[TenantModel](/apps/tenants.md)-scoped (PR 5 of the rollout, after
+[polls](/apps/polls.md)); both tables are also covered by the RLS
+backstop (`TENANT_RLS_TABLES`, migration `tenants.0009_rls_genealogy`).
+`gedcom_id` is unique **per tenant** — two tenants can each import a
+GEDCOM using `@I1@` — enforced by
+`UniqueConstraint(tenant, gedcom_id)`. The chart root person is read
+through `tenant_setting("family_chart_root_person_id")`
 (tenants/settings_overrides.py), so each family can point its chart at
-a different ancestor even though the records themselves are shared.
+a different ancestor. Legacy rows were backfilled to the default tenant
+(`genealogy.0004_tenant`).
 
 ## Models (genealogy/models.py)
 
-- `Person` — `first_name`/`last_name`, `sex` (M/F/O, default O),
-  birth and death `DateField` + place, `notes`, and the bookkeeping:
+- `Person` — [TenantModel](/apps/tenants.md): `first_name`/`last_name`,
+  `sex` (M/F/O, default O), birth and death `DateField` + place,
+  `notes`, and the bookkeeping:
   - `member` — nullable OneToOne to `Member`
     (`related_name="genealogy_person"`): links a tree person to a real
     account;
-  - `gedcom_id` — the GEDCOM pointer (`@I12@`), unique when set; this
-    is the import/export identity;
+  - `gedcom_id` — the GEDCOM pointer (`@I12@`), unique per tenant when
+    set; this is the import/export identity;
   - `uid` — random UUID (`_UID` tag), unique, not editable;
   - `child_of_family` — FK to the `Family` where the person is a child
     (`related_name="children"`).
-  Indexed on `last_name` and `birth_date`. Helpers: `age` property
+  Indexed on `(tenant, last_name)` and `(tenant, birth_date)`. Helpers:
+  `age` property
   (age at death when deceased, current age otherwise), `gender_icon`
   (CSS icon class), `get_partners()`.
 - `Family` — a union: `partner1` / `partner2` (nullable FKs,

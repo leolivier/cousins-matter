@@ -215,7 +215,8 @@ MIDDLEWARE = [
   "tenants.middleware.TenantMiddleware",
   "core.middleware.LoginRequiredMiddleware",
   "django.middleware.clickjacking.XFrameOptionsMiddleware",
-  "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
+  # scoped replacement for django.contrib.flatpages' fallback (global table leak)
+  "pages.middleware.TenantFlatpageFallbackMiddleware",
   "django_htmx.middleware.HtmxMiddleware",
 ]
 

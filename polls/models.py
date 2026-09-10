@@ -9,9 +9,10 @@ from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 
 from members.models import Member
+from tenants.scoping import TenantManager, TenantModel
 
 
-class Poll(models.Model):
+class Poll(TenantModel):
   OPEN_TO_ALL = "all"
   OPEN_TO_ACTIVE = "act"
   OPEN_TO_CLOSED = "lst"
@@ -81,7 +82,7 @@ class Poll(models.Model):
     return Question.objects.filter(poll=self)
 
 
-class Question(models.Model):
+class Question(TenantModel):
   """
   Question model for Polls.
   Question types are Yes/No, Multiple Choice, and Open Text.
@@ -126,7 +127,7 @@ class Question(models.Model):
     return self.question_text
 
 
-class PollAnswer(models.Model):
+class PollAnswer(TenantModel):
   "Answers provided by members to Poll questions."
 
   poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
@@ -249,7 +250,7 @@ class QuestionResult:
         self.user_answer = str(user_answer)
 
 
-class YesNoAnswer(Answer):
+class YesNoAnswer(Answer, TenantModel):
   question_type = Question.YESNO_QUESTION
   "Answer provided by a member to a yes/no question."
   answer = models.BooleanField(_("answer"), default=False)
@@ -269,7 +270,7 @@ class YesNoAnswer(Answer):
     ]
 
 
-class TextAnswer(Answer):
+class TextAnswer(Answer, TenantModel):
   question_type = Question.OPENTEXT_QUESTION
   "Answer provided by a member to an open text question."
   answer = models.TextField(_("answer"), default="", blank=True, max_length=500)
@@ -287,7 +288,7 @@ class TextAnswer(Answer):
     return ["-"] if result.total_answers == 0 else [answer.answer for answer in answers]
 
 
-class DateTimeAnswer(Answer):
+class DateTimeAnswer(Answer, TenantModel):
   "Answer provided by a member to an date/time question."
 
   question_type = Question.DATE_QUESTION
@@ -306,7 +307,7 @@ class DateTimeAnswer(Answer):
     return ["-"] if result.total_answers == 0 else [answer.answer for answer in answers]
 
 
-class ChoiceAnswer(Answer):
+class ChoiceAnswer(Answer, TenantModel):
   question_type = Question.SINGLECHOICE_QUESTION
   "Answer provided by a member to a single choice question."
   answer = models.CharField(_("choice"), max_length=100, default="", blank=True)
@@ -331,6 +332,10 @@ class ChoiceAnswer(Answer):
 
 
 class SingleEventAnswer(ChoiceAnswer):
+  # MTI child: tenant lives on the ChoiceAnswer table; redeclare the scoped
+  # manager or Django falls back to a plain (unscoped) Manager.
+  objects = TenantManager()
+
   """
   Answer provided by a member to an single choice event planner question.
   Event planner answers are a combination of date/time with single choice.
@@ -343,7 +348,7 @@ class SingleEventAnswer(ChoiceAnswer):
     verbose_name_plural = _("single event answers")
 
 
-class MultiChoiceAnswer(Answer):
+class MultiChoiceAnswer(Answer, TenantModel):
   question_type = Question.MULTICHOICES_QUESTION
   "Answer provided by a member to a multiple choice question."
   answer = models.JSONField(_("choices"), default=list, blank=True)
@@ -367,6 +372,10 @@ class MultiChoiceAnswer(Answer):
 
 
 class MultiEventAnswer(MultiChoiceAnswer):
+  # MTI child: tenant lives on the MultiChoiceAnswer table; redeclare the
+  # scoped manager or Django falls back to a plain (unscoped) Manager.
+  objects = TenantManager()
+
   """
   Answer provided by a member to an multiple choice event planner question.
   Event planner answers are a combination of date/time with multiple choices.
@@ -380,6 +389,10 @@ class MultiEventAnswer(MultiChoiceAnswer):
 
 
 class EventPlanner(Poll):
+  # MTI child: redeclare the scoped manager, else Django falls back to a plain
+  # (unscoped) Manager and event-planner lookups would cross tenants.
+  objects = TenantManager()
+
   # where the event will take place
   location = models.CharField(_("location"), max_length=250, default="", blank=True)
   # when the event will take place

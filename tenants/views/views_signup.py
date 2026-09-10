@@ -16,6 +16,7 @@ from django.views import generic
 
 from core.mixins import LoginNotRequiredMixin
 from members.forms import MemberRegistrationForm
+from pages.services import seed_tenant_pages
 from members.models import Member
 from verify_email.email_handler import send_verification_email
 
@@ -80,6 +81,8 @@ class FamilySignupView(LoginNotRequiredMixin, generic.View):
     with transaction.atomic():
       tenant = Tenant.objects.create(name=tenant_form.cleaned_data["name"], slug=tenant_form.cleaned_data["slug"])
       TenantSettings.objects.create(tenant=tenant)
+      # the family gets its own editable copy of the predefined pages
+      seed_tenant_pages(tenant)
       # the creator administers the family they just created
       form.instance.tenant = tenant
       form.instance.role = Member.Role.ADMIN

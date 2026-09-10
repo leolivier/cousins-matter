@@ -4,8 +4,8 @@ title: Pages
 description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpages, with publish/private URL conventions, menu/tree template tags and a predefined-pages import; documented in apps/pages.md
 tags: ["app", "pages"]
 status: draft
-stale_after: 2027-03-09
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:42:30Z }
+stale_after: 2027-03-10
+generated: { by: claude-code/glm-5.3-flash, at: 2026-09-10T00:00:00Z }
 ---
 
 # Pages
@@ -19,6 +19,15 @@ tenant-aware `pages.views.flatpage` view at
 `pages.middleware.TenantFlatpageFallbackMiddleware`
 (config/settings/base.py) — both scoped replacements for
 django.contrib.flatpages' global-table versions.
+
+**Redirect guard:** the `APPEND_SLASH` 301 emitted by
+`pages.views.flatpage` is built from `request.path`, which is
+user-controlled; since the model has no url validator (only
+`PageForm` regex-validates), a planted page whose url is
+protocol-relative (`//host/x/`, `/\host/x/`) would turn any 404 into
+a redirect off-site (CWE-601). The redirect target is therefore
+checked with `url_has_allowed_host_and_scheme` and an invalid target
+raises `Http404` (pages/tests/tests_flatpage_redirect.py).
 
 **Tenant note:** `FlatPage` is a [TenantModel](/apps/tenants.md) (MTI
 child: the `tenant` column lives on `pages_flatpage`, the contrib

@@ -179,6 +179,19 @@ strings uniformly say "family" (fr « famille ») even where the code says
 ## Performance
 
 `TenantSettingsAdmin` uses `list_select_related` on `tenant`.
+## Tests
+
+`tenants/tests/tests_feature_on.py` only runs when `MULTI_TENANT_ENABLED` is
+on (`_skip_if_off`); CI exercises it through the dedicated `test-multi-tenant`
+job (job 5 of build-and-publish-image.yml, `MULTI_TENANT_ENABLED=True`). Two
+conventions for those tests:
+
+- pin the language with `@override_settings(LANGUAGE_CODE="en")` when a test
+  asserts a message string — the CI and the dev `.env` set `LANGUAGE_CODE=fr`;
+- a tenant created with `Tenant.objects.create` in a test must call
+  `seed_tenant_pages(tenant)` when the flow under test lands on a predefined
+  page: the real signup/manage views seed them, a bare `create()` does not,
+  and the authenticated home page 500s without them.
 
 # See also
 

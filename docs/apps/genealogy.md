@@ -125,6 +125,12 @@ template fragment key). `genealogy:refresh` clears them manually.
 logged-in member can import, export and edit the tree; there is no
 admin-only gate in this app.
 
+## Performance
+
+`Person.get_partners()` iterates the prefetched `unions_as_p1`/`unions_as_p2` relations
+(callers prefetch `unions_as_p?__partner?`); re-chaining `select_related` there would defeat
+the prefetch cache. Guarded by a query-count test in `tests_views_person.py`.
+
 ## See also
 
 - [GEDCOM import/export flow](/flows/gedcom-import-export.md) — the

@@ -1,3 +1,5 @@
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 from django.utils import formats, timezone
 
@@ -143,3 +145,21 @@ class TestPollListsView(PollTestMixin):
     self.assertNotContains(response, "published, not yet closed")
     self.assertNotContains(response, "published today, not yet closed")
     self.assertContains(response, "published and closed")
+
+
+class TestDisplayQueryCount(PollTestMixin):
+  def _detail_query_count(self, num_questions):
+    poll = self.create_poll("Query count poll", "Query count description")
+    for i in range(num_questions):
+      self.create_question(poll, f"question {i}", Question.YESNO_QUESTION)
+    with CaptureQueriesContext(connection) as ctx:
+      response = self.client.get(reverse("polls:poll_detail", args=(poll.id,)), follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, poll.title)
+    return len(ctx)
+
+  def test_poll_detail_queries_do_not_scale_with_questions(self):
+    """Results are computed from the prefetched answers, not re-queried per question:
+    the detail page must issue the same number of queries for 2 and 6 questions."""
+    with_2_questions = self._detail_query_count(2)
+    self.assertEqual(self._detail_query_count(6), with_2_questions)

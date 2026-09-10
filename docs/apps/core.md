@@ -4,7 +4,7 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-09-04
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -189,6 +189,13 @@ Also in core: `core.mixins` (`LoginNotRequiredMixin`, `OnlyAdminMixin`) and
   order (members first).
 - `check_okf` — validates the frontmatter of this documentation bundle (see
   [Conventions](/conventions.md)).
+
+## Performance
+
+The shared followers template tags (`followers/followers-count-tag.html`,
+`followers/toggle-follow-button.html`) only fall back to a per-object follower query when
+`nfollowers` / `is_following` are not passed; annotated callers (forum, chat lists) render
+without N+1 queries.
 
 # See also
 

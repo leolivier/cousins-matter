@@ -83,10 +83,8 @@ class PollsVoteView(generic.View):
       return render(request, self.template_name, {"poll": poll, "questions": question_forms})
 
     # are we modifyning an existing answer for that poll and that user?
-    poll_answer = PollAnswer.objects.filter(poll=poll, member=request.user)
-    if poll_answer.exists():
-      poll_answer = poll_answer.first()
-    else:
+    poll_answer = PollAnswer.objects.filter(poll=poll, member=request.user).first()
+    if poll_answer is None:
       # otherwise create a new one
       poll_answer = PollAnswer(poll=poll, member=request.user)
       poll_answer.save()

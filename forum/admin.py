@@ -12,6 +12,7 @@ class MessageInline(admin.TabularInline):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
   list_display = ["title", "owner", "created_date"]
+  list_select_related = ["owner", "first_message"]
   search_fields = ["title"]
   inlines = [MessageInline]
   raw_id_fields = ["first_message"]
@@ -25,6 +26,7 @@ class PostAdmin(admin.ModelAdmin):
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
   list_display = ["author", "post", "created", "short_content"]
+  list_select_related = ["author", "post"]
   list_filter = ["post", "author", "created"]
   search_fields = ["content", "author__username", "post__title"]
   date_hierarchy = "created"
@@ -37,6 +39,7 @@ class MessageAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
   list_display = ["author", "message", "created", "short_content"]
+  list_select_related = ["author", "message"]
   list_filter = ["author", "created"]
   search_fields = ["content", "author__username"]
   date_hierarchy = "created"

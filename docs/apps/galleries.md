@@ -4,7 +4,7 @@ title: Galleries
 description: Photo/video galleries — nested gallery tree, photo import (single and bulk zip via Django-Q), thumbnails, protected storage
 tags: ["app", "galleries"]
 status: draft
-stale_after: 2027-03-04
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
 ---
 
@@ -117,6 +117,11 @@ Progress is polled by HTMX: `upload_progress/<group_id>` reads
 renders `core/common/progress-bar.html` and, when finished, cleans the
 temp directory, unregisters the `ZipImport` and shows a summary
 (galleries and photos created, per-photo errors).
+
+## Performance
+
+`galleries_tags.complete_photos_data` materializes the page's photo list once and filters
+boundary photos by `gallery_id`; `GalleryAdmin`/`PhotoAdmin` use `list_select_related`.
 
 ## See also
 

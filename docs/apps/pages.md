@@ -109,6 +109,10 @@ UI test base and new tenants get their copies through
 tenant (fixture-pinned pks drift once the test-runner flush re-seeds
 tenants).
 
+## Performance
+
+Pages menu tags no longer prefetch the unused `sites` relation on every navbar render.
+
 ## See also
 
 - [Core](/apps/core.md) — `OnlyAdminMixin`, modal confirm, context processors

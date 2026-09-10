@@ -23,4 +23,5 @@ class TenantAdmin(admin.ModelAdmin):
 @admin.register(TenantSettings)
 class TenantSettingsAdmin(admin.ModelAdmin):
   list_display = ("tenant",)
+  list_select_related = ["tenant"]
   search_fields = ("tenant__name", "tenant__slug")

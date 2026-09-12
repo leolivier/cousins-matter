@@ -1,35 +1,35 @@
-# Graph Report - cousins-matter  (2026-09-12)
+# Graph Report - cousins-matter  (2026-09-11)
 
 ## Corpus Check
-- 586 files · ~672,439 words
+- 586 files · ~670,979 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5048 nodes · 8753 edges · 454 communities (268 shown, 128 thin omitted)
-- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 836 edges (avg confidence: 0.55)
+- 4563 nodes · 8298 edges · 413 communities (229 shown, 126 thin omitted)
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 873 edges (avg confidence: 0.55)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a0bc1287`
+- Built from commit: `568ef586`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - override_settings
-- Paginator
-- get_photo_name
-- MemberTestCase
+- translate_date_format
+- Photo
+- tests_member_views.py
 - MembersUITestBase
-- Member
+- views_member.py
 - ClassifiedAdsUITestBase
 - manage_cousins_matter.py
 - core/base.html Layout
 - Question
-- chat/tests/tests_followers.py
+- TenantCreationForm
 - OKF Repo Docs Implementation Plan
 - Core App
-- ValueError
-- FlatPage
+- Answer
+- MemberTestCase
 - core/base.html layout ancestor
 - PlaywrightTestCase
 - Gallery
@@ -40,37 +40,37 @@
 - icon
 - galleries/models.py
 - get_test_absolute_url
-- ChatMessageSenderMixin
+- tests_member_base.py
 - ChatConsumer
 - MemberFactory
-- MemberManager
-- ChatRoom
-- views_reply.py
+- get_current_tenant
+- Paginator
+- check_edit_permission
 - GenealogyUITestBase
 - galleries/services.py
-- pages_tags.py
-- Answer
-- Funktionen
-- trace_login.py
-- OAuth/SSO-Authentifizierung
-- PublicChatRoomsUITest
+- TenantIsolationTests
+- ValueError
+- PrivateChatRoom
+- members/admin.py
+- MemberUpdateForm
+- ChatUITestBase
 - download_public_media
 - entrypoint.py
 - GedcomExporter
-- RichTextarea
+- members/forms.py
 - PersonViewsTest
-- members/models.py
+- Family
 - Post
 - FamilySignupTests
 - tenant_context
-- PageForm
+- FlatPage
 - tenant_setting
 - ForumTestCase
 - members/tasks.py
-- EventPlanner
-- Features
+- display_views.py
+- tenants/admin.py
 - Bulma-themed allauth element overrides
-- TestMemberDirectory
+- views_directory.py
 - check_bundle
 - TestGetLatestReleaseText
 - Address
@@ -78,64 +78,64 @@
 - GalleryUITestBase
 - PrivateRoomDetailUITest
 - confirm_delete_modal
-- OAuth/SSO Authentication
-- Funcionalidades
+- check_after_migration.py
+- Features
 - Family
 - RoleAwareUITestBase
 - Trove
-- MessageForm
+- CommentForm
 - Reusable Test Docker Image Workflow
 - PersonFactory
 - FamilyViewsTest
 - TokenManager
-- Autenticación OAuth/SSO
+- ChatRoom
 - Categories
 - Protected Media Access
-- check_edit_permission
+- views_post.py
 - genealogy/services.py
-- Fonctionnalités
+- CreatePhotoViewTests
 - TenantSettingsTests
 - TroveAppUITest
-- tests_read_receipts.py
-- genealogy/tests/tests.py
+- chat/models.py
+- GenealogyViewsTest
 - TestMemberImport
 - TestTroveList
 - classified_ads/views.py
 - classified_ads/tests/tests.py
 - ClassifiedAd
-- followers.py
+- NotificationEvent
 - patch
 - Tenant
 - GedcomParser
 - polls/tests/factories.py
-- Authentification OAuth/SSO
-- Funzionalità
+- RegistrationRequestForm
+- tenants/middleware.py
 - GalleryFactory
-- Autenticazione OAuth/SSO
+- OAuth/SSO Authentication
 - views_import_export.py
 - Member Detail Template
 - TestBirthdaysMixin
 - MemberInviteTests
-- classified_ads/admin.py
+- classified_ads/models.py
 - ClassifiedAdBaseTestCase
 - CommentUITest
-- CSVExportViewTests
+- tests_import_export.py
 - PollsListUITest
-- Funcionalidades
+- Files and Folders Scope Group (view/manage files and folders)
 - ClassifiedAdFullscreenViewTests
-- Autenticação OAuth/SSO
+- Fonctionnalités
 - AboutUITest
-- HomeUITest
-- members/admin.py
-- Medienspeicher
-- protected_media_url
-- Comment
-- Einstellungen
+- test_utils_coverage.py
+- Authentification OAuth/SSO
+- TestCase
+- galleries/forms.py
+- CommentCreateTestCase
+- PostReplyTestCase
 - core/utils.py
 - TestSelectViews
 - TestPollListsView
 - PollDetailUITest
-- Media Storage
+- Dropbox App Console
 - ChatRoomTests
 - dev_base.py
 - setup_notification_schedules
@@ -145,34 +145,34 @@
 - ChannelsRedisConfigTests
 - ContactUITest
 - CommentAdmin
-- Settings
-- DeletePhotoViewTest
+- remove_accents
+- tests_photo.py
 - GalleryDetailUITest
 - Genealogy base layout with tab navigation
 - GenealogyFamilyListUITest
 - GenealogyPersonDetailUITest
 - GenealogyPersonListUITest
-- Almacenamiento de los medios
+- tests_forms.py
 - MemberTestCaseMixin
 - ignore_captcha_errors
 - 0002_import_predefined_pages.py
-- Ajustes
-- Stockage des médias
+- Media Storage
+- Request Invitation form
 - core.js
 - core.min.js
-- Paramètres
+- Settings
 - Bulk photo upload form (htmx)
 - FamilyChartViewsTest
-- Archiviazione dei media
+- GedcomViewsTest
 - tests_member.py
-- Impostazioni
+- TestGalleryMoves
 - test_utils.sh
-- Armazenamento dos média
+- Stockage des médias
 - chat/admin.py
-- Configurações
+- Paramètres
 - HtmlValidatorMiddleware
 - ForumUITestBase
-- fr/installation.md
+- Member
 - GalleryCreateUITest
 - GalleryEditUITest
 - GalleryListUITest
@@ -182,28 +182,28 @@
 - GenealogyGedcomUITest
 - GenealogyPersonCreateUITest
 - PostDisplayUITest
-- it/installation.md
+- MemberRegistrationForm
 - Tenant Admin Invitation Email Template
 - RlsCatalogTests
-- get_current_tenant
-- tests_public.py
+- core/services.py
+- Members List Page
 - ReadReceiptModelTests
-- PrivateChatRoomsUITest
+- fr/installation.md
 - Classified Ads N+1 Analysis
 - galleries/admin.py
 - galleries.js
 - galleries.min.js
 - Inline CSS email styling
 - DeathNotificationTests
-- PhotoEditViewTest
+- Member Profile Page
 - LoginRequiredMiddleware
-- question_icon
+- .filter_answers
 - views_general.py
 - PollsUITestBase
-- Allgemeine Anpassung
-- 0002_mkdirs.py
 - General Customization
-- Personalización general
+- 0002_mkdirs.py
+- Upcoming Birthdays List
+- Personnalisation générale
 - Command
 - Command
 - Pocket ID (self-hosted authentication provider)
@@ -211,29 +211,29 @@
 - PostListUITest
 - ReplyUITest
 - troves/admin.py
-- Personnalisation générale
+- Cousins Matter Logo (cousinades.webp)
 - 0010_remove_chatmessage_chat_chatme_room_id_95b551_idx_and_more.py
-- Personalizzazione generale
+- en/installation.md
 - 0007_tenant.py
 - 0017_member_tenant_role.py
-- test_views_general.py
+- send_zipfile
 - 0003_migrate_page_names.py
-- Personalização geral
+- Customize your site
 - polls/admin.py
-- OAuthActivationTests
+- Personnalisez votre site
 - test_rotate_secret.sh
-- de/installation.md
+- ![Cousins Matter !](assets/logo.webp) COUSINS MATTER !
 - 0002_seed_tenants.py
 - 0003_trove_title_alter_trove_description.py
-- Ihre Website anpassen
-- en/installation.md
+- Members Directory Screenshot (directory.webp)
+- Invite Members Form Screenshot
 - ChatConfig
 - ClassifiedAdsConfig
 - Code of Conduct (Contributor Covenant, amended)
 - Cousinades logo test fixture (JPEG)
-- Customize your site
-- es/installation.md
-- forum/tests/factories.py
+- core/urls.py
+- Cousins Matter Logo
+- PostFactory
 - Family Form Template (htmx modal)
 - ForumConfig
 - 0005_alter_comment_options_alter_message_options_and_more.py
@@ -243,7 +243,7 @@
 - main
 - ReadTheDocs Build Config
 - PageConfig
-- Personaliza tu sitio
+- tests_login_out.py
 - PollsConfig
 - test_install.sh
 - test_migrate_v1_v2.sh
@@ -307,7 +307,7 @@
 - 0004_alter_trove_title.py
 - test-image-2.jpg - white numeral 2 on blue radial gradient (troves test fixture image)
 - Test image 3 (white numeral 3 on blue radial gradient)
-- Personnalisez votre site
+- Family tree / genealogy symbolism
 - Cousinades Decorative Banner
 - Cousinades decorative logo banner
 - Cousins Matter logo: navy serif wordmark 'COUSINS MATTER' over a green decorative vine/flourish underline — the site brand banner image served from core static assets for the family-reunion web app
@@ -333,84 +333,43 @@
 - test_avatar.jpg - cartoon avatar fixture (boy with round glasses, sweater vest and plaid tie, on maroon background with dotted selection-frame corners) used as member avatar upload test resource
 - cousins-matter
 - test-image-1.jpg — white numeral '1' on blue radial gradient (synthetic troves test fixture image)
-- ![Cousins Matter !](assets/logo.webp) COUSINS MATTER !
-- Personalizza il tuo sito
-- ![Cousins Matter!](assets/logo.webp) COUSINS MATTER!
-- pt/installation.md
-- Personalizar o seu sítio
-- get_new_member_data
-- modify_member_data
-- RegistrationLinkManagerTests
-- TroveFactory
-- Multi-Tenancy (mehrere Familien auf einer Bereitstellung)
+- FieldLinkWrapper
 - Multi-tenancy (several families on one deployment)
-- CustomSocialAccountAdapter
-- Multi-tenancy (varias familias en un mismo despliegue)
 - Multi-tenants (plusieurs familles sur un même déploiement)
-- Multi-tenancy (più famiglie su un'unica installazione)
-- Multi-tenancy (várias famílias numa só implantação)
-- TestAssertRequestIsAjax
-- today_minus
-- TokenManagerTests
-- Medienspeicher
+- PostCreateUITest
+- PostDeleteUITest
+- views_dashboard_stats.py
+- .__init__
+- RegistrationLinkManagerTests
+- PollNavigationUITest
 - Media Storage
-- Almacenamiento de los medios
 - Stockage des médias
-- Archiviazione dei media
-- Armazenamento dos média
-- PostDeleteTestCase
-- UploadProgressViewTest
-- TenantsConfig
-- TestDisplayMembers
-- Installation in der Produktivumgebung
-- Anbieter-spezifische Konfiguration
+- CustomSocialAccountAdapter
+- MultiTenantOffTests
 - Production installation
 - Provider-Specific Configuration
-- Instalación en producción
+- Configuration spécifique aux fournisseurs
+- TestAssertRequestIsAjax
+- TestProtectedMediaUrl
+- parse_locale_date
+- Other management operations
+- Autres opérations de gestion
+- MemberSearchTests
+- Application Technical Status
+- ![Cousins Matter!](assets/logo.webp) COUSINS MATTER!
+- État technique de l'application
+- PollCreateUITest
+- PollVoteUITest
+- TenantsConfig
+- Command
+- Reverse Proxying
+- Translations
+- Proxy inverse
+- Traductions
+- PasswordResetView
 - MkDocs Documentation Site
 - Tenant Confirm Delete Template
 - Tenant Settings Template
-- Configuración específica de cada proveedor
-- Configuration spécifique aux fournisseurs
-- Configurazione specifica per provider
-- Instalação em produção
-- Configuração específica de cada fornecedor
-- core/forms.py
-- .check_invitation
-- MemberDeleteTest
-- Cousins Matter aktualisieren
-- Other management operations
-- Actualizar Cousins Matter
-- Autres opérations de gestion
-- Aggiornare Cousins Matter
-- Atualizar o Cousins Matter
-- MemberDetailView
-- FlatPageFactory
-- QuestionResult
-- Technischer Status der Anwendung
-- ![Cousins Matter!](assets/logo.webp) BEI COUSINS MATTER ZÄHLT DIE FAMILIE!
-- Application Technical Status
-- ![Cousins Matter!](assets/logo.webp) COUSINS MATTER!
-- Estado técnico de la aplicación
-- ![¡Cousins Matter!](assets/logo.webp) COUSINS MATTER!
-- État technique de l'application
-- Stato tecnico dell'applicazione
-- Estado técnico da aplicação
-- ![Cousins Matter!](assets/logo.webp) COUSINS MATTER!
-- TestActivateManagedMember
-- Reverse Proxy
-- Übersetzungen
-- Reverse Proxying
-- Translations
-- Proxy inverso
-- Traducciones
-- Proxy inverse
-- Traductions
-- Reverse proxy
-- Traduzioni
-- Proxy inverso
-- Traduções
-- categories.py
 
 ## God Nodes (most connected - your core abstractions)
 1. `Member` - 158 edges
@@ -419,8 +378,8 @@
 4. `Tenant` - 65 edges
 5. `Photo` - 63 edges
 6. `ChatRoom` - 52 edges
-7. `override_settings` - 48 edges
-8. `PlaywrightTestCase` - 48 edges
+7. `PlaywrightTestCase` - 48 edges
+8. `override_settings` - 48 edges
 9. `MemberFactory` - 44 edges
 10. `Person` - 43 edges
 
@@ -429,12 +388,12 @@
   README.md → CLAUDE.md
 - `Nginx 413 Error Page` --conceptually_related_to--> `classified_ads Django App`  [AMBIGUOUS]
   config/nginx/nginx.d/errors/413.html → classified_ads/templates/classified_ads/detail.html
-- `override_settings` --uses--> `MemberInviteTests`  [INFERRED]
-  core/context_processors.py → members/tests/tests_register.py
-- `override_settings` --uses--> `TestHomePageMixin`  [INFERRED]
-  core/context_processors.py → pages/tests/tests_homepage.py
-- `override_settings` --uses--> `TestDisplayPageMenu`  [INFERRED]
-  core/context_processors.py → pages/tests/tests_menu.py
+- `Member` --uses--> `TenantCreateView`  [INFERRED]
+  members/models.py → tenants/views/views_manage.py
+- `RegistrationLinkManager` --uses--> `TenantCreateView`  [INFERRED]
+  members/registration_link_manager.py → tenants/views/views_manage.py
+- `Member` --uses--> `FamilySignupView`  [INFERRED]
+  members/models.py → tenants/views/views_signup.py
 
 ## Import Cycles
 - None detected.
@@ -487,31 +446,31 @@
 - **Reusable htmx fragment toolkit (modals, progress, pagination, toggle, redirect)** — htmx_integration, core_htmx_modal_form_template, core_confirm_delete_modal_template, core_modal_form_partial, core_ajax_redirect_partial, core_progress_bar_partial, core_toggle_slider_partial, core_paginate_template_partial, ajax_modal_pattern [INFERRED 0.95]
 - **Vendored widget asset includes (summernote, bulma-calendar, select2)** — core_include_summernote_partial, core_include_bulma_calendar_partial, core_include_select2_partial, jquery_dependency, bulma_css_framework [INFERRED 0.95]
 
-## Communities (454 total, 128 thin omitted)
+## Communities (413 total, 126 thin omitted)
 
 ### Community 0 - "override_settings"
 Cohesion: 0.04
 Nodes (44): override_settings, Computes and store a global dictionary containing the settings which can be…, override settings as usual for tests but also expose them in templates, recompute_settings_in_templates(), Tests both chats are visible when both features are enabled in settings., Tests classified ads are hidden when feature is disabled in settings., Helper method to build navigation URLs for testing., Tests classified ads are visible when feature is disabled in settings. (+36 more)
 
-### Community 1 - "Paginator"
+### Community 1 - "translate_date_format"
 Cohesion: 0.16
-Nodes (12): PageOutOfBounds, Paginator, get_people_queryset(), Filtered + ordered person queryset for the person list. ``sort``/``direction``…, family_list(), person_create(), person_delete(), person_detail() (+4 more)
+Nodes (10): Tests for translate_date_format edge cases., Test that %% is translated to a literal %., Test that an unknown format code like %Z is kept as is., Test that a single % at the end of string is kept as is., TestTranslateDateFormatEdgeCases, TestCase, Tests that translate_date_format returns expected localized strings., TestUtils (+2 more)
 
-### Community 2 - "get_photo_name"
-Cohesion: 0.09
-Nodes (13): CreatePhotoTests, get_photo_name(), PhotoFullscreenViewTests, Tests creating a photo with no gallery., Tests creating a photo with no date., Tests getting a photo in fullscreen with no side parameter., Tests getting the next photo in fullscreen., Tests getting the previous photo in fullscreen. (+5 more)
+### Community 2 - "Photo"
+Cohesion: 0.18
+Nodes (8): Photo, CreatePhotoTests, get_photo_name(), Tests creating a photo with no gallery., Tests creating a photo with no date., Tests creating a photo with no image., Tests creating a photo., Tests creating a photo that is too big.
 
-### Community 3 - "MemberTestCase"
-Cohesion: 0.04
-Nodes (39): ChatSearchTests, Test that HTMX request returns HTML, Tests the about page displays correctly with all categories., TestAbout, LoginTests, PasswordTests, Tests the logout view., Tests the change password view. (+31 more)
+### Community 3 - "tests_member_views.py"
+Cohesion: 0.05
+Nodes (25): Test short query (< 3 chars) returns all members page., Tests for notify_death view edge cases., Test POST without deathdate returns error and HX-Refresh., Tests for the validate_username AJAX endpoint., Tests for CreateManagedMemberView when creation is forbidden., Test that non-superuser cannot access create member page when disabled., Test that non-superuser cannot POST create member when disabled., Test checking a username that is not taken. (+17 more)
 
 ### Community 4 - "MembersUITestBase"
 Cohesion: 0.03
 Nodes (43): MembersUITestBase, Base class for Members UI tests with pre-created test members., AuthUITest, Login with valid credentials should succeed and show the navbar., The members list page should redirect to login when not authenticated., The member detail page should redirect to login when not authenticated., The profile edit page should redirect to login when not authenticated., The directory page should redirect to login when not authenticated. (+35 more)
 
-### Community 5 - "Member"
-Cohesion: 0.05
-Nodes (38): AbstractUser, MemberUpdateForm, Member, Meta, date, A tenant admin (role=admin); platform superusers are is_superuser., Role, do_activate_member() (+30 more)
+### Community 5 - "views_member.py"
+Cohesion: 0.08
+Nodes (26): NotifyDeathForm, do_activate_member(), do_notify_death(), get_members_page_queryset(), date, activate the member with username, activate_member(), _can_edit_member() (+18 more)
 
 ### Community 6 - "ClassifiedAdsUITestBase"
 Cohesion: 0.04
@@ -529,9 +488,9 @@ Nodes (45): Ajax modal form pattern (data-action / data-onsuccess contract), Bul
 Cohesion: 0.06
 Nodes (27): PollAnswer, Question, Answers provided by members to Poll questions., Question model for Polls. Question types are Yes/No, Multiple Choice, and Open…, EventPlannerTestMixin, PollTestBase, PollTestMixin, Create an event planner with the given `title` and `description` and published… (+19 more)
 
-### Community 10 - "chat/tests/tests_followers.py"
-Cohesion: 0.17
-Nodes (9): ChatRoomFollowerTests, tag, Tests following a chat room and verifying email notifications to followers., Tests chat room following in the context of one member following another., TestChatWithMemberFollower, AsyncMemberTestCase, TransactionTestCase, Specialized test case for async tests that need to avoid atomic block issues.… (+1 more)
+### Community 10 - "TenantCreationForm"
+Cohesion: 0.09
+Nodes (16): Create a new family (tenant). The slug is derived from the name., TenantCreationForm, multi_tenant_required(), Raise Http404 when the multi-tenant feature flag is off., OnlySuperuserMixin, (De)activate a family. Deactivated families' members are logged out and cannot…, Hard-delete a family. Refuses active and system families; requires typing the…, Allow only platform (cross-tenant) superusers. (+8 more)
 
 ### Community 11 - "OKF Repo Docs Implementation Plan"
 Cohesion: 0.07
@@ -541,33 +500,33 @@ Nodes (50): Six apps not tenant-scoped (forum, polls, classified ads, pages, tro
 Cohesion: 0.12
 Nodes (53): ASGI Channels Websockets, ChatConsumer Websocket Consumer, Classified Ads Contact Relay, Custom User Model Member, Django-Q2 Async Tasks, Docker Compose Topology, Email Batch Frequency, ENVIRONMENT Settings Selection (+45 more)
 
-### Community 13 - "ValueError"
+### Community 13 - "Answer"
 Cohesion: 0.09
-Nodes (24): AnswerFormMixin, ChoiceAnswerForm, DateAnswerForm, EventAnswerForm, Meta, MultiEventAnswerForm, MultipleChoiceAnswerForm, TextAnswerForm (+16 more)
+Nodes (27): AnswerFormMixin, ChoiceAnswerForm, DateAnswerForm, EventAnswerForm, Meta, MultiEventAnswerForm, MultipleChoiceAnswerForm, TextAnswerForm (+19 more)
 
-### Community 14 - "FlatPage"
-Cohesion: 0.09
-Nodes (22): DefaultFlatPageAdmin, FlatPageAdmin, register, create_page(), FlatPage, BasePageTestCase, TestPageMixin, TestAdminMessage (+14 more)
+### Community 14 - "MemberTestCase"
+Cohesion: 0.08
+Nodes (22): Tests the about page displays correctly with all categories., TestAbout, MemberTestCase, TestCase, create_page(), BasePageTestCase, TestPageMixin, TestAdminMessage (+14 more)
 
 ### Community 15 - "core/base.html layout ancestor"
 Cohesion: 0.09
 Nodes (47): members/base_members.html layout ancestor, core/common/include-bulma-calendar.html partial, Captcha refresh endpoint (/captcha/refresh/) and js-captcha-refresh, cm_tags template tag library (title, icon, navbar_item, featured), core/common/confirm-delete-modal.html#delete_button partial, core/base.html layout ancestor, django-crispy-forms rendering (crispy_forms_tags, form|crispy), CSP nonce for inline scripts/styles (csp_nonce) (+39 more)
 
 ### Community 16 - "PlaywrightTestCase"
-Cohesion: 0.08
-Nodes (12): PlaywrightTestCase, tag, Builds an absolute URL from a relative path., Authenticates the user via the allauth login form (login is the EMAIL:…, Asserts that an element is visible (fails cleanly)., Capture useful in case of debug or failure., Capture screenshot on failure if errors were collected., Log in as the superuser created by setUp(). (+4 more)
+Cohesion: 0.06
+Nodes (19): PlaywrightTestCase, tag, Builds an absolute URL from a relative path., Authenticates the user via the allauth login form (login is the EMAIL:…, Asserts that an element is visible (fails cleanly)., Capture useful in case of debug or failure., Capture screenshot on failure if errors were collected., Log in as the superuser created by setUp(). (+11 more)
 
 ### Community 17 - "Gallery"
 Cohesion: 0.08
-Nodes (31): create_test_image(), Gallery, Meta, Photo, Gallery move with no photos (should not error), Photo gallery change to None should fail validation (no move), Photo gallery change moves file, Gallery parent change moves subtree photos (+23 more)
+Nodes (25): GalleryForm, Gallery, Meta, build_gallery_tree(), get_gallery_detail_queryset(), Base queryset for the gallery detail view: owner/parent/cover selected, photo…, Builds the galleries tree for the tree view. Fetches all galleries in a single…, CreateGalleryTest (+17 more)
 
 ### Community 18 - "Poll"
-Cohesion: 0.09
-Nodes (18): EventPlannerUpsertForm, Meta, PollUpsertForm, QuestionUpsertForm, Poll, create_event_planner(), manage_closed_list(), atomic (+10 more)
+Cohesion: 0.11
+Nodes (22): EventPlannerUpsertForm, Meta, PollUpsertForm, QuestionUpsertForm, EventPlanner, Poll, create_event_planner(), get_poll_answer() (+14 more)
 
 ### Community 19 - "RegistrationLinkManager"
-Cohesion: 0.44
-Nodes (3): RegistrationLinkManager, get_fake_request(), MemberRegisterTests
+Cohesion: 0.17
+Nodes (8): RegistrationLinkManager, get_fake_request(), OAuthActivationTests, Test that an inactive member is activated if session has valid token., Test that social login is rejected if no invitation in session., Test that an already active member can log in normally., Test that a non-existent member with a valid invitation is allowed but…, MemberRegisterTests
 
 ### Community 20 - "cm_tags.py"
 Cohesion: 0.07
@@ -579,147 +538,143 @@ Nodes (39): Run Test Rule, Create UI Tests Workflow (agents), Custom User Model 
 
 ### Community 22 - "icon"
 Cohesion: 0.08
-Nodes (9): PrivateChatRoomTestsMixin, Tests creating a private chat room., Tests listing private chat rooms., Tests listing private chat room members., Tests listing private chat room admins., Tests permissions for private chat rooms., TestPrivateMembersAndAdmins, icon() (+1 more)
+Nodes (10): PrivateChatRoomTests, PrivateChatRoomTestsMixin, Tests creating a private chat room., Tests listing private chat rooms., Tests listing private chat room members., Tests listing private chat room admins., Tests permissions for private chat rooms., TestPrivateMembersAndAdmins (+2 more)
 
 ### Community 23 - "galleries/models.py"
-Cohesion: 0.06
-Nodes (26): create_image(), create_thumbnail(), create_video_thumbnail(), Create a Django InMemoryUploadedFile object from a local image file. Args:…, Extracts the first frame from a video file and returns it as a WEBP thumbnail.…, Creates a thumbnail for an image file. If the image is larger than…, FileField, Migration (+18 more)
+Cohesion: 0.07
+Nodes (23): create_thumbnail(), create_video_thumbnail(), Extracts the first frame from a video file and returns it as a WEBP thumbnail.…, Creates a thumbnail for an image file. If the image is larger than…, FileField, Migration, Migration, Migration (+15 more)
 
 ### Community 24 - "get_test_absolute_url"
-Cohesion: 0.19
-Nodes (8): Verifies that the owner or object followers receive an email notification for a…, function to test the followers emails - owner should have received an email to…, Verifies the email notification sent to followers (in BCC) when new content is…, TestFollowersMixin, get_test_absolute_url(), Tests that the follow member view works correctly., Tests that the follow member view works correctly., TestMemberFollower
+Cohesion: 0.15
+Nodes (11): Tests chat room following in the context of one member following another., Verifies that the owner or object followers receive an email notification for a…, function to test the followers emails - owner should have received an email to…, Verifies the email notification sent to followers (in BCC) when new content is…, TestFollowersMixin, get_test_absolute_url(), tag, Tests that the follow member view works correctly. (+3 more)
 
-### Community 25 - "ChatMessageSenderMixin"
-Cohesion: 0.18
-Nodes (8): ChatMessageSenderMixin, Actually sends a message to a chat room., Sends a chat message to a room., Sends an updated chat message to a room., Sends a delete chat message to a room., All tests start with a new room., All tests end with the room being deleted., object
+### Community 25 - "tests_member_base.py"
+Cohesion: 0.07
+Nodes (25): ChatRoomFollowerTests, tag, Tests following a chat room and verifying email notifications to followers., TestChatWithMemberFollower, ChatMessageSenderMixin, Actually sends a message to a chat room., Sends a chat message to a room., Sends an updated chat message to a room. (+17 more)
 
 ### Community 26 - "ChatConsumer"
 Cohesion: 0.08
 Nodes (18): AsyncWebsocketConsumer, ChatConsumer, Handles the disconnection of a websocket for the given room. Upon…, Closes the websocket connection. The connection is closed with the given code…, Shallow Tenant for the connection's scope (None = unscoped superuser)., Resolve a room scoped to the connection's tenant. The async ORM evaluates…, Resolve a message for update/delete, tenant-checked. Returns (message,…, Handles the received message from the WebSocket. The message is a request to… (+10 more)
 
 ### Community 27 - "MemberFactory"
+Cohesion: 0.09
+Nodes (23): ChatMessageFactory, ChatRoomFactory, Meta, DjangoModelFactory, post_generation, PublicRoomDetailUITest, The room name should be editable via HTMX inline form., Tests for the public chat room detail page. (+15 more)
+
+### Community 28 - "get_current_tenant"
 Cohesion: 0.08
-Nodes (25): ChatMessageFactory, ChatRoomFactory, Meta, DjangoModelFactory, post_generation, ChatUITestBase, Base class for Chat UI tests with pre-created test fixtures., PublicRoomDetailUITest (+17 more)
+Nodes (16): BaseUserManager, MemberManager, Member model manager where first_name, last_name are mandatory. Tenant-aware:…, Ensure a tenant is present: explicit > current request > default., Create and save a user with the given username, email, password, first_name and…, Async version of create_member, Create and save a SuperUser with the given email and password. A superuser is a…, QuerySet (+8 more)
 
-### Community 28 - "MemberManager"
-Cohesion: 0.10
-Nodes (12): BaseUserManager, MemberManager, Member model manager where first_name, last_name are mandatory. Tenant-aware:…, Ensure a tenant is present: explicit > current request > default., Create and save a user with the given username, email, password, first_name and…, Async version of create_member, Create and save a SuperUser with the given email and password. A superuser is a…, QuerySet (+4 more)
+### Community 29 - "Paginator"
+Cohesion: 0.08
+Nodes (36): build_room_context(), do_create_chat_room(), get_chat_rooms_queryset(), get_room_messages(), Returns the annotated queryset of chat rooms to list: public rooms, or the…, Replaces each room's ``first_message_author`` (an id) with the matching…, Creates a public or private chat room for ``user``. Returns ``(new_room,…, Ordered queryset of a room's messages, with member and read-by prefetched for… (+28 more)
 
-### Community 29 - "ChatRoom"
-Cohesion: 0.04
-Nodes (66): ChatMessage, ChatRoom, Meta, PrivateChatRoom, Aggregate read status of a message, as seen by its sender. Returns a…, Aggregate :class:`MessageStatus` of this message (sender's view). Returns…, build_room_context(), do_add_admin_to_private_room() (+58 more)
-
-### Community 30 - "views_reply.py"
-Cohesion: 0.22
-Nodes (10): check_followers_on_comment(), check_followers_on_message(), check_followers_on_new_post(), post_url(), sends an email to the followers of the post to which the message is added, sends an email to the followers of the post to which the message is added, sends an email to followers of the post if the comment is a reply to a message…, toggle_follow() (+2 more)
+### Community 30 - "check_edit_permission"
+Cohesion: 0.13
+Nodes (11): check_edit_permission(), check_followers_on_message(), check_followers_on_new_post(), post_url(), sends an email to the followers of the post to which the message is added, sends an email to the followers of the post to which the message is added, toggle_follow(), delete_post() (+3 more)
 
 ### Community 31 - "GenealogyUITestBase"
 Cohesion: 0.07
 Nodes (20): GenealogyUITestBase, Base class for Genealogy UI tests with pre-created test fixtures., GenealogyDashboardUITest, GenealogyStatisticsUITest, The dashboard should display the genealogy title and stats., The dashboard should not produce JavaScript errors., UI tests for the genealogy statistics page., The statistics page should redirect to login when not authenticated. (+12 more)
 
 ### Community 32 - "galleries/services.py"
-Cohesion: 0.13
-Nodes (18): BulkUploadPhotosForm, get_gallery_detail_queryset(), _get_or_create_gallery(), _get_parent_gallery(), handle_zip(), Returns the gallery inside which the gallery denoted by path is to be created.…, Creates a Gallery object based on the path. The path should denote a folder. If…, reads a zip file and creates galleries for each folder and create tasks to… (+10 more)
+Cohesion: 0.12
+Nodes (18): BulkUploadPhotosForm, _get_or_create_gallery(), _get_parent_gallery(), handle_zip(), Returns the gallery inside which the gallery denoted by path is to be created.…, Creates a Gallery object based on the path. The path should denote a folder. If…, reads a zip file and creates galleries for each folder and create tasks to…, create_photo() (+10 more)
 
-### Community 33 - "pages_tags.py"
-Cohesion: 0.17
-Nodes (14): build_pages_tree(), include_page(), link_pages_starting_with(), make_dict(), pages_menu(), pages_tree(), filter, inclusion_tag (+6 more)
+### Community 33 - "TenantIsolationTests"
+Cohesion: 0.08
+Nodes (8): DeleteTenantCommandTests, InactiveTenantTests, _make_member(), TestCase, Tenant-isolation tests for the shared-schema multi-tenant layer. Proves the…, # NOTE: do NOT overwrite m.password after creation — force_login() derives, TenantAdminRoleTests, TenantIsolationTests
 
-### Community 34 - "Answer"
-Cohesion: 0.16
-Nodes (12): get_answerform_class_for_question_type(), Returns the AnswerForm subclass corresponding to the question type., Answer, Abstract answer provided by a member to a question. Must be subclassed., Returns a list of answers that match the given kwargs. Includes all matching…, Returns the Answer class corresponding to the question type., get_poll_answer(), update_event_planner() (+4 more)
+### Community 34 - "ValueError"
+Cohesion: 0.12
+Nodes (9): get_answerform_class_for_question_type(), Returns the AnswerForm subclass corresponding to the question type., QuestionResult, Returns the Answer class corresponding to the question type., This method returns the results of the poll as an array of dictionaries, one…, PollsVoteView, Get question form using cached answers to avoid N+1 queries., Build form classes for given questions (already prefetched). (+1 more)
 
-### Community 35 - "Funktionen"
+### Community 35 - "PrivateChatRoom"
 Cohesion: 0.14
-Nodes (14): Authentifizierung, Chat, Follower und Benachrichtigungen, Forum, Funktionen, Galerien, Genealogie, Kleinanzeigen (+6 more)
+Nodes (26): PrivateChatRoom, do_add_admin_to_private_room(), do_add_member_to_private_room(), do_remove_admin_from_private_room(), do_remove_member_from_private_room(), add_admin_to_private_room(), add_member_to_private_room(), leave_private_room() (+18 more)
 
-### Community 36 - "trace_login.py"
-Cohesion: 0.18
-Nodes (13): MembersConfig, AppConfig, LoginTrace, get_default_geolocation_data(), get_geolocation_data(), post_login(), post_logout(), purge_login_traces() (+5 more)
+### Community 36 - "members/admin.py"
+Cohesion: 0.09
+Nodes (21): AddressAdmin, FamilyAdmin, LoginTraceAdmin, MemberAdmin, display, register, ReadOnlyModelAdmin, MembersConfig (+13 more)
 
-### Community 37 - "OAuth/SSO-Authentifizierung"
-Cohesion: 0.14
-Nodes (14): Auto-Signup-Konfiguration, Einführung, Einladungsverfahren, Fehlerbehebung, Konfiguration, Neustart erforderlich, „No invitation found for this email address“, OAuth-Anbieter aktivieren (+6 more)
+### Community 37 - "MemberUpdateForm"
+Cohesion: 0.15
+Nodes (11): MemberUpdateForm, Test that updating an existing member's birthdate works correctly., Tests for issue #379: birthdate field must be required in member forms., Test that birthdate field is required in MemberUpdateForm., Test that MemberUpdateForm is invalid when birthdate is missing., Test that MemberUpdateForm is valid when birthdate is provided., Test that MemberRegistrationForm is invalid when birthdate is missing., TestBirthdateFieldRequired (+3 more)
 
-### Community 38 - "PublicChatRoomsUITest"
-Cohesion: 0.18
-Nodes (6): PublicChatRoomsUITest, The chat rooms list should display the public rooms for authenticated users., Clicking a room link should navigate to its detail page., Users should be able to create a new public chat room., The chat rooms list should not produce JavaScript errors., The chat rooms page should redirect to login when not authenticated.
+### Community 38 - "ChatUITestBase"
+Cohesion: 0.08
+Nodes (14): ChatUITestBase, Base class for Chat UI tests with pre-created test fixtures., PublicChatRoomsUITest, The chat rooms list should display the public rooms for authenticated users., Clicking a room link should navigate to its detail page., Users should be able to create a new public chat room., The chat rooms list should not produce JavaScript errors., The chat rooms page should redirect to login when not authenticated. (+6 more)
 
 ### Community 39 - "download_public_media"
-Cohesion: 0.39
-Nodes (8): _download_media(), download_protected_media(), download_public_media(), Internal helper function to download a media file. The file is streamed in…, View to download a protected media file. Login required The file must be stored…, View to download a public media file. No login required The file must be stored…, HttpResponseNotModified, StreamingHttpResponse
+Cohesion: 0.31
+Nodes (9): _download_media(), download_protected_media(), download_public_media(), Internal helper function to download a media file. The file is streamed in…, View to download a protected media file. Login required The file must be stored…, View to download a public media file. No login required The file must be stored…, URL configuration for cousinsmatter project. The `urlpatterns` list routes URLs…, HttpResponseNotModified (+1 more)
 
 ### Community 40 - "entrypoint.py"
-Cohesion: 0.06
-Nodes (49): Cursor, Env, Exception, GedcomViewsTest, patch, acquire_lock(), check_db_connection(), check_environment() (+41 more)
+Cohesion: 0.13
+Nodes (27): Env, acquire_lock(), check_db_connection(), check_environment(), exec_docker_cmd(), get_redis(), InitException, initialize_environment() (+19 more)
 
 ### Community 41 - "GedcomExporter"
-Cohesion: 0.18
-Nodes (9): GedcomImportForm, do_import_gedcom(), Import a GEDCOM upload, returning ``(success, message)``. ``gedcom_file`` is…, GedcomExporterTests, TestCase, GedcomExporter, download_gedcom(), export_gedcom() (+1 more)
+Cohesion: 0.15
+Nodes (11): GedcomImportForm, do_import_gedcom(), Import a GEDCOM upload, returning ``(success, message)``. ``gedcom_file`` is…, GedcomExporterTests, GenealogyCacheTests, TestCase, GedcomExporter, register_genealogy_cache() (+3 more)
 
-### Community 42 - "RichTextarea"
-Cohesion: 0.11
-Nodes (11): BulmaCalendar, RichTextarea, DateInput, MemberFormMixin, MemberSocialSignupForm, Initialize the privacy consent field with a link to the privacy policy and…, FieldLinkWrapper, Any (+3 more)
+### Community 42 - "members/forms.py"
+Cohesion: 0.16
+Nodes (11): ContactForm, test the contact form, TestContactForm, BulmaCalendar, RichTextarea, DateInput, check_csv_file_size(), MemberFormMixin (+3 more)
 
-### Community 44 - "members/models.py"
-Cohesion: 0.06
-Nodes (42): LoginNotRequiredMixin, Mixin to exempt a view from the LoginRequiredMiddleware., AddressUpdateForm, FamilyUpdateForm, MemberRegistrationForm, Meta, RegistrationRequestForm, validate_csv_extension() (+34 more)
+### Community 44 - "Family"
+Cohesion: 0.14
+Nodes (15): Family, get_test_family(), TestCase, Tests creating and modifying a family with its members., Tests family creation via modal view., Tests family update via modal view., TestFamily, TestModalFamilyView (+7 more)
 
 ### Community 45 - "Post"
-Cohesion: 0.23
-Nodes (10): MessageInline, Message, Meta, Post, tag, TestMemberFollower, delete_reply(), test_create_comments() (+2 more)
-
-### Community 46 - "FamilySignupTests"
-Cohesion: 0.18
-Nodes (5): AdminEmailRoutingTests, FamilySignupTests, _make_admin(), Mails to "the admin" go to the requester's family admin (2 families)., _skip_if_off()
+Cohesion: 0.24
+Nodes (9): MessageInline, Comment, Message, Meta, Post, delete_comment(), test_create_comments(), test_create_posts() (+1 more)
 
 ### Community 47 - "tenant_context"
-Cohesion: 0.04
-Nodes (37): ChatTenantORMTests, ChatTenantWSTests, _make_member(), TestCase, TransactionTestCase, Tenant-isolation tests for the chat app (TenantModel conversion). A member of…, ORM + HTTP view isolation (no event loop needed)., WebSocket: the consumer must never read/write another tenant's data. (+29 more)
+Cohesion: 0.07
+Nodes (18): ChatTenantORMTests, ChatTenantWSTests, _make_member(), TestCase, TransactionTestCase, Tenant-isolation tests for the chat app (TenantModel conversion). A member of…, ORM + HTTP view isolation (no event loop needed)., WebSocket: the consumer must never read/write another tenant's data. (+10 more)
 
-### Community 48 - "PageForm"
-Cohesion: 0.11
-Nodes (13): OnlyAdminMixin, Allows platform superusers and tenant admins; denies everyone else., FlatpageForm, Meta, PageForm, Tests updating a page with the same url as another page., Tests that we cannot create 2 pages with the same url or a sub url of another…, PageAdminListView (+5 more)
+### Community 48 - "FlatPage"
+Cohesion: 0.06
+Nodes (35): OnlyAdminMixin, Allows platform superusers and tenant admins; denies everyone else., DefaultFlatPageAdmin, FlatpageForm, FlatPageAdmin, register, Meta, PageForm (+27 more)
 
 ### Community 49 - "tenant_setting"
-Cohesion: 0.09
-Nodes (24): MakeDate, FPDF, MemberInvitationForm, DirectoryPDF, generate_directory_pdf(), _get_directory_data(), get_static_path(), do_init_member() (+16 more)
+Cohesion: 0.07
+Nodes (27): clear_flags_cache(), Drop the memoized feature flags (call after editing TenantSettings.overrides)., FPDF, MemberInvitationForm, DirectoryPDF, generate_directory_pdf(), _get_directory_data(), get_static_path() (+19 more)
 
 ### Community 50 - "ForumTestCase"
-Cohesion: 0.07
-Nodes (19): django_q_sync_class(), _DjangoQSwitcher, Decorator for test classes. For each method whose name starts with 'test' it…, # TODO: how to check the edit inside the page which is done in javascript?, # TODO: how to check the removal inside the page which is done with htmx?, Tests that when a follower follows a post and then a member posts a comment on…, TestFollower, ForumTestCase (+11 more)
+Cohesion: 0.06
+Nodes (23): django_q_sync_class(), _DjangoQSwitcher, Decorator for test classes. For each method whose name starts with 'test' it…, # TODO: how to check the edit inside the page which is done in javascript?, # TODO: how to check the removal inside the page which is done with htmx?, Tests that when a follower follows a post and then a member posts a comment on…, TestFollower, ForumTestCase (+15 more)
 
 ### Community 51 - "members/tasks.py"
-Cohesion: 0.16
-Nodes (20): atomic, Member, create_member(), generate_random_string(), get_valid_manager(), handle_managed_by(), handle_no_manager_case(), import_row() (+12 more)
+Cohesion: 0.19
+Nodes (18): atomic, Member, create_member(), generate_random_string(), get_valid_manager(), handle_managed_by(), handle_no_manager_case(), import_row() (+10 more)
 
-### Community 52 - "EventPlanner"
+### Community 52 - "display_views.py"
 Cohesion: 0.11
-Nodes (20): EventPlanner, get_filtered_polls(), AllEventPlannersListView, AllPollsListView, ClosedEventPlannersListView, ClosedPollsListView, EventPlannerDetailView, EventPlannersListView (+12 more)
+Nodes (19): get_filtered_polls(), AllEventPlannersListView, AllPollsListView, ClosedEventPlannersListView, ClosedPollsListView, EventPlannerDetailView, EventPlannersListView, PollDetailView (+11 more)
 
-### Community 53 - "Features"
-Cohesion: 0.14
-Nodes (14): Authentication, Chat, Classified ads, Event planning, Features, Followers & Notifications, Forum, Galleries (+6 more)
+### Community 53 - "tenants/admin.py"
+Cohesion: 0.50
+Nodes (4): register, Django admin registration for tenants. The admin is the platform-admin…, TenantAdmin, TenantSettingsAdmin
 
 ### Community 54 - "Bulma-themed allauth element overrides"
 Cohesion: 0.14
 Nodes (12): Genealogy family graph data model, HTMX live table search, Chart.js statistics dashboards, allauth elements/button.html, allauth elements/button_group.html, allauth elements/fields.html, allauth elements/form.html, allauth elements/h1.html (+4 more)
 
-### Community 55 - "TestMemberDirectory"
-Cohesion: 0.22
-Nodes (6): Tests that the member directory displays correctly with all visible members., Tests that PDF generation for the member directory works correctly., Initializes test data for member directory., TestMemberDirectory, MembersDirectoryView, MembersPrintDirectoryView
+### Community 55 - "views_directory.py"
+Cohesion: 0.19
+Nodes (7): Tests that the member directory displays correctly with all visible members., Tests that PDF generation for the member directory works correctly., Initializes test data for member directory., TestMemberDirectory, MembersDirectoryView, MembersPrintDirectoryView, HttpResponse
 
 ### Community 56 - "check_bundle"
 Cohesion: 0.16
 Nodes (12): check_bundle(), Command, field(), frontmatter(), Any, BaseCommand, Path, Check OKF v0.2 conformance of a documentation bundle (default: docs/). Every… (+4 more)
 
 ### Community 57 - "TestGetLatestReleaseText"
-Cohesion: 0.12
-Nodes (18): patch, Test outdated version warning without extra text for regular user., Tests for get_github_release_version edge cases., Test when GitHub version lookup fails., Helper to get a request object via the test client., Test that a missing tag_name returns None and sets error message., Test that an HTTPError returns None and sets error message., Tests for get_latest_release_text version comparison logic. (+10 more)
+Cohesion: 0.13
+Nodes (17): patch, Test outdated version warning without extra text for regular user., Tests for get_github_release_version edge cases., Test when GitHub version lookup fails., Helper to get a request object via the test client., Test that a missing tag_name returns None and sets error message., Test that an HTTPError returns None and sets error message., Tests for get_latest_release_text version comparison logic. (+9 more)
 
 ### Community 58 - "Address"
-Cohesion: 0.17
-Nodes (12): Address, get_test_address(), Tests that the modal address creation view works correctly., Tests that the modal address update view works correctly., TestModalAddressView, AddressCreateView, AddressDetailView, AddressUpdateView (+4 more)
+Cohesion: 0.16
+Nodes (13): Address, Meta, get_test_address(), Tests that the modal address creation view works correctly., Tests that the modal address update view works correctly., TestModalAddressView, AddressCreateView, AddressDetailView (+5 more)
 
 ### Community 59 - "devDependencies"
 Cohesion: 0.09
@@ -734,20 +689,20 @@ Cohesion: 0.10
 Nodes (11): PrivateRoomDetailUITest, An admin should be able to leave their admin role., Tests for the private chat room detail page and member/admin management., An admin should be able to remove a member from the private room., An admin should be able to remove another admin from the private room., The private room detail should not produce JavaScript errors., The private room detail page should redirect to login when not authenticated., The private room detail should display the room name and chat form. (+3 more)
 
 ### Community 62 - "confirm_delete_modal"
-Cohesion: 0.09
-Nodes (22): check_file_size(), confirm_delete_modal(), check_zip_size(), GalleryForm, Meta, PhotoForm, check_image_size(), Validates the file size; uses MAX_VIDEO_FILE_SIZE for videos, otherwise… (+14 more)
+Cohesion: 0.15
+Nodes (10): confirm_delete_modal(), Meta, PhotoForm, get_next_prev_photo(), Returns the photo neighbouring ``pk`` in its gallery (ordered by id), wrapping…, delete_gallery(), delete_photo(), get_fullscreen_photo() (+2 more)
 
-### Community 63 - "OAuth/SSO Authentication"
-Cohesion: 0.14
-Nodes (14): Auto-Signup Configuration, Configuration, Enable OAuth Providers, Introduction, Invitation Process, "No invitation found for this email address", OAuth/SSO Authentication, Prerequisites (+6 more)
+### Community 63 - "check_after_migration.py"
+Cohesion: 0.20
+Nodes (20): Cursor, Exception, check_after_migration(), check_chat(), check_classified_ads(), check_forums(), check_galleries(), check_members() (+12 more)
 
-### Community 64 - "Funcionalidades"
+### Community 64 - "Features"
 Cohesion: 0.14
-Nodes (14): Anuncios clasificados, Autenticación, Chat, Encuestas, Foro, Funcionalidades, Galerías, Genealogía (+6 more)
+Nodes (14): Authentication, Chat, Classified ads, Event planning, Features, Followers & Notifications, Forum, Galleries (+6 more)
 
 ### Community 65 - "Family"
-Cohesion: 0.19
-Nodes (13): Family, build_statistics_context(), get_families_queryset(), Aggregate genealogy stats for the statistics page: gender distribution, top…, Filtered + ordered family queryset for the family list., GenealogyCacheTests, clear_genealogy_caches(), register_genealogy_cache() (+5 more)
+Cohesion: 0.20
+Nodes (15): FamilyForm, Meta, PersonForm, Family, get_families_queryset(), Filtered + ordered family queryset for the family list., GenealogyFormsTest, clear_genealogy_caches() (+7 more)
 
 ### Community 66 - "RoleAwareUITestBase"
 Cohesion: 0.15
@@ -757,9 +712,9 @@ Nodes (7): MemberEditRolesUITest, NavbarRolesUITest, Editing another member depe
 Cohesion: 0.16
 Nodes (10): Meta, TreasureForm, Meta, Trove, filter, translate_category(), create_treasure(), delete_treasure() (+2 more)
 
-### Community 68 - "MessageForm"
-Cohesion: 0.13
-Nodes (13): MessageForm, Meta, PostForm, PostCreateTestCase, PostEditTestCase, Tests creating a new forum post., Tests the get view for creating a new forum post., Tests the post view for creating a new forum post. (+5 more)
+### Community 68 - "CommentForm"
+Cohesion: 0.18
+Nodes (8): CommentForm, Meta, CommentCreateView, CommentEditView, tag, check_followers_on_comment(), sends an email to followers of the post if the comment is a reply to a message…, ModelForm
 
 ### Community 69 - "Reusable Test Docker Image Workflow"
 Cohesion: 0.14
@@ -770,100 +725,104 @@ Cohesion: 0.18
 Nodes (12): FamilyFactory, generate_genealogy_tree(), Meta, PersonFactory, DjangoModelFactory, post_generation, Generates a rich, connected 10-generation family tree for development and…, GenealogyFamilyDeleteUITest (+4 more)
 
 ### Community 72 - "TokenManager"
-Cohesion: 0.22
-Nodes (5): Verifies the token and returns ``(tenant_id, email)``. ``tenant_id`` is…, creates and verifies tokens based on the user's email. Based on the code from…, Return a token that can be used once., Check that a password reset token is correct for a given text., TokenManager
+Cohesion: 0.10
+Nodes (9): Verifies the token and returns ``(tenant_id, email)``. ``tenant_id`` is…, creates and verifies tokens based on the user's email. Based on the code from…, Validate an ``(email, tenant_id, token)`` triple (e.g. stored in session). Used…, Return a token that can be used once., Check that a password reset token is correct for a given text., The signed string. Tenant-prefixed (``"<id>:<email>"``) when a tenant is bound…, Generates an absolute registration/invitation link for ``email``. When…, TokenManager (+1 more)
 
-### Community 73 - "Autenticación OAuth/SSO"
-Cohesion: 0.14
-Nodes (14): Activar los proveedores OAuth, Autenticación OAuth/SSO, Configuración, Configuración del registro automático, Consideraciones de seguridad, "El proveedor de identidad no ha proporcionado una dirección de correo electrónico", "Esta cuenta aún no está activa", Introducción (+6 more)
+### Community 73 - "ChatRoom"
+Cohesion: 0.08
+Nodes (12): ChatMessage, ChatRoom, Meta, Aggregate read status of a message, as seen by its sender. Returns a…, Aggregate :class:`MessageStatus` of this message (sender's view). Returns…, edit_room(), toggle_follow(), create_test_messages() (+4 more)
 
 ### Community 74 - "Categories"
-Cohesion: 0.17
-Nodes (5): ClassifiedAdForm, Meta, Categories, CreateAdView, get_subcategories()
+Cohesion: 0.16
+Nodes (4): Categories, CreateAdView, get_subcategories(), UpdateAdView
 
 ### Community 75 - "Protected Media Access"
 Cohesion: 0.83
 Nodes (4): Protected Media Access, Treasure Detail Template, Treasure Form Template, Trove Cave (Treasure List) Template
 
-### Community 76 - "check_edit_permission"
-Cohesion: 0.14
-Nodes (11): delete_room(), check_edit_permission(), do_create_post(), get_post_replies_queryset(), get_posts_list_queryset(), Queryset of posts for the list view: each annotated with its message and…, Ordered replies of ``post`` (excluding its first message), with author and…, Creates a post and its first message atomically from two *validated* model… (+3 more)
+### Community 76 - "views_post.py"
+Cohesion: 0.17
+Nodes (12): MessageForm, PostForm, do_create_post(), get_post_replies_queryset(), get_posts_list_queryset(), Queryset of posts for the list view: each annotated with its message and…, Ordered replies of ``post`` (excluding its first message), with author and…, Creates a post and its first message atomically from two *validated* model… (+4 more)
 
 ### Community 77 - "genealogy/services.py"
-Cohesion: 0.25
-Nodes (13): build_family_chart_data(), _format_person_data(), _gender_code(), _get_bounded_family_graph(), _person_brief(), Compact, JSON-serializable summary of a related person, for the hover tooltip., Parents of a person, for the hover tooltip (regardless of chart bounds)., Children of a person (deduplicated by id), for the hover tooltip. (+5 more)
+Cohesion: 0.21
+Nodes (15): build_family_chart_data(), _format_person_data(), _gender_code(), _get_bounded_family_graph(), get_people_queryset(), _person_brief(), Compact, JSON-serializable summary of a related person, for the hover tooltip., Parents of a person, for the hover tooltip (regardless of chart bounds). (+7 more)
 
-### Community 78 - "Fonctionnalités"
-Cohesion: 0.14
-Nodes (14): Abonnés et notifications, Authentification, Chat, Fonctionnalités, Forum, Galeries, Gestion des membres, Généalogie (+6 more)
+### Community 78 - "CreatePhotoViewTests"
+Cohesion: 0.31
+Nodes (4): CreatePhotoViewTests, Create nb_photos photos in this gallery if first page and return them in a list…, Tests displaying several photos., Tests creating a photo through the view.
 
 ### Community 79 - "TenantSettingsTests"
 Cohesion: 0.16
 Nodes (3): Platform-admin lifecycle UI; tenant admins and members are refused., TenantManageTests, TenantSettingsTests
 
 ### Community 80 - "TroveAppUITest"
-Cohesion: 0.11
-Nodes (10): Clicking the delete button should remove the trove cell via HTMX., Clicking a trove link in the list should navigate to the detail page., The trove cave should display all created troves., The category dropdown should filter troves., The 'Add a treasure' button should be visible for logged-in users., UI tests exercising the main troves flows. Covers: * Trove list page with…, The creation form should be accessible and display correctly., The update form should load with existing treasure data. (+2 more)
+Cohesion: 0.09
+Nodes (15): Meta, DjangoModelFactory, TroveFactory, Base class for Troves UI tests using Playwright., TroveUITestBase, Clicking the delete button should remove the trove cell via HTMX., Clicking a trove link in the list should navigate to the detail page., The trove cave should display all created troves. (+7 more)
 
-### Community 81 - "tests_read_receipts.py"
-Cohesion: 0.29
-Nodes (4): MessageStatus, Tests for private-room read receipts (issue #130). Covers: -…, ASGI config for cousinsmatter project. It exposes the ASGI callable as a…, Enum
+### Community 81 - "chat/models.py"
+Cohesion: 0.13
+Nodes (7): ChatRoomManager, MessageStatus, ChatSearchTests, Test that HTMX request returns HTML, Enum, Manager that filters querysets by the current tenant. When no tenant is active…, TenantManager
 
-### Community 82 - "genealogy/tests/tests.py"
-Cohesion: 0.11
-Nodes (9): FamilyForm, Meta, PersonForm, FamilyModelTest, GenealogyFormsTest, GenealogyViewsTest, PersonModelTest, TestCase (+1 more)
+### Community 82 - "GenealogyViewsTest"
+Cohesion: 0.12
+Nodes (4): FamilyModelTest, GenealogyViewsTest, PersonModelTest, TestCase
+
+### Community 83 - "TestMemberImport"
+Cohesion: 0.18
+Nodes (3): test the import in French, test the import in english (create and update), TestMemberImport
 
 ### Community 85 - "classified_ads/views.py"
-Cohesion: 0.18
-Nodes (12): MessageForm, Migration, AdPhoto, get_photo_path(), get_thumbnail_path(), photos will be uploaded to MEDIA_ROOT/classified_ads/<ad_id>/<filename>., do_send_ad_message(), get_next_prev_photo() (+4 more)
+Cohesion: 0.23
+Nodes (10): ClassifiedAdForm, MessageForm, Meta, AdPhoto, do_send_ad_message(), get_next_prev_photo(), Email ``ad``'s owner a ``message_text`` from ``sender``. ``send_mail`` runs…, delete_photo() (+2 more)
 
 ### Community 86 - "classified_ads/tests/tests.py"
-Cohesion: 0.18
-Nodes (11): AdPhotoForm, ClassifiedAdUpdateTestCase, create_test_image(), DeleteAdTestCase, DetailAdTestCase, Tests adding photos to a classified ad., Tests deleting a classified ad., Creates a dummy image file with minimal binary content and random ending (+3 more)
+Cohesion: 0.20
+Nodes (10): AdPhotoForm, ClassifiedAdUpdateTestCase, create_test_image(), DeleteAdTestCase, DetailAdTestCase, Tests adding photos to a classified ad., Tests deleting a classified ad., Creates a dummy image file with minimal binary content and random ending (+2 more)
 
 ### Community 87 - "ClassifiedAd"
 Cohesion: 0.13
 Nodes (5): ClassifiedAd, Meta, AdDetailView, DeleteAdView, ListAdsView
 
-### Community 88 - "followers.py"
-Cohesion: 0.16
-Nodes (12): toggle_follow(), do_check_followers(), generate_emails(), Toggles the follow status of a user for a given object and sends notifications.…, see check_followers. Really implement the check, toggle_follow(), Meta, NotificationEvent (+4 more)
+### Community 88 - "NotificationEvent"
+Cohesion: 0.21
+Nodes (9): do_check_followers(), generate_emails(), see check_followers. Really implement the check, Meta, NotificationEvent, process_batched_notifications(), Processes batched notifications for a given frequency., NotificationBatchesTest (+1 more)
 
 ### Community 89 - "patch"
 Cohesion: 0.16
 Nodes (10): HealthCheckTestCase, patch, TestCase, QHealthCheckTestCase, Test qhealth view returns 200 status when everything is OK., Test qhealth view returns 503 status when task fails or returns error., Test that download_protected_media raises 404 on general exception., Test health view returns 200 status when everything is OK. (+2 more)
 
 ### Community 90 - "Tenant"
-Cohesion: 0.04
-Nodes (56): clear_flags_cache(), Drop the memoized feature flags (call after editing TenantSettings.overrides)., register, Django admin registration for tenants. The admin is the platform-admin…, TenantAdmin, TenantSettingsAdmin, Forms for the multi-tenant product feature (family signup & management)., Build a free tenant slug from ``name``: ``slugify(name)[:63]`` then -2, -3…… (+48 more)
+Cohesion: 0.07
+Nodes (28): Tenant-isolation tests for the galleries vertical slice (TenantModel). Proves…, UI tests exercising the three role levels on the same pages: * the **platform…, Forms for the multi-tenant product feature (family signup & management)., Build a free tenant slug from ``name``: ``slugify(name)[:63]`` then -2, -3……, uniquify_tenant_slug(), Hard-delete a tenant and all of its data (compliance / cleanup). Thin wrapper…, Meta, Tenant models for the shared-schema multi-tenant architecture. A ``Tenant``… (+20 more)
 
 ### Community 91 - "GedcomParser"
 Cohesion: 0.20
 Nodes (3): GedcomParserTests, GedcomParser, Check if the GEDCOM file is UTF-8. If not, transcode it to a temporary UTF-8…
 
 ### Community 92 - "polls/tests/factories.py"
-Cohesion: 0.16
-Nodes (16): lazy_attribute, Compute the result for a list of YesNoAnswers as a percentage of positive…, Compute the result for a list of TextAnswers., TextAnswer, YesNoAnswer, ChoiceAnswerFactory, DateTimeAnswerFactory, Meta (+8 more)
+Cohesion: 0.20
+Nodes (14): lazy_attribute, Compute the result for a list of TextAnswers., TextAnswer, ChoiceAnswerFactory, DateTimeAnswerFactory, Meta, MultiChoiceAnswerFactory, PollAnswerFactory (+6 more)
 
-### Community 93 - "Authentification OAuth/SSO"
-Cohesion: 0.14
-Nodes (14): Activer les fournisseurs OAuth, « Aucune invitation trouvée pour cette adresse e-mail », Authentification OAuth/SSO, « Ce compte n'est pas encore actif », Conditions préalables, Configuration, Configuration de l’inscription automatique, Considérations de sécurité (+6 more)
+### Community 93 - "RegistrationRequestForm"
+Cohesion: 0.27
+Nodes (6): RegistrationRequestForm, MemberRegisterConsentTests, MemberRegisterRequestTests, TestCase, Allows a user to request a registration link., RegistrationRequestView
 
-### Community 94 - "Funzionalità"
-Cohesion: 0.14
-Nodes (14): Annunci, Autenticazione, Chat, Follower e notifiche, Forum, Funzionalità, Gallerie, Genealogia (+6 more)
+### Community 94 - "tenants/middleware.py"
+Cohesion: 0.20
+Nodes (12): Tenant-resolution middleware (auth-based identification)., Resolve the request's tenant and activate it for the current thread.…, TenantMiddleware, PostgreSQL row-level security wiring (defense-in-depth backstop). The ORM…, Whether the runtime RLS session wiring should run., Set the session tenant for RLS policies (no-op when RLS is off)., Escape hatch for platform superusers (no-op when RLS is off)., Clear the RLS session variables (pooled connections must not leak them). (+4 more)
 
 ### Community 95 - "GalleryFactory"
 Cohesion: 0.24
 Nodes (8): GalleryFactory, Meta, PhotoFactory, DjangoModelFactory, post_generation, GalleryDeleteUITest, UI tests for gallery deletion., The gallery should be deletable via the confirm-delete modal.
 
-### Community 96 - "Autenticazione OAuth/SSO"
+### Community 96 - "OAuth/SSO Authentication"
 Cohesion: 0.14
-Nodes (14): Attivare i provider OAuth, Autenticazione OAuth/SSO, Configurazione, Configurazione dell'iscrizione automatica, Considerazioni sulla sicurezza, Introduzione, "No invitation found for this email address", Prerequisiti (+6 more)
+Nodes (14): Auto-Signup Configuration, Configuration, Enable OAuth Providers, Introduction, Invitation Process, "No invitation found for this email address", OAuth/SSO Authentication, Prerequisites (+6 more)
 
 ### Community 97 - "views_import_export.py"
-Cohesion: 0.16
-Nodes (14): assert_request_is_ajax(), is_ajax(), JsonResponse, CSVImportMembersForm, check_fields(), do_export_members_to_csv(), do_import_members_from_csv(), get_import_progress() (+6 more)
+Cohesion: 0.14
+Nodes (16): assert_request_is_ajax(), is_ajax(), JsonResponse, CSVImportMembersForm, check_fields(), do_export_members_to_csv(), do_import_members_from_csv(), get_import_progress() (+8 more)
 
 ### Community 98 - "Member Detail Template"
 Cohesion: 0.16
@@ -877,81 +836,81 @@ Nodes (6): Tests that the birthday today view works correctly., Tests that the b
 Cohesion: 0.17
 Nodes (6): MemberInviteTests, Tests inviting a member when staff., Tests inviting a member by another member when allowed., Tests inviting a member by superuser., Executes test inviting a member., Tests inviting a member when not staff.
 
-### Community 101 - "classified_ads/admin.py"
-Cohesion: 0.50
-Nodes (4): AdPhotoAdmin, AdPhotoInline, ClassifiedAdAdmin, register
+### Community 101 - "classified_ads/models.py"
+Cohesion: 0.16
+Nodes (10): AdPhotoAdmin, AdPhotoInline, ClassifiedAdAdmin, register, CategoryInfo, Migration, get_photo_path(), get_thumbnail_path() (+2 more)
 
 ### Community 102 - "ClassifiedAdBaseTestCase"
 Cohesion: 0.14
 Nodes (8): ClassifiedAdBaseTestCase, ClassifiedAdCreateTestCase, ListAdTestCase, Tests updating a classified ad., Tests listing classified ads., Test that when a user sends a message to another user (the owner of an ad), the…, Tests creating a classified ad., SendMessageTestCase
 
 ### Community 103 - "CommentUITest"
-Cohesion: 0.13
+Cohesion: 0.14
 Nodes (8): CommentUITest, The add comment link should be visible on the post detail page., Clicking the add comment link should load the comment form via HTMX., Submitting the comment form should add a new comment via HTMX., The post detail should show the pre-existing comment content., Editing the pre-existing comment (self.comment) via HTMX., UI tests for comment creation, editing and deletion via HTMX., Deleting the pre-existing comment (self.comment) via HTMX.
 
-### Community 104 - "CSVExportViewTests"
-Cohesion: 0.21
-Nodes (6): CSVExportViewTests, test the import in French, returns True if row is filtered according to filter, Utility function to check the equivalence of two CSVs in the context of this…, test the import in english (create and update), TestImportMixin
+### Community 104 - "tests_import_export.py"
+Cohesion: 0.27
+Nodes (5): CSVExportViewTests, get_test_file(), returns True if row is filtered according to filter, Utility function to check the equivalence of two CSVs in the context of this…, TestImportMixin
 
 ### Community 105 - "PollsListUITest"
 Cohesion: 0.14
 Nodes (8): PollsListUITest, The polls list should display all published polls for authenticated users., The polls list should show a 'Create poll' button for authenticated users., The Open/All/Closed tabs should be visible and clickable., Each poll should have a Vote button., The polls list page should not have JS errors., UI tests for the polls list page., The polls list page should redirect to login when not authenticated.
 
-### Community 106 - "Funcionalidades"
-Cohesion: 0.14
-Nodes (14): Anúncios classificados, Autenticação, Conversa (chat), Funcionalidades, Fórum, Galerias, Genealogia, Gestão dos membros (+6 more)
+### Community 106 - "Files and Folders Scope Group (view/manage files and folders)"
+Cohesion: 0.23
+Nodes (14): account_info.read (checked, disabled) - view username, email, country, Account Info Scope Group (view/manage Dropbox account info), account_info.write (unchecked) - view and edit basic account info such as profile photo, Dropbox App Console (App Console permissions UI), Files and Folders Scope Group (view/manage files and folders), files.content.read (checked) - view content of Dropbox files and folders, files.content.write (checked) - edit content of Dropbox files and folders, files.metadata.read (checked, disabled) - view file/folder information (+6 more)
 
 ### Community 107 - "ClassifiedAdFullscreenViewTests"
 Cohesion: 0.15
 Nodes (6): ClassifiedAdFullscreenViewTests, Tests getting a photo in fullscreen with no side parameter., Tests getting the next photo in fullscreen., Tests getting the previous photo in fullscreen., Tests getting the next photo from the last one (should stay on last)., Tests getting the previous photo from the first one (should stay on first).
 
-### Community 108 - "Autenticação OAuth/SSO"
+### Community 108 - "Fonctionnalités"
 Cohesion: 0.14
-Nodes (14): Ativar os fornecedores OAuth, Autenticação OAuth/SSO, Configuração, Configuração do registo automático, Considerações de segurança, Consulte também, «Esta conta ainda não está ativa», Introdução (+6 more)
+Nodes (14): Abonnés et notifications, Authentification, Chat, Fonctionnalités, Forum, Galeries, Gestion des membres, Généalogie (+6 more)
 
 ### Community 109 - "AboutUITest"
-Cohesion: 0.17
+Cohesion: 0.15
 Nodes (7): AboutUITest, About page should redirect to login when not authenticated., About page should show statistics sections for authenticated users., Clicking a tab should show the corresponding category panel., Each panel should contain stat blocks with key/value pairs., About page should not have JS errors., UI tests for the about / site statistics page.
 
-### Community 110 - "HomeUITest"
+### Community 110 - "test_utils_coverage.py"
+Cohesion: 0.12
+Nodes (15): Tests for storage_rmtree and helper functions., Test that empty prefix aborts without error., Test that slash-only prefix aborts without error., Test _fs_rmtree with FileSystemStorage., Test _fs_rmtree with non-existent directory still returns True., Test _fs_rmtree returns False for non-FileSystemStorage., Test _rm_emty_folders processes folder stack., Test _recursive_rmtree with mock storage. (+7 more)
+
+### Community 111 - "Authentification OAuth/SSO"
+Cohesion: 0.14
+Nodes (14): Activer les fournisseurs OAuth, « Aucune invitation trouvée pour cette adresse e-mail », Authentification OAuth/SSO, « Ce compte n'est pas encore actif », Conditions préalables, Configuration, Configuration de l’inscription automatique, Considérations de sécurité (+6 more)
+
+### Community 112 - "TestCase"
+Cohesion: 0.20
+Nodes (8): TestCase, Tests for temporary_log_level context manager., Test that level is changed inside context and restored after., Tests for parse_locale_date error path., Test that an invalid date string raises ValidationError., TestParseLocaleDate, TestTemporaryLogLevel, temporary_log_level()
+
+### Community 113 - "galleries/forms.py"
+Cohesion: 0.14
+Nodes (15): check_file_size(), is_video_file(), Returns True if the given filename/path has a recognized video extension., check_zip_size(), check_image_size(), Validates the file size; uses MAX_VIDEO_FILE_SIZE for videos, otherwise…, Returns True if this photo entry holds a video file., complete_photos_data() (+7 more)
+
+### Community 114 - "CommentCreateTestCase"
+Cohesion: 0.17
+Nodes (6): CommentCreateTestCase, tag, Tests adding a comment to a forum message., Tests deleting a comment from a forum message., Tests the GET request for adding a comment returns a form., Tests the GET request for editing a comment returns a form.
+
+### Community 115 - "PostReplyTestCase"
 Cohesion: 0.15
-Nodes (7): HomeUITest, Home page should be accessible to unauthenticated visitors., Home page should load htmx and essential scripts., Footer should contain contact and about links., Home page should load correctly for authenticated users., Home page should not trigger JS errors when navigating., UI tests for the home page.
-
-### Community 111 - "members/admin.py"
-Cohesion: 0.21
-Nodes (8): AddressAdmin, FamilyAdmin, LoginTraceAdmin, MemberAdmin, display, register, ReadOnlyModelAdmin, UserAdmin
-
-### Community 112 - "Medienspeicher"
-Cohesion: 0.15
-Nodes (12): Andere Medienspeicher, Andere S3-kompatible Speicher, Cloudflare R2, Dropbox, Erstellen der Konfiguration, Installation des benötigten Python-Pakets, Medienspeicher, Migration vom Medienverzeichnis zu einem externen Speicher (+4 more)
-
-### Community 113 - "protected_media_url"
-Cohesion: 0.10
-Nodes (18): Tests for protected_media_url edge cases., Test media path that starts with MEDIA_ROOT., Test media path that starts with BASE_DIR/MEDIA_REL., TestProtectedMediaUrl, is_video_file(), protected_media_url(), Returns True if the given filename/path has a recognized video extension., Returns True if this photo entry holds a video file. (+10 more)
-
-### Community 114 - "Comment"
-Cohesion: 0.11
-Nodes (12): CommentForm, Comment, CommentCreateTestCase, tag, Tests adding a comment to a forum message., Tests deleting a comment from a forum message., Tests the GET request for adding a comment returns a form., Tests the GET request for editing a comment returns a form. (+4 more)
-
-### Community 115 - "Einstellungen"
-Cohesion: 0.15
-Nodes (13): Anderer Medienspeicher, Datenbank, E-Mail-Eigenschaften, Einführung, Einstellungen, HINWEISE, Internationalisierung, Log-Level (+5 more)
+Nodes (7): PostReplyTestCase, Tests replying to a forum post., Tests editing a reply to a forum post., Tests deleting a reply to a forum post., Tests adding an empty reply returns an error with a client refresh., Tests the GET request for editing a reply returns a form., Tests that deleting the first message of a thread raises a ValidationError.
 
 ### Community 116 - "core/utils.py"
-Cohesion: 0.04
-Nodes (54): ProtectedMediaTestCase, test authenticated user can access protected media. This runs as a…, test non-authenticated user cannot access protected media. This runs as a…, TestMediaResourceMixin, TestCase, TestSiteLogo, TestCase, Tests for storage_rmtree and helper functions. (+46 more)
+Cohesion: 0.10
+Nodes (21): ProtectedMediaTestCase, test authenticated user can access protected media. This runs as a…, test non-authenticated user cannot access protected media. This runs as a…, TestMediaResourceMixin, TestCase, TestSiteLogo, create_image(), create_test_image() (+13 more)
 
 ### Community 117 - "TestSelectViews"
-Cohesion: 0.17
-Nodes (4): get_test_file(), patch, Tests for the AJAX select views and export selection view., TestSelectViews
+Cohesion: 0.18
+Nodes (3): patch, Tests for the AJAX select views and export selection view., TestSelectViews
 
 ### Community 119 - "PollDetailUITest"
 Cohesion: 0.17
 Nodes (7): PollDetailUITest, The detail page should show Update button for the poll owner., The poll detail page should not have JS errors., UI tests for the poll detail page., The poll detail page should display poll information., The detail page should have a back button linking to polls list., The detail page should have a Vote button.
 
-### Community 120 - "Media Storage"
-Cohesion: 0.15
-Nodes (12): Cloudflare R2, Create the setup, Default media storage, Dropbox, Install needed Python package, Media Storage, Migration from the media directory to an external storage, Non tested storages (+4 more)
+### Community 120 - "Dropbox App Console"
+Cohesion: 0.21
+Nodes (12): App Key and App Secret Credentials (key redacted), Chooser / Saver / Embedder Domains Setting, Credential Confidentiality (secrets must not be exposed), Development Status (Development users: Only you), Dropbox App Console, CousinsMatter Dropbox App (App Folder: CousinsMatter), Generated Access Token Control, Media Storage with Dropbox Manual Section (+4 more)
 
 ### Community 121 - "ChatRoomTests"
 Cohesion: 0.20
@@ -962,8 +921,8 @@ Cohesion: 0.24
 Nodes (8): CousinsMatterConfig, AppConfig, Signal handler to setup notification schedules after migration., setup_notification_schedules_handler(), Sets up a single schedule., Initializes summary email notification schedules if not already present., setup_notification_schedules(), _setup_schedule()
 
 ### Community 124 - "GeneralViewsTestCase"
-Cohesion: 0.18
-Nodes (6): GeneralViewsTestCase, Test that HomeView returns 200 and uses the correct template., Test that PasswordResetView uses the custom form., Test that PasswordResetForm.save is called and works., Test that download_protected_media raises 404 if file not found., Test that download_protected_media returns 304 if ETag matches.
+Cohesion: 0.15
+Nodes (7): PasswordResetForm, GeneralViewsTestCase, Test that HomeView returns 200 and uses the correct template., Test that PasswordResetView uses the custom form., Test that PasswordResetForm.save is called and works., Test that download_protected_media raises 404 if file not found., Test that download_protected_media returns 304 if ETag matches.
 
 ### Community 125 - "settings"
 Cohesion: 0.21
@@ -978,20 +937,20 @@ Cohesion: 0.20
 Nodes (6): ChannelsRedisConfigTests, SimpleTestCase, Non-regression tests for the CHANNEL_LAYERS / channels-redis configuration.…, hosts entries must be dicts, not plain (host, port) tuples — otherwise all…, socket_timeout MUST be explicitly None. A missing key falls back to redis-py's…, health_check_interval must be > 0: with socket_timeout=None, this is the only…
 
 ### Community 128 - "ContactUITest"
-Cohesion: 0.18
+Cohesion: 0.20
 Nodes (6): ContactUITest, Contact page should redirect to login when not authenticated., Contact form should display all expected fields for authenticated users., Cancel button should navigate away or reset the form., Contact page should not have JS errors., UI tests for the contact form page.
 
 ### Community 129 - "CommentAdmin"
 Cohesion: 0.32
 Nodes (5): CommentAdmin, MessageAdmin, PostAdmin, display, register
 
-### Community 130 - "Settings"
-Cohesion: 0.15
-Nodes (13): Database, Email properties, Features Management, Internationalization, Introduction, Log levels, Network setup, NOTES (+5 more)
+### Community 130 - "remove_accents"
+Cohesion: 0.50
+Nodes (4): remove accents from a string, including diacritical marks, remove_accents(), init_unaccent_fields(), Migration
 
-### Community 131 - "DeletePhotoViewTest"
-Cohesion: 0.14
-Nodes (7): DeletePhotoViewTest, Tests deleting a photo with no owner (should fail)., Tests deleting a photo as the photo owner., Tests deleting a photo as the gallery owner., Tests deleting a photo without proper permissions., Tests deleting a photo that doesn't exist., Tests deleting a photo as a superuser.
+### Community 131 - "tests_photo.py"
+Cohesion: 0.06
+Nodes (20): DeletePhotoViewTest, PhotoEditViewTest, PhotoFullscreenViewTests, PhotoTestsBase, Tests deleting a photo with no owner (should fail)., Tests deleting a photo as the photo owner., Tests deleting a photo as the gallery owner., Tests deleting a photo without proper permissions. (+12 more)
 
 ### Community 132 - "GalleryDetailUITest"
 Cohesion: 0.20
@@ -1013,9 +972,13 @@ Nodes (6): GenealogyPersonDetailUITest, The person detail should show links to f
 Cohesion: 0.20
 Nodes (6): GenealogyPersonListUITest, The person list page should redirect to login when not authenticated., The person list should display people in a table., The search input should filter people via HTMX., The person list should not produce JavaScript errors., UI tests for the person list page.
 
-### Community 137 - "Almacenamiento de los medios"
-Cohesion: 0.15
-Nodes (12): ADVERTENCIA ⚠️ ACTUALMENTE SOLO S3 ESTÁ SOPORTADO, DROPBOX NO FUNCIONA (probablemente debido a un problema con django-storages), ADVERTENCIAS, Almacenamiento de los medios, Almacenamiento de medios por defecto, Almacenamientos no probados, Cloudflare R2, Crear la configuración, Dropbox (+4 more)
+### Community 137 - "tests_forms.py"
+Cohesion: 0.19
+Nodes (9): validate_csv_extension(), TestCase, Tests for the validate_csv_extension function., Test that .csv files pass validation., Test that non-.csv files raise ValidationError., Tests for FamilyUpdateForm.clean_name validation., Test that whitespace-only family name raises ValidationError., TestFamilyUpdateFormCleanName (+1 more)
+
+### Community 138 - "MemberTestCaseMixin"
+Cohesion: 0.14
+Nodes (4): MemberTestCaseMixin, MemberDeleteTest, TestCase, UsersManagersTests
 
 ### Community 139 - "ignore_captcha_errors"
 Cohesion: 0.22
@@ -1025,13 +988,13 @@ Nodes (3): ignore_captcha_errors, RequestRegistrationLinkTests, TestContextDecor
 Cohesion: 0.31
 Nodes (8): createCustomFlatPage(), createNonPredefinedCustomFlatPages(), createPredefinedCustomFlatPages(), createSitesRelationship(), migrateOrCreateCustomFlatPages(), Migration, For each base FlatPage, if the corresponding custom FlatPage doesn't exist,…, Creates and saves a custom FlatPage instance using the provided base FlatPage…
 
-### Community 141 - "Ajustes"
+### Community 141 - "Media Storage"
 Cohesion: 0.15
-Nodes (13): Ajustes, Autenticación OAuth/SSO, Base de datos, Configuración de red, Gestión de las funcionalidades, Internacionalización, Introducción, Niveles de log (+5 more)
+Nodes (12): Cloudflare R2, Create the setup, Default media storage, Dropbox, Install needed Python package, Media Storage, Migration from the media directory to an external storage, Non tested storages (+4 more)
 
-### Community 142 - "Stockage des médias"
-Cohesion: 0.15
-Nodes (12): Autres stockages compatibles S3, Autres stockages multimédias, AVERTISSEMENT ⚠️ ACTUELLEMENT, SEUL S3 EST PRIS EN CHARGE ; DROPBOX NE FONCTIONNE PAS (probablement en raison d'un problème avec django-storages), AVERTISSEMENTS, Cloudflare R2, Créer la configuration, Dropbox, Installer le module Python nécessaire (+4 more)
+### Community 142 - "Request Invitation form"
+Cohesion: 0.27
+Nodes (10): Request Invitation screenshot (request-invite.webp), Dark bar cut off at bottom (footer or submit-button area), Captcha with click-to-refresh image challenge, Cousins Matter Demo site (page branding in title), 'Email where you will receive the link' required input, Invitation link delivered by email, Request Invitation form, 'Message to the administrator' required textarea (+2 more)
 
 ### Community 143 - "core.js"
 Cohesion: 0.31
@@ -1041,9 +1004,9 @@ Nodes (4): add_error_message(), add_info_message(), add_message(), add_success_m
 Cohesion: 0.31
 Nodes (4): add_error_message(), add_info_message(), add_message(), add_success_message()
 
-### Community 145 - "Paramètres"
+### Community 145 - "Settings"
 Cohesion: 0.15
-Nodes (13): Authentification OAuth/SSO, Autres stockages multimédias, Base de données, Configuration réseau, Gestion des fonctionnalités, Internationalisation, Introduction, Niveaux de journalisation (+5 more)
+Nodes (13): Database, Email properties, Features Management, Internationalization, Introduction, Log levels, Network setup, NOTES (+5 more)
 
 ### Community 146 - "Bulk photo upload form (htmx)"
 Cohesion: 0.25
@@ -1053,45 +1016,41 @@ Nodes (9): Bulk photo upload form (htmx), Galleries list panel, Recursive galler
 Cohesion: 0.14
 Nodes (4): Resolve which person to center the family chart on: the explicitly requested…, resolve_main_person_id(), FamilyChartViewsTest, family_chart_data()
 
-### Community 148 - "Archiviazione dei media"
-Cohesion: 0.15
-Nodes (12): Altre archiviazioni compatibili S3, Altri sistemi di archiviazione dei media, Archiviazione dei media, Archiviazione dei media predefinita, Archiviazioni non testate, AVVERTENZA ⚠️ AL MOMENTO È SUPPORTATO SOLO S3, DROPBOX NON FUNZIONA (probabilmente a causa di un problema di django-storages), AVVERTENZE, Cloudflare R2 (+4 more)
-
 ### Community 149 - "tests_member.py"
-Cohesion: 0.21
-Nodes (5): ManagedMemberChangeTests, MemberCreateTest, MemberDeleteTestByView, MemberViewTestMixin, creates and returns a new member through the UI using provided member data.…
+Cohesion: 0.07
+Nodes (18): get_counter(), get_new_member_data(), modify_member_data(), creates and returns a new member using provided member data. If the member data…, called once by the test framework before running the tests, Returns a brand new member data (new username)., returns a modified member dataset (same username and last_name, don't change…, today_minus() (+10 more)
 
-### Community 150 - "Impostazioni"
-Cohesion: 0.15
-Nodes (13): Altre archiviazioni dei media, Autenticazione OAuth/SSO, Configurazione di rete, Database, Gestione delle funzionalità, Impostazioni, Internazionalizzazione, Introduzione (+5 more)
+### Community 150 - "TestGalleryMoves"
+Cohesion: 0.18
+Nodes (5): Gallery move with no photos (should not error), Photo gallery change to None should fail validation (no move), Photo gallery change moves file, Gallery parent change moves subtree photos, TestGalleryMoves
 
 ### Community 151 - "test_utils.sh"
 Cohesion: 0.31
 Nodes (7): docker_run_cousins_matter(), error(), get_args(), get_github_branch_or_release(), set_variables(), test_utils.sh script, usage()
 
-### Community 152 - "Armazenamento dos média"
+### Community 152 - "Stockage des médias"
 Cohesion: 0.15
-Nodes (12): Armazenamento dos média, Armazenamento dos média predefinido, Armazenamentos não testados, AVISO ⚠️ ATUALMENTE APENAS O S3 É SUPORTADO, O DROPBOX NÃO FUNCIONA (provavelmente devido a um problema do django-storages), AVISOS, Cloudflare R2, Criar a configuração, Dropbox (+4 more)
+Nodes (12): Autres stockages compatibles S3, Autres stockages multimédias, AVERTISSEMENT ⚠️ ACTUELLEMENT, SEUL S3 EST PRIS EN CHARGE ; DROPBOX NE FONCTIONNE PAS (probablement en raison d'un problème avec django-storages), AVERTISSEMENTS, Cloudflare R2, Créer la configuration, Dropbox, Installer le module Python nécessaire (+4 more)
 
 ### Community 153 - "chat/admin.py"
 Cohesion: 0.36
 Nodes (5): ChatMessageAdmin, ChatRoomAdmin, PrivateChatRoomAdmin, display, register
 
-### Community 154 - "Configurações"
+### Community 154 - "Paramètres"
 Cohesion: 0.15
-Nodes (13): Autenticação OAuth/SSO, Base de dados, Configuração de rede, Configurações, Gestão das funcionalidades, Internacionalização, Introdução, NOTAS (+5 more)
+Nodes (13): Authentification OAuth/SSO, Autres stockages multimédias, Base de données, Configuration réseau, Gestion des fonctionnalités, Internationalisation, Introduction, Niveaux de journalisation (+5 more)
 
 ### Community 155 - "HtmlValidatorMiddleware"
 Cohesion: 0.32
 Nodes (3): HtmlValidatorMiddleware, # TODO: distribute on PyPi as a standalone django middleware, Return the given content with html escaped and line numbers in the left margin.
 
 ### Community 156 - "ForumUITestBase"
-Cohesion: 0.09
-Nodes (16): ForumUITestBase, Base class for Forum UI tests with pre-created test fixtures., PostCreateUITest, PostDeleteUITest, PostEditUITest, UI tests for post editing form., The edit post form should display pre-filled with post data., Submitting the edit form should update the post and redirect. (+8 more)
+Cohesion: 0.23
+Nodes (6): ForumUITestBase, Base class for Forum UI tests with pre-created test fixtures., PostEditUITest, UI tests for post editing form., The edit post form should display pre-filled with post data., Submitting the edit form should update the post and redirect.
 
-### Community 157 - "fr/installation.md"
-Cohesion: 0.20
-Nodes (7): Compiler à partir du code source, Démarrer Cousins Matter, Exécuter en dehors de Docker, Installation de Cousins Matter, Installation en production, Prérequis, Télécharger et exécuter le script d’administration de Cousins Matter
+### Community 157 - "Member"
+Cohesion: 0.09
+Nodes (14): AbstractUser, MakeDate, Member, date, Role, do_init_member(), do_toggle_follow(), get_birthdays() (+6 more)
 
 ### Community 158 - "GalleryCreateUITest"
 Cohesion: 0.25
@@ -1129,25 +1088,25 @@ Nodes (5): GenealogyPersonCreateUITest, UI tests for the person creation form., 
 Cohesion: 0.17
 Nodes (7): PostDisplayUITest, UI tests for post detail/display page., The post detail page should show the post title and content area., The post detail page should show author info., The post detail page should have a reply form., The post detail page should show replies., The post detail page should not produce JavaScript errors.
 
-### Community 167 - "it/installation.md"
-Cohesion: 0.20
-Nodes (7): Avviare Cousins Matter, Compilare dai sorgenti, Eseguirlo fuori da Docker, Installazione di Cousins Matter, Installazione in produzione, Prerequisiti, Scaricare ed eseguire lo script di amministrazione di Cousins Matter
+### Community 167 - "MemberRegistrationForm"
+Cohesion: 0.32
+Nodes (7): AddressUpdateForm, FamilyUpdateForm, MemberRegistrationForm, Meta, Test that birthdate field is required in MemberRegistrationForm., RegistrationCheckingView, UserCreationForm
 
 ### Community 169 - "RlsCatalogTests"
 Cohesion: 0.25
 Nodes (5): skipUnlessDBFeature, TestCase, RLS policy tests (catalog assertions + behavior with the runtime role). The…, The three tenant-scoped tables have RLS enabled (never forced) + policies., RlsCatalogTests
 
-### Community 170 - "get_current_tenant"
-Cohesion: 0.07
-Nodes (22): ChatRoomManager, build_site_stats(), do_send_contact_email(), Builds and sends the contact-form email from ``sender`` to ``recipient`` (the…, Builds the site-stats context for ``core/about/site-stats.html``: object counts…, ContactView, admin_or_superusers(), is_platform_admin() (+14 more)
+### Community 170 - "core/services.py"
+Cohesion: 0.14
+Nodes (14): build_site_stats(), do_send_contact_email(), Builds and sends the contact-form email from ``sender`` to ``recipient`` (the…, Builds the site-stats context for ``core/about/site-stats.html``: object counts…, ContactView, admin_or_superusers(), is_platform_admin(), is_tenant_admin() (+6 more)
 
-### Community 171 - "tests_public.py"
+### Community 171 - "Members List Page"
+Cohesion: 0.43
+Nodes (8): Members List Screenshot (user-manual asset), Cousins Matter Demo Site, Member Cards with Avatar Photos, Filter Members (first name / last name search), Members List Page, Pagination and Items-per-page (25) Controls, Sort By Control (Last name, ascending/descending), Toolbar Icons (birthdays, list view, add member, card view)
+
+### Community 173 - "fr/installation.md"
 Cohesion: 0.20
-Nodes (7): ChatMessageTests, tag, Tests the chat consumer., Tests that the date is not displayed when 2 messages are sent on the same date., Tests that the full name is displayed when a different user sends a message., async_django_q_sync_class(), Decorator for test classes. For each method whose name starts with 'test' it…
-
-### Community 173 - "PrivateChatRoomsUITest"
-Cohesion: 0.18
-Nodes (6): PrivateChatRoomsUITest, The private chat rooms list should display the private rooms for authenticated…, Clicking a room link should navigate to its detail page., Users should be able to create a new private chat room., The private chat rooms list should not produce JavaScript errors., The private chat rooms page should redirect to login when not authenticated.
+Nodes (7): Compiler à partir du code source, Démarrer Cousins Matter, Exécuter en dehors de Docker, Installation de Cousins Matter, Installation en production, Prérequis, Télécharger et exécuter le script d’administration de Cousins Matter
 
 ### Community 174 - "Classified Ads N+1 Analysis"
 Cohesion: 0.62
@@ -1165,41 +1124,41 @@ Nodes (5): executeSwipe(), openFullscreen(), startSlideshowTimer(), syncFullscre
 Cohesion: 0.48
 Nodes (5): executeSwipe(), openFullscreen(), startSlideshowTimer(), syncFullscreenButton(), toggleSlideshow()
 
-### Community 180 - "PhotoEditViewTest"
-Cohesion: 0.18
-Nodes (6): PhotoEditViewTest, Tests editing a photo with no owner (should succeed)., Tests editing a photo as the photo owner., Tests editing a photo without proper permissions., Tests editing a photo and changing its gallery moves the files., Tests editing a photo that doesn't exist.
+### Community 180 - "Member Profile Page"
+Cohesion: 0.43
+Nodes (7): Member Profile Page Screenshot (profile.webp), Address Selector (dropdown with edit/create buttons), Avatar Upload Field, Birthdate Field (calendar picker), Member Profile Page, Member Header (name, username, email, active status, Delete action), Profile Identity Fields (username, email, first/last name)
 
 ### Community 181 - "LoginRequiredMiddleware"
 Cohesion: 0.40
 Nodes (4): LoginRequiredMiddleware, Custom middleware that extends LoginRequiredMiddleware to exempt OAuth URLs., Custom LoginRequiredMiddleware that exempts OAuth callback URLs. This is needed…, HttpRequest
 
-### Community 182 - "question_icon"
-Cohesion: 0.29
-Nodes (4): filter, question_icon(), Test that poll information is displayed correctly, including title,…, Test that the poll info is displayed even if there are no questions.
+### Community 182 - ".filter_answers"
+Cohesion: 0.15
+Nodes (5): Returns a list of answers that match the given kwargs. Includes all matching…, filter, question_icon(), Test that poll information is displayed correctly, including title,…, Test that the poll info is displayed even if there are no questions.
 
 ### Community 183 - "views_general.py"
-Cohesion: 0.22
-Nodes (10): health_check(), health(), HomeView, PasswordResetView, qhealth(), Django Q Health check view. This view checks through Django Q if the database…, Health check view. This view checks if the database connection and the redis…, URL configuration for cousinsmatter project. The `urlpatterns` list routes URLs… (+2 more)
+Cohesion: 0.25
+Nodes (9): LoginNotRequiredMixin, Mixin to exempt a view from the LoginRequiredMiddleware., health_check(), health(), HomeView, qhealth(), Django Q Health check view. This view checks through Django Q if the database…, Health check view. This view checks if the database connection and the redis… (+1 more)
 
 ### Community 184 - "PollsUITestBase"
-Cohesion: 0.09
-Nodes (17): PollsUITestBase, Base class for Polls UI tests with pre-created test fixtures., PollCreateUITest, PollNavigationUITest, PollUpdateUITest, PollVoteUITest, UI tests for creating polls., The create poll form should display all expected fields. (+9 more)
+Cohesion: 0.22
+Nodes (6): PollsUITestBase, Base class for Polls UI tests with pre-created test fixtures., PollUpdateUITest, UI tests for updating polls., The update poll form should display with pre-filled data., The update form should show the questions management panel.
 
-### Community 185 - "Allgemeine Anpassung"
+### Community 185 - "General Customization"
 Cohesion: 0.18
-Nodes (11): Allgemeine Anpassung, Galerien, Genealogie, Kleinanzeigen, Kleinanzeigen, Mitglieder, Nachrichten und Chats, Schätze (Troves) (+3 more)
+Nodes (11): Classified ads, Classified ads, Galleries, Genealogy, General Customization, Members, Messages and chats, Pages (+3 more)
 
 ### Community 186 - "0002_mkdirs.py"
 Cohesion: 0.33
 Nodes (5): Migration, mkDirs(), Remove directories for troves., Create directories for troves., rmDirs()
 
-### Community 187 - "General Customization"
-Cohesion: 0.18
-Nodes (11): Classified ads, Classified ads, Galleries, Genealogy, General Customization, Members, Messages and chats, Pages (+3 more)
+### Community 187 - "Upcoming Birthdays List"
+Cohesion: 0.40
+Nodes (6): Upcoming Birthdays List, Birthdays Feature, 50-Day Birthday Horizon, Member Birthday Row (name + age + date), Next-Birthday Highlight Row, Birthdays Page Screenshot
 
-### Community 188 - "Personalización general"
+### Community 188 - "Personnalisation générale"
 Cohesion: 0.18
-Nodes (11): Anuncios clasificados, Anuncios clasificados, Encuestas, Galerías, Genealogía, Mensajes y chats, Miembros, Personalización general (+3 more)
+Nodes (11): Collections, Galeries, Généalogie, Membres, Messages et discussions, Pages, Personnalisation générale, Petites annonces (+3 more)
 
 ### Community 191 - "Pocket ID (self-hosted authentication provider)"
 Cohesion: 0.40
@@ -1214,56 +1173,56 @@ Cohesion: 0.20
 Nodes (6): PostListUITest, UI tests for the post list page., The post list should redirect to login when not authenticated., The post list should display the title and posts for authenticated users., The post list should have a create button linking to the create form., The post list should not produce JavaScript errors.
 
 ### Community 194 - "ReplyUITest"
-Cohesion: 0.18
+Cohesion: 0.20
 Nodes (6): Submitting the reply form should add a new reply via HTMX., Clicking the edit button should load the edit form via HTMX., Submitting the edit reply form should update the reply via HTMX., Clicking delete with confirmation should remove the reply via HTMX., UI tests for reply creation, editing and deletion via HTMX., ReplyUITest
 
 ### Community 195 - "troves/admin.py"
 Cohesion: 0.40
 Nodes (3): display, register, TroveAdmin
 
-### Community 196 - "Personnalisation générale"
-Cohesion: 0.18
-Nodes (11): Collections, Galeries, Généalogie, Membres, Messages et discussions, Pages, Personnalisation générale, Petites annonces (+3 more)
+### Community 196 - "Cousins Matter Logo (cousinades.webp)"
+Cohesion: 0.40
+Nodes (5): Cousinades (Family Gathering Event Feature), Cousins Matter Application, Cousins Matter Logo (cousinades.webp), Festive Ornamental Motif (flourishes, confetti dots, leaves), Cousins Matter User Manual
 
-### Community 198 - "Personalizzazione generale"
-Cohesion: 0.18
-Nodes (11): Annunci, Annunci, Gallerie, Genealogia, Membri, Messaggi e chat, Pagine, Personalizzazione generale (+3 more)
+### Community 198 - "en/installation.md"
+Cohesion: 0.27
+Nodes (4): Introduction, Migrate from Version 1 to Version 2, Prerequisites, Procedure
 
-### Community 201 - "test_views_general.py"
-Cohesion: 0.29
-Nodes (4): PasswordResetForm, Test that send_zipfile works., Create a ZIP file on disk and transmit it in chunks of 8KB, without loading the…, send_zipfile()
+### Community 201 - "send_zipfile"
+Cohesion: 0.50
+Nodes (3): Test that send_zipfile works., Create a ZIP file on disk and transmit it in chunks of 8KB, without loading the…, send_zipfile()
 
-### Community 203 - "Personalização geral"
-Cohesion: 0.18
-Nodes (11): Anúncios classificados, Anúncios classificados, Galerias, Genealogia, Membros, Mensagens e conversas, Personalização geral, Páginas (+3 more)
+### Community 203 - "Customize your site"
+Cohesion: 0.20
+Nodes (10): Creating pages, Custom footer, Customize your site, Features management, Front (or Home) pages, Notification preferences, Privacy Management, Settings (+2 more)
 
 ### Community 204 - "polls/admin.py"
 Cohesion: 0.27
 Nodes (8): AnswerAdmin, EventPlannerAdmin, PollAdmin, PollAnswerAdmin, display, register, QuestionAdmin, QuestionInline
 
-### Community 205 - "OAuthActivationTests"
+### Community 205 - "Personnalisez votre site"
 Cohesion: 0.20
-Nodes (5): OAuthActivationTests, Test that an inactive member is activated if session has valid token., Test that social login is rejected if no invitation in session., Test that an already active member can log in normally., Test that a non-existent member with a valid invitation is allowed but…
+Nodes (10): Afficher un message d'administration sur toutes les pages, Création de pages, Gestion de la confidentialité, Gestion des fonctionnalités, Pages d’accueil, Paramètres, Personnalisez votre site, Pied de page personnalisé (+2 more)
 
 ### Community 206 - "test_rotate_secret.sh"
 Cohesion: 0.83
 Nodes (3): error(), get_key(), test_rotate_secret.sh script
 
-### Community 207 - "de/installation.md"
-Cohesion: 0.27
-Nodes (4): Einführung, Migration von Version 1 auf Version 2, Voraussetzungen, Vorgehensweise
+### Community 207 - "![Cousins Matter !](assets/logo.webp) COUSINS MATTER !"
+Cohesion: 0.20
+Nodes (8): Auteurs, ![Cousins Matter !](assets/logo.webp) COUSINS MATTER !, Migration de la version 1 vers la version 2, Qu'est-ce que Cousins Matter ?, Introduction, Migration de la version 1 à la version 2, Procédure, Prérequis
 
 ### Community 209 - "0003_trove_title_alter_trove_description.py"
 Cohesion: 0.50
 Nodes (3): Migration, Compute title based on description, set_title()
 
-### Community 210 - "Ihre Website anpassen"
-Cohesion: 0.20
-Nodes (10): Benachrichtigungseinstellungen, Eigene Fußzeile, Eine Admin-Nachricht auf allen Seiten anzeigen, Einstellungen, Ihre Website anpassen, Seiten erstellen, Start- (oder Home-)Seiten, Themes (+2 more)
+### Community 210 - "Members Directory Screenshot (directory.webp)"
+Cohesion: 0.67
+Nodes (4): Cousinades Logo Branding, Directory Table Columns (Name, Phone, Email, Address), Members Directory Page, Members Directory Screenshot (directory.webp)
 
-### Community 211 - "en/installation.md"
-Cohesion: 0.27
-Nodes (4): Introduction, Migrate from Version 1 to Version 2, Prerequisites, Procedure
+### Community 211 - "Invite Members Form Screenshot"
+Cohesion: 0.67
+Nodes (4): Email to send invitation field, Invite Members Form Screenshot, Invite submit button, Name of the invited person field
 
 ### Community 214 - "Code of Conduct (Contributor Covenant, amended)"
 Cohesion: 0.67
@@ -1273,16 +1232,12 @@ Nodes (3): Code of Conduct (Contributor Covenant, amended), Contributor Covenant
 Cohesion: 0.67
 Nodes (3): core app test resource (logo upload/rendering fixture), Cousinades brand wordmark ("COUSINADES"), Cousinades logo test fixture (JPEG)
 
-### Community 216 - "Customize your site"
-Cohesion: 0.20
-Nodes (10): Creating pages, Custom footer, Customize your site, Features management, Front (or Home) pages, Notification preferences, Privacy Management, Settings (+2 more)
+### Community 217 - "Cousins Matter Logo"
+Cohesion: 0.67
+Nodes (3): Cousins Matter (Project), Family Tree Symbolism, Cousins Matter Logo
 
-### Community 217 - "es/installation.md"
-Cohesion: 0.27
-Nodes (4): Introducción, Migrar de la versión 1 a la versión 2, Procedimiento, Requisitos previos
-
-### Community 218 - "forum/tests/factories.py"
-Cohesion: 0.40
+### Community 218 - "PostFactory"
+Cohesion: 0.42
 Nodes (6): CommentFactory, MessageFactory, Meta, PostFactory, DjangoModelFactory, post_generation
 
 ### Community 219 - "Family Form Template (htmx modal)"
@@ -1293,279 +1248,131 @@ Nodes (3): Rationale: Editing a shared Family record affects all members using i
 Cohesion: 1.00
 Nodes (3): claude-code-action Integration, Claude Code Review Workflow, Claude Code Interaction Workflow
 
-### Community 228 - "Personaliza tu sitio"
-Cohesion: 0.20
-Nodes (10): Ajustes, Creación de páginas, Gestión de la privacidad, Gestión de las funcionalidades, Mostrar un mensaje de administración en todas las páginas, Personaliza tu sitio, Pie de página personalizado, Preferencias de notificación (+2 more)
-
-### Community 292 - "Personnalisez votre site"
-Cohesion: 0.20
-Nodes (10): Afficher un message d'administration sur toutes les pages, Création de pages, Gestion de la confidentialité, Gestion des fonctionnalités, Pages d’accueil, Paramètres, Personnalisez votre site, Pied de page personnalisé (+2 more)
-
-### Community 376 - "![Cousins Matter !](assets/logo.webp) COUSINS MATTER !"
-Cohesion: 0.20
-Nodes (8): Auteurs, ![Cousins Matter !](assets/logo.webp) COUSINS MATTER !, Migration de la version 1 vers la version 2, Qu'est-ce que Cousins Matter ?, Introduction, Migration de la version 1 à la version 2, Procédure, Prérequis
-
-### Community 377 - "Personalizza il tuo sito"
-Cohesion: 0.20
-Nodes (10): Creazione di pagine, Gestione della privacy, Gestione delle funzionalità, Impostazioni, Mostrare un messaggio di amministrazione su tutte le pagine, Pagine iniziali (Home), Personalizza il tuo sito, Piè di pagina personalizzato (+2 more)
-
-### Community 378 - "![Cousins Matter!](assets/logo.webp) COUSINS MATTER!"
-Cohesion: 0.20
-Nodes (8): Autori, Che cos'è Cousins Matter?, ![Cousins Matter!](assets/logo.webp) COUSINS MATTER!, Migrare dalla Versione 1 alla Versione 2, Introduzione, Migrare dalla Versione 1 alla Versione 2, Prerequisiti, Procedura
-
-### Community 379 - "pt/installation.md"
-Cohesion: 0.27
-Nodes (4): Introdução, Migrar da versão 1 para a versão 2, Procedimento, Pré-requisitos
-
-### Community 380 - "Personalizar o seu sítio"
-Cohesion: 0.20
-Nodes (10): Apresentar uma mensagem de administrador em todas as páginas, Configurações, Criação de páginas, Gestão da privacidade, Gestão das funcionalidades, Personalizar o seu sítio, Preferências de notificação, Páginas iniciais (Home) (+2 more)
-
-### Community 381 - "get_new_member_data"
-Cohesion: 0.25
-Nodes (4): get_new_member_data(), creates and returns a new member using provided member data. If the member data…, called once by the test framework before running the tests, Returns a brand new member data (new username).
-
-### Community 382 - "modify_member_data"
+### Community 228 - "tests_login_out.py"
 Cohesion: 0.22
-Nodes (6): get_counter(), modify_member_data(), returns a modified member dataset (same username and last_name, don't change…, MemberProfileViewTest, EditProfileView, change the profile of the logged user (ie request.user.id = member.id)
+Nodes (5): LoginTests, PasswordTests, Tests the logout view., Tests the change password view., Tests the login view.
 
-### Community 384 - "TroveFactory"
-Cohesion: 0.33
-Nodes (5): Meta, DjangoModelFactory, TroveFactory, Base class for Troves UI tests using Playwright., TroveUITestBase
-
-### Community 385 - "Multi-Tenancy (mehrere Familien auf einer Bereitstellung)"
+### Community 376 - "FieldLinkWrapper"
 Cohesion: 0.22
-Nodes (8): Aktivieren des Features, Aktueller Umfang, Anlegen einer Familie, Familieneinstellungen, Konzepte, Lebenszyklus, Multi-Tenancy (mehrere Familien auf einer Bereitstellung), PostgreSQL Row-Level Security (optionale Härtung)
+Nodes (3): FieldLinkWrapper, Any, Widget
 
-### Community 386 - "Multi-tenancy (several families on one deployment)"
+### Community 377 - "Multi-tenancy (several families on one deployment)"
 Cohesion: 0.22
 Nodes (8): Concepts, Creating a family, Current scope, Enabling the feature, Family settings, Lifecycle, Multi-tenancy (several families on one deployment), PostgreSQL row-level security (optional hardening)
 
-### Community 387 - "CustomSocialAccountAdapter"
-Cohesion: 0.29
-Nodes (4): DefaultSocialAccountAdapter, CustomSocialAccountAdapter, Intervene after social auth but before account is created/connected. We check…, Checks for a valid invitation for ``email`` in the session. Returns ``(ok,…
-
-### Community 388 - "Multi-tenancy (varias familias en un mismo despliegue)"
-Cohesion: 0.22
-Nodes (8): Activar la funcionalidad, Ajustes de la familia, Alcance actual, Ciclo de vida, Conceptos, Crear una familia, Multi-tenancy (varias familias en un mismo despliegue), Seguridad a nivel de fila de PostgreSQL (refuerzo opcional)
-
-### Community 389 - "Multi-tenants (plusieurs familles sur un même déploiement)"
+### Community 378 - "Multi-tenants (plusieurs familles sur un même déploiement)"
 Cohesion: 0.22
 Nodes (8): Activation de la fonctionnalité, Concepts, Création d’une famille, Cycle de vie, Multi-tenants (plusieurs familles sur un même déploiement), Paramètres de la famille, Portée actuelle, Sécurité au niveau des lignes dans PostgreSQL (renforcement facultatif)
 
-### Community 390 - "Multi-tenancy (più famiglie su un'unica installazione)"
-Cohesion: 0.22
-Nodes (8): Attivare la funzionalità, Ciclo di vita, Concetti, Creare una famiglia, Impostazioni della famiglia, Multi-tenancy (più famiglie su un'unica installazione), Perimetro attuale, Row-level security di PostgreSQL (irrigidimento opzionale)
+### Community 379 - "PostCreateUITest"
+Cohesion: 0.25
+Nodes (5): PostCreateUITest, UI tests for post creation form., The create post form should display all expected fields., Submitting the create form should create a new post and redirect to its detail…, The cancel button should navigate back to the list.
 
-### Community 391 - "Multi-tenancy (várias famílias numa só implantação)"
-Cohesion: 0.22
-Nodes (8): Ativar a funcionalidade, Ciclo de vida, Conceitos, Configurações da família, Criação de uma família, Multi-tenancy (várias famílias numa só implantação), Segurança ao nível da linha do PostgreSQL (reforço opcional), Âmbito atual
+### Community 380 - "PostDeleteUITest"
+Cohesion: 0.25
+Nodes (5): PostDeleteUITest, UI tests for post deletion., The delete button should be visible for the post author., Clicking the delete button should show a confirmation modal., Confirming the delete modal should delete the post and redirect to list.
+
+### Community 381 - "views_dashboard_stats.py"
+Cohesion: 0.29
+Nodes (5): build_statistics_context(), Aggregate genealogy stats for the statistics page: gender distribution, top…, dashboard(), refresh(), statistics()
+
+### Community 384 - "PollNavigationUITest"
+Cohesion: 0.25
+Nodes (5): PollNavigationUITest, UI tests for navigating between polls pages., Clicking a poll in the list should navigate to its detail page., Clicking Vote on the detail page should navigate to the vote page., Clicking Vote on the list should navigate to the vote page.
+
+### Community 385 - "Media Storage"
+Cohesion: 0.25
+Nodes (7): Cloudflare R2, Default media storage, Media Storage, Migration from the media directory to an external S3 storage, Other media storages, Other S3 compatible storages, WARNINGS
+
+### Community 386 - "Stockage des médias"
+Cohesion: 0.25
+Nodes (7): Autres stockages compatibles S3, Autres stockages multimédias, AVERTISSEMENTS, Cloudflare R2, Migration du répertoire « media » vers un stockage S3 externe, Stockage des médias, Stockage par défaut des médias
+
+### Community 387 - "CustomSocialAccountAdapter"
+Cohesion: 0.33
+Nodes (4): DefaultSocialAccountAdapter, CustomSocialAccountAdapter, Intervene after social auth but before account is created/connected. We check…, Checks for a valid invitation for ``email`` in the session. Returns ``(ok,…
+
+### Community 388 - "MultiTenantOffTests"
+Cohesion: 0.29
+Nodes (3): MultiTenantOffTests, Feature-flag tests: MULTI_TENANT_ENABLED off must hide the whole surface., With the flag off, /tenants/ must 404 and the login page shows no link. NOTE:…
+
+### Community 389 - "Production installation"
+Cohesion: 0.29
+Nodes (7): Build from source, Download and run the Cousins Matter admin script, Installation of Cousins Matter, Prerequisites, Production installation, Run it outside Docker, Start Cousins Matter
+
+### Community 390 - "Provider-Specific Configuration"
+Cohesion: 0.29
+Nodes (7): Apple Sign In, Facebook OAuth, Generic OpenID Connect Provider, GitHub OAuth, Google OAuth, PocketID (OpenID Connect), Provider-Specific Configuration
+
+### Community 391 - "Configuration spécifique aux fournisseurs"
+Cohesion: 0.29
+Nodes (7): Configuration spécifique aux fournisseurs, Connexion via Apple, Fournisseur OpenID Connect générique, OAuth Facebook, OAuth GitHub, OAuth Google, PocketID (OpenID Connect)
 
 ### Community 392 - "TestAssertRequestIsAjax"
 Cohesion: 0.33
 Nodes (4): Tests for assert_request_is_ajax., Test that a non-AJAX request raises ValidationError., Test that an AJAX request does not raise., TestAssertRequestIsAjax
 
-### Community 395 - "Medienspeicher"
-Cohesion: 0.25
-Nodes (7): Andere Medienspeicher, Andere S3-kompatible Speicher, Cloudflare R2, Medienspeicher, Migration vom Medienverzeichnis zu einem externen S3-Speicher, Standard-Medienspeicher, WARNUNGEN
-
-### Community 396 - "Media Storage"
-Cohesion: 0.25
-Nodes (7): Cloudflare R2, Default media storage, Media Storage, Migration from the media directory to an external S3 storage, Other media storages, Other S3 compatible storages, WARNINGS
-
-### Community 397 - "Almacenamiento de los medios"
-Cohesion: 0.25
-Nodes (7): ADVERTENCIAS, Almacenamiento de los medios, Almacenamiento de medios por defecto, Cloudflare R2, Migración del directorio media a un almacenamiento S3 externo, Otros almacenamientos compatibles con S3, Otros almacenamientos de medios
-
-### Community 398 - "Stockage des médias"
-Cohesion: 0.25
-Nodes (7): Autres stockages compatibles S3, Autres stockages multimédias, AVERTISSEMENTS, Cloudflare R2, Migration du répertoire « media » vers un stockage S3 externe, Stockage des médias, Stockage par défaut des médias
-
-### Community 399 - "Archiviazione dei media"
-Cohesion: 0.25
-Nodes (7): Altre archiviazioni compatibili S3, Altri sistemi di archiviazione dei media, Archiviazione dei media, Archiviazione dei media predefinita, AVVERTENZE, Cloudflare R2, Migrazione dalla directory media a un'archiviazione S3 esterna
-
-### Community 400 - "Armazenamento dos média"
-Cohesion: 0.25
-Nodes (7): Armazenamento dos média, Armazenamento dos média predefinido, AVISOS, Cloudflare R2, Migração do diretório media para um armazenamento S3 externo, Outros armazenamentos compatíveis com S3, Outros armazenamentos de média
-
-### Community 401 - "PostDeleteTestCase"
-Cohesion: 0.29
-Nodes (4): PostDeleteTestCase, Tests the GET request for deleting shows a confirmation modal., Tests the post view for deleting a forum post., Tests that displaying a non-existent post returns 404.
-
-### Community 405 - "Installation in der Produktivumgebung"
-Cohesion: 0.29
-Nodes (7): Betrieb außerhalb von Docker, Build aus dem Quellcode, Cousins Matter starten, Herunterladen und Ausführen des Cousins-Matter-Admin-Skripts, Installation in der Produktivumgebung, Installation von Cousins Matter, Voraussetzungen
-
-### Community 406 - "Anbieter-spezifische Konfiguration"
-Cohesion: 0.29
-Nodes (7): Anbieter-spezifische Konfiguration, Apple Sign In, Facebook OAuth, Generischer OpenID-Connect-Anbieter, GitHub OAuth, Google OAuth, PocketID (OpenID Connect)
-
-### Community 407 - "Production installation"
-Cohesion: 0.29
-Nodes (7): Build from source, Download and run the Cousins Matter admin script, Installation of Cousins Matter, Prerequisites, Production installation, Run it outside Docker, Start Cousins Matter
-
-### Community 408 - "Provider-Specific Configuration"
-Cohesion: 0.29
-Nodes (7): Apple Sign In, Facebook OAuth, Generic OpenID Connect Provider, GitHub OAuth, Google OAuth, PocketID (OpenID Connect), Provider-Specific Configuration
-
-### Community 409 - "Instalación en producción"
-Cohesion: 0.29
-Nodes (7): Construir a partir del código fuente, Descargar y ejecutar el script de administración de Cousins Matter, Ejecutarlo fuera de Docker, Iniciar Cousins Matter, Instalación de Cousins Matter, Instalación en producción, Requisitos previos
-
-### Community 413 - "Configuración específica de cada proveedor"
-Cohesion: 0.29
-Nodes (7): Apple Sign In, Configuración específica de cada proveedor, OAuth de Facebook, OAuth de GitHub, OAuth de Google, PocketID (OpenID Connect), Proveedor genérico de OpenID Connect
-
-### Community 414 - "Configuration spécifique aux fournisseurs"
-Cohesion: 0.29
-Nodes (7): Configuration spécifique aux fournisseurs, Connexion via Apple, Fournisseur OpenID Connect générique, OAuth Facebook, OAuth GitHub, OAuth Google, PocketID (OpenID Connect)
-
-### Community 415 - "Configurazione specifica per provider"
-Cohesion: 0.29
-Nodes (7): Apple Sign In, Configurazione specifica per provider, Facebook OAuth, GitHub OAuth, Google OAuth, PocketID (OpenID Connect), Provider OpenID Connect generico
-
-### Community 416 - "Instalação em produção"
-Cohesion: 0.29
-Nodes (7): Compilar a partir do código-fonte, Descarregar e executar o script de administração do Cousins Matter, Executar fora do Docker, Iniciar o Cousins Matter, Instalação do Cousins Matter, Instalação em produção, Pré-requisitos
-
-### Community 417 - "Configuração específica de cada fornecedor"
-Cohesion: 0.29
-Nodes (7): Apple Sign In, Configuração específica de cada fornecedor, Fornecedor genérico de OpenID Connect, OAuth da Facebook, OAuth da Google, OAuth do GitHub, PocketID (OpenID Connect)
-
-### Community 418 - "core/forms.py"
-Cohesion: 0.53
-Nodes (3): ContactForm, test the contact form, TestContactForm
-
-### Community 419 - ".check_invitation"
+### Community 393 - "TestProtectedMediaUrl"
 Cohesion: 0.33
-Nodes (3): Validate an ``(email, tenant_id, token)`` triple (e.g. stored in session). Used…, The signed string. Tenant-prefixed (``"<id>:<email>"``) when a tenant is bound…, Generates an absolute registration/invitation link for ``email``. When…
+Nodes (4): Tests for protected_media_url edge cases., Test media path that starts with MEDIA_ROOT., Test media path that starts with BASE_DIR/MEDIA_REL., TestProtectedMediaUrl
 
-### Community 420 - "MemberDeleteTest"
+### Community 394 - "parse_locale_date"
 Cohesion: 0.33
-Nodes (3): MemberDeleteTest, TestCase, UsersManagersTests
+Nodes (3): allowed_date_formats(), parse_locale_date(), Returns a list of date formats that are expected to be valid for the current…
 
-### Community 421 - "Cousins Matter aktualisieren"
-Cohesion: 0.33
-Nodes (5): Cousins Matter aktualisieren, Ihren Secret Key rotieren, Image aus dem Quellcode neu bauen, In der Produktivumgebung, Weitere Verwaltungsoperationen
-
-### Community 422 - "Other management operations"
+### Community 395 - "Other management operations"
 Cohesion: 0.33
 Nodes (5): In production, Other management operations, Rebuild image from source, Rotate your secret key, Upgrade Cousins Matter
 
-### Community 423 - "Actualizar Cousins Matter"
-Cohesion: 0.33
-Nodes (5): Actualizar Cousins Matter, En producción, Otras operaciones de gestión, Reconstruir la imagen a partir del código fuente, Rotar tu clave secreta
-
-### Community 424 - "Autres opérations de gestion"
+### Community 396 - "Autres opérations de gestion"
 Cohesion: 0.33
 Nodes (5): Autres opérations de gestion, En production, Mise à jour de Cousins Matter, Reconstruire l'image à partir du code source, Renouveler votre clé secrète
 
-### Community 425 - "Aggiornare Cousins Matter"
-Cohesion: 0.33
-Nodes (5): Aggiornare Cousins Matter, Altre operazioni di gestione, In produzione, Ricostruire l'immagine dai sorgenti, Ruotare la tua chiave segreta
-
-### Community 426 - "Atualizar o Cousins Matter"
-Cohesion: 0.33
-Nodes (5): Atualizar o Cousins Matter, Em produção, Outras operações de gestão, Recompilar a imagem a partir do código-fonte, Renovar a sua chave secreta
-
-### Community 428 - "FlatPageFactory"
-Cohesion: 0.40
-Nodes (4): FlatPageFactory, Meta, DjangoModelFactory, post_generation
-
-### Community 430 - "Technischer Status der Anwendung"
-Cohesion: 0.40
-Nodes (4): Entwicklungsstatus, Fakten, Status der Releases, Technischer Status der Anwendung
-
-### Community 431 - "![Cousins Matter!](assets/logo.webp) BEI COUSINS MATTER ZÄHLT DIE FAMILIE!"
-Cohesion: 0.40
-Nodes (4): Autoren, ![Cousins Matter!](assets/logo.webp) BEI COUSINS MATTER ZÄHLT DIE FAMILIE!, Migration von Version 1 auf Version 2, Was ist Cousins Matter?
-
-### Community 432 - "Application Technical Status"
+### Community 398 - "Application Technical Status"
 Cohesion: 0.40
 Nodes (4): Application Technical Status, Development status, Facts, Releases status
 
-### Community 433 - "![Cousins Matter!](assets/logo.webp) COUSINS MATTER!"
+### Community 399 - "![Cousins Matter!](assets/logo.webp) COUSINS MATTER!"
 Cohesion: 0.40
 Nodes (4): Authors, ![Cousins Matter!](assets/logo.webp) COUSINS MATTER!, Migrate from Version 1 to Version 2, What is Cousins Matter?
 
-### Community 434 - "Estado técnico de la aplicación"
-Cohesion: 0.40
-Nodes (4): Datos, Estado de las versiones, Estado del desarrollo, Estado técnico de la aplicación
-
-### Community 435 - "![¡Cousins Matter!](assets/logo.webp) COUSINS MATTER!"
-Cohesion: 0.40
-Nodes (4): Autores, ![¡Cousins Matter!](assets/logo.webp) COUSINS MATTER!, Migrar de la versión 1 a la versión 2, ¿Qué es Cousins Matter?
-
-### Community 436 - "État technique de l'application"
+### Community 400 - "État technique de l'application"
 Cohesion: 0.40
 Nodes (4): Faits, État d'avancement du développement, État des versions, État technique de l'application
 
-### Community 437 - "Stato tecnico dell'applicazione"
-Cohesion: 0.40
-Nodes (4): Informazioni, Stato delle release, Stato dello sviluppo, Stato tecnico dell'applicazione
-
-### Community 438 - "Estado técnico da aplicação"
-Cohesion: 0.40
-Nodes (4): Estado das versões, Estado do desenvolvimento, Estado técnico da aplicação, Factos
-
-### Community 439 - "![Cousins Matter!](assets/logo.webp) COUSINS MATTER!"
-Cohesion: 0.40
-Nodes (4): Autores, ![Cousins Matter!](assets/logo.webp) COUSINS MATTER!, Migrar da versão 1 para a versão 2, O que é o Cousins Matter?
-
-### Community 441 - "Reverse Proxy"
+### Community 401 - "PollCreateUITest"
 Cohesion: 0.50
-Nodes (3): Reverse Proxy, Reverse Proxy mit Apache, Reverse Proxy mit Nginx (Standard)
+Nodes (3): PollCreateUITest, UI tests for creating polls., The create poll form should display all expected fields.
 
-### Community 442 - "Übersetzungen"
+### Community 402 - "PollVoteUITest"
 Cohesion: 0.50
-Nodes (3): In eine neue Sprache übersetzen, Verfügbare Übersetzungen, Übersetzungen
+Nodes (3): PollVoteUITest, UI tests for the poll voting page., The vote page should display poll info and a card.
 
-### Community 443 - "Reverse Proxying"
+### Community 405 - "Reverse Proxying"
 Cohesion: 0.50
 Nodes (3): Reverse Proxying, Reverse proxying with Apache, Reverse proxying with Nginx (default)
 
-### Community 444 - "Translations"
+### Community 406 - "Translations"
 Cohesion: 0.50
 Nodes (3): Available translations, Translate to a new language, Translations
 
-### Community 445 - "Proxy inverso"
-Cohesion: 0.50
-Nodes (3): Proxy inverso, Proxy inverso con Apache, Proxy inverso con Nginx (por defecto)
-
-### Community 446 - "Traducciones"
-Cohesion: 0.50
-Nodes (3): Traducciones, Traducciones disponibles, Traducir a un nuevo idioma
-
-### Community 447 - "Proxy inverse"
+### Community 407 - "Proxy inverse"
 Cohesion: 0.50
 Nodes (3): Proxy inverse, Proxy inverse avec Apache, Proxy inverse avec Nginx (par défaut)
 
-### Community 448 - "Traductions"
+### Community 408 - "Traductions"
 Cohesion: 0.50
 Nodes (3): Traductions, Traductions disponibles, Traduire vers une nouvelle langue
-
-### Community 449 - "Reverse proxy"
-Cohesion: 0.50
-Nodes (3): Reverse proxy, Reverse proxy con Apache, Reverse proxy con Nginx (predefinito)
-
-### Community 450 - "Traduzioni"
-Cohesion: 0.50
-Nodes (3): Tradurre in una nuova lingua, Traduzioni, Traduzioni disponibili
-
-### Community 451 - "Proxy inverso"
-Cohesion: 0.50
-Nodes (3): Proxy inverso, Proxy inverso com Apache, Proxy inverso com Nginx (predefinição)
-
-### Community 452 - "Traduções"
-Cohesion: 0.50
-Nodes (3): Traduzir para um novo idioma, Traduções, Traduções disponíveis
 
 ## Ambiguous Edges - Review These
 - `Troves App Reference` → `Gallery Bulk Import Flow`  [AMBIGUOUS]
   docs/apps/troves.md · relation: semantically_similar_to
 - `New Follower Template` → `Members App`  [AMBIGUOUS]
   core/templates/core/followers/new_follower.html · relation: references
+- `Dark bar cut off at bottom (footer or submit-button area)` → `Request Invitation form`  [AMBIGUOUS]
+  user-manual/assets/request-invite.webp · relation: references
+- `Members List Page` → `Toolbar Icons (birthdays, list view, add member, card view)`  [AMBIGUOUS]
+  user-manual/assets/members.webp · relation: conceptually_related_to
 - `Django + PostgreSQL Stack` → `CLAUDE.md Project Guidance`  [AMBIGUOUS]
   README.md · relation: references
 - `Nginx 413 Error Page` → `classified_ads Django App`  [AMBIGUOUS]
@@ -1574,9 +1381,9 @@ Nodes (3): Traduzir para um novo idioma, Traduções, Traduções disponíveis
   members/templates/members/email/registration_request_email.html · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **789 isolated node(s):** `Status der Releases`, `Fakten`, `Entwicklungsstatus`, `Verwaltung der Funktionen`, `Benachrichtigungseinstellungen` (+784 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 2281 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **128 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **416 isolated node(s):** `Releases status`, `Facts`, `Development status`, `Features management`, `Notification preferences` (+411 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1888 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **126 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -1585,13 +1392,13 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: semantically_similar_to) - confidence is low._
 - **What is the exact relationship between `New Follower Template` and `Members App`?**
   _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
+- **What is the exact relationship between `Dark bar cut off at bottom (footer or submit-button area)` and `Request Invitation form`?**
+  _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
+- **What is the exact relationship between `Members List Page` and `Toolbar Icons (birthdays, list view, add member, card view)`?**
+  _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `Django + PostgreSQL Stack` and `CLAUDE.md Project Guidance`?**
   _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
 - **What is the exact relationship between `Nginx 413 Error Page` and `classified_ads Django App`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `Registration Request Email Template` and `Members List Template (search/sort/paginate)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `Member` connect `Member` to `override_settings`, `CustomSocialAccountAdapter`, `MemberTestCase`, `Question`, `chat/tests/tests_followers.py`, `MemberTestCaseMixin`, `ignore_captcha_errors`, `FlatPage`, `Poll`, `RegistrationLinkManager`, `TestDisplayMembers`, `tests_member.py`, `ChatConsumer`, `MemberFactory`, `MemberManager`, `ChatRoom`, `core/forms.py`, `MemberDeleteTest`, `entrypoint.py`, `RichTextarea`, `get_current_tenant`, `members/models.py`, `Post`, `MemberDetailView`, `tenant_context`, `tenant_setting`, `members/tasks.py`, `TestMemberDirectory`, `RoleAwareUITestBase`, `Trove`, `MessageForm`, `check_edit_permission`, `OAuthActivationTests`, `TestMemberImport`, `classified_ads/views.py`, `ClassifiedAd`, `followers.py`, `Tenant`, `views_import_export.py`, `CSVExportViewTests`, `members/admin.py`, `Comment`?**
-  _High betweenness centrality (0.146) - this node is a cross-community bridge._
-- **Why does `MemberTestCase` connect `MemberTestCase` to `override_settings`, `Member`, `Question`, `chat/tests/tests_followers.py`, `MemberTestCaseMixin`, `today_minus`, `ignore_captcha_errors`, `FlatPage`, `Gallery`, `UploadProgressViewTest`, `FamilyChartViewsTest`, `RegistrationLinkManager`, `tests_member.py`, `icon`, `TestDisplayMembers`, `get_test_absolute_url`, `ChatRoom`, `Person`, `core/forms.py`, `entrypoint.py`, `tests_public.py`, `ReadReceiptModelTests`, `Post`, `PersonViewsTest`, `members/models.py`, `FamilySignupTests`, `ForumTestCase`, `DeathNotificationTests`, `TestMemberDirectory`, `TestActivateManagedMember`, `TestGetLatestReleaseText`, `Address`, `MessageForm`, `FamilyViewsTest`, `test_views_general.py`, `OAuthActivationTests`, `TenantSettingsTests`, `tests_read_receipts.py`, `genealogy/tests/tests.py`, `TestMemberImport`, `TestTroveList`, `Tenant`, `TestBirthdaysMixin`, `MemberInviteTests`, `ClassifiedAdBaseTestCase`, `CSVExportViewTests`, `core/utils.py`, `ChatRoomTests`, `GeneralViewsTestCase`, `get_new_member_data`, `modify_member_data`?**
-  _High betweenness centrality (0.093) - this node is a cross-community bridge._

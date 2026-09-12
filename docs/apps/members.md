@@ -4,7 +4,7 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-03-09
+stale_after: 2027-09-12
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -121,15 +121,28 @@ Flow (members/views/views_registration.py):
    verifies the link via `decrypt_link`, refuses logged-in or already-active
    members, and stores `(invitation_token, invitation_email,
    invitation_tenant_id)` in the session before showing the signup form.
-3. `RegistrationRequestView` (`members:register_request`) — captcha-protected
-   self-service request; the request email goes to the first active platform
-   superuser (the request is anonymous, so no tenant is known yet).
+3. `TenantJoinRequestView` (`members:register_request`, plus `/<slug>/join/` as
+   `tenant-join`) — captcha-protected self-service request routed to the
+   matching family (see below).
 
 Social login is wired through `CustomSocialAccountAdapter`
 (members/adapter.py): `pre_social_login` validates the session invitation with
 `RegistrationLinkManager.check_invitation`, then either links and activates the
 existing inactive member or allows allauth to create the signup with
 `is_active=True` and the invitation's `tenant_id` — no invitation, no signup.
+
+## Join request (tenant-scoped)
+
+Anonymous visitors request an invitation from a family page: `/<slug>/join/`
+(`tenant-join`) resolves the family with `resolve_join_tenant`
+(tenants/services.py), 404s unknown slugs, and emails the request to that
+family's admins (`admin_or_superusers`) with a prefilled invitation link.
+Submissions are throttled per IP (5/hour).
+`/members/register/request` (`members:register_request`) is an alias resolving
+to the default tenant; with `MULTI_TENANT_ENABLED=False` it is the only entry
+point and behaves as before. The global invitation-request link is shown on
+unscoped pages only when multi-tenancy is off; a family's own page links to
+its `tenant-join` URL.
 
 ## CSV import / export
 

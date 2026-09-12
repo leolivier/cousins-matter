@@ -8,19 +8,26 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import Tenant
 
-# Slugs a family may never take: seeded/special tenants, plus the first
-# segment of every root route and the media/static prefixes — a tenant slug
-# would otherwise shadow them in the tenant-home catch-all.
+# Slugs a family may never take: seeded/special tenants plus the first
+# segment of every root route and media/static prefixes. The tenant-home
+# catch-all is mounted last so real routes always win — reserving these
+# slugs protects the family's home URL from being shadowed instead.
 RESERVED_TENANT_SLUGS = frozenset({
   settings.DEFAULT_TENANT_SLUG,
   settings.SYSTEM_TENANT_SLUG,
+  "about",
   "admin",
   "admins",
+  "contact",
+  "env-check",
   "manage",
   "settings",
   "signup",
   "accounts",
+  "jsi18n",
   "members",
+  "pages",
+  "public-media",
   "posts",
   "chat",
   "galleries",
@@ -34,6 +41,7 @@ RESERVED_TENANT_SLUGS = frozenset({
   "tenants",
   "saas",
   "troves",
+  "verification",
   "classified-ads",
   "pages-edit",
   "robots.txt",

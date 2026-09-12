@@ -101,9 +101,10 @@ class ReservedSlugTests(MemberTestCase):
     # "Chat & Galleries" slugifies to "chat-galleries", which is NOT reserved:
     # the tenant-home catch-all only matches a single path segment, so only an
     # exact slug can shadow a root route.
-    for name in ("Members", "Accounts", "Chat", "Galleries"):
-      with self.assertRaises(ValidationError):
-        uniquify_tenant_slug(name)
+    for name in ("Members", "Accounts", "Chat", "Galleries", "Contact", "Pages"):
+      with self.subTest(name=name):
+        with self.assertRaises(ValidationError):
+          uniquify_tenant_slug(name)
 
   def test_compound_slug_allowed(self):
     from ..forms import uniquify_tenant_slug

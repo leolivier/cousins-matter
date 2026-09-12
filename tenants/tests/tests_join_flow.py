@@ -59,7 +59,15 @@ class TenantHomeTests(MemberTestCase):
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "members/login/login.html")
     self.assertContains(response, "famille-dubois.jpg")
+    self.assertContains(response, self.tenant.name)
     self.assertEqual(response.context["settings"]["SITE_NAME"], "Famille Dubois")
+
+  def test_join_link_visible_on_family_home_only(self):
+    self.client.logout()
+    family = self.client.get(reverse("tenant-home", args=["famille-dubois"]))
+    self.assertContains(family, reverse("tenant-join", args=["famille-dubois"]))
+    global_login = self.client.get(reverse("members:login"))
+    self.assertNotContains(global_login, reverse("tenant-join", args=["famille-dubois"]))
 
   def test_home_login_post_works(self):
     self.client.logout()

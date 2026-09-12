@@ -6,7 +6,7 @@
 	<h1 class="title">{% title _("Request Invitation") %}</h1>
 	<hr>
 	<p class="content">
-		{% translate "By completing and submitting this form, you are asking the site administrator to send you an invitation link."%}
+		{% blocktranslate with name=settings.SITE_NAME %}By completing and submitting this form, you are asking the administrators of the "{{ name }}" family site to send you an invitation link.{% endblocktranslate %}
 	</p>
 	<form method="post">
 		{% csrf_token %}

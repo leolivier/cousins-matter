@@ -430,6 +430,11 @@ class TenantJoinRequestTests(RequestRegistrationLinkTests):
     self.assertContainsMessage(response, "error", _("Too many requests, please try again later."))
     self.assertEqual(len(mail.outbox), 5)
 
+  def test_invite_page_shows_family_home_url(self):
+    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    response = self.client.get(reverse("members:invite"))
+    self.assertContains(response, reverse("tenant-home", args=[self.superuser.tenant.slug]))
+
 
 class JoinFlagOffTests(MemberTestCase):
   @override_settings(MULTI_TENANT_ENABLED=False)
@@ -437,3 +442,9 @@ class JoinFlagOffTests(MemberTestCase):
     tenant = Tenant.objects.create(name="Other", slug="other")
     response = self.client.get(reverse("tenant-join", args=[tenant.slug]))
     self.assertEqual(response.status_code, 404)
+
+  @override_settings(MULTI_TENANT_ENABLED=False)
+  def test_legacy_link_visible_when_flag_off(self):
+    self.client.logout()
+    response = self.client.get(reverse("members:login"))
+    self.assertContains(response, reverse("members:register_request"))

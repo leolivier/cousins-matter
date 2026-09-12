@@ -136,17 +136,18 @@ class MemberInvitationView(generic.View):
     ko = self.check_before_invitation(request)
     if ko:
       return ko
+    join_url = request.build_absolute_uri(reverse("tenant-home", args=[request.user.tenant.slug]))
     form = MemberInvitationForm(request.POST)
     if not form.is_valid():
       messages.error(request, form.errors)
-      return render(request, self.template_name, {"form": form})
+      return render(request, self.template_name, {"form": form, "join_url": join_url})
 
     email = form.cleaned_data["email"]
     invited = form.cleaned_data["invited"]
 
     if Member.objects.filter(email=email).exists():
       messages.error(request, _("A member with this email already exists."))
-      return render(request, self.template_name, {"form": form})
+      return render(request, self.template_name, {"form": form, "join_url": join_url})
 
     invitation_url = RegistrationLinkManager().generate_link(request, email, tenant_id=request.user.tenant_id)
     site_name = tenant_setting("site_name")
@@ -206,18 +207,19 @@ class MemberInvitationView(generic.View):
         html_message=msg,
       )
     messages.success(request, _("Invitation sent to %(email)s.") % {"email": email})
-    return render(request, self.template_name, {"form": form})
+    return render(request, self.template_name, {"form": form, "join_url": join_url})
 
   def get(self, request):
     ko = self.check_before_invitation(request)
     if ko:
       return ko
+    join_url = request.build_absolute_uri(reverse("tenant-home", args=[request.user.tenant.slug]))
     email = request.GET.get("mail")
     if email:
       form = MemberInvitationForm(initial={"email": email})
     else:
       form = MemberInvitationForm()
-    return render(request, self.template_name, {"form": form})
+    return render(request, self.template_name, {"form": form, "join_url": join_url})
 
 
 class TenantJoinRequestView(LoginNotRequiredMixin, generic.View):

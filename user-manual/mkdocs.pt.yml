@@ -1,0 +1,25 @@
+INHERIT: mkdocs.yml
+plugins:
+- search
+- i18n:
+    docs_structure: folder
+    languages:
+    - locale: pt
+      name: Português
+      build: true
+      nav_translations:
+        Home: Início
+        Features: Funcionalidades
+        Installation: Instalação
+        Migrate from Version 1 to Version 2: Migração da versão 1 para a versão 2
+        Customization: Personalização
+        Multi-tenancy: Multi-tenancy
+        Reverse Proxying: Proxy reverso
+        Settings: Configurações
+        Translations: Traduções
+        Other management operations: Outras operações de gestão
+        Media Storage with Dropbox: Armazenamento de mídia com Dropbox
+        OAuth Authentication: Autenticação OAuth
+        Media Storage Management: Gestão do armazenamento de média
+        Technical Status: Estado técnico
+      default: true

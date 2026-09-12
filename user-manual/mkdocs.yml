@@ -158,6 +158,9 @@ markdown_extensions:
 extra_css:
   - "assets/css/extra.css"
 
+extra_javascript:
+  - "assets/js/language-switcher.js"
+
 #extra_javascript:
 #  - "assets/js/extra.js"      # optionnel
 

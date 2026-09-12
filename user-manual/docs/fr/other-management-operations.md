@@ -10,7 +10,7 @@ docker compose up -d
 ```
 
 ### Reconstruire l'image à partir du code source
-Découvrez comment compiler à partir du code source pour la première fois [ici](installation.md#build-from-source).
+Découvrez comment compiler à partir du code source pour la première fois [ici](installation.md#compiler-a-partir-du-code-source).
 Pour mettre à jour votre image à partir du code source, procédez simplement comme suit :
 ```
 git pull        # actualiser les sources

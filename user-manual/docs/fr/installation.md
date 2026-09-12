@@ -33,7 +33,7 @@ Cette commande va :
 * créer le fichier .env de base à partir d'un exemple ;
 * ouvrir le fichier .env dans un éditeur pour que vous puissiez l'adapter à vos besoins (voir la page [Paramètres](settings.md)). En particulier, __n’oubliez pas d’ajouter les informations nécessaires à la création du superutilisateur__.
 
-Ce script peut également vous aider à [migrer de la version v1 à la version v2 de Cousins Matter](migrate-from-v1-to-v2.md) et à [renouveler votre clé secrète de temps à autre](other-management-operations.md#rotate-your-secret-key).
+Ce script peut également vous aider à [migrer de la version v1 à la version v2 de Cousins Matter](migrate-from-v1-to-v2.md) et à [renouveler votre clé secrète de temps à autre](other-management-operations.md#renouveler-votre-cle-secrete).
 
 Pour afficher les différentes commandes disponibles, exécutez :
 

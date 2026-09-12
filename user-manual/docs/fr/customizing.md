@@ -7,7 +7,7 @@ Consultez la page [Paramètres](settings.md) pour personnaliser votre site en mo
 Grâce aux paramètres, vous pouvez également gérer les fonctionnalités qui seront proposées aux membres, comme expliqué dans la section [Gestion des fonctionnalités](settings.md/#features-management)
 
 ### Préférences de notification
-Les membres peuvent configurer la fréquence des notifications par e-mail dans les paramètres de leur profil. Consultez la section [Fonctionnalités - Abonnés et notifications](features.md#followers--notifications) pour plus de détails.
+Les membres peuvent configurer la fréquence des notifications par e-mail dans les paramètres de leur profil. Consultez la section [Fonctionnalités - Abonnés et notifications](features.md#abonnes-et-notifications) pour plus de détails.
 
 ## Création de pages
 L'administrateur peut créer ou mettre à jour des pages statiques à l'aide de la fonctionnalité « Modifier la page » dans la barre de navigation. **Seuls les administrateurs ont accès à cette fonctionnalité !**

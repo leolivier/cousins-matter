@@ -24,11 +24,11 @@
 
 * Un annuaire des membres peut être imprimé au format PDF
 
-    ![annuaire](assets/annuaire.webp)
+    ![annuaire](assets/directory.webp)
 
 * Les anniversaires des 50 prochains jours peuvent être affichés (le nombre de 50 peut être modifié dans les paramètres)
 
-    ![anniversaires](assets/anniversaires.webp)
+    ![anniversaires](assets/birthdays.webp)
 
 ### Authentification
 

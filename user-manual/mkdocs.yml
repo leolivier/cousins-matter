@@ -1,0 +1,169 @@
+site_name: "Cousins Matter"
+site_url: "https://cousins-matter.readthedocs.io/"
+site_description: "Documentation of the CousinsMatter application"
+site_author: "Olivier LEVILLAIN"
+repo_url: "https://github.com/leolivier/cousins-matter"
+repo_name: "GitHub"
+edit_uri: "/blob/main/user-manual/docs/"
+site_dir: "site"
+docs_dir: "docs"
+use_directory_urls: true
+
+theme:
+  name: "readthedocs"
+  logo: "assets/cousinades.webp"
+  favicon: "assets/favicon.jpg"
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - toc.integrate
+
+nav:
+  - Home: index.md
+  - Features: features.md
+  - Installation: installation.md
+  - Migrate from Version 1 to Version 2: migrate-from-v1-to-v2.md
+  - Customization: customizing.md
+  - Multi-tenancy: multi-tenancy.md
+  - Reverse Proxying: reverse-proxying.md
+  - Settings: settings.md
+  - Translations: translations.md
+  - Other management operations: other-management-operations.md
+  - Media Storage Management: media-storage.md
+  - Media Storage with Dropbox: media-storage-with-dropbox.md
+  - OAuth Authentication: oauth-authentication.md
+  # - FAQ: faq.md
+  - Technical Status: app-technical-status.md
+
+plugins:
+  - search
+  - i18n:
+      docs_structure: folder
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: fr
+          name: Français
+          build: true
+          nav_translations:
+            Home: Accueil
+            Features: Fonctionnalités
+            Installation: Installation
+            Migrate from Version 1 to Version 2: Migrer de la version 1 à la version 2
+            Customization: Personnalisation
+            Multi-tenancy: Multi-tenancy
+            Reverse Proxying: Reverse Proxy
+            Settings: Paramètres
+            Translations: Traductions
+            Other management operations: Autres opérations de gestion
+            Media Storage with Dropbox: Stockage média avec Dropbox
+            OAuth Authentication: Authentification OAuth
+            Media Storage Management: Gestion du stockage média
+            Technical Status: État technique
+        - locale: es
+          name: Español
+          build: true
+          nav_translations:
+            Home: Inicio
+            Features: Funcionalidades
+            Installation: Instalación
+            Migrate from Version 1 to Version 2: Migrar de la versión 1 a la versión 2
+            Customization: Personalización
+            Multi-tenancy: Multi-tenancy
+            Reverse Proxying: Proxy inverso
+            Settings: Configuración
+            Translations: Traducciones
+            Other management operations: Otras operaciones de gestión
+            Media Storage with Dropbox: Almacenamiento multimedia con Dropbox
+            OAuth Authentication: Autenticación OAuth
+            Media Storage Management: Gestión del almacenamiento multimedia
+            Technical Status: Estado técnico
+        - locale: it
+          name: Italiano
+          build: true
+          nav_translations:
+            Home: Home
+            Features: Funzionalità
+            Installation: Installazione
+            Migrate from Version 1 to Version 2: Migrazione dalla versione 1 alla versione 2
+            Customization: Personalizzazione
+            Multi-tenancy: Multi-tenancy
+            Reverse Proxying: Reverse proxy
+            Settings: Impostazioni
+            Translations: Traduzioni
+            Other management operations: Altre operazioni di gestione
+            Media Storage with Dropbox: Archiviazione multimediale con Dropbox
+            OAuth Authentication: Autenticazione OAuth
+            Media Storage Management: Gestione dell'archiviazione multimediale
+            Technical Status: Stato tecnico
+        - locale: de
+          name: Deutsch
+          build: true
+          nav_translations:
+            Home: Startseite
+            Features: Funktionen
+            Installation: Installation
+            Migrate from Version 1 to Version 2: Migration von Version 1 zu Version 2
+            Customization: Anpassung
+            Multi-tenancy: Multi-Tenancy
+            Reverse Proxying: Reverse Proxy
+            Settings: Einstellungen
+            Translations: Übersetzungen
+            Other management operations: Weitere Verwaltungsvorgänge
+            Media Storage with Dropbox: Medienspeicher mit Dropbox
+            OAuth Authentication: OAuth-Authentifizierung
+            Media Storage Management: Medienspeicherverwaltung
+            Technical Status: Technischer Status
+        - locale: pt
+          name: Português
+          build: true
+          nav_translations:
+            Home: Início
+            Features: Funcionalidades
+            Installation: Instalação
+            Migrate from Version 1 to Version 2: Migração da versão 1 para a versão 2
+            Customization: Personalização
+            Multi-tenancy: Multi-tenancy
+            Reverse Proxying: Proxy reverso
+            Settings: Configurações
+            Translations: Traduções
+            Other management operations: Outras operações de gestão
+            Media Storage with Dropbox: Armazenamento de mídia com Dropbox
+            OAuth Authentication: Autenticação OAuth
+            Media Storage Management: Gestão do armazenamento de média
+            Technical Status: Estado técnico
+
+markdown_extensions:
+  - admonition
+  # - codehilite
+  - toc:
+      permalink: true
+  - footnotes
+  - attr_list
+  # - pymdownx.superfences
+  # - pymdownx.highlight
+  # - pymdownx.inlinehilite
+  # - pymdownx.details
+  # - pymdownx.progressbar
+  # - pymdownx.betterem:
+  #     smart_enable: all
+
+extra_css:
+  - "assets/css/extra.css"
+
+#extra_javascript:
+#  - "assets/js/extra.js"      # optionnel
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: "https://github.com/leolivier/cousins-matter"
+
+# Optional deployment settings for Netlify / GitHub Pages omitted

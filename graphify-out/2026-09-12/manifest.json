@@ -3204,10 +3204,10 @@
     "semantic_hash": "0091d4f1745f38f5e1320ec1c29a7f41"
   },
   "user-manual/requirements.txt": {
-    "mtime": 1789228684.9862313,
-    "seen": 1789231429.6560376,
-    "ast_hash": "dca5e9830dba310c4719722df1f239e5",
-    "semantic_hash": ""
+    "mtime": 1788539366.478692,
+    "seen": 1788636802.848644,
+    "ast_hash": "d19b139b4eb4832549d29b13df20b419",
+    "semantic_hash": "d19b139b4eb4832549d29b13df20b419"
   },
   "core/static/core/images/cousinades-big.jpg": {
     "mtime": 1776512026.594183,
@@ -3376,6 +3376,72 @@
     "seen": 1788636802.8486736,
     "ast_hash": "c0f659e7941b0c7aa42255aa3c0c840e",
     "semantic_hash": "c0f659e7941b0c7aa42255aa3c0c840e"
+  },
+  "user-manual/assets/birthdays.webp": {
+    "mtime": 1788539366.4360235,
+    "seen": 1788636802.8486745,
+    "ast_hash": "b74cd1eb24f4021f52b4fba9266b3730",
+    "semantic_hash": "b74cd1eb24f4021f52b4fba9266b3730"
+  },
+  "user-manual/assets/cousinades.webp": {
+    "mtime": 1788539366.4366114,
+    "seen": 1788636802.8486755,
+    "ast_hash": "928ee40f3085065a7bb458071e6206e0",
+    "semantic_hash": "928ee40f3085065a7bb458071e6206e0"
+  },
+  "user-manual/assets/create_dropbox_app.webp": {
+    "mtime": 1788539366.436662,
+    "seen": 1788636802.8486767,
+    "ast_hash": "bc6c831550e670f2f90f3ed405193d99",
+    "semantic_hash": "bc6c831550e670f2f90f3ed405193d99"
+  },
+  "user-manual/assets/directory.webp": {
+    "mtime": 1788539366.437518,
+    "seen": 1788636802.8486774,
+    "ast_hash": "0c366871a9853e0e7b5322a1668fbe24",
+    "semantic_hash": "0c366871a9853e0e7b5322a1668fbe24"
+  },
+  "user-manual/assets/dropbox_app_permissions.webp": {
+    "mtime": 1788539366.4376621,
+    "seen": 1788636802.8486784,
+    "ast_hash": "69bfeafbe44e615e90d0996504dccbd7",
+    "semantic_hash": "69bfeafbe44e615e90d0996504dccbd7"
+  },
+  "user-manual/assets/favicon.jpg": {
+    "mtime": 1788539366.474662,
+    "seen": 1788636802.8486795,
+    "ast_hash": "ba5ffc4e80262082d07ea118a5be745d",
+    "semantic_hash": "ba5ffc4e80262082d07ea118a5be745d"
+  },
+  "user-manual/assets/invite.webp": {
+    "mtime": 1788539366.4757347,
+    "seen": 1788636802.8486803,
+    "ast_hash": "aaf353f4b5f5e602691421220d68f200",
+    "semantic_hash": "aaf353f4b5f5e602691421220d68f200"
+  },
+  "user-manual/assets/logo.webp": {
+    "mtime": 1788539366.4759977,
+    "seen": 1788636802.8486812,
+    "ast_hash": "496676a2e4fc64660b0ec3c3ed375130",
+    "semantic_hash": "496676a2e4fc64660b0ec3c3ed375130"
+  },
+  "user-manual/assets/members.webp": {
+    "mtime": 1788539366.4766967,
+    "seen": 1788636802.848682,
+    "ast_hash": "f990943b50c089a533e4675cf1135e13",
+    "semantic_hash": "f990943b50c089a533e4675cf1135e13"
+  },
+  "user-manual/assets/profile.webp": {
+    "mtime": 1788539366.4776318,
+    "seen": 1788636802.848683,
+    "ast_hash": "95708abdba00a487fe024b1eb640f1a2",
+    "semantic_hash": "95708abdba00a487fe024b1eb640f1a2"
+  },
+  "user-manual/assets/request-invite.webp": {
+    "mtime": 1788539366.477662,
+    "seen": 1788636802.848684,
+    "ast_hash": "16dbfc42d2a230efb1002962e489df54",
+    "semantic_hash": "16dbfc42d2a230efb1002962e489df54"
   },
   ".github/workflows/claude-code-review.yml": {
     "mtime": 1785688683.809442,
@@ -4097,580 +4163,514 @@
     "ast_hash": "2a94cbdee32e87c7baf854f5d16ceeb8",
     "semantic_hash": ""
   },
-  "user-manual/mkdocs.yml": {
-    "mtime": 1789230406.3063557,
-    "seen": 1789231429.6560338,
-    "ast_hash": "68ad03293ea2d62f48da63261fed7f44",
+  "user-manual/de/app-technical-status.md": {
+    "mtime": 1789151215.2112873,
+    "seen": 1789155321.0298064,
+    "ast_hash": "42954fcd2a4cac1f3da3c94cd03cecc3",
     "semantic_hash": ""
   },
-  "user-manual/docs/de/app-technical-status.md": {
-    "mtime": 1789228843.7183375,
-    "seen": 1789231429.6557584,
-    "ast_hash": "d9097744f8f58ff9cbe8382bfcab6b53",
+  "user-manual/de/customizing.md": {
+    "mtime": 1789151099.371047,
+    "seen": 1789155321.0298095,
+    "ast_hash": "063e7df7f0ef34966d20c151756d2458",
     "semantic_hash": ""
   },
-  "user-manual/docs/de/customizing.md": {
-    "mtime": 1789231190.2355504,
-    "seen": 1789231429.6557636,
-    "ast_hash": "e2187b24c7325ba16c355774b6c6f51d",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/features.md": {
-    "mtime": 1789228977.0504284,
-    "seen": 1789231429.6557672,
-    "ast_hash": "ebc63ce0a98433ffb1c66f7849e90487",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/index.md": {
-    "mtime": 1789229001.472445,
-    "seen": 1789231429.6557703,
-    "ast_hash": "1650d44fbc146e5e56332630fc7b53eb",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/installation.md": {
-    "mtime": 1789231190.2331378,
-    "seen": 1789231429.6557732,
-    "ast_hash": "faee75e021371f43329f26c7bd85d0e1",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/media-storage-with-dropbox.md": {
-    "mtime": 1789229211.2835908,
-    "seen": 1789231429.6557763,
-    "ast_hash": "f32afd2349987de672516c9c5cbb49f7",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/media-storage.md": {
-    "mtime": 1789229099.9945133,
-    "seen": 1789231429.6557794,
-    "ast_hash": "e88be987e00ab8cb0f1996017f9a6c08",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/migrate-from-v1-to-v2.md": {
-    "mtime": 1789229238.70061,
-    "seen": 1789231429.6557825,
-    "ast_hash": "5a1f436950cda7e73e66739d2c43137c",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/multi-tenancy.md": {
-    "mtime": 1789229325.7306712,
-    "seen": 1789231429.6557858,
-    "ast_hash": "35efd32fa248654cf029ce6ac2239f27",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/oauth-authentication.md": {
-    "mtime": 1789229375.171706,
-    "seen": 1789231429.6557891,
-    "ast_hash": "8453cf68938526f7cd66961bbd275125",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/other-management-operations.md": {
-    "mtime": 1789231190.2375643,
-    "seen": 1789231429.6557922,
-    "ast_hash": "fac58d02cd4d96687be12966eabdfe15",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/reverse-proxying.md": {
-    "mtime": 1789229413.8747332,
-    "seen": 1789231429.6557956,
-    "ast_hash": "67f47c4d0e76cded17f956af10da6556",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/settings.md": {
-    "mtime": 1789229598.4918642,
-    "seen": 1789231429.6557987,
-    "ast_hash": "e36ace5b6da6b1e26527204ade017a78",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/de/translations.md": {
-    "mtime": 1789229451.71176,
-    "seen": 1789231429.655802,
-    "ast_hash": "305ea2d51704fc0c09b34bd82267e841",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/en/app-technical-status.md": {
-    "mtime": 1788539366.434662,
-    "seen": 1789231429.655805,
-    "ast_hash": "ac464a3c958b3734c37cfdb0a5909fa7",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/en/customizing.md": {
-    "mtime": 1789231190.234347,
-    "seen": 1789231429.6558082,
-    "ast_hash": "6d15964543abf329f3928f7d76301bf3",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/en/features.md": {
-    "mtime": 1788539366.478692,
-    "seen": 1789231429.6558115,
+  "user-manual/de/features.md": {
+    "mtime": 1789151099.3711102,
+    "seen": 1789155321.0298116,
     "ast_hash": "6829b031d38f7c450b524870f29c5aa1",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/index.md": {
-    "mtime": 1788539366.478692,
-    "seen": 1789231429.6558146,
+  "user-manual/de/index.md": {
+    "mtime": 1789151099.3711672,
+    "seen": 1789155321.029814,
     "ast_hash": "d1bdeecf2218837b7d6d3683f33437a9",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/installation.md": {
-    "mtime": 1789231190.2315354,
-    "seen": 1789231429.6558177,
+  "user-manual/de/installation.md": {
+    "mtime": 1789151099.3712046,
+    "seen": 1789155321.029816,
     "ast_hash": "6878595fa4c96964bca04010d0d3c658",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/media-storage-with-dropbox.md": {
-    "mtime": 1788539366.478692,
-    "seen": 1789231429.6558208,
+  "user-manual/de/media-storage-with-dropbox.md": {
+    "mtime": 1789151099.3712945,
+    "seen": 1789155321.0298176,
     "ast_hash": "75e846f69c78953518215b54e096b803",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/media-storage.md": {
-    "mtime": 1788539366.478692,
-    "seen": 1789231429.6558242,
+  "user-manual/de/media-storage.md": {
+    "mtime": 1789151099.37125,
+    "seen": 1789155321.0298193,
     "ast_hash": "187309afcf0c731c5bc0ba4da7be632c",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/migrate-from-v1-to-v2.md": {
-    "mtime": 1788539366.478692,
-    "seen": 1789231429.6558273,
+  "user-manual/de/migrate-from-v1-to-v2.md": {
+    "mtime": 1789151099.3713307,
+    "seen": 1789155321.029821,
     "ast_hash": "0b656024c9411d68f154a5923f4ba701",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/multi-tenancy.md": {
-    "mtime": 1788539366.478692,
-    "seen": 1789231429.6558306,
+  "user-manual/de/multi-tenancy.md": {
+    "mtime": 1789151099.3713613,
+    "seen": 1789155321.0298228,
     "ast_hash": "40712a8a0cde8be0af264794219e9b4f",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/oauth-authentication.md": {
-    "mtime": 1788539366.478692,
-    "seen": 1789231429.655834,
+  "user-manual/de/oauth-authentication.md": {
+    "mtime": 1789151099.3713958,
+    "seen": 1789155321.0298243,
     "ast_hash": "21db42b0cd9ad195580bf869daf59562",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/other-management-operations.md": {
-    "mtime": 1789231190.236771,
-    "seen": 1789231429.6558375,
+  "user-manual/de/other-management-operations.md": {
+    "mtime": 1789151099.371429,
+    "seen": 1789155321.0298264,
     "ast_hash": "675a9b4edc367a2f9426a0f952b95699",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/reverse-proxying.md": {
-    "mtime": 1788539366.479662,
-    "seen": 1789231429.6558404,
+  "user-manual/de/reverse-proxying.md": {
+    "mtime": 1789151099.371467,
+    "seen": 1789155321.0298285,
     "ast_hash": "62d5b03abc96c02f60a6023d664ade23",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/settings.md": {
-    "mtime": 1788539366.479662,
-    "seen": 1789231429.6558435,
+  "user-manual/de/settings.md": {
+    "mtime": 1789151099.371498,
+    "seen": 1789155321.0298302,
     "ast_hash": "2686ee59bcde240662d10461e7957e28",
     "semantic_hash": ""
   },
-  "user-manual/docs/en/translations.md": {
-    "mtime": 1788539366.479662,
-    "seen": 1789231429.6558468,
+  "user-manual/de/translations.md": {
+    "mtime": 1789151099.3715372,
+    "seen": 1789155321.029833,
     "ast_hash": "174b6550b07706ec5e85688d8fc9624f",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/app-technical-status.md": {
-    "mtime": 1789229226.4936013,
-    "seen": 1789231429.65585,
-    "ast_hash": "36c32cae778f886b5abd964d560b813a",
+  "user-manual/en/app-technical-status.md": {
+    "mtime": 1788539366.434662,
+    "seen": 1789155321.029835,
+    "ast_hash": "ac464a3c958b3734c37cfdb0a5909fa7",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/customizing.md": {
-    "mtime": 1789231190.2350159,
-    "seen": 1789231429.655853,
-    "ast_hash": "8ec89b96b2108c8430ae481bc50879da",
+  "user-manual/en/customizing.md": {
+    "mtime": 1788539366.4785066,
+    "seen": 1789155321.0298374,
+    "ast_hash": "063e7df7f0ef34966d20c151756d2458",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/features.md": {
-    "mtime": 1789229262.722627,
-    "seen": 1789231429.6558564,
-    "ast_hash": "365f224aae636db5e410ff2e97a5ff4c",
+  "user-manual/en/features.md": {
+    "mtime": 1788539366.478692,
+    "seen": 1789155321.029839,
+    "ast_hash": "6829b031d38f7c450b524870f29c5aa1",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/index.md": {
-    "mtime": 1789229196.2855804,
-    "seen": 1789231429.6558597,
-    "ast_hash": "89add3177959dd69f03cdb642f8f256a",
+  "user-manual/en/index.md": {
+    "mtime": 1788539366.478692,
+    "seen": 1789155321.0298407,
+    "ast_hash": "d1bdeecf2218837b7d6d3683f33437a9",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/installation.md": {
-    "mtime": 1789231190.2323582,
-    "seen": 1789231429.6558628,
-    "ast_hash": "9afe5aa6fe7d38cd91d4c102cb7d95d4",
+  "user-manual/en/installation.md": {
+    "mtime": 1788539366.478692,
+    "seen": 1789155321.0298429,
+    "ast_hash": "6878595fa4c96964bca04010d0d3c658",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/media-storage-with-dropbox.md": {
-    "mtime": 1789229462.4237676,
-    "seen": 1789231429.6558661,
-    "ast_hash": "88fdf9683d6879c9c57041bd80a97920",
+  "user-manual/en/media-storage-with-dropbox.md": {
+    "mtime": 1788539366.478692,
+    "seen": 1789155321.029845,
+    "ast_hash": "75e846f69c78953518215b54e096b803",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/media-storage.md": {
-    "mtime": 1789229422.7087395,
-    "seen": 1789231429.6558692,
-    "ast_hash": "f68661dcca4c73b25d65dcb3cfc04f1f",
+  "user-manual/en/media-storage.md": {
+    "mtime": 1788539366.478692,
+    "seen": 1789155321.0298467,
+    "ast_hash": "187309afcf0c731c5bc0ba4da7be632c",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/migrate-from-v1-to-v2.md": {
-    "mtime": 1789229479.89878,
-    "seen": 1789231429.6558723,
-    "ast_hash": "d4d34d98fdfa89f1fc086d076122bf02",
+  "user-manual/en/migrate-from-v1-to-v2.md": {
+    "mtime": 1788539366.478692,
+    "seen": 1789155321.029849,
+    "ast_hash": "0b656024c9411d68f154a5923f4ba701",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/multi-tenancy.md": {
-    "mtime": 1789229526.1128128,
-    "seen": 1789231429.6558757,
-    "ast_hash": "ef439818c950295a81ae40a7d6de944f",
+  "user-manual/en/multi-tenancy.md": {
+    "mtime": 1788539366.478692,
+    "seen": 1789155321.0298512,
+    "ast_hash": "40712a8a0cde8be0af264794219e9b4f",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/oauth-authentication.md": {
-    "mtime": 1789229909.6040866,
-    "seen": 1789231429.6558785,
-    "ast_hash": "736888100744317ca57d6b486ac9a712",
+  "user-manual/en/oauth-authentication.md": {
+    "mtime": 1788539366.478692,
+    "seen": 1789155321.029853,
+    "ast_hash": "21db42b0cd9ad195580bf869daf59562",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/other-management-operations.md": {
-    "mtime": 1789231190.2373116,
-    "seen": 1789231429.6558816,
-    "ast_hash": "0c4c4748fe3f5e3cff1b3b779156769d",
+  "user-manual/en/other-management-operations.md": {
+    "mtime": 1788539366.478692,
+    "seen": 1789155321.0298553,
+    "ast_hash": "675a9b4edc367a2f9426a0f952b95699",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/reverse-proxying.md": {
-    "mtime": 1789229615.8628767,
-    "seen": 1789231429.6558847,
-    "ast_hash": "fb2cf6a079df562bd48c4da251f4bd7c",
+  "user-manual/en/reverse-proxying.md": {
+    "mtime": 1788539366.479662,
+    "seen": 1789155321.0298574,
+    "ast_hash": "62d5b03abc96c02f60a6023d664ade23",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/settings.md": {
-    "mtime": 1789229714.8959472,
-    "seen": 1789231429.6558878,
-    "ast_hash": "db68f142aa74bb8d6f529210a5d0f599",
+  "user-manual/en/settings.md": {
+    "mtime": 1788539366.479662,
+    "seen": 1789155321.0298593,
+    "ast_hash": "2686ee59bcde240662d10461e7957e28",
     "semantic_hash": ""
   },
-  "user-manual/docs/es/translations.md": {
-    "mtime": 1789229278.1396377,
-    "seen": 1789231429.655891,
-    "ast_hash": "fbdcdd114b3061683ba56553966cd773",
+  "user-manual/en/translations.md": {
+    "mtime": 1788539366.479662,
+    "seen": 1789155321.0298612,
+    "ast_hash": "174b6550b07706ec5e85688d8fc9624f",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/app-technical-status.md": {
+  "user-manual/es/app-technical-status.md": {
+    "mtime": 1789151255.1058204,
+    "seen": 1789155321.0298634,
+    "ast_hash": "fae8f7c335cf50ac5b498ea2b200e3e2",
+    "semantic_hash": ""
+  },
+  "user-manual/es/customizing.md": {
+    "mtime": 1789151106.7910736,
+    "seen": 1789155321.0298653,
+    "ast_hash": "063e7df7f0ef34966d20c151756d2458",
+    "semantic_hash": ""
+  },
+  "user-manual/es/features.md": {
+    "mtime": 1789151106.7911208,
+    "seen": 1789155321.029867,
+    "ast_hash": "6829b031d38f7c450b524870f29c5aa1",
+    "semantic_hash": ""
+  },
+  "user-manual/es/index.md": {
+    "mtime": 1789151106.7911565,
+    "seen": 1789155321.0298688,
+    "ast_hash": "d1bdeecf2218837b7d6d3683f33437a9",
+    "semantic_hash": ""
+  },
+  "user-manual/es/installation.md": {
+    "mtime": 1789151106.79119,
+    "seen": 1789155321.0298707,
+    "ast_hash": "6878595fa4c96964bca04010d0d3c658",
+    "semantic_hash": ""
+  },
+  "user-manual/es/media-storage-with-dropbox.md": {
+    "mtime": 1789151106.7912536,
+    "seen": 1789155321.029873,
+    "ast_hash": "75e846f69c78953518215b54e096b803",
+    "semantic_hash": ""
+  },
+  "user-manual/es/media-storage.md": {
+    "mtime": 1789151106.7912235,
+    "seen": 1789155321.029875,
+    "ast_hash": "187309afcf0c731c5bc0ba4da7be632c",
+    "semantic_hash": ""
+  },
+  "user-manual/es/migrate-from-v1-to-v2.md": {
+    "mtime": 1789151106.7912939,
+    "seen": 1789155321.0298767,
+    "ast_hash": "0b656024c9411d68f154a5923f4ba701",
+    "semantic_hash": ""
+  },
+  "user-manual/es/multi-tenancy.md": {
+    "mtime": 1789151106.7913234,
+    "seen": 1789155321.0298786,
+    "ast_hash": "40712a8a0cde8be0af264794219e9b4f",
+    "semantic_hash": ""
+  },
+  "user-manual/es/oauth-authentication.md": {
+    "mtime": 1789151106.7913663,
+    "seen": 1789155321.0298808,
+    "ast_hash": "21db42b0cd9ad195580bf869daf59562",
+    "semantic_hash": ""
+  },
+  "user-manual/es/other-management-operations.md": {
+    "mtime": 1789151106.7914083,
+    "seen": 1789155321.0298827,
+    "ast_hash": "675a9b4edc367a2f9426a0f952b95699",
+    "semantic_hash": ""
+  },
+  "user-manual/es/reverse-proxying.md": {
+    "mtime": 1789151106.7914486,
+    "seen": 1789155321.0298846,
+    "ast_hash": "62d5b03abc96c02f60a6023d664ade23",
+    "semantic_hash": ""
+  },
+  "user-manual/es/settings.md": {
+    "mtime": 1789151106.7914877,
+    "seen": 1789155321.0298867,
+    "ast_hash": "2686ee59bcde240662d10461e7957e28",
+    "semantic_hash": ""
+  },
+  "user-manual/es/translations.md": {
+    "mtime": 1789151106.7915325,
+    "seen": 1789155321.0298886,
+    "ast_hash": "174b6550b07706ec5e85688d8fc9624f",
+    "semantic_hash": ""
+  },
+  "user-manual/fr/app-technical-status.md": {
     "mtime": 1789151170.5235705,
-    "seen": 1789231429.6558943,
+    "seen": 1789155321.0298905,
     "ast_hash": "c9523a69dde522db5c25996a49ff3e73",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/customizing.md": {
-    "mtime": 1789231190.2347076,
-    "seen": 1789231429.6558974,
-    "ast_hash": "7c94875f657af43f528cdfc984a0f92b",
+  "user-manual/fr/customizing.md": {
+    "mtime": 1789151469.8860774,
+    "seen": 1789155321.0298924,
+    "ast_hash": "0b34a357d8d3b674803adfca77099152",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/features.md": {
-    "mtime": 1789230449.326602,
-    "seen": 1789231429.6559005,
-    "ast_hash": "91bad6c0ba983f439d303fa82ae48397",
+  "user-manual/fr/features.md": {
+    "mtime": 1789151576.6711836,
+    "seen": 1789155321.0298944,
+    "ast_hash": "66ad30d3aff6c6fb82b3a1f6fbb94848",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/index.md": {
+  "user-manual/fr/index.md": {
     "mtime": 1789151604.1572404,
-    "seen": 1789231429.6559038,
+    "seen": 1789155321.0298965,
     "ast_hash": "00f896c238006e33842dad14493488cb",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/installation.md": {
-    "mtime": 1789231190.2320068,
-    "seen": 1789231429.6559072,
-    "ast_hash": "e748d43bdf38d26127bcfc9765eb9675",
+  "user-manual/fr/installation.md": {
+    "mtime": 1789151639.172587,
+    "seen": 1789155321.0298984,
+    "ast_hash": "77e951ee85e170c51e2fe1f65d546174",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/media-storage-with-dropbox.md": {
+  "user-manual/fr/media-storage-with-dropbox.md": {
     "mtime": 1789151851.7123396,
-    "seen": 1789231429.6559105,
+    "seen": 1789155321.0299006,
     "ast_hash": "489f4c8cfab64631012336fdbff1c3cc",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/media-storage.md": {
+  "user-manual/fr/media-storage.md": {
     "mtime": 1789151679.9971569,
-    "seen": 1789231429.6559212,
+    "seen": 1789155321.0299027,
     "ast_hash": "c19f10a403c24dd2cb1d26a09d74d297",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/migrate-from-v1-to-v2.md": {
+  "user-manual/fr/migrate-from-v1-to-v2.md": {
     "mtime": 1789151919.274509,
-    "seen": 1789231429.6559246,
+    "seen": 1789155321.0299046,
     "ast_hash": "dec5923344a2ea5f0f5a7a2460c1666d",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/multi-tenancy.md": {
+  "user-manual/fr/multi-tenancy.md": {
     "mtime": 1789152029.7469993,
-    "seen": 1789231429.6559277,
+    "seen": 1789155321.0299067,
     "ast_hash": "b3d08aca36c25bc154ede33460f4f654",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/oauth-authentication.md": {
+  "user-manual/fr/oauth-authentication.md": {
     "mtime": 1789152135.7537546,
-    "seen": 1789231429.655931,
+    "seen": 1789155321.029909,
     "ast_hash": "4c9e2884e46a96337f0c55b4b647c6a2",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/other-management-operations.md": {
-    "mtime": 1789231190.237067,
-    "seen": 1789231429.6559339,
-    "ast_hash": "486006d3f797cf42034196ac40199218",
+  "user-manual/fr/other-management-operations.md": {
+    "mtime": 1789152188.0144088,
+    "seen": 1789155321.0299113,
+    "ast_hash": "e8be2cb796080c57d0de24f8575e39c3",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/reverse-proxying.md": {
+  "user-manual/fr/reverse-proxying.md": {
     "mtime": 1789154636.9029796,
-    "seen": 1789231429.655937,
+    "seen": 1789155321.0299134,
     "ast_hash": "a564049a47b342e80ad1575eb7a20bf3",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/settings.md": {
+  "user-manual/fr/settings.md": {
     "mtime": 1789155082.8841066,
-    "seen": 1789231429.65594,
+    "seen": 1789155321.029915,
     "ast_hash": "a8927dff67b7cc1850a8ed541b23eb7a",
     "semantic_hash": ""
   },
-  "user-manual/docs/fr/translations.md": {
+  "user-manual/fr/translations.md": {
     "mtime": 1789155131.7602587,
-    "seen": 1789231429.6559432,
+    "seen": 1789155321.0299172,
     "ast_hash": "09b7c60367ea6511fe15425f5f1b9c35",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/app-technical-status.md": {
-    "mtime": 1789229491.7017884,
-    "seen": 1789231429.6559463,
-    "ast_hash": "75fb9bc8e2f6cd80786da9440911b3e8",
+  "user-manual/it/app-technical-status.md": {
+    "mtime": 1789151284.3299437,
+    "seen": 1789155321.0299191,
+    "ast_hash": "5c697b05880fc952ecddf0aaa12db0ee",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/customizing.md": {
-    "mtime": 1789231190.2358332,
-    "seen": 1789231429.6559496,
-    "ast_hash": "5855a5b0019646abbf864bfe65423c4c",
+  "user-manual/it/customizing.md": {
+    "mtime": 1789151102.2279732,
+    "seen": 1789155321.0299213,
+    "ast_hash": "063e7df7f0ef34966d20c151756d2458",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/features.md": {
-    "mtime": 1789229586.2548556,
-    "seen": 1789231429.6559527,
-    "ast_hash": "b414829e7154161ae14d4085466af5b4",
+  "user-manual/it/features.md": {
+    "mtime": 1789151102.2280092,
+    "seen": 1789155321.029923,
+    "ast_hash": "6829b031d38f7c450b524870f29c5aa1",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/index.md": {
-    "mtime": 1789229506.764799,
-    "seen": 1789231429.6559558,
-    "ast_hash": "53a9bb59a06fade0b45eea7fc4781564",
+  "user-manual/it/index.md": {
+    "mtime": 1789151102.2280447,
+    "seen": 1789155321.029925,
+    "ast_hash": "d1bdeecf2218837b7d6d3683f33437a9",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/installation.md": {
-    "mtime": 1789231190.2334483,
-    "seen": 1789231429.655959,
-    "ast_hash": "d7cda46eb51b3d9a26d82e22145b7a66",
+  "user-manual/it/installation.md": {
+    "mtime": 1789151102.2280872,
+    "seen": 1789155321.029927,
+    "ast_hash": "6878595fa4c96964bca04010d0d3c658",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/media-storage-with-dropbox.md": {
-    "mtime": 1789229792.792003,
-    "seen": 1789231429.6559618,
-    "ast_hash": "6221cb3ad7705a9ba33213b0bd05648f",
+  "user-manual/it/media-storage-with-dropbox.md": {
+    "mtime": 1789151102.228147,
+    "seen": 1789155321.0299292,
+    "ast_hash": "75e846f69c78953518215b54e096b803",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/media-storage.md": {
-    "mtime": 1789229735.710962,
-    "seen": 1789231429.655965,
-    "ast_hash": "71d9aa596ba4ee07e531e8f7ec2ff038",
+  "user-manual/it/media-storage.md": {
+    "mtime": 1789151102.2281172,
+    "seen": 1789155321.029931,
+    "ast_hash": "187309afcf0c731c5bc0ba4da7be632c",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/migrate-from-v1-to-v2.md": {
-    "mtime": 1789229821.7630236,
-    "seen": 1789231429.6559682,
-    "ast_hash": "5d8b7470c3e388bb1c89e234177ca8a6",
+  "user-manual/it/migrate-from-v1-to-v2.md": {
+    "mtime": 1789151102.2281792,
+    "seen": 1789155321.029933,
+    "ast_hash": "0b656024c9411d68f154a5923f4ba701",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/multi-tenancy.md": {
-    "mtime": 1789229889.7230723,
-    "seen": 1789231429.6559715,
-    "ast_hash": "1714996f0fd67a0aab7b2228962e6386",
+  "user-manual/it/multi-tenancy.md": {
+    "mtime": 1789151102.228209,
+    "seen": 1789155321.029935,
+    "ast_hash": "40712a8a0cde8be0af264794219e9b4f",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/oauth-authentication.md": {
-    "mtime": 1789230074.6442049,
-    "seen": 1789231429.6559746,
-    "ast_hash": "6544ff1e37804c73414f06906af17484",
+  "user-manual/it/oauth-authentication.md": {
+    "mtime": 1789151102.2282412,
+    "seen": 1789155321.0299368,
+    "ast_hash": "21db42b0cd9ad195580bf869daf59562",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/other-management-operations.md": {
-    "mtime": 1789231190.2382047,
-    "seen": 1789231429.6559777,
-    "ast_hash": "da147e88154e8ef496761aece839bb3d",
+  "user-manual/it/other-management-operations.md": {
+    "mtime": 1789151102.228274,
+    "seen": 1789155321.0299387,
+    "ast_hash": "675a9b4edc367a2f9426a0f952b95699",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/reverse-proxying.md": {
-    "mtime": 1789229947.763114,
-    "seen": 1789231429.6559808,
-    "ast_hash": "e53212e8e94810484e0ea3e9d95657ed",
+  "user-manual/it/reverse-proxying.md": {
+    "mtime": 1789151102.228305,
+    "seen": 1789155321.0299404,
+    "ast_hash": "62d5b03abc96c02f60a6023d664ade23",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/settings.md": {
-    "mtime": 1789230019.165165,
-    "seen": 1789231429.6559842,
-    "ast_hash": "49718240db51f767334a5eb3fa070e6e",
+  "user-manual/it/settings.md": {
+    "mtime": 1789151102.2283344,
+    "seen": 1789155321.0299423,
+    "ast_hash": "2686ee59bcde240662d10461e7957e28",
     "semantic_hash": ""
   },
-  "user-manual/docs/it/translations.md": {
-    "mtime": 1789229629.118886,
-    "seen": 1789231429.655987,
-    "ast_hash": "06cd27ec1fcacf0414eb1233c471032f",
+  "user-manual/it/translations.md": {
+    "mtime": 1789151102.2283769,
+    "seen": 1789155321.0299444,
+    "ast_hash": "174b6550b07706ec5e85688d8fc9624f",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/app-technical-status.md": {
-    "mtime": 1789230261.1744802,
-    "seen": 1789231429.6559901,
-    "ast_hash": "dfe7d94bfca10941ed9f6e79243ada4c",
+  "user-manual/mkdocs.yml": {
+    "mtime": 1789155170.6559181,
+    "seen": 1789155321.0299463,
+    "ast_hash": "7dc715aa8d8315b1c799b574999f1b92",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/customizing.md": {
-    "mtime": 1789231190.2361276,
-    "seen": 1789231429.655993,
-    "ast_hash": "ab9d1ad29d54095a018cf842f76158b2",
+  "user-manual/pt/app-technical-status.md": {
+    "mtime": 1789151320.3143268,
+    "seen": 1789155321.0299482,
+    "ast_hash": "b179bc7ef36cf353b85fd396a49c6f0d",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/features.md": {
-    "mtime": 1789229348.170687,
-    "seen": 1789231429.655996,
-    "ast_hash": "e39787c7b9c8973bf71951cde86be3b5",
+  "user-manual/pt/customizing.md": {
+    "mtime": 1789151112.0887594,
+    "seen": 1789155321.0299501,
+    "ast_hash": "063e7df7f0ef34966d20c151756d2458",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/index.md": {
-    "mtime": 1789230155.2343616,
-    "seen": 1789231429.6559992,
-    "ast_hash": "0beae23e106c91ed3d2add9f2a26b266",
+  "user-manual/pt/features.md": {
+    "mtime": 1789151112.0887952,
+    "seen": 1789155321.0299528,
+    "ast_hash": "6829b031d38f7c450b524870f29c5aa1",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/installation.md": {
-    "mtime": 1789231190.2337239,
-    "seen": 1789231429.6560023,
-    "ast_hash": "d2d0651cca3ec92c6725e8dd35e9f3e7",
+  "user-manual/pt/index.md": {
+    "mtime": 1789151112.0888274,
+    "seen": 1789155321.0299547,
+    "ast_hash": "d1bdeecf2218837b7d6d3683f33437a9",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/media-storage-with-dropbox.md": {
-    "mtime": 1789229496.4457917,
-    "seen": 1789231429.6560051,
-    "ast_hash": "e849db3b179437c04d73e1c6a5460cc7",
+  "user-manual/pt/installation.md": {
+    "mtime": 1789151112.088853,
+    "seen": 1789155321.029956,
+    "ast_hash": "6878595fa4c96964bca04010d0d3c658",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/media-storage.md": {
-    "mtime": 1789229454.5347621,
-    "seen": 1789231429.6560082,
-    "ast_hash": "7fbc816a504167f24a421aac70ae4294",
+  "user-manual/pt/media-storage-with-dropbox.md": {
+    "mtime": 1789151112.088903,
+    "seen": 1789155321.0299582,
+    "ast_hash": "75e846f69c78953518215b54e096b803",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/migrate-from-v1-to-v2.md": {
-    "mtime": 1789230273.9208198,
-    "seen": 1789231429.6560113,
-    "ast_hash": "a374c8b1406c6f0ae41718c927f06784",
+  "user-manual/pt/media-storage.md": {
+    "mtime": 1789151112.0888782,
+    "seen": 1789155321.0299602,
+    "ast_hash": "187309afcf0c731c5bc0ba4da7be632c",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/multi-tenancy.md": {
-    "mtime": 1789229586.3088555,
-    "seen": 1789231429.6560144,
-    "ast_hash": "4f2b1ce3ea1790040fc75acde6d1d62c",
+  "user-manual/pt/migrate-from-v1-to-v2.md": {
+    "mtime": 1789151112.0889316,
+    "seen": 1789155321.0299628,
+    "ast_hash": "0b656024c9411d68f154a5923f4ba701",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/oauth-authentication.md": {
-    "mtime": 1789230155.235141,
-    "seen": 1789231429.656017,
-    "ast_hash": "e58ef50678dee40deabd53630a1ff8de",
+  "user-manual/pt/multi-tenancy.md": {
+    "mtime": 1789151112.088957,
+    "seen": 1789155321.0299644,
+    "ast_hash": "40712a8a0cde8be0af264794219e9b4f",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/other-management-operations.md": {
-    "mtime": 1789231190.238622,
-    "seen": 1789231429.6560202,
-    "ast_hash": "c84cf240c10c39f5ba272b7f26585b08",
+  "user-manual/pt/oauth-authentication.md": {
+    "mtime": 1789151112.088986,
+    "seen": 1789155321.0299664,
+    "ast_hash": "21db42b0cd9ad195580bf869daf59562",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/reverse-proxying.md": {
-    "mtime": 1789230155.2348711,
-    "seen": 1789231429.656023,
-    "ast_hash": "d3d128d2b2320441d0804dca24886402",
+  "user-manual/pt/other-management-operations.md": {
+    "mtime": 1789151112.0890138,
+    "seen": 1789155321.0299685,
+    "ast_hash": "675a9b4edc367a2f9426a0f952b95699",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/settings.md": {
-    "mtime": 1789229750.6839728,
-    "seen": 1789231429.6560261,
-    "ast_hash": "0e08902eac72718842da06307f0ce295",
+  "user-manual/pt/reverse-proxying.md": {
+    "mtime": 1789151112.0890386,
+    "seen": 1789155321.0299706,
+    "ast_hash": "62d5b03abc96c02f60a6023d664ade23",
     "semantic_hash": ""
   },
-  "user-manual/docs/pt/translations.md": {
-    "mtime": 1789230273.9108171,
-    "seen": 1789231429.6560295,
-    "ast_hash": "2cd8cb8c15c1ce88af4009cde914f7ae",
+  "user-manual/pt/settings.md": {
+    "mtime": 1789151112.0890763,
+    "seen": 1789155321.0299728,
+    "ast_hash": "2686ee59bcde240662d10461e7957e28",
     "semantic_hash": ""
   },
-  "user-manual/docs/assets/birthdays.webp": {
-    "mtime": 1788539366.4360235,
-    "seen": 1789231429.6561542,
-    "ast_hash": "b74cd1eb24f4021f52b4fba9266b3730",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/assets/cousinades.webp": {
-    "mtime": 1788539366.4366114,
-    "seen": 1789231429.6561575,
-    "ast_hash": "928ee40f3085065a7bb458071e6206e0",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/assets/create_dropbox_app.webp": {
-    "mtime": 1788539366.436662,
-    "seen": 1789231429.6561608,
-    "ast_hash": "bc6c831550e670f2f90f3ed405193d99",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/assets/directory.webp": {
-    "mtime": 1788539366.437518,
-    "seen": 1789231429.656164,
-    "ast_hash": "0c366871a9853e0e7b5322a1668fbe24",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/assets/dropbox_app_permissions.webp": {
-    "mtime": 1788539366.4376621,
-    "seen": 1789231429.656167,
-    "ast_hash": "69bfeafbe44e615e90d0996504dccbd7",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/assets/favicon.jpg": {
-    "mtime": 1788539366.474662,
-    "seen": 1789231429.65617,
-    "ast_hash": "ba5ffc4e80262082d07ea118a5be745d",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/assets/invite.webp": {
-    "mtime": 1788539366.4757347,
-    "seen": 1789231429.6561732,
-    "ast_hash": "aaf353f4b5f5e602691421220d68f200",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/assets/logo.webp": {
-    "mtime": 1788539366.4759977,
-    "seen": 1789231429.6561763,
-    "ast_hash": "496676a2e4fc64660b0ec3c3ed375130",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/assets/members.webp": {
-    "mtime": 1788539366.4766967,
-    "seen": 1789231429.6561797,
-    "ast_hash": "f990943b50c089a533e4675cf1135e13",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/assets/profile.webp": {
-    "mtime": 1788539366.4776318,
-    "seen": 1789231429.6561828,
-    "ast_hash": "95708abdba00a487fe024b1eb640f1a2",
-    "semantic_hash": ""
-  },
-  "user-manual/docs/assets/request-invite.webp": {
-    "mtime": 1788539366.477662,
-    "seen": 1789231429.6561856,
-    "ast_hash": "16dbfc42d2a230efb1002962e489df54",
+  "user-manual/pt/translations.md": {
+    "mtime": 1789151112.0891085,
+    "seen": 1789155321.0299747,
+    "ast_hash": "174b6550b07706ec5e85688d8fc9624f",
     "semantic_hash": ""
   }
 }

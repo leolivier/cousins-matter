@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.core import mail
+from django.core.cache import cache
 from django.utils.translation import gettext as _
 from django.conf import settings
 from django.contrib.auth import get_user
@@ -9,6 +10,7 @@ from captcha.conf import settings as captcha_settings
 from verify_email.app_configurations import GetFieldFromSettings
 
 from core.context_processors import override_settings
+from tenants.models import Tenant
 from ..forms import MemberRegistrationForm
 from ..models import Member
 from ..registration_link_manager import RegistrationLinkManager
@@ -362,3 +364,76 @@ class MemberRegisterConsentTests(TestCase):
     }
     form = MemberRegistrationForm(user)
     self.assertFormError(form, "privacy_consent", [_("This field is required.")])
+
+
+@override_settings(MULTI_TENANT_ENABLED=True)
+class TenantJoinRequestTests(RequestRegistrationLinkTests):
+  def setUp(self):
+    super().setUp()
+    cache.clear()
+    self.tenant = Tenant.objects.create(name="Famille Dupont", slug="famille-dupont")
+    self.tenant_admin = Member.unscoped.create(
+      username="dupont-admin",
+      email="admin@dupont.fr",
+      tenant=self.tenant,
+      role=Member.Role.ADMIN,
+      is_active=True,
+    )
+
+  @staticmethod
+  def join_data(email="new@cousin.fr"):
+    return {
+      "name": "New Cousin",
+      "email": email,
+      "message": "Hello!",
+      "captcha_0": "whatever",
+      "captcha_1": "passed",
+    }
+
+  @ignore_captcha_errors()
+  def test_join_request_emails_tenant_admins_not_superusers(self):
+    response = self.client.post(reverse("tenant-join", args=["famille-dupont"]), self.join_data(), follow=True)
+    self.assertEqual(len(mail.outbox), 1)
+    self.assertSequenceEqual(mail.outbox[0].recipients(), [self.tenant_admin.email])
+    self.assertNotIn(self.superuser.email, mail.outbox[0].recipients())
+    self.assertContainsMessage(response, "success", _("Registration request sent."))
+
+  @ignore_captcha_errors()
+  def test_join_request_redirects_to_family_home(self):
+    response = self.client.post(reverse("tenant-join", args=["famille-dupont"]), self.join_data())
+    self.assertRedirects(response, reverse("tenant-home", args=["famille-dupont"]))
+
+  @ignore_captcha_errors()
+  def test_join_request_unknown_slug_404(self):
+    response = self.client.post(reverse("tenant-join", args=["inconnu"]), self.join_data())
+    self.assertEqual(response.status_code, 404)
+
+  @ignore_captcha_errors()
+  def test_join_request_existing_email_rejected_unscoped(self):
+    data = self.join_data(email=self.superuser.email)  # member of ANOTHER tenant
+    response = self.client.post(reverse("tenant-join", args=["famille-dupont"]), data, follow=True)
+    self.assertContainsMessage(response, "error", _("A member with this email already exists."))
+    self.assertEqual(len(mail.outbox), 0)
+
+  @ignore_captcha_errors()
+  def test_join_request_throttled_after_five_posts(self):
+    for i in range(5):
+      self.client.post(
+        reverse("tenant-join", args=["famille-dupont"]),
+        self.join_data(email=f"cousin{i}@cousin.fr"),
+      )
+    response = self.client.post(
+      reverse("tenant-join", args=["famille-dupont"]),
+      self.join_data(email="sixth@cousin.fr"),
+      follow=True,
+    )
+    self.assertContainsMessage(response, "error", _("Too many requests, please try again later."))
+    self.assertEqual(len(mail.outbox), 5)
+
+
+class JoinFlagOffTests(MemberTestCase):
+  @override_settings(MULTI_TENANT_ENABLED=False)
+  def test_join_non_default_slug_404(self):
+    tenant = Tenant.objects.create(name="Other", slug="other")
+    response = self.client.get(reverse("tenant-join", args=[tenant.slug]))
+    self.assertEqual(response.status_code, 404)

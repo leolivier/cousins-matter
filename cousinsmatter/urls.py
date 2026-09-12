@@ -24,6 +24,7 @@ from django.views.generic.base import TemplateView
 from core.views.views_general import download_protected_media, download_public_media, health, qhealth
 from pages.views import flatpage as tenant_flatpage
 from core.views.views_general import PasswordResetView
+from members.views import views_registration
 from tenants.views import views_home
 
 # from django.utils.translation import gettext_lazy as _
@@ -111,9 +112,8 @@ urlpatterns = (
   # Kept last — tenant-home is a catch-all.
   + [
     path(
-      # ponytail: temporary target until Task 3 lands views_registration.TenantJoinRequestView
       "<slug:slug>/join/",
-      views_home.TenantHomeView.as_view(),
+      views_registration.TenantJoinRequestView.as_view(),
       name="tenant-join",
     ),
     path("<slug:slug>/", views_home.TenantHomeView.as_view(), name="tenant-home"),

@@ -1,6 +1,8 @@
 from django.contrib import messages
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -12,6 +14,7 @@ from ..registration_link_manager import RegistrationLinkManager
 from tenants.models import Tenant
 from tenants.scoping import tenant_context
 from tenants.authz import admin_or_superusers
+from tenants.services import resolve_join_tenant
 from tenants.settings_overrides import tenant_setting
 from ..forms import (
   MemberInvitationForm,
@@ -217,67 +220,83 @@ class MemberInvitationView(generic.View):
     return render(request, self.template_name, {"form": form})
 
 
-class RegistrationRequestView(LoginNotRequiredMixin, generic.View):
+class TenantJoinRequestView(LoginNotRequiredMixin, generic.View):
+  """Anonymous request to join a family (captcha; routed to its admins).
+
+  The tenant comes from the URL slug; the legacy ``members:register_request``
+  alias and flag-off deployments resolve to the default tenant. The request is
+  emailed to the tenant's admins (fallback: platform superusers) with a
+  prefilled invitation link.
+  """
+
   template_name = "members/registration/registration_request.html"
 
-  def post(self, request):
-    """
-    Allows a user to request a registration link.
-    """
-    form = RegistrationRequestForm(request.POST)
-    # Validate the form: the captcha field will automatically
-    # check the input
-    if form.is_valid():  # Captcha OK
-      site_name = tenant_setting("site_name")
-      requester_email = request.POST.get("email")
-      if Member.objects.filter(email=requester_email).exists():
-        messages.error(request, _("A member with this email already exists."))
-      else:
-        requester_name = request.POST.get("name")
-        requester_message = request.POST.get("message")
-        link = reverse("members:invite")
-        absolute_link = request.build_absolute_uri(link)
+  THROTTLE_LIMIT = 5  # submissions per hour per IP, same policy as other
+  THROTTLE_SECONDS = 3600  # anonymous public forms
 
-        context = {
-          "site_name": site_name,
-          "requester": {
-            "email": requester_email,
-            "name": requester_name,
-            "message": requester_message,
-          },
-          "link": absolute_link,
-        }
+  def get(self, request, slug=None):
+    tenant = resolve_join_tenant(slug)
+    if tenant is None:
+      raise Http404
+    request.tenant = tenant
+    with tenant_context(tenant):
+      return render(request, self.template_name, {"form": RegistrationRequestForm()})
 
-        msg = render_to_string(
-          "members/email/registration_request_email.html",
-          context,
-          request=request,
-        )
-        # anonymous request: tenant unknown pre-login, so route to a platform admin
-        admin = Member.unscoped.filter(is_superuser=True, is_active=True).first()
-        if not admin:
-          messages.error(request, _("Unable to send mail, please contact your administrator"))
+  def post(self, request, slug=None):
+    tenant = resolve_join_tenant(slug)
+    if tenant is None:
+      raise Http404
+    request.tenant = tenant
+    with tenant_context(tenant):
+      form = RegistrationRequestForm(request.POST)
+      if form.is_valid():
+        if self._throttled(request):
+          messages.error(request, _("Too many requests, please try again later."))
           return render(request, self.template_name, {"form": form})
-        if (
-          send_mail(
-            _("Registration request for %(site_name)s") % {"site_name": site_name},
-            strip_tags(msg),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[admin.email],
-            html_message=msg,
-          )
-          == 1
-        ):
+        email = form.cleaned_data["email"]
+        if Member.unscoped.filter(email=email).exists():
+          # email login is global: an existing member can never re-claim it here
+          messages.error(request, _("A member with this email already exists."))
+          return render(request, self.template_name, {"form": form})
+        if self._send_request(tenant, form.cleaned_data, request):
           messages.success(request, _("Registration request sent."))
-          return redirect("/")
-        else:
-          messages.error(
-            request,
-            _("Unable to send mail, please contact your administrator"),
-          )
+          return redirect("tenant-home", slug=tenant.slug)
+        messages.error(request, _("Unable to send mail, please contact your administrator"))
+      return render(request, self.template_name, {"form": form})
 
-    return render(request, self.template_name, {"form": form})
+  def _send_request(self, tenant, data, request) -> bool:
+    """Render + send the request email to the tenant's admins. True on success."""
+    site_name = tenant_setting("site_name")
+    msg = render_to_string(
+      "members/email/registration_request_email.html",
+      {
+        "site_name": site_name,
+        "requester": {"email": data["email"], "name": data["name"], "message": data["message"]},
+        "link": request.build_absolute_uri(reverse("members:invite")),
+      },
+      request=request,
+    )
+    admins = admin_or_superusers(tenant)
+    if not admins:
+      return False
+    return (
+      send_mail(
+        _("Registration request for %(site_name)s") % {"site_name": site_name},
+        strip_tags(msg),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[admin.email for admin in admins],
+        html_message=msg,
+      )
+      == 1
+    )
 
-  def get(self, request):
-    form = RegistrationRequestForm()
-    return render(request, self.template_name, {"form": form})
+  def _throttled(self, request) -> bool:
+    key = f"join-request:{request.META.get('REMOTE_ADDR', 'unknown')}"
+    count = cache.get_or_set(key, 0, self.THROTTLE_SECONDS)
+    if count >= self.THROTTLE_LIMIT:
+      return True
+    try:
+      cache.incr(key)
+    except ValueError:
+      cache.set(key, 1, self.THROTTLE_SECONDS)
+    return False

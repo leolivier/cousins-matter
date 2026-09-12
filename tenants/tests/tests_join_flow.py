@@ -54,6 +54,7 @@ class TenantHomeTests(MemberTestCase):
     )
 
   def test_home_renders_login_page_with_family_branding(self):
+    self.client.logout()
     response = self.client.get(reverse("tenant-home", args=["famille-dubois"]))
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "members/login/login.html")
@@ -61,6 +62,7 @@ class TenantHomeTests(MemberTestCase):
     self.assertEqual(response.context["settings"]["SITE_NAME"], "Famille Dubois")
 
   def test_home_login_post_works(self):
+    self.client.logout()
     response = self.client.post(
       reverse("tenant-home", args=["famille-dubois"]),
       {"username": self.superuser.username, "password": self.superuser.password},

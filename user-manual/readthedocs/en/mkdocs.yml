@@ -1,4 +1,5 @@
-INHERIT: mkdocs.yml
+INHERIT: ../../mkdocs.yml
+docs_dir: ../../docs
 plugins:
 - search
 - i18n:

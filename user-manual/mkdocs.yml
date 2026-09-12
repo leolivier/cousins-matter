@@ -45,10 +45,6 @@ plugins:
   - i18n:
       docs_structure: folder
       languages:
-        - locale: en
-          default: true
-          name: English
-          build: true
         - locale: fr
           name: Français
           build: true
@@ -139,6 +135,10 @@ plugins:
             OAuth Authentication: Autenticação OAuth
             Media Storage Management: Gestão do armazenamento de média
             Technical Status: Estado técnico
+        - locale: en
+          default: true
+          name: English
+          build: true
 
 markdown_extensions:
   - admonition

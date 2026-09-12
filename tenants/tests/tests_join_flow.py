@@ -1,5 +1,8 @@
-from django.test import override_settings
 from django.urls import reverse
+
+# Template-aware variant: also recomputes the settings memoized for templates,
+# so flipping MULTI_TENANT_ENABLED in a test is actually visible in rendering.
+from core.context_processors import override_settings
 
 from members.tests.tests_member_base import MemberTestCase
 
@@ -87,6 +90,25 @@ class TenantHomeTests(MemberTestCase):
     self.tenant.save()
     response = self.client.get(reverse("tenant-home", args=["famille-dubois"]))
     self.assertEqual(response.status_code, 404)
+
+
+class ReservedSlugTests(MemberTestCase):
+  def test_reserved_slug_rejected(self):
+    from django.forms import ValidationError
+
+    from ..forms import uniquify_tenant_slug
+
+    # "Chat & Galleries" slugifies to "chat-galleries", which is NOT reserved:
+    # the tenant-home catch-all only matches a single path segment, so only an
+    # exact slug can shadow a root route.
+    for name in ("Members", "Accounts", "Chat", "Galleries"):
+      with self.assertRaises(ValidationError):
+        uniquify_tenant_slug(name)
+
+  def test_compound_slug_allowed(self):
+    from ..forms import uniquify_tenant_slug
+
+    self.assertEqual(uniquify_tenant_slug("Chat & Galleries"), "chat-galleries")
 
 
 @override_settings(MULTI_TENANT_ENABLED=False)

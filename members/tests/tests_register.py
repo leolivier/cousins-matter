@@ -435,6 +435,10 @@ class TenantJoinRequestTests(RequestRegistrationLinkTests):
     response = self.client.get(reverse("members:invite"))
     self.assertContains(response, reverse("tenant-home", args=[self.superuser.tenant.slug]))
 
+  def test_legacy_link_hidden_when_flag_on(self):
+    response = self.client.get(reverse("members:login"))
+    self.assertNotContains(response, reverse("members:register_request"))
+
 
 class JoinFlagOffTests(MemberTestCase):
   @override_settings(MULTI_TENANT_ENABLED=False)

@@ -8,8 +8,9 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import Tenant
 
-# Slugs a family may never take (they collide with the seeded/special tenants
-# and would break slug-based routing).
+# Slugs a family may never take: seeded/special tenants, plus the first
+# segment of every root route and the media/static prefixes — a tenant slug
+# would otherwise shadow them in the tenant-home catch-all.
 RESERVED_TENANT_SLUGS = frozenset({
   settings.DEFAULT_TENANT_SLUG,
   settings.SYSTEM_TENANT_SLUG,
@@ -18,6 +19,27 @@ RESERVED_TENANT_SLUGS = frozenset({
   "manage",
   "settings",
   "signup",
+  "accounts",
+  "members",
+  "posts",
+  "chat",
+  "galleries",
+  "polls",
+  "genealogy",
+  "password",
+  "captcha",
+  "i18n",
+  "health",
+  "qhealth",
+  "tenants",
+  "saas",
+  "troves",
+  "classified-ads",
+  "pages-edit",
+  "robots.txt",
+  "static",
+  "media",
+  "protected-media",
 })
 
 

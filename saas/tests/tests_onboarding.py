@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from members.models import Member
+from pages.services import seed_tenant_pages
 from tenants.models import Tenant, TenantSettings
 
 from .utils import skip_if_saas_off
@@ -14,6 +15,8 @@ _PWD = "pw-12345-Aa"
 def _make_admin(email="admin@example.com", password=True):
   tenant = Tenant.objects.create(name="Smith", slug="smith")
   TenantSettings.objects.create(tenant=tenant)
+  # the home page includes the tenant's own copy of the predefined pages
+  seed_tenant_pages(tenant)
   admin = Member.unscoped.create(
     username="admin",
     email=email,

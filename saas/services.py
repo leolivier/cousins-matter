@@ -12,6 +12,7 @@ from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 
 from members.models import Member
+from pages.services import seed_tenant_pages
 from tenants.forms import uniquify_tenant_slug
 from tenants.models import Tenant, TenantSettings
 
@@ -85,6 +86,8 @@ def create_tenant_from_request(tenant_request: TenantRequest) -> Member:
     slug = uniquify_tenant_slug(tenant_request.tenant_name)
     tenant = Tenant.objects.create(name=tenant_request.tenant_name, slug=slug)
     TenantSettings.objects.create(tenant=tenant)
+    # the family gets its own editable copy of the predefined pages
+    seed_tenant_pages(tenant)
     username = tenant_request.email.partition("@")[0]
     member = Member.unscoped.create(
       username=username,

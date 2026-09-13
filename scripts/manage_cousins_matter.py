@@ -197,6 +197,31 @@ def download_github_file(file: str, dest: Path, base_url: str):
     error(1, f"Downloading {file} failed: {ex}")
 
 
+def local_checkout_file(rel_path: str, branch: str | None) -> Path | None:
+  """Local copy of a file when the script runs inside a checkout of ``branch``.
+
+  The install test on the private fork targets a branch that raw.githubusercontent.com
+  cannot serve unauthenticated (404). When the script runs from a checkout of that
+  very branch (the CI case), its files are exactly the tested content.
+  """
+  if not branch:
+    return None
+  root = Path(__file__).resolve().parents[1]
+  try:
+    current = run(
+      ["git", "-C", str(root), "rev-parse", "--abbrev-ref", "HEAD"],
+      check=True,
+      capture_output=True,
+      quiet=True,
+    ).stdout.strip()
+  except Exception:
+    return None
+  if current != branch:
+    return None
+  candidate = root / rel_path
+  return candidate if candidate.is_file() else None
+
+
 def download_V2_needed_files(directory: Path, branch: str | None, release: str | None):
   files_to_download = [
     ("docker-compose.yml", directory / "docker-compose.yml"),
@@ -209,7 +234,12 @@ def download_V2_needed_files(directory: Path, branch: str | None, release: str |
   ]
   base_url = get_github_base_url(branch, release)
   for rel, dest in files_to_download:
-    download_github_file(rel, dest, base_url)
+    if local := local_checkout_file(rel, branch):
+      verbose(f"Using local {rel} from {local}")
+      dest.parent.mkdir(parents=True, exist_ok=True)
+      shutil.copy(local, dest)
+    else:
+      download_github_file(rel, dest, base_url)
   # copy myself to scripts/ (already downloaded)
   script_dir = directory / "scripts"
   script_dir.mkdir(parents=True, exist_ok=True)

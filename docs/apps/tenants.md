@@ -4,7 +4,7 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-03-09
+stale_after: 2027-03-12
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -166,6 +166,19 @@ Deletion goes through `tenants.services.delete_tenant`, which refuses the
 system tenant and still-active tenants (deactivate first), deletes the
 tenant's members explicitly (`Member.tenant` is `PROTECT`) and lets
 tenant-scoped rows cascade; it returns the number of members removed.
+
+## Family home (anonymous)
+
+`/<slug>/` (`tenant-home`, `tenants/views/views_home.TenantHomeView`) renders
+the family's unauthenticated page: the same `LoginView` as `members:login`,
+branded by the tenant (`request.tenant`, resolved with `resolve_join_tenant`,
+404 on unknown or inactive slugs). `/<slug>/join/` (`tenant-join`) is the
+matching join-request form served by `TenantJoinRequestView`
+(members/views/views_registration.py). Both routes are mounted even when
+`MULTI_TENANT_ENABLED=False`; without multi-tenancy only the default tenant's
+slug responds, other slugs 404. Tenant slugs cannot shadow root routes
+(`RESERVED_TENANT_SLUGS`, tenants/forms.py) and the catch-all is mounted last
+in cousinsmatter/urls.py.
 
 ## Internationalization
 

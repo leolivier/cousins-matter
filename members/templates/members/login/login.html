@@ -3,6 +3,7 @@
 {% block content %}
     <div class="box">
         <legend class="title is-3 has-text-centered">{% translate "Sign in" %}</legend>
+        {% if request.tenant %}<p class="subtitle has-text-centered">{{ request.tenant.name }}</p>{% endif %}
         {% include "members/login/oauth_login.html" with kind="login" %}
         <form method="POST">
             {% csrf_token %}
@@ -15,7 +16,11 @@
         </form>
         <div class="container is-small">
             {% translate "Need An Account?" %}
+            {% if request.tenant %}
+            <a class="is-2" href="{% url 'tenant-join' request.tenant.slug %}">{% translate "Request invitation link" %}</a>
+            {% elif not settings.MULTI_TENANT_ENABLED %}
             <a class="is-2" href="{% url 'members:register_request' %}">{% translate "Request invitation link" %}</a>
+            {% endif %}
             {% if settings.MULTI_TENANT_ENABLED %}
                 {% translate "or" %}
                 <a class="is-2" href="{% url 'tenants:family_signup' %}">{% translate "Create a new family" %}</a>

@@ -23,6 +23,16 @@ class MemberManager(BaseUserManager):
     tenant = get_current_tenant()
     return qs.filter(tenant=tenant) if tenant is not None else qs
 
+  def get_by_natural_key(self, username):
+    """Authentication is never tenant-scoped: login credentials are global, and
+    the login form may be rendered under a tenant context (family home) while
+    the member belongs to another family. ModelBackend resolves users through
+    this method, so bypass the current-tenant filter here."""
+    from tenants.scoping import tenant_context
+
+    with tenant_context(None):
+      return super().get_by_natural_key(username)
+
   def _resolve_tenant(self, extra_fields):
     """Ensure a tenant is present: explicit > current request > default."""
     if extra_fields.get("tenant") is not None:

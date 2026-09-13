@@ -11,5 +11,8 @@
 			<button type="submit" class="button is-success">{%translate "Invite" %}</button>
 		</p>
 	</form>
+	<p class="content has-text-centered">
+		{% blocktranslate with url=join_url %}To let relatives request their invitation themselves, share your family home page: <a href="{{ url }}">{{ url }}</a>{% endblocktranslate %}
+	</p>
 </div>
 {% endblock %}

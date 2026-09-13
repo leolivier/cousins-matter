@@ -5,6 +5,10 @@ DEBUG = env.bool("DEBUG", False)
 TESTING = True
 DEBUG_TOOLBAR = False
 DEBUG_HTMX = False
+# Pin tests to the source language regardless of the local .env: tests assert
+# untranslated strings, which would fail wherever the .env sets LANGUAGE_CODE
+# to something else (CI has no .env and already gets the "en" default).
+LANGUAGE_CODE = "en"
 # Tests must run WITHOUT collectstatic. Django's test runner forces DEBUG=False
 # (DiscoverRunner -> setup_test_environment(debug=False)), which disables
 # HashedFilesMixin._url's DEBUG shortcut. With CompressedManifestStaticFilesStorage

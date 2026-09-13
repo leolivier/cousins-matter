@@ -62,7 +62,7 @@ jobs:
 
           # Start containers
           mkdir -p ${{ github.workspace }}/artifacts/screenshots
-          docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d --wait --wait-timeout 30
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d --wait --wait-timeout 60
 
           # Verify container exists and is running
           docker ps | grep cousins-matter || (docker ps && exit 1)

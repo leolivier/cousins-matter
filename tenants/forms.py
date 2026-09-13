@@ -27,13 +27,14 @@ RESERVED_TENANT_SLUGS = frozenset({
   "jsi18n",
   "members",
   "pages",
-  "public-media",
+  "public_media",
   "posts",
   "chat",
   "galleries",
   "polls",
   "genealogy",
   "password",
+  "password-reset",
   "captcha",
   "i18n",
   "health",
@@ -44,10 +45,8 @@ RESERVED_TENANT_SLUGS = frozenset({
   "verification",
   "classified-ads",
   "pages-edit",
-  "robots.txt",
   "static",
-  "media",
-  "protected-media",
+  "protected_media",
 })
 
 

@@ -72,6 +72,14 @@ class TenantHomeTests(MemberTestCase):
     global_login = self.client.get(reverse("members:login"))
     self.assertNotContains(global_login, reverse("tenant-join", args=["famille-dubois"]))
 
+  def test_join_page_title_uses_family_site_name(self):
+    # The {% title %} tag reads the global settings.SITE_NAME; the join page
+    # must use the tenant-layered value from the context processor instead.
+    self.client.logout()
+    response = self.client.get(reverse("tenant-join", args=["famille-dubois"]))
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, "<title>Famille Dubois - ")
+
   def test_home_login_post_works(self):
     self.client.logout()
     response = self.client.post(
@@ -101,7 +109,7 @@ class ReservedSlugTests(MemberTestCase):
     # "Chat & Galleries" slugifies to "chat-galleries", which is NOT reserved:
     # the tenant-home catch-all only matches a single path segment, so only an
     # exact slug can shadow a root route.
-    for name in ("Members", "Accounts", "Chat", "Galleries", "Contact", "Pages"):
+    for name in ("Members", "Accounts", "Chat", "Galleries", "Contact", "Pages", "Password reset"):
       with self.subTest(name=name):
         with self.assertRaises(ValidationError):
           uniquify_tenant_slug(name)
@@ -110,6 +118,38 @@ class ReservedSlugTests(MemberTestCase):
     from ..forms import uniquify_tenant_slug
 
     self.assertEqual(uniquify_tenant_slug("Chat & Galleries"), "chat-galleries")
+
+  def test_reserved_slugs_cover_root_routes(self):
+    import re
+
+    from ..forms import RESERVED_TENANT_SLUGS
+    from cousinsmatter import urls as root_urls
+
+    def first_segment(route):
+      return route.split("/")[0]
+
+    def slug_legal(segment):
+      # Tenant.slug is a SlugField: letters/digits/underscore/hyphen only.
+      return bool(segment) and "<" not in segment and re.fullmatch(r"[\w-]+", segment)
+
+    def walk(patterns):
+      for p in patterns:
+        segment = first_segment(str(p.pattern))
+        if slug_legal(segment):
+          yield segment
+        elif segment == "" and hasattr(p, "url_patterns"):
+          # include("") mounts its children at the root
+          yield from walk(p.url_patterns)
+
+    covered = set(walk(root_urls.urlpatterns))
+    self.assertIn("members", covered)
+    self.assertIn("protected_media", covered)
+    for slug in covered:
+      with self.subTest(slug=slug):
+        self.assertIn(slug, RESERVED_TENANT_SLUGS)
+    # the tenant catch-alls are converters, skipped by the same rule
+    self.assertFalse(slug_legal(first_segment("<slug:slug>/join/")))
+    self.assertFalse(slug_legal(first_segment("<slug:slug>/")))
 
 
 @override_settings(MULTI_TENANT_ENABLED=False)

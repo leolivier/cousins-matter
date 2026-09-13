@@ -1,9 +1,9 @@
 {% extends "members/base_members.html" %}
 {% load i18n crispy_forms_tags cm_tags %}
-{% block title %}{% title _("Request Invitation") %} {% endblock %}
+{% block title %}{{ settings.SITE_NAME }} - {% translate "Request Invitation" %}{% endblock %}
 {% block content %}
 <div class="container mt-5">
-	<h1 class="title">{% title _("Request Invitation") %}</h1>
+	<h1 class="title">{{ settings.SITE_NAME }} - {% translate "Request Invitation" %}</h1>
 	<hr>
 	<p class="content">
 		{% blocktranslate with name=settings.SITE_NAME %}By completing and submitting this form, you are asking the administrators of the "{{ name }}" family site to send you an invitation link.{% endblocktranslate %}

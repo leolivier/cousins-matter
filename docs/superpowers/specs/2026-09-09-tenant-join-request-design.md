@@ -73,9 +73,13 @@ Same view, in order:
 2. Throttle: 5 submissions/hour/IP, cache-based (`_throttled` pattern,
    reimplemented locally in `members` — see "Upstream contribution" below).
 3. Email must not already belong to a member — checked against
-   `Member.unscoped` (login email is global). This also fixes a latent bug: the
-   current check uses the tenant-scoped manager, which is empty for anonymous
-   requests.
+   `Member.unscoped` (login email is global). The unscoped manager is not a fix
+   for a broken legacy check: the legacy check ran with no active tenant, where
+   `MemberManager.get_queryset` returns an unfiltered queryset, so it already
+   worked. `Member.unscoped` is explicitness plus safety under `tenant_context`
+   — the new view renders and POSTs inside a tenant context, where the scoped
+   manager WOULD filter and could miss an existing member of another family
+   using that email.
 4. Sends one email to **all active admins of the tenant**
    (`tenants/authz.tenant_admins`, falling back to platform superusers), with:
    family name, requester name/email/message, and an absolute
@@ -99,8 +103,11 @@ Observable differences for flag-off users (explicit, all benign):
 1. Recipients: `tenant_admins(default_tenant)` with superuser fallback — all
    active superusers instead of only the first. No visible change with the
    usual single-admin deployment.
-2. The duplicate-email check now actually runs (unscoped manager); previously
-   the tenant-scoped check silently passed for anonymous requests.
+2. None from the duplicate-email check: the legacy tenant-scoped check already
+   worked (with no active tenant, `MemberManager.get_queryset` returns an
+   unfiltered queryset, so anonymous requests were checked). The new view uses
+   `Member.unscoped` for explicitness and safety: it renders and POSTs inside
+   `tenant_context`, where the scoped manager would filter.
 3. After a successful request the user lands on the family home (the login
    page) instead of `/`.
 

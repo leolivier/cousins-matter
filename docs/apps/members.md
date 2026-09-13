@@ -4,7 +4,7 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-09-12
+stale_after: 2027-03-12
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 

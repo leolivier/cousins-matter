@@ -22,6 +22,13 @@ class LandingTests(TestCase):
     self.assertContains(resp, settings.SAAS_DEMO_URL)
     self.assertContains(resp, settings.SAAS_DOCS_URL)
 
+  def test_docs_link_follows_page_language(self):
+    """Both doc links point to the readthedocs edition matching the page language."""
+    self.client.cookies["django_language"] = "fr"
+    resp = self.client.get("/")
+    self.assertEqual(resp.status_code, 200)
+    self.assertContains(resp, f"{settings.SAAS_DOCS_URL}fr/latest/", count=2)
+
   def test_authenticated_gets_app_home(self):
     member = Member.objects.create(username="joe", email="joe@example.com", first_name="Joe", last_name="Dalton")
     member.set_password("pw-12345-Aa")

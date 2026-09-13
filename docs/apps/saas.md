@@ -4,7 +4,7 @@ title: SaaS
 description: Public landing + self-service tenant requests (captcha, signed email link, auto-created tenant + admin, onboarding checklist) — the SaaS front door of the cmm fork
 tags: ["app", "saas"]
 status: draft
-stale_after: 2027-03-07
+stale_after: 2027-03-13
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-07T00:00:00Z }
 ---
 
@@ -28,7 +28,9 @@ and the home page behaves normally.
 1. **Landing** — `HomeView` (core/views/views_general.py) renders
    `saas/landing.html` instead of the regular home when the flag is on and
    the visitor is anonymous; the login page "Create a new family" link
-   points to `saas:signup`.
+   points to `saas:signup`. Both documentation links on the landing point
+   to `<SAAS_DOCS_URL><lang>/latest/` — the readthedocs edition matching
+   the page language (`get_current_language`, no URL prefix).
 2. **Request** — `SignupRequestView` (saas/views/views_signup.py): family
    name + email, protected by Cloudflare Turnstile
    (`saas/turnstile.py`, server-side `siteverify`, fails closed; no-op

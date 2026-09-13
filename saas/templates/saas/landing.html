@@ -41,8 +41,11 @@
 <section class="section has-background-light">
   <div class="container has-text-centered">
     <h2 class="title is-4">{% translate "Try it now" %}</h2>
+    {% get_current_language as lang %}
+    {# ponytail: assumes SAAS_DOCS_URL ends with "/" (default does); a trailing-slash-free override would glue the suffix #}
+    {% with docs_url=settings.SAAS_DOCS_URL|add:lang|add:"/latest/" %}
     <p>
-      {% blocktranslate with demo_url=settings.SAAS_DEMO_URL docs_url=settings.SAAS_DOCS_URL trimmed %}
+      {% blocktranslate with demo_url=settings.SAAS_DEMO_URL trimmed %}
       Play with the <a href="{{ demo_url }}">demo site</a> or read the <a href="{{ docs_url }}">documentation</a>
       before creating your own family site.
       {% endblocktranslate %}
@@ -53,6 +56,7 @@
       see the <a href="{{ docs_url }}">installation guide</a>.
       {% endblocktranslate %}
     </p>
+    {% endwith %}
   </div>
 </section>
 

@@ -103,6 +103,16 @@ app ships its own catalogues
 untranslated source language), regenerated with `make mkmsg a=saas` and
 compiled with `make cpmsg a=saas`. Both `.po` and `.mo` are committed.
 
+## Tests
+
+Unit tests live in `saas/tests/tests_*.py` (landing takeover, signup +
+throttle + member-email refusal, signed-link validation/expiry/replay,
+welcome, onboarding rules, purge, i18n). Playwright UI tests live in
+`saas/tests/ui/` (4 modules: landing, signup form, join flow, onboarding
+checklist) on the shared `SaasUITestBase`. Like the unit suite they skip
+silently when `SAAS_LANDING_ENABLED` is off at URLconf import — run them
+with `SAAS_LANDING_ENABLED=True make test-ui t=saas.tests.ui`.
+
 # See also
 
 - [Tenants](/apps/tenants.md) — `Tenant`/`TenantSettings`, scoping, signup throttle reused here

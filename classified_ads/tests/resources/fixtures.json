@@ -3,6 +3,7 @@
   "model": "members.member",
   "pk": 934,
   "fields": {
+    "tenant": 1,
     "password": "",
     "last_login": null,
     "is_superuser": false,
@@ -35,6 +36,7 @@
   "model": "members.member",
   "pk": 935,
   "fields": {
+    "tenant": 1,
     "password": "",
     "last_login": null,
     "is_superuser": false,
@@ -67,6 +69,7 @@
   "model": "members.member",
   "pk": 936,
   "fields": {
+    "tenant": 1,
     "password": "",
     "last_login": null,
     "is_superuser": false,
@@ -99,6 +102,7 @@
   "model": "members.member",
   "pk": 937,
   "fields": {
+    "tenant": 1,
     "password": "",
     "last_login": null,
     "is_superuser": false,
@@ -131,6 +135,7 @@
   "model": "members.member",
   "pk": 938,
   "fields": {
+    "tenant": 1,
     "password": "",
     "last_login": null,
     "is_superuser": false,
@@ -163,6 +168,7 @@
   "model": "classified_ads.classifiedad",
   "pk": 42,
   "fields": {
+    "tenant": 1,
     "title": "Or mission data choose.",
     "date_created": "2026-05-17T15:53:59.202Z",
     "category": "home",
@@ -180,6 +186,7 @@
   "model": "classified_ads.classifiedad",
   "pk": 43,
   "fields": {
+    "tenant": 1,
     "title": "Room investment door.",
     "date_created": "2026-05-17T15:53:59.222Z",
     "category": "home",
@@ -197,6 +204,7 @@
   "model": "classified_ads.classifiedad",
   "pk": 44,
   "fields": {
+    "tenant": 1,
     "title": "Ability book according.",
     "date_created": "2026-05-17T15:53:59.246Z",
     "category": "home",
@@ -214,6 +222,7 @@
   "model": "classified_ads.classifiedad",
   "pk": 45,
   "fields": {
+    "tenant": 1,
     "title": "Teach trip cup open.",
     "date_created": "2026-05-17T15:53:59.269Z",
     "category": "home",
@@ -231,6 +240,7 @@
   "model": "classified_ads.classifiedad",
   "pk": 46,
   "fields": {
+    "tenant": 1,
     "title": "Truth southern old plant.",
     "date_created": "2026-05-17T15:53:59.285Z",
     "category": "home",
@@ -248,6 +258,7 @@
   "model": "classified_ads.adphoto",
   "pk": 31,
   "fields": {
+    "tenant": 1,
     "image": "classified_ads/47/example_g7K0ZDM.jpg",
     "thumbnail": "classified_ads/47/example_g7K0ZDM.jpg",
     "ad": 47
@@ -257,6 +268,7 @@
   "model": "classified_ads.adphoto",
   "pk": 35,
   "fields": {
+    "tenant": 1,
     "image": "classified_ads/48/example_7PeYMOI.jpg",
     "thumbnail": "classified_ads/48/example_7PeYMOI.jpg",
     "ad": 48
@@ -266,6 +278,7 @@
   "model": "classified_ads.adphoto",
   "pk": 38,
   "fields": {
+    "tenant": 1,
     "image": "classified_ads/49/example_ya8zUSm.jpg",
     "thumbnail": "classified_ads/49/example_ya8zUSm.jpg",
     "ad": 49
@@ -275,6 +288,7 @@
   "model": "classified_ads.adphoto",
   "pk": 42,
   "fields": {
+    "tenant": 1,
     "image": "classified_ads/50/example_zYfZOld.jpg",
     "thumbnail": "classified_ads/50/example_zYfZOld.jpg",
     "ad": 50
@@ -284,6 +298,7 @@
   "model": "classified_ads.adphoto",
   "pk": 44,
   "fields": {
+    "tenant": 1,
     "image": "classified_ads/51/example_VQ7SM5W.jpg",
     "thumbnail": "classified_ads/51/example_VQ7SM5W.jpg",
     "ad": 51

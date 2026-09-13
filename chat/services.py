@@ -264,3 +264,31 @@ def build_room_context(room, page, private=False):
     "last_sender": last_msg.member.username if last_msg else None,
     "read_status_map": read_status_map,
   }
+
+
+def compute_read_updates(room, msg_ids):
+  """
+  Computes the aggregate read status of ``msg_ids`` for broadcast: one aggregate query on
+  the read receipts through table for all messages at once (no per-message queries), then
+  statuses computed in Python. Returns a list of ``{"msg_id", "status"}`` dicts.
+  """
+  member_ids = set(room.followers.values_list("id", flat=True))
+  read_counts = dict(
+    ChatMessage.read_by.through.objects
+    .filter(chatmessage_id__in=msg_ids, member_id__in=member_ids)
+    .values("chatmessage_id")
+    .annotate(read_count=Count("id"))
+    .values_list("chatmessage_id", "read_count")
+  )
+  return [
+    {
+      "msg_id": msg.id,
+      "status": ChatMessage.compute_status(
+        is_public=False,
+        room_members_count=len(member_ids),
+        read_count=read_counts.get(msg.id, 0),
+        sender_is_member=msg.member_id in member_ids,
+      ).value,
+    }
+    for msg in ChatMessage.objects.filter(pk__in=msg_ids).only("id", "member_id")
+  ]

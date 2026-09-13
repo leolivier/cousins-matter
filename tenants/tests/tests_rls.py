@@ -8,22 +8,19 @@ so it is skipped unless the env is set (see docs/multi-tenancy.md).
 from django.db import connection
 from django.test import TestCase, skipUnlessDBFeature
 
-from tenants.rls import TENANT_RLS_SPLIT_TABLES, TENANT_RLS_STRICT_TABLES
+from tenants.rls import TENANT_RLS_SPLIT_TABLES, TENANT_RLS_STRICT_TABLES, TENANT_RLS_TABLES
 
 
 @skipUnlessDBFeature("supports_transactions")
 class RlsCatalogTests(TestCase):
-  """The three tenant-scoped tables have RLS enabled (never forced) + policies."""
+  """Every tenant-scoped table has RLS enabled (never forced) + policies."""
 
   def test_rls_enabled_never_forced(self):
     if connection.vendor != "postgresql":
       self.skipTest("postgresql only")
+    in_list = ", ".join(f"'{t}'" for t in TENANT_RLS_TABLES)
     with connection.cursor() as c:
-      c.execute(
-        "SELECT relname, relrowsecurity, relforcerowsecurity FROM pg_class "
-        "WHERE relname IN ('members_member','galleries_gallery','galleries_photo',"
-        "'chat_chatroom','chat_chatmessage')"
-      )
+      c.execute(f"SELECT relname, relrowsecurity, relforcerowsecurity FROM pg_class WHERE relname IN ({in_list})")
       rows = {r[0]: (r[1], r[2]) for r in c.fetchall()}
     for table in TENANT_RLS_STRICT_TABLES + TENANT_RLS_SPLIT_TABLES:
       self.assertIn(table, rows, table)

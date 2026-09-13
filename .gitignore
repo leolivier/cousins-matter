@@ -20,3 +20,5 @@ backup/
 node_modules/
 bandit.out
 .tokensave/
+
+/user-manual/site/

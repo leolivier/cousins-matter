@@ -4,7 +4,7 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-03-10
+stale_after: 2027-03-12
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -167,6 +167,19 @@ system tenant and still-active tenants (deactivate first), deletes the
 tenant's members explicitly (`Member.tenant` is `PROTECT`) and lets
 tenant-scoped rows cascade; it returns the number of members removed.
 
+## Family home (anonymous)
+
+`/<slug>/` (`tenant-home`, `tenants/views/views_home.TenantHomeView`) renders
+the family's unauthenticated page: the same `LoginView` as `members:login`,
+branded by the tenant (`request.tenant`, resolved with `resolve_join_tenant`,
+404 on unknown or inactive slugs). `/<slug>/join/` (`tenant-join`) is the
+matching join-request form served by `TenantJoinRequestView`
+(members/views/views_registration.py). Both routes are mounted even when
+`MULTI_TENANT_ENABLED=False`; without multi-tenancy only the default tenant's
+slug responds, other slugs 404. Tenant slugs cannot shadow root routes
+(`RESERVED_TENANT_SLUGS`, tenants/forms.py) and the catch-all is mounted last
+in cousinsmatter/urls.py.
+
 ## Internationalization
 
 The app ships its own per-app catalogues
@@ -175,6 +188,23 @@ with `make mkmsg a=tenants` and compiled with `make cpmsg a=tenants`, like
 every other app. `en` is the source language and stays untranslated; user-facing
 strings uniformly say "family" (fr « famille ») even where the code says
 `tenant`. Both `.po` and `.mo` are committed.
+
+## Performance
+
+`TenantSettingsAdmin` uses `list_select_related` on `tenant`.
+## Tests
+
+`tenants/tests/tests_feature_on.py` only runs when `MULTI_TENANT_ENABLED` is
+on (`_skip_if_off`); CI exercises it through the dedicated `test-multi-tenant`
+job (job 5 of build-and-publish-image.yml, `MULTI_TENANT_ENABLED=True`). Two
+conventions for those tests:
+
+- pin the language with `@override_settings(LANGUAGE_CODE="en")` when a test
+  asserts a message string — the CI and the dev `.env` set `LANGUAGE_CODE=fr`;
+- a tenant created with `Tenant.objects.create` in a test must call
+  `seed_tenant_pages(tenant)` when the flow under test lands on a predefined
+  page: the real signup/manage views seed them, a bare `create()` does not,
+  and the authenticated home page 500s without them.
 
 # See also
 

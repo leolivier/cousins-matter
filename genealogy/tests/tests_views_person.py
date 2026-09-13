@@ -1,8 +1,10 @@
 from datetime import date
 from unittest.mock import patch
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 from django.contrib.messages import get_messages
-from ..models import Person
+from ..models import Family, Person
 from members.tests.tests_member_base import MemberTestCase
 
 
@@ -210,3 +212,24 @@ class PersonViewsTest(MemberTestCase):
   def test_person_delete_404(self):
     response = self.client.get(reverse("genealogy:person_delete", args=[99999]))
     self.assertEqual(response.status_code, 404)
+
+  # ── query counts ──────────────────────────────────────────────
+
+  def _detail_query_count(self, person):
+    with CaptureQueriesContext(connection) as ctx:
+      response = self.client.get(reverse("genealogy:person_detail", args=[person.pk]))
+    self.assertEqual(response.status_code, 200)
+    return len(ctx)
+
+  def test_person_detail_queries_do_not_scale_with_unions(self):
+    """get_partners() consumes the prefetched unions+partners; the detail page must not
+    re-query partners per union. Two persons with unions (1 vs 4) trigger the same
+    prefetch queries, so their render query counts must be equal."""
+    one_union = Person.objects.create(first_name="Onemade", last_name="Smith", sex="F", birth_date=date(1990, 1, 1))
+    four_unions = Person.objects.create(first_name="Fourmade", last_name="Smith", sex="F", birth_date=date(1990, 1, 1))
+    spouse1 = Person.objects.create(first_name="Spouse", last_name="Smith", sex="M", birth_date=date(1989, 1, 1))
+    Family.objects.create(partner1=one_union, partner2=spouse1, union_type="MARR")
+    for i in range(4):
+      partner = Person.objects.create(first_name=f"Bob{i}", last_name="Smith", sex="M", birth_date=date(1989, 1, 1))
+      Family.objects.create(partner1=four_unions, partner2=partner, union_type="MARR")
+    self.assertEqual(self._detail_query_count(four_unions), self._detail_query_count(one_union))

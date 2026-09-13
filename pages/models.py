@@ -3,8 +3,10 @@ from django.contrib.sites.models import Site
 from django.contrib.flatpages.models import FlatPage as _FlatPage
 from django.db.models import BooleanField
 
+from tenants.scoping import TenantModel
 
-class FlatPage(_FlatPage):
+
+class FlatPage(TenantModel, _FlatPage):
   # predefined means imported from predefined pages
   predefined = BooleanField(default=False)
   # updated means that the page has been created in the UI or modified since last import

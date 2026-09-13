@@ -2,12 +2,14 @@ import factory
 import random
 from factory.django import DjangoModelFactory
 from polls.models import Poll, Question, PollAnswer, YesNoAnswer, TextAnswer, DateTimeAnswer, ChoiceAnswer, MultiChoiceAnswer
-from members.tests.factories import MemberFactory
+from members.tests.factories import MemberFactory, DEFAULT_TENANT
 
 
 class PollFactory(DjangoModelFactory):
   class Meta:
     model = Poll
+
+  tenant = DEFAULT_TENANT
 
   title = factory.Faker("sentence")
   description = factory.Faker("paragraph")
@@ -55,6 +57,8 @@ class QuestionFactory(DjangoModelFactory):
     model = Question
 
   poll = factory.SubFactory(PollFactory)
+  # a question always belongs to its poll's tenant
+  tenant = factory.LazyAttribute(lambda o: o.poll.tenant)
   question_text = factory.Faker("sentence", nb_words=6)
   question_type = Question.YESNO_QUESTION
   possible_choices: list[str] = []
@@ -65,6 +69,8 @@ class PollAnswerFactory(DjangoModelFactory):
     model = PollAnswer
 
   poll = factory.SubFactory(PollFactory)
+  # a vote always belongs to its poll's tenant
+  tenant = factory.LazyAttribute(lambda o: o.poll.tenant)
   member = factory.SubFactory(MemberFactory)
 
   @factory.post_generation
@@ -93,6 +99,8 @@ class YesNoAnswerFactory(DjangoModelFactory):
   poll_answer = factory.SubFactory(PollAnswerFactory)
   question = factory.SubFactory(QuestionFactory)
   answer = factory.Faker("boolean")
+  # an answer always belongs to its vote's tenant
+  tenant = factory.LazyAttribute(lambda o: o.poll_answer.tenant)
 
 
 class TextAnswerFactory(DjangoModelFactory):
@@ -101,6 +109,7 @@ class TextAnswerFactory(DjangoModelFactory):
 
   poll_answer = factory.SubFactory(PollAnswerFactory)
   question = factory.SubFactory(QuestionFactory)
+  tenant = factory.LazyAttribute(lambda o: o.poll_answer.tenant)
   answer = factory.Faker("paragraph")
 
 
@@ -110,6 +119,7 @@ class DateTimeAnswerFactory(DjangoModelFactory):
 
   poll_answer = factory.SubFactory(PollAnswerFactory)
   question = factory.SubFactory(QuestionFactory)
+  tenant = factory.LazyAttribute(lambda o: o.poll_answer.tenant)
   answer = factory.Faker("date_time_this_decade")
 
 
@@ -119,6 +129,7 @@ class ChoiceAnswerFactory(DjangoModelFactory):
 
   poll_answer = factory.SubFactory(PollAnswerFactory)
   question = factory.SubFactory(QuestionFactory)
+  tenant = factory.LazyAttribute(lambda o: o.poll_answer.tenant)
 
   @factory.lazy_attribute
   def answer(self):
@@ -132,6 +143,7 @@ class MultiChoiceAnswerFactory(DjangoModelFactory):
 
   poll_answer = factory.SubFactory(PollAnswerFactory)
   question = factory.SubFactory(QuestionFactory)
+  tenant = factory.LazyAttribute(lambda o: o.poll_answer.tenant)
 
   @factory.lazy_attribute
   def answer(self):

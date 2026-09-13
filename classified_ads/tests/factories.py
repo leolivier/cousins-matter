@@ -2,12 +2,14 @@ import factory
 import random
 from factory.django import DjangoModelFactory, ImageField
 from classified_ads.models import ClassifiedAd, AdPhoto
-from members.tests.factories import MemberFactory
+from members.tests.factories import MemberFactory, DEFAULT_TENANT
 
 
 class ClassifiedAdFactory(DjangoModelFactory):
   class Meta:
     model = ClassifiedAd
+
+  tenant = DEFAULT_TENANT
 
   title = factory.Faker("sentence", nb_words=4)
   category = "home"  # Assuming "home" is a valid category key
@@ -31,6 +33,8 @@ class AdPhotoFactory(DjangoModelFactory):
     model = AdPhoto
 
   ad = factory.SubFactory(ClassifiedAdFactory)
+  # a photo always belongs to its ad's tenant
+  tenant = factory.LazyAttribute(lambda o: o.ad.tenant)
   image = ImageField(
     color=factory.LazyFunction(lambda: f"#{random.randint(0, 0xFFFFFF):06x}"),
     width=400,

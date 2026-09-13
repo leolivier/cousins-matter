@@ -3,13 +3,14 @@ import random
 import os
 from factory.django import DjangoModelFactory
 from genealogy.models import Person, Family
-from members.tests.factories import MemberFactory
+from members.tests.factories import MemberFactory, DEFAULT_TENANT
 
 
 class PersonFactory(DjangoModelFactory):
   class Meta:
     model = Person
 
+  tenant = DEFAULT_TENANT
   first_name = factory.Faker("first_name")
   last_name = factory.Faker("last_name")
   sex = factory.Iterator(["M", "F"])
@@ -27,6 +28,8 @@ class FamilyFactory(DjangoModelFactory):
 
   partner1 = factory.SubFactory(PersonFactory, sex="M")
   partner2 = factory.SubFactory(PersonFactory, sex="F")
+  # a family always belongs to its partners' tenant
+  tenant = factory.LazyAttribute(lambda o: o.partner1.tenant)
   union_type = "MARR"
 
   _tree_generated = False

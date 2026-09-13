@@ -37,9 +37,7 @@ def build_pages_tree(
   if prefix and include_or_exclude_prefix == "include":
     filter["url__istartswith"] = prefix
   # print('filter:', filter)
-  pages = (
-    FlatPage.objects.filter(**filter).prefetch_related("sites") if filter else FlatPage.objects.all().prefetch_related("sites")
-  )
+  pages = FlatPage.objects.filter(**filter) if filter else FlatPage.objects.all()
   if prefix and include_or_exclude_prefix == "exclude":
     pages = pages.exclude(url__istartswith=prefix)
 
@@ -153,5 +151,19 @@ def include_page(url):
 @register.inclusion_tag("pages/link_pages_starting_with.html")
 def link_pages_starting_with(url_prefix, icon):
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
-  pages = FlatPage.objects.filter(url__istartswith=url_prefix).prefetch_related("sites")
+  pages = FlatPage.objects.filter(url__istartswith=url_prefix)
   return {"pages": pages, "icon": icon}
+
+
+@register.simple_tag
+def get_flatpages(prefix=None):
+  """Scoped replacement for django.contrib.flatpages' ``get_flatpages`` tag.
+
+  The stock tag queries the global ``django_flatpage`` table; this one
+  resolves pages through the tenant-scoped manager. Same call shape:
+  ``{% get_flatpages <prefix> as pages %}`` (prefix optional).
+  """
+  pages = FlatPage.objects.all().prefetch_related("sites")
+  if prefix:
+    pages = pages.filter(url__istartswith=prefix)
+  return pages

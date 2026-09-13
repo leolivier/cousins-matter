@@ -4,7 +4,7 @@ title: Troves
 description: Troves app (`troves`) — the family's numeric treasures (texts, photos, music, videos…) filed by category, with ownership-based editing and auto-generated thumbnails; documented in apps/troves.md
 tags: ["app", "troves"]
 status: draft
-stale_after: 2027-03-05
+stale_after: 2027-03-10
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:53:05Z }
 ---
 
@@ -16,11 +16,11 @@ text, a music recording, a video…) — grouped in six fixed categories
 (`CATEGORY_CHOICES` in troves/models.py): history & stories, recipes,
 cousinades (family meetings), recollections, arts, miscellaneous.
 
-**Tenant note:** `Trove` inherits `models.Model` directly — **not**
-[TenantModel](/apps/tenants.md)-scoped (no `tenant` field, no
-`TenantManager`). Treasures are currently shared platform-wide across
-tenants, like [forum](/apps/forum.md), [polls](/apps/polls.md),
-[classified ads](/apps/classified-ads.md) and [pages](/apps/pages.md).
+**Tenant note:** `Trove` inherits
+[TenantModel](/apps/tenants.md) — tenant-scoped (`tenant` FK +
+`TenantManager`, RLS backstop via `tenants.0005_rls_troves`; conversion
+migration `troves.0005_tenant` backfilled legacy rows to the default
+tenant). Treasures are invisible cross-tenant.
 
 ## Model (troves/models.py)
 

@@ -9,10 +9,13 @@ Covers:
 from asgiref.sync import sync_to_async
 from channels.routing import URLRouter
 from channels.testing import WebsocketCommunicator
+from django.db import connection
 from django.test import tag
+from django.test.utils import CaptureQueriesContext
 
 from chat.models import ChatMessage, ChatRoom, MessageStatus, PrivateChatRoom
 from chat.routing import websocket_urlpatterns
+from chat.services import compute_read_updates
 from chat.tests.tests_mixin import ChatMessageSenderMixin
 from core.tests.test_django_q import async_django_q_sync_class
 from members.tests.tests_member_base import AsyncMemberTestCase, MemberTestCase
@@ -131,3 +134,37 @@ class ReadReceiptConsumerTests(ChatMessageSenderMixin, AsyncMemberTestCase):
     rendered = response["args"]["rendered_message"]
     self.assertNotIn("read-receipt", rendered)
     await comm_a.disconnect()
+
+
+class ComputeReadUpdatesTests(MemberTestCase):
+  """``compute_read_updates`` must stay O(1) in queries, not O(messages)."""
+
+  def _room_with_messages(self, name, n):
+    other = self.create_member(is_active=True)
+    room = PrivateChatRoom.objects.create(name=name)
+    room.followers.add(self.member, other)
+    msgs = [ChatMessage.objects.create(member=self.member, room=room, content=f"m{i}") for i in range(n)]
+    return room, msgs
+
+  def test_statuses_are_computed(self):
+    other = self.create_member(is_active=True)
+    room = PrivateChatRoom.objects.create(name="compute updates statuses room")
+    room.followers.add(self.member, other)
+    msg = ChatMessage.objects.create(member=self.member, room=room, content="hi")
+    updates = compute_read_updates(room, [msg.id])
+    self.assertEqual(updates[0]["msg_id"], msg.id)
+    self.assertEqual(updates[0]["status"], MessageStatus.UNREAD.value)
+    msg.read_by.add(other)
+    updates = compute_read_updates(room, [msg.id])
+    self.assertEqual(updates[0]["status"], MessageStatus.READ.value)
+
+  def test_query_count_does_not_scale_with_messages(self):
+    room, msgs = self._room_with_messages("compute updates 5 room", 5)
+    with CaptureQueriesContext(connection) as ctx5:
+      updates = compute_read_updates(room, [m.id for m in msgs])
+    self.assertEqual(len(updates), 5)
+    room2, msgs2 = self._room_with_messages("compute updates 10 room", 10)
+    with CaptureQueriesContext(connection) as ctx10:
+      updates2 = compute_read_updates(room2, [m.id for m in msgs2])
+    self.assertEqual(len(updates2), 10)
+    self.assertEqual(len(ctx10), len(ctx5))

@@ -2,6 +2,7 @@
 
 import logging
 
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
 
@@ -31,3 +32,22 @@ def delete_tenant(tenant: Tenant) -> int:
   tenant.delete()  # cascades tenant-scoped rows (galleries, photos)
   logger.info(f"Deleted tenant {name!r} ({slug!r}) and {member_count} member(s).")
   return member_count
+
+
+def resolve_join_tenant(slug: str | None) -> Tenant | None:
+  """Tenant targeted by the public join flow (family home, join request).
+
+  With multi-tenancy on, ``slug`` selects the tenant. Without multi-tenancy
+  only the default tenant exists: ``None`` (the legacy alias) and the default
+  slug resolve to it, any other slug is refused. Returns ``None`` when no
+  active tenant matches — callers raise 404.
+  """
+  default = Tenant.get_default()
+  if slug is None:
+    return default
+  tenant = Tenant.objects.filter(slug=slug).first()
+  if tenant is None or not tenant.is_active:
+    return None
+  if not settings.MULTI_TENANT_ENABLED and tenant.pk != default.pk:
+    return None
+  return tenant

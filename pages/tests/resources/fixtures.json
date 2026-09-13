@@ -3,6 +3,7 @@
   "model": "pages.flatpage",
   "pk": 44,
   "fields": {
+    "tenant": 1,
     "predefined": false,
     "updated": true
   }
@@ -11,6 +12,7 @@
   "model": "pages.flatpage",
   "pk": 45,
   "fields": {
+    "tenant": 1,
     "predefined": false,
     "updated": true
   }
@@ -19,6 +21,7 @@
   "model": "pages.flatpage",
   "pk": 46,
   "fields": {
+    "tenant": 1,
     "predefined": false,
     "updated": true
   }
@@ -27,6 +30,7 @@
   "model": "pages.flatpage",
   "pk": 47,
   "fields": {
+    "tenant": 1,
     "predefined": false,
     "updated": true
   }
@@ -35,6 +39,7 @@
   "model": "pages.flatpage",
   "pk": 48,
   "fields": {
+    "tenant": 1,
     "predefined": false,
     "updated": true
   }

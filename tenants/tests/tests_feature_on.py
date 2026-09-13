@@ -5,10 +5,11 @@ the platform-admin management UI, and the per-family settings form.
 """
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from members.tests.tests_member_base import MemberTestCase
+from pages.services import seed_tenant_pages
 from tenants.forms import uniquify_tenant_slug
 from tenants.models import Tenant, TenantSettings
 from tenants.scoping import set_current_tenant, tenant_context
@@ -41,6 +42,9 @@ def _make_admin(tenant, username):
   return m
 
 
+# These tests assert English message strings; pin the language so they pass
+# regardless of the environment's LANGUAGE_CODE (dev .env sets fr).
+@override_settings(LANGUAGE_CODE="en")
 class FamilySignupTests(TestCase):
   def setUp(self):
     _skip_if_off(self)
@@ -116,6 +120,7 @@ class SlugHelperTests(TestCase):
     self.assertEqual(uniquify_tenant_slug("Dup"), "dup-2")
 
 
+@override_settings(LANGUAGE_CODE="en")
 class TenantManageTests(MemberTestCase):
   """Platform-admin lifecycle UI; tenant admins and members are refused."""
 
@@ -175,6 +180,7 @@ class TenantManageTests(MemberTestCase):
     self.assertFalse(Member.unscoped.filter(username="other_admin").exists())
 
 
+@override_settings(LANGUAGE_CODE="en")
 class TenantSettingsTests(MemberTestCase):
   def setUp(self):
     _skip_if_off(self)
@@ -256,6 +262,9 @@ class AdminEmailRoutingTests(MemberTestCase):
     _skip_if_off(self)
     super().setUp()
     self.family_b = Tenant.objects.create(name="Bee", slug="bee")
+    # Tenants created through the app (signup/manage UI) get their predefined pages;
+    # seed them here too, else the post-contact redirect to the authenticated home page 500s.
+    seed_tenant_pages(self.family_b)
     self.admin_b = _make_admin(self.family_b, "bee_admin")
     set_current_tenant(None)
 

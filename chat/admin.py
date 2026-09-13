@@ -28,6 +28,7 @@ class PrivateChatRoomAdmin(admin.ModelAdmin):
 @admin.register(ChatMessage)
 class ChatMessageAdmin(admin.ModelAdmin):
   list_display = ["member", "room", "date_added", "short_content"]
+  list_select_related = ["member", "room"]
   list_filter = ["room", "member", "date_added"]
   search_fields = ["content", "member__username", "room__name"]
   readonly_fields = ["date_added"]

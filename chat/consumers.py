@@ -14,6 +14,7 @@ from django.template.loader import render_to_string
 from core.utils import get_test_absolute_url
 from core.followers import check_followers
 from .models import ChatMessage, ChatRoom
+from .services import compute_read_updates
 from members.models import Member
 
 random.seed()
@@ -455,18 +456,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     The status is recomputed from the DB (not derived locally) so reads by other
     members between the marking and the broadcast are reflected.
     """
-    member_ids = set(await sync_to_async(list)(room.followers.values_list("id", flat=True)))
-    member_count = len(member_ids)
-    updates = []
-    async for msg in ChatMessage.objects.filter(pk__in=msg_ids):
-      read_count = await msg.read_by.filter(id__in=member_ids).acount()
-      status = ChatMessage.compute_status(
-        is_public=False,
-        room_members_count=member_count,
-        read_count=read_count,
-        sender_is_member=msg.member_id in member_ids,
-      )
-      updates.append({"msg_id": msg.id, "status": status.value})
+    updates = await sync_to_async(compute_read_updates)(room, msg_ids)
     if not updates:
       return
     await self.channel_layer.group_send(

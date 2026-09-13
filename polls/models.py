@@ -1,5 +1,7 @@
 import datetime
 
+from collections import Counter
+
 from django.apps import apps
 from django.db import models
 from django.utils import formats, timezone
@@ -7,9 +9,10 @@ from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 
 from members.models import Member
+from tenants.scoping import TenantManager, TenantModel
 
 
-class Poll(models.Model):
+class Poll(TenantModel):
   OPEN_TO_ALL = "all"
   OPEN_TO_ACTIVE = "act"
   OPEN_TO_CLOSED = "lst"
@@ -79,7 +82,7 @@ class Poll(models.Model):
     return Question.objects.filter(poll=self)
 
 
-class Question(models.Model):
+class Question(TenantModel):
   """
   Question model for Polls.
   Question types are Yes/No, Multiple Choice, and Open Text.
@@ -124,7 +127,7 @@ class Question(models.Model):
     return self.question_text
 
 
-class PollAnswer(models.Model):
+class PollAnswer(TenantModel):
   "Answers provided by members to Poll questions."
 
   poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
@@ -228,16 +231,26 @@ class QuestionResult:
 
   def build_result(self, user=None):
     answer_class = Answer.get_answer_class_for_question_type(self.question.question_type)
-    answers = answer_class.objects.filter(question=self.question)
-    self.total_answers = answers.count()
+    # Consume the prefetched ``answers_*`` related manager (see Poll.get_results). For
+    # MTI subclasses (SingleEventAnswer, MultiEventAnswer) the manager lives on the
+    # first concrete ancestor in the MRO, hence the walk.
+    answers = None
+    for klass in answer_class.__mro__:
+      manager = getattr(self.question, f"answers_{klass.__name__.lower()}", None)
+      if manager is not None:
+        answers = list(manager.all())
+        break
+    if answers is None:
+      answers = list(answer_class.objects.filter(question=self.question))
+    self.total_answers = len(answers)
     self.result = answer_class.compute_result(answers, self)
     if user:
-      user_answer = answers.filter(poll_answer__member=user).first()
+      user_answer = next((answer for answer in answers if answer.poll_answer.member_id == user.pk), None)
       if user_answer:
         self.user_answer = str(user_answer)
 
 
-class YesNoAnswer(Answer):
+class YesNoAnswer(Answer, TenantModel):
   question_type = Question.YESNO_QUESTION
   "Answer provided by a member to a yes/no question."
   answer = models.BooleanField(_("answer"), default=False)
@@ -252,10 +265,12 @@ class YesNoAnswer(Answer):
   @staticmethod
   def compute_result(answers, result):
     "Compute the result for a list of YesNoAnswers as a percentage of positive answers."
-    return [f"{(answers.filter(answer=True).count() / result.total_answers) * 100 if result.total_answers > 0 else 0}%"]
+    return [
+      f"{(sum(1 for answer in answers if answer.answer) / result.total_answers) * 100 if result.total_answers > 0 else 0}%"
+    ]
 
 
-class TextAnswer(Answer):
+class TextAnswer(Answer, TenantModel):
   question_type = Question.OPENTEXT_QUESTION
   "Answer provided by a member to an open text question."
   answer = models.TextField(_("answer"), default="", blank=True, max_length=500)
@@ -270,10 +285,10 @@ class TextAnswer(Answer):
   @staticmethod
   def compute_result(answers, result):
     "Compute the result for a list of TextAnswers."
-    return ["-"] if result.total_answers == 0 else list(answers.values_list("answer", flat=True))
+    return ["-"] if result.total_answers == 0 else [answer.answer for answer in answers]
 
 
-class DateTimeAnswer(Answer):
+class DateTimeAnswer(Answer, TenantModel):
   "Answer provided by a member to an date/time question."
 
   question_type = Question.DATE_QUESTION
@@ -289,10 +304,10 @@ class DateTimeAnswer(Answer):
   @staticmethod
   def compute_result(answers, result):
     "Compute the result for a list of DateTimeAnswers."
-    return ["-"] if result.total_answers == 0 else list(answers.values_list("answer", flat=True))
+    return ["-"] if result.total_answers == 0 else [answer.answer for answer in answers]
 
 
-class ChoiceAnswer(Answer):
+class ChoiceAnswer(Answer, TenantModel):
   question_type = Question.SINGLECHOICE_QUESTION
   "Answer provided by a member to a single choice question."
   answer = models.CharField(_("choice"), max_length=100, default="", blank=True)
@@ -308,14 +323,19 @@ class ChoiceAnswer(Answer):
   @staticmethod
   def compute_result(answers, result):
     "Compute the result for a list of ChoiceAnswers."
-    choice_results = {}
-    for choice in result.question.possible_choices:
-      choice_answers = answers.filter(answer=choice).count()
-      choice_results[choice] = (choice_answers / result.total_answers) * 100 if result.total_answers > 0 else 0
+    choice_counts = Counter(answer.answer for answer in answers)
+    choice_results = {
+      choice: (choice_counts.get(choice, 0) / result.total_answers) * 100 if result.total_answers > 0 else 0
+      for choice in result.question.possible_choices
+    }
     return [f"{key}: {value}%" for key, value in choice_results.items()] if choice_results else ["-"]
 
 
 class SingleEventAnswer(ChoiceAnswer):
+  # MTI child: tenant lives on the ChoiceAnswer table; redeclare the scoped
+  # manager or Django falls back to a plain (unscoped) Manager.
+  objects = TenantManager()
+
   """
   Answer provided by a member to an single choice event planner question.
   Event planner answers are a combination of date/time with single choice.
@@ -328,7 +348,7 @@ class SingleEventAnswer(ChoiceAnswer):
     verbose_name_plural = _("single event answers")
 
 
-class MultiChoiceAnswer(Answer):
+class MultiChoiceAnswer(Answer, TenantModel):
   question_type = Question.MULTICHOICES_QUESTION
   "Answer provided by a member to a multiple choice question."
   answer = models.JSONField(_("choices"), default=list, blank=True)
@@ -346,14 +366,16 @@ class MultiChoiceAnswer(Answer):
     "Compute the result for a list of MultipleChoiceAnswers."
     choice_results = {}
     for choice in result.question.possible_choices:
-      # __contains not supported by sqlite3
-      choice_answers = answers.filter(answer__contains=choice).count()
-      # choice_answers = sum(1 for answer in answers if choice in answer.answer)
+      choice_answers = sum(1 for answer in answers if choice in answer.answer)
       choice_results[choice] = (choice_answers / result.total_answers) * 100 if result.total_answers > 0 else 0
     return [f"{key}: {value}%" for key, value in choice_results.items()] if choice_results else ["-"]
 
 
 class MultiEventAnswer(MultiChoiceAnswer):
+  # MTI child: tenant lives on the MultiChoiceAnswer table; redeclare the
+  # scoped manager or Django falls back to a plain (unscoped) Manager.
+  objects = TenantManager()
+
   """
   Answer provided by a member to an multiple choice event planner question.
   Event planner answers are a combination of date/time with multiple choices.
@@ -367,6 +389,10 @@ class MultiEventAnswer(MultiChoiceAnswer):
 
 
 class EventPlanner(Poll):
+  # MTI child: redeclare the scoped manager, else Django falls back to a plain
+  # (unscoped) Manager and event-planner lookups would cross tenants.
+  objects = TenantManager()
+
   # where the event will take place
   location = models.CharField(_("location"), max_length=250, default="", blank=True)
   # when the event will take place

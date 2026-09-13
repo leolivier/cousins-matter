@@ -22,7 +22,10 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
 from core.views.views_general import download_protected_media, download_public_media, health, qhealth
+from pages.views import flatpage as tenant_flatpage
 from core.views.views_general import PasswordResetView
+from members.views import views_registration
+from tenants.views import views_home
 
 # from django.utils.translation import gettext_lazy as _
 
@@ -86,7 +89,13 @@ urlpatterns = (
       download_public_media,
       name="get_public_media",
     ),
-    path(settings.PAGES_URL_PREFIX, include("django.contrib.flatpages.urls")),
+    # tenant-aware flatpage view — never include django.contrib.flatpages.urls,
+    # its fallback queries the global (unscoped) django_flatpage table
+    path(
+      f"{settings.PAGES_URL_PREFIX}<path:url>",
+      tenant_flatpage,
+      name="django.contrib.flatpages.views.flatpage",
+    ),
     path("pages-edit/", include("pages.urls")),
     path("troves/", include("troves.urls")),
     path("classified-ads/", include("classified_ads.urls")),
@@ -100,6 +109,17 @@ urlpatterns = (
   + ([path("tenants/", include("tenants.urls"))] if settings.MULTI_TENANT_ENABLED else [])
   # SaaS opt-in: public landing + self-service tenant requests (cmm fork)
   + ([path("saas/", include("saas.urls"))] if settings.SAAS_LANDING_ENABLED else [])
+  # Tenant-scoped anonymous surfaces (family home + join request). Always
+  # mounted: without multi-tenancy the views resolve the default tenant.
+  # Kept last — tenant-home is a catch-all.
+  + [
+    path(
+      "<slug:slug>/join/",
+      views_registration.TenantJoinRequestView.as_view(),
+      name="tenant-join",
+    ),
+    path("<slug:slug>/", views_home.TenantHomeView.as_view(), name="tenant-home"),
+  ]
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
   + static(settings.PUBLIC_MEDIA_URL, document_root=settings.MEDIA_ROOT)
 )

@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class FamilyDetailView(generic.DetailView):
-  model = Family
+  queryset = Family.objects.select_related("parent")
   template_name = "members/family/family_detail.html"
 
 

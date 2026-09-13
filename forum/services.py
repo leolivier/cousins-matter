@@ -1,7 +1,9 @@
 import logging
 
 from django.db import transaction
-from django.db.models import Count, Prefetch
+from django.db.models import Count, Exists, OuterRef, Prefetch
+
+from members.models import Member
 
 from .models import Comment, Message, Post
 
@@ -13,20 +15,20 @@ logger = logging.getLogger(__name__)
 # --------------------------------------------------------------------------------------
 
 
-def get_posts_list_queryset():
+def get_posts_list_queryset(user=None):
   """
   Queryset of posts for the list view: each annotated with its message and follower counts,
-  the first message's author prefetched, most recent first.
+  the first message's author prefetched, whether the given user follows it, most recent first.
 
   ``distinct=True`` is required on both counts: annotating two aggregates (messages +
   followers) in one queryset cross-joins them and would multiply both counts otherwise.
   """
-  return (
-    Post.objects
-    .select_related("first_message__author")
-    .annotate(num_messages=Count("message", distinct=True), num_followers=Count("followers", distinct=True))
-    .order_by("-first_message__created")
+  qs = Post.objects.select_related("first_message__author").annotate(
+    num_messages=Count("message", distinct=True), num_followers=Count("followers", distinct=True)
   )
+  if user is not None:
+    qs = qs.annotate(is_following=Exists(Member.objects.filter(pk=user.pk, followed_posts=OuterRef("id"))))
+  return qs.order_by("-first_message__created")
 
 
 def get_post_replies_queryset(post):

@@ -64,7 +64,7 @@ urlpatterns = [
   ),
   path(
     "register/request",
-    views_registration.RegistrationRequestView.as_view(),
+    views_registration.TenantJoinRequestView.as_view(),
     name="register_request",
   ),
   path(

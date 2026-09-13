@@ -3,11 +3,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from members.models import Member
+from tenants.scoping import TenantModel
 
 logger = logging.getLogger(__name__)
 
 
-class Message(models.Model):
+class Message(TenantModel):
   author = models.ForeignKey(Member, on_delete=models.CASCADE)
   created = models.DateTimeField(auto_now_add=True)
   modified = models.DateTimeField(auto_now=True)
@@ -17,14 +18,14 @@ class Message(models.Model):
   class Meta:
     ordering = ["created"]
     indexes = [
-      models.Index(fields=["post", "author"]),
+      models.Index(fields=["tenant", "post", "author"]),
     ]
 
   def __str__(self):
     return self.content
 
 
-class Post(models.Model):
+class Post(TenantModel):
   title = models.CharField(_("Title"), max_length=120)
   first_message = models.ForeignKey(Message, related_name="first_of_post", on_delete=models.CASCADE)
   followers = models.ManyToManyField(
@@ -38,7 +39,7 @@ class Post(models.Model):
     verbose_name_plural = _("posts")
     ordering = ["first_message__created"]
     indexes = [
-      models.Index(fields=["title"]),
+      models.Index(fields=["tenant", "title"]),
     ]
 
   def __str__(self):
@@ -49,7 +50,7 @@ class Post(models.Model):
     return self.first_message.author if self.first_message else None
 
 
-class Comment(models.Model):
+class Comment(TenantModel):
   author = models.ForeignKey(Member, on_delete=models.CASCADE)
   created = models.DateTimeField(auto_now_add=True)
   modified = models.DateTimeField(auto_now=True)
@@ -60,7 +61,7 @@ class Comment(models.Model):
     verbose_name_plural = _("comments")
     ordering = ["message", "created"]
     indexes = [
-      models.Index(fields=["message", "author"]),
+      models.Index(fields=["tenant", "message", "author"]),
     ]
 
   def __str__(self):

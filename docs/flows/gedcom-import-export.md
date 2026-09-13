@@ -67,8 +67,9 @@ back to GEDCOM 5.5.1. The data model (`Person`, `Family`) is covered in
    counts), one `0 @I<n>@ INDI` block per person (pointer = `gedcom_id` when
    present, else `@I<pk>@`; `_UID` from `person.uid`), one `FAM` block per
    family, and `0 TRLR`. **Scope note:** the export covers **all** persons
-   and families — `Person`/`Family` are not tenant-scoped
-   ([Tenants](/apps/tenants.md)), so the export is a whole-platform tree.
+   and families of the current tenant — `Person`/`Family` are
+   [TenantModel](/apps/tenants.md)-scoped, so the export is a per-tenant
+   tree.
 
 ## Failure modes visible to the user
 
@@ -87,6 +88,7 @@ back to GEDCOM 5.5.1. The data model (`Person`, `Family`) is covered in
 ## See also
 
 - [Genealogy app](/apps/genealogy.md) — Person/Family model, chart, statistics.
-- [Tenants app](/apps/tenants.md) — why genealogy is *not* tenant-scoped.
+- [Tenants app](/apps/tenants.md) — genealogy is tenant-scoped
+  (`gedcom_id` unique per tenant).
 - [Gallery Bulk Import flow](/flows/gallery-bulk-import.md) — the async
   counterpart for zip uploads.

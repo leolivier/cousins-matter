@@ -1,16 +1,4 @@
-{%load i18n%}
 <span class="tag {{extra_class}}">
-	{%if name == "members"%}
-	{%blocktranslate count nfollowers=nfollowers|default:followed_object.followers.count trimmed %}
-		{{nfollowers}} member
-		{%plural%}
-		{{nfollowers}} members
-		{%endblocktranslate%}
-	{%else%}
-	{%blocktranslate count nfollowers=nfollowers|default:followed_object.followers.count trimmed %}
-		{{nfollowers}} follower
-		{%plural%}
-		{{nfollowers}} followers
-		{%endblocktranslate%}
-	{%endif%}
+	{%if nfollowers == None%}{%with nfollowers=followed_object.followers.count%}{%include "core/followers/followers-count.html"%}{%endwith%}
+	{%else%}{%include "core/followers/followers-count.html"%}{%endif%}
 </span>

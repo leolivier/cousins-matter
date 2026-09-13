@@ -19,13 +19,30 @@ import re
 from django.conf import settings
 
 # Tables carrying a tenant_id column that get RLS policies. Extend this list
-# when converting an app to TenantModel (forum, polls, ...).
+# when converting an app to TenantModel (rollout complete).
 TENANT_RLS_TABLES: list[str] = [
   "members_member",
   "galleries_gallery",
   "galleries_photo",
   "chat_chatroom",
   "chat_chatmessage",
+  "troves_trove",
+  "forum_message",
+  "forum_post",
+  "forum_comment",
+  "classified_ads_classifiedad",
+  "classified_ads_adphoto",
+  "polls_poll",
+  "polls_question",
+  "polls_pollanswer",
+  "polls_yesnoanswer",
+  "polls_textanswer",
+  "polls_datetimeanswer",
+  "polls_choiceanswer",
+  "polls_multichoiceanswer",
+  "genealogy_person",
+  "genealogy_family",
+  "pages_flatpage",
 ]
 # Strict FOR ALL policy (read AND write scoped to the session tenant).
 TENANT_RLS_STRICT_TABLES: list[str] = [
@@ -33,6 +50,23 @@ TENANT_RLS_STRICT_TABLES: list[str] = [
   "galleries_photo",
   "chat_chatroom",
   "chat_chatmessage",
+  "troves_trove",
+  "forum_message",
+  "forum_post",
+  "forum_comment",
+  "classified_ads_classifiedad",
+  "classified_ads_adphoto",
+  "polls_poll",
+  "polls_question",
+  "polls_pollanswer",
+  "polls_yesnoanswer",
+  "polls_textanswer",
+  "polls_datetimeanswer",
+  "polls_choiceanswer",
+  "polls_multichoiceanswer",
+  "genealogy_person",
+  "genealogy_family",
+  "pages_flatpage",
 ]
 # Split policies: permissive SELECT + scoped writes.
 TENANT_RLS_SPLIT_TABLES: list[str] = [

@@ -16,6 +16,9 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import tag
 from django.urls import reverse
 
+from pages.services import seed_tenant_pages
+from tenants.models import Tenant
+
 os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "True")
 
 
@@ -32,8 +35,14 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
               ...
   """
 
-  # needed to avoid unauthenticated flatpage errors
-  fixtures = ["predefined_flatpages.json"]
+  # Pages are seeded through the ORM (pages.services.seed_tenant_pages),
+  # not loaddata: loaddata cannot resolve the tenant (fixture-pinned pks
+  # drift once the per-test flush of TransactionTestCase re-seeds tenants),
+  # and the navbar needs those pages to avoid unauthenticated flatpage errors.
+  @classmethod
+  def _fixture_setup(cls, *args, **kwargs):
+    super()._fixture_setup(*args, **kwargs)
+    seed_tenant_pages(Tenant.get_default())
 
   # -- Overridable by subclasses --
   headless: bool = True

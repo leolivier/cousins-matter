@@ -52,10 +52,17 @@
 						{%icon "login" %}
 						<span>{%trans "Sign in" %}</span>
 					</a>
+					{% if request.tenant %}
+					<a class="button has-background-link-light has-text-link" href="{% url 'tenant-join' request.tenant.slug %}">
+						{%icon "invite-request" %}
+						<span><strong>{%trans "Request invitation link" %}</strong></span>
+					</a>
+					{% elif not settings.MULTI_TENANT_ENABLED %}
 					<a class="button has-background-link-light has-text-link" href="{% url 'members:register_request' %}">
 						{%icon "invite-request" %}
 						<span><strong>{%trans "Request invitation link" %}</strong></span>
 					</a>
+					{% endif %}
 				</div>
 			</div>
 		</div>

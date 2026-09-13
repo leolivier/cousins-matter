@@ -5,8 +5,10 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from tenants.scoping import TenantModel
 
-class Person(models.Model):
+
+class Person(TenantModel):
   SEX_CHOICES = [
     ("M", _("Male")),
     ("F", _("Female")),
@@ -33,7 +35,8 @@ class Person(models.Model):
   death_place = models.CharField(_("Death Place"), max_length=255, blank=True)
 
   notes = models.TextField(_("Notes"), blank=True)
-  gedcom_id = models.CharField("GEDCOM ID", max_length=50, blank=True, unique=True, null=True)
+  # Unique per tenant: two tenants may each import a GEDCOM using @I1@.
+  gedcom_id = models.CharField("GEDCOM ID", max_length=50, blank=True, null=True)
   uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, verbose_name=_("GedCom UUID"))
 
   child_of_family = models.ForeignKey(
@@ -49,8 +52,14 @@ class Person(models.Model):
     verbose_name = _("Person")
     verbose_name_plural = _("People")
     indexes = [
-      models.Index(fields=["last_name"]),
-      models.Index(fields=["birth_date"]),
+      models.Index(fields=["tenant", "last_name"], name="person_tenant_last_name_idx"),
+      models.Index(fields=["tenant", "birth_date"], name="person_tenant_birth_date_idx"),
+    ]
+    constraints = [
+      models.UniqueConstraint(
+        fields=["tenant", "gedcom_id"],
+        name="person_tenant_gedcom_id_uniq",
+      ),
     ]
     ordering = ["last_name", "first_name"]
 
@@ -75,20 +84,23 @@ class Person(models.Model):
     }.get(self.sex, "question")
 
   def get_partners(self):
-    """Returns a list of partners from all unions."""
+    """Returns a list of partners from all unions.
+
+    Callers should prefetch ``unions_as_p1__partner2`` / ``unions_as_p2__partner1``
+    (re-chaining ``select_related`` here would defeat the prefetch cache)."""
     partners = []
     # As partner1
-    for family in self.unions_as_p1.select_related("partner2").all():
+    for family in self.unions_as_p1.all():
       if family.partner2:
         partners.append(family.partner2)
     # As partner2
-    for family in self.unions_as_p2.select_related("partner1").all():
+    for family in self.unions_as_p2.all():
       if family.partner1:
         partners.append(family.partner1)
     return partners
 
 
-class Family(models.Model):
+class Family(TenantModel):
   UNION_TYPES = [
     ("MARR", _("Marriage")),
     ("CIVI", _("Civil union")),

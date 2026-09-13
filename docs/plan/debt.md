@@ -35,19 +35,6 @@ than one app-server worker — or after a worker restart mid-upload — the
 progress poll hits a process that never saw the import and 404s. See
 [bulk zip import](/apps/galleries.md#bulk-zip-import).
 
-## Six apps are not tenant-scoped
-
-[forum](/apps/forum.md) (`Message`/`Post`/`Comment`),
-[polls](/apps/polls.md), [classified ads](/apps/classified-ads.md)
-(`ClassifiedAd`/`AdPhoto`), [pages](/apps/pages.md)
-(`FlatPage` extends `django.contrib.flatpages`),
-[troves](/apps/troves.md) and [genealogy](/apps/genealogy.md)
-(`Person`/`Family`) all inherit `models.Model` directly — their data is
-shared across tenants (see the
-[multi-tenancy spec](/specs/multi-tenancy.md#what-is-not-tenant-scoped)).
-Scoping them is roadmap work; each conversion must also add its tables
-to `TENANT_RLS_TABLES`.
-
 ## The `public` storage alias disappears when `MEDIA_STORAGE` is set
 
 `STORAGES` (config/settings/base.py:131-152) defines a `public` alias

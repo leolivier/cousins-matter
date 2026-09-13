@@ -1,0 +1,11 @@
+INHERIT: ../../mkdocs.yml
+docs_dir: ../../docs
+plugins:
+- search
+- i18n:
+    docs_structure: folder
+    languages:
+    - locale: en
+      default: true
+      name: English
+      build: true

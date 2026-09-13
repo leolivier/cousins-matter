@@ -1,0 +1,14 @@
+{%load i18n%}
+{%if name == "members"%}
+{%blocktranslate count nfollowers=nfollowers trimmed %}
+	{{nfollowers}} member
+	{%plural%}
+	{{nfollowers}} members
+	{%endblocktranslate%}
+{%else%}
+{%blocktranslate count nfollowers=nfollowers trimmed %}
+	{{nfollowers}} follower
+	{%plural%}
+	{{nfollowers}} followers
+	{%endblocktranslate%}
+{%endif%}

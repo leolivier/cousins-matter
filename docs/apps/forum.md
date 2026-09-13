@@ -4,7 +4,7 @@ title: Forum
 description: Discussion forum — posts with replies (messages) and comments, follower subscriptions with notifications on new content
 tags: ["app", "forum"]
 status: draft
-stale_after: 2027-03-04
+stale_after: 2027-03-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
 ---
 
@@ -18,11 +18,11 @@ email/in-app notifications through the generic
 Navbar visibility is gated by the `show_forums`
 [feature flag](/apps/core.md#feature-flags-and-context-processors).
 
-**Tenant note:** unlike most content apps, `Post`, `Message` and
-`Comment` inherit `models.Model` directly — they are **not**
-[TenantModel](/apps/tenants.md)-scoped (no `tenant` field, no
-`TenantManager`). Forum content is currently shared platform-wide;
-passing through `tenants.scoping` has not been applied to this app yet.
+**Tenant note:** `Post`, `Message` and `Comment` inherit
+[TenantModel](/apps/tenants.md) — tenant-scoped (`tenant` FK +
+`TenantManager`, RLS backstop via `tenants.0006_rls_forum`; conversion
+migration `forum.0007_tenant` backfilled legacy content to the default
+tenant). Forum content is invisible cross-tenant.
 
 ## Models (forum/models.py)
 
@@ -94,9 +94,16 @@ convention, so following a post is what subscribes you to it.
 - `settings.DEBUG`-only test endpoints under `test/`
   (`views_test.py`) to generate posts/replies/comments.
 
+## Performance
+
+`get_posts_list_queryset(user)` (services.py) annotates `num_messages`, `num_followers` and
+`is_following`; `post_list.html` passes them to the followers tags, so the list page query
+count does not scale with the number of posts. Admins use `list_select_related`. Guarded by
+`forum/tests/tests_queries.py`.
+
 ## See also
 
 - [Core](/apps/core.md) — followers/batching machinery, pagination and modal helpers
 - [Members](/apps/members.md) — `Member.followed_posts`, `email_batch_frequency`
 - [Notifications](/modules/notifications.md) — batched notification lifecycle
-- [Tenants](/apps/tenants.md) — why forum is the odd one out (not tenant-scoped yet)
+- [Tenants](/apps/tenants.md) — tenant scoping of the forum models

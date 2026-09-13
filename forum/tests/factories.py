@@ -1,12 +1,14 @@
 import factory
 from factory.django import DjangoModelFactory
 from forum.models import Message, Post, Comment
-from members.tests.factories import MemberFactory
+from members.tests.factories import MemberFactory, DEFAULT_TENANT
 
 
 class MessageFactory(DjangoModelFactory):
   class Meta:
     model = Message
+
+  tenant = DEFAULT_TENANT
 
   author = factory.SubFactory(MemberFactory)
   content = factory.Faker("paragraph")
@@ -16,6 +18,8 @@ class MessageFactory(DjangoModelFactory):
 class PostFactory(DjangoModelFactory):
   class Meta:
     model = Post
+
+  tenant = DEFAULT_TENANT
 
   title = factory.Faker("sentence")
   first_message = factory.SubFactory(MessageFactory, post=None)
@@ -55,6 +59,8 @@ class PostFactory(DjangoModelFactory):
 class CommentFactory(DjangoModelFactory):
   class Meta:
     model = Comment
+
+  tenant = DEFAULT_TENANT
 
   author = factory.SubFactory(MemberFactory)
   message = factory.SubFactory(MessageFactory)

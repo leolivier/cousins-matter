@@ -4,6 +4,9 @@ DEBUG = env.bool("DEBUG", False)
 TESTING = True
 DEBUG_TOOLBAR = False
 DEBUG_HTMX = False
+# Same as local_test.py: tests assert untranslated strings, pin the language
+# so a LANGUAGE_CODE in the compose .env cannot change the rendered pages.
+LANGUAGE_CODE = "en"
 # See local_test.py: tests run WITHOUT collectstatic, so use the plain storage
 # (DEBUG is forced to False by the test runner, which would otherwise make the
 # manifest storage raise "Missing staticfiles manifest entry" or return hashed

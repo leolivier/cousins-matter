@@ -47,6 +47,8 @@ From `config/settings/local_test.py` (and `docker_test.py` for the container var
   suite performs ~190 logins from localhost.
 - Test DBs are named `test_cousinsmatter_<0-20>` to allow parallel runs, and the psycopg pool
   option is removed.
+- The suite is pinned to `LANGUAGE_CODE = "en"` in both test settings, so it is independent of
+  the `LANGUAGE_CODE` in the local or compose `.env`.
 
 ## Coverage
 

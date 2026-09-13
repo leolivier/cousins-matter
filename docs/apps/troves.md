@@ -4,7 +4,7 @@ title: Troves
 description: Troves app (`troves`) — the family's numeric treasures (texts, photos, music, videos…) filed by category, with ownership-based editing and auto-generated thumbnails; documented in apps/troves.md
 tags: ["app", "troves"]
 status: draft
-stale_after: 2027-03-10
+stale_after: 2027-03-13
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:53:05Z }
 ---
 
@@ -91,6 +91,14 @@ logged-in member as soon as it is saved. The only access rule is
   `RichTextarea` widget from core/widgets.py).
 - The `translate_category` filter (troves/templatetags/troves_tags.py)
   displays category slugs in the current language.
+
+## Tests
+
+`troves/tests/tests.py` — model CRUD and list/create/update flows. Response
+assertions search for the escaped category label
+(`escape(Trove.translate_category(...))`): the template renders it under
+Django's autoescape, so searching the raw label only passes when the active
+translation contains no `&` (fr) — it broke once tests were pinned to `en`.
 
 ## See also
 

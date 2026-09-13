@@ -4,7 +4,7 @@ title: Polls
 description: Polls app (`polls`) — member polls and the event-planning survey submodule (event planners) for scheduling; documented in apps/polls.md
 tags: ["app", "polls"]
 status: draft
-stale_after: 2027-03-09
+stale_after: 2027-03-13
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:42:30Z }
 ---
 
@@ -117,6 +117,15 @@ or `ME` whose `possible_choices` are the candidate dates:
 (`QuestionResult.build_result` consumes the related-manager caches; `compute_result` works on
 lists) so poll-detail queries do not scale with the question count. Guarded by the query-count
 test in `polls/tests/test_display.py`.
+
+## Tests
+
+`polls/tests/` — per-feature unit tests. Tests asserting rendered widget
+values build the expected string from `formats.get_format("DATETIME_INPUT_FORMATS")`
+(the format `DateTimeInput` actually renders with), keeping them
+locale-agnostic — test settings pin `LANGUAGE_CODE=en`
+(`config/settings/local_test.py`), while formatters like
+`SHORT_DATETIME_FORMAT` only coincide with widget formats in some locales (fr).
 
 ## See also
 

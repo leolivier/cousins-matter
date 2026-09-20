@@ -83,7 +83,7 @@ _CSP_POLICY: dict[str, list[str]] = {
   "script-src": [CSP.SELF, CSP.NONCE, CSP.UNSAFE_EVAL],
   # 'unsafe-inline' (NOT a nonce) for styles: CSP3 ignores 'unsafe-inline' when a
   # nonce is present, so we must choose one. We need 'unsafe-inline' because
-  # jQuery plugins (select2, summernote, bulma-calendar) inject style="" attrs at
+  # jQuery plugins (summernote, bulma-calendar) inject style="" attrs at
   # runtime via .html()/.innerHTML — not coverable by a nonce or static hashes.
   # External sheets are still restricted to 'self'. The nonce="{{csp_nonce}}"
   # attributes left on <style> tags become no-ops but are harmless.

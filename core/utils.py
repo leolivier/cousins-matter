@@ -39,15 +39,6 @@ def get_test_absolute_url(url):
   return "http://testserver%s" % (url)
 
 
-def is_ajax(request):
-  return request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
-
-
-def assert_request_is_ajax(request):
-  if not is_ajax(request):
-    raise ValidationError("Forbidden non ajax request")
-
-
 def check_file_size(file, limit):
   if file.size > limit:
     limitmb = math.floor(limit * 100 / (1024 * 1024)) / 100

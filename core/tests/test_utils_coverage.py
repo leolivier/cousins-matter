@@ -6,11 +6,10 @@ from unittest.mock import MagicMock
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.forms import ValidationError
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from django.utils import translation
 
 from core.utils import (
-  assert_request_is_ajax,
   parse_locale_date,
   storage_rmtree,
   temporary_log_level,
@@ -20,22 +19,6 @@ from core.utils import (
   _rm_emty_folders,
   protected_media_url,
 )
-
-
-class TestAssertRequestIsAjax(TestCase):
-  """Tests for assert_request_is_ajax."""
-
-  def test_non_ajax_request_raises(self):
-    """Test that a non-AJAX request raises ValidationError."""
-    request = RequestFactory().get("/dummy")
-    with self.assertRaises(ValidationError):
-      assert_request_is_ajax(request)
-
-  def test_ajax_request_passes(self):
-    """Test that an AJAX request does not raise."""
-    request = RequestFactory().get("/dummy", HTTP_X_REQUESTED_WITH="XMLHttpRequest")
-    # Should not raise
-    assert_request_is_ajax(request)
 
 
 class TestTemporaryLogLevel(TestCase):

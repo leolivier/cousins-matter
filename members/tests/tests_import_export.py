@@ -353,22 +353,22 @@ class CSVExportViewTests(TestImportMixin, MemberTestCase):
 
 
 class TestSelectViews(TestMemberImport):
-  """Tests for the AJAX select views and export selection view."""
+  """Tests for the htmx select views and export selection view."""
+
+  def assert_bad_request_without_htmx(self, url, query):
+    response = self.client.get(reverse(url), query)
+    self.assertEqual(response.status_code, 400)
 
   def test_select_name(self):
     response = self.client.get(
       reverse("members:select_name"),
       {"q": self.member.last_name[:3]},
-      HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+      HTTP_HX_REQUEST="true",
     )
     self.assertEqual(response.status_code, 200)
-    data = response.json()
-    self.assertIn("results", data)
-    results = data["results"]
-    self.assertIsInstance(results, list)
-    self.assertTrue(len(results) > 0)
-    for n in ["text", "id"]:
-      self.assertIn(results[0][n].lower(), [self.member.last_name, self.superuser.last_name])
+    self.assertContains(response, 'class="dropdown-item"')
+    self.assertContains(response, f'data-value="{self.member.last_name.title()}"')
+    self.assert_bad_request_without_htmx("members:select_name", {"q": self.member.last_name[:3]})
 
   def test_select_family(self):
     from ..models import Family
@@ -377,14 +377,12 @@ class TestSelectViews(TestMemberImport):
     response = self.client.get(
       reverse("members:select_family"),
       {"q": "Test"},
-      HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+      HTTP_HX_REQUEST="true",
     )
     self.assertEqual(response.status_code, 200)
-    data = response.json()
-    self.assertIn("results", data)
-    self.assertTrue(len(data["results"]) > 0)
-    result = data["results"][0]
-    self.assertDictEqual(result, {"text": "Testfamily", "id": "Testfamily"})
+    self.assertContains(response, 'class="dropdown-item"')
+    self.assertContains(response, 'data-value="Testfamily"')
+    self.assert_bad_request_without_htmx("members:select_family", {"q": "Test"})
 
   def test_select_city(self):
     from ..models import Address
@@ -393,17 +391,12 @@ class TestSelectViews(TestMemberImport):
     response = self.client.get(
       reverse("members:select_city"),
       {"q": "Test"},
-      HTTP_X_REQUESTED_WITH="XMLHttpRequest",
-      follow=True,
+      HTTP_HX_REQUEST="true",
     )
     self.assertEqual(response.status_code, 200)
-    data = response.json()
-    self.assertIn("results", data)
-    results = data["results"]
-    self.assertIsInstance(results, list)
-    self.assertTrue(len(results) > 0)
-    self.assertEqual(results[0]["text"], "Testcity")
-    self.assertEqual(results[0]["id"], "Testcity")
+    self.assertContains(response, 'class="dropdown-item"')
+    self.assertContains(response, 'data-value="Testcity"')
+    self.assert_bad_request_without_htmx("members:select_city", {"q": "Test"})
 
   def test_select_members_to_export(self):
     response = self.client.get(reverse("members:select_members_to_export"))

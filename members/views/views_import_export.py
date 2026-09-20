@@ -2,14 +2,12 @@ import logging
 
 from django.conf import settings
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.views import generic
 from django.utils.translation import gettext_lazy as _
-
-from core.utils import assert_request_is_ajax
 
 from ..models import (
   Address,
@@ -104,40 +102,59 @@ def import_progress(request, id):
 
 
 def select_name(request):
-  assert_request_is_ajax(request)
+  if not request.htmx:
+    return HttpResponseBadRequest("This view requires an HTMX request")
   query = request.GET.get("q", "")
   # List of matching names, case insensitive, limited to 12 results
   names = (
     Member.objects.filter(last_name__icontains=query).values_list("last_name", flat=True).distinct().order_by("last_name")[:12]
   )
-  t_names = set(name.title() for name in names)
-  data = [{"id": name, "text": name} for name in t_names]
-  return JsonResponse({"results": data})
+  t_names = sorted(set(name.title() for name in names))
+  return render(request, "members/common/select_options.html", {"options": t_names})
 
 
 def select_family(request):
-  assert_request_is_ajax(request)
+  if not request.htmx:
+    return HttpResponseBadRequest("This view requires an HTMX request")
   query = request.GET.get("q", "")
   # List of matching familynames, case insensitive, limited to 12 results
   families = Family.objects.filter(name__icontains=query).values_list("name", flat=True).distinct().order_by("name")[:12]
-  t_families = set(family.title() for family in families)
-  data = [{"id": family, "text": family} for family in t_families]
-  return JsonResponse({"results": data})
+  t_families = sorted(set(family.title() for family in families))
+  return render(request, "members/common/select_options.html", {"options": t_families})
 
 
 def select_city(request):
-  assert_request_is_ajax(request)
+  if not request.htmx:
+    return HttpResponseBadRequest("This view requires an HTMX request")
   query = request.GET.get("q", "")
   # List of matching city names, case insensitive, limited to 12 results
   cities = Address.objects.filter(city__icontains=query).values_list("city", flat=True).distinct().order_by("city")[:12]
-  t_cities = set(city.title() for city in cities)
-  data = [{"id": city, "text": city} for city in t_cities]
-
-  return JsonResponse({"results": data})
+  t_cities = sorted(set(city.title() for city in cities))
+  return render(request, "members/common/select_options.html", {"options": t_cities})
 
 
 def select_members_to_export(request):
-  return render(request, "members/members/export_members.html")
+  filters = [
+    {
+      "label": _("Family filter"),
+      "placeholder": _("Select a family..."),
+      "url": reverse("members:select_family"),
+      "name": "family-id",
+    },
+    {
+      "label": _("City filter"),
+      "placeholder": _("Select a city..."),
+      "url": reverse("members:select_city"),
+      "name": "city-id",
+    },
+    {
+      "label": _("Last name filter"),
+      "placeholder": _("Select a name..."),
+      "url": reverse("members:select_name"),
+      "name": "name-id",
+    },
+  ]
+  return render(request, "members/members/export_members.html", {"filters": filters})
 
 
 def export_members_to_csv(request):

@@ -123,7 +123,7 @@ jobs:
           tags: ${{ inputs.tags_def }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: get runner id
         id: get_runner_id

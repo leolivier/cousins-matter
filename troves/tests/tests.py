@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.utils.html import escape
 from core.utils import (
   create_test_image,
   test_media_root_decorator,
@@ -58,7 +59,9 @@ class TestTroveList(MemberTestCase):
   def check_treasure_in_response(self, treasure, response, is_detail=False):
     # Warning: this works only because there is only two objects and they are both in the same page
     self.assertContains(response, treasure.title)
-    self.assertContains(response, Trove.translate_category(treasure.category))
+    # the template renders the label with Django's autoescape: search the
+    # escaped form, otherwise the assertion only passes for labels without '&'
+    self.assertContains(response, escape(Trove.translate_category(treasure.category)))
     if treasure.file and not treasure.description:
       self.assertContains(response, protected_media_url(treasure.file.name))
     if is_detail:

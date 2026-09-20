@@ -51,7 +51,9 @@ class TestVoteView(PollTestMixin):
             html=True,
           )
         case Question.DATE_QUESTION:
-          date = formats.date_format(answer, "SHORT_DATETIME_FORMAT") + ":00"  # need to add seconds manually
+          # the widget renders with the first DATETIME_INPUT_FORMATS of the
+          # active locale, not with SHORT_DATETIME_FORMAT (they only match in fr)
+          date = formats.localize_input(answer, formats.get_format("DATETIME_INPUT_FORMATS")[0])
           self.assertContains(
             response,
             f"""

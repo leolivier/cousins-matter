@@ -4,7 +4,7 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-03-12
+stale_after: 2027-09-12
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -159,7 +159,9 @@ its `tenant-join` URL.
   `manage_family`, `get_valid_manager`, `handle_managed_by`, `update_address`,
   `create_member` / `update_member`.
 - Export: `select_members_to_export` → `export_members_to_csv` →
-  `do_export_members_to_csv` (filterable by name, family, city).
+  `do_export_members_to_csv`. Filters are htmx dropdowns fed by the
+  `select_name`/`select_city`/`select_family` views (htmx requests only,
+  they return `members/common/select_options.html` fragments).
 
 ## Following
 

@@ -25,7 +25,7 @@ jobs:
   lint-and-build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # "Commit vendored assets" step pushes vendor updates to the branch
       packages: write
     outputs:
       runner_id: ${{ steps.get_runner_id.outputs.RUNNER_ID }}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 20:17+0200\n"
+"POT-Creation-Date: 2026-09-26 20:14+0200\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Spanish <LL@li.org>\n"
@@ -483,19 +483,23 @@ msgstr ""
 msgid "Import not found"
 msgstr "Importe no encontrado"
 
-#: services/members.py:21
+#: services/members.py:22
 msgid "Error: Cannot activate a dead member"
 msgstr "Error: No se puede activar un miembro muerto"
 
-#: services/members.py:26 tests/tests_member.py:509
+#: services/members.py:27 tests/tests_member.py:510
 msgid "Error: Member already active"
 msgstr "Error: Miembro ya activado"
 
-#: services/members.py:28 tests/tests_member.py:519
+#: services/members.py:29 tests/tests_member.py:520
 msgid "Error: Member without email cannot be activated"
 msgstr "Error: Miembro sin correo electrónico no puede ser activado"
 
-#: services/members.py:35
+#: services/members.py:37 tests/tests_member.py:531
+msgid "Member account activated successfully. The member can now sign in."
+msgstr "La cuenta del miembro se ha activado correctamente. El miembro ya puede iniciar sesión."
+
+#: services/members.py:44
 msgid ""
 "Member account successfully activated. The owner of the account will now "
 "receive an email containing an activation link then will be redirected to "
@@ -505,34 +509,34 @@ msgstr ""
 "un correo electrónico que contiene un enlace de activación, luego será "
 "redirigido/a al pantalla de restablecimiento de contraseña."
 
-#: services/members.py:114 tests/tests_death_notification.py:43
+#: services/members.py:123 tests/tests_death_notification.py:43
 #, python-format
 msgid "Death notification for %(member)s"
 msgstr "Notificación de fallecimiento para %(member)s"
 
-#: services/members.py:142
+#: services/members.py:151
 msgid "You can't follow yourself!"
 msgstr "No puedes seguir a ti mismo!"
 
-#: services/members.py:146
+#: services/members.py:155
 #, python-format
 msgid "You are no longer following %(followed_name)s"
 msgstr "No más sigues a %(followed_name)s"
 
-#: services/members.py:148
+#: services/members.py:157
 msgid "Error: You can't follow dead people"
 msgstr "Error: No puedes seguir a ti mismo!"
 
-#: services/members.py:152
+#: services/members.py:161
 msgid "You have a new follower!"
 msgstr "¡Tienes un nuevo seguidor!"
 
-#: services/members.py:153
+#: services/members.py:162
 #, python-format
 msgid "%(follower_name)s is now following you!"
 msgstr "%(follower_name)s te sigue ahora!"
 
-#: services/members.py:174
+#: services/members.py:183
 #, python-format
 msgid "You are now following %(followed_name)s"
 msgstr "You estás ahora siguiendo %(followed_name)s"
@@ -709,7 +713,7 @@ msgid "Greetings!"
 msgstr "Salutaciones!"
 
 #: templates/members/email/email_verification_msg.html:27
-#: tests/tests_member.py:479
+#: tests/tests_member.py:480
 msgid ""
 "You received this mail because you attempted to create an account on our "
 "website or because a member created and activated your account"
@@ -718,7 +722,7 @@ msgstr ""
 "web o porque un miembro ha creado y activado tu cuenta"
 
 #: templates/members/email/email_verification_msg.html:28
-#: tests/tests_member.py:482
+#: tests/tests_member.py:483
 msgid ""
 "Please click on the link below to confirm the email and activate your "
 "account."
@@ -1260,12 +1264,12 @@ msgid "Member Detail"
 msgstr "Detalles de un Miembro"
 
 #: templates/members/members/member_detail.html:30
-#: templates/members/members/member_upsert.html:30 tests/tests_member.py:307
+#: templates/members/members/member_upsert.html:30 tests/tests_member.py:308
 msgid "Active member"
 msgstr "Membro activo"
 
 #: templates/members/members/member_detail.html:32
-#: templates/members/members/member_upsert.html:32 tests/tests_member.py:307
+#: templates/members/members/member_upsert.html:32 tests/tests_member.py:308
 msgid "Member managed by"
 msgstr "Miembro gestionado por"
 
@@ -1287,27 +1291,27 @@ msgstr "Notificar Fallecimiento"
 msgid "Change Password"
 msgstr "Cambiar la contraseña"
 
-#: templates/members/members/member_upsert.html:47
+#: templates/members/members/member_upsert.html:48
 msgid "Activate Account"
 msgstr "Activar Cuenta"
 
-#: templates/members/members/member_upsert.html:51
+#: templates/members/members/member_upsert.html:53
 msgid "Delete"
 msgstr "Eliminar"
 
-#: templates/members/members/member_upsert.html:64
+#: templates/members/members/member_upsert.html:66
 msgid "Update"
 msgstr "Meter a actualizar"
 
-#: templates/members/members/member_upsert.html:67
+#: templates/members/members/member_upsert.html:69
 msgid "Create"
 msgstr "Créar"
 
-#: templates/members/members/member_upsert.html:74
+#: templates/members/members/member_upsert.html:76
 msgid "Lost your verification email?"
 msgstr "Correo de verificación perdido?"
 
-#: templates/members/members/member_upsert.html:76
+#: templates/members/members/member_upsert.html:78
 #: templates/members/registration/email_verification_failed.html:13
 msgid "Request a new link"
 msgstr "Demandar un nuevo enlace"
@@ -1487,12 +1491,12 @@ msgstr ""
 "Advertencia: no olvides hacer clic en el botón de guardar al final de la "
 "página, de lo contrario los cambios no se guardarán"
 
-#: tests/tests_member.py:282 tests/tests_member.py:287
+#: tests/tests_member.py:283 tests/tests_member.py:288
 #: views/views_member.py:181 views/views_member.py:198
 msgid "You do not have permission to edit this member."
 msgstr "No tienes permiso para editar este miembro."
 
-#: tests/tests_member.py:565
+#: tests/tests_member.py:603
 msgid "Error: Cannot activate a dead member "
 msgstr "Error: No se puede activar un miembro muerto "
 

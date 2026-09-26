@@ -9,6 +9,7 @@ from django.utils.translation import gettext as _
 from verify_email.email_handler import send_verification_email
 
 from core.utils import MakeDate
+from tenants.authz import is_tenant_admin
 from tenants.settings_overrides import tenant_setting
 from ..models import Member
 
@@ -26,6 +27,14 @@ def do_activate_member(member, request):
     return ("error", _("Error: Member already active"))
   elif not member.email:
     return ("error", _("Error: Member without email cannot be activated"))
+  elif is_tenant_admin(request.user):
+    # Tenant admins and platform superusers activate immediately: no
+    # verification-email round-trip.
+    member.member_manager = None  # explicit; do not rely on clean() auto-clear
+    member.is_active = True
+    member.save(update_fields=["is_active", "member_manager"])
+    logger.info(f"Member {member.username} activated by admin {request.user.username}")
+    return ("success", _("Member account activated successfully. The member can now sign in."))
   else:
     send_verification_email(request, inactive_user=member)
     logger.info(f"Member {member.username} activated by {request.user.username}")

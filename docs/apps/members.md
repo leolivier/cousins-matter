@@ -4,7 +4,7 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-03-12
+stale_after: 2027-03-26
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -99,7 +99,10 @@ account: the manager fills the profile, then activates it.
 - `activate_member` → `do_activate_member` (members/services/members.py)
   refuses dead, already-active or email-less members, otherwise sends the
   verification email (`verify_email.email_handler.send_verification_email`);
-  the owner finishes with the password-reset screen.
+  the owner finishes with the password-reset screen. Platform superusers and
+  tenant admins activate immediately instead (`is_active=True`, manager
+  cleared, no email); the edit page shows the Activate button to the manager,
+  tenant admins and superusers for inactive members only.
 
 ## Invitations and registration links
 

@@ -40,6 +40,21 @@ Two tenants are seeded by migration and cannot be deleted: `default`
 A family identifier (slug) is derived from its name; reserved slugs
 (`default`, `system`, `admin`, …) are rejected.
 
+## Connecting to a family
+
+Everyone logs in on the standard login page — the family is resolved
+automatically from the logged-in account; there is no per-family URL. An email
+address belongs to a single family: to join another family, you need another
+address.
+
+* **Family creator**: after signing up at *"Create a new family"*, the account
+  is inactive until the verification email link is clicked; then log in
+  normally and you are the family's admin.
+* **Other members**: either accept the invitation emailed by the family admin
+  (tenant-bound link → signup → email verification), or submit a join request
+  (captcha form) that a family admin must approve. In both cases, log in on
+  the standard login page afterwards.
+
 ## Family settings
 
 A family admin edits their family's settings at **Family settings**
@@ -61,21 +76,44 @@ death notifications) are routed to the **family's admin**.
 ## PostgreSQL row-level security (optional hardening)
 
 The ORM scoping is the primary isolation layer. For defense-in-depth, you can
-make the database itself refuse cross-tenant writes:
+make the database itself refuse cross-tenant writes. RLS is active when
+`MULTI_TENANT_ENABLED=True` **and** `POSTGRES_RUNTIME_USER` is set.
 
-1. Pick a non-owner role, e.g. `cm_app`, with a strong password.
-2. In `.env`, set `POSTGRES_RUNTIME_USER` / `POSTGRES_RUNTIME_PASSWORD` (and
-   keep `MULTI_TENANT_ENABLED=True`).
-3. Run `manage.py migrate` **as the owner** (`POSTGRES_USER`) — the RLS
-   migration (`tenants.0003_rls`) creates the role, grants DML-only privileges
-   and the policies. The container entrypoint does this automatically:
-   initialization runs as the owner, only the long-running server uses the
-   runtime role.
+**With Docker**, set in `.env`:
+
+```
+MULTI_TENANT_ENABLED=True
+POSTGRES_RUNTIME_USER=cm_app
+POSTGRES_RUNTIME_PASSWORD=<strong password>
+```
+
+then restart the app containers:
+
+```
+docker compose restart cousins-matter qcluster
+```
+
+On startup the entrypoint runs the migrations **as the owner**
+(`POSTGRES_USER`): the RLS migration (`tenants.0003_rls`) creates the runtime
+role with DML-only grants and applies the policies, then the server and
+qcluster restart and connect as the runtime role. Nothing to run by hand.
+
+**With a manual (non-Docker) install**, set the same variables and run
+`manage.py migrate` **as the owner** (`POSTGRES_USER`) — this is exactly what
+the entrypoint automates above.
+
+**What `POSTGRES_USER` is for**: it is the owner (superuser) created by the
+PostgreSQL image. It runs the migrations — creating the runtime role, its
+DML-only grants and the policies — and as the owner it bypasses RLS entirely,
+which is why `FORCE ROW LEVEL SECURITY` is never used. The server and qcluster
+only fall back to it when `POSTGRES_RUNTIME_USER` is unset (RLS then has no
+effect).
 
 How the policies behave for the runtime role:
 
-* tenant-scoped tables outside the apps' own models (galleries): rows outside
-  the session's tenant are invisible **and** unwritable;
+* all tenant-scoped tables (galleries, chat, forum, classified ads, polls,
+  troves, genealogy, pages): rows outside the session's tenant are invisible
+  **and** unwritable;
 * `members_member`: reads stay permissive (login by email happens before a
   tenant is known), but INSERT/UPDATE/DELETE are hard-scoped;
 * the middleware sets `app.current_tenant_id` per request and always resets
@@ -86,7 +124,8 @@ How the policies behave for the runtime role:
 
 ## Current scope
 
-Today `members` and `galleries` are tenant-scoped. Converting the remaining
-apps (chat, forum, polls, classified ads, pages, troves, genealogy) follows
-the same pattern (`TenantModel` base + composite indexes); until then those
-apps' data is shared across families of a deployment.
+All product apps are tenant-scoped and covered by row-level security:
+`members`, `galleries`, `chat`, `troves`, `forum`, `classified ads`, `polls`,
+`genealogy` and `pages` — 22 tables, migrations `tenants.0003_rls` through
+`tenants.0010_rls_pages`. Only infrastructure tables (Django sessions, allauth
+accounts) remain global; the ORM scoping applies to everything else.

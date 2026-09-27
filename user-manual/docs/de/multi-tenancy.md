@@ -41,6 +41,20 @@ Zwei Tenants werden durch die Migration angelegt und können nicht gelöscht wer
 Ein Familienkennung (Slug) wird aus dem Namen abgeleitet; reservierte Slugs
 (`default`, `system`, `admin`, …) werden abgelehnt.
 
+## Anmeldung bei einer Familie
+
+Alle melden sich auf der normalen Anmeldeseite an — die Familie wird automatisch aus dem
+angemeldeten Konto aufgelöst; es gibt keine URL pro Familie. Eine E-Mail-Adresse gehört zu
+einer einzigen Familie: um einer anderen Familie beizutreten, brauchen Sie eine andere Adresse.
+
+* **Familien-Ersteller**: nach der Registrierung über *„Neue Familie anlegen“* bleibt das
+  Konto inaktiv, bis der Link aus der Verifizierungs-E-Mail angeklickt wurde; danach melden
+  Sie sich normal an und sind der Admin der Familie.
+* **Andere Mitglieder**: entweder die vom Familien-Admin per E-Mail verschickte Einladung
+  annehmen (mandantengebundener Link → Registrierung → E-Mail-Verifizierung) oder einen
+  Beitrittsantrag stellen (Formular mit Captcha), den ein Familien-Admin genehmigen muss.
+  In beiden Fällen danach auf der normalen Anmeldeseite anmelden.
+
 ## Familieneinstellungen
 
 Ein Familien-Admin bearbeitet die Einstellungen seiner Familie unter **Familieneinstellungen**
@@ -63,21 +77,43 @@ zugestellt.
 ## PostgreSQL Row-Level Security (optionale Härtung)
 
 Das ORM-Scoping ist die primäre Isolationsschicht. Als vertiefte Verteidigung (defense-in-depth)
-können Sie die Datenbank selbst Cross-Tenant-Schreibvorgänge verweigern lassen:
+können Sie die Datenbank selbst Cross-Tenant-Schreibvorgänge verweigern lassen. RLS ist aktiv,
+wenn `MULTI_TENANT_ENABLED=True` **und** `POSTGRES_RUNTIME_USER` gesetzt ist.
 
-1. Wählen Sie eine Nicht-Owner-Rolle, z. B. `cm_app`, mit einem starken Passwort.
-2. Setzen Sie in `.env` `POSTGRES_RUNTIME_USER` / `POSTGRES_RUNTIME_PASSWORD` (und
-   belassen Sie `MULTI_TENANT_ENABLED=True`).
-3. Führen Sie `manage.py migrate` **als Owner** aus (`POSTGRES_USER`) — die RLS-Migration
-   (`tenants.0003_rls`) erstellt die Rolle, gewährt nur DML-Berechtigungen
-   und die Policies. Der Container-Entrypoint erledigt dies automatisch:
-   die Initialisierung läuft als Owner, nur der langlaufende Server verwendet die
-   Runtime-Rolle.
+**Mit Docker**, setzen Sie in `.env`:
+
+```
+MULTI_TENANT_ENABLED=True
+POSTGRES_RUNTIME_USER=cm_app
+POSTGRES_RUNTIME_PASSWORD=<starkes Passwort>
+```
+
+und starten Sie die Anwendungs-Container neu:
+
+```
+docker compose restart cousins-matter qcluster
+```
+
+Beim Start führt der Entrypoint die Migrationen **als Owner** aus (`POSTGRES_USER`):
+die RLS-Migration (`tenants.0003_rls`) erstellt die Runtime-Rolle mit ausschließlich
+DML-Berechtigungen und wendet die Policies an; danach starten Server und qcluster neu und
+verbinden sich mit der Runtime-Rolle. Nichts ist von Hand auszuführen.
+
+**Bei einer manuellen Installation (ohne Docker)**, setzen Sie dieselben Variablen und führen
+Sie `manage.py migrate` **als Owner** aus (`POSTGRES_USER`) — genau das automatisiert der
+Entrypoint oben.
+
+**Wozu `POSTGRES_USER` dient**: er ist der Owner (Superuser), den das PostgreSQL-Image anlegt.
+Er führt die Migrationen aus — erstellt die Runtime-Rolle, deren DML-Berechtigungen und die
+Policies — und umgeht als Owner die RLS vollständig; deshalb wird `FORCE ROW LEVEL SECURITY`
+nie verwendet. Server und qcluster greifen nur darauf zurück, wenn `POSTGRES_RUNTIME_USER`
+nicht gesetzt ist (RLS ist dann wirkungslos).
 
 Verhalten der Policies für die Runtime-Rolle:
 
-* tenant-scope Tabellen außerhalb der eigenen Models der Apps (galleries): Zeilen außerhalb
-  des Tenants der Session sind unsichtbar **und** nicht schreibbar;
+* alle tenant-scope Tabellen (galleries, chat, forum, classified ads, polls, troves,
+  genealogy, pages): Zeilen außerhalb des Tenants der Session sind unsichtbar **und**
+  nicht schreibbar;
 * `members_member`: Lesezugriffe bleiben zulässig (die Anmeldung per E-Mail erfolgt, bevor
   ein Tenant bekannt ist), aber INSERT/UPDATE/DELETE sind strikt auf den Tenant beschränkt;
 * die Middleware setzt `app.current_tenant_id` pro Anfrage und setzt es danach immer
@@ -88,7 +124,8 @@ Verhalten der Policies für die Runtime-Rolle:
 
 ## Aktueller Umfang
 
-Heute sind `members` und `galleries` tenant-scope. Die Umstellung der übrigen
-Apps (chat, forum, polls, classified ads, pages, troves, genealogy) folgt
-demselben Muster (`TenantModel`-Basisklasse + zusammengesetzte Indizes); bis dahin werden die
-Daten dieser Apps families übergreifend innerhalb einer Bereitstellung geteilt.
+Alle Produkt-Apps sind tenant-scope und durch Row-Level Security abgedeckt: `members`,
+`galleries`, `chat`, `troves`, `forum`, `classified ads`, `polls`, `genealogy` und
+`pages` — 22 Tabellen, Migrationen `tenants.0003_rls` bis `tenants.0010_rls_pages`.
+Nur Infrastruktur-Tabellen (Django-Sessions, allauth-Konten) bleiben global; das
+ORM-Scoping gilt für alles andere.

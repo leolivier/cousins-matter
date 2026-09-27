@@ -23,6 +23,7 @@ from .tests_member_base import (
   today_minus,
 )
 from core.utils import get_test_absolute_url
+from tenants.models import Tenant
 
 
 class UsersManagersTests(TestCase):
@@ -517,6 +518,43 @@ class TestActivateManagedMember(MemberTestCase):
     response = self.client.post(reverse("members:activate", args=[no_email.username]), follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertContainsMessage(response, "error", _("Error: Member without email cannot be activated"))
+
+
+class TestAdminActivateMember(MemberTestCase):
+  """Tenant admins and platform superusers activate members immediately, without email."""
+
+  def activate(self, member):
+    return self.client.get(reverse("members:activate", args=[member.username]), follow=True)
+
+  def check_immediate_activation(self, response, managed):
+    self.assertEqual(response.status_code, 200)
+    self.assertContainsMessage(response, "success", _("Member account activated successfully. The member can now sign in."))
+    managed.refresh_from_db()
+    self.assertTrue(managed.is_active)
+    self.assertIsNone(managed.member_manager)
+    self.assertEqual(len(mail.outbox), 0)
+
+  def test_superuser_activation_is_immediate(self):
+    # inactive member managed by self.member, not by the superuser
+    managed = self.create_member()
+    # reload: setUpTestData replaced self.superuser.password with clear text in
+    # memory, which would make force_login() store a wrong session auth hash
+    superuser = Member.objects.get(pk=self.superuser.pk)
+    self.client.force_login(superuser)
+    response = self.activate(managed)
+    self.check_immediate_activation(response, managed)
+
+  def test_tenant_admin_activation_is_immediate(self):
+    admin = Member.objects.create_member(
+      **get_new_member_data(prefix="tadmin-"),
+      is_active=True,
+      role=Member.Role.ADMIN,
+      tenant=Tenant.get_default(),
+    )
+    managed = self.create_member()
+    self.client.force_login(admin)
+    response = self.activate(managed)
+    self.check_immediate_activation(response, managed)
 
 
 class TestDeadMembers(MemberViewTestMixin, MemberTestCase):

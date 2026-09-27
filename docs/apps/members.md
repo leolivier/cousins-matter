@@ -77,7 +77,10 @@ is the plain-manager escape hatch for explicit cross-tenant access.
 - `create_superuser(...)` forces `is_staff`, `is_superuser`, `role="admin"` and
   `tenant=Tenant.get_system()` — superusers live on the *system* tenant.
 - `alive()` / `dead()` filter on `is_dead`.
-- `fuzzy_search(query)` uses `TrigramSimilarity` on the concatenated name.
+- `fuzzy_search(query)` ranks members by pg_trgm word similarity
+  (`TrigramWordSimilarity`, query aligned on the best fragment of the text, so
+  short prefixes match long names), taking the best score between the
+  concatenated name and the username.
 
 ## Family and Address
 

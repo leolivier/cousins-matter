@@ -10,8 +10,12 @@ on:
       image_name:
         required: true
         type: string
-      tags_def:
-        required: true
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Release tag to verify (with or without leading v)'
+        required: false
+        default: '3.0.0-rc1'
         type: string
 
 jobs:
@@ -24,32 +28,38 @@ jobs:
       - name: Determine version
         id: get_version
         run: |
-          if [[ ${{ github.event_name }} == 'release' ]]; then
-            echo "VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
-          elif [[ ${{ github.ref }} == refs/tags/* ]]; then
-            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            RAW="${{ inputs.image_tag }}"
+          elif [[ "${{ github.event_name }}" == 'release' ]]; then
+            RAW="${{ github.event.release.tag_name }}"
+          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            RAW="${GITHUB_REF#refs/tags/}"
           else
-            echo "VERSION=$(git describe --tags --abbrev=0)+$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+            RAW="$(git describe --tags --abbrev=0)+$(git rev-parse --short HEAD)"
           fi
+          REGISTRY="${{ inputs.registry || 'ghcr.io' }}"
+          IMAGE_NAME="${{ inputs.image_name || github.repository }}"
+          echo "VERSION=${RAW}" >> $GITHUB_OUTPUT
+          echo "IMAGE=${REGISTRY}/${IMAGE_NAME}:${RAW#v}" >> $GITHUB_OUTPUT
 
       - name: Get minimum files
         run: |
           curl -LO https://raw.githubusercontent.com/${{ github.actor }}/cousins-matter/refs/tags/${{ steps.get_version.outputs.VERSION }}/scripts/manage_cousins_matter.py
           python manage_cousins_matter.py install -d cm_test_install -r ${{ steps.get_version.outputs.VERSION }} -n
 
-      - name: Login to GHCR.io
-        uses: docker/login-action@v4
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: ${{ inputs.registry }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v6
-        with:
-          images: ${{ inputs.registry }}/${{ inputs.image_name }}
-          tags: ${{ inputs.tags_def }}
+      # One-run diagnostic: authenticated pull vs anonymous pull on the runner.
+      # The package is public, so the workflow never pushes and works anonymously;
+      # if even the anonymous pull fails here, the problem is GHCR/CDN infra.
+      - name: Diagnostic pull (auth vs anonymous)
+        run: |
+          docker version
+          docker info | grep -iE "storage|snapshotter" || true
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ inputs.registry || 'ghcr.io' }} -u ${{ github.actor }} --password-stdin
+          echo "--- authenticated pull ---"
+          docker pull ${{ steps.get_version.outputs.IMAGE }} 2>&1 | tail -5 || true
+          echo "--- anonymous pull after logout ---"
+          docker logout ${{ inputs.registry || 'ghcr.io' }} || true
+          docker pull ${{ steps.get_version.outputs.IMAGE }}
 
       - name: Update .env for production test
         run: |
@@ -70,14 +80,24 @@ jobs:
           sed -i -e 's/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=test-postgres-password/' cm_test_install/.env
           sed -i -e 's/^Q_SYNC=.*/Q_SYNC=True/' cm_test_install/.env
           sed -i -e 's/^ENVIRONMENT=.*/ENVIRONMENT=production/' cm_test_install/.env
-          echo "COUSINS_MATTER_IMAGE=${{ fromJSON(steps.meta.outputs.json).tags[0] }}" >> cm_test_install/.env
+          echo "COUSINS_MATTER_IMAGE=${{ steps.get_version.outputs.IMAGE }}" >> cm_test_install/.env
 
       - name: Starts the production environment
         run: |
           cd cm_test_install
 
-          # Start services with production environment
-          docker compose -f docker-compose.yml up -d --wait --wait-timeout 60
+          # Bounded retries absorb transient GHCR/CDN hiccups (incl. concurrent
+          # pushes of the same tag by overlapping runs)
+          PULL_RETRIES=5
+          for i in $(seq 1 $PULL_RETRIES); do
+            docker compose -f docker-compose.yml pull && break
+            [ "$i" -eq "$PULL_RETRIES" ] && { echo "ERROR: pull failed after $PULL_RETRIES attempts"; exit 1; }
+            echo "Pull failed, retry $i/$PULL_RETRIES"; sleep 20
+          done
+
+          # Start services with production environment.
+          # 300s covers start_period 15s + 3x30s healthcheck + first-install migrations.
+          docker compose -f docker-compose.yml up -d --wait --wait-timeout 300
 
           # Check that the main container is running
           if ! docker ps | grep -q cousins-matter; then

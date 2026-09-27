@@ -12,6 +12,12 @@ on:
 
   workflow_dispatch:
 
+# One run per ref: the release event fires twice (prereleased + published for
+# prereleases) and both runs push the same tag
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # ──────────────────────────────────────────────────────────────────────────────
   # Job 1 – Lint, build test image and prepare shared artefacts
@@ -102,5 +108,4 @@ jobs:
     with:
       registry: 'ghcr.io'
       image_name: ${{ github.repository }}
-      tags_def: ${{ 'type=semver,pattern={{version}}' }}
     secrets: inherit

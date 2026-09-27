@@ -39,6 +39,8 @@ jobs:
           fi
           REGISTRY="${{ inputs.registry || 'ghcr.io' }}"
           IMAGE_NAME="${{ inputs.image_name || github.repository }}"
+          # VERSION is the git tag (leading v); the image tag drops it
+          [[ "${RAW}" == v* ]] || RAW="v${RAW}"
           echo "VERSION=${RAW}" >> $GITHUB_OUTPUT
           echo "IMAGE=${REGISTRY}/${IMAGE_NAME}:${RAW#v}" >> $GITHUB_OUTPUT
 

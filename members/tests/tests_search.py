@@ -1,4 +1,7 @@
 from django.urls import reverse
+
+from members.models import Member
+
 from .tests_member_base import MemberTestCase
 
 
@@ -19,3 +22,21 @@ class MemberSearchTests(MemberTestCase):
     self.assertTemplateUsed(response, "members_content")
     self.assertContains(response, self.other_member.full_name)
     self.assertContains(response, reverse("members:detail", args=[self.other_member.username]))
+
+  def test_search_by_username(self):
+    """#491: searching by username finds member even if username contains neither first nor last name"""
+    member = self.create_member(
+      {
+        "username": "bibi67",
+        "first_name": "Robert",
+        "last_name": "Dupont",
+        "email": "bibi67@example.com",
+        "password": "bibi67password!",
+      },
+      is_active=True,
+    )
+    self.assertIn(member, Member.objects.fuzzy_search("bibi67"))
+    # same through the members screen search (service wrapping fuzzy_search)
+    url = reverse("members:search_members")
+    response = self.client.get(url, {"q": "bibi67"}, HTTP_HX_REQUEST="true")
+    self.assertContains(response, member.full_name)

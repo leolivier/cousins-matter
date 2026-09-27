@@ -1,7 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.postgres.search import TrigramSimilarity
 from django.db.models import Value
-from django.db.models.functions import Concat
+from django.db.models.functions import Concat, Greatest
 from django.db.models.query import QuerySet
 from django.utils.translation import gettext_lazy as _
 
@@ -119,7 +119,11 @@ class MemberManager(BaseUserManager):
       self
       .get_queryset()
       .annotate(
-        complete_name=Concat("first_name", Value(" "), "last_name"), similarity=TrigramSimilarity("complete_name", query)
+        complete_name=Concat("first_name", Value(" "), "last_name"),
+        similarity=Greatest(
+          TrigramSimilarity("complete_name", query),
+          TrigramSimilarity("username", query),
+        ),
       )
       .filter(similarity__gt=similarity_threshold)
       .order_by("-similarity")

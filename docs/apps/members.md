@@ -4,7 +4,7 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-09-12
+stale_after: 2027-09-27
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -133,6 +133,9 @@ Social login is wired through `CustomSocialAccountAdapter`
 `RegistrationLinkManager.check_invitation`, then either links and activates the
 existing inactive member or allows allauth to create the signup with
 `is_active=True` and the invitation's `tenant_id` — no invitation, no signup.
+Exception: an already-active existing member (no `SocialAccount` yet) is
+connected via `sociallogin.connect()` and logged in directly, without invitation
+or signup form.
 
 ## Join request (tenant-scoped)
 

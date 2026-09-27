@@ -60,7 +60,7 @@ class OAuthActivationTests(MemberTestCase):
       self.adapter.pre_social_login(request, sociallogin)
 
   def test_pre_social_login_already_active(self):
-    """Test that an already active member can log in normally."""
+    """Test that an already active member is connected (logged in directly)."""
     user = Member(email=self.member.email)
     sociallogin = SocialLogin(user=user, account=SocialAccount(user=user, provider="google"))
 
@@ -68,8 +68,13 @@ class OAuthActivationTests(MemberTestCase):
     request.session = self.client.session
     setattr(request, "_messages", FallbackStorage(request))
 
-    # Should return normally (no exception, no change)
-    self.adapter.pre_social_login(request, sociallogin)
+    # The social account must be connected to the existing member so allauth
+    # logs them in instead of redirecting to the signup form.
+    # Mock connect to avoid SocialApp.DoesNotExist in CI
+    # (allauth looks up a SocialApp DB record which only exists locally)
+    with patch.object(sociallogin, "connect") as mock_connect:
+      self.adapter.pre_social_login(request, sociallogin)
+    mock_connect.assert_called_once_with(request, self.member)
     self.assertTrue(self.member.is_active)
 
   def test_pre_social_login_new_member_with_invitation(self):

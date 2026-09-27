@@ -25,7 +25,7 @@ jobs:
   lint-and-build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # "Commit vendored assets" step pushes vendor updates to the branch
       packages: write
     outputs:
       runner_id: ${{ steps.get_runner_id.outputs.RUNNER_ID }}
@@ -123,7 +123,7 @@ jobs:
           tags: ${{ inputs.tags_def }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: get runner id
         id: get_runner_id

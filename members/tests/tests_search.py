@@ -36,7 +36,26 @@ class MemberSearchTests(MemberTestCase):
       is_active=True,
     )
     self.assertIn(member, Member.objects.fuzzy_search("bibi67"))
+    # short prefix of the username also matches
+    self.assertIn(member, Member.objects.fuzzy_search("bibi"))
     # same through the members screen search (service wrapping fuzzy_search)
     url = reverse("members:search_members")
     response = self.client.get(url, {"q": "bibi67"}, HTTP_HX_REQUEST="true")
     self.assertContains(response, member.full_name)
+
+  def test_search_by_short_prefix(self):
+    """#491: a short prefix query must match a long full name (whole-string similarity scores it too low)"""
+    member = self.create_member(
+      {
+        # username chosen with no trigram overlap with "oli"/"olig" so the
+        # match can only come from the full name, not from #493's username scoring
+        "username": "jb75",
+        "first_name": "Olivier",
+        "last_name": "Levillain",
+        "email": "jb75@example.com",
+        "password": "jb75-password!",
+      },
+      is_active=True,
+    )
+    self.assertIn(member, Member.objects.fuzzy_search("oli"))
+    self.assertIn(member, Member.objects.fuzzy_search("olig"))

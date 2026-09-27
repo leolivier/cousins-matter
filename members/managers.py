@@ -1,5 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.postgres.search import TrigramSimilarity
+from django.contrib.postgres.search import TrigramWordSimilarity
 from django.db.models import Value
 from django.db.models.functions import Concat, Greatest
 from django.db.models.query import QuerySet
@@ -121,8 +121,11 @@ class MemberManager(BaseUserManager):
       .annotate(
         complete_name=Concat("first_name", Value(" "), "last_name"),
         similarity=Greatest(
-          TrigramSimilarity("complete_name", query),
-          TrigramSimilarity("username", query),
+          # word_similarity(query, field): aligns the query on the best fragment
+          # of the text, so short prefixes score high on long names
+          # (TrigramSimilarity scores a short query low against a whole long name)
+          TrigramWordSimilarity(Value(query), "complete_name"),
+          TrigramWordSimilarity(Value(query), "username"),
         ),
       )
       .filter(similarity__gt=similarity_threshold)

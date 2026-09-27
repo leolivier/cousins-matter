@@ -86,18 +86,23 @@ jobs:
         run: |
           cd cm_test_install
 
+          docker compose version
+          echo "=== images resolved by compose (must show 3.0.0-rc1, not latest) ==="
+          grep COUSINS_MATTER_IMAGE .env
+          docker compose -f docker-compose.yml --env-file .env config | grep -E "image:"
+
           # Bounded retries absorb transient GHCR/CDN hiccups (incl. concurrent
           # pushes of the same tag by overlapping runs)
           PULL_RETRIES=5
           for i in $(seq 1 $PULL_RETRIES); do
-            docker compose -f docker-compose.yml pull && break
+            docker compose -f docker-compose.yml --env-file .env pull && break
             [ "$i" -eq "$PULL_RETRIES" ] && { echo "ERROR: pull failed after $PULL_RETRIES attempts"; exit 1; }
             echo "Pull failed, retry $i/$PULL_RETRIES"; sleep 20
           done
 
           # Start services with production environment.
           # 300s covers start_period 15s + 3x30s healthcheck + first-install migrations.
-          docker compose -f docker-compose.yml up -d --wait --wait-timeout 300
+          docker compose -f docker-compose.yml --env-file .env up -d --wait --wait-timeout 300
 
           # Check that the main container is running
           if ! docker ps | grep -q cousins-matter; then

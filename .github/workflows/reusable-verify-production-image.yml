@@ -82,7 +82,9 @@ jobs:
           sed -i -e 's/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=test-postgres-password/' cm_test_install/.env
           sed -i -e 's/^Q_SYNC=.*/Q_SYNC=True/' cm_test_install/.env
           sed -i -e 's/^ENVIRONMENT=.*/ENVIRONMENT=production/' cm_test_install/.env
-          echo "COUSINS_MATTER_IMAGE=${{ steps.get_version.outputs.IMAGE }}" >> cm_test_install/.env
+          # leading \n: .env templates may lack a trailing newline, which would
+          # glue this line into the previous (commented) one — see run 36330816976
+          printf '\nCOUSINS_MATTER_IMAGE=%s\n' "${{ steps.get_version.outputs.IMAGE }}" >> cm_test_install/.env
 
       - name: Starts the production environment
         run: |

@@ -95,6 +95,11 @@ jobs:
         run: |
           cd cm_test_install
 
+          # Bind mounts must be writable by the container user (uid 1000) even
+          # when the installer ran as another user: mkdir()'s 0777 mode is
+          # umask-masked and installers from old tags don't chmod at all.
+          chmod -R a+rwX media static config 2>/dev/null || true
+
           docker compose version
           echo "=== images resolved by compose (must show 3.0.0-rc1, not latest) ==="
           grep COUSINS_MATTER_IMAGE .env

@@ -606,6 +606,11 @@ def get_directory(review_environment: bool, directory_arg: str | None):
   Path("media").mkdir(parents=True, exist_ok=True, mode=0o777)
   Path("config").mkdir(parents=True, exist_ok=True, mode=0o777)
   Path("static").mkdir(parents=True, exist_ok=True, mode=0o777)
+  # mkdir() mode is umask-masked (0777 -> 0755): the container runs as uid 1000
+  # (cm_user), which must be able to write media/ even when the installer runs
+  # as another user (e.g. the GitHub runner, uid 1001).
+  for d in ("media", "config", "static"):
+    os.chmod(d, 0o777)
 
   return target_dir
 

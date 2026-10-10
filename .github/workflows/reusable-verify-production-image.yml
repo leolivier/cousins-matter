@@ -143,6 +143,7 @@ jobs:
         with:
           fetch-depth: 0  # Required to get all tags
           lfs: true
+          clean: false  # keep untracked cm_test_install/ so show-logs can read its .env
 
       - name: Show docker-compose services logs on failure
         if: failure()

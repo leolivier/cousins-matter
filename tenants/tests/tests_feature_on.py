@@ -9,7 +9,6 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from members.tests.tests_member_base import MemberTestCase
-from pages.services import seed_tenant_pages
 from tenants.forms import uniquify_tenant_slug
 from tenants.models import Tenant, TenantSettings
 from tenants.scoping import set_current_tenant, tenant_context
@@ -262,9 +261,8 @@ class AdminEmailRoutingTests(MemberTestCase):
     _skip_if_off(self)
     super().setUp()
     self.family_b = Tenant.objects.create(name="Bee", slug="bee")
-    # Tenants created through the app (signup/manage UI) get their predefined pages;
-    # seed them here too, else the post-contact redirect to the authenticated home page 500s.
-    seed_tenant_pages(self.family_b)
+    # the post_save signal (pages/apps.py) seeds family_b's predefined pages,
+    # so the post-contact redirect to the authenticated home page works
     self.admin_b = _make_admin(self.family_b, "bee_admin")
     set_current_tenant(None)
 

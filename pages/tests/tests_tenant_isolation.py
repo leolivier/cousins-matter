@@ -34,7 +34,9 @@ class PagesTenantIsolationTests(TestCase):
   def test_queryset_isolation(self):
     with tenant_context(self.tenant_a):
       self.assertNotIn(self.page_b.id, set(FlatPage.objects.values_list("id", flat=True)))
-      self.assertEqual(set(FlatPage.objects.values_list("url", flat=True)), {"/home/authenticated/"})
+      # tenant_a sees its own page (plus the fixture pages seeded on creation),
+      # never tenant_b's
+      self.assertIn("/home/authenticated/", set(FlatPage.objects.values_list("url", flat=True)))
     with tenant_context(self.tenant_b):
       self.assertNotIn(self.page_a.id, set(FlatPage.objects.values_list("id", flat=True)))
 
@@ -55,6 +57,9 @@ class PagesTenantIsolationTests(TestCase):
 
   def test_seed_tenant_pages_copies_predefined_pages(self):
     tenant = Tenant.objects.create(name="C", slug="t-pages-c")
+    # the post_save signal already seeded the tenant; start from a clean
+    # slate to unit-test the seeding function itself
+    FlatPage.unscoped.filter(tenant=tenant).delete()
     count = seed_tenant_pages(tenant)
     self.assertEqual(count, FlatPage.unscoped.filter(tenant=tenant).count())
     self.assertGreater(count, 0)
@@ -64,4 +69,4 @@ class PagesTenantIsolationTests(TestCase):
     self.assertTrue(seeded.predefined)
     self.assertFalse(seeded.updated)
     # default tenant's own copy is untouched (separate rows, same URL)
-    self.assertNotEqual(seeded.id, FlatPage.unscoped.exclude(tenant=tenant).get(url="/fr/home/authenticated/").id)
+    self.assertNotEqual(seeded.id, FlatPage.unscoped.get(tenant=Tenant.get_default(), url="/fr/home/authenticated/").id)

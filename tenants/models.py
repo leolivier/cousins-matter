@@ -14,8 +14,50 @@ of the global defaults.
 """
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+# Slugs a family may never take: seeded/special tenants plus the first
+# segment of every root route and media/static prefixes. The tenant-home
+# catch-all is mounted last so real routes always win — reserving these
+# slugs protects the family's home URL from being shadowed instead.
+RESERVED_TENANT_SLUGS = frozenset({
+  settings.DEFAULT_TENANT_SLUG,
+  settings.SYSTEM_TENANT_SLUG,
+  "about",
+  "admin",
+  "admins",
+  "contact",
+  "env-check",
+  "manage",
+  "settings",
+  "signup",
+  "accounts",
+  "jsi18n",
+  "members",
+  "pages",
+  "public_media",
+  "posts",
+  "chat",
+  "galleries",
+  "polls",
+  "genealogy",
+  "password",
+  "password-reset",
+  "captcha",
+  "i18n",
+  "health",
+  "qhealth",
+  "tenants",
+  "saas",
+  "troves",
+  "verification",
+  "classified-ads",
+  "pages-edit",
+  "static",
+  "protected_media",
+})
 
 # Process-local memoization of the singleton tenants resolved by slug. These
 # tenants are immutable after seeding, so the cache never needs invalidation.
@@ -70,6 +112,21 @@ class Tenant(models.Model):
   @property
   def is_system(self) -> bool:
     return self.slug == settings.SYSTEM_TENANT_SLUG
+
+  def clean(self):
+    super().clean()
+    if self.slug not in RESERVED_TENANT_SLUGS:
+      return
+    # only the seeded default/system tenants may keep their reserved slug
+    # (renaming or creating another tenant with it is rejected, even in admin)
+    seeded = {
+      settings.DEFAULT_TENANT_SLUG: self.get_default().pk,
+      settings.SYSTEM_TENANT_SLUG: self.get_system().pk,
+    }
+    # self.pk is not None: a new instance with pk=None would otherwise pass
+    # the comparison below when its slug is not a seeded one (None == None)
+    if self.pk is None or seeded.get(self.slug) != self.pk:
+      raise ValidationError({"slug": _("This slug is reserved, please choose another one.")})
 
 
 class TenantSettings(models.Model):

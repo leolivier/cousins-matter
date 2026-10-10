@@ -4,8 +4,8 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-03-09
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
+stale_after: 2027-09-09
+generated: { by: claude-code/glm-5.3-flash, at: 2026-10-10T00:00:00Z }
 ---
 
 # Core
@@ -172,6 +172,10 @@ side**, not a context processor:
 while anonymous). It sits right after `tenants.middleware.TenantMiddleware` in
 `MIDDLEWARE` (config/settings/base.py) — see
 [Architecture](/architecture.md).
+The list also exempts `/verification/` (django-verify-email): verification
+links mailed at signup must stay reachable while anonymous — missing from the
+list, the links silently redirected to the login page and accounts never got
+activated.
 
 Also in core: `core.mixins` (`LoginNotRequiredMixin`, `OnlyAdminMixin`) and
 `core.utils` (paginator, thumbnails `create_thumbnail` /

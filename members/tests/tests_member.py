@@ -489,6 +489,9 @@ class TestActivateManagedMember(MemberTestCase):
     self.assertIsNotNone(match)
     url = match.group(0)
     # print('url:', url)
+    # The real-world flow is anonymous: the new member clicks the link before
+    # ever signing in. Logout so the test exercises that path (LoginRequiredMiddleware).
+    self.client.logout()
     response = self.client.get(url, follow=True)
     tr1 = f"{_('Your Email is verified successfully and your account has been activated.')}"
     tr2 = f"{_('You can sign in with your credentials now...')}"

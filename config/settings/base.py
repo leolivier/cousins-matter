@@ -383,6 +383,7 @@ LOGIN_REQUIRED_IGNORE_PATHS = [
   "/accounts/password/reset/",  # Password reset request
   "/accounts/password/reset/key/",  # Password reset confirmation
   "/accounts/confirm-email/",  # Email confirmation
+  "/verification/",  # django-verify-email: verification + request-new-link must be reachable anonymously
   "/robots.txt",
   "/jsi18n/",
   "/i18n/",  # set_language (language switcher) — must work unauthenticated, e.g. on the login page

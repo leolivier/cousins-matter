@@ -82,6 +82,11 @@ jobs:
           sed -i -e 's/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=test-postgres-password/' cm_test_install/.env
           sed -i -e 's/^Q_SYNC=.*/Q_SYNC=True/' cm_test_install/.env
           sed -i -e 's/^ENVIRONMENT=.*/ENVIRONMENT=production/' cm_test_install/.env
+          # .env.example comments out some keys, so the seds above never match
+          # them: append (newline-safe, see run 36330816976) whatever is missing.
+          for kv in "SITE_DOMAIN=localhost" "SITE_NAME=Production Test Site" "ALLOWED_HOSTS=127.0.0.1,localhost"; do
+            grep -q "^${kv%%=*}=" cm_test_install/.env || printf '\n%s\n' "$kv" >> cm_test_install/.env
+          done
           # leading \n: .env templates may lack a trailing newline, which would
           # glue this line into the previous (commented) one — see run 36330816976
           printf '\nCOUSINS_MATTER_IMAGE=%s\n' "${{ steps.get_version.outputs.IMAGE }}" >> cm_test_install/.env
@@ -137,20 +142,22 @@ jobs:
           echo "ERROR: Application did not respond after $MAX_RETRIES attempts"
           exit 1
 
-      - name: Checkout
-        uses: actions/checkout@v7
+      # Inlined (not ./.github/actions/show-logs-on-failure) because that local
+      # action requires an on-failure Checkout, whose sparse-checkout handling
+      # wipes the untracked cm_test_install/ we want to inspect.
+      - name: Dump install dir and container logs on failure
         if: failure()
-        with:
-          fetch-depth: 0  # Required to get all tags
-          lfs: true
-          clean: false  # keep untracked cm_test_install/ so show-logs can read its .env
-
-      - name: Show docker-compose services logs on failure
-        if: failure()
-        uses: ./.github/actions/show-logs-on-failure
-        with:
-          env_file_path: cm_test_install/.env
-          containers: cousins-matter cousins-matter.qcluster cousins-matter.db cousins-matter.redis cousins-matter.nginx
+        run: |
+          echo "==================== .env file contents ===================="
+          cat cm_test_install/.env 2>/dev/null || echo "(.env not found)"
+          echo "==================== resolved compose images ==============="
+          docker compose -f cm_test_install/docker-compose.yml --env-file cm_test_install/.env config 2>/dev/null | grep "image:" || true
+          echo "==================== docker ps -a =========================="
+          docker ps -a
+          for container in cousins-matter cousins-matter.qcluster cousins-matter.db cousins-matter.redis cousins-matter.nginx; do
+            echo "==================== $container logs ========================"
+            docker logs "$container" 2>&1 | tail -50 || true
+          done
 
       - name: Cleanup
         if: always()

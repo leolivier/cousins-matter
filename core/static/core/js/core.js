@@ -155,16 +155,17 @@ function add_info_message(message) {
 // re-execute every inline <script> via DOMEval — losing the nonce and tripping CSP.
 function printSection(el) {
   var $body = $('body');
-  var $children = $body.children().detach();
-  var section = null;
+  var $print;
   try {
-    section = document.querySelector(el);
+    // Pure selector lookup, NOT $(el): jQuery parses a string argument as HTML
+    // when it looks like markup (CodeQL js/xss-through-dom), while
+    // document.querySelectorAll only ever matches existing nodes.
+    $print = $(document.querySelectorAll(el)).clone(); // all matches, like the old behaviour
   } catch (e) {
-    section = null;
+    $print = $(); // invalid selector → print nothing
   }
-  if (section) {
-    $body.append($(section).clone());
-  }
+  var $children = $body.children().detach();
+  $body.append($print);
   window.print();
   $body.empty().append($children);
 }

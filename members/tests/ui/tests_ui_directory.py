@@ -22,6 +22,33 @@ class DirectoryUITest(MembersUITestBase):
     print_btn = self.page.locator("button[data-print-section]")
     self.assertTrue(print_btn.is_visible(), "Print button should be visible")
 
+  def test_print_section(self):
+    """Print button should print the .printable sections and restore the page."""
+    self.login_and_goto_page("members:directory")
+
+    # Stub window.print to capture the DOM state at print time
+    self.page.evaluate("""() => {
+      window.__printed = null;
+      window.print = () => {
+        window.__printed = {
+          hasTable: !!document.querySelector('.printable table'),
+          childCount: document.body.children.length,
+        };
+      };
+    }""")
+    self.page.locator("button[data-print-section]").click()
+
+    printed = self.page.evaluate("() => window.__printed")
+    self.assertIsNotNone(printed, "window.print should have been called")
+    self.assertTrue(printed["hasTable"], "Printed content should include the members table")
+    self.assertGreater(printed["childCount"], 1, "Printed content should include title and table")
+
+    # Original page should be restored after printing
+    self.assertTrue(self.page.locator("table.table").is_visible(), "Directory table should be restored after print")
+    self.assertTrue(
+      self.page.locator("button[data-print-section]").is_visible(), "Print button should be restored after print"
+    )
+
   def test_directory_pdf_link(self):
     """The directory page should have a PDF export link."""
     self.login_and_goto_page("members:directory")

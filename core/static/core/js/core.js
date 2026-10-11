@@ -155,16 +155,9 @@ function add_info_message(message) {
 // re-execute every inline <script> via DOMEval — losing the nonce and tripping CSP.
 function printSection(el) {
   var $body = $('body');
+  var $print = $(el).clone(); // select & clone while still attached (all matches, like the old behaviour)
   var $children = $body.children().detach();
-  var section = null;
-  try {
-    section = document.querySelector(el);
-  } catch (e) {
-    section = null;
-  }
-  if (section) {
-    $body.append($(section).clone());
-  }
+  $body.append($print);
   window.print();
   $body.empty().append($children);
 }

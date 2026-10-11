@@ -20,7 +20,10 @@ def seed_tenant_pages(tenant):
   with open(FIXTURE) as fixture_file:
     entries = json.load(fixture_file)
   base_by_pk = {entry["pk"]: entry["fields"] for entry in entries if entry["model"] == "flatpages.flatpage"}
-  site = Site.objects.get(pk=settings.SITE_ID)
+  # get_or_create: pages loads before django.contrib.sites, so when seeding
+  # fires from the post_migrate re-creation of tenants after a flush, the
+  # default site row has not been re-created yet
+  site, _ = Site.objects.get_or_create(pk=settings.SITE_ID)
   for entry in entries:
     if entry["model"] != "pages.flatpage":
       continue

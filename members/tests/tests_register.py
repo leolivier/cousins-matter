@@ -400,6 +400,7 @@ class TenantJoinRequestTests(RequestRegistrationLinkTests):
 
   @ignore_captcha_errors()
   def test_join_request_redirects_to_family_home(self):
+    self.client.logout()  # the join flow is anonymous; family home serves the public page
     response = self.client.post(reverse("tenant-join", args=["famille-dupont"]), self.join_data())
     self.assertRedirects(response, reverse("tenant-home", args=["famille-dupont"]))
 

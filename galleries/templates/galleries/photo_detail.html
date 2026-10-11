@@ -20,7 +20,7 @@
 			</div>
 			<div class="level-right">
 				<p class="buttons has-addons">
-					<a class="button" href="{% url 'galleries:detail' photo.gallery.id %}"
+					<a class="button" href="{% url 'galleries:detail' photo.gallery.slug %}"
 						title="{% blocktranslate with gname=photo.gallery.name%}Back to {{gname}}{%endblocktranslate %}">
 						{%icon "back" %}
 					</a>

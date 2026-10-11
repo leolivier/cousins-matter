@@ -91,6 +91,9 @@ class CreatePhotoViewTests(PhotoTestsBase):
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "galleries/photo_detail.html")
     self.assertIs(response.resolver_match.func.view_class, PhotoDetailView)
+    # back-to-gallery link must use the gallery slug, not its id (galleries:detail is keyed by slug);
+    # assert on the href attribute: the slug can also appear in media paths (e.g. /protected_media/galleries/<slug>/...)
+    self.assertContains(response, f'href="{reverse("galleries:detail", kwargs={"slug": self.root_gallery.slug})}"')
     self.assertTrue(Photo.objects.filter(name=formdata["name"]).exists())
     photo = Photo.objects.get(name=formdata["name"])
     self.assertEqual(photo.gallery, self.root_gallery)
@@ -237,6 +240,9 @@ class DeletePhotoViewTest(PhotoTestsBase):
 
     self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
     self.assertEqual(response.status_code, 200)
+    # HTMX redirect after delete must point to the gallery slug, not its id
+    # (HttpResponseClientRedirect carries the URL in the HX-Redirect header, body is empty)
+    self.assertEqual(response.headers["HX-Redirect"], reverse("galleries:detail", kwargs={"slug": self.root_gallery.slug}))
 
     self.assertFalse(storage.exists(image_name))
     if thumbnail_name:

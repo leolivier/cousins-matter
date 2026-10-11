@@ -106,7 +106,7 @@ def delete_photo(request, pk):
   if request.method == "POST":
     photo.delete()
     messages.success(request, _("Photo deleted"))
-    return HttpResponseClientRedirect(reverse("galleries:detail", args=[photo.gallery.id]))
+    return HttpResponseClientRedirect(reverse("galleries:detail", args=[photo.gallery.slug]))
   delete_title = _("Delete photo")
   delete_msg = _('Are you sure you want to delete "%(object)s"?') % {"object": photo.name}
   return confirm_delete_modal(

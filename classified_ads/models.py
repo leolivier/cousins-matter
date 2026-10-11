@@ -12,8 +12,8 @@ from tenants.scoping import TenantModel
 class Categories:
   from .categories import CATEGORIES
 
-  cat_list = None
-  cat_keys = None
+  cat_list: list[tuple[str, str]] | None = None
+  cat_keys: list[str] | None = None
 
   @staticmethod
   def get_category(category):

@@ -46,6 +46,10 @@ jobs:
         with:
           images: ${{ inputs.registry }}/${{ inputs.image_name }}
           tags: ${{ inputs.tags_def }}
+          # Republish `latest` on each release: it is the compose-file default
+          # (COUSINS_MATTER_IMAGE fallback in docker-compose.yml) and its GHCR
+          # manifest is currently gone, breaking fresh installs.
+          flavor: latest=${{ github.event_name == 'release' }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4

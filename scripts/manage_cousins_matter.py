@@ -610,7 +610,7 @@ def get_directory(review_environment: bool, directory_arg: str | None):
   # (cm_user), which must be able to write media/ even when the installer runs
   # as another user (e.g. the GitHub runner, uid 1001).
   for d in ("media", "config", "static"):
-    os.chmod(d, 0o777)
+    Path(d).chmod(0o777)
 
   return target_dir
 

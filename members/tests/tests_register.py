@@ -4,7 +4,7 @@ from django.core.cache import cache
 from django.utils.translation import gettext as _
 from django.conf import settings
 from django.contrib.auth import get_user
-from django.test import TestCase, modify_settings
+from django.test import TestCase
 from django.test.utils import TestContextDecorator
 from captcha.conf import settings as captcha_settings
 from verify_email.app_configurations import GetFieldFromSettings
@@ -18,7 +18,6 @@ from .tests_member_base import (
   MemberTestCase,
   get_fake_request,
   today_minus,
-  ensure_google_oauth_app,
 )
 
 
@@ -250,19 +249,17 @@ class MemberRegisterRequestTests(TestCase):
 
 
 class MemberRegisterTests(MemberTestCase):
-  @modify_settings(INSTALLED_APPS={"append": "allauth.socialaccount.providers.google"})
   def test_register_view_ok(self):
     self.client.logout()  # logout everybody
     request = get_fake_request()
     email = "test-cousinsmatter@maildrop.cc"
     invitation_url = RegistrationLinkManager().generate_link(request, email)
-    # oauth_login.html renders nothing without a configured provider, so
-    # make sure one exists to check the OAuth UI is still shown on registration
-    ensure_google_oauth_app()
     response = self.client.get(invitation_url, follow=True)
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "members/members/member_upsert.html")
+    # the test settings register a google provider with a dummy app, so the
+    # registration page must keep rendering the OAuth buttons
     self.assertContains(response, "/accounts/google/login/")
     self.assertContains(
       response,

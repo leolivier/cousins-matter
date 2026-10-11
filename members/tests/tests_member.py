@@ -4,7 +4,7 @@ import os
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import transaction
-from django.test import TestCase, modify_settings
+from django.test import TestCase
 from django.urls import reverse
 from django.db.utils import IntegrityError
 from django.utils.formats import localize
@@ -21,7 +21,6 @@ from .tests_member_base import (
   modify_member_data,
   get_new_member_data,
   today_minus,
-  ensure_google_oauth_app,
 )
 from core.utils import get_test_absolute_url
 from tenants.models import Tenant
@@ -117,11 +116,9 @@ class MemberCreateTest(MemberViewTestMixin, MemberTestCase):
     # managed is managed by the creating member
     self.assertEqual(managed.member_manager, self.member)
 
-  @modify_settings(INSTALLED_APPS={"append": "allauth.socialaccount.providers.google"})
   def test_create_member_view_has_no_oauth_ui(self):
-    # oauth_login.html renders nothing without a configured provider, so
-    # make sure one exists to really check the registration-only UI is hidden
-    ensure_google_oauth_app()
+    # the test settings register a google provider with a dummy app, so the
+    # OAuth buttons would render if the template gating regressed
     response = self.client.get(reverse("members:create"))
     self.assertNotContains(response, "/accounts/google/login/")
 

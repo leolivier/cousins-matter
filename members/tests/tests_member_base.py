@@ -3,7 +3,6 @@ import os
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth import get_user
-from django.contrib.sites.models import Site
 from django.test import RequestFactory, TestCase, TransactionTestCase, AsyncClient
 from asgiref.sync import async_to_sync
 
@@ -22,18 +21,6 @@ def get_counter():
 
 def get_fake_request():
   return RequestFactory().get("/dummy-path")
-
-
-def ensure_google_oauth_app():
-  """Make sure the google OAuth provider has an app configured (settings or DB),
-  so oauth_login.html renders its buttons even without OAUTH_PROVIDERS env vars.
-  """
-  from allauth.socialaccount.models import SocialApp
-
-  if settings.SOCIALACCOUNT_PROVIDERS.get("google", {}).get("APPS"):
-    return
-  app = SocialApp.objects.create(provider="google", name="Google", client_id="dummy", secret="dummy")  # nosec
-  app.sites.add(Site.objects.get_current())
 
 
 def today_minus(delta: str):

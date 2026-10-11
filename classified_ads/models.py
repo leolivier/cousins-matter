@@ -28,8 +28,8 @@ class Categories:
   @staticmethod
   def list_category_keys() -> list[str]:
     if Categories.cat_keys is None:
-      Categories.cat_keys = Categories.CATEGORIES.keys()
-    return list(Categories.cat_keys)
+      Categories.cat_keys = list(Categories.CATEGORIES.keys())
+    return Categories.cat_keys
 
   @staticmethod
   def list_subcategories(category) -> list[tuple[str, str]]:

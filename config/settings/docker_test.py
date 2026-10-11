@@ -27,7 +27,7 @@ ACCOUNT_RATE_LIMITS = False
 # (locally the .env already configures it through base.py).
 if "allauth.socialaccount.providers.google" not in INSTALLED_APPS:
   INSTALLED_APPS.append("allauth.socialaccount.providers.google")
-SOCIALACCOUNT_PROVIDERS.setdefault("google", {"APPS": [{"client_id": "dummy", "secret": "dummy", "key": ""}]})
+SOCIALACCOUNT_PROVIDERS.setdefault("google", {"APPS": [{"client_id": "dummy", "secret": "dummy", "key": ""}]})  # nosec B105 - dummy test credentials
 # Database
 DATABASES["default"]["HOST"] = env.str("POSTGRES_HOST", default="postgres")
 DATABASES["default"]["OPTIONS"].pop("pool", None)

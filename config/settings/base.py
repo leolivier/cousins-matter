@@ -368,6 +368,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRISPY_FAIL_SILENTLY = True
 CRISPY_TEMPLATE_PACK = "bulma"
 CRISPY_ALLOWED_TEMPLATE_PACKS = ("bulma",)
+# crispy-bulma derives the field's CSS class from widget.__class__.__name__.
+# Map our custom BulmaCalendar widget back to "dateinput input" so the JS in
+# core/templates/core/common/include-bulma-calendar.html (attachCalendar('.dateinput'))
+# finds the date fields and bulma-calendar attaches to them again (regression from b4b2e846).
+CRISPY_CLASS_CONVERTERS = {"bulmacalendar": "dateinput input"}
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "members:login"

@@ -4,7 +4,7 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-09-09
+stale_after: 2027-10-11
 generated: { by: claude-code/glm-5.3-flash, at: 2026-10-10T00:00:00Z }
 ---
 
@@ -193,6 +193,17 @@ Also in core: `core.mixins` (`LoginNotRequiredMixin`, `OnlyAdminMixin`) and
   order (members first).
 - `check_okf` — validates the frontmatter of this documentation bundle (see
   [Conventions](/conventions.md)).
+
+## Widgets and crispy forms
+
+`core/widgets.py` defines `RichTextarea` (summernote) and `BulmaCalendar`
+(a `DateInput` with ISO format used by the member `birthdate`/`deathdate`
+fields). crispy-bulma derives a field's CSS class from the widget class name
+and only knows standard Django widget names, so `CRISPY_CLASS_CONVERTERS` in
+config/settings/base.py maps `bulmacalendar` back to `dateinput input` —
+without that mapping the JS in `include-bulma-calendar.html`
+(`attachCalendar('.dateinput')`) never attaches the picker (regression fixed
+from b4b2e846, guarded by members/tests/tests_forms.py).
 
 ## Performance
 

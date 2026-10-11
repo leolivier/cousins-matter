@@ -37,8 +37,7 @@
     </div>
 </div>
 {% endcache %}
-{# chart.js + inline init live OUTSIDE the cache block: the per-request CSP nonce
-   must not be frozen in the cached fragment. #}
+{# chart.js + inline init live OUTSIDE the cache block: the per-request CSP nonce must not be frozen in the cached fragment. #}
 <script src="{% static 'core/vendor/chart.umd.min.js' %}"></script>
 <script nonce="{{ csp_nonce }}">
     // Gender Chart

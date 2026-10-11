@@ -1,10 +1,13 @@
 import json
+import logging
 from pathlib import Path
 
 from django.conf import settings
 from django.contrib.sites.models import Site
 
 from .models import FlatPage
+
+logger = logging.getLogger(__name__)
 
 FIXTURE = Path(__file__).parent / "fixtures" / "predefined_flatpages.json"
 
@@ -19,6 +22,7 @@ def seed_tenant_pages(tenant):
   """
   with open(FIXTURE) as fixture_file:
     entries = json.load(fixture_file)
+  logger.info(f"seed_tenant_pages: seeding tenant {tenant.slug} (pk={tenant.pk})")
   base_by_pk = {entry["pk"]: entry["fields"] for entry in entries if entry["model"] == "flatpages.flatpage"}
   # get_or_create: pages loads before django.contrib.sites, so when seeding
   # fires from the post_migrate re-creation of tenants after a flush, the
@@ -41,4 +45,6 @@ def seed_tenant_pages(tenant):
       updated=child.get("updated", False),
     )
     page.sites.set([site])
-  return FlatPage.unscoped.filter(tenant=tenant).count()
+  count = FlatPage.unscoped.filter(tenant=tenant).count()
+  logger.info(f"seed_tenant_pages: tenant {tenant.slug} now has {count} pages")
+  return count

@@ -26,7 +26,16 @@ class PageConfig(AppConfig):
         seed_tenant_pages(instance)
 
     post_save.connect(seed_pages_on_tenant_create, sender=Tenant, dispatch_uid="pages.seed_on_tenant_create")
+
+    def debug_any_post_save(sender, instance, **kwargs):
+      if sender.__name__ == "Tenant" and sender is not Tenant:
+        print(
+          f"PAGES-SIGNAL-WRONG-SENDER sender={sender} module={sender.__module__} "
+          f"file={inspect.getfile(sender)} expected_id={id(Tenant)} actual_id={id(sender)}"
+        )
+
+    post_save.connect(debug_any_post_save, dispatch_uid="pages.debug_any_tenant")
     print(
       f"PAGES-READY file={__file__} tenant={Tenant.__module__}@{inspect.getfile(Tenant)} "
-      f"registered={any('pages.seed_on_tenant_create' in str(r) for r in post_save.receivers)}"
+      f"id={id(Tenant)} registered={any('pages.seed_on_tenant_create' in str(r) for r in post_save.receivers)}"
     )

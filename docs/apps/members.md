@@ -4,7 +4,7 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-09-27
+stale_after: 2027-10-11
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -139,6 +139,13 @@ existing inactive member or allows allauth to create the signup with
 Exception: an already-active existing member (no `SocialAccount` yet) is
 connected via `sociallogin.connect()` and logged in directly, without invitation
 or signup form.
+
+The signup form and the admin-facing create/edit/profile forms share the
+`members/members/member_upsert.html` template; the registration-only bits
+(OAuth "Sign in with" buttons, "lost your verification email" link) are gated
+on `request.user.is_anonymous`, which in this template is equivalent to
+"registration flow" (`RegistrationCheckingView` rejects logged-in users while
+the three other views sit behind `LoginRequiredMiddleware`).
 
 ## Join request (tenant-scoped)
 

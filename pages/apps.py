@@ -1,5 +1,19 @@
 from django.apps import AppConfig
+from django.db.models.signals import post_save
 from django.utils.translation import gettext_lazy as _
+
+
+def seed_pages_on_tenant_create(sender, instance, created, **kwargs):
+  """Seed a freshly created tenant with its own copy of the predefined pages.
+
+  Module-level so the signal's weak reference stays alive for the whole
+  process: a receiver defined inside ``ready()`` would be garbage-collected
+  (signals hold receivers weakly) and the seeding would silently stop.
+  """
+  if created:
+    from .services import seed_tenant_pages  # local import: models must not load before the registry
+
+    seed_tenant_pages(instance)
 
 
 class PageConfig(AppConfig):
@@ -12,30 +26,6 @@ class PageConfig(AppConfig):
     # predefined pages — whatever the creation path (signup view, admin,
     # ORM). Previously only the signup view seeded them, leaving tenants
     # created elsewhere (e.g. Django admin) without a family home page.
-    import inspect
-
-    from django.db.models.signals import post_save
-
     from tenants.models import Tenant
 
-    from .services import seed_tenant_pages
-
-    def seed_pages_on_tenant_create(sender, instance, created, **kwargs):
-      print(f"PAGES-SIGNAL fired created={created} slug={instance.slug} sender={sender}")
-      if created:
-        seed_tenant_pages(instance)
-
     post_save.connect(seed_pages_on_tenant_create, sender=Tenant, dispatch_uid="pages.seed_on_tenant_create")
-
-    def debug_any_post_save(sender, instance, **kwargs):
-      if sender.__name__ == "Tenant" and sender is not Tenant:
-        print(
-          f"PAGES-SIGNAL-WRONG-SENDER sender={sender} module={sender.__module__} "
-          f"file={inspect.getfile(sender)} expected_id={id(Tenant)} actual_id={id(sender)}"
-        )
-
-    post_save.connect(debug_any_post_save, dispatch_uid="pages.debug_any_tenant")
-    print(
-      f"PAGES-READY file={__file__} tenant={Tenant.__module__}@{inspect.getfile(Tenant)} "
-      f"id={id(Tenant)} registered={any('pages.seed_on_tenant_create' in str(r) for r in post_save.receivers)}"
-    )

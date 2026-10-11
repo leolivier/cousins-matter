@@ -13,15 +13,12 @@ class PageConfig(AppConfig):
     # ORM). Previously only the signup view seeded them, leaving tenants
     # created elsewhere (e.g. Django admin) without a family home page.
     import inspect
-    import logging
 
     from django.db.models.signals import post_save
 
     from tenants.models import Tenant
 
     from .services import seed_tenant_pages
-
-    logger = logging.getLogger(__name__)
 
     def seed_pages_on_tenant_create(sender, instance, created, **kwargs):
       print(f"PAGES-SIGNAL fired created={created} slug={instance.slug} sender={sender}")

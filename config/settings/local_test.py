@@ -27,6 +27,16 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 # in CI. Disable allauth rate limiting entirely in tests.
 ACCOUNT_RATE_LIMITS = False
 
+# OAuth UI tests (e.g. members registration vs create view gating) need a
+# registered provider. allauth's provider registry and URL patterns are built
+# once at boot from INSTALLED_APPS, so the provider must be installed here in
+# settings — a per-test modify_settings cannot add it after the fact. CI has
+# no OAUTH_PROVIDERS env vars, so add google with a dummy app when missing
+# (locally the .env already configures it through base.py).
+if "allauth.socialaccount.providers.google" not in INSTALLED_APPS:
+  INSTALLED_APPS.append("allauth.socialaccount.providers.google")
+SOCIALACCOUNT_PROVIDERS.setdefault("google", {"APPS": [{"client_id": "dummy", "secret": "dummy", "key": ""}]})  # nosec B105 - dummy test credentials
+
 # Additional test middleware
 # MIDDLEWARE.append("core.htmlvalidator.HtmlValidatorMiddleware")
 

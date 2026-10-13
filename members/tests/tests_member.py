@@ -116,6 +116,12 @@ class MemberCreateTest(MemberViewTestMixin, MemberTestCase):
     # managed is managed by the creating member
     self.assertEqual(managed.member_manager, self.member)
 
+  def test_create_member_view_has_no_oauth_ui(self):
+    # the test settings register a google provider with a dummy app, so the
+    # OAuth buttons would render if the template gating regressed
+    response = self.client.get(reverse("members:create"))
+    self.assertNotContains(response, "/accounts/google/login/")
+
 
 class MemberDeleteTest(MemberTestCaseMixin, TestCase):
   def test_delete_member(self):

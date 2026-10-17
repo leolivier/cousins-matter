@@ -8,8 +8,10 @@ fallback, and that ``seed_tenant_pages`` gives each family its own
 copy of the predefined pages.
 """
 
+from django.conf import settings
 from django.test import TestCase
 
+from pages.forms import AdminPageForm
 from pages.models import FlatPage
 from pages.services import seed_tenant_pages
 from pages.tests.factories import FlatPageFactory
@@ -49,6 +51,28 @@ class PagesTenantIsolationTests(TestCase):
     unscoped = set(FlatPage.unscoped.values_list("id", flat=True))
     self.assertIn(self.page_a.id, unscoped)
     self.assertIn(self.page_b.id, unscoped)
+
+  def _admin_form_data(self, page):
+    return {
+      "url": page.url,
+      "title": page.title,
+      "content": page.content,
+      "template_name": page.template_name,
+      "registration_required": page.registration_required,
+      "sites": [settings.SITE_ID],
+    }
+
+  def test_admin_form_update_ignores_other_tenants_copy(self):
+    # page_b (other tenant) owns the same URL on the same site: the stock
+    # FlatpageForm rejected the update with "already exists for site"
+    form = AdminPageForm(instance=self.page_a, data=self._admin_form_data(self.page_a))
+    self.assertTrue(form.is_valid(), form.errors)
+
+  def test_admin_form_still_blocks_same_tenant_duplicate(self):
+    FlatPageFactory(tenant=self.tenant_a, url=self.page_a.url)
+    form = AdminPageForm(instance=self.page_a, data=self._admin_form_data(self.page_a))
+    self.assertFalse(form.is_valid())
+    self.assertEqual([e.code for e in form.non_field_errors().as_data()], ["duplicate_url"])
 
   def test_save_without_tenant_falls_back_to_default(self):
     page = FlatPageFactory.build(tenant=None)

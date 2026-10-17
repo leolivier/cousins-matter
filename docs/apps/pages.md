@@ -34,7 +34,12 @@ child: the `tenant` column lives on `pages_flatpage`, the contrib
 parent table `django_flatpage` stays global). Its global `url` unique
 was dropped in `pages.0004_tenant` so every family can own
 `/home/authenticated/`; per-tenant URL uniqueness is enforced by the
-scoped `PageForm`. Each new tenant gets its own copy of the
+scoped `PageForm` (front office) and `AdminPageForm`
+(pages/forms.py), which re-implements contrib's `FlatpageForm.clean()`
+check scoped to the edited page's tenant — the stock check queries the
+global `django_flatpage` table and would reject the update because
+another tenant owns the same URL on the shared `SITE_ID` site.
+Each new tenant gets its own copy of the
 predefined pages via `pages.services.seed_tenant_pages`, called from
 the signup and `TenantCreateView` flows.
 

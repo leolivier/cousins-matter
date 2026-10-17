@@ -99,8 +99,8 @@ class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
   form_class = PageForm
 
   def post(self, request, pk, *args, **kwargs):
-    if not request.user.is_superuser:
-      raise PermissionDenied
+    # get_object_or_404 goes through the tenant-scoped manager: a tenant admin
+    # can only ever update pages of their own tenant (other tenants -> 404)
     page = get_object_or_404(FlatPage, pk=pk)
     form = PageForm(request.POST, instance=page)
     if form.is_valid():
@@ -122,13 +122,19 @@ class PageUpdateView(OnlyAdminMixin, generic.UpdateView):
 class PageAdminListView(OnlyAdminMixin, generic.ListView):
   model = FlatPage
   template_name = "pages/pages_admin_list.html"
-  queryset = FlatPage.objects.prefetch_related("sites")
+
+  def get_queryset(self):
+    # per request: TenantManager scopes by the current tenant
+    return FlatPage.objects.prefetch_related("sites")
 
 
 class PageTreeView(generic.ListView):
   model = FlatPage
   template_name = "pages/page_tree.html"
-  queryset = FlatPage.objects.prefetch_related("sites")
+
+  def get_queryset(self):
+    # per request: TenantManager scopes by the current tenant
+    return FlatPage.objects.prefetch_related("sites")
 
 
 class PageDeleteView(OnlyAdminMixin, generic.View):

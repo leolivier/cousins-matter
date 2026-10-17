@@ -25,7 +25,7 @@ jobs:
   lint-and-build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # "Commit vendored assets" step pushes vendor updates to the branch
       packages: write
     outputs:
       runner_id: ${{ steps.get_runner_id.outputs.RUNNER_ID }}
@@ -48,7 +48,7 @@ jobs:
           lfs: true
 
       - name: Set up Python 3.14
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.14'
           cache: 'pip'
@@ -104,7 +104,9 @@ jobs:
           uv run ruff format -q .
           uv run ruff check --fix .
           uv run bandit -r . -c pyproject.toml
-          uv run pip-audit .
+          # CVE-2026-106454: no fix released yet (twisted 26.4.0 is latest). ReDoS in twisted.mail.imap4;
+          # not applicable here: twisted is only pulled by daphne/Channels (ASGI/WebSocket), no IMAP server.
+          uv run pip-audit . --ignore-vuln CVE-2026-106454
           uv run mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
 
 
@@ -123,7 +125,7 @@ jobs:
           tags: ${{ inputs.tags_def }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: get runner id
         id: get_runner_id

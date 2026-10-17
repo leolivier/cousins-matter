@@ -4,7 +4,7 @@ title: Galleries
 description: Photo/video galleries — nested gallery tree, photo import (single and bulk zip via Django-Q), thumbnails, protected storage
 tags: ["app", "galleries"]
 status: draft
-stale_after: 2027-03-09
+stale_after: 2027-04-11
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
 ---
 

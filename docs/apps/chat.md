@@ -4,7 +4,7 @@ title: Chat
 description: Real-time chat rooms over Django Channels — public and private rooms, websocket consumer, read receipts, follower notifications
 tags: ["app", "chat"]
 status: draft
-stale_after: 2027-03-09
+stale_after: 2027-03-20
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
 ---
 

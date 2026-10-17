@@ -84,7 +84,7 @@ _CSP_POLICY: dict[str, list[str]] = {
   "script-src": [CSP.SELF, CSP.NONCE, CSP.UNSAFE_EVAL, "https://challenges.cloudflare.com"],
   # 'unsafe-inline' (NOT a nonce) for styles: CSP3 ignores 'unsafe-inline' when a
   # nonce is present, so we must choose one. We need 'unsafe-inline' because
-  # jQuery plugins (select2, summernote, bulma-calendar) inject style="" attrs at
+  # jQuery plugins (summernote, bulma-calendar) inject style="" attrs at
   # runtime via .html()/.innerHTML — not coverable by a nonce or static hashes.
   # External sheets are still restricted to 'self'. The nonce="{{csp_nonce}}"
   # attributes left on <style> tags become no-ops but are harmless.
@@ -385,6 +385,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRISPY_FAIL_SILENTLY = True
 CRISPY_TEMPLATE_PACK = "bulma"
 CRISPY_ALLOWED_TEMPLATE_PACKS = ("bulma",)
+# crispy-bulma derives the field's CSS class from widget.__class__.__name__.
+# Map our custom BulmaCalendar widget back to "dateinput input" so the JS in
+# core/templates/core/common/include-bulma-calendar.html (attachCalendar('.dateinput'))
+# finds the date fields and bulma-calendar attaches to them again (regression from b4b2e846).
+CRISPY_CLASS_CONVERTERS = {"bulmacalendar": "dateinput input"}
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "members:login"
@@ -400,6 +405,7 @@ LOGIN_REQUIRED_IGNORE_PATHS = [
   "/accounts/password/reset/",  # Password reset request
   "/accounts/password/reset/key/",  # Password reset confirmation
   "/accounts/confirm-email/",  # Email confirmation
+  "/verification/",  # django-verify-email: verification + request-new-link must be reachable anonymously
   "/robots.txt",
   "/jsi18n/",
   "/i18n/",  # set_language (language switcher) — must work unauthenticated, e.g. on the login page

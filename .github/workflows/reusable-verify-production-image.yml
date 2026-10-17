@@ -10,8 +10,12 @@ on:
       image_name:
         required: true
         type: string
-      tags_def:
-        required: true
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Release tag to verify (with or without leading v)'
+        required: false
+        default: '3.0.0-rc1'
         type: string
 
 jobs:
@@ -24,32 +28,40 @@ jobs:
       - name: Determine version
         id: get_version
         run: |
-          if [[ ${{ github.event_name }} == 'release' ]]; then
-            echo "VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
-          elif [[ ${{ github.ref }} == refs/tags/* ]]; then
-            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            RAW="${{ inputs.image_tag }}"
+          elif [[ "${{ github.event_name }}" == 'release' ]]; then
+            RAW="${{ github.event.release.tag_name }}"
+          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            RAW="${GITHUB_REF#refs/tags/}"
           else
-            echo "VERSION=$(git describe --tags --abbrev=0)+$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+            RAW="$(git describe --tags --abbrev=0)+$(git rev-parse --short HEAD)"
           fi
+          REGISTRY="${{ inputs.registry || 'ghcr.io' }}"
+          IMAGE_NAME="${{ inputs.image_name || github.repository }}"
+          # VERSION is the git tag (leading v); the image tag drops it
+          [[ "${RAW}" == v* ]] || RAW="v${RAW}"
+          echo "VERSION=${RAW}" >> $GITHUB_OUTPUT
+          echo "IMAGE=${REGISTRY}/${IMAGE_NAME}:${RAW#v}" >> $GITHUB_OUTPUT
 
       - name: Get minimum files
         run: |
           curl -LO https://raw.githubusercontent.com/${{ github.actor }}/cousins-matter/refs/tags/${{ steps.get_version.outputs.VERSION }}/scripts/manage_cousins_matter.py
           python manage_cousins_matter.py install -d cm_test_install -r ${{ steps.get_version.outputs.VERSION }} -n
 
-      - name: Login to GHCR.io
-        uses: docker/login-action@v4
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: ${{ inputs.registry }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v6
-        with:
-          images: ${{ inputs.registry }}/${{ inputs.image_name }}
-          tags: ${{ inputs.tags_def }}
+      # One-run diagnostic: authenticated pull vs anonymous pull on the runner.
+      # The package is public, so the workflow never pushes and works anonymously;
+      # if even the anonymous pull fails here, the problem is GHCR/CDN infra.
+      - name: Diagnostic pull (auth vs anonymous)
+        run: |
+          docker version
+          docker info | grep -iE "storage|snapshotter" || true
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ inputs.registry || 'ghcr.io' }} -u ${{ github.actor }} --password-stdin
+          echo "--- authenticated pull ---"
+          docker pull ${{ steps.get_version.outputs.IMAGE }} 2>&1 | tail -5 || true
+          echo "--- anonymous pull after logout ---"
+          docker logout ${{ inputs.registry || 'ghcr.io' }} || true
+          docker pull ${{ steps.get_version.outputs.IMAGE }}
 
       - name: Update .env for production test
         run: |
@@ -70,14 +82,41 @@ jobs:
           sed -i -e 's/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=test-postgres-password/' cm_test_install/.env
           sed -i -e 's/^Q_SYNC=.*/Q_SYNC=True/' cm_test_install/.env
           sed -i -e 's/^ENVIRONMENT=.*/ENVIRONMENT=production/' cm_test_install/.env
-          echo "COUSINS_MATTER_IMAGE=${{ fromJSON(steps.meta.outputs.json).tags[0] }}" >> cm_test_install/.env
+          # .env.example comments out some keys, so the seds above never match
+          # them: append (newline-safe, see run 36330816976) whatever is missing.
+          for kv in "SITE_DOMAIN=localhost" "SITE_NAME=Production Test Site" "ALLOWED_HOSTS=127.0.0.1,localhost"; do
+            grep -q "^${kv%%=*}=" cm_test_install/.env || printf '\n%s\n' "$kv" >> cm_test_install/.env
+          done
+          # leading \n: .env templates may lack a trailing newline, which would
+          # glue this line into the previous (commented) one — see run 36330816976
+          printf '\nCOUSINS_MATTER_IMAGE=%s\n' "${{ steps.get_version.outputs.IMAGE }}" >> cm_test_install/.env
 
       - name: Starts the production environment
         run: |
           cd cm_test_install
 
-          # Start services with production environment
-          docker compose -f docker-compose.yml up -d --wait --wait-timeout 60
+          # Bind mounts must be writable by the container user (uid 1000) even
+          # when the installer ran as another user: mkdir()'s 0777 mode is
+          # umask-masked and installers from old tags don't chmod at all.
+          chmod -R a+rwX media static config 2>/dev/null || true
+
+          docker compose version
+          echo "=== images resolved by compose (must show 3.0.0-rc1, not latest) ==="
+          grep COUSINS_MATTER_IMAGE .env
+          docker compose -f docker-compose.yml --env-file .env config | grep -E "image:"
+
+          # Bounded retries absorb transient GHCR/CDN hiccups (incl. concurrent
+          # pushes of the same tag by overlapping runs)
+          PULL_RETRIES=5
+          for i in $(seq 1 $PULL_RETRIES); do
+            docker compose -f docker-compose.yml --env-file .env pull && break
+            [ "$i" -eq "$PULL_RETRIES" ] && { echo "ERROR: pull failed after $PULL_RETRIES attempts"; exit 1; }
+            echo "Pull failed, retry $i/$PULL_RETRIES"; sleep 20
+          done
+
+          # Start services with production environment.
+          # 300s covers start_period 15s + 3x30s healthcheck + first-install migrations.
+          docker compose -f docker-compose.yml --env-file .env up -d --wait --wait-timeout 300
 
           # Check that the main container is running
           if ! docker ps | grep -q cousins-matter; then
@@ -108,19 +147,22 @@ jobs:
           echo "ERROR: Application did not respond after $MAX_RETRIES attempts"
           exit 1
 
-      - name: Checkout
-        uses: actions/checkout@v7
+      # Inlined (not ./.github/actions/show-logs-on-failure) because that local
+      # action requires an on-failure Checkout, whose sparse-checkout handling
+      # wipes the untracked cm_test_install/ we want to inspect.
+      - name: Dump install dir and container logs on failure
         if: failure()
-        with:
-          fetch-depth: 0  # Required to get all tags
-          lfs: true
-
-      - name: Show docker-compose services logs on failure
-        if: failure()
-        uses: ./.github/actions/show-logs-on-failure
-        with:
-          env_file_path: cm_test_install/.env
-          containers: cousins-matter cousins-matter.qcluster cousins-matter.db cousins-matter.redis cousins-matter.nginx
+        run: |
+          echo "==================== .env file contents ===================="
+          cat cm_test_install/.env 2>/dev/null || echo "(.env not found)"
+          echo "==================== resolved compose images ==============="
+          docker compose -f cm_test_install/docker-compose.yml --env-file cm_test_install/.env config 2>/dev/null | grep "image:" || true
+          echo "==================== docker ps -a =========================="
+          docker ps -a
+          for container in cousins-matter cousins-matter.qcluster cousins-matter.db cousins-matter.redis cousins-matter.nginx; do
+            echo "==================== $container logs ========================"
+            docker logs "$container" 2>&1 | tail -50 || true
+          done
 
       - name: Cleanup
         if: always()

@@ -17,7 +17,7 @@ runs:
   using: 'composite'
   steps:
     - name: Download test Docker image artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v7
       with:
         name: ${{ inputs.artifact_name }}
         path: ${{ inputs.artifact_path }}

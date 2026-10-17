@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-07 15:31+0200\n"
+"POT-Creation-Date: 2026-10-10 19:56+0200\n"
 "PO-Revision-Date: 2026-09-07 15:31+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Français <LL@li.org>\n"
@@ -17,28 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-
 #: apps.py:8
 msgid "Tenants"
 msgstr "Familles"
 
-#: forms.py:32
+#: forms.py:19
 msgid "This family name cannot be turned into a valid identifier."
 msgstr "Ce nom de famille ne peut pas être transformé en identifiant valide."
 
-#: forms.py:34
+#: forms.py:21
 msgid "This family name is reserved, please choose another one."
-msgstr "Ce nom de famille est réservé, merci d'en choisir un autre."
+msgstr "Ce slug est réservé, merci d'en choisir un autre."
 
-#: forms.py:41
+#: forms.py:28
 msgid "Too many families already use this name, please choose another one."
 msgstr "Trop de familles utilisent déjà ce nom, merci d'en choisir un autre."
 
-#: forms.py:48
+#: forms.py:35
 msgid "Family name"
 msgstr "Nom de la famille"
 
-#: forms.py:53
+#: forms.py:40
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
@@ -46,58 +45,66 @@ msgstr "Ce champ est obligatoire."
 msgid "This space has been deactivated and can no longer be accessed."
 msgstr "Cet espace a été désactivé et n'est plus accessible."
 
-#: models.py:36
+#: models.py:78
 msgid "Name"
 msgstr "Nom"
 
-#: models.py:37
+#: models.py:79
 msgid "Slug"
 msgstr "Slug"
 
-#: models.py:38
+#: models.py:80
 msgid "Active"
 msgstr "Active"
 
-#: models.py:39
+#: models.py:81
 msgid "Created at"
 msgstr "Créée le"
 
-#: models.py:40
+#: models.py:82
 msgid "Updated at"
 msgstr "Mise à jour le"
 
-#: models.py:43
+#: models.py:85
 msgid "tenant"
 msgstr "famille"
 
-#: models.py:44
+#: models.py:86
 msgid "tenants"
 msgstr "familles"
 
-#: models.py:76
+#: models.py:129
+#, fuzzy
+#| msgid "This family name is reserved, please choose another one."
+msgid "This slug is reserved, please choose another one."
+msgstr "Ce slug est réservé, merci d'en choisir un autre."
+
+#: models.py:133
 msgid "Tenant"
 msgstr "Famille"
 
-#: models.py:78
+#: models.py:135
 msgid "Overrides"
 msgstr "Surcharges"
 
-#: models.py:81 models.py:82
+#: models.py:138 models.py:139
 msgid "tenant settings"
 msgstr "paramètres de la famille"
 
-#: services.py:24
+#: services.py:25
 msgid "The system tenant cannot be deleted."
 msgstr "La famille système ne peut pas être supprimée."
 
-#: services.py:26
+#: services.py:27
 msgid "This family is still active. Deactivate it before deleting it."
-msgstr "Cette famille est toujours active. Désactivez-la avant de la supprimer."
+msgstr ""
+"Cette famille est toujours active. Désactivez-la avant de la supprimer."
 
 #: templates/tenants/email/tenant_admin_invitation.html:2
 #, python-format
 msgid "You are invited to administer the family \"%(name)s\" on %(site_name)s."
-msgstr "Tu es invité.e à administrer la famille « %(name)s » sur %(site_name)s."
+msgstr ""
+"Tu es invité.e à administrer la famille « %(name)s » sur %(site_name)s."
 
 #: templates/tenants/email/tenant_admin_invitation.html:3
 msgid "Click on the link below to create your account:"
@@ -108,7 +115,10 @@ msgid ""
 "You will create a new family space and become its administrator. After "
 "signing up, you will receive an email to verify your address and activate "
 "your account."
-msgstr "Tu vas créer un nouvel espace de famille et en devenir l'administrateur. Après ton inscription, tu recevras un e-mail pour vérifier ton adresse et activer ton compte."
+msgstr ""
+"Tu vas créer un nouvel espace de famille et en devenir l'administrateur. "
+"Après ton inscription, tu recevras un e-mail pour vérifier ton adresse et "
+"activer ton compte."
 
 #: templates/tenants/family_signup.html:20
 msgid "Your family"
@@ -133,7 +143,10 @@ msgstr "Supprimer la famille"
 msgid ""
 "You are about to PERMANENTLY delete the family \"%(name)s\" and ALL its data "
 "(members, galleries, photos). This cannot be undone."
-msgstr "Tu es sur le point de supprimer DÉFINITIVEMENT la famille « %(name)s » et TOUTES ses données (membres, galeries, photos). Cette action est irréversible."
+msgstr ""
+"Tu es sur le point de supprimer DÉFINITIVEMENT la famille « %(name)s » et "
+"TOUTES ses données (membres, galeries, photos). Cette action est "
+"irréversible."
 
 #: templates/tenants/tenant_confirm_delete.html:17
 #, python-format
@@ -157,10 +170,12 @@ msgstr "E-mail du premier administrateur (optionnel)"
 msgid ""
 "If provided, an invitation to administer this family will be sent to this "
 "address."
-msgstr "Si renseigné, une invitation à administrer cette famille sera envoyée à cette adresse."
+msgstr ""
+"Si renseigné, une invitation à administrer cette famille sera envoyée à "
+"cette adresse."
 
-#: templates/tenants/tenant_list.html:10 views/views_manage.py:57
-#: views/views_manage.py:62
+#: templates/tenants/tenant_list.html:10 views/views_manage.py:58
+#: views/views_manage.py:63
 msgid "Create a family"
 msgstr "Créer une famille"
 
@@ -224,58 +239,61 @@ msgstr "Aucune famille pour l'instant."
 msgid ""
 "Values left equal to the global defaults are not stored: a global change "
 "will still apply to your family."
-msgstr "Les valeurs laissées égales aux valeurs globales par défaut ne sont pas stockées : un changement global s'appliquera toujours à ta famille."
+msgstr ""
+"Les valeurs laissées égales aux valeurs globales par défaut ne sont pas "
+"stockées : un changement global s'appliquera toujours à ta famille."
 
 #: templates/tenants/tenant_settings.html:16
 msgid "Save"
 msgstr "Enregistrer"
 
-#: views/views_manage.py:39
+#: views/views_manage.py:40
 msgid "Only platform administrators can manage families."
 msgstr "Seuls les administrateurs de la plateforme peuvent gérer les familles."
 
-#: views/views_manage.py:48
+#: views/views_manage.py:49
 msgid "Families"
 msgstr "Familles"
 
-#: views/views_manage.py:66
+#: views/views_manage.py:69
 #, python-format
 msgid "Family %(name)s created."
 msgstr "Famille %(name)s créée."
 
-#: views/views_manage.py:71
+#: views/views_manage.py:74
 msgid "A member with this email already exists; invitation not sent."
 msgstr "Un membre avec cet e-mail existe déjà ; invitation non envoyée."
 
-#: views/views_manage.py:93
+#: views/views_manage.py:96
 #, python-format
 msgid "You are invited to administer the family %(name)s"
 msgstr "Tu es invité.e à administrer la famille %(name)s"
 
-#: views/views_manage.py:99
+#: views/views_manage.py:102
 #, python-format
 msgid "Invitation sent to %(email)s."
 msgstr "Invitation envoyée à %(email)s."
 
-#: views/views_manage.py:109
+#: views/views_manage.py:112
 msgid "The system family cannot be deactivated."
 msgstr "La famille système ne peut pas être désactivée."
 
-#: views/views_manage.py:114
+#: views/views_manage.py:117
 #, python-format
 msgid "Family %(name)s reactivated."
 msgstr "Famille %(name)s réactivée."
 
-#: views/views_manage.py:116
+#: views/views_manage.py:119
 #, python-format
 msgid "Family %(name)s deactivated."
 msgstr "Famille %(name)s désactivée."
 
-#: views/views_manage.py:133
+#: views/views_manage.py:136
 msgid "Confirmation did not match the family identifier. Aborting."
-msgstr "La confirmation ne correspond pas à l'identifiant de la famille. Abandon."
+msgstr ""
+"La confirmation ne correspond pas à l'identifiant de la famille. Abandon."
 
-#: views/views_manage.py:141
+#: views/views_manage.py:144
 #, python-format
 msgid "Family %(name)s permanently deleted."
 msgstr "Famille %(name)s définitivement supprimée."
@@ -342,7 +360,8 @@ msgstr "Paramètres de la famille"
 
 #: views/views_settings.py:146
 msgid "Only family administrators can edit family settings."
-msgstr "Seuls les administrateurs de la famille peuvent modifier ses paramètres."
+msgstr ""
+"Seuls les administrateurs de la famille peuvent modifier ses paramètres."
 
 #: views/views_settings.py:159
 msgid "Family settings updated."
@@ -364,4 +383,6 @@ msgstr "Un membre avec cette adresse e-mail existe déjà."
 msgid ""
 "Your family has been created! You will now receive an email to verify your "
 "email address. Click in the link inside the mail to finish the registration."
-msgstr "Ta famille a été créée ! Tu vas maintenant recevoir un e-mail pour vérifier ton adresse. Clique sur le lien dans le message pour terminer l'inscription."
+msgstr ""
+"Ta famille a été créée ! Tu vas maintenant recevoir un e-mail pour vérifier "
+"ton adresse. Clique sur le lien dans le message pour terminer l'inscription."

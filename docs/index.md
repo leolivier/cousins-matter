@@ -45,6 +45,7 @@ This is the OKF v0.2 documentation bundle for the Cousins Matter repository: one
 ## Flows
 
 - [Member Invitation](/flows/member-invitation.md)
+- [Tenant Onboarding E2E (Manual Test)](/flows/tenant-onboarding-e2e.md)
 - [GEDCOM Import/Export](/flows/gedcom-import-export.md)
 - [Gallery Bulk Import](/flows/gallery-bulk-import.md)
 - [OAuth Login](/flows/oauth-login.md)

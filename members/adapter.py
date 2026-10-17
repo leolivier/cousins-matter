@@ -27,8 +27,10 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
     try:
       member = Member.objects.get(email=email)
 
-      # If already active, just let them log in
+      # If already active, connect the social account to the existing member
+      # so allauth logs them in directly instead of showing the signup form.
       if member.is_active:
+        sociallogin.connect(request, member)
         return
 
       # Check for invitation in session

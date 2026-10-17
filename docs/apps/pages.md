@@ -4,7 +4,7 @@ title: Pages
 description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpages, with publish/private URL conventions, menu/tree template tags and a predefined-pages import; documented in apps/pages.md
 tags: ["app", "pages"]
 status: draft
-stale_after: 2027-03-10
+stale_after: 2027-04-11
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-10T00:00:00Z }
 ---
 
@@ -106,8 +106,10 @@ The fixture stays tenant-free: migration 0002 creates the initial pages
 (`pages.0004_tenant` backfills them to the default tenant), while the
 UI test base and new tenants get their copies through
 `pages.services.seed_tenant_pages` — loaddata cannot resolve the
-tenant (fixture-pinned pks drift once the test-runner flush re-seeds
-tenants).
+tenant. For tenants that already exist (e.g. missing pages added to
+the fixture after their creation), the official (re-)sync path is
+`manage.py sync_predefined_pages [--tenant SLUG]`: it re-runs the
+idempotent seed for one tenant or all of them.
 
 ## Performance
 

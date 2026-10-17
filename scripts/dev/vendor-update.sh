@@ -44,8 +44,4 @@ cp node_modules/family-chart/dist/styles/family-chart.css "$APP_DIR/"
 echo "==> hyperscript"
 cp node_modules/hyperscript.org/dist/_hyperscript.min.js "$APP_DIR/hyperscript.min.js"
 
-echo "==> select2"
-cp node_modules/select2/dist/js/select2.min.js "$APP_DIR/"
-cp node_modules/select2/dist/css/select2.min.css "$APP_DIR/"
-
 echo "Vendoring terminé."

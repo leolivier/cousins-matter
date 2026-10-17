@@ -4,7 +4,7 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-03-12
+stale_after: 2027-10-11
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -77,7 +77,10 @@ is the plain-manager escape hatch for explicit cross-tenant access.
 - `create_superuser(...)` forces `is_staff`, `is_superuser`, `role="admin"` and
   `tenant=Tenant.get_system()` — superusers live on the *system* tenant.
 - `alive()` / `dead()` filter on `is_dead`.
-- `fuzzy_search(query)` uses `TrigramSimilarity` on the concatenated name.
+- `fuzzy_search(query)` ranks members by pg_trgm word similarity
+  (`TrigramWordSimilarity`, query aligned on the best fragment of the text, so
+  short prefixes match long names), taking the best score between the
+  concatenated name and the username.
 
 ## Family and Address
 
@@ -99,7 +102,10 @@ account: the manager fills the profile, then activates it.
 - `activate_member` → `do_activate_member` (members/services/members.py)
   refuses dead, already-active or email-less members, otherwise sends the
   verification email (`verify_email.email_handler.send_verification_email`);
-  the owner finishes with the password-reset screen.
+  the owner finishes with the password-reset screen. Platform superusers and
+  tenant admins activate immediately instead (`is_active=True`, manager
+  cleared, no email); the edit page shows the Activate button to the manager,
+  tenant admins and superusers for inactive members only.
 
 ## Invitations and registration links
 
@@ -130,6 +136,16 @@ Social login is wired through `CustomSocialAccountAdapter`
 `RegistrationLinkManager.check_invitation`, then either links and activates the
 existing inactive member or allows allauth to create the signup with
 `is_active=True` and the invitation's `tenant_id` — no invitation, no signup.
+Exception: an already-active existing member (no `SocialAccount` yet) is
+connected via `sociallogin.connect()` and logged in directly, without invitation
+or signup form.
+
+The signup form and the admin-facing create/edit/profile forms share the
+`members/members/member_upsert.html` template; the registration-only bits
+(OAuth "Sign in with" buttons, "lost your verification email" link) are gated
+on `request.user.is_anonymous`, which in this template is equivalent to
+"registration flow" (`RegistrationCheckingView` rejects logged-in users while
+the three other views sit behind `LoginRequiredMiddleware`).
 
 ## Join request (tenant-scoped)
 
@@ -159,7 +175,9 @@ its `tenant-join` URL.
   `manage_family`, `get_valid_manager`, `handle_managed_by`, `update_address`,
   `create_member` / `update_member`.
 - Export: `select_members_to_export` → `export_members_to_csv` →
-  `do_export_members_to_csv` (filterable by name, family, city).
+  `do_export_members_to_csv`. Filters are htmx dropdowns fed by the
+  `select_name`/`select_city`/`select_family` views (htmx requests only,
+  they return `members/common/select_options.html` fragments).
 
 ## Following
 

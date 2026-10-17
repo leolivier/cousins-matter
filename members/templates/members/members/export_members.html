@@ -1,7 +1,6 @@
 {% extends "core/base.html" %}
-{% load i18n crispy_forms_tags cm_tags %}
-{%block header %}{%include "core/common/include-select2.html" %}{%endblock%}
-{% block title %}{% title _("Import Members") %}{% endblock %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Export Members") %}{% endblock %}
 {% block content %}
 <div class="container mt-5 px-2">
 	<h1 class="title has-text-centered">{% title _("Export Members") %}</h1>
@@ -13,83 +12,67 @@
 			{% trans "Admins can re-import the files after modification with any CSV editor."%}
 		{%endif%}
 	</p>
-	<form id="add-member-form" method="post" action="{%url 'members:export_members_to_csv' %}">
+	<form id="export-members-form" method="post" action="{%url 'members:export_members_to_csv' %}">
 		{% csrf_token %}
 		<p class="content is-medium">{% trans "Select members to export" %} :</p>
 		<div class="level">
+			{% for f in filters %}
 			<div class="control">
-				<label class="label">{% trans "Family filter" %}</label>
-				<select name="family-id" class="select2-selector"></select>
-				<button class="button clear-select2">{%icon "clear" %}</button>
+				<label class="label">{{ f.label }}</label>
+				<div class="dropdown" id="{{ f.name }}-dropdown">
+					<div class="dropdown-trigger">
+						<span class="htmx-indicator" id="{{ f.name }}-indicator">{%icon "loading" %}</span>
+						<input class="input" type="search" autocomplete="off"
+							placeholder="{{ f.placeholder }}"
+							hx-get="{{ f.url }}"
+							hx-trigger="input[this.value.length == 0 || this.value.length >= 2] changed delay:300ms, keyup[key=='Enter' && (this.value.length == 0 || this.value.length >= 2)]"
+							hx-target="#{{ f.name }}-results"
+							hx-indicator="#{{ f.name }}-indicator"
+						>
+					</div>
+					<div class="dropdown-menu" role="menu">
+						<div class="dropdown-content" id="{{ f.name }}-results"></div>
+					</div>
+				</div>
+				<input type="hidden" name="{{ f.name }}" id="{{ f.name }}">
+				<button class="button clear-filter" type="button" title="{% trans "Clear selection" %}" data-clear="{{ f.name }}">{%icon "clear" %}</button>
 			</div>
-			<div class="control">
-				<label class="label">{% trans "City filter" %}</label>
-				<select name="city-id" class="select2-selector"></select>
-				<button class="button clear-select2">{%icon "clear" %}</button>
-			</div>
-			<div class="control">
-				<label class="label">{% trans "Last name filter" %}</label>
-				<select name="name-id" class="select2-selector"></select>
-				<button class="button clear-select2">{%icon "clear" %}</button>
-			</div>
+			{% endfor %}
 		</div>
-	{#		<p class="content is-medium">{% trans "Number of selected members" %}:#}
-		{#			<span class="notification is-info ml-3"></span>#}
-		{#		</p>#}
 		<div class="buttons is-centered">
 			<button class="button" type="submit">{%icon "import-members" %} <span>{%trans "Export"%}</span></button>
 		</div>
 	</form>
 </div>
 <script nonce="{{ csp_nonce }}">
-	$(document).ready(function() {
-		$('.select2-selector').each(function(index, element) {
-			var $select, $url, $placeholder, $clear_button;
-			$select = $(this);
-			switch($(this).attr('name')) {
-				case 'name-id':
-					$placeholder = '{%trans "Select a name..." %}';
-					$url = '{%url "members:select_name"%}';
-					break;
-				case 'city-id':
-					$placeholder = '{%trans "Select a city..." %}';
-					$url = '{%url "members:select_city"%}';
-					break;
-				case 'family-id':
-					$placeholder = '{%trans "Select a family..." %}';
-					$url = '{%url "members:select_family"%}';
-					break;
-			};
-//			alert('placeholder: '+$placeholder+' url: '+$url);
-			$(this).select2({
-				ajax: {
-					url: $url,
-					dataType: 'json',
-					delay: 250,
-					data: function (params) {
-										return {
-												q: params.term
-										};
-								},
-								processResults: function (data) {
-										return {
-												results: data.results
-										};
-								},
-								cache: true
-						},
-						minimumInputLength: 2,
-						placeholder: $placeholder
-			});
-			$clearButton = $select.siblings('button.clear-select2');
-			$clearButton.attr('title', '{%trans "Clear selection" %}');
-			$clearButton.on('click', function(e) {
-					e.preventDefault();
-					e.stopPropagation();
-					$select.val(null).trigger('change');
-					$select.select2('close');
-			});
+	$(document).on('htmx:afterSwap', function(evt) {
+		if ($(evt.target).hasClass('dropdown-content')) {
+			const dropdown = $(evt.target).closest('.dropdown');
+			if (evt.target.innerHTML.trim()) {
+				dropdown.addClass('is-active');
+			} else {
+				dropdown.removeClass('is-active');
+			}
+		}
+	});
+	$(document).on('click', '.dropdown-item', function() {
+		const dropdown = $(this).closest('.dropdown');
+		dropdown.removeClass('is-active');
+		dropdown.find('input[type=search]').val($(this).text().trim());
+		$('#' + dropdown.attr('id').replace('-dropdown', '')).val($(this).data('value'));
+	});
+	$(document).on('click', function(event) {
+		$('.dropdown.is-active').each(function() {
+			if (!$(this).has(event.target).length) {
+				$(this).removeClass('is-active');
+			}
 		});
 	});
-	</script>
+	$(document).on('click', '.clear-filter', function() {
+		const id = $(this).data('clear');
+		$('#' + id).val('');
+		$('#' + id + '-dropdown').removeClass('is-active');
+		$('#' + id + '-dropdown input[type=search]').val('');
+	});
+</script>
 {% endblock %}

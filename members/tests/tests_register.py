@@ -258,6 +258,9 @@ class MemberRegisterTests(MemberTestCase):
     # self.print_response(response)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "members/members/member_upsert.html")
+    # the test settings register a google provider with a dummy app, so the
+    # registration page must keep rendering the OAuth buttons
+    self.assertContains(response, "/accounts/google/login/")
     self.assertContains(
       response,
       f"""<h1 class="title has-text-centered is-2">{_("Sign up")}</h1>""",
@@ -400,6 +403,7 @@ class TenantJoinRequestTests(RequestRegistrationLinkTests):
 
   @ignore_captcha_errors()
   def test_join_request_redirects_to_family_home(self):
+    self.client.logout()  # the join flow is anonymous; family home serves the public page
     response = self.client.post(reverse("tenant-join", args=["famille-dupont"]), self.join_data())
     self.assertRedirects(response, reverse("tenant-home", args=["famille-dupont"]))
 

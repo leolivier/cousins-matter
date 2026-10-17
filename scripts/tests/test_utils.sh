@@ -26,7 +26,7 @@ args:
 				-h: print this help and exit
 				-r: use the image from the remote repo (if not set, uses a local image)
 				-g: means the test is running in a GitHub action. Implies -r
-				-t tag: the tag of the image to test. 
+				-t tag: the tag of the image to test.
 								If -r or -g is set, this is the tag of the remote image
 								(can be a branch name or a release tag like v1.0.0). Defaults to 'latest'.
 								Otherwise (-r and -g not set), this is the tag of the local image.
@@ -108,7 +108,7 @@ set_variables() {
 
 docker_run_cousins_matter() {
 	(docker images --format "{{.Repository}}:{{.Tag}}" | grep -q -- "$COUSINS_MATTER_IMAGE") || error 1 "Image $COUSINS_MATTER_IMAGE not found"
-	docker compose up -d --wait --wait-timeout 45
+	docker compose up -d --wait --wait-timeout 60
 }
 
 set_admin_env_vars() {

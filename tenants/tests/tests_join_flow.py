@@ -56,13 +56,16 @@ class TenantHomeTests(MemberTestCase):
       overrides={"site_name": "Famille Dubois", "site_logo": "tenants/images/famille-dubois.jpg"},
     )
 
-  def test_home_renders_login_page_with_family_branding(self):
+  def test_home_renders_unauthenticated_page_with_family_branding(self):
     self.client.logout()
     response = self.client.get(reverse("tenant-home", args=["famille-dubois"]))
     self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, "members/login/login.html")
+    self.assertTemplateUsed(response, "core/base.html")
+    # unauthenticated page: a Sign in link, not the login form itself
+    self.assertContains(response, reverse("members:login"))
+    self.assertNotContains(response, 'name="username"')
+    # family branding surfaces on the navbar logo
     self.assertContains(response, "famille-dubois.jpg")
-    self.assertContains(response, self.tenant.name)
     self.assertEqual(response.context["settings"]["SITE_NAME"], "Famille Dubois")
 
   def test_join_link_visible_on_family_home_only(self):
@@ -80,14 +83,15 @@ class TenantHomeTests(MemberTestCase):
     self.assertEqual(response.status_code, 200)
     self.assertContains(response, "<title>Famille Dubois - ")
 
-  def test_home_login_post_works(self):
+  def test_home_post_not_allowed(self):
     self.client.logout()
-    response = self.client.post(
-      reverse("tenant-home", args=["famille-dubois"]),
-      {"username": self.superuser.username, "password": self.superuser.password},
-      follow=True,
-    )
-    self.assertTrue(response.context["user"].is_authenticated)
+    response = self.client.post(reverse("tenant-home", args=["famille-dubois"]), {})
+    self.assertEqual(response.status_code, 405)
+
+  def test_authenticated_user_redirected_to_site_home(self):
+    # MemberTestCase logs the superuser in
+    response = self.client.get(reverse("tenant-home", args=["famille-dubois"]))
+    self.assertRedirects(response, "/")
 
   def test_unknown_slug_404(self):
     response = self.client.get(reverse("tenant-home", args=["inconnu"]))
@@ -113,6 +117,19 @@ class ReservedSlugTests(MemberTestCase):
       with self.subTest(name=name):
         with self.assertRaises(ValidationError):
           uniquify_tenant_slug(name)
+
+  def test_model_clean_rejects_reserved_slug(self):
+    from django.core.exceptions import ValidationError
+
+    with self.assertRaisesMessage(ValidationError, "reserved"):
+      Tenant(name="Genealogy", slug="genealogy").full_clean()
+
+  def test_model_clean_keeps_seeded_slug(self):
+    # the seeded default tenant keeps its reserved slug (admin edition)
+    Tenant.get_default().full_clean()
+
+  def test_model_clean_accepts_free_slug(self):
+    Tenant(name="Famille Neptune", slug="famille-neptune").full_clean()
 
   def test_compound_slug_allowed(self):
     from ..forms import uniquify_tenant_slug
@@ -155,6 +172,7 @@ class ReservedSlugTests(MemberTestCase):
 @override_settings(MULTI_TENANT_ENABLED=False)
 class TenantHomeFlagOffTests(MemberTestCase):
   def test_default_tenant_home_works(self):
+    self.client.logout()
     response = self.client.get(reverse("tenant-home", args=[Tenant.get_default().slug]))
     self.assertEqual(response.status_code, 200)
 

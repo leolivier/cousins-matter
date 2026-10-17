@@ -7,7 +7,7 @@
 {%endblock%}
 {% block content %}
 {%with member=form.instance%}
-	{% if not member.pk %}  {# new member registration only: propose to login with OAuth #}
+	{% if request.user.is_anonymous %}  {# new member registration only: propose to login with OAuth #}
 		{% include "members/login/oauth_login.html" with kind="register" %}
 	{% endif %}
 
@@ -41,11 +41,13 @@
 					{%icon "change-password" %}
 					<span>{% translate "Change Password" %}</span>
 				</a>
-				{%elif member.member_manager and member.member_manager.id == request.user.id %} {# update managed member #}
-				<a class="button" href="{% url 'members:activate' member.username %}">
-					{%icon "activate-member" %}
-					<span>{% translate "Activate Account" %}</span>
-				</a>
+				{%elif not member.is_active %}
+					{% if member.member_manager.id == request.user.id or request.user.is_superuser or request.user.is_tenant_admin %} {# update managed member #}
+					<a class="button" href="{% url 'members:activate' member.username %}">
+						{%icon "activate-member" %}
+						<span>{% translate "Activate Account" %}</span>
+					</a>
+					{% endif %}
 				{% endif %}
 				{% url 'members:delete' member.username as delete_url %}
 				{%include "core/common/confirm-delete-modal.html#delete_button" with button_text=_("Delete") button_class='is-warning' delete_url=delete_url %}
@@ -70,12 +72,14 @@
 			</div>
 		</form>
 	</div>
-	<div class="container mt-4 has-text-centered">
-			{% translate 'Lost your verification email?' %} 
-			<a href="{% url 'request-new-link-from-email' %}" class="is-small">
-					{% translate "Request a new link" %}
-			</a>
-	</div>
+	{% if request.user.is_anonymous %}
+		<div class="container mt-4 has-text-centered">
+				{% translate 'Lost your verification email?' %}
+				<a href="{% url 'request-new-link-from-email' %}" class="is-small">
+						{% translate "Request a new link" %}
+				</a>
+		</div>
+	{% endif %}
 </div>
 
 {%endwith%}

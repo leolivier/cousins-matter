@@ -40,6 +40,21 @@ Deux tenants sont créés par migration et ne peuvent pas être supprimés : `de
 Un identifiant de famille (slug) est dérivé de son nom ; les slugs réservés
 (`default`, `system`, `admin`, …) sont rejetés.
 
+## Se connecter à une famille
+
+Tout le monde se connecte sur la page de connexion standard — la famille est résolue
+automatiquement à partir du compte connecté ; il n’existe pas d’URL propre à chaque famille.
+Une adresse e-mail appartient à une seule famille : pour rejoindre une autre famille,
+il faut une autre adresse e-mail.
+
+* **Créateur de la famille** : après l’inscription via *« Créer une nouvelle famille »*,
+  le compte reste inactif tant que le lien de l’e-mail de vérification n’a pas été cliqué ;
+  connectez-vous ensuite normalement et vous êtes l’administrateur de la famille.
+* **Autres membres** : soit accepter l’invitation envoyée par e-mail par l’administrateur
+  de la famille (lien lié au locataire → inscription → vérification par e-mail), soit soumettre
+  une demande d’adhésion (formulaire avec captcha) qu’un administrateur de la famille doit approuver.
+  Dans les deux cas, connectez-vous ensuite sur la page de connexion standard.
+
 ## Paramètres de la famille
 
 Un administrateur de famille modifie les paramètres de sa famille dans **Paramètres de la famille**
@@ -61,21 +76,43 @@ notifications de décès) sont redirigés vers l’**administrateur de la famill
 ## Sécurité au niveau des lignes dans PostgreSQL (renforcement facultatif)
 
 La portée de l’ORM constitue la principale couche d’isolation. Pour une défense en profondeur, vous pouvez
-faire en sorte que la base de données elle-même refuse les écritures inter-tenants :
+faire en sorte que la base de données elle-même refuse les écritures inter-tenants. Le RLS est actif lorsque
+`MULTI_TENANT_ENABLED=True` **et** que `POSTGRES_RUNTIME_USER` est défini.
 
-1. Choisissez un rôle autre que celui de propriétaire, par exemple `cm_app`, avec un mot de passe fort.
-2. Dans `.env`, définissez `POSTGRES_RUNTIME_USER` / `POSTGRES_RUNTIME_PASSWORD` (et
-   conservez `MULTI_TENANT_ENABLED=True`).
-3. Exécutez `manage.py migrate` **en tant que propriétaire** (`POSTGRES_USER`) — la migration RLS
-   (`tenants.0003_rls`) crée le rôle, accorde des privilèges DML uniquement
-   et applique les politiques. Le point d’entrée du conteneur s’en charge automatiquement :
-   l’initialisation s’exécute en tant que propriétaire, seul le serveur à exécution prolongée utilise le
-   rôle d’exécution.
+**Avec Docker**, définissez dans `.env` :
+
+```
+MULTI_TENANT_ENABLED=True
+POSTGRES_RUNTIME_USER=cm_app
+POSTGRES_RUNTIME_PASSWORD=<mot de passe fort>
+```
+
+puis redémarrez les conteneurs applicatifs :
+
+```
+docker compose restart cousins-matter qcluster
+```
+
+Au démarrage, le point d’entrée exécute les migrations **en tant que propriétaire**
+(`POSTGRES_USER`) : la migration RLS (`tenants.0003_rls`) crée le rôle d’exécution avec des
+privilèges DML uniquement et applique les politiques, puis le serveur et qcluster redémarrent
+et se connectent avec le rôle d’exécution. Rien à exécuter à la main.
+
+**Avec une installation manuelle (sans Docker)**, définissez les mêmes variables et exécutez
+`manage.py migrate` **en tant que propriétaire** (`POSTGRES_USER`) — c’est exactement ce que
+le point d’entrée automatise ci-dessus.
+
+**À quoi sert `POSTGRES_USER`** : c’est le propriétaire (superutilisateur) créé par l’image
+PostgreSQL. Il exécute les migrations — création du rôle d’exécution, de ses privilèges DML et
+des politiques — et, en tant que propriétaire, il contourne entièrement le RLS ; c’est la raison
+pour laquelle `FORCE ROW LEVEL SECURITY` n’est jamais utilisé. Le serveur et qcluster n’y
+recourent qu’en repli, lorsque `POSTGRES_RUNTIME_USER` n’est pas défini (le RLS est alors sans effet).
 
 Comportement des politiques pour le rôle d’exécution :
 
-* tables relevant du périmètre d’un locataire en dehors des modèles propres aux applications (galeries) : les lignes n’appartenant pas
-  au locataire de la session sont invisibles **et** non modifiables ;
+* toutes les tables relevant du périmètre d’un locataire (galeries, chat, forum, petites annonces,
+  sondages, troves, généalogie, pages) : les lignes n’appartenant pas au locataire de la session
+  sont invisibles **et** non modifiables ;
 * `members_member` : les lectures restent autorisées (la connexion par e-mail a lieu avant que le
   locataire ne soit connu), mais les opérations INSERT/UPDATE/DELETE sont strictement limitées au périmètre du locataire ;
 * le middleware définit `app.current_tenant_id` à chaque requête et le réinitialise
@@ -86,7 +123,8 @@ Comportement des politiques pour le rôle d’exécution :
 
 ## Portée actuelle
 
-Aujourd’hui, `members` et `galleries` ont une portée au niveau du locataire. La conversion des autres
-applications (chat, forum, sondages, petites annonces, pages, troves, généalogie) suit
-le même modèle (classe de base `TenantModel` + index composites) ; d’ici là, les
-données de ces applications sont partagées entre les familles d’un déploiement.
+Toutes les applications du produit ont une portée au niveau du locataire et sont couvertes par la
+sécurité au niveau des lignes : `members`, `galleries`, `chat`, `troves`, `forum`, `classified ads`,
+`polls`, `genealogy` et `pages` — 22 tables, migrations `tenants.0003_rls` à `tenants.0010_rls_pages`.
+Seules les tables d’infrastructure (sessions Django, comptes allauth) restent globales ; le
+périmétrage par l’ORM s’applique à tout le reste.

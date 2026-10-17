@@ -1,7 +1,9 @@
+import re
 from datetime import date
 from unittest.mock import MagicMock
 
 from django.forms import ValidationError
+from django.template import Context, Template
 from django.test import TestCase
 
 from members.forms import FamilyUpdateForm, MemberRegistrationForm, MemberUpdateForm, validate_csv_extension
@@ -128,3 +130,17 @@ class TestBirthdateFieldRequired(TestCase):
       self.assertEqual(updated_member.birthdate, new_birthdate, "Birthdate should be updated to the new value")
     finally:
       member.delete()
+
+
+class TestBulmaCalendarFieldClass(TestCase):
+  """Regression: crispy must render BulmaCalendar widgets with the 'dateinput' class
+  so the JS in include-bulma-calendar.html (attachCalendar('.dateinput')) attaches
+  the bulma-calendar picker (broken since b4b2e846 introduced the custom widget)."""
+
+  def test_birthdate_input_gets_dateinput_class(self):
+    """birthdate input is rendered with class="dateinput input" when crispy-rendered."""
+    form = MemberUpdateForm()
+    html = Template("{% load crispy_forms_tags %}{{ form|crispy }}").render(Context({"form": form}))
+    match = re.search(r'<input[^>]*name="birthdate"[^>]*>', html)
+    self.assertIsNotNone(match, "birthdate input not found in crispy-rendered form")
+    self.assertIn('class="dateinput input"', match.group(0))

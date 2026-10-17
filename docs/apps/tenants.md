@@ -4,7 +4,7 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-03-12
+stale_after: 2027-04-10
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -45,7 +45,12 @@ Two words, two levels:
   never be deleted (`Tenant.is_system`, `tenants.services.delete_tenant`).
   Instances resolved by slug are memoized in `_tenant_cache`; the memo is
   reset on `post_migrate` and `setting_changed` so tests that flush tables
-  don't keep stale pks.
+  don't keep stale pks. `clean()` rejects every slug in
+  `RESERVED_TENANT_SLUGS` (declared here, re-exported by
+  `tenants/forms.py`) except for the seeded default/system tenants
+  themselves: a slug mirroring a root route (`genealogy`, `members`, …) can
+  never be taken by a family, whatever the creation path (`full_clean()`
+  runs in the Django admin too).
 - `TenantSettings` — `OneToOneField(Tenant)` plus an `overrides` JSONField
   (feature flags, branding). `tenant_settings_overrides(tenant=None)` returns
   the raw dict (defaulting to the current tenant), `{}` when there is none.
@@ -170,15 +175,19 @@ tenant-scoped rows cascade; it returns the number of members removed.
 ## Family home (anonymous)
 
 `/<slug>/` (`tenant-home`, `tenants/views/views_home.TenantHomeView`) renders
-the family's unauthenticated page: the same `LoginView` as `members:login`,
-branded by the tenant (`request.tenant`, resolved with `resolve_join_tenant`,
-404 on unknown or inactive slugs). `/<slug>/join/` (`tenant-join`) is the
-matching join-request form served by `TenantJoinRequestView`
-(members/views/views_registration.py). Both routes are mounted even when
-`MULTI_TENANT_ENABLED=False`; without multi-tenancy only the default tenant's
-slug responds, other slugs 404. Tenant slugs cannot shadow root routes
-(`RESERVED_TENANT_SLUGS`, tenants/forms.py) and the catch-all is mounted last
-in cousinsmatter/urls.py.
+the tenant-scoped unauthenticated home: the same public home page as `/`
+(core `HomeView` → unauthenticated flatpage + navbar with the Sign in link and
+the family's "Request invitation" link), with the family's branding applied
+(`request.tenant`, resolved with `resolve_join_tenant`, 404 on unknown or
+inactive slugs). Authenticated users are redirected to the site home and POST
+is not served (405) — signing in happens through the Sign in link.
+`/<slug>/join/` (`tenant-join`) is the matching join-request form served by
+`TenantJoinRequestView` (members/views/views_registration.py). Both routes are
+mounted even when `MULTI_TENANT_ENABLED=False`; without multi-tenancy only the
+default tenant's slug responds, other slugs 404. Tenant slugs cannot shadow
+root routes (`RESERVED_TENANT_SLUGS`, tenants/models.py — enforced by
+`Tenant.clean()` and by the signup forms) and the catch-all is mounted last in
+cousinsmatter/urls.py.
 
 ## Internationalization
 
@@ -201,10 +210,10 @@ conventions for those tests:
 
 - pin the language with `@override_settings(LANGUAGE_CODE="en")` when a test
   asserts a message string — the CI and the dev `.env` set `LANGUAGE_CODE=fr`;
-- a tenant created with `Tenant.objects.create` in a test must call
-  `seed_tenant_pages(tenant)` when the flow under test lands on a predefined
-  page: the real signup/manage views seed them, a bare `create()` does not,
-  and the authenticated home page 500s without them.
+- every tenant created with `Tenant.objects.create` gets its own copy of the
+  predefined pages through the `post_save` signal registered in
+  pages/apps.py — tests no longer need to call `seed_tenant_pages` by hand
+  (a tenant's family home 500s without them).
 
 # See also
 

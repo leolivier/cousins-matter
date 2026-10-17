@@ -40,6 +40,22 @@ Dois tenants são criados por migração e não podem ser eliminados: `default`
 Um identificador de família (slug) é derivado do seu nome; slugs reservados
 (`default`, `system`, `admin`, …) são rejeitados.
 
+## Aceder a uma família
+
+Todos iniciam sessão na página de início de sessão padrão — a família é resolvida
+automaticamente a partir da conta ligada; não existe um URL por família. Um endereço
+de e-mail pertence a uma única família: para aderir a outra família é necessário
+outro endereço de e-mail.
+
+* **Criador da família**: após o registo em *«Criar uma nova família»*, a conta
+  permanece inativa até que a hiperligação do e-mail de verificação seja clicada;
+  inicie sessão depois normalmente e será o administrador da família.
+* **Outros membros**: ou aceitar o convite enviado por e-mail pelo administrador da
+  família (hiperligação vinculada ao tenant → registo → verificação por e-mail), ou
+  submeter um pedido de adesão (formulário com captcha) que um administrador da família
+  tem de aprovar. Em ambos os casos, inicie sessão depois na página de início de
+  sessão padrão.
+
 ## Configurações da família
 
 Um administrador de família edita as configurações da sua família em **Family settings**
@@ -61,21 +77,43 @@ notificações de falecimento) são encaminhados para o **administrador da famí
 ## Segurança ao nível da linha do PostgreSQL (reforço opcional)
 
 O isolamento ao nível do ORM é a camada primária de isolamento. Para uma defesa em profundidade, pode
-fazer com que a própria base de dados recuse escritas entre tenants:
+fazer com que a própria base de dados recuse escritas entre tenants. A RLS está ativa quando
+`MULTI_TENANT_ENABLED=True` **e** `POSTGRES_RUNTIME_USER` está definido.
 
-1. Escolha um papel que não seja o proprietário, por exemplo `cm_app`, com uma palavra-passe forte.
-2. No `.env`, defina `POSTGRES_RUNTIME_USER` / `POSTGRES_RUNTIME_PASSWORD` (e
-   mantenha `MULTI_TENANT_ENABLED=True`).
-3. Execute `manage.py migrate` **como proprietário** (`POSTGRES_USER`) — a migração
-   RLS (`tenants.0003_rls`) cria o papel, concede privilégios apenas de DML
-   e as políticas. O entrypoint do contentor faz isto automaticamente:
-   a inicialização é executada como proprietário, e só o servidor de longa duração utiliza o
-   papel de execução (runtime).
+**Com Docker**, defina no `.env`:
+
+```
+MULTI_TENANT_ENABLED=True
+POSTGRES_RUNTIME_USER=cm_app
+POSTGRES_RUNTIME_PASSWORD=<palavra-passe forte>
+```
+
+e reinicie os contentores da aplicação:
+
+```
+docker compose restart cousins-matter qcluster
+```
+
+No arranque, o entrypoint executa as migrações **como proprietário**
+(`POSTGRES_USER`): a migração RLS (`tenants.0003_rls`) cria o papel de execução com
+privilégios apenas de DML e aplica as políticas; em seguida, o servidor e o qcluster
+reiniciam e ligam-se com o papel de execução. Nada a executar manualmente.
+
+**Com uma instalação manual (sem Docker)**, defina as mesmas variáveis e execute
+`manage.py migrate` **como proprietário** (`POSTGRES_USER`) — é exatamente o que o
+entrypoint automatiza acima.
+
+**Para que serve `POSTGRES_USER`**: é o proprietário (superutilizador) criado pela
+imagem PostgreSQL. Executa as migrações — cria o papel de execução, os seus privilégios
+apenas de DML e as políticas — e, enquanto proprietário, ignora completamente a RLS; é a
+razão pela qual `FORCE ROW LEVEL SECURITY` nunca é utilizado. O servidor e o qcluster só o
+utilizam como recurso quando `POSTGRES_RUNTIME_USER` não está definido (a RLS não tem então efeito).
 
 Comportamento das políticas para o papel de execução:
 
-* tabelas com âmbito de tenant fora dos modelos das próprias apps (galleries): as linhas fora
-  do tenant da sessão são invisíveis **e** não graváveis;
+* todas as tabelas com âmbito de tenant (galleries, chat, forum, classified ads, polls,
+  troves, genealogy, pages): as linhas fora do tenant da sessão são invisíveis **e**
+  não graváveis;
 * `members_member`: as leituras continuam permissivas (o início de sessão por e-mail ocorre antes de
   o tenant ser conhecido), mas INSERT/UPDATE/DELETE são estritamente limitados ao tenant;
 * o middleware define `app.current_tenant_id` por pedido e repõe-no sempre
@@ -86,7 +124,8 @@ Comportamento das políticas para o papel de execução:
 
 ## Âmbito atual
 
-Hoje, `members` e `galleries` têm âmbito de tenant. A conversão das restantes
-apps (chat, forum, polls, classified ads, pages, troves, genealogy) segue
-o mesmo padrão (classe base `TenantModel` + índices compostos); até lá, os dados dessas
-apps são partilhados entre as famílias de uma implantação.
+Todas as apps do produto têm âmbito de tenant e estão cobertas pela segurança ao nível da
+linha: `members`, `galleries`, `chat`, `troves`, `forum`, `classified ads`, `polls`,
+`genealogy` e `pages` — 22 tabelas, migrações `tenants.0003_rls` a `tenants.0010_rls_pages`.
+Apenas as tabelas de infraestrutura (sessões Django, contas allauth) permanecem globais; o
+isolamento ao nível do ORM aplica-se a tudo o resto.

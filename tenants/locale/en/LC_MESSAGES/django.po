@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-07 15:31+0200\n"
+"POT-Creation-Date: 2026-10-10 19:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,28 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: apps.py:8
 msgid "Tenants"
 msgstr ""
 
-#: forms.py:32
+#: forms.py:19
 msgid "This family name cannot be turned into a valid identifier."
 msgstr ""
 
-#: forms.py:34
+#: forms.py:21
 msgid "This family name is reserved, please choose another one."
 msgstr ""
 
-#: forms.py:41
+#: forms.py:28
 msgid "Too many families already use this name, please choose another one."
 msgstr ""
 
-#: forms.py:48
+#: forms.py:35
 msgid "Family name"
 msgstr ""
 
-#: forms.py:53
+#: forms.py:40
 msgid "This field is required."
 msgstr ""
 
@@ -45,51 +46,55 @@ msgstr ""
 msgid "This space has been deactivated and can no longer be accessed."
 msgstr ""
 
-#: models.py:36
+#: models.py:78
 msgid "Name"
 msgstr ""
 
-#: models.py:37
+#: models.py:79
 msgid "Slug"
 msgstr ""
 
-#: models.py:38
+#: models.py:80
 msgid "Active"
 msgstr ""
 
-#: models.py:39
+#: models.py:81
 msgid "Created at"
 msgstr ""
 
-#: models.py:40
+#: models.py:82
 msgid "Updated at"
 msgstr ""
 
-#: models.py:43
+#: models.py:85
 msgid "tenant"
 msgstr ""
 
-#: models.py:44
+#: models.py:86
 msgid "tenants"
 msgstr ""
 
-#: models.py:76
+#: models.py:129
+msgid "This slug is reserved, please choose another one."
+msgstr ""
+
+#: models.py:133
 msgid "Tenant"
 msgstr ""
 
-#: models.py:78
+#: models.py:135
 msgid "Overrides"
 msgstr ""
 
-#: models.py:81 models.py:82
+#: models.py:138 models.py:139
 msgid "tenant settings"
 msgstr ""
 
-#: services.py:24
+#: services.py:25
 msgid "The system tenant cannot be deleted."
 msgstr ""
 
-#: services.py:26
+#: services.py:27
 msgid "This family is still active. Deactivate it before deleting it."
 msgstr ""
 
@@ -158,8 +163,8 @@ msgid ""
 "address."
 msgstr ""
 
-#: templates/tenants/tenant_list.html:10 views/views_manage.py:57
-#: views/views_manage.py:62
+#: templates/tenants/tenant_list.html:10 views/views_manage.py:58
+#: views/views_manage.py:63
 msgid "Create a family"
 msgstr ""
 
@@ -229,52 +234,52 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: views/views_manage.py:39
+#: views/views_manage.py:40
 msgid "Only platform administrators can manage families."
 msgstr ""
 
-#: views/views_manage.py:48
+#: views/views_manage.py:49
 msgid "Families"
 msgstr ""
 
-#: views/views_manage.py:66
+#: views/views_manage.py:69
 #, python-format
 msgid "Family %(name)s created."
 msgstr ""
 
-#: views/views_manage.py:71
+#: views/views_manage.py:74
 msgid "A member with this email already exists; invitation not sent."
 msgstr ""
 
-#: views/views_manage.py:93
+#: views/views_manage.py:96
 #, python-format
 msgid "You are invited to administer the family %(name)s"
 msgstr ""
 
-#: views/views_manage.py:99
+#: views/views_manage.py:102
 #, python-format
 msgid "Invitation sent to %(email)s."
 msgstr ""
 
-#: views/views_manage.py:109
+#: views/views_manage.py:112
 msgid "The system family cannot be deactivated."
 msgstr ""
 
-#: views/views_manage.py:114
+#: views/views_manage.py:117
 #, python-format
 msgid "Family %(name)s reactivated."
 msgstr ""
 
-#: views/views_manage.py:116
+#: views/views_manage.py:119
 #, python-format
 msgid "Family %(name)s deactivated."
 msgstr ""
 
-#: views/views_manage.py:133
+#: views/views_manage.py:136
 msgid "Confirmation did not match the family identifier. Aborting."
 msgstr ""
 
-#: views/views_manage.py:141
+#: views/views_manage.py:144
 #, python-format
 msgid "Family %(name)s permanently deleted."
 msgstr ""

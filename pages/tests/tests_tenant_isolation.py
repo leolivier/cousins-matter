@@ -34,7 +34,9 @@ class PagesTenantIsolationTests(TestCase):
   def test_queryset_isolation(self):
     with tenant_context(self.tenant_a):
       self.assertNotIn(self.page_b.id, set(FlatPage.objects.values_list("id", flat=True)))
-      self.assertEqual(set(FlatPage.objects.values_list("url", flat=True)), {"/home/authenticated/"})
+      # tenant_a sees its own page (plus the fixture pages seeded on creation),
+      # never tenant_b's
+      self.assertIn("/home/authenticated/", set(FlatPage.objects.values_list("url", flat=True)))
     with tenant_context(self.tenant_b):
       self.assertNotIn(self.page_a.id, set(FlatPage.objects.values_list("id", flat=True)))
 
@@ -55,6 +57,9 @@ class PagesTenantIsolationTests(TestCase):
 
   def test_seed_tenant_pages_copies_predefined_pages(self):
     tenant = Tenant.objects.create(name="C", slug="t-pages-c")
+    # the post_save signal already seeded the tenant; start from a clean
+    # slate to unit-test the seeding function itself
+    FlatPage.unscoped.filter(tenant=tenant).delete()
     count = seed_tenant_pages(tenant)
     self.assertEqual(count, FlatPage.unscoped.filter(tenant=tenant).count())
     self.assertGreater(count, 0)
@@ -64,4 +69,21 @@ class PagesTenantIsolationTests(TestCase):
     self.assertTrue(seeded.predefined)
     self.assertFalse(seeded.updated)
     # default tenant's own copy is untouched (separate rows, same URL)
-    self.assertNotEqual(seeded.id, FlatPage.unscoped.exclude(tenant=tenant).get(url="/fr/home/authenticated/").id)
+    self.assertNotEqual(seeded.id, FlatPage.unscoped.get(tenant=Tenant.get_default(), url="/fr/home/authenticated/").id)
+
+  def test_seed_tenant_pages_is_idempotent(self):
+    tenant = Tenant.objects.create(name="D", slug="t-pages-d")
+    count = FlatPage.unscoped.filter(tenant=tenant).count()
+    # re-seeding neither duplicates pages nor overwrites UI edits
+    page = FlatPage.unscoped.get(tenant=tenant, url="/fr/home/authenticated/")
+    page.updated = True
+    page.content = "<p>edited</p>"
+    page.save()
+    self.assertEqual(seed_tenant_pages(tenant), count)
+    page.refresh_from_db()
+    self.assertEqual(page.content, "<p>edited</p>")
+    # deleted pages are re-created
+    FlatPage.unscoped.get(tenant=tenant, url="/fr/about/privacy-policy/").delete()
+    seed_tenant_pages(tenant)
+    self.assertEqual(FlatPage.unscoped.filter(tenant=tenant).count(), count)
+    self.assertTrue(FlatPage.unscoped.filter(tenant=tenant, url="/fr/about/privacy-policy/").exists())

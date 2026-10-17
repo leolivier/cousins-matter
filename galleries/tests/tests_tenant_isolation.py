@@ -6,11 +6,30 @@ uniqueness allows the same slug in two tenants, the ``unscoped`` escape hatch
 works, and saving without a current tenant raises.
 """
 
+from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
 
 from galleries.models import Gallery
+from galleries.tests.factories import PhotoFactory
 from tenants.models import Tenant
 from tenants.scoping import set_current_tenant, tenant_context
+
+Member = get_user_model()
+
+_PWD = "pw-12345-Aa"
+
+
+def _make_member(tenant, username):
+  with tenant_context(tenant):
+    return Member.objects.create_member(
+      username=username,
+      email=f"{username}@example.com",
+      password=_PWD,
+      first_name=username,
+      last_name="x",
+      is_active=True,
+    )
 
 
 class GalleryTenantIsolationTests(TestCase):
@@ -56,3 +75,27 @@ class GalleryTenantIsolationTests(TestCase):
     g = Gallery(name="Orphan")
     g.save()
     self.assertEqual(g.tenant.slug, "default")
+
+
+class PhotoViewsTenantIsolationTests(TestCase):
+  """HTTP-level: detail views must resolve the photo through the
+  tenant-scoped manager, so another tenant's photo is a 404."""
+
+  @classmethod
+  def setUpTestData(cls):
+    cls.tenant_a = Tenant.objects.create(name="PA", slug="g-photo-a")
+    cls.tenant_b = Tenant.objects.create(name="PB", slug="g-photo-b")
+    cls.member_a = _make_member(cls.tenant_a, "photo_a")
+    with tenant_context(cls.tenant_b):
+      cls.photo_b = PhotoFactory(tenant=cls.tenant_b)
+
+  def setUp(self):
+    set_current_tenant(None)
+
+  def tearDown(self):
+    set_current_tenant(None)
+
+  def test_cross_tenant_photo_detail_is_404(self):
+    self.client.force_login(self.member_a)
+    resp = self.client.get(reverse("galleries:photo", args=[self.photo_b.pk]))
+    self.assertEqual(resp.status_code, 404)

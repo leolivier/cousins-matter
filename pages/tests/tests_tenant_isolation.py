@@ -8,8 +8,9 @@ fallback, and that ``seed_tenant_pages`` gives each family its own
 copy of the predefined pages.
 """
 
-from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
 
 from pages.forms import AdminPageForm
 from pages.models import FlatPage
@@ -17,6 +18,23 @@ from pages.services import seed_tenant_pages
 from pages.tests.factories import FlatPageFactory
 from tenants.models import Tenant
 from tenants.scoping import set_current_tenant, tenant_context
+
+Member = get_user_model()
+
+_PWD = "pw-12345-Aa"
+
+
+def _make_admin(tenant, username):
+  with tenant_context(tenant):
+    return Member.objects.create_member(
+      username=username,
+      email=f"{username}@example.com",
+      password=_PWD,
+      first_name=username,
+      last_name="x",
+      is_active=True,
+      role=Member.Role.ADMIN,
+    )
 
 
 class PagesTenantIsolationTests(TestCase):
@@ -111,3 +129,55 @@ class PagesTenantIsolationTests(TestCase):
     seed_tenant_pages(tenant)
     self.assertEqual(FlatPage.unscoped.filter(tenant=tenant).count(), count)
     self.assertTrue(FlatPage.unscoped.filter(tenant=tenant, url="/fr/about/privacy-policy/").exists())
+
+
+class PagesViewsTenantIsolationTests(TestCase):
+  """HTTP-level isolation for the edit views.
+
+  The list views must build their queryset per request (a class-level
+  ``queryset`` attribute is frozen at import time, when no tenant is
+  active), and ``PageUpdateView`` must let a tenant admin update their
+  own pages while returning 404 on another tenant's page.
+  """
+
+  @classmethod
+  def setUpTestData(cls):
+    cls.tenant_a = Tenant.objects.create(name="VA", slug="t-pages-views-a")
+    cls.tenant_b = Tenant.objects.create(name="VB", slug="t-pages-views-b")
+    cls.admin_a = _make_admin(cls.tenant_a, "pages_admin_a")
+    with tenant_context(cls.tenant_a):
+      cls.page_a = FlatPageFactory(tenant=cls.tenant_a, url="/home/authenticated/")
+    with tenant_context(cls.tenant_b):
+      cls.page_b = FlatPageFactory(tenant=cls.tenant_b, url="/home/authenticated/")
+
+  def setUp(self):
+    set_current_tenant(None)
+
+  def tearDown(self):
+    set_current_tenant(None)
+
+  def test_list_views_scoped_to_own_tenant(self):
+    self.client.force_login(self.admin_a)
+    for url_name in ("pages-edit:edit_list", "pages-edit:tree"):
+      resp = self.client.get(reverse(url_name))
+      self.assertEqual(resp.status_code, 200)
+      shown = set(resp.context["object_list"].values_list("pk", flat=True))
+      with tenant_context(self.tenant_a):
+        own = set(FlatPage.objects.values_list("pk", flat=True))
+      self.assertEqual(shown, own)
+      self.assertNotIn(self.page_b.pk, shown)
+
+  def test_tenant_admin_updates_own_page(self):
+    self.client.force_login(self.admin_a)
+    data = {"url": self.page_a.url, "title": "Updated", "content": "<p>x</p>", "save": "true"}
+    resp = self.client.post(reverse("pages-edit:update", args=[self.page_a.pk]), data)
+    self.assertEqual(resp.status_code, 302)
+    self.page_a.refresh_from_db()
+    self.assertTrue(self.page_a.updated)
+    self.assertEqual(self.page_a.title, "Updated")
+
+  def test_tenant_admin_cannot_update_other_tenant_page(self):
+    self.client.force_login(self.admin_a)
+    data = {"url": self.page_b.url, "title": "Hijack", "content": "x", "save": "true"}
+    resp = self.client.post(reverse("pages-edit:update", args=[self.page_b.pk]), data)
+    self.assertEqual(resp.status_code, 404)

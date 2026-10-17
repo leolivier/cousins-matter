@@ -81,10 +81,15 @@ Two URL namespaces, one app (`app_name = "pages-edit"`):
 - Public read side: `pages-edit:tree` (`PageTreeView`) renders the
   page tree for any visitor.
 - Admin side, gated twice: views use
-  `core.mixins.OnlyAdminMixin` (superuser **or** tenant admin) and
-  the create/update/delete `post` handlers re-check
-  `request.user.is_superuser` and raise `PermissionDenied` otherwise —
-  the tightest rule in the app wins.
+  `core.mixins.OnlyAdminMixin` (superuser **or** tenant admin), and the
+  create/delete `post` handlers re-check `request.user.is_superuser`
+  and raise `PermissionDenied` otherwise. `update` is open to tenant
+  admins: it resolves the page through the tenant-scoped manager, so an
+  admin can only ever update their own tenant's pages (another
+  tenant's pk is a 404). The list views build their queryset per
+  request via `get_queryset()` — a class-level `queryset` attribute
+  would be frozen at import time, when no tenant is active, and leak
+  other tenants' pages.
   - `edit_list` (`PageAdminListView`) — flat list with sites.
   - `create` / `<pk>` — `PageForm` save wrapped in
     `transaction.atomic()` with the site association and the

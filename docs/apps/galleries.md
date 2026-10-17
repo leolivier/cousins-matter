@@ -4,7 +4,7 @@ title: Galleries
 description: Photo/video galleries — nested gallery tree, photo import (single and bulk zip via Django-Q), thumbnails, protected storage
 tags: ["app", "galleries"]
 status: draft
-stale_after: 2027-04-11
+stale_after: 2027-10-17
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
 ---
 
@@ -83,7 +83,11 @@ login (and tenant) per request. Templates must build URLs with the
   (`delete_gallery` uses `confirm_delete_modal` from core.utils).
 - `photo/<pk>` — `PhotoDetailView`, `edit_photo`, `delete_photo`,
   `get_fullscreen_photo` (prev/next navigation via
-  `get_next_prev_photo()` in services.py).
+  `get_next_prev_photo()` in services.py). `PhotoDetailView` and
+  `PhotoEditView` build their queryset per request via `get_queryset()`
+  so the photo resolves through the tenant-scoped manager — another
+  tenant's photo is a 404 (a class-level `queryset` attribute would be
+  frozen at import time, before any tenant is active).
 - `<slug:gallery>/photos` — `PhotoAddView` (single upload).
 
 ## Bulk zip import

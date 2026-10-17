@@ -1,10 +1,12 @@
 from django.urls import reverse
+from django.utils.translation import get_language
 
 # Template-aware variant: also recomputes the settings memoized for templates,
 # so flipping MULTI_TENANT_ENABLED in a test is actually visible in rendering.
 from core.context_processors import override_settings
 
 from members.tests.tests_member_base import MemberTestCase
+from pages.models import FlatPage
 
 from ..models import Tenant, TenantSettings
 
@@ -67,6 +69,21 @@ class TenantHomeTests(MemberTestCase):
     # family branding surfaces on the navbar logo
     self.assertContains(response, "famille-dubois.jpg")
     self.assertEqual(response.context["settings"]["SITE_NAME"], "Famille Dubois")
+
+  def test_home_renders_tenant_own_page_content(self):
+    # Regression: the TemplateResponse renders after the view returns, i.e.
+    # outside the view's tenant_context block — include_page lookups must
+    # still be scoped to the request's tenant, not serve an arbitrary copy.
+    self.client.logout()
+    page_url = f"/{get_language()}/home/unauthenticated/"
+    page = FlatPage.unscoped.get(tenant=self.tenant, url=page_url)
+    page.content = "FAMILLE-DUBOIS-CONTENT"
+    page.save()
+    response = self.client.get(reverse("tenant-home", args=["famille-dubois"]))
+    self.assertContains(response, "FAMILLE-DUBOIS-CONTENT")
+    # the default tenant's seeded copy must not leak onto the family home
+    default_copy = FlatPage.unscoped.get(tenant=Tenant.get_default(), url=page_url)
+    self.assertNotContains(response, default_copy.content)
 
   def test_join_link_visible_on_family_home_only(self):
     self.client.logout()

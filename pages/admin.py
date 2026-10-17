@@ -14,5 +14,5 @@ except admin.sites.NotRegistered:
 @admin.register(FlatPage)
 class FlatPageAdmin(DefaultFlatPageAdmin):
   fieldsets = DefaultFlatPageAdmin.fieldsets + ((_("Sync status"), {"fields": ("predefined", "updated")}),)
-  list_display = ("url", "title", "predefined", "updated")
-  list_filter = ("sites", "registration_required", "predefined", "updated")
+  list_display = ("url", "tenant", "title", "predefined", "updated")
+  list_filter = ("tenant", "sites", "registration_required", "predefined", "updated")

@@ -70,3 +70,20 @@ class PagesTenantIsolationTests(TestCase):
     self.assertFalse(seeded.updated)
     # default tenant's own copy is untouched (separate rows, same URL)
     self.assertNotEqual(seeded.id, FlatPage.unscoped.get(tenant=Tenant.get_default(), url="/fr/home/authenticated/").id)
+
+  def test_seed_tenant_pages_is_idempotent(self):
+    tenant = Tenant.objects.create(name="D", slug="t-pages-d")
+    count = FlatPage.unscoped.filter(tenant=tenant).count()
+    # re-seeding neither duplicates pages nor overwrites UI edits
+    page = FlatPage.unscoped.get(tenant=tenant, url="/fr/home/authenticated/")
+    page.updated = True
+    page.content = "<p>edited</p>"
+    page.save()
+    self.assertEqual(seed_tenant_pages(tenant), count)
+    page.refresh_from_db()
+    self.assertEqual(page.content, "<p>edited</p>")
+    # deleted pages are re-created
+    FlatPage.unscoped.get(tenant=tenant, url="/fr/about/privacy-policy/").delete()
+    seed_tenant_pages(tenant)
+    self.assertEqual(FlatPage.unscoped.filter(tenant=tenant).count(), count)
+    self.assertTrue(FlatPage.unscoped.filter(tenant=tenant, url="/fr/about/privacy-policy/").exists())

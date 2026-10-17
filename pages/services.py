@@ -10,7 +10,12 @@ FIXTURE = Path(__file__).parent / "fixtures" / "predefined_flatpages.json"
 
 
 def seed_tenant_pages(tenant):
-  """Seed a freshly created tenant with its own copy of the predefined pages.
+  """Seed a tenant with its own copy of the predefined pages.
+
+  Idempotent: existing (tenant, url) pairs are left untouched — UI
+  edits win — missing ones are created, so this can re-sync tenants
+  that predate newer fixture entries (see
+  ``manage.py sync_predefined_pages``).
 
   Each family gets independent, editable home/about pages: rows are
   copies scoped to ``tenant`` (predefined/updated flags from the
@@ -29,16 +34,19 @@ def seed_tenant_pages(tenant):
       continue
     base = base_by_pk[entry["pk"]]
     child = entry["fields"]
-    page = FlatPage.objects.create(
+    page, created = FlatPage.unscoped.get_or_create(
       tenant=tenant,
       url=base["url"],
-      title=base["title"],
-      content=base["content"],
-      enable_comments=base.get("enable_comments", False),
-      template_name=base.get("template_name", ""),
-      registration_required=base.get("registration_required", False),
-      predefined=child.get("predefined", True),
-      updated=child.get("updated", False),
+      defaults={
+        "title": base["title"],
+        "content": base["content"],
+        "enable_comments": base.get("enable_comments", False),
+        "template_name": base.get("template_name", ""),
+        "registration_required": base.get("registration_required", False),
+        "predefined": child.get("predefined", True),
+        "updated": child.get("updated", False),
+      },
     )
-    page.sites.set([site])
+    if created:
+      page.sites.set([site])
   return FlatPage.unscoped.filter(tenant=tenant).count()

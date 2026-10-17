@@ -49,6 +49,11 @@ From `config/settings/local_test.py` (and `docker_test.py` for the container var
   option is removed.
 - The suite is pinned to `LANGUAGE_CODE = "en"` in both test settings, so it is independent of
   the `LANGUAGE_CODE` in the local or compose `.env`.
+- Same for `SAAS_LANDING_ENABLED`: it defaults to off in the test settings (upstream tests
+  assert the classic home page for anonymous visitors), even when the `.env` turns it on for
+  dev. Run the saas tests with `SAAS_LANDING_ENABLED=True MULTI_TENANT_ENABLED=True` in the
+  process env — the `/saas/` URLs are mounted at URLconf import, so `override_settings`
+  cannot enable them after the fact.
 
 ## Coverage
 

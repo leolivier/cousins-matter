@@ -202,6 +202,12 @@ members/views/views_member.py.
 `FamilyDetailView` selects `parent`; `MemberAdmin`, `FamilyAdmin` and `LoginTraceAdmin` use
 `list_select_related` on their FK columns.
 
+## UI tests
+
+`members/tests/ui/tests_ui_roles.py` exercises the three-role navbar/permission matrix under
+default settings and skips itself when `MULTI_TENANT_ENABLED=True` (flag-on variants live in
+the tenants app's `tests_feature_on.py`).
+
 # See also
 
 - [Tenants](/apps/tenants.md) — the isolation boundary behind `Member.tenant`

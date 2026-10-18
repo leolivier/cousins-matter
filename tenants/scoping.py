@@ -26,6 +26,17 @@ def _default_tenant():
   return Tenant.get_default()
 
 
+def current_or_default_tenant():
+  """The active tenant, else the seeded default one.
+
+  Public page renders scope themselves with this: TenantMiddleware
+  leaves anonymous requests unscoped by design (allauth must resolve
+  users by email), so flatpage lookups must not rely on the thread-local
+  alone — without it they would serve an arbitrary tenant's copy.
+  """
+  return get_current_tenant() or _default_tenant()
+
+
 def get_current_tenant():
   """Return the tenant active for the current thread, or None when unset."""
   return getattr(_thread_locals, "tenant", None)

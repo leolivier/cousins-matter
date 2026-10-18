@@ -4,7 +4,7 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-04-10
+stale_after: 2027-10-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -86,6 +86,12 @@ activates it (`set_current_tenant`, `request.tenant`):
 - platform superusers are left unscoped and get `set_rls_bypass(True)`;
 - anonymous requests stay unscoped so allauth can resolve a user by email
   before any tenant is known.
+
+`current_or_default_tenant()` covers the flip side: public page renders
+(`pages.views.flatpage`, the `pages` template tags) scope themselves to
+the active tenant, or to the default one when none is active — without
+it, an anonymous render would serve an arbitrary tenant's page copy (or
+crash on `MultipleObjectsReturned` when two tenants own the same URL).
 
 The `finally` block always `reset_rls()` and restores the previous
 thread-local tenant, so a pooled connection never carries a stale tenant or

@@ -1537,6 +1537,10 @@ msgstr "Demande de registro enviada."
 msgid "Invalid CAPTCHA"
 msgstr "CAPTCHA inválido"
 
+#: views/views_registration.py
+msgid "Hello %(username)s, your account is now active! You can now sign in."
+msgstr "Hola %(username)s, ¡tu cuenta ya está activa! Ya puedes iniciar sesión."
+
 #: tests/tests_register.py:288 views/views_registration.py:103
 #, python-format
 msgid ""

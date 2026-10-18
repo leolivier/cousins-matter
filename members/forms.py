@@ -4,7 +4,9 @@ from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from captcha.fields import CaptchaField
 from django import forms
 from django.conf import settings
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
+from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
@@ -95,6 +97,32 @@ class MemberFormMixin:
       % {"privacy_url": privacy_url}
     )  # nosec
     self.fields["privacy_consent"].required = True
+
+
+class MemberAuthenticationForm(AuthenticationForm):
+  """Login form that reports inactive accounts instead of bad credentials.
+
+  Both auth backends (ModelBackend + allauth) reject inactive members inside
+  ``authenticate()`` (returning ``None``), so Django's built-in "inactive"
+  branch is unreachable. Check for the inactive account here, before
+  ``super().clean()`` raises the generic invalid-credentials error.
+  """
+
+  def clean(self):
+    username = self.cleaned_data.get("username")
+    password = self.cleaned_data.get("password")
+    if username and password:
+      # ponytail: email has no global uniqueness constraint -> .first() is
+      # arbitrary on pathological duplicates; acceptable for this message.
+      member = Member.unscoped.filter(Q(username=username) | Q(email=username)).first()
+      # Only reveal the "not yet active" state when the password matches, so a
+      # wrong password still gets the generic error (no account enumeration).
+      if member and not member.is_active and member.check_password(password):
+        raise ValidationError(
+          _("This account is not yet active. Please use the invitation link sent to you by email."),
+          code="inactive",
+        )
+    return super().clean()
 
 
 class MemberRegistrationForm(MemberFormMixin, UserCreationForm):

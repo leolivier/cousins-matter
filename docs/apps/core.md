@@ -4,8 +4,8 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-10-11
-generated: { by: claude-code/glm-5.3-flash, at: 2026-10-10T00:00:00Z }
+stale_after: 2027-10-17
+generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T20:35:00Z }
 ---
 
 # Core
@@ -176,6 +176,15 @@ The list also exempts `/verification/` (django-verify-email): verification
 links mailed at signup must stay reachable while anonymous — missing from the
 list, the links silently redirected to the login page and accounts never got
 activated.
+
+The same `process_view` also enforces the GDPR consent gate: an authenticated
+user with `privacy_consent=False` (see [Members](/apps/members.md)) is
+redirected to their profile with a warning, so consent is unavoidable after
+login or account activation. Exempt prefixes (`CONSENT_EXEMPT_PATHS`): the
+profile itself (shows the consent form), logout, `/protected_media/` and
+`/media/` (profile avatar). It reads `request.user.privacy_consent`, already
+loaded by `AuthenticationMiddleware` — no extra query. The rule is uniform,
+including admins and superusers.
 
 Also in core: `core.mixins` (`LoginNotRequiredMixin`, `OnlyAdminMixin`) and
 `core.utils` (paginator, thumbnails `create_thumbnail` /

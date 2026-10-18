@@ -185,7 +185,11 @@ the tenant-scoped unauthenticated home: the same public home page as `/`
 (core `HomeView` → unauthenticated flatpage + navbar with the Sign in link and
 the family's "Request invitation" link), with the family's branding applied
 (`request.tenant`, resolved with `resolve_join_tenant`, 404 on unknown or
-inactive slugs). Authenticated users are redirected to the site home and POST
+inactive slugs). The wrapped `HomeView` TemplateResponse is rendered
+*synchronously inside the view's `tenant_context` block*: deferred rendering
+would run outside it, where the thread-local tenant is unset for anonymous
+requests and `include_page` lookups would serve an arbitrary tenant's copy of
+the flatpage. Authenticated users are redirected to the site home and POST
 is not served (405) — signing in happens through the Sign in link.
 `/<slug>/join/` (`tenant-join`) is the matching join-request form served by
 `TenantJoinRequestView` (members/views/views_registration.py). Both routes are

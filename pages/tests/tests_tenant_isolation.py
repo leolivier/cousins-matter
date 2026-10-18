@@ -10,6 +10,7 @@ copy of the predefined pages.
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import get_language
@@ -36,6 +37,7 @@ def _make_admin(tenant, username):
       last_name="x",
       is_active=True,
       role=Member.Role.ADMIN,
+      privacy_consent=True,  # these tests exercise tenant isolation, not the consent gate
     )
 
 

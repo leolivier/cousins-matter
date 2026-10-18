@@ -6,10 +6,10 @@ from .models import Gallery, Photo
 
 @admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):
-  list_display = ["name", "parent", "owner", "short_description"]
-  list_select_related = ["parent", "owner"]
+  list_display = ["name", "tenant", "parent", "owner", "short_description"]
+  list_select_related = ["parent", "owner", "tenant"]
   search_fields = ["name", "description"]
-  list_filter = ["parent", "owner"]
+  list_filter = ["tenant", "parent", "owner"]
   prepopulated_fields = {"slug": ("name",)}
   raw_id_fields = ["cover", "owner"]
 
@@ -20,9 +20,9 @@ class GalleryAdmin(admin.ModelAdmin):
 
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
-  list_display = ["name", "gallery", "uploaded_by", "date", "image_preview"]
-  list_select_related = ["gallery", "uploaded_by"]
-  list_filter = ["gallery", "uploaded_by", "date"]
+  list_display = ["name", "gallery", "tenant", "uploaded_by", "date", "image_preview"]
+  list_select_related = ["gallery", "uploaded_by", "tenant"]
+  list_filter = ["tenant", "gallery", "uploaded_by", "date"]
   search_fields = ["name", "description"]
   prepopulated_fields = {"slug": ("name",)}
   raw_id_fields = ["gallery", "uploaded_by"]

@@ -16,6 +16,7 @@ from django_htmx.http import HttpResponseClientRedirect
 
 from core.mixins import OnlyAdminMixin
 from core.utils import confirm_delete_modal
+from tenants.scoping import current_or_default_tenant, tenant_context
 
 from .forms import PageForm
 from .models import FlatPage
@@ -33,18 +34,22 @@ def flatpage(request, url):
   """
   if not url.startswith("/"):
     url = "/" + url
-  try:
-    page = get_object_or_404(FlatPage, url=url)
-  except Http404:
-    if not url.endswith("/") and settings.APPEND_SLASH:
-      page = get_object_or_404(FlatPage, url=f"{url}/")
-      # request.path is user-controlled; a planted page (no url validator) with a
-      # protocol-relative url like "//host/x/" would make this a redirect off-site
-      target = f"{request.path}/"
-      if not url_has_allowed_host_and_scheme(target, allowed_hosts=None):
-        raise Http404
-      return HttpResponsePermanentRedirect(target)
-    raise
+  # anonymous requests are unscoped by design (allauth): scope the lookups to
+  # the default tenant ourselves — unscoped, two tenants owning the same URL
+  # would raise MultipleObjectsReturned, one arbitrary copy otherwise
+  with tenant_context(current_or_default_tenant()):
+    try:
+      page = get_object_or_404(FlatPage, url=url)
+    except Http404:
+      if not url.endswith("/") and settings.APPEND_SLASH:
+        page = get_object_or_404(FlatPage, url=f"{url}/")
+        # request.path is user-controlled; a planted page (no url validator) with a
+        # protocol-relative url like "//host/x/" would make this a redirect off-site
+        target = f"{request.path}/"
+        if not url_has_allowed_host_and_scheme(target, allowed_hosts=None):
+          raise Http404
+        return HttpResponsePermanentRedirect(target)
+      raise
   return render_flatpage(request, page)
 
 

@@ -4,7 +4,7 @@ title: Pages
 description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpages, with publish/private URL conventions, menu/tree template tags and a predefined-pages import; documented in apps/pages.md
 tags: ["app", "pages"]
 status: draft
-stale_after: 2027-10-17
+stale_after: 2028-04-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-10T00:00:00Z }
 ---
 
@@ -54,6 +54,12 @@ the signup and `TenantCreateView` flows.
 - `create_page(url, title, content)` helper: creates the page and
   attaches the current `SITE_ID` — a page not linked to a site is
   never served by the flatpages fallback.
+- Public lookups scope themselves: `pages.views.flatpage` and the
+  template tags (`include_page`, `build_pages_tree`,
+  `link_pages_starting_with`, `get_flatpages`) wrap their queries in
+  `tenant_context(current_or_default_tenant())` — anonymous and
+  superuser requests are unscoped by design, so without this they would
+  serve an arbitrary tenant's copy or crash on duplicate URLs.
 
 ## Publication workflow (URL conventions)
 

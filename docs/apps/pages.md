@@ -54,15 +54,12 @@ the signup and `TenantCreateView` flows.
 - `create_page(url, title, content)` helper: creates the page and
   attaches the current `SITE_ID` — a page not linked to a site is
   never served by the flatpages fallback.
-- `visible_pages()` helper: the single queryset entry point for all
-  page **readers** (menu/tree tags, `flatpage()`, admin list views).
-  `TenantMiddleware` deliberately leaves platform superusers and
-  anonymous visitors without an active tenant, where the tenant manager
-  returns every tenant's rows — `visible_pages()` therefore falls back
-  to the default tenant in that case. Without it the navbar rendered
-  the privacy policy once per tenant and `flatpage()` raised
-  `MultipleObjectsReturned` on URLs shared by two tenants
-  (pages/tests/tests_tenant_isolation.py).
+- Public lookups scope themselves: `pages.views.flatpage` and the
+  template tags (`include_page`, `build_pages_tree`,
+  `link_pages_starting_with`, `get_flatpages`) wrap their queries in
+  `tenant_context(current_or_default_tenant())` — anonymous and
+  superuser requests are unscoped by design, so without this they would
+  serve an arbitrary tenant's copy or crash on duplicate URLs.
 
 ## Publication workflow (URL conventions)
 

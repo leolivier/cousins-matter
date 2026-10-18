@@ -8,6 +8,7 @@ from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 
 from ..models import FlatPage, visible_pages
+from tenants.scoping import current_or_default_tenant, tenant_context
 
 PageTree: TypeAlias = dict[str, "FlatPage | PageTree"]
 
@@ -37,9 +38,13 @@ def build_pages_tree(
   if prefix and include_or_exclude_prefix == "include":
     filter["url__istartswith"] = prefix
   # print('filter:', filter)
-  pages = visible_pages().filter(**filter) if filter else visible_pages()
-  if prefix and include_or_exclude_prefix == "exclude":
-    pages = pages.exclude(url__istartswith=prefix)
+  # anonymous requests are unscoped by design (allauth): scope the lookup to
+  # the default tenant so the menu never lists another family's pages
+  with tenant_context(current_or_default_tenant()):
+    pages = FlatPage.objects.filter(**filter) if filter else FlatPage.objects.all()
+    if prefix and include_or_exclude_prefix == "exclude":
+      pages = pages.exclude(url__istartswith=prefix)
+    pages = list(pages)  # evaluate now: iterated after the scope block
 
   page_tree: PageTree = {}
   last_tree = None
@@ -125,33 +130,38 @@ def include_page(url):
     Http404: if the page was not found in the database
   """
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
-  page = visible_pages().filter(url=url).first()
-  if page is None:
-    pages = visible_pages().filter(url__iexact=url)
-    count = pages.count()
-    match count:
-      case 0:
-        # page not found for the current language, try the default language (ie en)
-        # print("page not found for language", get_language(), "try default language")
-        new_url = url.replace(f"/{get_language()}/", "/en/")
-        if new_url != url:
-          return include_page(new_url)
-        else:
-          raise ValueError(f"page not found for url={url}")
-      case 1:
-        page = pages.first()
-        logger.info(f"searched for page with url={url}, found {page.url}")
-      case _:
-        page = pages.first()
-        matches = ", ".join([p.url for p in pages])
-        logger.warning(f"searched for page with url={url}, found {count} almost matching pages: {matches}, using {page.url}")
+  # anonymous requests are unscoped by design (allauth): scope the lookups to
+  # the default tenant so we never serve another family's copy of the page
+  with tenant_context(current_or_default_tenant()):
+    page = FlatPage.objects.filter(url=url).first()
+    if page is None:
+      pages = FlatPage.objects.filter(url__iexact=url)
+      count = pages.count()
+      match count:
+        case 0:
+          # page not found for the current language, try the default language (ie en)
+          # print("page not found for language", get_language(), "try default language")
+          new_url = url.replace(f"/{get_language()}/", "/en/")
+          if new_url != url:
+            return include_page(new_url)
+          else:
+            raise ValueError(f"page not found for url={url}")
+        case 1:
+          page = pages.first()
+          logger.info(f"searched for page with url={url}, found {page.url}")
+        case _:
+          page = pages.first()
+          matches = ", ".join([p.url for p in pages])
+          logger.warning(f"searched for page with url={url}, found {count} almost matching pages: {matches}, using {page.url}")
   return mark_safe(page.content)  # nosec
 
 
 @register.inclusion_tag("pages/link_pages_starting_with.html")
 def link_pages_starting_with(url_prefix, icon):
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
-  pages = visible_pages().filter(url__istartswith=url_prefix)
+  with tenant_context(current_or_default_tenant()):
+    # list() now: the inclusion template renders later, outside the scope
+    pages = list(FlatPage.objects.filter(url__istartswith=url_prefix))
   return {"pages": pages, "icon": icon}
 
 
@@ -163,7 +173,8 @@ def get_flatpages(prefix=None):
   resolves pages through the tenant-scoped manager. Same call shape:
   ``{% get_flatpages <prefix> as pages %}`` (prefix optional).
   """
-  pages = visible_pages().prefetch_related("sites")
-  if prefix:
-    pages = pages.filter(url__istartswith=prefix)
-  return pages
+  with tenant_context(current_or_default_tenant()):
+    pages = FlatPage.objects.all().prefetch_related("sites")
+    if prefix:
+      pages = pages.filter(url__istartswith=prefix)
+    return list(pages)  # evaluate now: the caller loops after the scope block

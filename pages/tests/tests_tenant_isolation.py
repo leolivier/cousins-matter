@@ -8,6 +8,7 @@ fallback, and that ``seed_tenant_pages`` gives each family its own
 copy of the predefined pages.
 """
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.test import TestCase

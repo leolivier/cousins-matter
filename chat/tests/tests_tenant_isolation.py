@@ -35,6 +35,7 @@ def _make_member(tenant, username):
       first_name=username,
       last_name="x",
       is_active=True,
+      privacy_consent=True,  # these tests exercise tenant isolation, not the consent gate
     )
   return m
 

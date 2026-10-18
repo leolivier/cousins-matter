@@ -209,7 +209,12 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
     self.is_profile_form = kwargs.pop("is_profile", False)
     super().__init__(*args, **kwargs)
     self.initialize_fields(*args, **kwargs)
-    self.init_privacy_field()
+    # privacy consent belongs to the member themself: only ask on profile forms (own account),
+    # never when an admin creates or edits another member
+    if self.is_profile_form:
+      self.init_privacy_field()
+    else:
+      del self.fields["privacy_consent"]
     # restrict deathdate to admins (platform superuser or tenant admin)
     if self.user and self.instance.is_active and not (self.user.is_superuser or getattr(self.user, "is_tenant_admin", False)):
       if "deathdate" in self.fields:

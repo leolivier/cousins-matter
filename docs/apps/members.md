@@ -4,8 +4,8 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-10-11
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
+stale_after: 2027-10-17
+generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T20:35:00Z }
 ---
 
 # Members
@@ -33,7 +33,14 @@ Fields that matter beyond `AbstractUser`:
   member itself when it manages itself.
 - `family` — FK to `Family` (below), plus `address` FK to `Address`.
 - `birthdate`, `is_dead` / `deathdate`, `phone`, `website`, `avatar`,
-  `description`, `hobbies`, `privacy_consent`.
+  `description`, `hobbies`, `privacy_consent`. `privacy_consent` is the GDPR
+  consent: it belongs to the member themself — the checkbox only appears on
+  forms where the member consents for themself (profile `EditProfileView`,
+  registration, social signup), never when an admin creates or edits another
+  member (a managed member is created with `privacy_consent=False`). Until it
+  is True, the consent gate in
+  [core middleware](/apps/core.md#middleware) redirects every request to the
+  profile, where the member can check the box.
 - `followers` — M2M to `"self"`, `symmetrical=False`,
   `related_name="following"`.
 - `email_batch_frequency` — one of `FREQUENCY_NEVER`, `FREQUENCY_IMMEDIATE`

@@ -4,7 +4,7 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-10-17
+stale_after: 2027-10-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T20:35:00Z }
 ---
 
@@ -120,23 +120,40 @@ account: the manager fills the profile, then activates it.
 `TokenManager`) builds one-time links signed with `salted_hmac` over
 `SECRET_KEY` (salt `cousinsmatter.members.check_before_registry.TokenManager`),
 valid for `MAX_REGISTRATION_AGE` (default 2 days, config/settings/base.py).
-The payload is `"<tenant_id>:<email>"` when the invite is tenant-bound, so the
-tenant is covered by the HMAC and cannot be swapped in the URL.
+The payload is `"<tenant_id>:<email>:<name>"` when the invite is tenant-bound
+and carries the invitee's name, so both the tenant and the name are covered by
+the HMAC and cannot be swapped in the URL; without a name the payload is
+byte-identical to legacy 2-segment links, so in-flight invitations stay valid.
 
 Flow (members/views/views_registration.py):
 
 1. `MemberInvitationView` (`members:invite`) — allowed to platform/tenant
    admins, or to anyone when `tenant_setting("allow_members_to_invite_members")`
-   is on. Generates the tenant-bound link for the invitee's email
-   (`RegistrationLinkManager.generate_link` with `request.user.tenant_id`) and
-   emails it.
+   is on. Generates the tenant-bound link for the invitee's email and name
+   (`RegistrationLinkManager.generate_link` with `request.user.tenant_id` and
+   the form's `invited` name) and emails it.
 2. `RegistrationCheckingView` (`members:register/<encoded_email>/<token>`) —
-   verifies the link via `decrypt_link`, refuses logged-in or already-active
-   members, and stores `(invitation_token, invitation_email,
-   invitation_tenant_id)` in the session before showing the signup form.
+   verifies the link via `decrypt_link` (returns `(tenant_id, email, name)`),
+   refuses logged-in or already-active members, and stores
+   `(invitation_token, invitation_email, invitation_tenant_id,
+   invitation_name)` in the session before showing the signup form,
+   **pre-filled** with the invitation's email and name. On submit, an email
+   identical to the invitation's means the mailbox is already proven: the
+   member is saved with `is_active=True` and **no** verification email is
+   sent; a changed email falls back to the verification-email flow
+   (`is_active=False` until the emailed link is clicked).
 3. `TenantJoinRequestView` (`members:register_request`, plus `/<slug>/join/` as
    `tenant-join`) — captcha-protected self-service request routed to the
    matching family (see below).
+3. `TenantJoinRequestView` (`members:register_request`, plus `/<slug>/join/` as
+   `tenant-join`) — captcha-protected self-service request routed to the
+   matching family (see below).
+
+Logging in (`members/forms.py: MemberAuthenticationForm`) distinguishes an
+inactive member with valid credentials — *"This account is not yet active.
+Please use the invitation link sent to you by email"* — from a wrong
+password, which still gets the generic invalid-credentials message (no
+user-enumeration leak).
 
 Social login is wired through `CustomSocialAccountAdapter`
 (members/adapter.py): `pre_social_login` validates the session invitation with

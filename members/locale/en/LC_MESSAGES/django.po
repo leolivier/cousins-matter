@@ -1410,6 +1410,10 @@ msgstr ""
 msgid "Invalid CAPTCHA"
 msgstr ""
 
+#: views/views_registration.py
+msgid "Hello %(username)s, your account is now active! You can now sign in."
+msgstr "Hello %(username)s, your account is now active! You can now sign in."
+
 #: tests/tests_register.py:288 views/views_registration.py:103
 #, python-format
 msgid ""

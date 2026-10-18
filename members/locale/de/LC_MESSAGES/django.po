@@ -1537,6 +1537,10 @@ msgstr "Registrierungsanfrage versendet."
 msgid "Invalid CAPTCHA"
 msgstr "Inkorrekte CAPTCHA"
 
+#: views/views_registration.py
+msgid "Hello %(username)s, your account is now active! You can now sign in."
+msgstr "Hallo %(username)s, dein Konto ist jetzt aktiv! Du kannst dich jetzt anmelden."
+
 #: tests/tests_register.py:288 views/views_registration.py:103
 #, python-format
 msgid ""

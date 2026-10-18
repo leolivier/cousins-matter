@@ -4,7 +4,7 @@ title: Tenant Onboarding E2E (Manual Test)
 description: Manual end-to-end test scenario — family self-signup, first tenant admin, managed member creation, join request, invitation, registration and login
 tags: ["flow", "tenants", "members", "testing", "manual"]
 status: draft
-stale_after: 2027-04-17
+stale_after: 2027-10-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T00:00:00Z }
 ---
 
@@ -108,22 +108,31 @@ signed link), [Tenants](/apps/tenants.md), [Members](/apps/members.md).
 ## Phase 6 — Registration of the invited person
 
 16. Private window: open the link from the invitation email. **Expect**:
-    *Sign up* form (registration + address + family sections). Fill username
-    `hugo`, password, etc. Submit.
-17. **Expect**: flash *"Hello hugo, your account has been created!…"*,
-    redirect to login. Terminal: verification email for Hugo — click its
-    link → activated.
+    *Sign up* form (registration + address + family sections) with first
+    name `Hugo`, last name and email `hugo@example.com` **pre-filled** —
+    the invited name and email travel inside the signed token. Only fill
+    username `hugo`, password, etc. Submit.
+17. **Expect**: flash *"Hello hugo, your account is now active! You can now
+    sign in."*, redirect to login. **No verification email is sent**: the
+    invitee opened the signed link from their own mailbox, so their email is
+    already proven — the account is created directly **active**. (If the
+    submitted email differs from the invitation, the old flow applies: see
+    edge checks.)
 
 ## Phase 7 — Login of the new member
 
-18. Log in with **email** `hugo@example.com` + password. **Expect**: Hugo
-    lands on the family-scoped site, authenticated, no permission errors on
-    the members pages.
+18. Log in with **email** `hugo@example.com` + password — no activation
+    step needed. **Expect**: Hugo lands on the family-scoped site,
+    authenticated, no permission errors on the members pages.
 
 ## Edge checks (optional)
 
 - Expired/tampered invitation link → *"Invalid link. Please contact the
   administrator."* + redirect home (max age 2 days, `MAX_REGISTRATION_AGE`).
+- Register through the invitation link but change the email → old flow: a
+  verification email is sent and the account stays inactive until its link
+  is clicked (*"…your account has been created! You will now receive an
+  email to verify your email address…"*).
 - Join request with an email that already exists → *"A member with this email
   already exists."*
 - Slug collision: create a second family with the same name → slug becomes
@@ -144,5 +153,5 @@ signed link), [Tenants](/apps/tenants.md), [Members](/apps/members.md).
 All numbered expectations in Phases 0–7 hold; at minimum: tenant + admin
 created via self-signup, admin can create a managed member (inactive,
 managed), join request reaches the tenant admin by email, admin invitation
-pre-filled and sent, invitee registers, activates and logs in on the family
-site.
+pre-filled and sent, invitee registers on a pre-filled form (name + email)
+and lands active, then logs in on the family site.

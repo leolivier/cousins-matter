@@ -68,23 +68,60 @@ class RegistrationLinkManagerTests(TestCase):
     encoded_email = parts[reg_idx + 1]
     token = parts[reg_idx + 2]
 
-    tenant_id, decrypted_email = self.manager.decrypt_link(encoded_email, token)
+    tenant_id, decrypted_email, name = self.manager.decrypt_link(encoded_email, token)
     self.assertEqual(decrypted_email, self.email)
     self.assertIsNone(tenant_id)  # link generated without a tenant
+    self.assertIsNone(name)  # legacy link without a name
+
+  def test_generate_and_decrypt_with_name(self):
+    request = self.factory.get("/")
+    link = self.manager.generate_link(request, self.email, tenant_id=3, name="John Doe")
+    parts = link.split("/")
+    reg_idx = parts.index("register")
+    encoded_email, token = parts[reg_idx + 1], parts[reg_idx + 2]
+
+    tenant_id, decrypted_email, name = self.manager.decrypt_link(encoded_email, token)
+    self.assertEqual((tenant_id, decrypted_email, name), (3, self.email, "John Doe"))
+
+  def test_decrypt_name_containing_colon(self):
+    payload = f"{self.email}:Jean:Deaux"
+    token = self.manager.make_token(payload)
+    encoded_email = urlsafe_b64encode(payload.encode("utf-8")).decode("utf-8")
+    _, email, name = self.manager.decrypt_link(encoded_email, token)
+    self.assertEqual(email, self.email)
+    self.assertEqual(name, "Jean:Deaux")
+
+  def test_legacy_token_still_valid(self):
+    # a token made before names existed (2-segment payload) must keep working
+    legacy_payload = f"7:{self.email}"
+    token = self.manager.make_token(legacy_payload)
+    encoded_email = urlsafe_b64encode(legacy_payload.encode("utf-8")).decode("utf-8")
+    tenant_id, email, name = self.manager.decrypt_link(encoded_email, token)
+    self.assertEqual((tenant_id, email, name), (7, self.email, None))
+
+  def test_check_invitation_with_name(self):
+    token = self.manager.make_token(f"3:{self.email}:John Doe")
+    self.assertTrue(self.manager.check_invitation(self.email, 3, token, name="John Doe"))
+    self.assertFalse(self.manager.check_invitation(self.email, 3, token, name="Other Name"))
+    self.assertFalse(self.manager.check_invitation(self.email, 3, token, name=None))
+
+  def test_check_invitation_legacy_without_name(self):
+    token = self.manager.make_token(self.email)
+    self.assertTrue(self.manager.check_invitation(self.email, None, token, name=None))
 
   def test_decrypt_link_invalid_token(self):
     encoded_email = urlsafe_b64encode(self.email.encode("utf-8")).decode("utf-8")
-    tenant_id, decrypted_email = self.manager.decrypt_link(encoded_email, "invalid-token")
+    tenant_id, decrypted_email, name = self.manager.decrypt_link(encoded_email, "invalid-token")
     self.assertIsNone(decrypted_email)
 
   def test_decrypt_link_missing_data(self):
     # decrypt_link(self, encoded_email, encoded_token)
-    # If either is empty it should return (None, None)
-    tenant_id, decrypted_email = self.manager.decrypt_link("", "token")
+    # If either is empty it should return (None, None, None)
+    tenant_id, decrypted_email, name = self.manager.decrypt_link("", "token")
     self.assertIsNone(decrypted_email)
 
   def test_decrypt_link_failure_cases(self):
-    # b64decode('') is b'', which is falsy -> failure -> (None, None)
+    # b64decode('') is b'', which is falsy -> failure -> (None, None, None)
     encoded_email = urlsafe_b64encode(b"").decode("utf-8")
-    tenant_id, decrypted_email = self.manager.decrypt_link(encoded_email, "some-token")
+    tenant_id, decrypted_email, name = self.manager.decrypt_link(encoded_email, "some-token")
     self.assertIsNone(decrypted_email)

@@ -74,13 +74,15 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
     invitation_token = request.session.get("invitation_token")
     invitation_email = request.session.get("invitation_email")
     invitation_tenant_id = request.session.get("invitation_tenant_id")
+    invitation_name = request.session.get("invitation_name")
 
     if invitation_token and invitation_email == email:
-      if RegistrationLinkManager().check_invitation(email, invitation_tenant_id, invitation_token):
+      if RegistrationLinkManager().check_invitation(email, invitation_tenant_id, invitation_token, invitation_name):
         if clear:
           request.session.pop("invitation_token", None)
           request.session.pop("invitation_email", None)
           request.session.pop("invitation_tenant_id", None)
+          request.session.pop("invitation_name", None)
         return True, invitation_tenant_id
     return False, None
 

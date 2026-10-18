@@ -4,14 +4,23 @@ These exercise the product feature end to end: self-service family creation,
 the platform-admin management UI, and the per-family settings form.
 """
 
+from unittest import mock
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
+
+from core.utils import test_media_root_decorator, test_resource_full_path
+from core.tests import test_site_logo
 
 from members.tests.tests_member_base import MemberTestCase
 from tenants.forms import uniquify_tenant_slug
 from tenants.models import Tenant, TenantSettings
 from tenants.scoping import set_current_tenant, tenant_context
+from tenants.settings_overrides import clear_tenant_settings_cache, tenant_setting
 
 Member = get_user_model()
 
@@ -253,6 +262,104 @@ class TenantSettingsTests(MemberTestCase):
     resp = self.client.get(reverse("tenants:settings") + "?tenant=fam")
     self.assertEqual(resp.status_code, 200)
     self.assertContains(resp, "Fam")
+
+
+@test_media_root_decorator(__file__)
+@override_settings(LANGUAGE_CODE="en")
+class TenantLogoUploadTests(MemberTestCase):
+  """The family admin uploads/replaces/clears the site logo from the settings form."""
+
+  def setUp(self):
+    _skip_if_off(self)
+    super().setUp()
+    self.family = Tenant.objects.create(name="Fam", slug="fam")
+    self.admin = _make_admin(self.family, "fam_admin")
+    set_current_tenant(None)
+    # settings_overrides memoizes per tenant pk; clear so tests don't see each other's overrides
+    clear_tenant_settings_cache()
+
+  def tearDown(self):
+    set_current_tenant(None)
+    clear_tenant_settings_cache()
+    # uploads go through default_storage whose root is shared across tests —
+    # remove the logos written by this test so the next one doesn't collide
+    if default_storage.exists("public/logos"):
+      for name in default_storage.listdir("public/logos")[1]:
+        default_storage.delete(f"public/logos/{name}")
+    super().tearDown()
+
+  def _base_data(self):
+    return {
+      "site_name": "",
+      "site_copyright": "",
+      "site_footer": "",
+      "pdf_size": "A4",
+      "dark_mode": False,
+      "language_code": "en",
+      "time_zone": "Europe/Paris",
+      "birthday_days": 50,
+      "allow_members_to_create_members": False,
+      "allow_members_to_invite_members": False,
+      "family_chart_root_person_id": "",
+    }
+
+  def _logo_file(self):
+    with open(test_resource_full_path("test-logo.jpg", test_site_logo.__file__), "rb") as f:
+      return SimpleUploadedFile("logo.jpg", f.read())
+
+  def _logo_exists(self):
+    return default_storage.exists("public/logos/fam.jpg")
+
+  def test_upload_stores_public_url_and_file(self):
+    self.client.force_login(self.admin)
+    resp = self.client.post(reverse("tenants:settings"), {**self._base_data(), "site_logo": self._logo_file()}, follow=True)
+    self.assertEqual(resp.status_code, 200)
+    row = TenantSettings.objects.get(tenant=self.family)
+    self.assertEqual(row.overrides.get("site_logo"), f"{settings.PUBLIC_MEDIA_URL}logos/fam.jpg")
+    self.assertTrue(self._logo_exists())
+    resp = self.client.get(f"{settings.PUBLIC_MEDIA_URL}logos/fam.jpg")
+    self.assertEqual(resp.status_code, 200)
+
+  def test_clear_resets_to_global_default(self):
+    self.client.force_login(self.admin)
+    self.client.post(reverse("tenants:settings"), {**self._base_data(), "site_logo": self._logo_file()})
+    self.assertTrue(self._logo_exists())
+    data = self._base_data()
+    data["site_logo-clear"] = "on"
+    resp = self.client.post(reverse("tenants:settings"), data, follow=True)
+    self.assertEqual(resp.status_code, 200)
+    row = TenantSettings.objects.get(tenant=self.family)
+    # back to the global default: no logo override is in effect anymore
+    self.assertIsNone(row.overrides.get("site_logo"))
+    self.assertFalse(self._logo_exists())
+    with tenant_context(self.family):
+      self.assertEqual(tenant_setting("site_logo"), settings.SITE_LOGO)
+
+  def test_other_setting_edit_keeps_logo_override(self):
+    self.client.force_login(self.admin)
+    self.client.post(reverse("tenants:settings"), {**self._base_data(), "site_logo": self._logo_file()})
+    data = self._base_data()
+    data["site_name"] = "Ma Famille"
+    resp = self.client.post(reverse("tenants:settings"), data, follow=True)
+    self.assertEqual(resp.status_code, 200)
+    row = TenantSettings.objects.get(tenant=self.family)
+    self.assertEqual(row.overrides.get("site_logo"), f"{settings.PUBLIC_MEDIA_URL}logos/fam.jpg")
+    self.assertEqual(row.overrides.get("site_name"), "Ma Famille")
+
+  def test_non_image_rejected(self):
+    self.client.force_login(self.admin)
+    bad = SimpleUploadedFile("x.txt", b"not an image")
+    resp = self.client.post(reverse("tenants:settings"), {**self._base_data(), "site_logo": bad}, follow=True)
+    self.assertEqual(resp.status_code, 200)
+    self.assertContains(resp, "valid image")
+    self.assertFalse(TenantSettings.objects.filter(tenant=self.family).exists())
+
+  def test_oversized_logo_rejected(self):
+    self.client.force_login(self.admin)
+    with mock.patch("tenants.views.views_settings._LOGO_MAX_SIZE", 10):
+      resp = self.client.post(reverse("tenants:settings"), {**self._base_data(), "site_logo": self._logo_file()}, follow=True)
+    self.assertContains(resp, "too big")
+    self.assertFalse(TenantSettings.objects.filter(tenant=self.family).exists())
 
 
 class AdminEmailRoutingTests(MemberTestCase):

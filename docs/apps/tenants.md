@@ -165,7 +165,15 @@ tenants through the shared cache.
   (`SIGNUP_THROTTLE_LIMIT` submissions per `SIGNUP_THROTTLE_SECONDS`).
 - `settings/` — `TenantSettingsUpdateView` (tenants/views/views_settings.py):
   form over `TENANT_SETTINGS_SPEC`; restricted to platform superusers and
-  tenant admins (`PermissionDenied` otherwise).
+  tenant admins (`PermissionDenied` otherwise). `site_logo` is an upload
+  field (`ImageField` + `ClearableFileInput`): the file is stored under
+  `PUBLIC_MEDIA_ROOT/logos/<tenant slug><ext>` and the override keeps a
+  `PUBLIC_MEDIA_URL` string, so the navbar, context processor and the
+  directory PDF (`members/services/directory.py`) all resolve it; the clear
+  checkbox drops the override and file, falling back to the global
+  `SITE_LOGO`. POST is multipart; only delta overrides are persisted by
+  `save()` (an untouched logo field returns the effective value, never
+  `None`).
 - list / `create/` / `<slug>/toggle-active/` / `<slug>/delete/` —
   `TenantListView`, `TenantCreateView`, `TenantToggleActiveView`,
   `TenantDeleteView` (tenants/views/views_manage.py): platform-superuser only

@@ -4,8 +4,8 @@ title: Testing
 description: Run the Django, Playwright UI and coverage suites, and the pre-commit quality gate
 tags: [testing, playwright, coverage]
 status: draft
-stale_after: 2027-03-04
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T21:36:13Z }
+stale_after: 2027-04-18
+generated: { by: claude-code/glm-5.3-flash, at: 2026-10-18T00:00:00Z }
 ---
 
 # Testing
@@ -19,6 +19,19 @@ make test t=<module>    # ENVIRONMENT="test" ./manage.py test --exclude-tag=ui <
 (`Makefile`) The `ui` tag is excluded, so plain `make test` never boots a browser. A module
 path looks like `members.tests.tests_member`. Tests need PostgreSQL and Redis reachable —
 start them with `make up4run` (see [Development Setup](/setup-dev.md)).
+
+## Multi-tenant tests
+
+```bash
+make test-mt t=<module>  # MULTI_TENANT_ENABLED="True" ./manage.py test --exclude-tag=ui <module>
+```
+
+CI runs the suite with `MULTI_TENANT_ENABLED=True`; feature-gated modules such as
+`tenants/tests/tests_feature_on.py` (`_skip_if_off`) only execute in that mode and are
+skipped otherwise — they are invisible to a plain local `make test`. Run `make test-mt`
+before opening a PR that touches multi-tenant behavior (tenants app, tenant-scoped
+querysets, auth middleware — anything affecting authenticated users): a green local run
+with the flag off does not prove CI green.
 
 ## UI tests (Playwright)
 

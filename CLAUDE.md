@@ -11,6 +11,8 @@ Stack: Django 6 + Channels (Daphne), PostgreSQL, Redis (cache + Django-Q2 tasks)
 ## Standard Workflow
 End of session workflow: before committing, run `make check` (ruff + pyright), the unit test suite, and the Playwright UI suite (190 tests) if UI files changed. Only then `git add`, commit with a descriptive message, and push to origin.
 
+If the change touches multi-tenant behavior (tenants app, tenant-scoped querysets, auth middleware — anything affecting authenticated users), also run `make test-mt` on the touched modules before the PR: CI runs the suite with `MULTI_TENANT_ENABLED=True`, and feature-gated modules (e.g. `tenants/tests/tests_feature_on.py`) are **skipped** in a plain local run, so a green `make test` alone does not prove CI green.
+
 
 ## Communication
 Always respond and write in English whatever the user is writing in (French or English) and never switch languages mid-session.

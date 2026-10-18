@@ -13,6 +13,25 @@ class FlatPage(TenantModel, _FlatPage):
   updated = BooleanField(default=True)
 
 
+def visible_pages():
+  """FlatPages visible to the current request's tenant.
+
+  With no active tenant (platform superuser, anonymous visitor,
+  management commands), fall back to the default tenant — the same
+  fallback TenantModel.ensure_tenant() uses on writes — otherwise the
+  unfiltered manager returns every tenant's pages (the navbar menu
+  renders the privacy policy once per tenant, and flatpage() raises
+  MultipleObjectsReturned on URLs shared by two tenants).
+  """
+  # local imports: avoid circular imports with the tenants app
+  from tenants.models import Tenant
+  from tenants.scoping import get_current_tenant
+
+  if get_current_tenant() is None:
+    return FlatPage.objects.filter(tenant=Tenant.get_default())
+  return FlatPage.objects.all()
+
+
 def create_page(url, title, content):
   page = FlatPage.objects.create(url=url, title=title, content=content)
   page.sites.set([Site.objects.get(pk=settings.SITE_ID)])

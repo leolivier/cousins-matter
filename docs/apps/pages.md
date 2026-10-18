@@ -4,7 +4,7 @@ title: Pages
 description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpages, with publish/private URL conventions, menu/tree template tags and a predefined-pages import; documented in apps/pages.md
 tags: ["app", "pages"]
 status: draft
-stale_after: 2027-10-17
+stale_after: 2027-10-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-10T00:00:00Z }
 ---
 
@@ -54,6 +54,15 @@ the signup and `TenantCreateView` flows.
 - `create_page(url, title, content)` helper: creates the page and
   attaches the current `SITE_ID` — a page not linked to a site is
   never served by the flatpages fallback.
+- `visible_pages()` helper: the single queryset entry point for all
+  page **readers** (menu/tree tags, `flatpage()`, admin list views).
+  `TenantMiddleware` deliberately leaves platform superusers and
+  anonymous visitors without an active tenant, where the tenant manager
+  returns every tenant's rows — `visible_pages()` therefore falls back
+  to the default tenant in that case. Without it the navbar rendered
+  the privacy policy once per tenant and `flatpage()` raised
+  `MultipleObjectsReturned` on URLs shared by two tenants
+  (pages/tests/tests_tenant_isolation.py).
 
 ## Publication workflow (URL conventions)
 

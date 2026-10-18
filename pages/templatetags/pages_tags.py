@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 
-from ..models import FlatPage
+from ..models import FlatPage, visible_pages
 
 PageTree: TypeAlias = dict[str, "FlatPage | PageTree"]
 
@@ -37,7 +37,7 @@ def build_pages_tree(
   if prefix and include_or_exclude_prefix == "include":
     filter["url__istartswith"] = prefix
   # print('filter:', filter)
-  pages = FlatPage.objects.filter(**filter) if filter else FlatPage.objects.all()
+  pages = visible_pages().filter(**filter) if filter else visible_pages()
   if prefix and include_or_exclude_prefix == "exclude":
     pages = pages.exclude(url__istartswith=prefix)
 
@@ -125,9 +125,9 @@ def include_page(url):
     Http404: if the page was not found in the database
   """
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
-  page = FlatPage.objects.filter(url=url).first()
+  page = visible_pages().filter(url=url).first()
   if page is None:
-    pages = FlatPage.objects.filter(url__iexact=url)
+    pages = visible_pages().filter(url__iexact=url)
     count = pages.count()
     match count:
       case 0:
@@ -151,7 +151,7 @@ def include_page(url):
 @register.inclusion_tag("pages/link_pages_starting_with.html")
 def link_pages_starting_with(url_prefix, icon):
   # don't use get_object_or_404 here otherwise, there is no mean to get out of the trap
-  pages = FlatPage.objects.filter(url__istartswith=url_prefix)
+  pages = visible_pages().filter(url__istartswith=url_prefix)
   return {"pages": pages, "icon": icon}
 
 
@@ -163,7 +163,7 @@ def get_flatpages(prefix=None):
   resolves pages through the tenant-scoped manager. Same call shape:
   ``{% get_flatpages <prefix> as pages %}`` (prefix optional).
   """
-  pages = FlatPage.objects.all().prefetch_related("sites")
+  pages = visible_pages().prefetch_related("sites")
   if prefix:
     pages = pages.filter(url__istartswith=prefix)
   return pages

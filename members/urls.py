@@ -1,5 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from .forms import EmailAuthenticationForm
 from .views import (
   views_address,
   views_family,
@@ -15,7 +16,10 @@ app_name = "members"
 urlpatterns = [
   path(
     "login/",
-    auth_views.LoginView.as_view(template_name="members/login/login.html"),
+    auth_views.LoginView.as_view(
+      template_name="members/login/login.html",
+      authentication_form=EmailAuthenticationForm,
+    ),
     name="login",
   ),
   path("logout/", views_member.logout_member, name="logout"),

@@ -8,6 +8,7 @@ from django.test import TestCase
 
 from members.forms import FamilyUpdateForm, MemberRegistrationForm, MemberUpdateForm, validate_csv_extension
 from members.models import Family, Member
+from members.tests.tests_member_base import get_new_member_data
 
 
 class TestValidateCsvExtension(TestCase):
@@ -40,6 +41,30 @@ class TestFamilyUpdateFormCleanName(TestCase):
       self.assertIn("name", form.errors)
     finally:
       family.delete()
+
+
+class TestMemberFormEmailValidation(TestCase):
+  """clean_email: global email uniqueness + email mandatory for active members."""
+
+  def test_update_active_member_clearing_email_rejected(self):
+    """Editing an active member to an empty email is rejected with a form error."""
+    member = Member.objects.create_member(**get_new_member_data(), is_active=True)
+    form = MemberUpdateForm(data={"email": ""}, instance=member)
+    self.assertFalse(form.is_valid())
+    self.assertIn("email", form.errors)
+
+  def test_update_inactive_member_without_email_accepted(self):
+    """A managed (inactive) member may have no email."""
+    member = Member.objects.create_member(**get_new_member_data(email=""))
+    form = MemberUpdateForm(data={"email": ""}, instance=member)
+    self.assertNotIn("email", form.errors)
+
+  def test_registration_with_taken_email_rejected(self):
+    """Registering with an email already used (any tenant, any case) is rejected."""
+    Member.objects.create_member(**get_new_member_data(email="taken@test.com"), is_active=True)
+    form = MemberRegistrationForm(data=get_new_member_data(email="Taken@Test.com", username="otheruser"))
+    self.assertFalse(form.is_valid())
+    self.assertIn("email", form.errors)
 
 
 class TestBirthdateFieldRequired(TestCase):

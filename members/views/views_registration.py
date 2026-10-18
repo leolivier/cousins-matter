@@ -145,7 +145,8 @@ class MemberInvitationView(generic.View):
     email = form.cleaned_data["email"]
     invited = form.cleaned_data["invited"]
 
-    if Member.objects.filter(email=email).exists():
+    if Member.unscoped.filter(email__iexact=email).exists():
+      # email login is global: an existing member can never re-claim it here
       messages.error(request, _("A member with this email already exists."))
       return render(request, self.template_name, {"form": form, "join_url": join_url})
 

@@ -529,6 +529,23 @@ class TestActivateManagedMember(MemberTestCase):
     self.assertContainsMessage(response, "error", _("Error: Member without email cannot be activated"))
 
 
+class TestEmailConstraints(MemberTestCase):
+  """member_email_uniq / member_active_needs_email constraints (migration 0018)."""
+
+  def test_duplicate_email_across_tenants_rejected(self):
+    # email is the global login key: uniqueness spans tenants and is case-insensitive
+    tenant_b = Tenant.objects.create(name="Email Tenant", slug="email-tenant")
+    Member.objects.create_member(**get_new_member_data(email="shared@test.com"), is_active=True, tenant=Tenant.get_default())
+    with self.assertRaises(IntegrityError):
+      with transaction.atomic():
+        Member.objects.create_member(**get_new_member_data(email="Shared@Test.com"), is_active=True, tenant=tenant_b)
+
+  def test_active_member_without_email_rejected(self):
+    with self.assertRaises(IntegrityError):
+      with transaction.atomic():
+        Member.objects.create_member(**get_new_member_data(email=""), is_active=True)
+
+
 class TestAdminActivateMember(MemberTestCase):
   """Tenant admins and platform superusers activate members immediately, without email."""
 

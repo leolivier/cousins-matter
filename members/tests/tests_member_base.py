@@ -175,7 +175,7 @@ class MemberTestCase(MemberTestCaseMixin, TestCase):
 
   def setUp(self):
     super().setUp()
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)
 
   def tearDown(self):
     self.client.logout()
@@ -199,7 +199,7 @@ class TransactionMemberTestCase(MemberTestCaseMixin, TransactionTestCase):
     member_data["is_active"] = True
     self.member = Member.objects.create_member(**member_data)
     self.member.password = pwd  # keep unhashed password in memory for login
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)
 
   def tearDown(self):
     self.client.logout()
@@ -237,7 +237,7 @@ class AsyncMemberTestCase(TransactionTestCase):
 
     self.created_members = []
     self.async_client = AsyncClient()
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)
     async_to_sync(self.async_client.alogin)(username=self.member.username, password=self.member.password)
 
   def tearDown(self):

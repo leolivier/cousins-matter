@@ -571,7 +571,9 @@ GEDCOM_FILE = env.str("GEDCOM_FILE", default="genealogy.ged")
 
 # --- Allauth Configuration ---
 AUTHENTICATION_BACKENDS = [
-  "django.contrib.auth.backends.ModelBackend",
+  # email-only login: the stock ModelBackend authenticates via username,
+  # which is only unique per tenant and thus not a reliable identifier.
+  "members.auth_backends.EmailModelBackend",
   "allauth.account.auth_backends.AuthenticationBackend",
 ]
 

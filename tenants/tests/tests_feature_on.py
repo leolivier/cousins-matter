@@ -131,7 +131,7 @@ class TenantManageTests(MemberTestCase):
     self.other_admin = _make_admin(self.other, "other_admin")
 
   def _login_superuser(self):
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
 
   def test_superuser_lists_tenants(self):
     self._login_superuser()
@@ -190,7 +190,7 @@ class TenantSettingsTests(MemberTestCase):
     set_current_tenant(None)
 
   def _login_superuser(self):
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
 
   def tearDown(self):
     set_current_tenant(None)
@@ -244,7 +244,7 @@ class TenantSettingsTests(MemberTestCase):
     self.assertContains(resp, "does not belong to your family")
 
   def test_non_admin_member_refused(self):
-    self.client.login(username=self.member.username, password=self.member.password)  # regular member
+    self.client.login(username=self.member.email, password=self.member.password)  # regular member
     resp = self.client.get(reverse("tenants:settings"))
     self.assertEqual(resp.status_code, 403)
 

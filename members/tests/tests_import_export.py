@@ -108,6 +108,15 @@ class TestMemberImport(TestImportMixin, TestMediaResourceMixin, MemberTestCase):
     "test the import in French"
     self.do_test_import("import_members-fr.csv", "fr", 4, member_prefix="member-fr", check_active=False)
 
+  def test_import_no_email_not_activated(self):
+    """activate_users leaves email-less members inactive (member_active_needs_email)."""
+    response = self.do_upload_file("import_members-no-email.csv", "en-us", activate_users=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertTrue(Member.objects.get(username="member1").is_active)
+    no_email = Member.objects.get(username="member-no-email")
+    self.assertFalse(no_email.is_active)
+    self.assertIsNotNone(no_email.member_manager)
+
   def _reset_manager(self, username):
     # make sure the member for which we change the managing member either does not exist or is not active
     m = Member.objects.filter(username=username).first()

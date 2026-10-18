@@ -4,7 +4,7 @@ from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from captcha.fields import CaptchaField
 from django import forms
 from django.conf import settings
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
@@ -87,6 +87,20 @@ class MemberFormMixin:
 
     return avatar
 
+  def clean_email(self):
+    """Email is the global login key: unique across tenants, and mandatory
+    for active members (DB constraints member_email_uniq /
+    member_active_needs_email turn violations into IntegrityError; these
+    checks turn them into proper form errors)."""
+    email = self.cleaned_data.get("email")
+    if email:
+      taken = Member.unscoped.filter(email__iexact=email).exclude(pk=self.instance.pk)
+      if taken.exists():
+        raise forms.ValidationError(_("A member with this email already exists."))
+    elif self.instance.pk and self.instance.is_active:
+      raise forms.ValidationError(_("An active member must have an email."))
+    return email
+
   def init_privacy_field(self):
     "Initialize the privacy consent field with a link to the privacy policy and force it to be required"
     privacy_url = "/" + get_language() + settings.PRIVACY_URL
@@ -95,6 +109,18 @@ class MemberFormMixin:
       % {"privacy_url": privacy_url}
     )  # nosec
     self.fields["privacy_consent"].required = True
+
+
+class EmailAuthenticationForm(AuthenticationForm):
+  """Login form: the identifier field is the email, not the username."""
+
+  # field name stays "username" (hardcoded in AuthenticationForm.authenticate);
+  # the backend treats its value as the email.
+  username = forms.EmailField(label=_("Email"), max_length=254)
+  error_messages = {
+    **AuthenticationForm.error_messages,
+    "invalid_login": _("Please enter a correct email and password. Note that both fields may be case-sensitive."),
+  }
 
 
 class MemberRegistrationForm(MemberFormMixin, UserCreationForm):

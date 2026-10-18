@@ -15,9 +15,10 @@ from django.urls import reverse
 from django.utils.translation import get_language
 
 from pages.forms import AdminPageForm
-from pages.models import FlatPage
+from pages.models import FlatPage, visible_pages
 from pages.services import seed_tenant_pages
 from pages.tests.factories import FlatPageFactory
+from pages.templatetags.pages_tags import build_pages_tree
 from tenants.models import Tenant
 from tenants.scoping import set_current_tenant, tenant_context
 
@@ -40,6 +41,17 @@ def _make_admin(tenant, username):
     )
 
 
+def _leaf_pks(tree):
+  """Collect the pks of all FlatPage leaves of a nested page tree."""
+  pks = set()
+  for value in tree.values():
+    if isinstance(value, dict):
+      pks |= _leaf_pks(value)
+    else:
+      pks.add(value.pk)
+  return pks
+
+
 class PagesTenantIsolationTests(TestCase):
   @classmethod
   def setUpTestData(cls):
@@ -47,6 +59,10 @@ class PagesTenantIsolationTests(TestCase):
     cls.tenant_b = Tenant.objects.create(name="B", slug="t-pages-b")
     cls.page_a = FlatPageFactory(tenant=cls.tenant_a, url="/home/authenticated/")
     cls.page_b = FlatPageFactory(tenant=cls.tenant_b, url="/home/authenticated/")
+    cls.page_default = FlatPageFactory(tenant=Tenant.get_default(), url="/home/authenticated/")
+    cls.superuser = _make_admin(Tenant.get_default(), "pages_super")
+    cls.superuser.is_superuser = True
+    cls.superuser.save()
 
   def setUp(self):
     set_current_tenant(None)
@@ -62,6 +78,22 @@ class PagesTenantIsolationTests(TestCase):
       self.assertIn("/home/authenticated/", set(FlatPage.objects.values_list("url", flat=True)))
     with tenant_context(self.tenant_b):
       self.assertNotIn(self.page_a.id, set(FlatPage.objects.values_list("id", flat=True)))
+
+  def test_no_active_tenant_falls_back_to_default_tenant(self):
+    # platform superuser / anonymous: no tenant is active so the manager is
+    # unfiltered; readers must fall back to the default tenant or the menu
+    # renders one entry per tenant and flatpage() 500s on shared URLs
+    pages = list(visible_pages())
+    self.assertIn(self.page_default.pk, {p.pk for p in pages})
+    self.assertNotIn(self.page_a.pk, {p.pk for p in pages})
+    self.assertNotIn(self.page_b.pk, {p.pk for p in pages})
+    self.assertEqual({p.tenant_id for p in pages}, {Tenant.get_default().id})
+    # the menu shows one single entry for the URL shared by the 3 tenants
+    self.assertEqual(_leaf_pks(build_pages_tree(prefix="/home")), {self.page_default.pk})
+    # and serving that shared URL to a superuser doesn't 500
+    self.client.force_login(self.superuser)
+    resp = self.client.get(self.page_default.url)
+    self.assertEqual(resp.status_code, 200)
 
   def test_same_url_in_two_tenants(self):
     # the global django_flatpage unique is gone; both rows coexist

@@ -7,9 +7,8 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 
+from ..models import FlatPage, visible_pages
 from tenants.scoping import current_or_default_tenant, tenant_context
-
-from ..models import FlatPage
 
 PageTree: TypeAlias = dict[str, "FlatPage | PageTree"]
 

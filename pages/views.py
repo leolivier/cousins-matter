@@ -19,7 +19,7 @@ from core.utils import confirm_delete_modal
 from tenants.scoping import current_or_default_tenant, tenant_context
 
 from .forms import PageForm
-from .models import FlatPage
+from .models import FlatPage, visible_pages
 
 DEFAULT_TEMPLATE = "flatpages/default.html"
 
@@ -27,9 +27,11 @@ DEFAULT_TEMPLATE = "flatpages/default.html"
 def flatpage(request, url):
   """Tenant-aware replacement for django.contrib.flatpages' fallback view.
 
-  Same behavior as the stock view, but resolves the page through the
-  scoped ``pages.FlatPage`` manager, so a family can never read another
-  family's pages. Serves ``<PAGES_URL_PREFIX><url>`` and, through
+  Same behavior as the stock view, but resolves the page through
+  ``visible_pages()`` (tenant-scoped, with a default-tenant fallback when
+  no tenant is active), so a family can never read another family's pages
+  and shared URLs don't raise MultipleObjectsReturned for platform
+  superusers. Serves ``<PAGES_URL_PREFIX><url>`` and, through
   ``TenantFlatpageFallbackMiddleware``, the raw page URL on 404s.
   """
   if not url.startswith("/"):
@@ -129,8 +131,9 @@ class PageAdminListView(OnlyAdminMixin, generic.ListView):
   template_name = "pages/pages_admin_list.html"
 
   def get_queryset(self):
-    # per request: TenantManager scopes by the current tenant
-    return FlatPage.objects.prefetch_related("sites")
+    # per request: visible_pages() scopes by the current tenant and falls
+    # back to the default tenant when none is active (platform superuser)
+    return visible_pages().prefetch_related("sites")
 
 
 class PageTreeView(generic.ListView):
@@ -138,8 +141,9 @@ class PageTreeView(generic.ListView):
   template_name = "pages/page_tree.html"
 
   def get_queryset(self):
-    # per request: TenantManager scopes by the current tenant
-    return FlatPage.objects.prefetch_related("sites")
+    # per request: visible_pages() scopes by the current tenant and falls
+    # back to the default tenant when none is active (platform superuser)
+    return visible_pages().prefetch_related("sites")
 
 
 class PageDeleteView(OnlyAdminMixin, generic.View):

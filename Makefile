@@ -1,4 +1,4 @@
-.PHONY: build run cpmsg mkmsg up down clean ps logs stop up4run help h u4r test mig mkmig cover minify shell install-hooks
+.PHONY: build run cpmsg mkmsg up down clean ps logs stop up4run help h u4r test test-mt mig mkmig cover minify shell install-hooks
 .EXPORT_ALL_VARIABLES:
 ENVIRONMENT ?= development
 
@@ -19,6 +19,7 @@ help h:
 	@echo "  mkmig: create a migration"
 	@echo "  mig: migrate the database"
 	@echo "  test [t=test_name]: run test(s)"
+	@echo "  test-mt [t=test_name]: run test(s) with MULTI_TENANT_ENABLED=True (as CI does)"
 	@echo "  test-ui [o=test_options]: run automated UI test(s) with playwright"
 	@echo "  cover [a=application] [co=coverage_options] [to=test_options]: run test(s) with coverage. Default is all applications. If an application is given, the coverage result is stored in .coverage.<application>."
 	@echo "  minify [a=application]: minify the css and js files of an application. Default is all applications."
@@ -62,6 +63,11 @@ mkmsg:
 
 test:
 	ENVIRONMENT="test" ./manage.py test --exclude-tag=ui $(t) $(o)
+
+# CI runs the suite with MULTI_TENANT_ENABLED=True: feature-gated modules
+# (e.g. tenants/tests/tests_feature_on.py) only execute in that mode.
+test-mt:
+	MULTI_TENANT_ENABLED="True" ENVIRONMENT="test" ./manage.py test --exclude-tag=ui $(t) $(o)
 
 check-docs:
 	ENVIRONMENT="test" ./manage.py check_okf docs

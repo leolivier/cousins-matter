@@ -8,9 +8,11 @@ fallback, and that ``seed_tenant_pages`` gives each family its own
 copy of the predefined pages.
 """
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.translation import get_language
 
 from pages.forms import AdminPageForm
 from pages.models import FlatPage
@@ -181,3 +183,79 @@ class PagesViewsTenantIsolationTests(TestCase):
     data = {"url": self.page_b.url, "title": "Hijack", "content": "x", "save": "true"}
     resp = self.client.post(reverse("pages-edit:update", args=[self.page_b.pk]), data)
     self.assertEqual(resp.status_code, 404)
+
+
+class AnonymousPublicPagesScopingTests(TestCase):
+  """Anonymous and superuser requests are deliberately unscoped (allauth
+  must resolve users by email; platform admins see every tenant), so the
+  public flatpage lookups must scope themselves to the default tenant —
+  never serve or list another family's copy.
+
+  Regression: on the site root (include_page, navbar/footer page lists)
+  unscoped lookups served an arbitrary tenant's page, and on
+  ``/pages/<url>`` (also reachable by the fallback middleware) they
+  crashed with MultipleObjectsReturned when two tenants owned the same
+  URL.
+  """
+
+  @classmethod
+  def setUpTestData(cls):
+    cls.default = Tenant.get_default()
+    cls.other = Tenant.objects.create(name="Anon Other", slug="t-anon-other")
+    cls.superuser = Member.objects.create_member(
+      username="anon_super",
+      email="anon_super@example.com",
+      password=_PWD,
+      first_name="anon_super",
+      last_name="x",
+      is_active=True,
+      is_superuser=True,
+    )
+    cls.default_page = FlatPageFactory(
+      tenant=cls.default,
+      url="/anon-scope-test/",
+      content="<p>DEFAULT-ANON-CONTENT</p>",
+    )
+    cls.other_page = FlatPageFactory(
+      tenant=cls.other,
+      url="/anon-scope-test/",
+      content="<p>OTHER-ANON-CONTENT</p>",
+    )
+
+  def setUp(self):
+    set_current_tenant(None)
+
+  def tearDown(self):
+    set_current_tenant(None)
+
+  def test_unscoped_request_flatpage_serves_default_tenant_copy(self):
+    # anonymous users are redirected to login before reaching the view
+    # (login-required-by-default), so exercise the unscoped path with a
+    # platform superuser: TenantMiddleware leaves them tenantless, the
+    # lookups must fall back to the default tenant's copy instead of
+    # crashing on MultipleObjectsReturned (same URL in two tenants)
+    self.client.force_login(self.superuser)
+    resp = self.client.get("/pages/anon-scope-test/")
+    self.assertContains(resp, "DEFAULT-ANON-CONTENT")
+    self.assertNotContains(resp, "OTHER-ANON-CONTENT")
+
+  def test_anonymous_home_shows_default_tenant_page_content(self):
+    # both tenants own the seeded unauthenticated home page; make the
+    # other family's copy distinctive and prove the root home never
+    # serves it through include_page
+    other_home = FlatPage.unscoped.get(tenant=self.other, url=f"/{get_language()}/home/unauthenticated/")
+    other_home.content = "OTHER-ANON-HOME-CONTENT"
+    other_home.save()
+    default_home = FlatPage.unscoped.get(tenant=self.default, url=f"/{get_language()}/home/unauthenticated/")
+    resp = self.client.get("/")
+    self.assertContains(resp, default_home.content)
+    self.assertNotContains(resp, "OTHER-ANON-HOME-CONTENT")
+
+  def test_anonymous_navbar_does_not_list_other_tenant_pages(self):
+    FlatPageFactory(
+      tenant=self.other,
+      url=f"/{get_language()}/about/other-family-page/",
+      title="OTHER-FAMILY-PAGE-TITLE",
+    )
+    resp = self.client.get("/")
+    self.assertNotContains(resp, "OTHER-FAMILY-PAGE-TITLE")

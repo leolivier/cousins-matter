@@ -91,6 +91,7 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
       first_name="Admin",
       last_name="User",
       birthdate="2000-01-01",
+      privacy_consent=True,  # otherwise the consent gate redirects every UI test to the profile
     )
     # errors tracking
     self.errors: list[str] = []

@@ -179,6 +179,24 @@ class PagesViewsTenantIsolationTests(TestCase):
     self.assertTrue(self.page_a.updated)
     self.assertEqual(self.page_a.title, "Updated")
 
+  def test_tenant_admin_creates_page(self):
+    # regression: a stale pre-multi-tenant is_superuser guard in post() 403'd
+    # tenant admins here although OnlyAdminMixin lets them through
+    self.client.force_login(self.admin_a)
+    data = {"url": "/new-page/", "title": "Created", "content": "<p>x</p>", "save": "true"}
+    resp = self.client.post(reverse("pages-edit:create"), data)
+    self.assertEqual(resp.status_code, 302)
+    with tenant_context(self.tenant_a):
+      self.assertTrue(FlatPage.objects.filter(url="/new-page/").exists())
+
+  def test_tenant_admin_deletes_own_page(self):
+    self.client.force_login(self.admin_a)
+    resp = self.client.post(reverse("pages-edit:delete", args=[self.page_a.pk]))
+    # HTMX HttpResponseClientRedirect (HX-Redirect header), not a plain 302
+    self.assertEqual(resp.status_code, 200)
+    with tenant_context(self.tenant_a):
+      self.assertFalse(FlatPage.objects.filter(pk=self.page_a.pk).exists())
+
   def test_tenant_admin_cannot_update_other_tenant_page(self):
     self.client.force_login(self.admin_a)
     data = {"url": self.page_b.url, "title": "Hijack", "content": "x", "save": "true"}

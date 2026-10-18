@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
-from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -79,8 +78,6 @@ class PageCreateView(OnlyAdminMixin, generic.CreateView):
   form_class = PageForm
 
   def post(self, request, *args, **kwargs):
-    if not request.user.is_superuser:
-      raise PermissionDenied
     form = PageForm(request.POST)
     if form.is_valid():
       # atomic: the page is never left created without its site association
@@ -144,8 +141,6 @@ class PageTreeView(generic.ListView):
 
 class PageDeleteView(OnlyAdminMixin, generic.View):
   def post(self, request, pk):
-    if not request.user.is_superuser:
-      raise PermissionDenied
     page = get_object_or_404(FlatPage, pk=pk)
     page.delete()
     messages.success(request, _('Page "%(title)s" deleted') % {"title": page.title})

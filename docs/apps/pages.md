@@ -4,7 +4,7 @@ title: Pages
 description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpages, with publish/private URL conventions, menu/tree template tags and a predefined-pages import; documented in apps/pages.md
 tags: ["app", "pages"]
 status: draft
-stale_after: 2028-04-18
+stale_after: 2027-10-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-10T00:00:00Z }
 ---
 
@@ -86,16 +86,15 @@ Two URL namespaces, one app (`app_name = "pages-edit"`):
 
 - Public read side: `pages-edit:tree` (`PageTreeView`) renders the
   page tree for any visitor.
-- Admin side, gated twice: views use
-  `core.mixins.OnlyAdminMixin` (superuser **or** tenant admin), and the
-  create/delete `post` handlers re-check `request.user.is_superuser`
-  and raise `PermissionDenied` otherwise. `update` is open to tenant
-  admins: it resolves the page through the tenant-scoped manager, so an
-  admin can only ever update their own tenant's pages (another
-  tenant's pk is a 404). The list views build their queryset per
-  request via `get_queryset()` — a class-level `queryset` attribute
-  would be frozen at import time, when no tenant is active, and leak
-  other tenants' pages.
+- Admin side, gated by `core.mixins.OnlyAdminMixin`
+  (superuser **or** tenant admin) on every view — it is the single
+  source of truth for authorization. Create, update and delete all
+  resolve their page through the tenant-scoped manager, so a tenant
+  admin can only ever touch their own tenant's pages (another tenant's
+  pk is a 404). The list views build their queryset per request via
+  `get_queryset()` — a class-level `queryset` attribute would be frozen
+  at import time, when no tenant is active, and leak other tenants'
+  pages.
   - `edit_list` (`PageAdminListView`) — flat list with sites.
   - `create` / `<pk>` — `PageForm` save wrapped in
     `transaction.atomic()` with the site association and the

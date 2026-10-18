@@ -1,6 +1,7 @@
 import logging
 import re
 from fpdf import FPDF
+from pathlib import Path
 from typing import Generator
 
 from django.conf import settings
@@ -15,7 +16,9 @@ logger = logging.getLogger(__name__)
 
 
 def get_static_path(filename):
-  return finders.find(filename) or None
+  # finders.find returns a Path on newer Django; FPDF.image() needs a str path
+  path = finders.find(filename)
+  return str(path) if path else None
 
 
 class DirectoryPDF(FPDF):
@@ -36,7 +39,14 @@ class DirectoryPDF(FPDF):
   def header(self):
     # Logo
     site_logo = tenant_setting("site_logo")
-    logo = site_logo if site_logo.startswith(settings.PUBLIC_MEDIA_URL) else get_static_path(site_logo)
+    # FPDF wants a disk path: a per-tenant uploaded logo is a public-media URL.
+    # public root recomputed from MEDIA_ROOT (PUBLIC_MEDIA_ROOT is import-time
+    # and goes stale under the MEDIA_ROOT overrides used by tests)
+    if site_logo.startswith(settings.PUBLIC_MEDIA_URL):
+      # FPDF.image() needs a str path, not a Path
+      logo = str(Path(settings.MEDIA_ROOT) / "public" / site_logo.removeprefix(settings.PUBLIC_MEDIA_URL))
+    else:
+      logo = get_static_path(site_logo)
     self.image(logo, 10, 8, 33)
     # Arial bold 15
     self.set_font("Arial", "B", 8)

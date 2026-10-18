@@ -10,7 +10,6 @@ copy of the predefined pages.
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import get_language
@@ -212,6 +211,7 @@ class AnonymousPublicPagesScopingTests(TestCase):
       last_name="x",
       is_active=True,
       is_superuser=True,
+      privacy_consent=True,  # otherwise the consent gate (PR #521) 302s to the profile
     )
     cls.default_page = FlatPageFactory(
       tenant=cls.default,

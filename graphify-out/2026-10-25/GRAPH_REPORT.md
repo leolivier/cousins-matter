@@ -1,7 +1,7 @@
-# Graph Report - cousins-matter  (2026-10-18)
+# Graph Report - cousins-matter  (2026-10-25)
 
 ## Corpus Check
-- 602 files · ~690,948 words
+- 602 files · ~690,978 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c8dfe023`
+- Built from commit: `6944e279`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -426,19 +426,19 @@
   README.md → CLAUDE.md
 - `Nginx 413 Error Page` --conceptually_related_to--> `classified_ads Django App`  [AMBIGUOUS]
   config/nginx/nginx.d/errors/413.html → classified_ads/templates/classified_ads/detail.html
-- `PrivateChatRoom` --uses--> `build_site_stats()`  [INFERRED]
-  chat/models.py → core/services.py
-- `PrivateChatRoom` --uses--> `Member`  [INFERRED]
-  chat/models.py → members/models.py
 - `ChatTenantORMTests` --uses--> `Tenant`  [INFERRED]
   chat/tests/tests_tenant_isolation.py → tenants/models.py
+- `GalleryTenantIsolationTests` --uses--> `Tenant`  [INFERRED]
+  galleries/tests/tests_tenant_isolation.py → tenants/models.py
+- `PrivateChatRoom` --uses--> `build_site_stats()`  [INFERRED]
+  chat/models.py → core/services.py
 
 ## Import Cycles
 - 3-file cycle: `core/templatetags/cm_tags.py -> core/utils.py -> galleries/tests/tests_gallery.py -> core/templatetags/cm_tags.py`
 - 3-file cycle: `genealogy/services.py -> genealogy/utils.py -> genealogy/views/views_person.py -> genealogy/services.py`
-- 3-file cycle: `genealogy/services.py -> genealogy/utils.py -> genealogy/views/views_family.py -> genealogy/services.py`
-- 3-file cycle: `genealogy/services.py -> genealogy/utils.py -> genealogy/views/views_dashboard_stats.py -> genealogy/services.py`
 - 3-file cycle: `genealogy/services.py -> genealogy/utils.py -> genealogy/views/views_gedcom.py -> genealogy/services.py`
+- 3-file cycle: `genealogy/services.py -> genealogy/utils.py -> genealogy/views/views_dashboard_stats.py -> genealogy/services.py`
+- 3-file cycle: `genealogy/services.py -> genealogy/utils.py -> genealogy/views/views_family.py -> genealogy/services.py`
 - 3-file cycle: `members/forms.py -> members/models.py -> members/tests/tests_register.py -> members/forms.py`
 - 3-file cycle: `members/forms.py -> members/models.py -> tenants/views/views_signup.py -> members/forms.py`
 - 3-file cycle: `members/forms.py -> members/models.py -> members/tests/tests_forms.py -> members/forms.py`
@@ -1604,7 +1604,7 @@ Nodes (3): inject(), render(), urlFor()
   members/templates/members/email/registration_request_email.html · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **818 isolated node(s):** `Migration`, `Migration`, `Migration`, `Migration`, `Migration` (+813 more)
+- **818 isolated node(s):** `cousins-matter`, `Migration`, `Migration`, `Migration`, `Migration` (+813 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 2394 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **121 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1621,7 +1621,7 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `Registration Request Email Template` and `Members List Template (search/sort/paginate)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `Member` connect `Member` to `tenant_context`, `PrivateChatRoom`, `views_member.py`, `Question`, `MemberTestCaseMixin`, `TenantJoinRequestTests`, `TenantModel`, `FlatPage`, `Poll`, `TenantSettingsForm`, `tests_member.py`, `tenant_setting`, `chat/tests/tests_tenant_isolation.py`, `ChatConsumer`, `MemberFactory`, `Family`, `chat/services.py`, `Tenant`, `ChatRoom`, `TestMemberImport`, `entrypoint.py`, `MemberManager`, `FieldLinkWrapper`, `Post`, `views_post.py`, `members/tasks.py`, `MemberTestCase`, `build_site_stats`, `members/models.py`, `RoleAwareUITestBase`, `Trove`, `chat/models.py`, `RegistrationLinkManager`, `override_settings`, `check_edit_permission`, `tests_member_base.py`, `classified_ads/views.py`, `followers.py`, `views_manage.py`, `views_import_export.py`, `get_current_tenant`, `ClassifiedAd`, `core/forms.py`, `core/services.py`?**
-  _High betweenness centrality (0.131) - this node is a cross-community bridge._
 - **Why does `MemberTestCase` connect `MemberTestCase` to `ForumTestCase`, `FamilyChartViewsTest`, `Question`, `MemberTestCaseMixin`, `TenantJoinRequestTests`, `FlatPage`, `Gallery`, `Member`, `tests_member.py`, `icon`, `chat/tests/tests_tenant_isolation.py`, `Tenant`, `Family`, `galleries/services.py`, `DashboardStatsViewsTest`, `TenantSettingsTests`, `TestDeleteMember`, `TestMemberImport`, `PersonViewsTest`, `tests_feature_on.py`, `get_test_absolute_url`, `members/tasks.py`, `ReadReceiptModelTests`, `members/models.py`, `TestPrivateMembersAndAdmins`, `Trove`, `chat/models.py`, `FamilyViewsTest`, `override_settings`, `RegistrationLinkManager`, `tests_member_base.py`, `RunEnvChecksTests`, `TestBirthdaysMixin`, `ClassifiedAd`, `test_env_check.py`, `core/forms.py`, `core/utils.py`, `ChatRoomTests`, `GeneralViewsTestCase`?**
-  _High betweenness centrality (0.095) - this node is a cross-community bridge._
+  _High betweenness centrality (0.109) - this node is a cross-community bridge._
+- **Why does `Member` connect `Member` to `tenant_context`, `PrivateChatRoom`, `views_member.py`, `Question`, `MemberTestCaseMixin`, `TenantJoinRequestTests`, `TenantModel`, `FlatPage`, `Poll`, `TenantSettingsForm`, `tests_member.py`, `tenant_setting`, `chat/tests/tests_tenant_isolation.py`, `ChatConsumer`, `MemberFactory`, `Family`, `chat/services.py`, `Tenant`, `ChatRoom`, `TestMemberImport`, `entrypoint.py`, `MemberManager`, `FieldLinkWrapper`, `Post`, `views_post.py`, `members/tasks.py`, `MemberTestCase`, `build_site_stats`, `members/models.py`, `RoleAwareUITestBase`, `Trove`, `chat/models.py`, `RegistrationLinkManager`, `override_settings`, `check_edit_permission`, `tests_member_base.py`, `classified_ads/views.py`, `followers.py`, `views_manage.py`, `views_import_export.py`, `get_current_tenant`, `ClassifiedAd`, `core/forms.py`, `core/services.py`?**
+  _High betweenness centrality (0.103) - this node is a cross-community bridge._

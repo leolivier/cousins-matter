@@ -238,7 +238,7 @@ class AsyncMemberTestCase(TransactionTestCase):
     self.created_members = []
     self.async_client = AsyncClient()
     self.client.login(username=self.member.email, password=self.member.password)
-    async_to_sync(self.async_client.alogin)(username=self.member.username, password=self.member.password)
+    async_to_sync(self.async_client.alogin)(username=self.member.email, password=self.member.password)
 
   def tearDown(self):
     super().tearDown()

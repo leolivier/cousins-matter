@@ -9,9 +9,7 @@ class LoginTests(MemberTestCase):
     response = self.client.get(self.login_url)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "members/login/login.html")
-    response = self.client.post(
-      self.login_url, {"username": self.member.email, "password": self.member.password}, follow=True
-    )
+    response = self.client.post(self.login_url, {"username": self.member.email, "password": self.member.password}, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertRequestUserIsLogged()
 

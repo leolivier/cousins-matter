@@ -196,8 +196,7 @@ def handle_no_manager_case(context: ImportContext, row_data: MemberImportData):
     # activation requires an email (member_active_needs_email constraint):
     # keep the member managed instead
     row_data.warnings.append(
-      _("Member %(member)s has no email and cannot be activated.")
-      % {"member": row_data.current_member.full_name}
+      _("Member %(member)s has no email and cannot be activated.") % {"member": row_data.current_member.full_name}
     )
   if row_data.current_member.member_manager:
     row_data.warnings.append(

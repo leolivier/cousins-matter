@@ -1,3 +1,5 @@
+from asgiref.sync import sync_to_async
+from allauth.account.auth_backends import AuthenticationBackend
 from django.contrib.auth.backends import ModelBackend
 
 from .models import Member
@@ -28,3 +30,35 @@ class EmailModelBackend(ModelBackend):
     # candidate-found path (same user-enumeration mitigation as upstream).
     Member().set_password(password)
     return None
+
+  async def aauthenticate(self, request, username=None, password=None, **kwargs):
+    """Async twin of ``authenticate``.
+
+    ``ModelBackend`` ships a native-async ``aauthenticate`` that does NOT call
+    ``self.authenticate``: it looks the user up by ``USERNAME_FIELD``
+    (``aget_by_natural_key``), which would silently re-enable username login
+    on the async path (ASGI/Channels requests, async test clients).
+    """
+    if username is None or password is None:
+      return None
+    async for user in Member.unscoped.filter(email__iexact=username):
+      if await user.acheck_password(password) and self.user_can_authenticate(user):
+        return user
+    # Timing-attack burn, same as the sync path (password hashing is pure CPU,
+    # no DB access, so it is safe to call from async code).
+    Member().set_password(password)
+    return None
+
+
+class AllauthEmailBackend(AuthenticationBackend):
+  """allauth backend forced through its sync ``authenticate``.
+
+  allauth inherits ``ModelBackend``'s native-async ``aauthenticate``, which
+  looks the user up by ``USERNAME_FIELD`` through ``aget_by_natural_key``,
+  bypassing allauth's own ``LOGIN_METHODS`` logic on the async path
+  (ASGI/Channels requests). Wrapping the sync ``authenticate`` keeps allauth
+  behaviour (email-only) identical in sync and async contexts.
+  """
+
+  async def aauthenticate(self, request, **credentials):
+    return await sync_to_async(self.authenticate)(request, **credentials)

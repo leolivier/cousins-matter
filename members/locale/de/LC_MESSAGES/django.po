@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-26 20:14+0200\n"
+"POT-Creation-Date: 2026-10-18 17:03+0200\n"
 "PO-Revision-Date: 2025-11-21 18:59+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "The identity provider did not provide an email address."
 msgstr "Die Identitätsanbieter hat keine E-Mail-Adresse angegeben."
 
-#: adapter.py:46
+#: adapter.py:48
 msgid ""
 "This account is not yet active. Please use the invitation link sent to you "
 "by email."
@@ -31,7 +31,7 @@ msgstr ""
 "Dieses Konto ist noch nicht aktiv. Bitte verwende den Einladungs-Link, den "
 "du per E-Mail erhalten hast."
 
-#: adapter.py:63
+#: adapter.py:65
 msgid ""
 "No invitation found for this email address. Please request an invitation "
 "first."
@@ -55,11 +55,11 @@ msgstr "Avatar"
 msgid "Members"
 msgstr "Mitglieder"
 
-#: forms.py:29 forms.py:246 views/views_family.py:62
+#: forms.py:29 forms.py:277 views/views_family.py:62
 msgid "New Family"
 msgstr "Neue Familie"
 
-#: forms.py:30 forms.py:247 templates/members/family/family_form.html:13
+#: forms.py:30 forms.py:278 templates/members/family/family_form.html:13
 #: views/views_family.py:70
 msgid "Change Family"
 msgstr "Ändern Sie die Familie"
@@ -73,7 +73,17 @@ msgstr "Neue Adresse"
 msgid "Change Address"
 msgstr "Adresse ändern"
 
-#: forms.py:94
+#: forms.py:99 tests/tests_register.py:139 tests/tests_register.py:233
+#: tests/tests_register.py:419 views/views_registration.py:150
+#: views/views_registration.py:262
+msgid "A member with this email already exists."
+msgstr "Ein Mitglied mit dieser E-Mail existiert bereits."
+
+#: forms.py:101
+msgid "An active member must have an email."
+msgstr "Ein aktives Mitglied muss eine E-Mail-Adresse haben."
+
+#: forms.py:108
 #, python-format
 msgid ""
 "By checking this box, you agree to this site's <a target='blank' "
@@ -83,111 +93,126 @@ msgstr ""
 "href='%(privacy_url)s'>Datenschutzrichtlinien</a> dieser Website "
 "einverstanden."
 
-#: forms.py:132 templates/members/members/members.html:63
+#: forms.py:119 services/directory.py:65
+#: templates/members/members/member_detail.html:45
+#: templates/members/members/members_directory.html:32
+msgid "Email"
+msgstr "E-Mail"
+
+#: forms.py:122
+msgid ""
+"Please enter a correct email and password. Note that both fields may be case-"
+"sensitive."
+msgstr ""
+"Bitte gib eine korrekte E-Mail-Adresse und ein korrektes Passwort ein. "
+"Beachte, dass beide Felder zwischen Groß- und Kleinschreibung unterscheiden "
+"können."
+
+#: forms.py:158 templates/members/members/members.html:63
 msgid "First name"
 msgstr "Vorname"
 
-#: forms.py:133 templates/members/members/members.html:64
+#: forms.py:159 templates/members/members/members.html:64
 msgid "Last name"
 msgstr "Name"
 
-#: forms.py:134
+#: forms.py:160
 msgid "Avatar"
 msgstr "Avatar"
 
-#: forms.py:135 models.py:165 templates/members/members/member_detail.html:53
+#: forms.py:161 models.py:166 templates/members/members/member_detail.html:53
 #: templates/members/members/members.html:65
 #: templates/members/members/members_directory.html:30
 msgid "Birthdate"
 msgstr "Geburtsdatum"
 
-#: forms.py:136 models.py:160 services/directory.py:65
+#: forms.py:162 models.py:161 services/directory.py:65
 #: templates/members/members/member_detail.html:41
 #: templates/members/members/members_directory.html:33
 msgid "Address"
 msgstr "Adresse"
 
-#: forms.py:137 models.py:162 services/directory.py:65
+#: forms.py:163 models.py:163 services/directory.py:65
 #: templates/members/members/member_detail.html:49
 #: templates/members/members/members_directory.html:31
 msgid "Phone"
 msgstr "Telefon"
 
-#: forms.py:138
+#: forms.py:164
 msgid "Description"
 msgstr "Beschreibung"
 
-#: forms.py:139 templates/members/members/member_detail.html:69
+#: forms.py:165 templates/members/members/member_detail.html:69
 msgid "Hobbies"
 msgstr "Hobbys"
 
-#: forms.py:140 models.py:171 templates/members/members/member_detail.html:57
+#: forms.py:166 models.py:172 templates/members/members/member_detail.html:57
 msgid "Website"
 msgstr "Website"
 
-#: forms.py:141 models.py:173 templates/members/members/member_detail.html:61
+#: forms.py:167 models.py:174 templates/members/members/member_detail.html:61
 msgid "Family"
 msgstr "Familie"
 
-#: forms.py:143 models.py:194
+#: forms.py:169 models.py:195
 msgid "Email frequency"
 msgstr "E-Mail-Häufigkeit"
 
-#: forms.py:148 models.py:186
+#: forms.py:174 models.py:187
 msgid "Privacy consent"
 msgstr "Datenschutz-Einwilligung"
 
-#: forms.py:253
+#: forms.py:284
 msgid "Family name cannot be empty"
 msgstr "Vorname darf nicht leer sein"
 
-#: forms.py:259
+#: forms.py:290
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Name desInvitees (wird im erhaltenen E-Mail angezeigt)"
 
-#: forms.py:262
+#: forms.py:293
 msgid "Email to send invitation"
 msgstr "E-Mail zur Einladung"
 
-#: forms.py:266
+#: forms.py:297
 msgid "Your name"
 msgstr "Ihr Name"
 
-#: forms.py:267
+#: forms.py:298
 msgid "Email where you will receive the link"
 msgstr "E-Mail, in der du den Link erhältst"
 
-#: forms.py:268
+#: forms.py:299
 msgid "Message to the administrator"
 msgstr "Nachricht für den Administrator"
 
-#: forms.py:269
+#: forms.py:300
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr ""
 "CAPTCHA (klicken Sie auf die Bild, um es zu aktualisieren, wenn Sie es nicht "
 "lesen können)"
 
-#: forms.py:286
+#: forms.py:317
 msgid "CSV file"
 msgstr "CSV-Datei"
 
-#: forms.py:287
+#: forms.py:318
 msgid "The CSV file containing the members to import."
 msgstr "Der CSV-Datei mit den Mitgliedern zum Importieren."
 
-#: forms.py:291
+#: forms.py:322
 msgid "Automatically activate imported users"
 msgstr "Automatisch Benutzer aktivieren"
 
-#: forms.py:295 templates/members/members/notify_death_form.html:11
+#: forms.py:326 templates/members/members/notify_death_form.html:11
 msgid "Date of Death"
 msgstr "Sterbedatum"
 
-#: forms.py:297 templates/members/members/notify_death_form.html:19
+#: forms.py:328 templates/members/members/notify_death_form.html:19
 msgid "Any additional information..."
 msgstr "Weitere Informationen..."
 
-#: forms.py:298 templates/members/members/notify_death_form.html:17
+#: forms.py:329 templates/members/members/notify_death_form.html:17
 msgid "Message (Optional)"
 msgstr "Nachricht (Optional)"
 
@@ -203,214 +228,214 @@ msgstr "Ein Superbenutzer muss is_staff=True sein."
 msgid "Superuser must have is_superuser=True."
 msgstr "Ein Superbenutzer muss is_superuser=True sein."
 
-#: models.py:27
+#: models.py:28
 msgctxt "CSV Field"
 msgid "number_and_street"
 msgstr "Nummer_und_Strasse"
 
-#: models.py:28
+#: models.py:29
 msgctxt "CSV Field"
 msgid "address_complementary_info"
 msgstr "Adresse_komplementär_Informationen"
 
-#: models.py:29
+#: models.py:30
 msgctxt "CSV Field"
 msgid "zip_code"
 msgstr "Zip_Code"
 
-#: models.py:30
+#: models.py:31
 msgctxt "CSV Field"
 msgid "city"
 msgstr "Stadt"
 
-#: models.py:31
+#: models.py:32
 msgctxt "CSV Field"
 msgid "country"
 msgstr "Land"
 
-#: models.py:35
+#: models.py:36
 msgctxt "CSV Field"
 msgid "username"
 msgstr "Benutzername"
 
-#: models.py:36
+#: models.py:37
 msgctxt "CSV Field"
 msgid "email"
 msgstr "E-Mail"
 
-#: models.py:37
+#: models.py:38
 msgctxt "CSV Field"
 msgid "first_name"
 msgstr "Vorname"
 
-#: models.py:38
+#: models.py:39
 msgctxt "CSV Field"
 msgid "last_name"
 msgstr "Letzte_Name"
 
-#: models.py:39
+#: models.py:40
 msgctxt "CSV Field"
 msgid "birthdate"
 msgstr "Geburtsdatum"
 
-#: models.py:43
+#: models.py:44
 msgctxt "CSV Field"
 msgid "phone"
 msgstr "Telefon"
 
-#: models.py:44
+#: models.py:45
 msgctxt "CSV Field"
 msgid "website"
 msgstr "Website"
 
-#: models.py:45
+#: models.py:46
 msgctxt "CSV Field"
 msgid "family"
 msgstr "Familie"
 
-#: models.py:46
+#: models.py:47
 msgctxt "CSV Field"
 msgid "avatar"
 msgstr "Avatar"
 
-#: models.py:47
+#: models.py:48
 msgctxt "CSV Field"
 msgid "deathdate"
 msgstr "Todesdatum"
 
-#: models.py:48
+#: models.py:49
 msgctxt "CSV Field"
 msgid "managed_by"
 msgstr "verwaltet_von"
 
-#: models.py:56 services/directory.py:65
+#: models.py:57 services/directory.py:65
 #: templates/members/members/members_directory.html:29
 msgid "Name"
 msgstr "Name"
 
-#: models.py:61 templates/members/family/family_detail.html:14
+#: models.py:62 templates/members/family/family_detail.html:14
 msgid "Parent family"
 msgstr "Elternfamilie"
 
-#: models.py:68
+#: models.py:69
 msgid "family"
 msgstr "Familie"
 
-#: models.py:69
+#: models.py:70
 msgid "families"
 msgstr "Familien"
 
-#: models.py:83 templates/members/address/address_detail.html:8
+#: models.py:84 templates/members/address/address_detail.html:8
 msgid "Number & Street name"
 msgstr "Nummer & Straße"
 
-#: models.py:85
+#: models.py:86
 msgid "Complementary info"
 msgstr "Komplizierte Informationen"
 
-#: models.py:87 templates/members/address/address_detail.html:16
+#: models.py:88 templates/members/address/address_detail.html:16
 msgid "Zip code"
 msgstr "Gebietscode"
 
-#: models.py:89 templates/members/address/address_detail.html:20
+#: models.py:90 templates/members/address/address_detail.html:20
 msgid "City"
 msgstr "Stadt"
 
-#: models.py:91
+#: models.py:92
 msgid "State"
 msgstr "Bundesland"
 
-#: models.py:93 templates/members/address/address_detail.html:24
+#: models.py:94 templates/members/address/address_detail.html:24
 msgid "Country"
 msgstr "Land"
 
-#: models.py:107
+#: models.py:108
 msgid "address"
 msgstr "Adresse"
 
-#: models.py:108
+#: models.py:109
 msgid "addresses"
 msgstr "Adressen"
 
-#: models.py:127
+#: models.py:128
 msgid "Never"
 msgstr "Nie"
 
-#: models.py:128
+#: models.py:129
 msgid "Immediately"
 msgstr "Sofort"
 
-#: models.py:129
+#: models.py:130
 msgid "Hourly"
 msgstr "Stündlich"
 
-#: models.py:130
+#: models.py:131
 msgid "Daily"
 msgstr "Täglich"
 
-#: models.py:131
+#: models.py:132
 msgid "Weekly"
 msgstr "Wöchentlich"
 
-#: models.py:132
+#: models.py:133
 msgid "Monthly"
 msgstr "Monatlich"
 
-#: models.py:136
+#: models.py:137
 #, fuzzy
 #| msgid "Members"
 msgid "Member"
 msgstr "Mitglieder"
 
-#: models.py:137
+#: models.py:138
 msgid "Tenant admin"
 msgstr ""
 
-#: models.py:139
+#: models.py:140
 msgid "Role"
 msgstr ""
 
-#: models.py:142
+#: models.py:143
 msgid "Tenant"
 msgstr ""
 
-#: models.py:150
+#: models.py:151
 msgid "Member manager"
 msgstr "Mitglied Manager"
 
-#: models.py:165
+#: models.py:166
 msgid "Click on the month name or the year to change them quickly"
 msgstr "Klicke auf den Monat oder das Jahr, um sie schnell zu ändern"
 
-#: models.py:168
+#: models.py:169
 msgid "Is dead"
 msgstr "Ist tot"
 
-#: models.py:169
+#: models.py:170
 msgid "Death date"
 msgstr "Todesdatum"
 
-#: models.py:176 templates/members/members/member_detail.html:65
+#: models.py:177 templates/members/members/member_detail.html:65
 msgid "Who I am"
 msgstr "Wer ich bin"
 
-#: models.py:180
+#: models.py:181
 msgid "Describe yourself, your likes and dislikes..."
 msgstr "Beschreibe dich selbst, deine Vorlieben und Unvorlieben..."
 
-#: models.py:183
+#: models.py:184
 msgid "My hobbies"
 msgstr "Meine Hobbys"
 
-#: models.py:183
+#: models.py:184
 msgid "Provide a list of hobbies separated by commas"
 msgstr "Bitte gib eine Liste von Hobbys, getrennt durch Kommas, an."
 
-#: models.py:189
+#: models.py:190
 msgid "Followers"
 msgstr "Follower"
 
-#: models.py:199
+#: models.py:200
 msgid ""
 "How often you want to receive email notifications about the followed "
 "elements (members, chat messages, etc.)"
@@ -418,32 +443,32 @@ msgstr ""
 "Wie oft Du E-Mail-Benachrichtigungen über die gefolgten Elemente "
 "(Mitglieder, Chat-Nachrichten usw.) erhalten möchtest."
 
-#: models.py:207
+#: models.py:208
 #, fuzzy
 #| msgctxt "CSV Field"
 #| msgid "username"
 msgid "username"
 msgstr "Benutzername"
 
-#: models.py:210
+#: models.py:211
 msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
 msgstr ""
 
-#: models.py:212
+#: models.py:213
 #, fuzzy
 #| msgid "A member with this email already exists."
 msgid "A user with that username already exists."
 msgstr "Ein Mitglied mit dieser E-Mail existiert bereits."
 
-#: models.py:222
+#: models.py:223
 msgid "member"
 msgstr "Mitglied"
 
-#: models.py:223
+#: models.py:224
 msgid "members"
 msgstr "Mitglieder"
 
-#: models.py:305
+#: models.py:311
 #, python-format
 msgid "Death date %(dd)s is before birthdate %(bd)s"
 msgstr "Todesdatum %(dd)s ist vor Geburtsdatum %(bd)s"
@@ -457,11 +482,6 @@ msgstr "%(site_name)s-Verzeichnis"
 #, python-format
 msgid "Page %(doc_page)s - %(title)s"
 msgstr "Seite %(doc_page)s - %(title)s"
-
-#: services/directory.py:65 templates/members/members/member_detail.html:45
-#: templates/members/members/members_directory.html:32
-msgid "Email"
-msgstr "E-Mail"
 
 #: services/import_export.py:32
 #, python-format
@@ -480,7 +500,7 @@ msgstr ""
 "Unbekannte Spalte in der CSV-Datei: \"%(fieldname)s\". Gültige Felder sind "
 "%(all_names)s"
 
-#: services/import_export.py:75 views/views_import_export.py:76
+#: services/import_export.py:75 views/views_import_export.py:74
 msgid "Import not found"
 msgstr "Import nicht gefunden"
 
@@ -488,17 +508,19 @@ msgstr "Import nicht gefunden"
 msgid "Error: Cannot activate a dead member"
 msgstr "Fehler: Ein totes Mitglied kann nicht aktiviert werden"
 
-#: services/members.py:27 tests/tests_member.py:510
+#: services/members.py:27 tests/tests_member.py:519
 msgid "Error: Member already active"
 msgstr "Fehler: Mitglied bereits aktiv"
 
-#: services/members.py:29 tests/tests_member.py:520
+#: services/members.py:29 tests/tests_member.py:529
 msgid "Error: Member without email cannot be activated"
 msgstr "Fehler: Mitglied ohne E-Mail kann nicht aktiviert werden"
 
-#: services/members.py:37 tests/tests_member.py:531
+#: services/members.py:37 tests/tests_member.py:557
 msgid "Member account activated successfully. The member can now sign in."
-msgstr "Das Mitgliedskonto wurde erfolgreich aktiviert. Das Mitglied kann sich jetzt anmelden."
+msgstr ""
+"Das Mitgliedskonto wurde erfolgreich aktiviert. Das Mitglied kann sich jetzt "
+"anmelden."
 
 #: services/members.py:44
 msgid ""
@@ -579,7 +601,12 @@ msgstr ""
 "Bitte beachte, dass %(manager)s inaktiv ist und nicht als Manager für "
 "%(member)s verwendet werden kann. Aktiviert es manuell!"
 
-#: tasks.py:196
+#: tasks.py:199
+#, python-format
+msgid "Member %(member)s has no email and cannot be activated."
+msgstr "Das Mitglied %(member)s hat keine E-Mail und kann nicht aktiviert werden."
+
+#: tasks.py:204
 #, python-format
 msgid ""
 "No manager provided for member %(member)s although inactive. Keeping "
@@ -588,7 +615,7 @@ msgstr ""
 "Für %(member)s ist kein Manager vorgesehen, obwohl inaktiv. Bestehenden "
 "Mitglied Manager beibehalten (%(manager)s)..."
 
-#: tasks.py:204
+#: tasks.py:212
 #, python-format
 msgid ""
 "Inactive member %(member)s has no manager. Please provide one! Meanwhile, "
@@ -597,7 +624,7 @@ msgstr ""
 "Inaktives Mitglied %(member)s hat keinen Mitglied Manager. Bitte liefern Sie "
 "einen! In der Zwischenzeit, wirst du als Manager eingesetzt"
 
-#: tasks.py:225
+#: tasks.py:233
 #, python-format
 msgid ""
 "Member %(member)s was active. Adding %(manager)s as manager inactivated him/"
@@ -606,7 +633,7 @@ msgstr ""
 "Mitglied %(member)s war aktiv. Das Hinzufügen von %(manager)s als Manager "
 "hat ihn/sie deaktiviert."
 
-#: tasks.py:235
+#: tasks.py:243
 msgid ""
 "You requested to activate imported members. All members with a manager in "
 "the file will be ignored and won't be activated."
@@ -712,7 +739,7 @@ msgid "Greetings!"
 msgstr "Hallo!"
 
 #: templates/members/email/email_verification_msg.html:27
-#: tests/tests_member.py:480
+#: tests/tests_member.py:486
 msgid ""
 "You received this mail because you attempted to create an account on our "
 "website or because a member created and activated your account"
@@ -721,7 +748,7 @@ msgstr ""
 "Website zu erstellen oder weil ein Mitglied dein Konto aktiviert hat."
 
 #: templates/members/email/email_verification_msg.html:28
-#: tests/tests_member.py:483
+#: tests/tests_member.py:489
 msgid ""
 "Please click on the link below to confirm the email and activate your "
 "account."
@@ -900,7 +927,7 @@ msgid "Sign up"
 msgstr "Registrieren"
 
 #: templates/members/email/registration_request_email.html:8
-#: tests/tests_register.py:192 views/views_registration.py:286
+#: tests/tests_register.py:192 views/views_registration.py:287
 #, python-format
 msgid "Registration request for %(site_name)s"
 msgstr "Registrierungsanfrage für %(site_name)s"
@@ -940,7 +967,7 @@ msgid "New invitation to register on %(site_name)s"
 msgstr "Neue Einladung zur Registrierung auf %(site_name)s"
 
 #: templates/members/email/registration_sent_email.html:15
-#: views/views_registration.py:196
+#: views/views_registration.py:197
 #, python-format
 msgid ""
 "Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s"
@@ -1147,17 +1174,12 @@ msgstr "wird %(age)s auf %(birthday)s"
 msgid "No birthdays in next %(ndays)s days"
 msgstr "Keine Geburtstage in den nächsten %(ndays)s Tagen"
 
-#: templates/members/members/export_members.html:4
-#: templates/members/members/import_members.html:3
-#: templates/members/members/import_members.html:6
-msgid "Import Members"
-msgstr "Mitgliederauswahl importieren"
-
-#: templates/members/members/export_members.html:7
+#: templates/members/members/export_members.html:3
+#: templates/members/members/export_members.html:6
 msgid "Export Members"
 msgstr "AusEXPORT-Mitglieder"
 
-#: templates/members/members/export_members.html:9
+#: templates/members/members/export_members.html:8
 msgid ""
 "You can export members to a CSV file. The first line of the file contains "
 "the field names. "
@@ -1165,53 +1187,34 @@ msgstr ""
 "Du kannst Mitglieder in ein CSV-Datei exportieren. Die erste Zeile des "
 "Dokuments enthält die Feldnamen."
 
-#: templates/members/members/export_members.html:10
+#: templates/members/members/export_members.html:9
 msgid "All fields are present and empty if not present in the database. "
 msgstr ""
 "Alle Felder sind vorhanden und leer, wenn sie nicht im Datenbank vorhanden "
 "sind."
 
-#: templates/members/members/export_members.html:13
+#: templates/members/members/export_members.html:12
 msgid "Admins can re-import the files after modification with any CSV editor."
 msgstr ""
 "Administratoren können die Dateien nach Modifikation wieder importieren, mit "
 "jedem CSV-Editor."
 
-#: templates/members/members/export_members.html:18
+#: templates/members/members/export_members.html:17
 msgid "Select members to export"
 msgstr "Wählen Sie Mitglieder zum Exportieren aus"
 
-#: templates/members/members/export_members.html:21
-msgid "Family filter"
-msgstr "Familienfilter"
+#: templates/members/members/export_members.html:38
+msgid "Clear selection"
+msgstr "Klare Auswahl"
 
-#: templates/members/members/export_members.html:26
-msgid "City filter"
-msgstr "Stadtfilter"
-
-#: templates/members/members/export_members.html:31
-msgid "Last name filter"
-msgstr "Letzter Name Filter"
-
-#: templates/members/members/export_members.html:40
+#: templates/members/members/export_members.html:43
 msgid "Export"
 msgstr "Exportieren"
 
-#: templates/members/members/export_members.html:51
-msgid "Select a name..."
-msgstr "Wählen Sie einen Namen aus..."
-
-#: templates/members/members/export_members.html:55
-msgid "Select a city..."
-msgstr "Wählen Sie eine Stadt..."
-
-#: templates/members/members/export_members.html:59
-msgid "Select a family..."
-msgstr "Wählen Sie eine Familie..."
-
-#: templates/members/members/export_members.html:85
-msgid "Clear selection"
-msgstr "Klare Auswahl"
+#: templates/members/members/import_members.html:3
+#: templates/members/members/import_members.html:6
+msgid "Import Members"
+msgstr "Mitgliederauswahl importieren"
 
 #: templates/members/members/import_members.html:9
 msgid ""
@@ -1264,12 +1267,12 @@ msgid "Member Detail"
 msgstr "Mitglied Details"
 
 #: templates/members/members/member_detail.html:30
-#: templates/members/members/member_upsert.html:30 tests/tests_member.py:308
+#: templates/members/members/member_upsert.html:30 tests/tests_member.py:314
 msgid "Active member"
 msgstr "Aktive Mitglied"
 
 #: templates/members/members/member_detail.html:32
-#: templates/members/members/member_upsert.html:32 tests/tests_member.py:308
+#: templates/members/members/member_upsert.html:32 tests/tests_member.py:314
 msgid "Member managed by"
 msgstr "Mitglied verwaltet von"
 
@@ -1307,11 +1310,11 @@ msgstr "Aktualisieren"
 msgid "Create"
 msgstr "Erstellen"
 
-#: templates/members/members/member_upsert.html:76
+#: templates/members/members/member_upsert.html:77
 msgid "Lost your verification email?"
 msgstr "Haben Sie Ihre Bestätigungs-E-Mail verloren?"
 
-#: templates/members/members/member_upsert.html:78
+#: templates/members/members/member_upsert.html:79
 #: templates/members/registration/email_verification_failed.html:13
 msgid "Request a new link"
 msgstr "Bitte einen neuen Link anfordern"
@@ -1491,12 +1494,12 @@ msgstr ""
 "Warnung: Vergiss nicht, auf der unteren Seite den Speichern-Taste zu "
 "klicken, ansonsten werden die Anderungen nicht gespeichert"
 
-#: tests/tests_member.py:283 tests/tests_member.py:288
+#: tests/tests_member.py:289 tests/tests_member.py:294
 #: views/views_member.py:181 views/views_member.py:198
 msgid "You do not have permission to edit this member."
 msgstr "Du hast keine Berechtigung, diese Mitgliedschaft zu bearbeiten."
 
-#: tests/tests_member.py:603
+#: tests/tests_member.py:629
 msgid "Error: Cannot activate a dead member "
 msgstr "Fehler: Ein totes Mitglied kann nicht aktiviert werden "
 
@@ -1504,17 +1507,17 @@ msgstr "Fehler: Ein totes Mitglied kann nicht aktiviert werden "
 msgid "Delete my account"
 msgstr "Lösche mein Konto"
 
-#: tests/tests_register.py:41 views/views_registration.py:209
+#: tests/tests_register.py:41 views/views_registration.py:210
 #, python-format
 msgid "Invitation sent to %(email)s."
 msgstr "Einladung wurde an %(email)s gesendet."
 
-#: tests/tests_register.py:48 views/views_registration.py:175
+#: tests/tests_register.py:48 views/views_registration.py:176
 #, python-format
 msgid "You are invited to register on %(site_name)s"
 msgstr "Du bist eingeladen, dich auf %(site_name)s anzumelden."
 
-#: tests/tests_register.py:129 tests/tests_register.py:366
+#: tests/tests_register.py:129 tests/tests_register.py:369
 msgid "This field is required."
 msgstr "Dieses Feld ist erforderlich."
 
@@ -1522,14 +1525,8 @@ msgstr "Dieses Feld ist erforderlich."
 msgid "Enter a valid email address."
 msgstr "Gib eine gültige E-Mail-Adresse ein."
 
-#: tests/tests_register.py:139 tests/tests_register.py:233
-#: tests/tests_register.py:415 views/views_registration.py:149
-#: views/views_registration.py:261
-msgid "A member with this email already exists."
-msgstr "Ein Mitglied mit dieser E-Mail existiert bereits."
-
-#: tests/tests_register.py:185 tests/tests_register.py:399
-#: views/views_registration.py:264
+#: tests/tests_register.py:185 tests/tests_register.py:402
+#: views/views_registration.py:265
 msgid "Registration request sent."
 msgstr "Registrierungsanfrage versendet."
 
@@ -1537,7 +1534,7 @@ msgstr "Registrierungsanfrage versendet."
 msgid "Invalid CAPTCHA"
 msgstr "Inkorrekte CAPTCHA"
 
-#: tests/tests_register.py:288 views/views_registration.py:103
+#: tests/tests_register.py:291 views/views_registration.py:103
 #, python-format
 msgid ""
 "Hello %(username)s, your account has been created! You will now receive an "
@@ -1548,16 +1545,16 @@ msgstr ""
 "zur Überprüfung deiner E-Mail-Adresse. Klicke auf den Link in der E-Mail, um "
 "die Registrierung abzuschließen.\","
 
-#: tests/tests_register.py:305 tests/tests_register.py:349
+#: tests/tests_register.py:308 tests/tests_register.py:352
 #: views/views_registration.py:39
 msgid "Invalid link. Please contact the administrator."
 msgstr "Ungültiger Link. Bitte kontaktieren Sie den Administrator."
 
-#: tests/tests_register.py:315 views/views_registration.py:43
+#: tests/tests_register.py:318 views/views_registration.py:43
 msgid "You are already logged in"
 msgstr "Du bist bereits eingeloggt"
 
-#: tests/tests_register.py:324 views/views_registration.py:53
+#: tests/tests_register.py:327 views/views_registration.py:53
 msgid ""
 "A member with the same email address is already active. Please sign in "
 "instead"
@@ -1565,7 +1562,7 @@ msgstr ""
 "Ein Mitglied mit der gleichen E-Mail-Adresse ist bereits aktiv. Bitte melde "
 "dich stattdessen an"
 
-#: tests/tests_register.py:339 views/views_registration.py:60
+#: tests/tests_register.py:342 views/views_registration.py:60
 #, python-format
 msgid ""
 "You are already registered but not active. Please contact %(admin)s to "
@@ -1574,15 +1571,15 @@ msgstr ""
 "Sie sind bereits registriert, aber nicht aktiv. Bitte kontaktieren Sie "
 "%(admin)s, um Ihr Konto zu aktivieren."
 
-#: tests/tests_register.py:430 views/views_registration.py:256
+#: tests/tests_register.py:434 views/views_registration.py:257
 msgid "Too many requests, please try again later."
 msgstr ""
 
-#: views/views_import_export.py:92
+#: views/views_import_export.py:90
 msgid "Back to members list"
 msgstr "Zurück zur Mitgliederliste"
 
-#: views/views_import_export.py:94
+#: views/views_import_export.py:92
 #, python-format
 msgid ""
 "CSV file uploaded: %(rows_num)i lines read, %(created_num)i members created "
@@ -1591,7 +1588,31 @@ msgstr ""
 "CSV-Datei hochgeladen: %(rows_num)i Zeilen gelesen, %(created_num)i "
 "Mitglieder erstellt und %(updated_num)i aktualisiert"
 
+#: views/views_import_export.py:139
+msgid "Family filter"
+msgstr "Familienfilter"
+
+#: views/views_import_export.py:140
+msgid "Select a family..."
+msgstr "Wählen Sie eine Familie..."
+
 #: views/views_import_export.py:145
+msgid "City filter"
+msgstr "Stadtfilter"
+
+#: views/views_import_export.py:146
+msgid "Select a city..."
+msgstr "Wählen Sie eine Stadt..."
+
+#: views/views_import_export.py:151
+msgid "Last name filter"
+msgstr "Letzter Name Filter"
+
+#: views/views_import_export.py:152
+msgid "Select a name..."
+msgstr "Wählen Sie einen Namen aus..."
+
+#: views/views_import_export.py:162
 msgid "Method not allowed"
 msgstr "Methode nicht erlaubt"
 
@@ -1673,7 +1694,7 @@ msgstr "Der Administrator wurde benachrichtigt."
 msgid "Only tenant admins can invite members"
 msgstr "Nur Superbenutzer können Mitglieder einladen"
 
-#: views/views_registration.py:266
+#: views/views_registration.py:267
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Kann keine E-Mail senden, bitte kontaktiere deinen Administrator"
 

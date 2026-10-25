@@ -50,8 +50,19 @@ Fields that matter beyond `AbstractUser`:
 
 Username handling is unusual: `username` is redeclared with `unique=False` and
 uniqueness becomes a `UniqueConstraint` on `(tenant, username)`
-(`member_tenant_username_uniq`), so the same username may exist in two tenants.
-Login is by email; `USERNAME_FIELD` stays `"username"` and
+(`member_tenant_username_uniq`), so the same username may exist in two tenants —
+username is therefore not a reliable identifier and never used to log in.
+Email is the global login key: `member_email_uniq`
+(`UniqueConstraint` on `Lower("email")`, empty emails excluded) makes it unique
+across all tenants, and `member_active_needs_email` requires an email for every
+active member — managed (inactive) members may stay email-less, but activating
+one demands an email first (the CSV import keeps such members managed with a
+warning instead of activating them).
+Login is by email only: `EmailModelBackend` (members/auth_backends.py) resolves
+candidates globally with `Member.unscoped.filter(email__iexact=...)`
+(timing-attack safe) and is first in `AUTHENTICATION_BACKENDS`; the login view
+uses `EmailAuthenticationForm`, whose identifier field is an email.
+`USERNAME_FIELD` stays `"username"` and
 `REQUIRED_FIELDS = ["first_name", "last_name", "birthdate", "email"]`.
 
 Model behaviour worth knowing:

@@ -574,7 +574,10 @@ AUTHENTICATION_BACKENDS = [
   # email-only login: the stock ModelBackend authenticates via username,
   # which is only unique per tenant and thus not a reliable identifier.
   "members.auth_backends.EmailModelBackend",
-  "allauth.account.auth_backends.AuthenticationBackend",
+  # allauth wrapped so its async aauthenticate (inherited from ModelBackend,
+  # username-based and tenant-unscoped) goes through its sync email-only
+  # authenticate() instead.
+  "members.auth_backends.AllauthEmailBackend",
 ]
 
 SOCIALACCOUNT_AUTO_SIGNUP = env.bool("SOCIALACCOUNT_AUTO_SIGNUP", False)

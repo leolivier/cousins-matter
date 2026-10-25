@@ -34,7 +34,8 @@ class RegistrationCheckingView(LoginNotRequiredMixin, generic.CreateView):
   template_name = "members/members/member_upsert.html"
 
   def check_before_register(self, request, encoded_email, token):
-    invitation_tenant_id, decoded_email = RegistrationLinkManager().decrypt_link(encoded_email, token)
+    # don't bind the name to ``_``: it would shadow the gettext import below
+    invitation_tenant_id, decoded_email, _name = RegistrationLinkManager().decrypt_link(encoded_email, token)
     if not decoded_email:
       messages.error(request, _("Invalid link. Please contact the administrator."))
       return False
@@ -68,16 +69,26 @@ class RegistrationCheckingView(LoginNotRequiredMixin, generic.CreateView):
       return redirect("/")
 
     # Store invitation info in session for potential social login
-    invitation_tenant_id, decoded_email = RegistrationLinkManager().decrypt_link(encoded_email, token)
+    invitation_tenant_id, decoded_email, invitation_name = RegistrationLinkManager().decrypt_link(encoded_email, token)
     request.session["invitation_token"] = token
     request.session["invitation_email"] = decoded_email
     request.session["invitation_tenant_id"] = invitation_tenant_id
+    request.session["invitation_name"] = invitation_name
+
+    # Prefill the form from the signed invitation: the invitee's email is
+    # already proven, and the inviter typed their name when inviting.
+    initial = {"email": decoded_email}
+    if invitation_name:
+      parts = invitation_name.split(None, 1)
+      initial["first_name"] = parts[0]
+      if len(parts) > 1:
+        initial["last_name"] = parts[1]
 
     return render(
       request,
       self.template_name,
       {
-        "form": MemberRegistrationForm(),
+        "form": MemberRegistrationForm(initial=initial),
         "addr_form": AddressUpdateForm(),
         "family_form": FamilyUpdateForm(),
         "title": self.title,
@@ -94,17 +105,33 @@ class RegistrationCheckingView(LoginNotRequiredMixin, generic.CreateView):
       # Create the new member on the invitation's tenant. The request is anonymous,
       # so the middleware hasn't set a current tenant; activate it explicitly.
       invitation_tenant_id = request.session.get("invitation_tenant_id")
+      activated = False
       with tenant_context(Tenant(pk=invitation_tenant_id) if invitation_tenant_id else None):
-        send_verification_email(request, form)  # also saves the member
+        # The invitee proved control of the invitation email by opening the signed
+        # link: if they kept it unchanged, no second verification email is needed.
+        invitation_email = request.session.get("invitation_email")
+        if invitation_email and form.cleaned_data["email"].lower() == invitation_email.lower():
+          member = form.save(commit=False)
+          member.is_active = True
+          member.save()
+          activated = True
+        else:
+          send_verification_email(request, form)  # also saves the member
       username = form.cleaned_data.get("username")
-      messages.success(
-        request,
-        _(
-          "Hello %(username)s, your account has been created! You will now receive an email "
-          "to verify your email address. Click in the link inside the mail to finish the registration."
+      if activated:
+        messages.success(
+          request,
+          _("Hello %(username)s, your account is now active! You can now sign in.") % {"username": username},
         )
-        % {"username": username},
-      )
+      else:
+        messages.success(
+          request,
+          _(
+            "Hello %(username)s, your account has been created! You will now receive an email "
+            "to verify your email address. Click in the link inside the mail to finish the registration."
+          )
+          % {"username": username},
+        )
       return redirect("members:login")
 
     return render(
@@ -150,7 +177,7 @@ class MemberInvitationView(generic.View):
       messages.error(request, _("A member with this email already exists."))
       return render(request, self.template_name, {"form": form, "join_url": join_url})
 
-    invitation_url = RegistrationLinkManager().generate_link(request, email, tenant_id=request.user.tenant_id)
+    invitation_url = RegistrationLinkManager().generate_link(request, email, tenant_id=request.user.tenant_id, name=invited)
     site_name = tenant_setting("site_name")
     inviter = request.user
     admins = admin_or_superusers(request.user.tenant)

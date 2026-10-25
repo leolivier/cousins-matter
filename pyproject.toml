@@ -1,6 +1,6 @@
 [project]
 name = "cousins-matter"
-version = "2.4.1"
+version = "3.0.0"
 description = "A family social network"
 readme = "README.md"
 requires-python = ">=3.14"
@@ -29,6 +29,10 @@ dependencies = [
     "psycopg[binary]~=3.3.4",
     "python-gedcom~=1.1.0",
     "requests~=2.34.2",
+    # Security floor: 26.10.0rc1 fixes CVE-2026-115774/115775/115776/115778/115877
+    # and no stable release does yet — the >= floor picks up 26.10.0 automatically
+    # once it ships (twisted stays transitive via daphne).
+    "twisted>=26.10.0rc1",
     "whitenoise~=6.12.0",
 ]
 

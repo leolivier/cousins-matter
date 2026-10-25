@@ -11,8 +11,9 @@ class PersonInline(admin.TabularInline):
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-  list_display = ["first_name", "last_name", "birth_date", "sex", "member"]
-  list_filter = ["sex", "birth_date"]
+  list_display = ["first_name", "last_name", "tenant", "birth_date", "sex", "member"]
+  list_filter = ["tenant", "sex", "birth_date"]
+  list_select_related = ["tenant"]
   search_fields = ["first_name", "last_name", "gedcom_id"]
   raw_id_fields = ["child_of_family", "member"]
 
@@ -23,8 +24,9 @@ class PersonAdmin(admin.ModelAdmin):
 
 @admin.register(Family)
 class FamilyAdmin(admin.ModelAdmin):
-  list_display = ["partner1", "partner2", "union_type", "union_date"]
-  list_filter = ["union_type", "union_date"]
+  list_display = ["tenant", "partner1", "partner2", "union_type", "union_date"]
+  list_filter = ["tenant", "union_type", "union_date"]
+  list_select_related = ["tenant"]
   search_fields = ["partner1__first_name", "partner1__last_name", "partner2__first_name", "partner2__last_name"]
   raw_id_fields = ["partner1", "partner2"]
   inlines = [PersonInline]

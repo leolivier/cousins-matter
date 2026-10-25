@@ -102,3 +102,28 @@ class OAuthActivationTests(MemberTestCase):
 
     # Verify sociallogin.user is now set to active (unsaved yet)
     self.assertTrue(sociallogin.user.is_active)
+
+  def test_pre_social_login_named_invitation(self):
+    """A named invitation (3-segment payload) validates through the adapter."""
+    email = "named_invited@example.com"
+    token = self.token_manager.make_token(f"3:{email}:John Doe")
+
+    # Setup session, as done by RegistrationCheckingView.get
+    session = self.client.session
+    session["invitation_token"] = token
+    session["invitation_email"] = email
+    session["invitation_tenant_id"] = 3
+    session["invitation_name"] = "John Doe"
+    session.save()
+
+    user = Member(email=email)
+    sociallogin = SocialLogin(user=user, account=SocialAccount(user=user, provider="google"))
+
+    request = get_fake_request()
+    request.session = session
+    setattr(request, "_messages", FallbackStorage(request))
+
+    self.adapter.pre_social_login(request, sociallogin)
+
+    self.assertTrue(sociallogin.user.is_active)
+    self.assertEqual(sociallogin.user.tenant_id, 3)

@@ -5,6 +5,7 @@ from captcha.fields import CaptchaField
 from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
@@ -112,7 +113,14 @@ class MemberFormMixin:
 
 
 class EmailAuthenticationForm(AuthenticationForm):
-  """Login form: the identifier field is the email, not the username."""
+  """Login form: the identifier field is the email, not the username.
+
+  Also reports inactive accounts instead of bad credentials: both auth
+  backends reject inactive members inside ``authenticate()`` (returning
+  ``None``), so Django's built-in "inactive" branch is unreachable. Check
+  for the inactive account here, before ``super().clean()`` raises the
+  generic invalid-credentials error.
+  """
 
   # field name stays "username" (hardcoded in AuthenticationForm.authenticate);
   # the backend treats its value as the email.
@@ -121,6 +129,22 @@ class EmailAuthenticationForm(AuthenticationForm):
     **AuthenticationForm.error_messages,
     "invalid_login": _("Please enter a correct email and password. Note that both fields may be case-sensitive."),
   }
+
+  def clean(self):
+    username = self.cleaned_data.get("username")
+    password = self.cleaned_data.get("password")
+    if username and password:
+      # Same candidate loop as the backend: transition safety for duplicate
+      # emails predating the uniqueness migration.
+      for member in Member.unscoped.filter(email__iexact=username):
+        # Only reveal the "not yet active" state when the password matches, so a
+        # wrong password still gets the generic error (no account enumeration).
+        if not member.is_active and member.check_password(password):
+          raise ValidationError(
+            _("This account is not yet active. Please use the invitation link sent to you by email."),
+            code="inactive",
+          )
+    return super().clean()
 
 
 class MemberRegistrationForm(MemberFormMixin, UserCreationForm):

@@ -298,6 +298,71 @@ class MemberRegisterTests(MemberTestCase):
     self.assertSequenceEqual(mail.outbox[0].to, [user["email"]])
     self.assertEqual(mail.outbox[0].subject, GetFieldFromSettings().get("subject"))
 
+  def test_register_get_prefills_form(self):
+    self.client.logout()
+    request = get_fake_request()
+    email = "prefill@example.com"
+    invitation_url = RegistrationLinkManager().generate_link(request, email, name="John Doe")
+    response = self.client.get(invitation_url)
+    self.assertEqual(response.status_code, 200)
+    initial = response.context["form"].initial
+    self.assertEqual(initial["email"], email)
+    self.assertEqual(initial["first_name"], "John")
+    self.assertEqual(initial["last_name"], "Doe")
+
+  def test_register_post_same_email_activates_directly(self):
+    self.client.logout()
+    request = get_fake_request()
+    email = "direct-activate@example.com"
+    invitation_url = RegistrationLinkManager().generate_link(request, email, name="John Doe")
+    self.client.get(invitation_url)  # stores the invitation in the session
+    user = {
+      "username": "direct_activate",
+      "password1": self.member.password,
+      "password2": self.member.password,
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": email,  # unchanged from the invitation link -> already proven
+      "phone": "01 23 45 67 78",
+      "birthdate": today_minus("30y"),
+      "privacy_consent": True,
+      "email_batch_frequency": "immediate",
+    }
+    mail.outbox = []
+    response = self.client.post(invitation_url, user, follow=True)
+    self.assertContains(
+      response,
+      _("Hello %(username)s, your account is now active! You can now sign in.") % {"username": user["username"]},
+    )
+    self.assertEqual(len(mail.outbox), 0)  # no second verification email
+    member = Member.unscoped.get(username=user["username"])
+    self.assertTrue(member.is_active)
+
+  def test_register_post_changed_email_sends_verification(self):
+    self.client.logout()
+    request = get_fake_request()
+    email = "invitation-target@example.com"
+    invitation_url = RegistrationLinkManager().generate_link(request, email, name="John Doe")
+    self.client.get(invitation_url)  # stores the invitation in the session
+    user = {
+      "username": "changed_email",
+      "password1": self.member.password,
+      "password2": self.member.password,
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "other@example.com",  # differs from the invitation -> must verify
+      "phone": "01 23 45 67 78",
+      "birthdate": today_minus("30y"),
+      "privacy_consent": True,
+      "email_batch_frequency": "immediate",
+    }
+    mail.outbox = []
+    self.client.post(invitation_url, user, follow=True)
+    self.assertEqual(len(mail.outbox), 1)  # verification email sent
+    self.assertEqual(mail.outbox[0].to, [user["email"]])
+    member = Member.unscoped.get(username=user["username"])
+    self.assertFalse(member.is_active)  # stays inactive until verified
+
   def test_register_view_wrong_token(self):
     request = get_fake_request()
     email = "test-cousinsmatter@maildrop.cc"

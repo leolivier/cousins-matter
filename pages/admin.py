@@ -17,4 +17,5 @@ class FlatPageAdmin(DefaultFlatPageAdmin):
   form = AdminPageForm
   fieldsets = DefaultFlatPageAdmin.fieldsets + ((_("Sync status"), {"fields": ("predefined", "updated")}),)
   list_display = ("url", "tenant", "title", "predefined", "updated")
+  list_select_related = ["tenant"]
   list_filter = ("tenant", "sites", "registration_required", "predefined", "updated")

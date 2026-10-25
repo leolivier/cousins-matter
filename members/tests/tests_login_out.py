@@ -39,7 +39,9 @@ class LoginTests(MemberTestCase):
       is_active=False,
       member_manager=self.superuser,
     )
-    response = self.client.post(self.login_url, {"username": "inactive_login", "password": self.member.password}, follow=True)
+    response = self.client.post(
+      self.login_url, {"username": "inactive_login@example.com", "password": self.member.password}, follow=True
+    )
     self.assertFormError(
       response.context["form"],
       None,
@@ -59,14 +61,14 @@ class LoginTests(MemberTestCase):
       member_manager=self.superuser,
     )
     response = self.client.post(
-      self.login_url, {"username": "inactive_login2", "password": f"{self.member.password}wrong"}, follow=True
+      self.login_url, {"username": "inactive_login2@example.com", "password": f"{self.member.password}wrong"}, follow=True
     )
     self.assertFormError(
       response.context["form"],
       None,
       [
-        _("Please enter a correct %(username)s and password. Note that both fields may be case-sensitive.")
-        % {"username": "username"}
+        # EmailAuthenticationForm overrides ``invalid_login`` to say "email".
+        _("Please enter a correct email and password. Note that both fields may be case-sensitive.")
       ],
     )
 

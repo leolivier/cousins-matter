@@ -9,6 +9,7 @@ from django.db import models
 from django.db.models.fields import CharField
 from django.db.models.fields.related import ForeignKey
 from django.db.models.indexes import Index
+from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -230,6 +231,11 @@ class Member(AbstractUser):
     ]
     constraints = [
       models.UniqueConstraint(fields=["tenant", "username"], name="member_tenant_username_uniq"),
+      # Email is the global login key: case-insensitive uniqueness across
+      # tenants, empty emails excluded (managed members may have none).
+      models.UniqueConstraint(Lower("email"), condition=~models.Q(email=""), name="member_email_uniq"),
+      # an active member can always sign in, so it must have an email
+      models.CheckConstraint(condition=models.Q(is_active=False) | ~models.Q(email=""), name="member_active_needs_email"),
     ]
 
   def get_absolute_url(self):

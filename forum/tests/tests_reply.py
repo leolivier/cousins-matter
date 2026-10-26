@@ -82,7 +82,7 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
     self.assertEqual(self.post.first_message.author, original_poster)
 
     follower = self.create_member(is_active=True)
-    self.client.login(username=follower.username, password=follower.password)
+    self.client.login(username=follower.email, password=follower.password)
     # follower follows the post
     url = reverse("forum:toggle_follow", args=[self.post.id])
     response = self.client.post(url, follow=True)
@@ -92,7 +92,7 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
 
     # create yet another member who will post a reply to the post
     new_poster = self.create_member(is_active=True)
-    self.client.login(username=new_poster.username, password=new_poster.password)
+    self.client.login(username=new_poster.email, password=new_poster.password)
     # poster posts a reply to the post
     url = reverse("forum:reply", args=[self.post.id])
     reply_msg_content = "a reply"
@@ -113,4 +113,4 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
     )
 
     # login back as self.member
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)

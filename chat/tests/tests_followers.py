@@ -22,7 +22,7 @@ class ChatRoomFollowerTests(ChatMessageSenderMixin, TestFollowersMixin, AsyncMem
     # create a new member and login, he will send a first
     # message on the room and become the owner
     new_poster = await self.acreate_member(is_active=True)
-    await self.async_client.alogin(username=new_poster.username, password=new_poster.password)
+    await self.async_client.alogin(username=new_poster.email, password=new_poster.password)
     msg = "this is the first message on the room so I am the owner!"
     await self.send_chat_message(msg, self.slug, sender=new_poster)
 
@@ -31,7 +31,7 @@ class ChatRoomFollowerTests(ChatMessageSenderMixin, TestFollowersMixin, AsyncMem
 
     # create another new member and login, he will be the follower
     follower = await self.acreate_member(is_active=True)
-    await self.async_client.alogin(username=follower.username, password=follower.password)
+    await self.async_client.alogin(username=follower.email, password=follower.password)
     response = await self.async_client.post(reverse("chat:toggle_follow", args=[self.slug]))
     self.assertEqual(response.status_code, 302)
     # now we should have one follower which is the new member
@@ -41,7 +41,7 @@ class ChatRoomFollowerTests(ChatMessageSenderMixin, TestFollowersMixin, AsyncMem
     self.assertEqual(await self.room.followers.afirst(), follower)
 
     # now log again as new_poster and send another message on the room
-    await self.async_client.alogin(username=new_poster.username, password=new_poster.password)
+    await self.async_client.alogin(username=new_poster.email, password=new_poster.password)
     msg = "this is a message to my followers!"
     await self.send_chat_message(msg, self.slug, sender=new_poster)
 
@@ -58,7 +58,7 @@ class ChatRoomFollowerTests(ChatMessageSenderMixin, TestFollowersMixin, AsyncMem
     )
 
     # login back as follower
-    await self.async_client.alogin(username=follower.username, password=follower.password)
+    await self.async_client.alogin(username=follower.email, password=follower.password)
     # now unfollow the room
     await self.async_client.post(reverse("chat:toggle_follow", args=[self.slug]))
     self.assertEqual(await self.room.followers.acount(), 0)
@@ -76,7 +76,7 @@ class TestChatWithMemberFollower(ChatMessageSenderMixin, TestFollowersMixin, Tra
     mail.outbox = []
 
     # first, followed creates a chat room
-    self.client.login(username=followed.username, password=followed.password)
+    self.client.login(username=followed.email, password=followed.password)
     room_name = "a room to be followed"
     response = self.client.post(reverse("chat:new_room"), {"name": room_name})
     self.assertEqual(response.status_code, 302)
@@ -111,7 +111,7 @@ class TestChatWithMemberFollower(ChatMessageSenderMixin, TestFollowersMixin, Tra
 
     # now, let someone else (the superuser) create a room and it's 1rst message and let the
     # followed reply to it, and check the email to the follower
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
 
     room_name = "a new room created by superuser"
     response = self.client.post(reverse("chat:new_room"), {"name": room_name}, follow=True)
@@ -124,7 +124,7 @@ class TestChatWithMemberFollower(ChatMessageSenderMixin, TestFollowersMixin, Tra
     # force reset the mail outbox.
     mail.outbox = []
     # now, followed will reply to the superuser's message
-    self.client.login(username=followed.username, password=followed.password)
+    self.client.login(username=followed.email, password=followed.password)
     reply_msg = "a reply to be superuser's message"
     async_to_sync(self.send_chat_message)(reply_msg, room_slug=room.slug, sender=followed)
     # print("follower email", follower.email)

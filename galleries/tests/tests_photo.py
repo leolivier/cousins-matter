@@ -277,7 +277,7 @@ class DeletePhotoViewTest(PhotoTestsBase):
 
   def test_delete_photo_as_superuser(self):
     """Tests deleting a photo as a superuser."""
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     response = self.client.post(self.url, follow=True)
     self.assertFalse(Photo.objects.filter(pk=self.photo.id).exists())
     self.assertEqual(response.status_code, 200)

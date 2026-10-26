@@ -23,7 +23,7 @@ class PrivacyGateTest(MemberTestCase):
     member.password = pwd  # keep unhashed password in memory for login
     self.created_members.append(member)
     self.client.logout()
-    self.client.login(username=member.username, password=member.password)
+    self.client.login(username=member.email, password=member.password)
     return member
 
   def test_unconsented_member_is_redirected_to_profile(self):

@@ -19,7 +19,7 @@ class TestMemberFollower(TestFollowersMixin, MemberTestCase):
 
   def do_test_toggle_unfollow_member(self, followed):
     # test unfollow
-    self.client.login(username=self.member.username, password=self.member.password)  # login as follower (ie self.member)
+    self.client.login(username=self.member.email, password=self.member.password)  # login as follower (ie self.member)
     url = reverse("members:toggle_follow", args=[followed.username])
     response = self.client.post(url, follow=True)
     self.assertEqual(response.status_code, 200)

@@ -6,17 +6,26 @@ from .tests_member_base import MemberTestCase
 
 class LoginTests(MemberTestCase):
   def test_login_view(self):
-    """Tests the login view."""
+    """Tests the login view: login is by email only."""
     self.client.logout()  # make sure nobodys logged in
     self.assertMemberExists(self.member)
     response = self.client.get(self.login_url)
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "members/login/login.html")
+    response = self.client.post(self.login_url, {"username": self.member.email, "password": self.member.password}, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertRequestUserIsLogged()
+
+  def test_login_by_username_rejected(self):
+    """Regression: username must not authenticate (not tenant-scoped, not unique)."""
+    self.client.logout()  # make sure nobodys logged in
     response = self.client.post(
       self.login_url, {"username": self.member.username, "password": self.member.password}, follow=True
     )
     self.assertEqual(response.status_code, 200)
-    self.assertRequestUserIsLogged()
+    self.assertRequestUserIsNotLogged()
+    # rejected at field validation (not a valid email) or at authentication
+    self.assertTrue(response.context["form"].errors)
 
   def test_login_inactive_member(self):
     """An inactive member with correct credentials gets the 'not yet active' error."""
@@ -30,7 +39,9 @@ class LoginTests(MemberTestCase):
       is_active=False,
       member_manager=self.superuser,
     )
-    response = self.client.post(self.login_url, {"username": "inactive_login", "password": self.member.password}, follow=True)
+    response = self.client.post(
+      self.login_url, {"username": "inactive_login@example.com", "password": self.member.password}, follow=True
+    )
     self.assertFormError(
       response.context["form"],
       None,
@@ -50,20 +61,20 @@ class LoginTests(MemberTestCase):
       member_manager=self.superuser,
     )
     response = self.client.post(
-      self.login_url, {"username": "inactive_login2", "password": f"{self.member.password}wrong"}, follow=True
+      self.login_url, {"username": "inactive_login2@example.com", "password": f"{self.member.password}wrong"}, follow=True
     )
     self.assertFormError(
       response.context["form"],
       None,
       [
-        _("Please enter a correct %(username)s and password. Note that both fields may be case-sensitive.")
-        % {"username": "username"}
+        # EmailAuthenticationForm overrides ``invalid_login`` to say "email".
+        _("Please enter a correct email and password. Note that both fields may be case-sensitive.")
       ],
     )
 
   def test_logout_view(self):
     """Tests the logout view."""
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)
     response = self.client.get(self.logout_url, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertFalse(self.current_user().is_authenticated)

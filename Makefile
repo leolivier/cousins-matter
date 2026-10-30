@@ -108,9 +108,7 @@ check:
 	ruff check . --fix
 	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
 	bandit -r . -c pyproject.toml -f txt -o bandit.out
-	# CVE-2026-106454: no fix released yet (twisted 26.4.0 is latest). ReDoS in twisted.mail.imap4;
-	# not applicable here: twisted is only pulled by daphne/Channels (ASGI/WebSocket), no IMAP server.
-	pip-audit . --ignore-vuln CVE-2026-106454
+	pip-audit .
 	ENVIRONMENT="test" ./manage.py check_okf docs
 
 install-hooks:

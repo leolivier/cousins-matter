@@ -78,7 +78,7 @@
 			</table>
 		</div>
 		<div class="card-footer buttons is-centered">
-			<a class="button" 
+			<a class="button"
 				{% if can_edit %} href="{% url 'members:member_edit' member.username %}"
 				{% else %} disabled
 				{% endif %}

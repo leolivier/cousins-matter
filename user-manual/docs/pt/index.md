@@ -24,4 +24,3 @@ A versão 2 do Cousins Matter é uma grande reescrita da versão 1 e não é dir
 
 ## Autores
 O principal programador do Cousins Matter é [@leolivier](https://www.github.com/leolivier)
-

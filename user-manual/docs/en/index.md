@@ -4,8 +4,8 @@
 ## What is Cousins Matter?
 Cousins Matter is a web application designed to help you manage large family trees. It allows you to list your cousins, aunts, uncles, siblings, childrens and ancestors and gives them the option to manage their own profiles. The app also provides various useful features, such as:
 
-* photo galleries, 
-* forums, 
+* photo galleries,
+* forums,
 * chat rooms,
 * polls
 * classified ads
@@ -24,4 +24,3 @@ The version 2 of Cousins Matter is a big rewrite of the version 1. It is not dir
 
 ## Authors
 The main developer of Cousins Matter is [@leolivier](https://www.github.com/leolivier)
-

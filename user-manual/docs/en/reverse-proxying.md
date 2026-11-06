@@ -68,4 +68,3 @@ sudo certbot --keep --expand --allow-sub set-of-names --cert-path /etc/letsencry
 This should create the certificate and install it at the right place.
 
 Now, you can now access your domain to https://\<your domain>
-

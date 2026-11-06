@@ -3,6 +3,7 @@
 # this script is expected to be run from the root of the dev environment project
 
 # import utils functions and variables
+# shellcheck source=SCRIPTDIR/test_utils.sh
 . "$(cd "$(dirname "$0")" && pwd)"/test_utils.sh
 
 get_args "Runs a Cousins Matter install test" "$@"
@@ -18,8 +19,8 @@ cd "$tmpdir"
 [ ! -f .env ] && error 1 "No .env file found in $tmpdir"
 
 set_admin_env_vars
-cat .env | grep -v "^#" | grep -v -e "^\s*$"
-export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-$tag}
+grep -v "^#" .env | grep -v -e "^\s*$"
+export COUSINS_MATTER_IMAGE="${COUSINS_MATTER_IMAGE:-$tag}"
 echo "tested image: $COUSINS_MATTER_IMAGE"
 
 grep 'POSTGRES_PASSWORD' .env || error 1 "No POSTGRES_PASSWORD found in .env"
@@ -29,4 +30,3 @@ docker_run_cousins_matter
 docker compose down -v
 rm -rf "$tmpdir"
 echo "test install passed"
-

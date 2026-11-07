@@ -24,5 +24,8 @@ class TenantHomeView(LoginNotRequiredMixin, generic.View):
     request.tenant = tenant
     with tenant_context(tenant):
       # the unauthenticated page: flatpage + navbar with Sign in link,
-      # rendered with the family's branding and join-request link
-      return HomeView.as_view()(request)
+      # rendered with the family's branding and join-request link.
+      # Render here: include_page lookups are scoped by the thread-local
+      # tenant, already restored to None once this view returns and Django
+      # renders the deferred TemplateResponse outside the block.
+      return HomeView.as_view()(request).render()

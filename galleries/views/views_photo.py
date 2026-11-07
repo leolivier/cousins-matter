@@ -19,7 +19,10 @@ logger = logging.getLogger(__name__)
 class PhotoDetailView(generic.DetailView):
   template_name = "galleries/photo_detail.html"
   model = Photo
-  queryset = Photo.objects.select_related("gallery__owner", "uploaded_by")
+
+  def get_queryset(self):
+    # per request: TenantManager scopes by the current tenant
+    return Photo.objects.select_related("gallery__owner", "uploaded_by")
 
 
 def get_fullscreen_photo(request, pk):
@@ -80,7 +83,10 @@ class PhotoEditView(generic.UpdateView):
   template_name = "galleries/photo_form.html"
   model = Photo
   form_class = PhotoForm
-  queryset = Photo.objects.select_related("gallery__owner", "uploaded_by")
+
+  def get_queryset(self):
+    # per request: TenantManager scopes by the current tenant
+    return Photo.objects.select_related("gallery__owner", "uploaded_by")
 
   def form_valid(self, form):
     if self.object.uploaded_by:

@@ -96,41 +96,41 @@ class MemberInviteTests(MemberTestCase):
   def test_invite_member_not_staff(self):
     "Tests inviting a member when not staff."
     # depending on settings,only superuser and staff cans send invites
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)
     with override_settings(ALLOW_MEMBERS_TO_INVITE_MEMBERS=False):
       self.do_test_invite(should_fail=True)
 
   def test_invite_member_staff(self):
     "Tests inviting a member when staff."
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     # should work anyway
     with override_settings(ALLOW_MEMBERS_TO_INVITE_MEMBERS=False):
       self.do_test_invite()
     # log back in again as normal member
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)
 
   def test_invite_member(self):
     "Tests inviting a member by another member when allowed."
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)
     # default settings for ALLOW_MEMBERS_TO_INVITE_MEMBERS=True, so should work
     self.do_test_invite()
 
   def test_invite_member_superuser(self):
     "Tests inviting a member by superuser."
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     self.do_test_invite()
     self.client.logout()
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)
 
   def test_invite_post_invalid_form(self):
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     response = self.client.post(reverse("members:invite"), {"invited": "", "email": "invalid"}, follow=True)
     form = response.context["form"]
     self.assertFormError(form, "invited", _("This field is required."))
     self.assertFormError(form, "email", _("Enter a valid email address."))
 
   def test_invite_post_member_exists(self):
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     test_invite = {
       "invited": "Existing User",
       "email": self.member.email,
@@ -139,14 +139,14 @@ class MemberInviteTests(MemberTestCase):
     self.assertContainsMessage(response, "error", _("A member with this email already exists."))
 
   def test_invite_get_with_mail_param(self):
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     email = "test-param@example.com"
     response = self.client.get(reverse("members:invite") + f"?mail={email}")
     self.assertEqual(response.status_code, 200)
     self.assertContains(response, email)
 
   def test_invite_get_no_mail_param(self):
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     response = self.client.get(reverse("members:invite"))
     self.assertEqual(response.status_code, 200)
 
@@ -298,6 +298,71 @@ class MemberRegisterTests(MemberTestCase):
     self.assertSequenceEqual(mail.outbox[0].to, [user["email"]])
     self.assertEqual(mail.outbox[0].subject, GetFieldFromSettings().get("subject"))
 
+  def test_register_get_prefills_form(self):
+    self.client.logout()
+    request = get_fake_request()
+    email = "prefill@example.com"
+    invitation_url = RegistrationLinkManager().generate_link(request, email, name="John Doe")
+    response = self.client.get(invitation_url)
+    self.assertEqual(response.status_code, 200)
+    initial = response.context["form"].initial
+    self.assertEqual(initial["email"], email)
+    self.assertEqual(initial["first_name"], "John")
+    self.assertEqual(initial["last_name"], "Doe")
+
+  def test_register_post_same_email_activates_directly(self):
+    self.client.logout()
+    request = get_fake_request()
+    email = "direct-activate@example.com"
+    invitation_url = RegistrationLinkManager().generate_link(request, email, name="John Doe")
+    self.client.get(invitation_url)  # stores the invitation in the session
+    user = {
+      "username": "direct_activate",
+      "password1": self.member.password,
+      "password2": self.member.password,
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": email,  # unchanged from the invitation link -> already proven
+      "phone": "01 23 45 67 78",
+      "birthdate": today_minus("30y"),
+      "privacy_consent": True,
+      "email_batch_frequency": "immediate",
+    }
+    mail.outbox = []
+    response = self.client.post(invitation_url, user, follow=True)
+    self.assertContains(
+      response,
+      _("Hello %(username)s, your account is now active! You can now sign in.") % {"username": user["username"]},
+    )
+    self.assertEqual(len(mail.outbox), 0)  # no second verification email
+    member = Member.unscoped.get(username=user["username"])
+    self.assertTrue(member.is_active)
+
+  def test_register_post_changed_email_sends_verification(self):
+    self.client.logout()
+    request = get_fake_request()
+    email = "invitation-target@example.com"
+    invitation_url = RegistrationLinkManager().generate_link(request, email, name="John Doe")
+    self.client.get(invitation_url)  # stores the invitation in the session
+    user = {
+      "username": "changed_email",
+      "password1": self.member.password,
+      "password2": self.member.password,
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "other@example.com",  # differs from the invitation -> must verify
+      "phone": "01 23 45 67 78",
+      "birthdate": today_minus("30y"),
+      "privacy_consent": True,
+      "email_batch_frequency": "immediate",
+    }
+    mail.outbox = []
+    self.client.post(invitation_url, user, follow=True)
+    self.assertEqual(len(mail.outbox), 1)  # verification email sent
+    self.assertEqual(mail.outbox[0].to, [user["email"]])
+    member = Member.unscoped.get(username=user["username"])
+    self.assertFalse(member.is_active)  # stays inactive until verified
+
   def test_register_view_wrong_token(self):
     request = get_fake_request()
     email = "test-cousinsmatter@maildrop.cc"
@@ -311,7 +376,7 @@ class MemberRegisterTests(MemberTestCase):
     self.assertRedirects(response, "/")
 
   def test_register_view_already_logged_in(self):
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)
     request = get_fake_request()
     invitation_url = RegistrationLinkManager().generate_link(request, "new@example.com")
     response = self.client.get(invitation_url, follow=True)
@@ -435,7 +500,7 @@ class TenantJoinRequestTests(RequestRegistrationLinkTests):
     self.assertEqual(len(mail.outbox), 5)
 
   def test_invite_page_shows_family_home_url(self):
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     response = self.client.get(reverse("members:invite"))
     self.assertContains(response, reverse("tenant-home", args=[self.superuser.tenant.slug]))
 

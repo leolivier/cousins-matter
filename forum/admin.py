@@ -11,12 +11,13 @@ class MessageInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-  list_display = ["title", "owner", "created_date"]
-  list_select_related = ["owner", "first_message"]
+  list_display = ["title", "tenant", "owner", "created_date"]
+  list_select_related = ["tenant", "first_message", "first_message__author"]
   search_fields = ["title"]
   inlines = [MessageInline]
   raw_id_fields = ["first_message"]
   filter_horizontal = ["followers"]
+  list_filter = ["tenant"]
 
   @admin.display(description=_("created"))
   def created_date(self, obj):
@@ -25,9 +26,9 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-  list_display = ["author", "post", "created", "short_content"]
-  list_select_related = ["author", "post"]
-  list_filter = ["post", "author", "created"]
+  list_display = ["author", "post", "created", "short_content", "tenant"]
+  list_select_related = ["author", "post", "tenant"]
+  list_filter = ["tenant", "post", "author", "created"]
   search_fields = ["content", "author__username", "post__title"]
   date_hierarchy = "created"
 
@@ -38,9 +39,9 @@ class MessageAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-  list_display = ["author", "message", "created", "short_content"]
-  list_select_related = ["author", "message"]
-  list_filter = ["author", "created"]
+  list_display = ["author", "message", "created", "short_content", "tenant"]
+  list_select_related = ["author", "message", "tenant"]
+  list_filter = ["tenant", "author", "created"]
   search_fields = ["content", "author__username"]
   date_hierarchy = "created"
 

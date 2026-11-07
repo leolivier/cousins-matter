@@ -22,7 +22,7 @@ class TestDisplayPollInfo(PollTestMixin):
     # create answers by 2 users
     self.create_and_check_answers(poll)
     member = self.create_member(is_active=True)
-    self.client.login(username=member.username, password=member.password)
+    self.client.login(username=member.email, password=member.password)
     self.create_and_check_answers(poll, expected_poll_answers=2)
 
     response = self.client.get(reverse("polls:poll_detail", args=(poll.id,)), follow=True)

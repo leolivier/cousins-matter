@@ -4,8 +4,8 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-10-11
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
+stale_after: 2027-10-18
+generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T20:35:00Z }
 ---
 
 # Members
@@ -33,7 +33,14 @@ Fields that matter beyond `AbstractUser`:
   member itself when it manages itself.
 - `family` — FK to `Family` (below), plus `address` FK to `Address`.
 - `birthdate`, `is_dead` / `deathdate`, `phone`, `website`, `avatar`,
-  `description`, `hobbies`, `privacy_consent`.
+  `description`, `hobbies`, `privacy_consent`. `privacy_consent` is the GDPR
+  consent: it belongs to the member themself — the checkbox only appears on
+  forms where the member consents for themself (profile `EditProfileView`,
+  registration, social signup), never when an admin creates or edits another
+  member (a managed member is created with `privacy_consent=False`). Until it
+  is True, the consent gate in
+  [core middleware](/apps/core.md#middleware) redirects every request to the
+  profile, where the member can check the box.
 - `followers` — M2M to `"self"`, `symmetrical=False`,
   `related_name="following"`.
 - `email_batch_frequency` — one of `FREQUENCY_NEVER`, `FREQUENCY_IMMEDIATE`
@@ -43,8 +50,19 @@ Fields that matter beyond `AbstractUser`:
 
 Username handling is unusual: `username` is redeclared with `unique=False` and
 uniqueness becomes a `UniqueConstraint` on `(tenant, username)`
-(`member_tenant_username_uniq`), so the same username may exist in two tenants.
-Login is by email; `USERNAME_FIELD` stays `"username"` and
+(`member_tenant_username_uniq`), so the same username may exist in two tenants —
+username is therefore not a reliable identifier and never used to log in.
+Email is the global login key: `member_email_uniq`
+(`UniqueConstraint` on `Lower("email")`, empty emails excluded) makes it unique
+across all tenants, and `member_active_needs_email` requires an email for every
+active member — managed (inactive) members may stay email-less, but activating
+one demands an email first (the CSV import keeps such members managed with a
+warning instead of activating them).
+Login is by email only: `EmailModelBackend` (members/auth_backends.py) resolves
+candidates globally with `Member.unscoped.filter(email__iexact=...)`
+(timing-attack safe) and is first in `AUTHENTICATION_BACKENDS`; the login view
+uses `EmailAuthenticationForm`, whose identifier field is an email.
+`USERNAME_FIELD` stays `"username"` and
 `REQUIRED_FIELDS = ["first_name", "last_name", "birthdate", "email"]`.
 
 Model behaviour worth knowing:
@@ -113,23 +131,40 @@ account: the manager fills the profile, then activates it.
 `TokenManager`) builds one-time links signed with `salted_hmac` over
 `SECRET_KEY` (salt `cousinsmatter.members.check_before_registry.TokenManager`),
 valid for `MAX_REGISTRATION_AGE` (default 2 days, config/settings/base.py).
-The payload is `"<tenant_id>:<email>"` when the invite is tenant-bound, so the
-tenant is covered by the HMAC and cannot be swapped in the URL.
+The payload is `"<tenant_id>:<email>:<name>"` when the invite is tenant-bound
+and carries the invitee's name, so both the tenant and the name are covered by
+the HMAC and cannot be swapped in the URL; without a name the payload is
+byte-identical to legacy 2-segment links, so in-flight invitations stay valid.
 
 Flow (members/views/views_registration.py):
 
 1. `MemberInvitationView` (`members:invite`) — allowed to platform/tenant
    admins, or to anyone when `tenant_setting("allow_members_to_invite_members")`
-   is on. Generates the tenant-bound link for the invitee's email
-   (`RegistrationLinkManager.generate_link` with `request.user.tenant_id`) and
-   emails it.
+   is on. Generates the tenant-bound link for the invitee's email and name
+   (`RegistrationLinkManager.generate_link` with `request.user.tenant_id` and
+   the form's `invited` name) and emails it.
 2. `RegistrationCheckingView` (`members:register/<encoded_email>/<token>`) —
-   verifies the link via `decrypt_link`, refuses logged-in or already-active
-   members, and stores `(invitation_token, invitation_email,
-   invitation_tenant_id)` in the session before showing the signup form.
+   verifies the link via `decrypt_link` (returns `(tenant_id, email, name)`),
+   refuses logged-in or already-active members, and stores
+   `(invitation_token, invitation_email, invitation_tenant_id,
+   invitation_name)` in the session before showing the signup form,
+   **pre-filled** with the invitation's email and name. On submit, an email
+   identical to the invitation's means the mailbox is already proven: the
+   member is saved with `is_active=True` and **no** verification email is
+   sent; a changed email falls back to the verification-email flow
+   (`is_active=False` until the emailed link is clicked).
 3. `TenantJoinRequestView` (`members:register_request`, plus `/<slug>/join/` as
    `tenant-join`) — captcha-protected self-service request routed to the
    matching family (see below).
+3. `TenantJoinRequestView` (`members:register_request`, plus `/<slug>/join/` as
+   `tenant-join`) — captcha-protected self-service request routed to the
+   matching family (see below).
+
+Logging in (`members/forms.py: MemberAuthenticationForm`) distinguishes an
+inactive member with valid credentials — *"This account is not yet active.
+Please use the invitation link sent to you by email"* — from a wrong
+password, which still gets the generic invalid-credentials message (no
+user-enumeration leak).
 
 Social login is wired through `CustomSocialAccountAdapter`
 (members/adapter.py): `pre_social_login` validates the session invitation with

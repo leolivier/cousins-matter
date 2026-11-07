@@ -4,7 +4,8 @@ from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from captcha.fields import CaptchaField
 from django import forms
 from django.conf import settings
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
@@ -87,6 +88,20 @@ class MemberFormMixin:
 
     return avatar
 
+  def clean_email(self):
+    """Email is the global login key: unique across tenants, and mandatory
+    for active members (DB constraints member_email_uniq /
+    member_active_needs_email turn violations into IntegrityError; these
+    checks turn them into proper form errors)."""
+    email = self.cleaned_data.get("email")
+    if email:
+      taken = Member.unscoped.filter(email__iexact=email).exclude(pk=self.instance.pk)
+      if taken.exists():
+        raise forms.ValidationError(_("A member with this email already exists."))
+    elif self.instance.pk and self.instance.is_active:
+      raise forms.ValidationError(_("An active member must have an email."))
+    return email
+
   def init_privacy_field(self):
     "Initialize the privacy consent field with a link to the privacy policy and force it to be required"
     privacy_url = "/" + get_language() + settings.PRIVACY_URL
@@ -95,6 +110,41 @@ class MemberFormMixin:
       % {"privacy_url": privacy_url}
     )  # nosec
     self.fields["privacy_consent"].required = True
+
+
+class EmailAuthenticationForm(AuthenticationForm):
+  """Login form: the identifier field is the email, not the username.
+
+  Also reports inactive accounts instead of bad credentials: both auth
+  backends reject inactive members inside ``authenticate()`` (returning
+  ``None``), so Django's built-in "inactive" branch is unreachable. Check
+  for the inactive account here, before ``super().clean()`` raises the
+  generic invalid-credentials error.
+  """
+
+  # field name stays "username" (hardcoded in AuthenticationForm.authenticate);
+  # the backend treats its value as the email.
+  username = forms.EmailField(label=_("Email"), max_length=254)
+  error_messages = {
+    **AuthenticationForm.error_messages,
+    "invalid_login": _("Please enter a correct email and password. Note that both fields may be case-sensitive."),
+  }
+
+  def clean(self):
+    username = self.cleaned_data.get("username")
+    password = self.cleaned_data.get("password")
+    if username and password:
+      # Same candidate loop as the backend: transition safety for duplicate
+      # emails predating the uniqueness migration.
+      for member in Member.unscoped.filter(email__iexact=username):
+        # Only reveal the "not yet active" state when the password matches, so a
+        # wrong password still gets the generic error (no account enumeration).
+        if not member.is_active and member.check_password(password):
+          raise ValidationError(
+            _("This account is not yet active. Please use the invitation link sent to you by email."),
+            code="inactive",
+          )
+    return super().clean()
 
 
 class MemberRegistrationForm(MemberFormMixin, UserCreationForm):
@@ -209,7 +259,12 @@ class MemberUpdateForm(MemberFormMixin, UserChangeForm):
     self.is_profile_form = kwargs.pop("is_profile", False)
     super().__init__(*args, **kwargs)
     self.initialize_fields(*args, **kwargs)
-    self.init_privacy_field()
+    # privacy consent belongs to the member themself: only ask on profile forms (own account),
+    # never when an admin creates or edits another member
+    if self.is_profile_form:
+      self.init_privacy_field()
+    else:
+      del self.fields["privacy_consent"]
     # restrict deathdate to admins (platform superuser or tenant admin)
     if self.user and self.instance.is_active and not (self.user.is_superuser or getattr(self.user, "is_tenant_admin", False)):
       if "deathdate" in self.fields:

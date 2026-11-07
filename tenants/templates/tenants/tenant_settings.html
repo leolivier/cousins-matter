@@ -7,7 +7,7 @@
 	<p class="has-text-centered is-size-7">
 		{% translate "Values left equal to the global defaults are not stored: a global change will still apply to your family." %}
 	</p>
-	<form method="POST">
+	<form method="POST" enctype="multipart/form-data">
 		{% csrf_token %}
 		<fieldset class="container">
 			{{ form|crispy }}

@@ -187,11 +187,18 @@ def get_valid_manager(default_manager: Member, row_data: MemberImportData, manag
 def handle_no_manager_case(context: ImportContext, row_data: MemberImportData):
   if row_data.current_member.is_active:
     return
-  if context.activate_users:
+  if context.activate_users and row_data.current_member.email:
     row_data.current_member.is_active = True
     row_data.current_member.member_manager = None
     row_data.set_updated()
-  elif row_data.current_member.member_manager:
+    return
+  if context.activate_users:
+    # activation requires an email (member_active_needs_email constraint):
+    # keep the member managed instead
+    row_data.warnings.append(
+      _("Member %(member)s has no email and cannot be activated.") % {"member": row_data.current_member.full_name}
+    )
+  if row_data.current_member.member_manager:
     row_data.warnings.append(
       _("No manager provided for member %(member)s although inactive. Keeping existing one (%(manager)s)...")
       % {

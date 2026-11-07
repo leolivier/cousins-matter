@@ -8,13 +8,48 @@ fallback, and that ``seed_tenant_pages`` gives each family its own
 copy of the predefined pages.
 """
 
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
+from django.utils.translation import get_language
 
-from pages.models import FlatPage
+from pages.forms import AdminPageForm
+from pages.models import FlatPage, visible_pages
 from pages.services import seed_tenant_pages
 from pages.tests.factories import FlatPageFactory
+from pages.templatetags.pages_tags import build_pages_tree
 from tenants.models import Tenant
 from tenants.scoping import set_current_tenant, tenant_context
+
+Member = get_user_model()
+
+_PWD = "pw-12345-Aa"
+
+
+def _make_admin(tenant, username):
+  with tenant_context(tenant):
+    return Member.objects.create_member(
+      username=username,
+      email=f"{username}@example.com",
+      password=_PWD,
+      first_name=username,
+      last_name="x",
+      is_active=True,
+      role=Member.Role.ADMIN,
+      privacy_consent=True,  # these tests exercise tenant isolation, not the consent gate
+    )
+
+
+def _leaf_pks(tree):
+  """Collect the pks of all FlatPage leaves of a nested page tree."""
+  pks = set()
+  for value in tree.values():
+    if isinstance(value, dict):
+      pks |= _leaf_pks(value)
+    else:
+      pks.add(value.pk)
+  return pks
 
 
 class PagesTenantIsolationTests(TestCase):
@@ -24,6 +59,10 @@ class PagesTenantIsolationTests(TestCase):
     cls.tenant_b = Tenant.objects.create(name="B", slug="t-pages-b")
     cls.page_a = FlatPageFactory(tenant=cls.tenant_a, url="/home/authenticated/")
     cls.page_b = FlatPageFactory(tenant=cls.tenant_b, url="/home/authenticated/")
+    cls.page_default = FlatPageFactory(tenant=Tenant.get_default(), url="/home/authenticated/")
+    cls.superuser = _make_admin(Tenant.get_default(), "pages_super")
+    cls.superuser.is_superuser = True
+    cls.superuser.save()
 
   def setUp(self):
     set_current_tenant(None)
@@ -40,6 +79,22 @@ class PagesTenantIsolationTests(TestCase):
     with tenant_context(self.tenant_b):
       self.assertNotIn(self.page_a.id, set(FlatPage.objects.values_list("id", flat=True)))
 
+  def test_no_active_tenant_falls_back_to_default_tenant(self):
+    # platform superuser / anonymous: no tenant is active so the manager is
+    # unfiltered; readers must fall back to the default tenant or the menu
+    # renders one entry per tenant and flatpage() 500s on shared URLs
+    pages = list(visible_pages())
+    self.assertIn(self.page_default.pk, {p.pk for p in pages})
+    self.assertNotIn(self.page_a.pk, {p.pk for p in pages})
+    self.assertNotIn(self.page_b.pk, {p.pk for p in pages})
+    self.assertEqual({p.tenant_id for p in pages}, {Tenant.get_default().id})
+    # the menu shows one single entry for the URL shared by the 3 tenants
+    self.assertEqual(_leaf_pks(build_pages_tree(prefix="/home")), {self.page_default.pk})
+    # and serving that shared URL to a superuser doesn't 500
+    self.client.force_login(self.superuser)
+    resp = self.client.get(self.page_default.url)
+    self.assertEqual(resp.status_code, 200)
+
   def test_same_url_in_two_tenants(self):
     # the global django_flatpage unique is gone; both rows coexist
     self.assertEqual(self.page_a.url, self.page_b.url)
@@ -49,6 +104,28 @@ class PagesTenantIsolationTests(TestCase):
     unscoped = set(FlatPage.unscoped.values_list("id", flat=True))
     self.assertIn(self.page_a.id, unscoped)
     self.assertIn(self.page_b.id, unscoped)
+
+  def _admin_form_data(self, page):
+    return {
+      "url": page.url,
+      "title": page.title,
+      "content": page.content,
+      "template_name": page.template_name,
+      "registration_required": page.registration_required,
+      "sites": [settings.SITE_ID],
+    }
+
+  def test_admin_form_update_ignores_other_tenants_copy(self):
+    # page_b (other tenant) owns the same URL on the same site: the stock
+    # FlatpageForm rejected the update with "already exists for site"
+    form = AdminPageForm(instance=self.page_a, data=self._admin_form_data(self.page_a))
+    self.assertTrue(form.is_valid(), form.errors)
+
+  def test_admin_form_still_blocks_same_tenant_duplicate(self):
+    FlatPageFactory(tenant=self.tenant_a, url=self.page_a.url)
+    form = AdminPageForm(instance=self.page_a, data=self._admin_form_data(self.page_a))
+    self.assertFalse(form.is_valid())
+    self.assertEqual([e.code for e in form.non_field_errors().as_data()], ["duplicate_url"])
 
   def test_save_without_tenant_falls_back_to_default(self):
     page = FlatPageFactory.build(tenant=None)
@@ -87,3 +164,150 @@ class PagesTenantIsolationTests(TestCase):
     seed_tenant_pages(tenant)
     self.assertEqual(FlatPage.unscoped.filter(tenant=tenant).count(), count)
     self.assertTrue(FlatPage.unscoped.filter(tenant=tenant, url="/fr/about/privacy-policy/").exists())
+
+
+class PagesViewsTenantIsolationTests(TestCase):
+  """HTTP-level isolation for the edit views.
+
+  The list views must build their queryset per request (a class-level
+  ``queryset`` attribute is frozen at import time, when no tenant is
+  active), and ``PageUpdateView`` must let a tenant admin update their
+  own pages while returning 404 on another tenant's page.
+  """
+
+  @classmethod
+  def setUpTestData(cls):
+    cls.tenant_a = Tenant.objects.create(name="VA", slug="t-pages-views-a")
+    cls.tenant_b = Tenant.objects.create(name="VB", slug="t-pages-views-b")
+    cls.admin_a = _make_admin(cls.tenant_a, "pages_admin_a")
+    with tenant_context(cls.tenant_a):
+      cls.page_a = FlatPageFactory(tenant=cls.tenant_a, url="/home/authenticated/")
+    with tenant_context(cls.tenant_b):
+      cls.page_b = FlatPageFactory(tenant=cls.tenant_b, url="/home/authenticated/")
+
+  def setUp(self):
+    set_current_tenant(None)
+
+  def tearDown(self):
+    set_current_tenant(None)
+
+  def test_list_views_scoped_to_own_tenant(self):
+    self.client.force_login(self.admin_a)
+    for url_name in ("pages-edit:edit_list", "pages-edit:tree"):
+      resp = self.client.get(reverse(url_name))
+      self.assertEqual(resp.status_code, 200)
+      shown = set(resp.context["object_list"].values_list("pk", flat=True))
+      with tenant_context(self.tenant_a):
+        own = set(FlatPage.objects.values_list("pk", flat=True))
+      self.assertEqual(shown, own)
+      self.assertNotIn(self.page_b.pk, shown)
+
+  def test_tenant_admin_updates_own_page(self):
+    self.client.force_login(self.admin_a)
+    data = {"url": self.page_a.url, "title": "Updated", "content": "<p>x</p>", "save": "true"}
+    resp = self.client.post(reverse("pages-edit:update", args=[self.page_a.pk]), data)
+    self.assertEqual(resp.status_code, 302)
+    self.page_a.refresh_from_db()
+    self.assertTrue(self.page_a.updated)
+    self.assertEqual(self.page_a.title, "Updated")
+
+  def test_tenant_admin_creates_page(self):
+    # regression: a stale pre-multi-tenant is_superuser guard in post() 403'd
+    # tenant admins here although OnlyAdminMixin lets them through
+    self.client.force_login(self.admin_a)
+    data = {"url": "/new-page/", "title": "Created", "content": "<p>x</p>", "save": "true"}
+    resp = self.client.post(reverse("pages-edit:create"), data)
+    self.assertEqual(resp.status_code, 302)
+    with tenant_context(self.tenant_a):
+      self.assertTrue(FlatPage.objects.filter(url="/new-page/").exists())
+
+  def test_tenant_admin_deletes_own_page(self):
+    self.client.force_login(self.admin_a)
+    resp = self.client.post(reverse("pages-edit:delete", args=[self.page_a.pk]))
+    # HTMX HttpResponseClientRedirect (HX-Redirect header), not a plain 302
+    self.assertEqual(resp.status_code, 200)
+    with tenant_context(self.tenant_a):
+      self.assertFalse(FlatPage.objects.filter(pk=self.page_a.pk).exists())
+
+  def test_tenant_admin_cannot_update_other_tenant_page(self):
+    self.client.force_login(self.admin_a)
+    data = {"url": self.page_b.url, "title": "Hijack", "content": "x", "save": "true"}
+    resp = self.client.post(reverse("pages-edit:update", args=[self.page_b.pk]), data)
+    self.assertEqual(resp.status_code, 404)
+
+
+class AnonymousPublicPagesScopingTests(TestCase):
+  """Anonymous and superuser requests are deliberately unscoped (allauth
+  must resolve users by email; platform admins see every tenant), so the
+  public flatpage lookups must scope themselves to the default tenant —
+  never serve or list another family's copy.
+
+  Regression: on the site root (include_page, navbar/footer page lists)
+  unscoped lookups served an arbitrary tenant's page, and on
+  ``/pages/<url>`` (also reachable by the fallback middleware) they
+  crashed with MultipleObjectsReturned when two tenants owned the same
+  URL.
+  """
+
+  @classmethod
+  def setUpTestData(cls):
+    cls.default = Tenant.get_default()
+    cls.other = Tenant.objects.create(name="Anon Other", slug="t-anon-other")
+    cls.superuser = Member.objects.create_member(
+      username="anon_super",
+      email="anon_super@example.com",
+      password=_PWD,
+      first_name="anon_super",
+      last_name="x",
+      is_active=True,
+      is_superuser=True,
+      privacy_consent=True,  # otherwise the consent gate (PR #521) 302s to the profile
+    )
+    cls.default_page = FlatPageFactory(
+      tenant=cls.default,
+      url="/anon-scope-test/",
+      content="<p>DEFAULT-ANON-CONTENT</p>",
+    )
+    cls.other_page = FlatPageFactory(
+      tenant=cls.other,
+      url="/anon-scope-test/",
+      content="<p>OTHER-ANON-CONTENT</p>",
+    )
+
+  def setUp(self):
+    set_current_tenant(None)
+
+  def tearDown(self):
+    set_current_tenant(None)
+
+  def test_unscoped_request_flatpage_serves_default_tenant_copy(self):
+    # anonymous users are redirected to login before reaching the view
+    # (login-required-by-default), so exercise the unscoped path with a
+    # platform superuser: TenantMiddleware leaves them tenantless, the
+    # lookups must fall back to the default tenant's copy instead of
+    # crashing on MultipleObjectsReturned (same URL in two tenants)
+    self.client.force_login(self.superuser)
+    resp = self.client.get("/pages/anon-scope-test/")
+    self.assertContains(resp, "DEFAULT-ANON-CONTENT")
+    self.assertNotContains(resp, "OTHER-ANON-CONTENT")
+
+  def test_anonymous_home_shows_default_tenant_page_content(self):
+    # both tenants own the seeded unauthenticated home page; make the
+    # other family's copy distinctive and prove the root home never
+    # serves it through include_page
+    other_home = FlatPage.unscoped.get(tenant=self.other, url=f"/{get_language()}/home/unauthenticated/")
+    other_home.content = "OTHER-ANON-HOME-CONTENT"
+    other_home.save()
+    default_home = FlatPage.unscoped.get(tenant=self.default, url=f"/{get_language()}/home/unauthenticated/")
+    resp = self.client.get("/")
+    self.assertContains(resp, default_home.content)
+    self.assertNotContains(resp, "OTHER-ANON-HOME-CONTENT")
+
+  def test_anonymous_navbar_does_not_list_other_tenant_pages(self):
+    FlatPageFactory(
+      tenant=self.other,
+      url=f"/{get_language()}/about/other-family-page/",
+      title="OTHER-FAMILY-PAGE-TITLE",
+    )
+    resp = self.client.get("/")
+    self.assertNotContains(resp, "OTHER-FAMILY-PAGE-TITLE")

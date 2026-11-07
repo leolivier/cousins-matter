@@ -19,7 +19,7 @@ class TestMemberFollower(TestFollowersMixin, MemberTestCase):
     followed.followers.add(follower)
 
     # now, followed will create a post
-    self.client.login(username=followed.username, password=followed.password)
+    self.client.login(username=followed.email, password=followed.password)
     url = reverse("forum:create")
     post_title = "a post to be followed"
     post_content = "a content of the new post"

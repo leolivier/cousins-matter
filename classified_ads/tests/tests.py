@@ -334,7 +334,7 @@ class SendMessageTestCase(ClassifiedAdBaseTestCase):
     ad = ClassifiedAd.objects.create(**self.ad)
     # create a sender and login
     sender = self.create_member(is_active=True)
-    self.client.login(username=sender.username, password=sender.password)
+    self.client.login(username=sender.email, password=sender.password)
     # send a message
     url = reverse("classified_ads:send_message", kwargs={"pk": ad.id})
     self.client.post(url, {"message": "Hello, how are you?"}, follow=True)

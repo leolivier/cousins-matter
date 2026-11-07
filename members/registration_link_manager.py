@@ -84,18 +84,26 @@ class TokenManager:
 
 class RegistrationLinkManager(TokenManager):
   @staticmethod
-  def _payload(email, tenant_id=None):
+  def _payload(email, tenant_id=None, name=None):
     """The signed string. Tenant-prefixed (``"<id>:<email>"``) when a tenant is
-    bound to the invitation, so it is covered by the HMAC and tamper-evident."""
-    return f"{tenant_id}:{email}" if tenant_id else email
+    bound to the invitation, so it is covered by the HMAC and tamper-evident.
+    The invited person's name is appended (``"<id>:<email>:<name>"``) so it
+    travels signed too. Without ``name`` the payload is byte-identical to
+    legacy 2-segment links, so in-flight links stay valid."""
+    payload = f"{tenant_id}:{email}" if tenant_id else email
+    if name:
+      payload += f":{name}"
+    return payload
 
-  def generate_link(self, request, email, tenant_id=None):
+  def generate_link(self, request, email, tenant_id=None, name=None):
     """Generates an absolute registration/invitation link for ``email``.
 
     When ``tenant_id`` is given it is bound into the signed token, so the invitee
     is created on that tenant (and the tenant cannot be swapped in the URL).
+    ``name`` (optional) is the invited person's full name, signed into the token
+    so the registration form can be prefilled with it.
     """
-    payload = self._payload(email, tenant_id)
+    payload = self._payload(email, tenant_id, name)
     token = self.make_token(payload)
     encoded_text = urlsafe_b64encode(payload.encode("utf-8")).decode("utf-8")
 
@@ -109,10 +117,13 @@ class RegistrationLinkManager(TokenManager):
     return request.build_absolute_uri(link)
 
   def decrypt_link(self, encoded_email, encoded_token):
-    """Verifies the token and returns ``(tenant_id, email)``.
+    """Verifies the token and returns ``(tenant_id, email, name)``.
 
-    ``tenant_id`` is ``None`` for links that carry no tenant. On any failure
-    (bad base64, missing data, invalid token) returns ``(None, None)``.
+    ``tenant_id`` is ``None`` for links that carry no tenant; ``name`` is
+    ``None`` for legacy links without it. Emails never contain ``:`` (RFC),
+    so ``email:name`` splits on the first colon while names may contain one.
+    On any failure (bad base64, missing data, invalid token) returns
+    ``(None, None, None)``.
     """
     logger.debug(f"\n{'~' * 40}\nDecoding the link {encoded_email}/{encoded_token}\n{'~' * 40}\n")
     try:
@@ -122,19 +133,23 @@ class RegistrationLinkManager(TokenManager):
     decoded_token = encoded_token
 
     if payload and decoded_token and self.check_token(payload, decoded_token):
-      # optional tenant prefix "<int>:<email>"
+      # optional tenant prefix "<int>:<email>[:<name>]"
+      tenant_id = None
+      rest = payload
       if ":" in payload:
-        head, rest = payload.split(":", 1)
+        head, tail = payload.split(":", 1)
         if head.isdigit():
-          return int(head), rest
-      return None, payload
+          tenant_id = int(head)
+          rest = tail
+      email, _, name = rest.partition(":")
+      return tenant_id, email, name or None
 
     logger.error(f"\n{'~' * 40}\nError occurred in decoding the link!\n{'~' * 40}\n")
-    return None, None
+    return None, None, None
 
-  def check_invitation(self, email, tenant_id, token):
+  def check_invitation(self, email, tenant_id, token, name=None):
     """Validate an ``(email, tenant_id, token)`` triple (e.g. stored in session).
 
-    Used by the social-login adapter, which keeps the three pieces separately.
+    Used by the social-login adapter, which keeps the pieces separately.
     """
-    return bool(token and self.check_token(self._payload(email, tenant_id), token))
+    return bool(token and self.check_token(self._payload(email, tenant_id, name), token))

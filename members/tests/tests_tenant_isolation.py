@@ -39,6 +39,7 @@ def _make_member(tenant, username, *, role=Member.Role.MEMBER, is_active=True):
       last_name="x",
       is_active=is_active,
       role=role,
+      privacy_consent=True,  # these tests exercise tenant isolation, not the consent gate
     )
 
 

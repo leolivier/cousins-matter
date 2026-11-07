@@ -21,12 +21,12 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
     }
     response = self.client.post(reverse("pages-edit:create"), page_data)
     self.assertEqual(response.status_code, 403)
-    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
+    self.client.login(username=self.superuser.email, password=self.superuser.password)  # only superuser can create pages
     response = self.client.post(reverse("pages-edit:create"), page_data, follow=True)
     self.assertEqual(response.status_code, 200)
     page = FlatPage.objects.get(url=page_data["url"])
     self.assertIsNotNone(page)
-    self.client.login(username=self.member.username, password=self.member.password)  # now log back as a normal user
+    self.client.login(username=self.member.email, password=self.member.password)  # now log back as a normal user
     page_data = {
       "url": settings.MENU_PAGE_URL_PREFIX + "/another-title33333/",
       "title": "another title",
@@ -40,7 +40,7 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
   # disable navbar cache for this test
   @override_settings(CACHES={"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"}})
   def test_display_page_menu(self):
-    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
+    self.client.login(username=self.superuser.email, password=self.superuser.password)  # only superuser can create pages
     page_list_data = [
       {
         "url": settings.MENU_PAGE_URL_PREFIX + "/1rst-title/",
@@ -99,7 +99,7 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
     )
 
   def test_display_bad_page_menu(self):
-    self.client.login(username=self.superuser.username, password=self.superuser.password)  # only superuser can create pages
+    self.client.login(username=self.superuser.email, password=self.superuser.password)  # only superuser can create pages
     bad_page_data = {
       # url doesn't start with settings.MENU_PAGE_URL_PREFIX=>won't appear in the navbar
       "url": "/foo/1rst-title/",

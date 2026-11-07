@@ -28,7 +28,7 @@ class RecordingLayer(InMemoryChannelLayer):
 
 class EnvCheckAccessTests(MemberTestCase):
   def _login_as_superuser(self):
-    self.assertTrue(self.client.login(username=self.superuser.username, password=self.superuser.password))
+    self.assertTrue(self.client.login(username=self.superuser.email, password=self.superuser.password))
 
   def test_superuser_gets_page(self):
     self._login_as_superuser()
@@ -56,7 +56,7 @@ class EnvCheckAccessTests(MemberTestCase):
 class EnvCheckEmailTests(MemberTestCase):
   def setUp(self):
     super().setUp()
-    self.assertTrue(self.client.login(username=self.superuser.username, password=self.superuser.password))
+    self.assertTrue(self.client.login(username=self.superuser.email, password=self.superuser.password))
 
   def test_send_test_email(self):
     resp = self.client.post(reverse(ENV_CHECK_URL_NAME), {"action": "send_test_email"})

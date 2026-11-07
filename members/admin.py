@@ -55,7 +55,7 @@ class FamilyAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-  list_display = ["number_and_street", "city", "zip_code", "country"]
+  list_display = ["country", "city", "zip_code", "number_and_street"]
   search_fields = ["number_and_street", "city", "zip_code", "country"]
   list_filter = ["country", "city"]
 

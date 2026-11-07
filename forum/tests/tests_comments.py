@@ -17,7 +17,7 @@ class CommentCreateTestCase(ForumTestCase):
     """Tests adding a comment to a forum message."""
     # login as a new member
     new_member = self.create_member(is_active=True)
-    self.client.login(username=new_member.username, password=new_member.password)
+    self.client.login(username=new_member.email, password=new_member.password)
     url = reverse("forum:add_comment", args=[self.message.id])
     content = "a wonderful comment"
     response = self.client.post(url, {"content": content}, follow=True)
@@ -82,7 +82,7 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
     self.assertEqual(self.post.first_message.author, original_poster)
 
     follower = self.create_member(is_active=True)
-    self.client.login(username=follower.username, password=follower.password)
+    self.client.login(username=follower.email, password=follower.password)
     # follower follows the post
     url = reverse("forum:toggle_follow", args=[self.post.id])
     response = self.client.post(url, follow=True)
@@ -92,7 +92,7 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
 
     # create yet another member who will post a comment to the first message of the post
     member = self.create_member(is_active=True)
-    self.client.login(username=member.username, password=member.password)
+    self.client.login(username=member.email, password=member.password)
     # poster posts a comment on the first message to the post
     url = reverse("forum:add_comment", args=[self.post.first_message.id])
     comment_msg_content = "a comment"
@@ -112,4 +112,4 @@ class TestFollower(TestFollowersMixin, ForumTestCase):
       created_content=comment_msg_content,
     )
     # login back as self.member
-    self.client.login(username=self.member.username, password=self.member.password)
+    self.client.login(username=self.member.email, password=self.member.password)

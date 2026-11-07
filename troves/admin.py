@@ -6,9 +6,9 @@ from .models import Trove
 
 @admin.register(Trove)
 class TroveAdmin(admin.ModelAdmin):
-  list_display = ["title", "category", "owner", "picture_preview"]
-  list_select_related = ["owner"]
-  list_filter = ["category", "owner"]
+  list_display = ["title", "category", "tenant", "owner", "picture_preview"]
+  list_select_related = ["tenant", "owner"]
+  list_filter = ["category", "tenant", "owner"]
   search_fields = ["title", "description"]
   readonly_fields = ["thumbnail"]
   raw_id_fields = ["owner"]

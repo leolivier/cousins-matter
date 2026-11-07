@@ -4,7 +4,7 @@ title: Pages
 description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpages, with publish/private URL conventions, menu/tree template tags and a predefined-pages import; documented in apps/pages.md
 tags: ["app", "pages"]
 status: draft
-stale_after: 2027-04-11
+stale_after: 2027-10-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-10T00:00:00Z }
 ---
 
@@ -34,7 +34,12 @@ child: the `tenant` column lives on `pages_flatpage`, the contrib
 parent table `django_flatpage` stays global). Its global `url` unique
 was dropped in `pages.0004_tenant` so every family can own
 `/home/authenticated/`; per-tenant URL uniqueness is enforced by the
-scoped `PageForm`. Each new tenant gets its own copy of the
+scoped `PageForm` (front office) and `AdminPageForm`
+(pages/forms.py), which re-implements contrib's `FlatpageForm.clean()`
+check scoped to the edited page's tenant — the stock check queries the
+global `django_flatpage` table and would reject the update because
+another tenant owns the same URL on the shared `SITE_ID` site.
+Each new tenant gets its own copy of the
 predefined pages via `pages.services.seed_tenant_pages`, called from
 the signup and `TenantCreateView` flows.
 
@@ -49,6 +54,12 @@ the signup and `TenantCreateView` flows.
 - `create_page(url, title, content)` helper: creates the page and
   attaches the current `SITE_ID` — a page not linked to a site is
   never served by the flatpages fallback.
+- Public lookups scope themselves: `pages.views.flatpage` and the
+  template tags (`include_page`, `build_pages_tree`,
+  `link_pages_starting_with`, `get_flatpages`) wrap their queries in
+  `tenant_context(current_or_default_tenant())` — anonymous and
+  superuser requests are unscoped by design, so without this they would
+  serve an arbitrary tenant's copy or crash on duplicate URLs.
 
 ## Publication workflow (URL conventions)
 
@@ -75,11 +86,15 @@ Two URL namespaces, one app (`app_name = "pages-edit"`):
 
 - Public read side: `pages-edit:tree` (`PageTreeView`) renders the
   page tree for any visitor.
-- Admin side, gated twice: views use
-  `core.mixins.OnlyAdminMixin` (superuser **or** tenant admin) and
-  the create/update/delete `post` handlers re-check
-  `request.user.is_superuser` and raise `PermissionDenied` otherwise —
-  the tightest rule in the app wins.
+- Admin side, gated by `core.mixins.OnlyAdminMixin`
+  (superuser **or** tenant admin) on every view — it is the single
+  source of truth for authorization. Create, update and delete all
+  resolve their page through the tenant-scoped manager, so a tenant
+  admin can only ever touch their own tenant's pages (another tenant's
+  pk is a 404). The list views build their queryset per request via
+  `get_queryset()` — a class-level `queryset` attribute would be frozen
+  at import time, when no tenant is active, and leak other tenants'
+  pages.
   - `edit_list` (`PageAdminListView`) — flat list with sites.
   - `create` / `<pk>` — `PageForm` save wrapped in
     `transaction.atomic()` with the site association and the

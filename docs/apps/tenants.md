@@ -4,7 +4,7 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-04-10
+stale_after: 2027-10-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -87,6 +87,12 @@ activates it (`set_current_tenant`, `request.tenant`):
 - anonymous requests stay unscoped so allauth can resolve a user by email
   before any tenant is known.
 
+`current_or_default_tenant()` covers the flip side: public page renders
+(`pages.views.flatpage`, the `pages` template tags) scope themselves to
+the active tenant, or to the default one when none is active — without
+it, an anonymous render would serve an arbitrary tenant's page copy (or
+crash on `MultipleObjectsReturned` when two tenants own the same URL).
+
 The `finally` block always `reset_rls()` and restores the previous
 thread-local tenant, so a pooled connection never carries a stale tenant or
 bypass flag into the next request.
@@ -159,7 +165,15 @@ tenants through the shared cache.
   (`SIGNUP_THROTTLE_LIMIT` submissions per `SIGNUP_THROTTLE_SECONDS`).
 - `settings/` — `TenantSettingsUpdateView` (tenants/views/views_settings.py):
   form over `TENANT_SETTINGS_SPEC`; restricted to platform superusers and
-  tenant admins (`PermissionDenied` otherwise).
+  tenant admins (`PermissionDenied` otherwise). `site_logo` is an upload
+  field (`ImageField` + `ClearableFileInput`): the file is stored under
+  `PUBLIC_MEDIA_ROOT/logos/<tenant slug><ext>` and the override keeps a
+  `PUBLIC_MEDIA_URL` string, so the navbar, context processor and the
+  directory PDF (`members/services/directory.py`) all resolve it; the clear
+  checkbox drops the override and file, falling back to the global
+  `SITE_LOGO`. POST is multipart; only delta overrides are persisted by
+  `save()` (an untouched logo field returns the effective value, never
+  `None`).
 - list / `create/` / `<slug>/toggle-active/` / `<slug>/delete/` —
   `TenantListView`, `TenantCreateView`, `TenantToggleActiveView`,
   `TenantDeleteView` (tenants/views/views_manage.py): platform-superuser only
@@ -179,7 +193,11 @@ the tenant-scoped unauthenticated home: the same public home page as `/`
 (core `HomeView` → unauthenticated flatpage + navbar with the Sign in link and
 the family's "Request invitation" link), with the family's branding applied
 (`request.tenant`, resolved with `resolve_join_tenant`, 404 on unknown or
-inactive slugs). Authenticated users are redirected to the site home and POST
+inactive slugs). The wrapped `HomeView` TemplateResponse is rendered
+*synchronously inside the view's `tenant_context` block*: deferred rendering
+would run outside it, where the thread-local tenant is unset for anonymous
+requests and `include_page` lookups would serve an arbitrary tenant's copy of
+the flatpage. Authenticated users are redirected to the site home and POST
 is not served (405) — signing in happens through the Sign in link.
 `/<slug>/join/` (`tenant-join`) is the matching join-request form served by
 `TenantJoinRequestView` (members/views/views_registration.py). Both routes are

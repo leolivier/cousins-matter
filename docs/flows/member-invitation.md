@@ -4,7 +4,7 @@ title: Member Invitation
 description: End-to-end invitation flow — who may invite, the signed registration link, the invitee's registration, email verification and activation
 tags: ["flow", "members"]
 status: draft
-stale_after: 2027-03-05
+stale_after: 2027-10-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T11:39:00Z }
 ---
 
@@ -36,11 +36,14 @@ end. The moving parts (Member model, tenant scoping, forms) are described in
    already exists"). No DB write on rejection.
 4. **Signed link generation.**
    `members/registration_link_manager.py: RegistrationLinkManager.generate_link`
-   builds the payload `"<tenant_id>:<email>"` (tenant-prefixed so the target
-   tenant is covered by the HMAC and cannot be swapped in the URL), signs it
-   with `TokenManager.make_token` (salted HMAC over `SECRET_KEY` + base36
-   timestamp), base64-encodes the payload, and returns the absolute URL
-   `/members/register/<encoded_email>/<token>`.
+   builds the payload `"<tenant_id>:<email>:<name>"` — tenant-prefixed so the
+   target tenant is covered by the HMAC and cannot be swapped in the URL, and
+   suffixed with the invited person's name so the registration form can be
+   pre-filled from a tamper-proof value. Without a name the payload is
+   byte-identical to legacy 2-segment links, so in-flight invitations stay
+   valid. It signs it with `TokenManager.make_token` (salted HMAC over
+   `SECRET_KEY` + base36 timestamp), base64-encodes the payload, and returns
+   the absolute URL `/members/register/<encoded_email>/<token>`.
 5. **Invitation email.** The view renders
    `members/email/registration_invite_email.html` and `send_mail`s it to the
    invitee from `settings.DEFAULT_FROM_EMAIL`. **Side effect:** if the inviter
@@ -51,23 +54,32 @@ end. The moving parts (Member model, tenant scoping, forms) are described in
 6. **Invitee opens the link.** `GET /members/register/<encoded>/<token>` →
    `members/views/views_registration.py: RegistrationCheckingView.get` →
    `check_before_register` →
-   `RegistrationLinkManager.decrypt_link` (base64-decode + `check_token`).
-   On success the view stores `invitation_token`, `invitation_email` and
-   `invitation_tenant_id` in the session (reused by the OAuth flow, see
-   [OAuth Login](/flows/oauth-login.md)) and renders
-   `MemberRegistrationForm` + address/family forms.
+   `RegistrationLinkManager.decrypt_link` (base64-decode + `check_token`,
+   returns `(tenant_id, email, name)`). On success the view stores
+   `invitation_token`, `invitation_email`, `invitation_tenant_id` and
+   `invitation_name` in the session (reused by the OAuth flow, see
+   [OAuth Login](/flows/oauth-login.md)) and renders `MemberRegistrationForm`
+   + address/family forms, **pre-filled** with the invitation's email and the
+   invitee's name (first word → first name, rest → last name).
 7. **Registration submit.** `RegistrationCheckingView.post` re-checks the
    link, then — inside `tenants/scoping.py: tenant_context(<invitation
    tenant>)`, because the request is anonymous and no middleware tenant
-   exists — calls `verify_email.email_handler: send_verification_email`,
-   which saves the new `Member` **with `is_active=False`** and emails a
-   verification link. **Side effects:** Member row created on the invitation's
-   tenant (subject to the `member_tenant_username_uniq` uniqueness on
-   `(tenant, username)`), one verification email, session keys set.
-8. **Email verification / activation.** Clicking the verification email link
-   flips `is_active=True` (handled by the `verify_email` package). As a
-   fallback, a manager can activate the member manually through
-   `members/views/views_member.py: activate_member`
+   exists — branches on the submitted email:
+   - **Unchanged from the invitation** (the default: the form arrives
+     pre-filled): the invitee proved control of that mailbox by opening the
+     signed link, so the new `Member` is saved **directly with
+     `is_active=True`** and *no* verification email is sent; the flash reads
+     *"Hello <username>, your account is now active! You can now sign in."*
+   - **Changed** (invitee typed a different address): the old flow applies —
+     `verify_email.email_handler: send_verification_email` saves the member
+     **with `is_active=False`** and emails a verification link.
+   **Side effects:** Member row created on the invitation's tenant (subject
+   to the `member_tenant_username_uniq` uniqueness on `(tenant, username)`),
+   0 or 1 verification email, session keys set.
+8. **Email verification / activation (email-changed path only).** Clicking
+   the verification email link flips `is_active=True` (handled by the
+   `verify_email` package). As a fallback, a manager can activate the member
+   manually through `members/views/views_member.py: activate_member`
    (`/members/<username>/activate/`). End state: an active member who can log
    in by email (`ACCOUNT_LOGIN_METHODS = {"email"}`).
 
@@ -93,6 +105,11 @@ the invite URL).
   active. Please contact <manager> to activate your account" (manager =
   `Member.member_manager`).
 - Inviting without the rights: 403.
+- Logging in with valid credentials while the account is still inactive:
+  "This account is not yet active. Please use the invitation link sent to
+  you by email" (`members/forms.py: MemberAuthenticationForm`) instead of
+  the generic "invalid credentials"; a wrong password still gets the generic
+  message (no user-enumeration leak).
 - Duplicate email at invitation time: error message, no email sent.
 - Emails here are plain synchronous `django.core.mail.send_mail` calls (not
   Django-Q2 tasks — unlike follower notifications): a broken SMTP config

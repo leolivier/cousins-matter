@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:56+0200\n"
+"POT-Creation-Date: 2026-10-18 16:45+0200\n"
 "PO-Revision-Date: 2026-09-07 15:31+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Français <LL@li.org>\n"
@@ -174,8 +174,8 @@ msgstr ""
 "Si renseigné, une invitation à administrer cette famille sera envoyée à "
 "cette adresse."
 
-#: templates/tenants/tenant_list.html:10 views/views_manage.py:58
-#: views/views_manage.py:63
+#: templates/tenants/tenant_list.html:10 views/views_manage.py:57
+#: views/views_manage.py:62
 msgid "Create a family"
 msgstr "Créer une famille"
 
@@ -247,123 +247,127 @@ msgstr ""
 msgid "Save"
 msgstr "Enregistrer"
 
-#: views/views_manage.py:40
+#: views/views_manage.py:39
 msgid "Only platform administrators can manage families."
 msgstr "Seuls les administrateurs de la plateforme peuvent gérer les familles."
 
-#: views/views_manage.py:49
+#: views/views_manage.py:48
 msgid "Families"
 msgstr "Familles"
 
-#: views/views_manage.py:69
+#: views/views_manage.py:66
 #, python-format
 msgid "Family %(name)s created."
 msgstr "Famille %(name)s créée."
 
-#: views/views_manage.py:74
+#: views/views_manage.py:71
 msgid "A member with this email already exists; invitation not sent."
 msgstr "Un membre avec cet e-mail existe déjà ; invitation non envoyée."
 
-#: views/views_manage.py:96
+#: views/views_manage.py:93
 #, python-format
 msgid "You are invited to administer the family %(name)s"
 msgstr "Tu es invité.e à administrer la famille %(name)s"
 
-#: views/views_manage.py:102
+#: views/views_manage.py:99
 #, python-format
 msgid "Invitation sent to %(email)s."
 msgstr "Invitation envoyée à %(email)s."
 
-#: views/views_manage.py:112
+#: views/views_manage.py:109
 msgid "The system family cannot be deactivated."
 msgstr "La famille système ne peut pas être désactivée."
 
-#: views/views_manage.py:117
+#: views/views_manage.py:114
 #, python-format
 msgid "Family %(name)s reactivated."
 msgstr "Famille %(name)s réactivée."
 
-#: views/views_manage.py:119
+#: views/views_manage.py:116
 #, python-format
 msgid "Family %(name)s deactivated."
 msgstr "Famille %(name)s désactivée."
 
-#: views/views_manage.py:136
+#: views/views_manage.py:133
 msgid "Confirmation did not match the family identifier. Aborting."
 msgstr ""
 "La confirmation ne correspond pas à l'identifiant de la famille. Abandon."
 
-#: views/views_manage.py:144
+#: views/views_manage.py:141
 #, python-format
 msgid "Family %(name)s permanently deleted."
 msgstr "Famille %(name)s définitivement supprimée."
 
-#: views/views_settings.py:29
+#: views/views_settings.py:61
 msgid "Family site name"
 msgstr "Nom du site de la famille"
 
-#: views/views_settings.py:30
-msgid "Site logo (static/media path)"
-msgstr "Logo du site (chemin static/media)"
+#: views/views_settings.py:63
+msgid "Site logo"
+msgstr "Logo du site"
 
-#: views/views_settings.py:31
+#: views/views_settings.py:65
+msgid "JPEG/PNG image up to 0.5MB. Check the box to reset the default logo."
+msgstr "Image JPEG/PNG de 0,5 Mo maximum. Cochez la case pour rétablir le logo par défaut."
+
+#: views/views_settings.py:68
 msgid "Copyright line"
 msgstr "Ligne de copyright"
 
-#: views/views_settings.py:32
+#: views/views_settings.py:69
 msgid "Footer text"
 msgstr "Texte du pied de page"
 
-#: views/views_settings.py:33
+#: views/views_settings.py:70
 msgid "PDF page size"
 msgstr "Format des pages PDF"
 
-#: views/views_settings.py:34
+#: views/views_settings.py:71
 msgid "Dark mode by default"
 msgstr "Mode sombre par défaut"
 
-#: views/views_settings.py:35
+#: views/views_settings.py:72
 msgid "Language"
 msgstr "Langue"
 
-#: views/views_settings.py:36
+#: views/views_settings.py:73
 msgid "Time zone (IANA, e.g. Europe/Paris)"
 msgstr "Fuseau horaire (IANA, ex. Europe/Paris)"
 
-#: views/views_settings.py:37
+#: views/views_settings.py:74
 msgid "Birthday lookahead (days)"
 msgstr "Anticipation des anniversaires (jours)"
 
-#: views/views_settings.py:38
+#: views/views_settings.py:75
 msgid "Members can create members"
 msgstr "Les membres peuvent créer des membres"
 
-#: views/views_settings.py:39
+#: views/views_settings.py:76
 msgid "Members can invite members"
 msgstr "Les membres peuvent inviter des membres"
 
-#: views/views_settings.py:41
+#: views/views_settings.py:78
 msgid "Genealogy chart root member id (optional)"
 msgstr "Id du membre racine de l'arbre généalogique (optionnel)"
 
-#: views/views_settings.py:60
+#: views/views_settings.py:99
 msgid "This member does not belong to your family."
 msgstr "Ce membre n'appartient pas à ta famille."
 
-#: views/views_settings.py:70
+#: views/views_settings.py:109
 msgid "Unknown time zone."
 msgstr "Fuseau horaire inconnu."
 
-#: views/views_settings.py:132
+#: views/views_settings.py:203
 msgid "Family settings"
 msgstr "Paramètres de la famille"
 
-#: views/views_settings.py:146
+#: views/views_settings.py:217
 msgid "Only family administrators can edit family settings."
 msgstr ""
 "Seuls les administrateurs de la famille peuvent modifier ses paramètres."
 
-#: views/views_settings.py:159
+#: views/views_settings.py:230
 msgid "Family settings updated."
 msgstr "Paramètres de la famille mis à jour."
 
@@ -386,3 +390,6 @@ msgid ""
 msgstr ""
 "Ta famille a été créée ! Tu vas maintenant recevoir un e-mail pour vérifier "
 "ton adresse. Clique sur le lien dans le message pour terminer l'inscription."
+
+#~ msgid "Site logo (static/media path)"
+#~ msgstr "Logo du site (chemin static/media)"

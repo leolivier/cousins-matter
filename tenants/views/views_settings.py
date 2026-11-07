@@ -5,13 +5,19 @@ the deltas vs the global defaults so a later global flip still propagates to
 families that never overrode a key.
 """
 
+import os
+
 from django import forms
 from django.conf import settings as django_settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.core.files.storage import default_storage
 from django.shortcuts import get_object_or_404, redirect, render
+from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
+
+from core.utils import check_file_size
 
 from . import multi_tenant_required
 from tenants.settings_overrides import TENANT_SETTINGS_SPEC
@@ -21,13 +27,46 @@ _BOOL_KEYS = {"dark_mode", "allow_members_to_create_members", "allow_members_to_
 # Keys accepting an empty value (stored as None)
 _NULLABLE_KEYS = {"site_copyright", "site_footer", "family_chart_root_person_id"}
 _PDF_SIZES = ("A4", "letter")
+# tenant site logos live under PUBLIC_MEDIA_ROOT/logos/<tenant slug><ext>
+_LOGO_DIR = "logos"
+# ponytail: 512KB fixed; move to env.int("SITE_LOGO_MAX_SIZE") in base.py if a family ever needs more
+_LOGO_MAX_SIZE = 512 * 1024
+
+
+class _LogoValue:
+  """Wraps a site_logo string so ``ClearableFileInput`` shows its preview + clear checkbox.
+
+  ``ClearableFileInput`` only renders the "currently / change / clear" UI when the
+  initial value exposes a ``.url``; ``site_logo`` itself is a plain string (static
+  path or public-media URL), so we bridge the two.
+  """
+
+  def __init__(self, value):
+    self.value = value or ""
+
+  @property
+  def url(self):
+    value = self.value
+    if not value:
+      return ""
+    if value.startswith((django_settings.PUBLIC_MEDIA_URL, "http://", "https://", "/")):
+      return value
+    return static(value)
+
+  def __str__(self):
+    return os.path.basename(self.value)
 
 
 class TenantSettingsForm(forms.Form):
   """Edit a family's overrides; generated from TENANT_SETTINGS_SPEC."""
 
   site_name = forms.CharField(label=_("Family site name"), max_length=200, required=False)
-  site_logo = forms.CharField(label=_("Site logo (static/media path)"), max_length=500, required=False)
+  site_logo = forms.ImageField(
+    label=_("Site logo"),
+    required=False,
+    help_text=_("JPEG/PNG image up to 0.5MB. Check the box to reset the default logo."),
+    widget=forms.ClearableFileInput(attrs={"accept": "image/*"}),
+  )
   site_copyright = forms.CharField(label=_("Copyright line"), max_length=500, required=False)
   site_footer = forms.CharField(label=_("Footer text"), max_length=500, required=False)
   pdf_size = forms.ChoiceField(label=_("PDF page size"), choices=[(s, s) for s in _PDF_SIZES])
@@ -48,6 +87,8 @@ class TenantSettingsForm(forms.Form):
     for key in TENANT_SETTINGS_SPEC:
       if key in self.fields:
         self.fields[key].initial = _setting_for(key, tenant)
+    # ClearableFileInput needs an initial with .url to render preview + clear checkbox
+    self.fields["site_logo"].initial = _LogoValue(_setting_for("site_logo", tenant))
 
   def clean_family_chart_root_person_id(self):
     pid = self.cleaned_data.get("family_chart_root_person_id")
@@ -69,6 +110,41 @@ class TenantSettingsForm(forms.Form):
     except Exception:
       raise forms.ValidationError(_("Unknown time zone."))
     return tz
+
+  def clean_site_logo(self):
+    value = self.cleaned_data.get("site_logo")
+    current = _setting_for("site_logo", self.tenant)
+    if value is False:
+      # clear checkbox checked: drop the file, return None so the delta loop
+      # removes the override (None is falsy but False is not in (None, ""))
+      self._delete_public_logo(current)
+      return None
+    if isinstance(value, _LogoValue) or not value:
+      # untouched field: FileField.clean handed back the initial (or None) —
+      # returning None here would make the delta loop wipe the existing override
+      return current
+    # new upload: store it through default_storage under public/logos/<slug><ext>
+    # (slug is unique per tenant so there are no cross-tenant collisions) and keep
+    # only the PUBLIC_MEDIA_URL string in the override — download_public_media
+    # serves the file back through the same storage
+    check_file_size(value, _LOGO_MAX_SIZE)
+    name = default_storage.save(f"public/{_LOGO_DIR}/{self.tenant.slug}{os.path.splitext(value.name)[1]}", value)
+    self._delete_public_logo(current, keep=name)
+    return f"{django_settings.PUBLIC_MEDIA_URL}{name.removeprefix('public/')}"
+
+  def _delete_public_logo(self, value, keep=None):
+    """Delete this tenant's uploaded logo (only files under public/logos/), never other public media."""
+    if not value or not value.startswith(django_settings.PUBLIC_MEDIA_URL):
+      return
+    name = value.removeprefix(django_settings.PUBLIC_MEDIA_URL)
+    storage_name = f"public/{name}"
+    if storage_name == keep or not name.startswith(f"{_LOGO_DIR}/"):
+      return
+    try:
+      if default_storage.exists(storage_name):
+        default_storage.delete(storage_name)
+    except OSError:
+      pass
 
   def save(self):
     """Persist only the deltas vs global defaults into TenantSettings.overrides."""
@@ -153,7 +229,7 @@ class TenantSettingsUpdateView(generic.View):
 
   def post(self, request):
     tenant = self._get_tenant(request)
-    form = TenantSettingsForm(request.POST, tenant=tenant)
+    form = TenantSettingsForm(request.POST, request.FILES, tenant=tenant)
     if form.is_valid():
       form.save()
       messages.success(request, _("Family settings updated."))

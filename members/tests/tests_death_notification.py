@@ -17,7 +17,7 @@ class DeathNotificationTests(MemberTestCase):
     self.assertNotContains(response, 'name="is_dead"')
 
   def test_deathdate_field_present_for_admin(self):
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     # Admin editing other_member
     response = self.client.get(reverse("members:member_edit", args=[self.other_member.username]), follow=True)
     self.assertContains(response, 'name="deathdate"')
@@ -50,7 +50,7 @@ class DeathNotificationTests(MemberTestCase):
     response = self.client.get(reverse("members:detail", args=[self.other_member.username]))
     self.assertContains(response, 'hx-get="/members/' + str(self.other_member.username) + '/notify-death"')
 
-    self.client.login(username=self.superuser.username, password=self.superuser.password)
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     response = self.client.get(reverse("members:detail", args=[self.other_member.username]))
     self.assertNotContains(response, 'hx-get="/members/' + str(self.other_member.username) + '/notify-death"')
 

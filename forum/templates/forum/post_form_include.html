@@ -16,7 +16,7 @@
 					<button type="submit" class="button is-dark">
 						{%icon "send" %} <span>{%translate "Send" %}</span>
 					</button>
-					<a type="reset" class="button" aria-label="close" 
+					<a type="reset" class="button" aria-label="close"
 						href="{%if post%}{%url 'forum:display' post.id %}{%else%}{%url 'forum:list'%}{%endif%}">
 						{%icon "cancel" %} <span>{%translate "Cancel" %}</span>
 					</a>

@@ -4,12 +4,12 @@
 error() {
 	code=$1
 	shift
-  echo "Error: $@" >&2
-  exit $code
+  echo "Error: $*" >&2
+  exit "$code"
 }
 get_key() {
 	key=$1
-	cat .env | grep -e "^${key}=" | cut -d= -f2 | sed -E 's/^"([^"]*)".*$/&1/;'"s/^'([^']*)'.*$/\1/"
+	grep -e "^${key}=" .env | cut -d= -f2 | sed -E 's/^"([^"]*)".*$/&1/;'"s/^'([^']*)'.*$/\1/"
 }
 
 set -e

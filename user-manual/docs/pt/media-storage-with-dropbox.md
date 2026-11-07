@@ -3,7 +3,7 @@
 
 # Armazenamento dos média
 
-## AVISOS 
+## AVISOS
 
 * __Esta é atualmente uma funcionalidade <span class="blinking-text"><u>BETA</u></span>!__
 * __Estas configurações são mais complexas e estão <u>reservadas aos utilizadores avançados</u>.__
@@ -17,7 +17,7 @@ Isto é muito simples, mas tem alguns inconvenientes, sobretudo em termos de seg
 
 O Cousins Matter também suporta uma série de outros armazenamentos de média através do pacote 'django-storages'. Para configurar tal armazenamento, basta definir duas novas variáveis no seu ficheiro .env: MEDIA_STORAGE e MEDIA_STORAGE_OPTIONS.
 
-Os armazenamentos de média suportados pelo django-storages, na altura em que esta página foi escrita, são: 
+Os armazenamentos de média suportados pelo django-storages, na altura em que esta página foi escrita, são:
 
 * Amazon S3
 * Apache Libcloud
@@ -82,7 +82,7 @@ MEDIA_STORAGE_OPTIONS='{"app_key":"<your app key>","app_secret":"<your app secre
 
 **Nota:** Isto não é necessário para todos os backends compatíveis com S3, consulte acima [Outros armazenamentos compatíveis com S3](#other-s3-compatible-storages)
 
-Primeiro, precisa de instalar um pacote python específico que implemente a ligação ao seu backend. 
+Primeiro, precisa de instalar um pacote python específico que implemente a ligação ao seu backend.
 
 Consulte a página relativa ao seu backend na [documentação do django-storages](https://django-storages.readthedocs.io/en/latest/index.html) para saber o nome do seu pacote, que deverá aparecer como `pip install django-storages[<backend name>]`. Guarde o valor de `<backend name>`, pois irá utilizá-lo para o substituir abaixo.
 

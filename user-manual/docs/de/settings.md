@@ -174,15 +174,15 @@ Siehe [OAuth-Authentifizierung](oauth-authentication.md) für detaillierte Konfi
 
 	`ALLOWED_HOSTS=127.0.0.1,localhost,my.cousins-matter.com,165.157.221.171`
 
-* `CORS_ALLOWED_ORIGINS`: Durch Kommas getrennte Liste der Hosts. Standard ist leer. 
+* `CORS_ALLOWED_ORIGINS`: Durch Kommas getrennte Liste der Hosts. Standard ist leer.
 
 	__WARNUNG!__ Wenn Ihr Protokoll Fehler wie den folgenden zeigt
 
 	`Forbidden (Origin checking failed - https://my.cousins-matter.com/ does not match any trusted origins.): /members/login/`
 
-	sollten Sie `CORS_ALLOWED_ORIGINS=<your full domain>` (z. B. https://my.cousins-matter.com) in der `.env`-Datei setzen, 
+	sollten Sie `CORS_ALLOWED_ORIGINS=<your full domain>` (z. B. https://my.cousins-matter.com) in der `.env`-Datei setzen,
 
-	__Verwenden Sie nicht die im Fehler gezeigte Python-Syntax!__. 
+	__Verwenden Sie nicht die im Fehler gezeigte Python-Syntax!__.
 
 	Wenn Sie mehrere Hosts haben, listen Sie diese durch Kommas getrennt auf, z. B.
 

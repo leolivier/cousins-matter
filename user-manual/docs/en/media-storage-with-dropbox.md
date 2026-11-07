@@ -3,7 +3,7 @@
 
 # Media Storage
 
-## WARNINGS 
+## WARNINGS
 
 * __This is currently a <span class="blinking-text"><u>BETA</u></span> feature!__
 * __These settings are more complex and are <u>reserved for advanced users</u>.__
@@ -17,7 +17,7 @@ This is very simple but it has some drawbacks, especially on the security side a
 
 Cousins Matter also supports a bunch of other media storages by using the 'django-storages' package. To setup such a storage, you just need to define two new variables in your .env file: MEDIA_STORAGE and MEDIA_STORAGE_OPTIONS.
 
-The media storages supported by django-storages at the time of writing this page are: 
+The media storages supported by django-storages at the time of writing this page are:
 
 * Amazon S3
 * Apache Libcloud
@@ -82,7 +82,7 @@ MEDIA_STORAGE_OPTIONS='{"app_key":"<your app key>","app_secret":"<your app secre
 
 **Note:** This is not needed for all S3 compatible backends, see above [Other S3 compatible storages](#other-s3-compatible-storages)
 
-First, you need to install a specific python package that implement the link to your backend. 
+First, you need to install a specific python package that implement the link to your backend.
 
 See the page related to your backend in the [django-storages documentation](https://django-storages.readthedocs.io/en/latest/index.html) to see the name of your package which should appear like `pip install django-storages[<backend name>]`. Remember the value of `<backend name>`, you will use it to replace it below.
 

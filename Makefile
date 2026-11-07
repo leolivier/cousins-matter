@@ -104,10 +104,8 @@ minify:
 	css-html-js-minify $$app
 
 check:
-	ruff format -q .
-	ruff check . --fix
+	pre-commit run --all-files
 	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
-	bandit -r . -c pyproject.toml -f txt -o bandit.out
 	pip-audit .
 	ENVIRONMENT="test" ./manage.py check_okf docs
 

@@ -81,14 +81,14 @@
 
 * Los miembros conectados pueden chatear en directo con otros miembros conectados
 * Cousins Matter gestiona tantas salas de chat como se deseen
-* Los miembros pueden crear salas de chat privadas y seleccionar a los miembros que pueden participar en ellas. 
+* Los miembros pueden crear salas de chat privadas y seleccionar a los miembros que pueden participar en ellas.
 	El creador de la sala se convierte en administrador de la misma y puede añadir a otros miembros y nombrar administradores entre ellos.
 	Los administradores pueden invitar a otros miembros y a otros administradores
 
 ### Páginas / CMS
 
-Funciones básicas de CMS: los administradores pueden crear páginas HTML estáticas y publicarlas en el sitio. 
-La página de inicio también puede configurarse de esta manera, así como la política de privacidad y las páginas "acerca de"... 
+Funciones básicas de CMS: los administradores pueden crear páginas HTML estáticas y publicarlas en el sitio.
+La página de inicio también puede configurarse de esta manera, así como la política de privacidad y las páginas "acerca de"...
 Las páginas públicas (las que se muestran en el menú Páginas aunque no hayas iniciado sesión) pueden ser creadas y publicadas por cualquier miembro administrador. Su URL debe empezar por '/publish/'
 Las páginas privadas (las que se muestran en el menú Páginas solo si has iniciado sesión) pueden ser creadas y publicadas por cualquier miembro administrador. Su URL debe empezar por '/private/'
 Los mensajes de administración son un tipo específico de página que se muestra a todos los miembros conectados en la parte superior del sitio. Su URL debe empezar por '/admin-message/'

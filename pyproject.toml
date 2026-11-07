@@ -139,3 +139,31 @@ docstring-code-line-length = "dynamic"
 
 [tool.pyright]
 typeCheckingMode = "off"
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = [
+    "migrations/",
+    "^\\.venv/",
+]
+
+[tool.coverage.run]
+data_file = ".coverage" # default, can be overriden in Makefile
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "core/tasks_schedules.py,scripts/*",
+    "config/*",
+    "core/settings.py",
+    "manage.py",
+    "cousinsmatter/asgi.py",
+    "cousinsmatter/wsgi.py",
+    "core/htmlvalidator.py",
+    "*/views_test.py"
+]
+
+[tool.coverage.report]
+sort = "Cover"
+skip_covered = true
+show_missing = true
+fail_under = 80

@@ -75,17 +75,11 @@ check-docs:
 test-ui:
 	ENVIRONMENT="test" ./manage.py test --tag=ui $(t) $(o)
 
-EXCLUDE_COVER = 'core/tasks_schedules.py,scripts/*,config/*,core/settings.py,manage.py,cousinsmatter/asgi.py,cousinsmatter/wsgi.py,core/htmlvalidator.py,*/views_test.py,*/migrations/*,*/tests/*'
-
 cover:
-	if [ -z "$(a)" ]; then \
-	  df=.coverage; \
-		ENVIRONMENT="test" coverage run --source="." $(co) ./manage.py test $(to); \
-	else \
-	  df=.coverage.$(a); \
-		ENVIRONMENT="test" coverage run --source="$(a)" --data-file=$(df) $(co) ./manage.py test $(to); \
-	fi; \
-	coverage report --sort=cover --skip-covered -m --fail-under=80 --omit="$(EXCLUDE_COVER)" --data-file=$(df)
+	source="$${a:-.}"; \
+	df=".coverage$${a:+.$$a}"; \
+	ENVIRONMENT="test" coverage run --source="$$source" --data-file="$$df" $(co) ./manage.py test $${a:+"$$a"} $(to); \
+	coverage report --data-file="$$df"
 
 dtest: build
 	docker compose down cousins-matter qcluster
@@ -105,7 +99,7 @@ minify:
 
 check:
 	pre-commit run --all-files
-	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
+	mypy .
 	pip-audit .
 	ENVIRONMENT="test" ./manage.py check_okf docs
 

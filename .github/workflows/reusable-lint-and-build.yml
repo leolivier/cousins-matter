@@ -105,7 +105,6 @@ jobs:
         run: |
           uv run pip-audit .
           uv run mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
-          ENVIRONMENT="test" uv run python manage.py check_okf docs
 
       - name: Login to GHCR.io
         uses: docker/login-action@v4

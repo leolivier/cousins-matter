@@ -125,6 +125,12 @@ account: the manager fills the profile, then activates it.
   cleared, no email); the edit page shows the Activate button to the manager,
   tenant admins and superusers for inactive members only.
 
+`manage.py fix_member_emails` (members/management/commands/) re-runs the
+migration 0018 data checks — duplicate case-insensitive emails across tenants,
+active members without email — and asks per record for the identity decision:
+enter an email, or deactivate the member and assign a manager. Re-run until it
+reports "Nothing to fix", then `migrate`.
+
 ## Invitations and registration links
 
 `RegistrationLinkManager` (members/registration_link_manager.py, subclass of

@@ -562,7 +562,7 @@
 }
 
 .f3-form hr {
-  border-style: solid;
+  border-style: solid; 
   border-width: thin 0 0 0;
   opacity: 0.15;
 }
@@ -640,7 +640,7 @@
   color: black;
   text-decoration: none;
   cursor: pointer;
-}
+} 
 
 .f3-popup {
   position: fixed;
@@ -682,7 +682,7 @@
   color: black;
   text-decoration: none;
   cursor: pointer;
-}
+} 
 
 
 
@@ -697,10 +697,10 @@
   outline: none;
   border-radius: 3px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
-
+  
   background-color: var(--text-color);
   color: var(--background-color);
-
+  
   transition: background-color .3s;
   font-size: 14px;
 }

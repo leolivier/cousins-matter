@@ -95,7 +95,7 @@ mkmig:
 minify:
 	app="$(a)"; \
 	if [ -z "$$app" ]; then app="."; fi; \
-	css-html-js-minify $$app
+	python scripts/dev/minify.py $$app
 
 check:
 	pre-commit run --all-files

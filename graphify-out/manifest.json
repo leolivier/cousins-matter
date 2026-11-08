@@ -552,9 +552,9 @@
     "semantic_hash": ""
   },
   "core/static/core/js/core.min.js": {
-    "mtime": 1794046749.8065352,
-    "seen": 1794046758.1103792,
-    "ast_hash": "8fa9a469dda01c3ef5a6064945d43615",
+    "mtime": 1794076004.245094,
+    "seen": 1794077634.7904105,
+    "ast_hash": "b20a4e10077ba23c337bc38f125de4ad",
     "semantic_hash": ""
   },
   "core/tasks.py": {
@@ -1062,9 +1062,9 @@
     "semantic_hash": "028437a6ef34aa8f25506e0932100db4"
   },
   "galleries/static/galleries/js/galleries.min.js": {
-    "mtime": 1794046749.821535,
-    "seen": 1794046758.1104934,
-    "ast_hash": "84405b332b0e152ee32e593029ca227f",
+    "mtime": 1794076004.2430942,
+    "seen": 1794077634.790643,
+    "ast_hash": "373cacf5f5065e42a3a31cc5d7ccb6e5",
     "semantic_hash": ""
   },
   "galleries/tasks.py": {
@@ -1122,10 +1122,10 @@
     "semantic_hash": "f7ba621f196e6246b8e5dab68331d2ac"
   },
   "galleries/tests/tests_gallery.py": {
-    "mtime": 1779730787.3750136,
-    "seen": 1788636802.8482955,
-    "ast_hash": "aa83841fcdb99ad76e44e9df318dfe33",
-    "semantic_hash": "aa83841fcdb99ad76e44e9df318dfe33"
+    "mtime": 1794050056.7618895,
+    "seen": 1794052674.859391,
+    "ast_hash": "b5e18e91e411c597ec20e4845eb78395",
+    "semantic_hash": ""
   },
   "galleries/tests/tests_photo.py": {
     "mtime": 1793982171.5517259,
@@ -2094,9 +2094,9 @@
     "semantic_hash": "1b14c2836b5429e288945a9a645a5f33"
   },
   "polls/static/polls/js/polls.min.js": {
-    "mtime": 1794046749.957535,
-    "seen": 1794046758.1107833,
-    "ast_hash": "a0284c0d3d829f14acd9af9e97a39253",
+    "mtime": 1794076004.2430942,
+    "seen": 1794077634.7911215,
+    "ast_hash": "dd50e2c57adf1af6ad80c2321f276421",
     "semantic_hash": ""
   },
   "polls/templatetags/__init__.py": {
@@ -2214,9 +2214,9 @@
     "semantic_hash": "e9a5682d1845ecd77f1fd86ecdfb8bf1"
   },
   "pyproject.toml": {
-    "mtime": 1794048288.1994007,
-    "seen": 1794048294.7425027,
-    "ast_hash": "8572ae1c7d8de8f8672d1a9c3588deba",
+    "mtime": 1794073751.2231026,
+    "seen": 1794077634.791172,
+    "ast_hash": "4a09ff6eb48c83d0b1a0c524f8f7fa6f",
     "semantic_hash": ""
   },
   "scripts/__init__.py": {
@@ -2676,9 +2676,9 @@
     "semantic_hash": ""
   },
   ".github/workflows/reusable-lint-and-build.yml": {
-    "mtime": 1794048288.16777,
-    "seen": 1794048294.7426374,
-    "ast_hash": "99b81f7f16ec7a446d2439eb6235adaa",
+    "mtime": 1794052639.6335618,
+    "seen": 1794052674.8597314,
+    "ast_hash": "a35690b3c07ca6fbec82df5d5c211b14",
     "semantic_hash": ""
   },
   ".github/workflows/reusable-test-docker-image.yml": {
@@ -2700,9 +2700,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1792314981.906763,
-    "seen": 1792345784.561464,
-    "ast_hash": "5f890ba94488ad731a9e3b1cf3a273f2",
+    "mtime": 1794056671.5258646,
+    "seen": 1794077634.7934732,
+    "ast_hash": "d45f7635a8a62184ee366ad9afe94116",
     "semantic_hash": ""
   },
   "CODE_OF_CONDUCT.md": {
@@ -4857,6 +4857,18 @@
     "mtime": 1793982171.5817258,
     "seen": 1793984681.8433676,
     "ast_hash": "6a8ca86ef82b568e2c0f635fa0fd6baf",
+    "semantic_hash": ""
+  },
+  "scripts/dev/minify.py": {
+    "mtime": 1794077623.0457172,
+    "seen": 1794077634.791186,
+    "ast_hash": "b696cbf310c4b6b0f5baf5fdcd042336",
+    "semantic_hash": ""
+  },
+  "user-manual/docs/assets/js/language-switcher.min.js": {
+    "mtime": 1794077623.3487182,
+    "seen": 1794077634.793423,
+    "ast_hash": "9030051ecbd1691ffafde1b57f5140a0",
     "semantic_hash": ""
   }
 }

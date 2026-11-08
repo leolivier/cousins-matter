@@ -30,6 +30,7 @@ urlpatterns = [
     name="validate_familyname",
   ),
   path("", views_member.MembersView.as_view(), name="members"),
+  path("managed/", views_member.ManagedMembersView.as_view(), name="managed_members"),
   path("create/", views_member.CreateManagedMemberView.as_view(), name="create"),
   path("profile/", views_member.EditProfileView.as_view(), name="profile"),
   path("search/", views_member.search_members, name="search_members"),

@@ -68,6 +68,7 @@ DJANGO_ICONS = {
   "import-members": "account-multiple-plus-outline",
   "activate-member": "account-reactivate",
   "members": "account-group-outline",
+  "managed-members": "account-multiple-outline",
   "profile": "account-box-edit-outline",
   "birthday": "cake-variant-outline",
   "birthday-variant": "cake-variant",

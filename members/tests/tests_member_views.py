@@ -141,3 +141,28 @@ class TestCreateMemberForbidden(MemberTestCase):
     data = get_new_member_data()
     response = self.client.post(reverse("members:create"), data)
     self.assertEqual(response.status_code, 403)
+
+
+class TestManagedMembersView(MemberTestCase):
+  """Tests for the "Members I Manage" page (issue 545)."""
+
+  def test_managed_members_listed(self):
+    managed = self.create_member()  # created with member_manager=self.member
+    response = self.client.get(reverse("members:managed_members"))
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, managed.get_full_name())
+
+  def test_activate_button_shown_for_inactive_managed_member(self):
+    managed = self.create_member()
+    response = self.client.get(reverse("members:managed_members"))
+    self.assertContains(response, reverse("members:activate", kwargs={"username": managed.username}))
+
+  def test_non_managed_members_not_listed(self):
+    other = self.create_member(is_active=True)  # active members have no member_manager
+    response = self.client.get(reverse("members:managed_members"))
+    self.assertNotContains(response, other.get_full_name())
+
+  def test_empty_for_member_without_managed_members(self):
+    response = self.client.get(reverse("members:managed_members"))
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, _("You don't manage any members yet."))

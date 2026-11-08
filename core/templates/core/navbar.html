@@ -159,6 +159,8 @@
 			<div class="navbar-item has-dropdown is-hoverable">
 				{%uncached_navbar_link "#" user.username "member" %}
 				<div class="navbar-dropdown is-right">
+					{% url 'members:managed_members' as managed_url%}
+					{%navbar_item managed_url _("Members I Manage") "managed-members" %}
 					{% url 'members:profile' as profile_url%}
 					{%navbar_item profile_url _("Profile") "profile" %}
 					{% url 'members:logout' as logout_url%}

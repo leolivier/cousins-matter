@@ -1,3 +1,5 @@
+from members.tests.factories import MemberFactory
+
 from .base import MembersUITestBase
 
 
@@ -97,3 +99,31 @@ class MemberDetailUITest(MembersUITestBase):
     # Django returns a 404 page with "Not Found" as title
     title = self.page.evaluate("document.title")
     self.assertIn("Not Found", title, "Non-existent member should show a 404 page")
+
+
+class ManagedMembersUITest(MembersUITestBase):
+  """UI tests for the "Members I Manage" navbar entry and page (issue 545)."""
+
+  def test_navbar_entry_opens_managed_members_page(self):
+    """The personal menu should show the "Members I Manage" entry (issue 545)."""
+    self.login_and_goto_page("members:members")
+    navbar = self.page.locator("nav.navbar")
+    entry = navbar.locator("a[href*='members/managed']")
+    self.assertTrue(entry.count() > 0, "Managed members entry should be in the navbar")
+    # the entry lives in the personal dropdown, open on hover only
+    self.page.locator("nav.navbar .navbar-link").last.hover()
+    entry.first.click()
+    self.page.wait_for_url("**/members/managed/")
+    self.assert_visible("h1.title", "Managed members page title should be visible")
+
+  def test_managed_members_page(self):
+    """The page lists logged user's managed members with an activate button."""
+    MemberFactory(first_name="Dana", last_name="Scully", is_active=False, member_manager=self.user)
+    self.login_and_goto_page("members:managed_members")
+    self.assert_visible("#managed-members-grid", "Managed members grid should be visible")
+    self.assertTrue(
+      self.page.locator("text=Dana Scully").first.is_visible(),
+      "Managed member should be listed",
+    )
+    activate_btn = self.page.locator("a[href*='/activate/']")
+    self.assertTrue(activate_btn.count() > 0, "Activate button should be shown for inactive members")

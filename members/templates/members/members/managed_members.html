@@ -1,0 +1,36 @@
+{% extends "members/base_members.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Members I Manage") %}{% endblock %}
+{% block content %}
+<div class="container mb-5">
+  <h1 class="title mx-5 has-text-centered">{% title _("Members I Manage") %}</h1>
+  {% if members %}
+    <div class="grid mx-3 is-col-min-8" id="managed-members-grid">
+      {% for member in members %}
+        <div class="cell has-text-centered my-auto">
+          <a class="button {% cycle 'is-dark' 'is-primary' 'is-link' %} button-wrap"
+             href="{% url 'members:detail' member.username %}">
+            {% if member.avatar %}
+            <figure class="image mini-avatar mr-2">
+              <img class="is-rounded" src="{{member.avatar_mini_url}}">
+            </figure>
+            {% endif %}
+            <strong>{{ member.get_full_name }}</strong>
+          </a>
+          {% if not member.is_active %}
+            <a class="button is-small" href="{% url 'members:activate' member.username %}"
+               title="{% translate 'Activate Account' %}">
+              {%icon "activate-member" %}
+              <span>{% translate "Activate Account" %}</span>
+            </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div>
+      <p>{% translate "You don't manage any members yet." %}</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

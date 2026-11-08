@@ -94,6 +94,16 @@ class MembersView(generic.ListView):
       return redirect(exc.redirect_to)
 
 
+class ManagedMembersView(generic.ListView):
+  """List the members managed by the logged-in user (issue 545)"""
+
+  template_name = "members/members/managed_members.html"
+
+  def get(self, request):
+    members = request.user.managed_members.order_by("last_name", "first_name")
+    return render(request, self.template_name, {"members": members})
+
+
 class MemberDetailView(generic.DetailView):
   model = Member
   template_name = "members/members/member_detail.html"

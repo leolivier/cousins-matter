@@ -1,5 +1,5 @@
-# Throwaway UI test: navbar collapse behavior between Bulma's 1024px
-# breakpoint and the ~1500px the menu actually needs.
+# UI regression test: navbar must stay fully reachable between Bulma's
+# 1024px breakpoint and the ~1500px the menu actually needs.
 
 from django.test import tag
 
@@ -26,12 +26,26 @@ class NavbarOverflowTest(PlaywrightTestCase):
           f"'{label}' not visible in burger menu at {width}",
         )
       self.page.screenshot(path=f"/tmp/screenshots/fix_burger_{width}.png")
-      # dropdown opens on click inside the burger panel
+      # dropdown stacks below its link and opens on click inside the panel
       self.page.locator(".navbar-end .has-dropdown .navbar-link").first.click()
       self.assertTrue(
         self.page.locator(".navbar-end .navbar-dropdown").first.is_visible(),
         f"settings dropdown should open on click at {width}",
       )
+      screenshot = self.page.locator(".navbar-end .navbar-dropdown").first.bounding_box()
+      link_box = self.page.locator(".navbar-end .has-dropdown .navbar-link").first.bounding_box()
+      self.assertIsNotNone(screenshot)
+      self.assertIsNotNone(link_box)
+      self.assertGreater(screenshot["y"], link_box["y"], f"dropdown should stack below its link at {width}")
+      # nothing overflows the viewport horizontally with the menu open
+      overflowers = self.page.evaluate(
+        """
+        () => [...document.querySelectorAll('#navMenu *')].filter(
+          (el) => el.getBoundingClientRect().right > window.innerWidth
+        ).map((el) => el.className + ' right=' + Math.round(el.getBoundingClientRect().right))
+        """
+      )
+      self.assertFalse(overflowers, f"elements overflow viewport at {width}: {overflowers}")
     # wide screen: no burger, full menu
     self.page.set_viewport_size({"width": 1700, "height": 900})
     self.page.goto(self.url("/"))

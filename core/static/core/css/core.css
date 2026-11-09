@@ -377,10 +377,27 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
    the dropdown menus open on click (see the navbar management in core.js,
    whose threshold must match). */
 @media screen and (min-width: 1024px) and (max-width: 1599.98px) {
+	.navbar-burger {
+		display: flex;
+	}
+	/* When the burger is open, stack the menu vertically like Bulma's mobile
+	   layout: above 1024px Bulma forces the menu/start/end back to flex rows,
+	   so the opened menu would still overflow off the right edge. */
 	.navbar-menu:not(.is-active) {
 		display: none;
 	}
-	.navbar-burger {
-		display: flex;
+	.navbar-menu.is-active {
+		display: block;
+	}
+	.navbar .navbar-start,
+	.navbar .navbar-end {
+		display: block;
+		margin: 0;
+	}
+	.navbar .navbar-item.has-dropdown {
+		display: block;
+	}
+	.navbar .navbar-item.has-dropdown > .navbar-dropdown {
+		position: static;
 	}
 }

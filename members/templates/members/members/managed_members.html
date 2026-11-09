@@ -42,4 +42,36 @@
     </div>
   {% endif %}
 </div>
+
+{# handlers for the "Change manager" modal (kept here, server-rendered, so CSP lets it run; see change_member_manager.html) #}
+<script nonce="{{ csp_nonce }}">
+document.addEventListener('htmx:afterSwap', function(evt) {
+  if (evt.target && evt.target.id === 'search-results') {
+    const dropdown = document.getElementById('manager-search-dropdown');
+    if (dropdown && evt.target.querySelectorAll('.dropdown-item').length > 0) {
+      dropdown.classList.add('is-active');
+    } else if (dropdown) {
+      dropdown.classList.remove('is-active');
+    }
+  }
+});
+
+{# capture phase: htmx_modal_form.html stops click propagation at the modal card, so the event never bubbles to the document #}
+document.addEventListener('click', function(event) {
+  const item = event.target.closest('.dropdown-item.manager-result');
+  if (item) {
+    event.preventDefault();
+    document.getElementById('new-manager-id').value = item.dataset.selectMemberId;
+    document.getElementById('manager-search-input').value = item.dataset.selectMemberName;
+    document.getElementById('manager-search-dropdown').classList.remove('is-active');
+    document.getElementById('change-manager-submit').disabled = false;
+    return;
+  }
+  // close the dropdown when clicking outside
+  const dropdown = document.getElementById('manager-search-dropdown');
+  if (dropdown && !dropdown.contains(event.target)) {
+    dropdown.classList.remove('is-active');
+  }
+}, true);
+</script>
 {% endblock %}

@@ -132,13 +132,15 @@ class ManagedMembersUITest(MembersUITestBase):
     """The "Change manager" command reassigns the member from the list."""
 
     managed = MemberFactory(first_name="Dana", last_name="Scully", is_active=False, member_manager=self.user)
-    new_manager = MemberFactory(first_name="Fox", last_name="Mulder", is_active=True)
+    MemberFactory(first_name="Fox", last_name="Mulder", is_active=True)  # candidate manager
     self.login_and_goto_page("members:managed_members")
     self.page.locator(f"button[hx-get*='{managed.username}/change-manager']").click()
     modal_appeared = self.page.wait_for_selector(".modal-card", timeout=5000) is not None
     self.assertTrue(modal_appeared, "Change manager modal should open")
-    self.page.select_option("select[name='new_manager']", str(new_manager.pk))
-    self.page.locator(".modal-card-foot button[type='submit']").click()
+    self.page.fill("#manager-search-input", "Mulder")
+    self.page.wait_for_selector(".dropdown-item.manager-result", timeout=5000)
+    self.page.click(".dropdown-item.manager-result")
+    self.page.locator("#change-manager-submit").click()
     self.page.wait_for_timeout(1000)
     self.assertTrue(
       self.page.locator("text=Fox Mulder").first.is_visible(),

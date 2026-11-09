@@ -176,13 +176,28 @@ class TestChangeMemberManager(MemberTestCase):
     self.managed = self.create_member()  # member_manager=self.member
     self.change_url = reverse("members:change_member_manager", kwargs={"username": self.managed.username})
 
-  def test_get_shows_manager_choice(self):
-    """The modal form offers the active members, excluding the member itself."""
-    new_manager = self.create_member(is_active=True)
+  def test_get_shows_manager_search(self):
+    """The modal offers a search-as-you-type manager picker."""
     response = self.client.get(self.change_url)
     self.assertEqual(response.status_code, 200)
-    self.assertContains(response, new_manager.get_full_name())
-    self.assertNotContains(response, f'value="{self.managed.pk}"')
+    self.assertContains(response, 'type="search"')
+    self.assertContains(response, 'name="new_manager"')
+
+  def test_search_results_offer_active_members_only(self):
+    """The search partial only shows active, non-dead members as candidates."""
+    active = self.create_member(get_new_member_data(first_name="Zoe", last_name="Auble"), is_active=True)
+    response = self.client.get(
+      reverse("members:search_members"),
+      {
+        "q": "Zoe",
+        "render_with": "members/members/manager_search_results.html",
+        "render_empty_query": "false",
+      },
+      HTTP_HX_REQUEST="true",
+    )
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, active.get_full_name())
+    self.assertNotContains(response, self.managed.get_full_name())
 
   def test_post_reassigns_member(self):
     new_manager = self.create_member(is_active=True)

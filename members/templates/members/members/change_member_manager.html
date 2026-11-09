@@ -1,5 +1,5 @@
 {%extends "core/common/htmx_modal_form.html"%}
-{%load i18n%}
+{%load i18n cm_tags%}
 {% block modal_title %}
 	{% translate "Change manager" %} - {{ member.full_name }}
 {% endblock modal_title %}
@@ -7,14 +7,34 @@
 	hx-post="{% url 'members:change_member_manager' member.username %}"
 {%endblock form_params%}
 {% block form %}
-	<div class="field">
-		<div class="control">
-			<div class="select">
-				{{ form.new_manager }}
+	{# search-as-you-type manager picker, same UX as chat add-member #}
+	<div class="dropdown full-width" id="manager-search-dropdown">
+		<div class="dropdown-trigger full-width">
+			<div class="control is-expanded has-icons-left is-relative">
+				<span class="htmx-indicator">{%icon "loading" %}</span>
+				<input class="input" type="search"
+							 name="q"
+							 placeholder="{%trans 'Search...' %}"
+							 hx-get="{% url 'members:search_members' %}"
+							 hx-vals='{"render_with": "members/members/manager_search_results.html", "render_empty_query": "false"}'
+							 hx-trigger="input[this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && this.value.length >= 3]"
+							 hx-target="#search-results"
+							 hx-indicator=".htmx-indicator"
+							 autocomplete="off"
+							 id="manager-search-input"
+							 data-min-length="3"
+							 >
+				{%icon "search" "is-small is-left"%}
+				<div class="dropdown-menu full-width" role="menu">
+					<div class="dropdown-content" id="search-results">
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
+	<input type="hidden" name="new_manager" id="new-manager-id">
 {% endblock form %}
+{% block submit_button_params %}id="change-manager-submit" disabled{% endblock %}
 {% block submit_button_text %}
 	{% trans "Change manager" %}
 {% endblock submit_button_text %}

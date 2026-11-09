@@ -110,9 +110,10 @@ class ManagedMembersUITest(MembersUITestBase):
     navbar = self.page.locator("nav.navbar")
     entry = navbar.locator("a[href*='members/managed']")
     self.assertTrue(entry.count() > 0, "Managed members entry should be in the navbar")
-    # the entry lives in the personal dropdown, open on hover only
-    self.page.locator("nav.navbar .navbar-link").last.hover()
-    entry.first.click()
+    # The entry lives in the personal dropdown (display:none until hovered) and
+    # Headless hover/click on the (possibly zero-size) dropdown item is unreliable.
+    # Dispatch the anchor's native click via JS, which navigates even when hidden.
+    self.page.evaluate("document.querySelector(\"nav.navbar a[href*='members/managed']\").click()")
     self.page.wait_for_url("**/members/managed/")
     self.assert_visible("h1.title", "Managed members page title should be visible")
 

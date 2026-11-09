@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the Troves package.
 # Olivier LEVILLAIN <olivier@levillain.eu>, 2024.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-18 14:43+0100\n"
+"POT-Creation-Date: 2026-11-09 13:26+0100\n"
 "PO-Revision-Date: 2025-01-01 09:13+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
@@ -18,55 +17,64 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: models.py:15 tests/tests.py:177
-msgid "History & Stories"
-msgstr "Geschichte und Geschichten"
+#: admin.py:16
+msgid "preview"
+msgstr ""
 
-#: models.py:16
-msgid "Recipes"
-msgstr "Rezepte"
+#: migrations/0003_trove_title_alter_trove_description.py:33
+#: migrations/0004_alter_trove_title.py:18 models.py:25
+msgid "Title of the treasure (this will appear in the list)"
+msgstr "Titel des Schatzes (dies erscheint in der Liste)"
 
-#: models.py:17
-msgid "Family meetings"
-msgstr "Familientreffen"
-
-#: models.py:18
-msgid "Recollections"
-msgstr "Erinnerungen"
-
-#: models.py:19
-msgid "Arts"
-msgstr "Arts"
-
-#: models.py:20
-msgid "Miscellaneous"
-msgstr "Verschiedenes"
-
-#: models.py:30
+#: migrations/0003_trove_title_alter_trove_description.py:44 models.py:31
 msgid "Description of the treasure (this will appear in the details)"
 msgstr "Beschreibung des Schatzes (dies erscheint in den Details)"
 
-#: models.py:36
+#: models.py:16 tests/tests.py:179
+msgid "History & Stories"
+msgstr "Geschichte und Geschichten"
+
+#: models.py:17
+msgid "Recipes"
+msgstr "Rezepte"
+
+#: models.py:18
+msgid "Family meetings"
+msgstr "Familientreffen"
+
+#: models.py:19
+msgid "Recollections"
+msgstr "Erinnerungen"
+
+#: models.py:20
+msgid "Arts"
+msgstr "Arts"
+
+#: models.py:21
+msgid "Miscellaneous"
+msgstr "Verschiedenes"
+
+#: models.py:37
 msgid "Treasure photo"
 msgstr "Foto des Schatzes"
 
-#: models.py:43
+#: models.py:44
 msgid "Treasure file"
 msgstr "Schatzkartei"
 
-#: models.py:47
+#: models.py:48
 msgid "Category"
 msgstr "Kategorie"
 
-#: models.py:51
+#: models.py:52
 msgid "trove"
 msgstr "Schatz"
 
-#: models.py:52
+#: models.py:53
 msgid "troves"
 msgstr "Schaetze"
 
-#: models.py:71
+#: models.py:72
 msgid "A treasure must have an owner."
 msgstr "Ein Schatz muss einen Besitzer haben."
 
@@ -91,7 +99,7 @@ msgstr "Einen Schatz hinzufügen"
 msgid "Submit"
 msgstr "Einreichen"
 
-#: templates/troves/treasure_form.html:38
+#: templates/troves/treasure_form.html:37
 msgid "Cancel"
 msgstr "Abbrechen"
 

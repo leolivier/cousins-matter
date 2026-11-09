@@ -23,7 +23,7 @@ class Trove(TenantModel):
   ]
 
   title = models.CharField(
-    verbose_name="Title of the treasure (this will appear in the list)",
+    verbose_name=_("Title of the treasure (this will appear in the list)"),
     null=False,
     blank=False,
     max_length=110,

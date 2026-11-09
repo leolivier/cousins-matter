@@ -42,9 +42,9 @@ dev = [
     "bandit>=1.9.4",
     "coverage>=7.14.3",
     "django-debug-toolbar>=7.0,<8.1",
+    "django-stubs[compatible-mypy]>=6.1.2",
     "factory-boy~=3.3.3",
-    "mypy==2.4.1",
-    "pip-audit>=2.10.1",
+    "mypy>=2.4.0",
     "playwright>=1.61.0",
     "pre-commit>=4.6.1",
     "rcssmin>=1.3.0",
@@ -149,6 +149,15 @@ exclude = [
     "migrations/",
     "^\\.venv/",
 ]
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "core.settings"
+
+# Ignore migrations
+[[tool.mypy.overrides]]
+module = ["*.migrations.*"]
+ignore_errors = true
 
 [tool.coverage.run]
 data_file = ".coverage" # default, can be overriden in Makefile

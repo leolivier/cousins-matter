@@ -3,7 +3,7 @@ import logging
 import os
 import secrets
 import string
-from typing import Literal
+from typing import Literal, cast
 
 
 from django.conf import settings
@@ -30,7 +30,8 @@ logger = logging.getLogger(__name__)
 
 
 def t(field: str) -> str:
-  return ALL_FIELD_NAMES[field]
+  # ALL_FIELD_NAMES values are lazy translation proxies used as plain strings
+  return cast(str, ALL_FIELD_NAMES[field])
 
 
 def generate_random_string(length: int) -> str:
@@ -247,20 +248,20 @@ def handle_managed_by(context: ImportContext, row_data: MemberImportData):
 
 
 def update_address(row_data: MemberImportData):
-  address = {}
+  address_data = {}
   for f in ADDRESS_FIELD_NAMES:
     trfield = t(f)
     if trfield in row_data.row:
-      address[f] = row_data.row[trfield]
-  # if len(address) == 5:   # we don't care if the address is incomplete
-  if len(address) > 0:
-    found = Address.objects.filter(**address).first()
+      address_data[f] = row_data.row[trfield]
+  # if len(address_data) == 5:   # we don't care if the address is incomplete
+  if len(address_data) > 0:
+    found = Address.objects.filter(**address_data).first()
     if found:
       if row_data.current_member.address != found:
         row_data.current_member.address = found
         row_data.set_updated()
     else:
-      address = Address.objects.create(**address)
+      address = Address.objects.create(**address_data)
       address.save()
       row_data.current_member.address = address
       row_data.set_updated()
@@ -320,7 +321,8 @@ def import_row(context: ImportContext, csv_row: dict):
   csv_row[t("username")] = slugify(csv_row[t("username")])
   # search for an existing member with this username
   current_member = Member.objects.filter(username=csv_row[t("username")]).first()
-  row_data = MemberImportData(row=csv_row, current_member=current_member)
+  # current_member is None for new members; create_member() below fills it in
+  row_data = MemberImportData(row=csv_row, current_member=cast(Member, current_member))
   if current_member:  # found, update it
     logger.debug(f"found member: {current_member}, updating it")
     update_member(context, row_data)

@@ -9,14 +9,16 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
 
 # then, get the command
-cmd = sys.argv[1]
-app_name = get_commands().get(cmd)  # ex: 'auth'
-cmd = load_command_class(app_name, cmd)
+cmd_name = sys.argv[1]
+app_name = get_commands().get(cmd_name)  # ex: 'auth'
+if app_name is None:
+  sys.exit(f"Unknown command: {cmd_name}")
+cmd = load_command_class(app_name, cmd_name)
 
 # inspect the arguments added
 if hasattr(cmd, "add_arguments"):
   # argparse actions registered on cmd.parser after create_parser called
-  parser = cmd.create_parser("manage.py", cmd)
+  parser = cmd.create_parser("manage.py", cmd_name)
   for action in parser._actions:
     print(action.option_strings, action.dest, action.help)
 else:

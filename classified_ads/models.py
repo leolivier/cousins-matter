@@ -8,43 +8,43 @@ from core.utils import create_thumbnail
 from members.models import Member
 from tenants.scoping import TenantModel
 
+from .categories import CATEGORIES, StrOrPromise
+
 
 class Categories:
-  from .categories import CATEGORIES
-
-  cat_list: list[tuple[str, str]] | None = None
+  cat_list: list[tuple[str, StrOrPromise]] | None = None
   cat_keys: list[str] | None = None
 
   @staticmethod
   def get_category(category):
-    return Categories.CATEGORIES[category]
+    return CATEGORIES[category]
 
   @staticmethod
-  def list_categories() -> list[tuple[str, str]]:
+  def list_categories() -> list[tuple[str, StrOrPromise]]:
     if Categories.cat_list is None:
-      Categories.cat_list = [(c, v["translation"]) for c, v in Categories.CATEGORIES.items()]
+      Categories.cat_list = [(c, v["translation"]) for c, v in CATEGORIES.items()]
     return Categories.cat_list
 
   @staticmethod
   def list_category_keys() -> list[str]:
     if Categories.cat_keys is None:
-      Categories.cat_keys = list(Categories.CATEGORIES.keys())
+      Categories.cat_keys = list(CATEGORIES.keys())
     return Categories.cat_keys
 
   @staticmethod
-  def list_subcategories(category) -> list[tuple[str, str]]:
-    return [(k, v) for k, v in Categories.CATEGORIES[category]["subcategories"].items()]
+  def list_subcategories(category) -> list[tuple[str, StrOrPromise]]:
+    return [(k, v) for k, v in CATEGORIES[category]["subcategories"].items()]
 
   @staticmethod
-  def display_category(category) -> str:
-    return Categories.CATEGORIES[category]["translation"]
+  def display_category(category) -> StrOrPromise:
+    return CATEGORIES[category]["translation"]
 
   @staticmethod
-  def display_subcategory(category, subcategory) -> str:
-    return Categories.CATEGORIES[category]["subcategories"][subcategory]
+  def display_subcategory(category, subcategory) -> StrOrPromise:
+    return CATEGORIES[category]["subcategories"][subcategory]
 
   def __call__(self, *args, **kwds):
-    return Categories.CATEGORIES
+    return CATEGORIES
 
 
 class ClassifiedAd(TenantModel):
@@ -94,22 +94,22 @@ class ClassifiedAd(TenantModel):
   def __str__(self) -> str:
     return self.title
 
-  def display_category(self) -> str:
+  def display_category(self) -> StrOrPromise:
     return Categories.display_category(self.category)
 
-  def display_subcategory(self) -> str:
+  def display_subcategory(self) -> StrOrPromise:
     if self.subcategory:
       return Categories.display_subcategory(self.category, self.subcategory)
     return "-"
 
-  def display_shipping_method(self) -> str:
-    return dict[str, str](self.SHIPPING_METHODS).get(self.shipping_method, "")
+  def display_shipping_method(self) -> StrOrPromise:
+    return dict[str, StrOrPromise](self.SHIPPING_METHODS).get(self.shipping_method, "")
 
-  def display_item_status(self) -> str:
-    return dict[str, str](self.ITEM_STATUS_TYPES).get(self.item_status, "")
+  def display_item_status(self) -> StrOrPromise:
+    return dict[str, StrOrPromise](self.ITEM_STATUS_TYPES).get(self.item_status, "")
 
-  def display_ad_status(self) -> str:
-    return dict[str, str](self.AD_STATUSES).get(self.ad_status, "")
+  def display_ad_status(self) -> StrOrPromise:
+    return dict[str, StrOrPromise](self.AD_STATUSES).get(self.ad_status, "")
 
 
 def get_photo_path(photo, filename):

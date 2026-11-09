@@ -8,11 +8,11 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models.fields import CharField
 from django.db.models.fields.related import ForeignKey
-from django.db.models.indexes import Index
 from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from typing import ClassVar
 
 from core.utils import create_thumbnail
 
@@ -68,8 +68,8 @@ class Family(models.Model):
   class Meta:
     verbose_name = _("family")
     verbose_name_plural = _("families")
-    ordering: list[str] = ["name"]
-    indexes: list[Index] = [
+    ordering = ["name"]
+    indexes = [
       models.Index(fields=["name"]),
     ]
 
@@ -216,7 +216,8 @@ class Member(AbstractUser):
   USERNAME_FIELD = "username"
   REQUIRED_FIELDS = ["first_name", "last_name", "birthdate", "email"]
 
-  objects = MemberManager()
+  # MemberManager intentionally extends BaseUserManager, not UserManager
+  objects: ClassVar[MemberManager] = MemberManager()  # type: ignore[assignment]
   unscoped = models.Manager()
 
   class Meta:
@@ -286,6 +287,8 @@ class Member(AbstractUser):
 
   @property
   def age(self) -> int:
+    if not self.birthdate:
+      return 0
     today = datetime.date.today()
     years = today.year - self.birthdate.year
     return years if (today >= self.next_birthday) else years - 1

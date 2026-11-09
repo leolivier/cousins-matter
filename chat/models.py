@@ -5,6 +5,7 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
 from asgiref.sync import sync_to_async
 from enum import Enum
+from typing import ClassVar
 
 from members.models import Member
 from tenants.scoping import TenantManager, TenantModel
@@ -26,7 +27,7 @@ class ChatRoomManager(TenantManager):
 
 class ChatRoom(TenantModel):
   # use ChatRoomManager when using ChatRoom.objects
-  objects = ChatRoomManager()
+  objects: ClassVar[ChatRoomManager] = ChatRoomManager()
 
   name = models.CharField(max_length=255)
   slug = models.CharField(max_length=255, blank=True)
@@ -175,7 +176,7 @@ class ChatMessage(TenantModel):
 class PrivateChatRoom(ChatRoom):
   # MTI child: redeclare the scoped manager, else Django falls back to a plain
   # (unscoped) Manager and private-room lookups would cross tenants.
-  objects = ChatRoomManager()
+  objects: ClassVar[ChatRoomManager] = ChatRoomManager()
 
   admins = models.ManyToManyField(Member, related_name="group_chat_rooms_admins", blank=True)
 

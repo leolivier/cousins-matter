@@ -1,6 +1,8 @@
 import logging
 from django.db import transaction
 from django.views import generic
+from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.edit import FormMixin
 from django_htmx.http import HttpResponseClientRefresh
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
@@ -29,7 +31,7 @@ class FamilyUpdateView(generic.UpdateView):
   fields = "__all__"
 
 
-class ModalFamilyUpsertMixin(generic.View):
+class ModalFamilyUpsertMixin(TemplateResponseMixin, FormMixin):
   model = Family
   template_name = "members/family/family_form.html"
   form_class = FamilyUpdateForm

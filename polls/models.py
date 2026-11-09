@@ -1,6 +1,7 @@
 import datetime
 
 from collections import Counter
+from typing import Any, ClassVar
 
 from django.apps import apps
 from django.db import models
@@ -144,8 +145,8 @@ class Answer(models.Model):
   poll_answer = models.ForeignKey(PollAnswer, on_delete=models.CASCADE)
   question = models.ForeignKey(Question, related_name="answers_%(class)s", on_delete=models.CASCADE)
   question_type = Question.UNKOWN_QUESTION
-  answer = None
-  subclasses = None
+  answer: Any = None
+  subclasses: Any = None
   question_dict: dict[str, type["Answer"]] = {}
 
   class Meta:
@@ -334,7 +335,7 @@ class ChoiceAnswer(Answer, TenantModel):
 class SingleEventAnswer(ChoiceAnswer):
   # MTI child: tenant lives on the ChoiceAnswer table; redeclare the scoped
   # manager or Django falls back to a plain (unscoped) Manager.
-  objects = TenantManager()
+  objects: ClassVar[TenantManager] = TenantManager()
 
   """
   Answer provided by a member to an single choice event planner question.
@@ -374,7 +375,7 @@ class MultiChoiceAnswer(Answer, TenantModel):
 class MultiEventAnswer(MultiChoiceAnswer):
   # MTI child: tenant lives on the MultiChoiceAnswer table; redeclare the
   # scoped manager or Django falls back to a plain (unscoped) Manager.
-  objects = TenantManager()
+  objects: ClassVar[TenantManager] = TenantManager()
 
   """
   Answer provided by a member to an multiple choice event planner question.
@@ -391,7 +392,7 @@ class MultiEventAnswer(MultiChoiceAnswer):
 class EventPlanner(Poll):
   # MTI child: redeclare the scoped manager, else Django falls back to a plain
   # (unscoped) Manager and event-planner lookups would cross tenants.
-  objects = TenantManager()
+  objects: ClassVar[TenantManager] = TenantManager()
 
   # where the event will take place
   location = models.CharField(_("location"), max_length=250, default="", blank=True)

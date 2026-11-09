@@ -1,9 +1,12 @@
+from django import forms
 from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import generic
+from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.edit import FormMixin
 from django_htmx.http import HttpResponseClientRefresh, HttpResponseClientRedirect
 from core.utils import check_edit_permission, confirm_delete_modal
 from ..models import Poll, Question
@@ -13,7 +16,7 @@ from ..services import manage_closed_list
 
 class PollCreateView(generic.CreateView):
   model = Poll
-  form_class = PollUpsertForm
+  form_class: type[forms.ModelForm] = PollUpsertForm
   template_name = "polls/poll_upsert_form.html"
   success_message = _("Poll created successfully. You can now add questions.")
   redirect_to = "polls:update_poll"
@@ -46,7 +49,7 @@ class PollCreateView(generic.CreateView):
 
 class PollUpdateView(generic.UpdateView):
   model = Poll
-  form_class = PollUpsertForm
+  form_class: type[forms.ModelForm] = PollUpsertForm
   template_name = "polls/poll_upsert_form.html"
   redirect_to = "polls:poll_detail"
   success_message = _("Poll updated successfully.")
@@ -99,7 +102,7 @@ class PollDeleteView(generic.DeleteView):
     return HttpResponseClientRedirect(reverse("polls:all_polls"))
 
 
-class QuestionUpsertMixin:
+class QuestionUpsertMixin(TemplateResponseMixin, FormMixin):
   model = Question
   form_class = QuestionUpsertForm
   template_name = "polls/questions/question_form.html"

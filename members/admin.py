@@ -27,7 +27,8 @@ class MemberAdmin(UserAdmin):
   raw_id_fields = ["address", "family", "member_manager"]
   filter_horizontal = ["groups", "user_permissions", "followers"]
 
-  fieldsets = UserAdmin.fieldsets + (
+  fieldsets = (
+    *(UserAdmin.fieldsets or ()),
     (
       _("Extra Profile Info"),
       {"fields": ("avatar", "birthdate", "phone", "address", "family", "website", "description", "hobbies")},

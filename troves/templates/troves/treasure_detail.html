@@ -32,7 +32,19 @@
 			</div>
 			{%if treasure.description%}
 			<div class="content">
-				{%autoescape off%}{{treasure.description}}{%endautoescape%}
+				{%autoescape off%}{{treasure.description|sanitize}}{%endautoescape%}
+			</div>
+			{%endif%}
+			{%if treasure.embed_url%}
+			<figure class="image is-16by9">
+				<iframe src="{{treasure.embed_url}}" title="{{treasure.title}}"
+					allowfullscreen allow="encrypted-media" style="width:100%;height:100%"></iframe>
+			</figure>
+			{%elif treasure.url%}
+			<div class="card-footer">
+				<a href="{{treasure.url}}" target="_blank" rel="noopener noreferrer">
+					{%trans 'See the external treasure' %}
+				</a>
 			</div>
 			{%endif%}
 			{%if treasure.file%}

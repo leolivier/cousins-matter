@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.exceptions import ValidationError
@@ -45,6 +46,12 @@ class Trove(TenantModel):
     blank=True,
     null=True,
   )
+  url = models.URLField(
+    verbose_name=_("External URL of the treasure (e.g. a YouTube video)"),
+    blank=True,
+    null=True,
+    max_length=500,
+  )
   category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, verbose_name=_("Category"))
   owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -52,12 +59,24 @@ class Trove(TenantModel):
     verbose_name = _("trove")
     verbose_name_plural = _("troves")
     ordering = ["id"]
-    indexes = [
-      models.Index(fields=["tenant", "category"]),
-    ]
+    indexes = [models.Index(fields=["tenant", "category"], name="troves_trov_tenant_c30fb4_idx")]
 
   def __str__(self):
     return self.title
+
+  # Extracts the video id from watch, youtu.be and shorts URLs; only YouTube
+  # URLs are embeddable (CSP frame-src, see config/settings/base.py)
+  _YOUTUBE_ID_RE = re.compile(
+    r"^https?://(?:www\.)?(?:youtube\.com/(?:watch\?v=|shorts/)|youtu\.be/)([A-Za-z0-9_-]{11})(?:[?&].*)?$"
+  )
+
+  @property
+  def embed_url(self):
+    """Privacy-enhanced YouTube embed URL if the treasure is a YouTube video, else None."""
+    if not self.url:
+      return None
+    m = self._YOUTUBE_ID_RE.match(self.url)
+    return f"https://www.youtube-nocookie.com/embed/{m.group(1)}?autoplay=0" if m else None
 
   @staticmethod
   def translate_category(category):

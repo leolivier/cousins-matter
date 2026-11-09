@@ -183,3 +183,56 @@ class TestTroveList(MemberTestCase):
     treasure = self.treasures[0]
     path = treasure._thumbnail_path()
     self.assertIn(treasure.picture.name.split("/")[-1], path)
+
+
+class TestTroveDetailSecurityAndUrl(MemberTestCase):
+  """Stored-XSS sanitization of description/title and the external URL feature."""
+
+  def setUp(self):
+    super().setUp()
+    self.treasure = Trove.objects.create(
+      title="title 1",
+      description="Description 1",
+      picture=create_test_image(__file__, "test-image-1.jpg"),
+      category="history",
+      owner=self.member,
+    )
+
+  def tearDown(self):
+    Trove.objects.all().delete()
+    return super().tearDown()
+
+  def test_detail_sanitizes_script_in_description(self):
+    self.treasure.description = '<p>ok</p><script>alert(1)</script><img src=x onerror="alert(2)">'
+    self.treasure.save()
+    response = self.client.get(reverse("troves:detail", args=[self.treasure.id]))
+    self.assertContains(response, "<p>ok</p>", status_code=200)
+    self.assertNotContains(response, "<script>")
+    self.assertNotContains(response, "onerror")
+
+  def test_detail_sanitizes_legacy_stored_xss_in_title(self):
+    # titles are plain text: the list template must escape them (regression test
+    # for the autoescape-off rendering of trove_cave.html)
+    Trove.objects.filter(id=self.treasure.id).update(title='x"><script>alert(1)</script>')
+    response = self.client.get(reverse("troves:list"))
+    # the payload must be rendered as escaped text, not executed
+    self.assertNotContains(response, "<script>alert(1)</script>")
+    self.assertContains(response, "x&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;")
+
+  def test_youtube_url_is_embedded(self):
+    for url in [
+      "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "https://youtu.be/dQw4w9WgXcQ",
+      "https://www.youtube.com/shorts/dQw4w9WgXcQ",
+    ]:
+      self.treasure.url = url
+      self.treasure.save()
+      response = self.client.get(reverse("troves:detail", args=[self.treasure.id]))
+      self.assertContains(response, "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ")
+
+  def test_non_youtube_url_is_a_link(self):
+    self.treasure.url = "https://example.com/page"
+    self.treasure.save()
+    response = self.client.get(reverse("troves:detail", args=[self.treasure.id]))
+    self.assertNotIn("<iframe", str(response.content))
+    self.assertContains(response, "https://example.com/page")

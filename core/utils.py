@@ -7,6 +7,7 @@ from contextlib import contextmanager
 from datetime import datetime
 from io import BytesIO
 from PIL import Image, ImageOps, ImageFile
+import nh3
 
 # import pprint
 import sys
@@ -432,6 +433,74 @@ def check_edit_permission(request, owner):
   if request.user.is_superuser or request.user.is_tenant_admin or owner.id == request.user.id:
     return True
   raise PermissionDenied(_("You do not have permission to edit/delete this object."))
+
+
+# Tags/attributes accepted from rich-text (summernote) content; everything else,
+# in particular scripts, event handlers (on*) and javascript: URLs, is stripped.
+_RICH_HTML_TAGS = {
+  "a",
+  "b",
+  "blockquote",
+  "br",
+  "caption",
+  "code",
+  "col",
+  "colgroup",
+  "div",
+  "em",
+  "figure",
+  "figcaption",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "hr",
+  "i",
+  "img",
+  "li",
+  "ol",
+  "p",
+  "pre",
+  "s",
+  "small",
+  "span",
+  "strike",
+  "strong",
+  "sub",
+  "sup",
+  "table",
+  "tbody",
+  "td",
+  "tfoot",
+  "th",
+  "thead",
+  "tr",
+  "u",
+  "ul",
+}
+
+
+def sanitize_rich_html(html: str) -> str:
+  """
+  Sanitize rich-text HTML produced by summernote (or pasted by users).
+
+  Use at render time for fields whose templates render with autoescape off; it
+  also cleans up data saved before sanitizing was introduced.
+  """
+
+  return nh3.clean(
+    html,
+    tags=_RICH_HTML_TAGS,
+    attributes={
+      "a": {"href", "title"},
+      "img": {"src", "alt", "width", "height"},
+      "*": {"class"},
+    },
+    url_schemes={"http", "https", "mailto"},
+    link_rel="noopener noreferrer",
+  )
 
 
 def _fs_rmtree(storage, prefix):

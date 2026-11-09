@@ -58,6 +58,10 @@ msgstr "Fichier contenant le trésor"
 msgid "Category"
 msgstr "Catégorie"
 
+#: models.py:49
+msgid "External URL of the treasure (e.g. a YouTube video)"
+msgstr "URL externe du trésor (par exemple une vidéo YouTube)"
+
 #: models.py:51
 msgid "trove"
 msgstr "trésor"
@@ -77,6 +81,10 @@ msgstr "Trésor"
 #: templates/troves/treasure_detail.html:41
 msgid "Look at the file contents"
 msgstr "Voir le contenu du fichier"
+
+#: templates/troves/treasure_detail.html:49
+msgid "See the external treasure"
+msgstr "Voir le trésor externe"
 
 #: templates/troves/treasure_form.html:8 templates/troves/treasure_form.html:20
 msgid "Modify treasure"

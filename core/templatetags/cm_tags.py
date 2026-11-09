@@ -229,6 +229,14 @@ def startswith(text, starts):
   return False
 
 
+@register.filter
+def sanitize(value):
+  """Sanitize rich-text HTML for rendering with autoescape off (see core.utils.sanitize_rich_html)."""
+  from core.utils import sanitize_rich_html
+
+  return sanitize_rich_html(value or "")
+
+
 @register.simple_tag(takes_context=True)
 def absolute_url(context, relative_url):
   request = context["request"]

@@ -93,6 +93,8 @@ _CSP_POLICY: dict[str, list[str]] = {
   # ws/wss for the chat WebSocket (chat/consumers.py); htmx requests are same-origin
   "connect-src": [CSP.SELF, "ws:", "wss:"],
   "frame-ancestors": [CSP.NONE],
+  # troves embed external videos from YouTube's privacy-enhanced domain
+  "frame-src": [CSP.SELF, "https://www.youtube-nocookie.com"],
   "base-uri": [CSP.SELF],
   "object-src": [CSP.NONE],
 }

@@ -23,6 +23,8 @@ dependencies = [
     "django-simple-captcha>=0.6.3,<0.8.0",
     "django-storages[dropbox,s3]~=1.14.6",
     "fpdf~=1.7.2",
+    # HTML sanitizer (bleach successor) used to clean rich-text fields on render
+    "nh3~=0.3.2",
     "packaging~=26.2",
     "pillow>=12.2",
     "psycopg-pool~=3.3.1",

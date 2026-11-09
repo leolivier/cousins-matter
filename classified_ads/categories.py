@@ -1,10 +1,11 @@
 from typing import TypedDict
 from django.utils.translation import gettext_lazy as _
+from django_stubs_ext import StrOrPromise
 
 
 class CategoryInfo(TypedDict):
-  translation: str
-  subcategories: dict[str, str]
+  translation: StrOrPromise
+  subcategories: dict[str, StrOrPromise]
 
 
 CATEGORIES: dict[str, CategoryInfo] = {

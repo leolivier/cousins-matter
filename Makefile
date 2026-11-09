@@ -24,7 +24,7 @@ help h:
 	@echo "  cover [a=application] [co=coverage_options] [to=test_options]: run test(s) with coverage. Default is all applications. If an application is given, the coverage result is stored in .coverage.<application>."
 	@echo "  minify [a=application]: minify the css and js files of an application. Default is all applications."
 	@echo "  shell: Run a django shell in devt mode"
-	@echo "  check: Run ruff checks, pip-audit vuln scan and bandit security checks. Bandit results are stored in bandit.out"
+	@echo "  check: Run ruff checks, uv audit vuln scan and bandit security checks. Bandit results are stored in bandit.out"
 	@echo "  count: Count lines of code using cloc (which must be installed, eg via sudo apt-get install cloc)"
 
 build:
@@ -100,7 +100,7 @@ minify:
 check:
 	pre-commit run --all-files
 	mypy .
-	pip-audit .
+	uv audit
 	ENVIRONMENT="test" ./manage.py check_okf docs
 
 install-hooks:

@@ -390,8 +390,8 @@
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
   },
   "config/settings/base.py": {
-    "mtime": 1794229308.4212017,
-    "seen": 1794229318.512024,
+    "mtime": 1794237136.7369025,
+    "seen": 1794238595.8393912,
     "ast_hash": "e03c5f6b0fd277a2f49e2e624fb182ca",
     "semantic_hash": ""
   },
@@ -480,10 +480,10 @@
     "semantic_hash": "6b38b15809485bc9438e1eddf55620d7"
   },
   "core/icons.py": {
-    "mtime": 1776512026.5904098,
-    "seen": 1788636802.8481712,
-    "ast_hash": "b644f80a23dd0d644c8dbec0fb4f2a46",
-    "semantic_hash": "b644f80a23dd0d644c8dbec0fb4f2a46"
+    "mtime": 1794237138.0888975,
+    "seen": 1794238595.8394122,
+    "ast_hash": "0e71666598b5de46fd9b079b7b811785",
+    "semantic_hash": ""
   },
   "core/management/commands/check_okf.py": {
     "mtime": 1788629281.9700637,
@@ -546,15 +546,15 @@
     "semantic_hash": "22bf839e814023c72fc0f5291c222b9c"
   },
   "core/static/core/js/core.js": {
-    "mtime": 1794229308.4212017,
-    "seen": 1794229318.5120893,
-    "ast_hash": "411c9928fa1e7b0f60ae42f971ed89e4",
+    "mtime": 1794237138.1168973,
+    "seen": 1794238595.8394287,
+    "ast_hash": "ef5f0e6c05caed99e90e212b33582ddc",
     "semantic_hash": ""
   },
   "core/static/core/js/core.min.js": {
-    "mtime": 1794229308.4212017,
-    "seen": 1794229318.5120919,
-    "ast_hash": "b20a4e10077ba23c337bc38f125de4ad",
+    "mtime": 1794237138.1168973,
+    "seen": 1794238595.83943,
+    "ast_hash": "46fd4b0e924653fc9a782b3b80aa2e8c",
     "semantic_hash": ""
   },
   "core/tasks.py": {
@@ -576,8 +576,8 @@
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
   },
   "core/templatetags/cm_tags.py": {
-    "mtime": 1794229308.4222016,
-    "seen": 1794229318.5121012,
+    "mtime": 1794237136.7399025,
+    "seen": 1794238595.8394353,
     "ast_hash": "26e0a586b394f1f99f208967686a1c18",
     "semantic_hash": ""
   },
@@ -660,9 +660,9 @@
     "semantic_hash": ""
   },
   "core/tests/test_views_general.py": {
-    "mtime": 1788902904.4294994,
-    "seen": 1789155321.028449,
-    "ast_hash": "6f0050ea003e443fc798ffcfa5f5c6ff",
+    "mtime": 1794237138.1178973,
+    "seen": 1794238595.8394573,
+    "ast_hash": "2bd4a18766372dc584bb136a16434139",
     "semantic_hash": ""
   },
   "core/tests/test_views_stats.py": {
@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "core/utils.py": {
-    "mtime": 1794229308.4222016,
-    "seen": 1794229318.51217,
+    "mtime": 1794237136.7399025,
+    "seen": 1794238595.8394752,
     "ast_hash": "64afcb76280e5061af040c4b3a151566",
     "semantic_hash": ""
   },
@@ -888,8 +888,8 @@
     "semantic_hash": ""
   },
   "forum/tests/tests_post.py": {
-    "mtime": 1794229308.4232016,
-    "seen": 1794229318.5122423,
+    "mtime": 1794237136.7429025,
+    "seen": 1794238595.8395135,
     "ast_hash": "5a5721feb77ccf74498da186494e4557",
     "semantic_hash": ""
   },
@@ -1134,8 +1134,8 @@
     "semantic_hash": ""
   },
   "galleries/tests/tests_photo_detail.py": {
-    "mtime": 1794229308.4242017,
-    "seen": 1794229318.5123484,
+    "mtime": 1794237136.7439024,
+    "seen": 1794238595.8395705,
     "ast_hash": "05e649c4bf2aff064b08c0aeabfb86df",
     "semantic_hash": ""
   },
@@ -1446,9 +1446,9 @@
     "semantic_hash": "70ca6ca3846c8b70f65566478e6b5512"
   },
   "members/forms.py": {
-    "mtime": 1793982171.5517259,
-    "seen": 1793984681.8433316,
-    "ast_hash": "64f819b460653e5cafe13ce2faff8fc7",
+    "mtime": 1794237138.1198974,
+    "seen": 1794238595.8396437,
+    "ast_hash": "a35296c7480edda3d1fafe2df1e75f28",
     "semantic_hash": ""
   },
   "members/managers.py": {
@@ -1692,9 +1692,9 @@
     "semantic_hash": ""
   },
   "members/tests/tests_member.py": {
-    "mtime": 1793982171.583726,
-    "seen": 1793984681.8433747,
-    "ast_hash": "e31335766913f5a5eb54463cfe1a114a",
+    "mtime": 1794237138.1288972,
+    "seen": 1794238595.8397028,
+    "ast_hash": "5a05e890db7ad47e56bf1f8ba88aba08",
     "semantic_hash": ""
   },
   "members/tests/tests_member_base.py": {
@@ -1704,10 +1704,10 @@
     "semantic_hash": ""
   },
   "members/tests/tests_member_views.py": {
-    "mtime": 1779716826.3260915,
-    "seen": 1788636802.8483942,
-    "ast_hash": "2fdccc991df167a975852ce4900e825b",
-    "semantic_hash": "2fdccc991df167a975852ce4900e825b"
+    "mtime": 1794237138.1298974,
+    "seen": 1794238595.8397052,
+    "ast_hash": "c94f3db73fbc1ddf78a279a52fc3edb6",
+    "semantic_hash": ""
   },
   "members/tests/tests_oauth.py": {
     "mtime": 1792339587.46155,
@@ -1770,10 +1770,10 @@
     "semantic_hash": "585462385336f98096f35e535c80621d"
   },
   "members/tests/ui/tests_ui_members.py": {
-    "mtime": 1787481673.9986494,
-    "seen": 1788636802.8484046,
-    "ast_hash": "28e464058e4da2fd81325349cd5acf02",
-    "semantic_hash": "28e464058e4da2fd81325349cd5acf02"
+    "mtime": 1794237138.1338973,
+    "seen": 1794238595.839737,
+    "ast_hash": "bc73d45d103983679a4666b05ed3230a",
+    "semantic_hash": ""
   },
   "members/tests/ui/tests_ui_profile.py": {
     "mtime": 1783244431.3067691,
@@ -1794,9 +1794,9 @@
     "semantic_hash": "568044d24df56e9228e199038e42b031"
   },
   "members/urls.py": {
-    "mtime": 1793982171.5847259,
-    "seen": 1793984681.8433967,
-    "ast_hash": "2cabcef2c5fad5cada6311a83625791d",
+    "mtime": 1794237138.1338973,
+    "seen": 1794238595.8397427,
+    "ast_hash": "802d7ba7db39ae42f52b26893e4600ce",
     "semantic_hash": ""
   },
   "members/views/__init__.py": {
@@ -1848,10 +1848,10 @@
     "semantic_hash": ""
   },
   "members/views/views_member.py": {
-    "mtime": 1788539337.666672,
-    "seen": 1788636802.8484168,
-    "ast_hash": "4231f85967b363376f1320ec64d254eb",
-    "semantic_hash": "4231f85967b363376f1320ec64d254eb"
+    "mtime": 1794237138.1348972,
+    "seen": 1794238595.8397553,
+    "ast_hash": "1bf261282059a31b1b44ba8aa50410d0",
+    "semantic_hash": ""
   },
   "members/views/views_registration.py": {
     "mtime": 1793982171.5857258,
@@ -2136,8 +2136,8 @@
     "semantic_hash": "b88360fed48a52f368e95343598f8f38"
   },
   "polls/tests/test_display.py": {
-    "mtime": 1794229308.4242017,
-    "seen": 1794229318.5128598,
+    "mtime": 1794237136.7799025,
+    "seen": 1794238595.8398325,
     "ast_hash": "109ce96c0acd2fd4fca958d88ed1ef6d",
     "semantic_hash": ""
   },
@@ -2214,8 +2214,8 @@
     "semantic_hash": "e9a5682d1845ecd77f1fd86ecdfb8bf1"
   },
   "pyproject.toml": {
-    "mtime": 1794229308.425214,
-    "seen": 1794229318.5128946,
+    "mtime": 1794237136.7806396,
+    "seen": 1794238595.8398507,
     "ast_hash": "9acb6c4334e247771eda85438131aa65",
     "semantic_hash": ""
   },
@@ -2484,8 +2484,8 @@
     "semantic_hash": "fb75ba14227a2570227a29f87bb0fcb2"
   },
   "troves/forms.py": {
-    "mtime": 1794229308.425214,
-    "seen": 1794229318.5130439,
+    "mtime": 1794237136.7806396,
+    "seen": 1794238595.8399441,
     "ast_hash": "1359d1c2c9c7f8b2406eb6438ebcd4b2",
     "semantic_hash": ""
   },
@@ -2520,8 +2520,8 @@
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
   },
   "troves/models.py": {
-    "mtime": 1794229308.4392016,
-    "seen": 1794229318.5130677,
+    "mtime": 1794237136.875902,
+    "seen": 1794238595.839961,
     "ast_hash": "1d433e4b28e8eb3d56e96db6c0075f0d",
     "semantic_hash": ""
   },
@@ -2556,8 +2556,8 @@
     "semantic_hash": ""
   },
   "troves/tests/tests.py": {
-    "mtime": 1794229308.4402018,
-    "seen": 1794229318.5130837,
+    "mtime": 1794237136.876902,
+    "seen": 1794238595.8399746,
     "ast_hash": "1391cf49b905a794042c7fd6acd401b5",
     "semantic_hash": ""
   },
@@ -2694,9 +2694,9 @@
     "semantic_hash": ""
   },
   ".pre-commit-config.yaml": {
-    "mtime": 1794229308.4212017,
-    "seen": 1794229318.5131538,
-    "ast_hash": "bdd4cc560d1e83f6ac9040c0f3d50a29",
+    "mtime": 1794237138.0868108,
+    "seen": 1794238595.8400154,
+    "ast_hash": "701fa615a5a055c8448db990d73e42e3",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
@@ -2766,8 +2766,8 @@
     "semantic_hash": ""
   },
   "core/templates/core/base.html": {
-    "mtime": 1794229308.4222016,
-    "seen": 1794229318.5131967,
+    "mtime": 1794237136.7379026,
+    "seen": 1794238595.8400393,
     "ast_hash": "3fa4300b7c7afe4504dd41d5bffa6b1d",
     "semantic_hash": ""
   },
@@ -2778,9 +2778,9 @@
     "semantic_hash": ""
   },
   "core/templates/core/navbar.html": {
-    "mtime": 1788988200.816019,
-    "seen": 1789155321.0294735,
-    "ast_hash": "0c052b9b8f52c731e0515bdc516d57e3",
+    "mtime": 1794237138.1178973,
+    "seen": 1794238595.8400671,
+    "ast_hash": "e72790d62922f3d4f921136c466c4f05",
     "semantic_hash": ""
   },
   "core/templates/core/robots.txt": {
@@ -2814,20 +2814,20 @@
     "semantic_hash": ""
   },
   "docs/apps/core.md": {
-    "mtime": 1794229308.4232016,
-    "seen": 1794229318.513271,
-    "ast_hash": "7f1bc654851bd8a5a82f843eeb6e683b",
+    "mtime": 1794237138.1178973,
+    "seen": 1794238595.840079,
+    "ast_hash": "97f71384792eff43ff15c8489b1f01ca",
     "semantic_hash": ""
   },
   "docs/apps/forum.md": {
-    "mtime": 1794229308.4232016,
-    "seen": 1794229318.513273,
+    "mtime": 1794237136.7419026,
+    "seen": 1794238595.8400805,
     "ast_hash": "fe6e9d7174594f1b036497e18a4e2f15",
     "semantic_hash": ""
   },
   "docs/apps/galleries.md": {
-    "mtime": 1794229308.4232016,
-    "seen": 1794229318.5132754,
+    "mtime": 1794237136.7429025,
+    "seen": 1794238595.8400817,
     "ast_hash": "9a485445c98a8fa1f7e5373c1db5b4cd",
     "semantic_hash": ""
   },
@@ -2838,9 +2838,9 @@
     "semantic_hash": ""
   },
   "docs/apps/members.md": {
-    "mtime": 1794137974.3115396,
-    "seen": 1794138007.9326124,
-    "ast_hash": "3b0b03f243cac0e6bdef12a78afd398a",
+    "mtime": 1794237138.1188972,
+    "seen": 1794238595.840084,
+    "ast_hash": "f76e07653143e659299b89371e35cd62",
     "semantic_hash": ""
   },
   "docs/apps/pages.md": {
@@ -2850,8 +2850,8 @@
     "semantic_hash": ""
   },
   "docs/apps/polls.md": {
-    "mtime": 1794229308.4232016,
-    "seen": 1794229318.5132854,
+    "mtime": 1794237136.7429025,
+    "seen": 1794238595.8400865,
     "ast_hash": "e5541d13338ae070e76d49b5f75ad5aa",
     "semantic_hash": ""
   },
@@ -2862,8 +2862,8 @@
     "semantic_hash": ""
   },
   "docs/apps/troves.md": {
-    "mtime": 1794229308.4232016,
-    "seen": 1794229318.5132897,
+    "mtime": 1794237136.7429025,
+    "seen": 1794238595.8400893,
     "ast_hash": "f0f560db2992735d3275feffd98a2b2d",
     "semantic_hash": ""
   },
@@ -3012,8 +3012,8 @@
     "semantic_hash": "900a184305dbb29c538c091b2dd5d3ca"
   },
   "forum/templates/forum/post_detail.html": {
-    "mtime": 1794229308.4232016,
-    "seen": 1794229318.5133607,
+    "mtime": 1794237136.7429025,
+    "seen": 1794238595.8401287,
     "ast_hash": "e1e9fed6489916b6f92ba7c5ada7da9c",
     "semantic_hash": ""
   },
@@ -3138,8 +3138,8 @@
     "semantic_hash": "b19a53f5439d34f1368b4a0d741ef346"
   },
   "polls/templates/polls/poll_detail.html": {
-    "mtime": 1794229308.4242017,
-    "seen": 1794229318.5135608,
+    "mtime": 1794237136.7789025,
+    "seen": 1794238595.8402448,
     "ast_hash": "0d0001b27c1d7f515d6437586e29d4a6",
     "semantic_hash": ""
   },
@@ -3186,8 +3186,8 @@
     "semantic_hash": "b802cc17d2d360d714932f9cb5ee5ddb"
   },
   "troves/templates/troves/treasure_detail.html": {
-    "mtime": 1794229308.4392016,
-    "seen": 1794229318.5135942,
+    "mtime": 1794237136.875902,
+    "seen": 1794238595.8402622,
     "ast_hash": "28d71d27f26da06b0b435ce61387796e",
     "semantic_hash": ""
   },
@@ -3456,8 +3456,8 @@
     "semantic_hash": ""
   },
   "core/templates/core/common/progress-bar.html": {
-    "mtime": 1794229308.4222016,
-    "seen": 1794229318.5132208,
+    "mtime": 1794237136.7379026,
+    "seen": 1794238595.840052,
     "ast_hash": "2f9b0a7c3d009ef5639b0be66920c02e",
     "semantic_hash": ""
   },
@@ -3474,20 +3474,20 @@
     "semantic_hash": ""
   },
   "core/templates/core/contact/email-contact-form.html": {
-    "mtime": 1794229308.4222016,
-    "seen": 1794229318.5132277,
+    "mtime": 1794237136.7389026,
+    "seen": 1794238595.8400557,
     "ast_hash": "72d3cef1251ca3c97044b9c7c5fbda4d",
     "semantic_hash": ""
   },
   "core/templates/core/followers/email-followers-on-change.html": {
-    "mtime": 1794229308.4222016,
-    "seen": 1794229318.513233,
+    "mtime": 1794237136.7389026,
+    "seen": 1794238595.8400583,
     "ast_hash": "2a78753a0f34fc1a268363a74d9b9d7f",
     "semantic_hash": ""
   },
   "core/templates/core/followers/email-notification-summary.html": {
-    "mtime": 1794229308.4222016,
-    "seen": 1794229318.5132349,
+    "mtime": 1794237136.7389026,
+    "seen": 1794238595.8400598,
     "ast_hash": "cacb33429ee118edce18f3d5a8f6146c",
     "semantic_hash": ""
   },
@@ -3582,8 +3582,8 @@
     "semantic_hash": ""
   },
   "galleries/templates/galleries/photo_detail.html": {
-    "mtime": 1794229308.4232016,
-    "seen": 1794229318.513385,
+    "mtime": 1794237136.7429025,
+    "seen": 1794238595.8401434,
     "ast_hash": "f041fbba6bb05b0394064bf6662e4e3f",
     "semantic_hash": ""
   },
@@ -3816,9 +3816,9 @@
     "semantic_hash": ""
   },
   "members/templates/members/members/member_upsert.html": {
-    "mtime": 1792229981.7189445,
-    "seen": 1792345784.5617335,
-    "ast_hash": "2822e628aa9d88ea29b6b8d4320cfc10",
+    "mtime": 1794237138.1288972,
+    "seen": 1794238595.8402169,
+    "ast_hash": "88508b49a5751ca430662d64e13ce600",
     "semantic_hash": ""
   },
   "members/templates/members/members/members.html": {
@@ -3918,8 +3918,8 @@
     "semantic_hash": ""
   },
   "troves/templates/troves/trove_cave.html": {
-    "mtime": 1794229308.4402018,
-    "seen": 1794229318.5135992,
+    "mtime": 1794237136.876902,
+    "seen": 1794238595.8402648,
     "ast_hash": "8b0585ec95b560090dafc818d99348d1",
     "semantic_hash": ""
   },
@@ -4782,9 +4782,9 @@
     "semantic_hash": ""
   },
   "members/tests/ui/tests_ui_activation.py": {
-    "mtime": 1790505383.745527,
-    "seen": 1792345784.5612085,
-    "ast_hash": "5cccd96136ed71549e0c4d90441d3a39",
+    "mtime": 1794237138.1328971,
+    "seen": 1794238595.8397267,
+    "ast_hash": "646fc5db99319dcca3c4211c1ca1c563",
     "semantic_hash": ""
   },
   "members/tests/ui/tests_ui_export.py": {
@@ -4890,9 +4890,33 @@
     "semantic_hash": ""
   },
   "troves/migrations/0006_trove_url.py": {
-    "mtime": 1794229308.4392016,
-    "seen": 1794229318.5130615,
+    "mtime": 1794237136.874902,
+    "seen": 1794238595.8399565,
     "ast_hash": "10ae29c90b238b3d2d9a925bd91f35fc",
+    "semantic_hash": ""
+  },
+  "core/tests/ui/test_navbar_overflow.py": {
+    "mtime": 1794237138.1178973,
+    "seen": 1794238595.8394654,
+    "ast_hash": "f567751c67a27f76156d551bb61622a4",
+    "semantic_hash": ""
+  },
+  "members/templates/members/members/change_member_manager.html": {
+    "mtime": 1794237138.1278973,
+    "seen": 1794238595.8402085,
+    "ast_hash": "208e7aed1a6e355940fe7d490e62c869",
+    "semantic_hash": ""
+  },
+  "members/templates/members/members/managed_members.html": {
+    "mtime": 1794237138.1288972,
+    "seen": 1794238595.840213,
+    "ast_hash": "0ab8447c3601f53053228e4048e99c12",
+    "semantic_hash": ""
+  },
+  "members/templates/members/members/manager_search_results.html": {
+    "mtime": 1794237138.1288972,
+    "seen": 1794238595.840214,
+    "ast_hash": "e916844d9cf0e3748312dd43475c1051",
     "semantic_hash": ""
   }
 }

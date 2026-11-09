@@ -37,3 +37,4 @@ backup/
 **/.settings
 **/.toolstarget
 **/.vs
+**/graphify-out

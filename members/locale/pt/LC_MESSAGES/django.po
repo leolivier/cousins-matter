@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-09 12:27+0100\n"
+"POT-Creation-Date: 2026-11-09 12:57+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Portuguese <LL@li.org>\n"
@@ -1716,6 +1716,7 @@ msgid "The administrator has been notified."
 msgstr "O administrador foi notificado."
 
 #: views/views_member.py:382
+#, python-format
 msgid "Are you sure you want to activate the account of %(name)s?"
 msgstr "Confirma a ativação da conta de %(name)s?"
 

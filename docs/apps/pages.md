@@ -4,7 +4,7 @@ title: Pages
 description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpages, with publish/private URL conventions, menu/tree template tags and a predefined-pages import; documented in apps/pages.md
 tags: ["app", "pages"]
 status: draft
-stale_after: 2027-10-18
+stale_after: 2027-11-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-10T00:00:00Z }
 ---
 
@@ -100,7 +100,10 @@ Two URL namespaces, one app (`app_name = "pages-edit"`):
     `transaction.atomic()` with the site association and the
     `updated=True` flag: an unflagged edit can never be silently
     overwritten by a later import. Buttons: `save` (redirect to the
-    page) or `save-and-continue`.
+    page) or `save-and-continue`. `page_form.html` shows an info
+    notification linking to the user manual's Pages/CMS section
+    (`https://cousins-matter.readthedocs.io/<lang>/latest/features/#pages-cms`)
+    so the URL conventions are explained on the editing screen.
   - `<pk>/delete` — HTMX confirm modal, then redirect to the list.
 
 ## Predefined pages import

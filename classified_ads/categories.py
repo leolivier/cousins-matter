@@ -1,6 +1,11 @@
 from typing import TypedDict
+
+from django.utils.functional import Promise
 from django.utils.translation import gettext_lazy as _
-from django_stubs_ext import StrOrPromise
+
+# gettext_lazy() returns a lazy proxy, not a str: annotate it honestly without
+# depending on django-stubs-ext, which is a dev-only dependency.
+StrOrPromise = str | Promise
 
 
 class CategoryInfo(TypedDict):

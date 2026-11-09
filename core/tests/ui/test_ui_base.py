@@ -10,6 +10,7 @@ except ImportError:
 
 import os
 import unittest
+from typing import Any
 
 from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -44,6 +45,8 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
   browser_type: str = "chromium"  # "chromium" | "firefox" | "webkit"
   slow_mo: int = 0  # ms between each action (useful for debugging)
   default_timeout: int = 5_000  # ms, Playwright default timeout
+  _playwright: Any
+  _browser: Any
   # Login involves a PBKDF2 password check + 302 redirect + target page render.
   # On slow CI containers (GitHub Actions, shared CPU) this can take several
   # seconds, so we use a generous timeout here rather than default_timeout.

@@ -362,6 +362,8 @@ class ChangeManagerForm(forms.Form):
 
   def __init__(self, *args, member: Member, **kwargs):
     super().__init__(*args, **kwargs)
-    self.fields["new_manager"].queryset = (
+    field = self.fields["new_manager"]
+    assert isinstance(field, forms.ModelChoiceField)  # nosec B101
+    field.queryset = (
       Member.objects.filter(is_active=True, is_dead=False).exclude(pk=member.pk).order_by("last_name", "first_name")
     )

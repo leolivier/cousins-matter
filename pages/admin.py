@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin.exceptions import NotRegistered
 from django.contrib.flatpages.admin import FlatPageAdmin as DefaultFlatPageAdmin
 from django.contrib.flatpages.models import FlatPage as DefaultFlatPage
 from django.utils.translation import gettext_lazy as _
@@ -8,7 +9,7 @@ from .models import FlatPage
 # Unregister the default FlatPage admin if it's registered
 try:
   admin.site.unregister(DefaultFlatPage)
-except admin.sites.NotRegistered:
+except NotRegistered:
   pass
 
 

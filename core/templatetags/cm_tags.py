@@ -302,7 +302,7 @@ def featured(value: str) -> bool:
 def boldify(value: str) -> str:
   txt = escape(value)
   if txt.startswith("**") and txt.endswith("**"):
-    txt = "<i>" + txt[2:-2] + "</i>"
+    return mark_safe("<i>" + txt[2:-2] + "</i>")  # nosec
   return mark_safe(txt)  # nosec
 
 

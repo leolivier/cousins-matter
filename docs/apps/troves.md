@@ -4,7 +4,7 @@ title: Troves
 description: Troves app (`troves`) — the family's numeric treasures (texts, photos, music, videos…) filed by category, with ownership-based editing and auto-generated thumbnails; documented in apps/troves.md
 tags: ["app", "troves"]
 status: draft
-stale_after: 2027-03-13
+stale_after: 2027-09-13
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:53:05Z }
 ---
 
@@ -41,6 +41,10 @@ tenant). Treasures are invisible cross-tenant.
   - `delete()` removes the stored picture + thumbnail only after the
     row deletion succeeded, so a failed delete never leaves a row
     pointing at deleted files.
+- Field labels are translatable: `title` / `description` verbose names
+  use `gettext_lazy`, in `models.py` as well as in historical migrations
+  0003/0004, so `makemessages` extracts them; the five catalogs live in
+  `troves/locale/<lang>/LC_MESSAGES/` (`.mo` files are Git LFS).
 - Thumbnails reuse the galleries machinery: `create_thumbnail`
   (core/utils.py) with `settings.TROVE_THUMBNAIL_SIZE` (defaults to the
   galleries thumbnail size).

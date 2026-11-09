@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+  // Navbar collapse breakpoint: must match the media query in core.css that
+  // raises Bulma's fixed 1024px breakpoint to 1600px (see comment there).
+  const NAVBAR_BREAKPOINT = 1600;
+
   // "navbar-burger" management
   $('.navbar-burger').on('click', function(el) {
       // Get the target from the "data-target" attribute
@@ -19,7 +23,7 @@ $(document).ready(function() {
 
   // Management of sub-menu opening on mouse-over (desktop only)
   $('.navbar-item.has-dropdown').on('mouseenter', function() {
-      if ($(window).width() > 1023) {
+      if ($(window).width() >= NAVBAR_BREAKPOINT) {
           toggleDropdown($(this));
       }
   });
@@ -28,7 +32,7 @@ $(document).ready(function() {
   $('.navbar-item.has-dropdown > .navbar-link').on('click', function(e) {
       e.preventDefault();
       var $dropdown = $(this).closest('.navbar-item.has-dropdown');
-      if ($(window).width() > 1023) {
+      if ($(window).width() >= NAVBAR_BREAKPOINT) {
           toggleDropdown($dropdown);
       } else {
           $dropdown.toggleClass('is-active');
@@ -38,7 +42,7 @@ $(document).ready(function() {
 
   // Close submenus on outgoing hover (desktop only)
   $('.navbar-item.has-dropdown').on('mouseleave', function() {
-      if ($(window).width() > 1023) {
+      if ($(window).width() >= NAVBAR_BREAKPOINT) {
           $(this).removeClass('is-active');
       }
   });

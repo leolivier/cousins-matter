@@ -24,8 +24,9 @@ repos:
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
+        exclude: ^graphify-out/|^core/static/core/vendor/
       - id: end-of-file-fixer
-        exclude: ^graphify-out/
+        exclude: ^graphify-out/|^core/static/core/vendor/
       - id: check-yaml
       - id: check-json
         exclude: ^\.vscode/|^graphify-out/

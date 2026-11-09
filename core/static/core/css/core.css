@@ -368,3 +368,36 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 	border: 1px dashed hsl(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l));
 	border-radius: 5px;
 }
+
+/* The navbar content (brand + all start items + settings/help/user) is
+   ~1500px wide with all features enabled, well past Bulma's fixed 1024px
+   collapse breakpoint: between 1024px and ~1500px the right-hand menus
+   (Settings, Help, user) overflow off the screen with no hamburger.
+   Raise the collapse breakpoint to 1600px: below that the burger shows and
+   the dropdown menus open on click (see the navbar management in core.js,
+   whose threshold must match). */
+@media screen and (min-width: 1024px) and (max-width: 1599.98px) {
+	.navbar-burger {
+		display: flex;
+	}
+	/* When the burger is open, stack the menu vertically like Bulma's mobile
+	   layout: above 1024px Bulma forces the menu/start/end back to flex rows,
+	   so the opened menu would still overflow off the right edge. */
+	.navbar-menu:not(.is-active) {
+		display: none;
+	}
+	.navbar-menu.is-active {
+		display: block;
+	}
+	.navbar .navbar-start,
+	.navbar .navbar-end {
+		display: block;
+		margin: 0;
+	}
+	.navbar .navbar-item.has-dropdown {
+		display: block;
+	}
+	.navbar .navbar-item.has-dropdown > .navbar-dropdown {
+		position: static;
+	}
+}

@@ -4,8 +4,8 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-10-17
-generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T20:35:00Z }
+stale_after: 2027-02-09
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-09T12:00:00Z }
 ---
 
 # Core
@@ -163,6 +163,17 @@ side**, not a context processor:
   `BIRTHDAY_DAYS`). `recompute_settings_in_templates()` refreshes the
   memoized global dict, and the `override_settings` subclass re-computes it so
   tests see template-visible changes.
+
+## Navbar and static assets
+
+`core/templates/core/navbar.html` is the Bulma navbar; `core.min.css` /
+`core.min.js` (compiled by `make minify` from `core/static/core/css/core.css`
+and `core/static/core/js/core.js`) contain its behavior. Bulma's collapse
+breakpoint is fixed at 1024px but the menu content needs ~1500px with all
+features on: `core.css` media-queries the burger up to 1600px and
+`core.js` keeps its `NAVBAR_BREAKPOINT` constant (1600) in sync — the two
+must be updated together. The burger menu's dropdowns open on click or
+hover inside the panel.
 
 ## Middleware
 

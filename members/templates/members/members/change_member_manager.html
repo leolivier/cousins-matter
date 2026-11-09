@@ -7,29 +7,25 @@
 	hx-post="{% url 'members:change_member_manager' member.username %}"
 {%endblock form_params%}
 {% block form %}
-	{# search-as-you-type manager picker, same UX as chat add-member #}
-	<div class="dropdown full-width" id="manager-search-dropdown">
-		<div class="dropdown-trigger full-width">
-			<div class="control is-expanded has-icons-left is-relative">
-				<span class="htmx-indicator">{%icon "loading" %}</span>
-				<input class="input" type="search"
-							 name="q"
-							 placeholder="{%trans 'Search...' %}"
-							 hx-get="{% url 'members:search_members' %}"
-							 hx-vals='{"render_with": "members/members/manager_search_results.html", "render_empty_query": "false"}'
-							 hx-trigger="input[this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && this.value.length >= 3]"
-							 hx-target="#search-results"
-							 hx-indicator=".htmx-indicator"
-							 autocomplete="off"
-							 id="manager-search-input"
-							 data-min-length="3"
-							 >
-				{%icon "search" "is-small is-left"%}
-				<div class="dropdown-menu full-width" role="menu">
-					<div class="dropdown-content" id="search-results">
-					</div>
-				</div>
-			</div>
+	{# results in normal flow: a Bulma dropdown-menu would be clipped by the modal-card overflow #}
+	<div class="control is-expanded has-icons-left is-relative">
+		<span class="htmx-indicator">{%icon "loading" %}</span>
+		<input class="input" type="search"
+					 name="q"
+					 placeholder="{%trans 'Search...' %}"
+					 hx-get="{% url 'members:search_members' %}"
+					 hx-vals='{"render_with": "members/members/manager_search_results.html", "render_empty_query": "false"}'
+					 hx-trigger="input[this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && this.value.length >= 3]"
+					 hx-target="#search-results"
+					 hx-indicator=".htmx-indicator"
+					 autocomplete="off"
+					 id="manager-search-input"
+					 data-min-length="3"
+					 >
+		{%icon "search" "is-small is-left"%}
+	</div>
+	<div id="search-results-box" class="mt-2" style="display:none">
+		<div class="dropdown-content" id="search-results">
 		</div>
 	</div>
 	<input type="hidden" name="new_manager" id="new-manager-id">

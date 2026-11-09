@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-09 10:48+0100\n"
+"POT-Creation-Date: 2026-11-09 12:27+0100\n"
 "PO-Revision-Date: 2025-05-20 12:46+00:00\n"
 "Last-Translator: Auto-po-lyglot using qwen3:8b (https://github.com/leolivier/"
 "auto-po-lyglot)\n"
@@ -519,7 +519,7 @@ msgstr "Errore: Membro già attivo"
 msgid "Error: Member without email cannot be activated"
 msgstr "Errore: Un membro senza indirizzo email non può essere attivato"
 
-#: services/members.py:37 tests/tests_member.py:557
+#: services/members.py:37 tests/tests_member.py:558
 msgid "Member account activated successfully. The member can now sign in."
 msgstr ""
 "L'account del membro è stato attivato con successo. Il membro può ora "
@@ -1175,11 +1175,16 @@ msgid "No birthdays in next %(ndays)s days"
 msgstr "Nessun compleanno nei prossimi %(ndays)s giorni"
 
 #: templates/members/members/change_member_manager.html:4
-#: templates/members/members/change_member_manager.html:19
-#: templates/members/members/managed_members.html:30
-#: templates/members/members/managed_members.html:32
+#: templates/members/members/change_member_manager.html:35
+#: templates/members/members/managed_members.html:27
+#: templates/members/members/managed_members.html:29
 msgid "Change manager"
 msgstr "Cambia manager"
+
+#: templates/members/members/change_member_manager.html:15
+#: templates/members/members/members.html:41
+msgid "Search..."
+msgstr "Cerca..."
 
 #: templates/members/members/export_members.html:3
 #: templates/members/members/export_members.html:6
@@ -1273,15 +1278,21 @@ msgid "Members I Manage"
 msgstr "Membri che gestisco"
 
 #: templates/members/members/managed_members.html:23
-#: templates/members/members/managed_members.html:25
-#: templates/members/members/member_upsert.html:48
+#: templates/members/members/member_upsert.html:47
+#: tests/tests_member_views.py:228 views/views_member.py:381
 msgid "Activate Account"
 msgstr "Attiva l'account"
 
-#: templates/members/members/managed_members.html:41
-#: tests/tests_member_views.py:168
+#: templates/members/members/managed_members.html:38
+#: tests/tests_member_views.py:169
 msgid "You don't manage any members yet."
 msgstr "Non gestisci ancora nessun membro."
+
+#: templates/members/members/manager_search_results.html:13
+#, fuzzy
+#| msgid "No members found"
+msgid "No results found"
+msgstr "Nessun membro trovato"
 
 #: templates/members/members/member_detail.html:3
 msgid "Member Detail"
@@ -1315,23 +1326,23 @@ msgstr "Segnala Decesso"
 msgid "Change Password"
 msgstr "Cambia password"
 
-#: templates/members/members/member_upsert.html:53
+#: templates/members/members/member_upsert.html:51
 msgid "Delete"
 msgstr "Elimina"
 
-#: templates/members/members/member_upsert.html:66
+#: templates/members/members/member_upsert.html:64
 msgid "Update"
 msgstr "Aggiornare"
 
-#: templates/members/members/member_upsert.html:69
+#: templates/members/members/member_upsert.html:67
 msgid "Create"
 msgstr "Crea"
 
-#: templates/members/members/member_upsert.html:77
+#: templates/members/members/member_upsert.html:75
 msgid "Lost your verification email?"
 msgstr "Hai perso l'email di verifica?"
 
-#: templates/members/members/member_upsert.html:79
+#: templates/members/members/member_upsert.html:77
 #: templates/members/registration/email_verification_failed.html:13
 msgid "Request a new link"
 msgstr "Richiedi un nuovo link"
@@ -1345,18 +1356,14 @@ msgstr "Elenco dei Membri"
 msgid "Show directory"
 msgstr "Mostra l'elenco"
 
-#: templates/members/members/members.html:21 views/views_member.py:149
-#: views/views_member.py:170
+#: templates/members/members/members.html:21 views/views_member.py:148
+#: views/views_member.py:169
 msgid "Create Member"
 msgstr "Crea Membro"
 
 #: templates/members/members/members.html:27
 msgid "Invite Member"
 msgstr "Invita Membro"
-
-#: templates/members/members/members.html:41
-msgid "Search..."
-msgstr "Cerca..."
 
 #: templates/members/members/members.html:58
 msgid "Sort by"
@@ -1514,16 +1521,16 @@ msgstr ""
 "del sito, altrimenti le modifiche non saranno salvate"
 
 #: tests/tests_member.py:289 tests/tests_member.py:294
-#: views/views_member.py:191 views/views_member.py:208
-#: views/views_member.py:329
+#: views/views_member.py:190 views/views_member.py:207
+#: views/views_member.py:328
 msgid "You do not have permission to edit this member."
 msgstr "Non hai il permesso di modificare questo membro."
 
-#: tests/tests_member.py:629
+#: tests/tests_member.py:630
 msgid "Error: Cannot activate a dead member "
 msgstr "Errore: Impossibile attivare un membro morto "
 
-#: tests/tests_member_views.py:79 views/views_member.py:287
+#: tests/tests_member_views.py:80 views/views_member.py:286
 msgid "Delete my account"
 msgstr "Eliminare il mio account?"
 
@@ -1641,51 +1648,51 @@ msgstr "Seleziona un nome..."
 msgid "Method not allowed"
 msgstr "Metodo non consentito"
 
-#: views/views_member.py:51
+#: views/views_member.py:50
 msgid "You have been logged out"
 msgstr "Sei stato disconnesso"
 
-#: views/views_member.py:139
+#: views/views_member.py:138
 #, fuzzy
 #| msgid "Only superusers can create members"
 msgid "Only admins can create members"
 msgstr "Solo i superutenti possono creare membri"
 
-#: views/views_member.py:162
+#: views/views_member.py:161
 msgid "Member successfully created"
 msgstr "Il membro è stato creato con successo"
 
-#: views/views_member.py:184
+#: views/views_member.py:183
 msgid "Update Member Details"
 msgstr "Aggiorna i dettagli del membro"
 
-#: views/views_member.py:185
+#: views/views_member.py:184
 msgid "Member successfully updated"
 msgstr "Il membro è stato aggiornato con successo"
 
-#: views/views_member.py:226
+#: views/views_member.py:225
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Un'email di verifica è stata inviata per convalidare il tuo nuovo indirizzo "
 "email."
 
-#: views/views_member.py:265
+#: views/views_member.py:264
 msgid "My Profile"
 msgstr "Il mio profilo"
 
-#: views/views_member.py:266
+#: views/views_member.py:265
 msgid "Profile successfully updated"
 msgstr "Profilo aggiornato con successo"
 
-#: views/views_member.py:280
+#: views/views_member.py:279
 msgid "You do not have permission to delete this member."
 msgstr "Non hai il permesso di eliminare questo membro."
 
-#: views/views_member.py:284
+#: views/views_member.py:283
 msgid "Member deleted"
 msgstr "Membro eliminato"
 
-#: views/views_member.py:288
+#: views/views_member.py:287
 msgid ""
 "Are you sure you want to delete your account and all associated data? This "
 "is irrecoverable!"
@@ -1693,29 +1700,34 @@ msgstr ""
 "Sei sicuro di voler eliminare il tuo account e tutti i dati associati? "
 "Questa azione è irreversibile!"
 
-#: views/views_member.py:290
+#: views/views_member.py:289
 msgid "Delete member"
 msgstr "Elimina membro"
 
-#: views/views_member.py:291
+#: views/views_member.py:290
 #, python-format
 msgid ""
 "Are you sure you want to delete %(name)s's account and all associated data?"
 msgstr ""
 "Sei sicuro di voler eliminare l'account di %(name)s e tutti i dati associati?"
 
-#: views/views_member.py:339
+#: views/views_member.py:338
 #, python-format
 msgid "%(member)s is now managed by %(manager)s"
 msgstr "%(member)s è ora gestito da %(manager)s"
 
-#: views/views_member.py:352
+#: views/views_member.py:353
 msgid "Please provide a death date."
 msgstr "Si prega di fornire una data di decesso."
 
-#: views/views_member.py:359
+#: views/views_member.py:360
 msgid "The administrator has been notified."
 msgstr "L'amministratore è stato avvisato."
+
+#: views/views_member.py:382
+msgid "Are you sure you want to activate the account of %(name)s?"
+msgstr "Confermi l'attivazione dell'account di %(name)s?"
+"Sei sicuro di voler eliminare l'account di %(name)s e tutti i dati associati?"
 
 #: views/views_registration.py:154
 #, fuzzy

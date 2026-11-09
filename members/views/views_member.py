@@ -18,7 +18,6 @@ from core.utils import (
   Paginator,
   confirm_delete_modal,
 )
-
 from ..forms import ChangeManagerForm, MemberUpdateForm, NotifyDeathForm
 from ..models import Family, Member
 from ..services.members import (
@@ -365,12 +364,22 @@ def notify_death(request, username):
 
 
 def activate_member(request, username):
-  """activate the member with username"""
+  """activate the member with username; asks for confirmation first"""
   member = get_object_or_404(Member, username=username)
-  (status, message) = do_activate_member(member, request)
-  if status == "error":
-    messages.error(request, message)
-  elif status == "success":
-    messages.success(request, message)
-
+  if request.method == "POST":
+    (status, message) = do_activate_member(member, request)
+    if status == "error":
+      messages.error(request, message)
+    elif status == "success":
+      messages.success(request, message)
+    if request.htmx:
+      return HttpResponseClientRefresh()
+    return redirect(reverse("members:detail", kwargs={"username": member.username}))
+  if request.htmx:
+    return confirm_delete_modal(
+      request,
+      _("Activate Account"),
+      _("Are you sure you want to activate the account of %(name)s?") % {"name": member.full_name},
+    )
+  # direct navigation: never activate without confirmation
   return redirect(reverse("members:detail", kwargs={"username": member.username}))

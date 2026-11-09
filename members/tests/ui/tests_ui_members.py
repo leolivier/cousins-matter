@@ -125,7 +125,7 @@ class ManagedMembersUITest(MembersUITestBase):
       self.page.locator("text=Dana Scully").first.is_visible(),
       "Managed member should be listed",
     )
-    activate_btn = self.page.locator("a[href*='/activate/']")
+    activate_btn = self.page.locator("button[hx-get*='/activate/']")
     self.assertTrue(activate_btn.count() > 0, "Activate button should be shown for inactive members")
 
   def test_change_manager_modal_flow(self):

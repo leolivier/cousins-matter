@@ -550,7 +550,8 @@ class TestAdminActivateMember(MemberTestCase):
   """Tenant admins and platform superusers activate members immediately, without email."""
 
   def activate(self, member):
-    return self.client.get(reverse("members:activate", args=[member.username]), follow=True)
+    # activation is confirmed through an htmx modal; POST is the effective step
+    return self.client.post(reverse("members:activate", args=[member.username]), follow=True)
 
   def check_immediate_activation(self, response, managed):
     self.assertEqual(response.status_code, 200)
@@ -623,7 +624,7 @@ class TestDeadMembers(MemberViewTestMixin, MemberTestCase):
 
     # check that dead members can't be activated
     activate_url = reverse("members:activate", kwargs={"username": user.username})
-    response = self.client.get(activate_url, follow=True)
+    response = self.client.post(activate_url, {}, follow=True)
     self.assertEqual(response.status_code, 200)
     # self.print_response(response)
     self.assertContainsMessage(response, "error", _("Error: Cannot activate a dead member "))

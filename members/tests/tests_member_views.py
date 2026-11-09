@@ -1,5 +1,6 @@
 import json
 
+from django.core import mail
 from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -211,3 +212,32 @@ class TestChangeMemberManager(MemberTestCase):
     self.client.login(username=other.email, password=other.password)
     response = self.client.post(self.change_url, {"new_manager": self.member.pk})
     self.assertRedirects(response, reverse("members:detail", kwargs={"username": self.managed.username}))
+
+
+class TestActivationConfirmation(MemberTestCase):
+  """The activation asks for confirmation through an htmx modal (issue 545)."""
+
+  def setUp(self):
+    super().setUp()
+    self.managed = self.create_member()  # member_manager=self.member
+    self.activate_url = reverse("members:activate", kwargs={"username": self.managed.username})
+
+  def test_htmx_get_shows_confirmation(self):
+    response = self.client.get(self.activate_url, HTTP_HX_REQUEST="true")
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, _("Activate Account"))
+    self.assertContains(response, self.managed.get_full_name())
+    self.managed.refresh_from_db()
+    self.assertFalse(self.managed.is_active)  # GET never activates
+
+  def test_plain_get_does_not_activate(self):
+    response = self.client.get(self.activate_url, follow=True)
+    self.assertRedirects(response, reverse("members:detail", kwargs={"username": self.managed.username}))
+    self.managed.refresh_from_db()
+    self.assertFalse(self.managed.is_active)
+
+  def test_post_activates(self):
+    # regular managers only trigger the verification email; an admin activates directly
+    mail.outbox = []
+    self.client.post(self.activate_url, {}, follow=True)
+    self.assertEqual(len(mail.outbox), 1)

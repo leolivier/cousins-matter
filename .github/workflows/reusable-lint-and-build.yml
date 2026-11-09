@@ -105,7 +105,7 @@ jobs:
 
       - name: audits
         run: |
-          uv run pip-audit .
+          uv audit
           uv run mypy .
 
       - name: Login to GHCR.io

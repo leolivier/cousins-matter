@@ -88,6 +88,7 @@ urlpatterns = [
   path("<str:username>/notify-death", views_member.notify_death, name="notify_death"),
   path("<str:username>/toggle-follow", views_followers.toggle_follow, name="toggle_follow"),
   path("<str:username>/activate/", views_member.activate_member, name="activate"),
+  path("<str:username>/change-manager", views_member.change_member_manager, name="change_member_manager"),
   path(
     "address/<int:pk>/",
     views_address.AddressDetailView.as_view(),

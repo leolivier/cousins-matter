@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-09 10:33+0100\n"
+"POT-Creation-Date: 2026-11-09 10:48+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+020\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Français <LL@li.org>\n"
@@ -211,6 +211,10 @@ msgstr "Toute information complémentaire..."
 msgid "Message (Optional)"
 msgstr "Message (Optionnel)"
 
+#: forms.py:361 models.py:151
+msgid "Member manager"
+msgstr "Gestionnaire de ce membre"
+
 #: managers.py:50 managers.py:73
 msgid "The username must be set"
 msgstr "Le nom d'utilisateur doit être fuourni"
@@ -392,10 +396,6 @@ msgstr "Rôle"
 #: models.py:143
 msgid "Tenant"
 msgstr "Famille"
-
-#: models.py:151
-msgid "Member manager"
-msgstr "Gestionnaire de ce membre"
 
 #: models.py:166
 msgid "Click on the month name or the year to change them quickly"
@@ -1172,6 +1172,13 @@ msgstr "aura %(age)s ans %(birthday)s"
 msgid "No birthdays in next %(ndays)s days"
 msgstr "Pas d'anniversaire dans les prochains %(ndays)s jours"
 
+#: templates/members/members/change_member_manager.html:4
+#: templates/members/members/change_member_manager.html:19
+#: templates/members/members/managed_members.html:30
+#: templates/members/members/managed_members.html:32
+msgid "Change manager"
+msgstr "Changer de gestionnaire"
+
 #: templates/members/members/export_members.html:3
 #: templates/members/members/export_members.html:6
 msgid "Export Members"
@@ -1266,13 +1273,13 @@ msgstr "Importer"
 msgid "Members I Manage"
 msgstr "Membres que je gère"
 
-#: templates/members/members/managed_members.html:22
-#: templates/members/members/managed_members.html:24
+#: templates/members/members/managed_members.html:23
+#: templates/members/members/managed_members.html:25
 #: templates/members/members/member_upsert.html:48
 msgid "Activate Account"
 msgstr "Activer le compte"
 
-#: templates/members/members/managed_members.html:32
+#: templates/members/members/managed_members.html:41
 #: tests/tests_member_views.py:168
 msgid "You don't manage any members yet."
 msgstr "Tu ne gères aucun membre pour l'instant."
@@ -1507,6 +1514,7 @@ msgstr ""
 
 #: tests/tests_member.py:289 tests/tests_member.py:294
 #: views/views_member.py:191 views/views_member.py:208
+#: views/views_member.py:329
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
 
@@ -1696,11 +1704,16 @@ msgstr ""
 "Es-tu sûr de vouloir supprimer le compte de %(name)s et toutes les données "
 "associées ?"
 
-#: views/views_member.py:329
+#: views/views_member.py:339
+#, python-format
+msgid "%(member)s is now managed by %(manager)s"
+msgstr "%(member)s est maintenant géré par %(manager)s"
+
+#: views/views_member.py:352
 msgid "Please provide a death date."
 msgstr "Merci de fournir une date de décès."
 
-#: views/views_member.py:336
+#: views/views_member.py:359
 msgid "The administrator has been notified."
 msgstr "L'administrateur a été prévenu."
 

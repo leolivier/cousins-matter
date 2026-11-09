@@ -166,3 +166,33 @@ class TestManagedMembersView(MemberTestCase):
     response = self.client.get(reverse("members:managed_members"))
     self.assertEqual(response.status_code, 200)
     self.assertContains(response, _("You don't manage any members yet."))
+
+
+class TestChangeMemberManager(MemberTestCase):
+  """Tests for the change-manager command (issue 545)."""
+
+  def setUp(self):
+    super().setUp()
+    self.managed = self.create_member()  # member_manager=self.member
+    self.change_url = reverse("members:change_member_manager", kwargs={"username": self.managed.username})
+
+  def test_get_shows_manager_choice(self):
+    """The modal form offers the active members, excluding the member itself."""
+    new_manager = self.create_member(is_active=True)
+    response = self.client.get(self.change_url)
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, new_manager.get_full_name())
+    self.assertNotContains(response, f'value="{self.managed.pk}"')
+
+  def test_post_reassigns_member(self):
+    new_manager = self.create_member(is_active=True)
+    response = self.client.post(self.change_url, {"new_manager": new_manager.pk})
+    self.assertHXRefresh(response)
+    self.managed.refresh_from_db()
+    self.assertEqual(self.managed.member_manager, new_manager)
+
+  def test_non_manager_is_refused(self):
+    other = self.create_member(is_active=True)
+    self.client.login(username=other.email, password=other.password)
+    response = self.client.post(self.change_url, {"new_manager": self.member.pk})
+    self.assertRedirects(response, reverse("members:detail", kwargs={"username": self.managed.username}))

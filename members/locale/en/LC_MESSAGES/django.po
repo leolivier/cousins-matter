@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-09 10:33+0100\n"
+"POT-Creation-Date: 2026-11-09 10:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -203,6 +203,10 @@ msgstr ""
 msgid "Message (Optional)"
 msgstr ""
 
+#: forms.py:361 models.py:151
+msgid "Member manager"
+msgstr ""
+
 #: managers.py:50 managers.py:73
 msgid "The username must be set"
 msgstr ""
@@ -382,10 +386,6 @@ msgstr ""
 
 #: models.py:143
 msgid "Tenant"
-msgstr ""
-
-#: models.py:151
-msgid "Member manager"
 msgstr ""
 
 #: models.py:166
@@ -1071,6 +1071,13 @@ msgstr ""
 msgid "No birthdays in next %(ndays)s days"
 msgstr ""
 
+#: templates/members/members/change_member_manager.html:4
+#: templates/members/members/change_member_manager.html:19
+#: templates/members/members/managed_members.html:30
+#: templates/members/members/managed_members.html:32
+msgid "Change manager"
+msgstr "Change manager"
+
 #: templates/members/members/export_members.html:3
 #: templates/members/members/export_members.html:6
 msgid "Export Members"
@@ -1151,13 +1158,13 @@ msgstr ""
 msgid "Members I Manage"
 msgstr "Members I Manage"
 
-#: templates/members/members/managed_members.html:22
-#: templates/members/members/managed_members.html:24
+#: templates/members/members/managed_members.html:23
+#: templates/members/members/managed_members.html:25
 #: templates/members/members/member_upsert.html:48
 msgid "Activate Account"
 msgstr ""
 
-#: templates/members/members/managed_members.html:32
+#: templates/members/members/managed_members.html:41
 #: tests/tests_member_views.py:168
 msgid "You don't manage any members yet."
 msgstr "You don't manage any members yet."
@@ -1376,6 +1383,7 @@ msgstr ""
 
 #: tests/tests_member.py:289 tests/tests_member.py:294
 #: views/views_member.py:191 views/views_member.py:208
+#: views/views_member.py:329
 msgid "You do not have permission to edit this member."
 msgstr ""
 
@@ -1548,11 +1556,16 @@ msgid ""
 "Are you sure you want to delete %(name)s's account and all associated data?"
 msgstr ""
 
-#: views/views_member.py:329
+#: views/views_member.py:339
+#, python-format
+msgid "%(member)s is now managed by %(manager)s"
+msgstr "%(member)s is now managed by %(manager)s"
+
+#: views/views_member.py:352
 msgid "Please provide a death date."
 msgstr ""
 
-#: views/views_member.py:336
+#: views/views_member.py:359
 msgid "The administrator has been notified."
 msgstr ""
 

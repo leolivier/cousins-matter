@@ -127,3 +127,20 @@ class ManagedMembersUITest(MembersUITestBase):
     )
     activate_btn = self.page.locator("a[href*='/activate/']")
     self.assertTrue(activate_btn.count() > 0, "Activate button should be shown for inactive members")
+
+  def test_change_manager_modal_flow(self):
+    """The "Change manager" command reassigns the member from the list."""
+
+    managed = MemberFactory(first_name="Dana", last_name="Scully", is_active=False, member_manager=self.user)
+    new_manager = MemberFactory(first_name="Fox", last_name="Mulder", is_active=True)
+    self.login_and_goto_page("members:managed_members")
+    self.page.locator(f"button[hx-get*='{managed.username}/change-manager']").click()
+    modal_appeared = self.page.wait_for_selector(".modal-card", timeout=5000) is not None
+    self.assertTrue(modal_appeared, "Change manager modal should open")
+    self.page.select_option("select[name='new_manager']", str(new_manager.pk))
+    self.page.locator(".modal-card-foot button[type='submit']").click()
+    self.page.wait_for_timeout(1000)
+    self.assertTrue(
+      self.page.locator("text=Fox Mulder").first.is_visible(),
+      "Success message should name the new manager",
+    )

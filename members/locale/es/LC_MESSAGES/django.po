@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-09 10:33+0100\n"
+"POT-Creation-Date: 2026-11-09 10:48+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Spanish <LL@li.org>\n"
@@ -214,6 +214,10 @@ msgstr "Cualquier información adicional..."
 msgid "Message (Optional)"
 msgstr "Mensaje (Opcional)"
 
+#: forms.py:361 models.py:151
+msgid "Member manager"
+msgstr "Gestor de miembro"
+
 #: managers.py:50 managers.py:73
 msgid "The username must be set"
 msgstr "No debe establecer el nombre de usuario"
@@ -396,10 +400,6 @@ msgstr ""
 #: models.py:143
 msgid "Tenant"
 msgstr ""
-
-#: models.py:151
-msgid "Member manager"
-msgstr "Gestor de miembro"
 
 #: models.py:166
 msgid "Click on the month name or the year to change them quickly"
@@ -1175,6 +1175,13 @@ msgstr "tendrá %(age)s años el día de %(birthday)s"
 msgid "No birthdays in next %(ndays)s days"
 msgstr "No anniversario en los próximos %(ndays)s días"
 
+#: templates/members/members/change_member_manager.html:4
+#: templates/members/members/change_member_manager.html:19
+#: templates/members/members/managed_members.html:30
+#: templates/members/members/managed_members.html:32
+msgid "Change manager"
+msgstr "Cambiar de gestor"
+
 #: templates/members/members/export_members.html:3
 #: templates/members/members/export_members.html:6
 msgid "Export Members"
@@ -1268,13 +1275,13 @@ msgstr "Importar"
 msgid "Members I Manage"
 msgstr "Miembros que gestiono"
 
-#: templates/members/members/managed_members.html:22
-#: templates/members/members/managed_members.html:24
+#: templates/members/members/managed_members.html:23
+#: templates/members/members/managed_members.html:25
 #: templates/members/members/member_upsert.html:48
 msgid "Activate Account"
 msgstr "Activar Cuenta"
 
-#: templates/members/members/managed_members.html:32
+#: templates/members/members/managed_members.html:41
 #: tests/tests_member_views.py:168
 msgid "You don't manage any members yet."
 msgstr "Todavía no gestionas ningún miembro."
@@ -1509,6 +1516,7 @@ msgstr ""
 
 #: tests/tests_member.py:289 tests/tests_member.py:294
 #: views/views_member.py:191 views/views_member.py:208
+#: views/views_member.py:329
 msgid "You do not have permission to edit this member."
 msgstr "No tienes permiso para editar este miembro."
 
@@ -1699,11 +1707,16 @@ msgstr ""
 "Sí está seguro de querer eliminar la cuenta de %(name)s y todas las datos "
 "asociados?"
 
-#: views/views_member.py:329
+#: views/views_member.py:339
+#, python-format
+msgid "%(member)s is now managed by %(manager)s"
+msgstr "%(member)s ahora lo gestiona %(manager)s"
+
+#: views/views_member.py:352
 msgid "Please provide a death date."
 msgstr "Por favor, proporcione una fecha de fallecimiento."
 
-#: views/views_member.py:336
+#: views/views_member.py:359
 msgid "The administrator has been notified."
 msgstr "Se ha notificado al administrador."
 

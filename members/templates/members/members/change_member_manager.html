@@ -1,0 +1,20 @@
+{%extends "core/common/htmx_modal_form.html"%}
+{%load i18n%}
+{% block modal_title %}
+	{% translate "Change manager" %} - {{ member.full_name }}
+{% endblock modal_title %}
+{%block form_params%}
+	hx-post="{% url 'members:change_member_manager' member.username %}"
+{%endblock form_params%}
+{% block form %}
+	<div class="field">
+		<div class="control">
+			<div class="select">
+				{{ form.new_manager }}
+			</div>
+		</div>
+	</div>
+{% endblock form %}
+{% block submit_button_text %}
+	{% trans "Change manager" %}
+{% endblock submit_button_text %}

@@ -19,7 +19,7 @@ from core.utils import (
   confirm_delete_modal,
 )
 
-from ..forms import MemberUpdateForm, NotifyDeathForm
+from ..forms import ChangeManagerForm, MemberUpdateForm, NotifyDeathForm
 from ..models import Family, Member
 from ..services.members import (
   do_activate_member,
@@ -319,6 +319,31 @@ def search_members(request):
       context = {"members": None, "page": None, "page_num": None}
 
   return render(request, render_with, context)
+
+
+def change_member_manager(request, username):
+  """reassign an inactive member to another manager (issue 545)"""
+  member = get_object_or_404(Member, username=username)
+  is_admin = request.user.is_superuser or getattr(request.user, "is_tenant_admin", False)
+  if not is_admin and request.user.id != getattr(member.member_manager, "id", None):
+    messages.error(request, _("You do not have permission to edit this member."))
+    return redirect("members:detail", username=member.username)
+
+  if request.method == "POST":
+    form = ChangeManagerForm(request.POST, member=member)
+    if form.is_valid():
+      member.member_manager = form.cleaned_data["new_manager"]
+      member.save(update_fields=["member_manager"])
+      messages.success(
+        request,
+        _("%(member)s is now managed by %(manager)s")
+        % {"member": member.full_name, "manager": member.member_manager.full_name},
+      )
+      return HttpResponseClientRefresh()
+    return render(request, "members/members/change_member_manager.html", {"member": member, "form": form})
+  return render(
+    request, "members/members/change_member_manager.html", {"member": member, "form": ChangeManagerForm(member=member)}
+  )
 
 
 def notify_death(request, username):

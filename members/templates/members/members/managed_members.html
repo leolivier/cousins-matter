@@ -18,11 +18,20 @@
             <strong>{{ member.get_full_name }}</strong>
           </a>
           {% if not member.is_active %}
-            <a class="button is-small" href="{% url 'members:activate' member.username %}"
+          <div class="buttons is-centered are-small mt-1">
+            <a class="button" href="{% url 'members:activate' member.username %}"
                title="{% translate 'Activate Account' %}">
               {%icon "activate-member" %}
               <span>{% translate "Activate Account" %}</span>
             </a>
+            <button type="button" class="button"
+                    hx-get="{% url 'members:change_member_manager' member.username %}"
+                    hx-target="#modal" hx-swap="innerHTML"
+                    title="{% translate 'Change manager' %}">
+              {%icon "member-link" %}
+              <span>{% translate "Change manager" %}</span>
+            </button>
+          </div>
           {% endif %}
         </div>
       {% endfor %}

@@ -43,10 +43,8 @@
 				</a>
 				{%elif not member.is_active %}
 					{% if member.member_manager.id == request.user.id or request.user.is_superuser or request.user.is_tenant_admin %} {# update managed member #}
-					<a class="button" href="{% url 'members:activate' member.username %}">
-						{%icon "activate-member" %}
-						<span>{% translate "Activate Account" %}</span>
-					</a>
+					{% url 'members:activate' member.username as activate_url %}
+					{%include "core/common/confirm-delete-modal.html#delete_button" with button_text=_("Activate Account") button_class="is-primary" button_icon="activate-member" delete_url=activate_url %}
 					{% endif %}
 				{% endif %}
 				{% url 'members:delete' member.username as delete_url %}

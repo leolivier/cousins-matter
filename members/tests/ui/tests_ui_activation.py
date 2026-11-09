@@ -15,12 +15,16 @@ class ActivateAccountUITest(MembersUITestBase):
 
     self.login_and_goto_page("members:member_edit", kwargs={"username": self.member3.username})
 
-    activate_link = self.page.locator("a[href$='/activate/']")
-    activate_link.wait_for(state="visible")
-    activate_link.click()
+    # activation requires a confirmation modal since issue 545
+    activate_button = self.page.locator("button[hx-get$='/activate/']")
+    activate_button.wait_for(state="visible")
+    activate_button.click()
+    modal_appeared = self.page.wait_for_selector(".modal-card", timeout=5000) is not None
+    self.assertTrue(modal_appeared, "Activation confirmation modal should open")
+    self.page.locator(".modal-card-foot button[type='submit']").click()
 
-    # The view redirects to the member detail page with a success flash
-    self.page.wait_for_timeout(500)
+    # HX-Refresh reloads the edit page with a success flash
+    self.page.wait_for_timeout(1000)
     self.assert_url_contains(f"/members/{self.member3.username}")
     self.assert_visible(".message.is-success", "Activation success message should be displayed")
 

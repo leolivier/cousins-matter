@@ -353,3 +353,15 @@ class NotifyDeathForm(forms.Form):
     label=_("Message (Optional)"),
     required=False,
   )
+
+
+class ChangeManagerForm(forms.Form):
+  """reassign an inactive member to another (active) manager"""
+
+  new_manager = forms.ModelChoiceField(queryset=Member.objects.none(), label=_("Member manager"))
+
+  def __init__(self, *args, member: Member, **kwargs):
+    super().__init__(*args, **kwargs)
+    self.fields["new_manager"].queryset = (
+      Member.objects.filter(is_active=True, is_dead=False).exclude(pk=member.pk).order_by("last_name", "first_name")
+    )

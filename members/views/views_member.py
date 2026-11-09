@@ -18,8 +18,7 @@ from core.utils import (
   Paginator,
   confirm_delete_modal,
 )
-
-from ..forms import MemberUpdateForm, NotifyDeathForm
+from ..forms import ChangeManagerForm, MemberUpdateForm, NotifyDeathForm
 from ..models import Family, Member
 from ..services.members import (
   do_activate_member,
@@ -92,6 +91,16 @@ class MembersView(generic.ListView):
       return render(request, self.template_name, {"page": page, "members": page.object_list})
     except PageOutOfBounds as exc:
       return redirect(exc.redirect_to)
+
+
+class ManagedMembersView(generic.ListView):
+  """List the members managed by the logged-in user (issue 545)"""
+
+  template_name = "members/members/managed_members.html"
+
+  def get(self, request):
+    members = request.user.managed_members.order_by("last_name", "first_name")
+    return render(request, self.template_name, {"members": members})
 
 
 class MemberDetailView(generic.DetailView):
@@ -311,6 +320,31 @@ def search_members(request):
   return render(request, render_with, context)
 
 
+def change_member_manager(request, username):
+  """reassign an inactive member to another manager (issue 545)"""
+  member = get_object_or_404(Member, username=username)
+  is_admin = request.user.is_superuser or getattr(request.user, "is_tenant_admin", False)
+  if not is_admin and request.user.id != getattr(member.member_manager, "id", None):
+    messages.error(request, _("You do not have permission to edit this member."))
+    return redirect("members:detail", username=member.username)
+
+  if request.method == "POST":
+    form = ChangeManagerForm(request.POST, member=member)
+    if form.is_valid():
+      member.member_manager = form.cleaned_data["new_manager"]
+      member.save(update_fields=["member_manager"])
+      messages.success(
+        request,
+        _("%(member)s is now managed by %(manager)s")
+        % {"member": member.full_name, "manager": member.member_manager.full_name},
+      )
+      return HttpResponseClientRefresh()
+    return render(request, "members/members/change_member_manager.html", {"member": member, "form": form})
+  return render(
+    request, "members/members/change_member_manager.html", {"member": member, "form": ChangeManagerForm(member=member)}
+  )
+
+
 def notify_death(request, username):
   member = get_object_or_404(Member, username=username)
   if request.method == "POST":
@@ -330,12 +364,22 @@ def notify_death(request, username):
 
 
 def activate_member(request, username):
-  """activate the member with username"""
+  """activate the member with username; asks for confirmation first"""
   member = get_object_or_404(Member, username=username)
-  (status, message) = do_activate_member(member, request)
-  if status == "error":
-    messages.error(request, message)
-  elif status == "success":
-    messages.success(request, message)
-
+  if request.method == "POST":
+    (status, message) = do_activate_member(member, request)
+    if status == "error":
+      messages.error(request, message)
+    elif status == "success":
+      messages.success(request, message)
+    if request.htmx:
+      return HttpResponseClientRefresh()
+    return redirect(reverse("members:detail", kwargs={"username": member.username}))
+  if request.htmx:
+    return confirm_delete_modal(
+      request,
+      _("Activate Account"),
+      _("Are you sure you want to activate the account of %(name)s?") % {"name": member.full_name},
+    )
+  # direct navigation: never activate without confirmation
   return redirect(reverse("members:detail", kwargs={"username": member.username}))

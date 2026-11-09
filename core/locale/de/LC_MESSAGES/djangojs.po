@@ -79,3 +79,11 @@ msgstr "Profil"
 
 msgid "Are you sure you want to delete this treasure?"
 msgstr "Bist du sicher, dass du diesen Schatz löschen möchtest?"
+
+#: static/core/js/core.js:176 static/core/js/core.min.js:15
+msgid "Please enter at least "
+msgstr "Geben Sie mindestens "
+
+#: static/core/js/core.js:176 static/core/js/core.min.js:15
+msgid " characters"
+msgstr " Zeichen"

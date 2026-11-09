@@ -4,8 +4,8 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-10-18
-generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T20:35:00Z }
+stale_after: 2027-11-08
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-08T00:00:00Z }
 ---
 
 # Members
@@ -117,6 +117,9 @@ account: the manager fills the profile, then activates it.
 - `CreateManagedMemberView` (members/views/views_member.py) creates the member;
   `do_init_member` (members/services/members.py) forces `is_active=False` and
   sets `member_manager` to the logged-in user.
+- `ManagedMembersView` + "Members I Manage" navbar entry (issue 545) lists the
+  members whose `member_manager` is the logged-in user, with an Activate
+  button for the inactive ones.
 - `activate_member` → `do_activate_member` (members/services/members.py)
   refuses dead, already-active or email-less members, otherwise sends the
   verification email (`verify_email.email_handler.send_verification_email`);

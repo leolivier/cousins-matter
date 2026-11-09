@@ -1,0 +1,36 @@
+{%extends "core/common/htmx_modal_form.html"%}
+{%load i18n cm_tags%}
+{% block modal_title %}
+	{% translate "Change manager" %} - {{ member.full_name }}
+{% endblock modal_title %}
+{%block form_params%}
+	hx-post="{% url 'members:change_member_manager' member.username %}"
+{%endblock form_params%}
+{% block form %}
+	{# results in normal flow: a Bulma dropdown-menu would be clipped by the modal-card overflow #}
+	<div class="control is-expanded has-icons-left is-relative">
+		<span class="htmx-indicator">{%icon "loading" %}</span>
+		<input class="input" type="search"
+					 name="q"
+					 placeholder="{%trans 'Search...' %}"
+					 hx-get="{% url 'members:search_members' %}"
+					 hx-vals='{"render_with": "members/members/manager_search_results.html", "render_empty_query": "false"}'
+					 hx-trigger="input[this.value.length >= 3] changed delay:300ms, keyup[key=='Enter' && this.value.length >= 3]"
+					 hx-target="#search-results"
+					 hx-indicator=".htmx-indicator"
+					 autocomplete="off"
+					 id="manager-search-input"
+					 data-min-length="3"
+					 >
+		{%icon "search" "is-small is-left"%}
+	</div>
+	<div id="search-results-box" class="mt-2" style="display:none">
+		<div class="dropdown-content" id="search-results">
+		</div>
+	</div>
+	<input type="hidden" name="new_manager" id="new-manager-id">
+{% endblock form %}
+{% block submit_button_params %}id="change-manager-submit" disabled{% endblock %}
+{% block submit_button_text %}
+	{% trans "Change manager" %}
+{% endblock submit_button_text %}

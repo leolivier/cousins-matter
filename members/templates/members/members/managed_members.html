@@ -1,0 +1,74 @@
+{% extends "members/base_members.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Members I Manage") %}{% endblock %}
+{% block content %}
+<div class="container mb-5">
+  <h1 class="title mx-5 has-text-centered">{% title _("Members I Manage") %}</h1>
+  {% if members %}
+    <div class="grid mx-3 is-col-min-8" id="managed-members-grid">
+      {% for member in members %}
+        <div class="cell has-text-centered my-auto">
+          <a class="button {% cycle 'is-dark' 'is-primary' 'is-link' %} button-wrap"
+             href="{% url 'members:detail' member.username %}">
+            {% if member.avatar %}
+            <figure class="image mini-avatar mr-2">
+              <img class="is-rounded" src="{{member.avatar_mini_url}}">
+            </figure>
+            {% endif %}
+            <strong>{{ member.get_full_name }}</strong>
+          </a>
+          {% if not member.is_active %}
+          <div class="buttons is-centered are-small mt-1">
+            {% url 'members:activate' member.username as activate_url %}
+            {%include "core/common/confirm-delete-modal.html#delete_button" with button_text=_("Activate Account") button_class="is-primary" button_icon="activate-member" delete_url=activate_url %}
+            <button type="button" class="button"
+                    hx-get="{% url 'members:change_member_manager' member.username %}"
+                    hx-target="#modal" hx-swap="innerHTML"
+                    title="{% translate 'Change manager' %}">
+              {%icon "member-link" %}
+              <span>{% translate "Change manager" %}</span>
+            </button>
+          </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div>
+      <p>{% translate "You don't manage any members yet." %}</p>
+    </div>
+  {% endif %}
+</div>
+
+{# handlers for the "Change manager" modal (kept here, server-rendered, so CSP lets it run; see change_member_manager.html) #}
+<script nonce="{{ csp_nonce }}">
+document.addEventListener('htmx:afterSwap', function(evt) {
+  if (evt.target && evt.target.id === 'search-results') {
+    const box = document.getElementById('search-results-box');
+    if (box && evt.target.querySelectorAll('.dropdown-item').length > 0) {
+      box.style.display = 'block';
+    } else if (box) {
+      box.style.display = 'none';
+    }
+  }
+});
+
+{# capture phase: htmx_modal_form.html stops click propagation at the modal card, so the event never bubbles to the document #}
+document.addEventListener('click', function(event) {
+  const box = document.getElementById('search-results-box');
+  const item = event.target.closest('.dropdown-item.manager-result');
+  if (item) {
+    event.preventDefault();
+    document.getElementById('new-manager-id').value = item.dataset.selectMemberId;
+    document.getElementById('manager-search-input').value = item.dataset.selectMemberName;
+    if (box) box.style.display = 'none';
+    document.getElementById('change-manager-submit').disabled = false;
+    return;
+  }
+  // close the results box when clicking outside (the search input keeps it open)
+  if (box && event.target.id !== 'manager-search-input' && !box.contains(event.target)) {
+    box.style.display = 'none';
+  }
+}, true);
+</script>
+{% endblock %}

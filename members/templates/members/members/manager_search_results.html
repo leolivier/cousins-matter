@@ -1,0 +1,16 @@
+{%load i18n%}
+{# search-results fragment for the "Change manager" modal: active members only #}
+{% if members is not None %}
+<div class="dropdown-content">
+  {% for candidate in members %}
+    {% if candidate.is_active and not candidate.is_dead %}
+      <a href="#" class="dropdown-item manager-result"
+         data-select-member-id="{{candidate.id}}" data-select-member-name="{{candidate.full_name}}">
+        {{ candidate.full_name }}
+      </a>
+    {% endif %}
+  {% empty %}
+    {% trans "No results found" %}
+  {% endfor %}
+</div>
+{% endif %}

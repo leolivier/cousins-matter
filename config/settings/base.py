@@ -93,6 +93,9 @@ _CSP_POLICY: dict[str, list[str]] = {
   # ws/wss for the chat WebSocket (chat/consumers.py); htmx requests are same-origin
   "connect-src": [CSP.SELF, "ws:", "wss:"],
   "frame-ancestors": [CSP.NONE],
+  # troves embed external treasures: any https URL, YouTube URLs rewritten to
+  # youtube-nocookie (see Trove.embed_url)
+  "frame-src": [CSP.SELF, "https:"],
   "base-uri": [CSP.SELF],
   "object-src": [CSP.NONE],
 }

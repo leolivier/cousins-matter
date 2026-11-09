@@ -12,7 +12,7 @@
 			{%if success %}
 			<li class="message is-success">
 				<div class="message-body">
-					{% autoescape off %}{{ success }}{% endautoescape %}
+					{{ success }}
 				</div>
 			</li>
 			{% endif %}
@@ -20,7 +20,7 @@
 			{%for error in errors%}
 			<li class="message is-danger">
 				<div class="message-body">
-					{% autoescape off %}{{ error }}{% endautoescape %}
+					{{ error }}
 				</div>
 			</li>
 			{% endfor %}
@@ -29,7 +29,7 @@
 			{%for warning in warnings%}
 			<li class="message is-warning">
 				<div class="message-body">
-					{% autoescape off %}{{ warning }}{% endautoescape %}
+					{{ warning }}
 				</div>
 			</li>
 			{% endfor %}
@@ -38,7 +38,7 @@
 			{%for processed_object in processed_objects%}
 			<li class="message is-info">
 				<div class="message-body">
-					{% autoescape off %}{{ processed_object }}{% endautoescape %}
+					{{ processed_object }}
 				</div>
 			</li>
 			{% endfor %}

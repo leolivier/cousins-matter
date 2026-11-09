@@ -33,7 +33,7 @@
 					{% endif %}
 					</strong>
 					<br>
-					<i>{% autoescape off %}{{notification.obj_str|linebreaksbr}}{% endautoescape %}</i>
+					<i>{{notification.obj_str|linebreaksbr}}</i>
 					<br>
 					<small style="color: #666;">{{notification.created_at|date:"SHORT_DATETIME_FORMAT"}}</small>
 				</p>

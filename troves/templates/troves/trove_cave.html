@@ -54,7 +54,7 @@
             <figure class="image thumbnail mx-auto">
               <img src="{% url 'get_protected_media' trove.thumbnail.name%}" alt="{{ trove.title }}"/>
             </figure>
-            <p>{% autoescape off %}{{ trove.title }}{% endautoescape %}</p>
+            <p>{{ trove.title }}</p>
           </a>
           {%if trove.owner.id == user.id %}
           <p>

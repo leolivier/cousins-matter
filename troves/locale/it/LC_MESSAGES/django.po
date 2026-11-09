@@ -110,3 +110,11 @@ msgstr "Tutti"
 #: templates/troves/trove_cave.html:64
 msgid "Are you sure you want to delete this treasure?"
 msgstr "Sei sicuro di voler eliminare questo tesoro?"
+
+#: models.py:49
+msgid "External URL of the treasure (e.g. a YouTube video)"
+msgstr "URL esterna del tesoro (ad esempio un video YouTube)"
+
+#: templates/troves/treasure_detail.html:49
+msgid "See the external treasure"
+msgstr "Vedi il tesoro esterno"

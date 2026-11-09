@@ -163,3 +163,17 @@ class TestDisplayQueryCount(PollTestMixin):
     the detail page must issue the same number of queries for 2 and 6 questions."""
     with_2_questions = self._detail_query_count(2)
     self.assertEqual(self._detail_query_count(6), with_2_questions)
+
+
+class PollAnswerEscapingTest(PollTestMixin):
+  """Open-text answers are plain text and must be escaped at render time (stored XSS regression)."""
+
+  def test_text_answer_escaped(self):
+    payload = "<script>alert(1)</script>"
+    poll = self.create_poll("XSS poll", "desc")
+    question = self.create_question(poll=poll, question_text="q1", question_type=Question.OPENTEXT_QUESTION)
+    self.client.post(reverse("polls:vote", args=(poll.id,)), {f"q{question.id}-answer": payload}, follow=True)
+    response = self.client.get(reverse("polls:poll_detail", args=(poll.id,)), follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertNotContains(response, "<script>alert(1)</script>")
+    self.assertContains(response, "&lt;script&gt;")

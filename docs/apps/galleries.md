@@ -40,6 +40,12 @@ and automatic thumbnail generation. Both models inherit
   `core.utils` decides), `thumbnail` `ImageField`, `name`, `slug`,
   `description`, `date`, `gallery` FK (`CASCADE`),
   `uploaded_by` FK `Member`.
+- **Render-time sanitization:** `Photo.description` (and
+  `Gallery.description`, same rich-text widget) is rendered with
+  `{% autoescape off %}` in templates/galleries/galleries/photo_detail.html
+  and now passes through the `sanitize` template filter ([core](/apps/core.md)
+  — nh3 allowlist cleaner) which strips scripts, event handlers and
+  non-https URLs, covering data stored before the fix.
 - Upload paths (`photo_path`/`thumbnail_path`): under
   `MEDIA_ROOT/settings.GALLERIES_DIR` (`"galleries"`,
   config/settings/base.py) **inside the gallery's `full_path()`**,

@@ -105,8 +105,9 @@ jobs:
 
       - name: audits
         run: |
-          uv run pip-audit .
-          uv run mypy .
+          uv audit
+          # Django settings require these at import time; mypy never connects.
+          ENVIRONMENT=development SECRET_KEY=ci-dummy POSTGRES_PASSWORD=ci-dummy uv run mypy .
 
       - name: Login to GHCR.io
         uses: docker/login-action@v4

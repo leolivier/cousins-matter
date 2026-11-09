@@ -94,8 +94,7 @@ def get_birthdays(ndays):
 
 
 def get_members_page_queryset(query, sort_by: str | None, order: str):
-  members = Member.objects
-  members = members.fuzzy_search(query) if query else members.all()
+  members = Member.objects.fuzzy_search(query) if query else Member.objects.all()
   lsort_by = [sort_by] if sort_by else ["last_name", "first_name"]  # default sort
   if order:
     lsort_by = [order + s for s in lsort_by]
@@ -130,7 +129,6 @@ def do_notify_death(dead_member: Member, sender: Member, deathdate: date, messag
     }
 
     html_message = render_to_string("members/email/notify_death_email.html", email_context)
-    plain_message = render_to_string("members/email/notify_death_email.html", email_context)  # simplify for now, or strip tags
 
     from django.utils.html import strip_tags
 

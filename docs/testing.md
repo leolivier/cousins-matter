@@ -84,7 +84,7 @@ enforced by the `--fail-under` flag.
 2. `ruff check . --fix`
 3. `mypy ./ --ignore-missing-imports --exclude migrations/* --exclude .venv/*`
 4. `bandit -r . -c pyproject.toml -f txt -o bandit.out`
-5. `pip-audit .`
+5. `uv audit`
 6. `ENVIRONMENT="test" ./manage.py check_okf docs` (same as `make check-docs`, which checks
    the OKF frontmatter of this bundle)
 

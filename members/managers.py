@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.postgres.search import TrigramWordSimilarity
 from django.db.models import Value
@@ -5,8 +7,11 @@ from django.db.models.functions import Concat, Greatest
 from django.db.models.query import QuerySet
 from django.utils.translation import gettext_lazy as _
 
+if TYPE_CHECKING:
+  from members.models import Member  # noqa: F401  (used in the manager's generic parameter)
 
-class MemberManager(BaseUserManager):
+
+class MemberManager(BaseUserManager["Member"]):
   """
   Member model manager where first_name, last_name are mandatory.
 
@@ -124,8 +129,8 @@ class MemberManager(BaseUserManager):
           # word_similarity(query, field): aligns the query on the best fragment
           # of the text, so short prefixes score high on long names
           # (TrigramSimilarity scores a short query low against a whole long name)
-          TrigramWordSimilarity(Value(query), "complete_name"),
-          TrigramWordSimilarity(Value(query), "username"),
+          TrigramWordSimilarity(query, "complete_name"),
+          TrigramWordSimilarity(query, "username"),
         ),
       )
       .filter(similarity__gt=similarity_threshold)

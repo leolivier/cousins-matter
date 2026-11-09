@@ -36,7 +36,7 @@ def _throttled(request) -> bool:
   from django.core.cache import cache
 
   key = f"tenant-signup:{request.META.get('REMOTE_ADDR', 'unknown')}"
-  count = cache.get_or_set(key, 0, SIGNUP_THROTTLE_SECONDS)
+  count = cache.get_or_set(key, 0, SIGNUP_THROTTLE_SECONDS) or 0
   if count >= SIGNUP_THROTTLE_LIMIT:
     return True
   try:

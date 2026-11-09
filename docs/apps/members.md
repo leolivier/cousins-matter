@@ -4,7 +4,7 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-11-08
+stale_after: 2027-11-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-08T00:00:00Z }
 ---
 
@@ -103,11 +103,21 @@ is the plain-manager escape hatch for explicit cross-tenant access.
 ## Family and Address
 
 `Family` (members/models.py) is a named grouping with an optional `parent`
-family (self FK) — it organises members *inside* a tenant and is **not** the
-isolation boundary; that is `tenants.Tenant`
-(see [Tenants](/apps/tenants.md)). `Address` holds postal fields and is shared
-by members through a nullable FK. Both have standard CRUD views plus HTMX modal
-variants (members/views/views_family.py, members/views/views_address.py).
+family (self FK). `Address` holds postal fields and is shared by members
+through a nullable FK. Both inherit `tenants.scoping.TenantModel`, so they
+carry a non-editable `tenant` FK, get a tenant-filtered `objects` manager and
+an `unscoped` escape hatch, and auto-assign the current tenant on save —
+the same isolation layer as every other content model
+(see [Tenants](/apps/tenants.md)). Migration 0019 added the column and
+backfilled it from the referencing members, duplicating rows that several
+tenants shared. Both have standard CRUD views plus HTMX modal variants
+(members/views/views_family.py, members/views/views_address.py).
+
+Caveat when adding a form/view over them: a `QuerySet` or `ModelForm` FK
+field built at class-definition/import time captures the tenant *at import*
+(none), so it stays unscoped. Build it per request/instance instead
+(`get_queryset()`, or reset `field.queryset` in `__init__` — see
+`MemberFormMixin.initialize_fields` and `FamilyUpdateForm`).
 
 ## Managed members
 

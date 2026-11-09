@@ -230,9 +230,17 @@ class TestTroveDetailSecurityAndUrl(MemberTestCase):
       response = self.client.get(reverse("troves:detail", args=[self.treasure.id]))
       self.assertContains(response, "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ")
 
-  def test_non_youtube_url_is_a_link(self):
+  def test_any_https_url_is_embedded_as_is(self):
+    # a YouTube URL was only an example: any https URL is embedded (normalized to
+    # youtube-nocookie when it is a YouTube one, raw otherwise)
     self.treasure.url = "https://example.com/page"
     self.treasure.save()
     response = self.client.get(reverse("troves:detail", args=[self.treasure.id]))
+    self.assertContains(response, '<iframe src="https://example.com/page"')
+
+  def test_non_https_url_is_a_link(self):
+    self.treasure.url = "http://example.com/page"
+    self.treasure.save()
+    response = self.client.get(reverse("troves:detail", args=[self.treasure.id]))
     self.assertNotIn("<iframe", str(response.content))
-    self.assertContains(response, "https://example.com/page")
+    self.assertContains(response, "http://example.com/page")

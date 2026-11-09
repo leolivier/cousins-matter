@@ -53,7 +53,7 @@
         <div class="notification is-info admin-message" data-id="{{admin_message.id}}">
           <button class="delete"></button>
           {%autoescape off%}
-          {{admin_message.content}}
+          {{admin_message.content|sanitize}}
           {%endautoescape%}
         </div>
         {%endfor%}
@@ -62,7 +62,7 @@
           {% for message in messages %}
           <li{% if message.tags %} class="message is-{{ message.tags }}" {% endif %}>
             <div class="message-body">
-              {% autoescape off %}{{ message }}{% endautoescape %}
+              {{ message }}
             </div>
             </li>
             {% endfor %}

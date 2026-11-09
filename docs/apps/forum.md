@@ -38,6 +38,15 @@ tenant). Forum content is invisible cross-tenant.
   reply `Message`), `content` capped by
   `MESSAGE_COMMENTS_MAX_SIZE` (400).
 
+**Render-time sanitization:** `Message.content` and reply content are
+rich text (Summernote) rendered with `{% autoescape off %}` in
+templates/forum/forum/post_detail.html — they go through the
+`sanitize` template filter (nh3 allowlist cleaner,
+[core](/apps/core.md)) which strips scripts, event handlers and
+non-https URLs at render time, so legacy stored content is cleaned too.
+Data entry itself performs no validation, do not rely on the stored
+value being HTML-safe.
+
 ## Notifications on new content (forum/views/views_follow.py)
 
 Thin wrappers over [core.followers](/apps/core.md), each passing the

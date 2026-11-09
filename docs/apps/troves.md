@@ -101,12 +101,14 @@ to) a file: `Trove.url` is an optional `URLField`. On the detail page:
 - a **YouTube** URL (watch / youtu.be / shorts forms, matched by
   `_YOUTUBE_ID_RE` in troves/models.py) is embedded through the
   `embed_url` property, which rebuilds a
-  `https://www.youtube-nocookie.com/embed/<id>` URL server-side — the
-  raw user URL is never put in an iframe;
-- any other URL is rendered as a plain external link;
-- the enforced CSP allows iframes only from
-  `https://www.youtube-nocookie.com` (`frame-src` in
-  config/settings/base.py).
+  `https://www.youtube-nocookie.com/embed/<id>` URL server-side;
+- **any other https URL is embedded as-is** (the iframe is served
+  cross-origin, so the embedded page can never reach the site's DOM);
+  `http://` URLs and exotic schemes are rendered as a plain external
+  link instead (mixed content is blocked on https pages anyway);
+- the enforced CSP allows iframes from any https origin
+  (`frame-src: https:` in config/settings/base.py) — `frame-ancestors:
+  'none'` still prevents the family site from being framed elsewhere.
 
 ## Rich-text sanitization (stored XSS fix)
 
@@ -123,9 +125,10 @@ store `<script>` or `onerror=` handlers (stored XSS). Treasures now:
 - render `title` with Django's default autoescaping (it is plain text,
   not rich text).
 
-The same `autoescape off` pattern still exists in forum, polls,
-galleries and classified_ads templates; they can adopt the `sanitize`
-filter the same way.
+The same pattern is now shared: [forum](/apps/forum.md) and
+[galleries](/apps/galleries.md) rich-text fields use the `sanitize`
+filter too, and polls / framework messages / e-mails rely on default
+escaping — see [core](/apps/core.md).
 
 ## Tests
 

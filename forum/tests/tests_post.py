@@ -107,3 +107,16 @@ class PostDeleteTestCase(ForumTestCase):
       _('Are you sure you want to delete "%(post)s" and all associated replies and comments?') % {"post": self.post.title},
       html=True,
     )
+
+
+class MessageXssSanitizationTestCase(ForumTestCase):
+  """Rich-text content must be sanitized at render time (stored XSS regression)."""
+
+  def test_message_content_scripts_stripped(self):
+    self.message.content = "<p>hello</p><script>alert(1)</script><img src=x onerror=alert(2)>"
+    self.message.save()
+    response = self.client.get(reverse("forum:display", args=[self.post.id]))
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, "<p>hello</p>")
+    self.assertNotContains(response, "<script>")
+    self.assertNotContains(response, "onerror")

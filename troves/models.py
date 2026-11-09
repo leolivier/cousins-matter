@@ -64,19 +64,27 @@ class Trove(TenantModel):
   def __str__(self):
     return self.title
 
-  # Extracts the video id from watch, youtu.be and shorts URLs; only YouTube
-  # URLs are embeddable (CSP frame-src, see config/settings/base.py)
+  # Extracts the video id from watch, youtu.be and shorts URLs so a YouTube URL
+  # can be canonicalized to its privacy-enhanced embed form. Any other https URL
+  # is embedded as-is (CSP frame-src allows https:, see config/settings/base.py).
   _YOUTUBE_ID_RE = re.compile(
     r"^https?://(?:www\.)?(?:youtube\.com/(?:watch\?v=|shorts/)|youtu\.be/)([A-Za-z0-9_-]{11})(?:[?&].*)?$"
   )
 
   @property
   def embed_url(self):
-    """Privacy-enhanced YouTube embed URL if the treasure is a YouTube video, else None."""
+    """URL to embed in an iframe, or None when the treasure must be a plain link.
+
+    A YouTube URL (any site the user may have copied it from) is rewritten to the
+    privacy-enhanced embed form; every other https URL is embedded as-is.
+    http:// is not embeddable (mixed content is blocked on https pages).
+    """
     if not self.url:
       return None
-    m = self._YOUTUBE_ID_RE.match(self.url)
-    return f"https://www.youtube-nocookie.com/embed/{m.group(1)}?autoplay=0" if m else None
+    if self.url.startswith("https://"):
+      m = self._YOUTUBE_ID_RE.match(self.url)
+      return f"https://www.youtube-nocookie.com/embed/{m.group(1)}?autoplay=0" if m else self.url
+    return None
 
   @staticmethod
   def translate_category(category):

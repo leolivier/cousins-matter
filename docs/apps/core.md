@@ -214,6 +214,21 @@ without that mapping the JS in `include-bulma-calendar.html`
 (`attachCalendar('.dateinput')`) never attaches the picker (regression fixed
 from b4b2e846, guarded by members/tests/tests_forms.py).
 
+## Rich-text sanitization (shared XSS defense)
+
+`sanitize_rich_html` (core/utils.py, on top of **nh3**) and its
+`sanitize` template filter (core/templatetags/cm_tags.py) are the
+single cleaning point for rich-text HTML rendered with
+`{% autoescape off %}`. nh3 allows summernote-style tags and
+`href/src/alt/class` attributes, `http/https/mailto` schemes only, and
+forces `rel="noopener noreferrer"` on links. Used today by
+[forum](/apps/forum.md), [galleries](/apps/galleries.md),
+[troves](/apps/troves.md) and the admin flatpage banner in
+core/templates/core/base.html. Plain-text surfaces that used to disable
+escaping (framework messages in base.html, the upload
+progress-bar.html, followers/contact e-mails) now use default
+autoescaping instead.
+
 ## Performance
 
 The shared followers template tags (`followers/followers-count-tag.html`,

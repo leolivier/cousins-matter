@@ -37,7 +37,7 @@
 			{%endif%}
 			{%if treasure.embed_url%}
 			<figure class="image is-16by9">
-				<iframe src="{{treasure.embed_url}}" title="{{treasure.title}}"
+				<iframe src="{{treasure.embed_url}}" title="{{treasure.title}}" referrerpolicy="no-referrer"
 					allowfullscreen allow="encrypted-media" style="width:100%;height:100%"></iframe>
 			</figure>
 			{%elif treasure.url%}

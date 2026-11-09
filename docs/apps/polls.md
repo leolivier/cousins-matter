@@ -54,6 +54,12 @@ Polls are invisible cross-tenant.
   `question_type` → answer class (`get_answer_class_for_question_type`);
   `Answer.filter_answers()` fans a filter out over all subclasses and
   drops parent rows shadowed by a child of the same id.
+- **Render-time escaping:** answer values (`TextAnswer.answer`, choice
+  labels) are plain text — the results table in
+  templates/polls/polls/poll_detail.html used to render them with
+  `{% autoescape off %}` (a stored-XSS hole, member-controlled open-text
+  answers); it now relies on Django's default autoescaping
+  (`PollAnswerEscapingTest`).
 - `QuestionResult` — per-question aggregate built by each subclass's
   static `compute_result` (percentages for yes/no and choices, raw
   value lists for text/dates) plus the requesting user's own answer.

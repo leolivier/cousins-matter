@@ -33,10 +33,12 @@ class GallerySlideshowUITest(GalleryUITestBase):
 
     # Open the first image in fullscreen
     self._open_fullscreen()
+    self.assertEqual(self.page.text_content("#fullscreen-caption"), self.photos[0].name)
 
     # Navigate forward
     self._click_nav("next")
     self._wait_for_swipe_container(self.photos[1].pk)
+    self.assertEqual(self.page.text_content("#fullscreen-caption"), self.photos[1].name)
 
     # Check URL points to second photo
     swipe_url = self.page.evaluate("document.querySelector('#image-container').getAttribute('hx-get')")

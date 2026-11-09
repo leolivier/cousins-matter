@@ -1730,8 +1730,6 @@ msgstr "Se ha notificado al administrador."
 #: views/views_member.py:382
 msgid "Are you sure you want to activate the account of %(name)s?"
 msgstr "¿Confirmas la activación de la cuenta de %(name)s?"
-"Sí está seguro de querer eliminar la cuenta de %(name)s y todas las datos "
-"asociados?"
 
 #: views/views_registration.py:154
 #, fuzzy

@@ -1727,8 +1727,6 @@ msgstr "L'administrateur a été prévenu."
 #: views/views_member.py:382
 msgid "Are you sure you want to activate the account of %(name)s?"
 msgstr "Confirmez-vous l'activation du compte de %(name)s ?"
-"Es-tu sûr de vouloir supprimer le compte de %(name)s et toutes les données "
-"associées ?"
 
 #
 #: views/views_registration.py:154

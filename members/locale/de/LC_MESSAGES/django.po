@@ -1731,8 +1731,6 @@ msgstr "Der Administrator wurde benachrichtigt."
 #: views/views_member.py:382
 msgid "Are you sure you want to activate the account of %(name)s?"
 msgstr "Möchten Sie das Konto von %(name)s wirklich aktivieren?"
-"Bist Du sicher, das du %(name)s' Konto löschen und alle zugehörigen Daten "
-"entfernen willst?"
 
 #: views/views_registration.py:154
 #, fuzzy

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 20:42+0100\n"
+"POT-Creation-Date: 2026-11-09 10:33+0100\n"
 "PO-Revision-Date: 2025-11-21 18:59+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "The identity provider did not provide an email address."
 msgstr "Die Identitätsanbieter hat keine E-Mail-Adresse angegeben."
 
-#: adapter.py:48 forms.py:144 tests/tests_login_out.py:46
+#: adapter.py:48 forms.py:144 tests/tests_login_out.py:48
 msgid ""
 "This account is not yet active. Please use the invitation link sent to you "
 "by email."
@@ -99,11 +99,14 @@ msgstr ""
 msgid "Email"
 msgstr "E-Mail"
 
-#: forms.py:130
+#: forms.py:130 tests/tests_login_out.py:71
 msgid ""
 "Please enter a correct email and password. Note that both fields may be case-"
 "sensitive."
-msgstr ""  "Bitte gib eine korrekte E-Mail-Adresse und ein korrektes Passwort ein. Beachte, dass beide Felder zwischen Groß- und Kleinschreibung unterscheiden können."
+msgstr ""
+"Bitte gib eine korrekte E-Mail-Adresse und ein korrektes Passwort ein. "
+"Beachte, dass beide Felder zwischen Groß- und Kleinschreibung unterscheiden "
+"können."
 
 #: forms.py:182 templates/members/members/members.html:63
 msgid "First name"
@@ -1260,6 +1263,22 @@ msgstr ""
 msgid "Import"
 msgstr "Importieren"
 
+#: templates/members/members/managed_members.html:3
+#: templates/members/members/managed_members.html:6
+msgid "Members I Manage"
+msgstr "Von mir verwaltete Mitglieder"
+
+#: templates/members/members/managed_members.html:22
+#: templates/members/members/managed_members.html:24
+#: templates/members/members/member_upsert.html:48
+msgid "Activate Account"
+msgstr "Aktivieren Sie Konto"
+
+#: templates/members/members/managed_members.html:32
+#: tests/tests_member_views.py:168
+msgid "You don't manage any members yet."
+msgstr "Sie verwalten noch keine Mitglieder."
+
 #: templates/members/members/member_detail.html:3
 msgid "Member Detail"
 msgstr "Mitglied Details"
@@ -1292,10 +1311,6 @@ msgstr "Todesfall melden"
 msgid "Change Password"
 msgstr "Ändern Sie Ihr Passwort"
 
-#: templates/members/members/member_upsert.html:48
-msgid "Activate Account"
-msgstr "Aktivieren Sie Konto"
-
 #: templates/members/members/member_upsert.html:53
 msgid "Delete"
 msgstr "Löschen"
@@ -1326,8 +1341,8 @@ msgstr "Mitgliederliste"
 msgid "Show directory"
 msgstr "Zeige Verzeichnis"
 
-#: templates/members/members/members.html:21 views/views_member.py:139
-#: views/views_member.py:160
+#: templates/members/members/members.html:21 views/views_member.py:149
+#: views/views_member.py:170
 msgid "Create Member"
 msgstr "Erstellen Sie Mitglied"
 
@@ -1492,15 +1507,8 @@ msgstr ""
 "Warnung: Vergiss nicht, auf der unteren Seite den Speichern-Taste zu "
 "klicken, ansonsten werden die Anderungen nicht gespeichert"
 
-#: tests/tests_login_out.py:68
-#, python-format
-msgid ""
-"Please enter a correct %(username)s and password. Note that both fields may "
-"be case-sensitive."
-msgstr ""
-
 #: tests/tests_member.py:289 tests/tests_member.py:294
-#: views/views_member.py:181 views/views_member.py:198
+#: views/views_member.py:191 views/views_member.py:208
 msgid "You do not have permission to edit this member."
 msgstr "Du hast keine Berechtigung, diese Mitgliedschaft zu bearbeiten."
 
@@ -1508,7 +1516,7 @@ msgstr "Du hast keine Berechtigung, diese Mitgliedschaft zu bearbeiten."
 msgid "Error: Cannot activate a dead member "
 msgstr "Fehler: Ein totes Mitglied kann nicht aktiviert werden "
 
-#: tests/tests_member_views.py:79 views/views_member.py:277
+#: tests/tests_member_views.py:79 views/views_member.py:287
 msgid "Delete my account"
 msgstr "Lösche mein Konto"
 
@@ -1632,47 +1640,47 @@ msgstr "Methode nicht erlaubt"
 msgid "You have been logged out"
 msgstr "Du wurdest ausgeloggt"
 
-#: views/views_member.py:129
+#: views/views_member.py:139
 #, fuzzy
 #| msgid "Only superusers can create members"
 msgid "Only admins can create members"
 msgstr "Nur Superbenutzer können Mitglieder erstellen"
 
-#: views/views_member.py:152
+#: views/views_member.py:162
 msgid "Member successfully created"
 msgstr "Mitglied wurde erfolgreich erstellt"
 
-#: views/views_member.py:174
+#: views/views_member.py:184
 msgid "Update Member Details"
 msgstr "Aktualisiere Mitgliedsdetails"
 
-#: views/views_member.py:175
+#: views/views_member.py:185
 msgid "Member successfully updated"
 msgstr "Mitglied erfolgreich aktualisiert"
 
-#: views/views_member.py:216
+#: views/views_member.py:226
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Eine E-Mail zur Überprüfung wurde an dich gesendet, um deine neue E-Mail-"
 "Adresse zu bestätigen."
 
-#: views/views_member.py:255
+#: views/views_member.py:265
 msgid "My Profile"
 msgstr "Mein Profil"
 
-#: views/views_member.py:256
+#: views/views_member.py:266
 msgid "Profile successfully updated"
 msgstr "Profil erfolgreich aktualisiert"
 
-#: views/views_member.py:270
+#: views/views_member.py:280
 msgid "You do not have permission to delete this member."
 msgstr "Du hast keine Berechtigung, diese Mitgliedschaft zu löschen."
 
-#: views/views_member.py:274
+#: views/views_member.py:284
 msgid "Member deleted"
 msgstr "Mitglied gelöscht"
 
-#: views/views_member.py:278
+#: views/views_member.py:288
 msgid ""
 "Are you sure you want to delete your account and all associated data? This "
 "is irrecoverable!"
@@ -1680,11 +1688,11 @@ msgstr ""
 "Bist du sicher, dass du dein Konto und alle damit verbundenen Daten löschen "
 "möchtest? Das ist endgültig!"
 
-#: views/views_member.py:280
+#: views/views_member.py:290
 msgid "Delete member"
 msgstr "Mitglied Löschen"
 
-#: views/views_member.py:281
+#: views/views_member.py:291
 #, python-format
 msgid ""
 "Are you sure you want to delete %(name)s's account and all associated data?"
@@ -1692,11 +1700,11 @@ msgstr ""
 "Bist Du sicher, das du %(name)s' Konto löschen und alle zugehörigen Daten "
 "entfernen willst?"
 
-#: views/views_member.py:319
+#: views/views_member.py:329
 msgid "Please provide a death date."
 msgstr "Bitte geben Sie ein Sterbedatum an."
 
-#: views/views_member.py:326
+#: views/views_member.py:336
 msgid "The administrator has been notified."
 msgstr "Der Administrator wurde benachrichtigt."
 

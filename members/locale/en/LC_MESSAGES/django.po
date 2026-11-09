@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 20:42+0100\n"
+"POT-Creation-Date: 2026-11-09 10:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "The identity provider did not provide an email address."
 msgstr ""
 
-#: adapter.py:48 forms.py:144 tests/tests_login_out.py:46
+#: adapter.py:48 forms.py:144 tests/tests_login_out.py:48
 msgid ""
 "This account is not yet active. Please use the invitation link sent to you "
 "by email."
@@ -91,7 +91,7 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: forms.py:130
+#: forms.py:130 tests/tests_login_out.py:71
 msgid ""
 "Please enter a correct email and password. Note that both fields may be case-"
 "sensitive."
@@ -1146,6 +1146,22 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
+#: templates/members/members/managed_members.html:3
+#: templates/members/members/managed_members.html:6
+msgid "Members I Manage"
+msgstr "Members I Manage"
+
+#: templates/members/members/managed_members.html:22
+#: templates/members/members/managed_members.html:24
+#: templates/members/members/member_upsert.html:48
+msgid "Activate Account"
+msgstr ""
+
+#: templates/members/members/managed_members.html:32
+#: tests/tests_member_views.py:168
+msgid "You don't manage any members yet."
+msgstr "You don't manage any members yet."
+
 #: templates/members/members/member_detail.html:3
 msgid "Member Detail"
 msgstr ""
@@ -1178,10 +1194,6 @@ msgstr ""
 msgid "Change Password"
 msgstr ""
 
-#: templates/members/members/member_upsert.html:48
-msgid "Activate Account"
-msgstr ""
-
 #: templates/members/members/member_upsert.html:53
 msgid "Delete"
 msgstr ""
@@ -1212,8 +1224,8 @@ msgstr ""
 msgid "Show directory"
 msgstr ""
 
-#: templates/members/members/members.html:21 views/views_member.py:139
-#: views/views_member.py:160
+#: templates/members/members/members.html:21 views/views_member.py:149
+#: views/views_member.py:170
 msgid "Create Member"
 msgstr ""
 
@@ -1362,15 +1374,8 @@ msgid ""
 "otherwise the changes won't be saved"
 msgstr ""
 
-#: tests/tests_login_out.py:68
-#, python-format
-msgid ""
-"Please enter a correct %(username)s and password. Note that both fields may "
-"be case-sensitive."
-msgstr ""
-
 #: tests/tests_member.py:289 tests/tests_member.py:294
-#: views/views_member.py:181 views/views_member.py:198
+#: views/views_member.py:191 views/views_member.py:208
 msgid "You do not have permission to edit this member."
 msgstr ""
 
@@ -1378,7 +1383,7 @@ msgstr ""
 msgid "Error: Cannot activate a dead member "
 msgstr ""
 
-#: tests/tests_member_views.py:79 views/views_member.py:277
+#: tests/tests_member_views.py:79 views/views_member.py:287
 msgid "Delete my account"
 msgstr ""
 
@@ -1491,63 +1496,63 @@ msgstr ""
 msgid "You have been logged out"
 msgstr ""
 
-#: views/views_member.py:129
+#: views/views_member.py:139
 msgid "Only admins can create members"
 msgstr ""
 
-#: views/views_member.py:152
+#: views/views_member.py:162
 msgid "Member successfully created"
 msgstr ""
 
-#: views/views_member.py:174
+#: views/views_member.py:184
 msgid "Update Member Details"
 msgstr ""
 
-#: views/views_member.py:175
+#: views/views_member.py:185
 msgid "Member successfully updated"
 msgstr ""
 
-#: views/views_member.py:216
+#: views/views_member.py:226
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 
-#: views/views_member.py:255
+#: views/views_member.py:265
 msgid "My Profile"
 msgstr ""
 
-#: views/views_member.py:256
+#: views/views_member.py:266
 msgid "Profile successfully updated"
 msgstr ""
 
-#: views/views_member.py:270
+#: views/views_member.py:280
 msgid "You do not have permission to delete this member."
 msgstr ""
 
-#: views/views_member.py:274
+#: views/views_member.py:284
 msgid "Member deleted"
 msgstr ""
 
-#: views/views_member.py:278
+#: views/views_member.py:288
 msgid ""
 "Are you sure you want to delete your account and all associated data? This "
 "is irrecoverable!"
 msgstr ""
 
-#: views/views_member.py:280
+#: views/views_member.py:290
 msgid "Delete member"
 msgstr ""
 
-#: views/views_member.py:281
+#: views/views_member.py:291
 #, python-format
 msgid ""
 "Are you sure you want to delete %(name)s's account and all associated data?"
 msgstr ""
 
-#: views/views_member.py:319
+#: views/views_member.py:329
 msgid "Please provide a death date."
 msgstr ""
 
-#: views/views_member.py:326
+#: views/views_member.py:336
 msgid "The administrator has been notified."
 msgstr ""
 

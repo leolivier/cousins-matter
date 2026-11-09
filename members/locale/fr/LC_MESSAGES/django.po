@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 20:42+0100\n"
+"POT-Creation-Date: 2026-11-09 10:33+0100\n"
 "PO-Revision-Date: 2025-04-06 13:05+020\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Français <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "The identity provider did not provide an email address."
 msgstr "Le fournisseur d'identité n'a pas fourni d'adresse e-mail."
 
-#: adapter.py:48 forms.py:144 tests/tests_login_out.py:46
+#: adapter.py:48 forms.py:144 tests/tests_login_out.py:48
 msgid ""
 "This account is not yet active. Please use the invitation link sent to you "
 "by email."
@@ -97,11 +97,13 @@ msgstr ""
 msgid "Email"
 msgstr "Email"
 
-#: forms.py:130
+#: forms.py:130 tests/tests_login_out.py:71
 msgid ""
 "Please enter a correct email and password. Note that both fields may be case-"
 "sensitive."
-msgstr ""  "Veuillez saisir une adresse mail et un mot de passe corrects. Attention, ces deux champs peuvent être sensibles à la casse."
+msgstr ""
+"Veuillez saisir une adresse mail et un mot de passe corrects. Attention, ces "
+"deux champs peuvent être sensibles à la casse."
 
 #: forms.py:182 templates/members/members/members.html:63
 msgid "First name"
@@ -1259,6 +1261,22 @@ msgstr ""
 msgid "Import"
 msgstr "Importer"
 
+#: templates/members/members/managed_members.html:3
+#: templates/members/members/managed_members.html:6
+msgid "Members I Manage"
+msgstr "Membres que je gère"
+
+#: templates/members/members/managed_members.html:22
+#: templates/members/members/managed_members.html:24
+#: templates/members/members/member_upsert.html:48
+msgid "Activate Account"
+msgstr "Activer le compte"
+
+#: templates/members/members/managed_members.html:32
+#: tests/tests_member_views.py:168
+msgid "You don't manage any members yet."
+msgstr "Tu ne gères aucun membre pour l'instant."
+
 #: templates/members/members/member_detail.html:3
 msgid "Member Detail"
 msgstr "Détail d'un Membre"
@@ -1291,10 +1309,6 @@ msgstr "Signaler un décès"
 msgid "Change Password"
 msgstr "Changer le mot de passe"
 
-#: templates/members/members/member_upsert.html:48
-msgid "Activate Account"
-msgstr "Activer le compte"
-
 #: templates/members/members/member_upsert.html:53
 msgid "Delete"
 msgstr "Supprimer"
@@ -1325,8 +1339,8 @@ msgstr "Liste des Membres"
 msgid "Show directory"
 msgstr "Afficher l'annuaire"
 
-#: templates/members/members/members.html:21 views/views_member.py:139
-#: views/views_member.py:160
+#: templates/members/members/members.html:21 views/views_member.py:149
+#: views/views_member.py:170
 msgid "Create Member"
 msgstr "Créer un Membre"
 
@@ -1491,15 +1505,8 @@ msgstr ""
 "Attention: n'oubliez pas de cliquer sur le bouton de sauvegarde en bas de la "
 "page, sinon les changements ne seront pas sauvegardés"
 
-#: tests/tests_login_out.py:68
-#, python-format
-msgid ""
-"Please enter a correct %(username)s and password. Note that both fields may "
-"be case-sensitive."
-msgstr ""
-
 #: tests/tests_member.py:289 tests/tests_member.py:294
-#: views/views_member.py:181 views/views_member.py:198
+#: views/views_member.py:191 views/views_member.py:208
 msgid "You do not have permission to edit this member."
 msgstr "Tu n'as pas la permission de modifier ce membre."
 
@@ -1507,7 +1514,7 @@ msgstr "Tu n'as pas la permission de modifier ce membre."
 msgid "Error: Cannot activate a dead member "
 msgstr "Erreur: Impossible d'activer un membre mort "
 
-#: tests/tests_member_views.py:79 views/views_member.py:277
+#: tests/tests_member_views.py:79 views/views_member.py:287
 msgid "Delete my account"
 msgstr "Supprimer mon compte?"
 
@@ -1631,45 +1638,45 @@ msgid "You have been logged out"
 msgstr "Tu as été déconnecté(e)"
 
 #
-#: views/views_member.py:129
+#: views/views_member.py:139
 msgid "Only admins can create members"
 msgstr "Seuls les administrateurs peuvent créer des membres"
 
-#: views/views_member.py:152
+#: views/views_member.py:162
 msgid "Member successfully created"
 msgstr "Le membre a été créé avec succès"
 
-#: views/views_member.py:174
+#: views/views_member.py:184
 msgid "Update Member Details"
 msgstr "Modifier les détails d'un Membre"
 
-#: views/views_member.py:175
+#: views/views_member.py:185
 msgid "Member successfully updated"
 msgstr "Le membre a été mis à jour avec succès"
 
-#: views/views_member.py:216
+#: views/views_member.py:226
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 "Un courriel de vérification a été envoyé pour valider ta nouvelle adresse "
 "électronique."
 
-#: views/views_member.py:255
+#: views/views_member.py:265
 msgid "My Profile"
 msgstr "Mon Profil"
 
-#: views/views_member.py:256
+#: views/views_member.py:266
 msgid "Profile successfully updated"
 msgstr "Profil mis à jour avec succès"
 
-#: views/views_member.py:270
+#: views/views_member.py:280
 msgid "You do not have permission to delete this member."
 msgstr "Tu n'as pas la permission de supprimer ce membre."
 
-#: views/views_member.py:274
+#: views/views_member.py:284
 msgid "Member deleted"
 msgstr "Membre supprimé"
 
-#: views/views_member.py:278
+#: views/views_member.py:288
 msgid ""
 "Are you sure you want to delete your account and all associated data? This "
 "is irrecoverable!"
@@ -1677,11 +1684,11 @@ msgstr ""
 "Es-tu sûr de vouloir supprimer ton compte et toutes les données qui y sont "
 "associées ? C'est irrécupérable !"
 
-#: views/views_member.py:280
+#: views/views_member.py:290
 msgid "Delete member"
 msgstr "Supprimer le Membre"
 
-#: views/views_member.py:281
+#: views/views_member.py:291
 #, python-format
 msgid ""
 "Are you sure you want to delete %(name)s's account and all associated data?"
@@ -1689,11 +1696,11 @@ msgstr ""
 "Es-tu sûr de vouloir supprimer le compte de %(name)s et toutes les données "
 "associées ?"
 
-#: views/views_member.py:319
+#: views/views_member.py:329
 msgid "Please provide a death date."
 msgstr "Merci de fournir une date de décès."
 
-#: views/views_member.py:326
+#: views/views_member.py:336
 msgid "The administrator has been notified."
 msgstr "L'administrateur a été prévenu."
 

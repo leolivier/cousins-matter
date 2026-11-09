@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 20:27+0200\n"
+"POT-Creation-Date: 2026-11-09 10:33+0100\n"
 "PO-Revision-Date: 2024-12-24 12:10+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: PT <LL@li.org>\n"
@@ -738,10 +738,14 @@ msgid "About the site"
 msgstr "Sobre o site"
 
 #: templates/core/navbar.html:163
+msgid "Members I Manage"
+msgstr "Membros geridos"
+
+#: templates/core/navbar.html:165
 msgid "Profile"
 msgstr "Perfil"
 
-#: templates/core/navbar.html:165
+#: templates/core/navbar.html:167
 msgid "Log Out"
 msgstr "Sair"
 

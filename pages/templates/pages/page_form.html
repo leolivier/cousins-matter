@@ -19,6 +19,14 @@
 		{%else%}
 			{% title _("Create Page") %}
 		{%endif%}</h1>
+	{% get_current_language as LANGUAGE_CODE %}
+	{% with docs_url="https://cousins-matter.readthedocs.io/"|add:LANGUAGE_CODE|add:"/latest/features/#pages-cms" %}
+	<div class="notification is-info">
+		{%icon "information"%}
+		{%blocktranslate%}Page URLs must follow specific rules (for example they must start with <code>/publish/</code> or <code>/private/</code>).{%endblocktranslate%}
+		<a href="{{ docs_url }}" target="_blank" rel="noopener noreferrer">{%translate "See the documentation"%}</a>
+	</div>
+	{%endwith%}
 	<form method="post">
 		{% csrf_token %}
 		{{ form | crispy}}

@@ -108,9 +108,11 @@ through a nullable FK. Both inherit `tenants.scoping.TenantModel`, so they
 carry a non-editable `tenant` FK, get a tenant-filtered `objects` manager and
 an `unscoped` escape hatch, and auto-assign the current tenant on save —
 the same isolation layer as every other content model
-(see [Tenants](/apps/tenants.md)). Migration 0019 added the column and
-backfilled it from the referencing members, duplicating rows that several
-tenants shared. Both have standard CRUD views plus HTMX modal variants
+(see [Tenants](/apps/tenants.md)). Migrations 0019/0020/0021 add the column,
+backfill it from the referencing members (duplicating rows several tenants
+shared) and make it non-nullable — three migrations because PostgreSQL blocks
+schema changes while the backfill's deferred FK triggers are pending. Both
+have standard CRUD views plus HTMX modal variants
 (members/views/views_family.py, members/views/views_address.py).
 
 Caveat when adding a form/view over them: a `QuerySet` or `ModelForm` FK

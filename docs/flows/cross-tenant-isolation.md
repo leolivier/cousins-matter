@@ -174,6 +174,7 @@ deliberately **unscoped** (by design, not a leak).
 ## Note
 
 Automated coverage exists for parts of this (`members/tests/
-tests_tenant_isolation.py`, per-app `TenantModel` tests). This scenario is
+tests_tenant_isolation.py`, per-app `TenantModel` tests — including
+`TenantScopedAddressFamilyTests` for addresses and families). This scenario is
 the browser-level mirror: it exercises real sessions, real slugs and real
 media URLs end to end.

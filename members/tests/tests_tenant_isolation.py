@@ -18,6 +18,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from members.models import Address, Family
 from tenants.models import Tenant
 from tenants.scoping import set_current_tenant, tenant_context
 
@@ -197,3 +198,78 @@ class DeleteTenantCommandTests(TestCase):
     call_command("delete_tenant", "removable-tenant", yes=True)
     self.assertFalse(Tenant.objects.filter(slug="removable-tenant").exists())
     self.assertFalse(Member.unscoped.filter(username="removable_member").exists())
+
+
+class TenantScopedAddressFamilyTests(TestCase):
+  """Address and Family are content models: they must be tenant-scoped too.
+
+  Without a tenant FK they leaked across families (detail pages, modal edits,
+  member-form dropdowns) and the CSV import could reuse another tenant's rows.
+  """
+
+  @classmethod
+  def setUpTestData(cls):
+    cls.tenant_a = Tenant.objects.create(name="Dir A", slug="dir-tenant-a")
+    cls.tenant_b = Tenant.objects.create(name="Dir B", slug="dir-tenant-b")
+    cls.admin_a = _make_member(cls.tenant_a, "dir_admin_a", role=Member.Role.ADMIN)
+    with tenant_context(cls.tenant_a):
+      cls.address_a = Address.objects.create(number_and_street="1 A street", zip_code="11111", city="Aville", country="FR")
+      cls.family_a = Family.objects.create(name="Family A")
+    with tenant_context(cls.tenant_b):
+      cls.address_b = Address.objects.create(number_and_street="2 B street", zip_code="22222", city="Bville", country="FR")
+      cls.family_b = Family.objects.create(name="Family B")
+
+  def setUp(self):
+    set_current_tenant(None)
+
+  def tearDown(self):
+    set_current_tenant(None)
+
+  def test_address_and_family_auto_assign_tenant(self):
+    self.assertEqual(self.address_a.tenant_id, self.tenant_a.id)
+    self.assertEqual(self.address_b.tenant_id, self.tenant_b.id)
+    self.assertEqual(self.family_a.tenant_id, self.tenant_a.id)
+    self.assertEqual(self.family_b.tenant_id, self.tenant_b.id)
+
+  def test_address_queryset_is_scoped(self):
+    with tenant_context(self.tenant_a):
+      self.assertEqual(set(Address.objects.values_list("id", flat=True)), {self.address_a.id})
+
+  def test_family_queryset_is_scoped(self):
+    with tenant_context(self.tenant_a):
+      self.assertEqual(set(Family.objects.values_list("id", flat=True)), {self.family_a.id})
+
+  def test_cross_tenant_address_detail_is_404(self):
+    self.client.force_login(self.admin_a)
+    resp = self.client.get(reverse("members:address_detail", args=[self.address_b.pk]))
+    self.assertEqual(resp.status_code, 404)
+
+  def test_cross_tenant_family_detail_is_404(self):
+    self.client.force_login(self.admin_a)
+    resp = self.client.get(reverse("members:family_detail", args=[self.family_b.pk]))
+    self.assertEqual(resp.status_code, 404)
+
+  def test_cross_tenant_address_modal_update_is_404(self):
+    self.client.force_login(self.admin_a)
+    resp = self.client.post(reverse("members:modal_update_address", args=[self.address_b.pk]), {})
+    self.assertEqual(resp.status_code, 404)
+
+  def test_cross_tenant_family_modal_update_is_404(self):
+    self.client.force_login(self.admin_a)
+    resp = self.client.post(reverse("members:modal_update_family", args=[self.family_b.pk]), {})
+    self.assertEqual(resp.status_code, 404)
+
+  def test_member_form_scopes_address_and_family_choices(self):
+    from members.forms import MemberUpdateForm
+
+    with tenant_context(self.tenant_a):
+      form = MemberUpdateForm(instance=self.admin_a, is_profile=True)
+      self.assertEqual(set(form.fields["address"].queryset.values_list("id", flat=True)), {self.address_a.id})
+      self.assertEqual(set(form.fields["family"].queryset.values_list("id", flat=True)), {self.family_a.id})
+
+  def test_family_form_scopes_parent_choices(self):
+    from members.forms import FamilyUpdateForm
+
+    with tenant_context(self.tenant_a):
+      form = FamilyUpdateForm(instance=self.family_a)
+      self.assertEqual(set(form.fields["parent"].queryset.values_list("id", flat=True)), {self.family_a.id})

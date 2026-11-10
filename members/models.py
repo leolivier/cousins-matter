@@ -17,7 +17,7 @@ from typing import ClassVar
 from core.utils import create_thumbnail
 
 from tenants.models import Tenant
-from tenants.scoping import get_current_tenant
+from tenants.scoping import TenantModel, get_current_tenant
 
 from .managers import MemberManager
 
@@ -53,7 +53,7 @@ MEMBER_FIELD_NAMES = MANDATORY_MEMBER_FIELD_NAMES | {
 ALL_FIELD_NAMES = MEMBER_FIELD_NAMES | ADDRESS_FIELD_NAMES
 
 
-class Family(models.Model):
+class Family(TenantModel):
   name: CharField = models.CharField(_("Name"), max_length=72)
 
   parent: ForeignKey = models.ForeignKey(
@@ -80,7 +80,7 @@ class Family(models.Model):
     return reverse("members:family_detail", kwargs={"pk": self.pk})
 
 
-class Address(models.Model):
+class Address(TenantModel):
   number_and_street = models.CharField(_("Number & Street name"), max_length=120)
 
   complementary_info = models.CharField(_("Complementary info"), max_length=120, default="", blank=True)

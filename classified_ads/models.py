@@ -88,7 +88,7 @@ class ClassifiedAd(TenantModel):
     verbose_name = _("Classified Ad")
     verbose_name_plural = _("Classified Ads")
     indexes = [
-      models.Index(fields=["tenant", "owner", "category", "subcategory"]),
+      models.Index(fields=["tenant", "owner", "category", "subcategory"], name="classified_tenant_9d2f4a_idx"),
     ]
 
   def __str__(self) -> str:
@@ -133,7 +133,7 @@ class AdPhoto(TenantModel):
     verbose_name = _("Ad Photo")
     verbose_name_plural = _("Ad Photos")
     indexes = [
-      models.Index(fields=["tenant", "ad"]),
+      models.Index(fields=["tenant", "ad"], name="classified_tenant_a1c7e8_idx"),
     ]
 
   def save(self, *args, **kwargs):

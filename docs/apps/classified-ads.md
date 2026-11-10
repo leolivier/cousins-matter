@@ -4,7 +4,7 @@ title: Classified Ads
 description: Classified ads app (`classified_ads`, documented as apps/classified-ads.md) — member-to-member sale listings with photos and owner contact by email
 tags: ["app", "classified_ads"]
 status: draft
-stale_after: 2027-03-10
+stale_after: 2027-11-10
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:42:30Z }
 ---
 

@@ -4,7 +4,7 @@ title: Forum
 description: Discussion forum — posts with replies (messages) and comments, follower subscriptions with notifications on new content
 tags: ["app", "forum"]
 status: draft
-stale_after: 2027-03-09
+stale_after: 2027-11-10
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
 ---
 

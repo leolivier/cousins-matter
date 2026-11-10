@@ -18,7 +18,7 @@ class Message(TenantModel):
   class Meta:
     ordering = ["created"]
     indexes = [
-      models.Index(fields=["tenant", "post", "author"]),
+      models.Index(fields=["tenant", "post", "author"], name="forum_messa_tenant_4a2c19_idx"),
     ]
 
   def __str__(self):
@@ -39,7 +39,7 @@ class Post(TenantModel):
     verbose_name_plural = _("posts")
     ordering = ["first_message__created"]
     indexes = [
-      models.Index(fields=["tenant", "title"]),
+      models.Index(fields=["tenant", "title"], name="forum_post_tenant_b7d3e2_idx"),
     ]
 
   def __str__(self):
@@ -61,7 +61,7 @@ class Comment(TenantModel):
     verbose_name_plural = _("comments")
     ordering = ["message", "created"]
     indexes = [
-      models.Index(fields=["tenant", "message", "author"]),
+      models.Index(fields=["tenant", "message", "author"], name="forum_comme_tenant_c1f8a5_idx"),
     ]
 
   def __str__(self):

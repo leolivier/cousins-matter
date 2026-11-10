@@ -3,47 +3,78 @@ import os
 import sys
 import requests
 
-print("This script removes all untagged versions of the package cousins-matter on ghcr.io")
-print("Images without tags can be the one of each platform (amd64, arm64, etc.) and removing them will end up in")
-print('an error "Manifest not found"! So USE WITH CAUTION!!!')
-if input("Type 'GO' to continue: ") != "GO":
-  sys.exit(0)
+OWNER, PACKAGE = "leolivier", "cousins-matter"
+API = f"https://api.github.com/users/{OWNER}/packages/container/{PACKAGE}/versions"
+REGISTRY = f"https://ghcr.io/v2/{OWNER}/{PACKAGE}/manifests"
+REMOVABLE_PREFIXES = ("dependabot-", "dev-", "worktree-", "feat-", "fix-", "leolivier-")
+DRY_RUN = "--delete" not in sys.argv
 
-api = "https://api.github.com/users/leolivier/packages/container/cousins-matter/versions"
-headers = {
+TOKEN = os.environ["GITHUB_TOKEN"]  # scopes: read:packages + delete:packages
+GH_HEADERS = {
   "Accept": "application/vnd.github+json",
   "X-GitHub-Api-Version": "2022-11-28",
-  "Authorization": "Bearer " + str(os.getenv("GITHUB_TOKEN")),
+  "Authorization": f"Bearer {TOKEN}",
 }
-get_url = f"{api}?state=active&per_page=100"
-while True:
-  response = requests.get(get_url, headers=headers, timeout=10)
-  if response.status_code != 200:
-    print(response.json())
-    sys.exit(1)
-  images = response.json()
-  for image in images:
-    # print(image)
-    metadata = image["metadata"]
-    if metadata["package_type"] != "container":
-      continue
-    if "tags" in metadata["container"]:
-      # remove dependabot and dev images
-      tags = metadata["container"]["tags"]
-      start_tags = ["dependabot-", "dev-"]
-      removed = True
-      for tag in tags:
-        if not any(tag.startswith(start_tag) for start_tag in start_tags):
-          removed = False
-          break
-      if not removed:
-        continue
-    print(f"removing {api}/{image['id']} {metadata['container']['tags']}")
-    requests.delete(f"{api}/{image['id']}", headers=headers, timeout=10)
-  links = response.links
-  if "next" in links:
-    get_url = links["next"]["url"]
+ACCEPT = ", ".join([
+  "application/vnd.oci.image.index.v1+json",
+  "application/vnd.docker.distribution.manifest.list.v2+json",
+  "application/vnd.oci.image.manifest.v1+json",
+  "application/vnd.docker.distribution.manifest.v2+json",
+])
+
+
+def list_versions():
+  versions, url = [], f"{API}?state=active&per_page=100"
+  while url:
+    r = requests.get(url, headers=GH_HEADERS, timeout=10)
+    r.raise_for_status()
+    versions += [v for v in r.json() if v["metadata"]["package_type"] == "container"]
+    url = r.links.get("next", {}).get("url")
+  return versions
+
+
+def registry_headers():
+  r = requests.get(
+    "https://ghcr.io/token",
+    params={"service": "ghcr.io", "scope": f"repository:{OWNER}/{PACKAGE}:pull"},
+    auth=(OWNER, TOKEN),
+    timeout=10,
+  )
+  r.raise_for_status()
+  return {"Authorization": f"Bearer {r.json()['token']}", "Accept": ACCEPT}
+
+
+def child_digests(digest, headers):
+  """Digests referenced by an index (platforms + attestations)."""
+  r = requests.get(f"{REGISTRY}/{digest}", headers=headers, timeout=10)
+  if r.status_code == 404:
+    return []
+  r.raise_for_status()  # on any other error: abort rather than risk deleting
+  return [m["digest"] for m in r.json().get("manifests", [])]
+
+
+def is_removable_tags(tags):
+  return all(t.startswith(REMOVABLE_PREFIXES) for t in tags)  # True if tags == []
+
+
+versions = list_versions()
+reg = registry_headers()
+
+# 1. Everything reachable from a "real" tag is protected
+keep = set()
+for v in versions:
+  tags = v["metadata"]["container"].get("tags", [])
+  if tags and not is_removable_tags(tags):
+    keep.add(v["name"])
+    keep.update(child_digests(v["name"], reg))
+
+# 2. Delete everything else
+for v in versions:
+  if v["name"] in keep:
     continue
-  else:
-    print("Done")
-    break
+  tags = v["metadata"]["container"].get("tags", [])
+  print(f"{'[dry-run] ' if DRY_RUN else ''}removing {v['id']} {v['name'][:19]} {tags}")
+  if not DRY_RUN:
+    requests.delete(f"{API}/{v['id']}", headers=GH_HEADERS, timeout=10).raise_for_status()
+
+print(f"Kept {len(keep)} versions. {'Re-run with --delete to apply.' if DRY_RUN else 'Done.'}")

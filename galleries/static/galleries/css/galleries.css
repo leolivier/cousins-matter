@@ -124,6 +124,19 @@ figure.thumbnail {
 	object-fit: contain;
 }
 
+#fullscreen-caption {
+	position: absolute;
+	bottom: 20px;
+	left: 0;
+	right: 0;
+	margin: 0;
+	text-align: center;
+	color: var(--bulma-white);
+	text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+	z-index: 1001;
+	pointer-events: none;
+}
+
 .swipe-container {
 	overflow: hidden;
 	width: 100%;

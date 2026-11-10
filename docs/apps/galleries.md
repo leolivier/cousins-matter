@@ -4,7 +4,7 @@ title: Galleries
 description: Photo/video galleries — nested gallery tree, photo import (single and bulk zip via Django-Q), thumbnails, protected storage
 tags: ["app", "galleries"]
 status: draft
-stale_after: 2027-10-17
+stale_after: 2027-11-09
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
 ---
 
@@ -89,7 +89,10 @@ login (and tenant) per request. Templates must build URLs with the
   (`delete_gallery` uses `confirm_delete_modal` from core.utils).
 - `photo/<pk>` — `PhotoDetailView`, `edit_photo`, `delete_photo`,
   `get_fullscreen_photo` (prev/next navigation via
-  `get_next_prev_photo()` in services.py). `PhotoDetailView` and
+  `get_next_prev_photo()` in services.py). The fullscreen partial
+  (`photo_fullscreen.html#image`) also renders the photo `name` as a
+  bottom caption, so it stays in sync when swiping or during a
+  slideshow. `PhotoDetailView` and
   `PhotoEditView` build their queryset per request via `get_queryset()`
   so the photo resolves through the tenant-scoped manager — another
   tenant's photo is a 404 (a class-level `queryset` attribute would be

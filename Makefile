@@ -34,7 +34,7 @@ help h:
 
 build:
 	t=$(if $(t),$(t),local); \
-	docker build -t cousins-matter:$$t .
+	docker build --pull -t cousins-matter:$$t .
 
 run:
 	$(MANAGE) runserver
@@ -86,10 +86,24 @@ cover:
 	ENVIRONMENT="test" $(COVERAGE) run --source="$$source" --data-file="$$df" $(co) $(MANAGE) test $${a:+"$$a"} $(to); \
 	$(COVERAGE) report --data-file="$$df"
 
-dtest: build
-	$(COMPOSE) down cousins-matter qcluster
-	ENVIRONMENT="docker-test" $(COMPOSE) up -d
-	docker exec -it cousins-matter python manage.py test $(t) $(o)
+DOCKER_INSTALL_TEST = docker build --pull -t cousins-matter:local .; \
+	$(COMPOSE) down cousins-matter qcluster; \
+    ENVIRONMENT="docker-test" $(COMPOSE) -f docker-compose.yml -f docker-compose.ci.yml up -d; \
+    docker exec -u root cousins-matter pip install uv; \
+    docker exec -u root cousins-matter uv sync --dev;
+
+DOCKER_RUN_TEST = docker exec -it cousins-matter python manage.py test
+
+dtest:
+	$(DOCKER_INSTALL_TEST)
+	$(DOCKER_RUN_TEST) $(t) $(o)
+
+dtest-ui:
+	$(DOCKER_INSTALL_TEST)
+	docker exec -u root cousins-matter apt-get update
+	docker exec -u root cousins-matter python -m playwright install-deps chromium
+	docker exec cousins-matter python -m playwright install chromium
+	$(DOCKER_RUN_TEST) --tag=ui $(t) $(o)
 
 mig:
 	$(MANAGE) migrate

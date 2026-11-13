@@ -1,8 +1,10 @@
-# Creates a multiplatform image of cousins matter and push it to ghcr.io for each new release
+# Builds a multiplatform image of cousins matter: pushed to ghcr.io for each PR
+# (pr-<number> tag) and each new release, never for plain branch pushes.
 name: Image Build & Push
 
 on:
-  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
     paths-ignore:
       - 'user-manual/**'
       - '**/*.md'
@@ -23,12 +25,13 @@ jobs:
   # Job 1 – Lint, build test image and prepare shared artefacts
   # ──────────────────────────────────────────────────────────────────────────────
   lint-and-build:
-    if: github.event_name == 'release' || github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
+    # Fork PRs cannot push the vendored-assets commit nor write the registry cache.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     uses: ./.github/workflows/reusable-lint-and-build.yml
     with:
       registry: 'ghcr.io'
       image_name: ${{ github.repository }}
-      tags_def: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'push' && 'type=ref,event=branch' || 'type=sha' }}
+      tags_def: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'pull_request' && 'type=ref,event=pr' || 'type=sha' }}
       test_tag: 'test-${{ github.sha }}'
     secrets: inherit
 
@@ -93,8 +96,8 @@ jobs:
       registry: 'ghcr.io'
       image_name: ${{ github.repository }}
       platforms: 'linux/amd64,linux/arm64'
-      push: ${{ github.event_name == 'release' || github.event_name == 'push' }}
-      tags_def: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'push' && 'type=ref,event=branch' || 'type=sha' }}
+      push: ${{ github.event_name == 'release' || github.event_name == 'pull_request' }}
+      tags_def: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'pull_request' && 'type=ref,event=pr' || 'type=sha' }}
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────

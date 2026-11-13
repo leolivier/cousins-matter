@@ -138,6 +138,7 @@ jobs:
           platforms: linux/amd64
           push: false
           load: true
+          pull: true
           build-args: |
             UID=${{ steps.get_runner_id.outputs.RUNNER_ID }}
           tags: ${{ inputs.registry }}/${{ inputs.image_name }}:${{ inputs.test_tag }}

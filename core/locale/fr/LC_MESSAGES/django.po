@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-09 10:33+0100\n"
+"POT-Creation-Date: 2026-11-13 17:24+0100\n"
 "PO-Revision-Date: 2024-12-24 12:09+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -404,6 +404,18 @@ msgstr "Résumé des notifications (%(frequency)s) pour \"%(site_name)s\""
 msgid "You have %(count)s new notifications."
 msgstr "Tu as %(count)s nouvelles notifications."
 
+#: templates/404.html:3 templates/404.html:9
+msgid "Page not found"
+msgstr "Page introuvable"
+
+#: templates/404.html:10
+msgid "The page you requested does not exist or has been moved."
+msgstr "La page demandée n'existe pas ou a été déplacée."
+
+#: templates/404.html:11 templates/core/base.html:10
+msgid "Home"
+msgstr "Accueil"
+
 #: templates/core/about/site-stats.html:3
 #: templates/core/about/site-stats.html:6
 msgid "Site Statistics"
@@ -412,10 +424,6 @@ msgstr "Statistiques du site"
 #: templates/core/about/site-stats.html:7
 msgid "This page displays some statistics about this site:"
 msgstr "Cette page affiche quelques statistiques sur ce site :"
-
-#: templates/core/base.html:10
-msgid "Home"
-msgstr "Accueil"
 
 #: templates/core/base.html:80
 msgid "This site proudly built using"
@@ -792,7 +800,7 @@ msgstr ""
 "href=\"%(follower_url)s\">%(follower_name)s</a> te suit maintenant sur "
 "%(site_name)s!"
 
-#: utils.py:48
+#: utils.py:50
 #, python-format
 msgid ""
 "Uploaded file %(filename)s is too big (%(sizemb)sMB), maximum is "
@@ -801,7 +809,7 @@ msgstr ""
 "Le fichier téléchargé %(filename)s est trop gros (%(sizemb)sMB), le maximum "
 "est de %(limitmb)sMB."
 
-#: utils.py:276
+#: utils.py:278
 #, python-format
 msgid ""
 "Date '%(date_string_to_parse)s' does not match any expected format: "
@@ -810,43 +818,43 @@ msgstr ""
 "La date '%(date_string_to_parse)s' ne correspond à aucun des formats "
 "attendus: %(translated_date_formats)s."
 
-#: utils.py:286
+#: utils.py:288
 msgid "DD"
 msgstr "JJ"
 
-#: utils.py:287
+#: utils.py:289
 msgid "MM"
 msgstr "MM"
 
-#: utils.py:288
+#: utils.py:290
 msgid "YYYY"
 msgstr "AAAA"
 
-#: utils.py:289
+#: utils.py:291
 msgid "YY"
 msgstr "AA"
 
-#: utils.py:290
+#: utils.py:292
 msgid "HH"
 msgstr "HH"
 
-#: utils.py:291
+#: utils.py:293
 msgid "hh"
 msgstr "hh"
 
-#: utils.py:292
+#: utils.py:294
 msgid "AM/PM"
 msgstr "AM/PM"
 
-#: utils.py:293
+#: utils.py:295
 msgid "mm"
 msgstr "mm"
 
-#: utils.py:294
+#: utils.py:296
 msgid "ss"
 msgstr "ss"
 
-#: utils.py:434
+#: utils.py:438
 msgid "You do not have permission to edit/delete this object."
 msgstr "Tu n'as pas le droit de modifier/supprimer cet objet."
 

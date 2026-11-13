@@ -4,7 +4,7 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-02-09
+stale_after: 2027-11-13
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-09T12:00:00Z }
 ---
 
@@ -48,6 +48,13 @@ Infrastructure endpoints (cousinsmatter/urls.py): `health` and `qhealth`
 (login not required) both call `health_check` (core/services.py) — a
 `SELECT 1` on the database plus a Redis `PING` — the latter running it through
 Django-Q to prove the broker works.
+
+## Error pages
+
+`core/templates/404.html` extends `core/base.html` and is rendered by Django's
+default `page_not_found` handler whenever `DEBUG=False`. With `DEBUG=True`
+Django keeps its technical 404 page (the template is bypassed), so no custom
+`handler404` is declared in `cousinsmatter/urls.py`.
 
 ## Environment check
 

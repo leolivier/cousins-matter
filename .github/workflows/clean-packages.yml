@@ -1,0 +1,35 @@
+name: Cleanup container images
+on:
+  pull_request:
+    types: [closed]
+  schedule:
+    - cron: "0 3 * * 0"
+  workflow_dispatch:
+
+permissions:
+  packages: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete the closed PR's image
+        if: github.event_name == 'pull_request'
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: cousins-matter
+          delete-tags: pr-${{ github.event.pull_request.number }}
+
+      - name: Weekly sweep
+        if: github.event_name != 'pull_request'
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: cousins-matter
+          delete-tags: |
+            pr-*
+            dev-*
+            dependabot-*
+            feat-*
+            fix-*
+          delete-untagged: true
+          # dry-run: true

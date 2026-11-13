@@ -96,9 +96,9 @@ class MemberDetailUITest(MembersUITestBase):
     self.login_and_goto_page("members:detail", kwargs={"username": "nonexistentuser"})
     self.page.wait_for_timeout(500)
 
-    # Django returns a 404 page with "Not Found" as title
+    # The custom 404 page shows "Page not found" as title
     title = self.page.evaluate("document.title")
-    self.assertIn("Not Found", title, "Non-existent member should show a 404 page")
+    self.assertIn("Page not found", title, "Non-existent member should show a 404 page")
 
 
 class ManagedMembersUITest(MembersUITestBase):

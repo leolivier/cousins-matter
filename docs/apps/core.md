@@ -49,6 +49,13 @@ Infrastructure endpoints (cousinsmatter/urls.py): `health` and `qhealth`
 `SELECT 1` on the database plus a Redis `PING` — the latter running it through
 Django-Q to prove the broker works.
 
+## Error pages
+
+`core/templates/404.html` extends `core/base.html` and is rendered by Django's
+default `page_not_found` handler whenever `DEBUG=False`. With `DEBUG=True`
+Django keeps its technical 404 page (the template is bypassed), so no custom
+`handler404` is declared in `cousinsmatter/urls.py`.
+
 ## Environment check
 
 `/env-check/` (`core:env_check`, core/views/views_stats.py `env_check`) is a

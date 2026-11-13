@@ -4,7 +4,7 @@ title: Testing
 description: Run the Django, Playwright UI and coverage suites, and the pre-commit quality gate
 tags: [testing, playwright, coverage]
 status: draft
-stale_after: 2027-04-18
+stale_after: 2027-05-13
 generated: { by: claude-code/glm-5.3-flash, at: 2026-10-18T00:00:00Z }
 ---
 
@@ -62,6 +62,21 @@ From `config/settings/local_test.py` (and `docker_test.py` for the container var
   option is removed.
 - The suite is pinned to `LANGUAGE_CODE = "en"` in both test settings, so it is independent of
   the `LANGUAGE_CODE` in the local or compose `.env`.
+
+## Upgrade tests (v2 -> v3)
+
+`scripts/tests/test_upgrade_v2_v3.sh` boots the published
+`ghcr.io/leolivier/cousins-matter:2.6.1` image, seeds one legacy row per
+tenant-scoped app, then starts the image under test on the same PostgreSQL
+volume. It asserts that `migrate --check` is clean and that every legacy row is
+on the default tenant while platform superusers are on the system tenant. CI
+runs it as the `test-upgrade-v2` job in
+`.github/workflows/build-and-publish-image.yml`.
+
+Override the v2 image with `V2_IMAGE`; the target image comes from
+`COUSINS_MATTER_IMAGE` (or `-t`). The script needs an `.env` with `SECRET_KEY`
+and `POSTGRES_PASSWORD` set — `manage_cousins_matter.py install -e -n -d "$PWD"`
+does that.
 
 ## Coverage
 

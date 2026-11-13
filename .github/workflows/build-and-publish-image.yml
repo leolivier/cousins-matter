@@ -53,6 +53,49 @@ jobs:
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────
+  # Job 3b – Upgrade a v2 database to v3 (runs in parallel with jobs 2, 3, 4, 5 & 6)
+  # ──────────────────────────────────────────────────────────────────────────────
+  test-upgrade-v2:
+    needs: lint-and-build
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      V2_TAG: "2.6.1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Load test Docker image
+        uses: ./.github/actions/load-docker-image
+
+      - name: Write .env
+        uses: ./.github/actions/write-test-env
+        with:
+          test_image_ref: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
+
+      - name: Prepare .env (generate secrets)
+        run: python ./scripts/manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"
+
+      - name: Test v2 -> v3 upgrade
+        env:
+          COUSINS_MATTER_IMAGE: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
+          V2_IMAGE: ghcr.io/${{ github.repository }}:${{ env.V2_TAG }}
+          ENVIRONMENT: docker-test
+        run: |
+          docker compose down -v
+          docker volume prune -f
+          ./scripts/tests/test_upgrade_v2_v3.sh -g
+
+      - name: Show docker-compose services logs on failure
+        if: failure()
+        uses: ./.github/actions/show-logs-on-failure
+        with:
+          env_file_path: ${{ github.workspace }}/.env
+          containers: cousins-matter.db cousins-matter cousins-matter.qcluster
+
+  # ──────────────────────────────────────────────────────────────────────────────
   # Job 4 – Test S3 backend (runs in parallel with jobs 2, 3, 5 & 6)
   # ──────────────────────────────────────────────────────────────────────────────
   test-s3:
@@ -89,7 +132,7 @@ jobs:
   # Job 7 – Final multiplatform build & push (waits for jobs 2, 3, 4, 5 & 6)
   # ──────────────────────────────────────────────────────────────────────────────
   build-and-push:
-    needs: [test-docker-image, test-install-migrate, test-s3, test-multi-tenant, test-ui]
+    needs: [test-docker-image, test-install-migrate, test-upgrade-v2, test-s3, test-multi-tenant, test-ui]
     if: ${{ github.actor != 'dependabot[bot]' }}
     uses: ./.github/workflows/reusable-build-and-push.yml
     with:

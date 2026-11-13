@@ -72,20 +72,13 @@ jobs:
         with:
           test_image_ref: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
 
-      - name: Build the v2 image (the GHCR tag is no longer pullable)
-        run: |
-          mkdir -p /tmp/cm-v2
-          curl -fsSL https://github.com/${{ github.repository }}/archive/refs/tags/v${{ env.V2_TAG }}.tar.gz \
-            | tar -xz -C /tmp/cm-v2 --strip-components=1
-          docker build -t cm-v2:${{ env.V2_TAG }} /tmp/cm-v2
-
       - name: Prepare .env (generate secrets)
         run: python ./scripts/manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"
 
       - name: Test v2 -> v3 upgrade
         env:
           COUSINS_MATTER_IMAGE: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
-          V2_IMAGE: cm-v2:${{ env.V2_TAG }}
+          V2_IMAGE: ghcr.io/${{ github.repository }}:${{ env.V2_TAG }}
           ENVIRONMENT: docker-test
         run: |
           docker compose down -v

@@ -5,11 +5,7 @@
 # after .env exists and has SECRET_KEY and POSTGRES_PASSWORD set (CI runs
 # `manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"` first).
 #
-# The v2 image is not pullable from GHCR anymore, build it from the tag first:
-#   mkdir -p /tmp/cm-v2 && curl -fsSL \
-#     https://github.com/leolivier/cousins-matter/archive/refs/tags/v2.6.1.tar.gz \
-#     | tar -xz -C /tmp/cm-v2 --strip-components=1
-#   docker build -t cm-v2:2.6.1 /tmp/cm-v2
+# Pulls the published v2.6.1 image from GHCR; override it with V2_IMAGE.
 
 # import utils functions and variables
 # shellcheck source=SCRIPTDIR/test_utils.sh
@@ -20,7 +16,7 @@ set_variables
 
 script_dir=$(cd "$(dirname "$0")" && cd .. && pwd)
 new_image="${COUSINS_MATTER_IMAGE:-$tag}"
-v2_image="${V2_IMAGE:-cm-v2:2.6.1}"
+v2_image="${V2_IMAGE:-ghcr.io/leolivier/cousins-matter:2.6.1}"
 
 [ -f .env ] || error 1 "No .env file found in $(pwd)"
 [ -f docker-compose.yml ] || error 1 "No docker-compose.yml found in $(pwd)"

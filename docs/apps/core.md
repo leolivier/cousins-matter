@@ -4,7 +4,7 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-02-09
+stale_after: 2027-11-13
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-09T12:00:00Z }
 ---
 
@@ -224,6 +224,17 @@ config/settings/base.py maps `bulmacalendar` back to `dateinput input` —
 without that mapping the JS in `include-bulma-calendar.html`
 (`attachCalendar('.dateinput')`) never attaches the picker (regression fixed
 from b4b2e846, guarded by members/tests/tests_forms.py).
+
+## Template helpers
+
+`core/templatetags/cm_tags.py` holds the shared tags (`icon`, view
+inclusion, `normalized_language_code`…). `user_manual_url` builds a
+link into the readthedocs user manual for the current language: the
+section anchor follows the *translated* heading in
+user-manual/docs/<lang>/features.md (mkdocs slugs it), so only the
+languages diverging from the default slug are mapped in the tag —
+`pages/tests/tests_manual_docs_url.py` pins the anchors for all six
+languages; update both when a manual heading changes.
 
 ## Rich-text sanitization (shared XSS defense)
 

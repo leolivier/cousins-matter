@@ -62,7 +62,9 @@ jobs:
         id: pkgjson
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+            # Checkout already fetched every branch with full history (fetch-depth: 0).
+            # Do not re-fetch the base at --depth=1: that marks the base tip as a
+            # shallow root and `...` then fails with "fatal: no merge base".
             CHANGED=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD -- package.json)
           else
               BEFORE="${{ github.event.before }}"

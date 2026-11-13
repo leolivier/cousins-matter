@@ -24,6 +24,7 @@ v2_image="${V2_IMAGE:-cm-v2:2.6.1}"
 
 [ -f .env ] || error 1 "No .env file found in $(pwd)"
 [ -f docker-compose.yml ] || error 1 "No docker-compose.yml found in $(pwd)"
+[ -z "$(docker compose ps --quiet)" ] || error 1 "Cousins Matter containers are already running, stop them first"
 
 echo "v2 image: $v2_image"
 echo "v3 image: $new_image"

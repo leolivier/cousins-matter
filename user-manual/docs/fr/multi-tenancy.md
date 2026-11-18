@@ -13,8 +13,7 @@ comme l’application classique. Pour l’activer, définissez dans `.env` :
 MULTI_TENANT_ENABLED=True
 ```
 
-Cela monte les URL `/tenants/` (inscription et gestion des familles) et affiche le
-lien « Créer une nouvelle famille » sur la page de connexion. Lorsque cette fonctionnalité est désactivée, toutes ces URL renvoient une erreur 404.
+Cela monte les URL `/tenants/` (inscription et gestion des familles). Lorsque cette fonctionnalité est désactivée, toutes ces URL renvoient une erreur 404.
 
 ## Concepts
 
@@ -31,9 +30,10 @@ Deux tenants sont créés par migration et ne peuvent pas être supprimés : `de
 
 ## Création d’une famille
 
-* **En libre-service** : lorsque la fonctionnalité est activée, la page de connexion propose
-  *« Créer une nouvelle famille »*. Le créateur s’inscrit via une vérification par e-mail et
-  devient l’administrateur de la famille.
+* **En libre-service** : lorsque la fonctionnalité est activée, rendez-vous sur
+  `/tenants/signup/` (et non sur la page de connexion) pour demander la création d’une
+  nouvelle famille. Le créateur s’inscrit via une vérification par e-mail et devient
+  l’administrateur de la famille.
 * **Par un administrateur de la plateforme** : `/tenants/create/` crée la famille et permet d’envoyer par e-mail
   une invitation (lien lié au locataire) à son premier administrateur.
 
@@ -43,17 +43,19 @@ Un identifiant de famille (slug) est dérivé de son nom ; les slugs réservés
 ## Se connecter à une famille
 
 Tout le monde se connecte sur la page de connexion standard — la famille est résolue
-automatiquement à partir du compte connecté ; il n’existe pas d’URL propre à chaque famille.
-Une adresse e-mail appartient à une seule famille : pour rejoindre une autre famille,
-il faut une autre adresse e-mail.
+automatiquement à partir du compte connecté ; la page de connexion elle-même est commune
+à toutes les familles. Une adresse e-mail appartient à une seule famille : pour rejoindre
+une autre famille, il faut une autre adresse e-mail.
 
-* **Créateur de la famille** : après l’inscription via *« Créer une nouvelle famille »*,
-  le compte reste inactif tant que le lien de l’e-mail de vérification n’a pas été cliqué ;
-  connectez-vous ensuite normalement et vous êtes l’administrateur de la famille.
+* **Créateur de la famille** : après l’inscription sur `/tenants/signup/`, le compte reste
+  inactif tant que le lien de l’e-mail de vérification n’a pas été cliqué ; connectez-vous
+  ensuite normalement et vous êtes l’administrateur de la famille.
 * **Autres membres** : soit accepter l’invitation envoyée par e-mail par l’administrateur
-  de la famille (lien lié au locataire → inscription → vérification par e-mail), soit soumettre
-  une demande d’adhésion (formulaire avec captcha) qu’un administrateur de la famille doit approuver.
-  Dans les deux cas, connectez-vous ensuite sur la page de connexion standard.
+  de la famille (lien lié au locataire → inscription → vérification par e-mail), soit se
+  rendre sur la page d’accueil de la famille à `/<tenant>/` et cliquer sur
+  *« Demander un lien d’invitation »* pour soumettre une demande d’adhésion (formulaire
+  avec captcha) qu’un administrateur de la famille doit approuver. Dans les deux cas,
+  connectez-vous ensuite sur la page de connexion standard.
 
 ## Paramètres de la famille
 

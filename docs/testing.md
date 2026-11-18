@@ -4,7 +4,7 @@ title: Testing
 description: Run the Django, Playwright UI and coverage suites, and the pre-commit quality gate
 tags: [testing, playwright, coverage]
 status: draft
-stale_after: 2027-05-13
+stale_after: 2027-11-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-10-18T00:00:00Z }
 ---
 
@@ -32,6 +32,28 @@ skipped otherwise — they are invisible to a plain local `make test`. Run `make
 before opening a PR that touches multi-tenant behavior (tenants app, tenant-scoped
 querysets, auth middleware — anything affecting authenticated users): a green local run
 with the flag off does not prove CI green.
+
+## Tenant onboarding E2E
+
+`tenants/tests/tests_onboarding_e2e.py` automates
+[Tenant Onboarding E2E](/flows/tenant-onboarding-e2e.md) phases 1-7 with the
+Django test client: family signup, first admin login and permission gates,
+managed member, join request, invitation, invited-person registration and
+login. Each `test_NN_...` rebuilds the state its phase needs, so the tests are
+independent while the numbering keeps the report in scenario order.
+
+```bash
+scripts/tests/run_tenant_onboarding_e2e.sh   # = make test-mt t=tenants.tests.tests_onboarding_e2e
+```
+
+The script enables multi-tenancy (the `/tenants/` URLconf is mounted at import
+time) and exits non-zero on the first failing phase.
+
+`members/tests/tests_cross_tenant_isolation_e2e.py` does the same for
+[Cross-Tenant Isolation](/flows/cross-tenant-isolation.md): two families seed
+the same marker content in every app, then each family's session probes the
+other's lists, objects, members, chat, media and deactivation.
+`scripts/tests/run_cross_tenant_isolation_e2e.sh` runs it in scenario order.
 
 ## UI tests (Playwright)
 

@@ -4,7 +4,7 @@ title: Tenant Onboarding E2E (Manual Test)
 description: Manual end-to-end test scenario — family self-signup, first tenant admin, managed member creation, join request, invitation, registration and login
 tags: ["flow", "tenants", "members", "testing", "manual"]
 status: draft
-stale_after: 2027-10-18
+stale_after: 2027-11-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T00:00:00Z }
 ---
 
@@ -23,6 +23,11 @@ at the end.
 
 Related: [Member Invitation](/flows/member-invitation.md) (mechanics of the
 signed link), [Tenants](/apps/tenants.md), [Members](/apps/members.md).
+
+Automated version: `tenants/tests/tests_onboarding_e2e.py` covers Phases 1-7
+(each `test_NN_...` rebuilds its prerequisites), plus the tampered-link edge
+check. Run it with `scripts/tests/run_tenant_onboarding_e2e.sh` (or
+`make test-mt t=tenants.tests.tests_onboarding_e2e`).
 
 ## Preconditions
 

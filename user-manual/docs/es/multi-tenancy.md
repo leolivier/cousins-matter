@@ -13,8 +13,7 @@ comporta exactamente igual que la aplicación clásica. Para activarla, define e
 MULTI_TENANT_ENABLED=True
 ```
 
-Esto monta las URLs `/tenants/` (registro de familias + gestión) y muestra el
-enlace "Crear una nueva familia" en la página de inicio de sesión. Cuando está desactivada, todo esto da 404.
+Esto monta las URLs `/tenants/` (registro de familias + gestión). Cuando está desactivada, todo esto da 404.
 
 ## Conceptos
 
@@ -31,8 +30,8 @@ Dos tenants se crean mediante una migración y no pueden eliminarse: `default`
 
 ## Crear una familia
 
-* **Autoservicio**: con la funcionalidad activada, la página de inicio de sesión ofrece
-  *"Crear una nueva familia"*. El creador se registra con verificación por correo electrónico y
+* **Autoservicio**: con la funcionalidad activada, vaya a `/tenants/signup/` (no a la página
+  de inicio de sesión) para solicitar una nueva familia. El creador se registra con verificación por correo electrónico y
   se convierte en el administrador de la familia.
 * **Por un administrador de la plataforma**: `/tenants/create/` crea la familia y puede enviar por
   correo electrónico una invitación (enlace vinculado al tenant) a su primer administrador.
@@ -43,18 +42,20 @@ Un identificador de familia (slug) se deriva de su nombre; los slugs reservados
 ## Conectarse a una familia
 
 Todos inician sesión en la página de inicio de sesión estándar — la familia se resuelve
-automáticamente a partir de la cuenta conectada; no existe una URL por familia. Una dirección
+automáticamente a partir de la cuenta conectada; la página de inicio de sesión es común a
+todas las familias. Una dirección
 de correo electrónico pertenece a una sola familia: para unirse a otra familia hace falta
 otra dirección de correo.
 
-* **Creador de la familia**: tras registrarse en *"Crear una nueva familia"*, la cuenta
+* **Creador de la familia**: tras registrarse en `/tenants/signup/`, la cuenta
   permanece inactiva hasta hacer clic en el enlace del correo de verificación; después
   inicie sesión con normalidad y será el administrador de la familia.
 * **Otros miembros**: o bien aceptar la invitación enviada por correo electrónico por el
   administrador de la familia (enlace vinculado al tenant → registro → verificación por correo),
-  o bien enviar una solicitud de adhesión (formulario con captcha) que un administrador de la
-  familia debe aprobar. En ambos casos, inicie sesión después en la página de inicio de
-  sesión estándar.
+  o bien ir a la página de inicio de la familia en `/<tenant>/` y hacer clic en
+  *"Demandar un enlace de invitación"* para enviar una solicitud de adhesión (formulario con
+  captcha) que un administrador de la familia debe aprobar. En ambos casos, inicie sesión
+  después en la página de inicio de sesión estándar.
 
 ## Ajustes de la familia
 

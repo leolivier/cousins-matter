@@ -13,8 +13,8 @@ like the classic app. To turn it on, set in `.env`:
 MULTI_TENANT_ENABLED=True
 ```
 
-This mounts the `/tenants/` URLs (family signup + management) and shows the
-"Create a new family" link on the login page. When off, all of this 404s.
+This mounts the `/tenants/` URLs (family signup + management). When off, all
+of this 404s.
 
 ## Concepts
 
@@ -31,9 +31,9 @@ Two tenants are seeded by migration and cannot be deleted: `default`
 
 ## Creating a family
 
-* **Self-service**: with the feature on, the login page offers
-  *"Create a new family"*. The creator signs up with email verification and
-  becomes the family's admin.
+* **Self-service**: with the feature on, go to `/tenants/signup/` (not the
+  login page) to request a new family. The creator signs up with email
+  verification and becomes the family's admin.
 * **By a platform admin**: `/tenants/create/` creates the family and can email
   an invitation (tenant-bound link) to its first admin.
 
@@ -43,17 +43,18 @@ A family identifier (slug) is derived from its name; reserved slugs
 ## Connecting to a family
 
 Everyone logs in on the standard login page — the family is resolved
-automatically from the logged-in account; there is no per-family URL. An email
-address belongs to a single family: to join another family, you need another
-address.
+automatically from the logged-in account; the login page itself is shared by
+all families. An email address belongs to a single family: to join another
+family, you need another address.
 
-* **Family creator**: after signing up at *"Create a new family"*, the account
-  is inactive until the verification email link is clicked; then log in
-  normally and you are the family's admin.
+* **Family creator**: after signing up at `/tenants/signup/`, the account is
+  inactive until the verification email link is clicked; then log in normally
+  and you are the family's admin.
 * **Other members**: either accept the invitation emailed by the family admin
-  (tenant-bound link → signup → email verification), or submit a join request
-  (captcha form) that a family admin must approve. In both cases, log in on
-  the standard login page afterwards.
+  (tenant-bound link → signup → email verification), or go to the family home
+  at `/<tenant>/` and click *"Request invitation link"* to submit a join
+  request (captcha form) that a family admin must approve. In both cases, log
+  in on the standard login page afterwards.
 
 ## Family settings
 

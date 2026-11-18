@@ -58,7 +58,7 @@ check. Run it with `scripts/tests/run_tenant_onboarding_e2e.sh` (or
    a family form (name) and the member registration form.
 3. Fill family name `Test Family ETA`; registration: username `nora`, first
    name, email `nora@example.com`, birthdate, password. Submit.
-4. **Expect**: success message *"Your family has been created! You will now
+4. **Expect**: success message *"Your new family space has been created! You will now
    receive an email to verify your email address…"*, redirect to the login
    page. (Internally: `Tenant` + `TenantSettings` created, slug auto-derived
    `test-family-eta`; member `nora` with `role=admin`, inactive.)

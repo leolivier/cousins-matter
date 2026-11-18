@@ -630,18 +630,14 @@ msgstr ""
 "<a href=\"%(notification.url)s\">'%(notification.followed_object_name)s'</a>:"
 
 #: templates/core/followers/email-notification-summary.html:30
-#, fuzzy, python-format
-#| msgid ""
-#| "%(notification.author_name)s added the following "
-#| "%(notification.obj_type)s on %(notification.followed_type)s <a "
-#| "href=\"%(notification.url)s\">'%(notification.followed_object_name)s'</a>:"
+#, python-format
 msgid ""
 "%(notification.author_name)s added the following %(notification.obj_type)s "
 "on %(notification.followed_type)s <a "
 "href=\"%(notification.url)s\">'%(notification.followed_object_name)s'</a>:"
 msgstr ""
-"%(notification.author_name)s hat den folgenden "
-"%(notification.followed_type)s <a "
+"%(notification.author_name)s hat den folgenden %(notification.obj_type)s "
+"auf %(notification.followed_type)s <a "
 "href=\"%(notification.url)s\">'%(notification.followed_object_name)s'</a>:"
 
 #: templates/core/followers/email-notification-summary.html:42

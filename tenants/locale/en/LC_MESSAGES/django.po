@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 16:45+0200\n"
+"POT-Creation-Date: 2026-11-18 20:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -234,6 +234,39 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+#: tests/tests_onboarding_e2e.py:189 views/views_signup.py:94
+msgid ""
+"Your new family space has been created! You will now receive an email to verify your "
+"email address. Click in the link inside the mail to finish the registration."
+msgstr ""
+
+#: tests/tests_onboarding_e2e.py:213
+msgid "Member successfully created"
+msgstr ""
+
+#: tests/tests_onboarding_e2e.py:233
+msgid "Registration request sent."
+msgstr ""
+
+#: tests/tests_onboarding_e2e.py:237
+#, python-format
+msgid "Registration request for %(site_name)s"
+msgstr ""
+
+#: tests/tests_onboarding_e2e.py:249 views/views_manage.py:99
+#, python-format
+msgid "Invitation sent to %(email)s."
+msgstr ""
+
+#: tests/tests_onboarding_e2e.py:270
+#, python-format
+msgid "Hello %(username)s, your account is now active! You can now sign in."
+msgstr ""
+
+#: tests/tests_onboarding_e2e.py:291
+msgid "Invalid link. Please contact the administrator."
+msgstr ""
+
 #: views/views_manage.py:39
 msgid "Only platform administrators can manage families."
 msgstr ""
@@ -254,11 +287,6 @@ msgstr ""
 #: views/views_manage.py:93
 #, python-format
 msgid "You are invited to administer the family %(name)s"
-msgstr ""
-
-#: views/views_manage.py:99
-#, python-format
-msgid "Invitation sent to %(email)s."
 msgstr ""
 
 #: views/views_manage.py:109
@@ -284,80 +312,80 @@ msgstr ""
 msgid "Family %(name)s permanently deleted."
 msgstr ""
 
-#: views/views_settings.py:61
+#: views/views_settings.py:63
 msgid "Family site name"
 msgstr ""
 
-#: views/views_settings.py:63
+#: views/views_settings.py:65
 msgid "Site logo"
 msgstr ""
 
-#: views/views_settings.py:65
+#: views/views_settings.py:67
 msgid "JPEG/PNG image up to 0.5MB. Check the box to reset the default logo."
 msgstr ""
 
-#: views/views_settings.py:68
+#: views/views_settings.py:70
 msgid "Copyright line"
 msgstr ""
 
-#: views/views_settings.py:69
+#: views/views_settings.py:71
 msgid "Footer text"
 msgstr ""
 
-#: views/views_settings.py:70
+#: views/views_settings.py:72
 msgid "PDF page size"
 msgstr ""
 
-#: views/views_settings.py:71
+#: views/views_settings.py:73
 msgid "Dark mode by default"
 msgstr ""
 
-#: views/views_settings.py:72
+#: views/views_settings.py:74
 msgid "Language"
 msgstr ""
 
-#: views/views_settings.py:73
+#: views/views_settings.py:75
 msgid "Time zone (IANA, e.g. Europe/Paris)"
 msgstr ""
 
-#: views/views_settings.py:74
+#: views/views_settings.py:76
 msgid "Birthday lookahead (days)"
 msgstr ""
 
-#: views/views_settings.py:75
+#: views/views_settings.py:77
 msgid "Members can create members"
 msgstr ""
 
-#: views/views_settings.py:76
+#: views/views_settings.py:78
 msgid "Members can invite members"
 msgstr ""
 
-#: views/views_settings.py:78
+#: views/views_settings.py:80
 msgid "Genealogy chart root member id (optional)"
 msgstr ""
 
-#: views/views_settings.py:99
+#: views/views_settings.py:101
 msgid "This member does not belong to your family."
 msgstr ""
 
-#: views/views_settings.py:109
+#: views/views_settings.py:111
 msgid "Unknown time zone."
 msgstr ""
 
-#: views/views_settings.py:203
+#: views/views_settings.py:208
 msgid "Family settings"
 msgstr ""
 
-#: views/views_settings.py:217
+#: views/views_settings.py:222
 msgid "Only family administrators can edit family settings."
 msgstr ""
 
-#: views/views_settings.py:230
+#: views/views_settings.py:235
 msgid "Family settings updated."
 msgstr ""
 
 #: views/views_signup.py:53
-msgid "Create a new family"
+msgid "Create a new space for my family"
 msgstr ""
 
 #: views/views_signup.py:66
@@ -366,10 +394,4 @@ msgstr ""
 
 #: views/views_signup.py:77
 msgid "A member with this email address already exists."
-msgstr ""
-
-#: views/views_signup.py:94
-msgid ""
-"Your family has been created! You will now receive an email to verify your "
-"email address. Click in the link inside the mail to finish the registration."
 msgstr ""

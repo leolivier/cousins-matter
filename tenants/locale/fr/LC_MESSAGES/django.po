@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 16:45+0200\n"
+"POT-Creation-Date: 2026-11-18 20:06+0100\n"
 "PO-Revision-Date: 2026-09-07 15:31+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Français <LL@li.org>\n"
@@ -247,6 +247,42 @@ msgstr ""
 msgid "Save"
 msgstr "Enregistrer"
 
+#: tests/tests_onboarding_e2e.py:189 views/views_signup.py:94
+msgid ""
+"Your new family space has been created! You will now receive an email to verify your "
+"email address. Click in the link inside the mail to finish the registration."
+msgstr "Ton nouvel espace familial a été créé ! Tu vas maintenant recevoir un e-mail t'invitant à valider ton "
+"adresse e-mail. Clique sur le lien figurant dans cet e-mail pour finaliser votre inscription."
+"Ta famille a été créée ! Tu vas maintenant recevoir un e-mail pour vérifier "
+"ton adresse. Clique sur le lien dans le message pour terminer l'inscription."
+
+#: tests/tests_onboarding_e2e.py:213
+msgid "Member successfully created"
+msgstr "Le compte a été créé avec succès"
+
+#: tests/tests_onboarding_e2e.py:233
+msgid "Registration request sent."
+msgstr "Demande d'inscription envoyée."
+
+#: tests/tests_onboarding_e2e.py:237
+#, python-format
+msgid "Registration request for %(site_name)s"
+msgstr "Demande d'inscription pour %(site_name)s"
+
+#: tests/tests_onboarding_e2e.py:249 views/views_manage.py:99
+#, python-format
+msgid "Invitation sent to %(email)s."
+msgstr "Invitation envoyée à %(email)s."
+
+#: tests/tests_onboarding_e2e.py:270
+#, python-format
+msgid "Hello %(username)s, your account is now active! You can now sign in."
+msgstr "Bonjour %(username)s, ton compte est désormais actif ! Tu peux désormais te connecter."
+
+#: tests/tests_onboarding_e2e.py:291
+msgid "Invalid link. Please contact the administrator."
+msgstr "Lien invalide. Merci de contacter l'administrateur."
+
 #: views/views_manage.py:39
 msgid "Only platform administrators can manage families."
 msgstr "Seuls les administrateurs de la plateforme peuvent gérer les familles."
@@ -268,11 +304,6 @@ msgstr "Un membre avec cet e-mail existe déjà ; invitation non envoyée."
 #, python-format
 msgid "You are invited to administer the family %(name)s"
 msgstr "Tu es invité.e à administrer la famille %(name)s"
-
-#: views/views_manage.py:99
-#, python-format
-msgid "Invitation sent to %(email)s."
-msgstr "Invitation envoyée à %(email)s."
 
 #: views/views_manage.py:109
 msgid "The system family cannot be deactivated."
@@ -298,82 +329,84 @@ msgstr ""
 msgid "Family %(name)s permanently deleted."
 msgstr "Famille %(name)s définitivement supprimée."
 
-#: views/views_settings.py:61
+#: views/views_settings.py:63
 msgid "Family site name"
 msgstr "Nom du site de la famille"
 
-#: views/views_settings.py:63
+#: views/views_settings.py:65
 msgid "Site logo"
 msgstr "Logo du site"
 
-#: views/views_settings.py:65
+#: views/views_settings.py:67
 msgid "JPEG/PNG image up to 0.5MB. Check the box to reset the default logo."
-msgstr "Image JPEG/PNG de 0,5 Mo maximum. Cochez la case pour rétablir le logo par défaut."
+msgstr ""
+"Image JPEG/PNG de 0,5 Mo maximum. Cochez la case pour rétablir le logo par "
+"défaut."
 
-#: views/views_settings.py:68
+#: views/views_settings.py:70
 msgid "Copyright line"
 msgstr "Ligne de copyright"
 
-#: views/views_settings.py:69
+#: views/views_settings.py:71
 msgid "Footer text"
 msgstr "Texte du pied de page"
 
-#: views/views_settings.py:70
+#: views/views_settings.py:72
 msgid "PDF page size"
 msgstr "Format des pages PDF"
 
-#: views/views_settings.py:71
+#: views/views_settings.py:73
 msgid "Dark mode by default"
 msgstr "Mode sombre par défaut"
 
-#: views/views_settings.py:72
+#: views/views_settings.py:74
 msgid "Language"
 msgstr "Langue"
 
-#: views/views_settings.py:73
+#: views/views_settings.py:75
 msgid "Time zone (IANA, e.g. Europe/Paris)"
 msgstr "Fuseau horaire (IANA, ex. Europe/Paris)"
 
-#: views/views_settings.py:74
+#: views/views_settings.py:76
 msgid "Birthday lookahead (days)"
 msgstr "Anticipation des anniversaires (jours)"
 
-#: views/views_settings.py:75
+#: views/views_settings.py:77
 msgid "Members can create members"
 msgstr "Les membres peuvent créer des membres"
 
-#: views/views_settings.py:76
+#: views/views_settings.py:78
 msgid "Members can invite members"
 msgstr "Les membres peuvent inviter des membres"
 
-#: views/views_settings.py:78
+#: views/views_settings.py:80
 msgid "Genealogy chart root member id (optional)"
 msgstr "Id du membre racine de l'arbre généalogique (optionnel)"
 
-#: views/views_settings.py:99
+#: views/views_settings.py:101
 msgid "This member does not belong to your family."
 msgstr "Ce membre n'appartient pas à ta famille."
 
-#: views/views_settings.py:109
+#: views/views_settings.py:111
 msgid "Unknown time zone."
 msgstr "Fuseau horaire inconnu."
 
-#: views/views_settings.py:203
+#: views/views_settings.py:208
 msgid "Family settings"
 msgstr "Paramètres de la famille"
 
-#: views/views_settings.py:217
+#: views/views_settings.py:222
 msgid "Only family administrators can edit family settings."
 msgstr ""
 "Seuls les administrateurs de la famille peuvent modifier ses paramètres."
 
-#: views/views_settings.py:230
+#: views/views_settings.py:235
 msgid "Family settings updated."
 msgstr "Paramètres de la famille mis à jour."
 
 #: views/views_signup.py:53
-msgid "Create a new family"
-msgstr "Créer une nouvelle famille"
+msgid "Create a new space for my family"
+msgstr "Créer un nouvel espace pour ma famille"
 
 #: views/views_signup.py:66
 msgid "Too many signup attempts, please try again later."
@@ -382,14 +415,6 @@ msgstr "Trop de tentatives d'inscription, merci de réessayer plus tard."
 #: views/views_signup.py:77
 msgid "A member with this email address already exists."
 msgstr "Un membre avec cette adresse e-mail existe déjà."
-
-#: views/views_signup.py:94
-msgid ""
-"Your family has been created! You will now receive an email to verify your "
-"email address. Click in the link inside the mail to finish the registration."
-msgstr ""
-"Ta famille a été créée ! Tu vas maintenant recevoir un e-mail pour vérifier "
-"ton adresse. Clique sur le lien dans le message pour terminer l'inscription."
 
 #~ msgid "Site logo (static/media path)"
 #~ msgstr "Logo du site (chemin static/media)"

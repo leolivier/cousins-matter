@@ -216,8 +216,8 @@ def _probe_db_and_redis() -> list[dict[str, Any]]:
   check = health_check()
   if check["status"] == "db_error":
     return [
-      _line(_("Database"), "error", check["msg"]),
-      _line(_("Redis"), "skipped", _("Not checked (database unreachable)")),
+      _line("Database", "error", check["msg"]),
+      _line("Redis", "skipped", _("Not checked (database unreachable)")),
     ]
   if check["status"] == "redis_error":
     # health_check's msg stays generic (it feeds the anonymous /health endpoint):
@@ -229,12 +229,12 @@ def _probe_db_and_redis() -> list[dict[str, Any]]:
     else:
       detail = check["msg"]
     return [
-      _line(_("Database"), "ok", _("SELECT 1 succeeded")),
-      _line(_("Redis"), "error", detail),
+      _line("Database", "ok", "SELECT 1 OK"),
+      _line("Redis", "error", detail),
     ]
   return [
-    _line(_("Database"), "ok", _("SELECT 1 succeeded")),
-    _line(_("Redis"), "ok", _("PING succeeded")),
+    _line("Database", "ok", "SELECT 1 OK"),
+    _line("Redis", "ok", "PING OK"),
   ]
 
 

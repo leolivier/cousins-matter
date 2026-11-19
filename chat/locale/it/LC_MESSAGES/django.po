@@ -21,11 +21,11 @@ msgstr ""
 
 #: admin.py:14
 msgid "public"
-msgstr ""
+msgstr "pubblico"
 
 #: admin.py:36
 msgid "content"
-msgstr ""
+msgstr "contenuto"
 
 #: consumers.py:260
 msgid "User not authenticated"

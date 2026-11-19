@@ -186,7 +186,7 @@ class TenantOnboardingE2ETests(TestCase):
     self.assertContains(
       response,
       _(
-        "Your family has been created! You will now receive an email to verify your "
+        "Your new family space has been created! You will now receive an email to verify your "
         "email address. Click in the link inside the mail to finish the registration."
       ),
     )

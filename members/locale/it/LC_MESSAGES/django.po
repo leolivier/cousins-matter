@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-09 12:57+0100\n"
+"POT-Creation-Date: 2026-11-18 20:05+0100\n"
 "PO-Revision-Date: 2025-05-20 12:46+00:00\n"
 "Last-Translator: Auto-po-lyglot using qwen3:8b (https://github.com/leolivier/"
 "auto-po-lyglot)\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "The identity provider did not provide an email address."
 msgstr "Il fornitore di identità non ha fornito un indirizzo email."
 
-#: adapter.py:48 forms.py:144 tests/tests_login_out.py:48
+#: adapter.py:48 forms.py:149 tests/tests_login_out.py:48
 msgid ""
 "This account is not yet active. Please use the invitation link sent to you "
 "by email."
@@ -44,15 +44,15 @@ msgstr ""
 "Nessun invito trovato per questo indirizzo email. Per favore, richiedi un "
 "invito prima."
 
-#: admin.py:32
+#: admin.py:33
 msgid "Extra Profile Info"
 msgstr "Informazioni di profilo aggiuntive"
 
-#: admin.py:36
+#: admin.py:37
 msgid "Privacy & Management"
 msgstr "Privacy & Gestione"
 
-#: admin.py:41
+#: admin.py:42
 msgid "avatar"
 msgstr "avatar"
 
@@ -60,35 +60,35 @@ msgstr "avatar"
 msgid "Members"
 msgstr "Membri"
 
-#: forms.py:30 forms.py:301 views/views_family.py:62
+#: forms.py:35 forms.py:309 views/views_family.py:69
 msgid "New Family"
 msgstr "Nuova Famiglia"
 
-#: forms.py:31 forms.py:302 templates/members/family/family_form.html:13
-#: views/views_family.py:70
+#: forms.py:36 forms.py:310 templates/members/family/family_form.html:13
+#: views/views_family.py:77
 msgid "Change Family"
 msgstr "Modifica Famiglia"
 
-#: forms.py:40 views/views_address.py:56
+#: forms.py:45 views/views_address.py:58
 msgid "New Address"
 msgstr "Nuovo Indirizzo"
 
-#: forms.py:41 templates/members/address/address_form.html:12
-#: views/views_address.py:64
+#: forms.py:46 templates/members/address/address_form.html:12
+#: views/views_address.py:66
 msgid "Change Address"
 msgstr "Modifica Indirizzo"
 
-#: forms.py:100 tests/tests_register.py:139 tests/tests_register.py:233
+#: forms.py:105 tests/tests_register.py:139 tests/tests_register.py:233
 #: tests/tests_register.py:484 views/views_registration.py:177
 #: views/views_registration.py:289
 msgid "A member with this email already exists."
 msgstr "Un membro con questa email esiste già."
 
-#: forms.py:102
+#: forms.py:107
 msgid "An active member must have an email."
 msgstr "Un membro attivo deve avere un indirizzo email."
 
-#: forms.py:109
+#: forms.py:114
 #, python-format
 msgid ""
 "By checking this box, you agree to this site's <a target='blank' "
@@ -98,13 +98,13 @@ msgstr ""
 "target='blank' href='%(privacy_url)s'>politica sulla privacy</a> di questo "
 "sito"
 
-#: forms.py:127 services/directory.py:75
+#: forms.py:132 services/directory.py:75
 #: templates/members/members/member_detail.html:45
 #: templates/members/members/members_directory.html:32
 msgid "Email"
 msgstr "Email"
 
-#: forms.py:130 tests/tests_login_out.py:71
+#: forms.py:135 tests/tests_login_out.py:71
 msgid ""
 "Please enter a correct email and password. Note that both fields may be case-"
 "sensitive."
@@ -112,126 +112,126 @@ msgstr ""
 "Inserisci un indirizzo email e una password corretti. Tieni presente che "
 "entrambi i campi possono distinguere tra maiuscole e minuscole."
 
-#: forms.py:182 templates/members/members/members.html:63
+#: forms.py:187 templates/members/members/members.html:63
 msgid "First name"
 msgstr "Nome"
 
-#: forms.py:183 templates/members/members/members.html:64
+#: forms.py:188 templates/members/members/members.html:64
 msgid "Last name"
 msgstr "Cognome"
 
-#: forms.py:184
+#: forms.py:189
 msgid "Avatar"
 msgstr "Avatar"
 
-#: forms.py:185 models.py:166 templates/members/members/member_detail.html:53
+#: forms.py:190 models.py:166 templates/members/members/member_detail.html:53
 #: templates/members/members/members.html:65
 #: templates/members/members/members_directory.html:30
 msgid "Birthdate"
 msgstr "Data di nascita"
 
-#: forms.py:186 models.py:161 services/directory.py:75
+#: forms.py:191 models.py:161 services/directory.py:75
 #: templates/members/members/member_detail.html:41
 #: templates/members/members/members_directory.html:33
 msgid "Address"
 msgstr "Indirizzo"
 
-#: forms.py:187 models.py:163 services/directory.py:75
+#: forms.py:192 models.py:163 services/directory.py:75
 #: templates/members/members/member_detail.html:49
 #: templates/members/members/members_directory.html:31
 msgid "Phone"
 msgstr "Telefono"
 
-#: forms.py:188
+#: forms.py:193
 msgid "Description"
 msgstr "Descrizione"
 
-#: forms.py:189 templates/members/members/member_detail.html:69
+#: forms.py:194 templates/members/members/member_detail.html:69
 msgid "Hobbies"
 msgstr "Passatempi"
 
-#: forms.py:190 models.py:172 templates/members/members/member_detail.html:57
+#: forms.py:195 models.py:172 templates/members/members/member_detail.html:57
 msgid "Website"
 msgstr "Sito web"
 
-#: forms.py:191 models.py:174 templates/members/members/member_detail.html:61
+#: forms.py:196 models.py:174 templates/members/members/member_detail.html:61
 msgid "Family"
 msgstr "Famiglia"
 
-#: forms.py:193 models.py:195
+#: forms.py:198 models.py:195
 msgid "Email frequency"
 msgstr "Frequenza e-mail"
 
-#: forms.py:198 models.py:187
+#: forms.py:203 models.py:187
 msgid "Privacy consent"
 msgstr "Consenso sulla privacy"
 
-#: forms.py:308
+#: forms.py:316
 msgid "Family name cannot be empty"
 msgstr "Il cognome non puo' essere vuoto"
 
-#: forms.py:314
+#: forms.py:322
 msgid "Name of the invited person (will appear in the received email)"
 msgstr "Nome della persona invitata (apparirà nell'email ricevuta)"
 
-#: forms.py:317
+#: forms.py:325
 msgid "Email to send invitation"
 msgstr "Email a cui inviare l'invito"
 
-#: forms.py:321
+#: forms.py:329
 msgid "Your name"
 msgstr "Il tuo nome"
 
-#: forms.py:322
+#: forms.py:330
 msgid "Email where you will receive the link"
 msgstr "Email dove riceverai il link"
 
-#: forms.py:323
+#: forms.py:331
 msgid "Message to the administrator"
 msgstr "Messaggio all'amministratore"
 
-#: forms.py:324
+#: forms.py:332
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr ""
 "Captcha (clicca sull'immagine per aggiornarla se non riesci a leggerla)"
 
-#: forms.py:341
+#: forms.py:349
 msgid "CSV file"
 msgstr "File CSV"
 
-#: forms.py:342
+#: forms.py:350
 msgid "The CSV file containing the members to import."
 msgstr "Il file CSV contenente i membri da importare."
 
-#: forms.py:346
+#: forms.py:354
 msgid "Automatically activate imported users"
 msgstr "Attivare automaticamente gli utenti importati"
 
-#: forms.py:350 templates/members/members/notify_death_form.html:11
+#: forms.py:358 templates/members/members/notify_death_form.html:11
 msgid "Date of Death"
 msgstr "Data del decesso"
 
-#: forms.py:352 templates/members/members/notify_death_form.html:19
+#: forms.py:360 templates/members/members/notify_death_form.html:19
 msgid "Any additional information..."
 msgstr "Qualsiasi informazione aggiuntiva..."
 
-#: forms.py:353 templates/members/members/notify_death_form.html:17
+#: forms.py:361 templates/members/members/notify_death_form.html:17
 msgid "Message (Optional)"
 msgstr "Messaggio (Opzionale)"
 
-#: forms.py:361 models.py:151
+#: forms.py:369 models.py:151
 msgid "Member manager"
 msgstr "Membro manager"
 
-#: managers.py:50 managers.py:73
+#: managers.py:55 managers.py:78
 msgid "The username must be set"
 msgstr "Il nome utente deve essere fornito"
 
-#: managers.py:106
+#: managers.py:111
 msgid "Superuser must have is_staff=True."
 msgstr "Il superutente deve avere is_staff=True."
 
-#: managers.py:108
+#: managers.py:113
 msgid "Superuser must have is_superuser=True."
 msgstr "Il superutente deve avere is_superuser=True."
 
@@ -389,22 +389,20 @@ msgid "Monthly"
 msgstr "Mensilmente"
 
 #: models.py:137
-#, fuzzy
-#| msgid "Members"
 msgid "Member"
-msgstr "Membri"
+msgstr "Membro"
 
 #: models.py:138
 msgid "Tenant admin"
-msgstr ""
+msgstr "Amministratore del tenant"
 
 #: models.py:140
 msgid "Role"
-msgstr ""
+msgstr "Ruolo"
 
 #: models.py:143
 msgid "Tenant"
-msgstr ""
+msgstr "Tenant"
 
 #: models.py:166
 msgid "Click on the month name or the year to change them quickly"
@@ -455,7 +453,7 @@ msgstr "nome_utente"
 
 #: models.py:211
 msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-msgstr ""
+msgstr "Obbligatorio. Massimo 150 caratteri. Sono ammessi solo lettere, cifre e i simboli @/./+/-/_."
 
 #: models.py:213
 #, fuzzy
@@ -463,15 +461,15 @@ msgstr ""
 msgid "A user with that username already exists."
 msgstr "Un membro con questa email esiste già."
 
-#: models.py:223
+#: models.py:224
 msgid "member"
 msgstr "membro"
 
-#: models.py:224
+#: models.py:225
 msgid "members"
 msgstr "membri"
 
-#: models.py:311
+#: models.py:314
 #, python-format
 msgid "Death date %(dd)s is before birthdate %(bd)s"
 msgstr "Data di morte %(dd)s precede la data di nascita %(bd)s"
@@ -486,7 +484,7 @@ msgstr "Directory %(site_name)s"
 msgid "Page %(doc_page)s - %(title)s"
 msgstr "Pagina %(doc_page)s - %(title)s"
 
-#: services/import_export.py:32
+#: services/import_export.py:34
 #, python-format
 msgid ""
 "Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
@@ -494,7 +492,7 @@ msgstr ""
 "Colonna sconosciuta nel file CSV: \"%(fieldname)s\". I campi validi sono "
 "%(all_names)s"
 
-#: services/import_export.py:38
+#: services/import_export.py:40
 #, python-format
 msgid ""
 "Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
@@ -503,7 +501,7 @@ msgstr ""
 "Colonna mancante nel file CSV: \"%(fieldname)s\". I campi obbligatori sono "
 "%(all_names)s"
 
-#: services/import_export.py:75 views/views_import_export.py:74
+#: services/import_export.py:77 views/views_import_export.py:74
 msgid "Import not found"
 msgstr "Importazione non trovata"
 
@@ -535,45 +533,45 @@ msgstr ""
 "ora un'email contenente un link di attivazione e successivamente sarà "
 "reindirizzato alla schermata di reimpostazione della password."
 
-#: services/members.py:123 tests/tests_death_notification.py:43
+#: services/members.py:122 tests/tests_death_notification.py:43
 #, python-format
 msgid "Death notification for %(member)s"
 msgstr "Notifica di decesso per %(member)s"
 
-#: services/members.py:151
+#: services/members.py:149
 msgid "You can't follow yourself!"
 msgstr "Non puoi seguire te stesso!"
 
-#: services/members.py:155
+#: services/members.py:153
 #, python-format
 msgid "You are no longer following %(followed_name)s"
 msgstr "Non segui più %(followed_name)s"
 
-#: services/members.py:157
+#: services/members.py:155
 msgid "Error: You can't follow dead people"
 msgstr "Errare: Non puoi seguire te stesso!"
 
-#: services/members.py:161
+#: services/members.py:159
 msgid "You have a new follower!"
 msgstr "Hai un nuovo follower!"
 
-#: services/members.py:162
+#: services/members.py:160
 #, python-format
 msgid "%(follower_name)s is now following you!"
 msgstr "%(follower_name)s ora ti segue!"
 
-#: services/members.py:183
+#: services/members.py:181
 #, python-format
 msgid "You are now following %(followed_name)s"
 msgstr "Ora stai seguendo %(followed_name)s"
 
-#: tasks.py:131
+#: tasks.py:132
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 "Avatar non trovato: %(avatar)s per il nome utente %(username)s. Ignorato..."
 
-#: tasks.py:141
+#: tasks.py:142
 #, python-format
 msgid ""
 "Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. "
@@ -582,20 +580,20 @@ msgstr ""
 "Errore nel salvare l'avatar (%(warning)s): %(avatar)s per il nome utente "
 "%(username)s. Ignorato..."
 
-#: tasks.py:164
+#: tasks.py:165
 msgid "Keeping current manager."
 msgstr "Mantenere l'attuale manager."
 
-#: tasks.py:167
+#: tasks.py:168
 msgid "Using your id..."
 msgstr "Utilizzando l'id..."
 
-#: tasks.py:171
+#: tasks.py:172
 #, python-format
 msgid "Manager %(manager)s not found for member %(member)s."
 msgstr "Il manager %(manager)s non è stato trovato per il membro %(member)s. "
 
-#: tasks.py:178
+#: tasks.py:179
 #, python-format
 msgid ""
 "%(manager)s is inactive and cannot be used as manager for %(member)s. "
@@ -604,13 +602,13 @@ msgstr ""
 "%(manager)s è inattivo e non può essere utilizzato come manager per "
 "%(member)s. Attivarlo manualmente!"
 
-#: tasks.py:199
+#: tasks.py:200
 #, fuzzy, python-format
 #| msgid "Error: Member without email cannot be activated"
 msgid "Member %(member)s has no email and cannot be activated."
 msgstr "Errore: Un membro senza indirizzo email non può essere attivato"
 
-#: tasks.py:203
+#: tasks.py:204
 #, python-format
 msgid ""
 "No manager provided for member %(member)s although inactive. Keeping "
@@ -619,7 +617,7 @@ msgstr ""
 "Non è previsto nessun gestore per i membri %(member)s, anche se inattivi. "
 "Mantenere quello esistente (%(manager)s)..."
 
-#: tasks.py:211
+#: tasks.py:212
 #, python-format
 msgid ""
 "Inactive member %(member)s has no manager. Please provide one! Meanwhile, "
@@ -628,7 +626,7 @@ msgstr ""
 "Il membro inattivo %(member)s non ha un manager. Si prega di fornirne uno! "
 "Nel frattempo, sarete utilizzati come manager"
 
-#: tasks.py:232
+#: tasks.py:233
 #, python-format
 msgid ""
 "Member %(member)s was active. Adding %(manager)s as manager inactivated him/"
@@ -637,7 +635,7 @@ msgstr ""
 "Il membro %(member)s era attivo. L'aggiunta di %(manager)s come manager lo "
 "ha reso inattivo."
 
-#: tasks.py:242
+#: tasks.py:243
 msgid ""
 "You requested to activate imported members. All members with a manager in "
 "the file will be ignored and won't be activated."
@@ -1029,13 +1027,11 @@ msgstr "Richiedi link di invito"
 
 #: templates/members/login/login.html:25
 msgid "or"
-msgstr ""
+msgstr "oppure"
 
 #: templates/members/login/login.html:26
-#, fuzzy
-#| msgid "Parent family"
-msgid "Create a new family"
-msgstr "Famiglia d'origine"
+msgid "Create a new space for my family"
+msgstr "Creare un nuovo spazio per la mia famiglia"
 
 #: templates/members/login/login.html:30
 #: templates/members/login/password_change.html:17
@@ -1474,7 +1470,8 @@ msgstr "Invitare"
 msgid ""
 "To let relatives request their invitation themselves, share your family home "
 "page: <a href=\"%(url)s\">%(url)s</a>"
-msgstr ""
+msgstr "Per consentire ai tuoi parenti di richiedere autonomamente l'invito, "
+"condividi la pagina principale della tua famiglia: <a href=\"%(url)s\">%(url)s</a>"
 
 #: templates/members/registration/registration_request.html:3
 #: templates/members/registration/registration_request.html:6
@@ -1605,7 +1602,7 @@ msgstr ""
 
 #: tests/tests_register.py:499 views/views_registration.py:284
 msgid "Too many requests, please try again later."
-msgstr ""
+msgstr "Troppe richieste: riprova più tardi."
 
 #: views/views_import_export.py:90
 msgid "Back to members list"
@@ -1730,14 +1727,9 @@ msgid "Are you sure you want to activate the account of %(name)s?"
 msgstr "Confermi l'attivazione dell'account di %(name)s?"
 
 #: views/views_registration.py:154
-#, fuzzy
-#| msgid "Only superusers can invite members"
 msgid "Only tenant admins can invite members"
-msgstr "Solo i superutenti possono invitare membri"
+msgstr "Solo i amministratori del tenant possono invitare membri"
 
 #: views/views_registration.py:294
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossibile inviare l'email. Si prega di contattare l'amministratore."
-
-#~ msgid "Receive email notifications"
-#~ msgstr "Ricevi notifiche e-mail"

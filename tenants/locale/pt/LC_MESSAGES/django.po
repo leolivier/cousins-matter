@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 16:45+0200\n"
+"POT-Creation-Date: 2026-11-18 20:06+0100\n"
 "PO-Revision-Date: 2026-09-07 15:31+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Português <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: apps.py:8
 msgid "Tenants"
-msgstr "Famílias"
+msgstr "Inquilinos"
 
 #: forms.py:19
 msgid "This family name cannot be turned into a valid identifier."
@@ -68,11 +68,11 @@ msgstr "Data de atualização"
 
 #: models.py:85
 msgid "tenant"
-msgstr "família"
+msgstr "inquilino"
 
 #: models.py:86
 msgid "tenants"
-msgstr "famílias"
+msgstr "inquilinos"
 
 #: models.py:129
 #, fuzzy
@@ -82,7 +82,7 @@ msgstr "Este slug está reservado, escolha outro."
 
 #: models.py:133
 msgid "Tenant"
-msgstr "Família"
+msgstr "Inquilino"
 
 #: models.py:135
 msgid "Overrides"
@@ -90,11 +90,11 @@ msgstr "Sobrescritas"
 
 #: models.py:138 models.py:139
 msgid "tenant settings"
-msgstr "configurações da família"
+msgstr "configurações do inquilino"
 
 #: services.py:25
 msgid "The system tenant cannot be deleted."
-msgstr "A família do sistema não pode ser excluída."
+msgstr "O inquilino do sistema não pode ser eliminado."
 
 #: services.py:27
 msgid "This family is still active. Deactivate it before deleting it."
@@ -247,6 +247,42 @@ msgstr ""
 msgid "Save"
 msgstr "Salvar"
 
+#: tests/tests_onboarding_e2e.py:189 views/views_signup.py:94
+msgid ""
+"Your new family space has been created! You will now receive an email to verify your "
+"email address. Click in the link inside the mail to finish the registration."
+msgstr "O seu novo espaço familiar já foi criado! Vai receber agora um e-mail para confirmar o seu "
+"endereço de e-mail. Clique na ligação que se encontra no e-mail para concluir o registo."
+"Sua família foi criada! Você receberá agora um e-mail para verificar seu "
+"endereço. Clique no link dentro da mensagem para concluir o cadastro."
+
+#: tests/tests_onboarding_e2e.py:213
+msgid "Member successfully created"
+msgstr "O membro foi criado com sucesso"
+
+#: tests/tests_onboarding_e2e.py:233
+msgid "Registration request sent."
+msgstr "Pedido de registo enviado."
+
+#: tests/tests_onboarding_e2e.py:237
+#, python-format
+msgid "Registration request for %(site_name)s"
+msgstr "Pedido de registo para %(site_name)s"
+
+#: tests/tests_onboarding_e2e.py:249 views/views_manage.py:99
+#, python-format
+msgid "Invitation sent to %(email)s."
+msgstr "Convite enviado para %(email)s."
+
+#: tests/tests_onboarding_e2e.py:270
+#, python-format
+msgid "Hello %(username)s, your account is now active! You can now sign in."
+msgstr "Olá, %(username)s, a vossa conta já está ativa! Já podem iniciar sessão."
+
+#: tests/tests_onboarding_e2e.py:291
+msgid "Invalid link. Please contact the administrator."
+msgstr "Link inválido. Por favor, contacte o administrador."
+
 #: views/views_manage.py:39
 msgid "Only platform administrators can manage families."
 msgstr "Somente administradores da plataforma podem gerenciar famílias."
@@ -268,11 +304,6 @@ msgstr "Já existe um membro com este e-mail; convite não enviado."
 #, python-format
 msgid "You are invited to administer the family %(name)s"
 msgstr "Você foi convidado/a para administrar a família %(name)s"
-
-#: views/views_manage.py:99
-#, python-format
-msgid "Invitation sent to %(email)s."
-msgstr "Convite enviado para %(email)s."
 
 #: views/views_manage.py:109
 msgid "The system family cannot be deactivated."
@@ -297,81 +328,83 @@ msgstr "A confirmação não corresponde ao identificador da família. Abortando
 msgid "Family %(name)s permanently deleted."
 msgstr "Família %(name)s excluída permanentemente."
 
-#: views/views_settings.py:61
+#: views/views_settings.py:63
 msgid "Family site name"
 msgstr "Nome do site da família"
 
-#: views/views_settings.py:63
+#: views/views_settings.py:65
 msgid "Site logo"
 msgstr "Logótipo do site"
 
-#: views/views_settings.py:65
+#: views/views_settings.py:67
 msgid "JPEG/PNG image up to 0.5MB. Check the box to reset the default logo."
-msgstr "Imagem JPEG/PNG até 0,5 MB. Marque a caixa para restaurar o logótipo predefinido."
+msgstr ""
+"Imagem JPEG/PNG até 0,5 MB. Marque a caixa para restaurar o logótipo "
+"predefinido."
 
-#: views/views_settings.py:68
+#: views/views_settings.py:70
 msgid "Copyright line"
 msgstr "Linha de copyright"
 
-#: views/views_settings.py:69
+#: views/views_settings.py:71
 msgid "Footer text"
 msgstr "Texto do rodapé"
 
-#: views/views_settings.py:70
+#: views/views_settings.py:72
 msgid "PDF page size"
 msgstr "Tamanho da página PDF"
 
-#: views/views_settings.py:71
+#: views/views_settings.py:73
 msgid "Dark mode by default"
 msgstr "Modo escuro por padrão"
 
-#: views/views_settings.py:72
+#: views/views_settings.py:74
 msgid "Language"
 msgstr "Idioma"
 
-#: views/views_settings.py:73
+#: views/views_settings.py:75
 msgid "Time zone (IANA, e.g. Europe/Paris)"
 msgstr "Fuso horário (IANA, ex. Europe/Paris)"
 
-#: views/views_settings.py:74
+#: views/views_settings.py:76
 msgid "Birthday lookahead (days)"
 msgstr "Antecedência de aniversários (dias)"
 
-#: views/views_settings.py:75
+#: views/views_settings.py:77
 msgid "Members can create members"
 msgstr "Membros podem criar membros"
 
-#: views/views_settings.py:76
+#: views/views_settings.py:78
 msgid "Members can invite members"
 msgstr "Membros podem convidar membros"
 
-#: views/views_settings.py:78
+#: views/views_settings.py:80
 msgid "Genealogy chart root member id (optional)"
 msgstr "ID do membro raiz da árvore genealógica (opcional)"
 
-#: views/views_settings.py:99
+#: views/views_settings.py:101
 msgid "This member does not belong to your family."
 msgstr "Este membro não pertence à sua família."
 
-#: views/views_settings.py:109
+#: views/views_settings.py:111
 msgid "Unknown time zone."
 msgstr "Fuso horário desconhecido."
 
-#: views/views_settings.py:203
+#: views/views_settings.py:208
 msgid "Family settings"
 msgstr "Configurações da família"
 
-#: views/views_settings.py:217
+#: views/views_settings.py:222
 msgid "Only family administrators can edit family settings."
 msgstr "Somente administradores da família podem editar as configurações."
 
-#: views/views_settings.py:230
+#: views/views_settings.py:235
 msgid "Family settings updated."
 msgstr "Configurações da família atualizadas."
 
 #: views/views_signup.py:53
-msgid "Create a new family"
-msgstr "Criar uma nova família"
+msgid "Create a new space for my family"
+msgstr "Criar um novo espaço para a minha família"
 
 #: views/views_signup.py:66
 msgid "Too many signup attempts, please try again later."
@@ -380,14 +413,6 @@ msgstr "Tentativas de cadastro demais, tente novamente mais tarde."
 #: views/views_signup.py:77
 msgid "A member with this email address already exists."
 msgstr "Já existe um membro com este endereço de e-mail."
-
-#: views/views_signup.py:94
-msgid ""
-"Your family has been created! You will now receive an email to verify your "
-"email address. Click in the link inside the mail to finish the registration."
-msgstr ""
-"Sua família foi criada! Você receberá agora um e-mail para verificar seu "
-"endereço. Clique no link dentro da mensagem para concluir o cadastro."
 
 #~ msgid "Site logo (static/media path)"
 #~ msgstr "Logo do site (caminho static/media)"

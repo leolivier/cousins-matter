@@ -40,4 +40,4 @@ class MultiTenantOffTests(MemberTestCase):
       self.skipTest("flag is on in this environment")
     resp = self.client.get(reverse("members:login"))
     self.assertEqual(resp.status_code, 200)
-    self.assertNotContains(resp, "Create a new family")
+    self.assertNotContains(resp, "Create a new space for my family")

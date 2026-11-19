@@ -19,7 +19,7 @@ msgstr ""
 
 #: admin.py:16
 msgid "preview"
-msgstr ""
+msgstr "aperçu"
 
 #: migrations/0003_trove_title_alter_trove_description.py:33
 #: migrations/0004_alter_trove_title.py:18 models.py:25

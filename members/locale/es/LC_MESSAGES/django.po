@@ -391,15 +391,15 @@ msgstr "Membres"
 
 #: models.py:138
 msgid "Tenant admin"
-msgstr ""
+msgstr "Administrador de inquilino"
 
 #: models.py:140
 msgid "Role"
-msgstr ""
+msgstr "Función"
 
 #: models.py:143
 msgid "Tenant"
-msgstr ""
+msgstr "Inquilino"
 
 #: models.py:166
 msgid "Click on the month name or the year to change them quickly"
@@ -450,7 +450,7 @@ msgstr "nombre_de_cuenta"
 
 #: models.py:211
 msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-msgstr ""
+msgstr "Obligatorio. 150 caracteres como máximo. Solo se admiten letras, números y los símbolos @/./+/-/_."
 
 #: models.py:213
 #, fuzzy
@@ -1028,7 +1028,7 @@ msgstr "Demandar una invitación"
 
 #: templates/members/login/login.html:25
 msgid "or"
-msgstr ""
+msgstr "o"
 
 #: templates/members/login/login.html:26
 msgid "Create a new space for my family"
@@ -1473,7 +1473,8 @@ msgstr "Invitar"
 msgid ""
 "To let relatives request their invitation themselves, share your family home "
 "page: <a href=\"%(url)s\">%(url)s</a>"
-msgstr ""
+msgstr "Para que tus familiares puedan solicitar ellos mismos su invitación, "
+"comparte la página de inicio de tu familia: <a href=\"%(url)s\">%(url)s</a>"
 
 #: templates/members/registration/registration_request.html:3
 #: templates/members/registration/registration_request.html:6
@@ -1605,7 +1606,7 @@ msgstr ""
 
 #: tests/tests_register.py:499 views/views_registration.py:284
 msgid "Too many requests, please try again later."
-msgstr ""
+msgstr "Demasiadas solicitudes. Inténtalo de nuevo más tarde."
 
 #: views/views_import_export.py:90
 msgid "Back to members list"
@@ -1731,14 +1732,9 @@ msgid "Are you sure you want to activate the account of %(name)s?"
 msgstr "¿Confirmas la activación de la cuenta de %(name)s?"
 
 #: views/views_registration.py:154
-#, fuzzy
-#| msgid "Only superusers can invite members"
 msgid "Only tenant admins can invite members"
-msgstr "Solo los superusuarios pueden invitar a miembros"
+msgstr "Solo los inquilinos administrators pueden invitar a miembros"
 
 #: views/views_registration.py:294
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Imposible de enviar un correo. Por favor, contacte al administrador."
-
-#~ msgid "Receive email notifications"
-#~ msgstr "Recibir notificaciones por correo electrónico"

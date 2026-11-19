@@ -389,15 +389,15 @@ msgstr "membri"
 
 #: models.py:138
 msgid "Tenant admin"
-msgstr ""
+msgstr "Administrador do inquilino"
 
 #: models.py:140
 msgid "Role"
-msgstr ""
+msgstr "Função"
 
 #: models.py:143
 msgid "Tenant"
-msgstr ""
+msgstr "Inquilino"
 
 #: models.py:166
 msgid "Click on the month name or the year to change them quickly"
@@ -448,7 +448,7 @@ msgstr "nome_de_usuario"
 
 #: models.py:211
 msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-msgstr ""
+msgstr "Obrigatório. Máximo de 150 caracteres. Apenas letras, algarismos e @/./+/-/_."
 
 #: models.py:213
 #, fuzzy
@@ -1020,7 +1020,7 @@ msgstr "Pedir um link de convite"
 
 #: templates/members/login/login.html:25
 msgid "or"
-msgstr ""
+msgstr "ou"
 
 #: templates/members/login/login.html:26
 msgid "Create a new space for my family"
@@ -1462,7 +1462,8 @@ msgstr "Convidar"
 msgid ""
 "To let relatives request their invitation themselves, share your family home "
 "page: <a href=\"%(url)s\">%(url)s</a>"
-msgstr ""
+msgstr "Para que os familiares possam solicitar eles próprios o seu convite, "
+"partilhe a página inicial da sua família: <a href=\"%(url)s\">%(url)s</a>"
 
 #: templates/members/registration/registration_request.html:3
 #: templates/members/registration/registration_request.html:6
@@ -1593,7 +1594,7 @@ msgstr ""
 
 #: tests/tests_register.py:499 views/views_registration.py:284
 msgid "Too many requests, please try again later."
-msgstr ""
+msgstr "Demasiadas solicitações. Por favor, tente novamente mais tarde."
 
 #: views/views_import_export.py:90
 msgid "Back to members list"
@@ -1719,15 +1720,10 @@ msgid "Are you sure you want to activate the account of %(name)s?"
 msgstr "Confirma a ativação da conta de %(name)s?"
 
 #: views/views_registration.py:154
-#, fuzzy
-#| msgid "Only superusers can invite members"
 msgid "Only tenant admins can invite members"
-msgstr "Somente os superusuários podem convidar membros."
+msgstr "Apenas os administradores do inquilino podem convidar membros"
 
 #: views/views_registration.py:294
 msgid "Unable to send mail, please contact your administrator"
 msgstr ""
 "Impossível enviar e-mail, por favor entre em contato com seu administrador."
-
-#~ msgid "Receive email notifications"
-#~ msgstr "Receber notificações por e-mail"

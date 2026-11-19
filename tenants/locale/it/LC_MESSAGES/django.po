@@ -19,7 +19,7 @@ msgstr ""
 
 #: apps.py:8
 msgid "Tenants"
-msgstr "Famiglie"
+msgstr "Tenants"
 
 #: forms.py:19
 msgid "This family name cannot be turned into a valid identifier."
@@ -69,11 +69,11 @@ msgstr "Data di aggiornamento"
 
 #: models.py:85
 msgid "tenant"
-msgstr "famiglia"
+msgstr "tenant"
 
 #: models.py:86
 msgid "tenants"
-msgstr "famiglie"
+msgstr "tenants"
 
 #: models.py:129
 #, fuzzy
@@ -83,7 +83,7 @@ msgstr "Questo slug è riservato, scegline un altro."
 
 #: models.py:133
 msgid "Tenant"
-msgstr "Famiglia"
+msgstr "Tenant"
 
 #: models.py:135
 msgid "Overrides"
@@ -91,11 +91,11 @@ msgstr "Sovrascritture"
 
 #: models.py:138 models.py:139
 msgid "tenant settings"
-msgstr "impostazioni della famiglia"
+msgstr "impostazioni dell tenant"
 
 #: services.py:25
 msgid "The system tenant cannot be deleted."
-msgstr "La famiglia di sistema non può essere eliminata."
+msgstr "Il tenant di sistema non può essere eliminato."
 
 #: services.py:27
 msgid "This family is still active. Deactivate it before deleting it."

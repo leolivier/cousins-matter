@@ -387,7 +387,7 @@ msgstr "Membre"
 
 #: models.py:138
 msgid "Tenant admin"
-msgstr "Administrateur de la famille"
+msgstr "Administrateur du tenant"
 
 #: models.py:140
 msgid "Role"
@@ -395,7 +395,7 @@ msgstr "Rôle"
 
 #: models.py:143
 msgid "Tenant"
-msgstr "Famille"
+msgstr "Tenant"
 
 #: models.py:166
 msgid "Click on the month name or the year to change them quickly"
@@ -450,7 +450,6 @@ msgstr ""
 "Obligatoire. 150 caractères ou moins. Uniquement des lettres, chiffres et "
 "'@/./+/-/_'."
 
-#
 #: models.py:213
 msgid "A user with that username already exists."
 msgstr "Un membre avec ce nom d'utilisateur existe déjà."
@@ -1029,7 +1028,6 @@ msgstr "Demander une invitation"
 msgid "or"
 msgstr "ou"
 
-#
 #: templates/members/login/login.html:26
 msgid "Create a new space for my family"
 msgstr "Créer un nouvel espace pour ma famille"
@@ -1474,13 +1472,13 @@ msgid ""
 "To let relatives request their invitation themselves, share your family home "
 "page: <a href=\"%(url)s\">%(url)s</a>"
 msgstr ""
-"Pour permettre à vos proches de demander leur invitation, partagez la page "
-"d'accueil de votre famille : <a href=\"%(url)s\">%(url)s</a>"
+"Pour permettre à tes proches de demander leur invitation, partage la page "
+"d'accueil de ta famille : <a href=\"%(url)s\">%(url)s</a>"
 
 #: templates/members/registration/registration_request.html:3
 #: templates/members/registration/registration_request.html:6
 msgid "Request Invitation"
-msgstr "Demande  d'invitation"
+msgstr "Demande d'invitation"
 
 #: templates/members/registration/registration_request.html:9
 #, python-format
@@ -1605,7 +1603,7 @@ msgstr ""
 
 #: tests/tests_register.py:499 views/views_registration.py:284
 msgid "Too many requests, please try again later."
-msgstr "Trop de demandes, veuillez réessayer plus tard."
+msgstr "Trop de demandes, merci de réessayer plus tard."
 
 #: views/views_import_export.py:90
 msgid "Back to members list"
@@ -1732,11 +1730,8 @@ msgstr "Confirmez-vous l'activation du compte de %(name)s ?"
 #
 #: views/views_registration.py:154
 msgid "Only tenant admins can invite members"
-msgstr "Seuls les administrateurs de la famille peuvent inviter des membres"
+msgstr "Seuls les administrateurs du tenant peuvent inviter des membres"
 
 #: views/views_registration.py:294
 msgid "Unable to send mail, please contact your administrator"
 msgstr "Impossible d'envoyer un mail. Merci de contacter l'administrateur."
-
-#~ msgid "Receive email notifications"
-#~ msgstr "Recevoir des notifications par email"

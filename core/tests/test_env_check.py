@@ -104,7 +104,7 @@ class RunEnvChecksTests(MemberTestCase):
     self.assertEqual(errors[0]["name"], _("Django-Q2 task queue"))
     self.assertIn("boom", errors[0]["detail"])
     # every other probe still reported, db probe unaffected
-    db = next(check for check in checks if check["name"] == _("Database"))
+    db = next(check for check in checks if check["name"] == "Database")
     self.assertEqual(db["status"], "ok")
 
   @override_settings(EMAIL_BACKEND="django.core.mail.backends.console.EmailBackend")
@@ -134,7 +134,7 @@ class RunEnvChecksTests(MemberTestCase):
     with patch("core.services.redis_client") as mock_redis:
       mock_redis.ping.side_effect = redis.exceptions.ConnectionError("Error -2 connecting to redis:6379")
       checks = run_env_checks()
-    redis_row = next(check for check in checks if check["name"] == _("Redis"))
+    redis_row = next(check for check in checks if check["name"] == "Redis")
     self.assertEqual(redis_row["status"], "error")
     self.assertIn("redis:6379", redis_row["detail"])
     q2 = next(check for check in checks if check["name"] == _("Django-Q2 task queue"))

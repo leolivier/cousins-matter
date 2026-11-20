@@ -26,7 +26,7 @@ SIGNUP_THROTTLE_SECONDS = 3600
 
 def _throttled(request) -> bool:
   key = f"saas-signup:{request.META.get('REMOTE_ADDR', 'unknown')}"
-  count = cache.get_or_set(key, 0, SIGNUP_THROTTLE_SECONDS)
+  count = cache.get_or_set(key, 0, SIGNUP_THROTTLE_SECONDS) or 0
   if count >= SIGNUP_THROTTLE_LIMIT:
     return True
   try:

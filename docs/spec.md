@@ -18,9 +18,9 @@ Ceci est un projet parallèle et complémentaire du projet cousins-matter. Il do
 - la personne doit ensuite fournir un email et donner un nom de tenant (nom de la famille du site) dont l'unicité sera vérifiée au fur et à mesure (lettre à lettre).
 - une fois la demande soumise, un mail de vérification avec lien est envoyé sur le mail fourni (validité 24h)
 - le nom de tenant reste réservé pendant ces 24h. Puis il est rendu disponible s'il n'a pas été validé
-- une fois validé par le clic dans le lien, le tenant est créé automatiquement et le compte de l'admin du tenant est créé automatiquement aussi. 
+- une fois validé par le clic dans le lien, le tenant est créé automatiquement et le compte de l'admin du tenant est créé automatiquement aussi.
 - Ensuite, il est proposé à l'admin un petit parcours de découverte de son site incluant:
-  - l'écran de paramètres du tenant, 
+  - l'écran de paramètres du tenant,
   - le profil de l'admin à compléter
   - l'écran pour inviter des membres.
 

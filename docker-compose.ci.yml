@@ -3,3 +3,15 @@ services:
   cousins-matter:
     volumes:
       - ./artifacts/screenshots:/tmp/screenshots
+      - ./members/tests:/app/members/tests
+      - ./galleries/tests:/app/galleries/tests
+      - ./pages/tests:/app/pages/tests
+      - ./classified_ads/tests:/app/classified_ads/tests
+      - ./forum/tests:/app/forum/tests
+      - ./chat/tests:/app/chat/tests
+      - ./genealogy/tests:/app/genealogy/tests
+      - ./polls/tests:/app/polls/tests
+      - ./core/tests:/app/core/tests
+      - ./tenants/tests:/app/tenants/tests
+      - ./troves/tests:/app/troves/tests
+      - ./scripts/tests:/app/scripts/tests

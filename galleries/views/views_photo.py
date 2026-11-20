@@ -40,6 +40,7 @@ def get_fullscreen_photo(request, pk):
       "swipe_url": reverse("galleries:get_fullscreen_photo", args=[photo.id]),
       "photo_detail_url": reverse("galleries:photo", args=[photo.id]),
       "fullscreen_url": photo.image.url,
+      "photo_name": photo.name,
       "pk": photo.id,
       "is_video": photo.is_video,
     },

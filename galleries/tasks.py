@@ -89,9 +89,8 @@ def create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
   image = InMemoryUploadedFile(membuffer, "ImageField", f"{filename_wo_ext}.jpg", "image/jpeg", size, None)
   # create or update photo object in database
   # WARNING: if an image with the same name already exist in the gallery, we override it
-  photo = Photo.objects.filter(name=filename, gallery__id=gallery_id)
-  if photo.exists():
-    photo = photo.first()
+  photo = Photo.objects.filter(name=filename, gallery__id=gallery_id).first()
+  if photo:
     photo.image = image
     photo.date = date
     photo.save()

@@ -6,16 +6,16 @@ As configurações do Cousins Matter podem ser geridas através de um ficheiro `
 
 Se utilizou o script manage_cousins_matter.py para instalar o Cousins Matter, conforme descrito em [Instalação](installation.md), um ficheiro .env de exemplo foi descarregado automaticamente para si e a SECRET_KEY e a POSTGRES_PASSWORD foram geradas automaticamente (**não as substitua!**).
 
-Se está a trabalhar a partir do código-fonte, copie o ficheiro `.env.example` para `.env` 
+Se está a trabalhar a partir do código-fonte, copie o ficheiro `.env.example` para `.env`
 
 Em ambos os casos, agora precisa de editar o `.env` para definir as propriedades conforme o seu contexto, como descrito abaixo.
 
-Há muitas configurações disponíveis para personalizar a parte técnica do seu sítio... 
+Há muitas configurações disponíveis para personalizar a parte técnica do seu sítio...
 
 Além disso, não se esqueça de consultar [Personalização](customizing.md) para personalizar a aparência do seu sítio.
 
-**AVISO**: Se o contentor já estiver em execução, a atualização das configurações no .env só será tida em conta depois de o reiniciar. 
-Para isso, basta executar o seguinte comando (no diretório do sítio): 
+**AVISO**: Se o contentor já estiver em execução, a atualização das configurações no .env só será tida em conta depois de o reiniciar.
+Para isso, basta executar o seguinte comando (no diretório do sítio):
 ```
 docker compose restart
 ```
@@ -174,15 +174,15 @@ Consulte [Autenticação OAuth](oauth-authentication.md) para obter instruções
 
 	`ALLOWED_HOSTS=127.0.0.1,localhost,my.cousins-matter.com,165.157.221.171`
 
-* `CORS_ALLOWED_ORIGINS`: Lista de anfitriões separada por vírgulas. Por predefinição, vazio. 
+* `CORS_ALLOWED_ORIGINS`: Lista de anfitriões separada por vírgulas. Por predefinição, vazio.
 
 	__AVISO!__ Se o seu registo mostrar erros como
 
 	`Forbidden (Origin checking failed - https://my.cousins-matter.com/ does not match any trusted origins.): /members/login/`
 
-	deve definir `CORS_ALLOWED_ORIGINS=<your full domain>` (por exemplo, https://my.cousins-matter.com) no ficheiro `.env`, 
+	deve definir `CORS_ALLOWED_ORIGINS=<your full domain>` (por exemplo, https://my.cousins-matter.com) no ficheiro `.env`,
 
-	__Não utilize a sintaxe Python mostrada no erro!__. 
+	__Não utilize a sintaxe Python mostrada no erro!__.
 
 	Se tiver vários anfitriões, liste-os separados por vírgulas, por exemplo
 

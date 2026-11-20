@@ -1,3 +1,5 @@
+from members.tests.factories import MemberFactory
+
 from .base import MembersUITestBase
 
 
@@ -94,6 +96,54 @@ class MemberDetailUITest(MembersUITestBase):
     self.login_and_goto_page("members:detail", kwargs={"username": "nonexistentuser"})
     self.page.wait_for_timeout(500)
 
-    # Django returns a 404 page with "Not Found" as title
+    # The custom 404 page shows "Page not found" as title
     title = self.page.evaluate("document.title")
-    self.assertIn("Not Found", title, "Non-existent member should show a 404 page")
+    self.assertIn("Page not found", title, "Non-existent member should show a 404 page")
+
+
+class ManagedMembersUITest(MembersUITestBase):
+  """UI tests for the "Members I Manage" navbar entry and page (issue 545)."""
+
+  def test_navbar_entry_opens_managed_members_page(self):
+    """The personal menu should show the "Members I Manage" entry (issue 545)."""
+    self.login_and_goto_page("members:members")
+    navbar = self.page.locator("nav.navbar")
+    entry = navbar.locator("a[href*='members/managed']")
+    self.assertTrue(entry.count() > 0, "Managed members entry should be in the navbar")
+    # The entry lives in the personal dropdown (display:none until hovered) and
+    # Headless hover/click on the (possibly zero-size) dropdown item is unreliable.
+    # Dispatch the anchor's native click via JS, which navigates even when hidden.
+    self.page.evaluate("document.querySelector(\"nav.navbar a[href*='members/managed']\").click()")
+    self.page.wait_for_url("**/members/managed/")
+    self.assert_visible("h1.title", "Managed members page title should be visible")
+
+  def test_managed_members_page(self):
+    """The page lists logged user's managed members with an activate button."""
+    MemberFactory(first_name="Dana", last_name="Scully", is_active=False, member_manager=self.user)
+    self.login_and_goto_page("members:managed_members")
+    self.assert_visible("#managed-members-grid", "Managed members grid should be visible")
+    self.assertTrue(
+      self.page.locator("text=Dana Scully").first.is_visible(),
+      "Managed member should be listed",
+    )
+    activate_btn = self.page.locator("button[hx-get*='/activate/']")
+    self.assertTrue(activate_btn.count() > 0, "Activate button should be shown for inactive members")
+
+  def test_change_manager_modal_flow(self):
+    """The "Change manager" command reassigns the member from the list."""
+
+    managed = MemberFactory(first_name="Dana", last_name="Scully", is_active=False, member_manager=self.user)
+    MemberFactory(first_name="Fox", last_name="Mulder", is_active=True)  # candidate manager
+    self.login_and_goto_page("members:managed_members")
+    self.page.locator(f"button[hx-get*='{managed.username}/change-manager']").click()
+    modal_appeared = self.page.wait_for_selector(".modal-card", timeout=5000) is not None
+    self.assertTrue(modal_appeared, "Change manager modal should open")
+    self.page.fill("#manager-search-input", "Mulder")
+    self.page.wait_for_selector(".dropdown-item.manager-result", timeout=5000)
+    self.page.click(".dropdown-item.manager-result")
+    self.page.locator("#change-manager-submit").click()
+    self.page.wait_for_timeout(1000)
+    self.assertTrue(
+      self.page.locator("text=Fox Mulder").first.is_visible(),
+      "Success message should name the new manager",
+    )

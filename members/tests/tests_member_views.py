@@ -1,5 +1,6 @@
 import json
 
+from django.core import mail
 from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -141,3 +142,102 @@ class TestCreateMemberForbidden(MemberTestCase):
     data = get_new_member_data()
     response = self.client.post(reverse("members:create"), data)
     self.assertEqual(response.status_code, 403)
+
+
+class TestManagedMembersView(MemberTestCase):
+  """Tests for the "Members I Manage" page (issue 545)."""
+
+  def test_managed_members_listed(self):
+    managed = self.create_member()  # created with member_manager=self.member
+    response = self.client.get(reverse("members:managed_members"))
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, managed.get_full_name())
+
+  def test_activate_button_shown_for_inactive_managed_member(self):
+    managed = self.create_member()
+    response = self.client.get(reverse("members:managed_members"))
+    self.assertContains(response, reverse("members:activate", kwargs={"username": managed.username}))
+
+  def test_non_managed_members_not_listed(self):
+    other = self.create_member(is_active=True)  # active members have no member_manager
+    response = self.client.get(reverse("members:managed_members"))
+    self.assertNotContains(response, other.get_full_name())
+
+  def test_empty_for_member_without_managed_members(self):
+    response = self.client.get(reverse("members:managed_members"))
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, _("You don't manage any members yet."))
+
+
+class TestChangeMemberManager(MemberTestCase):
+  """Tests for the change-manager command (issue 545)."""
+
+  def setUp(self):
+    super().setUp()
+    self.managed = self.create_member()  # member_manager=self.member
+    self.change_url = reverse("members:change_member_manager", kwargs={"username": self.managed.username})
+
+  def test_get_shows_manager_search(self):
+    """The modal offers a search-as-you-type manager picker."""
+    response = self.client.get(self.change_url)
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, 'type="search"')
+    self.assertContains(response, 'name="new_manager"')
+
+  def test_search_results_offer_active_members_only(self):
+    """The search partial only shows active, non-dead members as candidates."""
+    active = self.create_member(get_new_member_data(first_name="Zoe", last_name="Auble"), is_active=True)
+    response = self.client.get(
+      reverse("members:search_members"),
+      {
+        "q": "Zoe",
+        "render_with": "members/members/manager_search_results.html",
+        "render_empty_query": "false",
+      },
+      HTTP_HX_REQUEST="true",
+    )
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, active.get_full_name())
+    self.assertNotContains(response, self.managed.get_full_name())
+
+  def test_post_reassigns_member(self):
+    new_manager = self.create_member(is_active=True)
+    response = self.client.post(self.change_url, {"new_manager": new_manager.pk})
+    self.assertHXRefresh(response)
+    self.managed.refresh_from_db()
+    self.assertEqual(self.managed.member_manager, new_manager)
+
+  def test_non_manager_is_refused(self):
+    other = self.create_member(is_active=True)
+    self.client.login(username=other.email, password=other.password)
+    response = self.client.post(self.change_url, {"new_manager": self.member.pk})
+    self.assertRedirects(response, reverse("members:detail", kwargs={"username": self.managed.username}))
+
+
+class TestActivationConfirmation(MemberTestCase):
+  """The activation asks for confirmation through an htmx modal (issue 545)."""
+
+  def setUp(self):
+    super().setUp()
+    self.managed = self.create_member()  # member_manager=self.member
+    self.activate_url = reverse("members:activate", kwargs={"username": self.managed.username})
+
+  def test_htmx_get_shows_confirmation(self):
+    response = self.client.get(self.activate_url, HTTP_HX_REQUEST="true")
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, _("Activate Account"))
+    self.assertContains(response, self.managed.get_full_name())
+    self.managed.refresh_from_db()
+    self.assertFalse(self.managed.is_active)  # GET never activates
+
+  def test_plain_get_does_not_activate(self):
+    response = self.client.get(self.activate_url, follow=True)
+    self.assertRedirects(response, reverse("members:detail", kwargs={"username": self.managed.username}))
+    self.managed.refresh_from_db()
+    self.assertFalse(self.managed.is_active)
+
+  def test_post_activates(self):
+    # regular managers only trigger the verification email; an admin activates directly
+    mail.outbox = []
+    self.client.post(self.activate_url, {}, follow=True)
+    self.assertEqual(len(mail.outbox), 1)

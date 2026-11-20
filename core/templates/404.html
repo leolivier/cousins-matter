@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+{% load i18n static cm_tags %}
+{% block title %}{% title _("Page not found") %}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container has-text-centered">
+    <img class="mb-5" src="{% static 'core/images/404.svg' %}" alt="" width="240" height="165">
+    <p class="title is-1">404</p>
+    <p class="subtitle is-4">{% trans "Page not found" %}</p>
+    <p class="content">{% trans "The page you requested does not exist or has been moved." %}</p>
+    <a class="button is-link" href="{% url 'core:Home' %}">{% trans "Home" %}</a>
+  </div>
+</section>
+{% endblock %}

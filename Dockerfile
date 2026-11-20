@@ -35,14 +35,15 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Copy python dependencies from builder
-COPY --from=builder /app/.venv /app/.venv
+# Creates a non-root user with an explicit UID
+RUN adduser --uid ${UID} --disabled-password --gecos "" cm_user && \
+    chown cm_user:cm_user /app
+
+# Copy python dependencies from builder using cm_user as owner
+COPY --from=builder --chown=cm_user:cm_user /app/.venv /app/.venv
 
 # Add virtual environment to PATH
 ENV PATH="/app/.venv/bin:$PATH"
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-RUN adduser --uid ${UID} --disabled-password --gecos "" cm_user && \
-    chown -R cm_user:cm_user /app
 
 # now copy all (but .dockerignore rules) with cm_user as proprietary
 COPY --chown=cm_user:cm_user . .
@@ -52,4 +53,4 @@ ENV PORT=9001
 ENTRYPOINT ["python", "-m", "scripts.entrypoint"]
 CMD ["daphne", "-p", "9001", "-b", "0.0.0.0", "--proxy-headers", "cousinsmatter.asgi:application"]
 
-VOLUME ./data ./media
+VOLUME ["/app/data", "/app/media"]

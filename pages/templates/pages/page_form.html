@@ -19,6 +19,12 @@
 		{%else%}
 			{% title _("Create Page") %}
 		{%endif%}</h1>
+	{% user_manual_url as docs_url %}
+	<div class="notification is-info">
+		{%icon "information"%}
+		{%blocktranslate%}Page URLs must follow specific rules (for example they must start with <code>/publish/</code> or <code>/private/</code>).{%endblocktranslate%}
+		<a href="{{ docs_url }}" target="_blank" rel="noopener noreferrer">{%translate "See the documentation"%}</a>
+	</div>
 	<form method="post">
 		{% csrf_token %}
 		{{ form | crispy}}

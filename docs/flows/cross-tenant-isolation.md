@@ -4,7 +4,7 @@ title: Cross-Tenant Isolation (Manual Test)
 description: Manual end-to-end test scenario verifying that tenants cannot see or touch each other's data in any app — lists, direct object access, member lookups, chat, media and auth boundaries
 tags: ["flow", "tenants", "testing", "manual", "isolation"]
 status: draft
-stale_after: 2027-04-17
+stale_after: 2027-11-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T00:00:00Z }
 ---
 
@@ -174,6 +174,15 @@ deliberately **unscoped** (by design, not a leak).
 ## Note
 
 Automated coverage exists for parts of this (`members/tests/
-tests_tenant_isolation.py`, per-app `TenantModel` tests). This scenario is
+tests_tenant_isolation.py`, per-app `TenantModel` tests — including
+`TenantScopedAddressFamilyTests` for addresses and families). This scenario is
 the browser-level mirror: it exercises real sessions, real slugs and real
 media URLs end to end.
+
+Automated version: `members/tests/tests_cross_tenant_isolation_e2e.py`
+covers Phases 1-7 (each `test_NN_...` seeds both families and rebuilds the
+prerequisites it needs). Run it with
+`scripts/tests/run_cross_tenant_isolation_e2e.sh` (or
+`make test-mt t=members.tests.tests_cross_tenant_isolation_e2e`). The Phase 5
+media observation is asserted as a recorded limitation: fix
+`download_protected_media` and that test will tell you to expect 404.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 20:42+0100\n"
+"POT-Creation-Date: 2026-11-18 20:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "The identity provider did not provide an email address."
 msgstr ""
 
-#: adapter.py:48 forms.py:144 tests/tests_login_out.py:46
+#: adapter.py:48 forms.py:149 tests/tests_login_out.py:48
 msgid ""
 "This account is not yet active. Please use the invitation link sent to you "
 "by email."
@@ -34,15 +34,15 @@ msgid ""
 "first."
 msgstr ""
 
-#: admin.py:32
+#: admin.py:33
 msgid "Extra Profile Info"
 msgstr ""
 
-#: admin.py:36
+#: admin.py:37
 msgid "Privacy & Management"
 msgstr ""
 
-#: admin.py:41
+#: admin.py:42
 msgid "avatar"
 msgstr ""
 
@@ -50,168 +50,172 @@ msgstr ""
 msgid "Members"
 msgstr ""
 
-#: forms.py:30 forms.py:301 views/views_family.py:62
+#: forms.py:35 forms.py:309 views/views_family.py:69
 msgid "New Family"
 msgstr ""
 
-#: forms.py:31 forms.py:302 templates/members/family/family_form.html:13
-#: views/views_family.py:70
+#: forms.py:36 forms.py:310 templates/members/family/family_form.html:13
+#: views/views_family.py:77
 msgid "Change Family"
 msgstr ""
 
-#: forms.py:40 views/views_address.py:56
+#: forms.py:45 views/views_address.py:58
 msgid "New Address"
 msgstr ""
 
-#: forms.py:41 templates/members/address/address_form.html:12
-#: views/views_address.py:64
+#: forms.py:46 templates/members/address/address_form.html:12
+#: views/views_address.py:66
 msgid "Change Address"
 msgstr ""
 
-#: forms.py:100 tests/tests_register.py:139 tests/tests_register.py:233
+#: forms.py:105 tests/tests_register.py:139 tests/tests_register.py:233
 #: tests/tests_register.py:484 views/views_registration.py:177
 #: views/views_registration.py:289
 msgid "A member with this email already exists."
 msgstr ""
 
-#: forms.py:102
+#: forms.py:107
 msgid "An active member must have an email."
 msgstr ""
 
-#: forms.py:109
+#: forms.py:114
 #, python-format
 msgid ""
 "By checking this box, you agree to this site's <a target='blank' "
 "href='%(privacy_url)s'>privacy policy</a>"
 msgstr ""
 
-#: forms.py:127 services/directory.py:75
+#: forms.py:132 services/directory.py:75
 #: templates/members/members/member_detail.html:45
 #: templates/members/members/members_directory.html:32
 msgid "Email"
 msgstr ""
 
-#: forms.py:130
+#: forms.py:135 tests/tests_login_out.py:71
 msgid ""
 "Please enter a correct email and password. Note that both fields may be case-"
 "sensitive."
 msgstr ""
 
-#: forms.py:182 templates/members/members/members.html:63
+#: forms.py:187 templates/members/members/members.html:63
 msgid "First name"
 msgstr ""
 
-#: forms.py:183 templates/members/members/members.html:64
+#: forms.py:188 templates/members/members/members.html:64
 msgid "Last name"
 msgstr ""
 
-#: forms.py:184
+#: forms.py:189
 msgid "Avatar"
 msgstr ""
 
-#: forms.py:185 models.py:166 templates/members/members/member_detail.html:53
+#: forms.py:190 models.py:166 templates/members/members/member_detail.html:53
 #: templates/members/members/members.html:65
 #: templates/members/members/members_directory.html:30
 msgid "Birthdate"
 msgstr ""
 
-#: forms.py:186 models.py:161 services/directory.py:75
+#: forms.py:191 models.py:161 services/directory.py:75
 #: templates/members/members/member_detail.html:41
 #: templates/members/members/members_directory.html:33
 msgid "Address"
 msgstr ""
 
-#: forms.py:187 models.py:163 services/directory.py:75
+#: forms.py:192 models.py:163 services/directory.py:75
 #: templates/members/members/member_detail.html:49
 #: templates/members/members/members_directory.html:31
 msgid "Phone"
 msgstr ""
 
-#: forms.py:188
+#: forms.py:193
 msgid "Description"
 msgstr ""
 
-#: forms.py:189 templates/members/members/member_detail.html:69
+#: forms.py:194 templates/members/members/member_detail.html:69
 msgid "Hobbies"
 msgstr ""
 
-#: forms.py:190 models.py:172 templates/members/members/member_detail.html:57
+#: forms.py:195 models.py:172 templates/members/members/member_detail.html:57
 msgid "Website"
 msgstr ""
 
-#: forms.py:191 models.py:174 templates/members/members/member_detail.html:61
+#: forms.py:196 models.py:174 templates/members/members/member_detail.html:61
 msgid "Family"
 msgstr ""
 
-#: forms.py:193 models.py:195
+#: forms.py:198 models.py:195
 msgid "Email frequency"
 msgstr ""
 
-#: forms.py:198 models.py:187
+#: forms.py:203 models.py:187
 msgid "Privacy consent"
 msgstr ""
 
-#: forms.py:308
+#: forms.py:316
 msgid "Family name cannot be empty"
 msgstr ""
 
-#: forms.py:314
+#: forms.py:322
 msgid "Name of the invited person (will appear in the received email)"
 msgstr ""
 
-#: forms.py:317
+#: forms.py:325
 msgid "Email to send invitation"
 msgstr ""
 
-#: forms.py:321
+#: forms.py:329
 msgid "Your name"
 msgstr ""
 
-#: forms.py:322
+#: forms.py:330
 msgid "Email where you will receive the link"
 msgstr ""
 
-#: forms.py:323
+#: forms.py:331
 msgid "Message to the administrator"
 msgstr ""
 
-#: forms.py:324
+#: forms.py:332
 msgid "Captcha (click on the image to refresh if you can't read it)"
 msgstr ""
 
-#: forms.py:341
+#: forms.py:349
 msgid "CSV file"
 msgstr ""
 
-#: forms.py:342
+#: forms.py:350
 msgid "The CSV file containing the members to import."
 msgstr ""
 
-#: forms.py:346
+#: forms.py:354
 msgid "Automatically activate imported users"
 msgstr ""
 
-#: forms.py:350 templates/members/members/notify_death_form.html:11
+#: forms.py:358 templates/members/members/notify_death_form.html:11
 msgid "Date of Death"
 msgstr ""
 
-#: forms.py:352 templates/members/members/notify_death_form.html:19
+#: forms.py:360 templates/members/members/notify_death_form.html:19
 msgid "Any additional information..."
 msgstr ""
 
-#: forms.py:353 templates/members/members/notify_death_form.html:17
+#: forms.py:361 templates/members/members/notify_death_form.html:17
 msgid "Message (Optional)"
 msgstr ""
 
-#: managers.py:50 managers.py:73
+#: forms.py:369 models.py:151
+msgid "Member manager"
+msgstr ""
+
+#: managers.py:55 managers.py:78
 msgid "The username must be set"
 msgstr ""
 
-#: managers.py:106
+#: managers.py:111
 msgid "Superuser must have is_staff=True."
 msgstr ""
 
-#: managers.py:108
+#: managers.py:113
 msgid "Superuser must have is_superuser=True."
 msgstr ""
 
@@ -384,10 +388,6 @@ msgstr ""
 msgid "Tenant"
 msgstr ""
 
-#: models.py:151
-msgid "Member manager"
-msgstr ""
-
 #: models.py:166
 msgid "Click on the month name or the year to change them quickly"
 msgstr ""
@@ -438,15 +438,15 @@ msgstr ""
 msgid "A user with that username already exists."
 msgstr ""
 
-#: models.py:223
+#: models.py:224
 msgid "member"
 msgstr ""
 
-#: models.py:224
+#: models.py:225
 msgid "members"
 msgstr ""
 
-#: models.py:311
+#: models.py:314
 #, python-format
 msgid "Death date %(dd)s is before birthdate %(bd)s"
 msgstr ""
@@ -461,20 +461,20 @@ msgstr ""
 msgid "Page %(doc_page)s - %(title)s"
 msgstr ""
 
-#: services/import_export.py:32
+#: services/import_export.py:34
 #, python-format
 msgid ""
 "Unknown column in CSV file: \"%(fieldname)s\". Valid fields are %(all_names)s"
 msgstr ""
 
-#: services/import_export.py:38
+#: services/import_export.py:40
 #, python-format
 msgid ""
 "Missing column in CSV file: \"%(fieldname)s\". Mandatory fields are "
 "%(all_names)s"
 msgstr ""
 
-#: services/import_export.py:75 views/views_import_export.py:74
+#: services/import_export.py:77 views/views_import_export.py:74
 msgid "Import not found"
 msgstr ""
 
@@ -490,7 +490,7 @@ msgstr ""
 msgid "Error: Member without email cannot be activated"
 msgstr ""
 
-#: services/members.py:37 tests/tests_member.py:557
+#: services/members.py:37 tests/tests_member.py:558
 msgid "Member account activated successfully. The member can now sign in."
 msgstr ""
 
@@ -501,97 +501,97 @@ msgid ""
 "the password reset screen."
 msgstr ""
 
-#: services/members.py:123 tests/tests_death_notification.py:43
+#: services/members.py:122 tests/tests_death_notification.py:43
 #, python-format
 msgid "Death notification for %(member)s"
 msgstr ""
 
-#: services/members.py:151
+#: services/members.py:149
 msgid "You can't follow yourself!"
 msgstr ""
 
-#: services/members.py:155
+#: services/members.py:153
 #, python-format
 msgid "You are no longer following %(followed_name)s"
 msgstr ""
 
-#: services/members.py:157
+#: services/members.py:155
 msgid "Error: You can't follow dead people"
 msgstr ""
 
-#: services/members.py:161
+#: services/members.py:159
 msgid "You have a new follower!"
 msgstr ""
 
-#: services/members.py:162
+#: services/members.py:160
 #, python-format
 msgid "%(follower_name)s is now following you!"
 msgstr ""
 
-#: services/members.py:183
+#: services/members.py:181
 #, python-format
 msgid "You are now following %(followed_name)s"
 msgstr ""
 
-#: tasks.py:131
+#: tasks.py:132
 #, python-format
 msgid "Avatar not found: %(avatar)s for username %(username)s. Ignored..."
 msgstr ""
 
-#: tasks.py:141
+#: tasks.py:142
 #, python-format
 msgid ""
 "Error saving avatar (%(warning)s): %(avatar)s for username %(username)s. "
 "Ignored..."
 msgstr ""
 
-#: tasks.py:164
+#: tasks.py:165
 msgid "Keeping current manager."
 msgstr ""
 
-#: tasks.py:167
+#: tasks.py:168
 msgid "Using your id..."
 msgstr ""
 
-#: tasks.py:171
+#: tasks.py:172
 #, python-format
 msgid "Manager %(manager)s not found for member %(member)s."
 msgstr ""
 
-#: tasks.py:178
+#: tasks.py:179
 #, python-format
 msgid ""
 "%(manager)s is inactive and cannot be used as manager for %(member)s. "
 "Activate it manually!"
 msgstr ""
 
-#: tasks.py:199
+#: tasks.py:200
 #, python-format
 msgid "Member %(member)s has no email and cannot be activated."
 msgstr ""
 
-#: tasks.py:203
+#: tasks.py:204
 #, python-format
 msgid ""
 "No manager provided for member %(member)s although inactive. Keeping "
 "existing one (%(manager)s)..."
 msgstr ""
 
-#: tasks.py:211
+#: tasks.py:212
 #, python-format
 msgid ""
 "Inactive member %(member)s has no manager. Please provide one! Meanwhile, "
 "you will be used as manager"
 msgstr ""
 
-#: tasks.py:232
+#: tasks.py:233
 #, python-format
 msgid ""
 "Member %(member)s was active. Adding %(manager)s as manager inactivated him/"
 "her."
 msgstr ""
 
-#: tasks.py:242
+#: tasks.py:243
 msgid ""
 "You requested to activate imported members. All members with a manager in "
 "the file will be ignored and won't be activated."
@@ -942,7 +942,7 @@ msgid "or"
 msgstr ""
 
 #: templates/members/login/login.html:26
-msgid "Create a new family"
+msgid "Create a new space for my family"
 msgstr ""
 
 #: templates/members/login/login.html:30
@@ -1071,6 +1071,18 @@ msgstr ""
 msgid "No birthdays in next %(ndays)s days"
 msgstr ""
 
+#: templates/members/members/change_member_manager.html:4
+#: templates/members/members/change_member_manager.html:35
+#: templates/members/members/managed_members.html:27
+#: templates/members/members/managed_members.html:29
+msgid "Change manager"
+msgstr "Change manager"
+
+#: templates/members/members/change_member_manager.html:15
+#: templates/members/members/members.html:41
+msgid "Search..."
+msgstr ""
+
 #: templates/members/members/export_members.html:3
 #: templates/members/members/export_members.html:6
 msgid "Export Members"
@@ -1146,6 +1158,26 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
+#: templates/members/members/managed_members.html:3
+#: templates/members/members/managed_members.html:6
+msgid "Members I Manage"
+msgstr "Members I Manage"
+
+#: templates/members/members/managed_members.html:23
+#: templates/members/members/member_upsert.html:47
+#: tests/tests_member_views.py:228 views/views_member.py:381
+msgid "Activate Account"
+msgstr ""
+
+#: templates/members/members/managed_members.html:38
+#: tests/tests_member_views.py:169
+msgid "You don't manage any members yet."
+msgstr "You don't manage any members yet."
+
+#: templates/members/members/manager_search_results.html:13
+msgid "No results found"
+msgstr ""
+
 #: templates/members/members/member_detail.html:3
 msgid "Member Detail"
 msgstr ""
@@ -1178,27 +1210,23 @@ msgstr ""
 msgid "Change Password"
 msgstr ""
 
-#: templates/members/members/member_upsert.html:48
-msgid "Activate Account"
-msgstr ""
-
-#: templates/members/members/member_upsert.html:53
+#: templates/members/members/member_upsert.html:51
 msgid "Delete"
 msgstr ""
 
-#: templates/members/members/member_upsert.html:66
+#: templates/members/members/member_upsert.html:64
 msgid "Update"
 msgstr ""
 
-#: templates/members/members/member_upsert.html:69
+#: templates/members/members/member_upsert.html:67
 msgid "Create"
 msgstr ""
 
-#: templates/members/members/member_upsert.html:77
+#: templates/members/members/member_upsert.html:75
 msgid "Lost your verification email?"
 msgstr ""
 
-#: templates/members/members/member_upsert.html:79
+#: templates/members/members/member_upsert.html:77
 #: templates/members/registration/email_verification_failed.html:13
 msgid "Request a new link"
 msgstr ""
@@ -1212,17 +1240,13 @@ msgstr ""
 msgid "Show directory"
 msgstr ""
 
-#: templates/members/members/members.html:21 views/views_member.py:139
-#: views/views_member.py:160
+#: templates/members/members/members.html:21 views/views_member.py:148
+#: views/views_member.py:169
 msgid "Create Member"
 msgstr ""
 
 #: templates/members/members/members.html:27
 msgid "Invite Member"
-msgstr ""
-
-#: templates/members/members/members.html:41
-msgid "Search..."
 msgstr ""
 
 #: templates/members/members/members.html:58
@@ -1362,23 +1386,17 @@ msgid ""
 "otherwise the changes won't be saved"
 msgstr ""
 
-#: tests/tests_login_out.py:68
-#, python-format
-msgid ""
-"Please enter a correct %(username)s and password. Note that both fields may "
-"be case-sensitive."
-msgstr ""
-
 #: tests/tests_member.py:289 tests/tests_member.py:294
-#: views/views_member.py:181 views/views_member.py:198
+#: views/views_member.py:190 views/views_member.py:207
+#: views/views_member.py:328
 msgid "You do not have permission to edit this member."
 msgstr ""
 
-#: tests/tests_member.py:629
+#: tests/tests_member.py:630
 msgid "Error: Cannot activate a dead member "
 msgstr ""
 
-#: tests/tests_member_views.py:79 views/views_member.py:277
+#: tests/tests_member_views.py:80 views/views_member.py:286
 msgid "Delete my account"
 msgstr ""
 
@@ -1487,69 +1505,79 @@ msgstr ""
 msgid "Method not allowed"
 msgstr ""
 
-#: views/views_member.py:51
+#: views/views_member.py:50
 msgid "You have been logged out"
 msgstr ""
 
-#: views/views_member.py:129
+#: views/views_member.py:138
 msgid "Only admins can create members"
 msgstr ""
 
-#: views/views_member.py:152
+#: views/views_member.py:161
 msgid "Member successfully created"
 msgstr ""
 
-#: views/views_member.py:174
+#: views/views_member.py:183
 msgid "Update Member Details"
 msgstr ""
 
-#: views/views_member.py:175
+#: views/views_member.py:184
 msgid "Member successfully updated"
 msgstr ""
 
-#: views/views_member.py:216
+#: views/views_member.py:225
 msgid "A verification email has been sent to validate your new email address."
 msgstr ""
 
-#: views/views_member.py:255
+#: views/views_member.py:264
 msgid "My Profile"
 msgstr ""
 
-#: views/views_member.py:256
+#: views/views_member.py:265
 msgid "Profile successfully updated"
 msgstr ""
 
-#: views/views_member.py:270
+#: views/views_member.py:279
 msgid "You do not have permission to delete this member."
 msgstr ""
 
-#: views/views_member.py:274
+#: views/views_member.py:283
 msgid "Member deleted"
 msgstr ""
 
-#: views/views_member.py:278
+#: views/views_member.py:287
 msgid ""
 "Are you sure you want to delete your account and all associated data? This "
 "is irrecoverable!"
 msgstr ""
 
-#: views/views_member.py:280
+#: views/views_member.py:289
 msgid "Delete member"
 msgstr ""
 
-#: views/views_member.py:281
+#: views/views_member.py:290
 #, python-format
 msgid ""
 "Are you sure you want to delete %(name)s's account and all associated data?"
 msgstr ""
 
-#: views/views_member.py:319
+#: views/views_member.py:338
+#, python-format
+msgid "%(member)s is now managed by %(manager)s"
+msgstr "%(member)s is now managed by %(manager)s"
+
+#: views/views_member.py:353
 msgid "Please provide a death date."
 msgstr ""
 
-#: views/views_member.py:326
+#: views/views_member.py:360
 msgid "The administrator has been notified."
 msgstr ""
+
+#: views/views_member.py:382
+#, python-format
+msgid "Are you sure you want to activate the account of %(name)s?"
+msgstr "Are you sure you want to activate the account of %(name)s?"
 
 #: views/views_registration.py:154
 msgid "Only tenant admins can invite members"

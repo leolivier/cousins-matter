@@ -395,6 +395,8 @@ class PhotoFullscreenViewTests(PhotoTestsBase):
     self.assertEqual(response.status_code, 200)
     self.assertTemplateUsed(response, "image")
     self.assertEqual(response.context["pk"], self.photo2.id)
+    self.assertEqual(response.context["photo_name"], self.photo2.name)
+    self.assertContains(response, f'<p id="fullscreen-caption">{self.photo2.name}</p>', html=True)
 
   def test_get_fullscreen_photo_next(self):
     """Tests getting the next photo in fullscreen."""
@@ -403,6 +405,7 @@ class PhotoFullscreenViewTests(PhotoTestsBase):
     response = self.client.get(url, {"side": "next"}, HTTP_HX_REQUEST="true")
     self.assertEqual(response.status_code, 200)
     self.assertEqual(response.context["pk"], self.photo2.id)
+    self.assertEqual(response.context["photo_name"], self.photo2.name)
 
   def test_get_fullscreen_photo_prev(self):
     """Tests getting the previous photo in fullscreen."""

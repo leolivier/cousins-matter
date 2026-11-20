@@ -20,6 +20,21 @@ logger = logging.getLogger(__name__)
 
 
 @register.simple_tag
+def user_manual_url(page_anchor="pages-cms"):
+  """Build a URL into the readthedocs user manual's features page for the
+  current language.
+
+  Anchors come from mkdocs' slugification of the translated section
+  heading in user-manual/docs/<lang>/features.md, e.g. "Pages / CMS" is
+  #pages-cms in en/fr but #paginas-cms in es/pt. Only the languages whose
+  heading differs from the default slug are listed here.
+  """
+  lang = (get_language() or "en").split("-")[0].lower()
+  slug = {"es": "paginas-cms", "pt": "paginas-cms", "de": "seiten-cms", "it": "pagine-cms"}.get(lang, page_anchor)
+  return f"https://cousins-matter.readthedocs.io/{lang}/latest/features/#{slug}"
+
+
+@register.simple_tag
 def normalized_language_code():
   "if language is en-us, return en-US, if lang is en, return en-EN"
   lang = get_language().split("-")
@@ -229,6 +244,14 @@ def startswith(text, starts):
   return False
 
 
+@register.filter
+def sanitize(value):
+  """Sanitize rich-text HTML for rendering with autoescape off (see core.utils.sanitize_rich_html)."""
+  from core.utils import sanitize_rich_html
+
+  return sanitize_rich_html(value or "")
+
+
 @register.simple_tag(takes_context=True)
 def absolute_url(context, relative_url):
   request = context["request"]
@@ -294,7 +317,7 @@ def featured(value: str) -> bool:
 def boldify(value: str) -> str:
   txt = escape(value)
   if txt.startswith("**") and txt.endswith("**"):
-    txt = "<i>" + txt[2:-2] + "</i>"
+    return mark_safe("<i>" + txt[2:-2] + "</i>")  # nosec
   return mark_safe(txt)  # nosec
 
 

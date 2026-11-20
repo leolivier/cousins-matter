@@ -1,5 +1,5 @@
 import logging
-from typing import Literal, TypeAlias
+from typing import Literal, TypeAlias, cast
 
 from django.conf import settings
 from django.template import Library
@@ -44,12 +44,12 @@ def build_pages_tree(
     pages = FlatPage.objects.filter(**filter) if filter else FlatPage.objects.all()
     if prefix and include_or_exclude_prefix == "exclude":
       pages = pages.exclude(url__istartswith=prefix)
-    pages = list(pages)  # evaluate now: iterated after the scope block
+    page_list = list(pages)  # evaluate now: iterated after the scope block
 
   page_tree: PageTree = {}
   last_tree = None
   start = len(prefix) if prefix else 0
-  for page in pages:
+  for page in page_list:
     trc = ""
     url = page.url[start:-1]
     logger.debug(f"{trc}url: {url}")
@@ -63,7 +63,7 @@ def build_pages_tree(
         logger.debug(f"{trc}is not in tree_level")
         last_tree = tree_level
         tree_level[level] = {}
-      tree_level = tree_level[level]
+      tree_level = cast(PageTree, tree_level[level])
       logger.debug(f"{trc}tree for level: {level} is {last_tree}\n{trc}full tree {page_tree}")
     if last_tree is not None:
       del last_tree[level]

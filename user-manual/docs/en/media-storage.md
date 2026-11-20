@@ -1,6 +1,6 @@
 # Media Storage
 
-## WARNINGS 
+## WARNINGS
 
 * __This is currently a <span class="blinking-text"><u>BETA</u></span> feature!__
 * __These settings are more complex and are <u>reserved for advanced users</u>.__

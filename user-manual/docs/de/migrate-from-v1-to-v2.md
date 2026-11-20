@@ -2,7 +2,7 @@
 
 ## Einführung
 
-Die Version 2 von Cousins Matter ist eine umfassende Neuentwicklung der Version 1 und ist nicht direkt mit der Version 1 kompatibel. 
+Die Version 2 von Cousins Matter ist eine umfassende Neuentwicklung der Version 1 und ist nicht direkt mit der Version 1 kompatibel.
 Zu den großen Änderungen gehören unter anderem:
 
 * die Datenbank wurde von sqlite3 auf PostgreSQL migriert, um bessere Leistung und Skalierbarkeit zu ermöglichen.
@@ -55,8 +55,8 @@ Sie benötigen außerdem eine Python-3.14+-Umgebung, um das Migrationsskript aus
 	Die Einstellungen von Cousins Matter v2 unterscheiden sich von denen der v1. Bitte passen Sie Ihre .env-Datei an die Einstellungen von Cousins Matter v2 an.
 
 	Die Einstellungen von Cousins Matter v2 sind auf der Seite [Einstellungen](settings.md) im Detail beschrieben.
-	Insbesondere aktualisiert die Migration die Datei .env.example, um sie an die Einstellungen von Cousins Matter v2 anzupassen. Vergleichen Sie daher bitte diese neue Datei .env.example mit Ihrer .env-Datei und aktualisieren Sie Ihre .env-Datei entsprechend. 
-	
+	Insbesondere aktualisiert die Migration die Datei .env.example, um sie an die Einstellungen von Cousins Matter v2 anzupassen. Vergleichen Sie daher bitte diese neue Datei .env.example mit Ihrer .env-Datei und aktualisieren Sie Ihre .env-Datei entsprechend.
+
 	Achten Sie außerdem darauf, dass sich einige Standardwerte geändert haben. Zum Beispiel:
 
 	* ALLOW_MEMBERS_TO_CREATE_MEMBERS und ALLOW_MEMBERS_TO_INVITE_MEMBERS sind jetzt standardmäßig True

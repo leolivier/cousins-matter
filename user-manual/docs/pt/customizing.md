@@ -19,7 +19,7 @@ Ao criar uma página, abre-se um formulário que tem de preencher com alguns cam
 
 	* As páginas «About» (Acerca de), que incluem a política de privacidade descrita abaixo, têm de começar por '/<language-code\>/about/<page-slug\>'. São apresentadas do lado direito da barra de navegação, por baixo de um ícone de ponto de interrogação.
 	* As páginas «Home» (Início) são páginas que começam por '/<language-code\>/home/'. Consulte [Páginas iniciais (Home)](#front-or-home-pages) abaixo
-	* As páginas «Static» (Estáticas) são páginas que começam por '/publish/'. Podem ter 2 subformas: 
+	* As páginas «Static» (Estáticas) são páginas que começam por '/publish/'. Podem ter 2 subformas:
 
 		* /publish/<page-slug\>: o título destas páginas é apresentado diretamente no menu Páginas da barra de navegação.
 		* /publish/<menu-name\>/<page-slug\>: São menus pendentes do menu Páginas com o nome «menu-name», e o título de cada página é apresentado na lista pendente por baixo de <menu-name\>.
@@ -41,7 +41,7 @@ Estas páginas podem ser personalizadas utilizando a funcionalidade padrão «Ed
 Defina `SITE_FOOTER` conforme explicado em [Personalização geral](settings.md/#general-customization)
 
 ## Páginas iniciais (Home)
-O seu sítio precisa de duas páginas iniciais diferentes (também designadas home): 
+O seu sítio precisa de duas páginas iniciais diferentes (também designadas home):
 
 * a primeira para as pessoas não autenticadas, onde pode explicar o objetivo do seu sítio sem dar demasiados detalhes e nada de privado.
 * a segunda é a página para os seus membros depois de iniciarem sessão.
@@ -49,7 +49,7 @@ Pode editar estas 2 páginas diretamente a partir da página inicial predefinida
 
 O URL destas páginas é construído assim: /<language code\>/home/authenticated e /<language code\>/home/unauthenticated.
 
-Versões predefinidas destas duas páginas são carregadas na base de dados no primeiro arranque. 
+Versões predefinidas destas duas páginas são carregadas na base de dados no primeiro arranque.
 Se o código de idioma do .env não corresponder a nenhuma das páginas pré-carregadas, é apresentada a versão en-US.
 
 **ATENÇÃO**: Não altere os URLs destas páginas, caso contrário não funcionarão!!!
@@ -83,10 +83,9 @@ por exemplo
 }
 ```
 
-alterará o tamanho global das letras do sítio e mudará a cor primária (definida em termos de HSL (matiz, saturação e luminosidade). 
+alterará o tamanho global das letras do sítio e mudará a cor primária (definida em termos de HSL (matiz, saturação e luminosidade).
 (Pode experimentar as cores HSL em https://hslpicker.com/)
 
 Também pode alterar estas variáveis no âmbito de um componente, mas nesse caso já não é verdadeiramente um tema; consulte os detalhes em [Bulma CSS Variables](https://bulma.io/documentation/features/css-variables/) e [Customizing Bulma with CSS variables](https://bulma.io/documentation/customize/with-css-variables/)
 
 Para conhecer todas as variáveis CSS disponíveis definidas pelo Bulma, consulte o [Bulma CSS File](https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.css) e experimente-as no seu navegador para ver o efeito.
-

@@ -13,8 +13,7 @@ verhält sich genau wie die klassische Anwendung. Um es einzuschalten, setzen Si
 MULTI_TENANT_ENABLED=True
 ```
 
-Dies bindet die `/tenants/`-URLs ein (Familien-Registrierung + Verwaltung) und zeigt den
-Link „Neue Familie anlegen“ auf der Anmeldeseite. Wenn das Feature ausgeschaltet ist,
+Dies bindet die `/tenants/`-URLs ein (Familien-Registrierung + Verwaltung). Wenn das Feature ausgeschaltet ist,
 liefert all dies einen 404-Fehler.
 
 ## Konzepte
@@ -32,8 +31,8 @@ Zwei Tenants werden durch die Migration angelegt und können nicht gelöscht wer
 
 ## Anlegen einer Familie
 
-* **Self-Service**: Mit aktiviertem Feature bietet die Anmeldeseite
-  *„Neue Familie anlegen“* an. Der Ersteller registriert sich mit E-Mail-Verifizierung und
+* **Self-Service**: Mit aktiviertem Feature gehen Sie auf `/tenants/signup/` (nicht auf die
+  Anmeldeseite), um eine neue Familie zu beantragen. Der Ersteller registriert sich mit E-Mail-Verifizierung und
   wird Admin der Familie.
 * **Durch einen Plattform-Admin**: `/tenants/create/` legt die Familie an und kann eine
   Einladung (mandantengebundener Link) per E-Mail an ihren ersten Admin senden.
@@ -44,16 +43,17 @@ Ein Familienkennung (Slug) wird aus dem Namen abgeleitet; reservierte Slugs
 ## Anmeldung bei einer Familie
 
 Alle melden sich auf der normalen Anmeldeseite an — die Familie wird automatisch aus dem
-angemeldeten Konto aufgelöst; es gibt keine URL pro Familie. Eine E-Mail-Adresse gehört zu
-einer einzigen Familie: um einer anderen Familie beizutreten, brauchen Sie eine andere Adresse.
+angemeldeten Konto aufgelöst; die Anmeldeseite selbst ist für alle Familien gemeinsam.
+Eine E-Mail-Adresse gehört zu einer einzigen Familie: um einer anderen Familie beizutreten, brauchen Sie eine andere Adresse.
 
-* **Familien-Ersteller**: nach der Registrierung über *„Neue Familie anlegen“* bleibt das
+* **Familien-Ersteller**: nach der Registrierung unter `/tenants/signup/` bleibt das
   Konto inaktiv, bis der Link aus der Verifizierungs-E-Mail angeklickt wurde; danach melden
   Sie sich normal an und sind der Admin der Familie.
 * **Andere Mitglieder**: entweder die vom Familien-Admin per E-Mail verschickte Einladung
-  annehmen (mandantengebundener Link → Registrierung → E-Mail-Verifizierung) oder einen
-  Beitrittsantrag stellen (Formular mit Captcha), den ein Familien-Admin genehmigen muss.
-  In beiden Fällen danach auf der normalen Anmeldeseite anmelden.
+  annehmen (mandantengebundener Link → Registrierung → E-Mail-Verifizierung) oder auf die
+  Startseite der Familie unter `/<tenant>/` gehen und auf *„Bitte um Einladungslink“* klicken,
+  um einen Beitrittsantrag zu stellen (Formular mit Captcha), den ein Familien-Admin
+  genehmigen muss. In beiden Fällen danach auf der normalen Anmeldeseite anmelden.
 
 ## Familieneinstellungen
 

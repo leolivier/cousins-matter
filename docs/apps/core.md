@@ -4,8 +4,8 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-10-17
-generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T20:35:00Z }
+stale_after: 2027-11-13
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-09T12:00:00Z }
 ---
 
 # Core
@@ -48,6 +48,13 @@ Infrastructure endpoints (cousinsmatter/urls.py): `health` and `qhealth`
 (login not required) both call `health_check` (core/services.py) — a
 `SELECT 1` on the database plus a Redis `PING` — the latter running it through
 Django-Q to prove the broker works.
+
+## Error pages
+
+`core/templates/404.html` extends `core/base.html` and is rendered by Django's
+default `page_not_found` handler whenever `DEBUG=False`. With `DEBUG=True`
+Django keeps its technical 404 page (the template is bypassed), so no custom
+`handler404` is declared in `cousinsmatter/urls.py`.
 
 ## Environment check
 
@@ -164,6 +171,17 @@ side**, not a context processor:
   memoized global dict, and the `override_settings` subclass re-computes it so
   tests see template-visible changes.
 
+## Navbar and static assets
+
+`core/templates/core/navbar.html` is the Bulma navbar; `core.min.css` /
+`core.min.js` (compiled by `make minify` from `core/static/core/css/core.css`
+and `core/static/core/js/core.js`) contain its behavior. Bulma's collapse
+breakpoint is fixed at 1024px but the menu content needs ~1500px with all
+features on: `core.css` media-queries the burger up to 1600px and
+`core.js` keeps its `NAVBAR_BREAKPOINT` constant (1600) in sync — the two
+must be updated together. The burger menu's dropdowns open on click or
+hover inside the panel.
+
 ## Middleware
 
 `core.middleware.LoginRequiredMiddleware` extends Django's
@@ -213,6 +231,32 @@ config/settings/base.py maps `bulmacalendar` back to `dateinput input` —
 without that mapping the JS in `include-bulma-calendar.html`
 (`attachCalendar('.dateinput')`) never attaches the picker (regression fixed
 from b4b2e846, guarded by members/tests/tests_forms.py).
+
+## Template helpers
+
+`core/templatetags/cm_tags.py` holds the shared tags (`icon`, view
+inclusion, `normalized_language_code`…). `user_manual_url` builds a
+link into the readthedocs user manual for the current language: the
+section anchor follows the *translated* heading in
+user-manual/docs/<lang>/features.md (mkdocs slugs it), so only the
+languages diverging from the default slug are mapped in the tag —
+`pages/tests/tests_manual_docs_url.py` pins the anchors for all six
+languages; update both when a manual heading changes.
+
+## Rich-text sanitization (shared XSS defense)
+
+`sanitize_rich_html` (core/utils.py, on top of **nh3**) and its
+`sanitize` template filter (core/templatetags/cm_tags.py) are the
+single cleaning point for rich-text HTML rendered with
+`{% autoescape off %}`. nh3 allows summernote-style tags and
+`href/src/alt/class` attributes, `http/https/mailto` schemes only, and
+forces `rel="noopener noreferrer"` on links. Used today by
+[forum](/apps/forum.md), [galleries](/apps/galleries.md),
+[troves](/apps/troves.md) and the admin flatpage banner in
+core/templates/core/base.html. Plain-text surfaces that used to disable
+escaping (framework messages in base.html, the upload
+progress-bar.html, followers/contact e-mails) now use default
+autoescaping instead.
 
 ## Performance
 

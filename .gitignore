@@ -22,3 +22,5 @@ bandit.out
 .tokensave/
 
 /user-manual/site/
+graphify-out/
+/latest

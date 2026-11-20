@@ -36,7 +36,7 @@ def _throttled(request) -> bool:
   from django.core.cache import cache
 
   key = f"tenant-signup:{request.META.get('REMOTE_ADDR', 'unknown')}"
-  count = cache.get_or_set(key, 0, SIGNUP_THROTTLE_SECONDS)
+  count = cache.get_or_set(key, 0, SIGNUP_THROTTLE_SECONDS) or 0
   if count >= SIGNUP_THROTTLE_LIMIT:
     return True
   try:
@@ -50,7 +50,7 @@ class FamilySignupView(LoginNotRequiredMixin, generic.View):
   """Anonymous signup that creates a new family and its first admin."""
 
   template_name = "tenants/family_signup.html"
-  title = _("Create a new family")
+  title = _("Create a new space for my family")
 
   def get(self, request):
     multi_tenant_required()
@@ -91,7 +91,7 @@ class FamilySignupView(LoginNotRequiredMixin, generic.View):
     messages.success(
       request,
       _(
-        "Your family has been created! You will now receive an email to verify your "
+        "Your new family space has been created! You will now receive an email to verify your "
         "email address. Click in the link inside the mail to finish the registration."
       ),
     )

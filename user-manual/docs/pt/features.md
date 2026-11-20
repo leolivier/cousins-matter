@@ -81,14 +81,14 @@
 
 * Os membros ligados podem conversar em direto com outros membros ligados
 * O Cousins Matter gere tantas salas de conversa quantas as solicitadas
-* Os membros podem criar salas de conversa privadas e escolher os membros que podem participar nessas salas. 
+* Os membros podem criar salas de conversa privadas e escolher os membros que podem participar nessas salas.
 	O criador da sala torna-se administrador dessa sala e pode acrescentar outros membros e eleger administradores entre eles.
 	Os administradores podem convidar outros membros e outros administradores
 
 ### Páginas / CMS
 
-Funcionalidades básicas de CMS: os administradores podem criar páginas HTML estáticas e publicá-las no sítio. 
-A página inicial também pode ser configurada desta forma, assim como a política de privacidade, as páginas «Acerca de»... 
+Funcionalidades básicas de CMS: os administradores podem criar páginas HTML estáticas e publicá-las no sítio.
+A página inicial também pode ser configurada desta forma, assim como a política de privacidade, as páginas «Acerca de»...
 As páginas públicas (as que aparecem no menu Páginas mesmo que não tenha iniciado sessão) podem ser criadas e publicadas por qualquer membro administrador. O URL delas tem de começar por '/publish/'
 As páginas privadas (as que só aparecem no menu Páginas se tiver iniciado sessão) podem ser criadas e publicadas por qualquer membro administrador. O URL delas tem de começar por '/private/'
 As mensagens dos administradores são um tipo específico de página que é apresentada a todos os membros ligados no topo do sítio. O URL delas tem de começar por '/admin-message/'

@@ -322,7 +322,7 @@ class TenantJoinRequestView(LoginNotRequiredMixin, generic.View):
 
   def _throttled(self, request) -> bool:
     key = f"join-request:{request.META.get('REMOTE_ADDR', 'unknown')}"
-    count = cache.get_or_set(key, 0, self.THROTTLE_SECONDS)
+    count = cache.get_or_set(key, 0, self.THROTTLE_SECONDS) or 0
     if count >= self.THROTTLE_LIMIT:
       return True
     try:

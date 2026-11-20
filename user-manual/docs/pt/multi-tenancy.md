@@ -13,8 +13,7 @@ exatamente como a aplicação clássica. Para a ativar, defina no `.env`:
 MULTI_TENANT_ENABLED=True
 ```
 
-Isto monta os URLs `/tenants/` (registo de família + gestão) e mostra a
-hiperligação «Criar uma nova família» na página de início de sessão. Quando desativada, tudo isto devolve 404.
+Isto monta os URLs `/tenants/` (registo de família + gestão). Quando desativada, tudo isto devolve 404.
 
 ## Conceitos
 
@@ -31,8 +30,8 @@ Dois tenants são criados por migração e não podem ser eliminados: `default`
 
 ## Criação de uma família
 
-* **Self-service**: com a funcionalidade ativada, a página de início de sessão oferece
-  *«Criar uma nova família»*. O criador regista-se com verificação por e-mail e
+* **Self-service**: com a funcionalidade ativada, aceda a `/tenants/signup/` (não à página
+  de início de sessão) para pedir a criação de uma nova família. O criador regista-se com verificação por e-mail e
   torna-se o administrador da família.
 * **Por um administrador da plataforma**: `/tenants/create/` cria a família e pode enviar por e-mail
   um convite (hiperligação vinculada ao tenant) ao seu primeiro administrador.
@@ -43,18 +42,20 @@ Um identificador de família (slug) é derivado do seu nome; slugs reservados
 ## Aceder a uma família
 
 Todos iniciam sessão na página de início de sessão padrão — a família é resolvida
-automaticamente a partir da conta ligada; não existe um URL por família. Um endereço
+automaticamente a partir da conta ligada; a página de início de sessão é comum a todas
+as famílias. Um endereço
 de e-mail pertence a uma única família: para aderir a outra família é necessário
 outro endereço de e-mail.
 
-* **Criador da família**: após o registo em *«Criar uma nova família»*, a conta
+* **Criador da família**: após o registo em `/tenants/signup/`, a conta
   permanece inativa até que a hiperligação do e-mail de verificação seja clicada;
   inicie sessão depois normalmente e será o administrador da família.
 * **Outros membros**: ou aceitar o convite enviado por e-mail pelo administrador da
   família (hiperligação vinculada ao tenant → registo → verificação por e-mail), ou
-  submeter um pedido de adesão (formulário com captcha) que um administrador da família
-  tem de aprovar. Em ambos os casos, inicie sessão depois na página de início de
-  sessão padrão.
+  aceder à página inicial da família em `/<tenant>/` e clicar em
+  *«Pedir um link de convite»* para submeter um pedido de adesão (formulário com captcha)
+  que um administrador da família tem de aprovar. Em ambos os casos, inicie sessão
+  depois na página de início de sessão padrão.
 
 ## Configurações da família
 

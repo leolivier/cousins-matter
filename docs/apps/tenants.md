@@ -4,7 +4,7 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-10-18
+stale_after: 2027-11-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
 ---
 
@@ -232,6 +232,15 @@ conventions for those tests:
   predefined pages through the `post_save` signal registered in
   pages/apps.py — tests no longer need to call `seed_tenant_pages` by hand
   (a tenant's family home 500s without them).
+
+`tenants/tests/tests_onboarding_e2e.py` covers the whole family onboarding
+flow (signup → admin → managed member → join request → invitation →
+registration → login). It runs on the same flag and is driven by
+`scripts/tests/run_tenant_onboarding_e2e.sh`; see [Testing](/testing.md).
+`members/tests/tests_cross_tenant_isolation_e2e.py` mirrors the isolation
+flow (two families seed the same content in every app, then probe each
+other's lists, objects, members, chat, media and deactivation); run it with
+`scripts/tests/run_cross_tenant_isolation_e2e.sh`.
 
 # See also
 

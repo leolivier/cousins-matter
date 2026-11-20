@@ -4,7 +4,7 @@ title: Forum
 description: Discussion forum — posts with replies (messages) and comments, follower subscriptions with notifications on new content
 tags: ["app", "forum"]
 status: draft
-stale_after: 2027-03-09
+stale_after: 2027-11-10
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
 ---
 
@@ -37,6 +37,15 @@ tenant). Forum content is invisible cross-tenant.
 - `Comment` — `author` FK, `message` FK (a comment attaches to a
   reply `Message`), `content` capped by
   `MESSAGE_COMMENTS_MAX_SIZE` (400).
+
+**Render-time sanitization:** `Message.content` and reply content are
+rich text (Summernote) rendered with `{% autoescape off %}` in
+templates/forum/forum/post_detail.html — they go through the
+`sanitize` template filter (nh3 allowlist cleaner,
+[core](/apps/core.md)) which strips scripts, event handlers and
+non-https URLs at render time, so legacy stored content is cleaned too.
+Data entry itself performs no validation, do not rely on the stored
+value being HTML-safe.
 
 ## Notifications on new content (forum/views/views_follow.py)
 

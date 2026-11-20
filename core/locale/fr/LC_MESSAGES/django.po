@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 20:27+0200\n"
+"POT-Creation-Date: 2026-11-19 12:04+0100\n"
 "PO-Revision-Date: 2024-12-24 12:09+0100\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -95,7 +95,8 @@ msgstr "Tu peux attacher un fichier ici si nécessaire"
 
 #: middleware.py:50
 msgid "You must accept the privacy policy to use this site."
-msgstr "Tu dois accepter la politique de confidentialité pour utiliser ce site."
+msgstr ""
+"Tu dois accepter la politique de confidentialité pour utiliser ce site."
 
 #: services.py:82
 msgid "Site"
@@ -199,7 +200,7 @@ msgstr "Ce site est géré par"
 
 #: services.py:148
 msgid "(no admin yet)"
-msgstr ""
+msgstr "(pas encore d'administrateur)"
 
 #: services.py:149
 msgid "Administrator email"
@@ -222,27 +223,9 @@ msgstr "Mais ton logiciel de messagerie est trop vieux pour l'afficher :'("
 msgid "This file type is not supported"
 msgstr "Ce type de fichier n'est pas supporté"
 
-#: services.py:219 services.py:232 services.py:236 tests/test_env_check.py:83
-#: tests/test_env_check.py:107
-msgid "Database"
-msgstr "Base de données"
-
-#: services.py:220 services.py:233 services.py:237 tests/test_env_check.py:84
-#: tests/test_env_check.py:137
-msgid "Redis"
-msgstr "Redis"
-
 #: services.py:220
 msgid "Not checked (database unreachable)"
 msgstr "Non vérifié (base de données injoignable)"
-
-#: services.py:232 services.py:236
-msgid "SELECT 1 succeeded"
-msgstr "SELECT 1 réussi"
-
-#: services.py:237
-msgid "PING succeeded"
-msgstr "PING réussi"
 
 #: services.py:245 services.py:247 services.py:253 services.py:254
 #: services.py:255 services.py:377 tests/test_env_check.py:85
@@ -403,6 +386,18 @@ msgstr "Résumé des notifications (%(frequency)s) pour \"%(site_name)s\""
 msgid "You have %(count)s new notifications."
 msgstr "Tu as %(count)s nouvelles notifications."
 
+#: templates/404.html:3 templates/404.html:9
+msgid "Page not found"
+msgstr "Page introuvable"
+
+#: templates/404.html:10
+msgid "The page you requested does not exist or has been moved."
+msgstr "La page demandée n'existe pas ou a été déplacée."
+
+#: templates/404.html:11 templates/core/base.html:10
+msgid "Home"
+msgstr "Accueil"
+
 #: templates/core/about/site-stats.html:3
 #: templates/core/about/site-stats.html:6
 msgid "Site Statistics"
@@ -411,10 +406,6 @@ msgstr "Statistiques du site"
 #: templates/core/about/site-stats.html:7
 msgid "This page displays some statistics about this site:"
 msgstr "Cette page affiche quelques statistiques sur ce site :"
-
-#: templates/core/base.html:10
-msgid "Home"
-msgstr "Accueil"
 
 #: templates/core/base.html:80
 msgid "This site proudly built using"
@@ -726,11 +717,11 @@ msgstr "Importer des membres depuis un CSV"
 
 #: templates/core/navbar.html:119
 msgid "Manage families"
-msgstr ""
+msgstr "Gérer les familles"
 
 #: templates/core/navbar.html:123
 msgid "Family settings"
-msgstr ""
+msgstr "Paramètres de la famille"
 
 #: templates/core/navbar.html:127
 msgid "Admin site"
@@ -745,10 +736,14 @@ msgid "About the site"
 msgstr "A propos du site"
 
 #: templates/core/navbar.html:163
+msgid "Members I Manage"
+msgstr "Membres que je gère"
+
+#: templates/core/navbar.html:165
 msgid "Profile"
 msgstr "Profil"
 
-#: templates/core/navbar.html:165
+#: templates/core/navbar.html:167
 msgid "Log Out"
 msgstr "Déconnexion"
 
@@ -769,6 +764,14 @@ msgstr "Ce champ est obigatoire."
 msgid "Your message has been sent"
 msgstr "Ton message a été envoyé"
 
+#: tests/test_env_check.py:83
+msgid "Database"
+msgstr "Base de données"
+
+#: tests/test_env_check.py:84
+msgid "Redis"
+msgstr "Redis"
+
 #: tests/test_featured.py:30
 msgid "Pages"
 msgstr "Pages"
@@ -787,7 +790,7 @@ msgstr ""
 "href=\"%(follower_url)s\">%(follower_name)s</a> te suit maintenant sur "
 "%(site_name)s!"
 
-#: utils.py:48
+#: utils.py:50
 #, python-format
 msgid ""
 "Uploaded file %(filename)s is too big (%(sizemb)sMB), maximum is "
@@ -796,7 +799,7 @@ msgstr ""
 "Le fichier téléchargé %(filename)s est trop gros (%(sizemb)sMB), le maximum "
 "est de %(limitmb)sMB."
 
-#: utils.py:276
+#: utils.py:278
 #, python-format
 msgid ""
 "Date '%(date_string_to_parse)s' does not match any expected format: "
@@ -805,43 +808,43 @@ msgstr ""
 "La date '%(date_string_to_parse)s' ne correspond à aucun des formats "
 "attendus: %(translated_date_formats)s."
 
-#: utils.py:286
+#: utils.py:288
 msgid "DD"
 msgstr "JJ"
 
-#: utils.py:287
+#: utils.py:289
 msgid "MM"
 msgstr "MM"
 
-#: utils.py:288
+#: utils.py:290
 msgid "YYYY"
 msgstr "AAAA"
 
-#: utils.py:289
+#: utils.py:291
 msgid "YY"
 msgstr "AA"
 
-#: utils.py:290
+#: utils.py:292
 msgid "HH"
 msgstr "HH"
 
-#: utils.py:291
+#: utils.py:293
 msgid "hh"
 msgstr "hh"
 
-#: utils.py:292
+#: utils.py:294
 msgid "AM/PM"
 msgstr "AM/PM"
 
-#: utils.py:293
+#: utils.py:295
 msgid "mm"
 msgstr "mm"
 
-#: utils.py:294
+#: utils.py:296
 msgid "ss"
 msgstr "ss"
 
-#: utils.py:434
+#: utils.py:438
 msgid "You do not have permission to edit/delete this object."
 msgstr "Tu n'as pas le droit de modifier/supprimer cet objet."
 
@@ -877,3 +880,11 @@ msgstr "Ta version est plus récente que la version la plus récente (?!?)"
 #: views/views_stats.py:102
 msgid "Only platform administrators can run the environment check."
 msgstr ""
+"Seuls les administrateurs de la plateforme peuvent effectuer la vérification "
+"de l'environnement."
+
+#~ msgid "SELECT 1 succeeded"
+#~ msgstr "SELECT 1 réussi"
+
+#~ msgid "PING succeeded"
+#~ msgstr "PING réussi"

@@ -4,7 +4,7 @@ title: Tenant Onboarding E2E (Manual Test)
 description: Manual end-to-end test scenario — family self-signup, first tenant admin, managed member creation, join request, invitation, registration and login
 tags: ["flow", "tenants", "members", "testing", "manual"]
 status: draft
-stale_after: 2027-10-18
+stale_after: 2027-11-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T00:00:00Z }
 ---
 
@@ -23,6 +23,11 @@ at the end.
 
 Related: [Member Invitation](/flows/member-invitation.md) (mechanics of the
 signed link), [Tenants](/apps/tenants.md), [Members](/apps/members.md).
+
+Automated version: `tenants/tests/tests_onboarding_e2e.py` covers Phases 1-7
+(each `test_NN_...` rebuilds its prerequisites), plus the tampered-link edge
+check. Run it with `scripts/tests/run_tenant_onboarding_e2e.sh` (or
+`make test-mt t=tenants.tests.tests_onboarding_e2e`).
 
 ## Preconditions
 
@@ -53,7 +58,7 @@ signed link), [Tenants](/apps/tenants.md), [Members](/apps/members.md).
    a family form (name) and the member registration form.
 3. Fill family name `Test Family ETA`; registration: username `nora`, first
    name, email `nora@example.com`, birthdate, password. Submit.
-4. **Expect**: success message *"Your family has been created! You will now
+4. **Expect**: success message *"Your new family space has been created! You will now
    receive an email to verify your email address…"*, redirect to the login
    page. (Internally: `Tenant` + `TenantSettings` created, slug auto-derived
    `test-family-eta`; member `nora` with `role=admin`, inactive.)

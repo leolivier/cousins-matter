@@ -4,8 +4,8 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-10-18
-generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T20:35:00Z }
+stale_after: 2027-11-09
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-08T00:00:00Z }
 ---
 
 # Members
@@ -103,11 +103,23 @@ is the plain-manager escape hatch for explicit cross-tenant access.
 ## Family and Address
 
 `Family` (members/models.py) is a named grouping with an optional `parent`
-family (self FK) — it organises members *inside* a tenant and is **not** the
-isolation boundary; that is `tenants.Tenant`
-(see [Tenants](/apps/tenants.md)). `Address` holds postal fields and is shared
-by members through a nullable FK. Both have standard CRUD views plus HTMX modal
-variants (members/views/views_family.py, members/views/views_address.py).
+family (self FK). `Address` holds postal fields and is shared by members
+through a nullable FK. Both inherit `tenants.scoping.TenantModel`, so they
+carry a non-editable `tenant` FK, get a tenant-filtered `objects` manager and
+an `unscoped` escape hatch, and auto-assign the current tenant on save —
+the same isolation layer as every other content model
+(see [Tenants](/apps/tenants.md)). Migrations 0019/0020/0021 add the column,
+backfill it from the referencing members (duplicating rows several tenants
+shared) and make it non-nullable — three migrations because PostgreSQL blocks
+schema changes while the backfill's deferred FK triggers are pending. Both
+have standard CRUD views plus HTMX modal variants
+(members/views/views_family.py, members/views/views_address.py).
+
+Caveat when adding a form/view over them: a `QuerySet` or `ModelForm` FK
+field built at class-definition/import time captures the tenant *at import*
+(none), so it stays unscoped. Build it per request/instance instead
+(`get_queryset()`, or reset `field.queryset` in `__init__` — see
+`MemberFormMixin.initialize_fields` and `FamilyUpdateForm`).
 
 ## Managed members
 
@@ -117,6 +129,9 @@ account: the manager fills the profile, then activates it.
 - `CreateManagedMemberView` (members/views/views_member.py) creates the member;
   `do_init_member` (members/services/members.py) forces `is_active=False` and
   sets `member_manager` to the logged-in user.
+- `ManagedMembersView` + "Members I Manage" navbar entry (issue 545) lists the
+  members whose `member_manager` is the logged-in user, with an Activate
+  button for the inactive ones.
 - `activate_member` → `do_activate_member` (members/services/members.py)
   refuses dead, already-active or email-less members, otherwise sends the
   verification email (`verify_email.email_handler.send_verification_email`);
@@ -124,6 +139,12 @@ account: the manager fills the profile, then activates it.
   tenant admins activate immediately instead (`is_active=True`, manager
   cleared, no email); the edit page shows the Activate button to the manager,
   tenant admins and superusers for inactive members only.
+
+`manage.py fix_member_emails` (members/management/commands/) re-runs the
+migration 0018 data checks — duplicate case-insensitive emails across tenants,
+active members without email — and asks per record for the identity decision:
+enter an email, or deactivate the member and assign a manager. Re-run until it
+reports "Nothing to fix", then `migrate`.
 
 ## Invitations and registration links
 

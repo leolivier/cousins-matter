@@ -45,9 +45,9 @@
       {%else%}
         {%url 'polls:event_planner_detail' poll.id as detail_url%}
       {%endif%}
-      <a class="subtitle is-size-5" href="{{detail_url}}">{%icon "vote"%} {{ poll.title }}</a> 
-      <span class="ml-auto is-size-7">({%trans "Created at"%}:<span class="tag">{{ poll.created_at|date:"SHORT_DATE_FORMAT" }}</span> 
-        {%trans "Published at"%}: <span class="tag">{{ poll.pub_date|date:"SHORT_DATE_FORMAT" }}</span>, 
+      <a class="subtitle is-size-5" href="{{detail_url}}">{%icon "vote"%} {{ poll.title }}</a>
+      <span class="ml-auto is-size-7">({%trans "Created at"%}:<span class="tag">{{ poll.created_at|date:"SHORT_DATE_FORMAT" }}</span>
+        {%trans "Published at"%}: <span class="tag">{{ poll.pub_date|date:"SHORT_DATE_FORMAT" }}</span>,
         {%trans "Closed at"%}: <span class="tag">{{ poll.close_date|date:"SHORT_DATE_FORMAT" }}</span>)</span>
       <div class="is-grouped ml-auto">
         {%if tab == "polls"%}
@@ -66,7 +66,7 @@
           {%url 'polls:update_event_planner' poll.id as update_url%}
         {%endif%}
         <a class="button is-link is-responsive" aria-label="{%trans 'Update'%}"
-          href="{{update_url}}" 
+          href="{{update_url}}"
           title="{%trans 'Update'%}">
           {%icon "update-poll"%} <span class="is-hidden-mobile">{%trans "Update"%}</span>
         </a>

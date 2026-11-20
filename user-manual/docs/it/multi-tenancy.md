@@ -14,8 +14,7 @@ in `.env`:
 MULTI_TENANT_ENABLED=True
 ```
 
-Questo monta gli URL `/tenants/` (iscrizione di una famiglia + gestione) e mostra
-il collegamento "Create a new family" nella pagina di login. Se è disattivata,
+Questo monta gli URL `/tenants/` (iscrizione di una famiglia + gestione). Se è disattivata,
 tutto questo restituisce un 404.
 
 ## Concetti
@@ -34,8 +33,8 @@ della piattaforma).
 
 ## Creare una famiglia
 
-* **Self-service**: con la funzionalità attiva, la pagina di login propone
-  *"Create a new family"*. Chi la crea si iscrive con verifica dell'email e
+* **Self-service**: con la funzionalità attiva, andare su `/tenants/signup/` (non sulla
+  pagina di login) per richiedere una nuova famiglia. Chi la crea si iscrive con verifica dell'email e
   diventa l'admin della famiglia.
 * **Da parte di un admin della piattaforma**: `/tenants/create/` crea la famiglia e può inviare via email
   un invito (link vincolato al tenant) al suo primo admin.
@@ -46,16 +45,18 @@ Un identificatore di famiglia (slug) è derivato dal suo nome; gli slug riservat
 ## Accedere a una famiglia
 
 Tutti accedono dalla pagina di login standard — la famiglia viene risolta automaticamente
-dall'account connesso; non esiste un URL per famiglia. Un indirizzo email appartiene a
+dall'account connesso; la pagina di login è comune a tutte le famiglie. Un indirizzo email appartiene a
 una sola famiglia: per entrare in un'altra famiglia serve un altro indirizzo email.
 
-* **Chi crea la famiglia**: dopo essersi iscritto tramite *"Create a new family"*,
+* **Chi crea la famiglia**: dopo essersi iscritto su `/tenants/signup/`,
   l'account resta inattivo finché non si fa clic sul link dell'email di verifica;
   poi si accede normalmente e si è l'admin della famiglia.
 * **Gli altri membri**: oppure accettare l'invito inviato via email dall'admin della
-  famiglia (link vincolato al tenant → iscrizione → verifica dell'email), oppure
-  presentare una richiesta di adesione (modulo con captcha) che un admin della famiglia
-  deve approvare. In entrambi i casi, accedere poi dalla pagina di login standard.
+  famiglia (link vincolato al tenant → iscrizione → verifica dell'email), oppure andare
+  alla pagina iniziale della famiglia su `/<tenant>/` e fare clic su
+  *"Richiedi link di invito"* per presentare una richiesta di adesione (modulo con captcha)
+  che un admin della famiglia deve approvare. In entrambi i casi, accedere poi dalla
+  pagina di login standard.
 
 ## Impostazioni della famiglia
 

@@ -85,3 +85,11 @@ msgstr "Seite \"%(title)s\" gespeichert"
 #, python-format
 msgid "Page \"%(title)s\" deleted"
 msgstr "Seite \"%(title)s\" gelöscht"
+
+#: pages/templates/pages/page_form.html:22
+msgid "Page URLs must follow specific rules (for example they must start with <code>/publish/</code> or <code>/private/</code>)."
+msgstr "Die URLs von Seiten müssen bestimmten Regeln folgen (zum Beispiel müssen sie mit <code>/publish/</code> oder <code>/private/</code> beginnen)."
+
+#: pages/templates/pages/page_form.html:24
+msgid "See the documentation"
+msgstr "Dokumentation ansehen"

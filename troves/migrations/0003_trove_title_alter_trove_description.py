@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 from django.utils.html import strip_tags
+from django.utils.translation import gettext_lazy as _
 
 
 def set_title(apps, schema_editor):
@@ -29,7 +30,7 @@ class Migration(migrations.Migration):
       name="title",
       field=models.CharField(
         default="title",
-        verbose_name="Title of the treasure (this will appear in the list)",
+        verbose_name=_("Title of the treasure (this will appear in the list)"),
         max_length=100,
       ),
       preserve_default=False,
@@ -40,7 +41,7 @@ class Migration(migrations.Migration):
       field=models.TextField(
         blank=True,
         null=True,
-        verbose_name="Description of the treasure (this will appear in the details)",
+        verbose_name=_("Description of the treasure (this will appear in the details)"),
       ),
     ),
     migrations.RunPython(set_title),

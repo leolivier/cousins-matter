@@ -1,6 +1,11 @@
 .PHONY: build run cpmsg mkmsg up down clean ps logs stop up4run help h u4r test test-mt mig mkmig cover minify shell install-hooks
 .EXPORT_ALL_VARIABLES:
 ENVIRONMENT ?= development
+RUN = uv run
+PYTHON = $(RUN) python
+MANAGE = $(PYTHON) manage.py
+COVERAGE = $(RUN) coverage
+COMPOSE = docker compose
 
 help h:
 	@echo "Available targets:"
@@ -24,98 +29,104 @@ help h:
 	@echo "  cover [a=application] [co=coverage_options] [to=test_options]: run test(s) with coverage. Default is all applications. If an application is given, the coverage result is stored in .coverage.<application>."
 	@echo "  minify [a=application]: minify the css and js files of an application. Default is all applications."
 	@echo "  shell: Run a django shell in devt mode"
-	@echo "  check: Run ruff checks, pip-audit vuln scan and bandit security checks. Bandit results are stored in bandit.out"
+	@echo "  check: Run ruff checks, uv audit vuln scan and bandit security checks. Bandit results are stored in bandit.out"
 	@echo "  count: Count lines of code using cloc (which must be installed, eg via sudo apt-get install cloc)"
 
 build:
 	t=$(if $(t),$(t),local); \
-	docker build -t cousins-matter:$$t .
+	docker build --pull -t cousins-matter:$$t .
 
 run:
-	./manage.py runserver
+	$(MANAGE) runserver
 
 up:
-	ENVIRONMENT="docker-devt" docker compose up -d $(c)
+	ENVIRONMENT="docker-devt" $(COMPOSE) up -d $(c)
 
 up4run u4r:
-	ENVIRONMENT="docker-devt" docker compose up -d postgres redis qcluster
+	ENVIRONMENT="docker-devt" $(COMPOSE) up -d postgres redis qcluster
 
 down:
-	docker compose down $(c)
+	$(COMPOSE) down $(c)
 
 clean:
-	docker compose down --volumes
+	$(COMPOSE) down --volumes
 
 ps:
-	docker compose ps $(c)
+	$(COMPOSE) ps $(c)
 
 logs:
-	docker compose logs $(c)
+	$(COMPOSE) logs $(c)
 
 stop:
-	docker compose stop $(c)
+	$(COMPOSE) stop $(c)
 
 cpmsg:
-	cd "$(a)" && ../manage.py compilemessages
+	cd "$(a)" && $(RUN) ../manage.py compilemessages
 
 mkmsg:
-	cd "$(a)" && ../manage.py makemessages -a
+	cd "$(a)" && $(RUN) ../manage.py makemessages -a
 
 test:
-	ENVIRONMENT="test" ./manage.py test --exclude-tag=ui $(t) $(o)
+	ENVIRONMENT="test" $(MANAGE) test --exclude-tag=ui $(t) $(o)
 
 # CI runs the suite with MULTI_TENANT_ENABLED=True: feature-gated modules
 # (e.g. tenants/tests/tests_feature_on.py) only execute in that mode.
 test-mt:
-	MULTI_TENANT_ENABLED="True" ENVIRONMENT="test" ./manage.py test --exclude-tag=ui $(t) $(o)
+	MULTI_TENANT_ENABLED="True" ENVIRONMENT="test" $(MANAGE) test --exclude-tag=ui $(t) $(o)
 
 check-docs:
-	ENVIRONMENT="test" ./manage.py check_okf docs
+	ENVIRONMENT="test" $(MANAGE) check_okf docs
 
 test-ui:
-	ENVIRONMENT="test" ./manage.py test --tag=ui $(t) $(o)
-
-EXCLUDE_COVER = 'core/tasks_schedules.py,scripts/*,config/*,core/settings.py,manage.py,cousinsmatter/asgi.py,cousinsmatter/wsgi.py,core/htmlvalidator.py,*/views_test.py,*/migrations/*,*/tests/*'
+	ENVIRONMENT="test" $(MANAGE) test --tag=ui $(t) $(o)
 
 cover:
-	if [ -z "$(a)" ]; then \
-	  df=.coverage; \
-		ENVIRONMENT="test" coverage run --source="." $(co) ./manage.py test $(to); \
-	else \
-	  df=.coverage.$(a); \
-		ENVIRONMENT="test" coverage run --source="$(a)" --data-file=$(df) $(co) ./manage.py test $(to); \
-	fi; \
-	coverage report --sort=cover --skip-covered -m --fail-under=80 --omit="$(EXCLUDE_COVER)" --data-file=$(df)
+	source="$${a:-.}"; \
+	df=".coverage$${a:+.$$a}"; \
+	ENVIRONMENT="test" $(COVERAGE) run --source="$$source" --data-file="$$df" $(co) $(MANAGE) test $${a:+"$$a"} $(to); \
+	$(COVERAGE) report --data-file="$$df"
 
-dtest: build
-	docker compose down cousins-matter qcluster
-	ENVIRONMENT="docker-test" docker compose up -d
-	docker exec -it cousins-matter python manage.py test $(t) $(o)
+DOCKER_INSTALL_TEST = docker build --pull -t cousins-matter:local .; \
+	$(COMPOSE) down cousins-matter qcluster; \
+    ENVIRONMENT="docker-test" $(COMPOSE) -f docker-compose.yml -f docker-compose.ci.yml up -d; \
+    docker exec -u root cousins-matter pip install uv; \
+    docker exec -u root cousins-matter uv sync --dev;
+
+DOCKER_RUN_TEST = docker exec -it cousins-matter python manage.py test
+
+dtest:
+	$(DOCKER_INSTALL_TEST)
+	$(DOCKER_RUN_TEST) $(t) $(o)
+
+dtest-ui:
+	$(DOCKER_INSTALL_TEST)
+	docker exec -u root cousins-matter apt-get update
+	docker exec -u root cousins-matter python -m playwright install-deps chromium
+	docker exec cousins-matter python -m playwright install chromium
+	$(DOCKER_RUN_TEST) --tag=ui $(t) $(o)
 
 mig:
-	ENVIRONMENT="development" ./manage.py migrate
+	$(MANAGE) migrate
 
 mkmig:
-	ENVIRONMENT="development" ./manage.py makemigrations
+	$(MANAGE) makemigrations
 
 minify:
 	app="$(a)"; \
 	if [ -z "$$app" ]; then app="."; fi; \
-	css-html-js-minify $$app
+	$(PYTHON) scripts/dev/minify.py $$app
 
 check:
-	ruff format -q .
-	ruff check . --fix
-	mypy ./ --ignore-missing-imports --exclude migrations/* --exclude '.venv/*'
-	bandit -r . -c pyproject.toml -f txt -o bandit.out
-	pip-audit .
-	ENVIRONMENT="test" ./manage.py check_okf docs
+	$(RUN) pre-commit run --all-files
+	$(RUN) mypy .
+	uv audit
+	ENVIRONMENT="test" $(MANAGE) check_okf docs
 
 install-hooks:
-	pre-commit install
+	$(RUN) pre-commit install
 
 shell:
-	./manage.py shell
+	$(MANAGE) shell
 
 count:
 	if [ ! command -v cloc >/dev/null 2>&1 ]; then echo "cloc is not installed"; exit 1; fi

@@ -7,6 +7,7 @@ from contextlib import contextmanager
 from datetime import datetime
 from io import BytesIO
 from PIL import Image, ImageOps, ImageFile
+import nh3
 
 # import pprint
 import sys
@@ -19,6 +20,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.files.storage import FileSystemStorage, default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
+from django.db.models.fields.files import FieldFile
 from django.forms import ValidationError
 from django.shortcuts import render
 from django.urls import reverse
@@ -334,7 +336,7 @@ def is_video_file(name: str) -> bool:
   return ext.lower() in VIDEO_EXTENSIONS
 
 
-def create_video_thumbnail(video_field: models.FileField, size: int) -> InMemoryUploadedFile:
+def create_video_thumbnail(video_field: FieldFile, size: int) -> InMemoryUploadedFile:
   """
   Extracts the first frame from a video file and returns it as a WEBP thumbnail.
 
@@ -345,7 +347,8 @@ def create_video_thumbnail(video_field: models.FileField, size: int) -> InMemory
   import av
   from tempfile import NamedTemporaryFile
 
-  filename = os.path.basename(video_field.name)
+  name = video_field.name or ""
+  filename = os.path.basename(name)
   file_stem, file_extension = os.path.splitext(filename)
   file_extension = file_extension.lower()
   if file_extension not in VIDEO_EXTENSIONS:
@@ -355,7 +358,7 @@ def create_video_thumbnail(video_field: models.FileField, size: int) -> InMemory
   with NamedTemporaryFile(suffix=file_extension, delete=False) as tmp:
     tmp_path = tmp.name
     if video_field.file.closed:
-      video_field.file = default_storage.open(video_field.name, "rb")
+      video_field.file = default_storage.open(name, "rb")
     tmp.write(video_field.file.read())
 
   try:
@@ -379,7 +382,7 @@ def create_video_thumbnail(video_field: models.FileField, size: int) -> InMemory
     os.unlink(tmp_path)
 
 
-def create_thumbnail(image: models.FileField, size: int) -> InMemoryUploadedFile:
+def create_thumbnail(image: FieldFile, size: int) -> InMemoryUploadedFile | FieldFile:
   """
   Creates a thumbnail for an image file.
 
@@ -392,11 +395,12 @@ def create_thumbnail(image: models.FileField, size: int) -> InMemoryUploadedFile
       than this, it is resized.
   :return: An InMemoryUploadedFile representing the thumbnail.
   """
-  if not image.storage.exists(image.name):
-    logger.warning(f"create_thumbnail: file '{image.name}' not found in storage, skipping thumbnail generation")
+  name = image.name or ""
+  if not image.storage.exists(name):
+    logger.warning(f"create_thumbnail: file '{name}' not found in storage, skipping thumbnail generation")
     return image
   if image.file.closed:
-    image.file = default_storage.open(image.name, "rb")
+    image.file = default_storage.open(name, "rb")
   with Image.open(image.file) as imgf:
     img_width, img_height = imgf.size
     if img_height <= size or img_width <= size:
@@ -407,11 +411,11 @@ def create_thumbnail(image: models.FileField, size: int) -> InMemoryUploadedFile
     # use WEBP format for thumbnails instead of JPEG to avoid loss of transparency
     img.save(output_thumb, format="WEBP", quality=90)
     output_thumb.seek(0)
-    filename = image.name.split("/")[-1]
+    filename = name.split("/")[-1]
     file_stem, _ = os.path.splitext(filename)
     thumb_size = sys.getsizeof(output_thumb)
     thumbnail = InMemoryUploadedFile(output_thumb, "ImageField", f"{file_stem}.webp", "image/webp", thumb_size, None)
-    logger.debug(f"Resized and saved thumbnail for {image.name}, size={thumb_size}")
+    logger.debug(f"Resized and saved thumbnail for {name}, size={thumb_size}")
     return thumbnail
 
 
@@ -432,6 +436,74 @@ def check_edit_permission(request, owner):
   if request.user.is_superuser or request.user.is_tenant_admin or owner.id == request.user.id:
     return True
   raise PermissionDenied(_("You do not have permission to edit/delete this object."))
+
+
+# Tags/attributes accepted from rich-text (summernote) content; everything else,
+# in particular scripts, event handlers (on*) and javascript: URLs, is stripped.
+_RICH_HTML_TAGS = {
+  "a",
+  "b",
+  "blockquote",
+  "br",
+  "caption",
+  "code",
+  "col",
+  "colgroup",
+  "div",
+  "em",
+  "figure",
+  "figcaption",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "hr",
+  "i",
+  "img",
+  "li",
+  "ol",
+  "p",
+  "pre",
+  "s",
+  "small",
+  "span",
+  "strike",
+  "strong",
+  "sub",
+  "sup",
+  "table",
+  "tbody",
+  "td",
+  "tfoot",
+  "th",
+  "thead",
+  "tr",
+  "u",
+  "ul",
+}
+
+
+def sanitize_rich_html(html: str) -> str:
+  """
+  Sanitize rich-text HTML produced by summernote (or pasted by users).
+
+  Use at render time for fields whose templates render with autoescape off; it
+  also cleans up data saved before sanitizing was introduced.
+  """
+
+  return nh3.clean(
+    html,
+    tags=_RICH_HTML_TAGS,
+    attributes={
+      "a": {"href", "title"},
+      "img": {"src", "alt", "width", "height"},
+      "*": {"class"},
+    },
+    url_schemes={"http", "https", "mailto"},
+    link_rel="noopener noreferrer",
+  )
 
 
 def _fs_rmtree(storage, prefix):

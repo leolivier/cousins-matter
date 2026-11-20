@@ -1,8 +1,10 @@
-# Creates a multiplatform image of cousins matter and push it to ghcr.io for each new release
+# Builds a multiplatform image of cousins matter: pushed to ghcr.io for each PR
+# (pr-<number> tag) and each new release, never for plain branch pushes.
 name: Image Build & Push
 
 on:
-  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
     paths-ignore:
       - 'user-manual/**'
       - '**/*.md'
@@ -23,12 +25,13 @@ jobs:
   # Job 1 – Lint, build test image and prepare shared artefacts
   # ──────────────────────────────────────────────────────────────────────────────
   lint-and-build:
-    if: github.event_name == 'release' || github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
+    # Fork PRs cannot push the vendored-assets commit nor write the registry cache.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     uses: ./.github/workflows/reusable-lint-and-build.yml
     with:
       registry: 'ghcr.io'
       image_name: ${{ github.repository }}
-      tags_def: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'push' && 'type=ref,event=branch' || 'type=sha' }}
+      tags_def: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'pull_request' && 'type=ref,event=pr' || 'type=sha' }}
       test_tag: 'test-${{ github.sha }}'
     secrets: inherit
 
@@ -48,6 +51,49 @@ jobs:
     if: ${{ github.actor != 'dependabot[bot]' }}
     uses: ./.github/workflows/reusable-test-install.yml
     secrets: inherit
+
+  # ──────────────────────────────────────────────────────────────────────────────
+  # Job 3b – Upgrade a v2 database to v3 (runs in parallel with jobs 2, 3, 4, 5 & 6)
+  # ──────────────────────────────────────────────────────────────────────────────
+  test-upgrade-v2:
+    needs: lint-and-build
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      V2_TAG: "2.6.1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Load test Docker image
+        uses: ./.github/actions/load-docker-image
+
+      - name: Write .env
+        uses: ./.github/actions/write-test-env
+        with:
+          test_image_ref: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
+
+      - name: Prepare .env (generate secrets)
+        run: python ./scripts/manage_cousins_matter.py install -e -n -d "$GITHUB_WORKSPACE"
+
+      - name: Test v2 -> v3 upgrade
+        env:
+          COUSINS_MATTER_IMAGE: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
+          V2_IMAGE: ghcr.io/${{ github.repository }}:${{ env.V2_TAG }}
+          ENVIRONMENT: docker-test
+        run: |
+          docker compose down -v
+          docker volume prune -f
+          ./scripts/tests/test_upgrade_v2_v3.sh -g
+
+      - name: Show docker-compose services logs on failure
+        if: failure()
+        uses: ./.github/actions/show-logs-on-failure
+        with:
+          env_file_path: ${{ github.workspace }}/.env
+          containers: cousins-matter.db cousins-matter cousins-matter.qcluster
 
   # ──────────────────────────────────────────────────────────────────────────────
   # Job 4 – Test S3 backend (runs in parallel with jobs 2, 3, 5 & 6)
@@ -86,15 +132,15 @@ jobs:
   # Job 7 – Final multiplatform build & push (waits for jobs 2, 3, 4, 5 & 6)
   # ──────────────────────────────────────────────────────────────────────────────
   build-and-push:
-    needs: [test-docker-image, test-install-migrate, test-s3, test-multi-tenant, test-ui]
+    needs: [test-docker-image, test-install-migrate, test-upgrade-v2, test-s3, test-multi-tenant, test-ui]
     if: ${{ github.actor != 'dependabot[bot]' }}
     uses: ./.github/workflows/reusable-build-and-push.yml
     with:
       registry: 'ghcr.io'
       image_name: ${{ github.repository }}
       platforms: 'linux/amd64,linux/arm64'
-      push: ${{ github.event_name == 'release' || github.event_name == 'push' }}
-      tags_def: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'push' && 'type=ref,event=branch' || 'type=sha' }}
+      push: ${{ github.event_name == 'release' || github.event_name == 'pull_request' }}
+      tags_def: ${{ github.event_name == 'release' && 'type=semver,pattern={{version}}' || github.event_name == 'pull_request' && 'type=ref,event=pr' || 'type=sha' }}
     secrets: inherit
 
   # ──────────────────────────────────────────────────────────────────────────────

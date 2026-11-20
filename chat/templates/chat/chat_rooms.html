@@ -4,7 +4,7 @@
 {%if private%}
 	{% title _("Private Chat Rooms") %}
 {%else%}
-	{% title _("Chat Rooms") %} 
+	{% title _("Chat Rooms") %}
 {%endif%}
 {% endblock %}
 {% block content %}
@@ -65,10 +65,10 @@
 		{% with admin=room.admins.first owner=room.first_message_author %}
 		<div class="panel-block is-flex is-flex-wrap-wrap is-align-items-flex-start">
 			<div class="panel-icon mini-avatar is-flex is-align-items-center is-justify-content-center is-flex-shrink-5 image">
-				<img class="is-rounded" 
+				<img class="is-rounded"
 				{%if private%}
 					src="{{admin.avatar_mini_url}}"
-					alt="{{admin.username}}" 
+					alt="{{admin.username}}"
 				{%else%}
 					src="{{owner.avatar_mini_url|default:settings.DEFAULT_AVATAR_URL}}"
 					alt="{{owner.username|default:nobody}}"
@@ -99,7 +99,7 @@
 			{%endif%}
 			</div>
 			<div class="is-flex-grow-1">
-				<a class="title is-size-6" href="{{room_url}}">{{room.name}}</a> 
+				<a class="title is-size-6" href="{{room_url}}">{{room.name}}</a>
 			</div>
 		{%if private%}
 			<div class="mr-1 buttons has-addons is-rounded">

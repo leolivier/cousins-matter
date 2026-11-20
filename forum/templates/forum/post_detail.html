@@ -85,7 +85,7 @@
 		</div>
 	</div>
 	<div class="container has-background-primary-light p-2">
-		{% autoescape off %}{{message.content}}{%endautoescape%}
+		{% autoescape off %}{{message.content|sanitize}}{%endautoescape%}
 	</div>
 </div>
 {%include "forum/comment_list.html" with message=message%}
@@ -127,7 +127,7 @@
 				<div class="level-item">
 					<div class="block">
 						<div class="has-background-primary-light p-2">
-							{% autoescape off %}{{reply.content}}{%endautoescape%}
+							{% autoescape off %}{{reply.content|sanitize}}{%endautoescape%}
 						</div>
 						<p class="content is-small">
 							{{reply.created}},

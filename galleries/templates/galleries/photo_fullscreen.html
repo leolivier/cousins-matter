@@ -36,6 +36,9 @@
 			<img src="{{fullscreen_url}}">
 			{% endif %}
 		</div>
+		{% if photo_name %}
+		<p id="fullscreen-caption">{{photo_name}}</p>
+		{% endif %}
 		{%endif%}
 		{%endpartialdef%}
 	</div>

@@ -85,3 +85,11 @@ msgstr "página '%(title)s' salva"
 #, python-format
 msgid "Page \"%(title)s\" deleted"
 msgstr "página '%(title)s' excluída"
+
+#: pages/templates/pages/page_form.html:22
+msgid "Page URLs must follow specific rules (for example they must start with <code>/publish/</code> or <code>/private/</code>)."
+msgstr "Os URLs das páginas devem seguir regras específicas (por exemplo, devem começar por <code>/publish/</code> ou <code>/private/</code>)."
+
+#: pages/templates/pages/page_form.html:24
+msgid "See the documentation"
+msgstr "Ver a documentação"

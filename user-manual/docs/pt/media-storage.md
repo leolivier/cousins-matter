@@ -1,6 +1,6 @@
 # Armazenamento dos média
 
-## AVISOS 
+## AVISOS
 
 * __Esta é atualmente uma funcionalidade <span class="blinking-text"><u>BETA</u></span>!__
 * __Estas configurações são mais complexas e estão <u>reservadas aos utilizadores avançados</u>.__

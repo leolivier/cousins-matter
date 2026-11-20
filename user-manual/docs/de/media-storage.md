@@ -1,6 +1,6 @@
 # Medienspeicher
 
-## WARNUNGEN 
+## WARNUNGEN
 
 * __Dies ist derzeit eine <span class="blinking-text"><u>BETA</u></span>-Funktion!__
 * __Diese Einstellungen sind komplexer und <u>fortgeschrittenen Benutzern vorbehalten</u>.__

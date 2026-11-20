@@ -1,2 +1,3 @@
 # graphify: JS vendor libs (external, not project code)
 core/static/core/vendor/
+graphify-out/

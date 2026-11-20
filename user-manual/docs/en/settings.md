@@ -6,16 +6,16 @@ The settings of Cousins Matter can be managed using a `.env` file in the main di
 
 If you have used the manage_cousins_matter.py script to install Cousins Matter as described in [Installation](installation.md), an example .env file has been downloaded for you automatically and the SECRET_KEY and the POSTGRES_PASSWORD have been generated automatically (**don't overwrite them!**).
 
-If you are working from source, copy the `.env.example` file to `.env` 
+If you are working from source, copy the `.env.example` file to `.env`
 
 In both cases, you now need to edit `.env` to set the properties according to your context as described below.
 
-There are many settings available to customize the technical part of your site... 
+There are many settings available to customize the technical part of your site...
 
 Also, don't forget to check out [Customization](customizing.md) to customize the look and feel of your site.
 
-**WARNING**: If the container is already running, the update of the settings in .env won't be taken into account until you restart it. 
-To do that, just run the following command (in the site directory): 
+**WARNING**: If the container is already running, the update of the settings in .env won't be taken into account until you restart it.
+To do that, just run the following command (in the site directory):
 ```
 docker compose restart
 ```
@@ -174,15 +174,15 @@ See [OAuth Authentication](oauth-authentication.md) for detailed configuration i
 
 	`ALLOWED_HOSTS=127.0.0.1,localhost,my.cousins-matter.com,165.157.221.171`
 
-* `CORS_ALLOWED_ORIGINS`: Comma-separated list of hosts. Default is empty. 
+* `CORS_ALLOWED_ORIGINS`: Comma-separated list of hosts. Default is empty.
 
 	__WARNING!__ If your log shows errors such as
 
 	`Forbidden (Origin checking failed - https://my.cousins-matter.com/ does not match any trusted origins.): /members/login/`
 
-	you should set `CORS_ALLOWED_ORIGINS=<your full domain>` (e.g. https://my.cousins-matter.com) in the `.env` file, 
+	you should set `CORS_ALLOWED_ORIGINS=<your full domain>` (e.g. https://my.cousins-matter.com) in the `.env` file,
 
-	__Don't use the Python syntax shown in the error!__. 
+	__Don't use the Python syntax shown in the error!__.
 
 	If you have multiple hosts, list them separated by commas, e.g.
 

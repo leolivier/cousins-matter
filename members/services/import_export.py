@@ -2,6 +2,7 @@ import csv
 import io
 import logging
 import uuid
+from typing import cast
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.translation import gettext_lazy as _, get_language
@@ -22,7 +23,8 @@ logger = logging.getLogger(__name__)
 
 
 def t(field: str) -> str:
-  return ALL_FIELD_NAMES[field]
+  # ALL_FIELD_NAMES values are lazy translation proxies used as plain strings
+  return cast(str, ALL_FIELD_NAMES[field])
 
 
 def check_fields(fieldnames: list[str]):
@@ -32,11 +34,11 @@ def check_fields(fieldnames: list[str]):
         _('Unknown column in CSV file: "%(fieldname)s". Valid fields are %(all_names)s')
         % {"fieldname": fieldname, "all_names": ", ".join([str(s) for s in ALL_FIELD_NAMES.values()])}
       )
-  for fieldname in MANDATORY_MEMBER_FIELD_NAMES.values():
-    if fieldname not in fieldnames:
+  for mandatory_field in MANDATORY_MEMBER_FIELD_NAMES.values():
+    if mandatory_field not in fieldnames:
       raise ValidationError(
         _('Missing column in CSV file: "%(fieldname)s". Mandatory fields are %(all_names)s')
-        % {"fieldname": fieldname, "all_names": ", ".join([str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()])}
+        % {"fieldname": mandatory_field, "all_names": ", ".join([str(s) for s in MANDATORY_MEMBER_FIELD_NAMES.values()])}
       )
 
   return True

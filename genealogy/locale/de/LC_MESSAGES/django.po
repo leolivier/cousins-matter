@@ -376,7 +376,7 @@ msgstr "GEDCOM erfolgreich importiert."
 
 #: tests/tests_views_gedcom.py:57
 msgid "This field is required."
-msgstr ""
+msgstr "Dieses Feld muss ausgefüllt werden."
 
 #: tests/tests_views_gedcom.py:72 views/views_gedcom.py:25
 #, python-format

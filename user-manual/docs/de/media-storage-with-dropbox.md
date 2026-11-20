@@ -17,7 +17,7 @@ Dies ist sehr einfach, hat aber einige Nachteile, insbesondere im Bereich der Si
 
 Cousins Matter unterstützt auch eine Reihe anderer Medienspeicher mithilfe des Pakets 'django-storages'. Um einen solchen Speicher einzurichten, müssen Sie nur zwei neue Variablen in Ihrer .env-Datei definieren: MEDIA_STORAGE und MEDIA_STORAGE_OPTIONS.
 
-Die von django-storages zum Zeitpunkt der Erstellung dieser Seite unterstützten Medienspeicher sind: 
+Die von django-storages zum Zeitpunkt der Erstellung dieser Seite unterstützten Medienspeicher sind:
 
 * Amazon S3
 * Apache Libcloud

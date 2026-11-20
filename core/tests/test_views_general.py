@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.db.utils import DatabaseError
 from unittest.mock import patch
@@ -119,3 +119,16 @@ class QHealthCheckTestCase(TestCase):
     mock_result.return_value = None
     response = self.client.get(reverse("qhealth"))
     self.assertEqual(response.status_code, 503)
+
+
+class TestJsCatalogMinLength(MemberTestCase):
+  """The JS gettext catalogs ship the search min-length hint used by core.js."""
+
+  @override_settings(LANGUAGE_CODE="fr")
+  def test_min_length_message_translated(self):
+    # the URL token is a cache buster only; the catalog follows the active language
+    response = self.client.get("/jsi18n/core/fr")
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, "Saisissez au moins")
+    # the JS catalog escapes non-ASCII as è
+    self.assertContains(response, " caract\\u00e8res")

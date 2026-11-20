@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cousins Matter 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 20:27+0200\n"
+"POT-Creation-Date: 2026-11-19 12:04+0100\n"
 "PO-Revision-Date: 2025-04-06 13:04+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: German <LL@li.org>\n"
@@ -96,7 +96,8 @@ msgstr "Du kannst hier ein Dokument anhängen, wenn nötig"
 
 #: middleware.py:50
 msgid "You must accept the privacy policy to use this site."
-msgstr "Du musst die Datenschutzerklärung akzeptieren, um diese Seite zu nutzen."
+msgstr ""
+"Du musst die Datenschutzerklärung akzeptieren, um diese Seite zu nutzen."
 
 #: services.py:82
 msgid "Site"
@@ -200,7 +201,7 @@ msgstr "Diese Website wird verwaltet von"
 
 #: services.py:148
 msgid "(no admin yet)"
-msgstr ""
+msgstr "(noch kein Administrator)"
 
 #: services.py:149
 msgid "Administrator email"
@@ -223,169 +224,152 @@ msgstr "Aber dein Mail-Tool ist zu alt, um es anzuzeigen :'("
 msgid "This file type is not supported"
 msgstr "Dieser Dateityp wird nicht unterstützt"
 
-#: services.py:219 services.py:232 services.py:236 tests/test_env_check.py:83
-#: tests/test_env_check.py:107
-msgid "Database"
-msgstr ""
-
-#: services.py:220 services.py:233 services.py:237 tests/test_env_check.py:84
-#: tests/test_env_check.py:137
-msgid "Redis"
-msgstr ""
-
 #: services.py:220
 msgid "Not checked (database unreachable)"
-msgstr ""
-
-#: services.py:232 services.py:236
-msgid "SELECT 1 succeeded"
-msgstr ""
-
-#: services.py:237
-msgid "PING succeeded"
-msgstr ""
+msgstr "Nicht geprüft (Datenbank nicht erreichbar)"
 
 #: services.py:245 services.py:247 services.py:253 services.py:254
 #: services.py:255 services.py:377 tests/test_env_check.py:85
 #: tests/test_env_check.py:104 tests/test_env_check.py:140
 msgid "Django-Q2 task queue"
-msgstr ""
+msgstr "Django-Q2-Aufgabenwarteschlange"
 
 #: services.py:245
 msgid "Skipped: Redis is unreachable"
-msgstr ""
+msgstr "Übersprungen: Redis ist nicht erreichbar"
 
 #: services.py:247
 msgid "Skipped: Database is unreachable"
-msgstr ""
+msgstr "Übersprungen: Die Datenbank ist nicht erreichbar"
 
 #: services.py:253
 msgid "Task roundtrip succeeded (sync mode: executed in-process)"
-msgstr ""
+msgstr "Aufgaben-Roundtrip erfolgreich (Synchronmodus: im Prozess ausgeführt)"
 
 #: services.py:254
 msgid "Task roundtrip through the worker succeeded"
-msgstr ""
+msgstr "Aufgaben-Roundtrip über den Worker erfolgreich"
 
 #: services.py:255
 msgid "No task result within 1s: is the qcluster worker running?"
-msgstr ""
+msgstr "Kein Aufgabenergebnis innerhalb von 1 s: Läuft der qcluster-Worker?"
 
 #: services.py:264 services.py:268 services.py:269 services.py:378
 #: tests/test_env_check.py:86
 msgid "Migrations"
-msgstr ""
+msgstr "Migrationen"
 
 #: services.py:264 services.py:267
 msgid "Unapplied migrations"
-msgstr ""
+msgstr "Nicht angewendete Migrationen"
 
 #: services.py:269
 msgid "All migrations applied"
-msgstr ""
+msgstr "Alle Migrationen angewendet"
 
 #: services.py:278 services.py:281 services.py:282 services.py:379
 #: tests/test_env_check.py:87
 msgid "Deployment checks"
-msgstr ""
+msgstr "Bereitstellungsprüfungen"
 
 #: services.py:282
 msgid "No deployment issue found"
-msgstr ""
+msgstr "Keine Bereitstellungsprobleme gefunden"
 
 #: services.py:296 services.py:297 services.py:380 tests/test_env_check.py:88
 msgid "Media storage"
-msgstr ""
+msgstr "Medienspeicher"
 
 #: services.py:296
 #, python-format
 msgid "Read-back mismatch on %(backend)s"
-msgstr ""
+msgstr "Rückleseprüfung fehlgeschlagen auf %(backend)s"
 
 #: services.py:297
 #, python-format
 msgid "Write/read/delete roundtrip succeeded on %(backend)s"
-msgstr ""
+msgstr "Roundtrip Schreiben/Lesen/Löschen erfolgreich auf %(backend)s"
 
 #: services.py:310 services.py:318 services.py:320 services.py:381
 #: tests/test_env_check.py:89 tests/test_env_check.py:122
 msgid "Chat (Channels)"
-msgstr ""
+msgstr "Chat (Channels)"
 
 #: services.py:310
 msgid "No channel layer configured"
-msgstr ""
+msgstr "Kein Channel-Layer konfiguriert"
 
 #: services.py:318
 msgid "No message echoed back within 5s"
-msgstr ""
+msgstr "Keine Nachricht innerhalb von 5 s zurückerhalten"
 
 #: services.py:320
 #, python-format
 msgid "Roundtrip succeeded on channel layer %(layer)s"
-msgstr ""
+msgstr "Roundtrip auf Channel-Layer %(layer)s erfolgreich"
 
 #: services.py:329 services.py:335 services.py:345 services.py:353
 #: services.py:382 tests/test_env_check.py:90
 msgid "Multi-tenancy"
-msgstr ""
+msgstr "Multi-Familien"
 
 #: services.py:329
 msgid "Multi-tenancy is disabled"
-msgstr ""
+msgstr "Multi-Familien ist deaktiviert"
 
 #: services.py:337
 #, python-format
 msgid "Missing tenant with slug '%(slug)s' (DEFAULT_TENANT_SLUG)"
-msgstr ""
+msgstr "Mandant mit Slug '%(slug)s' fehlt (DEFAULT_TENANT_SLUG)"
 
 #: services.py:347
 #, python-format
 msgid "Missing tenant with slug '%(slug)s' (SYSTEM_TENANT_SLUG)"
-msgstr ""
+msgstr "Mandant mit Slug '%(slug)s' fehlt (SYSTEM_TENANT_SLUG)"
 
 #: services.py:355
 #, python-format
 msgid "%(count)d tenant(s), current: %(current)s"
-msgstr ""
+msgstr "%(count)d Mandant(en), aktuell: %(current)s"
 
 #: services.py:356
 msgid "none"
-msgstr ""
+msgstr "keine"
 
 #: services.py:364 services.py:365 services.py:383 tests/test_env_check.py:91
 #: tests/test_env_check.py:113
 msgid "Email"
-msgstr ""
+msgstr "E-Mail"
 
 #: services.py:364
 #, python-format
 msgid "Development backend %(backend)s: no real email is sent"
-msgstr ""
+msgstr "Entwicklungs-Backend %(backend)s: Es wird keine echte E-Mail gesendet"
 
 #: services.py:376
 msgid "Database & Redis"
-msgstr ""
+msgstr "Datenbank & Redis"
 
 #: services.py:398
 #, python-format
 msgid "User %(username)s has no email address"
-msgstr ""
+msgstr "Benutzer %(username)s hat keine E-Mail-Adresse"
 
 #: services.py:401
 msgid "Cousins Matter - environment check"
-msgstr ""
+msgstr "Cousins Matter - Umgebungsprüfung"
 
 #: services.py:402
 msgid ""
 "Congratulations! Your email backend works. This test email was sent from the "
 "environment check page."
-msgstr ""
+msgstr "Herzlichen Glückwunsch! Dein E-Mail-Backend funktioniert. Diese "
+"Test-E-Mail wurde über die Seite zur Umgebungsprüfung gesendet."
 
 #: services.py:410
 #, python-format
 msgid "Test email sent to %s"
-msgstr ""
+msgstr "Test-E-Mail gesendet an %s"
 
 #: tasks.py:55
 msgid "Unknown"
@@ -402,6 +386,18 @@ msgstr ""
 msgid "You have %(count)s new notifications."
 msgstr "Du hast %(count)s neue Benachrichtigungen."
 
+#: templates/404.html:3 templates/404.html:9
+msgid "Page not found"
+msgstr "Seite nicht gefunden"
+
+#: templates/404.html:10
+msgid "The page you requested does not exist or has been moved."
+msgstr "Die angeforderte Seite existiert nicht oder wurde verschoben."
+
+#: templates/404.html:11 templates/core/base.html:10
+msgid "Home"
+msgstr "Heim"
+
 #: templates/core/about/site-stats.html:3
 #: templates/core/about/site-stats.html:6
 msgid "Site Statistics"
@@ -410,10 +406,6 @@ msgstr "Website-Statistiken"
 #: templates/core/about/site-stats.html:7
 msgid "This page displays some statistics about this site:"
 msgstr "Diese Seite zeigt einige Statistiken über diese Website an:"
-
-#: templates/core/base.html:10
-msgid "Home"
-msgstr "Heim"
 
 #: templates/core/base.html:80
 msgid "This site proudly built using"
@@ -545,33 +537,35 @@ msgstr "Du kannst direkt auf diese E-Mail antworten, um ihn zu beantworten."
 #: templates/core/env_check.html:3 templates/core/env_check.html:6
 #: templates/core/navbar.html:129
 msgid "Environment check"
-msgstr ""
+msgstr "Umgebungsprüfung"
 
 #: templates/core/env_check.html:7
 msgid ""
 "Diagnostics of this deployment: database, Redis, task queue, migrations, "
 "media storage, chat, tenants and email."
-msgstr ""
+msgstr "Diagnose dieser Bereitstellung: Datenbank, Redis, "
+"Aufgabenwarteschlange, Migrationen, Medienspeicher, Chat, Mandanten und "
+"E-Mail."
 
 #: templates/core/env_check.html:14
 msgid "Send a test email to myself"
-msgstr ""
+msgstr "Test-E-Mail an mich senden"
 
 #: templates/core/env_check.html:22
 msgid "Check"
-msgstr ""
+msgstr "Prüfung"
 
 #: templates/core/env_check.html:23
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: templates/core/env_check.html:24
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: templates/core/env_check.html:39
 msgid "Show output"
-msgstr ""
+msgstr "Ausgabe anzeigen"
 
 #: templates/core/followers/email-followers-on-change.html:20
 #: tests/tests_followers.py:111
@@ -621,17 +615,13 @@ msgstr ""
 "<a href=\"%(notification.url)s\">'%(notification.followed_object_name)s'</a>:"
 
 #: templates/core/followers/email-notification-summary.html:30
-#, fuzzy, python-format
-#| msgid ""
-#| "%(notification.author_name)s added the following "
-#| "%(notification.obj_type)s on %(notification.followed_type)s <a "
-#| "href=\"%(notification.url)s\">'%(notification.followed_object_name)s'</a>:"
+#, python-format
 msgid ""
 "%(notification.author_name)s added the following %(notification.obj_type)s "
 "on %(notification.followed_type)s <a "
 "href=\"%(notification.url)s\">'%(notification.followed_object_name)s'</a>:"
 msgstr ""
-"%(notification.author_name)s hat den folgenden "
+"%(notification.author_name)s hat den folgenden %(notification.obj_type)s auf "
 "%(notification.followed_type)s <a "
 "href=\"%(notification.url)s\">'%(notification.followed_object_name)s'</a>:"
 
@@ -732,11 +722,11 @@ msgstr "Importiere Mitglieder aus CSV"
 
 #: templates/core/navbar.html:119
 msgid "Manage families"
-msgstr ""
+msgstr "Familien verwalten"
 
 #: templates/core/navbar.html:123
 msgid "Family settings"
-msgstr ""
+msgstr "Familieneinstellungen"
 
 #: templates/core/navbar.html:127
 msgid "Admin site"
@@ -751,10 +741,14 @@ msgid "About the site"
 msgstr "Über den Site"
 
 #: templates/core/navbar.html:163
+msgid "Members I Manage"
+msgstr "Von mir verwaltete Mitglieder"
+
+#: templates/core/navbar.html:165
 msgid "Profile"
 msgstr "Profil"
 
-#: templates/core/navbar.html:165
+#: templates/core/navbar.html:167
 msgid "Log Out"
 msgstr "Ausloggen"
 
@@ -775,6 +769,14 @@ msgstr "Dieses Feld ist erforderlich."
 msgid "Your message has been sent"
 msgstr "Ihre Nachricht wurde versendet."
 
+#: tests/test_env_check.py:83
+msgid "Database"
+msgstr "Datenbank"
+
+#: tests/test_env_check.py:84
+msgid "Redis"
+msgstr "Redis"
+
 #: tests/test_featured.py:30
 msgid "Pages"
 msgstr "Seiten"
@@ -792,7 +794,7 @@ msgstr ""
 "Hallo %(followed_name)s, <br><a href=\"%(follower_url)s\">%(follower_name)s</"
 "a> ist jetzt auf %(site_name)s gefolgt!"
 
-#: utils.py:48
+#: utils.py:50
 #, python-format
 msgid ""
 "Uploaded file %(filename)s is too big (%(sizemb)sMB), maximum is "
@@ -801,7 +803,7 @@ msgstr ""
 "Der hochgeladene Datei %(filename)s ist zu groß (%(sizemb)s MB), der "
 "maximale Wert beträgt %(limitmb)s MB."
 
-#: utils.py:276
+#: utils.py:278
 #, python-format
 msgid ""
 "Date '%(date_string_to_parse)s' does not match any expected format: "
@@ -810,43 +812,43 @@ msgstr ""
 "Das Datum '%(date_string_to_parse)s' passt nicht zu einem erwarteten Format: "
 "%(translated_date_formats)s."
 
-#: utils.py:286
+#: utils.py:288
 msgid "DD"
 msgstr "TT"
 
-#: utils.py:287
+#: utils.py:289
 msgid "MM"
 msgstr "MM"
 
-#: utils.py:288
+#: utils.py:290
 msgid "YYYY"
 msgstr "JJJJ"
 
-#: utils.py:289
+#: utils.py:291
 msgid "YY"
 msgstr "JJ"
 
-#: utils.py:290
+#: utils.py:292
 msgid "HH"
 msgstr "HH"
 
-#: utils.py:291
+#: utils.py:293
 msgid "hh"
 msgstr "hh"
 
-#: utils.py:292
+#: utils.py:294
 msgid "AM/PM"
 msgstr "AM/PM"
 
-#: utils.py:293
+#: utils.py:295
 msgid "mm"
 msgstr "mm"
 
-#: utils.py:294
+#: utils.py:296
 msgid "ss"
 msgstr "ss"
 
-#: utils.py:434
+#: utils.py:438
 msgid "You do not have permission to edit/delete this object."
 msgstr "Du hast keine Berechtigung, diesen Objekt zu bearbeiten/zu löschen."
 
@@ -881,4 +883,4 @@ msgstr "Ihre Version ist neuer als die neueste Veröffentlichung (?!?)"
 
 #: views/views_stats.py:102
 msgid "Only platform administrators can run the environment check."
-msgstr ""
+msgstr "Nur Plattformadministratoren können die Umgebungsprüfung durchführen."

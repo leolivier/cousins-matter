@@ -3,6 +3,7 @@
 # this script is expected to be run from the root of the dev environment project
 
 # import utils functions and variables
+# shellcheck source=SCRIPTDIR/test_utils.sh
 . "$(cd "$(dirname "$0")" && pwd)"/test_utils.sh
 
 get_args "Runs a V1 to V2 cousins matter migration test" "$@"
@@ -21,7 +22,7 @@ sudo chown 5678:5678 media/avatars
 [ ! -f .env ] && error 1 "No .env file found in $tmpdir"
 # no need to set the superuser variables as the superuser must already exist in tha database
 # the postgres password is added by the migration tool
-export COUSINS_MATTER_IMAGE=${COUSINS_MATTER_IMAGE:-$tag}
+export COUSINS_MATTER_IMAGE="${COUSINS_MATTER_IMAGE:-$tag}"
 echo "tested image: $COUSINS_MATTER_IMAGE"
 
 python "$script_dir/manage_cousins_matter.py" migrate-v1-v2 -d "$tmpdir" "$release_or_branch" "$ref" | tee migrate-v1-v2.log || error 1 "manage_cousins_matter failed to migrate from v1 to v2"
@@ -40,4 +41,3 @@ grep "sudo chown -R 1000:1000" migrate-v1-v2.log  || error 1 "Warning message ab
 cd ..
 sudo rm -rf "$tmpdir"
 echo "test migrate v1 to v2 passed"
-

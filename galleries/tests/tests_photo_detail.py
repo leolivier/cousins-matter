@@ -34,3 +34,16 @@ class PhotoDetailTest(GalleryBaseTestCase):
     self.assertTemplateUsed(response, "galleries/photo_detail.html")
     self.assertContains(response, self.photo.name)
     self.assertContains(response, protected_media_url(self.photo.image.name))
+
+
+class PhotoDescriptionSanitizationTest(PhotoDetailTest):
+  """Rich-text photo description must be sanitized at render time (stored XSS regression)."""
+
+  def test_photo_description_scripts_stripped(self):
+    self.photo.description = "<p>note</p><script>alert(1)</script><img src=x onerror=alert(2)>"
+    self.photo.save()
+    response = self.client.get(reverse("galleries:photo", args=[self.photo.id]))
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, "<p>note</p>")
+    self.assertNotContains(response, "<script>")
+    self.assertNotContains(response, "onerror")

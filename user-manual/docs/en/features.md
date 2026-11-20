@@ -81,14 +81,14 @@
 
 * Connected members can chat in live mode with other connected members
 * Cousins Matter manages as many chat rooms as requested
-* Members can create private chat rooms and select the members who can participate in these rooms. 
+* Members can create private chat rooms and select the members who can participate in these rooms.
 	The creator of the room becomes admin in this room and can add other members and elect admins in these members.
 	Admins can invite other members and other admins
 
 ### Pages / CMS
 
-Basic CMS features: admins can create static HTML pages and publish them on the site. 
-The home page can also be configured this way as well as the privcay policy, the about pages... 
+Basic CMS features: admins can create static HTML pages and publish them on the site.
+The home page can also be configured this way as well as the privcay policy, the about pages...
 Public pages (those which are shown from the Pages menu even if you are not logged in) can be created and published by any admin member. Their URL must start with '/publish/'
 Private pages (those which are shown from the Pages menu only if you are logged in) can be created and published by any admin member. Their URL must start with '/private/'
 Admin messages are a specific kind of page which is displayed to all connected members at the top of the site. Their URL must start with '/admin-message/'

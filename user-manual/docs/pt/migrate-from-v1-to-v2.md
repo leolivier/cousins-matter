@@ -2,7 +2,7 @@
 
 ## Introdução
 
-A versão 2 do Cousins Matter é uma grande reescrita da versão 1 e não é diretamente compatível com a versão 1. 
+A versão 2 do Cousins Matter é uma grande reescrita da versão 1 e não é diretamente compatível com a versão 1.
 Entre as grandes alterações:
 
 * a base de dados foi migrada de sqlite3 para postgresql, para permitir melhor desempenho e melhor escalabilidade.
@@ -55,8 +55,8 @@ Também precisará de um ambiente Python 3.14+ para executar o script de migraç
 	As configurações do Cousins Matter v2 são diferentes das da v1. Atualize o seu ficheiro .env para corresponder às configurações do Cousins Matter v2.
 
 	As configurações do Cousins Matter v2 estão detalhadas na página [Configurações](settings.md).
-	Em particular, a migração atualiza o ficheiro .env.example para corresponder às configurações do Cousins Matter v2. Assim, compare este novo ficheiro .env.example com o seu ficheiro .env e atualize o seu ficheiro .env em conformidade. 
-	
+	Em particular, a migração atualiza o ficheiro .env.example para corresponder às configurações do Cousins Matter v2. Assim, compare este novo ficheiro .env.example com o seu ficheiro .env e atualize o seu ficheiro .env em conformidade.
+
 	Preste também atenção ao facto de alguns valores predefinidos terem mudado. Por exemplo:
 
 	* ALLOW_MEMBERS_TO_CREATE_MEMBERS e ALLOW_MEMBERS_TO_INVITE_MEMBERS são agora True por predefinição
@@ -79,4 +79,3 @@ Também precisará de um ambiente Python 3.14+ para executar o script de migraç
 	docker compose pull  # obtém todas as imagens
 	docker compose up -d
 	```
-

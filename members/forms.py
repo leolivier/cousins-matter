@@ -20,6 +20,11 @@ from .widgets import FieldLinkWrapper
 
 class MemberFormMixin:
   def initialize_fields(self, *args, **kwargs):
+    # Address/Family are tenant-scoped, but ModelForm builds FK choice querysets
+    # once at class-definition time (no request tenant yet). Reset them here, per
+    # instance, so the dropdowns only offer the current tenant's rows.
+    self.fields["address"].queryset = Address.objects.all()
+    self.fields["family"].queryset = Family.objects.all()
     can_change_family = self.instance and self.instance.family
     self.fields["family"].widget = FieldLinkWrapper(
       self.fields["family"].widget,
@@ -290,6 +295,9 @@ class FamilyUpdateForm(forms.ModelForm):
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
+    # Same class-definition-time queryset trap as the member form: scope the
+    # parent choices to the current tenant per instance.
+    self.fields["parent"].queryset = Family.objects.all()
     can_change_parent = self.instance and self.instance.parent
     self.fields["parent"].widget = FieldLinkWrapper(
       self.fields["parent"].widget,
@@ -353,3 +361,17 @@ class NotifyDeathForm(forms.Form):
     label=_("Message (Optional)"),
     required=False,
   )
+
+
+class ChangeManagerForm(forms.Form):
+  """reassign an inactive member to another (active) manager"""
+
+  new_manager = forms.ModelChoiceField(queryset=Member.objects.none(), label=_("Member manager"))
+
+  def __init__(self, *args, member: Member, **kwargs):
+    super().__init__(*args, **kwargs)
+    field = self.fields["new_manager"]
+    assert isinstance(field, forms.ModelChoiceField)  # nosec B101
+    field.queryset = (
+      Member.objects.filter(is_active=True, is_dead=False).exclude(pk=member.pk).order_by("last_name", "first_name")
+    )

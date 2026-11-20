@@ -4,7 +4,7 @@ title: Testing
 description: Run the Django, Playwright UI and coverage suites, and the pre-commit quality gate
 tags: [testing, playwright, coverage]
 status: draft
-stale_after: 2027-04-18
+stale_after: 2027-11-18
 generated: { by: claude-code/glm-5.3-flash, at: 2026-10-18T00:00:00Z }
 ---
 
@@ -32,6 +32,28 @@ skipped otherwise — they are invisible to a plain local `make test`. Run `make
 before opening a PR that touches multi-tenant behavior (tenants app, tenant-scoped
 querysets, auth middleware — anything affecting authenticated users): a green local run
 with the flag off does not prove CI green.
+
+## Tenant onboarding E2E
+
+`tenants/tests/tests_onboarding_e2e.py` automates
+[Tenant Onboarding E2E](/flows/tenant-onboarding-e2e.md) phases 1-7 with the
+Django test client: family signup, first admin login and permission gates,
+managed member, join request, invitation, invited-person registration and
+login. Each `test_NN_...` rebuilds the state its phase needs, so the tests are
+independent while the numbering keeps the report in scenario order.
+
+```bash
+scripts/tests/run_tenant_onboarding_e2e.sh   # = make test-mt t=tenants.tests.tests_onboarding_e2e
+```
+
+The script enables multi-tenancy (the `/tenants/` URLconf is mounted at import
+time) and exits non-zero on the first failing phase.
+
+`members/tests/tests_cross_tenant_isolation_e2e.py` does the same for
+[Cross-Tenant Isolation](/flows/cross-tenant-isolation.md): two families seed
+the same marker content in every app, then each family's session probes the
+other's lists, objects, members, chat, media and deactivation.
+`scripts/tests/run_cross_tenant_isolation_e2e.sh` runs it in scenario order.
 
 ## UI tests (Playwright)
 
@@ -68,6 +90,21 @@ From `config/settings/local_test.py` (and `docker_test.py` for the container var
   process env — the `/saas/` URLs are mounted at URLconf import, so `override_settings`
   cannot enable them after the fact.
 
+## Upgrade tests (v2 -> v3)
+
+`scripts/tests/test_upgrade_v2_v3.sh` boots the published
+`ghcr.io/leolivier/cousins-matter:2.6.1` image, seeds one legacy row per
+tenant-scoped app, then starts the image under test on the same PostgreSQL
+volume. It asserts that `migrate --check` is clean and that every legacy row is
+on the default tenant while platform superusers are on the system tenant. CI
+runs it as the `test-upgrade-v2` job in
+`.github/workflows/build-and-publish-image.yml`.
+
+Override the v2 image with `V2_IMAGE`; the target image comes from
+`COUSINS_MATTER_IMAGE` (or `-t`). The script needs an `.env` with `SECRET_KEY`
+and `POSTGRES_PASSWORD` set — `manage_cousins_matter.py install -e -n -d "$PWD"`
+does that.
+
 ## Coverage
 
 ```bash
@@ -89,7 +126,7 @@ enforced by the `--fail-under` flag.
 2. `ruff check . --fix`
 3. `mypy ./ --ignore-missing-imports --exclude migrations/* --exclude .venv/*`
 4. `bandit -r . -c pyproject.toml -f txt -o bandit.out`
-5. `pip-audit .`
+5. `uv audit`
 6. `ENVIRONMENT="test" ./manage.py check_okf docs` (same as `make check-docs`, which checks
    the OKF frontmatter of this bundle)
 

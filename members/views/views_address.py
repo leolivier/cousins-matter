@@ -1,5 +1,7 @@
 import logging
 from django.views import generic
+from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.edit import FormMixin
 from django_htmx.http import HttpResponseClientRefresh
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
@@ -28,7 +30,7 @@ class AddressUpdateView(generic.UpdateView):
   fields = "__all__"
 
 
-class ModalAddressMixin:
+class ModalAddressMixin(TemplateResponseMixin, FormMixin):
   model = Address
   template_name = "members/address/address_form.html"
   form_class = AddressUpdateForm

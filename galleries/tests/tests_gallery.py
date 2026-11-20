@@ -97,7 +97,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
   <div class="control">
     <div class="select">
       <select name="cover" id="id_cover">
-        <option value="" selected="">---------</option>
+        <option value="" selected="">- Select an option -</option>
       </select>
     </div>
   </div>
@@ -198,7 +198,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
   <div class="control">
     <div class="select">
       <select name="cover" id="id_cover">
-        <option value="" selected="">---------</option>
+        <option value="" selected="">- Select an option -</option>
         {"".join([f'<option value="{p.id}">{p}</option>' for p in photos])}
       </select>
     </div>

@@ -6,7 +6,7 @@ from core.widgets import RichTextarea
 class TreasureForm(forms.ModelForm):
   class Meta:
     model = Trove
-    fields = ["title", "description", "picture", "file", "category"]
+    fields = ["title", "description", "picture", "file", "url", "category"]
     widgets = {
       "description": RichTextarea(),
     }

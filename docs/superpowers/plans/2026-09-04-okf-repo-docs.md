@@ -197,7 +197,7 @@ Expected: OK (6 tests)
 
 - [ ] **Step 5: Wire into the Makefile**
 
-In `Makefile`, inside the `check:` recipe (after the `pip-audit .` line, same tab indentation), add:
+In `Makefile`, inside the `check:` recipe (after the `uv audit` line, same tab indentation), add:
 
 ```make
 	ENVIRONMENT="test" ./manage.py check_okf docs
@@ -250,7 +250,7 @@ Fiche frontmatter values (copy the template, then):
 - `architecture.md`: settings selection via `ENVIRONMENT` (`config/settings/{base,development,production,local_test,docker_devt,docker_test}.py`); `manage.py` points at `core.settings`; middleware order (TenantMiddleware, LoginRequiredMiddleware, WhiteNoise, CSP, allauth, htmx); ASGI + Channels (`cousinsmatter/asgi.py`); WhiteNoise for static; protected media served through `/protected_media/` with access control, public media under `/media/public/`; Docker compose services (postgres, redis, qcluster); multi-tenancy pointer to `/specs/multi-tenancy.md`.
 - `conventions.md`: services pattern (business logic in `<app>/services.py` or `services/`); custom user model `members.models.Member` + always `get_user_model()`; followers utilities in `core.followers` driving notifications; `FEATURES_FLAGS` dict surfaced by `core.context_processors.features`; async via Django-Q2 with `Q_SYNC=True` in dev; translations workflow (`make mkmsg`/`make cpmsg`, 6 locales); themes/customization pointer to `/modules/themes.md`.
 - `setup-dev.md`: `uv sync --dev` + `.venv/bin/activate`; `make up4run` (postgres/redis/qcluster), `make run` (port 8000), `make mkmig`/`make mig`, `make mkmsg a=<app>`/`make cpmsg a=<app>`; `ENVIRONMENT` values and when to use each; OAuth/local test settings.
-- `testing.md`: `make test t=<module>` (excludes `--tag=ui`), `make test-ui t=<module>`; base class `members/tests/tests_member_base.py::MemberTestCase`; coverage `make cover`, 80% minimum enforced; `make check` = ruff format + ruff check + mypy + bandit + pip-audit + `check-docs`; UI tests live in `<app>/tests/ui/` (Playwright).
+- `testing.md`: `make test t=<module>` (excludes `--tag=ui`), `make test-ui t=<module>`; base class `members/tests/tests_member_base.py::MemberTestCase`; coverage `make cover`, 80% minimum enforced; `make check` = ruff format + ruff check + mypy + bandit + uv audit + `check-docs`; UI tests live in `<app>/tests/ui/` (Playwright).
 
 Each fiche ends with `# See also` linking to the others and to relevant user-manual pages (`user-manual/installation.md`, `user-manual/settings.md`, `user-manual/translations.md` on readthedocs).
 
@@ -540,7 +540,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 
 - [ ] **Step 1:** Run `make check-docs` — expected: exit 0, no ERROR, no STALE.
 - [ ] **Step 2:** Run `make test t=core.tests.test_check_okf` — expected: OK (6 tests).
-- [ ] **Step 3:** Run `make check` — expected: ruff, ruff format, mypy, bandit, pip-audit and check-docs all pass.
+- [ ] **Step 3:** Run `make check` — expected: ruff, ruff format, mypy, bandit, uv audit and check-docs all pass.
 - [ ] **Step 4:** Spot-check 3 random fiches: every cited path exists (`ls <path>`), links resolve (`docs/<linked path>` exists), frontmatter matches the template.
 - [ ] **Step 5:** No commit unless something was fixed in steps 1–4; if fixes were made, commit them with the same conventions.
 

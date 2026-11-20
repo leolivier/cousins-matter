@@ -11,12 +11,12 @@ image=ghcr.io/$github_repo
 error() {
 	code=$1
 	shift
-  echo "Error: $@" >&2
-  exit $code
+  echo "Error: $*" >&2
+  exit "$code"
 }
 
 usage() {
-	cmd_desc=$@
+	cmd_desc="$*"
 	cat << EOF
 usage: $0 [-h]  [-r] [-g] [-t tag]
 
@@ -73,7 +73,7 @@ get_github_branch_or_release() {
 set_variables() {
 	if [ -n "$github_action" ]; then
 		get_github_branch_or_release
-		ref_tag=$(echo $ref | sed 's@/@-@g')
+		ref_tag=$(echo "$ref" | sed 's@/@-@g')
 		tag=${COUSINS_MATTER_IMAGE:-$image:${tag:-$ref_tag}}
 	elif [ -z "$remote" ]; then  # if we are testing a local image, compute ref
 		ref=$(git rev-parse --abbrev-ref HEAD)
@@ -91,14 +91,14 @@ set_variables() {
 	case "$tag" in
 		"$container":*)
 			# if we are testing a local image, check git status
-			if [ -n "$(git status -s)" ] || [ -n "$(git log @{u}.. 2>/dev/null)" ]; then
+			if [ -n "$(git status -s)" ] || [ -n "$(git log '@{u}..' 2>/dev/null)" ]; then
 			echo "###########################################################################################"
 			echo "# WARNING! Some of the files may have been modified and not pushed to github.             #"
 			echo "# As some files are downloaded from github by manage_cousins_matter, the test might not   #"
 			echo "# use modified local files. Please commit your changes before running this script.        #"
 			echo "###########################################################################################"
 			git status -s
-			git log @{u}..
+			git log '@{u}..'
 			fi
 			;;
 		*)

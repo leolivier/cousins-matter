@@ -19,7 +19,7 @@ When creating a page, a form opens and you have to fill some fields:
 
 	* "About" pages including the privacy policy described below, must start with '/<language-code\>/about/<page-slug\>'. They are displayed on the right side of the nav bar under a question mark icon.
 	* "Home" pages are pages that start with '/<language-code\>/home/'. See [Front or Home Page](#front-or-home-pages) below
-	* "Static" pages are pages that start with '/publish/'. They can have 2 subforms: 
+	* "Static" pages are pages that start with '/publish/'. They can have 2 subforms:
 
 		* /publish/<page-slug\>: the title of these pages is displayed directly in the Pages menu of the navbar.
 		* /publish/<menu-name\>/<page-slug\>: These are drop-down menus of the Pages menu with the name "menu-name", and the title of each page is displayed in the drop-down list under <menu-name\>.
@@ -41,7 +41,7 @@ These pages can be customized using the standard "Edit Page" feature described a
 Set `SITE_FOOTER` as explained in [General customization](settings.md/#general-customization)
 
 ## Front (or Home) pages
-Your site needs two different front (aka home) pages: 
+Your site needs two different front (aka home) pages:
 
 * The first one for unauthenticated people, where you can explain the purpose of your site without giving too many details and nothing private.
 * The second is the page for your members once they are logged in.
@@ -49,7 +49,7 @@ You can edit these 2 pages directly from the default homepage or from the list o
 
 The URL of these pages is built like this: /<language code\>/home/authenticated and /<language code\>/home/unauthenticated.
 
-Predefined versions of these two pages are loaded in the database at first load. 
+Predefined versions of these two pages are loaded in the database at first load.
 If the language code in the .env doesn't correspond to any of the preloaded pages, the en-US version is displayed.
 
 **CAUTION**: Do not change the URLs of these pages or it won't work!!!
@@ -83,10 +83,9 @@ e.g.
 }
 ```
 
-will change the global font size of the site and change the primary color (defined in terms of HSL (Hue, Saturation, and Lightness). 
+will change the global font size of the site and change the primary color (defined in terms of HSL (Hue, Saturation, and Lightness).
 (You can try the HSL colors at https://hslpicker.com/)
 
 You can also change these variables in the component scope but then it's not a real theme anymore, see details on [Bulma CSS Variables](https://bulma.io/documentation/features/css-variables/) and [Customizing Bulma with CSS variables](https://bulma.io/documentation/customize/with-css-variables/)
 
 To know all available CSS Variables defined by Bulma, please have a look at the [Bulma CSS File](https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.css) and test them in your browser to see the effect.
-

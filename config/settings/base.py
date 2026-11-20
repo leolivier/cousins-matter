@@ -92,10 +92,9 @@ _CSP_POLICY: dict[str, list[str]] = {
   "img-src": [CSP.SELF, "data:"],
   "font-src": [CSP.SELF],
   # ws/wss for the chat WebSocket (chat/consumers.py); htmx requests are same-origin
-  # Turnstile widget runs in an iframe and phones home to Cloudflare
-  "frame-src": ["https://challenges.cloudflare.com"],
   "connect-src": [CSP.SELF, "ws:", "wss:", "https://challenges.cloudflare.com"],
   "frame-ancestors": [CSP.NONE],
+  # iframes: Turnstile widget (SaaS signup) loads from challenges.cloudflare.com;
   # troves embed external treasures: any https URL, YouTube URLs rewritten to
   # youtube-nocookie (see Trove.embed_url)
   "frame-src": [CSP.SELF, "https:"],

@@ -105,6 +105,21 @@ Override the v2 image with `V2_IMAGE`; the target image comes from
 and `POSTGRES_PASSWORD` set — `manage_cousins_matter.py install -e -n -d "$PWD"`
 does that.
 
+## Upgrade tests (v2 -> v3)
+
+`scripts/tests/test_upgrade_v2_v3.sh` boots the published
+`ghcr.io/leolivier/cousins-matter:2.6.1` image, seeds one legacy row per
+tenant-scoped app, then starts the image under test on the same PostgreSQL
+volume. It asserts that `migrate --check` is clean and that every legacy row is
+on the default tenant while platform superusers are on the system tenant. CI
+runs it as the `test-upgrade-v2` job in
+`.github/workflows/build-and-publish-image.yml`.
+
+Override the v2 image with `V2_IMAGE`; the target image comes from
+`COUSINS_MATTER_IMAGE` (or `-t`). The script needs an `.env` with `SECRET_KEY`
+and `POSTGRES_PASSWORD` set — `manage_cousins_matter.py install -e -n -d "$PWD"`
+does that.
+
 ## Coverage
 
 ```bash

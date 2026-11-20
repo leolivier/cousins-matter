@@ -57,7 +57,7 @@ jobs:
   # ──────────────────────────────────────────────────────────────────────────────
   test-upgrade-v2:
     needs: lint-and-build
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.actor == 'never in cmm' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

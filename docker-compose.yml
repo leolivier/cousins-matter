@@ -89,7 +89,7 @@ services:
 
   nginx:
     image: nginx:stable-alpine
-    container_name: cousins-matter.nginx
+    container_name: ${CONTAINER_NAME:-cousins_matter}.nginx
     ports:
       - "8000:80"
     volumes:

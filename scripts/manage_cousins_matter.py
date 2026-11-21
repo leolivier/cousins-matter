@@ -528,7 +528,7 @@ def migrate_v1_v2(args):
   # fix_permissions()
 
   verbose("Downloading v2 scripts...")
-  download_V2_needed_files(directory, repo=args.githu_repo, branch=args.branch, release=args.release)
+  download_V2_needed_files(directory, repo=args.github_repo, branch=args.branch, release=args.release)
 
   verbose("Rotating secrets...")
   rotate_secrets()
@@ -726,17 +726,17 @@ manage_cousins_matter <command> -h""",
   parser.add_argument(
     "-n",
     "--container_name",
-    dest="CONTAINER_NAME",
+    dest="container_name",
     default="cousins-matter",
     help="Container name (default is 'cousins-matter')",
   )
 
   parser.add_argument(
-    "-g",
-    "--git_repo",
-    dest="GITHUB_REPO",
+    "-R",
+    "--github_repo",
+    dest="github_repo",
     default="leolivier/cousins-matter",
-    help="Git repository from where to download artifacts (default is 'leolivier/cousins-matter')",
+    help="Github repository from where to download artifacts (default is 'leolivier/cousins-matter')",
   )
 
   # Subcommands

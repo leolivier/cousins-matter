@@ -108,6 +108,6 @@ networks:
 
 volumes:
   cousins_matter_postgres_data:
-    name: ${CONTAINER_NAME:-cousins-matter}_postgres_data
+    name: ${CONTAINER_NAME:-cousins_matter}_postgres_data
   cousins_matter_redis_data:
-    name: ${CONTAINER_NAME:-cousins-matter}_redis_data
+    name: ${CONTAINER_NAME:-cousins_matter}_redis_data

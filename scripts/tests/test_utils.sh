@@ -75,6 +75,9 @@ get_github_branch_or_release() {
 }
 
 set_variables() {
+	# every docker compose command of the test scripts (up, down -v, logs...) must
+	# target the same project: the compose file defaults to cousins_matter otherwise
+	export CONTAINER_NAME="$container"
 	if [ -n "$github_action" ]; then
 		get_github_branch_or_release
 		ref_tag=$(echo "$ref" | sed 's@/@-@g')
@@ -112,7 +115,7 @@ set_variables() {
 
 docker_run_cousins_matter() {
 	(docker images --format "{{.Repository}}:{{.Tag}}" | grep -q -- "$COUSINS_MATTER_IMAGE") || error 1 "Image $COUSINS_MATTER_IMAGE not found"
-	CONTAINER_NAME=$container docker compose up -d --wait --wait-timeout 60
+	docker compose up -d --wait --wait-timeout 60
 }
 
 set_admin_env_vars() {

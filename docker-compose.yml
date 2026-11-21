@@ -1,7 +1,7 @@
 services:
   cousins-matter:
     image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
-    container_name: cousins-matter
+    container_name: ${CONTAINER_NAME:-cousins-matter}
     restart: unless-stopped
     depends_on:
       - postgres

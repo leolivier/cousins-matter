@@ -66,6 +66,12 @@ get_github_branch_or_release() {
 		refs/tags/*)
 			ref="${ref#refs/tags/}"
 			release_or_branch='-r'
+			# A fork's release tag does not exist in the repo the deployment
+			# files are downloaded from (raw.githubusercontent.com cannot serve
+			# a private fork anonymously): use its latest release, as for PRs.
+			if ! GIT_TERMINAL_PROMPT=0 git ls-remote --exit-code --tags "https://github.com/$github_repo" "refs/tags/$ref" >/dev/null 2>&1; then
+				ref="latest"
+			fi
 			;;
 		*)
 			ref="latest"

@@ -18,12 +18,14 @@ error() {
 usage() {
 	cmd_desc="$*"
 	cat << EOF
-usage: $0 [-h]  [-r] [-g] [-t tag]
+usage: $0 [-h] [-R repo] [-n container]  [-r] [-g] [-t tag]
 
 $cmd_desc
 
 args:
 				-h: print this help and exit
+				-R: use the given github repo (default repo is $github_repo)
+				-n: use the given container name (default name is $container)
 				-r: use the image from the remote repo (if not set, uses a local image)
 				-g: means the test is running in a GitHub action. Implies -r
 				-t tag: the tag of the image to test.
@@ -40,9 +42,11 @@ EOF
 get_args() {
 	cmd_desc=$1
 	shift
-	while getopts ":hrgt:" opt; do
+	while getopts ":hR:n:rgt:" opt; do
 					case $opt in
 									h) usage "$cmd_desc"; exit 0;;
+									R) github_repo=$OPTARG; image=ghcr.io/$github_repo;;
+									n) container=$OPTARG;;
 									r) remote=true;;
 									g) github_action=true; remote=true;;
 									t) tag=$OPTARG;;
@@ -71,6 +75,9 @@ get_github_branch_or_release() {
 }
 
 set_variables() {
+	# every docker compose command of the test scripts (up, down -v, logs...) must
+	# target the same project: the compose file defaults to cousins_matter otherwise
+	export CONTAINER_NAME="$container"
 	if [ -n "$github_action" ]; then
 		get_github_branch_or_release
 		ref_tag=$(echo "$ref" | sed 's@/@-@g')

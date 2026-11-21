@@ -15,10 +15,6 @@ from urllib.request import urlopen
 from pathlib import Path
 
 
-CONTAINER = "cousins-matter"
-IMAGE = f"ghcr.io/leolivier/{CONTAINER}"
-GITHUB_REPO = "leolivier/cousins-matter"
-
 # ANSI colors
 ON_RED = "\x1b[41m"
 ON_GREEN = "\x1b[42m\x1b[1;37m"
@@ -164,19 +160,19 @@ def github_latest_release(repo: str) -> str:
   return tag
 
 
-def get_github_base_url(branch: str | None, release: str | None) -> str:
+def get_github_base_url(repo: str, branch: str | None, release: str | None) -> str:
   """Will return the base URL for the given branch or release if branch is None.
   Default release is latest if branch is None"""
   if branch and not release:
-    return f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/{branch}"
+    return f"https://raw.githubusercontent.com/{repo}/refs/heads/{branch}"
   else:
     release = release or "latest"
     if release == "latest":
       try:
-        release = github_latest_release(GITHUB_REPO)
+        release = github_latest_release(repo)
       except Exception as ex:
         error(1, f"Failed to obtain latest release from GitHub: {ex}")
-    return f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/tags/{release}"
+    return f"https://raw.githubusercontent.com/{repo}/refs/tags/{release}"
 
 
 def download_github_file(file: str, dest: Path, base_url: str):
@@ -197,7 +193,32 @@ def download_github_file(file: str, dest: Path, base_url: str):
     error(1, f"Downloading {file} failed: {ex}")
 
 
-def download_V2_needed_files(directory: Path, branch: str | None, release: str | None):
+def local_checkout_file(rel_path: str, branch: str | None) -> Path | None:
+  """Local copy of a file when the script runs inside a checkout of ``branch``.
+
+  The install test on the private fork targets a branch that raw.githubusercontent.com
+  cannot serve unauthenticated (404). When the script runs from a checkout of that
+  very branch (the CI case), its files are exactly the tested content.
+  """
+  if not branch:
+    return None
+  root = Path(__file__).resolve().parents[1]
+  try:
+    current = run(
+      ["git", "-C", str(root), "rev-parse", "--abbrev-ref", "HEAD"],
+      check=True,
+      capture_output=True,
+      quiet=True,
+    ).stdout.strip()
+  except Exception:
+    return None
+  if current != branch:
+    return None
+  candidate = root / rel_path
+  return candidate if candidate.is_file() else None
+
+
+def download_V2_needed_files(directory: Path, repo: str, branch: str | None, release: str | None):
   files_to_download = [
     ("docker-compose.yml", directory / "docker-compose.yml"),
     (".env.example", directory / ".env.example"),
@@ -207,7 +228,7 @@ def download_V2_needed_files(directory: Path, branch: str | None, release: str |
       directory / "config" / "nginx" / "nginx.d" / "errors" / "413.html",
     ),
   ]
-  base_url = get_github_base_url(branch, release)
+  base_url = get_github_base_url(repo, branch, release)
   for rel, dest in files_to_download:
     download_github_file(rel, dest, base_url)
   # copy myself to scripts/ (already downloaded)
@@ -219,7 +240,7 @@ def download_V2_needed_files(directory: Path, branch: str | None, release: str |
     pass
 
 
-def check_cousins_matter_is_down():
+def check_cousins_matter_is_down(container_name: str):
   """Check if Cousins Matter is down
   will check containers and networks with name starting with cousins-matter
   """
@@ -230,7 +251,7 @@ def check_cousins_matter_is_down():
         "ps",
         "-a",
         "--filter",
-        "name=cousins-matter",
+        f"name={container_name}",
         "--format",
         "json",
       ],
@@ -239,7 +260,7 @@ def check_cousins_matter_is_down():
       text=True,
     )
     if result.returncode != 0:
-      error(1, "Unable to check if cousins-matter is down")
+      error(1, f"Unable to check if {container_name} is down")
     containers = json.loads(f"[{','.join(result.stdout.splitlines())}]")
     errors = []
     for container in containers:
@@ -257,19 +278,19 @@ but the container is still there, please remove it before running this script"""
           errors.append(f"""{name} is in an unknown state ({state}),
 please remove the container before running this script""")
   except subprocess.CalledProcessError as e:
-    error(1, f"Unable to check if cousins-matter containers are down: {e}")
+    error(1, f"Unable to check if {container_name} containers are down: {e}")
 
   result = run(
-    ["docker", "network", "ls", "--filter", "name=cousins_matter", "-q"],
+    ["docker", "network", "ls", "--filter", f"name={container_name}", "-q"],
     check=True,
     capture_output=True,
     text=True,
   )
 
   if result.returncode != 0:
-    error(1, "Unable to check if cousins-matter networks are down")
+    error(1, f"Unable to check if {container_name} networks are down")
   if result.stdout != "":
-    errors.append(f"""This cousins-matter network is still up: {result.stdout},
+    errors.append(f"""This {container_name} network is still up: {result.stdout},
 please remove it before running this script""")
   if errors:
     error(1, "\n".join(errors))
@@ -492,7 +513,7 @@ def migrate_v1_v2(args):
 
   check_if_cousins_matter_V1_directory(directory)
 
-  check_cousins_matter_is_down()
+  check_cousins_matter_is_down(args.container_name)
 
   check_permissions(directory)
 
@@ -507,7 +528,7 @@ def migrate_v1_v2(args):
   # fix_permissions()
 
   verbose("Downloading v2 scripts...")
-  download_V2_needed_files(directory, branch=args.branch, release=args.release)
+  download_V2_needed_files(directory, repo=args.github_repo, branch=args.branch, release=args.release)
 
   verbose("Rotating secrets...")
   rotate_secrets()
@@ -622,12 +643,12 @@ def install_cousins_matter(args):
   """
 
   require_docker()
-  check_cousins_matter_is_down()  # just in case we have sevaral tests running at the same moment
+  check_cousins_matter_is_down(args.container_name)  # just in case we have sevaral tests running at the same moment
   directory = get_directory(args.review_environment, args.directory)
 
   if not args.review_environment:
     # Normal install: download files
-    download_V2_needed_files(directory, args.branch, args.release)
+    download_V2_needed_files(directory, args.github_repo, args.branch, args.release)
 
     # Create .env from .env.example if .env is missing
     verbose("Creating .env from .env.example...")
@@ -700,6 +721,22 @@ manage_cousins_matter <command> -h""",
     action="store_true",
     dest="quiet",
     help="quiet mode (default mode is verbose)",
+  )
+
+  parser.add_argument(
+    "-n",
+    "--container_name",
+    dest="container_name",
+    default="cousins-matter",
+    help="Container name (default is 'cousins-matter')",
+  )
+
+  parser.add_argument(
+    "-R",
+    "--github_repo",
+    dest="github_repo",
+    default="leolivier/cousins-matter",
+    help="Github repository from where to download artifacts (default is 'leolivier/cousins-matter')",
   )
 
   # Subcommands

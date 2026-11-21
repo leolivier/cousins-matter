@@ -73,8 +73,9 @@ class TroveAppUITest(TroveUITestBase):
     self.assert_visible('input[name="picture"]', "Picture file input should be visible")
     self.assert_visible('input[name="file"]', "File input should be visible")
 
-    # Submit and Cancel buttons
-    self.assert_visible('button[type="submit"]', "Submit button should be visible")
+    # Submit and Cancel buttons (scoped to the form: the saas onboarding
+    # banner's Dismiss button is also a submit button on the same page)
+    self.assert_visible('#treasure-form button[type="submit"]', "Submit button should be visible")
     # Use aria-label to target only the Cancel link, not the navbar link
     cancel_link = self.page.locator('a[aria-label="close"]')
     self.assertTrue(cancel_link.is_visible(), "Cancel link should be visible")
@@ -93,7 +94,7 @@ class TroveAppUITest(TroveUITestBase):
       "Title input should contain the existing title",
     )
 
-    self.assert_visible('button[type="submit"]', "Submit button should be visible")
+    self.assert_visible('#treasure-form button[type="submit"]', "Submit button should be visible")
 
   def test_treasure_detail_page(self):
     """The detail page should display all treasure information."""

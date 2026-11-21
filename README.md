@@ -53,6 +53,15 @@ The version 2 is quite different from the 1.x versions and you will need to appl
 If you find a bug, please open an issue in this project.
 If you can provide the solution to your issue, please provide a PR.
 
+## SaaS (cmm fork)
+
+This repository is the private fork behind the SaaS offering: the public site
+(cousins-matter.net) lets anyone create a family site — captcha, email + family
+name, 24 h verification link — and creates the tenant plus its admin account
+automatically. Enable it with `SAAS_LANDING_ENABLED=True` (see `docs/apps/saas.md`
+and the `SAAS_*`/`TURNSTILE_*` variables in `.env.example`). The upstream
+self-hosted app and its multi-tenancy feature are unchanged.
+
 ## Authors
 
 - [@leolivier](https://www.github.com/leolivier)

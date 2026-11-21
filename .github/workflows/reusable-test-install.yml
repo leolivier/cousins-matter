@@ -7,6 +7,7 @@ on:
 env:
   COUSINS_MATTER_IMAGE: ghcr.io/${{ github.repository }}:test-${{ github.sha }}
   ENVIRONMENT: 'docker-test'
+  CONTAINER_NAME: ${{ vars.CONTAINER_NAME || 'cousins-matter' }}
 
 jobs:
   test-install:
@@ -36,11 +37,11 @@ jobs:
           # and no unused volumes are remaining
           docker volume prune -f
           # then run test
-          ./scripts/tests/test_install.sh -g
+          ./scripts/tests/test_install.sh -g -n "$CONTAINER_NAME"
 
       - name: Show docker-compose services logs on failure
         if: failure()
         uses: ./.github/actions/show-logs-on-failure
         with:
           env_file_path: ${{ github.workspace }}/.env
-          containers: cousins-matter.db cousins-matter cousins-matter.qcluster
+          containers: ${{ env.CONTAINER_NAME }}.db ${{ env.CONTAINER_NAME }} ${{ env.CONTAINER_NAME }}.qcluster

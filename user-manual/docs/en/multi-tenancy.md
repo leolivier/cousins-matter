@@ -130,3 +130,14 @@ All product apps are tenant-scoped and covered by row-level security:
 `genealogy` and `pages` — 22 tables, migrations `tenants.0003_rls` through
 `tenants.0010_rls_pages`. Only infrastructure tables (Django sessions, allauth
 accounts) remain global; the ORM scoping applies to everything else.
+
+## SaaS hosting (cmm fork)
+
+The `cmm` fork adds a public, SaaS-style front door on top of this feature
+(see [the saas app](/apps/saas.md)): with `SAAS_LANDING_ENABLED=True`
+anonymous visitors of the home page get a landing page and can request a
+family site with just an email + family name (protected by an optional
+Cloudflare Turnstile captcha). They confirm from a signed email link valid
+24 h: the family, its settings and its admin account are created and they
+land on a welcome screen (password choice + getting-started checklist).
+The classic self-service `/tenants/signup/` flow remains available.

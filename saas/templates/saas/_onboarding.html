@@ -1,0 +1,45 @@
+{% load i18n %}
+{% if state %}
+<div class="box" id="saas-onboarding">
+  <div class="level">
+    <div class="level-left">
+      <h2 class="title is-4">{% translate "Get started with your family site" %}</h2>
+    </div>
+    <div class="level-right">
+      <form method="post" action="{% url 'saas:onboarding_dismiss' %}">
+        {% csrf_token %}
+        <button class="button is-small is-text" type="submit">{% translate "Dismiss" %}</button>
+      </form>
+    </div>
+  </div>
+  <div class="columns is-multiline">
+    <a class="column is-one-third" href="{% url 'change_password' %}">
+      <div class="box has-text-centered {{ state.password_set|yesno:'has-background-success-light,has-background-warning-light' }}">
+        <p class="icon is-large">
+          {% if state.password_set %}&#10003;{% else %}&hellip;{% endif %}
+        </p>
+        <p class="title is-5">{% translate "Secure your account" %}</p>
+        <p>{% translate "Set your password." %}</p>
+      </div>
+    </a>
+    <a class="column is-one-third" href="{% url 'members:profile' %}">
+      <div class="box has-text-centered {{ state.profile_done|yesno:'has-background-success-light,has-background-warning-light' }}">
+        <p class="icon is-large">
+          {% if state.profile_done %}&#10003;{% else %}&hellip;{% endif %}
+        </p>
+        <p class="title is-5">{% translate "Fill your profile" %}</p>
+        <p>{% translate "Your name, photo and contact details." %}</p>
+      </div>
+    </a>
+    <a class="column is-one-third" href="{% url 'members:invite' %}">
+      <div class="box has-text-centered {{ state.invited|yesno:'has-background-success-light,has-background-warning-light' }}">
+        <p class="icon is-large">
+          {% if state.invited %}&#10003;{% else %}&hellip;{% endif %}
+        </p>
+        <p class="title is-5">{% translate "Invite your family" %}</p>
+        <p>{% translate "Send invitations to your family members." %}</p>
+      </div>
+    </a>
+  </div>
+</div>
+{% endif %}

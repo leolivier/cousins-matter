@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+{% load i18n cm_tags crispy_forms_tags %}
+{% block title %}{% title _("Create your family site") %}{% endblock %}
+{% block content %}
+<div class="box">
+  <legend class="title is-3 has-text-centered">{% translate "Create your family site" %}</legend>
+  <p class="has-text-centered">
+    {% translate "Give your family a name and your email address: we send you a verification link to create the site and your administrator account." %}
+  </p>
+  <form method="POST">
+    {% csrf_token %}
+    <fieldset class="container">
+      {{ form|crispy }}
+    </fieldset>
+    {% if settings.TURNSTILE_ENABLED and settings.TURNSTILE_SITE_KEY %}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" nonce="{{ csp_nonce }}" async defer></script>
+    <div class="has-text-centered my-3">
+      <div class="cf-turnstile" data-sitekey="{{ settings.TURNSTILE_SITE_KEY }}"></div>
+    </div>
+    {% endif %}
+    <div class="container mt-4 has-text-centered">
+      <button class="button is-primary" type="submit">{% translate "Send the verification email" %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

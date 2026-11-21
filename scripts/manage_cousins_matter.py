@@ -230,7 +230,12 @@ def download_V2_needed_files(directory: Path, repo: str, branch: str | None, rel
   ]
   base_url = get_github_base_url(repo, branch, release)
   for rel, dest in files_to_download:
-    download_github_file(rel, dest, base_url)
+    if local := local_checkout_file(rel, branch):
+      verbose(f"Using local {rel} from {local}")
+      dest.parent.mkdir(parents=True, exist_ok=True)
+      shutil.copy(local, dest)
+    else:
+      download_github_file(rel, dest, base_url)
   # copy myself to scripts/ (already downloaded)
   script_dir = directory / "scripts"
   script_dir.mkdir(parents=True, exist_ok=True)

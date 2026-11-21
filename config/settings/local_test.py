@@ -1,5 +1,11 @@
+import os
 import random
-from .dev_base import *  # noqa: F403, F405
+
+# Capture the process env BEFORE dev_base/base read the .env file into
+# os.environ: afterwards a .env value is indistinguishable from an explicit
+# command-line variable. Used by the SAAS_LANDING_ENABLED pin below.
+_saas_landing_cli = os.environ.get("SAAS_LANDING_ENABLED")
+from .dev_base import *  # noqa: E402, F403, F405
 
 DEBUG = env.bool("DEBUG", False)
 TESTING = True
@@ -9,6 +15,12 @@ DEBUG_HTMX = False
 # untranslated strings, which would fail wherever the .env sets LANGUAGE_CODE
 # to something else (CI has no .env and already gets the "en" default).
 LANGUAGE_CODE = "en"
+# Same hermeticity as LANGUAGE_CODE above: the shared dev .env turns the SaaS
+# landing on, but upstream tests assert the classic home page for anonymous
+# visitors. Off unless explicitly set in the process env
+# (SAAS_LANDING_ENABLED=True), which is how the saas tests opt in
+# (/saas/ URLs are mounted at URLconf import, override_settings can't add them).
+SAAS_LANDING_ENABLED = str(_saas_landing_cli).lower() in ("1", "true", "yes", "on")
 # Tests must run WITHOUT collectstatic. Django's test runner forces DEBUG=False
 # (DiscoverRunner -> setup_test_environment(debug=False)), which disables
 # HashedFilesMixin._url's DEBUG shortcut. With CompressedManifestStaticFilesStorage

@@ -7,6 +7,7 @@ import zipfile
 from hashlib import blake2b
 from wsgiref.util import FileWrapper
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_not_required
 from django.contrib.auth.views import PasswordResetView as DefaultPasswordResetView
 from django.core.files.storage import default_storage
@@ -33,6 +34,12 @@ class PasswordResetView(DefaultPasswordResetView):
 
 class HomeView(LoginNotRequiredMixin, generic.TemplateView):
   template_name = "core/base.html"
+
+  def get_template_names(self):
+    # SaaS deployment (cmm fork): anonymous visitors get the landing page
+    if getattr(settings, "SAAS_LANDING_ENABLED", False) and self.request.user.is_anonymous:
+      return ["saas/landing.html"]
+    return [self.template_name]
 
 
 def _download_media(request, media) -> StreamingHttpResponse | HttpResponseNotModified:

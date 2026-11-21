@@ -4,7 +4,7 @@ title: Management Commands
 description: Inventory of the project's manage.py commands (check_okf, generate_test_data, import_test_data, delete_tenant) and the scripts/manage_cousins_matter.py operations
 tags: ["module", "management-commands"]
 status: draft
-stale_after: 2027-03-05
+stale_after: 2027-03-13
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T11:16:06Z }
 ---
 
@@ -35,7 +35,11 @@ Run inside the container/directory of a deployment; three subcommands:
 - `install` — pre-flight checks (v1 directory leftovers, permissions),
   downloads a few files from GitHub, generates/rotates `SECRET_KEY` and the
   Postgres password if missing, creates directories with the right
-  permissions, then opens an editor on `.env` after a countdown.
+  permissions, then opens an editor on `.env` after a countdown. When the
+  script runs inside a git checkout of the requested `--branch` (the CI
+  test case: `actions/checkout` of the branch under test), those files are
+  copied from the checkout instead of being downloaded — raw.githubusercontent.com
+  cannot serve fork-only branches of the private fork.
 - `rotate-secrets` — rotates `SECRET_KEY` and appends the old one to
   `PREVIOUS_SECRET_KEYS` in `.env`.
 - `migrate-v1-v2` — migrates a v1.x install to v2: checks, converts the

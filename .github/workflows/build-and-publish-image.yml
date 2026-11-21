@@ -139,7 +139,9 @@ jobs:
   # ──────────────────────────────────────────────────────────────────────────────
   build-and-push:
     needs: [test-docker-image, test-install-migrate, test-upgrade-v2, test-s3, test-multi-tenant, test-ui]
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    # !failure(): a skipped dependency (test-upgrade-v2 is disabled in some
+    # repos) must not skip the build. The implicit success() does.
+    if: ${{ !failure() && !cancelled() && github.actor != 'dependabot[bot]' }}
     uses: ./.github/workflows/reusable-build-and-push.yml
     with:
       registry: 'ghcr.io'

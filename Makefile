@@ -10,7 +10,7 @@ COMPOSE = docker compose
 help h:
 	@echo "Available targets:"
 	@echo "  help, h: Show this help"
-	@echo "  build [t=tag]: Build the docker image. Default tag is local"
+	@echo "  build [c=container_name] [t=tag]: Build the docker image. Default tag is current branch, default container name is cousins-matter"
 	@echo "  run: Run the application outside of docker (supposes postgres, redis and qcluster are running)"
 	@echo "  up [c=container_name]: Start the application with docker"
 	@echo "  up4run, u4r: Start the docker containers for postgres, redis and qcluster, so you can use run afterwards"
@@ -33,8 +33,11 @@ help h:
 	@echo "  count: Count lines of code using cloc (which must be installed, eg via sudo apt-get install cloc)"
 
 build:
-	t=$(if $(t),$(t),local); \
-	docker build --pull -t cousins-matter:$$t .
+	ref=$$(git rev-parse --abbrev-ref HEAD 2>/dev/null); \
+	ref="$${ref:-local}"; \
+	t="$${t:-$$ref}"; \
+	c="$${c:-cousins-matter}"; \
+	docker build --pull -t "$$c:$$t" .
 
 run:
 	$(MANAGE) runserver

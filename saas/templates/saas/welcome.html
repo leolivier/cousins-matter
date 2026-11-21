@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% load i18n cm_tags crispy_forms_tags %}
+{% block title %}{% title _("Welcome to your family site") %}{% endblock %}
+{% block content %}
+<div class="box">
+  <h1 class="title is-3 has-text-centered">{% translate "Welcome to your new family site!" %}</h1>
+  <p class="has-text-centered">
+    {% translate "Your site and your administrator account are ready. Choose a password to secure your account, then follow the checklist to set it up." %}
+  </p>
+  <form method="POST">
+    {% csrf_token %}
+    <fieldset class="container">
+      {{ form|crispy }}
+    </fieldset>
+    <div class="container mt-4 has-text-centered">
+      <button class="button is-primary" type="submit">{% translate "Set my password" %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

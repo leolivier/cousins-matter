@@ -1,0 +1,364 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-08 20:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms.py:8 models.py:23 tests/tests_i18n.py:18
+msgid "Family name"
+msgstr "Nome da família"
+
+#: forms.py:9 models.py:22
+msgid "Email"
+msgstr "Email"
+
+#: models.py:18
+msgid "Pending"
+msgstr "Pendente"
+
+#: models.py:19
+msgid "Validated"
+msgstr "Validada"
+
+#: models.py:20
+msgid "Expired"
+msgstr "Expirada"
+
+#: models.py:24
+msgid "Status"
+msgstr "Estado"
+
+#: models.py:25
+msgid "Expires at"
+msgstr "Expira em"
+
+#: models.py:26
+msgid "Validated at"
+msgstr "Validada em"
+
+#: models.py:27
+msgid "IP address"
+msgstr "Endereço IP"
+
+#: models.py:28
+msgid "Created at"
+msgstr "Criada em"
+
+#: models.py:31
+msgid "tenant request"
+msgstr "pedido de site"
+
+#: models.py:32
+msgid "tenant requests"
+msgstr "pedidos de site"
+
+#: services.py:51
+#, python-format
+msgid "Your new \"%(name)s\" family site on %(site_name)s"
+msgstr "O seu novo site familiar « %(name)s » em %(site_name)s"
+
+#: templates/saas/_onboarding.html:6
+msgid "Get started with your family site"
+msgstr "Comece com o seu site familiar"
+
+#: templates/saas/_onboarding.html:11
+msgid "Dismiss"
+msgstr "Ocultar"
+
+#: templates/saas/_onboarding.html:21
+msgid "Secure your account"
+msgstr "Proteja a sua conta"
+
+#: templates/saas/_onboarding.html:22
+msgid "Set your password."
+msgstr "Escolha a sua palavra-passe."
+
+#: templates/saas/_onboarding.html:30
+msgid "Fill your profile"
+msgstr "Complete o seu perfil"
+
+#: templates/saas/_onboarding.html:31
+msgid "Your name, photo and contact details."
+msgstr "O seu nome, a sua foto e os seus contactos."
+
+#: templates/saas/_onboarding.html:39
+msgid "Invite your family"
+msgstr "Convide a sua família"
+
+#: templates/saas/_onboarding.html:40
+msgid "Send invitations to your family members."
+msgstr "Envie convites aos membros da sua família."
+
+#: templates/saas/email/tenant_request_email.html:8
+#, python-format
+msgid "Confirm your \"%(tenant_name)s\" family site"
+msgstr "Confirme o seu site familiar « %(tenant_name)s »"
+
+#: templates/saas/email/tenant_request_email.html:17
+#, python-format
+msgid "Your \"%(tenant_name)s\" family site on %(site_name)s"
+msgstr "O seu site familiar « %(tenant_name)s » em %(site_name)s"
+
+#: templates/saas/email/tenant_request_email.html:22
+msgid "Hello!"
+msgstr "Olá!"
+
+#: templates/saas/email/tenant_request_email.html:27
+#, python-format
+msgid ""
+"We received a request to create the family site \"%(tenant_name)s\" with "
+"this email address on %(site_name)s."
+msgstr ""
+"Recebemos um pedido para criar o site familiar « %(tenant_name)s » com este "
+"endereço de email em %(site_name)s."
+
+#: templates/saas/email/tenant_request_email.html:30
+msgid ""
+"Click on the link below to confirm and create your site with your "
+"administrator account."
+msgstr ""
+"Clique na ligação abaixo para confirmar e criar o seu site com a sua conta "
+"de administrador."
+
+#: templates/saas/email/tenant_request_email.html:33
+msgid ""
+"If you don't know where this email comes from, just ignore it: nothing will "
+"be created without confirmation."
+msgstr ""
+"Se não sabe de onde vem este email, simplesmente ignore-o: nada será criado "
+"sem confirmação."
+
+#: templates/saas/email/tenant_request_email.html:38
+#: templates/saas/validate_confirm.html:15
+msgid "Create my site"
+msgstr "Criar o meu site"
+
+#: templates/saas/email/tenant_request_email.html:40 tests/tests_i18n.py:24
+#, python-format
+msgid "This link is valid for %(max_age_hours)s hours."
+msgstr "Esta ligação é válida durante %(max_age_hours)s horas."
+
+#: templates/saas/landing.html:3
+msgid "Your family site, ready in minutes"
+msgstr "O seu site familiar, pronto em minutos"
+
+#: templates/saas/landing.html:7
+msgid "Keep your big family organized, together"
+msgstr "Mantenha a sua grande família organizada, em conjunto"
+
+#: templates/saas/landing.html:9
+msgid ""
+"Cousins Matter is a free web application for large families: a private site "
+"for your family with a member directory, birthdays, photo galleries, forums, "
+"polls, genealogy and much more."
+msgstr ""
+"O Cousins Matter é uma aplicação web gratuita para famílias grandes: um site "
+"privado para a sua família com um diretório de membros, aniversários, "
+"galerias de fotos, fóruns, sondagens, genealogia e muito mais."
+
+#: templates/saas/landing.html:11 templates/saas/landing.html:67
+#: tests/tests_i18n.py:19
+msgid "Create my family site"
+msgstr "Criar o meu site familiar"
+
+#: templates/saas/landing.html:17
+msgid "Everything your family needs"
+msgstr "Tudo o que a sua família precisa"
+
+#: templates/saas/landing.html:21
+msgid "Member directory"
+msgstr "Diretório de membros"
+
+#: templates/saas/landing.html:22
+msgid "All the family, with contact details, addresses and relationships."
+msgstr ""
+"Toda a família, com os seus contactos, endereços e relações de parentesco."
+
+#: templates/saas/landing.html:27
+msgid "Birthdays &amp; galleries"
+msgstr "Aniversários &amp; galerias"
+
+#: templates/saas/landing.html:28
+msgid "Never miss a birthday again, and share photos of the reunions."
+msgstr "Nunca mais perca um aniversário e partilhe as fotos dos encontros."
+
+#: templates/saas/landing.html:33
+msgid "Forums, polls &amp; more"
+msgstr "Fóruns, sondagens &amp; mais"
+
+#: templates/saas/landing.html:34
+msgid ""
+"Organize the next cousinade: forums, polls, classified ads and genealogy."
+msgstr ""
+"Organize o próximo encontro de família: fóruns, sondagens, anúncios "
+"classificados e genealogia."
+
+#: templates/saas/landing.html:43
+msgid "Try it now"
+msgstr "Experimente agora"
+
+#: templates/saas/landing.html:45
+msgid ""
+"Play with the <a href=\"%(demo_url)s\">demo site</a> or read the <a "
+"href=\"%(docs_url)s\">documentation</a> before creating your own family site."
+msgstr ""
+"Experimente o <a href=\"%(demo_url)s\">site de demonstração</a> ou leia a "
+"<a href=\"%(docs_url)s\">documentação</a> antes de criar o seu próprio site familiar."
+
+#: templates/saas/landing.html:51
+#, python-format
+msgid ""
+"You prefer hosting it yourself? Cousins Matter is open source and can be "
+"self-hosted, see the <a href=\"%(docs_url)s\">installation guide</a>."
+msgstr ""
+"Prefere alojá-lo você mesmo? O Cousins Matter é open source e pode ser auto-"
+"hospedado, veja o <a href=\"%(docs_url)s\">guia de instalação</a>."
+
+#: templates/saas/landing.html:61
+msgid "Free plan"
+msgstr "Plano gratuito"
+
+#: templates/saas/landing.html:63
+msgid ""
+"Creating a family site is free. Usage limits apply and are displayed when "
+"you sign up; a paid plan with more room and extras is planned for later."
+msgstr ""
+"Criar um site familiar é gratuito. Aplicam-se limites de utilização, "
+"apresentados no registo; está planeado um plano pago com mais espaço e "
+"extras mais tarde."
+
+#: templates/saas/signup_form.html:3 templates/saas/signup_form.html:6
+msgid "Create your family site"
+msgstr "Crie o seu site familiar"
+
+#: templates/saas/signup_form.html:8
+msgid ""
+"Give your family a name and your email address: we send you a verification "
+"link to create the site and your administrator account."
+msgstr ""
+"Dê um nome à sua família e o seu endereço de email: enviar-lhe-emos uma "
+"ligação de verificação para criar o site e a sua conta de administrador."
+
+#: templates/saas/signup_form.html:22
+msgid "Send the verification email"
+msgstr "Enviar o email de verificação"
+
+#: templates/saas/signup_sent.html:3
+msgid "Check your mailbox"
+msgstr "Consulte a sua caixa de correio"
+
+#: templates/saas/signup_sent.html:6
+msgid "Check your mailbox!"
+msgstr "Consulte a sua caixa de correio!"
+
+#: templates/saas/signup_sent.html:8
+msgid ""
+"We just sent you a verification link. Click it to create your family site "
+"and your administrator account."
+msgstr ""
+"Acabámos de lhe enviar uma ligação de verificação. Clique nela para criar o "
+"seu site familiar e a sua conta de administrador."
+
+#: templates/saas/signup_sent.html:14
+msgid ""
+"The link is valid for %(max_age_hours)s hours. If you don't receive it, "
+"check your spam folder or submit a new request."
+msgstr ""
+"A ligação é válida durante %(max_age_hours)s horas. Se não a receber, "
+"verifique a pasta de spam ou envie um novo pedido."
+
+#: templates/saas/signup_sent.html:19
+msgid "New request"
+msgstr "Novo pedido"
+
+#: templates/saas/validate_confirm.html:3
+#: templates/saas/validate_confirm.html:6
+msgid "Confirm your family site"
+msgstr "Confirme o seu site familiar"
+
+#: templates/saas/validate_confirm.html:8
+#, python-format
+msgid "Create the family site \"%(tenant_name)s\" for %(email)s?"
+msgstr "Criar o site familiar \"%(tenant_name)s\" para %(email)s?"
+
+#: templates/saas/validate_confirm.html:11
+msgid ""
+"Your administrator account will be created, and you will choose your "
+"password right after."
+msgstr ""
+"A sua conta de administrador será criada e logo a seguir escolherá a sua "
+"palavra-passe."
+
+#: templates/saas/validate_confirm.html:17
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/saas/welcome.html:3
+msgid "Welcome to your family site"
+msgstr "Bem-vindo ao seu site familiar"
+
+#: templates/saas/welcome.html:6
+msgid "Welcome to your new family site!"
+msgstr "Bem-vindo ao seu novo site familiar!"
+
+#: templates/saas/welcome.html:8
+msgid ""
+"Your site and your administrator account are ready. Choose a password to "
+"secure your account, then follow the checklist to set it up."
+msgstr ""
+"O seu site e a sua conta de administrador estão prontos. Escolha uma palavra-"
+"passe para proteger a conta e depois siga a lista de verificação para a "
+"configurar."
+
+#: templates/saas/welcome.html:16
+msgid "Set my password"
+msgstr "Definir a minha palavra-passe"
+
+#: views/views_onboarding.py:19
+msgid "Checklist dismissed. You can restart it anytime from the docs."
+msgstr ""
+"Lista de verificação ocultada. Pode voltá-la a mostrar em qualquer altura a "
+"partir da documentação."
+
+#: views/views_signup.py:49
+msgid "Captcha verification failed, please try again."
+msgstr "A verificação do captcha falhou, tente novamente."
+
+#: views/views_signup.py:52
+msgid "Too many requests, please try again later."
+msgstr "Demasiados pedidos, tente mais tarde."
+
+#: views/views_signup.py:62
+msgid "A member with this email address already exists."
+msgstr "Já existe um membro com este endereço de email."
+
+#: views/views_validate.py:51
+msgid "Could not create the family site, please contact support."
+msgstr "Não foi possível criar o site familiar, contacte o suporte."
+
+#: views/views_validate.py:56
+msgid "Your family site is ready! Choose a password to finish."
+msgstr ""
+"O seu site familiar está pronto! Escolha uma palavra-passe para terminar."
+
+#: views/views_validate.py:60
+msgid "This link is invalid or has expired, please submit a new request."
+msgstr "Esta ligação é inválida ou expirou, envie um novo pedido."
+
+#: views/views_validate.py:85
+msgid "Password set, welcome to your new family site!"
+msgstr "Palavra-passe definida, bem-vindo ao seu novo site familiar!"

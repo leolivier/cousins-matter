@@ -17,6 +17,9 @@ on:
         type: boolean
         default: false
 
+env:
+  CONTAINER_NAME: ${{ vars.CONTAINER_NAME || 'cousins-matter' }}
+
 jobs:
   run-test:
     runs-on: ubuntu-latest
@@ -65,13 +68,13 @@ jobs:
           docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d --wait --wait-timeout 60
 
           # Verify container exists and is running
-          docker ps | grep cousins-matter || (docker ps && exit 1)
+          docker ps | grep "$CONTAINER_NAME" || (docker ps && exit 1)
 
       - name: Install Python Dev Dependencies in Container (always)
         run: |
-          docker cp pyproject.toml cousins-matter:/app/
-          docker exec -u root cousins-matter pip install uv
-          docker exec -u root cousins-matter uv sync --dev
+          docker cp pyproject.toml "$CONTAINER_NAME":/app/
+          docker exec -u root "$CONTAINER_NAME" pip install uv
+          docker exec -u root "$CONTAINER_NAME" uv sync --dev
 
       - name: Install Playwright & Browsers inside Container (UI mode only)
         # env:
@@ -79,30 +82,31 @@ jobs:
         if: ${{ inputs.ui }}
         run: |
           # playwright install --with-deps
-          docker exec -u root cousins-matter apt-get update
-          docker exec -u root cousins-matter apt-get install -y wget gnupg
-          docker exec -u root cousins-matter python -m playwright install-deps chromium
-          docker exec cousins-matter python -m playwright install chromium
+          docker exec -u root "$CONTAINER_NAME" apt-get update
+          docker exec -u root "$CONTAINER_NAME" apt-get install -y wget gnupg
+          docker exec -u root "$CONTAINER_NAME" python -m playwright install-deps chromium
+          docker exec "$CONTAINER_NAME" python -m playwright install chromium
 
       - name: Run Tests
         if: ${{ !inputs.multi_tenant }}
         run: |
           if [ ${{ inputs.ui }} == true ]; then
-            docker exec cousins-matter python manage.py test --tag=ui
+            docker exec "$CONTAINER_NAME" python manage.py test --tag=ui
           else
-            docker exec cousins-matter python manage.py test --exclude-tag=ui
+            docker exec "$CONTAINER_NAME" python manage.py test --exclude-tag=ui
           fi
 
       - name: Run Tests (multi-tenant)
         if: ${{ inputs.multi_tenant }}
         run: |
-          docker exec -e MULTI_TENANT_ENABLED=True cousins-matter python manage.py test --exclude-tag=ui --noinput
+          docker exec -e MULTI_TENANT_ENABLED=True "$CONTAINER_NAME" python manage.py test --exclude-tag=ui --noinput
 
       - name: Show docker-compose services logs on failure
         if: failure()
         uses: ./.github/actions/show-logs-on-failure
         with:
           env_file_path: ${{ github.workspace }}/.env
+          containers: ${{ env.CONTAINER_NAME }} ${{ env.CONTAINER_NAME }}.qcluster ${{ env.CONTAINER_NAME }}.db
 
       - name: Upload screenshots
         if: failure() && inputs.ui

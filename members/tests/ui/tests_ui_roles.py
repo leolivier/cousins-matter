@@ -14,6 +14,7 @@ import os
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
+from django.conf import settings
 from django.urls import reverse
 
 from core.tests.ui import PlaywrightTestCase
@@ -27,6 +28,10 @@ class RoleAwareUITestBase(PlaywrightTestCase):
 
   def setUp(self):
     super().setUp()
+    if settings.MULTI_TENANT_ENABLED:
+      self.skipTest(
+        "needs MULTI_TENANT_ENABLED off (default settings); flag-on variants live in tenants/tests/tests_feature_on.py"
+      )
     set_current_tenant(None)
     self.tenant_admin = MemberFactory(
       username="tenant-admin",

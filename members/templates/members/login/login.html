@@ -21,7 +21,10 @@
             {% elif not settings.MULTI_TENANT_ENABLED %}
             <a class="is-2" href="{% url 'members:register_request' %}">{% translate "Request invitation link" %}</a>
             {% endif %}
-            {% if settings.MULTI_TENANT_ENABLED %}
+            {% if settings.SAAS_LANDING_ENABLED %}
+                {% translate "or" %}
+                <a class="is-2" href="{% url 'saas:signup' %}">{% translate "Create a new family" %}</a>
+            {% elif settings.MULTI_TENANT_ENABLED %}
                 {% translate "or" %}
                 <a class="is-2" href="{% url 'tenants:family_signup' %}">{% translate "Create a new space for my family" %}</a>
             {% endif %}

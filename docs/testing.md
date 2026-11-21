@@ -84,6 +84,26 @@ From `config/settings/local_test.py` (and `docker_test.py` for the container var
   option is removed.
 - The suite is pinned to `LANGUAGE_CODE = "en"` in both test settings, so it is independent of
   the `LANGUAGE_CODE` in the local or compose `.env`.
+- Same for `SAAS_LANDING_ENABLED`: it defaults to off in the test settings (upstream tests
+  assert the classic home page for anonymous visitors), even when the `.env` turns it on for
+  dev. Run the saas tests with `SAAS_LANDING_ENABLED=True MULTI_TENANT_ENABLED=True` in the
+  process env — the `/saas/` URLs are mounted at URLconf import, so `override_settings`
+  cannot enable them after the fact.
+
+## Upgrade tests (v2 -> v3)
+
+`scripts/tests/test_upgrade_v2_v3.sh` boots the published
+`ghcr.io/leolivier/cousins-matter:2.6.1` image, seeds one legacy row per
+tenant-scoped app, then starts the image under test on the same PostgreSQL
+volume. It asserts that `migrate --check` is clean and that every legacy row is
+on the default tenant while platform superusers are on the system tenant. CI
+runs it as the `test-upgrade-v2` job in
+`.github/workflows/build-and-publish-image.yml`.
+
+Override the v2 image with `V2_IMAGE`; the target image comes from
+`COUSINS_MATTER_IMAGE` (or `-t`). The script needs an `.env` with `SECRET_KEY`
+and `POSTGRES_PASSWORD` set — `manage_cousins_matter.py install -e -n -d "$PWD"`
+does that.
 
 ## Upgrade tests (v2 -> v3)
 

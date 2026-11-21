@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+{% load i18n cm_tags %}
+{% block title %}{% title _("Confirm your family site") %}{% endblock %}
+{% block content %}
+<div class="box has-text-centered">
+  <h1 class="title is-3">{% translate "Confirm your family site" %}</h1>
+  <p>
+    {% blocktranslate %}Create the family site "{{ tenant_name }}" for {{ email }}?{% endblocktranslate %}
+  </p>
+  <p class="has-text-grey">
+    {% translate "Your administrator account will be created, and you will choose your password right after." %}
+  </p>
+  <form method="POST">
+    {% csrf_token %}
+    <button class="button is-primary is-large mt-3" type="submit">{% translate "Create my site" %}</button>
+  </form>
+  <a class="mt-3" href="{% url 'saas:signup' %}">{% translate "Cancel" %}</a>
+</div>
+{% endblock %}

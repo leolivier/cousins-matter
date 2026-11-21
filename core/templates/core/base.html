@@ -68,6 +68,7 @@
             {% endfor %}
         </ul>
       </div>
+      {% load saas_tags %}{% saas_onboarding user %}
       {% block content %}
       {% include "core/home.html" %}
       {% endblock %}

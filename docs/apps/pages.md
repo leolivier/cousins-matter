@@ -131,6 +131,14 @@ the fixture after their creation), the official (re-)sync path is
 `manage.py sync_predefined_pages [--tenant SLUG]`: it re-runs the
 idempotent seed for one tenant or all of them.
 
+`TransactionTestCase.flush` wipes every table while leaving
+`django_migrations` intact, so migration 0002 never reruns on a reused
+(``--keepdb``) test database. The pages come back through the signal
+chain instead: flush emits `post_migrate`,
+`tenants.models._seed_tenants_post_migrate` re-creates the default
+tenant and the `pages.apps` post_save hook re-seeds its predefined
+pages. `pages.tests.tests_post_flush_reseed` locks this behaviour in.
+
 ## Performance
 
 Pages menu tags no longer prefetch the unused `sites` relation on every navbar render.

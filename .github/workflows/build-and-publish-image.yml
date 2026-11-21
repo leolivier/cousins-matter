@@ -20,6 +20,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Compose project / container name used by the test jobs. Override it with a
+# repository variable named CONTAINER_NAME. A caller's env is NOT inherited by
+# reusable workflows, so each of them sets it too.
+env:
+  CONTAINER_NAME: ${{ vars.CONTAINER_NAME || 'cousins-matter' }}
+
 jobs:
   # ──────────────────────────────────────────────────────────────────────────────
   # Job 1 – Lint, build test image and prepare shared artefacts
@@ -86,14 +92,14 @@ jobs:
         run: |
           docker compose down -v
           docker volume prune -f
-          ./scripts/tests/test_upgrade_v2_v3.sh -g
+          ./scripts/tests/test_upgrade_v2_v3.sh -g -n "$CONTAINER_NAME"
 
       - name: Show docker-compose services logs on failure
         if: failure()
         uses: ./.github/actions/show-logs-on-failure
         with:
           env_file_path: ${{ github.workspace }}/.env
-          containers: cousins-matter.db cousins-matter cousins-matter.qcluster
+          containers: ${{ env.CONTAINER_NAME }}.db ${{ env.CONTAINER_NAME }} ${{ env.CONTAINER_NAME }}.qcluster
 
   # ──────────────────────────────────────────────────────────────────────────────
   # Job 4 – Test S3 backend (runs in parallel with jobs 2, 3, 5 & 6)

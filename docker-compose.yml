@@ -1,9 +1,9 @@
-name: ${CONTAINER_NAME:-cousins_matter}   # nom du projet Compose (optionnel)
+name: ${CONTAINER_NAME:-cousins-matter}   # nom du projet Compose (optionnel)
 
 services:
   cousins-matter:
     image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
-    container_name: ${CONTAINER_NAME:-cousins_matter}
+    container_name: ${CONTAINER_NAME:-cousins-matter}
     restart: unless-stopped
     depends_on:
       - postgres
@@ -29,7 +29,7 @@ services:
 
   qcluster:
     image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
-    container_name: ${CONTAINER_NAME:-cousins_matter}.qcluster
+    container_name: ${CONTAINER_NAME:-cousins-matter}.qcluster
     command: [ "python", "manage.py", "qcluster" ]
     user: "cm_user:cm_user"
     restart: unless-stopped
@@ -49,7 +49,7 @@ services:
 
   postgres:
     image: postgres:18.2-alpine
-    container_name: ${CONTAINER_NAME:-cousins_matter}.db
+    container_name: ${CONTAINER_NAME:-cousins-matter}.db
     restart: unless-stopped
     user: "postgres:postgres"
     ports:
@@ -72,7 +72,7 @@ services:
 
   redis:
     image: redis:alpine
-    container_name: ${CONTAINER_NAME:-cousins_matter}.redis
+    container_name: ${CONTAINER_NAME:-cousins-matter}.redis
     restart: unless-stopped
     ports:
       - "${REDIS_PORT:-6379}:${REDIS_PORT:-6379}"
@@ -89,7 +89,7 @@ services:
 
   nginx:
     image: nginx:stable-alpine
-    container_name: ${CONTAINER_NAME:-cousins_matter}.nginx
+    container_name: ${CONTAINER_NAME:-cousins-matter}.nginx
     ports:
       - "8000:80"
     volumes:
@@ -103,7 +103,7 @@ services:
 
 networks:
   cousins_matter_network:
-    name: ${CONTAINER_NAME:-cousins-matter}_network
+    name: ${CONTAINER_NAME:-cousins_matter}_network
     driver: bridge
 
 volumes:

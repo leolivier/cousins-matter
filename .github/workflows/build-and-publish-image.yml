@@ -151,11 +151,12 @@ jobs:
 
   # ──────────────────────────────────────────────────────────────────────────────
   # Job 8 – Verify production image starts correctly (waits for job 7)
-  # RUNS ONLY FOR RELEASES
+  # RUNS ONLY FOR RELEASES ON PUBLIC REPOS: the verification installs from
+  # raw.githubusercontent.com, which cannot serve a private repo anonymously.
   # ──────────────────────────────────────────────────────────────────────────────
   verify-production-image:
     needs: build-and-push
-    if: ${{ github.event_name == 'release' }}
+    if: ${{ github.event_name == 'release' && !github.event.repository.private }}
     uses: ./.github/workflows/reusable-verify-production-image.yml
     with:
       registry: 'ghcr.io'

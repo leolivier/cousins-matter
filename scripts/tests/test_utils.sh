@@ -112,7 +112,7 @@ set_variables() {
 
 docker_run_cousins_matter() {
 	(docker images --format "{{.Repository}}:{{.Tag}}" | grep -q -- "$COUSINS_MATTER_IMAGE") || error 1 "Image $COUSINS_MATTER_IMAGE not found"
-	docker compose up -d --wait --wait-timeout 60
+	CONTAINER_NAME=$container docker compose up -d --wait --wait-timeout 60
 }
 
 set_admin_env_vars() {

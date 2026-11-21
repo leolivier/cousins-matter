@@ -260,7 +260,7 @@ def check_cousins_matter_is_down(container_name: str):
       text=True,
     )
     if result.returncode != 0:
-      error(1, "Unable to check if {CONTAINER_NAME} is down")
+      error(1, f"Unable to check if {container_name} is down")
     containers = json.loads(f"[{','.join(result.stdout.splitlines())}]")
     errors = []
     for container in containers:
@@ -281,7 +281,7 @@ please remove the container before running this script""")
     error(1, f"Unable to check if {container_name} containers are down: {e}")
 
   result = run(
-    ["docker", "network", "ls", "--filter", "name=cousins_matter", "-q"],
+    ["docker", "network", "ls", "--filter", f"name={container_name}", "-q"],
     check=True,
     capture_output=True,
     text=True,

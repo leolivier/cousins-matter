@@ -1,5 +1,5 @@
 #!/bin/sh
-
+set -x
 # this script is expected to be run from the root of the dev environment project
 
 # import utils functions and variables
@@ -12,7 +12,7 @@ set_variables
 tmpdir=$(mktemp -d)
 echo "tmpdir: $tmpdir"
 
-python ./scripts/manage_cousins_matter.py install -d "$tmpdir" "$release_or_branch" "$ref" -n || error 1 "manage_cousins_matter failed to install Cousins Matter"
+python ./scripts/manage_cousins_matter.py -R $github_repo -n $container install -d "$tmpdir" "$release_or_branch" "$ref" -n || error 1 "manage_cousins_matter failed to install Cousins Matter"
 
 cd "$tmpdir"
 # .env must have been created by manage_cousins_matter install above

@@ -29,16 +29,16 @@ echo "starting the v2 instance on a fresh database..."
 COUSINS_MATTER_IMAGE="$v2_image" docker compose up -d --wait --wait-timeout 120 || error 1 "the v2 instance failed to start"
 
 echo "seeding legacy v2 data..."
-docker cp "$script_dir/tests/seed_v2_data.py" cousins-matter:/tmp/seed_v2_data.py || error 1 "failed to copy the v2 seed script"
-docker exec cousins-matter python manage.py shell -c "exec(open('/tmp/seed_v2_data.py').read())" || error 1 "failed to seed v2 data"
+docker cp "$script_dir/tests/seed_v2_data.py" "$CONTAINER_NAME":/tmp/seed_v2_data.py || error 1 "failed to copy the v2 seed script"
+docker exec "$CONTAINER_NAME" python manage.py shell -c "exec(open('/tmp/seed_v2_data.py').read())" || error 1 "failed to seed v2 data"
 
 echo "stopping v2 and starting v3 on the same database..."
 docker compose down || error 1 "failed to stop the v2 instance"
 COUSINS_MATTER_IMAGE="$new_image" docker compose up -d --wait --wait-timeout 180 --force-recreate || error 1 "the v3 instance failed to start after the upgrade"
 
-docker exec cousins-matter python manage.py migrate --check || error 1 "pending migrations after the upgrade"
-docker cp "$script_dir/tests/check_after_upgrade_v2_v3.py" cousins-matter:/tmp/check_after_upgrade_v2_v3.py || error 1 "failed to copy the post-upgrade check script"
-docker exec cousins-matter python manage.py shell -c "exec(open('/tmp/check_after_upgrade_v2_v3.py').read())" || error 1 "post-upgrade checks failed"
+docker exec "$CONTAINER_NAME" python manage.py migrate --check || error 1 "pending migrations after the upgrade"
+docker cp "$script_dir/tests/check_after_upgrade_v2_v3.py" "$CONTAINER_NAME":/tmp/check_after_upgrade_v2_v3.py || error 1 "failed to copy the post-upgrade check script"
+docker exec "$CONTAINER_NAME" python manage.py shell -c "exec(open('/tmp/check_after_upgrade_v2_v3.py').read())" || error 1 "post-upgrade checks failed"
 
 docker compose down -v
 echo "test v2 to v3 upgrade passed"

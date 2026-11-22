@@ -76,6 +76,8 @@ class TestDisplayPageMenu(TestPageMixin, BasePageTestCase, MemberTestCase):
 </a>""",
       html=True,
     )
+    # the pages dropdown is attached to the navbar brand
+    self.assertContains(response, 'class="navbar-item has-dropdown is-hoverable cm-brand-dropdown"')
     self.assertContains(
       response,
       f"""

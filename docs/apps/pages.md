@@ -4,7 +4,7 @@ title: Pages
 description: Pages app (`pages`) — minimal CMS on top of django.contrib.flatpages, with publish/private URL conventions, menu/tree template tags and a predefined-pages import; documented in apps/pages.md
 tags: ["app", "pages"]
 status: draft
-stale_after: 2027-11-13
+stale_after: 2028-11-13
 generated: { by: claude-code/glm-5.3-flash, at: 2026-09-10T00:00:00Z }
 ---
 
@@ -66,7 +66,8 @@ the signup and `TenantCreateView` flows.
 Publication is driven by the page **URL prefix**, not a boolean flag:
 
 - `/publish/...` (`MENU_PAGE_URL_PREFIX`) — public pages, rendered as
-  the navbar menu by the `pages_menu` tag.
+  the navbar menu by the `pages_menu` tag. `pages_menu_tree` exposes the
+  same tree to templates that render their own dropdown (the navbar brand).
 - `/private/...` (`PRIVATE_PAGE_URL_PREFIX`) — private pages, shown in
   a separate "Private" section; combine with flatpages'
   `registration_required` to demand login.

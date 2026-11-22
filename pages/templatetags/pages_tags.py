@@ -75,12 +75,21 @@ def build_pages_tree(
 
 
 @register.inclusion_tag("pages/menu_pages.html")
-def pages_menu():
+def pages_menu(page_tree=None):
   """
   Creates a nested tree structure from all flat pages that start with the menu page URL prefix
   and pass it to the "pages/menu_pages.html" template for rendering.
+  Accepts an already-built tree so the navbar can reuse pages_menu_tree.
   """
-  return {"page_tree": build_pages_tree(prefix=settings.MENU_PAGE_URL_PREFIX)}
+  if page_tree is None:
+    page_tree = build_pages_tree(prefix=settings.MENU_PAGE_URL_PREFIX)
+  return {"page_tree": page_tree}
+
+
+@register.simple_tag
+def pages_menu_tree():
+  """Same tree as pages_menu, for templates that render the dropdown themselves (navbar brand)."""
+  return build_pages_tree(prefix=settings.MENU_PAGE_URL_PREFIX)
 
 
 @register.inclusion_tag("pages/page_subtree.html", takes_context=True)

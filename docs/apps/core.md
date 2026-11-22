@@ -4,7 +4,7 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-12-22
+stale_after: 2028-12-22
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-09T12:00:00Z }
 ---
 
@@ -199,6 +199,12 @@ from `PUBLIC_MEDIA_URL` — keeps the historical
 `<img width="112" height="28">`. Any page can include the partial and pass
 `brand_class` (`cm-brand--navbar`, `cm-brand--hero` or `cm-brand--small`) to
 pick a variant; its styles live in `core.css` so they load on every page.
+
+The pages menu (`/publish/...`) is not a `navbar-start` item: `navbar.html`
+renders it as a hover dropdown attached to the brand (`cm-brand-dropdown`) at
+1600px and up. Below that breakpoint the same entry stays in the burger menu
+(`cm-pages-menu`), since the brand dropdown would only open on hover and
+would otherwise render inline.
 
 ## Middleware
 

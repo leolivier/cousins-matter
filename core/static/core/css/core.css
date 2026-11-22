@@ -416,6 +416,22 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 	}
 }
 
+/* The pages dropdown sits under the brand in the full-width navbar only.
+   1600px matches core.js's NAVBAR_BREAKPOINT: below it the menu collapses
+   behind the burger, so the Pages entry stays in #navMenu and the brand
+   dropdown is suppressed (it would otherwise render inline). */
+@media screen and (max-width: 1599.98px) {
+	.cm-brand-dropdown .navbar-dropdown {
+		display: none !important;
+	}
+}
+
+@media screen and (min-width: 1600px) {
+	.cm-pages-menu {
+		display: none;
+	}
+}
+
 /* Cousins Matter brand lockup (default navbar logo, landing hero, auth pages) */
 .cm-brand {
 	display: flex;

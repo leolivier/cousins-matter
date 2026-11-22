@@ -52,8 +52,8 @@ class ModalFamilyUpsertMixin(TemplateResponseMixin, FormMixin):
       # atomic: the family and the child link commit together or not at all
       with transaction.atomic():
         family = form.save()
-        # TODO: very inefficient! refactor to add a search field
-        families = Family.objects.all()
+        # Only name is rendered in the select; a search field is a separate UI feature.
+        families = Family.objects.only("name")
         child_family_id = request.GET.get("current_family_id", "")
         if child_family_id:
           child_family = get_object_or_404(Family, pk=child_family_id)

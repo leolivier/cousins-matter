@@ -305,12 +305,17 @@ class PhotoEditViewTest(PhotoTestsBase):
     }
 
   def test_edit_photo_no_owner(self):
-    """Tests editing a photo with no owner (should succeed)."""
+    """Ownerless photos (and galleries) are managed by tenant admins only."""
+    self.assertEqual(self.client.get(self.url).status_code, 403)
+    response = self.client.post(self.url, self.update_data, follow=True)
+    self.assertEqual(response.status_code, 403)
+    self.assertEqual(Photo.objects.get(pk=self.photo.id).name, self.name)
+
+  def test_edit_photo_no_owner_as_superuser(self):
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
     response = self.client.post(self.url, self.update_data, follow=True)
     self.assertRedirects(response, reverse("galleries:photo", kwargs={"pk": self.photo.id}), 302, 200)
-    updated_photo = Photo.objects.get(pk=self.photo.id)
-    self.assertEqual(updated_photo.name, "Updated photo name")
-    self.assertContainsMessage(response, "success", _("Photo updated successfully"))
+    self.assertEqual(Photo.objects.get(pk=self.photo.id).name, "Updated photo name")
 
   def test_edit_photo_as_owner(self):
     """Tests editing a photo as the photo owner."""

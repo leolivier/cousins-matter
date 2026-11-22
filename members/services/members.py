@@ -174,7 +174,7 @@ def do_toggle_follow(followed: Member, follower: Member, follower_url: str):
           "follower_name": follower.full_name,
           "followed_name": followed.full_name,
           "follower_url": follower_url,
-          "site_name": settings.SITE_NAME,
+          "site_name": tenant_setting("site_name"),
         },
       ),
     )

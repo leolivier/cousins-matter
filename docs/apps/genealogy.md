@@ -72,7 +72,7 @@ a different ancestor. Legacy rows were backfilled to the default tenant
     to the first 4-digit year (Jan 1st) — GEDCOM dates like
     `ABT 1990` degrade instead of failing.
 - `GedcomExporter` (export): emits a GEDCOM 5.5.1, UTF-8 file with a
-  CousinsMatter header (`APP_VERSION`, `SITE_NAME`), one
+  CousinsMatter header (`APP_VERSION`, `tenant_setting("site_name")`), one
   `0 @I<pk>@ INDI` record per person (name, sex, `_UID`, BIRT/DEAT,
   FAMS/FAMC pointers) and one `0 @F<pk>@ FAM` record per union; the
   pointer uses `person.gedcom_id` when present and falls back to

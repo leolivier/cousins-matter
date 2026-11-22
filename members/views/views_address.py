@@ -44,8 +44,8 @@ class ModalAddressMixin(TemplateResponseMixin, FormMixin):
     assert request.htmx  # nosec B101
     if form.is_valid():
       address = form.save()
-      # TODO: very inefficient! refactor to add a search field
-      addresses = Address.objects.all()
+      # Only the fields rendered by Address.__str__ are needed in the select.
+      addresses = Address.objects.only("number_and_street", "complementary_info", "zip_code", "city", "state", "country")
       return render(
         request, "members/address/address_form.html#set_address", {"selected_address": address, "addresses": addresses}
       )

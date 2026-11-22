@@ -1,11 +1,11 @@
 ---
 type: Plan
 title: Known Debt
-description: Known shortcuts, latent bugs and unenforced settings, each anchored to the code that carries them (verified 2026-09-05)
+description: Remaining shortcuts and unenforced settings, each anchored to the code that carries them (verified 2026-11-22)
 tags: ["plan", "debt"]
 status: draft
-stale_after: 2026-12-04
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T12:28:11Z }
+stale_after: 2027-02-22
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-22T12:22:29Z }
 ---
 
 # Known Debt
@@ -13,95 +13,89 @@ generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T12:28:11Z }
 Deliberate shortcuts and latent defects, each anchored to a file so the
 next reader can re-verify it in seconds. Planned work derived from these
 items lives in the [Roadmap](/plan/roadmap.md). Facts below were checked
-against the code on 2026-09-05.
+against the code on 2026-11-22.
 
-## Gallery bulk import: invalid-form branch raises TypeError
+## Feature flags are still memoized per process
 
-`galleries/views/views_bulk.py:56` flashes form errors with
-`": ".join(code, error)` — `str.join` takes one argument, so any
-**invalid** bulk-import form raises `TypeError` and the user gets an
-HTTP 500 instead of the field errors. (`form.errors.items()` also yields
-a list of messages as `error`, so the fix is formatting, e.g.
-`f"{code}: {'; '.join(error)}"`.) The sibling `except Exception` branch
-just above flashes raw `str(e)`. User-visible failure modes are listed
-in the [gallery bulk import flow](/flows/gallery-bulk-import.md#failure-modes-visible-to-the-user).
+`_tenant_flags_cache` (core/templatetags/cm_tags.py:280) is a plain
+per-process dict and `clear_flags_cache()` has a single caller, the
+family-settings save (tenants/views/views_settings.py). This is accepted
+today because `|featured` is only evaluated while rendering templates in
+daphne (a single process; `Dockerfile:54`) — qcluster never renders
+templates. Tenant **settings** are no longer affected: their memo is
+versioned through the shared cache and invalidated by
+`TenantSettings.save()` (tenants/settings_overrides.py).
 
-## Zip import progress is per-process state
+Trigger to revisit: if a second web worker is added, give the flags memo
+the same `_version()` / `cache.incr` treatment. See the
+[feature-flags fiche](/modules/feature-flags.md).
 
-`ZIP_IMPORTS` is a module-level dict (galleries/tasks.py:52) holding
-in-flight `ZipImport` objects; `upload_progress` raises `Http404` when
-the group is absent (galleries/views/views_bulk.py:65-67). With more
-than one app-server worker — or after a worker restart mid-upload — the
-progress poll hits a process that never saw the import and 404s. See
+## Import progress depends on the cache being up
+
+`ZipImport` (galleries/tasks.py) and `ImportContext` (members/tasks.py)
+store their progress objects in the Django cache with a 24 h TTL, so a
+web restart no longer loses an in-flight import and every process sees
+the same state. Production uses Redis (config/settings/production.py);
+dev and tests use LocMem (single process by definition). If Redis is
+down, `upload_progress` / `get_import_progress` return 404 — the import
+itself still completes in qcluster, only the polling bar is lost. See
 [bulk zip import](/apps/galleries.md#bulk-zip-import).
 
-## The `public` storage alias disappears when `MEDIA_STORAGE` is set
+## Ownerless galleries and photos are managed by tenant admins only
 
-`STORAGES` (config/settings/base.py:131-152) defines a `public` alias
-pointing at `PUBLIC_MEDIA_ROOT` **only while `MEDIA_STORAGE` is unset**;
-setting `MEDIA_STORAGE` replaces that entry wholesale. Nothing selects
-`storage="public"` today, so nothing breaks — but the alias is the hook
-[public media](/architecture.md#static-and-media) relies on, and it
-silently vanishes exactly when someone moves media to S3. See the
-[media-storage spec](/specs/media-storage.md).
+`Gallery.owner` is nullable (galleries/models.py:182-188). User-created
+galleries always have an owner (`GalleryCreateView.form_valid`), and
+zip-imported galleries inherit the importer. Ownerless rows come from the
+admin or direct ORM use; `check_edit_permission(None)` now allows only
+superusers/tenant admins (core/utils.py:435), and the gallery and photo
+edit paths always call it (`uploaded_by or gallery.owner` for photos).
+This is a deliberate policy, not a bug — document it if a new creation
+path can produce ownerless galleries.
 
-Suspected misplaced-key bug on top: `MEDIA_STORAGE` reconfigures `public`
-where an operator would expect `default` — see the remote media storage
-item in the [roadmap](/plan/roadmap.md).
+## Trove description size is client-side only
 
-## Trove size limits are unenforced
-
-`TROVE_FILE_MAX_SIZE` (20 MB) and `TROVE_PICTURE_FILE_MAX_SIZE`
-(config/settings/base.py:520-521) are read by no upload path — a grep
-shows their only consumer is the settings file itself.
-`TROVE_DESCRIPTION_MAX_SIZE` is enforced client-side only, via the
-summernote `maxsize` include in
-troves/templates/troves/treasure_form.html:4. Server-side trove uploads
-are therefore unbounded by these settings.
-
-## Per-tenant flags cache invalidation
-
-`clear_flags_cache()` has a single caller (the family-settings save) and
-`_tenant_flags_cache` is a per-process dict, so other workers serve
-stale flags. The [feature-flags module fiche](/modules/feature-flags.md)
-owns this analysis — do not fix it in a second place.
-
-## Classified ads N+1 analysis (resolved in code)
-
-`classified_ads_n+1_analysis.md` (repo root, kept on purpose) found two
-N+1 query paths. Both fixes **are already in the code**:
-`ListAdsView` uses `select_related("owner")` and `AdDetailView` adds
-`prefetch_related("photos")` (classified_ads/views.py:75-90), and both
-admins carry `list_select_related` (classified_ads/admin.py). The file
-stays as the historical analysis; the user-facing summary is in
-[apps/classified-ads.md](/apps/classified-ads.md#known-performance-issue).
-Remaining cleanup: archive or delete the root file once nothing links
-to it.
+`TROVE_FILE_MAX_SIZE` and `TROVE_PICTURE_FILE_MAX_SIZE`
+(config/settings/base.py:560-561) are now enforced server-side by model
+validators on `Trove.file` / `Trove.picture` (troves/models.py), through
+the shared `core.utils.check_file_size`. `TROVE_DESCRIPTION_MAX_SIZE`
+remains a Summernote `maxsize` hint only
+(troves/templates/troves/treasure_form.html:4); its default (~2.5 MB)
+makes a server-side character check pointless. See
+[troves](/apps/troves.md#storage-and-size-limits-configsettingsbasepy).
 
 ## Markers left in code
 
-- **`ponytail:` marker** — galleries/models.py:156: files copied during
-  a gallery move are not cleaned up on failure (rare, harmless orphans).
-- **TODO/FIXME hotspots** — 15 occurrences across 13 `.py` files
-  (`grep -rn "TODO\|FIXME" --include=*.py`). The heavy ones:
-  - members/views/views_family.py:48 and members/views/views_address.py:45
-    — "very inefficient! refactor to add a search field" (family/address
-    listing scans).
-  - galleries/views/views_gallery.py:68 — "every member can edit any
-    gallery ???" — an open permission-design question on gallery edit.
-  - core/templatetags/cm_tags.py:3 and core/htmlvalidator.py:32 —
-    extract as reusable packages.
-  - config/settings/production.py:33 — `SECURE_HSTS_SECONDS` still a TODO.
-  - galleries/tasks.py:80 (exif as JSON), members/trace_login.py:101
-    (post_migrate signal ordering), galleries/tests/tests_bulk_upload.py:88
-    (test cleanup), core/views/views_general.py:145 (Windows paths), and
-    3 in forum/tests (JS/HTMX interactions untestable server-side).
+- **`ponytail:` markers** — deliberate ceilings, kept on purpose:
+  - galleries/models.py:156: files copied during a gallery move are not
+    cleaned up on failure (rare, harmless orphans).
+  - tenants/views/views_settings.py:32: site-logo limit fixed at 512 KB;
+    move to an env setting only if a family needs more.
+  - saas/onboarding.py:25: "invited" derives from the tenant having other
+    members (no dedicated flag).
+- **TODO/FIXME** — 3 occurrences, all in forum tests and all notes about
+  JS/HTMX interactions that cannot be asserted server-side
+  (forum/tests/tests_reply.py:48, forum/tests/tests_comments.py:42 and :54).
+  Keep them as documentation.
 
-## move TokenManager from Members.registration_link_manager?py to core/token_manager.py
-This will make it available to other parts of the codebase.
+## TokenManager stays in members
 
-## Review the link between Tenant name and Site name
-Why shouldn't the Tenant name be used as the Site name? (or the reverse)
+`members/registration_link_manager.py:TokenManager` has a single consumer
+(`RegistrationLinkManager`); moving it to `core/` would only pay off with
+a second consumer, and its `_key_salt` must stay byte-identical or every
+in-flight registration link breaks. Revisit when another app needs
+signed, expiring tokens.
+
+## Recently resolved (kept for context)
+
+- Bulk-import invalid form raised `TypeError` (`": ".join(code, error)`);
+  it now flashes the field errors and logs unexpected exceptions.
+- `MEDIA_STORAGE` configures the `default` alias; the phantom `public`
+  alias is gone (issue #465).
+- Classified ads N+1 paths use `select_related("owner")` /
+  `prefetch_related("photos")`; the root analysis file was removed.
+- `Tenant.name` now stands in for `site_name` in multi-tenant mode when
+  no override is set (default/system tenants keep the global brand).
+- `send_zipfile` (dead, never URL-wired) was deleted.
 
 ## See also
 

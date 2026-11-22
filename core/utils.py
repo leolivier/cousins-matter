@@ -433,7 +433,9 @@ def protected_media_url(media):
 
 
 def check_edit_permission(request, owner):
-  if request.user.is_superuser or request.user.is_tenant_admin or owner.id == request.user.id:
+  # Ownerless rows (admin/ORM-created) are managed by tenant admins only.
+  is_admin = request.user.is_superuser or request.user.is_tenant_admin
+  if is_admin or (owner is not None and owner.id == request.user.id):
     return True
   raise PermissionDenied(_("You do not have permission to edit/delete this object."))
 

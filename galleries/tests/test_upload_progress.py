@@ -1,6 +1,6 @@
 from unittest.mock import patch
 from django.urls import reverse
-from galleries.tasks import ZipImport, ZIP_IMPORTS
+from galleries.tasks import ZipImport
 from members.tests.tests_member_base import MemberTestCase
 
 
@@ -15,12 +15,10 @@ class UploadProgressViewTest(MemberTestCase):
       owner_id=self.member.id, root="/tmp/test_root", group=self.task_group_id, nbPhotos=10, nbGalleries=2
     )
     # Register the mock ZipImport
-    ZIP_IMPORTS[self.task_group_id] = self.zimport
+    self.zimport.register()
 
   def tearDown(self):
-    # clean up global variable
-    if self.task_group_id in ZIP_IMPORTS:
-      del ZIP_IMPORTS[self.task_group_id]
+    self.zimport.unregister()
 
   @patch("galleries.views.views_bulk.count_group")
   @patch("galleries.views.views_bulk.result_group")
@@ -68,10 +66,10 @@ class UploadProgressViewTest(MemberTestCase):
     self.assertIn("back_text", response.context)
 
     # Check cleanup - verify rmtree was called
-    mock_rmtree.assert_called_once_with("/tmp/test_root")
+    mock_rmtree.assert_called_once_with("/tmp/test_root", ignore_errors=True)
 
     # Verify zimport is unregistered
-    self.assertFalse(self.task_group_id in ZIP_IMPORTS)
+    self.assertIsNone(ZipImport.get(self.task_group_id))
 
   def test_upload_progress_not_found(self):
     # Test with a non-existent group ID

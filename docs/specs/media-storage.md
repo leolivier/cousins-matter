@@ -4,8 +4,8 @@ title: Media Storage
 description: Design of the storage layer — the two media roots and their URL prefixes, the STORAGES alias switch driven by MEDIA_STORAGE, the pluggable backend contract, and the Dropbox option
 tags: ["spec", "media"]
 status: draft
-stale_after: 2027-03-05
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T12:02:12Z }
+stale_after: 2027-05-22
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-22T12:22:29Z }
 ---
 
 # Media Storage
@@ -25,23 +25,18 @@ This fiche is the contract and the invariants.
 - `PUBLIC_MEDIA_ROOT = MEDIA_ROOT/"public"`, `PUBLIC_MEDIA_URL =
   "/public_media/"` — the anonymous subset (site logo, theme stylesheet).
 
-`STORAGES` is built conditionally:
+`STORAGES` has one media alias, `"default"`:
 
-- **`MEDIA_STORAGE` unset (default):** two FileSystemStorage aliases —
-  `"default"` on `MEDIA_ROOT` and `"public"` on `PUBLIC_MEDIA_ROOT`.
-- **`MEDIA_STORAGE` set:** the `"public"` alias entry is replaced wholesale
-  by `{"BACKEND": env.str("MEDIA_STORAGE"),
-  "OPTIONS": env.json("MEDIA_STORAGE_OPTIONS", default={})}`. The
-  `"default"` alias is **not** touched — it stays FileSystemStorage on
-  `MEDIA_ROOT`, so member uploads remain local.
+- **`MEDIA_STORAGE` unset (default):** `"default"` is a FileSystemStorage
+  on `MEDIA_ROOT` / `MEDIA_URL`.
+- **`MEDIA_STORAGE` set:** `"default"` becomes the remote backend given by
+  `MEDIA_STORAGE` / `MEDIA_STORAGE_OPTIONS` (regression test:
+  core/tests/test_media_storage_settings.py, issue #465).
 
-Nothing in the codebase currently selects `storage="public"`, so with
-`MEDIA_STORAGE` set the remote backend is effectively inert until something
-is wired to it; public files are simply files under `media/public/` reached
-through `default_storage` (`download_public_media` re-prefixes
-`Path("public")`). So the whole public mechanism is a directory convention,
-not a storage routing decision — keep it that way unless both aliases are
-migrated together.
+The "public" subset is not a separate alias: it is the `public/` directory
+prefix inside the same backend, read through `default_storage`
+(`download_public_media` re-prefixes `Path("public")`). One alias means
+moving media to S3 moves public and protected files together.
 
 ## Backend contract
 

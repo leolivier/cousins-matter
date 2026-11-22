@@ -86,8 +86,11 @@ def settings(request):
   result = dict(_settings_in_templates)
   tenant = getattr(request, "tenant", None)
   if tenant is not None:
-    from tenants.settings_overrides import effective_overrides
+    from tenants.settings_overrides import effective_overrides, tenant_site_name
 
+    site_name = tenant_site_name(tenant)
+    if site_name:
+      result["SITE_NAME"] = site_name
     overrides = effective_overrides(tenant)
     if overrides:
       for key, value in overrides.items():

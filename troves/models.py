@@ -6,10 +6,20 @@ from django.core.files.storage import default_storage
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
-from core.utils import create_thumbnail
+from core.utils import check_file_size, create_thumbnail
 from tenants.scoping import TenantModel
 
 logger = logging.getLogger(__name__)
+
+
+def check_trove_picture_size(file):
+  if file:
+    check_file_size(file, settings.TROVE_PICTURE_FILE_MAX_SIZE)
+
+
+def check_trove_file_size(file):
+  if file:
+    check_file_size(file, settings.TROVE_FILE_MAX_SIZE)
 
 
 class Trove(TenantModel):
@@ -38,6 +48,7 @@ class Trove(TenantModel):
     verbose_name=_("Treasure photo"),
     null=False,
     blank=False,
+    validators=[check_trove_picture_size],
   )
   thumbnail = models.ImageField(upload_to=settings.TROVE_THUMBNAIL_DIRECTORY, blank=True)
   file = models.FileField(
@@ -45,6 +56,7 @@ class Trove(TenantModel):
     verbose_name=_("Treasure file"),
     blank=True,
     null=True,
+    validators=[check_trove_file_size],
   )
   url = models.URLField(
     verbose_name=_("External URL of the treasure (e.g. a YouTube video)"),

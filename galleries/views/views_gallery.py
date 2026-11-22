@@ -45,8 +45,7 @@ class GalleryUpdateView(generic.UpdateView):
     if slug is None:
       raise Http404("No gallery found matching the given slug.")
     gallery = get_object_or_404(Gallery, slug=slug)
-    if gallery.owner:
-      check_edit_permission(self.request, gallery.owner)
+    check_edit_permission(self.request, gallery.owner)
     return gallery
 
 
@@ -65,8 +64,6 @@ class GalleryDetailView(generic.DetailView):
       context={"gallery": gallery, "page_num": page, "page_size": page_size},
     )
 
-  # TODO: every member can edit any gallery ???
-
 
 class GalleryTreeView(generic.ListView):
   template_name = "galleries/galleries_tree.html"
@@ -79,9 +76,8 @@ class GalleryTreeView(generic.ListView):
 
 def delete_gallery(request, slug):
   gallery = get_object_or_404(Gallery, slug=slug)
+  check_edit_permission(request, gallery.owner)
   if request.method == "POST":
-    if gallery.owner:
-      check_edit_permission(request, gallery.owner)
     gallery.delete()
     messages.success(request, _("Gallery deleted successfully"))
     return HttpResponseClientRedirect(reverse("galleries:galleries"))

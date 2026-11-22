@@ -271,6 +271,15 @@ ASGI_APPLICATION = "cousinsmatter.asgi.application"
 REDIS_HOST = env.str("REDIS_HOST", default="redis")
 REDIS_PORT = env.int("REDIS_PORT", default=6379)
 
+# Cache shared by all processes. LocMem by default (single-process dev/tests);
+# production.py switches to Redis so daphne and qcluster share state.
+CACHES: dict[str, Any] = {
+  "default": {
+    "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    "LOCATION": "cousins-matter",
+  }
+}
+
 CHANNEL_LAYERS: dict[str, Any] = {
   "default": {
     "BACKEND": "channels_redis.core.RedisChannelLayer",

@@ -4,8 +4,8 @@ title: Feature Flags
 description: FEATURES_FLAGS defaults, the |featured template filter, per-family overrides through TenantSettings.overrides, and how to add a new flag
 tags: ["module", "feature-flags"]
 status: draft
-stale_after: 2027-03-05
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T11:16:06Z }
+stale_after: 2027-05-22
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-22T12:22:29Z }
 ---
 
 # Feature Flags
@@ -39,22 +39,20 @@ environment. The shipped keys, all `True` by default:
   memoized per process in `_tenant_flags_cache`, keyed by (tenant pk, global
   flags tuple) so test `override_settings(FEATURES_FLAGS=...)` invalidates
   naturally.
-- After editing `TenantSettings.overrides` you must call
-  `clear_flags_cache()`; tenants/views/views_settings.py does exactly that
-  (plus `clear_tenant_settings_cache()`) when persisting the family settings
-  form ([Tenants](/apps/tenants.md#per-tenant-settings-tenantssettings_overridespy)).
+- `TenantSettings.save()` invalidates both memos: the tenant-settings memo is
+  versioned through the shared cache (every process recomputes), and
+  `clear_flags_cache()` drops the local flags memo. This covers the family
+  settings form, the Django admin and direct ORM edits
+  ([Tenants](/apps/tenants.md#per-tenant-settings-tenantssettings_overridespy)).
+- The flags memo itself is still per process. That is accepted because
+  `|featured` is only evaluated while rendering templates in daphne (a single
+  process, `Dockerfile:54`); qcluster never renders templates. If a second web
+  worker is added, give it the same version-key treatment as the tenant
+  settings.
 - The family settings UI (`tenants:settings` →
   tenants/views/views_settings.py) only exposes the branding/behavior keys of
   `TENANT_SETTINGS_SPEC`, not flags: per-family flag overrides are set
-  through the Django admin on the `TenantSettings` row. They take effect only
-  once the flags cache is invalidated — today the *only* code path calling
-  `clear_flags_cache()` is the family-settings form save
-  (tenants/views/views_settings.py); `TenantSettingsAdmin` and
-  `TenantSettings.save()` do not. And because `_tenant_flags_cache` is a
-  plain per-process dict keyed without the overrides content, other worker
-  processes (multi-worker app servers, the qcluster worker) keep serving the
-  stale flags until they restart or a family-settings save happens in that
-  same process.
+  through the Django admin on the `TenantSettings` row.
 
 ## Adding a flag
 

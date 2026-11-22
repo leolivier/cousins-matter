@@ -176,7 +176,7 @@ class CreateGalleryViewTest(GalleryBaseTestCase):
     """Tests modifying a gallery through the view."""
     # create a gallery
     gal_name = get_gallery_name()
-    rg = Gallery(name=gal_name)
+    rg = Gallery(name=gal_name, owner=self.member)
     rg.save()
     # add 3 photos in it
     photos = [
@@ -259,7 +259,7 @@ class DeleteGalleryViewTest(GalleryBaseTestCase):
     # create n embedded galleries with one photo in each one
     if n == 0:
       return []
-    gal = Gallery(name=get_gallery_name(), parent=parent)
+    gal = Gallery(name=get_gallery_name(), parent=parent, owner=self.member)
     gal.save()
     p = Photo(name=get_gallery_name(), gallery=gal, date=date.today(), image=image)
     p.save()
@@ -287,3 +287,22 @@ class DeleteGalleryViewTest(GalleryBaseTestCase):
     for gslug, pid in lst[1:]:
       self.assertFalse(Gallery.objects.filter(slug=gslug).exists())
       self.assertFalse(Photo.objects.filter(pk=pid).exists())
+
+
+class OwnerlessGalleryPermissionTest(GalleryBaseTestCase):
+  """An ownerless gallery is managed by tenant admins, not by every member."""
+
+  def setUp(self):
+    super().setUp()
+    self.gallery = Gallery.objects.create(name="orphan")
+
+  def test_regular_member_cannot_edit_or_delete(self):
+    self.assertEqual(self.client.get(reverse("galleries:edit", args=[self.gallery.slug])).status_code, 403)
+    response = self.client.post(reverse("galleries:delete_gallery", kwargs={"slug": self.gallery.slug}))
+    self.assertEqual(response.status_code, 403)
+    self.assertTrue(Gallery.objects.filter(pk=self.gallery.pk).exists())
+
+  def test_superuser_can_edit(self):
+    self.client.login(username=self.superuser.email, password=self.superuser.password)
+    response = self.client.get(reverse("galleries:edit", args=[self.gallery.slug]))
+    self.assertEqual(response.status_code, 200)

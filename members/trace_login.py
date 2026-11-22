@@ -97,8 +97,8 @@ def purge_login_traces(days: int):
 _purge_scheduled = False
 
 
-# starts the scheduling after the migrations
-# TODO: make sure the post_migrate signals (1 per migration) are sent after all migrations are done
+# starts the scheduling after the migrations (post_migrate runs once the
+# migrated app's tables exist; the global guard keeps it to one Schedule)
 @receiver(post_migrate)  # noqa E302
 def schedule_purge_login_traces(sender, **kwargs):
   "Schedules the purge_login_traces function to run weekly."

@@ -17,14 +17,14 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: dataaxiom/ghcr-cleanup-action@v1
         with:
-          package: cousins-matter
+          package: ${{ github.event.repository.name }}
           delete-tags: pr-${{ github.event.pull_request.number }}
 
       - name: Weekly sweep
         if: github.event_name != 'pull_request'
         uses: dataaxiom/ghcr-cleanup-action@v1
         with:
-          package: cousins-matter
+          package: ${{ github.event.repository.name }}
           delete-tags: |
             pr-*
             dev-*

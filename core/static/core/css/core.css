@@ -43,6 +43,20 @@
 	}
 }
 
+/* Language menu entries are submit inputs: keep Bulma's navbar-item look. */
+.navbar-dropdown input.navbar-item {
+	border: none;
+	width: 100%;
+	text-align: start;
+	cursor: pointer;
+	font-size: inherit;
+}
+.navbar-dropdown input.navbar-item:hover,
+.navbar-dropdown input.navbar-item:focus {
+	--bulma-navbar-item-background-l-delta: var(--bulma-navbar-item-hover-background-l-delta);
+	--bulma-navbar-item-background-a: 1;
+}
+
 .icon img {
 	width: 100%;
 	height: 100%;

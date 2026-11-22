@@ -1,6 +1,5 @@
 # based on https://stackoverflow.com/questions/17178525/django-how-to-include-a-view-from-within-a-template#56476932
 # this view and tag allows including a view into another view. see template/core/base.html as an example
-# TODO: deliver this as a reusable piece of code
 import os
 import logging
 from django.template import Library, Node, Variable, TemplateSyntaxError
@@ -104,7 +103,9 @@ def get_view(parser, token):
 
 
 def get_title(title):
-  return f"{settings.SITE_NAME} - {title}"
+  from tenants.settings_overrides import tenant_setting
+
+  return f"{tenant_setting('site_name')} - {title}"
 
 
 class TitleNode(Node):

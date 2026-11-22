@@ -48,12 +48,13 @@ class BulkUploadPhotosView(generic.FormView):
         for err in e.messages:
           messages.error(request, err)
         return HttpResponseClientRefresh()
-      except Exception as e:
-        messages.error(request, e.__str__())
+      except Exception:
+        logger.exception("Bulk zip import failed")
+        messages.error(request, _("Unable to import the zip file."))
         return HttpResponseClientRefresh()
     else:
-      for code, error in form.errors.items():
-        messages.error(request, ": ".join(code, error))
+      for code, errors in form.errors.items():
+        messages.error(request, f"{code}: {'; '.join(errors)}")
       return HttpResponseClientRefresh()
 
 
@@ -91,8 +92,8 @@ def upload_progress(request, id):
       "lg": zimport.nbGalleries,
       "nbp": len(zimport.photos),
     }
-    # clean temp directory
-    shutil.rmtree(zimport.root)
+    # clean temp directory (a concurrent/retried poll may already have done it)
+    shutil.rmtree(zimport.root, ignore_errors=True)
     # remove zimport from the cache
     zimport.unregister()
     logger.debug(f"cleaned {zimport}")

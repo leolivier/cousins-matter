@@ -57,7 +57,6 @@ def do_import_members_from_csv(csv_file, user_id, activate_users):
     lang=get_language(),
     tenant_id=default_manager.tenant_id,
   )
-  import_context.register()
   csvf = io.TextIOWrapper(csv_file, encoding="utf-8", newline="")
   reader = csv.DictReader(csvf)
   check_fields(reader.fieldnames)
@@ -68,6 +67,9 @@ def do_import_members_from_csv(csv_file, user_id, activate_users):
     import_context.rows_num += 1
   logger.info("importing %d rows", import_context.rows_num)
 
+  # register only once rows_num is populated: the cached snapshot is what the
+  # progress poll reads.
+  import_context.register()
   return import_context
 
 

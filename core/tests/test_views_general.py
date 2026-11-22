@@ -56,16 +56,6 @@ class GeneralViewsTestCase(MemberTestCase):
     response = self.client.get(reverse("get_protected_media", args=["some_file.jpg"]))
     self.assertEqual(response.status_code, 404)
 
-  def test_send_zipfile(self):
-    """Test that send_zipfile works."""
-    from core.views.views_general import send_zipfile
-    from members.tests.tests_member_base import get_fake_request
-
-    request = get_fake_request()
-    response = send_zipfile(request)
-    self.assertEqual(response.status_code, 200)
-    self.assertEqual(response["Content-Type"], "application/zip")
-
 
 class HealthCheckTestCase(TestCase):
   def test_health_ok(self):

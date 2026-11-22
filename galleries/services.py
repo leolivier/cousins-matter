@@ -170,7 +170,6 @@ def handle_zip(zip_file, task_group, owner_id, root_gallery=None, tenant_id=None
 
   tmpdir = tempfile.mkdtemp()
   zimport = ZipImport(owner_id=owner_id, root=tmpdir, group=task_group, root_gallery=root_gallery)
-  zimport.register()
   broker = get_broker()
   # extract the zip file to a temporary directory
   with zipfile.ZipFile(zip_file, "r") as zip_ref:
@@ -197,4 +196,7 @@ def handle_zip(zip_file, task_group, owner_id, root_gallery=None, tenant_id=None
       zimport.nbPhotos += 1
       logger.debug(f"created task for {image} group: {task_group}")
 
+  # register only once nbPhotos/nbGalleries are populated: the cached snapshot
+  # is what the progress poll reads.
+  zimport.register()
   return zimport

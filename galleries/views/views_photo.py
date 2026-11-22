@@ -89,11 +89,12 @@ class PhotoEditView(generic.UpdateView):
     # per request: TenantManager scopes by the current tenant
     return Photo.objects.select_related("gallery__owner", "uploaded_by")
 
+  def get_object(self, queryset=None):
+    photo = super().get_object(queryset)
+    check_edit_permission(self.request, photo.uploaded_by or photo.gallery.owner)
+    return photo
+
   def form_valid(self, form):
-    if self.object.uploaded_by:
-      check_edit_permission(self.request, self.object.uploaded_by)
-    elif self.object.gallery.owner:
-      check_edit_permission(self.request, self.object.gallery.owner)
     messages.success(self.request, _("Photo updated successfully"))
     return super().form_valid(form)
 

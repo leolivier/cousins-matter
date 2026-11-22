@@ -30,8 +30,18 @@ SESSION_COOKIE_DOMAIN = env.str("SESSION_COOKIE_DOMAIN", None)
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-# SECURE_HSTS_SECONDS= # TODO
+SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=0)  # 0 = disabled
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Share the cache across processes (daphne + qcluster): import progress,
+# tenant settings and feature-flag invalidation. DB 2 keeps it clear of
+# channels/django-q on DB 0.
+CACHES = {
+  "default": {
+    "BACKEND": "django.core.cache.backends.redis.RedisCache",
+    "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/2",  # noqa: F405
+  }
+}
 
 # Production Email properties
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

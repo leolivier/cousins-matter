@@ -141,6 +141,14 @@ class TenantSettings(models.Model):
   def __str__(self):
     return f"Settings for {self.tenant}"
 
+  def save(self, *args, **kwargs):
+    super().save(*args, **kwargs)
+    from core.templatetags.cm_tags import clear_flags_cache
+    from .settings_overrides import clear_tenant_settings_cache
+
+    clear_tenant_settings_cache()
+    clear_flags_cache()
+
 
 def tenant_settings_overrides(tenant=None):
   """The ``overrides`` dict for ``tenant`` (default: the current tenant's).

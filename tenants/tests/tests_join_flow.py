@@ -93,8 +93,8 @@ class TenantHomeTests(MemberTestCase):
     self.assertNotContains(global_login, reverse("tenant-join", args=["famille-dubois"]))
 
   def test_join_page_title_uses_family_site_name(self):
-    # The {% title %} tag reads the global settings.SITE_NAME; the join page
-    # must use the tenant-layered value from the context processor instead.
+    # The join page takes the tenant-layered SITE_NAME from the context
+    # processor ({% title %} now reads tenant_setting("site_name") too).
     self.client.logout()
     response = self.client.get(reverse("tenant-join", args=["famille-dubois"]))
     self.assertEqual(response.status_code, 200)

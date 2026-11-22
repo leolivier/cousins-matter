@@ -5,6 +5,7 @@ import sys
 # import time
 from dataclasses import dataclass, field
 from datetime import datetime
+from django.core.cache import cache
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from PIL import Image, ImageOps
 from io import BytesIO
@@ -37,19 +38,20 @@ class ZipImport:
   errors: set[str] = field(default_factory=set)
 
   def register(self):
-    ZIP_IMPORTS[self.group] = self
+    cache.set(_ZIP_IMPORT_KEY.format(self.group), self, _ZIP_IMPORT_TTL)
 
   def unregister(self):
-    if self.group in ZIP_IMPORTS:
-      del ZIP_IMPORTS[self.group]
+    cache.delete(_ZIP_IMPORT_KEY.format(self.group))
 
   @classmethod
   def get(cls, group: str):
-    return ZIP_IMPORTS.get(group, None)
+    return cache.get(_ZIP_IMPORT_KEY.format(group))
 
 
-# in memory cache of ZipImports
-ZIP_IMPORTS: dict[str, ZipImport] = {}
+# Import progress lives in the cache so it survives a web restart and is
+# visible to every process. The TTL bounds orphaned entries.
+_ZIP_IMPORT_KEY = "galleries:zip_import:{}"
+_ZIP_IMPORT_TTL = 24 * 60 * 60
 
 
 def create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
@@ -76,9 +78,6 @@ def create_photo(filename, filepath, zimport: ZipImport, gallery_id: str):
   # reset buffer to beginning
   membuffer.seek(0)
   size = sys.getsizeof(membuffer)
-
-  # TODO: save all exif data as a json buffer?
-  # or extract them when showing image detail?
 
   # compute exif date
   DateTimeOriginalKey = 36867

@@ -106,8 +106,9 @@ login (and tenant) per request. Templates must build URLs with the
 (`galleries/services.py`):
 
 1. The zip is extracted to a temp directory; `ZipImport` (a dataclass
-   in `galleries/tasks.py`) is created and registered in the in-memory
-   `ZIP_IMPORTS` dict keyed by a `task_group` uuid.
+   in `galleries/tasks.py`) is created and, once every task is submitted,
+   registered in the shared cache keyed by a `task_group` uuid (24 h TTL,
+   so it survives a web restart and is visible to every process).
 2. Directory tree → gallery tree: `_get_or_create_gallery()` creates
    missing galleries recursively inside one `transaction.atomic()`
    (paths are normalized and checked for `..`, raising

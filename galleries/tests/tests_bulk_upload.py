@@ -1,15 +1,46 @@
+from django.contrib.messages import get_messages
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from core.tests.test_django_q import django_q_sync_class
 from core.utils import test_resource_full_path
 from django_htmx.http import HttpResponseClientRefresh
 from ..models import Gallery, Photo
+from ..services import handle_zip
+from ..tasks import ZipImport
 from ..views import views_bulk
 from .tests_utils import GalleryBaseTestCase
 
 
 @django_q_sync_class
 class TestBulkUpload(GalleryBaseTestCase):
+  def test_bulk_upload_invalid_form_reports_field_errors(self):
+    """An invalid form must flash its field errors, not raise (issue: ": ".join(code, error))."""
+    response = self.client.post(reverse("galleries:bulk_upload"), {})
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response["HX-Refresh"], "true")
+    messages = [str(m) for m in get_messages(response.wsgi_request)]
+    self.assertTrue(any(m.startswith("zipfile:") for m in messages), messages)
+
+  def test_handle_zip_registers_populated_counts(self):
+    """The cached snapshot must be taken after the task-count loop (regression)."""
+    target = Gallery.objects.create(name="ordering-target", owner=self.member)
+    zipfile = test_resource_full_path("test_bulk_import_flat.zip", __file__)
+    group = "ordering-group"
+    with open(zipfile, "rb") as f:
+      zimport = handle_zip(
+        SimpleUploadedFile("flat.zip", f.read(), content_type="application/zip"),
+        group,
+        self.member.id,
+        target,
+      )
+    try:
+      cached = ZipImport.get(group)
+      self.assertIsNotNone(cached)
+      self.assertEqual(cached.nbPhotos, zimport.nbPhotos)
+      self.assertGreater(cached.nbPhotos, 0)
+    finally:
+      zimport.unregister()
+
   def test_bulk_folder_upload_no_target(self):
     """Tests bulk uploading photos from a zip file containing folders without a target gallery."""
     response = self.client.get(reverse("galleries:bulk_upload"))
@@ -85,4 +116,3 @@ class TestBulkUpload(GalleryBaseTestCase):
 
     # Check that the import gallery contains the imported photos
     self.assertEqual(target_gallery.photo_set.count(), 12)
-    # TODO: remove target gallery directory

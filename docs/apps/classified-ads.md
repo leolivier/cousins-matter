@@ -81,10 +81,9 @@ list as soon as it is created. The effective publication rules are:
 
 ## Known performance issue
 
-N+1 query findings on the list/detail rendering paths are tracked in
-[/plan/debt.md](/plan/debt.md) (full analysis captured at
-`classified_ads_n+1_analysis.md` in the repo root); do not restate it
-here.
+The two N+1 paths found on the list/detail rendering are fixed:
+`ListAdsView` selects the owner and `AdDetailView` prefetches photos
+(classified_ads/views.py), and both admins use `list_select_related`.
 
 ## See also
 

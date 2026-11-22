@@ -245,6 +245,25 @@ class TenantSettingsTests(MemberTestCase):
     clear_tenant_settings_cache()
     self.assertEqual(tenant_setting("birthday_days"), dj_settings.BIRTHDAY_DAYS)
 
+  def test_saving_tenant_settings_invalidates_the_cache(self):
+    from tenants.settings_overrides import effective_overrides, tenant_setting
+
+    with tenant_context(self.family):
+      effective_overrides()  # populate the memo with the empty overrides
+      TenantSettings.objects.create(tenant=self.family, overrides={"birthday_days": 7})
+      self.assertEqual(tenant_setting("birthday_days"), 7)
+
+  def test_site_name_falls_back_to_tenant_name(self):
+    from tenants.settings_overrides import clear_tenant_settings_cache, tenant_setting
+
+    with tenant_context(self.family):
+      self.assertEqual(tenant_setting("site_name"), self.family.name)
+
+    TenantSettings.objects.create(tenant=self.family, overrides={"site_name": "Ma Famille"})
+    clear_tenant_settings_cache()
+    with tenant_context(self.family):
+      self.assertEqual(tenant_setting("site_name"), "Ma Famille")
+
   def test_chart_root_must_belong_to_tenant(self):
     self.client.force_login(self.admin)
     data = self._base_data()

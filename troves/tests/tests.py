@@ -1,3 +1,6 @@
+from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import override_settings
 from django.urls import reverse
 from django.utils.html import escape
 from core.utils import (
@@ -171,6 +174,27 @@ class TestTroveList(MemberTestCase):
     )
     self.assertEqual(response.status_code, 200)
     self.assertFalse(Trove.objects.filter(id=treasure.id).exists())
+
+  @override_settings(TROVE_PICTURE_FILE_MAX_SIZE=1)
+  def test_picture_too_big_is_rejected(self):
+    with self.assertRaises(ValidationError):
+      Trove.objects.create(
+        title="big picture",
+        picture=create_test_image(__file__, "test-image-1.jpg"),
+        category="history",
+        owner=self.member,
+      )
+
+  @override_settings(TROVE_FILE_MAX_SIZE=10)
+  def test_file_too_big_is_rejected(self):
+    with self.assertRaises(ValidationError):
+      Trove.objects.create(
+        title="big file",
+        picture=create_test_image(__file__, "test-image-1.jpg"),
+        file=SimpleUploadedFile("attachment.txt", b"0123456789A"),
+        category="history",
+        owner=self.member,
+      )
 
   def test_translate_category(self):
     from django.utils.translation import gettext as _

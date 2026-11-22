@@ -313,6 +313,26 @@ def featured(value: str) -> bool:
   return _feature_flags(get_current_tenant()).get(value, False)
 
 
+# Language codes that are not country codes, mapped to the country whose flag
+# represents them. Languages whose code is already a country code (fr, es, de,
+# it, pt) need no entry.
+LANGUAGE_FLAGS = {"en": "GB"}
+
+
+@register.filter
+def flag(code: str) -> str:
+  """Return the flag emoji for a language code (fr -> 🇫🇷).
+
+  Built from regional indicator symbols, so no image asset is needed. Empty
+  string for anything that is not a two-letter code (e.g. a malformed value).
+  """
+  letters = code.split("-")[0].upper()
+  if len(letters) != 2 or not (letters.isascii() and letters.isalpha()):
+    return ""
+  letters = LANGUAGE_FLAGS.get(letters.lower(), letters)
+  return "".join(chr(0x1F1E6 + ord(c) - ord("A")) for c in letters)
+
+
 @register.filter
 def boldify(value: str) -> str:
   txt = escape(value)

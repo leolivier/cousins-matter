@@ -475,8 +475,6 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 }
 
 .cm-brand--navbar .cm-brand-name {
-	flex-direction: row;
-	gap: 0.3rem;
 	color: #fff;
 	font-size: 0.82rem;
 	letter-spacing: 0.09em;

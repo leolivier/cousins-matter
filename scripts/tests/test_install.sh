@@ -12,7 +12,13 @@ set_variables
 tmpdir=$(mktemp -d)
 echo "tmpdir: $tmpdir"
 
-python ./scripts/manage_cousins_matter.py -R "$github_repo" -n "$container" install -d "$tmpdir" "$release_or_branch" "$ref" -n || error 1 "manage_cousins_matter failed to install Cousins Matter"
+# CI runs from a checkout of the tested ref: install its files instead of
+# downloading them (the tested repo may be private, which raw GitHub cannot
+# serve unauthenticated, and the download would test the wrong code)
+local_files=
+[ -n "$github_action" ] && local_files="-l"
+# shellcheck disable=SC2086  # $local_files is an optional flag, not a value
+python ./scripts/manage_cousins_matter.py -R "$github_repo" -n "$container" install -d "$tmpdir" "$release_or_branch" "$ref" $local_files -n || error 1 "manage_cousins_matter failed to install Cousins Matter"
 
 cd "$tmpdir"
 # .env must have been created by manage_cousins_matter install above

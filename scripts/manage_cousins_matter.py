@@ -218,7 +218,13 @@ def local_checkout_file(rel_path: str, branch: str | None) -> Path | None:
   return candidate if candidate.is_file() else None
 
 
-def download_V2_needed_files(directory: Path, repo: str, branch: str | None, release: str | None):
+def download_V2_needed_files(
+  directory: Path,
+  repo: str,
+  branch: str | None,
+  release: str | None,
+  local_files: bool = False,
+):
   files_to_download = [
     ("docker-compose.yml", directory / "docker-compose.yml"),
     (".env.example", directory / ".env.example"),
@@ -228,9 +234,27 @@ def download_V2_needed_files(directory: Path, repo: str, branch: str | None, rel
       directory / "config" / "nginx" / "nginx.d" / "errors" / "413.html",
     ),
   ]
-  base_url = get_github_base_url(repo, branch, release)
-  for rel, dest in files_to_download:
-    download_github_file(rel, dest, base_url)
+  root = Path(__file__).resolve().parents[1]
+  if local_files:
+    # CI runs from a checkout of the tested ref: use its files instead of
+    # downloading (the tested repo may be private, which raw GitHub cannot
+    # serve unauthenticated) and test the code actually being built.
+    for rel, dest in files_to_download:
+      source = root / rel
+      if not source.is_file():
+        error(1, f"Local file {rel} not found in the checkout {root}")
+      verbose(f"Using local {rel} from {source}")
+      dest.parent.mkdir(parents=True, exist_ok=True)
+      shutil.copy(source, dest)
+  else:
+    base_url = get_github_base_url(repo, branch, release)
+    for rel, dest in files_to_download:
+      if local := local_checkout_file(rel, branch):
+        verbose(f"Using local {rel} from {local}")
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(local, dest)
+      else:
+        download_github_file(rel, dest, base_url)
   # copy myself to scripts/ (already downloaded)
   script_dir = directory / "scripts"
   script_dir.mkdir(parents=True, exist_ok=True)
@@ -648,7 +672,7 @@ def install_cousins_matter(args):
 
   if not args.review_environment:
     # Normal install: download files
-    download_V2_needed_files(directory, args.github_repo, args.branch, args.release)
+    download_V2_needed_files(directory, args.github_repo, args.branch, args.release, local_files=args.local_files)
 
     # Create .env from .env.example if .env is missing
     verbose("Creating .env from .env.example...")
@@ -825,6 +849,15 @@ Release to use for downloading files from GitHub (default: latest release, alway
     action="store_true",
     help="""
 do not start an editor to edit .env at the end of the process""",
+  )
+  p_install.add_argument(
+    "-l",
+    "--local-files",
+    dest="local_files",
+    action="store_true",
+    help="""
+copy the deployment files from the current checkout instead of downloading them
+from GitHub (used by CI, which tests the code being built)""",
   )
   p_install.set_defaults(func=install_cousins_matter)
 

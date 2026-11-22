@@ -81,6 +81,12 @@ get_github_branch_or_release() {
 }
 
 set_variables() {
+	# in CI, test the current repository, not the hardcoded upstream default:
+	# the deployment files and the image must come from the repo being built
+	if [ -n "$github_action" ] && [ -n "${GITHUB_REPOSITORY:-}" ]; then
+		github_repo="$GITHUB_REPOSITORY"
+		image="ghcr.io/$github_repo"
+	fi
 	# every docker compose command of the test scripts (up, down -v, logs...) must
 	# target the same project: the compose file defaults to cousins_matter otherwise
 	export CONTAINER_NAME="$container"

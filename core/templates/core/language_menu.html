@@ -1,0 +1,27 @@
+{% load i18n cm_tags %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% if 'show_change_language'|featured %}
+<div class="navbar-item has-dropdown is-hoverable">
+	<a class="navbar-link" href="#" title="{% trans 'Change language' %}" aria-label="{% trans 'Change language' %}">
+		<span>{{ LANGUAGE_CODE|flag }}</span>
+		<span class="ml-1">{{ LANGUAGE_CODE|slice:":2"|upper }}</span>
+	</a>
+	<div class="navbar-dropdown is-right">
+		{# One form per language: an input[type=submit] cannot carry a value #}
+		{# different from its label, unlike a submit button that generic #}
+		{# selectors would pick up on every page. #}
+		{% for language in languages %}
+			<form action="{% url 'set_language' %}" method="post">
+				{% csrf_token %}
+				<input name="next" type="hidden" value="{{ request.get_full_path }}">
+				<input name="language" type="hidden" value="{{ language.code }}">
+				<input type="submit" value="{{ language.code|flag }} {{ language.code|upper }}"
+					title="{{ language.name_local|capfirst }}" aria-label="{{ language.name_local|capfirst }}"
+					class="navbar-item{% if language.code == LANGUAGE_CODE %} has-text-weight-bold{% endif %}">
+			</form>
+		{% endfor %}
+	</div>
+</div>
+{% endif %}

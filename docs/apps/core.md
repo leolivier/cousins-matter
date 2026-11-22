@@ -4,7 +4,7 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-11-13
+stale_after: 2027-12-22
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-09T12:00:00Z }
 ---
 
@@ -181,6 +181,14 @@ features on: `core.css` media-queries the burger up to 1600px and
 `core.js` keeps its `NAVBAR_BREAKPOINT` constant (1600) in sync — the two
 must be updated together. The burger menu's dropdowns open on click or
 hover inside the panel.
+
+The language switcher is a navbar item shared by `navbar.html` and
+`unauthenticated-navbar.html` through
+`core/templates/core/language_menu.html`: the trigger shows the current
+language's flag and two-letter code, and each dropdown entry posts to
+`set_language`. The flag is a regional-indicator emoji built by the `flag`
+filter; `LANGUAGE_FLAGS` maps language codes that are not country codes
+(`en` → `GB`).
 
 ## Middleware
 

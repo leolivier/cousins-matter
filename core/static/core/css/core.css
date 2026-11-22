@@ -19,6 +19,17 @@
 .navbar-item.has-dropdown.is-active > .navbar-dropdown {
 	display: block;
 }
+/* Bulma shows dropdowns on hover with a descendant selector, so hovering a
+   top-level menu opened every nested submenu at once. Only open the nested
+   dropdown whose own trigger is hovered, focused or clicked. */
+.navbar-dropdown .navbar-item.has-dropdown > .navbar-dropdown {
+	display: none;
+}
+.navbar-dropdown .navbar-item.has-dropdown:hover > .navbar-dropdown,
+.navbar-dropdown .navbar-item.has-dropdown:focus-within > .navbar-dropdown,
+.navbar-dropdown .navbar-item.has-dropdown.is-active > .navbar-dropdown {
+	display: block;
+}
 
 .navbar {
 	--bulma-navbar-divider-background-l:92% !important;

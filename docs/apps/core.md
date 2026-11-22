@@ -190,6 +190,16 @@ language's flag and two-letter code, and each dropdown entry posts to
 filter; `LANGUAGE_FLAGS` maps language codes that are not country codes
 (`en` → `GB`).
 
+The default navbar logo is the `core/_brand.html` lockup: the vector
+`core/static/core/images/cousins-matter-mark.svg` (tree canopy) plus a
+`COUSINS MATTER` wordmark, rendered by both navbars. `SITE_LOGO_DEFAULT`
+holds the legacy raster path: when `SITE_LOGO` equals it the lockup is
+shown, while any custom value — including a tenant's uploaded logo served
+from `PUBLIC_MEDIA_URL` — keeps the historical
+`<img width="112" height="28">`. Any page can include the partial and pass
+`brand_class` (`cm-brand--navbar`, `cm-brand--hero` or `cm-brand--small`) to
+pick a variant; its styles live in `core.css` so they load on every page.
+
 ## Middleware
 
 `core.middleware.LoginRequiredMiddleware` extends Django's

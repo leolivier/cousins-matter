@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200" role="img" aria-labelledby="cm-mark-title">
+  <title id="cm-mark-title">Cousins Matter</title>
+  <defs>
+    <path id="cm-leaf" d="M0 0 C5 -10 14 -15 23 -13 C23 -4 15 4 5 3 C2 3 0 2 0 0 Z"/>
+  </defs>
+  <circle cx="100" cy="94" r="94" fill="#fbf7ef" stroke="#efe6d6" stroke-width="2"/>
+  <g>
+    <use xlink:href="#cm-leaf" transform="translate(93.3 38.5) rotate(70.8) scale(1.67)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(106.1 42.5) rotate(106.7) scale(1.14)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(64.4 48.4) rotate(221.1) scale(1.27)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(77.1 49.6) rotate(109.5) scale(1.63)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(132.2 50.6) rotate(214.7) scale(1.28)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(93.0 54.2) rotate(347.1) scale(1.55)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(108.5 59.2) rotate(104.1) scale(1.14)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(92.5 62.6) rotate(186.9) scale(1.48)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(128.8 62.9) rotate(47.1) scale(1.49)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(73.7 63.9) rotate(0.2) scale(1.23)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(113.8 70.8) rotate(190.2) scale(1.14)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(103.3 71.0) rotate(33.9) scale(1.28)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(154.9 72.1) rotate(6.0) scale(1.26)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(57.3 72.6) rotate(345.3) scale(1.39)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(145.3 73.0) rotate(65.8) scale(1.19)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(134.3 76.5) rotate(352.9) scale(1.34)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(81.1 76.6) rotate(235.4) scale(1.47)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(106.3 84.2) rotate(332.7) scale(1.38)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(54.0 85.5) rotate(85.8) scale(1.52)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(139.7 86.9) rotate(307.6) scale(1.49)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(70.4 88.1) rotate(302.5) scale(1.52)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(91.6 90.5) rotate(66.5) scale(1.41)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(61.4 91.2) rotate(201.3) scale(1.37)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(123.9 94.0) rotate(164.6) scale(1.27)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(107.6 96.7) rotate(249.6) scale(1.13)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(62.8 97.4) rotate(76.8) scale(1.25)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(128.8 101.2) rotate(36.4) scale(1.14)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(97.0 103.9) rotate(10.8) scale(1.38)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(80.1 106.9) rotate(280.3) scale(1.26)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(144.7 108.1) rotate(151.7) scale(1.16)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(111.0 111.5) rotate(304.8) scale(1.33)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(119.3 117.9) rotate(87.5) scale(1.46)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(99.8 118.3) rotate(76.6) scale(1.26)" fill="#df5902"/>
+    <use xlink:href="#cm-leaf" transform="translate(73.8 123.5) rotate(89.8) scale(1.21)" fill="#597101"/>
+    <use xlink:href="#cm-leaf" transform="translate(73.3 126.3) rotate(63.5) scale(1.32)" fill="#0096c8"/>
+    <use xlink:href="#cm-leaf" transform="translate(103.2 128.7) rotate(24.8) scale(1.24)" fill="#0096c8"/>
+  </g>
+  <g fill="none" stroke="#01232d" stroke-linecap="round">
+    <path d="M100 172 C99 158 100 142 100 126" stroke-width="10"/>
+    <path d="M100 150 C92 144 84 137 76 128 C71 123 68 120 66 117" stroke-width="6"/>
+    <path d="M100 141 C109 134 118 127 126 118 C130 114 132 110 133 107" stroke-width="6"/>
+    <path d="M100 131 C96 124 92 118 88 111 C86 107 85 101 85 97" stroke-width="5"/>
+    <path d="M100 172 C88 175 78 173 68 168" stroke-width="5"/>
+    <path d="M100 172 C112 175 122 173 132 168" stroke-width="5"/>
+    <path d="M64 178 C79 184 121 184 136 178" stroke="#597101" stroke-width="3"/>
+  </g>
+</svg>

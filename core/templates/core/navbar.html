@@ -3,11 +3,13 @@
 <nav class="navbar is-primary has-shadow" role="navigation" aria-label="main navigation">
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
-			{% if settings.SITE_LOGO|startswith:settings.PUBLIC_MEDIA_URL %}
+			{% if settings.SITE_LOGO == settings.SITE_LOGO_DEFAULT %}
+				{% include "core/_brand.html" with brand_class="cm-brand--navbar" %}
+			{% elif settings.SITE_LOGO|startswith:settings.PUBLIC_MEDIA_URL %}
 				<img src="{{settings.SITE_LOGO}}" width="112" height="28">
-			{%else%}
+			{% else %}
 				<img src="{% static settings.SITE_LOGO %}" width="112" height="28">
-			{%endif%}
+			{% endif %}
 		</a>
 
 		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">

@@ -19,6 +19,17 @@
 .navbar-item.has-dropdown.is-active > .navbar-dropdown {
 	display: block;
 }
+/* Bulma shows dropdowns on hover with a descendant selector, so hovering a
+   top-level menu opened every nested submenu at once. Only open the nested
+   dropdown whose own trigger is hovered, focused or clicked. */
+.navbar-dropdown .navbar-item.has-dropdown > .navbar-dropdown {
+	display: none;
+}
+.navbar-dropdown .navbar-item.has-dropdown:hover > .navbar-dropdown,
+.navbar-dropdown .navbar-item.has-dropdown:focus-within > .navbar-dropdown,
+.navbar-dropdown .navbar-item.has-dropdown.is-active > .navbar-dropdown {
+	display: block;
+}
 
 .navbar {
 	--bulma-navbar-divider-background-l:92% !important;
@@ -414,4 +425,84 @@ rich-text is for text displayed in pages, note-editable is for the text inside t
 	.navbar .navbar-item.has-dropdown > .navbar-dropdown {
 		position: static;
 	}
+}
+
+/* The pages dropdown sits under the brand in the full-width navbar only.
+   1600px matches core.js's NAVBAR_BREAKPOINT: below it the menu collapses
+   behind the burger, so the Pages entry stays in #navMenu and the brand
+   dropdown is suppressed (it would otherwise render inline). */
+@media screen and (max-width: 1599.98px) {
+	.cm-brand-dropdown .navbar-dropdown {
+		display: none !important;
+	}
+}
+
+@media screen and (min-width: 1600px) {
+	.cm-pages-menu {
+		display: none;
+	}
+}
+
+/* Cousins Matter brand lockup (default navbar logo, landing hero, auth pages) */
+.cm-brand {
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+}
+
+.cm-brand-mark {
+	width: 72px;
+	height: 72px;
+	flex: none;
+}
+
+.cm-brand-name {
+	display: flex;
+	flex-direction: column;
+	color: #01232d;
+	font-size: 1.35rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	line-height: 0.95;
+}
+
+[data-theme="dark"] .cm-brand-name {
+	color: var(--bulma-text-strong);
+}
+
+.cm-brand--hero {
+	margin-bottom: 1.5rem;
+}
+
+.cm-brand--hero .cm-brand-name {
+	color: #fff;
+}
+
+.cm-brand--small {
+	justify-content: center;
+	margin-bottom: 1.25rem;
+}
+
+.cm-brand--small .cm-brand-mark {
+	width: 56px;
+	height: 56px;
+}
+
+.cm-brand--small .cm-brand-name {
+	font-size: 1.05rem;
+}
+
+.cm-brand--navbar {
+	gap: 0.5rem;
+}
+
+.cm-brand--navbar .cm-brand-mark {
+	width: 38px;
+	height: 38px;
+}
+
+.cm-brand--navbar .cm-brand-name {
+	color: #fff;
+	font-size: 0.82rem;
+	letter-spacing: 0.09em;
 }

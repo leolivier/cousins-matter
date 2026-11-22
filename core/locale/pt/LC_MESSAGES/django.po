@@ -118,7 +118,7 @@ msgstr "Última versão"
 
 #: services.py:91 templates/core/navbar.html:27
 msgid "Members"
-msgstr "membros"
+msgstr "Membros"
 
 #: services.py:93
 msgid "Total number of members"

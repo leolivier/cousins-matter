@@ -15,6 +15,15 @@ from core.tests.test_protected_media import TestMediaResourceMixin
 class TestSiteLogo(TestMediaResourceMixin, TestCase):
   # disable navbar cache for this test
   @override_settings(CACHES={"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"}})
+  def test_default_logo_uses_brand_lockup(self):
+    """Without a custom logo the navbar renders the vector brand lockup."""
+    with override_settings(SITE_LOGO=settings.SITE_LOGO_DEFAULT):
+      response = self.client.get(reverse("core:Home"), follow=True)
+      self.assertContains(response, static("core/images/cousins-matter-mark.svg"))
+      self.assertContains(response, "cm-brand--navbar")
+      self.assertNotContains(response, static(settings.SITE_LOGO))
+
+  @override_settings(CACHES={"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"}})
   def test_custom_logo(self):
     """test the custom site logo"""
     logo_basefilename = "test-logo.jpg"
@@ -22,15 +31,11 @@ class TestSiteLogo(TestMediaResourceMixin, TestCase):
     logo_testresources_file = os.path.join(os.path.dirname(__file__), "resources", logo_basefilename)
     logo_url = f"{settings.PUBLIC_MEDIA_URL}{logo_basefilename}"
 
-    current_logo_url = static(settings.SITE_LOGO)
     format = """<a class="navbar-item" href="/">
   <img src="%s" width="112" height="28">
 </a>"""
     # check if the current logo is already set to the test logo
-    self.assertFalse(current_logo_url == logo_url, f"SITE_LOGO should not be set to {logo_url} for this test")
-    # test the current_logo
-    response = self.client.get(reverse("core:Home"), follow=True)
-    self.assertContains(response, format % current_logo_url, html=True)
+    self.assertNotEqual(settings.SITE_LOGO, logo_url, f"SITE_LOGO should not be set to {logo_url} for this test")
 
     logo_target_path = self.copy_test_resource(logo_testresources_file, logo_target_path)
 
@@ -41,3 +46,14 @@ class TestSiteLogo(TestMediaResourceMixin, TestCase):
 
     # clean up
     self.clean_storage(logo_target_path)
+
+  @override_settings(CACHES={"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"}})
+  def test_static_custom_logo(self):
+    """A SITE_LOGO pointing at a static file still renders as an image."""
+    logo = "core/images/cousinades-big.jpg"
+    format = """<a class="navbar-item" href="/">
+  <img src="%s" width="112" height="28">
+</a>"""
+    with override_settings(SITE_LOGO=logo):
+      response = self.client.get(reverse("core:Home"), follow=True)
+      self.assertContains(response, format % static(logo), html=True)

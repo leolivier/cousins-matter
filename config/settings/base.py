@@ -122,7 +122,8 @@ TIME_ZONE = env.str("TIME_ZONE", default="Europe/Paris")
 
 SITE_COPYRIGHT = env.str("SITE_COPYRIGHT", default=None)
 SITE_FOOTER = env.str("SITE_FOOTER", default=None)
-SITE_LOGO = env.str("SITE_LOGO", default="core/images/cousinades.jpg")
+SITE_LOGO_DEFAULT = "core/images/cousinades.jpg"
+SITE_LOGO = env.str("SITE_LOGO", default=SITE_LOGO_DEFAULT)
 
 # Defult Email properties
 DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="cousinsmatter@localhost")

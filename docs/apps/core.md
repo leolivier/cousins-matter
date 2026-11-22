@@ -4,7 +4,7 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2027-12-22
+stale_after: 2028-12-22
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-09T12:00:00Z }
 ---
 
@@ -189,6 +189,22 @@ language's flag and two-letter code, and each dropdown entry posts to
 `set_language`. The flag is a regional-indicator emoji built by the `flag`
 filter; `LANGUAGE_FLAGS` maps language codes that are not country codes
 (`en` → `GB`).
+
+The default navbar logo is the `core/_brand.html` lockup: the vector
+`core/static/core/images/cousins-matter-mark.svg` (tree canopy) plus a
+`COUSINS MATTER` wordmark, rendered by both navbars. `SITE_LOGO_DEFAULT`
+holds the legacy raster path: when `SITE_LOGO` equals it the lockup is
+shown, while any custom value — including a tenant's uploaded logo served
+from `PUBLIC_MEDIA_URL` — keeps the historical
+`<img width="112" height="28">`. Any page can include the partial and pass
+`brand_class` (`cm-brand--navbar`, `cm-brand--hero` or `cm-brand--small`) to
+pick a variant; its styles live in `core.css` so they load on every page.
+
+The pages menu (`/publish/...`) is not a `navbar-start` item: `navbar.html`
+renders it as a hover dropdown attached to the brand (`cm-brand-dropdown`) at
+1600px and up. Below that breakpoint the same entry stays in the burger menu
+(`cm-pages-menu`), since the brand dropdown would only open on hover and
+would otherwise render inline.
 
 ## Middleware
 

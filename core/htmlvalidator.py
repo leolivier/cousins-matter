@@ -29,7 +29,6 @@ UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 __author__ = "Olivier LEVILLAIN based on code from Brian St. Pierre <http://bstpierre.org/>"
 
-# TODO: distribute on PyPi as a standalone django middleware
 import math
 import os
 import subprocess  # nosec B404

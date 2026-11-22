@@ -141,10 +141,16 @@ tenant (site_name, site_logo, site_copyright, site_footer, pdf_size,
 dark_mode, language_code, time_zone, birthday_days,
 allow_members_to_create_members, allow_members_to_invite_members,
 family_chart_root_person_id), each mapped to the global Django setting used as
-default. `tenant_setting(key)` returns override → global → default;
-`effective_overrides(tenant=None)` returns all of them, memoized and cleared
-by `clear_tenant_settings_cache()`. Everything not in the spec is never read
-per tenant.
+default. `tenant_setting(key)` returns override → global → default, with two
+refinements:
+
+- `site_name` falls back to `tenant.name` in multi-tenant mode, except for
+  the default/system tenants (they keep the deployment brand);
+- `effective_overrides(tenant=None)` is memoized under a version stored in
+  the shared cache, so a change is visible to every process;
+  `TenantSettings.save()` bumps the version (and clears the local flags memo).
+
+Everything not in the spec is never read per tenant.
 
 ## Cache keys (tenants/caching.py)
 

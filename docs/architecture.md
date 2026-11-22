@@ -104,9 +104,10 @@ flatpages under `settings.PAGES_URL_PREFIX`, and `health/` / `qhealth/` views fr
 - Public media: `PUBLIC_MEDIA_ROOT = MEDIA_ROOT / "public"` (filesystem `media/public/`),
   served at `PUBLIC_MEDIA_URL = "/public_media/"` through `download_public_media`
   (`cousinsmatter/urls.py`).
-- Only the `public` storage alias can be reconfigured to a remote backend via the
-  `MEDIA_STORAGE` / `MEDIA_STORAGE_OPTIONS` env vars; `default` stays local
-  (FileSystemStorage on `MEDIA_ROOT`) (`config/settings/base.py`).
+- `MEDIA_STORAGE` / `MEDIA_STORAGE_OPTIONS` replace the `default` storage alias
+  (used by uploads and both download views) with any Django backend. The
+  "public" subset is the `public/` prefix inside that same backend
+  (`config/settings/base.py`).
 
 ## Async tasks
 

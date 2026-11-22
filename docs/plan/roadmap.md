@@ -1,11 +1,11 @@
 ---
 type: Plan
 title: Roadmap
-description: In-flight and planned work — open GitHub issues, multi-tenancy follow-ups from PR #457, and the OKF documentation effort (snapshot 2026-09-05)
+description: In-flight and planned work — open GitHub issues, multi-tenancy follow-ups from PR #457, and the OKF documentation effort (reviewed 2026-11-22)
 tags: ["plan"]
 status: draft
-stale_after: 2026-12-04
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T12:27:11Z }
+stale_after: 2027-02-22
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-22T12:22:29Z }
 ---
 
 # Roadmap
@@ -60,23 +60,19 @@ All six open issues are enhancements; the order below is by number
 Deliberately left open when the tenant foundation landed; tracked as
 debt items in [Known Debt](/plan/debt.md) with code anchors:
 
-1. **Close the chat RLS gap** — `ChatRoom`/`ChatMessage` are
-   `TenantModel`-scoped but their tables are missing from
-   `TENANT_RLS_TABLES` ([details](/plan/debt.md#chat-tables-have-no-rls-policies)).
-2. **Tenant-scope the remaining apps** —
+1. **Tenant-scope the remaining apps** —
    [forum](/apps/forum.md), [polls](/apps/polls.md),
    [classified ads](/apps/classified-ads.md), [pages](/apps/pages.md),
    [troves](/apps/troves.md), [genealogy](/apps/genealogy.md)
    ([what is not tenant-scoped](/specs/multi-tenancy.md#what-is-not-tenant-scoped)).
    Converting an app means extending `TENANT_RLS_TABLES`
    (tenants/rls.py:21) in the same change.
-3. **Remote media storage** — member uploads never leave local disk:
-   `MEDIA_STORAGE` configures only the `public` alias, which nothing
-   selects — suspected misplaced-key bug vs the user-manual promise
-   ([details](/plan/debt.md#the-public-storage-alias-disappears-when-media_storage-is-set)).
-4. **Cross-worker flag invalidation** — the per-tenant flags cache is a
-   per-process dict; see [feature flags](/modules/feature-flags.md)
-   and [debt](/plan/debt.md#per-tenant-flags-cache-invalidation).
+2. **Cross-worker flag invalidation** — tenant *settings* are versioned
+   through the shared cache, but the per-tenant *flags* memo is still per
+   process. Accepted while daphne is the only web process (qcluster never
+   renders templates); revisit if a second web worker is added. See
+   [feature flags](/modules/feature-flags.md) and
+   [debt](/plan/debt.md#feature-flags-are-still-memoized-per-process).
 
 ## See also
 

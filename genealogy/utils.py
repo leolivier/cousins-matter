@@ -11,6 +11,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
+from tenants.settings_overrides import tenant_setting
 from .models import Person, Family
 
 logger = logging.getLogger(__name__)
@@ -235,7 +236,7 @@ class GedcomExporter:
       "1 LANG English",
       f"1 FILE {settings.GEDCOM_FILE}",
       "1 COPR © 2025 CousinsMatter",
-      f"1 _TITL {settings.SITE_NAME}",
+      f"1 _TITL {tenant_setting('site_name')}",
       "1 _STS",
       f"2 INDI {nindi}",
       f"2 FAM {nfam}",

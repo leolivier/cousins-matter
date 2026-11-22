@@ -7,6 +7,7 @@ from typing import Literal, cast
 
 
 from django.conf import settings
+from django.core.cache import cache
 from django.core.files.storage import default_storage
 from django.db import transaction
 from django.utils.text import slugify
@@ -103,19 +104,20 @@ class ImportContext:
   current_count: int = 0
 
   def register(self):
-    MEMBER_IMPORTS[self.group] = self
+    cache.set(_MEMBER_IMPORT_KEY.format(self.group), self, _MEMBER_IMPORT_TTL)
 
   def unregister(self):
-    if self.group in MEMBER_IMPORTS:
-      del MEMBER_IMPORTS[self.group]
+    cache.delete(_MEMBER_IMPORT_KEY.format(self.group))
 
   @staticmethod
   def get(group: str) -> "ImportContext | None":
-    return MEMBER_IMPORTS.get(group)
+    return cache.get(_MEMBER_IMPORT_KEY.format(group))
 
 
-# in memory cache of MemberImportData
-MEMBER_IMPORTS: dict[str, ImportContext] = {}
+# Import progress lives in the cache so it survives a web restart and is
+# visible to every process. The TTL bounds orphaned entries.
+_MEMBER_IMPORT_KEY = "members:import:{}"
+_MEMBER_IMPORT_TTL = 24 * 60 * 60
 
 
 def manage_avatar(row_data: MemberImportData):

@@ -234,7 +234,7 @@ class TenantOnboardingE2ETests(TestCase):
     self.assertEqual(len(mail.outbox), 1)
     request_mail = mail.outbox[0]
     self.assertSequenceEqual(request_mail.recipients(), [self.NORA_EMAIL])
-    self.assertEqual(request_mail.subject, _("Registration request for %(site_name)s") % {"site_name": settings.SITE_NAME})
+    self.assertEqual(request_mail.subject, _("Registration request for %(site_name)s") % {"site_name": self.FAMILY_NAME})
     self.assertIn(reverse("members:invite") + f"?mail={self.HUGO_EMAIL}", self._html_body(request_mail))
 
   def test_05_admin_invitation_is_prefilled_and_sent(self):

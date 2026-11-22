@@ -4,8 +4,8 @@ title: Gallery Bulk Import
 description: End-to-end zip import — extraction to galleries, per-photo Django-Q tasks, HTMX progress bar, and what happens on failure
 tags: ["flow", "galleries"]
 status: draft
-stale_after: 2027-03-05
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T11:39:00Z }
+stale_after: 2027-05-22
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-22T12:22:29Z }
 ---
 
 # Gallery Bulk Import
@@ -27,12 +27,11 @@ single-photo upload are covered in [Galleries](/apps/galleries.md).
 2. **Submit.** `POST /galleries/bulk_upload` →
    `galleries/views/views_bulk.py: BulkUploadPhotosView.post`. Field-level
    validation failures (wrong extension, oversize — `galleries/forms.py`
-   validators on the `zipfile` field) take the invalid-form branch, which is
-   **broken**: `": ".join(code, error)` (views_bulk.py, `else` branch) calls
-   `str.join` with two arguments and raises `TypeError` → HTTP 500 instead of
-   an error flash. Only non-form exceptions (a file that is not a zip at all,
-   `BadZipFile` raised by `handle_zip`) are caught by the generic `except`
-   and flashed, followed by `HttpResponseClientRefresh` (HTMX re-render).
+   validators on the `zipfile` field) flash the field errors and return
+   `HttpResponseClientRefresh` (HTMX re-render); nothing is imported.
+   Unexpected exceptions (a file that is not a zip at all, `BadZipFile`
+   raised by `handle_zip`) are logged and flashed as a generic import
+   failure.
 3. **Scheduling.** A fresh `task_group = uuid4().hex` is generated and
    `galleries/services.py: handle_zip(zip_file, task_group, owner_id,
    root_gallery, tenant_id)` runs synchronously:
@@ -40,8 +39,8 @@ single-photo upload are covered in [Galleries](/apps/galleries.md).
      `BadZipFile`, caught by the view and flashed.
    - The zip is extracted to a `tempfile.mkdtemp()` temp dir; a
      `galleries/tasks.py: ZipImport` state object (temp root, counters,
-     gallery cache) is registered in the in-process `ZIP_IMPORTS` dict keyed
-     by the task group.
+     gallery cache) is registered in the shared cache keyed by the task group,
+     after the walk has populated the counters.
    - `os.walk` over the extraction: directories containing **no image file**
      (by `mimetypes.guess_type`) are skipped entirely; each other directory
      maps to a gallery via `galleries/services.py: _get_or_create_gallery`,
@@ -82,17 +81,16 @@ single-photo upload are covered in [Galleries](/apps/galleries.md).
 ## Failure modes visible to the user
 
 - Not a zip at all (`BadZipFile`): flashed error, nothing imported.
-- Oversized zip / non-zip extension: **HTTP 500** — the invalid-form branch
-  crashes on the `": ".join(code, error)` bug (see step 2); nothing is
-  imported. Fixing that one line is the whole fix.
+- Oversized zip / non-zip extension: the form's field errors are flashed
+  (no 500); nothing is imported.
 - `..` inside zip paths: `SuspiciousFileOperation` flashed, import aborted
   (galleries already created in earlier iterations remain).
 - Root-level photos without a selected parent gallery: "Root gallery not
   found. Please select a root gallery."
 - Individual unreadable/corrupt images: skipped with an error line in the
   progress bar; the rest of the zip still imports.
-- Stale/unknown progress id: 404 (e.g. server restarted — `ZIP_IMPORTS` is
-  in-memory and not shared across workers).
+- Stale/unknown progress id: 404 once the cached entry expires (24 h) or is
+  evicted; a web restart no longer loses an in-flight import.
 - Dev only: without `make up4run` the Q broker is unreachable and the upload
   fails with an error (`Q_SYNC=True` avoids this by running the tasks
   synchronously).

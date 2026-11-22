@@ -1,9 +1,6 @@
 from pathlib import Path
 import logging
 import mimetypes
-import os
-import tempfile
-import zipfile
 from hashlib import blake2b
 from wsgiref.util import FileWrapper
 
@@ -128,32 +125,3 @@ def qhealth(request) -> JsonResponse:
   check = result(task_id, 1000)
   status = 200 if check and "status" in check and check["status"] == "ok" else 503
   return JsonResponse(check, status=status, safe=False)
-
-
-def send_zipfile(request) -> StreamingHttpResponse:
-  """
-  Create a ZIP file on disk and transmit it in chunks of 8KB,
-  without loading the whole file into memory. A similar approach can
-  be used for large dynamic PDF files.
-  """
-  chunk_size = 8192
-  temp = tempfile.TemporaryFile(suffix=".zip")
-  archive = zipfile.ZipFile(temp, "w", zipfile.ZIP_DEFLATED)
-  files: list[str] = []  # Select your files here.
-  for filename in files:
-    abs_filename = os.path.abspath(filename)
-    rel_filename = filename if filename.startswith("./") else os.path.join(".", filename)  # TODO: won't work on Windows
-    archive.write(abs_filename, rel_filename)
-  archive.close()
-  temp.seek(0)
-  response = StreamingHttpResponse(
-    FileWrapper(
-      temp,
-      chunk_size,
-    ),
-    content_type="application/zip",
-  )
-  response["Content-Length"] = temp.tell()
-  response["Content-Disposition"] = "attachment; filename=file.zip"
-  temp.seek(0)
-  return response

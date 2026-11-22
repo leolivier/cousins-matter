@@ -59,13 +59,14 @@ to anonymous visitors (see [architecture](/architecture.md)):
   `TROVE_THUMBNAIL_DIRECTORY` = `troves/pictures/thumbnails/`,
   `TROVE_FILES_DIRECTORY` = `troves/files/`;
 - `TROVE_FILE_MAX_SIZE` (20 MB by default) and
-  `TROVE_PICTURE_FILE_MAX_SIZE` are defined but **not enforced by any
-  upload path today** — troves has no equivalent of the galleries
-  `check_file_size` (core/utils.py); define them in `.env`, but expect
-  no server-side rejection;
-- `TROVE_DESCRIPTION_MAX_SIZE` reuses `MESSAGE_MAX_SIZE` and is the
-  only one wired up, as the Summernote `maxsize`
-  (troves/templates/troves/treasure_form.html).
+  `TROVE_PICTURE_FILE_MAX_SIZE` are enforced server-side by model
+  validators on `Trove.file` / `Trove.picture`, through
+  `core.utils.check_file_size`; `Trove.save()` calls `full_clean()`, so
+  creates, updates, admin and forms are all covered;
+- `TROVE_DESCRIPTION_MAX_SIZE` reuses `MESSAGE_MAX_SIZE` as the
+  Summernote `maxsize` hint only
+  (troves/templates/troves/treasure_form.html); it is not enforced
+  server-side.
 
 ## Publication rules
 

@@ -172,12 +172,8 @@ class TenantSettingsForm(forms.Form):
     row.overrides = overrides
     row.save()
 
-    # invalidate caches so changes apply immediately
-    from core.templatetags.cm_tags import clear_flags_cache
-    from tenants.settings_overrides import clear_tenant_settings_cache
-
-    clear_flags_cache()
-    clear_tenant_settings_cache()
+    # invalidate caches so changes apply immediately (TenantSettings.save
+    # already invalidates the settings and flags memos)
     if "family_chart_root_person_id" in self.changed_data:
       from genealogy.utils import clear_genealogy_caches
 

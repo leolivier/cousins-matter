@@ -45,7 +45,7 @@ class MemberFormMixin:
       add_title=_("New Address"),
       change_title=_("Change Address"),
     )
-    # force first and last name to be required  # TODO: is this useful?
+    # Optional on the model, required on member-facing forms.
     self.fields["first_name"].required = True
     self.fields["last_name"].required = True
     # we don't need the password field, it's useless and harmful
@@ -178,7 +178,7 @@ class MemberRegistrationForm(MemberFormMixin, UserCreationForm):
   def __init__(self, *args, **kwargs):
     super(UserCreationForm, self).__init__(*args, **kwargs)
     self.initialize_fields(*args, **kwargs)
-    # force email to be required  # TODO: is this useful?
+    # Optional on the model, required for account creation.
     self.fields["email"].required = True
     self.init_privacy_field()
 

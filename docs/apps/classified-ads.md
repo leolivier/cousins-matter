@@ -4,8 +4,8 @@ title: Classified Ads
 description: Classified ads app (`classified_ads`, documented as apps/classified-ads.md) — member-to-member sale listings with photos and owner contact by email
 tags: ["app", "classified_ads"]
 status: draft
-stale_after: 2027-11-10
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:42:30Z }
+stale_after: 2027-11-23
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
 # Classified Ads
@@ -35,7 +35,11 @@ and photos to the default tenant). Ads are invisible cross-tenant.
 - `AdPhoto` — `image` + generated `thumbnail`
   (`create_thumbnail`, size `GALLERIES_THUMBNAIL_SIZE`), FK `ad`
   (`related_name="photos"`). Files land under
-  `MEDIA_ROOT/classified_ads/<ad id>/` via `get_photo_path`.
+  `MEDIA_ROOT/[<tenant slug>/]classified_ads/<ad id>/` via
+  `get_photo_path` (tenant segment only in multi-tenant mode). When the
+  source image is already thumbnail-sized, the thumbnail column stores the
+  image's own name — the tenant migration command moves that file once and
+  updates both columns.
   `save()` wraps row + thumbnail in `transaction.atomic()` and, if
   thumbnail generation fails on a new photo, deletes the orphaned
   image from storage (issue #120); `delete()` removes the files only

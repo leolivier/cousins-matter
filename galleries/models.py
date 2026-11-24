@@ -11,22 +11,23 @@ from django.template.defaultfilters import slugify
 from django.urls import reverse
 from core.utils import check_file_size, create_thumbnail, create_video_thumbnail, is_video_file, protected_media_url
 from tenants.scoping import TenantModel
+from tenants.storage import move_file, tenant_path
 
 logger = logging.getLogger(__name__)
 
 
 def get_path(instance, filename, subdir=None):
   """
-  photos will be uploaded to MEDIA_ROOT/GALLERIES_DIR/<gallery_full_path>/<subdir>/<filename>.
-  subdir is None or 'thumbnails' for thumbnails
+  photos are uploaded to MEDIA_ROOT/[<tenant slug>/]GALLERIES_DIR/<gallery_full_path>/<subdir>/<filename>.
+  subdir is None or 'thumbnails' for thumbnails; the tenant prefix is only added in multi-tenant mode.
   """
   if not instance.gallery_id:
     raise ValidationError(_("A photo must belong to a gallery."))
-  path = (
-    os.path.join(settings.GALLERIES_DIR, instance.gallery.full_path(), subdir, filename)
-    if subdir
-    else os.path.join(settings.GALLERIES_DIR, instance.gallery.full_path(), filename)
-  )
+  parts = [settings.GALLERIES_DIR, instance.gallery.full_path()]
+  if subdir:
+    parts.append(subdir)
+  parts.append(filename)
+  path = tenant_path(instance, *parts)
   logger.debug(f"photo is stored in {path}")
   return path
 
@@ -241,26 +242,6 @@ class Gallery(TenantModel):
       self._move_subtree_photos()
     return result
 
-  def _move_file(self, storage, old_name, new_name):
-    """Move a single file using Django Storage API. Returns True on success."""
-    try:
-      if not storage.exists(old_name):
-        return False
-      if storage.exists(new_name):
-        storage.delete(new_name)
-      with storage.open(old_name, "rb") as f:
-        content = f.read()
-      storage.save(new_name, ContentFile(content))
-      try:
-        storage.delete(old_name)
-      except Exception as e:
-        logger.warning(f"Failed to delete old file {old_name}: {e}")
-        pass
-      return True
-    except Exception as e:
-      logger.warning(f"Failed to move file {old_name} -> {new_name}: {e}")
-      return False
-
   def _move_subtree_photos(self):  # noqa: C901
     """Move all photos in this gallery subtree to their new storage paths.
     Works with any Django Storage backend via open/save/delete.
@@ -269,7 +250,7 @@ class Gallery(TenantModel):
       gallery_ids = self.rec_children_list()
     except Exception:
       return
-    photos = Photo.objects.filter(gallery_id__in=gallery_ids).select_related("gallery")
+    photos = Photo.objects.filter(gallery_id__in=gallery_ids).select_related("gallery", "tenant")
     for photo in photos:
       old_image = photo.image.name if photo.image else None
       old_thumb = photo.thumbnail.name if photo.thumbnail and photo.thumbnail.name else None
@@ -280,14 +261,14 @@ class Gallery(TenantModel):
         new_thumb = None
       updates = {}
       if old_image and new_image and old_image != new_image:
-        if self._move_file(photo.image.storage, old_image, new_image):
+        if move_file(photo.image.storage, old_image, new_image):
           updates["image"] = new_image
         else:
           continue
       if old_thumb and new_thumb and old_thumb != new_thumb:
         if old_thumb == old_image:
           updates["thumbnail"] = new_thumb
-        elif self._move_file(photo.thumbnail.storage, old_thumb, new_thumb):
+        elif move_file(photo.thumbnail.storage, old_thumb, new_thumb):
           updates["thumbnail"] = new_thumb
       elif old_thumb == old_image and "image" in updates:
         updates["thumbnail"] = new_thumb

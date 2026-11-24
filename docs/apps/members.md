@@ -4,8 +4,8 @@ title: Members
 description: The custom user model, families and addresses, managed members, invitations and registration links, CSV import/export, following
 tags: ["app", "members"]
 status: draft
-stale_after: 2027-11-09
-generated: { by: claude-code/glm-5.3-flash, at: 2026-11-08T00:00:00Z }
+stale_after: 2027-11-23
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
 # Members
@@ -72,6 +72,10 @@ Model behaviour worth knowing:
   `createsuperuser`, allauth signup), `Tenant.get_default()` — then runs
   `clean()`, then regenerates avatar thumbnails only when the avatar file
   actually changed (a login touching `last_login` must not rewrite files).
+- Avatar storage: `avatar_path` puts files at
+  `MEDIA_ROOT/[<tenant slug>/]avatars/<file>` (tenant segment only in
+  multi-tenant mode, via `tenants.storage.tenant_path`); the mini avatar is
+  written next to it as `mini_<file>` by the same `save()`.
 - `clean()` derives `is_dead`/`is_active` from `deathdate`, clears
   `member_manager` on active members, and assigns one to inactive members
   without one: the first active tenant admin of the member's tenant, falling
@@ -229,7 +233,11 @@ its `tenant-join` URL.
   `import_progress` view.
 - Row handling helpers live in members/tasks.py: `manage_avatar`,
   `manage_family`, `get_valid_manager`, `handle_managed_by`, `update_address`,
-  `create_member` / `update_member`.
+  `create_member` / `update_member`. `manage_avatar` reads source images from
+  the same tenant-prefixed avatars directory
+  (`tenant_path(member, settings.AVATARS_DIR, filename)`) through
+  `default_storage` (remote-storage compatible), then re-saves them on the
+  member.
 - Export: `select_members_to_export` → `export_members_to_csv` →
   `do_export_members_to_csv`. Filters are htmx dropdowns fed by the
   `select_name`/`select_city`/`select_family` views (htmx requests only,

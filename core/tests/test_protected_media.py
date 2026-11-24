@@ -7,6 +7,7 @@ from django.http import StreamingHttpResponse
 
 from django.core.files.storage import default_storage
 
+from core.context_processors import override_settings
 from core.utils import (
   test_resource_full_path,
   get_test_absolute_url,
@@ -38,8 +39,8 @@ class ProtectedMediaTestCase(TestMediaResourceMixin, MemberTestCase):
   def setUp(self):
     super().setUp()
     # use test logo from resources as an image file to test the protected media
-    # so copy it to /media/testdir/testimage.png
-    self.test_file = Path("test_protected_media") / "test_image.jpg"
+    # so copy it to /media/<tenant slug>/testdir/testimage.png
+    self.test_file = Path(self.member.tenant.slug) / "test_protected_media" / "test_image.jpg"
     logo_file = test_resource_full_path("test-logo.jpg", __file__)
     (self.test_file, self.uploaded_content) = self.copy_test_resource(logo_file, self.test_file, return_content=True)
     self.rel_url = protected_media_url(self.test_file)
@@ -75,3 +76,36 @@ class ProtectedMediaTestCase(TestMediaResourceMixin, MemberTestCase):
     self.assertEqual(response.request["PATH_INFO"], reverse("members:login"))
     quoted_url = urllib.parse.quote(self.rel_url, safe="")
     self.assertEqual(response.request["QUERY_STRING"], f"next={quoted_url}")
+
+  def _copy_foreign_file(self, path):
+    logo_file = test_resource_full_path("test-logo.jpg", __file__)
+    return self.copy_test_resource(logo_file, path)
+
+  @override_settings(MULTI_TENANT_ENABLED=True)
+  def test_member_cannot_read_another_tenants_media(self):
+    foreign = self._copy_foreign_file(Path("other-tenant") / "test_protected_media" / "foreign.jpg")
+    try:
+      response = self.client.get(protected_media_url(foreign), follow=True)
+      self.assertEqual(response.status_code, 404)
+    finally:
+      self.clean_storage(foreign)
+
+  @override_settings(MULTI_TENANT_ENABLED=True)
+  def test_superuser_can_read_another_tenants_media(self):
+    foreign = self._copy_foreign_file(Path("other-tenant") / "test_protected_media" / "foreign.jpg")
+    try:
+      self.client.logout()
+      self.assertTrue(self.client.login(username=self.superuser.email, password=self.superuser.password))
+      response = self.client.get(protected_media_url(foreign))
+      self.assertEqual(response.status_code, 200)
+    finally:
+      self.clean_storage(foreign)
+
+  @override_settings(MULTI_TENANT_ENABLED=True)
+  def test_legacy_unprefixed_path_is_404(self):
+    legacy = self._copy_foreign_file(Path("legacy_media") / "x.jpg")
+    try:
+      response = self.client.get(protected_media_url(legacy))
+      self.assertEqual(response.status_code, 404)
+    finally:
+      self.clean_storage(legacy)

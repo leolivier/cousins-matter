@@ -117,8 +117,10 @@ served by the web server directly. Both stream in 64 KB chunks from
 `"<username>@<media>"`. The public variant is decorated `@login_not_required`
 and prefixes `public/` (i.e. `PUBLIC_MEDIA_ROOT = MEDIA_ROOT / "public"`,
 config/settings/base.py); the protected one requires login through
-`core.middleware.LoginRequiredMiddleware` (below). Helper:
-`protected_media_url` (core/utils.py).
+`core.middleware.LoginRequiredMiddleware` (below) and, in multi-tenant mode
+(`MULTI_TENANT_ENABLED`), rejects with 404 any path whose first segment is
+not `request.tenant.slug` — platform superusers (`request.tenant = None`)
+stay unscoped. Helper: `protected_media_url` (core/utils.py).
 
 ## Followers and notification batching
 

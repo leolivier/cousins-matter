@@ -4,8 +4,8 @@ title: Architecture
 description: How the Django project is wired — settings selection, middleware, ASGI/Channels, static and media serving, Docker topology
 tags: [architecture, settings, asgi, docker]
 status: draft
-stale_after: 2027-03-04
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T21:36:13Z }
+stale_after: 2027-11-23
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
 # Architecture
@@ -100,7 +100,10 @@ flatpages under `settings.PAGES_URL_PREFIX`, and `health/` / `qhealth/` views fr
 - Protected media: `MEDIA_URL = "/protected_media/"` (`config/settings/base.py`) and
   `MEDIA_ROOT = media/`. Downloads go through the `download_protected_media` view in
   `core/views/views_general.py`, routed in `cousinsmatter/urls.py` — never link a protected
-  file directly.
+  file directly. In multi-tenant mode uploads are tenant-foldered
+  (`media/<tenant slug>/…`) and the view rejects a path whose first segment is
+  not the caller's tenant slug (superusers unscoped); flag off keeps the flat
+  layout and login-only check.
 - Public media: `PUBLIC_MEDIA_ROOT = MEDIA_ROOT / "public"` (filesystem `media/public/`),
   served at `PUBLIC_MEDIA_URL = "/public_media/"` through `download_public_media`
   (`cousinsmatter/urls.py`).

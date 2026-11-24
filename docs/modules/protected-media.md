@@ -4,8 +4,8 @@ title: Protected Media
 description: The two media URL prefixes (/protected_media/, /public_media/), the streaming download views, storage settings, and what makes public media public
 tags: ["module", "media"]
 status: draft
-stale_after: 2027-03-05
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T11:16:06Z }
+stale_after: 2027-11-23
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
 # Protected Media
@@ -43,10 +43,21 @@ Both views funnel into `_download_media`:
   `core.middleware.LoginRequiredMiddleware` forces authentication on every
   path not listed in `LOGIN_REQUIRED_IGNORE_PATHS`
   (config/settings/base.py) — media prefixes are deliberately *not* exempted;
+- in multi-tenant mode (`MULTI_TENANT_ENABLED`) the same view also checks
+  that the path's first segment is `request.tenant.slug` and answers
+  **404** otherwise. Platform superusers have `request.tenant = None` and
+  stay unscoped (useful to inspect another family's files, and to verify a
+  migration); with the flag off the check is skipped entirely because
+  mono-tenant paths have no tenant segment;
 - `download_public_media` is decorated `@login_not_required` and serves
   `PUBLIC_MEDIA_ROOT` only — the path it receives is re-prefixed with
   `public/` under `MEDIA_ROOT`, so nothing outside `media/public/` can leak
   through it.
+
+Protected uploads are tenant-foldered in multi-tenant mode
+(`media/<tenant slug>/…`); see [Media Storage](/specs/media-storage.md) for
+the layout and `manage.py migrate_media_to_tenant_dirs` for migrating files
+uploaded before the change.
 
 ## Storage settings
 

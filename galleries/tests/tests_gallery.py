@@ -1,4 +1,3 @@
-import os
 from django.conf import settings
 from django.core.files.storage import default_storage
 from datetime import date
@@ -10,6 +9,7 @@ from core.templatetags.cm_tags import icon
 from core.utils import create_test_image
 from galleries.models import Gallery, Photo
 from galleries.views.views_gallery import GalleryCreateView, GalleryDetailView, GalleryUpdateView
+from tenants.storage import tenant_path
 from .tests_utils import GalleryBaseTestCase
 
 COUNTER = 0
@@ -53,7 +53,7 @@ class CreateGalleryTest(GalleryBaseTestCase):
     cover.save()
     gal.cover = cover
     gal.save()
-    cover_url = os.path.join(settings.MEDIA_URL, settings.GALLERIES_DIR, gal.full_path(), "thumbnails", "test-image-1")
+    cover_url = settings.MEDIA_URL + tenant_path(gal, settings.GALLERIES_DIR, gal.full_path(), "thumbnails", "test-image-1")
     self.assertTrue(default_storage.exists(cover.image.name))
     # print("cover_url", cover_url, "gal.cover_url()", gal.cover_url())
     self.assertTrue(gal.cover_url().startswith(cover_url))

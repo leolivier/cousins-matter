@@ -235,21 +235,20 @@ class CrossTenantIsolationE2ETests(TestCase):
     )
     self.assertContains(search, "Hugo")
 
-  # -- Phase 5 - protected media (recorded deviation) ---------------------
+  # -- Phase 5 - protected media -----------------------------------------
 
-  def test_06_protected_media_is_auth_gated_not_tenant_gated(self):
-    """Recorded limitation from the flow doc: media are login-gated only.
-
-    If a future change tenant-scopes ``download_protected_media``, this test
-    will fail and should be updated to expect 404 — the deviation is then
-    fixed, which is the good outcome.
-    """
+  def test_06_protected_media_is_tenant_gated(self):
+    """Media files are login-gated and tenant-gated (first path segment = tenant slug)."""
+    self.assertTrue(self.photo_b.image.name.startswith(f"{self.tenant_b.slug}/"))
     self.assertTrue(default_storage.exists(self.photo_b.image.name))
     url = reverse("get_protected_media", args=[self.photo_b.image.name])
     # anonymous access is refused
     self.assertEqual(self.client.get(url).status_code, 302)
-    # a logged-in member of the other family currently gets the file
+    # a member of the other family must not get the file
     self.client.force_login(self.nora)
+    self.assertEqual(self.client.get(url).status_code, 404)
+    # family B's own member still gets it
+    self.client.force_login(self.lena)
     self.assertEqual(self.client.get(url).status_code, 200)
 
   # -- Phase 6 - deactivated family ---------------------------------------

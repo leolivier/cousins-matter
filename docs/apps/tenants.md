@@ -4,8 +4,8 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-11-18
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:06:02Z }
+stale_after: 2027-11-23
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
 # Tenants
@@ -50,7 +50,11 @@ Two words, two levels:
   `tenants/forms.py`) except for the seeded default/system tenants
   themselves: a slug mirroring a root route (`genealogy`, `members`, …) can
   never be taken by a family, whatever the creation path (`full_clean()`
-  runs in the Django admin too).
+  runs in the Django admin too). The media roots are reserved as well —
+  `public` (a tenant named `public` would put protected files under
+  `media/public/`, served anonymously), `avatars`, `classified_ads`, `tmp`,
+  `env_check`, plus the already-reserved `galleries`, `troves`. Renaming a
+  slug after media have been tenant-foldered invalidates every stored path.
 - `TenantSettings` — `OneToOneField(Tenant)` plus an `overrides` JSONField
   (feature flags, branding). `tenant_settings_overrides(tenant=None)` returns
   the raw dict (defaulting to the current tenant), `{}` when there is none.
@@ -74,6 +78,20 @@ Two words, two levels:
 - `Member` deliberately does **not** inherit `TenantModel`: it owns the FK
   that identifies the tenant and redeclares it with its own save() fallback
   (members/models.py, members/managers.py).
+
+## Media folders (tenants/storage.py)
+
+- `tenant_prefix(instance)` returns `""` when `MULTI_TENANT_ENABLED` is off
+  (mono-tenant paths unchanged) and the tenant slug otherwise — instance
+  tenant, else the active tenant, else the default tenant.
+- `tenant_path(instance, *parts)` joins that prefix with a relative storage
+  path; every media `upload_to` uses it (galleries, avatars, ad photos,
+  troves). See [Media Storage](/specs/media-storage.md).
+- `move_file(storage, old, new)` moves one file through the generic Storage
+  API (filesystem or S3/Dropbox); shared by gallery moves and the command.
+- `manage.py migrate_media_to_tenant_dirs [--dry-run]` moves files uploaded
+  before the feature to `<slug>/…` and rewrites the DB columns; idempotent,
+  and a no-op when the flag is off.
 
 ## TenantMiddleware (tenants/middleware.py)
 

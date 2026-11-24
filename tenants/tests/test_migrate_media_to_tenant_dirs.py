@@ -4,9 +4,10 @@ from io import StringIO
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.management import call_command
-from django.test import TestCase, override_settings
+from django.test import TestCase
 
 from classified_ads.models import AdPhoto, ClassifiedAd
+from core.context_processors import override_settings
 from core.utils import test_media_root_decorator
 from galleries.models import Gallery, Photo
 from members.models import Member
@@ -23,7 +24,6 @@ def run(dry_run=False):
 
 
 @test_media_root_decorator(__file__)
-@override_settings(MULTI_TENANT_ENABLED=True)
 class MigrateMediaToTenantDirsTestCase(TestCase):
   def setUp(self):
     self.tenant = Tenant.objects.create(name="Mig", slug=SLUG)
@@ -86,6 +86,7 @@ class MigrateMediaToTenantDirsTestCase(TestCase):
       Trove.unscoped.get(pk=self.trove.pk),
     )
 
+  @override_settings(MULTI_TENANT_ENABLED=True)
   def test_dry_run_changes_nothing(self):
     output = run(dry_run=True)
     self.assertIn("would move", output)
@@ -96,6 +97,7 @@ class MigrateMediaToTenantDirsTestCase(TestCase):
     self.assertEqual(trove.picture.name, "troves/pictures/a.jpg")
     self.assertTrue(default_storage.exists("galleries/g/a.jpg"))
 
+  @override_settings(MULTI_TENANT_ENABLED=True)
   def test_migrates_every_target(self):
     run()
     photo, member, ad_photo, trove = self._refresh()
@@ -121,6 +123,7 @@ class MigrateMediaToTenantDirsTestCase(TestCase):
     for old_name in ("galleries/g/a.jpg", "avatars/a.jpg", "avatars/mini_a.jpg", self.ad_photo_name):
       self.assertFalse(default_storage.exists(old_name), old_name)
 
+  @override_settings(MULTI_TENANT_ENABLED=True)
   def test_is_idempotent(self):
     run()
     output = run()

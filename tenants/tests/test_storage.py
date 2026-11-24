@@ -1,6 +1,7 @@
-from django.test import TestCase, override_settings
+from django.test import TestCase
 
 from classified_ads.models import AdPhoto, get_photo_path, get_thumbnail_path
+from core.context_processors import override_settings
 from galleries.models import Gallery, Photo, photo_path, thumbnail_path
 from members.models import Member, avatar_path
 from tenants.models import Tenant
@@ -12,7 +13,6 @@ from troves.models import picture_path as trove_picture_path
 from troves.models import thumbnail_path as trove_thumbnail_path
 
 
-@override_settings(MULTI_TENANT_ENABLED=False)
 class MonoTenantPathsTestCase(TestCase):
   """Flag off (self-hosted mono-tenant): upload paths must stay exactly as before."""
 
@@ -24,9 +24,11 @@ class MonoTenantPathsTestCase(TestCase):
     self.ad_photo = AdPhoto(tenant=self.tenant, ad_id=7)
     self.trove = Trove(tenant=self.tenant)
 
+  @override_settings(MULTI_TENANT_ENABLED=False)
   def test_tenant_prefix_is_empty(self):
     self.assertEqual(tenant_prefix(self.photo), "")
 
+  @override_settings(MULTI_TENANT_ENABLED=False)
   def test_paths_are_unchanged(self):
     self.assertEqual(photo_path(self.photo, "a.jpg"), "galleries/g/a.jpg")
     self.assertEqual(thumbnail_path(self.photo, "a.jpg"), "galleries/g/thumbnails/a.jpg")
@@ -38,7 +40,6 @@ class MonoTenantPathsTestCase(TestCase):
     self.assertEqual(trove_file_path(self.trove, "a.txt"), "troves/files/a.txt")
 
 
-@override_settings(MULTI_TENANT_ENABLED=True)
 class MultiTenantPathsTestCase(TestCase):
   """Flag on: every protected path is prefixed with the tenant slug."""
 
@@ -53,9 +54,11 @@ class MultiTenantPathsTestCase(TestCase):
     self.ad_photo = AdPhoto(tenant=self.tenant, ad_id=7)
     self.trove = Trove(tenant=self.tenant)
 
+  @override_settings(MULTI_TENANT_ENABLED=True)
   def test_tenant_prefix_uses_instance_tenant(self):
     self.assertEqual(tenant_prefix(self.photo), "path-fam")
 
+  @override_settings(MULTI_TENANT_ENABLED=True)
   def test_paths_are_tenant_prefixed(self):
     self.assertEqual(photo_path(self.photo, "a.jpg"), "path-fam/galleries/g/a.jpg")
     self.assertEqual(thumbnail_path(self.photo, "a.jpg"), "path-fam/galleries/g/thumbnails/a.jpg")
@@ -66,9 +69,11 @@ class MultiTenantPathsTestCase(TestCase):
     self.assertEqual(trove_thumbnail_path(self.trove, "a.jpg"), "path-fam/troves/pictures/thumbnails/a.jpg")
     self.assertEqual(trove_file_path(self.trove, "a.txt"), "path-fam/troves/files/a.txt")
 
+  @override_settings(MULTI_TENANT_ENABLED=True)
   def test_prefix_falls_back_to_current_tenant(self):
     with tenant_context(self.tenant):
       self.assertEqual(tenant_prefix(Member()), "path-fam")
 
+  @override_settings(MULTI_TENANT_ENABLED=True)
   def test_prefix_falls_back_to_default_tenant(self):
     self.assertEqual(tenant_prefix(Member()), Tenant.get_default().slug)

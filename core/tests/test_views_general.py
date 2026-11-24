@@ -8,6 +8,10 @@ from core.forms import PasswordResetForm
 
 
 class GeneralViewsTestCase(MemberTestCase):
+  def _media(self, filename):
+    """A protected media name under the caller's tenant slug (multi-tenant ACL)."""
+    return f"{self.member.tenant.slug}/{filename}"
+
   def test_home_view(self):
     """Test that HomeView returns 200 and uses the correct template."""
     response = self.client.get(reverse("core:Home"))
@@ -31,7 +35,7 @@ class GeneralViewsTestCase(MemberTestCase):
   def test_download_protected_media_not_found(self):
     """Test that download_protected_media raises 404 if file not found."""
     # Line 68
-    response = self.client.get(reverse("get_protected_media", args=["non_existent_file.jpg"]))
+    response = self.client.get(reverse("get_protected_media", args=[self._media("non_existent_file.jpg")]))
     self.assertEqual(response.status_code, 404)
 
   def test_download_protected_media_not_modified(self):
@@ -39,7 +43,7 @@ class GeneralViewsTestCase(MemberTestCase):
     # Line 58
     from hashlib import blake2b
 
-    media = "test_file.jpg"
+    media = self._media("test_file.jpg")
     hasher = blake2b()
     tbh = bytes(f"{self.member.username}@{media}", "utf-8")
     hasher.update(tbh)
@@ -53,7 +57,7 @@ class GeneralViewsTestCase(MemberTestCase):
     """Test that download_protected_media raises 404 on general exception."""
     # Line 70
     mock_open.side_effect = Exception("General Error")
-    response = self.client.get(reverse("get_protected_media", args=["some_file.jpg"]))
+    response = self.client.get(reverse("get_protected_media", args=[self._media("some_file.jpg")]))
     self.assertEqual(response.status_code, 404)
 
 

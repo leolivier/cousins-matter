@@ -2,12 +2,12 @@ from pathlib import Path
 
 import urllib.parse
 
-from django.test import override_settings
 from django.urls import reverse
 from django.http import StreamingHttpResponse
 
 from django.core.files.storage import default_storage
 
+from core.context_processors import override_settings
 from core.utils import (
   test_resource_full_path,
   get_test_absolute_url,

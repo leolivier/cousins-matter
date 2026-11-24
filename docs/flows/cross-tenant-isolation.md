@@ -4,8 +4,8 @@ title: Cross-Tenant Isolation (Manual Test)
 description: Manual end-to-end test scenario verifying that tenants cannot see or touch each other's data in any app — lists, direct object access, member lookups, chat, media and auth boundaries
 tags: ["flow", "tenants", "testing", "manual", "isolation"]
 status: draft
-stale_after: 2027-11-18
-generated: { by: claude-code/glm-5.3-flash, at: 2026-10-17T00:00:00Z }
+stale_after: 2027-11-23
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
 # Cross-Tenant Isolation (Manual Test)
@@ -126,16 +126,18 @@ deliberately **unscoped** (by design, not a leak).
     yields nothing.
 13. Repeat 11–12 mirrored as Lena.
 
-## Phase 5 — Protected media (known surface, record what you see)
+## Phase 5 — Protected media
 
 14. As Lena, copy the full URL of her avatar or of the family B gallery photo
-    (from the page source or "copy image address").
-15. As Nora, paste that URL. **Expect (current code)**: the file **is**
-    served — `download_protected_media` (core/views/views_general.py) checks
-    login only, not the tenant. This is an **observed deviation to record**
-    (media are auth-gated, not tenant-gated); classify it as accepted
-    limitation or defect depending on the family's data policy. Anonymous
-    access must still be refused (login redirect).
+    (from the page source or "copy image address"). The path starts with the
+    family B tenant slug (`/protected_media/isolation-family-ifb/...`).
+15. As Nora, paste that URL. **Expect**: **404** — in multi-tenant mode
+    `download_protected_media` (core/views/views_general.py) requires the
+    first path segment to be the caller's tenant slug. Family B's own
+    members still get the file, and platform superusers (`request.tenant`
+    is `None`) stay unscoped. Anonymous access is still refused (login
+    redirect). The automated mirror is
+    `members/tests/tests_cross_tenant_isolation_e2e.py` (`test_06`).
 
 ## Phase 6 — Auth boundaries and the deactivated family
 

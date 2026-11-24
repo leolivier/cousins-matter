@@ -4,8 +4,8 @@ title: Galleries
 description: Photo/video galleries — nested gallery tree, photo import (single and bulk zip via Django-Q), thumbnails, protected storage
 tags: ["app", "galleries"]
 status: draft
-stale_after: 2027-11-09
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:23:24Z }
+stale_after: 2027-11-23
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
 # Galleries
@@ -46,12 +46,13 @@ and automatic thumbnail generation. Both models inherit
   and now passes through the `sanitize` template filter ([core](/apps/core.md)
   — nh3 allowlist cleaner) which strips scripts, event handlers and
   non-https URLs, covering data stored before the fix.
-- Upload paths (`photo_path`/`thumbnail_path`): under
-  `MEDIA_ROOT/settings.GALLERIES_DIR` (`"galleries"`,
+- Upload paths (`photo_path`/`thumbnail_path`):
+  `MEDIA_ROOT/[<tenant slug>/]settings.GALLERIES_DIR` (`"galleries"`,
   config/settings/base.py) **inside the gallery's `full_path()`**,
-  thumbnails in a `thumbnails/` subfolder. Renaming a photo or moving
-  it to another gallery rewrites the file on storage to match the new
-  path.
+  thumbnails in a `thumbnails/` subfolder. The tenant segment is added only
+  in multi-tenant mode via `tenants.storage.tenant_path`. Renaming a photo
+  or moving it to another gallery rewrites the file on storage to match the
+  new path (the move helper is the shared `tenants.storage.move_file`).
 - Constraints/indexes: slugs unique per `(tenant, slug, gallery)`;
   indexes on `(tenant, gallery)`, `(tenant, name)`,
   `(tenant, gallery, id)`.
@@ -72,10 +73,11 @@ only) for the bulk-upload form; `check_image_size` (models.py) enforces
 ## Storage is protected
 
 Photo files never live under `/media/public/`: they sit in
-`MEDIA_ROOT/galleries/...` and are streamed by the
-[protected media](/modules/protected-media.md) view, which checks
-login (and tenant) per request. Templates must build URLs with the
-`protected_media_url` helper (`core.utils`), as `cover_url()` does.
+`MEDIA_ROOT/[<tenant slug>/]galleries/...` and are streamed by the
+[protected media](/modules/protected-media.md) view, which checks login
+and, in multi-tenant mode, that the first path segment is the caller's
+tenant slug. Templates must build URLs with the `protected_media_url`
+helper (`core.utils`), as `cover_url()` does.
 
 ## Views and URLs (galleries/urls.py, `app_name = "galleries"`)
 

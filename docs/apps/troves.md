@@ -4,8 +4,8 @@ title: Troves
 description: Troves app (`troves`) — the family's numeric treasures (texts, photos, music, videos…) filed by category, with ownership-based editing and auto-generated thumbnails; documented in apps/troves.md
 tags: ["app", "troves"]
 status: draft
-stale_after: 2027-09-13
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-04T22:53:05Z }
+stale_after: 2027-11-23
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
 # Troves
@@ -57,7 +57,11 @@ to anonymous visitors (see [architecture](/architecture.md)):
 
 - `TROVE_PICTURE_DIRECTORY` = `troves/pictures/`,
   `TROVE_THUMBNAIL_DIRECTORY` = `troves/pictures/thumbnails/`,
-  `TROVE_FILES_DIRECTORY` = `troves/files/`;
+  `TROVE_FILES_DIRECTORY` = `troves/files/`; in multi-tenant mode every
+  upload is prefixed with the tenant slug
+  (`<slug>/troves/...` via the `picture_path` / `thumbnail_path` /
+  `file_path` callables and `tenants.storage.tenant_path`), and
+  `_thumbnail_path()` / `delete_picture()` use the same prefix;
 - `TROVE_FILE_MAX_SIZE` (20 MB by default) and
   `TROVE_PICTURE_FILE_MAX_SIZE` are enforced server-side by model
   validators on `Trove.file` / `Trove.picture`, through

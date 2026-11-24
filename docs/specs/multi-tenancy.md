@@ -4,8 +4,8 @@ title: Multi-Tenancy
 description: Design rationale and invariants of shared-schema multi-tenancy — isolation layers (ORM scoping, RLS backstop), the default/system tenants, per-tenant settings, and the known gaps
 tags: ["spec", "multi-tenancy"]
 status: draft
-stale_after: 2027-03-10
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T12:02:12Z }
+stale_after: 2027-11-23
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
 # Multi-Tenancy
@@ -102,15 +102,20 @@ tenants.
 
 ## What is *not* tenant-scoped
 
-Media files carry no tenant prefix on disk or in any backend — file
-isolation is access-control at the view layer, not storage layout (see
-[Media Storage](/specs/media-storage.md)). Static assets are global. URLs are
-not tenant-prefixed: the tenant is always derived from the session, never
-from the hostname or path.
+Media files **are** tenant-scoped in multi-tenant mode: every protected
+upload is stored under `<tenant slug>/…` and `/protected_media/` rejects a
+path whose first segment is not the caller's tenant slug (platform
+superusers stay unscoped). With `MULTI_TENANT_ENABLED` off — the self-hosted
+mono-tenant default — paths and the login-only ACL are unchanged. See
+[Media Storage](/specs/media-storage.md) for the layout contract and the
+`migrate_media_to_tenant_dirs` migration command.
+
+Static assets are global. URLs are not tenant-prefixed: the tenant is
+always derived from the session, never from the hostname or path.
 
 # See also
 
 - [Tenants](/apps/tenants.md) — the code: models, middleware, views
-- [Media Storage](/specs/media-storage.md) — why media is outside the tenant scope
+- [Media Storage](/specs/media-storage.md) — the tenant folder contract
 - user-manual/multi-tenancy.md — enabling, family lifecycle, RLS setup recipe
 - [Architecture](/architecture.md) — middleware order, settings selection

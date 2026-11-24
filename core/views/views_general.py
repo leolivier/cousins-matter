@@ -4,6 +4,7 @@ import mimetypes
 from hashlib import blake2b
 from wsgiref.util import FileWrapper
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_not_required
 from django.contrib.auth.views import PasswordResetView as DefaultPasswordResetView
 from django.core.files.storage import default_storage
@@ -78,7 +79,13 @@ def download_protected_media(request, media) -> StreamingHttpResponse | HttpResp
   """
   View to download a protected media file. Login required
   The file must be stored in the MEDIA_ROOT directory in the media backend storage as defined in the settings (e.g. S3).
+  In multi-tenant mode, the first path segment must be the caller's tenant slug; platform superusers
+  (request.tenant is None) stay unscoped.
   """
+  if settings.MULTI_TENANT_ENABLED:
+    tenant = getattr(request, "tenant", None)
+    if tenant is not None and media.split("/", 1)[0] != tenant.slug:
+      raise Http404(_("Media not found"))
   return _download_media(request, media)
 
 

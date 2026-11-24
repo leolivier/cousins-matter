@@ -12,6 +12,12 @@ from tenants.models import Tenant
 COUNTER: int = -1  # -1 for superuser and 0 for member
 
 
+def _avatar_test_path(filename):
+  """Expected avatar storage name for a member on the default tenant (tenant-prefixed in multi-tenant mode)."""
+  prefix = settings.DEFAULT_TENANT_SLUG if settings.MULTI_TENANT_ENABLED else ""
+  return os.path.join(prefix, settings.AVATARS_DIR, filename)
+
+
 def get_counter():
   global COUNTER
   res = COUNTER
@@ -85,8 +91,14 @@ class MemberTestCaseMixin:
   change_password_url = reverse("change_password")
 
   base_avatar = "test_avatar.jpg"
-  test_avatar_jpg = os.path.join(settings.AVATARS_DIR, "test_avatar.jpg")
-  test_mini_avatar_jpg = os.path.join(settings.AVATARS_DIR, "mini_test_avatar.jpg")
+
+  @property
+  def test_avatar_jpg(self):
+    return _avatar_test_path("test_avatar.jpg")
+
+  @property
+  def test_mini_avatar_jpg(self):
+    return _avatar_test_path("mini_test_avatar.jpg")
 
   def setUp(self):
     self.created_members = []
@@ -217,8 +229,13 @@ class AsyncMemberTestCase(TransactionTestCase):
   member = None
   superuser = None
 
-  test_avatar_jpg = os.path.join(settings.AVATARS_DIR, "test_avatar.jpg")
-  test_mini_avatar_jpg = os.path.join(settings.AVATARS_DIR, "mini_test_avatar.jpg")
+  @property
+  def test_avatar_jpg(self):
+    return _avatar_test_path("test_avatar.jpg")
+
+  @property
+  def test_mini_avatar_jpg(self):
+    return _avatar_test_path("mini_test_avatar.jpg")
 
   def setUp(self):
     super().setUp()

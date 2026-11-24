@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 import logging
-import os
 import secrets
 import string
 from typing import Literal, cast
@@ -17,6 +16,8 @@ from django.utils.translation import (
   deactivate as translation_deactivate,
 )
 from django.core.files import File
+
+from tenants.storage import tenant_path
 
 from .models import (
   ALL_FIELD_NAMES,
@@ -123,9 +124,9 @@ _MEMBER_IMPORT_TTL = 24 * 60 * 60
 def manage_avatar(row_data: MemberImportData):
   username = row_data.row[t("username")]
   avatar_file = row_data.row[t("avatar")]
-  avatar = os.path.join(settings.AVATARS_DIR, avatar_file)
-  # avatar not changed
-  if row_data.current_member.avatar and row_data.current_member.avatar.path == avatar:
+  avatar = tenant_path(row_data.current_member, settings.AVATARS_DIR, avatar_file)
+  # avatar not changed (compare storage names: works with remote storage, unlike .path)
+  if row_data.current_member.avatar and row_data.current_member.avatar.name == avatar:
     return
 
   # avatar image must already exist
@@ -135,7 +136,7 @@ def manage_avatar(row_data: MemberImportData):
     )
   else:
     try:
-      with open(avatar, "rb") as image_file:
+      with default_storage.open(avatar, "rb") as image_file:
         image = File(image_file)
         row_data.current_member.avatar.save(avatar_file, image)
         row_data.set_updated()

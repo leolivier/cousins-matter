@@ -18,6 +18,7 @@ from core.utils import create_thumbnail
 
 from tenants.models import Tenant
 from tenants.scoping import TenantModel, get_current_tenant
+from tenants.storage import tenant_path
 
 from .managers import MemberManager
 
@@ -116,6 +117,11 @@ class Address(TenantModel):
     ]
 
 
+def avatar_path(instance, filename):
+  """Avatars are uploaded to MEDIA_ROOT/[<tenant slug>/]avatars/<filename>; the mini avatar sits next to it."""
+  return tenant_path(instance, settings.AVATARS_DIR, filename)
+
+
 class Member(AbstractUser):
   FREQUENCY_NEVER = "never"
   FREQUENCY_IMMEDIATE = "immediate"
@@ -156,7 +162,7 @@ class Member(AbstractUser):
     default=None,
   )
 
-  avatar = models.ImageField(upload_to=settings.AVATARS_DIR, blank=True, null=True)
+  avatar = models.ImageField(upload_to=avatar_path, blank=True, null=True)
 
   address = models.ForeignKey(Address, verbose_name=_("Address"), null=True, blank=True, on_delete=models.SET_NULL)
 

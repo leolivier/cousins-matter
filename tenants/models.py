@@ -37,6 +37,7 @@ RESERVED_TENANT_SLUGS = frozenset({
   "jsi18n",
   "members",
   "pages",
+  "public",
   "public_media",
   "posts",
   "chat",
@@ -54,9 +55,14 @@ RESERVED_TENANT_SLUGS = frozenset({
   "troves",
   "verification",
   "classified-ads",
+  "classified_ads",
   "pages-edit",
   "static",
   "protected_media",
+  # media roots used as upload prefixes (or by legacy/transient files)
+  "avatars",
+  "tmp",
+  "env_check",
 })
 
 # Process-local memoization of the singleton tenants resolved by slug. These

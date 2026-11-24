@@ -1,16 +1,16 @@
 ---
 type: Module Reference
 title: Management Commands
-description: Inventory of the project's manage.py commands (check_okf, generate_test_data, import_test_data, delete_tenant) and the scripts/manage_cousins_matter.py operations
+description: Inventory of the project's manage.py commands (check_okf, generate_test_data, import_test_data, delete_tenant, migrate_media_to_tenant_dirs) and the scripts/manage_cousins_matter.py operations
 tags: ["module", "management-commands"]
 status: draft
-stale_after: 2027-03-05
-generated: { by: claude-code/glm-5.3-flash, at: 2026-09-05T11:16:06Z }
+stale_after: 2027-11-23
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
 # Management Commands
 
-Only four `manage.py` commands are project code; everything else comes from
+Only five `manage.py` commands are project code; everything else comes from
 Django or dependencies. Remember to export the settings environment first
 (`ENVIRONMENT=test SECRET_KEY=x POSTGRES_PASSWORD=x ./manage.py ...` locally
 — see [Setup](/setup-dev.md#choosing-environment)).
@@ -23,6 +23,7 @@ Django or dependencies. Remember to export the settings environment first
 | `generate_test_data [--app A] [--count N]` | core/management/commands/generate_test_data.py | Import `<app>/tests/factories.py` for every (or one) app, instantiate N objects per factory and dump fixtures into the app's `tests/resources/` folder. |
 | `import_test_data [--app A]` | core/management/commands/import_test_data.py | `loaddata` each app's `tests/resources/fixtures.json` (apps visited in a fixed order because of FKs) to seed a dev/test database. |
 | `delete_tenant <slug> [--yes]` | tenants/management/commands/delete_tenant.py | Hard-delete a tenant and all its data; refuses the system and currently-active tenants, and asks for confirmation unless `--yes`. |
+| `migrate_media_to_tenant_dirs [--dry-run]` | tenants/management/commands/migrate_media_to_tenant_dirs.py | Move every protected media file under its `<tenant slug>/` folder and rewrite the DB file names (galleries, avatars + mini avatars, ad photos, troves). Idempotent, `--dry-run` only reports; no-op when `MULTI_TENANT_ENABLED` is off. Run it before rolling containers that enforce the tenant media ACL. |
 
 Commands provided by dependencies that matter operationally: `qcluster`,
 `qmonitor`, `qinfo` (django-q2 — the cluster that runs notifications), and

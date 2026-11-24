@@ -1,5 +1,4 @@
 import logging
-import os
 import re
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -8,8 +7,22 @@ from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 from core.utils import check_file_size, create_thumbnail
 from tenants.scoping import TenantModel
+from tenants.storage import tenant_path
 
 logger = logging.getLogger(__name__)
+
+
+def picture_path(trove, filename):
+  """Troves are uploaded to MEDIA_ROOT/[<tenant slug>/]TROVE_PICTURE_DIRECTORY/<filename>."""
+  return tenant_path(trove, settings.TROVE_PICTURE_DIRECTORY, filename)
+
+
+def thumbnail_path(trove, filename):
+  return tenant_path(trove, settings.TROVE_THUMBNAIL_DIRECTORY, filename)
+
+
+def file_path(trove, filename):
+  return tenant_path(trove, settings.TROVE_FILES_DIRECTORY, filename)
 
 
 def check_trove_picture_size(file):
@@ -44,15 +57,15 @@ class Trove(TenantModel):
     blank=True,
   )
   picture = models.ImageField(
-    upload_to=settings.TROVE_PICTURE_DIRECTORY,
+    upload_to=picture_path,
     verbose_name=_("Treasure photo"),
     null=False,
     blank=False,
     validators=[check_trove_picture_size],
   )
-  thumbnail = models.ImageField(upload_to=settings.TROVE_THUMBNAIL_DIRECTORY, blank=True)
+  thumbnail = models.ImageField(upload_to=thumbnail_path, blank=True)
   file = models.FileField(
-    upload_to=settings.TROVE_FILES_DIRECTORY,
+    upload_to=file_path,
     verbose_name=_("Treasure file"),
     blank=True,
     null=True,
@@ -104,7 +117,7 @@ class Trove(TenantModel):
 
   def _thumbnail_path(self):
     base = self.picture.name.split("/")[-1]
-    return os.path.join(settings.TROVE_THUMBNAIL_DIRECTORY, base)
+    return tenant_path(self, settings.TROVE_THUMBNAIL_DIRECTORY, base)
 
   def clean(self):
     if self.owner is None:
@@ -137,6 +150,5 @@ class Trove(TenantModel):
 
   def delete_picture(self):
     default_storage.delete(self.picture.name)
-    thumbnail_path = os.path.join(settings.TROVE_THUMBNAIL_DIRECTORY, self.picture.name.split("/")[-1])
-    default_storage.delete(thumbnail_path)
+    default_storage.delete(tenant_path(self, settings.TROVE_THUMBNAIL_DIRECTORY, self.picture.name.split("/")[-1]))
     self.picture = None

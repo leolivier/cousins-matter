@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from core.utils import create_thumbnail
 from members.models import Member
 from tenants.scoping import TenantModel
+from tenants.storage import tenant_path
 
 from .categories import CATEGORIES, StrOrPromise
 
@@ -114,9 +115,9 @@ class ClassifiedAd(TenantModel):
 
 def get_photo_path(photo, filename):
   """
-  photos will be uploaded to MEDIA_ROOT/classified_ads/<ad_id>/<filename>.
+  photos are uploaded to MEDIA_ROOT/[<tenant slug>/]classified_ads/<ad_id>/<filename>.
   """
-  return os.path.join("classified_ads", str(photo.ad.id), filename)
+  return tenant_path(photo, "classified_ads", str(photo.ad_id), filename)
 
 
 def get_thumbnail_path(photo, filename):

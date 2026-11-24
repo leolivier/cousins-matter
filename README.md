@@ -27,6 +27,7 @@ Cousins Matter provides a bunch of features (described in details at [Features](
 * _Polls_: creation and answering by any active member.
 * _Event planning_: sub module of the Poll module, event planning survey to define when an avent should take place.
 * _Classified ads_: Any member can publish a classified ad.
+* _Genealogy_: Manage your family tree. Import & Export genealogy files to/from other sources.
 
 ## Deep customization & Theming
 Admin can easily customize their site and define their own theme.

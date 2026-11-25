@@ -55,7 +55,7 @@ Vous aurez également besoin d’un environnement Python 3.14 ou supérieur pour
     Les paramètres de Cousins Matter v2 sont différents de ceux de la v1. Veuillez mettre à jour votre fichier .env afin qu’il corresponde aux paramètres de Cousins Matter v2.
 
     Les paramètres de Cousins Matter v2 sont détaillés sur la page [Paramètres](settings.md).
-    La migration met notamment à jour le fichier .env.example afin qu’il corresponde aux paramètres de Cousins Matter v2. Veuillez donc comparer ce nouveau fichier .env.example avec votre fichier .env et mettre à jour ce dernier en conséquence.
+    La migration met notamment à jour le fichier env.example afin qu’il corresponde aux paramètres de Cousins Matter v2. Veuillez donc comparer ce nouveau fichier env.example avec votre fichier .env et mettre à jour ce dernier en conséquence.
 
     Notez également que certaines valeurs par défaut ont changé. Par exemple :
 

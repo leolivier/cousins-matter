@@ -6,7 +6,7 @@ Les paramètres de Cousins Matter peuvent être gérés à l'aide d'un fichier `
 
 Si vous avez utilisé le script `manage_cousins_matter.py` pour installer Cousins Matter comme décrit dans la section [Installation](installation.md), un fichier `.env` d'exemple a été téléchargé automatiquement pour vous et les variables `SECRET_KEY` et `POSTGRES_PASSWORD` ont été générées automatiquement (**ne les écrasez pas !**).
 
-Si vous travaillez à partir du code source, copiez le fichier `.env.example` dans `.env`.
+Si vous travaillez à partir du code source, copiez le fichier `env.example` dans `.env`.
 
 Dans les deux cas, vous devez maintenant modifier le fichier `.env` pour définir les propriétés en fonction de votre contexte, comme décrit ci-dessous.
 
@@ -43,7 +43,7 @@ Avant d’exécuter `docker compose up -d` pour la première fois, fournissez le
 
 Vous pouvez gérer les fonctionnalités qui seront proposées aux membres dans le fichier .env.
 
-Pour ce faire, modifiez la variable FEATURES_FLAGS en vous basant sur le contenu du fichier .env.example et définissez la valeur de chaque fonctionnalité à ignorer sur « false ».
+Pour ce faire, modifiez la variable FEATURES_FLAGS en vous basant sur le contenu du fichier env.example et définissez la valeur de chaque fonctionnalité à ignorer sur « false ».
 
 La valeur par défaut de FEATURES_FLAGS est :
 ```

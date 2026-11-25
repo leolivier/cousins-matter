@@ -81,7 +81,7 @@ __The first time__, go to http://127.0.0.1:8000/members/profile, log in using th
 	```
 
 * Update your settings:
-	Copy `.env.example` to `.env` and edit `.env` to set the properties according to your needs, see the [Settings](settings.md) page.
+	Copy `env.example` to `.env` and edit `.env` to set the properties according to your needs, see the [Settings](settings.md) page.
 
 	You can automatically create the SECRET_KEY by running the following command:
 

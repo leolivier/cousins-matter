@@ -55,7 +55,7 @@ Sie benötigen außerdem eine Python-3.14+-Umgebung, um das Migrationsskript aus
 	Die Einstellungen von Cousins Matter v2 unterscheiden sich von denen der v1. Bitte passen Sie Ihre .env-Datei an die Einstellungen von Cousins Matter v2 an.
 
 	Die Einstellungen von Cousins Matter v2 sind auf der Seite [Einstellungen](settings.md) im Detail beschrieben.
-	Insbesondere aktualisiert die Migration die Datei .env.example, um sie an die Einstellungen von Cousins Matter v2 anzupassen. Vergleichen Sie daher bitte diese neue Datei .env.example mit Ihrer .env-Datei und aktualisieren Sie Ihre .env-Datei entsprechend.
+	Insbesondere aktualisiert die Migration die Datei env.example, um sie an die Einstellungen von Cousins Matter v2 anzupassen. Vergleichen Sie daher bitte diese neue Datei env.example mit Ihrer .env-Datei und aktualisieren Sie Ihre .env-Datei entsprechend.
 
 	Achten Sie außerdem darauf, dass sich einige Standardwerte geändert haben. Zum Beispiel:
 

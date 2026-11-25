@@ -293,7 +293,7 @@ Please make sure you are in the project directory before running this script."""
     raise InitException(
       """
 The .env file is missing or not readable.
-Please download .env.example from github latest release, rename it to .env, and fill it with the right data.
+Please download env.example from github latest release, rename it to .env, and fill it with the right data.
 Then use --force-recreate option with 'docker compose up' to recreate the container.""",
       2,
     )

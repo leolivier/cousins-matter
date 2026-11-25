@@ -81,7 +81,7 @@ __Na primeira vez__, aceda a http://127.0.0.1:8000/members/profile, inicie sess�
 	```
 
 * Atualize as suas configurações:
-	Copie `.env.example` para `.env` e edite `.env` para definir as propriedades conforme as suas necessidades; consulte a página [Configurações](settings.md).
+	Copie `env.example` para `.env` e edite `.env` para definir as propriedades conforme as suas necessidades; consulte a página [Configurações](settings.md).
 
 	Pode criar automaticamente a SECRET_KEY executando o seguinte comando:
 

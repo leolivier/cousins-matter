@@ -31,7 +31,7 @@ scripts/dev/
 backup/
 **/*.log
 **/*.rdb
-**/.env.example
+**/env.example
 **/.github
 **/user-manual
 *.yaml

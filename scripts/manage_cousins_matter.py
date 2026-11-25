@@ -227,7 +227,7 @@ def download_V2_needed_files(
 ):
   files_to_download = [
     ("docker-compose.yml", directory / "docker-compose.yml"),
-    (".env.example", directory / ".env.example"),
+    ("env.example", directory / "env.example"),
     ("config/nginx/nginx.conf", directory / "config" / "nginx" / "nginx.conf"),
     (
       "config/nginx/nginx.d/errors/413.html",
@@ -595,8 +595,8 @@ def check_envfile(directory: Path, review_environment: bool):
   if review_environment:
     if not ENV_PATH.exists():
       print(
-        framed("""WARNING! '-e' param was provided and skipped dowloading .env.example. However, .env
-does not exist in this directory. Please check .env.example, .env.old if it exists, and
+        framed("""WARNING! '-e' param was provided and skipped dowloading env.example. However, .env
+does not exist in this directory. Please check env.example, .env.old if it exists, and
 create a .env file to make sure all required variables are present.""")
       )
   else:
@@ -605,7 +605,7 @@ create a .env file to make sure all required variables are present.""")
     if ENV_PATH.exists():
       print(
         framed("""WARNING! .env already existed and as been moved to .env.old
-WARNING! Recreating a new .env file from .env.example
+WARNING! Recreating a new .env file from env.example
 WARNING! Please check .env and copy the variables from .env.old to .env when it makes sense.""")
       )
       try:
@@ -674,12 +674,12 @@ def install_cousins_matter(args):
     # Normal install: download files
     download_V2_needed_files(directory, args.github_repo, args.branch, args.release, local_files=args.local_files)
 
-    # Create .env from .env.example if .env is missing
-    verbose("Creating .env from .env.example...")
+    # Create .env from env.example if .env is missing
+    verbose("Creating .env from env.example...")
     try:
-      ENV_PATH.with_name(".env.example").replace(ENV_PATH)
+      ENV_PATH.with_name("env.example").replace(ENV_PATH)
     except Exception as ex:
-      error(1, f"Failed to create .env from .env.example: {ex}")
+      error(1, f"Failed to create .env from env.example: {ex}")
 
   verbose("Generating secret key...")
   rotate_secrets()

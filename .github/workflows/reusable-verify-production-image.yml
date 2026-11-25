@@ -85,7 +85,7 @@ jobs:
           sed -i -e 's/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=test-postgres-password/' cm_test_install/.env
           sed -i -e 's/^Q_SYNC=.*/Q_SYNC=True/' cm_test_install/.env
           sed -i -e 's/^ENVIRONMENT=.*/ENVIRONMENT=production/' cm_test_install/.env
-          # .env.example comments out some keys, so the seds above never match
+          # env.example comments out some keys, so the seds above never match
           # them: append (newline-safe, see run 36330816976) whatever is missing.
           for kv in "SITE_DOMAIN=localhost" "SITE_NAME=Production Test Site" "ALLOWED_HOSTS=127.0.0.1,localhost"; do
             grep -q "^${kv%%=*}=" cm_test_install/.env || printf '\n%s\n' "$kv" >> cm_test_install/.env

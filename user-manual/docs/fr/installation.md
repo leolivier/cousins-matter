@@ -81,7 +81,7 @@ __La première fois__, rendez-vous sur http://127.0.0.1:8000/members/profile, co
     ```
 
 * Mettez à jour vos paramètres :
-    Copiez `.env.example` dans `.env` et modifiez `.env` pour définir les propriétés en fonction de vos besoins ; consultez la page [Paramètres](settings.md).
+    Copiez `env.example` dans `.env` et modifiez `.env` pour définir les propriétés en fonction de vos besoins ; consultez la page [Paramètres](settings.md).
 
     Vous pouvez créer automatiquement la clé SECRET_KEY en exécutant la commande suivante :
 

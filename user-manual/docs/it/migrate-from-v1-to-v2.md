@@ -55,7 +55,7 @@ Ti servirà anche un ambiente Python 3.14+ per eseguire lo script di migrazione.
 	Le impostazioni di Cousins Matter v2 sono diverse da quelle della v1. Aggiorna il tuo file .env per allinearlo alle impostazioni di Cousins Matter v2.
 
 	Le impostazioni di Cousins Matter v2 sono descritte in dettaglio nella pagina [Impostazioni](settings.md).
-	In particolare, la migrazione aggiorna il file .env.example per allinearlo alle impostazioni di Cousins Matter v2. Confronta quindi questo nuovo file .env.example con il tuo file .env e aggiorna di conseguenza il tuo file .env.
+	In particolare, la migrazione aggiorna il file env.example per allinearlo alle impostazioni di Cousins Matter v2. Confronta quindi questo nuovo file env.example con il tuo file .env e aggiorna di conseguenza il tuo file .env.
 
 	Fai attenzione anche al fatto che alcuni valori predefiniti sono cambiati. Per esempio:
 

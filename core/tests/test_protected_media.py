@@ -2,6 +2,7 @@ from pathlib import Path
 
 import urllib.parse
 
+from django.conf import settings
 from django.urls import reverse
 from django.http import StreamingHttpResponse
 
@@ -109,3 +110,38 @@ class ProtectedMediaTestCase(TestMediaResourceMixin, MemberTestCase):
       self.assertEqual(response.status_code, 404)
     finally:
       self.clean_storage(legacy)
+
+  def test_protected_media_is_not_cacheable_by_shared_caches(self):
+    """Protected media must stay out of shared caches (Cloudflare, proxies): only the browser caches it."""
+    response = self.client.get(self.rel_url)
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response["Cache-Control"], "private, max-age=3600")
+
+  def test_etag_is_quoted_and_conditional_request_returns_304(self):
+    """ETags must be quoted (RFC 7232) and a matching If-None-Match must answer 304 without reopening the file."""
+    response = self.client.get(self.rel_url)
+    etag = response["ETag"]
+    self.assertTrue(etag.startswith('"') and etag.endswith('"'))
+    not_modified = self.client.get(self.rel_url, HTTP_IF_NONE_MATCH=etag)
+    self.assertEqual(not_modified.status_code, 304)
+    self.assertEqual(not_modified["ETag"], etag)
+    self.assertEqual(not_modified["Cache-Control"], "private, max-age=3600")
+
+
+class PublicMediaCacheControlTestCase(TestMediaResourceMixin, MemberTestCase):
+  def setUp(self):
+    super().setUp()
+    self.test_file = Path("public") / "test_public_media" / "test_image.jpg"
+    logo_file = test_resource_full_path("test-logo.jpg", __file__)
+    (self.test_file, self.uploaded_content) = self.copy_test_resource(logo_file, self.test_file, return_content=True)
+    self.rel_url = f"{settings.PUBLIC_MEDIA_URL}test_public_media/test_image.jpg"
+
+  def tearDown(self):
+    self.clean_storage(self.test_file)
+    super().tearDown()
+
+  def test_public_media_is_cacheable_at_the_edge(self):
+    """Public media is anonymous and identical for every visitor, so the CDN/browser may cache it."""
+    response = self.client.get(self.rel_url)
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response["Cache-Control"], "public, max-age=86400")

@@ -4,7 +4,7 @@ title: Protected Media
 description: The two media URL prefixes (/protected_media/, /public_media/), the streaming download views, storage settings, and what makes public media public
 tags: ["module", "media"]
 status: draft
-stale_after: 2027-11-23
+stale_after: 2027-11-26
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
@@ -36,9 +36,20 @@ Both views funnel into `_download_media`:
 
 - streams the file in 64 KB chunks via `default_storage.open` (works with any
   storage backend, e.g. S3), `Content-Disposition: inline`, guessed MIME type;
-- answers `If-None-Match` with a blake2b ETag built from
+- answers `If-None-Match` with a quoted blake2b ETag built from
   `"<request.user.username>@<media>"` (cheap per-user caching, `304` when
-  unchanged) and raises `Http404` on missing/unreadable files;
+  unchanged — answered before the storage is opened, so a revalidation costs
+  no remote read) and raises `Http404` on missing/unreadable files;
+- sends `Cache-Control: private, max-age=3600`: the browser caches, but shared
+  caches (CDN, corporate proxies) must not, because the cache key cannot carry
+  the user identity outside an Enterprise CDN. `/public_media/` sends
+  `public, max-age=86400` instead — it is anonymous and identical for every
+  visitor, so a CDN may serve it;
+- the ETag is derived from the path, so regenerated thumbnails get a
+  content-digest suffix (`<stem>-<8 hex>.webp`, `core.utils.versioned_thumbnail_name`)
+  and therefore a new URL — otherwise clients would keep the stale copy. When
+  putting a CDN in front of the app, keep `/protected_media/*` out of its cache
+  (Cloudflare: a *Bypass cache* rule) or private media leaks between users;
 - `download_protected_media` requires a login: it is a normal view and
   `core.middleware.LoginRequiredMiddleware` forces authentication on every
   path not listed in `LOGIN_REQUIRED_IGNORE_PATHS`

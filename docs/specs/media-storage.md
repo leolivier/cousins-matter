@@ -4,7 +4,7 @@ title: Media Storage
 description: Design of the storage layer — the two media roots and their URL prefixes, the STORAGES alias switch driven by MEDIA_STORAGE, the pluggable backend contract, and the Dropbox option
 tags: ["spec", "media"]
 status: draft
-stale_after: 2027-11-23
+stale_after: 2027-11-26
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
@@ -44,7 +44,10 @@ Any Django storage backend works, because the two download views
 (core/views/views_general.py: `_download_media`) only ever call
 `default_storage.open` and stream in 64 KB chunks with a per-user blake2b ETag
 (`"<request.user.username>@<media>"` — hence 304s are per-user even on shared
-files). The corollaries:
+files). Protected responses are `Cache-Control: private` (browser-only cache),
+public ones `public`; generated thumbnails carry a content-digest suffix so the
+path-derived ETag actually changes when the image is regenerated. The
+corollaries:
 
 - a backend needs only read support for serving, but uploads go through the
   same `default_storage`, so it needs write support too;

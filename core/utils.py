@@ -5,6 +5,7 @@ import os
 import shutil
 from contextlib import contextmanager
 from datetime import datetime
+from hashlib import blake2b
 from io import BytesIO
 from PIL import Image, ImageOps, ImageFile
 import nh3
@@ -336,6 +337,16 @@ def is_video_file(name: str) -> bool:
   return ext.lower() in VIDEO_EXTENSIONS
 
 
+def versioned_thumbnail_name(file_stem: str, data: bytes) -> str:
+  """Names a generated thumbnail after a digest of its content.
+
+  Media ETags are derived from the storage path (see core.views.views_general._download_media),
+  so keeping the same name when a thumbnail is regenerated would leave clients on the stale
+  copy forever. A content digest makes every version a new path, hence a new URL and ETag.
+  """
+  return f"{file_stem}-{blake2b(data, digest_size=4).hexdigest()}.webp"
+
+
 def create_video_thumbnail(video_field: FieldFile, size: int) -> InMemoryUploadedFile:
   """
   Extracts the first frame from a video file and returns it as a WEBP thumbnail.
@@ -374,10 +385,12 @@ def create_video_thumbnail(video_field: FieldFile, size: int) -> InMemoryUploade
 
     output_thumb = BytesIO()
     img.save(output_thumb, format="WEBP", quality=90)
-    output_thumb.seek(0)
+    data = output_thumb.getvalue()
     thumb_size = sys.getsizeof(output_thumb)
     logger.debug(f"Extracted video thumbnail for {video_field.name}, size={thumb_size}")
-    return InMemoryUploadedFile(output_thumb, "ImageField", f"{file_stem}.webp", "image/webp", thumb_size, None)
+    return InMemoryUploadedFile(
+      BytesIO(data), "ImageField", versioned_thumbnail_name(file_stem, data), "image/webp", thumb_size, None
+    )
   finally:
     os.unlink(tmp_path)
 
@@ -410,11 +423,13 @@ def create_thumbnail(image: FieldFile, size: int) -> InMemoryUploadedFile | Fiel
     output_thumb = BytesIO()
     # use WEBP format for thumbnails instead of JPEG to avoid loss of transparency
     img.save(output_thumb, format="WEBP", quality=90)
-    output_thumb.seek(0)
+    data = output_thumb.getvalue()
     filename = name.split("/")[-1]
     file_stem, _ = os.path.splitext(filename)
     thumb_size = sys.getsizeof(output_thumb)
-    thumbnail = InMemoryUploadedFile(output_thumb, "ImageField", f"{file_stem}.webp", "image/webp", thumb_size, None)
+    thumbnail = InMemoryUploadedFile(
+      BytesIO(data), "ImageField", versioned_thumbnail_name(file_stem, data), "image/webp", thumb_size, None
+    )
     logger.debug(f"Resized and saved thumbnail for {name}, size={thumb_size}")
     return thumbnail
 

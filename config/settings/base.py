@@ -163,6 +163,8 @@ SYSTEM_TENANT_SLUG = env.str("SYSTEM_TENANT_SLUG", default="system")
 # Product feature flag: when False the deployment behaves exactly like the
 # pre-multi-tenant single-family app (no /tenants/ URLs, no family signup).
 MULTI_TENANT_ENABLED = env.bool("MULTI_TENANT_ENABLED", default=False)
+# How long a family data export ZIP stays downloadable after it is built.
+TENANT_EXPORT_TTL_DAYS = env.int("TENANT_EXPORT_TTL_DAYS", default=7)
 
 LOCAL_APPS = [
   "core",

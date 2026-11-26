@@ -16,5 +16,40 @@
 			<button class="button is-primary" type="submit">{% translate "Save" %}</button>
 		</div>
 	</form>
+
+	<hr>
+	<h2 class="title is-4">{% translate "Export family data" %}</h2>
+	<p>{% translate "Download a ZIP archive containing a spreadsheet of all your family's data and its media files. You will receive an email with a download link once it is ready." %}</p>
+	<form method="POST" action="{% url 'tenants:export_create' %}{% if tenant %}?tenant={{ tenant.slug }}{% endif %}">
+		{% csrf_token %}
+		<button class="button is-primary" type="submit">{% translate "Export data" %}</button>
+	</form>
+	{% if exports %}
+	<table class="table is-fullwidth mt-4">
+		<thead>
+			<tr>
+				<th>{% translate "Requested on" %}</th>
+				<th>{% translate "Status" %}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for export in exports %}
+			<tr>
+				<td>{{ export.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+				<td>{{ export.get_status_display }}</td>
+				<td>
+					{% if export.status == "ready" %}
+					<a href="{% url 'tenants:export_download' export.token %}">{% translate "Download" %}</a>
+					{% if export.expires_at %}
+					— {% blocktranslate with date=export.expires_at|date:"SHORT_DATE_FORMAT" %}Expires on {{ date }}{% endblocktranslate %}
+					{% endif %}
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
 </div>
 {% endblock content %}

@@ -221,7 +221,7 @@ class TenantSettingsUpdateView(generic.View):
   def get(self, request):
     tenant = self._get_tenant(request)
     form = TenantSettingsForm(tenant=tenant)
-    return render(request, self.template_name, {"form": form, "tenant": tenant, "title": self.title})
+    return render(request, self.template_name, self._context(form, tenant))
 
   def post(self, request):
     tenant = self._get_tenant(request)
@@ -230,4 +230,11 @@ class TenantSettingsUpdateView(generic.View):
       form.save()
       messages.success(request, _("Family settings updated."))
       return redirect("tenants:settings")
-    return render(request, self.template_name, {"form": form, "tenant": tenant, "title": self.title})
+    return render(request, self.template_name, self._context(form, tenant))
+
+  def _context(self, form, tenant):
+    from tenants.models import TenantExport
+
+    # filter explicitly: TenantExport.objects is unscoped for a platform superuser
+    exports = TenantExport.unscoped.filter(tenant=tenant)[:5]
+    return {"form": form, "tenant": tenant, "title": self.title, "exports": exports}

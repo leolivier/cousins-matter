@@ -4,7 +4,7 @@ title: Tenants
 description: Shared-schema multi-tenancy — Tenant/TenantSettings models, thread-local scoping, TenantMiddleware, RLS hardening, per-tenant settings and authz helpers
 tags: ["app", "tenants"]
 status: draft
-stale_after: 2027-11-23
+stale_after: 2027-11-26
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
@@ -210,6 +210,33 @@ system tenant and still-active tenants (deactivate first), deletes the
 tenant's members explicitly (`Member.tenant` is `PROTECT`) and lets
 tenant-scoped rows cascade; it returns the number of members removed.
 
+## Family data export (tenants/views/views_export.py, tenants/tasks.py)
+
+`TenantExport` (models.py, a `TenantModel`) tracks one requested archive:
+unique `token` (the URL segment), `status`, `file`, `expires_at`.
+
+- `export/` (POST) — `TenantExportCreateView`: tenant admins only (platform
+  superusers may pass `?tenant=<slug>`); creates a pending row and queues
+  `tenants.tasks.build_tenant_export` with a 30-minute task timeout (the
+  cluster default is 60 s, too short for a media-heavy family).
+- `export/<uuid:token>/` — `TenantExportDownloadView`: any logged-in member
+  of the export's tenant (other tenants get a 404, so a forwarded email link
+  is not enough on its own); an expired export is deleted with its file.
+
+`build_tenant_export` runs under `tenant_context` and writes `export.xlsx`
+(openpyxl): one sheet per model carrying a `tenant` FK (introspection, so new
+tenant-scoped models are included automatically), headers and sheet names
+translated in the tenant's `language_code`, FK cells rendered with `str()` of
+the related object, `tenant` and `password` columns dropped. Every storage
+file under `<slug>/` (its own `exports/` folder excluded) and the tenant's
+public logo are stored under `media/` in the same ZIP, which is saved at
+`<slug>/exports/<token>.zip`. The requester then receives an email with the
+absolute download URL. ZIPs expire after `TENANT_EXPORT_TTL_DAYS` (default 7);
+a tenant's expired exports are pruned whenever its next export is built — no
+scheduled job. The worker reads its row through `set_rls_bypass` before
+activating the tenant, and `tenants_tenantexport` carries the strict RLS
+policy (migration `0012_rls_tenant_export`).
+
 ## Family home (anonymous)
 
 `/<slug>/` (`tenant-home`, `tenants/views/views_home.TenantHomeView`) renders
@@ -245,7 +272,7 @@ strings uniformly say "family" (fr « famille ») even where the code says
 `TenantSettingsAdmin` uses `list_select_related` on `tenant`.
 ## Tests
 
-`tenants/tests/tests_feature_on.py` only runs when `MULTI_TENANT_ENABLED` is
+`tenants/tests/tests_feature_on.py` and `tenants/tests/tests_export.py` only run when `MULTI_TENANT_ENABLED` is
 on (`_skip_if_off`); CI exercises it through the dedicated `test-multi-tenant`
 job (job 5 of build-and-publish-image.yml, `MULTI_TENANT_ENABLED=True`). Two
 conventions for those tests:

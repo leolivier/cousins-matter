@@ -18,6 +18,7 @@ from core.utils import (
   _recursive_rmtree,
   _rm_emty_folders,
   protected_media_url,
+  versioned_thumbnail_name,
 )
 
 
@@ -80,6 +81,16 @@ class TestProtectedMediaUrl(TestCase):
     base_media = str(settings.BASE_DIR / settings.MEDIA_REL)
     result = protected_media_url(f"{base_media}/test_file.jpg")
     self.assertIn("test_file.jpg", result)
+
+
+class TestVersionedThumbnailName(TestCase):
+  """Tests for the content-digest suffix that invalidates media ETags."""
+
+  def test_same_content_same_name(self):
+    self.assertEqual(versioned_thumbnail_name("photo", b"same"), versioned_thumbnail_name("photo", b"same"))
+
+  def test_different_content_different_name(self):
+    self.assertNotEqual(versioned_thumbnail_name("photo", b"one"), versioned_thumbnail_name("photo", b"two"))
 
 
 class TestStorageRmtree(TestCase):

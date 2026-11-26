@@ -147,9 +147,11 @@ class Photo(TenantModel):
           self.thumbnail = create_thumbnail(self.image, settings.GALLERIES_THUMBNAIL_SIZE)
         super().save(force_update=True, update_fields=["thumbnail"])
 
-        if gallery_changed and old_thumbnail_name:
-          if not self.thumbnail or self.thumbnail.name != old_thumbnail_name:
-            self.image.storage.delete(old_thumbnail_name)
+        # A regenerated thumbnail has a new content-versioned name: drop the previous file
+        # (gallery move or replaced image) unless it is also the current image.
+        new_thumbnail_name = self.thumbnail.name if self.thumbnail else None
+        if old_thumbnail_name and old_thumbnail_name not in (new_thumbnail_name, self.image.name):
+          self.image.storage.delete(old_thumbnail_name)
 
     except Exception as e:
       # issue #120: if any exception during the save/thumbnail process, the transaction rolls

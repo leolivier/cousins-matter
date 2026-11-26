@@ -24,6 +24,12 @@ from core.services import health_check
 
 logger = logging.getLogger(__name__)
 
+# Media is private per user, so shared caches (Cloudflare, proxies) must not store it:
+# "private" keeps them out and only the browser caches, which is per user by nature.
+# Public media is anonymous and identical for everyone, so it can be cached at the edge.
+PROTECTED_MEDIA_CACHE_CONTROL = "private, max-age=3600"
+PUBLIC_MEDIA_CACHE_CONTROL = "public, max-age=86400"
+
 
 class PasswordResetView(DefaultPasswordResetView):
   form_class = PasswordResetForm
@@ -33,13 +39,16 @@ class HomeView(LoginNotRequiredMixin, generic.TemplateView):
   template_name = "core/base.html"
 
 
-def _download_media(request, media) -> StreamingHttpResponse | HttpResponseNotModified:
+def _download_media(
+  request, media, cache_control: str = PROTECTED_MEDIA_CACHE_CONTROL
+) -> StreamingHttpResponse | HttpResponseNotModified:
   """
   Internal helper function to download a media file.
 
   The file is streamed in chunks of 8KB to avoid loading the whole file into memory.
   :param request: The request object (unused)
   :param media: The name of the media file to download
+  :param cache_control: The Cache-Control header value for the response
   :return: A StreamingHttpResponse object containing the media file
   :raises Http404: If the file is not found, or if the path is invalid
   """
@@ -48,11 +57,16 @@ def _download_media(request, media) -> StreamingHttpResponse | HttpResponseNotMo
   hasher = blake2b()
   tbh = bytes(f"{request.user.username}@{media}", "utf-8")
   hasher.update(tbh)
-  media_etag = hasher.hexdigest()
+  # RFC 7232 requires the ETag to be a quoted string; unquoted values are ignored
+  # by some caches and intermediaries.
+  media_etag = f'"{hasher.hexdigest()}"'
   request_etag = request.headers.get("If-None-Match", None)
   logger.debug(f"File modified: {media_etag != request_etag}")
   if request_etag and request_etag == media_etag:
-    return HttpResponseNotModified()
+    not_modified = HttpResponseNotModified()
+    not_modified["ETag"] = media_etag
+    not_modified["Cache-Control"] = cache_control
+    return not_modified
 
   chunk_size = 64 * 1024
   try:
@@ -71,6 +85,7 @@ def _download_media(request, media) -> StreamingHttpResponse | HttpResponseNotMo
   # response["Content-Disposition"] = f"inline; filename={filename}"
   response["Content-Disposition"] = "inline"
   response["ETag"] = media_etag
+  response["Cache-Control"] = cache_control
 
   return response
 
@@ -95,7 +110,7 @@ def download_public_media(request, media) -> StreamingHttpResponse | HttpRespons
   View to download a public media file. No login required
   The file must be stored in the PUBLIC_MEDIA_ROOT directory in the media backend storage as defined in the settings (e.g. S3).
   """
-  return _download_media(request, Path("public") / media)
+  return _download_media(request, Path("public") / media, cache_control=PUBLIC_MEDIA_CACHE_CONTROL)
 
 
 @login_not_required

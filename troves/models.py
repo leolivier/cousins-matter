@@ -149,6 +149,8 @@ class Trove(TenantModel):
     self.delete_picture()
 
   def delete_picture(self):
+    # the thumbnail name carries a content digest, so it cannot be recomputed from the picture name
+    if self.thumbnail:
+      default_storage.delete(self.thumbnail.name)
     default_storage.delete(self.picture.name)
-    default_storage.delete(tenant_path(self, settings.TROVE_THUMBNAIL_DIRECTORY, self.picture.name.split("/")[-1]))
     self.picture = None

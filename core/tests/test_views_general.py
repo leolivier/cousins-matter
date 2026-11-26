@@ -47,7 +47,7 @@ class GeneralViewsTestCase(MemberTestCase):
     hasher = blake2b()
     tbh = bytes(f"{self.member.username}@{media}", "utf-8")
     hasher.update(tbh)
-    media_etag = hasher.hexdigest()
+    media_etag = f'"{hasher.hexdigest()}"'  # ETags are quoted, per RFC 7232
 
     response = self.client.get(reverse("get_protected_media", args=[media]), HTTP_IF_NONE_MATCH=media_etag)
     self.assertEqual(response.status_code, 304)

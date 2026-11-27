@@ -13,10 +13,14 @@ data migration and are special:
 of the global defaults.
 """
 
+import uuid
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from .scoping import TenantModel
 
 # Slugs a family may never take: seeded/special tenants plus the first
 # segment of every root route and media/static prefixes. The tenant-home
@@ -173,6 +177,54 @@ def tenant_settings_overrides(tenant=None):
     return {}
   settings_row = TenantSettings._base_manager.filter(tenant=tenant).only("overrides").first()
   return settings_row.overrides if settings_row and settings_row.overrides else {}
+
+
+def export_path(instance, filename):
+  """Storage path of an export ZIP: ``<tenant slug>/exports/<file>``.
+
+  Imported lazily: ``tenants.storage`` imports this module.
+  """
+  from .storage import tenant_path
+
+  return tenant_path(instance, "exports", filename)
+
+
+class TenantExport(TenantModel):
+  """A requested export of the whole tenant (spreadsheet + media) as a ZIP.
+
+  ``token`` is the unguessable URL segment emailed to the requester; the
+  download view still requires a logged-in member of the same tenant.
+  """
+
+  class Status(models.TextChoices):
+    PENDING = "pending", _("Pending")
+    RUNNING = "running", _("Running")
+    READY = "ready", _("Ready")
+    FAILED = "failed", _("Failed")
+
+  created_by = models.ForeignKey(
+    "members.Member",
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="tenant_exports",
+    verbose_name=_("Requested by"),
+  )
+  token = models.UUIDField(_("Token"), default=uuid.uuid4, unique=True, editable=False)
+  status = models.CharField(_("Status"), max_length=16, choices=Status.choices, default=Status.PENDING)
+  file = models.FileField(_("File"), upload_to=export_path, blank=True)
+  error = models.TextField(_("Error"), blank=True, default="")
+  created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+  expires_at = models.DateTimeField(_("Expires at"), null=True, blank=True)
+
+  class Meta:
+    verbose_name = _("tenant export")
+    verbose_name_plural = _("tenant exports")
+    ordering = ["-created_at"]
+    indexes = [models.Index(fields=["tenant", "created_at"])]
+
+  def __str__(self):
+    return f"{self.tenant} export {self.created_at:%Y-%m-%d %H:%M}"
 
 
 # Keep the memo in sync with the DB lifecycle: `flush` (run between

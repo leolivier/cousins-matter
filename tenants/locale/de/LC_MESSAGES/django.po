@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CousinsMatter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-18 20:06+0100\n"
+"POT-Creation-Date: 2026-11-26 18:52+0100\n"
 "PO-Revision-Date: 2026-09-07 15:31+0200\n"
 "Last-Translator: Olivier LEVILLAIN <olivier@levillain.eu>\n"
 "Language-Team: Deutsch <LL@li.org>\n"
@@ -47,50 +47,103 @@ msgstr "Dieses Feld ist erforderlich."
 msgid "This space has been deactivated and can no longer be accessed."
 msgstr "Dieser Bereich wurde deaktiviert und ist nicht mehr zugänglich."
 
-#: models.py:78
+#: models.py:88
 msgid "Name"
 msgstr "Name"
 
-#: models.py:79
+#: models.py:89
 msgid "Slug"
 msgstr "Slug"
 
-#: models.py:80
+#: models.py:90
 msgid "Active"
 msgstr "Aktiv"
 
-#: models.py:81
+#: models.py:91 models.py:217
 msgid "Created at"
 msgstr "Erstellt am"
 
-#: models.py:82
+#: models.py:92
 msgid "Updated at"
 msgstr "Aktualisiert am"
 
-#: models.py:85
+#: models.py:95
 msgid "tenant"
 msgstr "Tenant"
 
-#: models.py:86
+#: models.py:96
 msgid "tenants"
 msgstr "Tenants"
 
-#: models.py:129
+#: models.py:139
 #, fuzzy
 #| msgid "This family name is reserved, please choose another one."
 msgid "This slug is reserved, please choose another one."
 msgstr "Dieser Slug ist reserviert, bitte wähle einen anderen."
 
-#: models.py:133
+#: models.py:143
 msgid "Tenant"
 msgstr "Tenant"
 
-#: models.py:135
+#: models.py:145
 msgid "Overrides"
 msgstr "Überschreibungen"
 
-#: models.py:138 models.py:139
+#: models.py:148 models.py:149
 msgid "tenant settings"
+msgstr "Einstellungen der Tenant"
+
+#: models.py:200
+msgid "Pending"
+msgstr ""
+
+#: models.py:201
+msgid "Running"
+msgstr ""
+
+#: models.py:202
+msgid "Ready"
+msgstr ""
+
+#: models.py:203
+msgid "Failed"
+msgstr ""
+
+#: models.py:211
+msgid "Requested by"
+msgstr ""
+
+#: models.py:213
+msgid "Token"
+msgstr ""
+
+#: models.py:214 templates/tenants/tenant_list.html:21
+#: templates/tenants/tenant_settings.html:32
+msgid "Status"
+msgstr "Status"
+
+#: models.py:215
+msgid "File"
+msgstr ""
+
+#: models.py:216
+msgid "Error"
+msgstr ""
+
+#: models.py:218
+msgid "Expires at"
+msgstr ""
+
+#: models.py:221
+#, fuzzy
+#| msgid "tenant settings"
+msgid "tenant export"
+msgstr "Einstellungen der Tenant"
+
+#: models.py:222
+#, fuzzy
+#| msgid "tenant settings"
+msgid "tenant exports"
 msgstr "Einstellungen der Tenant"
 
 #: services.py:25
@@ -100,6 +153,20 @@ msgstr "Die SystemTenant kann nicht gelöscht werden."
 #: services.py:27
 msgid "This family is still active. Deactivate it before deleting it."
 msgstr "Diese Familie ist noch aktiv. Deaktiviere sie, bevor du sie löschst."
+
+#: tasks.py:220
+msgid "Your family data export is ready"
+msgstr ""
+
+#: tasks.py:221
+#, python-format
+msgid ""
+"Your family data export is ready.\n"
+"\n"
+"Download it here: %(url)s\n"
+"\n"
+"This link expires on %(date)s."
+msgstr ""
 
 #: templates/tenants/email/tenant_admin_invitation.html:2
 #, python-format
@@ -192,10 +259,6 @@ msgstr "Kennung"
 msgid "Members"
 msgstr "Mitglieder"
 
-#: templates/tenants/tenant_list.html:21
-msgid "Status"
-msgstr "Status"
-
 #: templates/tenants/tenant_list.html:22
 msgid "Created"
 msgstr "Erstellt"
@@ -248,15 +311,47 @@ msgstr ""
 msgid "Save"
 msgstr "Speichern"
 
+#: templates/tenants/tenant_settings.html:21
+#, fuzzy
+#| msgid "Your family"
+msgid "Export family data"
+msgstr "Deine Familie"
+
+#: templates/tenants/tenant_settings.html:22
+msgid ""
+"Download a ZIP archive containing a spreadsheet of all your family's data "
+"and its media files. You will receive an email with a download link once it "
+"is ready."
+msgstr ""
+
+#: templates/tenants/tenant_settings.html:25
+msgid "Export data"
+msgstr ""
+
+#: templates/tenants/tenant_settings.html:31
+msgid "Requested on"
+msgstr ""
+
+#: templates/tenants/tenant_settings.html:43
+msgid "Download"
+msgstr ""
+
+#: templates/tenants/tenant_settings.html:45
+#, python-format
+msgid "Expires on %(date)s"
+msgstr ""
+
 #: tests/tests_onboarding_e2e.py:189 views/views_signup.py:94
 msgid ""
-"Your new family space has been created! You will now receive an email to verify your "
-"email address. Click in the link inside the mail to finish the registration."
-msgstr "Ihr neuer Familienbereich wurde eingerichtet! Sie erhalten nun eine E-Mail zur Bestätigung Ihrer "
-"-E-Mail-Adresse. Klicken Sie auf den Link in der E-Mail, um die Registrierung abzuschließen."
-"Deine Familie wurde erstellt! Du erhältst nun eine E-Mail, um deine E-Mail-"
-"Adresse zu bestätigen. Klicke auf den Link in der Mail, um die Registrierung "
-"abzuschließen."
+"Your new family space has been created! You will now receive an email to "
+"verify your email address. Click in the link inside the mail to finish the "
+"registration."
+msgstr ""
+"Ihr neuer Familienbereich wurde eingerichtet! Sie erhalten nun eine E-Mail "
+"zur Bestätigung Ihrer -E-Mail-Adresse. Klicken Sie auf den Link in der E-"
+"Mail, um die Registrierung abzuschließen.Deine Familie wurde erstellt! Du "
+"erhältst nun eine E-Mail, um deine E-Mail-Adresse zu bestätigen. Klicke auf "
+"den Link in der Mail, um die Registrierung abzuschließen."
 
 #: tests/tests_onboarding_e2e.py:213
 msgid "Member successfully created"
@@ -279,11 +374,46 @@ msgstr "Einladung an %(email)s gesendet."
 #: tests/tests_onboarding_e2e.py:270
 #, python-format
 msgid "Hello %(username)s, your account is now active! You can now sign in."
-msgstr "Hallo %(username)s, dein Konto ist jetzt aktiv! Du kannst dich jetzt anmelden."
+msgstr ""
+"Hallo %(username)s, dein Konto ist jetzt aktiv! Du kannst dich jetzt "
+"anmelden."
 
 #: tests/tests_onboarding_e2e.py:291
 msgid "Invalid link. Please contact the administrator."
 msgstr "Ungültiger Link. Bitte wenden Sie sich an den Administrator."
+
+#: views/views_export.py:50
+#, fuzzy
+#| msgid "Only family administrators can edit family settings."
+msgid "Only family administrators can export family data."
+msgstr ""
+"Nur Familien-Administratoren können die Familieneinstellungen bearbeiten."
+
+#: views/views_export.py:60
+msgid ""
+"Export requested. You will receive an email with a download link once it is "
+"ready."
+msgstr ""
+
+#: views/views_export.py:81
+msgid "Export not found."
+msgstr ""
+
+#: views/views_export.py:88
+#, fuzzy
+#| msgid "This field is required."
+msgid "This export has expired."
+msgstr "Dieses Feld ist erforderlich."
+
+#: views/views_export.py:90
+msgid "This export is not ready yet."
+msgstr ""
+
+#: views/views_export.py:92
+#, fuzzy
+#| msgid "This field is required."
+msgid "This export is no longer available."
+msgstr "Dieses Feld ist erforderlich."
 
 #: views/views_manage.py:39
 msgid "Only platform administrators can manage families."
@@ -394,16 +524,16 @@ msgstr "Dieses Mitglied gehört nicht zu deiner Familie."
 msgid "Unknown time zone."
 msgstr "Unbekannte Zeitzone."
 
-#: views/views_settings.py:208
+#: views/views_settings.py:204
 msgid "Family settings"
 msgstr "Familieneinstellungen"
 
-#: views/views_settings.py:222
+#: views/views_settings.py:218
 msgid "Only family administrators can edit family settings."
 msgstr ""
 "Nur Familien-Administratoren können die Familieneinstellungen bearbeiten."
 
-#: views/views_settings.py:235
+#: views/views_settings.py:231
 msgid "Family settings updated."
 msgstr "Familieneinstellungen aktualisiert."
 

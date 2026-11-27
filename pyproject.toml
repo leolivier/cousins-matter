@@ -25,6 +25,7 @@ dependencies = [
     "fpdf~=1.7.2",
     # HTML sanitizer (bleach successor) used to clean rich-text fields on render
     "nh3~=0.3.2",
+    "openpyxl>=3.1.5",
     "packaging~=26.2",
     "pillow>=12.2",
     "psycopg-pool~=3.3.1",

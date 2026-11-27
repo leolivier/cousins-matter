@@ -43,6 +43,7 @@ TENANT_RLS_TABLES: list[str] = [
   "genealogy_person",
   "genealogy_family",
   "pages_flatpage",
+  "tenants_tenantexport",
 ]
 # Strict FOR ALL policy (read AND write scoped to the session tenant).
 TENANT_RLS_STRICT_TABLES: list[str] = [
@@ -67,6 +68,7 @@ TENANT_RLS_STRICT_TABLES: list[str] = [
   "genealogy_person",
   "genealogy_family",
   "pages_flatpage",
+  "tenants_tenantexport",
 ]
 # Split policies: permissive SELECT + scoped writes.
 TENANT_RLS_SPLIT_TABLES: list[str] = [

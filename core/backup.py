@@ -13,7 +13,7 @@ database role, not the RLS-restricted runtime role: use ``BACKUP_DB_USER`` /
 
 import logging
 import os
-import subprocess
+import subprocess  # nosec B404 - required to run pg_dump/pg_restore
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -68,8 +68,9 @@ def create_dump(target: Path, timeout: int = 3600) -> Path:
   ]
   env = {**os.environ, "PGPASSWORD": config["password"]}
   try:
-    subprocess.run(command, check=True, env=env, timeout=timeout, capture_output=True, text=True)
-    subprocess.run(
+    # fixed argv list, no shell; paths come from settings, never from a request
+    subprocess.run(command, check=True, env=env, timeout=timeout, capture_output=True, text=True)  # nosec B603
+    subprocess.run(  # nosec B603 B607 - fixed argv list, no shell, path from settings
       ["pg_restore", "--list", str(target)],
       check=True,
       timeout=120,

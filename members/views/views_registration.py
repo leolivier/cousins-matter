@@ -1,7 +1,8 @@
+import logging
+
 from django.contrib import messages
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
-from django.core.mail import send_mail
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -26,7 +27,10 @@ from ..forms import (
 from ..models import Member
 from verify_email.email_handler import send_verification_email
 from django.conf import settings
+from core.mailer import send_mail_async
 from core.mixins import LoginNotRequiredMixin
+
+logger = logging.getLogger(__name__)
 
 
 class RegistrationCheckingView(LoginNotRequiredMixin, generic.CreateView):
@@ -199,7 +203,7 @@ class MemberInvitationView(generic.View):
       request=request,
     )
 
-    send_mail(
+    send_mail_async(
       _("You are invited to register on %(site_name)s") % {"site_name": site_name},
       strip_tags(msg),
       from_email=from_email,
@@ -220,7 +224,7 @@ class MemberInvitationView(generic.View):
         },
         request=request,
       )
-      send_mail(
+      send_mail_async(
         _("Invitation to register on %(site_name)s sent by %(inviter)s to %(invited)s")
         % {
           "site_name": site_name,
@@ -309,16 +313,18 @@ class TenantJoinRequestView(LoginNotRequiredMixin, generic.View):
     admins = admin_or_superusers(tenant)
     if not admins:
       return False
-    return (
-      send_mail(
+    try:
+      send_mail_async(
         _("Registration request for %(site_name)s") % {"site_name": site_name},
         strip_tags(msg),
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[admin.email for admin in admins],
         html_message=msg,
       )
-      == 1
-    )
+    except Exception:
+      logger.exception("Could not queue the registration request e-mail for %r", tenant.slug)
+      return False
+    return True
 
   def _throttled(self, request) -> bool:
     key = f"join-request:{request.META.get('REMOTE_ADDR', 'unknown')}"

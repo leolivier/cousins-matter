@@ -77,10 +77,10 @@ class TenantCreateView(OnlySuperuserMixin, generic.View):
   def _send_admin_invitation(request, tenant, email):
     """Invite ``email`` as the first admin of ``tenant`` (tenant-bound link)."""
     from django.conf import settings as dj_settings
-    from django.core.mail import send_mail
     from django.template.loader import render_to_string
     from django.utils.html import strip_tags
 
+    from core.mailer import send_mail_async
     from members.registration_link_manager import RegistrationLinkManager
 
     invitation_url = RegistrationLinkManager().generate_link(request, email, tenant_id=tenant.pk)
@@ -89,7 +89,7 @@ class TenantCreateView(OnlySuperuserMixin, generic.View):
       {"link": invitation_url, "tenant": tenant, "site_name": dj_settings.SITE_NAME},
       request=request,
     )
-    send_mail(
+    send_mail_async(
       _("You are invited to administer the family %(name)s") % {"name": tenant.name},
       strip_tags(msg),
       from_email=dj_settings.DEFAULT_FROM_EMAIL,

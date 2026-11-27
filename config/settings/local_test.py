@@ -21,6 +21,9 @@ LANGUAGE_CODE = "en"
 STORAGES["staticfiles"]["BACKEND"] = "django.contrib.staticfiles.storage.StaticFilesStorage"
 # Email in memory
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+# Always run queued tasks inline, regardless of the developer's .env: tests
+# assert on the locmem outbox and must never enqueue to a real Redis/qcluster.
+Q_CLUSTER["sync"] = True
 
 # allauth ships a default "login: 30/m/ip" rate limit. The UI suite performs
 # ~190 logins from localhost, which trips it (HTTP 429) and makes tests flaky

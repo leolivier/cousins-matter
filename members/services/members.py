@@ -1,13 +1,13 @@
 import logging
 from datetime import date, timedelta
 
-from django.conf import settings
 from django.db.models import Case, DateField, F, IntegerField, Value, When
 from django.db.models.functions import Cast, ExtractDay, ExtractMonth
 from django.utils.translation import gettext as _
 
 from verify_email.email_handler import send_verification_email
 
+from core.mailer import send_mail_async
 from core.utils import MakeDate
 from tenants.authz import is_tenant_admin
 from tenants.settings_overrides import tenant_setting
@@ -116,7 +116,6 @@ def do_notify_death(dead_member: Member, sender: Member, deathdate: date, messag
   emails = [a.email for a in admin_or_superusers(dead_member.tenant) if a.email]
 
   if emails:
-    from django.core.mail import send_mail
     from django.template.loader import render_to_string
 
     subject = _("Death notification for %(member)s") % {"member": dead_member.full_name}
@@ -134,11 +133,10 @@ def do_notify_death(dead_member: Member, sender: Member, deathdate: date, messag
 
     plain_message = strip_tags(html_message)
 
-    send_mail(
+    send_mail_async(
       subject,
       plain_message,
-      settings.DEFAULT_FROM_EMAIL,
-      emails,
+      recipient_list=emails,
       html_message=html_message,
     )
 
@@ -160,13 +158,11 @@ def do_toggle_follow(followed: Member, follower: Member, follower_url: str):
     message = _("%(follower_name)s is now following you!") % {"follower_name": follower.full_name}
 
     from django.template.loader import render_to_string
-    from django.core.mail import send_mail
 
-    send_mail(
+    send_mail_async(
       title,
       message,
-      settings.DEFAULT_FROM_EMAIL,
-      [followed.email],
+      recipient_list=[followed.email],
       html_message=render_to_string(
         "members/email/new_follower.html",
         {

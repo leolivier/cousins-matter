@@ -1,6 +1,7 @@
 from django.conf import settings
-from django.core.mail import send_mail
 from django.utils.translation import gettext as _
+
+from core.mailer import send_mail_async
 
 from .models import AdPhoto
 from tenants.settings_overrides import tenant_setting
@@ -27,8 +28,8 @@ def get_next_prev_photo(pk, side):
 def do_send_ad_message(sender, ad, message_text):
   """Email ``ad``'s owner a ``message_text`` from ``sender``.
 
-  ``send_mail`` runs with ``fail_silently=False``: an SMTP error raises instead
-  of returning a failure flag, so there is no soft-failure path to report.
+  The e-mail is queued on qcluster; only a queue failure (Redis down, with no
+  synchronous fallback available) can raise here.
   """
   subject = _("Message from %(username)s about ad %(title)s") % {
     "username": sender.full_name,
@@ -53,4 +54,4 @@ The %(site_name)s admin team
     "site_url": settings.SITE_DOMAIN,
     "email": sender.email,
   }
-  send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [ad.owner.email], fail_silently=False)
+  send_mail_async(subject, message, recipient_list=[ad.owner.email])

@@ -13,7 +13,7 @@ import nh3
 # import pprint
 import sys
 import unicodedata
-from urllib.parse import urlencode, quote
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core import paginator
@@ -444,7 +444,7 @@ def protected_media_url(media):
     p = str(settings.BASE_DIR / settings.MEDIA_REL)
     if media.startswith(p):
       media = media[len(p) + 1 :]
-  return reverse("get_protected_media", args=[quote(media)])
+  return reverse("get_protected_media", args=[media])
 
 
 def check_edit_permission(request, owner):

@@ -127,6 +127,23 @@ class ProtectedMediaTestCase(TestMediaResourceMixin, MemberTestCase):
     self.assertEqual(not_modified["ETag"], etag)
     self.assertEqual(not_modified["Cache-Control"], "private, max-age=3600")
 
+  def test_non_ascii_filename_is_served(self):
+    """Accented names must be encoded exactly once (é -> %C3%A9, never %25C3%25A9).
+
+    ``protected_media_url`` used to ``quote()`` the name before ``reverse()``,
+    which encoded it again: every media with a non-ASCII name 404'd.
+    """
+    target = Path(self.member.tenant.slug) / "test_protected_media" / "américains_Littry.png"
+    logo_file = test_resource_full_path("test-logo.jpg", __file__)
+    self.copy_test_resource(logo_file, target)
+
+    url = protected_media_url(target)
+
+    self.assertNotIn("%25", url)
+    response = self.client.get(url, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertIsInstance(response, StreamingHttpResponse)
+
 
 class PublicMediaCacheControlTestCase(TestMediaResourceMixin, MemberTestCase):
   def setUp(self):

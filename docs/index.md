@@ -57,6 +57,10 @@ This is the OKF v0.2 documentation bundle for the Cousins Matter repository: one
 - [OAuth Authentication](/specs/oauth-authentication.md)
 - [Media Storage](/specs/media-storage.md)
 
+## Operations
+
+- [Database Backups](/ops/backups.md)
+
 ## Plans
 
 - [Roadmap](/plan/roadmap.md)

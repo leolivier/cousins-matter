@@ -34,6 +34,7 @@ dependencies = [
     "requests~=2.34.2",
     # Security floor: 26.10.0 fixes CVE-2026-115774/115775/115776/115778/115877
     # twisted stays transitive via daphne. To be removed once it ships through daphne
+    "sentry-sdk>=2.0",
     "twisted>=26.10.0",
     "whitenoise~=6.12.0",
 ]

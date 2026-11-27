@@ -6,6 +6,19 @@ TESTING = False
 DEBUG_TOOLBAR = False
 DEBUG_HTMX = False
 
+# --- Error tracking (optional, off unless SENTRY_DSN is set) ---
+SENTRY_DSN = env.str("SENTRY_DSN", default="")
+if SENTRY_DSN:
+  import sentry_sdk
+
+  sentry_sdk.init(  # type: ignore[call-arg]  # sentry-sdk's stub omits its keyword-only options
+    dsn=SENTRY_DSN,
+    environment=env.str("SENTRY_ENVIRONMENT", default="production"),
+    release=env.str("SENTRY_RELEASE", default=None),
+    traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.0),
+    send_default_pii=False,  # family data is personal data: keep it out of Sentry
+  )
+
 SECRET_KEY = env.str("SECRET_KEY")
 # when rotating the secret key, you can provide the old key here to avoid breaking the site
 SECRET_KEY_FALLBACKS = env.list("PREVIOUS_SECRET_KEYS", default=[])

@@ -35,6 +35,18 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+# pg_dump/pg_restore for the daily database backup. The client major version
+# must match the server (18), so install it from the PostgreSQL PGDG repo
+# instead of Debian's older client.
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && \
+    install -d /usr/share/postgresql-common/pgdg && \
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+      -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc && \
+    echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(. /etc/os-release && echo "$VERSION_CODENAME")-pgdg main" \
+      > /etc/apt/sources.list.d/pgdg.list && \
+    apt-get update && apt-get install -y --no-install-recommends postgresql-client-18 && \
+    rm -rf /var/lib/apt/lists/*
+
 # Creates a non-root user with an explicit UID
 RUN adduser --uid ${UID} --disabled-password --gecos "" cm_user && \
     chown cm_user:cm_user /app

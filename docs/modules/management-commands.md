@@ -4,7 +4,7 @@ title: Management Commands
 description: Inventory of the project's manage.py commands (check_okf, generate_test_data, import_test_data, delete_tenant, migrate_media_to_tenant_dirs) and the scripts/manage_cousins_matter.py operations
 tags: ["module", "management-commands"]
 status: draft
-stale_after: 2027-11-23
+stale_after: 2028-11-27
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
 ---
 
@@ -19,6 +19,7 @@ Django or dependencies. Remember to export the settings environment first
 
 | Command | Location | Purpose |
 | --- | --- | --- |
+| `backup_database [--directory D] [--keep-days N] [--no-upload]` | core/management/commands/backup_database.py | `pg_dump` in custom format, verify the archive with `pg_restore --list`, upload to `BACKUP_S3_BUCKET` (R2) and prune old local/remote dumps. Run daily by the compose `backup` service; see [Database Backups](/ops/backups.md). |
 | `check_okf [bundle]` | core/management/commands/check_okf.py | Check OKF v0.2 conformance of the docs bundle (frontmatter `type` + `stale_after` date); prints `ERROR`/`STALE` lines, exit 1 on errors. Wired as `make check-docs` (`ENVIRONMENT="test" ./manage.py check_okf docs`). |
 | `generate_test_data [--app A] [--count N]` | core/management/commands/generate_test_data.py | Import `<app>/tests/factories.py` for every (or one) app, instantiate N objects per factory and dump fixtures into the app's `tests/resources/` folder. |
 | `import_test_data [--app A]` | core/management/commands/import_test_data.py | `loaddata` each app's `tests/resources/fixtures.json` (apps visited in a fixed order because of FKs) to seed a dev/test database. |

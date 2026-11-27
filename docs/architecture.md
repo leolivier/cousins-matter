@@ -116,19 +116,33 @@ flatpages under `settings.PAGES_URL_PREFIX`, and `health/` / `qhealth/` views fr
 
 Django-Q2 (`django-q2` in `pyproject.toml`). `Q_CLUSTER` in `config/settings/base.py` uses
 Redis and `"sync": env.bool("Q_SYNC", False)`; `config/settings/dev_base.py` flips the
-default to `True` so tasks run synchronously in development and tests. The `qcluster`
-process runs as its own container (below).
+default to `True` so tasks run synchronously in development and tests, and
+`config/settings/local_test.py` pins it to `True` so tests never enqueue to a
+real Redis. The `qcluster` process runs as its own container (below).
+
+Transactional e-mails go through `core/mailer.py` (`send_mail_async`):
+production queues them on qcluster, which retries a failed SMTP send; dev and
+tests send inline. A broker outage falls back to a synchronous send so the
+e-mail is not lost.
 
 ## Docker topology
 
-`docker-compose.yml` defines five services on the `cousins_matter_network` bridge:
+`docker-compose.yml` defines six services on the `cousins_matter_network` bridge:
 
 - `cousins-matter` — the ASGI app image (`ghcr.io/leolivier/cousins-matter`), health-checked
   by `scripts/healthcheck.py`.
 - `qcluster` — same image, command `python manage.py qcluster`.
+- `backup` — same image, `manage.py backup_database` in a daily loop; see
+  [Database Backups](/ops/backups.md).
 - `postgres` — `postgres:18.2-alpine`, data in the `cousins_matter_postgres_data` volume.
 - `redis` — used by both Channels and Django-Q2.
 - `nginx` — reverse proxy serving `static/` and `media/`, exposing port 8000.
+
+PostgreSQL and Redis publish **no host port**: they are reachable only from the
+compose network. Redis has no password, so publishing it would hand the broker
+and the session cache to anyone who can reach the VPS. Only nginx (and, for
+debugging, the ASGI app on 9005) are bound to the host; put a firewall in front
+of them anyway.
 
 `scripts/entrypoint.py` initializes the app container: it takes a leadership lock in Redis,
 checks `.env`/`SECRET_KEY`, and on first run creates media directories and `theme.css`, then

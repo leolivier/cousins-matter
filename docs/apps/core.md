@@ -4,7 +4,7 @@ title: Core
 description: Site-wide plumbing — NotificationEvent, contact form, site stats, protected media, followers batching, feature flags, context processors, management commands
 tags: ["app", "core"]
 status: draft
-stale_after: 2028-12-22
+stale_after: 2029-11-27
 generated: { by: claude-code/glm-5.3-flash, at: 2026-11-09T12:00:00Z }
 ---
 
@@ -121,6 +121,30 @@ config/settings/base.py); the protected one requires login through
 (`MULTI_TENANT_ENABLED`), rejects with 404 any path whose first segment is
 not `request.tenant.slug` — platform superusers (`request.tenant = None`)
 stay unscoped. Helper: `protected_media_url` (core/utils.py).
+
+## Transactional e-mail
+
+`core/mailer.py` is the single entry point for e-mails sent from a view or a
+model save:
+
+- `send_mail_async(subject, message, from_email=None, recipient_list=(),
+  html_message=None)` mirrors `django.core.mail.send_mail` and queues the send
+  on qcluster (`async_task("django.core.mail.send_mail", ...)`). Subjects and
+  bodies are converted to `str` before queueing, so lazy translations resolve
+  in the caller's language and the payload stays picklable.
+- `send_multi_alternatives_async(...)` does the same for one plain+HTML e-mail
+  with `bcc` recipients (follower notifications).
+
+`Q_CLUSTER["sync"]` defaults to `True` in development and is pinned to `True`
+in `config/settings/local_test.py`, so the helper sends inline there and tests
+can assert on `mail.outbox`. In production the request returns as soon as the task
+is queued; qcluster retries a failed SMTP send (`MAIL_TASK_TIMEOUT`, 30 s per
+attempt). If the broker itself is down, the helper logs the error and sends
+synchronously so the e-mail is not lost.
+
+Keep the old `send_mail` for a user who is waiting for the result (the
+environment-check test e-mail in `core/services.py`). Do not call
+`send_mail` directly from an upload, signup or webhook path.
 
 ## Followers and notification batching
 
@@ -244,6 +268,10 @@ Also in core: `core.mixins` (`LoginNotRequiredMixin`, `OnlyAdminMixin`) and
 - `import_test_data` (core/management/commands/import_test_data.py) —
   `loaddata`s `<app>/tests/resources/fixtures.json` per app, in FK-friendly
   order (members first).
+- `backup_database` — `pg_dump` (custom format), archive verification,
+  optional S3/R2 upload and age-based pruning (`--directory`, `--keep-days`,
+  `--no-upload`). Run daily by the compose `backup` service; see
+  [Database Backups](/ops/backups.md).
 - `check_okf` — validates the frontmatter of this documentation bundle (see
   [Conventions](/conventions.md)).
 

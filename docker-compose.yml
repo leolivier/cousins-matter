@@ -38,8 +38,6 @@ services:
       - postgres
     networks:
       - cousins_matter_network
-    ports:
-      - "9002:9001"
     volumes:
       - ./media:/app/media
       - ./static:/app/static
@@ -47,13 +45,33 @@ services:
     environment:
       - ENVIRONMENT=${ENVIRONMENT:-production}
 
+  # Daily database dump, uploaded to R2 when BACKUP_S3_* is configured (see
+  # core/management/commands/backup_database.py). It uses the app image, which
+  # ships a pg_dump matching the PostgreSQL server major version.
+  backup:
+    image: ${COUSINS_MATTER_IMAGE:-ghcr.io/leolivier/cousins-matter:latest}
+    container_name: ${CONTAINER_NAME:-cousins-matter}.backup
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    user: "cm_user:cm_user"
+    entrypoint: ["/bin/sh", "-c", "while true; do python manage.py backup_database || echo 'database backup failed'; sleep 24h; done"]
+    command: []  # do not append the image's default daphne command
+    volumes:
+      - ./backup:/app/backup
+      - ./.env:/app/.env
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+    networks:
+      - cousins_matter_network
+
   postgres:
     image: postgres:18.2-alpine
     container_name: ${CONTAINER_NAME:-cousins-matter}.db
     restart: unless-stopped
     user: "postgres:postgres"
-    ports:
-      - "5432:5432"
+    # No published port: only the compose network may reach the database.
     volumes:
       - cousins_matter_postgres_data:/var/lib/postgresql
       - ./backup:/backup
@@ -74,8 +92,8 @@ services:
     image: redis:alpine
     container_name: ${CONTAINER_NAME:-cousins-matter}.redis
     restart: unless-stopped
-    ports:
-      - "${REDIS_PORT:-6379}:${REDIS_PORT:-6379}"
+    # No published port: the broker/cache must never be reachable from the host
+    # network or the internet (it has no password).
     volumes:
       - cousins_matter_redis_data:/data
     networks:

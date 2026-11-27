@@ -2,13 +2,14 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.mail import EmailMultiAlternatives, send_mail
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from django_q.tasks import async_task
 from tenants.models import Tenant
 from tenants.scoping import tenant_context
+
+from core.mailer import send_mail_async, send_multi_alternatives_async
 
 logger = logging.getLogger(__name__)
 
@@ -167,13 +168,6 @@ def generate_emails(followed_object, followed_object_owner, new_internal_object,
       "followed_object_name": followed_object_name,
     }
 
-  email = EmailMultiAlternatives(
-    title,
-    body,
-    settings.DEFAULT_FROM_EMAIL,
-    [],
-    bcc=follower_emails,
-  )
   html_message = render_to_string(
     "core/followers/email-followers-on-change.html",
     {
@@ -187,8 +181,8 @@ def generate_emails(followed_object, followed_object_owner, new_internal_object,
       "followed_object_url": followed_object_url,
     },
   )
-  email.attach_alternative(html_message, "text/html")
-  email.send()
+  # queued on qcluster: one notification per follower must not slow the save
+  send_multi_alternatives_async(title, body, bcc=follower_emails, html_message=html_message)
   return len(follower_emails)
 
 
@@ -238,11 +232,10 @@ def toggle_follow(request, followed_object, owner, followed_object_url):
         "followed_type": followed_type,
         "followed_object_name": followed_object_name,
       }
-      send_mail(
+      send_mail_async(
         title,
         message,
-        settings.DEFAULT_FROM_EMAIL,
-        [owner.email],
+        recipient_list=[owner.email],
         html_message=render_to_string(
           "core/followers/new_follower.html",
           {

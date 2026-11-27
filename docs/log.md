@@ -4,6 +4,14 @@
 
 - Media downloads on a remote backend (S3, Cloudflare R2, MinIO) now answer a `302` to the signed object URL instead of streaming through Django, so bytes and egress never transit the application server; filesystem deployments keep streaming. The redirect carries a shorter `private` max-age than the signed URL lifetime, and an `exists()` HEAD keeps a missing object from reaching the bucket's XML 404.
 
+- Added `manage.py backup_database` and the compose `backup` service: daily `pg_dump` in custom format, `pg_restore --list` verification, optional R2 upload, local/remote age-based pruning. The image now ships `postgresql-client-18`; the restore drill is documented in `ops/backups.md`.
+
+- PostgreSQL and Redis no longer publish a host port in `docker-compose.yml`; they are reachable only on the compose network. Redis has no password, so the published port was an unauthenticated broker/cache on the VPS.
+
+- Transactional e-mails now go through `core/mailer.py` (`send_mail_async` / `send_multi_alternatives_async`): invitations, registration requests, follower notifications and classified-ad messages are queued on qcluster instead of blocking the request on SMTP. A broker outage falls back to a synchronous send. Tests pin `Q_CLUSTER["sync"] = True` so they never enqueue to a real Redis.
+
+- Optional Sentry error tracking in production (`SENTRY_DSN`, no personal data); disabled when unset.
+
 ## 2026-09-05
 
 - Root fiches: architecture, conventions, setup-dev, testing.

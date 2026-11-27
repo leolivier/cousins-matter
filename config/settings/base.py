@@ -128,6 +128,22 @@ SITE_LOGO = env.str("SITE_LOGO", default=SITE_LOGO_DEFAULT)
 # Defult Email properties
 DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="cousinsmatter@localhost")
 
+# --- Database backups (core/management/commands/backup_database.py) ---
+# Local dumps are kept under BACKUP_DIR; when BACKUP_S3_BUCKET is set they are
+# also uploaded to an S3-compatible bucket (Cloudflare R2 by default) and
+# pruned remotely. Use the database OWNER role (not the RLS runtime role) so
+# the dump is complete: leave these empty to reuse the default DB user.
+BACKUP_DIR = env.str("BACKUP_DIR", default=str(BASE_DIR / "backup"))
+BACKUP_KEEP_DAYS = env.int("BACKUP_KEEP_DAYS", default=14)
+BACKUP_DB_USER = env.str("BACKUP_DB_USER", default=env.str("POSTGRES_USER", default=""))
+BACKUP_DB_PASSWORD = env.str("BACKUP_DB_PASSWORD", default=env.str("POSTGRES_PASSWORD", default=""))
+BACKUP_S3_BUCKET = env.str("BACKUP_S3_BUCKET", default="")
+BACKUP_S3_ENDPOINT_URL = env.str("BACKUP_S3_ENDPOINT_URL", default="")
+BACKUP_S3_ACCESS_KEY = env.str("BACKUP_S3_ACCESS_KEY", default="")
+BACKUP_S3_SECRET_KEY = env.str("BACKUP_S3_SECRET_KEY", default="")
+BACKUP_S3_REGION = env.str("BACKUP_S3_REGION", default="auto")
+BACKUP_S3_PREFIX = env.str("BACKUP_S3_PREFIX", default="db-backups")
+
 # Default log levels
 DJANGO_LOG_LEVEL = env.str("DJANGO_LOG_LEVEL", default="INFO")
 CM_LOG_LEVEL = env.str("CM_LOG_LEVEL", default="INFO")

@@ -1,5 +1,9 @@
 # Log
 
+## 2026-11-27
+
+- Media downloads on a remote backend (S3, Cloudflare R2, MinIO) now answer a `302` to the signed object URL instead of streaming through Django, so bytes and egress never transit the application server; filesystem deployments keep streaming. The redirect carries a shorter `private` max-age than the signed URL lifetime, and an `exists()` HEAD keeps a missing object from reaching the bucket's XML 404.
+
 ## 2026-09-05
 
 - Root fiches: architecture, conventions, setup-dev, testing.

@@ -5,7 +5,7 @@ description: Design of the storage layer — the two media roots and their URL p
 tags: ["spec", "media"]
 status: draft
 stale_after: 2027-11-26
-generated: { by: claude-code/glm-5.3-flash, at: 2026-11-23T19:00:00Z }
+generated: { by: claude-code/glm-5.3-flash, at: 2026-11-27T00:00:00Z }
 ---
 
 # Media Storage
@@ -41,16 +41,25 @@ moving media to S3 moves public and protected files together.
 ## Backend contract
 
 Any Django storage backend works, because the two download views
-(core/views/views_general.py: `_download_media`) only ever call
-`default_storage.open` and stream in 64 KB chunks with a per-user blake2b ETag
-(`"<request.user.username>@<media>"` — hence 304s are per-user even on shared
-files). Protected responses are `Cache-Control: private` (browser-only cache),
-public ones `public`; generated thumbnails carry a content-digest suffix so the
-path-derived ETag actually changes when the image is regenerated. The
-corollaries:
+(core/views/views_general.py: `_download_media`) always authorize first and then
+serve with a per-user blake2b ETag (`"<request.user.username>@<media>"` — hence
+304s are per-user even on shared files). How the bytes travel depends on the
+backend: a local one is streamed in 64 KB chunks via `default_storage.open`; a
+remote one (S3, R2, …) is answered with a `302` to `default_storage.url()` when
+that URL is not itself under `MEDIA_URL` — after an `exists()` HEAD, since
+signing succeeds for keys that do not exist — so the object store serves the
+transfer and the application server only answers the authorization. Streamed
+protected responses are `Cache-Control: private` (browser-only cache), public
+ones `public`; the redirect carries a shorter `private` max-age so the browser
+never caches a signed URL past its expiry. Generated thumbnails carry a
+content-digest suffix so the path-derived ETag actually changes when the image
+is regenerated.
+
+The corollaries:
 
 - a backend needs only read support for serving, but uploads go through the
-  same `default_storage`, so it needs write support too;
+  same `default_storage`, so it needs write support too; a backend that can sign
+  URLs also needs no egress bandwidth on the application side;
 - file *paths* are just relative names, and they are mode-dependent: with
   `MULTI_TENANT_ENABLED` off they are flat (`avatars/…`, `galleries/…`),
   with it on every protected upload is prefixed with the tenant slug

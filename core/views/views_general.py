@@ -11,6 +11,7 @@ from django.core.files.storage import default_storage
 from django.http import (
   Http404,
   HttpResponseNotModified,
+  HttpResponseRedirect,
   JsonResponse,
   StreamingHttpResponse,
 )
@@ -29,6 +30,10 @@ logger = logging.getLogger(__name__)
 # Public media is anonymous and identical for everyone, so it can be cached at the edge.
 PROTECTED_MEDIA_CACHE_CONTROL = "private, max-age=3600"
 PUBLIC_MEDIA_CACHE_CONTROL = "public, max-age=86400"
+# A remote backend answer is a redirect to a signed URL that expires
+# (AWS_QUERYSTRING_EXPIRE, 3600 by default): caching the redirect longer than
+# the URL lives would hand an expired link to the browser.
+REMOTE_MEDIA_CACHE_CONTROL = "private, max-age=300"
 
 
 class PasswordResetView(DefaultPasswordResetView):
@@ -39,17 +44,36 @@ class HomeView(LoginNotRequiredMixin, generic.TemplateView):
   template_name = "core/base.html"
 
 
+def _direct_media_url(media) -> str | None:
+  """
+  The storage backend's own URL when that URL is served elsewhere, else None.
+
+  FileSystemStorage answers with a path under MEDIA_URL, which this very view
+  serves: redirecting to it would loop forever. A remote backend (e.g. S3 or an
+  S3-compatible object store) returns an absolute URL, which the browser can
+  follow straight to the bucket so the bytes never transit this server.
+  """
+  try:
+    url = default_storage.url(media)
+  except Exception:  # signing or unsafe name: fall back to streaming below
+    logger.debug(f"Could not build a direct URL for {media}")
+    return None
+  return None if url.startswith(str(settings.MEDIA_URL)) else url
+
+
 def _download_media(
   request, media, cache_control: str = PROTECTED_MEDIA_CACHE_CONTROL
-) -> StreamingHttpResponse | HttpResponseNotModified:
+) -> StreamingHttpResponse | HttpResponseNotModified | HttpResponseRedirect:
   """
   Internal helper function to download a media file.
 
-  The file is streamed in chunks of 8KB to avoid loading the whole file into memory.
+  A remote backend (S3 and compatible) is answered with a redirect to its signed
+  URL, so the bytes never transit this server; a local backend is streamed in
+  64 KB chunks to avoid loading the whole file into memory.
   :param request: The request object (unused)
   :param media: The name of the media file to download
   :param cache_control: The Cache-Control header value for the response
-  :return: A StreamingHttpResponse object containing the media file
+  :return: A redirect to the backend, a StreamingHttpResponse, or a 304
   :raises Http404: If the file is not found, or if the path is invalid
   """
   logger.debug(f"Downloading media {media}")
@@ -67,6 +91,21 @@ def _download_media(
     not_modified["ETag"] = media_etag
     not_modified["Cache-Control"] = cache_control
     return not_modified
+
+  direct_url = _direct_media_url(media)
+  if direct_url:
+    # A signed URL is handed out for any key, so check the object exists first:
+    # otherwise a missing file would send the browser to the bucket's XML 404.
+    try:
+      found = default_storage.exists(media)
+    except Exception as e:
+      raise Http404(_("Error when retrieving media: %s") % e)
+    if not found:
+      raise Http404(_("Media not found"))
+    # The object store serves the bytes; only the access check stays here.
+    redirect = HttpResponseRedirect(direct_url)
+    redirect["Cache-Control"] = REMOTE_MEDIA_CACHE_CONTROL
+    return redirect
 
   chunk_size = 64 * 1024
   try:
@@ -90,7 +129,7 @@ def _download_media(
   return response
 
 
-def download_protected_media(request, media) -> StreamingHttpResponse | HttpResponseNotModified:
+def download_protected_media(request, media) -> StreamingHttpResponse | HttpResponseNotModified | HttpResponseRedirect:
   """
   View to download a protected media file. Login required
   The file must be stored in the MEDIA_ROOT directory in the media backend storage as defined in the settings (e.g. S3).
@@ -105,7 +144,7 @@ def download_protected_media(request, media) -> StreamingHttpResponse | HttpResp
 
 
 @login_not_required
-def download_public_media(request, media) -> StreamingHttpResponse | HttpResponseNotModified:
+def download_public_media(request, media) -> StreamingHttpResponse | HttpResponseNotModified | HttpResponseRedirect:
   """
   View to download a public media file. No login required
   The file must be stored in the PUBLIC_MEDIA_ROOT directory in the media backend storage as defined in the settings (e.g. S3).

@@ -1,14 +1,17 @@
 from pathlib import Path
 
 import urllib.parse
+from unittest.mock import patch
 
 from django.conf import settings
 from django.urls import reverse
 from django.http import StreamingHttpResponse
+from django.test import SimpleTestCase
 
 from django.core.files.storage import default_storage
 
 from core.context_processors import override_settings
+from core.views import views_general
 from core.utils import (
   test_resource_full_path,
   get_test_absolute_url,
@@ -47,13 +50,39 @@ class ProtectedMediaTestCase(TestMediaResourceMixin, MemberTestCase):
     self.rel_url = protected_media_url(self.test_file)
     self.abs_url = get_test_absolute_url(self.rel_url)
 
+  def test_remote_backend_redirects_to_the_signed_url(self):
+    signed = "https://bucket.example/acme/test.jpg?sig=1"
+    with (
+      patch("core.views.views_general._direct_media_url", return_value=signed),
+      patch("core.views.views_general.default_storage") as storage,
+    ):
+      storage.exists.return_value = True
+      response = self.client.get(self.rel_url)
+    self.assertEqual(response.status_code, 302)
+    self.assertEqual(response["Location"], signed)
+    self.assertEqual(response["Cache-Control"], "private, max-age=300")
+
+  def test_remote_backend_missing_file_is_404(self):
+    # A signed URL is issued for any key, so the view checks the object first
+    # instead of sending the browser to the bucket's XML 404.
+    with (
+      patch("core.views.views_general._direct_media_url", return_value="https://bucket.example/x.jpg"),
+      patch("core.views.views_general.default_storage") as storage,
+    ):
+      storage.exists.return_value = False
+      response = self.client.get(self.rel_url)
+    self.assertEqual(response.status_code, 404)
+
   def tearDown(self):
     self.clean_storage(self.test_file)
     super().tearDown()
 
   def test_authenticated_user_can_access_protected_media(self):
     """test authenticated user can access protected media. This runs as a MemberTestCase so the user is logged in."""
-    response = self.client.get(self.rel_url, follow=True)
+    # Force the streaming branch so the content check runs on any backend
+    # (CI stores media in S3, where the view redirects instead).
+    with patch("core.views.views_general._direct_media_url", return_value=None):
+      response = self.client.get(self.rel_url, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertIsInstance(response, StreamingHttpResponse)
     # get the content of the response
@@ -97,7 +126,8 @@ class ProtectedMediaTestCase(TestMediaResourceMixin, MemberTestCase):
     try:
       self.client.logout()
       self.assertTrue(self.client.login(username=self.superuser.email, password=self.superuser.password))
-      response = self.client.get(protected_media_url(foreign))
+      with patch("core.views.views_general._direct_media_url", return_value=None):
+        response = self.client.get(protected_media_url(foreign))
       self.assertEqual(response.status_code, 200)
     finally:
       self.clean_storage(foreign)
@@ -113,16 +143,19 @@ class ProtectedMediaTestCase(TestMediaResourceMixin, MemberTestCase):
 
   def test_protected_media_is_not_cacheable_by_shared_caches(self):
     """Protected media must stay out of shared caches (Cloudflare, proxies): only the browser caches it."""
-    response = self.client.get(self.rel_url)
+    # Force the streaming branch: CI stores media in S3, where the view redirects.
+    with patch("core.views.views_general._direct_media_url", return_value=None):
+      response = self.client.get(self.rel_url)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(response["Cache-Control"], "private, max-age=3600")
 
   def test_etag_is_quoted_and_conditional_request_returns_304(self):
     """ETags must be quoted (RFC 7232) and a matching If-None-Match must answer 304 without reopening the file."""
-    response = self.client.get(self.rel_url)
-    etag = response["ETag"]
-    self.assertTrue(etag.startswith('"') and etag.endswith('"'))
-    not_modified = self.client.get(self.rel_url, HTTP_IF_NONE_MATCH=etag)
+    with patch("core.views.views_general._direct_media_url", return_value=None):
+      response = self.client.get(self.rel_url)
+      etag = response["ETag"]
+      self.assertTrue(etag.startswith('"') and etag.endswith('"'))
+      not_modified = self.client.get(self.rel_url, HTTP_IF_NONE_MATCH=etag)
     self.assertEqual(not_modified.status_code, 304)
     self.assertEqual(not_modified["ETag"], etag)
     self.assertEqual(not_modified["Cache-Control"], "private, max-age=3600")
@@ -140,7 +173,9 @@ class ProtectedMediaTestCase(TestMediaResourceMixin, MemberTestCase):
     url = protected_media_url(target)
 
     self.assertNotIn("%25", url)
-    response = self.client.get(url, follow=True)
+    # Force the streaming branch: CI stores media in S3, where the view redirects.
+    with patch("core.views.views_general._direct_media_url", return_value=None):
+      response = self.client.get(url, follow=True)
     self.assertEqual(response.status_code, 200)
     self.assertIsInstance(response, StreamingHttpResponse)
 
@@ -159,6 +194,26 @@ class PublicMediaCacheControlTestCase(TestMediaResourceMixin, MemberTestCase):
 
   def test_public_media_is_cacheable_at_the_edge(self):
     """Public media is anonymous and identical for every visitor, so the CDN/browser may cache it."""
-    response = self.client.get(self.rel_url)
+    with patch("core.views.views_general._direct_media_url", return_value=None):
+      response = self.client.get(self.rel_url)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(response["Cache-Control"], "public, max-age=86400")
+
+
+class DirectMediaUrlTests(SimpleTestCase):
+  """Only a backend URL that this view does not itself serve is followed."""
+
+  def test_url_served_by_this_view_is_not_followed(self):
+    with patch("core.views.views_general.default_storage") as storage:
+      storage.url.return_value = f"{settings.MEDIA_URL}acme/file.jpg"
+      self.assertIsNone(views_general._direct_media_url("acme/file.jpg"))
+
+  def test_remote_backend_url_is_returned(self):
+    with patch("core.views.views_general.default_storage") as storage:
+      storage.url.return_value = "https://bucket.example/acme/file.jpg?sig=1"
+      self.assertEqual(views_general._direct_media_url("acme/file.jpg"), storage.url.return_value)
+
+  def test_signing_failure_falls_back_to_streaming(self):
+    with patch("core.views.views_general.default_storage") as storage:
+      storage.url.side_effect = ValueError("unsafe name")
+      self.assertIsNone(views_general._direct_media_url("../../etc/passwd"))
